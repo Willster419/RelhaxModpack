@@ -40,6 +40,7 @@
             this.downloadProgressBar = new System.Windows.Forms.ProgressBar();
             this.downloadOnly = new System.Windows.Forms.CheckBox();
             this.findWotExe = new System.Windows.Forms.OpenFileDialog();
+            this.forceManuel = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // downloadMods
@@ -161,11 +162,22 @@
             this.findWotExe.Filter = "WorldOfTanks.exe|WorldOfTanks.exe";
             this.findWotExe.Title = "Find WorldOfTanks.exe";
             // 
+            // forceManuel
+            // 
+            this.forceManuel.AutoSize = true;
+            this.forceManuel.Location = new System.Drawing.Point(155, 155);
+            this.forceManuel.Name = "forceManuel";
+            this.forceManuel.Size = new System.Drawing.Size(140, 17);
+            this.forceManuel.TabIndex = 13;
+            this.forceManuel.Text = "Force Manuel Detection";
+            this.forceManuel.UseVisualStyleBackColor = true;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(303, 229);
+            this.Controls.Add(this.forceManuel);
             this.Controls.Add(this.downloadOnly);
             this.Controls.Add(this.downloadProgressBar);
             this.Controls.Add(this.statusLabel);
@@ -179,7 +191,7 @@
             this.Controls.Add(this.downloadMods);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainWindow";
-            this.Text = "RelHax ModManager V9.1";
+            this.Text = "RelHax ModManager V9.2";
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -200,6 +212,7 @@
         private System.Windows.Forms.ProgressBar downloadProgressBar;
         private System.Windows.Forms.CheckBox downloadOnly;
         private System.Windows.Forms.OpenFileDialog findWotExe;
+        private System.Windows.Forms.CheckBox forceManuel;
     }
 }
 

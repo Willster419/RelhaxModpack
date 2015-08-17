@@ -54,64 +54,45 @@ namespace RelicModManager
         {
             checkingForUpdates = false;
             this.resetUI();
+            if (this.forceManuel.Checked)
+            {
+                if (!this.manuallyFindTanks()) return;
+            }
 
             //try to find the tanks location by registry
-            const string userRoot = "HKEY_CLASSES_ROOT";
-            const string subkey = ".wotreplay\\DefaultIcon";
-            const string keyName = userRoot + "\\" + subkey;
+            const string keyName = "HKEY_CURRENT_USER\\Software\\Classes\\.wotreplay\\shell\\open\\command";
             theObject = Registry.GetValue(keyName, "", -1);
-            if (theObject.Equals(-1))
+            if (theObject == null)
             {
-
-            //unable to find it in the registry, so ask for it
-            //the user is caching...so far
-            if (downloadOnly.Checked)
-            {
-                wotFolder = this.getDownloadOnlyFolder();
-                if (wotFolder == null)
-                {
-                    downloadProgress.Text = "Canceled";
-                    return;
-                }
-
-                //save the tanks install!!!
-                if (File.Exists(wotFolder + "\\WorldOfTanks.exe"))
-                {
-                    tryingToCache = MessageBox.Show("World of Tanks install detected. Uncheck 'Download only' and try aagain.", "Your Tanks install was saved!");
-                    downloadProgress.Text = "Aborted";
-                    return;
-                }
-                if (Directory.Exists(wotFolder + "\\res")) Directory.Delete((wotFolder + "\\res"), true);
-                Directory.CreateDirectory(wotFolder + "\\res\\audio");
+                if(!this.manuallyFindTanks()) return;
             }
-
-            //the user is installing
-            else
-            {
-                if (findWotExe.ShowDialog().Equals(DialogResult.Cancel))
-                {
-                    downloadProgress.Text = "Canceled";
-                    return;
-                }
-                wotFolder = findWotExe.FileName;
-                wotFolder = wotFolder.Substring(0, wotFolder.Length - 17);
-            }
-
-            parsedFolder = wotFolder + "\\res\\audio";
-            }
-
             //parse it from the registry
             else
             {
-                tanksLocation = (string) theObject;
+                tanksLocation = (string)theObject;
                 tanksLocation = tanksLocation.Substring(1);
-                tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 20);
+                tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
+                if (!File.Exists(tanksLocation))
+                {
+                    if (!this.manuallyFindTanks()) return;
+                }
+                tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
                 parsedFolder = tanksLocation + "\\res\\audio";
                 wotFolder = tanksLocation;
             }
+
             //delete the old files if they exist
             downloadProgress.Text = "Delete old files...";
-            System.IO.File.Delete(parsedFolder + "\\gui.fev");
+            try
+            {
+                System.IO.File.Delete(parsedFolder + "\\gui.fev");
+            }
+            catch (DirectoryNotFoundException)
+            {
+                MessageBox.Show("Registry Detection Failed. Check the 'force manuel detection' checkbox", "Something f*cked up");
+                statusLabel.Text = "Aborted";
+                return;
+            }
             System.IO.File.Delete(parsedFolder + "\\gui.fsb");
             System.IO.File.Delete(parsedFolder + "\\ingame_voice_def.fev");
             System.IO.File.Delete(parsedFolder + "\\ingame_voice_def.fsb");
@@ -128,6 +109,10 @@ namespace RelicModManager
                 }
                 zipFileDownloadURL = custom.zipFileURL.Text;
             }
+            if (censoredVersion.Checked)
+            {
+                zipFileDownloadURL = "http://96.61.83.3/OtherStuff/Other%20Stuff/World%20of%20Pdanks%20stuffs/relic%20mod/relic_censored/relic.zip";
+            }
             else
             {
                 zipFileDownloadURL = "http://96.61.83.3/OtherStuff/Other%20Stuff/World%20of%20Pdanks%20stuffs/relic%20mod/relic/relic.zip";
@@ -143,48 +128,11 @@ namespace RelicModManager
             checkingForUpdates = false;
             this.resetUI();
 
-            //try to find the tanks location by registry
-            const string userRoot = "HKEY_CLASSES_ROOT";
-            const string subkey = ".wotreplay\\DefaultIcon";
-            const string keyName = userRoot + "\\" + subkey;
+            const string keyName = "HKEY_CURRENT_USER\\Software\\Classes\\.wotreplay\\shell\\open\\command";
             theObject = Registry.GetValue(keyName, "", -1);
-            if (theObject.Equals(-1))
+            if (theObject == null)
             {
-
-            //the user is caching...so far
-            if (downloadOnly.Checked)
-            {
-                wotFolder = this.getDownloadOnlyFolder();
-                if (wotFolder == null)
-                {
-                    downloadProgress.Text = "Canceled";
-                    return;
-                }
-
-                //save the tanks install!!!
-                if (File.Exists(wotFolder + "\\WorldOfTanks.exe"))
-                {
-                    tryingToCache = MessageBox.Show("World of Tanks install detected. Uncheck 'Download only' and try aagain.", "Your Tanks install was saved!");
-                    downloadProgress.Text = "Aborted";
-                    return;
-                }
-                if (Directory.Exists(wotFolder + "\\res")) Directory.Delete((wotFolder + "\\res"), true);
-                Directory.CreateDirectory(wotFolder + "\\res\\audio");
-            }
-
-            //the user is installing
-            else
-            {
-                if (findWotExe.ShowDialog().Equals(DialogResult.Cancel))
-                {
-                    downloadProgress.Text = "Canceled";
-                    return;
-                }
-                wotFolder = findWotExe.FileName;
-                wotFolder = wotFolder.Substring(0, wotFolder.Length - 17);
-            }
-
-            parsedFolder = wotFolder + "\\res\\audio";
+                if (!this.manuallyFindTanks()) return;
             }
 
             //parse it from the registry
@@ -192,8 +140,14 @@ namespace RelicModManager
             {
                 tanksLocation = (string)theObject;
                 tanksLocation = tanksLocation.Substring(1);
-                tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 20);
+                tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
+                if (!File.Exists(tanksLocation))
+                {
+                    if (!this.manuallyFindTanks()) return;
+                }
+                tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
                 parsedFolder = tanksLocation + "\\res\\audio";
+                wotFolder = tanksLocation;
             }
 
             //delete the old files if they exist
@@ -364,22 +318,13 @@ namespace RelicModManager
             //if this is the first thing the user did when opening the application
             if (!alreadyDownloaded)
             {
+
                 //try to find the tanks location by registry
-                const string userRoot = "HKEY_CLASSES_ROOT";
-                const string subkey = ".wotreplay\\DefaultIcon";
-                const string keyName = userRoot + "\\" + subkey;
+                const string keyName = "HKEY_CURRENT_USER\\Software\\Classes\\.wotreplay\\shell\\open\\command";
                 theObject = Registry.GetValue(keyName, "", -1);
-                if (theObject.Equals(-1))
+                if (theObject == null)
                 {
-                    //unable to find it in the registry, so ask for it
-                    //get the wot folder location
-                    if (findWotExe.ShowDialog().Equals(DialogResult.Cancel))
-                    {
-                        downloadProgress.Text = "Canceled";
-                        return;
-                    }
-                    wotFolder = findWotExe.FileName;
-                    wotFolder = wotFolder.Substring(0, wotFolder.Length - 17);
+                    if (!this.manuallyFindTanks()) return;
                 }
 
                 //parse it from the registry
@@ -387,7 +332,13 @@ namespace RelicModManager
                 {
                     tanksLocation = (string)theObject;
                     tanksLocation = tanksLocation.Substring(1);
-                    tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 20);
+                    tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
+                    if (!File.Exists(tanksLocation))
+                    {
+                        if (!this.manuallyFindTanks()) return;
+                    }
+                    tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
+                    parsedFolder = tanksLocation + "\\res\\audio";
                     wotFolder = tanksLocation;
                 }
 
@@ -409,7 +360,7 @@ namespace RelicModManager
                 {
                     guiVersion = "not installed";
                 }
-                managerVersion = "version 9.1";
+                managerVersion = "version 9.2";
 
                 //display the version info
                 info.downloadedVersionInfo.Text = "gui sounds " + guiVersion + "\ningame voice sounds " + ingameVoiceVersion + "\ndownlaod manager " + managerVersion;
@@ -460,7 +411,7 @@ namespace RelicModManager
                 {
                     guiVersion = "not installed";
                 }
-                managerVersion = "version 9.1";
+                managerVersion = "version 9.2";
 
                 //display the version info
                 info.downloadedVersionInfo.Text = "gui sounds " + guiVersion + "\ningame voice sounds " + ingameVoiceVersion + "\ndownlaod manager " + managerVersion;
@@ -495,6 +446,11 @@ namespace RelicModManager
         {
             MessageBox.Show("When i make the censored version this will work");
             censoredVersion.Checked = false;
+            if (this.customDownloadURL.Checked)
+            {
+                MessageBox.Show("Irrelevant since custom download link is checked");
+                censoredVersion.Checked = false;
+            }
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -531,6 +487,47 @@ namespace RelicModManager
             checkingForUpdates = false;
             if (!isOutofDate) MessageBox.Show("Your manager and sound mods are up to date");
         }
+
+        private bool manuallyFindTanks()
+        {
+             //unable to find it in the registry, so ask for it
+            //the user is caching...so far
+            if (downloadOnly.Checked)
+            {
+                wotFolder = this.getDownloadOnlyFolder();
+                if (wotFolder == null)
+                {
+                    downloadProgress.Text = "Canceled";
+                    return false;
+                }
+
+                //save the tanks install!!!
+                if (File.Exists(wotFolder + "\\WorldOfTanks.exe"))
+                {
+                    tryingToCache = MessageBox.Show("World of Tanks install detected. Uncheck 'Download only' and try aagain.", "Your Tanks install was saved!");
+                    downloadProgress.Text = "Aborted";
+                    return false;
+                }
+                if (Directory.Exists(wotFolder + "\\res")) Directory.Delete((wotFolder + "\\res"), true);
+                Directory.CreateDirectory(wotFolder + "\\res\\audio");
+                return true;
+            }
+
+            //the user is installing
+            else
+            {
+                if (findWotExe.ShowDialog().Equals(DialogResult.Cancel))
+                {
+                    downloadProgress.Text = "Canceled";
+                    return false;
+                }
+                wotFolder = findWotExe.FileName;
+                wotFolder = wotFolder.Substring(0, wotFolder.Length - 17);
+            }
+
+            parsedFolder = wotFolder + "\\res\\audio";
+            return true;
+            }
 
         //old method of unzipping
         /*public static void UnZip(string zipFile, string folderPath)
