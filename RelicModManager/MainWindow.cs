@@ -54,33 +54,39 @@ namespace RelicModManager
         {
             checkingForUpdates = false;
             this.resetUI();
-            if (this.forceManuel.Checked)
+            if (this.downloadOnly.Checked)
+            {
+                if (!this.manuallyFindTanks()) return;
+            }
+            else if (this.forceManuel.Checked)
             {
                 if (!this.manuallyFindTanks()) return;
             }
 
-            //try to find the tanks location by registry
-            const string keyName = "HKEY_CURRENT_USER\\Software\\Classes\\.wotreplay\\shell\\open\\command";
-            theObject = Registry.GetValue(keyName, "", -1);
-            if (theObject == null)
-            {
-                if(!this.manuallyFindTanks()) return;
-            }
-            //parse it from the registry
             else
             {
-                tanksLocation = (string)theObject;
-                tanksLocation = tanksLocation.Substring(1);
-                tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
-                if (!File.Exists(tanksLocation))
+                //try to find the tanks location by registry
+                const string keyName = "HKEY_CURRENT_USER\\Software\\Classes\\.wotreplay\\shell\\open\\command";
+                theObject = Registry.GetValue(keyName, "", -1);
+                if (theObject == null)
                 {
                     if (!this.manuallyFindTanks()) return;
                 }
-                tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
-                parsedFolder = tanksLocation + "\\res\\audio";
-                wotFolder = tanksLocation;
+                //parse it from the registry
+                else
+                {
+                    tanksLocation = (string)theObject;
+                    tanksLocation = tanksLocation.Substring(1);
+                    tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
+                    if (!File.Exists(tanksLocation))
+                    {
+                        if (!this.manuallyFindTanks()) return;
+                    }
+                    tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
+                    parsedFolder = tanksLocation + "\\res\\audio";
+                    wotFolder = tanksLocation;
+                }
             }
-
             //delete the old files if they exist
             downloadProgress.Text = "Delete old files...";
             try
@@ -510,6 +516,7 @@ namespace RelicModManager
                 }
                 if (Directory.Exists(wotFolder + "\\res")) Directory.Delete((wotFolder + "\\res"), true);
                 Directory.CreateDirectory(wotFolder + "\\res\\audio");
+                parsedFolder = wotFolder + "\\res\\audio";
                 return true;
             }
 
