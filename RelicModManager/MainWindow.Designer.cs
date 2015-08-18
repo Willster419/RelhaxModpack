@@ -105,6 +105,7 @@
             this.customDownloadURL.TabIndex = 6;
             this.customDownloadURL.Text = "Custom Download URL";
             this.customDownloadURL.UseVisualStyleBackColor = true;
+            this.customDownloadURL.Click += new System.EventHandler(this.customDownloadURL_Click);
             // 
             // whatVersion
             // 
@@ -156,6 +157,7 @@
             this.downloadOnly.TabIndex = 12;
             this.downloadOnly.Text = "Download only no install";
             this.downloadOnly.UseVisualStyleBackColor = true;
+            this.downloadOnly.Click += new System.EventHandler(this.downloadOnly_Click);
             // 
             // findWotExe
             // 
@@ -171,6 +173,7 @@
             this.forceManuel.TabIndex = 13;
             this.forceManuel.Text = "Force Manuel Detection";
             this.forceManuel.UseVisualStyleBackColor = true;
+            this.forceManuel.Click += new System.EventHandler(this.forceManuel_Click);
             // 
             // MainWindow
             // 
@@ -191,7 +194,7 @@
             this.Controls.Add(this.downloadMods);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainWindow";
-            this.Text = "RelHax ModManager V9.2";
+            this.Text = "RelHax ModManager V10";
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

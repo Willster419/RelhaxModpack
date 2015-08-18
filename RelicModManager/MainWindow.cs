@@ -40,7 +40,7 @@ namespace RelicModManager
         private string zipFileDownloadURL;
         private string ingameVoiceVersion;
         private string guiVersion;
-        private string managerVersion;
+        private string managerVersion = "Version 10";
         private string tanksLocation;
         private object theObject;
         private bool checkingForUpdates;
@@ -366,7 +366,7 @@ namespace RelicModManager
                 {
                     guiVersion = "not installed";
                 }
-                managerVersion = "version 9.2";
+                //managerVersion = "version 9.2";
 
                 //display the version info
                 info.downloadedVersionInfo.Text = "gui sounds " + guiVersion + "\ningame voice sounds " + ingameVoiceVersion + "\ndownlaod manager " + managerVersion;
@@ -417,7 +417,7 @@ namespace RelicModManager
                 {
                     guiVersion = "not installed";
                 }
-                managerVersion = "version 9.2";
+                //managerVersion = "version 9.2";
 
                 //display the version info
                 info.downloadedVersionInfo.Text = "gui sounds " + guiVersion + "\ningame voice sounds " + ingameVoiceVersion + "\ndownlaod manager " + managerVersion;
@@ -450,8 +450,6 @@ namespace RelicModManager
 
         private void censoredVersion_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("When i make the censored version this will work");
-            censoredVersion.Checked = false;
             if (this.customDownloadURL.Checked)
             {
                 MessageBox.Show("Irrelevant since custom download link is checked");
@@ -535,6 +533,33 @@ namespace RelicModManager
             parsedFolder = wotFolder + "\\res\\audio";
             return true;
             }
+
+        private void customDownloadURL_Click(object sender, EventArgs e)
+        {
+            if (this.censoredVersion.Checked)
+            {
+                MessageBox.Show("Please uncheck 'Censored version' as it is now irrelevant. You can get a custom link to\nthe censored version from the main form thread post.");
+                customDownloadURL.Checked = false;
+            }
+        }
+
+        private void downloadOnly_Click(object sender, EventArgs e)
+        {
+            if (forceManuel.Checked)
+            {
+                MessageBox.Show("This setting conflicts with the setting 'Force Manuel detection'. \nYou can eithor install, manually or autodetection, OR download to a specific folder.");
+                downloadOnly.Checked = false;
+            }
+        }
+
+        private void forceManuel_Click(object sender, EventArgs e)
+        {
+            if (downloadOnly.Checked)
+            {
+                MessageBox.Show("This setting conflicts with the setting 'Download only no Install'. \nYou can eithor install, manually or autodetection, OR download to a specific folder.");
+                forceManuel.Checked = false;
+            }
+        }
 
         //old method of unzipping
         /*public static void UnZip(string zipFile, string folderPath)
