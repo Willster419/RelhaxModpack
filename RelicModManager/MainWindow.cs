@@ -40,7 +40,7 @@ namespace RelicModManager
         private string zipFileDownloadURL;
         private string ingameVoiceVersion;
         private string guiVersion;
-        private string managerVersion = "Version 10";
+        private string managerVersion = "version 10";
         private string tanksLocation;
         private object theObject;
         private bool checkingForUpdates;
