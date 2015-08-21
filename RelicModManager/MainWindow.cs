@@ -40,7 +40,7 @@ namespace RelicModManager
         private string zipFileDownloadURL;
         private string ingameVoiceVersion;
         private string guiVersion;
-        private string managerVersion = "version 10";
+        private string managerVersion = "version 10.1";
         private string tanksLocation;
         private object theObject;
         private bool checkingForUpdates;
@@ -115,15 +115,10 @@ namespace RelicModManager
                 }
                 zipFileDownloadURL = custom.zipFileURL.Text;
             }
-            if (censoredVersion.Checked)
-            {
-                zipFileDownloadURL = "http://96.61.83.3/OtherStuff/Other%20Stuff/World%20of%20Pdanks%20stuffs/relic%20mod/relic_censored/relic.zip";
-            }
             else
             {
                 zipFileDownloadURL = "http://96.61.83.3/OtherStuff/Other%20Stuff/World%20of%20Pdanks%20stuffs/relic%20mod/relic/relic.zip";
             }
-
             //download unzip cleanup
             this.download(new Uri(zipFileDownloadURL), tempPath + "\\relic.zip");
             alreadyDownloaded = true;
@@ -448,15 +443,6 @@ namespace RelicModManager
             }
         }
 
-        private void censoredVersion_Click(object sender, EventArgs e)
-        {
-            if (this.customDownloadURL.Checked)
-            {
-                MessageBox.Show("Irrelevant since custom download link is checked");
-                censoredVersion.Checked = false;
-            }
-        }
-
         private void MainWindow_Load(object sender, EventArgs e)
         {
             downloader.Credentials = new NetworkCredential("tudbury209", "tudbury209");
@@ -534,15 +520,6 @@ namespace RelicModManager
             return true;
             }
 
-        private void customDownloadURL_Click(object sender, EventArgs e)
-        {
-            if (this.censoredVersion.Checked)
-            {
-                MessageBox.Show("Please uncheck 'Censored version' as it is now irrelevant. You can get a custom link to\nthe censored version from the main form thread post.");
-                customDownloadURL.Checked = false;
-            }
-        }
-
         private void downloadOnly_Click(object sender, EventArgs e)
         {
             if (forceManuel.Checked)
@@ -559,6 +536,80 @@ namespace RelicModManager
                 MessageBox.Show("This setting conflicts with the setting 'Download only no Install'. \nYou can eithor install, manually or autodetection, OR download to a specific folder.");
                 forceManuel.Checked = false;
             }
+        }
+
+        private void CensoredVersion_Click_1(object sender, EventArgs e)
+        {
+            checkingForUpdates = false;
+            this.resetUI();
+            if (this.downloadOnly.Checked)
+            {
+                if (!this.manuallyFindTanks()) return;
+            }
+            else if (this.forceManuel.Checked)
+            {
+                if (!this.manuallyFindTanks()) return;
+            }
+
+            else
+            {
+                //try to find the tanks location by registry
+                const string keyName = "HKEY_CURRENT_USER\\Software\\Classes\\.wotreplay\\shell\\open\\command";
+                theObject = Registry.GetValue(keyName, "", -1);
+                if (theObject == null)
+                {
+                    if (!this.manuallyFindTanks()) return;
+                }
+                //parse it from the registry
+                else
+                {
+                    tanksLocation = (string)theObject;
+                    tanksLocation = tanksLocation.Substring(1);
+                    tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
+                    if (!File.Exists(tanksLocation))
+                    {
+                        if (!this.manuallyFindTanks()) return;
+                    }
+                    tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
+                    parsedFolder = tanksLocation + "\\res\\audio";
+                    wotFolder = tanksLocation;
+                }
+            }
+            //delete the old files if they exist
+            downloadProgress.Text = "Delete old files...";
+            try
+            {
+                System.IO.File.Delete(parsedFolder + "\\gui.fev");
+            }
+            catch (DirectoryNotFoundException)
+            {
+                MessageBox.Show("Registry Detection Failed. Check the 'force manuel detection' checkbox", "Something f*cked up");
+                statusLabel.Text = "Aborted";
+                return;
+            }
+            System.IO.File.Delete(parsedFolder + "\\gui.fsb");
+            System.IO.File.Delete(parsedFolder + "\\ingame_voice_def.fev");
+            System.IO.File.Delete(parsedFolder + "\\ingame_voice_def.fsb");
+
+            //handle the custom URL information
+            downloadProgress.Text = "Starting Download...";
+            if (customDownloadURL.Checked)
+            {
+                custom.ShowDialog();
+                if (custom.canceling)
+                {
+                    downloadProgress.Text = "Canceled";
+                    return;
+                }
+                zipFileDownloadURL = custom.zipFileURL.Text;
+            }
+            else
+            {
+                zipFileDownloadURL = "http://96.61.83.3/OtherStuff/Other%20Stuff/World%20of%20Pdanks%20stuffs/relic%20mod/relic_censored/relic.zip";
+            }
+            //download unzip cleanup
+            this.download(new Uri(zipFileDownloadURL), tempPath + "\\relic.zip");
+            alreadyDownloaded = true;
         }
 
         //old method of unzipping

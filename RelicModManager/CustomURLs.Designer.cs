@@ -34,6 +34,7 @@
             this.findDownloadLinks = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.zipFileLabel = new System.Windows.Forms.Label();
+            this.openFormPost = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // URLInstructions
@@ -91,11 +92,22 @@
             this.zipFileLabel.TabIndex = 1;
             this.zipFileLabel.Text = "zip file";
             // 
+            // openFormPost
+            // 
+            this.openFormPost.Location = new System.Drawing.Point(96, 79);
+            this.openFormPost.Name = "openFormPost";
+            this.openFormPost.Size = new System.Drawing.Size(105, 23);
+            this.openFormPost.TabIndex = 12;
+            this.openFormPost.Text = "open form post";
+            this.openFormPost.UseVisualStyleBackColor = true;
+            this.openFormPost.Click += new System.EventHandler(this.openFormPost_Click);
+            // 
             // CustomURLs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(294, 146);
+            this.Controls.Add(this.openFormPost);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.findDownloadLinks);
             this.Controls.Add(this.doneButton);
@@ -119,5 +131,6 @@
         private System.Windows.Forms.Button findDownloadLinks;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Label zipFileLabel;
+        private System.Windows.Forms.Button openFormPost;
     }
 }

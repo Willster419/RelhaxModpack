@@ -39,5 +39,10 @@ namespace RelicModManager
         {
             canceling = true;
         }
+
+        private void openFormPost_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://relicgaming.com/index.php?topic=165");
+        }
     }
 }
