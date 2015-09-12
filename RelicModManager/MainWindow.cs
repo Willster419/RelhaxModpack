@@ -25,25 +25,28 @@ namespace RelicModManager
         private WebClient downloader = new WebClient();
         private string parsedFolder;
         private string parsedBackupFolder;
-        private DialogResult tryingToCache;
         private CustomURLs custom = new CustomURLs();
         private VersionInfo info = new VersionInfo();
         private string tempPath = Path.GetTempPath();
-        private string locatedTanksFolder;
-        private bool alreadyDownloaded = false;
         private ZipFile relicZip;
         private double bytesIn;
         private double totalBytes;
         private int MBytesIn;
         private int MBytesTotal;
         private static int MBDivisor = 1048576;
-        private string zipFileDownloadURL;
         private string ingameVoiceVersion;
         private string guiVersion;
-        private string managerVersion = "version 10.1";
+        private string managerVersion = "version 12";
         private string tanksLocation;
         private object theObject;
-        private bool checkingForUpdates;
+        private string sixthSenseVersion;
+        private SelectFeatures features = new SelectFeatures();
+        private List<DownloadItem> downloadQueue;
+        private int downloadCount;
+        private int totalDownloadCount;
+        private bool isAutoDetected;
+        private string versionFolder;
+        private bool hasUnzipped;
 
         public MainWindow()
         {
@@ -52,137 +55,79 @@ namespace RelicModManager
 
         private void downloadMods_Click(object sender, EventArgs e)
         {
-            checkingForUpdates = false;
-            this.resetUI();
-            if (this.downloadOnly.Checked)
+            // this is how the program will be re-written
+            // - reset the UI and some download features
+            // - method to auto return the tanks install location by reg search
+            // if that failes, return the tanks install location by asking
+            // - parse the strings
+            // - delete old files, if they exist
+            // - download the selected files
+            // - extract them and cleanup
+            this.features.ShowDialog();
+            if (features.canceling)
             {
-                if (!this.manuallyFindTanks()) return;
-            }
-            else if (this.forceManuel.Checked)
-            {
-                if (!this.manuallyFindTanks()) return;
-            }
-
-            else
-            {
-                //try to find the tanks location by registry
-                const string keyName = "HKEY_CURRENT_USER\\Software\\Classes\\.wotreplay\\shell\\open\\command";
-                theObject = Registry.GetValue(keyName, "", -1);
-                if (theObject == null)
-                {
-                    if (!this.manuallyFindTanks()) return;
-                }
-                //parse it from the registry
-                else
-                {
-                    tanksLocation = (string)theObject;
-                    tanksLocation = tanksLocation.Substring(1);
-                    tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
-                    if (!File.Exists(tanksLocation))
-                    {
-                        if (!this.manuallyFindTanks()) return;
-                    }
-                    tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
-                    parsedFolder = tanksLocation + "\\res\\audio";
-                    wotFolder = tanksLocation;
-                }
-            }
-            //delete the old files if they exist
-            downloadProgress.Text = "Delete old files...";
-            try
-            {
-                System.IO.File.Delete(parsedFolder + "\\gui.fev");
-            }
-            catch (DirectoryNotFoundException)
-            {
-                MessageBox.Show("Registry Detection Failed. Check the 'force manuel detection' checkbox", "Something f*cked up");
-                statusLabel.Text = "Aborted";
+                downloadProgress.Text = "Canceled";
                 return;
             }
-            System.IO.File.Delete(parsedFolder + "\\gui.fsb");
-            System.IO.File.Delete(parsedFolder + "\\ingame_voice_def.fev");
-            System.IO.File.Delete(parsedFolder + "\\ingame_voice_def.fsb");
+            this.reset();
+            if (this.autoFindTanks() == null || this.forceManuel.Checked)
+            {
+                if (this.manuallyFindTanks() == null) return;
+            }
+            if (this.parseStrings() == null) this.displayError("The auto-detection failed. Please use the 'force manuel' option", null);
+            if (this.prepareForInstall(false) == null) this.displayError("Failed preparing for install.", null);
+            this.createDownloadQueue();
+            this.downloader_DownloadFileCompleted(null, null);
+        }
 
-            //handle the custom URL information
-            downloadProgress.Text = "Starting Download...";
-            if (customDownloadURL.Checked)
+        private void downloadRelhax_Click(object sender, EventArgs e)
+        {
+            // this is how the program will be re-written
+            // - reset the UI and some download features
+            // - parse the strings
+            // - delete old files, if they exist
+            // - download the selected files
+            // - extract them and cleanup
+            
+            this.reset();
+            this.features.ShowDialog();
+            if (features.canceling)
             {
-                custom.ShowDialog();
-                if (custom.canceling)
-                {
-                    downloadProgress.Text = "Canceled";
-                    return;
-                }
-                zipFileDownloadURL = custom.zipFileURL.Text;
+                downloadProgress.Text = "Canceled";
+                return;
             }
-            else
+            tanksLocation = this.getDownloadOnlyFolder();
+            if (tanksLocation == null) return;
+            parsedFolder = tanksLocation + "\\res\\audio";
+            try
             {
-                zipFileDownloadURL = "http://96.61.83.3/OtherStuff/Other%20Stuff/World%20of%20Pdanks%20stuffs/relic%20mod/relic/relic.zip";
+                System.IO.Directory.Delete(tanksLocation + "\\res", true);
             }
-            //download unzip cleanup
-            this.download(new Uri(zipFileDownloadURL), tempPath + "\\relic.zip");
-            alreadyDownloaded = true;
+            catch (IOException) { }
+            System.IO.Directory.CreateDirectory(parsedFolder);
+            this.createDownloadQueue();
+            this.downloader_DownloadFileCompleted(null,null);
         }
 
         private void stockSounds_Click(object sender, EventArgs e)
         {
-            checkingForUpdates = false;
-            this.resetUI();
-
-            const string keyName = "HKEY_CURRENT_USER\\Software\\Classes\\.wotreplay\\shell\\open\\command";
-            theObject = Registry.GetValue(keyName, "", -1);
-            if (theObject == null)
+            this.reset();
+            if (this.autoFindTanks() == null || this.forceManuel.Checked)
             {
-                if (!this.manuallyFindTanks()) return;
+                if (this.manuallyFindTanks() == null) return;
             }
-
-            //parse it from the registry
-            else
-            {
-                tanksLocation = (string)theObject;
-                tanksLocation = tanksLocation.Substring(1);
-                tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
-                if (!File.Exists(tanksLocation))
-                {
-                    if (!this.manuallyFindTanks()) return;
-                }
-                tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
-                parsedFolder = tanksLocation + "\\res\\audio";
-                wotFolder = tanksLocation;
-            }
-
-            //delete the old files if they exist
-            downloadProgress.Text = "Delete old files...";
-            System.IO.File.Delete(parsedFolder + "\\gui.fev");
-            System.IO.File.Delete(parsedFolder + "\\gui.fsb");
-            System.IO.File.Delete(parsedFolder + "\\ingame_voice_def.fev");
-            System.IO.File.Delete(parsedFolder + "\\ingame_voice_def.fsb");
-
-            //handle the custom URL information
-            downloadProgress.Text = "Starting Download...";
-            if (customDownloadURL.Checked)
-            {
-                custom.ShowDialog();
-                if (custom.canceling)
-                {
-                    downloadProgress.Text = "Canceled";
-                    return;
-                }
-                zipFileDownloadURL = custom.zipFileURL.Text;
-            }
-            else
-            {
-                zipFileDownloadURL = "http://96.61.83.3/OtherStuff/Other%20Stuff/World%20of%20Pdanks%20stuffs/relic%20mod/origional/origional.zip";
-            }
-
-            //download unzip cleanup
-            this.download(new Uri(zipFileDownloadURL), tempPath + "\\relic.zip");
-            alreadyDownloaded = true;
+            if (this.parseStrings() == null) this.displayError("The auto-detection failed. PLease use the 'force manuel' option", null);
+            if (this.prepareForInstall(true) == null) this.displayError("Tell Willster he screwed up. He'll know.", null);
+            downloadQueue = new List<DownloadItem>();
+            downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/origional.zip"), tempPath + "\\origional.zip"));
+            totalDownloadCount = downloadQueue.Count;
+            downloadNumberCount.Visible = true;
+            this.downloader_DownloadFileCompleted(null, null);
         }
 
         private void backupCustom_Click(object sender, EventArgs e)
         {
-            this.resetUI();
+            this.reset();
             wotFolder = this.getBackupFolder();
             if (wotFolder == null)
             {
@@ -195,6 +140,8 @@ namespace RelicModManager
             if (File.Exists(parsedBackupFolder + "\\yes.txt")) return;
             if (File.Exists(wotFolder + "\\gui.fev")) File.Copy(wotFolder + "\\gui.fev", parsedBackupFolder + "\\gui.fev");
             if (File.Exists(wotFolder + "\\gui.fsb")) File.Copy(wotFolder + "\\gui.fsb", parsedBackupFolder + "\\gui.fsb");
+            if (File.Exists(wotFolder + "\\xvm.fev")) File.Copy(wotFolder + "\\xvm.fev", parsedBackupFolder + "\\xvm.fev");
+            if (File.Exists(wotFolder + "\\xvm.fsb")) File.Copy(wotFolder + "\\xvm.fsb", parsedBackupFolder + "\\xvm.fsb");
             File.Copy(wotFolder + "\\ingame_voice.fev", parsedBackupFolder + "\\ingame_voice.fev");
             File.Copy(wotFolder + "\\ingame_voice_def.fsb", parsedBackupFolder + "\\ingame_voice_def.fsb");
             File.Create(parsedBackupFolder + "\\yes.txt");
@@ -203,7 +150,7 @@ namespace RelicModManager
 
         private void restoreCustom_Click(object sender, EventArgs e)
         {
-            this.resetUI();
+            this.reset();
             wotFolder = this.getBackupFolder();
             if (wotFolder == null)
             {
@@ -223,6 +170,17 @@ namespace RelicModManager
                 File.Delete(wotFolder + "\\gui.fsb");
                 File.Copy(parsedBackupFolder + "\\gui.fsb", wotFolder + "\\gui.fsb");
             }
+            if (File.Exists(parsedBackupFolder + "\\xvm.fev"))
+            {
+                File.Delete(wotFolder + "\\xvm.fev");
+                File.Copy(parsedBackupFolder + "\\xvm.fev", wotFolder + "\\xvm.fev");
+            }
+            if (File.Exists(parsedBackupFolder + "\\xvm.fsb"))
+            {
+                File.Delete(wotFolder + "\\xvm.fsb");
+                File.Copy(parsedBackupFolder + "\\xvm.fsb", wotFolder + "\\xvm.fsb");
+            }
+
             File.Delete(wotFolder + "\\ingame_voice.fev");
             File.Delete(wotFolder + "\\ingame_voice_def.fsb");
             File.Copy(parsedBackupFolder + "\\ingame_voice.fev", wotFolder + "\\ingame_voice.fev");
@@ -242,61 +200,190 @@ namespace RelicModManager
 
         void downloader_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            if (checkingForUpdates)
+            if (hasUnzipped) return;
+            if (downloadQueue.Count > 0)
             {
-                this.unzipAndCleanup(tempPath + "\\relic.zip", tempPath + "\\versionCheck");
+                downloadCount++;
+                this.downloadNumberCount.Text = "Downloading " + downloadCount + " of " + totalDownloadCount;
+                this.download(downloadQueue[0].getURL(), downloadQueue[0].getZipFile());
+                downloadQueue.RemoveAt(0);
+                return;
+            }
+            if (downloadCount == totalDownloadCount)
+            {
+                if (File.Exists(tempPath + "\\relic.zip")) this.unzipAndCleanup(tempPath + "\\relic.zip", parsedFolder);
+                if (File.Exists(tempPath + "\\relic_censored.zip")) this.unzipAndCleanup(tempPath + "\\relic_censored.zip", parsedFolder);
+                if (File.Exists(tempPath + "\\gui.zip")) this.unzipAndCleanup(tempPath + "\\gui.zip", parsedFolder);
+                if (File.Exists(tempPath + "\\6thSense.zip")) this.unzipAndCleanup(tempPath + "\\6thSense.zip", parsedFolder);
+                if (File.Exists(tempPath + "\\origional.zip")) this.unzipAndCleanup(tempPath + "\\origional.zip", parsedFolder);
+                if (File.Exists(tempPath + "\\version.zip"))
+                {
+                    this.unzipAndCleanup(tempPath + "\\version.zip", tempPath + "\\versionCheck");
+                    this.checkForUpdates();
+                }
+                hasUnzipped = true;
+            }
+        }
+
+        private void whatVersion_Click(object sender, EventArgs e)
+        {
+            // How to re-write this version
+            // auto if fail manuel detect
+            // parse acordingly
+            // read current mod information
+            // display current mod information
+            // decide if checking for updates
+            // so, download version info
+            // determine what is out of date
+            // inform the user
+
+            this.reset();
+            if (this.autoFindTanks() == null || this.forceManuel.Checked)
+            {
+                if (this.manuallyFindTanks() == null) return;
+            }
+            if (this.parseStrings() == null) this.displayError("The auto-detection failed. PLease use the 'force manuel' option", null);
+            versionFolder = tanksLocation + "\\res\\audio\\relicModVersion";
+            if (File.Exists(versionFolder + "\\ingame voice version.txt"))
+            {
+                ingameVoiceVersion = "version " + File.ReadAllText(versionFolder + "\\ingame voice version.txt");
             }
             else
             {
-                this.unzipAndCleanup(tempPath + "\\relic.zip", parsedFolder);
+                ingameVoiceVersion = "not installed";
+            }
+            if (File.Exists(versionFolder + "\\gui version.txt"))
+            {
+                guiVersion = "version " + File.ReadAllText(versionFolder + "\\gui version.txt");
+            }
+            else
+            {
+                guiVersion = "not installed";
+            }
+            if (File.Exists(versionFolder + "\\6thSense version.txt"))
+            {
+                sixthSenseVersion = "version " + File.ReadAllText(versionFolder + "\\6thSense version.txt");
+            }
+            else
+            {
+                sixthSenseVersion = "not installed";
+            }
+            info.downloadedVersionInfo.Text = "gui sounds " + guiVersion + "\ningame voice sounds " + ingameVoiceVersion + "\n6th Sense " + sixthSenseVersion + "\ndownlaod manager " + managerVersion;
+            info.ShowDialog();
+
+            //if we're checking for updates, do so
+            if (info.checkForUpdates)
+            {
+                downloadProgress.Text = "Checking for updates...";
+                downloadQueue = new List<DownloadItem>();
+                downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/version.zip"), tempPath + "\\version.zip"));
+                totalDownloadCount = downloadQueue.Count;
+                downloadNumberCount.Visible = true;
+                this.downloader_DownloadFileCompleted(null, null);
+                //make sure to include the \\versionCheck\\ folder
+               
+            }
+           
+        }
+
+        private String parseStrings()
+        {
+            if (isAutoDetected)
+            {
+                tanksLocation = tanksLocation.Substring(1);
+                tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
+                if (!File.Exists(tanksLocation)) return null;
+            }
+            tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
+            parsedFolder = tanksLocation + "\\res\\audio";
+            return "1";
+        }
+
+        private String prepareForInstall(bool deleteAll)
+        {
+            //delete the old files if they exist
+            downloadProgress.Text = "Delete old files...";
+            try
+            {
+                if (this.features.relhaxBox.Checked || this.features.relhaxCensoredBox.Checked || deleteAll) System.IO.File.Delete(parsedFolder + "\\ingame_voice_def.fev");
+                if (this.features.relhaxBox.Checked || this.features.relhaxCensoredBox.Checked || deleteAll) System.IO.File.Delete(parsedFolder + "\\ingame_voice_def.fsb");
+                if (this.features.guiBox.Checked || deleteAll) System.IO.File.Delete(parsedFolder + "\\gui.fev");
+                if (this.features.guiBox.Checked || deleteAll) System.IO.File.Delete(parsedFolder + "\\gui.fsb");
+                if (this.features.sixthSenseBox.Checked || deleteAll) System.IO.File.Delete(parsedFolder + "\\xvm.fev");
+                if (this.features.sixthSenseBox.Checked || deleteAll) System.IO.File.Delete(parsedFolder + "\\xvm.fsb");
+            }
+            catch (DirectoryNotFoundException)
+            {
+                return null;
             }
             
+            
+            try
+            {
+                System.IO.Directory.Delete(parsedFolder + "\\relicModVersion", true);
+            }
+            catch (DirectoryNotFoundException) { }
+            return "We're all set!";
+        }
+
+        private void displayError(String errorText, String errorHandle)
+        {
+            if(!errorHandle.Equals(null)) MessageBox.Show(errorText, errorHandle);
+            else MessageBox.Show(errorText);
+            statusLabel.Text = "Aborted";
         }
 
         private void download(Uri URL, string zipFile)
         {
-            try
-            {
-                //delete temp if it's there
-                File.Delete(zipFile);
-                //download new zip file
-                downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
-                downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
-                downloader.DownloadFileAsync(URL, zipFile, zipFile);
-            }
-            catch (WebException)
-            {
-                if (checkingForUpdates)
-                {
-                    MessageBox.Show("Unable to check for updates\n try using it with the custom links checked");
-                    downloadProgress.Text = "Failed";
-                    return;
-                }
-                else
-                {
-                    MessageBox.Show("Error: Eithor you are offline or my NAS is offline\nTry downloading using the custom URL option via google drive");
-                    downloadProgress.Text = "Failed";
-                    return;
-                }
-            }
+            //delete temp if it's there
+            File.Delete(zipFile);
+            //download new zip file
+            downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
+            downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
+            downloader.DownloadFileAsync(URL, zipFile, zipFile);
         }
 
         private void unzipAndCleanup(string zipFile, string extractFolder)
         {
-            //exract
-            relicZip = new ZipFile(zipFile);
-            relicZip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
-            //cleanup
-            relicZip.Dispose();
-            System.IO.File.Delete(zipFile);
-            downloadProgress.Text = "Complete!";
-            if (checkingForUpdates) this.checkForUpdates();
+            try
+            {
+                //exract
+                relicZip = new ZipFile(zipFile);
+                relicZip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
+                //cleanup
+                relicZip.Dispose();
+                System.IO.File.Delete(zipFile);
+                downloadProgress.Text = "Complete!";
+            }
+            catch (ZipException)
+                {
+                    MessageBox.Show("Error Downloading, please try again. If this is not the first\ntime you have seen this, tell Willster he messed up");
+                    downloadProgress.Text = "Error";
+                }
         }
 
-        private void resetUI()
+        private void reset()
         {
+            //reset the UI and critical componets
+            downloader.Dispose();
+            downloader = new WebClient();
             this.downloadProgress.Text = "Idle";
             this.downloadProgressBar.Value = downloadProgressBar.Minimum;
+            downloadCount = 0;
+            isAutoDetected = false;
+            downloadNumberCount.Visible = false;
+            hasUnzipped = false;
+        }
+
+        private void createDownloadQueue()
+        {
+            downloadQueue = new List<DownloadItem>();
+            if (this.features.relhaxBox.Checked) downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/relic.zip"), tempPath + "\\relic.zip"));
+            if (this.features.relhaxCensoredBox.Checked) downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/relic_censored.zip"), tempPath + "\\relic_censored.zip"));
+            if (this.features.guiBox.Checked) downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/gui.zip"), tempPath + "\\gui.zip"));
+            if (this.features.sixthSenseBox.Checked) downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/6thSense.zip"), tempPath + "\\6thSense.zip"));
+            totalDownloadCount = downloadQueue.Count;
+            downloadNumberCount.Visible = true;
         }
 
         private string getDownloadOnlyFolder()
@@ -313,141 +400,6 @@ namespace RelicModManager
             return selectWotFolder.SelectedPath;
         }
 
-        private void whatVersion_Click(object sender, EventArgs e)
-        {
-            checkingForUpdates = true;
-            //if this is the first thing the user did when opening the application
-            if (!alreadyDownloaded)
-            {
-
-                //try to find the tanks location by registry
-                const string keyName = "HKEY_CURRENT_USER\\Software\\Classes\\.wotreplay\\shell\\open\\command";
-                theObject = Registry.GetValue(keyName, "", -1);
-                if (theObject == null)
-                {
-                    if (!this.manuallyFindTanks()) return;
-                }
-
-                //parse it from the registry
-                else
-                {
-                    tanksLocation = (string)theObject;
-                    tanksLocation = tanksLocation.Substring(1);
-                    tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
-                    if (!File.Exists(tanksLocation))
-                    {
-                        if (!this.manuallyFindTanks()) return;
-                    }
-                    tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
-                    parsedFolder = tanksLocation + "\\res\\audio";
-                    wotFolder = tanksLocation;
-                }
-
-                //get the version infos if it's there
-                locatedTanksFolder = wotFolder + "\\res\\audio\\relicModVersion";
-                if (File.Exists(locatedTanksFolder + "\\ingame voice version.txt"))
-                {
-                    ingameVoiceVersion = "version " + File.ReadAllText(locatedTanksFolder + "\\ingame voice version.txt");
-                }
-                else
-                {
-                    ingameVoiceVersion = "not installed";
-                }
-                if (File.Exists(locatedTanksFolder + "\\gui version.txt"))
-                {
-                    guiVersion = "version " + File.ReadAllText(locatedTanksFolder + "\\gui version.txt");
-                }
-                else
-                {
-                    guiVersion = "not installed";
-                }
-                //managerVersion = "version 9.2";
-
-                //display the version info
-                info.downloadedVersionInfo.Text = "gui sounds " + guiVersion + "\ningame voice sounds " + ingameVoiceVersion + "\ndownlaod manager " + managerVersion;
-                info.ShowDialog();
-
-                //if we're checking for updates, do so
-                if (info.checkForUpdates)
-                {
-                    downloadProgress.Text = "Checking for updates...";
-                    //download and extract to temp folder
-                    if (customDownloadURL.Checked)
-                    {
-                        custom.ShowDialog();
-                        if (custom.canceling)
-                        {
-                            downloadProgress.Text = "Canceled";
-                            return;
-                        }
-                        zipFileDownloadURL = custom.zipFileURL.Text;
-                    }
-                    else
-                    {
-                        zipFileDownloadURL = "http://96.61.83.3/OtherStuff/Other%20Stuff/World%20of%20Pdanks%20stuffs/relic%20mod/relic/version.zip";
-                    }
-                    this.download(new Uri(zipFileDownloadURL), tempPath + "\\relic.zip");
-                }
-                return;
-            }
-
-            //else just display what is in the version text files
-            //no need to re-get the world of tanks folder
-            else
-            {
-                locatedTanksFolder = wotFolder + "\\res\\audio\\relicModVersion";
-                if (File.Exists(locatedTanksFolder + "\\ingame voice version.txt"))
-                {
-                    ingameVoiceVersion = "version " + File.ReadAllText(locatedTanksFolder + "\\ingame voice version.txt");
-                }
-                else
-                {
-                    ingameVoiceVersion = "not installed";
-                }
-                if (File.Exists(locatedTanksFolder + "\\gui version.txt"))
-                {
-                    guiVersion = "version " + File.ReadAllText(locatedTanksFolder + "\\gui version.txt");
-                }
-                else
-                {
-                    guiVersion = "not installed";
-                }
-                //managerVersion = "version 9.2";
-
-                //display the version info
-                info.downloadedVersionInfo.Text = "gui sounds " + guiVersion + "\ningame voice sounds " + ingameVoiceVersion + "\ndownlaod manager " + managerVersion;
-                info.ShowDialog();
-
-                //if we're checking for updates, do so
-                if (info.checkForUpdates)
-                {
-                    downloadProgress.Text = "Checking for updates...";
-                    //download and extract to temp folder
-                    if (customDownloadURL.Checked)
-                    {
-                        custom.ShowDialog();
-                        if (custom.canceling)
-                        {
-                            downloadProgress.Text = "Canceled";
-                            return;
-                        }
-                        zipFileDownloadURL = custom.zipFileURL.Text;
-                    }
-                    else
-                    {
-                        zipFileDownloadURL = "http://96.61.83.3/OtherStuff/Other%20Stuff/World%20of%20Pdanks%20stuffs/relic%20mod/relic/version.zip";
-                    }
-                    this.download(new Uri(zipFileDownloadURL), tempPath + "\\relic.zip");
-                }
-                return;
-            }
-        }
-
-        private void MainWindow_Load(object sender, EventArgs e)
-        {
-            downloader.Credentials = new NetworkCredential("tudbury209", "tudbury209");
-        }
-
         private void checkForUpdates()
         {
             bool isOutofDate = false;
@@ -455,12 +407,26 @@ namespace RelicModManager
             string newIngameVoiceVersion = "version " + File.ReadAllText(tempPath + "\\versionCheck\\relicModVersion" + "\\ingame voice version.txt");
             string newGuiVersion = "version " + File.ReadAllText(tempPath + "\\versionCheck\\relicModVersion" + "\\gui version.txt");
             string newManagerVersion = "version " + File.ReadAllText(tempPath + "\\versionCheck\\relicModVersion" + "\\manager version.txt");
+            string new6thSenseVersion = "version " + File.ReadAllText(tempPath + "\\versionCheck\\relicModVersion" + "\\6thSense version.txt");
             //cleanup extracted folders
             Directory.Delete(tempPath + "\\versionCheck", true);
             //display what we found
-            if (!guiVersion.Equals(newGuiVersion) || !ingameVoiceVersion.Equals(newIngameVoiceVersion))
+            if (!ingameVoiceVersion.Equals(newIngameVoiceVersion))
             {
-                MessageBox.Show("Your voice sounds are out of date. Please update.");
+                if (ingameVoiceVersion.Equals("not installed")) return;
+                MessageBox.Show("Your ingame voice sounds are out of date. Please update.");
+                isOutofDate = true;
+            }
+            if (!guiVersion.Equals(newGuiVersion))
+            {
+                if (guiVersion.Equals("not installed")) return;
+                MessageBox.Show("Your gui voice sounds are out of date. Please update.");
+                isOutofDate = true;
+            }
+            if (!sixthSenseVersion.Equals(new6thSenseVersion))
+            {
+                if (sixthSenseVersion.Equals("not installed")) return;
+                MessageBox.Show("Your 6th Sense sounds is out of date. Please update.");
                 isOutofDate = true;
             }
             if (!managerVersion.Equals(newManagerVersion))
@@ -471,145 +437,30 @@ namespace RelicModManager
                 {
                     System.Diagnostics.Process.Start("http://relicgaming.com/index.php?topic=165");
                 }
-                checkingForUpdates = false;
                 return;
             }
-            checkingForUpdates = false;
             if (!isOutofDate) MessageBox.Show("Your manager and sound mods are up to date");
         }
 
-        private bool manuallyFindTanks()
+        private string autoFindTanks()
         {
-             //unable to find it in the registry, so ask for it
-            //the user is caching...so far
-            if (downloadOnly.Checked)
-            {
-                wotFolder = this.getDownloadOnlyFolder();
-                if (wotFolder == null)
-                {
-                    downloadProgress.Text = "Canceled";
-                    return false;
-                }
-
-                //save the tanks install!!!
-                if (File.Exists(wotFolder + "\\WorldOfTanks.exe"))
-                {
-                    tryingToCache = MessageBox.Show("World of Tanks install detected. Uncheck 'Download only' and try aagain.", "Your Tanks install was saved!");
-                    downloadProgress.Text = "Aborted";
-                    return false;
-                }
-                if (Directory.Exists(wotFolder + "\\res")) Directory.Delete((wotFolder + "\\res"), true);
-                Directory.CreateDirectory(wotFolder + "\\res\\audio");
-                parsedFolder = wotFolder + "\\res\\audio";
-                return true;
-            }
-
-            //the user is installing
-            else
-            {
-                if (findWotExe.ShowDialog().Equals(DialogResult.Cancel))
-                {
-                    downloadProgress.Text = "Canceled";
-                    return false;
-                }
-                wotFolder = findWotExe.FileName;
-                wotFolder = wotFolder.Substring(0, wotFolder.Length - 17);
-            }
-
-            parsedFolder = wotFolder + "\\res\\audio";
-            return true;
-            }
-
-        private void downloadOnly_Click(object sender, EventArgs e)
-        {
-            if (forceManuel.Checked)
-            {
-                MessageBox.Show("This setting conflicts with the setting 'Force Manuel detection'. \nYou can eithor install, manually or autodetection, OR download to a specific folder.");
-                downloadOnly.Checked = false;
-            }
+            const string keyName = "HKEY_CURRENT_USER\\Software\\Classes\\.wotreplay\\shell\\open\\command";
+            theObject = Registry.GetValue(keyName, "", -1);
+            if (theObject == null) return null;
+            isAutoDetected = true;
+            return (string)theObject;
         }
 
-        private void forceManuel_Click(object sender, EventArgs e)
+        private string manuallyFindTanks()
         {
-            if (downloadOnly.Checked)
+            //unable to find it in the registry, so ask for it
+            if (findWotExe.ShowDialog().Equals(DialogResult.Cancel))
             {
-                MessageBox.Show("This setting conflicts with the setting 'Download only no Install'. \nYou can eithor install, manually or autodetection, OR download to a specific folder.");
-                forceManuel.Checked = false;
+                downloadProgress.Text = "Canceled";
+                return null;
             }
-        }
-
-        private void CensoredVersion_Click_1(object sender, EventArgs e)
-        {
-            checkingForUpdates = false;
-            this.resetUI();
-            if (this.downloadOnly.Checked)
-            {
-                if (!this.manuallyFindTanks()) return;
-            }
-            else if (this.forceManuel.Checked)
-            {
-                if (!this.manuallyFindTanks()) return;
-            }
-
-            else
-            {
-                //try to find the tanks location by registry
-                const string keyName = "HKEY_CURRENT_USER\\Software\\Classes\\.wotreplay\\shell\\open\\command";
-                theObject = Registry.GetValue(keyName, "", -1);
-                if (theObject == null)
-                {
-                    if (!this.manuallyFindTanks()) return;
-                }
-                //parse it from the registry
-                else
-                {
-                    tanksLocation = (string)theObject;
-                    tanksLocation = tanksLocation.Substring(1);
-                    tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
-                    if (!File.Exists(tanksLocation))
-                    {
-                        if (!this.manuallyFindTanks()) return;
-                    }
-                    tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
-                    parsedFolder = tanksLocation + "\\res\\audio";
-                    wotFolder = tanksLocation;
-                }
-            }
-            //delete the old files if they exist
-            downloadProgress.Text = "Delete old files...";
-            try
-            {
-                System.IO.File.Delete(parsedFolder + "\\gui.fev");
-            }
-            catch (DirectoryNotFoundException)
-            {
-                MessageBox.Show("Registry Detection Failed. Check the 'force manuel detection' checkbox", "Something f*cked up");
-                statusLabel.Text = "Aborted";
-                return;
-            }
-            System.IO.File.Delete(parsedFolder + "\\gui.fsb");
-            System.IO.File.Delete(parsedFolder + "\\ingame_voice_def.fev");
-            System.IO.File.Delete(parsedFolder + "\\ingame_voice_def.fsb");
-
-            //handle the custom URL information
-            downloadProgress.Text = "Starting Download...";
-            if (customDownloadURL.Checked)
-            {
-                custom.ShowDialog();
-                if (custom.canceling)
-                {
-                    downloadProgress.Text = "Canceled";
-                    return;
-                }
-                zipFileDownloadURL = custom.zipFileURL.Text;
-            }
-            else
-            {
-                zipFileDownloadURL = "http://96.61.83.3/OtherStuff/Other%20Stuff/World%20of%20Pdanks%20stuffs/relic%20mod/relic_censored/relic.zip";
-            }
-            //download unzip cleanup
-            this.download(new Uri(zipFileDownloadURL), tempPath + "\\relic.zip");
-            alreadyDownloaded = true;
+            tanksLocation = findWotExe.FileName;
+            return "all good";
         }
 
         //old method of unzipping
@@ -674,4 +525,18 @@ namespace RelicModManager
         //download stardard way
         this.unzipAndCleanup(tempPath + "\\relic.zip", tempPath + "\\versionCheck");*/
     }
+
+    class DownloadItem
+    {
+        private Uri URL;
+        private string zipFile;
+        public DownloadItem(Uri newURL, String newZipFile)
+        {
+            URL = newURL;
+            zipFile = newZipFile;
+        }
+        public Uri getURL() { return URL; }
+        public string getZipFile() { return zipFile; }
+    }
+
 }

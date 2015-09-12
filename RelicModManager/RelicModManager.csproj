@@ -75,6 +75,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SelectFeatures.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectFeatures.Designer.cs">
+      <DependentUpon>SelectFeatures.cs</DependentUpon>
+    </Compile>
     <Compile Include="VersionInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,9 +101,13 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="SelectFeatures.resx">
+      <DependentUpon>SelectFeatures.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="VersionInfo.resx">
       <DependentUpon>VersionInfo.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -120,28 +130,62 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\step1.PNG" />
+    <None Include="Resources\pictures\step1.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\step3.PNG" />
+    <None Include="Resources\pictures\step3.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\step5.PNG" />
+    <None Include="Resources\pictures\step5.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\step5_new.PNG" />
+    <None Include="Resources\pictures\step5_new.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\step4.PNG" />
+    <None Include="Resources\pictures\step4.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\step1_new.png" />
+    <None Include="Resources\pictures\step1_new.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\step2.PNG" />
+    <None Include="Resources\pictures\step2.PNG" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Ionic.Zip.dll" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\audio\ammoRack.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\audio\battleStart.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\audio\pen.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\audio\playerDied.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\audio\ammoRackCensored.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\audio\spotted2.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\audio\spotted3.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\audio\spotted1.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\audio\battleCountdown1.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\audio\battleCountdown2.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\audio\enemySighted1.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
