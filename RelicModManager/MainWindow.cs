@@ -36,7 +36,7 @@ namespace RelicModManager
         private static int MBDivisor = 1048576;
         private string ingameVoiceVersion;
         private string guiVersion;
-        private string managerVersion = "version 12";
+        private string managerVersion = "version 13.0";
         private string tanksLocation;
         private object theObject;
         private string sixthSenseVersion;
@@ -46,7 +46,9 @@ namespace RelicModManager
         private int totalDownloadCount;
         private bool isAutoDetected;
         private string versionFolder;
-        private bool hasUnzipped;
+        string appPath = Application.StartupPath;
+        private string newVersionName;
+        private bool isAlreadyStarted = false;
 
         public MainWindow()
         {
@@ -196,11 +198,22 @@ namespace RelicModManager
             MBytesTotal = (int)totalBytes / MBDivisor;
             downloadProgress.Text = "Downloaded " + MBytesIn + " MB" + " of " + MBytesTotal + " MB";
             downloadProgressBar.Value = e.ProgressPercentage;
+            if(MBytesIn == 0 && MBytesTotal == 0)
+            {
+                this.downloadProgress.Text = "Complete!";
+            }
         }
 
         void downloader_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            if (hasUnzipped) return;
+            //get rid of this, just let it look again and again
+            //it won't do anything cause after unzipping it will
+            //delete the file
+            //if (hasUnzipped)
+            //{
+            //    this.cleanup();
+            //    return;
+            //}
             if (downloadQueue.Count > 0)
             {
                 downloadCount++;
@@ -209,19 +222,38 @@ namespace RelicModManager
                 downloadQueue.RemoveAt(0);
                 return;
             }
-            if (downloadCount == totalDownloadCount)
+            else
             {
-                if (File.Exists(tempPath + "\\relic.zip")) this.unzipAndCleanup(tempPath + "\\relic.zip", parsedFolder);
-                if (File.Exists(tempPath + "\\relic_censored.zip")) this.unzipAndCleanup(tempPath + "\\relic_censored.zip", parsedFolder);
-                if (File.Exists(tempPath + "\\gui.zip")) this.unzipAndCleanup(tempPath + "\\gui.zip", parsedFolder);
-                if (File.Exists(tempPath + "\\6thSense.zip")) this.unzipAndCleanup(tempPath + "\\6thSense.zip", parsedFolder);
-                if (File.Exists(tempPath + "\\origional.zip")) this.unzipAndCleanup(tempPath + "\\origional.zip", parsedFolder);
+                //just let it keep running it's little heart out doing nothing
+                //since the files won't exist
+                //use the overloaded method of cleanup(filepath,filename);
+                if (File.Exists(tempPath + "\\relic.zip")) this.unzip(tempPath + "\\relic.zip", parsedFolder);
+                if (File.Exists(tempPath + "\\relic_censored.zip")) this.unzip(tempPath + "\\relic_censored.zip", parsedFolder);
+                if (File.Exists(tempPath + "\\gui.zip")) this.unzip(tempPath + "\\gui.zip", parsedFolder);
+                if (File.Exists(tempPath + "\\6thSense.zip")) this.unzip(tempPath + "\\6thSense.zip", parsedFolder);
+                if (File.Exists(tempPath + "\\origional.zip")) this.unzip(tempPath + "\\origional.zip", parsedFolder);
                 if (File.Exists(tempPath + "\\version.zip"))
                 {
-                    this.unzipAndCleanup(tempPath + "\\version.zip", tempPath + "\\versionCheck");
+                    this.unzip(tempPath + "\\version.zip", tempPath + "\\versionCheck");
                     this.checkForUpdates();
                 }
-                hasUnzipped = true;
+                if (File.Exists(appPath + "\\" + newVersionName))
+                {
+                    if (!isAlreadyStarted)
+                    {
+                        try
+                        {
+                            System.Diagnostics.Process.Start(appPath + "\\" + newVersionName);
+                            isAlreadyStarted = true;
+                            this.Close();
+                        }
+                        catch (Win32Exception)
+                        {
+                            isAlreadyStarted = false;
+                        }
+                    }
+                }
+                //hasUnzipped = true;
             }
         }
 
@@ -280,10 +312,7 @@ namespace RelicModManager
                 totalDownloadCount = downloadQueue.Count;
                 downloadNumberCount.Visible = true;
                 this.downloader_DownloadFileCompleted(null, null);
-                //make sure to include the \\versionCheck\\ folder
-               
             }
-           
         }
 
         private String parseStrings()
@@ -328,8 +357,8 @@ namespace RelicModManager
 
         private void displayError(String errorText, String errorHandle)
         {
-            if(!errorHandle.Equals(null)) MessageBox.Show(errorText, errorHandle);
-            else MessageBox.Show(errorText);
+            if(errorHandle == null) MessageBox.Show(errorText);
+            else MessageBox.Show(errorText, errorHandle);
             statusLabel.Text = "Aborted";
         }
 
@@ -343,23 +372,41 @@ namespace RelicModManager
             downloader.DownloadFileAsync(URL, zipFile, zipFile);
         }
 
-        private void unzipAndCleanup(string zipFile, string extractFolder)
+        private void unzip(string zipFile, string extractFolder)
         {
             try
             {
                 //exract
                 relicZip = new ZipFile(zipFile);
                 relicZip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
-                //cleanup
                 relicZip.Dispose();
-                System.IO.File.Delete(zipFile);
-                downloadProgress.Text = "Complete!";
+                //cleanup
+                this.cleanup(zipFile);
             }
             catch (ZipException)
                 {
                     MessageBox.Show("Error Downloading, please try again. If this is not the first\ntime you have seen this, tell Willster he messed up");
                     downloadProgress.Text = "Error";
                 }
+        }
+
+        private void cleanup()
+        {
+            if (File.Exists(tempPath + "\\relic.zip")) System.IO.File.Delete(tempPath + "\\relic.zip");
+            if (File.Exists(tempPath + "\\relic_censored.zip")) System.IO.File.Delete(tempPath + "\\relic_censored.zip");
+            if (File.Exists(tempPath + "\\gui.zip")) System.IO.File.Delete(tempPath + "\\gui.zip");
+            if (File.Exists(tempPath + "\\6thSense.zip")) System.IO.File.Delete(tempPath + "\\6thSense.zip");
+            if (File.Exists(tempPath + "\\origional.zip")) System.IO.File.Delete(tempPath + "\\origional.zip");
+            if (File.Exists(tempPath + "\\version.zip")) System.IO.File.Delete(tempPath + "\\version.zip");
+            this.downloadNumberCount.Visible = false;
+            this.downloadProgress.Text = "Complete!";
+        }
+
+        private void cleanup(string theZipFile)
+        {
+            if (File.Exists(theZipFile)) File.Delete(theZipFile);
+            this.downloadNumberCount.Visible = false;
+            this.downloadProgress.Text = "Complete!";
         }
 
         private void reset()
@@ -372,7 +419,6 @@ namespace RelicModManager
             downloadCount = 0;
             isAutoDetected = false;
             downloadNumberCount.Visible = false;
-            hasUnzipped = false;
         }
 
         private void createDownloadQueue()
@@ -407,39 +453,62 @@ namespace RelicModManager
             string newIngameVoiceVersion = "version " + File.ReadAllText(tempPath + "\\versionCheck\\relicModVersion" + "\\ingame voice version.txt");
             string newGuiVersion = "version " + File.ReadAllText(tempPath + "\\versionCheck\\relicModVersion" + "\\gui version.txt");
             string newManagerVersion = "version " + File.ReadAllText(tempPath + "\\versionCheck\\relicModVersion" + "\\manager version.txt");
+            newVersionName = "RelicModManager v" + File.ReadAllText(tempPath + "\\versionCheck\\relicModVersion" + "\\manager version.txt") + ".exe";
             string new6thSenseVersion = "version " + File.ReadAllText(tempPath + "\\versionCheck\\relicModVersion" + "\\6thSense version.txt");
             //cleanup extracted folders
             Directory.Delete(tempPath + "\\versionCheck", true);
+            if (File.Exists(tempPath + "\\version.zip")) System.IO.File.Delete(tempPath + "\\version.zip");
             //display what we found
             if (!ingameVoiceVersion.Equals(newIngameVoiceVersion))
             {
-                if (ingameVoiceVersion.Equals("not installed")) return;
-                MessageBox.Show("Your ingame voice sounds are out of date. Please update.");
-                isOutofDate = true;
+                if (ingameVoiceVersion.Equals("not installed")) { }
+                else
+                {
+                    MessageBox.Show("Your ingame voice sounds are out of date. Please update.");
+                    isOutofDate = true;
+                }
             }
             if (!guiVersion.Equals(newGuiVersion))
             {
-                if (guiVersion.Equals("not installed")) return;
-                MessageBox.Show("Your gui voice sounds are out of date. Please update.");
-                isOutofDate = true;
+                if (guiVersion.Equals("not installed")) { }
+                else
+                {
+                    MessageBox.Show("Your gui voice sounds are out of date. Please update.");
+                    isOutofDate = true;
+                }
             }
             if (!sixthSenseVersion.Equals(new6thSenseVersion))
             {
-                if (sixthSenseVersion.Equals("not installed")) return;
-                MessageBox.Show("Your 6th Sense sounds is out of date. Please update.");
-                isOutofDate = true;
+                if (sixthSenseVersion.Equals("not installed")) { }
+                else
+                {
+                    MessageBox.Show("Your 6th Sense sounds is out of date. Please update.");
+                    isOutofDate = true;
+                }
             }
             if (!managerVersion.Equals(newManagerVersion))
             {
-                DialogResult result = MessageBox.Show("Your manager is out of date. Go to the forms to download the update?", "Manager is out of date", MessageBoxButtons.YesNo);
+                //have it download the new version
+                //when downloaded, move it to this application's directory
+                //maintain file name structure
+                //open the new one
+                //close this one
+                //try to delete the old one
+                DialogResult result = MessageBox.Show("Your manager is out of date. Download the new version?", "Manager is out of date", MessageBoxButtons.YesNo);
                 isOutofDate = true;
                 if (result.Equals(DialogResult.Yes))
                 {
-                    System.Diagnostics.Process.Start("http://relicgaming.com/index.php?topic=165");
+                    //downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/" + newVersionName), appPath + "\\" + "2" + newVersionName));
+                    downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/" + newVersionName), appPath + "\\" + newVersionName));
+                    this.downloader_DownloadFileCompleted(null, null);
                 }
+                //downloadProgress.Text = "Complete!";
+                //downloadNumberCount.Visible = false;
                 return;
             }
             if (!isOutofDate) MessageBox.Show("Your manager and sound mods are up to date");
+            downloadProgress.Text = "Complete!";
+            downloadNumberCount.Visible = false;
         }
 
         private string autoFindTanks()
@@ -448,6 +517,7 @@ namespace RelicModManager
             theObject = Registry.GetValue(keyName, "", -1);
             if (theObject == null) return null;
             isAutoDetected = true;
+            tanksLocation = (string)theObject;
             return (string)theObject;
         }
 
@@ -460,6 +530,7 @@ namespace RelicModManager
                 return null;
             }
             tanksLocation = findWotExe.FileName;
+            isAutoDetected = false;
             return "all good";
         }
 
