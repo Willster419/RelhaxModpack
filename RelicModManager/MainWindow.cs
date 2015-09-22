@@ -36,7 +36,7 @@ namespace RelicModManager
         private static int MBDivisor = 1048576;
         private string ingameVoiceVersion;
         private string guiVersion;
-        private string managerVersion = "version 13.0";
+        private string managerVersion = "version 13.1";
         private string tanksLocation;
         private object theObject;
         private string sixthSenseVersion;
@@ -49,6 +49,7 @@ namespace RelicModManager
         string appPath = Application.StartupPath;
         private string newVersionName;
         private bool isAlreadyStarted = false;
+        private bool isStartupCheck = true;
 
         public MainWindow()
         {
@@ -209,11 +210,6 @@ namespace RelicModManager
             //get rid of this, just let it look again and again
             //it won't do anything cause after unzipping it will
             //delete the file
-            //if (hasUnzipped)
-            //{
-            //    this.cleanup();
-            //    return;
-            //}
             if (downloadQueue.Count > 0)
             {
                 downloadCount++;
@@ -224,7 +220,7 @@ namespace RelicModManager
             }
             else
             {
-                //just let it keep running it's little heart out doing nothing
+                //just let it keep running
                 //since the files won't exist
                 //use the overloaded method of cleanup(filepath,filename);
                 if (File.Exists(tempPath + "\\relic.zip")) this.unzip(tempPath + "\\relic.zip", parsedFolder);
@@ -235,10 +231,18 @@ namespace RelicModManager
                 if (File.Exists(tempPath + "\\version.zip"))
                 {
                     this.unzip(tempPath + "\\version.zip", tempPath + "\\versionCheck");
-                    this.checkForUpdates();
+                    if (isStartupCheck)
+                    {
+                        this.checkForUpdatesOnStartup();
+                        isStartupCheck = false;
+                        return;
+                    }
+                    else this.checkForUpdates();
                 }
                 if (File.Exists(appPath + "\\" + newVersionName))
                 {
+                    string exePath = appPath + "\\" + newVersionName;
+                    if (exePath.Equals(Application.ExecutablePath)) return;
                     if (!isAlreadyStarted)
                     {
                         try
@@ -253,7 +257,6 @@ namespace RelicModManager
                         }
                     }
                 }
-                //hasUnzipped = true;
             }
         }
 
@@ -313,6 +316,16 @@ namespace RelicModManager
                 downloadNumberCount.Visible = true;
                 this.downloader_DownloadFileCompleted(null, null);
             }
+        }
+
+        private void checkmanagerUpdatesStartup()
+        {
+            this.reset();
+            downloadQueue = new List<DownloadItem>();
+            downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/version.zip"), tempPath + "\\version.zip"));
+            totalDownloadCount = downloadQueue.Count;
+            downloadNumberCount.Visible = true;
+            this.downloader_DownloadFileCompleted(null, null);
         }
 
         private String parseStrings()
@@ -493,22 +506,39 @@ namespace RelicModManager
                 //maintain file name structure
                 //open the new one
                 //close this one
-                //try to delete the old one
+                //try to delete the old one (nah)
                 DialogResult result = MessageBox.Show("Your manager is out of date. Download the new version?", "Manager is out of date", MessageBoxButtons.YesNo);
                 isOutofDate = true;
                 if (result.Equals(DialogResult.Yes))
                 {
-                    //downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/" + newVersionName), appPath + "\\" + "2" + newVersionName));
                     downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/" + newVersionName), appPath + "\\" + newVersionName));
                     this.downloader_DownloadFileCompleted(null, null);
                 }
-                //downloadProgress.Text = "Complete!";
-                //downloadNumberCount.Visible = false;
                 return;
             }
             if (!isOutofDate) MessageBox.Show("Your manager and sound mods are up to date");
             downloadProgress.Text = "Complete!";
             downloadNumberCount.Visible = false;
+        }
+
+        private void checkForUpdatesOnStartup()
+        {
+            //get the version infos
+            string newManagerVersion = "version " + File.ReadAllText(tempPath + "\\versionCheck\\relicModVersion" + "\\manager version.txt");
+            newVersionName = "RelicModManager v" + File.ReadAllText(tempPath + "\\versionCheck\\relicModVersion" + "\\manager version.txt") + ".exe";
+            //cleanup extracted folders
+            Directory.Delete(tempPath + "\\versionCheck", true);
+            if (File.Exists(tempPath + "\\version.zip")) System.IO.File.Delete(tempPath + "\\version.zip");
+            if (!managerVersion.Equals(newManagerVersion))
+            {
+                DialogResult result = MessageBox.Show("Your manager is out of date. Download the new version?", "Manager is out of date", MessageBoxButtons.YesNo);
+                if (result.Equals(DialogResult.Yes))
+                {
+                    downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/" + newVersionName), appPath + "\\" + newVersionName));
+                    this.downloader_DownloadFileCompleted(null, null);
+                }
+                return;
+            }
         }
 
         private string autoFindTanks()
@@ -532,6 +562,11 @@ namespace RelicModManager
             tanksLocation = findWotExe.FileName;
             isAutoDetected = false;
             return "all good";
+        }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+            this.checkmanagerUpdatesStartup();
         }
 
         //old method of unzipping
