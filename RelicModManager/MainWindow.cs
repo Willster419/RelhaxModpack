@@ -36,7 +36,7 @@ namespace RelicModManager
         private static int MBDivisor = 1048576;
         private string ingameVoiceVersion;
         private string guiVersion;
-        private string managerVersion = "version 13.1";
+        private string managerVersion = "version 13.2";
         private string tanksLocation;
         private object theObject;
         private string sixthSenseVersion;
@@ -102,6 +102,11 @@ namespace RelicModManager
             tanksLocation = this.getDownloadOnlyFolder();
             if (tanksLocation == null) return;
             parsedFolder = tanksLocation + "\\res\\audio";
+            if (File.Exists(tanksLocation + "\\worldOfTanks.exe"))
+            {
+                this.displayError("It looks like you are trying to 'install' rather \nthan 'download' the mods. please use the 'install' button", "trying to install?");
+                return;
+            }
             try
             {
                 System.IO.Directory.Delete(tanksLocation + "\\res", true);
