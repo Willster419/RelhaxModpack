@@ -571,6 +571,12 @@ namespace RelicModManager
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            if (File.Exists(tempPath + "\\relic.zip")) File.Delete(tempPath + "\\relic.zip");
+            if (File.Exists(tempPath + "\\relic_censored.zip")) File.Delete(tempPath + "\\relic_censored.zip");
+            if (File.Exists(tempPath + "\\gui.zip")) File.Delete(tempPath + "\\gui.zip");
+            if (File.Exists(tempPath + "\\6thSense.zip")) File.Delete(tempPath + "\\6thSense.zip");
+            if (File.Exists(tempPath + "\\origional.zip")) File.Delete(tempPath + "\\origional.zip");
+            if (File.Exists(tempPath + "\\version.zip")) File.Delete(tempPath + "\\version.zip");
             this.checkmanagerUpdatesStartup();
         }
 
