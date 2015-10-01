@@ -36,7 +36,7 @@ namespace RelicModManager
         private static int MBDivisor = 1048576;
         private string ingameVoiceVersion;
         private string guiVersion;
-        private string managerVersion = "version 13.2";
+        private string managerVersion = "version 13.3";
         private string tanksLocation;
         private object theObject;
         private string sixthSenseVersion;
