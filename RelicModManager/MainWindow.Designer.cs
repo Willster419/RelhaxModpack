@@ -137,7 +137,7 @@
             this.forceManuel.Name = "forceManuel";
             this.forceManuel.Size = new System.Drawing.Size(171, 17);
             this.forceManuel.TabIndex = 13;
-            this.forceManuel.Text = "Force Manuel Game Detection";
+            this.forceManuel.Text = "Force Manual Game Detection";
             this.forceManuel.UseVisualStyleBackColor = true;
             // 
             // downloadRelhax

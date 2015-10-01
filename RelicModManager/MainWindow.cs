@@ -77,7 +77,7 @@ namespace RelicModManager
             {
                 if (this.manuallyFindTanks() == null) return;
             }
-            if (this.parseStrings() == null) this.displayError("The auto-detection failed. Please use the 'force manuel' option", null);
+            if (this.parseStrings() == null) this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
             if (this.prepareForInstall(false) == null) this.displayError("Failed preparing for install.", null);
             this.createDownloadQueue();
             this.downloader_DownloadFileCompleted(null, null);
@@ -124,7 +124,7 @@ namespace RelicModManager
             {
                 if (this.manuallyFindTanks() == null) return;
             }
-            if (this.parseStrings() == null) this.displayError("The auto-detection failed. PLease use the 'force manuel' option", null);
+            if (this.parseStrings() == null) this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
             if (this.prepareForInstall(true) == null) this.displayError("Tell Willster he screwed up. He'll know.", null);
             downloadQueue = new List<DownloadItem>();
             downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/origional.zip"), tempPath + "\\origional.zip"));
@@ -193,7 +193,7 @@ namespace RelicModManager
             File.Delete(wotFolder + "\\ingame_voice_def.fsb");
             File.Copy(parsedBackupFolder + "\\ingame_voice.fev", wotFolder + "\\ingame_voice.fev");
             File.Copy(parsedBackupFolder + "\\ingame_voice_def.fsb", wotFolder + "\\ingame_voice_def.fsb");
-            downloadProgress.Text = "Complete";
+            downloadProgress.Text = "Complete!";
         }
 
         void downloader_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -282,7 +282,7 @@ namespace RelicModManager
             {
                 if (this.manuallyFindTanks() == null) return;
             }
-            if (this.parseStrings() == null) this.displayError("The auto-detection failed. PLease use the 'force manuel' option", null);
+            if (this.parseStrings() == null) this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
             versionFolder = tanksLocation + "\\res\\audio\\relicModVersion";
             if (File.Exists(versionFolder + "\\ingame voice version.txt"))
             {
@@ -308,7 +308,7 @@ namespace RelicModManager
             {
                 sixthSenseVersion = "not installed";
             }
-            info.downloadedVersionInfo.Text = "gui sounds " + guiVersion + "\ningame voice sounds " + ingameVoiceVersion + "\n6th Sense " + sixthSenseVersion + "\ndownlaod manager " + managerVersion;
+            info.downloadedVersionInfo.Text = "gui sounds " + guiVersion + "\ningame voice sounds " + ingameVoiceVersion + "\n6th Sense " + sixthSenseVersion + "\ndownload manager " + managerVersion;
             info.ShowDialog();
 
             //if we're checking for updates, do so
@@ -459,7 +459,7 @@ namespace RelicModManager
 
         private string getBackupFolder()
         {
-            selectWotFolder.Description = "Select the 'audio' folder where your moded audio files are held. (Eithor under res or res_mods)";
+            selectWotFolder.Description = "Select the 'audio' folder where your modded audio files are held. (Either under res or res_mods)";
             if (selectWotFolder.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return null;
             return selectWotFolder.SelectedPath;
         }

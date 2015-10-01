@@ -91,9 +91,9 @@
             this.selectYourFeatures.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.selectYourFeatures.Location = new System.Drawing.Point(12, 9);
             this.selectYourFeatures.Name = "selectYourFeatures";
-            this.selectYourFeatures.Size = new System.Drawing.Size(191, 13);
+            this.selectYourFeatures.Size = new System.Drawing.Size(192, 13);
             this.selectYourFeatures.TabIndex = 4;
-            this.selectYourFeatures.Text = "Selext which parts of the Relhax";
+            this.selectYourFeatures.Text = "Select which parts of the Relhax";
             // 
             // label1
             // 
