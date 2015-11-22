@@ -45,9 +45,9 @@
             // 
             this.updateButton.Location = new System.Drawing.Point(49, 83);
             this.updateButton.Name = "updateButton";
-            this.updateButton.Size = new System.Drawing.Size(100, 23);
+            this.updateButton.Size = new System.Drawing.Size(105, 23);
             this.updateButton.TabIndex = 1;
-            this.updateButton.Text = "check for updates";
+            this.updateButton.Text = "Check for updates";
             this.updateButton.UseVisualStyleBackColor = true;
             this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
             // 

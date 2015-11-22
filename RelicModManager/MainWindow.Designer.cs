@@ -48,7 +48,7 @@
             this.installMods.Name = "installMods";
             this.installMods.Size = new System.Drawing.Size(129, 34);
             this.installMods.TabIndex = 0;
-            this.installMods.Text = "install latest relhax";
+            this.installMods.Text = "Install latest Relhax";
             this.installMods.UseVisualStyleBackColor = true;
             this.installMods.Click += new System.EventHandler(this.downloadMods_Click);
             // 
@@ -58,7 +58,7 @@
             this.stockSounds.Name = "stockSounds";
             this.stockSounds.Size = new System.Drawing.Size(129, 34);
             this.stockSounds.TabIndex = 1;
-            this.stockSounds.Text = "uninstall relhax";
+            this.stockSounds.Text = "Uninstall Relhax";
             this.stockSounds.UseVisualStyleBackColor = true;
             this.stockSounds.Click += new System.EventHandler(this.stockSounds_Click);
             // 
@@ -68,7 +68,7 @@
             this.backupCustom.Name = "backupCustom";
             this.backupCustom.Size = new System.Drawing.Size(129, 34);
             this.backupCustom.TabIndex = 2;
-            this.backupCustom.Text = "backup custom sounds";
+            this.backupCustom.Text = "Backup custom sounds";
             this.backupCustom.UseVisualStyleBackColor = true;
             this.backupCustom.Click += new System.EventHandler(this.backupCustom_Click);
             // 
@@ -78,7 +78,7 @@
             this.restoreCustom.Name = "restoreCustom";
             this.restoreCustom.Size = new System.Drawing.Size(129, 34);
             this.restoreCustom.TabIndex = 3;
-            this.restoreCustom.Text = "restore custom sounds";
+            this.restoreCustom.Text = "Restore custom sounds";
             this.restoreCustom.UseVisualStyleBackColor = true;
             this.restoreCustom.Click += new System.EventHandler(this.restoreCustom_Click);
             // 
@@ -101,7 +101,7 @@
             this.whatVersion.Name = "whatVersion";
             this.whatVersion.Size = new System.Drawing.Size(129, 34);
             this.whatVersion.TabIndex = 7;
-            this.whatVersion.Text = "version info";
+            this.whatVersion.Text = "Version info";
             this.whatVersion.UseVisualStyleBackColor = true;
             this.whatVersion.Click += new System.EventHandler(this.whatVersion_Click);
             // 
@@ -135,9 +135,9 @@
             this.forceManuel.AutoSize = true;
             this.forceManuel.Location = new System.Drawing.Point(12, 132);
             this.forceManuel.Name = "forceManuel";
-            this.forceManuel.Size = new System.Drawing.Size(171, 17);
+            this.forceManuel.Size = new System.Drawing.Size(166, 17);
             this.forceManuel.TabIndex = 13;
-            this.forceManuel.Text = "Force Manual Game Detection";
+            this.forceManuel.Text = "Force manual game detection";
             this.forceManuel.UseVisualStyleBackColor = true;
             // 
             // downloadRelhax
@@ -146,7 +146,7 @@
             this.downloadRelhax.Name = "downloadRelhax";
             this.downloadRelhax.Size = new System.Drawing.Size(129, 34);
             this.downloadRelhax.TabIndex = 14;
-            this.downloadRelhax.Text = "download latest relhax (no install)";
+            this.downloadRelhax.Text = "Download latest Relhax (no install)";
             this.downloadRelhax.UseVisualStyleBackColor = true;
             this.downloadRelhax.Click += new System.EventHandler(this.downloadRelhax_Click);
             // 
