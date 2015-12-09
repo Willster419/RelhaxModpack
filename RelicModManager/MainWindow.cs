@@ -36,7 +36,7 @@ namespace RelicModManager
         private static int MBDivisor = 1048576;
         private string ingameVoiceVersion;
         private string guiVersion;
-        private string managerVersion = "version 13.3";
+        private string managerVersion = "version 14";
         private string tanksLocation;
         private object theObject;
         private string sixthSenseVersion;
@@ -50,6 +50,8 @@ namespace RelicModManager
         private string newVersionName;
         private bool isAlreadyStarted = false;
         private bool isStartupCheck = true;
+        private pleaseWait wait = new pleaseWait();
+        private string parsedModsFolder;
 
         public MainWindow()
         {
@@ -58,14 +60,6 @@ namespace RelicModManager
 
         private void downloadMods_Click(object sender, EventArgs e)
         {
-            // this is how the program will be re-written
-            // - reset the UI and some download features
-            // - method to auto return the tanks install location by reg search
-            // if that failes, return the tanks install location by asking
-            // - parse the strings
-            // - delete old files, if they exist
-            // - download the selected files
-            // - extract them and cleanup
             this.features.ShowDialog();
             if (features.canceling)
             {
@@ -77,21 +71,22 @@ namespace RelicModManager
             {
                 if (this.manuallyFindTanks() == null) return;
             }
-            if (this.parseStrings() == null) this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
-            if (this.prepareForInstall(false) == null) this.displayError("Failed preparing for install.", null);
+            if (this.parseStrings() == null)
+            {
+                this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
+                return;
+            }
+            if (this.prepareForInstall(false) == null)
+            {
+                this.displayError("Failed preparing for install.", null);
+                return;
+            }
             this.createDownloadQueue();
             this.downloader_DownloadFileCompleted(null, null);
         }
 
         private void downloadRelhax_Click(object sender, EventArgs e)
         {
-            // this is how the program will be re-written
-            // - reset the UI and some download features
-            // - parse the strings
-            // - delete old files, if they exist
-            // - download the selected files
-            // - extract them and cleanup
-            
             this.reset();
             this.features.ShowDialog();
             if (features.canceling)
@@ -101,7 +96,7 @@ namespace RelicModManager
             }
             tanksLocation = this.getDownloadOnlyFolder();
             if (tanksLocation == null) return;
-            parsedFolder = tanksLocation + "\\res\\audio";
+            parsedFolder = tanksLocation;
             if (File.Exists(tanksLocation + "\\worldOfTanks.exe"))
             {
                 this.displayError("It looks like you are trying to 'install' rather \nthan 'download' the mods. please use the 'install' button", "trying to install?");
@@ -283,7 +278,7 @@ namespace RelicModManager
                 if (this.manuallyFindTanks() == null) return;
             }
             if (this.parseStrings() == null) this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
-            versionFolder = tanksLocation + "\\res\\audio\\relicModVersion";
+            versionFolder = parsedFolder + "\\relicModVersion";
             if (File.Exists(versionFolder + "\\ingame voice version.txt"))
             {
                 ingameVoiceVersion = "version " + File.ReadAllText(versionFolder + "\\ingame voice version.txt");
@@ -342,12 +337,18 @@ namespace RelicModManager
                 if (!File.Exists(tanksLocation)) return null;
             }
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
-            parsedFolder = tanksLocation + "\\res\\audio";
+            string[] filesList;
+            filesList = Directory.GetDirectories(tanksLocation + "\\res_mods", "0.*");
+            parsedModsFolder = filesList[0];
+            //parsedFolder = tanksLocation + "\\res\\audio";
+            parsedFolder = parsedModsFolder + "\\audio";
             return "1";
         }
 
         private String prepareForInstall(bool deleteAll)
         {
+            //re-written for using the res-mods folder
+            
             //delete the old files if they exist
             downloadProgress.Text = "Delete old files...";
             try
@@ -361,7 +362,7 @@ namespace RelicModManager
             }
             catch (DirectoryNotFoundException)
             {
-                return null;
+                Directory.CreateDirectory(parsedFolder);
             }
             
             
@@ -571,13 +572,39 @@ namespace RelicModManager
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            if (File.Exists(tempPath + "\\relic.zip")) File.Delete(tempPath + "\\relic.zip");
-            if (File.Exists(tempPath + "\\relic_censored.zip")) File.Delete(tempPath + "\\relic_censored.zip");
-            if (File.Exists(tempPath + "\\gui.zip")) File.Delete(tempPath + "\\gui.zip");
-            if (File.Exists(tempPath + "\\6thSense.zip")) File.Delete(tempPath + "\\6thSense.zip");
-            if (File.Exists(tempPath + "\\origional.zip")) File.Delete(tempPath + "\\origional.zip");
-            if (File.Exists(tempPath + "\\version.zip")) File.Delete(tempPath + "\\version.zip");
+            Application.DoEvents();
+            wait.Show();
+            Application.DoEvents();
+            try
+            {
+                File.WriteAllText(tempPath + "\\RelHaxOneInstance.txt", "this file is open and cannot be deleted");
+                File.OpenWrite(tempPath + "\\RelHaxOneInstance.txt");
+            }
+            catch (IOException)
+            {
+                wait.Close();
+                this.Close();
+            }
+            try
+            {
+                if (File.Exists(tempPath + "\\relic.zip")) File.Delete(tempPath + "\\relic.zip");
+                if (File.Exists(tempPath + "\\relic_censored.zip")) File.Delete(tempPath + "\\relic_censored.zip");
+                if (File.Exists(tempPath + "\\gui.zip")) File.Delete(tempPath + "\\gui.zip");
+                if (File.Exists(tempPath + "\\6thSense.zip")) File.Delete(tempPath + "\\6thSense.zip");
+                if (File.Exists(tempPath + "\\origional.zip")) File.Delete(tempPath + "\\origional.zip");
+                if (File.Exists(tempPath + "\\version.zip")) File.Delete(tempPath + "\\version.zip");
+            }
+            catch (IOException)
+            {
+                wait.Close();
+                MessageBox.Show("Error: Another Instance of the relic mod manager is already running");
+                this.Close();
+            }
+            Application.DoEvents();
             this.checkmanagerUpdatesStartup();
+            Application.DoEvents();
+            wait.Close();
+            Application.DoEvents();
         }
 
         //old method of unzipping

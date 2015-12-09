@@ -178,7 +178,7 @@
             this.Controls.Add(this.installMods);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainWindow";
-            this.Text = "RelHax V13.3";
+            this.Text = "RelHax V14";
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
