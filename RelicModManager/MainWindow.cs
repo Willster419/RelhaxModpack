@@ -36,7 +36,7 @@ namespace RelicModManager
         private static int MBDivisor = 1048576;
         private string ingameVoiceVersion;
         private string guiVersion;
-        private string managerVersion = "version 14";
+        private string managerVersion = "version 14.1";
         private string tanksLocation;
         private object theObject;
         private string sixthSenseVersion;
@@ -371,7 +371,37 @@ namespace RelicModManager
                 System.IO.Directory.Delete(parsedFolder + "\\relicModVersion", true);
             }
             catch (DirectoryNotFoundException) { }
+
+            //if the res_mods audio folder does not exist, create it and not modify the res audio folder
+            if (!File.Exists(parsedFolder + "\\ambient.fev")) this.copyToResMods();
+
             return "We're all set!";
+        }
+
+        private void copyToResMods()
+        {
+            int numProcessedFiles = 0;
+            string[] files = System.IO.Directory.GetFiles(tanksLocation + "\\res\\audio");
+            foreach (string s in files)
+            {
+                string theFileName = Path.GetFileName(s);
+                File.Copy(s, parsedFolder + "\\" + theFileName);
+                numProcessedFiles++;
+                Application.DoEvents();
+                this.updateOnCopy(numProcessedFiles, files.Length);
+                Application.DoEvents();
+            }
+        }
+
+        private void updateOnCopy(int fileNumber, int totalFiles)
+        {
+            downloadProgress.Text = "Copying audio files to res_mods, " + fileNumber + " of " + totalFiles;
+            double realFileNumber = fileNumber;
+            double realTotalFiles = totalFiles;
+            double percent = realFileNumber / realTotalFiles;
+            percent = percent * 100;
+            int intPercent = (int)percent;
+            downloadProgressBar.Value = intPercent;
         }
 
         private void displayError(String errorText, String errorHandle)
