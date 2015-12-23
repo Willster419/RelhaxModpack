@@ -29,7 +29,6 @@ namespace RelicModManager
             //Clear the previous enteries
             canceling = true;
             relhaxBox.Checked = false;
-            relhaxCensoredBox.Checked = false;
             guiBox.Checked = false;
             sixthSenseBox.Checked = false;
             thePlayah = new SoundPlayer();
@@ -104,24 +103,6 @@ namespace RelicModManager
         private void stopPlaying_Click(object sender, EventArgs e)
         {
             thePlayah.Stop();
-        }
-
-        private void relhaxBox_CheckStateChanged(object sender, EventArgs e)
-        {
-            if (relhaxCensoredBox.Checked && relhaxBox.Checked)
-            {
-                relhaxCensoredBox.Checked = false;
-                relhaxBox.Checked = true;
-            }
-        }
-
-        private void relhaxCensoredBox_CheckStateChanged(object sender, EventArgs e)
-        {
-            if (relhaxCensoredBox.Checked && relhaxBox.Checked)
-            {
-                relhaxBox.Checked = false;
-                relhaxCensoredBox.Checked = true;
-            }
         }
     }
 }

@@ -40,6 +40,7 @@
             this.forceManuel = new System.Windows.Forms.CheckBox();
             this.downloadRelhax = new System.Windows.Forms.Button();
             this.downloadNumberCount = new System.Windows.Forms.Label();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // installMods
@@ -123,6 +124,7 @@
             this.downloadProgressBar.Location = new System.Drawing.Point(12, 198);
             this.downloadProgressBar.Name = "downloadProgressBar";
             this.downloadProgressBar.Size = new System.Drawing.Size(265, 23);
+            this.downloadProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.downloadProgressBar.TabIndex = 11;
             // 
             // findWotExe
@@ -160,6 +162,14 @@
             this.downloadNumberCount.Text = "Idle";
             this.downloadNumberCount.Visible = false;
             // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.WorkerReportsProgress = true;
+            this.backgroundWorker1.WorkerSupportsCancellation = true;
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -178,7 +188,7 @@
             this.Controls.Add(this.installMods);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainWindow";
-            this.Text = "RelHax V14.1";
+            this.Text = "RelHax ";
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -199,6 +209,7 @@
         private System.Windows.Forms.CheckBox forceManuel;
         private System.Windows.Forms.Button downloadRelhax;
         private System.Windows.Forms.Label downloadNumberCount;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 

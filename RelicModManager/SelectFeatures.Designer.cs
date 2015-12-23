@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.relhaxBox = new System.Windows.Forms.CheckBox();
-            this.relhaxCensoredBox = new System.Windows.Forms.CheckBox();
             this.guiBox = new System.Windows.Forms.CheckBox();
             this.sixthSenseBox = new System.Windows.Forms.CheckBox();
             this.selectYourFeatures = new System.Windows.Forms.Label();
@@ -41,6 +40,7 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.continueButton = new System.Windows.Forms.Button();
             this.stopPlaying = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // relhaxBox
@@ -48,41 +48,29 @@
             this.relhaxBox.AutoSize = true;
             this.relhaxBox.Location = new System.Drawing.Point(15, 43);
             this.relhaxBox.Name = "relhaxBox";
-            this.relhaxBox.Size = new System.Drawing.Size(151, 17);
+            this.relhaxBox.Size = new System.Drawing.Size(228, 17);
             this.relhaxBox.TabIndex = 0;
-            this.relhaxBox.Text = "Ingame voice during battle";
+            this.relhaxBox.Text = "RelHax Voice Pack (regular and censored)";
             this.relhaxBox.UseVisualStyleBackColor = true;
-            this.relhaxBox.CheckStateChanged += new System.EventHandler(this.relhaxBox_CheckStateChanged);
-            // 
-            // relhaxCensoredBox
-            // 
-            this.relhaxCensoredBox.AutoSize = true;
-            this.relhaxCensoredBox.Location = new System.Drawing.Point(15, 66);
-            this.relhaxCensoredBox.Name = "relhaxCensoredBox";
-            this.relhaxCensoredBox.Size = new System.Drawing.Size(153, 17);
-            this.relhaxCensoredBox.TabIndex = 1;
-            this.relhaxCensoredBox.Text = "Censored version of above";
-            this.relhaxCensoredBox.UseVisualStyleBackColor = true;
-            this.relhaxCensoredBox.CheckStateChanged += new System.EventHandler(this.relhaxCensoredBox_CheckStateChanged);
             // 
             // guiBox
             // 
             this.guiBox.AutoSize = true;
             this.guiBox.Location = new System.Drawing.Point(15, 89);
             this.guiBox.Name = "guiBox";
-            this.guiBox.Size = new System.Drawing.Size(150, 17);
+            this.guiBox.Size = new System.Drawing.Size(147, 17);
             this.guiBox.TabIndex = 2;
-            this.guiBox.Text = "gui fx (spotted, battle start)";
+            this.guiBox.Text = "RelHax Sound FX add-on";
             this.guiBox.UseVisualStyleBackColor = true;
             // 
             // sixthSenseBox
             // 
             this.sixthSenseBox.AutoSize = true;
-            this.sixthSenseBox.Location = new System.Drawing.Point(15, 112);
+            this.sixthSenseBox.Location = new System.Drawing.Point(15, 130);
             this.sixthSenseBox.Name = "sixthSenseBox";
-            this.sixthSenseBox.Size = new System.Drawing.Size(113, 17);
+            this.sixthSenseBox.Size = new System.Drawing.Size(191, 17);
             this.sixthSenseBox.TabIndex = 3;
-            this.sixthSenseBox.Text = "6th Sense Sounds";
+            this.sixthSenseBox.Text = "6th Sense Sounds (XVM Required)";
             this.sixthSenseBox.UseVisualStyleBackColor = true;
             // 
             // selectYourFeatures
@@ -107,27 +95,27 @@
             // 
             // sampleIngameVoice
             // 
-            this.sampleIngameVoice.Location = new System.Drawing.Point(174, 39);
+            this.sampleIngameVoice.Location = new System.Drawing.Point(29, 62);
             this.sampleIngameVoice.Name = "sampleIngameVoice";
-            this.sampleIngameVoice.Size = new System.Drawing.Size(75, 23);
+            this.sampleIngameVoice.Size = new System.Drawing.Size(99, 23);
             this.sampleIngameVoice.TabIndex = 6;
-            this.sampleIngameVoice.Text = "Sample";
+            this.sampleIngameVoice.Text = "Sample Regular";
             this.sampleIngameVoice.UseVisualStyleBackColor = true;
             this.sampleIngameVoice.Click += new System.EventHandler(this.sampleIngameVoice_Click);
             // 
             // sampleCensoredIngameVoice
             // 
-            this.sampleCensoredIngameVoice.Location = new System.Drawing.Point(174, 62);
+            this.sampleCensoredIngameVoice.Location = new System.Drawing.Point(159, 62);
             this.sampleCensoredIngameVoice.Name = "sampleCensoredIngameVoice";
-            this.sampleCensoredIngameVoice.Size = new System.Drawing.Size(75, 23);
+            this.sampleCensoredIngameVoice.Size = new System.Drawing.Size(102, 23);
             this.sampleCensoredIngameVoice.TabIndex = 7;
-            this.sampleCensoredIngameVoice.Text = "Sample";
+            this.sampleCensoredIngameVoice.Text = "Sample Censored";
             this.sampleCensoredIngameVoice.UseVisualStyleBackColor = true;
             this.sampleCensoredIngameVoice.Click += new System.EventHandler(this.sampleCensoredIngameVoice_Click);
             // 
             // sampleGui
             // 
-            this.sampleGui.Location = new System.Drawing.Point(174, 85);
+            this.sampleGui.Location = new System.Drawing.Point(186, 91);
             this.sampleGui.Name = "sampleGui";
             this.sampleGui.Size = new System.Drawing.Size(75, 23);
             this.sampleGui.TabIndex = 8;
@@ -137,9 +125,9 @@
             // 
             // sampleSixthSense
             // 
-            this.sampleSixthSense.Location = new System.Drawing.Point(174, 108);
+            this.sampleSixthSense.Location = new System.Drawing.Point(201, 124);
             this.sampleSixthSense.Name = "sampleSixthSense";
-            this.sampleSixthSense.Size = new System.Drawing.Size(75, 23);
+            this.sampleSixthSense.Size = new System.Drawing.Size(60, 23);
             this.sampleSixthSense.TabIndex = 9;
             this.sampleSixthSense.Text = "Sample";
             this.sampleSixthSense.UseVisualStyleBackColor = true;
@@ -147,7 +135,7 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(15, 138);
+            this.cancelButton.Location = new System.Drawing.Point(15, 153);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 10;
@@ -157,7 +145,7 @@
             // 
             // continueButton
             // 
-            this.continueButton.Location = new System.Drawing.Point(174, 138);
+            this.continueButton.Location = new System.Drawing.Point(186, 153);
             this.continueButton.Name = "continueButton";
             this.continueButton.Size = new System.Drawing.Size(75, 23);
             this.continueButton.TabIndex = 11;
@@ -167,7 +155,7 @@
             // 
             // stopPlaying
             // 
-            this.stopPlaying.Location = new System.Drawing.Point(96, 138);
+            this.stopPlaying.Location = new System.Drawing.Point(102, 153);
             this.stopPlaying.Name = "stopPlaying";
             this.stopPlaying.Size = new System.Drawing.Size(72, 23);
             this.stopPlaying.TabIndex = 12;
@@ -175,11 +163,21 @@
             this.stopPlaying.UseVisualStyleBackColor = true;
             this.stopPlaying.Click += new System.EventHandler(this.stopPlaying_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 108);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(168, 13);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "(Enemy Spotted, Battle Start, Etc.)";
+            // 
             // SelectFeatures
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(265, 172);
+            this.ClientSize = new System.Drawing.Size(275, 185);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.stopPlaying);
             this.Controls.Add(this.continueButton);
             this.Controls.Add(this.cancelButton);
@@ -191,7 +189,6 @@
             this.Controls.Add(this.selectYourFeatures);
             this.Controls.Add(this.sixthSenseBox);
             this.Controls.Add(this.guiBox);
-            this.Controls.Add(this.relhaxCensoredBox);
             this.Controls.Add(this.relhaxBox);
             this.Name = "SelectFeatures";
             this.Text = "Select Features";
@@ -213,8 +210,8 @@
         private System.Windows.Forms.Button continueButton;
         private System.Windows.Forms.Button stopPlaying;
         public System.Windows.Forms.CheckBox relhaxBox;
-        public System.Windows.Forms.CheckBox relhaxCensoredBox;
         public System.Windows.Forms.CheckBox guiBox;
         public System.Windows.Forms.CheckBox sixthSenseBox;
+        private System.Windows.Forms.Label label2;
     }
 }

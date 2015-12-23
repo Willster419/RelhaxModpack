@@ -12,6 +12,8 @@ using System.IO.Compression;
 using Ionic.Zip;
 using System.Reflection;
 using Microsoft.Win32;
+using System.Threading;
+
 
 
 
@@ -23,12 +25,11 @@ namespace RelicModManager
         private FolderBrowserDialog selectWotFolder = new FolderBrowserDialog();
         private string wotFolder;
         private WebClient downloader = new WebClient();
-        private string parsedFolder;
+        private string modAudioFolder;
         private string parsedBackupFolder;
         private CustomURLs custom = new CustomURLs();
         private VersionInfo info = new VersionInfo();
         private string tempPath = Path.GetTempPath();
-        private ZipFile relicZip;
         private double bytesIn;
         private double totalBytes;
         private int MBytesIn;
@@ -36,7 +37,7 @@ namespace RelicModManager
         private static int MBDivisor = 1048576;
         private string ingameVoiceVersion;
         private string guiVersion;
-        private string managerVersion = "version 14.1";
+        private string managerVersion = "version 15.0";
         private string tanksLocation;
         private object theObject;
         private string sixthSenseVersion;
@@ -51,13 +52,24 @@ namespace RelicModManager
         private bool isAlreadyStarted = false;
         private bool isStartupCheck = true;
         private pleaseWait wait = new pleaseWait();
-        private string parsedModsFolder;
+        private string parsedModsFolder;//0.9.x
+        private string stockTextFolder;
+        private string modTextFolder;
+        private string stockAudioFolder;
+        private string modGuiFolder;
+        int numZipFiles;
+        int totalZipFiles;
+        bool repairMode;
+        ZipFile zip;
+        bool workerIdle;
+        double totalProgress;
+        double allProgress;
 
         public MainWindow()
         {
             InitializeComponent();
         }
-
+        //install RelHax
         private void downloadMods_Click(object sender, EventArgs e)
         {
             this.features.ShowDialog();
@@ -76,15 +88,70 @@ namespace RelicModManager
                 this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
                 return;
             }
-            if (this.prepareForInstall(false) == null)
+            
+            if (Directory.Exists(stockAudioFolder + "\\relicModVersion"))
             {
-                this.displayError("Failed preparing for install.", null);
-                return;
+                repairMode = true;
+                this.displayError("Your res folder must be repaired to continue",null);
+                this.cleanOldVersions();
             }
-            this.createDownloadQueue();
+            if (!repairMode)
+            {
+                if (this.prepareForInstall(false) == null)
+                {
+                    this.displayError("Failed preparing for install.", null);
+                    return;
+                }
+                this.createDownloadQueue();
+                this.downloader_DownloadFileCompleted(null, null);
+            }
+        }
+
+        //remove any residual files this may have left in the res folder
+        private void cleanOldVersions()
+        {
+            Application.DoEvents();
+            downloadProgress.Text = "Repairing...";
+            Application.DoEvents();
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice.fev");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_def.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_CN1.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_CS.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_DE.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_EN.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_FR.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_JA.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_RH.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_RHC.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_RU.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_UK.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_cn1.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_cs.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_de.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_en.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_fr.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_ja.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_rh.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_rhc.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_ru.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_uk.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_REL.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_rel.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_U01.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\ingame_voice_U02.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\gui.fev");
+            System.IO.File.Delete(stockAudioFolder + "\\gui.fsb");
+            System.IO.File.Delete(stockAudioFolder + "\\xvm.fev");
+            System.IO.File.Delete(stockAudioFolder + "\\xvm.fsb");
+            if(Directory.Exists(stockAudioFolder + "\\relicModVersion"))Directory.Delete(stockAudioFolder + "\\relicModVersion", true);
+            downloadQueue = new List<DownloadItem>();
+            downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/origional.zip"), tempPath + "\\origional.zip"));
+            totalDownloadCount = downloadQueue.Count;
+            downloadNumberCount.Visible = true;
             this.downloader_DownloadFileCompleted(null, null);
         }
 
+        //download RelHax
         private void downloadRelhax_Click(object sender, EventArgs e)
         {
             this.reset();
@@ -96,38 +163,121 @@ namespace RelicModManager
             }
             tanksLocation = this.getDownloadOnlyFolder();
             if (tanksLocation == null) return;
-            parsedFolder = tanksLocation;
+            parsedModsFolder = tanksLocation + "\\relHax";
+            Directory.CreateDirectory(parsedModsFolder);
+            Directory.Delete(parsedModsFolder, true);
+            Directory.CreateDirectory(parsedModsFolder);
             if (File.Exists(tanksLocation + "\\worldOfTanks.exe"))
             {
                 this.displayError("It looks like you are trying to 'install' rather \nthan 'download' the mods. please use the 'install' button", "trying to install?");
                 return;
             }
-            try
-            {
-                System.IO.Directory.Delete(tanksLocation + "\\res", true);
-            }
-            catch (IOException) { }
-            System.IO.Directory.CreateDirectory(parsedFolder);
             this.createDownloadQueue();
             this.downloader_DownloadFileCompleted(null,null);
         }
-
+        
+        //uninstall RelHax
         private void stockSounds_Click(object sender, EventArgs e)
         {
             this.reset();
+            Application.DoEvents();
+            downloadProgress.Text = "Preparing...";
+            Application.DoEvents();
             if (this.autoFindTanks() == null || this.forceManuel.Checked)
             {
                 if (this.manuallyFindTanks() == null) return;
             }
             if (this.parseStrings() == null) this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
-            if (this.prepareForInstall(true) == null) this.displayError("Tell Willster he screwed up. He'll know.", null);
-            downloadQueue = new List<DownloadItem>();
-            downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/origional.zip"), tempPath + "\\origional.zip"));
-            totalDownloadCount = downloadQueue.Count;
-            downloadNumberCount.Visible = true;
-            this.downloader_DownloadFileCompleted(null, null);
+            //all of the stock files are in the res folder
+            //only matters is if this copied to res mods
+            Application.DoEvents();
+            downloadProgress.Text = "Removing Audio...";
+            downloadProgressBar.Value = 20;
+            Application.DoEvents();
+            if (File.Exists(modAudioFolder + "\\RelHaxCopied.txt"))
+            {
+                Directory.Delete(modAudioFolder, true);
+            }
+            else
+            {
+                //delete relHax audio files
+                try
+                {
+                    File.Delete(modAudioFolder + "\\ingame_voice.fev");
+                }
+                catch (DirectoryNotFoundException) 
+                {
+                    this.reset();
+                    return;
+                }
+                File.Delete(modAudioFolder + "\\ingame_voice_CN1.fsb");
+                File.Delete(modAudioFolder + "\\ingame_voice_CS.fsb");
+                File.Delete(modAudioFolder + "\\ingame_voice_DE.fsb");
+                File.Delete(modAudioFolder + "\\ingame_voice_def.fsb");
+                File.Delete(modAudioFolder + "\\ingame_voice_EN.fsb");
+                File.Delete(modAudioFolder + "\\ingame_voice_FR.fsb");
+                File.Delete(modAudioFolder + "\\ingame_voice_JA.fsb");
+                File.Delete(modAudioFolder + "\\ingame_voice_RH.fsb");
+                File.Delete(modAudioFolder + "\\ingame_voice_RHC.fsb");
+                File.Delete(modAudioFolder + "\\ingame_voice_RU.fsb");
+                File.Delete(modAudioFolder + "\\ingame_voice_UK.fsb");
+                File.Delete(modAudioFolder + "\\gui.fev");
+                File.Delete(modAudioFolder + "\\gui.fsb");
+                File.Delete(modAudioFolder + "\\xvm.fev");
+                File.Delete(modAudioFolder + "\\xvm.fsb");
+                Application.DoEvents();
+                downloadProgressBar.Value = 50;
+                Application.DoEvents();
+                //copy stock files back
+                File.Copy(stockAudioFolder + "\\ingame_voice.fev" , modAudioFolder + "\\ingame_voice.fev");
+                File.Copy(stockAudioFolder + "\\ingame_voice_CN1.fsb" , modAudioFolder + "\\ingame_voice_CN1.fsb");
+                File.Copy(stockAudioFolder + "\\ingame_voice_CS.fsb" , modAudioFolder + "\\ingame_voice_CS.fsb");
+                File.Copy(stockAudioFolder + "\\ingame_voice_DE.fsb" , modAudioFolder + "\\ingame_voice_DE.fsb");
+                File.Copy(stockAudioFolder + "\\ingame_voice_def.fsb" , modAudioFolder + "\\ingame_voice_def.fsb");
+                File.Copy(stockAudioFolder + "\\ingame_voice_EN.fsb" , modAudioFolder + "\\ingame_voice_EN.fsb");
+                File.Copy(stockAudioFolder + "\\ingame_voice_FR.fsb" , modAudioFolder + "\\ingame_voice_FR.fsb");
+                File.Copy(stockAudioFolder + "\\ingame_voice_JA.fsb" , modAudioFolder + "\\ingame_voice_JA.fsb");
+                File.Copy(stockAudioFolder + "\\ingame_voice_RU.fsb" , modAudioFolder + "\\ingame_voice_RU.fsb");
+                File.Copy(stockAudioFolder + "\\ingame_voice_UK.fsb" , modAudioFolder + "\\ingame_voice_UK.fsb");
+                File.Copy(stockAudioFolder + "\\gui.fev", modAudioFolder + "\\gui.fev");
+                if(File.Exists(stockAudioFolder + "\\xvm.fev")) File.Copy(stockAudioFolder + "\\xvm.fev",modAudioFolder + "\\xvm.fev");
+                if(File.Exists(stockAudioFolder + "\\xvm.fsb")) File.Copy(stockAudioFolder + "\\xvm.fsb",modAudioFolder + "\\xvm.fsb");
+            }
+            Application.DoEvents();
+            downloadProgress.Text = "Removing Text...";
+            downloadProgressBar.Value = 80;
+            Application.DoEvents();
+            if (File.Exists(modTextFolder + "\\RelHaxCopied.txt"))
+            {
+                Directory.Delete(modTextFolder, true);
+            }
+            else
+            {
+                //delete relHax text files
+                File.Delete(modTextFolder + "\\settings.mo");
+                //copy stock files back
+                File.Copy(stockTextFolder + "\\settings.mo", modTextFolder + "\\settings.mo");
+            }
+            Application.DoEvents();
+            downloadProgress.Text = "Removing gui stuff...";
+            downloadProgressBar.Value = 95;
+            Application.DoEvents();
+            //delete gui file
+            string[] guiFiles;
+            try
+            {
+                File.Delete(modGuiFolder + "\\main_sound_modes.xml");
+                //if directory empty, delete it too
+                guiFiles = Directory.GetFiles(modGuiFolder);
+                if (guiFiles.Length == 0) Directory.Delete(modGuiFolder);
+            }
+            catch (DirectoryNotFoundException) { }
+            Application.DoEvents();
+            downloadProgress.Text = "Complete!";
+            downloadProgressBar.Value = 100;
+            Application.DoEvents();
         }
-
+        
         private void backupCustom_Click(object sender, EventArgs e)
         {
             this.reset();
@@ -150,7 +300,7 @@ namespace RelicModManager
             File.Create(parsedBackupFolder + "\\yes.txt");
             downloadProgress.Text = "Complete!";
         }
-
+        
         private void restoreCustom_Click(object sender, EventArgs e)
         {
             this.reset();
@@ -223,40 +373,86 @@ namespace RelicModManager
                 //just let it keep running
                 //since the files won't exist
                 //use the overloaded method of cleanup(filepath,filename);
-                if (File.Exists(tempPath + "\\relic.zip")) this.unzip(tempPath + "\\relic.zip", parsedFolder);
-                if (File.Exists(tempPath + "\\relic_censored.zip")) this.unzip(tempPath + "\\relic_censored.zip", parsedFolder);
-                if (File.Exists(tempPath + "\\gui.zip")) this.unzip(tempPath + "\\gui.zip", parsedFolder);
-                if (File.Exists(tempPath + "\\6thSense.zip")) this.unzip(tempPath + "\\6thSense.zip", parsedFolder);
-                if (File.Exists(tempPath + "\\origional.zip")) this.unzip(tempPath + "\\origional.zip", parsedFolder);
-                if (File.Exists(tempPath + "\\version.zip"))
+                //if (zipThread.ThreadState != ThreadState.Running)zipThread.Start();
+                //this.lookForFilesToUnzip();
+                if (workerIdle)
                 {
-                    this.unzip(tempPath + "\\version.zip", tempPath + "\\versionCheck");
-                    if (isStartupCheck)
-                    {
-                        this.checkForUpdatesOnStartup();
-                        isStartupCheck = false;
-                        return;
-                    }
-                    else this.checkForUpdates();
+                    workerIdle = false;
+                    backgroundWorker1.RunWorkerAsync();
                 }
-                if (File.Exists(appPath + "\\" + newVersionName))
+            }
+        }
+
+        private void lookForFilesToUnzip()
+        {
+            //just let it keep running
+            //since the files won't exist
+            //use the overloaded method of cleanup(filepath,filename);
+
+            //System.Threading.Thread.Sleep(100);
+            if (File.Exists(tempPath + "\\RelHax.zip"))
+            {
+                numZipFiles++;
+                this.unzip(tempPath + "\\RelHax.zip", parsedModsFolder);
+                System.Threading.Thread.Sleep(10);
+                this.cleanup(tempPath + "\\RelHax.zip");
+            }
+            if (File.Exists(tempPath + "\\gui.zip"))
+            {
+                numZipFiles++;
+                this.unzip(tempPath + "\\gui.zip", parsedModsFolder);
+                System.Threading.Thread.Sleep(10);
+                this.cleanup(tempPath + "\\gui.zip");
+            }
+            if (File.Exists(tempPath + "\\6thSense.zip"))
+            {
+                numZipFiles++;
+                this.unzip(tempPath + "\\6thSense.zip", parsedModsFolder);
+                System.Threading.Thread.Sleep(10);
+                this.cleanup(tempPath + "\\6thSense.zip");
+            }
+            if (File.Exists(tempPath + "\\origional.zip"))
+            {
+                numZipFiles = 1;
+                totalZipFiles = 1;
+                this.unzip(tempPath + "\\origional.zip", tanksLocation + "\\res");
+                System.Threading.Thread.Sleep(10);
+                this.cleanup(tempPath + "\\origional.zip");
+                return;
+            }
+            if (File.Exists(tempPath + "\\version.zip"))
+            {
+                this.unzip(tempPath + "\\version.zip", tempPath + "\\versionCheck");
+                //sleep
+                this.cleanup(tempPath + "\\version.zip");
+                if (isStartupCheck)
                 {
-                    string exePath = appPath + "\\" + newVersionName;
-                    if (exePath.Equals(Application.ExecutablePath)) return;
-                    if (!isAlreadyStarted)
+                    this.checkForUpdatesOnStartup();
+                    isStartupCheck = false;
+                    return;
+                }
+                else this.checkForUpdates();
+            }
+            if (File.Exists(appPath + "\\" + newVersionName))
+            {
+                string exePath = appPath + "\\" + newVersionName;
+                if (exePath.Equals(Application.ExecutablePath)) return;
+                if (!isAlreadyStarted)
+                {
+                    try
                     {
-                        try
-                        {
-                            System.Diagnostics.Process.Start(appPath + "\\" + newVersionName);
-                            isAlreadyStarted = true;
-                            this.Close();
-                        }
-                        catch (Win32Exception)
-                        {
-                            isAlreadyStarted = false;
-                        }
+                        System.Diagnostics.Process.Start(appPath + "\\" + newVersionName);
+                        isAlreadyStarted = true;
+                        this.Close();
+                    }
+                    catch (Win32Exception)
+                    {
+                        isAlreadyStarted = false;
                     }
                 }
+            }
+            else
+            {
             }
         }
 
@@ -278,7 +474,7 @@ namespace RelicModManager
                 if (this.manuallyFindTanks() == null) return;
             }
             if (this.parseStrings() == null) this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
-            versionFolder = parsedFolder + "\\relicModVersion";
+            versionFolder = modAudioFolder + "\\relicModVersion";
             if (File.Exists(versionFolder + "\\ingame voice version.txt"))
             {
                 ingameVoiceVersion = "version " + File.ReadAllText(versionFolder + "\\ingame voice version.txt");
@@ -340,8 +536,11 @@ namespace RelicModManager
             string[] filesList;
             filesList = Directory.GetDirectories(tanksLocation + "\\res_mods", "0.*");
             parsedModsFolder = filesList[0];
-            //parsedFolder = tanksLocation + "\\res\\audio";
-            parsedFolder = parsedModsFolder + "\\audio";
+            stockAudioFolder = tanksLocation + "\\res\\audio";
+            stockTextFolder = tanksLocation + "\\res\\text\\lc_messages";
+            modGuiFolder = parsedModsFolder + "\\gui\\soundModes";
+            modTextFolder = parsedModsFolder + "\\text\\lc_messages";
+            modAudioFolder = parsedModsFolder + "\\audio";
             return "1";
         }
 
@@ -353,49 +552,97 @@ namespace RelicModManager
             downloadProgress.Text = "Delete old files...";
             try
             {
-                if (this.features.relhaxBox.Checked || this.features.relhaxCensoredBox.Checked || deleteAll) System.IO.File.Delete(parsedFolder + "\\ingame_voice_def.fev");
-                if (this.features.relhaxBox.Checked || this.features.relhaxCensoredBox.Checked || deleteAll) System.IO.File.Delete(parsedFolder + "\\ingame_voice_def.fsb");
-                if (this.features.guiBox.Checked || deleteAll) System.IO.File.Delete(parsedFolder + "\\gui.fev");
-                if (this.features.guiBox.Checked || deleteAll) System.IO.File.Delete(parsedFolder + "\\gui.fsb");
-                if (this.features.sixthSenseBox.Checked || deleteAll) System.IO.File.Delete(parsedFolder + "\\xvm.fev");
-                if (this.features.sixthSenseBox.Checked || deleteAll) System.IO.File.Delete(parsedFolder + "\\xvm.fsb");
+                if (this.features.relhaxBox.Checked || deleteAll) System.IO.File.Delete(modAudioFolder + "\\ingame_voice.fev");
+                if (this.features.relhaxBox.Checked || deleteAll) System.IO.File.Delete(modAudioFolder + "\\ingame_voice_CN1.fsb");
+                if (this.features.relhaxBox.Checked || deleteAll) System.IO.File.Delete(modAudioFolder + "\\ingame_voice_CS.fsb");
+                if (this.features.relhaxBox.Checked || deleteAll) System.IO.File.Delete(modAudioFolder + "\\ingame_voice_DE.fsb");
+                if (this.features.relhaxBox.Checked || deleteAll) System.IO.File.Delete(modAudioFolder + "\\ingame_voice_def.fsb");
+                if (this.features.relhaxBox.Checked || deleteAll) System.IO.File.Delete(modAudioFolder + "\\ingame_voice_EN.fsb");
+                if (this.features.relhaxBox.Checked || deleteAll) System.IO.File.Delete(modAudioFolder + "\\ingame_voice_FR.fsb");
+                if (this.features.relhaxBox.Checked || deleteAll) System.IO.File.Delete(modAudioFolder + "\\ingame_voice_JA.fsb");
+                if (this.features.relhaxBox.Checked || deleteAll) System.IO.File.Delete(modAudioFolder + "\\ingame_voice_RH.fsb");
+                if (this.features.relhaxBox.Checked || deleteAll) System.IO.File.Delete(modAudioFolder + "\\ingame_voice_RHC.fsb");
+                if (this.features.relhaxBox.Checked || deleteAll) System.IO.File.Delete(modAudioFolder + "\\ingame_voice_RU.fsb");
+                if (this.features.relhaxBox.Checked || deleteAll) System.IO.File.Delete(modAudioFolder + "\\ingame_voice_UK.fsb");
+                if (this.features.relhaxBox.Checked || deleteAll) System.IO.Directory.Delete(modGuiFolder, true);
+                if (this.features.guiBox.Checked || deleteAll) System.IO.File.Delete(modAudioFolder + "\\gui.fev");
+                if (this.features.guiBox.Checked || deleteAll) System.IO.File.Delete(modAudioFolder + "\\gui.fsb");
+                if (this.features.sixthSenseBox.Checked || deleteAll) System.IO.File.Delete(modAudioFolder + "\\xvm.fev");
+                if (this.features.sixthSenseBox.Checked || deleteAll) System.IO.File.Delete(modAudioFolder + "\\xvm.fsb");
             }
             catch (DirectoryNotFoundException)
             {
-                Directory.CreateDirectory(parsedFolder);
+                Directory.CreateDirectory(modAudioFolder);
             }
-            
             
             try
             {
-                System.IO.Directory.Delete(parsedFolder + "\\relicModVersion", true);
+                System.IO.Directory.Delete(modAudioFolder + "\\relicModVersion", true);
             }
             catch (DirectoryNotFoundException) { }
 
-            //if the res_mods audio folder does not exist, create it and not modify the res audio folder
-            if (!File.Exists(parsedFolder + "\\ambient.fev")) this.copyToResMods();
+            //if the res_mods audio relic mod version folder does not exist, create it and not modify the res audio folder
+            if (!File.Exists(modAudioFolder + "\\ambient.fev"))
+            {
+                this.copyToResMods(true);
+                File.WriteAllText(modAudioFolder + "\\RelHaxCopied.txt", "This folder was created by RelHax");
+            }
+            if (!File.Exists(modTextFolder + "\\achievements.mo"))
+            {
+                this.copyToResMods(false);
+                File.WriteAllText(modTextFolder + "\\RelHaxCopied.txt", "This folder was created by RelHax");
+            }
 
             return "We're all set!";
         }
 
-        private void copyToResMods()
+        private void copyToResMods(bool audioOrText)
         {
-            int numProcessedFiles = 0;
-            string[] files = System.IO.Directory.GetFiles(tanksLocation + "\\res\\audio");
-            foreach (string s in files)
+            //true = audio
+            int numProcessedFiles;
+            string[] files;
+            if (audioOrText)
             {
-                string theFileName = Path.GetFileName(s);
-                File.Copy(s, parsedFolder + "\\" + theFileName);
-                numProcessedFiles++;
-                Application.DoEvents();
-                this.updateOnCopy(numProcessedFiles, files.Length);
-                Application.DoEvents();
+                numProcessedFiles = 0;
+                files = System.IO.Directory.GetFiles(stockAudioFolder);
+                foreach (string s in files)
+                {
+                    string theFileName = Path.GetFileName(s);
+                    File.Copy(s, modAudioFolder + "\\" + theFileName);
+                    numProcessedFiles++;
+                    Application.DoEvents();
+                    this.updateOnCopy(numProcessedFiles, files.Length, audioOrText);
+                    Application.DoEvents();
+                }
             }
+            else
+            {
+                numProcessedFiles = 0;
+                files = System.IO.Directory.GetFiles(stockTextFolder);
+                Directory.CreateDirectory(modTextFolder);
+                foreach (string s in files)
+                {
+                    string theFileName = Path.GetFileName(s);
+                    File.Copy(s, modTextFolder + "\\" + theFileName);
+                    numProcessedFiles++;
+                    Application.DoEvents();
+                    this.updateOnCopy(numProcessedFiles, files.Length, audioOrText);
+                    Application.DoEvents();
+                }
+            }
+            
         }
 
-        private void updateOnCopy(int fileNumber, int totalFiles)
+        private void updateOnCopy(int fileNumber, int totalFiles, bool audioOrText)
         {
-            downloadProgress.Text = "Copying audio files to res_mods, " + fileNumber + " of " + totalFiles;
+            if (audioOrText)
+            {
+                downloadProgress.Text = "Copying audio files to res_mods, " + fileNumber + " of " + totalFiles;
+            }
+            else
+            {
+                downloadProgress.Text = "Copying text files to res_mods, " + fileNumber + " of " + totalFiles;
+            }
             double realFileNumber = fileNumber;
             double realTotalFiles = totalFiles;
             double percent = realFileNumber / realTotalFiles;
@@ -425,17 +672,35 @@ namespace RelicModManager
         {
             try
             {
-                //exract
-                relicZip = new ZipFile(zipFile);
-                relicZip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
-                relicZip.Dispose();
-                //cleanup
-                this.cleanup(zipFile);
+                using (zip = ZipFile.Read(zipFile))
+                {
+                    double step = (100 / zip.Count);
+                    double percentComplete = 0;
+                    int realPercentComplete = 0;
+                    foreach (ZipEntry file in zip)
+                    {
+                        try
+                        {
+                            System.Threading.Thread.Sleep(10);
+                            file.Extract(extractFolder, ExtractExistingFileAction.OverwriteSilently);
+                        }
+                        catch (IOException e)
+                        {
+                            
+                            //file.Extract(extractFolder, ExtractExistingFileAction.OverwriteSilently);
+                            //e.Message;
+                            //File.Delete()
+                        }
+                            percentComplete = percentComplete + step;
+                            realPercentComplete = (int)percentComplete;
+                            backgroundWorker1.ReportProgress(realPercentComplete);
+                    }
+                    zip.Dispose();
+                }
             }
             catch (ZipException)
                 {
                     MessageBox.Show("Error Downloading, please try again. If this is not the first\ntime you have seen this, tell Willster he messed up");
-                    downloadProgress.Text = "Error";
                 }
         }
 
@@ -447,15 +712,12 @@ namespace RelicModManager
             if (File.Exists(tempPath + "\\6thSense.zip")) System.IO.File.Delete(tempPath + "\\6thSense.zip");
             if (File.Exists(tempPath + "\\origional.zip")) System.IO.File.Delete(tempPath + "\\origional.zip");
             if (File.Exists(tempPath + "\\version.zip")) System.IO.File.Delete(tempPath + "\\version.zip");
-            this.downloadNumberCount.Visible = false;
-            this.downloadProgress.Text = "Complete!";
         }
 
         private void cleanup(string theZipFile)
         {
             if (File.Exists(theZipFile)) File.Delete(theZipFile);
-            this.downloadNumberCount.Visible = false;
-            this.downloadProgress.Text = "Complete!";
+            
         }
 
         private void reset()
@@ -464,19 +726,38 @@ namespace RelicModManager
             downloader.Dispose();
             downloader = new WebClient();
             this.downloadProgress.Text = "Idle";
-            this.downloadProgressBar.Value = downloadProgressBar.Minimum;
+            this.downloadProgressBar.Value = 0;
             downloadCount = 0;
             isAutoDetected = false;
             downloadNumberCount.Visible = false;
+            repairMode = false;
+            zip = new ZipFile();
+            numZipFiles = 0;
+            totalZipFiles = 0;
+            workerIdle = true;
+            totalProgress = 0;
+            allProgress = 0;
+            statusLabel.Text = "STATUS:";
         }
 
         private void createDownloadQueue()
         {
             downloadQueue = new List<DownloadItem>();
-            if (this.features.relhaxBox.Checked) downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/relic.zip"), tempPath + "\\relic.zip"));
-            if (this.features.relhaxCensoredBox.Checked) downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/relic_censored.zip"), tempPath + "\\relic_censored.zip"));
-            if (this.features.guiBox.Checked) downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/gui.zip"), tempPath + "\\gui.zip"));
-            if (this.features.sixthSenseBox.Checked) downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/6thSense.zip"), tempPath + "\\6thSense.zip"));
+            if (this.features.relhaxBox.Checked)
+            {
+                downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/RelHax.zip"), tempPath + "\\RelHax.zip"));
+                totalZipFiles++;
+            }
+            if (this.features.guiBox.Checked)
+            {
+                downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/gui.zip"), tempPath + "\\gui.zip"));
+                totalZipFiles++;
+            }
+            if (this.features.sixthSenseBox.Checked)
+            {
+                downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/6thSense.zip"), tempPath + "\\6thSense.zip"));
+                totalZipFiles++;
+            }
             totalDownloadCount = downloadQueue.Count;
             downloadNumberCount.Visible = true;
         }
@@ -552,9 +833,7 @@ namespace RelicModManager
                 }
                 return;
             }
-            if (!isOutofDate) MessageBox.Show("Your manager and sound mods are up to date");
-            downloadProgress.Text = "Complete!";
-            downloadNumberCount.Visible = false;
+            if (!isOutofDate) MessageBox.Show("Your manager and/or sound mods are up to date");
         }
 
         private void checkForUpdatesOnStartup()
@@ -617,12 +896,12 @@ namespace RelicModManager
             }
             try
             {
-                if (File.Exists(tempPath + "\\relic.zip")) File.Delete(tempPath + "\\relic.zip");
-                if (File.Exists(tempPath + "\\relic_censored.zip")) File.Delete(tempPath + "\\relic_censored.zip");
+                if (File.Exists(tempPath + "\\relhax.zip")) File.Delete(tempPath + "\\relhax.zip");
                 if (File.Exists(tempPath + "\\gui.zip")) File.Delete(tempPath + "\\gui.zip");
                 if (File.Exists(tempPath + "\\6thSense.zip")) File.Delete(tempPath + "\\6thSense.zip");
                 if (File.Exists(tempPath + "\\origional.zip")) File.Delete(tempPath + "\\origional.zip");
                 if (File.Exists(tempPath + "\\version.zip")) File.Delete(tempPath + "\\version.zip");
+                if (Directory.Exists(tempPath + "\\versionCheck")) Directory.Delete(tempPath + "\\versionCheck", true);
             }
             catch (IOException)
             {
@@ -635,6 +914,40 @@ namespace RelicModManager
             Application.DoEvents();
             wait.Close();
             Application.DoEvents();
+            this.Text = this.Text + managerVersion;
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            this.lookForFilesToUnzip();
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            downloadProgress.Text = e.ProgressPercentage + "% Complete extracting " + numZipFiles + " of " + totalZipFiles;
+            //real progress
+            /*allProgress++;
+            if (totalZipFiles !=0) totalProgress = allProgress / totalZipFiles;
+            int val = (int)totalProgress;*/
+            //realistic progress
+            if(numZipFiles == 1) downloadProgressBar.Value = e.ProgressPercentage;
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (repairMode)
+            {
+                this.reset();
+                this.downloadMods_Click(null, null);
+            }
+            else
+            {
+                this.cleanup();
+                this.downloadNumberCount.Visible = false;
+                this.downloadProgress.Text = "Complete!";
+                downloadProgressBar.Value = 100;
+            }
         }
 
         //old method of unzipping
