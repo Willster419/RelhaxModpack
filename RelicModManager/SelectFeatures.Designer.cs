@@ -41,6 +41,7 @@
             this.continueButton = new System.Windows.Forms.Button();
             this.stopPlaying = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.relhaxBoxCen = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // relhaxBox
@@ -48,10 +49,11 @@
             this.relhaxBox.AutoSize = true;
             this.relhaxBox.Location = new System.Drawing.Point(15, 43);
             this.relhaxBox.Name = "relhaxBox";
-            this.relhaxBox.Size = new System.Drawing.Size(228, 17);
+            this.relhaxBox.Size = new System.Drawing.Size(119, 17);
             this.relhaxBox.TabIndex = 0;
-            this.relhaxBox.Text = "RelHax Voice Pack (regular and censored)";
+            this.relhaxBox.Text = "RelHax Voice Pack";
             this.relhaxBox.UseVisualStyleBackColor = true;
+            this.relhaxBox.CheckedChanged += new System.EventHandler(this.relhaxBox_CheckedChanged);
             // 
             // guiBox
             // 
@@ -68,9 +70,9 @@
             this.sixthSenseBox.AutoSize = true;
             this.sixthSenseBox.Location = new System.Drawing.Point(15, 130);
             this.sixthSenseBox.Name = "sixthSenseBox";
-            this.sixthSenseBox.Size = new System.Drawing.Size(191, 17);
+            this.sixthSenseBox.Size = new System.Drawing.Size(113, 17);
             this.sixthSenseBox.TabIndex = 3;
-            this.sixthSenseBox.Text = "6th Sense Sounds (XVM Required)";
+            this.sixthSenseBox.Text = "6th Sense Sounds";
             this.sixthSenseBox.UseVisualStyleBackColor = true;
             // 
             // selectYourFeatures
@@ -95,7 +97,7 @@
             // 
             // sampleIngameVoice
             // 
-            this.sampleIngameVoice.Location = new System.Drawing.Point(29, 62);
+            this.sampleIngameVoice.Location = new System.Drawing.Point(162, 39);
             this.sampleIngameVoice.Name = "sampleIngameVoice";
             this.sampleIngameVoice.Size = new System.Drawing.Size(99, 23);
             this.sampleIngameVoice.TabIndex = 6;
@@ -172,11 +174,23 @@
             this.label2.TabIndex = 13;
             this.label2.Text = "(Enemy Spotted, Battle Start, Etc.)";
             // 
+            // relhaxBoxCen
+            // 
+            this.relhaxBoxCen.AutoSize = true;
+            this.relhaxBoxCen.Location = new System.Drawing.Point(15, 66);
+            this.relhaxBoxCen.Name = "relhaxBoxCen";
+            this.relhaxBoxCen.Size = new System.Drawing.Size(138, 17);
+            this.relhaxBoxCen.TabIndex = 14;
+            this.relhaxBoxCen.Text = "RelHaxCen Voice Pack";
+            this.relhaxBoxCen.UseVisualStyleBackColor = true;
+            this.relhaxBoxCen.CheckedChanged += new System.EventHandler(this.relhaxBoxCen_CheckedChanged);
+            // 
             // SelectFeatures
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(275, 185);
+            this.Controls.Add(this.relhaxBoxCen);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.stopPlaying);
             this.Controls.Add(this.continueButton);
@@ -213,5 +227,6 @@
         public System.Windows.Forms.CheckBox guiBox;
         public System.Windows.Forms.CheckBox sixthSenseBox;
         private System.Windows.Forms.Label label2;
+        public System.Windows.Forms.CheckBox relhaxBoxCen;
     }
 }

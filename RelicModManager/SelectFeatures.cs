@@ -104,5 +104,15 @@ namespace RelicModManager
         {
             thePlayah.Stop();
         }
+
+        private void relhaxBoxCen_CheckedChanged(object sender, EventArgs e)
+        {
+            if (relhaxBox.Checked) relhaxBoxCen.Checked = false;
+        }
+
+        private void relhaxBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (relhaxBoxCen.Checked) relhaxBox.Checked = false;
+        }
     }
 }
