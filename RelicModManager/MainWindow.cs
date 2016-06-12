@@ -37,7 +37,7 @@ namespace RelicModManager
         private static int MBDivisor = 1048576;
         private string ingameVoiceVersion;
         private string guiVersion;
-        private string managerVersion = "version 16.0";
+        private string managerVersion = "version 16.1";
         private string tanksLocation;
         private object theObject;
         private string sixthSenseVersion;
@@ -67,6 +67,7 @@ namespace RelicModManager
         double totalProgress;
         double allProgress;
         public volatile bool closeIt = false;
+        private NotSupported ns;
 
         public MainWindow()
         {
@@ -901,7 +902,11 @@ namespace RelicModManager
         {
             Application.DoEvents();
             wait.Show();
+            wait.Close();
             Application.DoEvents();
+            ns = new NotSupported();
+            ns.ShowDialog();
+            this.Close();
             try
             {
                 File.WriteAllText(tempPath + "\\RelHaxOneInstance.txt", "this file is open and cannot be deleted");

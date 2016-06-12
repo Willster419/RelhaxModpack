@@ -68,6 +68,12 @@
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="NotSupported.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NotSupported.Designer.cs">
+      <DependentUpon>NotSupported.cs</DependentUpon>
+    </Compile>
     <Compile Include="pleaseWait.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,6 +107,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NotSupported.resx">
+      <DependentUpon>NotSupported.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="pleaseWait.resx">
       <DependentUpon>pleaseWait.cs</DependentUpon>
