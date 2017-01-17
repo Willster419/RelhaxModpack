@@ -36,6 +36,7 @@ namespace RelicModManager
                 }
 
             };
+            //Application.Run(new MainWindow());
             Application.Run(new MainWindow());
         }
 

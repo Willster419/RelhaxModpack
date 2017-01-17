@@ -67,6 +67,7 @@
             // 
             // backupCustom
             // 
+            this.backupCustom.Enabled = false;
             this.backupCustom.Location = new System.Drawing.Point(147, 12);
             this.backupCustom.Name = "backupCustom";
             this.backupCustom.Size = new System.Drawing.Size(129, 34);
@@ -77,6 +78,7 @@
             // 
             // restoreCustom
             // 
+            this.restoreCustom.Enabled = false;
             this.restoreCustom.Location = new System.Drawing.Point(147, 52);
             this.restoreCustom.Name = "restoreCustom";
             this.restoreCustom.Size = new System.Drawing.Size(129, 34);
@@ -100,6 +102,7 @@
             // 
             // whatVersion
             // 
+            this.whatVersion.Enabled = false;
             this.whatVersion.Location = new System.Drawing.Point(147, 92);
             this.whatVersion.Name = "whatVersion";
             this.whatVersion.Size = new System.Drawing.Size(129, 34);
@@ -146,6 +149,7 @@
             // 
             // downloadRelhax
             // 
+            this.downloadRelhax.Enabled = false;
             this.downloadRelhax.Location = new System.Drawing.Point(12, 52);
             this.downloadRelhax.Name = "downloadRelhax";
             this.downloadRelhax.Size = new System.Drawing.Size(129, 34);

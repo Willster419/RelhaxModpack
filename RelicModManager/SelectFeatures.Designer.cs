@@ -58,22 +58,26 @@
             // guiBox
             // 
             this.guiBox.AutoSize = true;
+            this.guiBox.Enabled = false;
             this.guiBox.Location = new System.Drawing.Point(15, 89);
             this.guiBox.Name = "guiBox";
             this.guiBox.Size = new System.Drawing.Size(147, 17);
             this.guiBox.TabIndex = 2;
             this.guiBox.Text = "RelHax Sound FX add-on";
             this.guiBox.UseVisualStyleBackColor = true;
+            this.guiBox.Visible = false;
             // 
             // sixthSenseBox
             // 
             this.sixthSenseBox.AutoSize = true;
+            this.sixthSenseBox.Enabled = false;
             this.sixthSenseBox.Location = new System.Drawing.Point(15, 130);
             this.sixthSenseBox.Name = "sixthSenseBox";
             this.sixthSenseBox.Size = new System.Drawing.Size(113, 17);
             this.sixthSenseBox.TabIndex = 3;
             this.sixthSenseBox.Text = "6th Sense Sounds";
             this.sixthSenseBox.UseVisualStyleBackColor = true;
+            this.sixthSenseBox.Visible = false;
             // 
             // selectYourFeatures
             // 
@@ -97,32 +101,34 @@
             // 
             // sampleIngameVoice
             // 
-            this.sampleIngameVoice.Location = new System.Drawing.Point(162, 39);
+            this.sampleIngameVoice.Location = new System.Drawing.Point(201, 39);
             this.sampleIngameVoice.Name = "sampleIngameVoice";
-            this.sampleIngameVoice.Size = new System.Drawing.Size(99, 23);
+            this.sampleIngameVoice.Size = new System.Drawing.Size(60, 23);
             this.sampleIngameVoice.TabIndex = 6;
-            this.sampleIngameVoice.Text = "Sample Regular";
+            this.sampleIngameVoice.Text = "Sample";
             this.sampleIngameVoice.UseVisualStyleBackColor = true;
             this.sampleIngameVoice.Click += new System.EventHandler(this.sampleIngameVoice_Click);
             // 
             // sampleCensoredIngameVoice
             // 
-            this.sampleCensoredIngameVoice.Location = new System.Drawing.Point(159, 62);
+            this.sampleCensoredIngameVoice.Location = new System.Drawing.Point(201, 62);
             this.sampleCensoredIngameVoice.Name = "sampleCensoredIngameVoice";
-            this.sampleCensoredIngameVoice.Size = new System.Drawing.Size(102, 23);
+            this.sampleCensoredIngameVoice.Size = new System.Drawing.Size(60, 23);
             this.sampleCensoredIngameVoice.TabIndex = 7;
-            this.sampleCensoredIngameVoice.Text = "Sample Censored";
+            this.sampleCensoredIngameVoice.Text = "Sample";
             this.sampleCensoredIngameVoice.UseVisualStyleBackColor = true;
             this.sampleCensoredIngameVoice.Click += new System.EventHandler(this.sampleCensoredIngameVoice_Click);
             // 
             // sampleGui
             // 
-            this.sampleGui.Location = new System.Drawing.Point(186, 91);
+            this.sampleGui.Enabled = false;
+            this.sampleGui.Location = new System.Drawing.Point(201, 91);
             this.sampleGui.Name = "sampleGui";
-            this.sampleGui.Size = new System.Drawing.Size(75, 23);
+            this.sampleGui.Size = new System.Drawing.Size(60, 23);
             this.sampleGui.TabIndex = 8;
             this.sampleGui.Text = "Sample";
             this.sampleGui.UseVisualStyleBackColor = true;
+            this.sampleGui.Visible = false;
             this.sampleGui.Click += new System.EventHandler(this.sampleGui_Click);
             // 
             // sampleSixthSense
@@ -173,15 +179,16 @@
             this.label2.Size = new System.Drawing.Size(168, 13);
             this.label2.TabIndex = 13;
             this.label2.Text = "(Enemy Spotted, Battle Start, Etc.)";
+            this.label2.Visible = false;
             // 
             // relhaxBoxCen
             // 
             this.relhaxBoxCen.AutoSize = true;
             this.relhaxBoxCen.Location = new System.Drawing.Point(15, 66);
             this.relhaxBoxCen.Name = "relhaxBoxCen";
-            this.relhaxBoxCen.Size = new System.Drawing.Size(138, 17);
+            this.relhaxBoxCen.Size = new System.Drawing.Size(167, 17);
             this.relhaxBoxCen.TabIndex = 14;
-            this.relhaxBoxCen.Text = "RelHaxCen Voice Pack";
+            this.relhaxBoxCen.Text = "RelHax Voice Pack Censored";
             this.relhaxBoxCen.UseVisualStyleBackColor = true;
             this.relhaxBoxCen.CheckedChanged += new System.EventHandler(this.relhaxBoxCen_CheckedChanged);
             // 
@@ -204,6 +211,7 @@
             this.Controls.Add(this.sixthSenseBox);
             this.Controls.Add(this.guiBox);
             this.Controls.Add(this.relhaxBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "SelectFeatures";
             this.Text = "Select Features";
             this.Load += new System.EventHandler(this.SelectFeatures_Load);
