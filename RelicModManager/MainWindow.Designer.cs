@@ -28,64 +28,37 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.installMods = new System.Windows.Forms.Button();
-            this.stockSounds = new System.Windows.Forms.Button();
-            this.backupCustom = new System.Windows.Forms.Button();
-            this.restoreCustom = new System.Windows.Forms.Button();
+            this.installRelhax = new System.Windows.Forms.Button();
+            this.uninstallRelhax = new System.Windows.Forms.Button();
             this.downloadProgress = new System.Windows.Forms.Label();
-            this.whatVersion = new System.Windows.Forms.Button();
             this.statusLabel = new System.Windows.Forms.Label();
             this.downloadProgressBar = new System.Windows.Forms.ProgressBar();
             this.findWotExe = new System.Windows.Forms.OpenFileDialog();
             this.forceManuel = new System.Windows.Forms.CheckBox();
-            this.downloadRelhax = new System.Windows.Forms.Button();
             this.downloadNumberCount = new System.Windows.Forms.Label();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.formPageLink = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
-            // installMods
+            // installRelhax
             // 
-            this.installMods.Location = new System.Drawing.Point(12, 12);
-            this.installMods.Name = "installMods";
-            this.installMods.Size = new System.Drawing.Size(129, 34);
-            this.installMods.TabIndex = 0;
-            this.installMods.Text = "Install latest Relhax";
-            this.installMods.UseVisualStyleBackColor = true;
-            this.installMods.Click += new System.EventHandler(this.downloadMods_Click);
+            this.installRelhax.Location = new System.Drawing.Point(12, 12);
+            this.installRelhax.Name = "installRelhax";
+            this.installRelhax.Size = new System.Drawing.Size(129, 34);
+            this.installRelhax.TabIndex = 0;
+            this.installRelhax.Text = "Install latest Relhax";
+            this.installRelhax.UseVisualStyleBackColor = true;
+            this.installRelhax.Click += new System.EventHandler(this.installRelhax_Click);
             // 
-            // stockSounds
+            // uninstallRelhax
             // 
-            this.stockSounds.Location = new System.Drawing.Point(12, 92);
-            this.stockSounds.Name = "stockSounds";
-            this.stockSounds.Size = new System.Drawing.Size(129, 34);
-            this.stockSounds.TabIndex = 1;
-            this.stockSounds.Text = "Uninstall Relhax";
-            this.stockSounds.UseVisualStyleBackColor = true;
-            this.stockSounds.Click += new System.EventHandler(this.stockSounds_Click);
-            // 
-            // backupCustom
-            // 
-            this.backupCustom.Enabled = false;
-            this.backupCustom.Location = new System.Drawing.Point(147, 12);
-            this.backupCustom.Name = "backupCustom";
-            this.backupCustom.Size = new System.Drawing.Size(129, 34);
-            this.backupCustom.TabIndex = 2;
-            this.backupCustom.Text = "Backup custom sounds";
-            this.backupCustom.UseVisualStyleBackColor = true;
-            this.backupCustom.Click += new System.EventHandler(this.backupCustom_Click);
-            // 
-            // restoreCustom
-            // 
-            this.restoreCustom.Enabled = false;
-            this.restoreCustom.Location = new System.Drawing.Point(147, 52);
-            this.restoreCustom.Name = "restoreCustom";
-            this.restoreCustom.Size = new System.Drawing.Size(129, 34);
-            this.restoreCustom.TabIndex = 3;
-            this.restoreCustom.Text = "Restore custom sounds";
-            this.restoreCustom.UseVisualStyleBackColor = true;
-            this.restoreCustom.Click += new System.EventHandler(this.restoreCustom_Click);
+            this.uninstallRelhax.Location = new System.Drawing.Point(12, 92);
+            this.uninstallRelhax.Name = "uninstallRelhax";
+            this.uninstallRelhax.Size = new System.Drawing.Size(129, 34);
+            this.uninstallRelhax.TabIndex = 1;
+            this.uninstallRelhax.Text = "Uninstall Relhax";
+            this.uninstallRelhax.UseVisualStyleBackColor = true;
+            this.uninstallRelhax.Click += new System.EventHandler(this.uninstallRelhax_Click);
             // 
             // downloadProgress
             // 
@@ -99,17 +72,6 @@
             this.downloadProgress.TabIndex = 4;
             this.downloadProgress.Text = "Idle";
             this.downloadProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // whatVersion
-            // 
-            this.whatVersion.Enabled = false;
-            this.whatVersion.Location = new System.Drawing.Point(147, 92);
-            this.whatVersion.Name = "whatVersion";
-            this.whatVersion.Size = new System.Drawing.Size(129, 34);
-            this.whatVersion.TabIndex = 7;
-            this.whatVersion.Text = "Version info";
-            this.whatVersion.UseVisualStyleBackColor = true;
-            this.whatVersion.Click += new System.EventHandler(this.whatVersion_Click);
             // 
             // statusLabel
             // 
@@ -147,17 +109,6 @@
             this.forceManuel.Text = "Force manual game detection";
             this.forceManuel.UseVisualStyleBackColor = true;
             // 
-            // downloadRelhax
-            // 
-            this.downloadRelhax.Enabled = false;
-            this.downloadRelhax.Location = new System.Drawing.Point(12, 52);
-            this.downloadRelhax.Name = "downloadRelhax";
-            this.downloadRelhax.Size = new System.Drawing.Size(129, 34);
-            this.downloadRelhax.TabIndex = 14;
-            this.downloadRelhax.Text = "Download latest Relhax (no install)";
-            this.downloadRelhax.UseVisualStyleBackColor = true;
-            this.downloadRelhax.Click += new System.EventHandler(this.downloadRelhax_Click);
-            // 
             // downloadNumberCount
             // 
             this.downloadNumberCount.AutoSize = true;
@@ -176,27 +127,30 @@
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
-            // timer1
+            // formPageLink
             // 
-            this.timer1.Enabled = true;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.formPageLink.AutoSize = true;
+            this.formPageLink.Location = new System.Drawing.Point(9, 224);
+            this.formPageLink.Name = "formPageLink";
+            this.formPageLink.Size = new System.Drawing.Size(84, 13);
+            this.formPageLink.TabIndex = 16;
+            this.formPageLink.TabStop = true;
+            this.formPageLink.Text = "View Form Page";
+            this.formPageLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.formPageLink_LinkClicked);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(289, 231);
+            this.ClientSize = new System.Drawing.Size(289, 240);
+            this.Controls.Add(this.formPageLink);
             this.Controls.Add(this.downloadNumberCount);
-            this.Controls.Add(this.downloadRelhax);
             this.Controls.Add(this.forceManuel);
             this.Controls.Add(this.downloadProgressBar);
             this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.downloadProgress);
-            this.Controls.Add(this.whatVersion);
-            this.Controls.Add(this.restoreCustom);
-            this.Controls.Add(this.backupCustom);
-            this.Controls.Add(this.stockSounds);
-            this.Controls.Add(this.installMods);
+            this.Controls.Add(this.uninstallRelhax);
+            this.Controls.Add(this.installRelhax);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainWindow";
             this.Text = "RelHax ";
@@ -208,20 +162,16 @@
 
         #endregion
 
-        private System.Windows.Forms.Button installMods;
-        private System.Windows.Forms.Button stockSounds;
-        private System.Windows.Forms.Button backupCustom;
-        private System.Windows.Forms.Button restoreCustom;
+        private System.Windows.Forms.Button installRelhax;
+        private System.Windows.Forms.Button uninstallRelhax;
         private System.Windows.Forms.Label downloadProgress;
-        private System.Windows.Forms.Button whatVersion;
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.ProgressBar downloadProgressBar;
         private System.Windows.Forms.OpenFileDialog findWotExe;
         private System.Windows.Forms.CheckBox forceManuel;
-        private System.Windows.Forms.Button downloadRelhax;
         private System.Windows.Forms.Label downloadNumberCount;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.LinkLabel formPageLink;
     }
 }
 
