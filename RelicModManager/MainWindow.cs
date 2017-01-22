@@ -16,6 +16,8 @@ using System.Threading;
 using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Linq;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace RelicModManager
 {
@@ -27,28 +29,17 @@ namespace RelicModManager
         private string modAudioFolder;
         private string tempPath = Path.GetTempPath();
         private static int MBDivisor = 1048576;
-        private string managerVersion = "version 17.1";
+        private string managerVersion = "version 17.2";
         private string tanksLocation;
         private SelectFeatures features = new SelectFeatures();
         private List<DownloadItem> downloadQueue;
-        private int downloadCount;
-        private volatile int totalDownloadCount;
-        private bool isAutoDetected;
-        string appPath = Application.StartupPath;
-        private pleaseWait wait = new pleaseWait();
-        private string parsedModsFolder;//0.9.x
-        private string stockTextFolder;
-        private string modTextFolder;
-        private string stockAudioFolder;
+        private string appPath = Application.StartupPath;
+        private string downloadPath = Application.StartupPath + "\\RelHaxDownloads";
+        private string parsedModsFolder;//0.9.x.y.z
         private string modGuiFolder;
         private string modGuiFolderBase;
-        private string modTextFolderBase;
-        int numZipFiles;
-        int totalZipFiles;
-        bool repairMode;
         ZipFile zip;
-        bool workerIdle;
-        private bool isInstalling = false;
+        Stopwatch sw = new Stopwatch();
         
         //The constructur for the application
         public MainWindow()
@@ -59,28 +50,32 @@ namespace RelicModManager
         //install RelHax
         private void installRelhax_Click(object sender, EventArgs e)
         {
-            isInstalling = true;
+            //reset the interface
+            this.reset();
+            //ask the user which features s/he wishes to install
             this.features.ShowDialog();
             if (features.canceling)
             {
                 downloadProgress.Text = "Canceled";
                 return;
             }
-            this.reset();
+            //attempt to locate the tanks directory
             if (this.autoFindTanks() == null || this.forceManuel.Checked)
             {
                 if (this.manuallyFindTanks() == null) return;
             }
+            //parse all strings
             if (this.parseStrings() == null)
             {
                 this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
                 return;
             }
-            /*if (this.prepareForInstall(false) == null)
-            {
-                this.displayError("Failed preparing for install.", null);
-                return;
-            }*/
+
+            if (!Directory.Exists(downloadPath)) Directory.CreateDirectory(downloadPath);
+
+            sw.Reset();
+            sw.Start();
+
             this.createDownloadQueue();
             this.downloader_DownloadFileCompleted(null, null);
         }
@@ -89,9 +84,8 @@ namespace RelicModManager
         private void uninstallRelhax_Click(object sender, EventArgs e)
         {
             this.reset();
-            Application.DoEvents();
+            childProgressBar.Maximum = 100;
             downloadProgress.Text = "Preparing...";
-            Application.DoEvents();
             if (this.autoFindTanks() == null || this.forceManuel.Checked)
             {
                 if (this.manuallyFindTanks() == null) return;
@@ -104,7 +98,7 @@ namespace RelicModManager
             //all of the stock files are in the res folder
             //only matters is if this copied to res mods
             downloadProgress.Text = "Removing Audio...";
-            downloadProgressBar.Value = 20;
+            childProgressBar.Value = 20;
             Application.DoEvents();
             //delete only relHax audio files
             if (Directory.Exists(modAudioFolder))
@@ -120,11 +114,11 @@ namespace RelicModManager
             //if audioww is empty, delete it as well
             int totalFilesAndFoldersLeft = this.anythingElseRemaining(modAudioFolder);
             if (totalFilesAndFoldersLeft == 0) Directory.Delete(modAudioFolder);
-            downloadProgressBar.Value = 50;
+            childProgressBar.Value = 50;
             Application.DoEvents();
 
             downloadProgress.Text = "Removing gui stuff...";
-            downloadProgressBar.Value = 85;
+            childProgressBar.Value = 85;
             Application.DoEvents();
             //delete gui file
             if (File.Exists(modGuiFolder + "\\main_sound_modes.xml")) File.Delete(modGuiFolder + "\\main_sound_modes.xml");
@@ -143,7 +137,7 @@ namespace RelicModManager
             if (this.anythingElseRemaining(tanksLocation + "\\res_mods\\configs") == 0) Directory.Delete(tanksLocation + "\\res_mods\\configs");
             
             downloadProgress.Text = "Unpatching xml files...";
-            downloadProgressBar.Value = 95;
+            childProgressBar.Value = 95;
             if (File.Exists(parsedModsFolder + "\\engine_config.xml"))
             {
                 this.decreaseSoundMemory();
@@ -158,19 +152,21 @@ namespace RelicModManager
                 this.removeDeclaration();
             }
             downloadProgress.Text = "Complete!";
-            downloadProgressBar.Value = 100;
+            childProgressBar.Value = 100;
             Application.DoEvents();
         }
 
         //handler for the mod download file progress
         void downloader_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
+            double msElapsed = sw.Elapsed.TotalMilliseconds;
             double bytesIn = double.Parse(e.BytesReceived.ToString());
             double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
             int MBytesIn = (int)bytesIn / MBDivisor;
             int MBytesTotal = (int)totalBytes / MBDivisor;
             downloadProgress.Text = "Downloaded " + MBytesIn + " MB" + " of " + MBytesTotal + " MB";
-            downloadProgressBar.Value = e.ProgressPercentage;
+            childProgressBar.Value = e.ProgressPercentage;
+            speedLabel.Text = string.Format("{0} MB/s", (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds).ToString("0.00"));
             if(MBytesIn == 0 && MBytesTotal == 0)
             {
                 this.downloadProgress.Text = "Complete!";
@@ -180,69 +176,41 @@ namespace RelicModManager
         //handler for the mod download file complete event
         void downloader_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            //get rid of this, just let it look again and again
-            //it won't do anything cause after unzipping it will
-            //delete the file
-            if (downloadQueue.Count > 0)
+            if (downloadQueue.Count != 0)
             {
-                downloadCount++;
-                this.downloadNumberCount.Text = "Downloading " + downloadCount + " of " + totalDownloadCount;
-                this.download(downloadQueue[0].getURL(), downloadQueue[0].getZipFile());
+                //TODO:check for CRC verification before deciding you have to re-download
+                //TODO: change the download folder location to a "data" folder relative to the path of the application
+                if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
+                //download new zip file
+                downloader = new WebClient();
+                downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
+                downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
+                downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
                 downloadQueue.RemoveAt(0);
+                parrentProgressBar.Value++;
                 return;
             }
-            else
+            if (downloadQueue.Count == 0)
             {
-                //just let it keep running
-                //since the files won't exist
-                //use the overloaded method of cleanup(filepath,filename);
-                //if (zipThread.ThreadState != ThreadState.Running)zipThread.Start();
-                //this.lookForFilesToUnzip();
-                if (workerIdle)
-                {
-                    workerIdle = false;
-                    backgroundWorker1.RunWorkerAsync();
-                }
+                //tell it to extract the zip files
+                downloadProgress.Text = "done";
+                this.extractZipFiles();
             }
         }
 
-        private void lookForFilesToUnzip()
+        private void extractZipFiles()
         {
-            //just let it keep running
-            //since the files won't exist
-            //use the overloaded method of cleanup(filepath,filename);
-
-            //System.Threading.Thread.Sleep(100);
-            if (File.Exists(tempPath + "\\RelHax.zip"))
+            speedLabel.Text = "Extracting...";
+            string[] fileNames = Directory.GetFiles(downloadPath);
+            parrentProgressBar.Maximum = fileNames.Count();
+            parrentProgressBar.Value = 0;
+            //TODO: check with each zip file if the user is actually installing it
+            foreach (string fName in fileNames)
             {
-                numZipFiles++;
-                this.unzip(tempPath + "\\RelHax.zip", tanksLocation);
-                System.Threading.Thread.Sleep(10);
-                this.cleanup(tempPath + "\\RelHax.zip");
+                this.unzip(fName, tanksLocation);
+                parrentProgressBar.Value++;
             }
-            if (File.Exists(tempPath + "\\gui.zip"))
-            {
-                numZipFiles++;
-                this.unzip(tempPath + "\\gui.zip", tanksLocation);
-                System.Threading.Thread.Sleep(10);
-                this.cleanup(tempPath + "\\gui.zip");
-            }
-            if (File.Exists(tempPath + "\\6thSense.zip"))
-            {
-                numZipFiles++;
-                this.unzip(tempPath + "\\6thSense.zip", tanksLocation);
-                System.Threading.Thread.Sleep(10);
-                this.cleanup(tempPath + "\\6thSense.zip");
-            }
-            if (File.Exists(tempPath + "\\origional.zip"))
-            {
-                numZipFiles = 1;
-                totalZipFiles = 1;
-                this.unzip(tempPath + "\\origional.zip", tanksLocation + "\\res");
-                System.Threading.Thread.Sleep(10);
-                this.cleanup(tempPath + "\\origional.zip");
-                return;
-            }
+            this.patchStuff();
         }
 
         //method to check for updates to the application on startup
@@ -260,6 +228,8 @@ namespace RelicModManager
                 if (result.Equals(DialogResult.Yes))
                 {
                     //download new version
+                    sw.Reset();
+                    sw.Start();
                     string newExeName = Application.StartupPath + "\\RelicModManager " + managerVersion + ".exe";
                     updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(updater_DownloadProgressChanged);
                     updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
@@ -304,7 +274,8 @@ namespace RelicModManager
             int MBytesIn = (int)bytesIn / MBDivisor;
             int MBytesTotal = (int)totalBytes / MBDivisor;
             downloadProgress.Text = "Downloaded " + MBytesIn + " MB" + " of " + MBytesTotal + " MB";
-            downloadProgressBar.Value = e.ProgressPercentage;
+            childProgressBar.Value = e.ProgressPercentage;
+            speedLabel.Text = string.Format("{0} MB/s", (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds).ToString("0.00"));
             if (MBytesIn == 0 && MBytesTotal == 0)
             {
                 this.downloadProgress.Text = "Complete!";
@@ -313,21 +284,11 @@ namespace RelicModManager
 
         private String parseStrings()
         {
-            if (isAutoDetected)
-            {
-                tanksLocation = tanksLocation.Substring(1);
-                tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
-                if (!File.Exists(tanksLocation)) return null;
-            }
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
             parsedModsFolder =  tanksLocation + "\\res_mods\\" + this.getFolderVersion(tanksLocation);
-            stockAudioFolder = tanksLocation + "\\res\\audioww";
-            stockTextFolder = tanksLocation + "\\res\\text\\lc_messages";
             modGuiFolder = parsedModsFolder + "\\gui\\soundModes";
-            modTextFolder = parsedModsFolder + "\\text\\lc_messages";
             modAudioFolder = parsedModsFolder + "\\audioww";
             modGuiFolderBase = parsedModsFolder + "\\gui";
-            modTextFolderBase = parsedModsFolder + "\\text";
             return "1";
         }
 
@@ -352,50 +313,29 @@ namespace RelicModManager
             downloadProgress.Text = "Aborted";
         }
 
-        private void download(Uri URL, string zipFile)
-        {
-            //delete temp if it's there
-            if (File.Exists(zipFile)) File.Delete(zipFile);
-            //download new zip file
-            downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
-            downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
-            downloader.DownloadFileAsync(URL, zipFile, zipFile);
-        }
-
         private void unzip(string zipFile, string extractFolder)
         {
-            try
+            zip = ZipFile.Read(zipFile);
+            zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
+            childProgressBar.Maximum = zip.Entries.Count;
+            childProgressBar.Value = 0;
+            zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
+        }
+
+        void zip_ExtractProgress(object sender, ExtractProgressEventArgs e)
+        {
+            childProgressBar.Value = e.EntriesExtracted;
+            if (e.CurrentEntry != null)
             {
-                using (zip = ZipFile.Read(zipFile))
-                {
-                    double step = (100 / zip.Count);
-                    double percentComplete = 0;
-                    int realPercentComplete = 0;
-                    foreach (ZipEntry file in zip)
-                    {
-                        try
-                        {
-                            System.Threading.Thread.Sleep(10);
-                            file.Extract(extractFolder, ExtractExistingFileAction.OverwriteSilently);
-                        }
-                        catch (IOException)
-                        {
-                            
-                            //file.Extract(extractFolder, ExtractExistingFileAction.OverwriteSilently);
-                            //e.Message;
-                            //File.Delete()
-                        }
-                            percentComplete = percentComplete + step;
-                            realPercentComplete = (int)percentComplete;
-                            backgroundWorker1.ReportProgress(realPercentComplete);
-                    }
-                    zip.Dispose();
-                }
+                downloadProgress.Text = e.CurrentEntry.FileName;
+                Application.DoEvents();
             }
-            catch (ZipException)
-                {
-                    MessageBox.Show("Error Downloading, please try again. If this is not the first\ntime you have seen this, tell Willster he messed up");
-                }
+            if (e.EventType == ZipProgressEventType.Extracting_AfterExtractAll)
+            {
+                zip.Dispose();
+                downloadProgress.Text = "Complete!";
+                speedLabel.Text = "";
+            }
         }
 
         private void cleanup()
@@ -409,26 +349,12 @@ namespace RelicModManager
             if (Directory.Exists(tempPath + "\\versionCheck")) Directory.Delete(tempPath + "\\versionCheck", true);
         }
 
-        private void cleanup(string theZipFile)
-        {
-            if (File.Exists(theZipFile)) File.Delete(theZipFile);
-        }
-
+        //reset the UI and critical componets
         private void reset()
         {
-            //reset the UI and critical componets
-            downloader.Dispose();
-            downloader = new WebClient();
-            this.downloadProgress.Text = "Idle";
-            this.downloadProgressBar.Value = 0;
-            downloadCount = 0;
-            isAutoDetected = false;
-            downloadNumberCount.Visible = false;
-            repairMode = false;
-            zip = new ZipFile();
-            numZipFiles = 0;
-            totalZipFiles = 0;
-            workerIdle = true;
+            downloadProgress.Text = "Idle";
+            childProgressBar.Value = 0;
+            parrentProgressBar.Value = 0;
             statusLabel.Text = "STATUS:";
         }
 
@@ -437,26 +363,16 @@ namespace RelicModManager
             downloadQueue = new List<DownloadItem>();
             if (this.features.relhaxBox.Checked)
             {
-                downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/RelHax.zip"), tempPath + "\\RelHax.zip"));
-                totalZipFiles++;
+                downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/RelHax.zip"), downloadPath + "\\RelHax.zip"));
+                //downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/RelHax.zip"), downloadPath + "\\gui.zip"));
+                //downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/RelHax.zip"), downloadPath + "\\6thSense.zip"));
             }
             if (this.features.relhaxBoxCen.Checked)
             {
-                downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/RelHaxCen.zip"), tempPath + "\\RelHax.zip"));
-                totalZipFiles++;
+                downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/RelHaxCen.zip"), downloadPath + "\\RelHax.zip"));
             }
-            /*if (this.features.guiBox.Checked)
-            {
-                downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/gui.zip"), tempPath + "\\gui.zip"));
-                totalZipFiles++;
-            }
-            if (this.features.sixthSenseBox.Checked)
-            {
-                downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/6thSense.zip"), tempPath + "\\6thSense.zip"));
-                totalZipFiles++;
-            }*/
-            totalDownloadCount = downloadQueue.Count;
-            downloadNumberCount.Visible = true;
+            parrentProgressBar.Maximum = downloadQueue.Count;
+            parrentProgressBar.Minimum = 0;
         }
 
         private string autoFindTanks()
@@ -465,8 +381,10 @@ namespace RelicModManager
             const string keyName = "HKEY_CURRENT_USER\\Software\\Classes\\.wotreplay\\shell\\open\\command";
             theObject = Registry.GetValue(keyName, "", -1);
             if (theObject == null) return null;
-            isAutoDetected = true;
             tanksLocation = (string)theObject;
+            tanksLocation = tanksLocation.Substring(1);
+            tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
+            if (!File.Exists(tanksLocation)) return null;
             return (string)theObject;
         }
 
@@ -479,13 +397,13 @@ namespace RelicModManager
                 return null;
             }
             tanksLocation = findWotExe.FileName;
-            isAutoDetected = false;
             return "all good";
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
             this.Text = this.Text + managerVersion;
+            pleaseWait wait = new pleaseWait();
             wait.Show();
             Application.DoEvents();
             try
@@ -505,56 +423,25 @@ namespace RelicModManager
             Application.DoEvents();
         }
 
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        //starts the patching process
+        private void patchStuff()
         {
-            BackgroundWorker worker = sender as BackgroundWorker;
-            this.lookForFilesToUnzip();
-        }
-
-        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            downloadProgress.Text = e.ProgressPercentage + "% Complete extracting " + numZipFiles + " of " + totalZipFiles;
-            //real progress
-            /*allProgress++;
-            if (totalZipFiles !=0) totalProgress = allProgress / totalZipFiles;
-            int val = (int)totalProgress;*/
-            //realistic progress
-            if(numZipFiles == 1) downloadProgressBar.Value = e.ProgressPercentage;
-        }
-
-        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (repairMode)
+            this.downloadProgress.Text = "patching xml file...";
+            if (!File.Exists(parsedModsFolder + "\\engine_config.xml"))
             {
-                this.reset();
-                this.installRelhax_Click(null, null);
+                downloader.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/RelicMod/stock_engine_config.xml", parsedModsFolder + "\\engine_config.xml");
             }
-            else
-            {
-                this.cleanup();
-                this.downloadNumberCount.Visible = false;
-                //patch the engine config file
-                if (isInstalling)
-                {
-                    this.downloadProgress.Text = "patching xml file...";
-                    if (!File.Exists(parsedModsFolder + "\\engine_config.xml"))
-                    {
-                        downloader.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/RelicMod/stock_engine_config.xml", parsedModsFolder + "\\engine_config.xml");
-                    }
-                    this.increaseSoundMemory();
-                    this.addBank("RelHax_1.bnk");
-                    this.addBank("RelHax_2.bnk");
-                    this.addBank("RelHax_3.bnk");
-                    this.addBank("RelHax_4.bnk");
-                    this.addBank("RelHaxChatShotcuts.bnk");
-                    this.addBank("RelHaxMusicSources.bnk");
-                    this.addBank("RelHaxGui.bnk");
-                    this.removeDeclaration();
-                    isInstalling = false;
-                }
-                this.downloadProgress.Text = "Complete!";
-                downloadProgressBar.Value = 100;
-            }
+            this.increaseSoundMemory();
+            this.addBank("RelHax_1.bnk");
+            this.addBank("RelHax_2.bnk");
+            this.addBank("RelHax_3.bnk");
+            this.addBank("RelHax_4.bnk");
+            this.addBank("RelHaxChatShotcuts.bnk");
+            this.addBank("RelHaxMusicSources.bnk");
+            this.addBank("RelHaxGui.bnk");
+            this.removeDeclaration();
+            this.downloadProgress.Text = "Complete!";
+            childProgressBar.Value = childProgressBar.Maximum;
         }
 
         //patches the engine config xml to increase the sound memory available
@@ -745,15 +632,13 @@ namespace RelicModManager
 
     class DownloadItem
     {
-        private Uri URL;
-        private string zipFile;
+        public Uri URL { get; set; }
+        public string zipFile;
         public DownloadItem(Uri newURL, String newZipFile)
         {
             URL = newURL;
             zipFile = newZipFile;
         }
-        public Uri getURL() { return URL; }
-        public string getZipFile() { return zipFile; }
     }
 
 }

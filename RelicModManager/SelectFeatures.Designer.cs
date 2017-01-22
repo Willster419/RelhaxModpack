@@ -133,12 +133,14 @@
             // 
             // sampleSixthSense
             // 
+            this.sampleSixthSense.Enabled = false;
             this.sampleSixthSense.Location = new System.Drawing.Point(201, 124);
             this.sampleSixthSense.Name = "sampleSixthSense";
             this.sampleSixthSense.Size = new System.Drawing.Size(60, 23);
             this.sampleSixthSense.TabIndex = 9;
             this.sampleSixthSense.Text = "Sample";
             this.sampleSixthSense.UseVisualStyleBackColor = true;
+            this.sampleSixthSense.Visible = false;
             this.sampleSixthSense.Click += new System.EventHandler(this.sampleSixthSense_Click);
             // 
             // cancelButton
