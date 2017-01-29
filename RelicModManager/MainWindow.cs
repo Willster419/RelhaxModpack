@@ -18,6 +18,7 @@ using System.Xml.XPath;
 using System.Xml.Linq;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace RelicModManager
 {
@@ -38,15 +39,17 @@ namespace RelicModManager
         private string parsedModsFolder;//0.9.x.y.z
         private string modGuiFolder;
         private string modGuiFolderBase;
+        private string customUserMods;
         ZipFile zip;
         Stopwatch sw = new Stopwatch();
-        
+        private List<Catagory> parsedCatagoryLists;
+
         //The constructur for the application
         public MainWindow()
         {
             InitializeComponent();
         }
-        
+
         //install RelHax
         private void installRelhax_Click(object sender, EventArgs e)
         {
@@ -79,7 +82,7 @@ namespace RelicModManager
             this.createDownloadQueue();
             this.downloader_DownloadFileCompleted(null, null);
         }
-        
+
         //uninstall RelHax
         private void uninstallRelhax_Click(object sender, EventArgs e)
         {
@@ -135,7 +138,7 @@ namespace RelicModManager
             if (File.Exists(tanksLocation + "\\res_mods\\configs\\D2R52\\mod_SoundMapper.xml")) File.Delete(tanksLocation + "\\res_mods\\configs\\D2R52\\mod_SoundMapper.xml");
             if (this.anythingElseRemaining(tanksLocation + "\\res_mods\\configs\\D2R52") == 0) Directory.Delete(tanksLocation + "\\res_mods\\configs\\D2R52");
             if (this.anythingElseRemaining(tanksLocation + "\\res_mods\\configs") == 0) Directory.Delete(tanksLocation + "\\res_mods\\configs");
-            
+
             downloadProgress.Text = "Unpatching xml files...";
             childProgressBar.Value = 95;
             if (File.Exists(parsedModsFolder + "\\engine_config.xml"))
@@ -167,7 +170,7 @@ namespace RelicModManager
             downloadProgress.Text = "Downloaded " + MBytesIn + " MB" + " of " + MBytesTotal + " MB";
             childProgressBar.Value = e.ProgressPercentage;
             speedLabel.Text = string.Format("{0} MB/s", (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds).ToString("0.00"));
-            if(MBytesIn == 0 && MBytesTotal == 0)
+            if (MBytesIn == 0 && MBytesTotal == 0)
             {
                 this.downloadProgress.Text = "Complete!";
             }
@@ -217,27 +220,29 @@ namespace RelicModManager
         private void checkmanagerUpdates()
         {
             WebClient updater = new WebClient();
-            string versionSaveLocation = Application.ExecutablePath.Substring(0,Application.ExecutablePath.Length-4) + "_version.txt";
+            string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
             if (File.Exists(versionSaveLocation)) File.Delete(versionSaveLocation);
             updater.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/RelicMod/manager version.txt", versionSaveLocation);
             string version = File.ReadAllText(versionSaveLocation);
             if (!version.Equals(managerVersion))
             {
                 //out of date
-                DialogResult result = MessageBox.Show("Your manager is out of date. Please Download the New Version", "Manager is out of date", MessageBoxButtons.YesNo);
+                VersionInfo vi = new VersionInfo();
+                vi.ShowDialog();
+                DialogResult result = vi.result;
                 if (result.Equals(DialogResult.Yes))
                 {
                     //download new version
                     sw.Reset();
                     sw.Start();
-                    string newExeName = Application.StartupPath + "\\RelicModManager " + managerVersion + ".exe";
+                    string newExeName = Application.StartupPath + "\\RelicModManager " + version + ".exe";
                     updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(updater_DownloadProgressChanged);
                     updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
                     if (File.Exists(newExeName)) File.Delete(newExeName);
                     updater.DownloadFileAsync(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/" + "RelicModManager.exe"), newExeName);
                 }
-                else 
-                { 
+                else
+                {
                     //close the application
                     this.Close();
                 }
@@ -253,7 +258,9 @@ namespace RelicModManager
                 MessageBox.Show("Unable to download new version, exiting!");
                 this.Close();
             }
-            string newExeName = Application.StartupPath + "\\RelicModManager " + managerVersion + ".exe";
+            string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
+            string version = File.ReadAllText(versionSaveLocation);
+            string newExeName = Application.StartupPath + "\\RelicModManager " + version + ".exe";
             try
             {
                 System.Diagnostics.Process.Start(newExeName);
@@ -285,10 +292,11 @@ namespace RelicModManager
         private String parseStrings()
         {
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
-            parsedModsFolder =  tanksLocation + "\\res_mods\\" + this.getFolderVersion(tanksLocation);
+            parsedModsFolder = tanksLocation + "\\res_mods\\" + this.getFolderVersion(tanksLocation);
             modGuiFolder = parsedModsFolder + "\\gui\\soundModes";
             modAudioFolder = parsedModsFolder + "\\audioww";
             modGuiFolderBase = parsedModsFolder + "\\gui";
+            customUserMods = Application.StartupPath + "\\RelHaxUserMods";
             return "1";
         }
 
@@ -308,7 +316,7 @@ namespace RelicModManager
         //Method for displaying an error message
         private void displayError(String errorText, String errorHandle)
         {
-            if(errorHandle == null) MessageBox.Show(errorText);
+            if (errorHandle == null) MessageBox.Show(errorText);
             else MessageBox.Show(errorText, errorHandle);
             downloadProgress.Text = "Aborted";
         }
@@ -405,6 +413,7 @@ namespace RelicModManager
             this.Text = this.Text + managerVersion;
             pleaseWait wait = new pleaseWait();
             wait.Show();
+            wait.loadingDescLabel.Text = "Checking for single instance...";
             Application.DoEvents();
             try
             {
@@ -417,8 +426,19 @@ namespace RelicModManager
                 MessageBox.Show("Error: Another Instance of the relic mod manager is already running");
                 this.Close();
             }
+            wait.loadingDescLabel.Text = "Doing Random Cleanup...";
+            Application.DoEvents();
             this.cleanup();
+            wait.loadingDescLabel.Text = "Checking for updates...";
+            Application.DoEvents();
             this.checkmanagerUpdates();
+            wait.loadingDescLabel.Text = "Verifying Directory Structure...";
+            Application.DoEvents();
+            //create directory structures
+            if (!Directory.Exists(Application.StartupPath + "\\RelHaxDownloads")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxDownloads");
+            if (!Directory.Exists(Application.StartupPath + "\\RelHaxUserMods")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxUserMods");
+            if (!Directory.Exists(Application.StartupPath + "\\RelHaxTemp")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxTemp");
+            if (!Directory.Exists(Application.StartupPath + "\\RelHaxUserConfigs")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxUserConfigs");
             wait.Close();
             Application.DoEvents();
         }
@@ -459,22 +479,22 @@ namespace RelicModManager
             XmlNode lowEnginePool = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/lowEnginePool");
             temp = int.Parse(lowEnginePool.InnerText);
             if (temp < 24)
-            lowEnginePool.InnerText = "24";
+                lowEnginePool.InnerText = "24";
             //patch defaultPool
             XmlNode preparedPool = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/preparedPool");
             temp = int.Parse(preparedPool.InnerText);
             if (temp < 256)
-            preparedPool.InnerText = "256";
+                preparedPool.InnerText = "256";
             //patch defaultPool
             XmlNode streamingPool = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/streamingPool");
             temp = int.Parse(streamingPool.InnerText);
             if (temp < 8)
-            streamingPool.InnerText = "8";
+                streamingPool.InnerText = "8";
             //patch defaultPool
             XmlNode IOPoolSize = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/IOPoolSize");
             temp = int.Parse(IOPoolSize.InnerText);
             if (temp < 12)
-            IOPoolSize.InnerText = "12";
+                IOPoolSize.InnerText = "12";
             if (File.Exists("engine_config_test.xml")) File.Delete("engine_config_test.xml");
             doc.Save(parsedModsFolder + "\\engine_config.xml");
         }
@@ -486,19 +506,19 @@ namespace RelicModManager
             doc.Load(parsedModsFolder + "\\engine_config.xml");
             //patch defaultPool
             XmlNode defaultPool = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/defaultPool");
-                defaultPool.InnerText = "12";
+            defaultPool.InnerText = "12";
             //patch defaultPool
             XmlNode lowEnginePool = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/lowEnginePool");
-                lowEnginePool.InnerText = "10";
+            lowEnginePool.InnerText = "10";
             //patch defaultPool
             XmlNode preparedPool = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/preparedPool");
-                preparedPool.InnerText = "106";
+            preparedPool.InnerText = "106";
             //patch defaultPool
             XmlNode streamingPool = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/streamingPool");
-                streamingPool.InnerText = "2";
+            streamingPool.InnerText = "2";
             //patch defaultPool
             XmlNode IOPoolSize = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/IOPoolSize");
-                IOPoolSize.InnerText = "4";
+            IOPoolSize.InnerText = "4";
             if (File.Exists("engine_config_test.xml")) File.Delete("engine_config_test.xml");
             doc.Save(parsedModsFolder + "\\engine_config.xml");
         }
@@ -553,7 +573,7 @@ namespace RelicModManager
                     return;
                 }
             }
-            
+
             {
                 //create refrence node
                 XmlNode reff = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/voice_soundbanks");
@@ -627,6 +647,131 @@ namespace RelicModManager
         private void formPageLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://relicgaming.com/index.php?topic=697.0");
+        }
+
+        private void RegxPatch(string fileLocation, string search, string replace, int lineNumber = 0)
+        {
+            //load file from disk...
+            string file = File.ReadAllText(fileLocation);
+            string[] fileParsed = file.Split('\n');
+            StringBuilder sb = new StringBuilder();
+            //Console.WriteLine(fileParsed.Count());
+            if (lineNumber == 0)
+            //search entire file
+            {
+                for (int i = 0; i < fileParsed.Count(); i++)
+                {
+                    if (Regex.IsMatch(fileParsed[i], search))
+                    {
+                        //Console.WriteLine(fileParsed[i]);
+                        fileParsed[i] = Regex.Replace(fileParsed[i], search, replace);
+                        //Console.WriteLine(fileParsed[i]);
+                    }
+                    sb.Append(fileParsed[i] + "\n");
+                }
+            }
+            else
+            {
+                for (int i = 0; i < fileParsed.Count(); i++)
+                {
+                    if (Regex.IsMatch(fileParsed[i], search) && i == lineNumber - 1)
+                    {
+                        fileParsed[i] = Regex.Replace(fileParsed[i], search, replace);
+                    }
+                    sb.Append(fileParsed[i] + "\n");
+                }
+            }
+            file = sb.ToString();
+            File.WriteAllText(Application.StartupPath + "\\mod_battle_assistant_patched.txt", file);
+        }
+
+        private void createPatchList()
+        {/*
+            //this would be the createPatchList method
+    Console.WriteLine("loading xml document");
+    XmlDocument doc = new XmlDocument();
+    doc.Load("https://dl.dropboxusercontent.com/u/44191620/relHax_patch.xml");
+    Console.WriteLine("xml loaded, parsing to class structure...");
+    XmlNodeList patchesList = doc.SelectNodes("//patchs/patch");
+    Console.WriteLine(patchesList.Count + " patches loaded");
+    List<Patch> parsedPatchesList = new List<Patch>();
+    foreach (XmlNode n in patchesList)
+    {
+      Patch p = new Patch();
+      foreach (XmlNode nn in n.ChildNodes)
+      {
+        switch (nn.Name)
+        {
+          case "type":
+          p.type = nn.InnerText;
+          break;
+          case "mode":
+          p.mode = nn.InnerText;
+          break;
+          case "file":
+          p.file = nn.InnerText;
+          break;
+          case "path":
+          p.path = nn.InnerText;
+          break;
+          case "line":
+          p.lines = nn.InnerText.Split(',');
+          break;
+          case "search":
+          p.search = nn.InnerText;
+          break;
+          case "replace":
+          p.replace = nn.InnerText;
+          break;
+        }
+      }
+      parsedPatchesList.Add(p);
+    }
+    //this would be the actual patch method
+    foreach (Patch p in parsedPatchesList)
+    {
+      if (p.type.Equals("regx"))
+      {
+        if (p.lines.Count() == 0)
+        {
+          //perform regex patch on entire file
+          Console.WriteLine("Will perform " + p.type +" patch on file " + p.file);
+        }
+        else if (p.lines.Count() > 0)
+        {
+          StringBuilder sb2 = new StringBuilder();
+          sb2.Append("Will perform " + p.type + " patch on file " + p.file + ", lines ");
+          foreach (string s in p.lines)
+          {
+            //perform regex patch on specific file lines
+            //will need to be a standard for loop BTW
+            sb2.Append(s + ", ");
+          }
+          string output = sb2.ToString().Trim();
+          output = output.Substring(0,output.Length-1);
+          Console.WriteLine(output);
+        }
+        else
+        {
+          
+        }
+      }
+      else if (p.type.Equals("xml"))
+      {
+        //perform xml patch
+        Console.WriteLine("Will perform " + p.type +" patch on file " + p.file);
+      }
+    }
+  }*/
+        }
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ModSelectionList list = new ModSelectionList();
+            list.ShowDialog();
+            parsedCatagoryLists = list.parsedCatagoryList;
+
         }
     }
 

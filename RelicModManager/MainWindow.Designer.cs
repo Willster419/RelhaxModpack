@@ -38,6 +38,7 @@
             this.formPageLink = new System.Windows.Forms.LinkLabel();
             this.parrentProgressBar = new System.Windows.Forms.ProgressBar();
             this.speedLabel = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // installRelhax
@@ -137,11 +138,23 @@
             this.speedLabel.TabIndex = 18;
             this.speedLabel.Text = "Idle";
             // 
+            // button1
+            // 
+            this.button1.Enabled = false;
+            this.button1.Location = new System.Drawing.Point(147, 12);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 19;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(289, 267);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.speedLabel);
             this.Controls.Add(this.parrentProgressBar);
             this.Controls.Add(this.formPageLink);
@@ -172,6 +185,7 @@
         private System.Windows.Forms.LinkLabel formPageLink;
         private System.Windows.Forms.ProgressBar parrentProgressBar;
         private System.Windows.Forms.Label speedLabel;
+        private System.Windows.Forms.Button button1;
     }
 }
 

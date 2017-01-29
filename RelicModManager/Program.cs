@@ -37,6 +37,7 @@ namespace RelicModManager
 
             };
             Application.Run(new MainWindow());
+            //Application.Run(new ModSelectionList());
         }
 
        /* static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)

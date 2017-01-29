@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
+            this.loadingDescLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -40,11 +41,21 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Loading...please wait...";
             // 
+            // loadingDescLabel
+            // 
+            this.loadingDescLabel.AutoSize = true;
+            this.loadingDescLabel.Location = new System.Drawing.Point(68, 65);
+            this.loadingDescLabel.Name = "loadingDescLabel";
+            this.loadingDescLabel.Size = new System.Drawing.Size(35, 13);
+            this.loadingDescLabel.TabIndex = 1;
+            this.loadingDescLabel.Text = "label2";
+            // 
             // pleaseWait
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(253, 98);
+            this.Controls.Add(this.loadingDescLabel);
             this.Controls.Add(this.label1);
             this.Name = "pleaseWait";
             this.Text = "pleaseWait";
@@ -56,5 +67,6 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Label loadingDescLabel;
     }
 }
