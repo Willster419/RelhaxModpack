@@ -192,7 +192,8 @@ namespace RelicModManager
                                 string configName = tb.Name.Split('_')[2];
                                 if (configName.Equals(cc.name))
                                 {
-                                    cc.zipConfigFile = tb.Text;
+                                    cc.setValue = tb.Text;
+                                    cc.configChecked = true;
                                 }
                             }
                         }
@@ -202,6 +203,25 @@ namespace RelicModManager
             catch (FormatException)
             {
                 tb.BackColor = Color.Red;
+                string modName = tb.Parent.Parent.Controls[0].Text;
+                string catagoryName = tb.Parent.Parent.Parent.Text;
+                foreach (Catagory c in parsedCatagoryList)
+                {
+                    foreach (Mod m in c.mods)
+                    {
+                        if (c.name.Equals(catagoryName) && m.name.Equals(modName))
+                        {
+                            foreach (Config cc in m.configs)
+                            {
+                                string configName = tb.Name.Split('_')[2];
+                                if (configName.Equals(cc.name))
+                                {
+                                    cc.configChecked = false;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -285,7 +305,7 @@ namespace RelicModManager
         private void createModStructure()
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load("modInfoAlpha.xml");
+            doc.Load("https://dl.dropboxusercontent.com/u/44191620/RelicMod/mods/modInfo.xml");
             XmlNodeList modsList = doc.SelectNodes("//modInfoAlpha.xml/mods/mod");
             parsedModsList = new List<Mod>();
             foreach (XmlNode n in modsList)

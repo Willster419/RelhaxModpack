@@ -19,6 +19,7 @@ using System.Xml.Linq;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Security.Cryptography;
 
 namespace RelicModManager
 {
@@ -30,7 +31,7 @@ namespace RelicModManager
         private string modAudioFolder;
         private string tempPath = Path.GetTempPath();
         private static int MBDivisor = 1048576;
-        private string managerVersion = "version 17.2";
+        private string managerVersion = "version 17.3";
         private string tanksLocation;
         private SelectFeatures features = new SelectFeatures();
         private List<DownloadItem> downloadQueue;
@@ -42,7 +43,13 @@ namespace RelicModManager
         private string customUserMods;
         ZipFile zip;
         Stopwatch sw = new Stopwatch();
+        private string downloadURL = "https://dl.dropboxusercontent.com/u/44191620/RelicMod/mods/";
         private List<Catagory> parsedCatagoryLists;
+        private List<Mod> modsToInstall;
+        private List<Config> configsToInstall;
+        private List<Patch> patchList;
+        bool modPack;
+        string tempOldDownload;
 
         //The constructur for the application
         public MainWindow()
@@ -53,6 +60,7 @@ namespace RelicModManager
         //install RelHax
         private void installRelhax_Click(object sender, EventArgs e)
         {
+            modPack = false;
             //reset the interface
             this.reset();
             //ask the user which features s/he wishes to install
@@ -179,25 +187,65 @@ namespace RelicModManager
         //handler for the mod download file complete event
         void downloader_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            if (downloadQueue.Count != 0)
+            if (!modPack)
             {
-                //TODO:check for CRC verification before deciding you have to re-download
-                //TODO: change the download folder location to a "data" folder relative to the path of the application
-                if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
-                //download new zip file
-                downloader = new WebClient();
-                downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
-                downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
-                downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
-                downloadQueue.RemoveAt(0);
-                parrentProgressBar.Value++;
-                return;
+                //old relhax sound mod code
+                if (downloadQueue.Count != 0)
+                {
+                    //TODO:check for CRC verification before deciding you have to re-download
+                    //TODO: change the download folder location to a "data" folder relative to the path of the application
+                    if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
+                    //download new zip file
+                    downloader = new WebClient();
+                    downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
+                    downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
+                    downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
+                    downloadQueue.RemoveAt(0);
+                    parrentProgressBar.Value++;
+                    return;
+                }
+                if (downloadQueue.Count == 0)
+                {
+                    //tell it to extract the zip files
+                    downloadProgress.Text = "done";
+                    this.extractZipFiles();
+                }
             }
-            if (downloadQueue.Count == 0)
+            else
             {
-                //tell it to extract the zip files
-                downloadProgress.Text = "done";
-                this.extractZipFiles();
+                if (e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
+                {
+                    //404
+                    MessageBox.Show("Failed to download " + tempOldDownload + ". If you know which mod this is, uncheck it and you should be fine. It will be fixed soon. Restart this when it crashes");
+                    Application.Exit();
+                }
+                //new relhax modpack code
+                if (downloadQueue.Count != 0)
+                {
+                    if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
+                    //download new zip file
+                    downloader = new WebClient();
+                    downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
+                    downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
+                    downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
+                    tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
+                    downloadQueue.RemoveAt(0);
+                    parrentProgressBar.Value++;
+                    return;
+                }
+                if (downloadQueue.Count == 0)
+                {
+                    //tell it to extract the zip files
+                    downloadProgress.Text = "done";
+                    if (cleanInstallCB.Checked)
+                    {
+                        //delete everything in res_mods
+                        if (Directory.Exists(tanksLocation + "\\res_mods")) Directory.Delete(tanksLocation + "\\res_mods", true);
+                        if (!Directory.Exists(tanksLocation + "\\res_mods")) Directory.CreateDirectory(tanksLocation + "\\res_mods");
+                    }
+                    this.extractZipFilesModPack();
+                    this.patchFiles();
+                }
             }
         }
 
@@ -214,6 +262,74 @@ namespace RelicModManager
                 parrentProgressBar.Value++;
             }
             this.patchStuff();
+            this.installFonts();
+        }
+
+        private void extractZipFilesModPack()
+        {
+            speedLabel.Text = "Extracting...";
+            parrentProgressBar.Maximum = modsToInstall.Count + configsToInstall.Count;
+            parrentProgressBar.Value = 0;
+            string downloadedFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
+            //extract mods
+            foreach (Mod m in modsToInstall)
+            {
+                this.unzip(downloadedFilesDir + m.modZipFile, tanksLocation);
+                parrentProgressBar.Value++;
+            }
+            //extract configs
+            foreach (Config c in configsToInstall)
+            {
+                this.unzip(downloadedFilesDir + c.zipConfigFile, tanksLocation);
+                parrentProgressBar.Value++;
+            }
+            //extract user mods
+            //for now assume all of them in there are to be used
+
+        }
+
+        private void patchFiles()
+        {
+            string[] patchFiles = Directory.GetFiles(tanksLocation + "\\_patch");
+
+            patchList.Clear();//this has all the patches in memory
+            for (int i = 0; i < patchFiles.Count(); i++)
+            {
+                //add patches to patchList
+                
+                this.createPatchList(patchFiles[i]);
+            }
+            //this would be the actual patch method
+            foreach (Patch p in patchList)
+            {
+                if (p.type.Equals("regx"))
+                {
+                    if (p.lines.Count() == 0)
+                    {
+                        //perform regex patch on entire file
+                        this.RegxPatch(p.file, p.search, p.replace);
+                    }
+                    else
+                    {
+                        foreach (string s in p.lines)
+                        {
+                            //perform regex patch on specific file lines
+                            //will need to be a standard for loop BTW
+                            this.RegxPatch(p.file, p.search, p.replace,int.Parse(s));
+                        }
+                    }
+                }
+                else if (p.type.Equals("xml"))
+                {
+                    //perform xml patch
+                    this.xmlPatch(p.file, p.path, p.mode, p.search, p.replace);
+                }
+            }
+        }
+
+        private void installFonts()
+        {
+
         }
 
         //method to check for updates to the application on startup
@@ -324,6 +440,14 @@ namespace RelicModManager
         private void unzip(string zipFile, string extractFolder)
         {
             zip = ZipFile.Read(zipFile);
+            for (int i = 0; i < zip.Entries.Count; i++)
+            {
+                if (Regex.IsMatch(zip[i].FileName, "versiondir"))
+                {
+                    zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", this.getFolderVersion(null));
+                }
+            }
+
             zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
             childProgressBar.Maximum = zip.Entries.Count;
             childProgressBar.Value = 0;
@@ -649,6 +773,130 @@ namespace RelicModManager
             System.Diagnostics.Process.Start("http://relicgaming.com/index.php?topic=697.0");
         }
 
+        private void xmlPatch(string filePath, string xpath, string mode, string search, string replace)
+        {
+            //patch versiondir out of filePath
+            filePath = tanksLocation + "\\res_mods" + filePath;
+            filePath = Regex.Replace(filePath, "versiondir", this.getFolderVersion(null));
+
+            //load document
+            XmlDocument doc = new XmlDocument();
+            doc.Load(filePath);
+
+            switch (mode)
+            {
+                case "add":
+                    //check to see if it's already there
+                    XmlNodeList currentSoundBanksAdd = doc.SelectNodes(xpath);
+                    foreach (XmlElement e in currentSoundBanksAdd)
+                    {
+                        if (e.InnerText.Equals(replace))
+                            return;
+                    }
+                    //get to the node where to add the element
+                    XmlNode reff = doc.SelectSingleNode(xpath);
+                    //create node(s) to add to the element
+                    string[] temp = replace.Split('/');
+                    List<XmlElement> nodes = new List<XmlElement>();
+                    for (int i = 0; i < temp.Count()-1; i++)
+                    {
+                        XmlElement ele = doc.CreateElement(temp[i]);
+                        if (i == temp.Count() - 2)
+                        {
+                            //last node with actual data to add
+                            ele.InnerText = temp[temp.Count()-1];
+                        }
+                        nodes.Add(ele);
+                    }
+                    //add nodes to the element in hierarchy order
+                    for (int i = nodes.Count-1; i > -1; i--)
+                    {
+                        if (i == 0)
+                        {
+                            reff.InsertAfter(nodes[i], reff.FirstChild);
+                            break;
+                        }
+                        XmlElement parrent = nodes[i - 1];
+                        XmlElement child = nodes[i];
+                        parrent.InsertAfter(child, parrent.FirstChild);
+                    }
+
+                    //save it
+                    if (File.Exists(filePath)) File.Delete(filePath);
+                    doc.Save(filePath);
+                    break;
+
+                case "edit":
+                    //check to see if it's already there
+                    XmlNodeList currentSoundBanksEdit = doc.SelectNodes(xpath);
+                    foreach (XmlElement e in currentSoundBanksEdit)
+                    {
+                        if (e.InnerText.Equals(replace))
+                            return;
+                    }
+                    //find and replace
+                    XmlNodeList rel1Edit = doc.SelectNodes(xpath);
+                    foreach (XmlElement eee in rel1Edit)
+                    {
+                        if (eee.InnerText.Equals(search))
+                        {
+                            eee.InnerText = replace;
+                        }
+                    }
+                    //save it
+                    if (File.Exists(filePath)) File.Delete(filePath);
+                    doc.Save(filePath);
+                    break;
+
+                case "remove":
+                    //check to see if it's there
+                    XmlNodeList currentSoundBanksRemove = doc.SelectNodes(xpath);
+                    foreach (XmlElement e in currentSoundBanksRemove)
+                    {
+                        if (e.InnerText.Equals(search))
+                        {
+                            e.RemoveAll();
+                        }
+                    }
+                    //save it
+                    if (File.Exists(filePath)) File.Delete(filePath);
+                    doc.Save(filePath);
+                    //check to see if it has the header info at the top to see if we need to remove it later
+                    bool hasHeader = false;
+                    XmlDocument doc3 = new XmlDocument();
+                    doc3.Load(filePath);
+                    foreach (XmlNode node in doc3)
+                    {
+                        if (node.NodeType == XmlNodeType.XmlDeclaration)
+                        {
+                            hasHeader = true;
+                            //doc3.RemoveChild(node);
+                        }
+                    }
+                    doc3.Save(filePath);
+                    //remove empty elements
+                    XDocument doc2 = XDocument.Load(filePath);
+                    doc2.Descendants().Where(e => string.IsNullOrEmpty(e.Value)).Remove();
+                    if (File.Exists(filePath)) File.Delete(filePath);
+                    doc2.Save(filePath);
+                    if (!hasHeader)
+                    {
+                        //need to remove the header
+                        XmlDocument doc4 = new XmlDocument();
+                        doc4.Load(filePath);
+                        foreach (XmlNode node in doc4)
+                        {
+                            if (node.NodeType == XmlNodeType.XmlDeclaration)
+                            {
+                                doc4.RemoveChild(node);
+                            }
+                        }
+                        doc4.Save(filePath);
+                    }
+                    break;
+            }
+        }
+
         private void RegxPatch(string fileLocation, string search, string replace, int lineNumber = 0)
         {
             //load file from disk...
@@ -685,94 +933,233 @@ namespace RelicModManager
             File.WriteAllText(Application.StartupPath + "\\mod_battle_assistant_patched.txt", file);
         }
 
-        private void createPatchList()
-        {/*
+        private void createPatchList(string xmlFile)
+        {
             //this would be the createPatchList method
-    Console.WriteLine("loading xml document");
-    XmlDocument doc = new XmlDocument();
-    doc.Load("https://dl.dropboxusercontent.com/u/44191620/relHax_patch.xml");
-    Console.WriteLine("xml loaded, parsing to class structure...");
-    XmlNodeList patchesList = doc.SelectNodes("//patchs/patch");
-    Console.WriteLine(patchesList.Count + " patches loaded");
-    List<Patch> parsedPatchesList = new List<Patch>();
-    foreach (XmlNode n in patchesList)
-    {
-      Patch p = new Patch();
-      foreach (XmlNode nn in n.ChildNodes)
-      {
-        switch (nn.Name)
-        {
-          case "type":
-          p.type = nn.InnerText;
-          break;
-          case "mode":
-          p.mode = nn.InnerText;
-          break;
-          case "file":
-          p.file = nn.InnerText;
-          break;
-          case "path":
-          p.path = nn.InnerText;
-          break;
-          case "line":
-          p.lines = nn.InnerText.Split(',');
-          break;
-          case "search":
-          p.search = nn.InnerText;
-          break;
-          case "replace":
-          p.replace = nn.InnerText;
-          break;
-        }
-      }
-      parsedPatchesList.Add(p);
-    }
-    //this would be the actual patch method
-    foreach (Patch p in parsedPatchesList)
-    {
-      if (p.type.Equals("regx"))
-      {
-        if (p.lines.Count() == 0)
-        {
-          //perform regex patch on entire file
-          Console.WriteLine("Will perform " + p.type +" patch on file " + p.file);
-        }
-        else if (p.lines.Count() > 0)
-        {
-          StringBuilder sb2 = new StringBuilder();
-          sb2.Append("Will perform " + p.type + " patch on file " + p.file + ", lines ");
-          foreach (string s in p.lines)
-          {
-            //perform regex patch on specific file lines
-            //will need to be a standard for loop BTW
-            sb2.Append(s + ", ");
-          }
-          string output = sb2.ToString().Trim();
-          output = output.Substring(0,output.Length-1);
-          Console.WriteLine(output);
-        }
-        else
-        {
-          
-        }
-      }
-      else if (p.type.Equals("xml"))
-      {
-        //perform xml patch
-        Console.WriteLine("Will perform " + p.type +" patch on file " + p.file);
-      }
-    }
-  }*/
+            XmlDocument doc = new XmlDocument();
+            doc.Load(xmlFile);
+            XmlNodeList patchesList = doc.SelectNodes("//patchs/patch");
+            foreach (XmlNode n in patchesList)
+            {
+                Patch p = new Patch();
+                foreach (XmlNode nn in n.ChildNodes)
+                {
+                    switch (nn.Name)
+                    {
+                        case "type":
+                            p.type = nn.InnerText;
+                            break;
+                        case "mode":
+                            p.mode = nn.InnerText;
+                            break;
+                        case "file":
+                            p.file = nn.InnerText;
+                            break;
+                        case "path":
+                            p.path = nn.InnerText;
+                            break;
+                        case "line":
+                            p.lines = nn.InnerText.Split(',');
+                            break;
+                        case "search":
+                            p.search = nn.InnerText;
+                            break;
+                        case "replace":
+                            p.replace = nn.InnerText;
+                            break;
+                    }
+                }
+                patchList.Add(p);
+            }
         }
 
 
         private void button1_Click(object sender, EventArgs e)
         {
+            modPack = true;
+            //reset the interface
+            this.reset();
+            //attempt to locate the tanks directory
+            if (this.autoFindTanks() == null || this.forceManuel.Checked)
+            {
+                if (this.manuallyFindTanks() == null) return;
+            }
+            //parse all strings
+            if (this.parseStrings() == null)
+            {
+                this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
+                return;
+            }
+            //the download timers started
+            sw.Reset();
+            sw.Start();
+            //actual new code
             ModSelectionList list = new ModSelectionList();
             list.ShowDialog();
+            if (list.cancel) return;
             parsedCatagoryLists = list.parsedCatagoryList;
-
+            modsToInstall = new List<Mod>();
+            configsToInstall = new List<Config>();
+            patchList = new List<Patch>();
+            //if mod is enabled and checked, add it to list of mods to extract/install
+            //same for configs
+            foreach (Catagory c in parsedCatagoryLists)
+            {
+                foreach (Mod m in c.mods)
+                {
+                    if (m.enabled && m.modChecked)
+                    {
+                        modsToInstall.Add(m);
+                        foreach (Config cc in m.configs)
+                        {
+                            if (cc.enabled && cc.configChecked)
+                            {
+                                configsToInstall.Add(cc);
+                            }
+                        }
+                    }
+                }
+            }
+            //remove the mods and configs that don't have zips to download
+            //this will keep those configs that have the entered value as the zip url
+            for (int i = 0; i < modsToInstall.Count; i++)
+            {
+                if (modsToInstall[i].modZipFile == null || modsToInstall[i].modZipFile.Equals(""))
+                {
+                    modsToInstall.RemoveAt(i);
+                }
+            }
+            for (int i = 0; i < configsToInstall.Count; i++)
+            {
+                if (configsToInstall[i].zipConfigFile == null || configsToInstall[i].zipConfigFile.Equals(""))
+                {
+                    configsToInstall.RemoveAt(i);
+                }
+            }
+            //foreach mod and config, if the crc's don't match, download it
+            downloadQueue = new List<DownloadItem>();
+            string localFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
+            foreach (Mod m in modsToInstall)
+            {
+                if (!this.CRCsMatch(localFilesDir + m.modZipFile,m.crc))
+                {
+                    //crc's don't match, need to re-download
+                    downloadQueue.Add(new DownloadItem(new Uri(this.downloadURL + m.modZipFile), localFilesDir + m.modZipFile));
+                }
+            }
+            foreach (Config c in configsToInstall)
+            {
+                if (!this.CRCsMatch(localFilesDir + c.zipConfigFile, c.crc))
+                {
+                    //crc's don't match, need to re-download
+                    downloadQueue.Add(new DownloadItem(new Uri(this.downloadURL + c.zipConfigFile), localFilesDir + c.zipConfigFile));
+                }
+            }
+            //remove configs tha are value_enter patches
+            for (int i = 0; i < configsToInstall.Count; i++)
+            {
+                if (parseable(configsToInstall[i].zipConfigFile))
+                {
+                    //magicly make it a patch somehow
+                    //and remove it from the list
+                    configsToInstall.RemoveAt(i);
+                }
+            }
+            parrentProgressBar.Maximum = downloadQueue.Count;
+            if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
+            //download new zip file
+            downloader = new WebClient();
+            downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
+            downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
+            downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
+            tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
+            downloadQueue.RemoveAt(0);
+            parrentProgressBar.Value++;
+            return;
         }
+
+        private bool CRCsMatch(string localFile, string remoteCRC)
+        {
+            if (!File.Exists(localFile))
+                return false;
+            MD5 hash = MD5.Create();
+            string crc = this.GetMd5Hash(hash, localFile);
+            if (crc.Equals(remoteCRC))
+                return true;
+            return false;
+        }
+
+        private string GetMd5Hash(MD5 md5Hash, string inputFile)
+        {
+            // Convert the input string to a byte array and compute the hash.
+            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(inputFile));
+            // Create a new Stringbuilder to collect the bytes
+            // and create a string.
+            StringBuilder sBuilder = new StringBuilder();
+            // Loop through each byte of the hashed data 
+            // and format each one as a hexadecimal string.
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+            // Return the hexadecimal string.
+            return sBuilder.ToString();
+        }
+
+        private bool parseable(string configzip)
+        {
+            try
+            {
+                int i = int.Parse(configzip);
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            modPack = true;
+            //reset the interface
+            this.reset();
+            //attempt to locate the tanks directory
+            if (this.autoFindTanks() == null || this.forceManuel.Checked)
+            {
+                if (this.manuallyFindTanks() == null) return;
+            }
+            //parse all strings
+            if (this.parseStrings() == null)
+            {
+                this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
+                return;
+            }
+            if (MessageBox.Show("This will delete ALL MODS. Are you Sure?", "Um...", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                downloadProgress.Text = "Uninstalling...";
+                Application.DoEvents();
+                Directory.Delete(tanksLocation + "\\res_mods", true);
+                if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
+                downloadProgress.Text = "Done!";
+                Application.DoEvents();
+            }
+        }
+
+        private void cleanInstallCB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cleanInstallCB.Checked)
+            {
+                MessageBox.Show("Enabling this will delete all mods in your res_mods folder");
+            }
+        }
+
+        private void CIEplainLabel_Click(object sender, EventArgs e)
+        {
+            crcCheck crcCHecker = new crcCheck();
+            crcCHecker.Show();
+        }
+
     }
 
     class DownloadItem

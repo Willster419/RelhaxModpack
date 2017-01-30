@@ -67,6 +67,12 @@
   <ItemGroup>
     <Compile Include="Catagory.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="crcCheck.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="crcCheck.Designer.cs">
+      <DependentUpon>crcCheck.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -106,6 +112,9 @@
     <Compile Include="VersionInfo.Designer.cs">
       <DependentUpon>VersionInfo.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="crcCheck.resx">
+      <DependentUpon>crcCheck.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>

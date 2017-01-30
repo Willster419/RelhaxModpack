@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.installRelhax = new System.Windows.Forms.Button();
-            this.uninstallRelhax = new System.Windows.Forms.Button();
+            this.installRelhaxSound = new System.Windows.Forms.Button();
+            this.uninstallRelhaxSound = new System.Windows.Forms.Button();
             this.downloadProgress = new System.Windows.Forms.Label();
             this.statusLabel = new System.Windows.Forms.Label();
             this.childProgressBar = new System.Windows.Forms.ProgressBar();
@@ -38,28 +38,31 @@
             this.formPageLink = new System.Windows.Forms.LinkLabel();
             this.parrentProgressBar = new System.Windows.Forms.ProgressBar();
             this.speedLabel = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.installRelhaxMod = new System.Windows.Forms.Button();
+            this.uninstallRelhaxMod = new System.Windows.Forms.Button();
+            this.cleanInstallCB = new System.Windows.Forms.CheckBox();
+            this.CIEplainLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // installRelhax
+            // installRelhaxSound
             // 
-            this.installRelhax.Location = new System.Drawing.Point(12, 12);
-            this.installRelhax.Name = "installRelhax";
-            this.installRelhax.Size = new System.Drawing.Size(129, 34);
-            this.installRelhax.TabIndex = 0;
-            this.installRelhax.Text = "Install latest Relhax";
-            this.installRelhax.UseVisualStyleBackColor = true;
-            this.installRelhax.Click += new System.EventHandler(this.installRelhax_Click);
+            this.installRelhaxSound.Location = new System.Drawing.Point(12, 12);
+            this.installRelhaxSound.Name = "installRelhaxSound";
+            this.installRelhaxSound.Size = new System.Drawing.Size(129, 34);
+            this.installRelhaxSound.TabIndex = 0;
+            this.installRelhaxSound.Text = "Install Relhax Soundmod";
+            this.installRelhaxSound.UseVisualStyleBackColor = true;
+            this.installRelhaxSound.Click += new System.EventHandler(this.installRelhax_Click);
             // 
-            // uninstallRelhax
+            // uninstallRelhaxSound
             // 
-            this.uninstallRelhax.Location = new System.Drawing.Point(12, 92);
-            this.uninstallRelhax.Name = "uninstallRelhax";
-            this.uninstallRelhax.Size = new System.Drawing.Size(129, 34);
-            this.uninstallRelhax.TabIndex = 1;
-            this.uninstallRelhax.Text = "Uninstall Relhax";
-            this.uninstallRelhax.UseVisualStyleBackColor = true;
-            this.uninstallRelhax.Click += new System.EventHandler(this.uninstallRelhax_Click);
+            this.uninstallRelhaxSound.Location = new System.Drawing.Point(12, 92);
+            this.uninstallRelhaxSound.Name = "uninstallRelhaxSound";
+            this.uninstallRelhaxSound.Size = new System.Drawing.Size(129, 34);
+            this.uninstallRelhaxSound.TabIndex = 1;
+            this.uninstallRelhaxSound.Text = "Uninstall Relhax Soundmod";
+            this.uninstallRelhaxSound.UseVisualStyleBackColor = true;
+            this.uninstallRelhaxSound.Click += new System.EventHandler(this.uninstallRelhax_Click);
             // 
             // downloadProgress
             // 
@@ -138,23 +141,56 @@
             this.speedLabel.TabIndex = 18;
             this.speedLabel.Text = "Idle";
             // 
-            // button1
+            // installRelhaxMod
             // 
-            this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(147, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 19;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.installRelhaxMod.Location = new System.Drawing.Point(147, 12);
+            this.installRelhaxMod.Name = "installRelhaxMod";
+            this.installRelhaxMod.Size = new System.Drawing.Size(130, 34);
+            this.installRelhaxMod.TabIndex = 19;
+            this.installRelhaxMod.Text = "Install Relhax ModPack";
+            this.installRelhaxMod.UseVisualStyleBackColor = true;
+            this.installRelhaxMod.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // uninstallRelhaxMod
+            // 
+            this.uninstallRelhaxMod.Location = new System.Drawing.Point(147, 92);
+            this.uninstallRelhaxMod.Name = "uninstallRelhaxMod";
+            this.uninstallRelhaxMod.Size = new System.Drawing.Size(130, 34);
+            this.uninstallRelhaxMod.TabIndex = 20;
+            this.uninstallRelhaxMod.Text = "Uninstall Relhax Modpack";
+            this.uninstallRelhaxMod.UseVisualStyleBackColor = true;
+            this.uninstallRelhaxMod.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // cleanInstallCB
+            // 
+            this.cleanInstallCB.AutoSize = true;
+            this.cleanInstallCB.Location = new System.Drawing.Point(160, 52);
+            this.cleanInstallCB.Name = "cleanInstallCB";
+            this.cleanInstallCB.Size = new System.Drawing.Size(106, 17);
+            this.cleanInstallCB.TabIndex = 21;
+            this.cleanInstallCB.Text = "Clean Installation";
+            this.cleanInstallCB.UseVisualStyleBackColor = true;
+            this.cleanInstallCB.CheckedChanged += new System.EventHandler(this.cleanInstallCB_CheckedChanged);
+            // 
+            // CIEplainLabel
+            // 
+            this.CIEplainLabel.AutoSize = true;
+            this.CIEplainLabel.Location = new System.Drawing.Point(144, 72);
+            this.CIEplainLabel.Name = "CIEplainLabel";
+            this.CIEplainLabel.Size = new System.Drawing.Size(145, 13);
+            this.CIEplainLabel.TabIndex = 22;
+            this.CIEplainLabel.Text = "(deletes all mods beforehand)";
+            this.CIEplainLabel.Click += new System.EventHandler(this.CIEplainLabel_Click);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(289, 267);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.CIEplainLabel);
+            this.Controls.Add(this.cleanInstallCB);
+            this.Controls.Add(this.uninstallRelhaxMod);
+            this.Controls.Add(this.installRelhaxMod);
             this.Controls.Add(this.speedLabel);
             this.Controls.Add(this.parrentProgressBar);
             this.Controls.Add(this.formPageLink);
@@ -162,9 +198,10 @@
             this.Controls.Add(this.childProgressBar);
             this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.downloadProgress);
-            this.Controls.Add(this.uninstallRelhax);
-            this.Controls.Add(this.installRelhax);
+            this.Controls.Add(this.uninstallRelhaxSound);
+            this.Controls.Add(this.installRelhaxSound);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "MainWindow";
             this.Text = "RelHax ";
             this.Load += new System.EventHandler(this.MainWindow_Load);
@@ -175,8 +212,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Button installRelhax;
-        private System.Windows.Forms.Button uninstallRelhax;
+        private System.Windows.Forms.Button installRelhaxSound;
+        private System.Windows.Forms.Button uninstallRelhaxSound;
         private System.Windows.Forms.Label downloadProgress;
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.ProgressBar childProgressBar;
@@ -185,7 +222,10 @@
         private System.Windows.Forms.LinkLabel formPageLink;
         private System.Windows.Forms.ProgressBar parrentProgressBar;
         private System.Windows.Forms.Label speedLabel;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button installRelhaxMod;
+        private System.Windows.Forms.Button uninstallRelhaxMod;
+        private System.Windows.Forms.CheckBox cleanInstallCB;
+        private System.Windows.Forms.Label CIEplainLabel;
     }
 }
 
