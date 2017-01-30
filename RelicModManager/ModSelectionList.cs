@@ -16,7 +16,7 @@ namespace RelicModManager
         private List<Mod> parsedModsList;
         public List<Catagory> parsedCatagoryList;
 
-        public bool cancel = false;
+        public bool cancel = true;
 
         public ModSelectionList()
         {
@@ -144,6 +144,7 @@ namespace RelicModManager
             modCheckBox.TabIndex = 1;
             modCheckBox.Text = m.name;
             modCheckBox.UseVisualStyleBackColor = true;
+            modCheckBox.Enabled = m.enabled;
             modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
 
             //make mainPanel
@@ -285,10 +286,7 @@ namespace RelicModManager
             Panel innerPanel = (Panel)p.Controls[1];
             if (cb.Checked) innerPanel.BackColor = Color.BlanchedAlmond;
             else innerPanel.BackColor = SystemColors.Control;
-            foreach (Control c in innerPanel.Controls)
-            {
-                c.Enabled = cb.Checked;
-            }
+            
             //update the memory database with the change
             foreach (Catagory c in parsedCatagoryList)
             {
@@ -296,79 +294,105 @@ namespace RelicModManager
                 {
                     if (m.name.Equals(cb.Text))
                     {
+                        //mod located
                         m.modChecked = cb.Checked;
+                        //update configs
+                        foreach (Control cc in innerPanel.Controls)
+                        {
+                            foreach (Config ccc in m.configs)
+                            {
+                                if (cc.Name.Equals(c.name + "_" + m.name + "_" + ccc.name))
+                                {
+                                    //for the checkboxes
+                                    if (ccc.enabled && m.enabled && cb.Checked)
+                                    {
+                                        cc.Enabled = true;
+                                    }
+                                    else
+                                    {
+                                        cc.Enabled = false;
+                                        /*if (cc is RadioButton)
+                                        {
+                                            RadioButton b = (RadioButton)cc;
+                                            b.Checked = false;
+                                        }
+
+                                        if (cc is CheckBox)
+                                        {
+                                            CheckBox b = (CheckBox)cc;
+                                            b.Checked = false;
+                                        }*/
+                                    }
+                                }
+                                if (cc.Text.Equals(ccc.name))
+                                {
+                                    //for the lables
+                                    cc.Enabled = cb.Checked;
+                                }
+                            }
+                        }
                     }
                 }
             }
-        }
-
-        private void createModStructure()
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.Load("https://dl.dropboxusercontent.com/u/44191620/RelicMod/mods/modInfo.xml");
-            XmlNodeList modsList = doc.SelectNodes("//modInfoAlpha.xml/mods/mod");
-            parsedModsList = new List<Mod>();
-            foreach (XmlNode n in modsList)
+            if (cb.Checked)
             {
-                Mod m = new Mod();
-                foreach (XmlNode nn in n.ChildNodes)
+                //check to make sure at least one config is selected
+                bool oneSelected = false;
+                foreach (Control c in innerPanel.Controls)
                 {
-                    switch (nn.Name)
+                    if (c is RadioButton)
                     {
-                        case "name":
-                            m.name = nn.InnerText;
-                            break;
-                        case "version":
-                            m.version = float.Parse(nn.InnerText);
-                            break;
-                        case "modzipfile":
-                            m.modZipFile = nn.InnerText;
-                            break;
-                        case "modzipcrc":
-                            m.crc = nn.InnerText;
-                            break;
-                        case "enabled":
-                            m.enabled = bool.Parse(nn.InnerText);
-                            break;
-                        case "configselectiontype":
-                            m.configType = nn.InnerText;
-                            break;
-                        case "configs":
-                            //parse every config for that mod
-                            foreach (XmlNode nnn in nn.ChildNodes)
-                            {
-                                Config c = new Config();
-                                foreach (XmlNode nnnn in nnn.ChildNodes)
-                                {
-                                    switch (nnnn.Name)
-                                    {
-                                        case "name":
-                                            c.name = nnnn.InnerText;
-                                            break;
-                                        case "configzipfile":
-                                            c.zipConfigFile = nnnn.InnerText;
-                                            break;
-                                        case "configzipcrc":
-                                            c.crc = nnnn.InnerText;
-                                            break;
-                                        case "configenabled":
-                                            c.enabled = bool.Parse(nnn.InnerText);
-                                            break;
-                                    }
-                                }
-                                m.configs.Add(c);
-                            }
-                            break;
+                        RadioButton b = (RadioButton)c;
+                        if (b.Checked)
+                        {
+                            oneSelected = true;
+                        }
+                    }
+
+                    if (c is CheckBox)
+                    {
+                        CheckBox b = (CheckBox)c;
+                        if (b.Checked)
+                        {
+                            oneSelected = true;
+                        }
                     }
                 }
-                parsedModsList.Add(m);
+                if (!oneSelected)
+                {
+                    //select one randomly
+                    foreach (Control c in innerPanel.Controls)
+                    {
+                        if (c is RadioButton)
+                        {
+                            RadioButton b = (RadioButton)c;
+                            if (b.Enabled)
+                            {
+                                b.Checked = true;
+                                break;
+                            }
+                        }
+
+                        if (c is CheckBox)
+                        {
+                            CheckBox b = (CheckBox)c;
+                            if (b.Enabled)
+                            {
+                                b.Checked = true;
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
 
         private void createModStructure2()
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load("modInfo.xml");
+            doc.Load("https://dl.dropboxusercontent.com/u/44191620/RelicMod/mods/modInfo.xml");
+            //DEGUB
+            //doc.Load("modInfo.xml");
             XmlNodeList catagoryList = doc.SelectNodes("//modInfoAlpha.xml/catagories/catagory");
             parsedCatagoryList = new List<Catagory>();
             foreach (XmlNode nnnnn in catagoryList)
@@ -482,13 +506,19 @@ namespace RelicModManager
 
         private void continueButton_Click(object sender, EventArgs e)
         {
+            cancel = false;
             this.Close();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            cancel = true;
+            
             this.Close();
+        }
+
+        private void ModSelectionList_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            
         }
         
     }

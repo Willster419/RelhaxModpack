@@ -213,7 +213,7 @@ namespace RelicModManager
             }
             else
             {
-                if (e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
+                if (e != null && e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
                 {
                     //404
                     MessageBox.Show("Failed to download " + tempOldDownload + ". If you know which mod this is, uncheck it and you should be fine. It will be fixed soon. Restart this when it crashes");
@@ -1020,6 +1020,7 @@ namespace RelicModManager
                     }
                 }
             }
+            /*
             //remove the mods and configs that don't have zips to download
             //this will keep those configs that have the entered value as the zip url
             for (int i = 0; i < modsToInstall.Count; i++)
@@ -1035,6 +1036,10 @@ namespace RelicModManager
                 {
                     configsToInstall.RemoveAt(i);
                 }
+            }*/
+            if (modsToInstall.Count == 0)
+            {
+                return;
             }
             //foreach mod and config, if the crc's don't match, download it
             downloadQueue = new List<DownloadItem>();
@@ -1066,15 +1071,22 @@ namespace RelicModManager
                 }
             }
             parrentProgressBar.Maximum = downloadQueue.Count;
-            if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
-            //download new zip file
-            downloader = new WebClient();
-            downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
-            downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
-            downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
-            tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
-            downloadQueue.RemoveAt(0);
-            parrentProgressBar.Value++;
+            if (downloadQueue.Count > 0)
+            {
+                if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
+                //download new zip file
+                downloader = new WebClient();
+                downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
+                downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
+                downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
+                tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
+                downloadQueue.RemoveAt(0);
+                parrentProgressBar.Value++;
+            }
+            else
+            {
+                downloader_DownloadFileCompleted(null, null);
+            }
             return;
         }
 

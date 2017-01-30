@@ -206,6 +206,7 @@
             this.Controls.Add(this.modTabGroups);
             this.Name = "ModSelectionList";
             this.Text = "ModSelectionList";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ModSelectionList_FormClosing);
             this.Load += new System.EventHandler(this.ModSelectionList_Load);
             this.SizeChanged += new System.EventHandler(this.ModSelectionList_SizeChanged);
             this.modTabGroups.ResumeLayout(false);
