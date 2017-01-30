@@ -28,6 +28,7 @@ namespace RelicModManager
             this.createModStructure2();
             this.makeTabs();
             this.addAllMods();
+            //this.setupUserTab
         }
 
         private void addAllMods()

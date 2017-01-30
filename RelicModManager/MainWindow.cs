@@ -245,6 +245,8 @@ namespace RelicModManager
                     }
                     this.extractZipFilesModPack();
                     this.patchFiles();
+                    //this.extractZipFilesCustom();
+                    //this.patchFilesCustom();
                 }
             }
         }
@@ -325,6 +327,8 @@ namespace RelicModManager
                     this.xmlPatch(p.file, p.path, p.mode, p.search, p.replace);
                 }
             }
+            //delete patch directory for user patches later
+
         }
 
         private void installFonts()
