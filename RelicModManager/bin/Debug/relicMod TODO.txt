@@ -1,0 +1,24 @@
+finish the installation process
+  -delete patch folder*
+  -extract user mods*
+  -patch user files*
+  -delete patch folder*
+  -install all fonts*
+  -delete fonts folder if install was sucessfull*
+  
+update uninstall process
+  -go through and get count of every directory and file that needs to be deleted
+  -seperate thread (backgroundWorker) to delete everything
+  -report progress for each file deleted
+
+create save and load config methods
+  -create RelHaxConfigs dir if not already there on startup
+  -have it load the last used/saved config
+  -for each mod, if checked, save it's name and config
+
+update extract process
+  -literally take extract process and move it to a backgroundWorker
+  
+create user tab and selectable mods*
+
+comment code

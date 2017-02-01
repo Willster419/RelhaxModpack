@@ -1,0 +1,79 @@
+<modInfoAlpha.xml>
+<!-- Comments here -->
+	<catagories>
+		<catagory>
+			<name>Sound Mods</name>
+			<selectionType>single</selectionType>
+			<mods>
+				<mod>
+				<name>Relhax</name>
+				<version>17</version>
+				<modzipfile>relhax_sounds_base.zip</modzipfile>
+				<modzipcrc>4734aa7c33ffab0954ffc45273d641c8</modzipcrc>
+				<enabled>true</enabled>
+				<!-- Implement these parts soon -->
+				<configselectiontype>single</configselectiontype>
+				<configdefault>standard</configdefault>
+				<configs>
+					<config>
+						<name>standard</name>
+						<configzipfile>relhax_sounds_standard_config.zip</configzipfile>
+						<configzipcrc>a3bc6cd0999359477bd08971f4d4f1ec</configzipcrc>
+						<configenabled>true</configenabled>
+					</config>
+					<config>
+						<name>censored</name>
+						<configzipfile>relhax_sounds_censored_config.zip</configzipfile>
+						<configzipcrc>4e2a382324be2bb96d889fd29513f51c</configzipcrc>
+						<configenabled>true</configenabled>
+					</config>
+				</configs>
+				<!-- Implement these parts if time allows -->
+				<description>description here</description>
+				<updateComment>update comment here</updateComment>
+				<pictureURL>RelHax_picture_file.png</pictureURL>
+				</mod>
+			</mods>
+		</catagory>
+		<catagory>
+			<name>Zoom Configs</name>
+			<selectionType>multi</selectionType>
+			<mods>
+				<mod>
+				<name>Zoom Out Config (meters)</name>
+				<version>1</version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<!-- Implement these parts soon -->
+				<configselectiontype>single</configselectiontype>
+				<configdefault>100</configdefault>
+				<configs>
+					<config>
+						<name>100</name>
+						<configzipfile>zoom_out_config_100.zip</configzipfile>
+						<configzipcrc>e44b322d591f22e30ad8b9e461db9fae</configzipcrc>
+						<configenabled>true</configenabled>
+					</config>
+					<config>
+						<name>200</name>
+						<configzipfile>zoom_out_config_200.zip</configzipfile>
+						<configzipcrc>779bc5c678cced1d66df042db0fcfe3a</configzipcrc>
+						<configenabled>true</configenabled>
+					</config>
+					<config>
+						<name>500</name>
+						<configzipfile>zoom_out_config_500.zip</configzipfile>
+						<configzipcrc>5a1bfacdf981d7b7b42b1cb93a0366cc</configzipcrc>
+						<configenabled>true</configenabled>
+					</config>
+				</configs>
+				<!-- Implement these parts if time allows -->
+				<description>description here</description>
+				<updateComment>update comment here</updateComment>
+				<pictureURL>RelHax_picture_file.png</pictureURL>
+				</mod>
+			</mods>
+		</catagory>
+	</catagories>
+</modInfoAlpha.xml>

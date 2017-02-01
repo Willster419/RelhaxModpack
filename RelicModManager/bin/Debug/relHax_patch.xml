@@ -1,0 +1,42 @@
+<patchs>
+<!-- xml patch example -->
+<patch>
+  <!-- the type of patch being performed -->
+  <!-- options: xml, regx -->
+  <type>xml</type>
+  <!-- the xml patch mode to perform -->
+  <!-- options: add, remove, edit -->
+  <mode>edit</mode>
+  <!-- the file to perform patching on -->
+  <!-- relative to res_mods directory -->
+  <file>\\configs\\folder\\mod_name.xml</file>
+  <!-- the location of the most child static element to patch, xpath style -->
+  <!-- options: //root/child/child/etc. -->
+  <path>//xpath/goes/here</path>
+  <!-- The element value to search for -->
+  <!-- not required if using add -->
+  <search>element_value</search>
+  <!-- the value to replace or add -->
+  <!-- not required if using remove -->
+  <!-- for add you must specify element name -->
+  <!-- <replace>element_name/new_element_value</replace> -->
+  <replace>new_element_value</replace>
+</patch>
+<!-- regx patch example -->
+<patch>
+  <!-- the type of patch being performed -->
+  <!-- options: xml, regex -->
+  <type>regx</type>
+  <!-- the file to perform patching on -->
+  <!-- relative to res_mods directory -->
+  <file>\\configs\\folder\\mod_name.xc</file>
+  <!-- the line number(s) in the file for patching -->
+  <!-- if specefied, mathcing search must also be in those lines -->
+  <!-- can be left blank to patch all matches of search -->
+  <line>69,420</line>
+  <!-- the value or phrase to search for in a single line -->
+  <search>value</search>
+  <!-- the value or phrase to replace <search> with -->
+  <replace>new_value</replace>
+</patch>
+</patchs>
