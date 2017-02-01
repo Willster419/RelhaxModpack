@@ -42,6 +42,7 @@
             this.uninstallRelhaxMod = new System.Windows.Forms.Button();
             this.cleanInstallCB = new System.Windows.Forms.CheckBox();
             this.CIEplainLabel = new System.Windows.Forms.Label();
+            this.cancerFontCB = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // installRelhaxSound
@@ -182,11 +183,23 @@
             this.CIEplainLabel.Text = "(deletes all mods beforehand)";
             this.CIEplainLabel.Click += new System.EventHandler(this.CIEplainLabel_Click);
             // 
+            // cancerFontCB
+            // 
+            this.cancerFontCB.AutoSize = true;
+            this.cancerFontCB.Location = new System.Drawing.Point(162, 245);
+            this.cancerFontCB.Name = "cancerFontCB";
+            this.cancerFontCB.Size = new System.Drawing.Size(115, 17);
+            this.cancerFontCB.TabIndex = 23;
+            this.cancerFontCB.Text = "enable cancer font";
+            this.cancerFontCB.UseVisualStyleBackColor = true;
+            this.cancerFontCB.CheckedChanged += new System.EventHandler(this.cancerFontCB_CheckedChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(289, 267);
+            this.Controls.Add(this.cancerFontCB);
             this.Controls.Add(this.CIEplainLabel);
             this.Controls.Add(this.cleanInstallCB);
             this.Controls.Add(this.uninstallRelhaxMod);
@@ -226,6 +239,7 @@
         private System.Windows.Forms.Button uninstallRelhaxMod;
         private System.Windows.Forms.CheckBox cleanInstallCB;
         private System.Windows.Forms.Label CIEplainLabel;
+        private System.Windows.Forms.CheckBox cancerFontCB;
     }
 }
 

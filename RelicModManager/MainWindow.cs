@@ -1269,6 +1269,18 @@ namespace RelicModManager
             crcCHecker.Show();
         }
 
+        private void cancerFontCB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cancerFontCB.Checked)
+            {
+                this.Font = new Font("Comic Sans", 0);
+            }
+            else
+            {
+
+            }
+        }
+
     }
 
     class DownloadItem
