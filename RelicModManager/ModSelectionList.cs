@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using System.IO;
 
 namespace RelicModManager
 {
@@ -15,6 +16,7 @@ namespace RelicModManager
 
         private List<Mod> parsedModsList;
         public List<Catagory> parsedCatagoryList;
+        public List<Mod> userMods;
 
         public bool cancel = true;
 
@@ -28,9 +30,47 @@ namespace RelicModManager
             this.createModStructure2();
             this.makeTabs();
             this.addAllMods();
-            //this.setupUserTab
+            this.addUserMods();
         }
-
+        
+        //adds all usermods to thier own (to be made) userMods tab
+        private void addUserMods()
+        {
+            //make the new tab
+            TabPage tp = new TabPage("User Mods");
+            modTabGroups.TabPages.Add(tp);
+            //create all the user mod objects
+            string modsPath = Application.StartupPath + "\\RelHaxUserMods";
+            string[] userModFiles = Directory.GetFiles(modsPath);
+            userMods = new List<Mod>();
+            foreach (string s in userModFiles)
+            {
+              Mod m = new Mod();
+              m.modZipFile = Path.GetFileName(s);
+              m.name = Path.GetFileNameWithoutExtension(s);
+              m.enabled = true;
+              m.modChecked = false;
+              userMods.Add(m);
+            }
+            //add all mods to the tab page
+            for (int i = 0; i < userMods.Count; i++)
+            {
+                //make modCheckBox
+                CheckBox modCheckBox = new CheckBox();
+                modCheckBox.AutoSize = true;
+                int yLocation = 3 + (17*i);
+                modCheckBox.Location = new System.Drawing.Point(3, yLocation);
+                //modCheckBox.Name = "modCheckBox";
+                modCheckBox.Size = new System.Drawing.Size(49, 17);
+                modCheckBox.TabIndex = 1;
+                modCheckBox.Text = userMods[i].name;
+                modCheckBox.UseVisualStyleBackColor = true;
+                modCheckBox.Enabled = true;
+                modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
+                tp.Controls.Add(modCheckBox);
+            }
+        }
+        
         private void addAllMods()
         {
             foreach (TabPage t in this.modTabGroups.TabPages)
@@ -281,6 +321,23 @@ namespace RelicModManager
 
         void modCheckBox_CheckedChanged(object sender, EventArgs e)
         {
+            //check to see if it's the User Mods page or not
+            CheckBox cbUser = (CheckBox)sender;
+            TabPage t = (TabPage)cbUser.Parent;
+            if (t.Text.Equals("User Mods"))
+            {
+                //this is a check from the user checkboxes
+                foreach (Mod m in userMods)
+                {
+                    if (m.name.Equals(cbUser.Text))
+                    {
+                        //linked the cb to the user mod
+                        m.modChecked = cbUser.Checked;
+                        return;
+                    }
+                }
+            }
+
             //update the ui with the change
             CheckBox cb = (CheckBox)sender;
             Panel p = (Panel)cb.Parent;

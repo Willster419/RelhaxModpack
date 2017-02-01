@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
+using System.Security.Principal;
 
 namespace RelicModManager
 {
@@ -50,6 +51,7 @@ namespace RelicModManager
         private List<Patch> patchList;
         bool modPack;
         string tempOldDownload;
+        private List<Mod> userMods;
 
         //The constructur for the application
         public MainWindow()
@@ -213,13 +215,13 @@ namespace RelicModManager
             }
             else
             {
+                //new relhax modpack code
                 if (e != null && e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
                 {
                     //404
                     MessageBox.Show("Failed to download " + tempOldDownload + ". If you know which mod this is, uncheck it and you should be fine. It will be fixed soon. Restart this when it crashes");
                     Application.Exit();
                 }
-                //new relhax modpack code
                 if (downloadQueue.Count != 0)
                 {
                     if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
@@ -243,10 +245,14 @@ namespace RelicModManager
                         if (Directory.Exists(tanksLocation + "\\res_mods")) Directory.Delete(tanksLocation + "\\res_mods", true);
                         if (!Directory.Exists(tanksLocation + "\\res_mods")) Directory.CreateDirectory(tanksLocation + "\\res_mods");
                     }
+                    //just a double-check to delete all patches
+                    if (Directory.Exists(tanksLocation + "\\_patch")) Directory.Delete(tanksLocation + "\\_patch", true);
+                    if (Directory.Exists(tanksLocation + "\\_fonts")) Directory.Delete(tanksLocation + "\\_fonts", true);
                     this.extractZipFilesModPack();
                     this.patchFiles();
-                    //this.extractZipFilesCustom();
-                    //this.patchFilesCustom();
+                    this.extractZipFilesUser();
+                    this.patchFiles();
+                    this.installFonts();
                 }
             }
         }
@@ -264,12 +270,12 @@ namespace RelicModManager
                 parrentProgressBar.Value++;
             }
             this.patchStuff();
-            this.installFonts();
+            //this.installFonts();
         }
 
         private void extractZipFilesModPack()
         {
-            speedLabel.Text = "Extracting...";
+            speedLabel.Text = "Extracting RelHax...";
             parrentProgressBar.Maximum = modsToInstall.Count + configsToInstall.Count;
             parrentProgressBar.Value = 0;
             string downloadedFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
@@ -285,13 +291,30 @@ namespace RelicModManager
                 this.unzip(downloadedFilesDir + c.zipConfigFile, tanksLocation);
                 parrentProgressBar.Value++;
             }
-            //extract user mods
-            //for now assume all of them in there are to be used
-
+        }
+        
+        //extract all the selected user mods
+        private void extractZipFilesUser()
+        {
+            speedLabel.Text = "Extracting User Mods...";
+            parrentProgressBar.Maximum = userMods.Count;
+            parrentProgressBar.Value = 0;
+            string downloadedFilesDir = Application.StartupPath + "\\RelHaxUserMods\\";
+            foreach (Mod m in userMods)
+            {
+                if (m.modChecked && m.enabled)
+                {
+                    this.unzip(downloadedFilesDir + m.modZipFile, tanksLocation);
+                    parrentProgressBar.Value++;
+                }
+            }
         }
 
         private void patchFiles()
         {
+            //don't do anything if the file does not exist
+            if (!Directory.Exists(tanksLocation + "\\_patch"))
+                return;
             string[] patchFiles = Directory.GetFiles(tanksLocation + "\\_patch");
 
             patchList.Clear();//this has all the patches in memory
@@ -327,13 +350,70 @@ namespace RelicModManager
                     this.xmlPatch(p.file, p.path, p.mode, p.search, p.replace);
                 }
             }
-            //delete patch directory for user patches later
-
+            //all done, delete the patch folder
+            if (Directory.Exists(tanksLocation + "\\_patch"))
+              Directory.Delete(tanksLocation + "\\_patch",true);
         }
 
+        //installs all fonts in the fonts folder, user and custom
         private void installFonts()
         {
-
+            downloadProgress.Text = "Installing Fonts...";
+            if (!Directory.Exists(tanksLocation + "\\_fonts"))
+                return;
+            string[] fonts = Directory.GetFiles(tanksLocation + "\\_fonts");
+            if (fonts.Count() == 0)
+              return;
+            DialogResult dr = MessageBox.Show("Do you have admin rights?", "Admin to install fonts?", MessageBoxButtons.YesNo);
+            if (dr == DialogResult.Yes)
+            {
+                //download the fontreg program
+                if (!File.Exists(tanksLocation + "\\_fonts\\FontReg.exe")) downloader.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/RelicMod/tools/FontReg.exe", tanksLocation + "\\_fonts\\FontReg.exe");
+                ProcessStartInfo info = new ProcessStartInfo();
+                info.FileName = tanksLocation + "\\_fonts\\FontReg.exe";
+                info.UseShellExecute = true;
+                info.Verb = "runas"; // Provides Run as Administrator
+                info.Arguments = "/copy";
+                Process installFontss = new Process();
+                installFontss.StartInfo = info;
+                bool fontsBool = false;
+                try
+                {
+                    installFontss.Start();
+                    installFontss.WaitForExit();
+                }
+                catch (Win32Exception)
+                {
+                    MessageBox.Show("Unable to install fonts. Some mods may not work properly. Fonts are located in " + tanksLocation + "\\_fonts");
+                    return;
+                }
+                if ( fontsBool == null )
+                { 
+                    MessageBox.Show("Unable to install fonts. Some mods may not work properly. Fonts are located in " + tanksLocation + "\\_fonts");
+                    return;
+                }
+                else
+                {
+                    if (Directory.Exists(tanksLocation + "\\_fonts"))
+                        Directory.Delete(tanksLocation + "\\_fonts", true);
+                    downloadProgress.Text = "Done!";
+                    
+                }
+            }
+        }
+        
+        //checks to see if the application is indeed in admin mode
+        public bool isAdministrator()
+        {
+            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            if (identity != null)
+            {
+                WindowsPrincipal principal = new WindowsPrincipal(identity);
+                bool isPowerUser = principal.IsInRole(WindowsBuiltInRole.PowerUser);
+                bool isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
+                return (isPowerUser || isAdmin);
+            }
+            return false;
         }
 
         //method to check for updates to the application on startup
@@ -1001,10 +1081,11 @@ namespace RelicModManager
             ModSelectionList list = new ModSelectionList();
             list.ShowDialog();
             if (list.cancel) return;
-            parsedCatagoryLists = list.parsedCatagoryList;
             modsToInstall = new List<Mod>();
             configsToInstall = new List<Config>();
             patchList = new List<Patch>();
+            userMods = new List<Mod>();
+            parsedCatagoryLists = list.parsedCatagoryList;
             //if mod is enabled and checked, add it to list of mods to extract/install
             //same for configs
             foreach (Catagory c in parsedCatagoryLists)
@@ -1041,12 +1122,24 @@ namespace RelicModManager
                     configsToInstall.RemoveAt(i);
                 }
             }*/
+            downloadQueue = new List<DownloadItem>();
             if (modsToInstall.Count == 0)
             {
+                //check for any user mods to install
+                for (int i = 0; i < list.userMods.Count; i++)
+                {
+                    if (list.userMods[i].enabled && list.userMods[i].modChecked)
+                    {
+                        this.userMods.Add(list.userMods[i]);
+                    }
+                }
+                if (userMods.Count > 0)
+                {
+                    this.downloader_DownloadFileCompleted(null,null);
+                }
                 return;
             }
             //foreach mod and config, if the crc's don't match, download it
-            downloadQueue = new List<DownloadItem>();
             string localFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
             foreach (Mod m in modsToInstall)
             {
