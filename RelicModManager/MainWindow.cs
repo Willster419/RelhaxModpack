@@ -1273,11 +1273,11 @@ namespace RelicModManager
         {
             if (cancerFontCB.Checked)
             {
-                this.Font = new Font("Comic Sans", 0);
+                this.Font = new System.Drawing.Font("Comic Sans MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             }
             else
             {
-
+                this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             }
         }
 
