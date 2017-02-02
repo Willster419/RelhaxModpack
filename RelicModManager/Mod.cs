@@ -16,11 +16,19 @@ namespace RelicModManager
         public string configType { get; set; }
         public List<Config> configs = new List<Config>();
         public string configDefault { get; set; }
-
-        //creates an empty mod instance
-        public Mod()
+        public Mod() { }
+        //returns the config of the specified name
+        //if it does not exist, it returns null
+        public Config getConfig(string configName)
         {
-
+          if (configs == null || configs.Count == 0)
+            return null;
+          foreach (Config cfg in configs)
+          {
+            if (cfg.name.Equals(configName))
+              return cfg;
+          }
+          return null;
         }
     }
 }

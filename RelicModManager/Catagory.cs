@@ -11,5 +11,18 @@ namespace RelicModManager
         public string selectionType { get; set; }
         public List<Mod> mods = new List<Mod>();
         public Catagory() { }
+        //returns the mod with the specified name
+        //if it does not exist, it returns null
+        public Mod getMod(string modName)
+        {
+          if (mods == null || mods.Count == 0)
+            return null;
+          foreach (Mod m in mods)
+          {
+            if (m.name.Equals(modName))
+              return m;
+          }
+          return null;
+        }
     }
 }

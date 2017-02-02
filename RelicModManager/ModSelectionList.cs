@@ -13,18 +13,17 @@ namespace RelicModManager
 {
     public partial class ModSelectionList : Form
     {
-
-        private List<Mod> parsedModsList;
-        public List<Catagory> parsedCatagoryList;
-        public List<Mod> userMods;
-
-        public bool cancel = true;
+        //private List<Mod> parsedModsList;//only for within the application
+        public List<Catagory> parsedCatagoryList;//can be grabbed by MainWindow
+        public List<Mod> userMods;//can be grabbed by MainWindow
+        public bool cancel = true;//used to determine if the user canceled
 
         public ModSelectionList()
         {
             InitializeComponent();
         }
 
+        //called on application startup
         private void ModSelectionList_Load(object sender, EventArgs e)
         {
             this.createModStructure2();
@@ -33,24 +32,26 @@ namespace RelicModManager
             this.addUserMods();
         }
         
-        //adds all usermods to thier own (to be made) userMods tab
+        //adds all usermods to thier own userMods tab
         private void addUserMods()
         {
             //make the new tab
-            TabPage tp = new TabPage("User Mods");
-            modTabGroups.TabPages.Add(tp);
+            TabPage tb = new TabPage("User Mods");
             //create all the user mod objects
             string modsPath = Application.StartupPath + "\\RelHaxUserMods";
             string[] userModFiles = Directory.GetFiles(modsPath);
             userMods = new List<Mod>();
             foreach (string s in userModFiles)
             {
-              Mod m = new Mod();
-              m.modZipFile = Path.GetFileName(s);
-              m.name = Path.GetFileNameWithoutExtension(s);
-              m.enabled = true;
-              m.modChecked = false;
-              userMods.Add(m);
+              if (Path.GetExtension(s).Equals(".zip"))
+              {
+                  Mod m = new Mod();
+                  m.modZipFile = s;
+                  m.name = Path.GetFileNameWithoutExtension(s);
+                  m.enabled = true;
+                  m.modChecked = false;
+                  userMods.Add(m);
+              }
             }
             //add all mods to the tab page
             for (int i = 0; i < userMods.Count; i++)
@@ -58,7 +59,7 @@ namespace RelicModManager
                 //make modCheckBox
                 CheckBox modCheckBox = new CheckBox();
                 modCheckBox.AutoSize = true;
-                int yLocation = 3 + (17*i);
+                int yLocation = 3 + (17*(i));
                 modCheckBox.Location = new System.Drawing.Point(3, yLocation);
                 //modCheckBox.Name = "modCheckBox";
                 modCheckBox.Size = new System.Drawing.Size(49, 17);
@@ -67,8 +68,9 @@ namespace RelicModManager
                 modCheckBox.UseVisualStyleBackColor = true;
                 modCheckBox.Enabled = true;
                 modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
-                tp.Controls.Add(modCheckBox);
+                tb.Controls.Add(modCheckBox);
             }
+            modTabGroups.TabPages.Add(tb);
         }
         
         private void addAllMods()
@@ -80,6 +82,7 @@ namespace RelicModManager
                     if (c.name.Equals(t.Text))
                     {
                         //matched the catagory to tab
+                        //add to the ui every mod of that catagory
                         int i = 1;
                         foreach (Mod m in c.mods)
                         {
@@ -91,6 +94,7 @@ namespace RelicModManager
             }
         }
 
+        //adds a tab view for each mod catagory
         private void makeTabs()
         {
             modTabGroups.TabPages.Clear();
@@ -100,9 +104,9 @@ namespace RelicModManager
             }
         }
 
+        //adds a mod m to a tabpage t
         private void addMod(Mod m, TabPage t, int panelCount)
         {
-
             //make config panel
             Panel configPanel = new Panel();
             configPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -113,6 +117,8 @@ namespace RelicModManager
             configPanel.AutoSize = true;
             configPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
             configPanel.Controls.Clear();
+            //add configs to the panel
+            ComboBox configControlDD = new ComboBox();
             for (int i = 0; i < m.configs.Count; i++)
             {
                 //make configLabel
@@ -126,11 +132,10 @@ namespace RelicModManager
                 configLabel.Text = m.configs[i].name;
                 configLabel.Enabled = false;
                 configPanel.Controls.Add(configLabel);
-
-                //make configControl
                 switch (m.configType)
                 {
-                    case "single":
+                    case "single2":
+                        //make a radioButton
                         RadioButton configControlRB = new RadioButton();
                         configControlRB.AutoSize = true;
                         configControlRB.Location = new System.Drawing.Point(100, yPosition-10);
@@ -144,7 +149,22 @@ namespace RelicModManager
                         configPanel.Controls.Add(configControlRB);
                         break;
 
+                    case "single":
+                        //make a radioButton
+                        configControlDD.AutoSize = true;
+                        configControlDD.Location = new System.Drawing.Point(100, yPosition - 10);
+                        //configControlDD.Name = "configControlDD";
+                        configControlDD.Size = new System.Drawing.Size(150, 15);
+                        configControlDD.TabIndex = 1;
+                        configControlDD.TabStop = true;
+                        configControlDD.Enabled = false;
+                        configControlDD.SelectedIndexChanged += new EventHandler(configControlDD_CheckedChanged);
+                        configControlDD.Name = t.Text + "_" + m.name + "_" + m.configs[i].name;
+                        configControlDD.Items.Add(m.configs[i].name);
+                        break;
+
                     case "multi":
+                        //make a checkBox
                         CheckBox configControlCB = new CheckBox();
                         configControlCB.AutoSize = true;
                         configControlCB.Location = new System.Drawing.Point(100, yPosition - 10);
@@ -159,6 +179,7 @@ namespace RelicModManager
                         break;
 
                     case "value_enter":
+                        //DEPRECATED: make a text box
                         TextBox configControlTB = new TextBox();
                         configControlTB.Text = m.configDefault;
                         configControlTB.AutoSize = true;
@@ -175,8 +196,9 @@ namespace RelicModManager
                         break;
                 }
             }
-
-            //make modCheckBox
+            if (m.configType.Equals("single"))
+                configPanel.Controls.Add(configControlDD);
+            //make the mod check box
             CheckBox modCheckBox = new CheckBox();
             modCheckBox.AutoSize = true;
             modCheckBox.Location = new System.Drawing.Point(3, 3);
@@ -188,7 +210,7 @@ namespace RelicModManager
             modCheckBox.Enabled = m.enabled;
             modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
 
-            //make mainPanel
+            //make the main panel
             Panel mainPanel = new Panel();
             mainPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             mainPanel.Controls.Add(configPanel);
@@ -206,19 +228,27 @@ namespace RelicModManager
             mainPanel.AutoSize = true;
             mainPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
 
-            //add them to everything
+            //add to main panel
             mainPanel.Controls.Clear();
             mainPanel.Controls.Add(modCheckBox);
             mainPanel.Controls.Add(configPanel);
+            //add to tab
             t.Controls.Add(mainPanel);
 
         }
 
+        void configControlDD_CheckedChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        //DEPRECATED: handler for when the config of text box is changed
         void configControlTB_TextChanged(object sender, EventArgs e)
         {
             TextBox tb = (TextBox)sender;
             try
             {
+                //check to see if the user has entered a valid value like an int
                 int temp = int.Parse(tb.Text);
                 tb.BackColor = Color.Green;
                 string modName = tb.Parent.Parent.Controls[0].Text;
@@ -229,6 +259,7 @@ namespace RelicModManager
                     {
                         if (c.name.Equals(catagoryName) && m.name.Equals(modName))
                         {
+                            //get the mod in memory to update
                             foreach (Config cc in m.configs)
                             {
                                 string configName = tb.Name.Split('_')[2];
@@ -244,20 +275,24 @@ namespace RelicModManager
             }
             catch (FormatException)
             {
+                //the user has not entered a vaid value like decimals or letters
                 tb.BackColor = Color.Red;
-                string modName = tb.Parent.Parent.Controls[0].Text;
-                string catagoryName = tb.Parent.Parent.Parent.Text;
+                string modName = tb.Parent.Parent.Controls[0].Text;//text name of mod
+                string catagoryName = tb.Parent.Parent.Parent.Text;//text name of catagory
                 foreach (Catagory c in parsedCatagoryList)
                 {
                     foreach (Mod m in c.mods)
                     {
                         if (c.name.Equals(catagoryName) && m.name.Equals(modName))
                         {
+                            //catagory and mod in memory linked to catagory and mod in ui
                             foreach (Config cc in m.configs)
                             {
+                                //get the name of the config
                                 string configName = tb.Name.Split('_')[2];
                                 if (configName.Equals(cc.name))
                                 {
+                                    //config ui linked to config memory
                                     cc.configChecked = false;
                                 }
                             }
@@ -267,8 +302,11 @@ namespace RelicModManager
             }
         }
 
+        //handler for when the config checkbox is checked or unchecked
         void configControlCB_CheckedChanged(object sender, EventArgs e)
         {
+            
+            //else it's a RelHax modpack config checkBox
             CheckBox cb = (CheckBox)sender;
             string modName = cb.Parent.Parent.Controls[0].Text;
             string catagoryName = cb.Parent.Parent.Parent.Text;
@@ -278,6 +316,9 @@ namespace RelicModManager
                 {
                     if (c.name.Equals(catagoryName) && m.name.Equals(modName))
                     {
+                        //get the mod of the specified catagory
+                        //I should make a method to do this
+                        //TODO: make a method to get mod based on catagory and mod name
                         foreach (Config cc in m.configs)
                         {
                             string configName = cb.Name.Split('_')[2];
@@ -291,6 +332,7 @@ namespace RelicModManager
             }
         }
 
+        //handler for when a config radioButton is pressed
         void configControlRB_CheckedChanged(object sender, EventArgs e)
         {
             RadioButton rb = (RadioButton)sender;
@@ -304,6 +346,7 @@ namespace RelicModManager
                     {
                         foreach (Config cc in m.configs)
                         {
+                            //disable all configs for that mod in memory
                             cc.configChecked = false;
                         }
                         foreach (Config cc in m.configs)
@@ -311,6 +354,7 @@ namespace RelicModManager
                             string configName = rb.Name.Split('_')[2];
                             if (configName.Equals(cc.name))
                             {
+                                //enable that config for that mod in memory
                                 cc.configChecked = rb.Checked;
                             }
                         }
@@ -319,25 +363,30 @@ namespace RelicModManager
             }
         }
 
+        //handler for when a mod checkbox is changed
+        //TODO: understand this cancer and re-write it cause holy crap it's awefull
         void modCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             //check to see if it's the User Mods page or not
+            //i don't think this will ever be run TBH
             CheckBox cbUser = (CheckBox)sender;
-            TabPage t = (TabPage)cbUser.Parent;
-            if (t.Text.Equals("User Mods"))
+            if (cbUser.Parent is TabPage)
             {
-                //this is a check from the user checkboxes
-                foreach (Mod m in userMods)
+                TabPage t = (TabPage)cbUser.Parent;
+                if (t.Text.Equals("User Mods"))
                 {
-                    if (m.name.Equals(cbUser.Text))
+                    //this is a check from the user checkboxes
+                    foreach (Mod m in userMods)
                     {
-                        //linked the cb to the user mod
-                        m.modChecked = cbUser.Checked;
-                        return;
+                        if (m.name.Equals(cbUser.Text))
+                        {
+                            //linked the cb to the user mod
+                            m.modChecked = cbUser.Checked;
+                            return;
+                        }
                     }
                 }
             }
-
             //update the ui with the change
             CheckBox cb = (CheckBox)sender;
             Panel p = (Panel)cb.Parent;
@@ -352,7 +401,7 @@ namespace RelicModManager
                 {
                     if (m.name.Equals(cb.Text))
                     {
-                        //mod located
+                        //enable the mod in memory
                         m.modChecked = cb.Checked;
                         //update configs
                         foreach (Control cc in innerPanel.Controls)
@@ -364,6 +413,7 @@ namespace RelicModManager
                                     //for the checkboxes
                                     if (ccc.enabled && m.enabled && cb.Checked)
                                     {
+                                        //enable the control
                                         cc.Enabled = true;
                                     }
                                     else
@@ -382,6 +432,7 @@ namespace RelicModManager
                                         }*/
                                     }
                                 }
+                                //if contgrol text = config name
                                 if (cc.Text.Equals(ccc.name))
                                 {
                                     //for the lables
@@ -392,6 +443,7 @@ namespace RelicModManager
                     }
                 }
             }
+            //if the mod checkbox was changed to checked state
             if (cb.Checked)
             {
                 //check to make sure at least one config is selected
@@ -445,6 +497,7 @@ namespace RelicModManager
             }
         }
 
+        //parses the xml mod info into the memory database
         private void createModStructure2()
         {
             XmlDocument doc = new XmlDocument();
@@ -533,6 +586,7 @@ namespace RelicModManager
             
         }
 
+        //resizing handler for the window
         private void ModSelectionList_SizeChanged(object sender, EventArgs e)
         {
             continueButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height);
@@ -562,6 +616,7 @@ namespace RelicModManager
             }
         }
 
+        //handler to set the cancel bool to false
         private void continueButton_Click(object sender, EventArgs e)
         {
             cancel = false;
@@ -570,14 +625,37 @@ namespace RelicModManager
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            
             this.Close();
         }
 
+        //stub for possible implementation later
         private void ModSelectionList_FormClosing(object sender, FormClosingEventArgs e)
         {
             
         }
         
+        //returns the mod based on catagory and mod name
+        private Mod linkMod(string modName, string catagoryName)
+        {
+            foreach (Catagory c in parsedCatagoryList)
+            {
+                foreach (Mod m in c.mods)
+                {
+                    if (c.name.Equals(catagoryName) && m.name.Equals(modName))
+                    {
+                        //found it
+                        return m;
+                    }
+                }
+            }
+            return null;
+        }
+        
+        //logs string info to the log output
+        private void appendToLog(string info)
+        {
+          //the method should automaticly make the file if it's not there
+          File.AppendAllText(Application.StartupPath + "\\RelHaxLog.txt", info + "\n");
+        }
     }
 }

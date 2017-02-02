@@ -238,7 +238,7 @@ namespace RelicModManager
                 if (downloadQueue.Count == 0)
                 {
                     //tell it to extract the zip files
-                    downloadProgress.Text = "done";
+                    //downloadProgress.Text = "done";
                     if (cleanInstallCB.Checked)
                     {
                         //delete everything in res_mods
@@ -304,8 +304,9 @@ namespace RelicModManager
             {
                 if (m.modChecked && m.enabled)
                 {
-                    this.unzip(downloadedFilesDir + m.modZipFile, tanksLocation);
+                    this.unzip(downloadedFilesDir + Path.GetFileName(m.modZipFile), tanksLocation);
                     parrentProgressBar.Value++;
+                    Application.DoEvents();
                 }
             }
         }
@@ -315,16 +316,16 @@ namespace RelicModManager
             //don't do anything if the file does not exist
             if (!Directory.Exists(tanksLocation + "\\_patch"))
                 return;
+            //get every patch file in the folder
             string[] patchFiles = Directory.GetFiles(tanksLocation + "\\_patch");
-
-            patchList.Clear();//this has all the patches in memory
+            //get any other old patches out of memory
+            patchList.Clear();
             for (int i = 0; i < patchFiles.Count(); i++)
             {
                 //add patches to patchList
-                
                 this.createPatchList(patchFiles[i]);
             }
-            //this would be the actual patch method
+            //the actual patch method
             foreach (Patch p in patchList)
             {
                 if (p.type.Equals("regx"))
@@ -365,6 +366,7 @@ namespace RelicModManager
             if (fonts.Count() == 0)
               return;
             DialogResult dr = MessageBox.Show("Do you have admin rights?", "Admin to install fonts?", MessageBoxButtons.YesNo);
+            return;
             if (dr == DialogResult.Yes)
             {
                 //download the fontreg program
@@ -465,9 +467,8 @@ namespace RelicModManager
             {
                 System.Diagnostics.Process.Start(newExeName);
             }
-            catch (Win32Exception exeption)
+            catch (Win32Exception)
             {
-                string temp = exeption.Message;
                 MessageBox.Show("Unable to start application, but it is located in \n" + newExeName);
             }
             this.Close();
@@ -489,6 +490,7 @@ namespace RelicModManager
             }
         }
 
+        //parses all instance strings to be used for (un)install processes
         private String parseStrings()
         {
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
@@ -500,6 +502,8 @@ namespace RelicModManager
             return "1";
         }
 
+        //gets the version of tanks that this is, in the format
+        //of the res_mods version folder i.e. 0.9.17.0.3
         private string getFolderVersion(string gamePath)
         {
             if (!File.Exists(tanksLocation + "\\version.xml"))
@@ -521,14 +525,18 @@ namespace RelicModManager
             downloadProgress.Text = "Aborted";
         }
 
+        //TODO: put this back on a seperate thread
         private void unzip(string zipFile, string extractFolder)
         {
+            string thisVersion = this.getFolderVersion(null);
             zip = ZipFile.Read(zipFile);
+            //for this zip file instance, for each entry in the zip file,
+            //change the "versiondir" path to this version of tanks
             for (int i = 0; i < zip.Entries.Count; i++)
             {
                 if (Regex.IsMatch(zip[i].FileName, "versiondir"))
                 {
-                    zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", this.getFolderVersion(null));
+                    zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", thisVersion);
                 }
             }
 
@@ -538,6 +546,7 @@ namespace RelicModManager
             zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
         }
 
+        //handler for when progress is made in extracting a zip file
         void zip_ExtractProgress(object sender, ExtractProgressEventArgs e)
         {
             childProgressBar.Value = e.EntriesExtracted;
@@ -554,6 +563,7 @@ namespace RelicModManager
             }
         }
 
+        //DEPRECATED: Cleans up after legacy installers
         private void cleanup()
         {
             if (File.Exists(tempPath + "\\relic.zip")) System.IO.File.Delete(tempPath + "\\relic.zip");
@@ -574,15 +584,18 @@ namespace RelicModManager
             statusLabel.Text = "STATUS:";
         }
 
+        //DEPRECATED: Checks for which parts of the RelHax sound mod it is to download
         private void createDownloadQueue()
         {
             downloadQueue = new List<DownloadItem>();
+            //install RelHax
             if (this.features.relhaxBox.Checked)
             {
                 downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/RelHax.zip"), downloadPath + "\\RelHax.zip"));
                 //downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/RelHax.zip"), downloadPath + "\\gui.zip"));
                 //downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/RelHax.zip"), downloadPath + "\\6thSense.zip"));
             }
+            //install RelHax Censored version
             if (this.features.relhaxBoxCen.Checked)
             {
                 downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/RelHaxCen.zip"), downloadPath + "\\RelHax.zip"));
@@ -591,6 +604,8 @@ namespace RelicModManager
             parrentProgressBar.Minimum = 0;
         }
 
+        //checks the registry to get the location of where WoT is installed
+        //idea: if the user can open replay files, this can get the WoT exe filepath
         private string autoFindTanks()
         {
             object theObject = new object();
@@ -604,6 +619,8 @@ namespace RelicModManager
             return (string)theObject;
         }
 
+        //prompts the user to specify where the "WorldOfTanks.exe" file is
+        //return the file path and name of "WorldOfTanks.exe"
         private string manuallyFindTanks()
         {
             //unable to find it in the registry, so ask for it
@@ -618,16 +635,20 @@ namespace RelicModManager
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            //set window header text to current version so user knows
             this.Text = this.Text + managerVersion;
+            //show the wait screen
             pleaseWait wait = new pleaseWait();
             wait.Show();
             wait.loadingDescLabel.Text = "Checking for single instance...";
             Application.DoEvents();
+            //enforces a single instance of the program
             try
             {
                 File.WriteAllText(tempPath + "\\RelHaxOneInstance.txt", "this file is open and cannot be deleted");
                 File.OpenWrite(tempPath + "\\RelHaxOneInstance.txt");
             }
+            //catching an exeption means that this is not the only instance open
             catch (IOException)
             {
                 wait.Close();
@@ -636,6 +657,7 @@ namespace RelicModManager
             }
             wait.loadingDescLabel.Text = "Doing Random Cleanup...";
             Application.DoEvents();
+            //cleans up after any previous relicModManager versions
             this.cleanup();
             wait.loadingDescLabel.Text = "Checking for updates...";
             Application.DoEvents();
@@ -852,21 +874,37 @@ namespace RelicModManager
             return total;
         }
 
+        //when the "visit form page" link is clicked. the link clicked handler
         private void formPageLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://relicgaming.com/index.php?topic=697.0");
         }
 
+        //method to patch a part of an xml file
+        //fileLocation is relative to res_mods folder
         private void xmlPatch(string filePath, string xpath, string mode, string search, string replace)
         {
+            //verify the file exists...
+            if (!File.Exists(filePath))
+              return;
             //patch versiondir out of filePath
             filePath = tanksLocation + "\\res_mods" + filePath;
             filePath = Regex.Replace(filePath, "versiondir", this.getFolderVersion(null));
-
             //load document
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
-
+            //check to see if it has the header info at the top to see if we need to remove it later
+            bool hadHeader = false;
+            XmlDocument doc3 = new XmlDocument();
+            doc3.Load(filePath);
+            foreach (XmlNode node in doc3)
+            {
+                if (node.NodeType == XmlNodeType.XmlDeclaration)
+                {
+                    hadHeader = true;
+                }
+            }
+            //determines which version of pathing will be done
             switch (mode)
             {
                 case "add":
@@ -892,11 +930,13 @@ namespace RelicModManager
                         }
                         nodes.Add(ele);
                     }
-                    //add nodes to the element in hierarchy order
+                    //add nodes to the element in reverse for hierarchy order
                     for (int i = nodes.Count-1; i > -1; i--)
                     {
                         if (i == 0)
                         {
+                            //getting here means this is the highmost node
+                            //that needto be modified
                             reff.InsertAfter(nodes[i], reff.FirstChild);
                             break;
                         }
@@ -904,7 +944,6 @@ namespace RelicModManager
                         XmlElement child = nodes[i];
                         parrent.InsertAfter(child, parrent.FirstChild);
                     }
-
                     //save it
                     if (File.Exists(filePath)) File.Delete(filePath);
                     doc.Save(filePath);
@@ -945,51 +984,63 @@ namespace RelicModManager
                     //save it
                     if (File.Exists(filePath)) File.Delete(filePath);
                     doc.Save(filePath);
-                    //check to see if it has the header info at the top to see if we need to remove it later
-                    bool hasHeader = false;
-                    XmlDocument doc3 = new XmlDocument();
-                    doc3.Load(filePath);
-                    foreach (XmlNode node in doc3)
-                    {
-                        if (node.NodeType == XmlNodeType.XmlDeclaration)
-                        {
-                            hasHeader = true;
-                            //doc3.RemoveChild(node);
-                        }
-                    }
-                    doc3.Save(filePath);
                     //remove empty elements
                     XDocument doc2 = XDocument.Load(filePath);
                     doc2.Descendants().Where(e => string.IsNullOrEmpty(e.Value)).Remove();
                     if (File.Exists(filePath)) File.Delete(filePath);
                     doc2.Save(filePath);
-                    if (!hasHeader)
-                    {
-                        //need to remove the header
-                        XmlDocument doc4 = new XmlDocument();
-                        doc4.Load(filePath);
-                        foreach (XmlNode node in doc4)
-                        {
-                            if (node.NodeType == XmlNodeType.XmlDeclaration)
-                            {
-                                doc4.RemoveChild(node);
-                            }
-                        }
-                        doc4.Save(filePath);
-                    }
                     break;
             }
+            //check to see if we need to remove the header
+            bool hasHeader = false;
+            XmlDocument doc5 = new XmlDocument();
+            doc5.Load(filePath);
+            foreach (XmlNode node in doc5)
+            {
+                if (node.NodeType == XmlNodeType.XmlDeclaration)
+                {
+                    hasHeader = true;
+                }
+            }
+            //if not had header and has header, remove header
+            //if had header and has header, no change
+            //if not had header and not has header, no change
+            //if had header and not has header, no change
+            if (!hadHeader && hasHeader)
+                {
+                    XmlDocument doc4 = new XmlDocument();
+                    doc4.Load(filePath);
+                    foreach (XmlNode node in doc4)
+                    {
+                        if (node.NodeType == XmlNodeType.XmlDeclaration)
+                        {
+                            doc4.RemoveChild(node);
+                        }
+                    }
+                    doc4.Save(filePath);
+                }
         }
 
+        //method to patch a standard text or json file
+        //fileLocation is relative to res_mods folder
         private void RegxPatch(string fileLocation, string search, string replace, int lineNumber = 0)
         {
+            //check that the file exists
+            if (!File.Exists(fileLocation))
+              return;
+            
+            //patch versiondir out of fileLocation
+            fileLocation = tanksLocation + "\\res_mods" + fileLocation;
+            fileLocation = Regex.Replace(fileLocation, "versiondir", this.getFolderVersion(null));
+            
             //load file from disk...
             string file = File.ReadAllText(fileLocation);
+            //parse each line into an index array
             string[] fileParsed = file.Split('\n');
             StringBuilder sb = new StringBuilder();
             //Console.WriteLine(fileParsed.Count());
             if (lineNumber == 0)
-            //search entire file
+            //search entire file and replace each instance
             {
                 for (int i = 0; i < fileParsed.Count(); i++)
                 {
@@ -1013,21 +1064,30 @@ namespace RelicModManager
                     sb.Append(fileParsed[i] + "\n");
                 }
             }
+            //save the file back into the string and then the file
             file = sb.ToString();
-            File.WriteAllText(Application.StartupPath + "\\mod_battle_assistant_patched.txt", file);
+            File.WriteAllText(fileLocation, file);
         }
 
+        //parses a patch xml file into an xml patch instance in memory to be enqueued
         private void createPatchList(string xmlFile)
         {
-            //this would be the createPatchList method
+            if(!File.Exists(xmlFile))
+              return;
             XmlDocument doc = new XmlDocument();
             doc.Load(xmlFile);
+            //loaded the xml file into memory, create an xml list of patchs
             XmlNodeList patchesList = doc.SelectNodes("//patchs/patch");
+            //foreach "patch" node in the "patchs" node of the xml file
             foreach (XmlNode n in patchesList)
             {
+                //create a patch instance to take the patch information
                 Patch p = new Patch();
+                //foreach node in this specific "patch" node
                 foreach (XmlNode nn in n.ChildNodes)
                 {
+                    //each element in the xml gets put into the
+                    //the correcpondng attribute for the Patch instance
                     switch (nn.Name)
                     {
                         case "type":
@@ -1057,27 +1117,32 @@ namespace RelicModManager
             }
         }
 
-
+        //TODO: rename method
+        //handler for when the install relhax modpack button is pressed
+        //basicly the entire install process
         private void button1_Click(object sender, EventArgs e)
         {
+            //quick bool hack to say to the downloader to use the "modpack" code
             modPack = true;
             //reset the interface
             this.reset();
-            //attempt to locate the tanks directory
+            //attempt to locate the tanks directory automatically
+            //if it fails, it will prompt the user to return the world of tanks exe
             if (this.autoFindTanks() == null || this.forceManuel.Checked)
             {
                 if (this.manuallyFindTanks() == null) return;
             }
-            //parse all strings
+            //parse all strings for installation
             if (this.parseStrings() == null)
             {
                 this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
                 return;
             }
-            //the download timers started
+            //the download timers started for download speed measurement
             sw.Reset();
             sw.Start();
             //actual new code
+            //show the mod selection window
             ModSelectionList list = new ModSelectionList();
             list.ShowDialog();
             if (list.cancel) return;
@@ -1090,21 +1155,27 @@ namespace RelicModManager
             //same for configs
             foreach (Catagory c in parsedCatagoryLists)
             {
+                //will itterate through every catagory once
                 foreach (Mod m in c.mods)
                 {
+                    //will itterate through every mod of every catagory once
                     if (m.enabled && m.modChecked)
                     {
+                        //move each mod that is enalbed and checked to a new
+                        //list of mods to install
                         modsToInstall.Add(m);
                         foreach (Config cc in m.configs)
                         {
                             if (cc.enabled && cc.configChecked)
                             {
+                                //same for configs
                                 configsToInstall.Add(cc);
                             }
                         }
                     }
                 }
             }
+            //DEPRECATED: do not use!!
             /*
             //remove the mods and configs that don't have zips to download
             //this will keep those configs that have the entered value as the zip url
@@ -1122,7 +1193,10 @@ namespace RelicModManager
                     configsToInstall.RemoveAt(i);
                 }
             }*/
+            //create a new download queue. even if not downloading any
+            //relhax modpack mods, still used in downloader code
             downloadQueue = new List<DownloadItem>();
+            //if the user did not select any relhax modpack mods to install
             if (modsToInstall.Count == 0)
             {
                 //check for any user mods to install
@@ -1135,11 +1209,13 @@ namespace RelicModManager
                 }
                 if (userMods.Count > 0)
                 {
+                    //skip to the extraction process
                     this.downloader_DownloadFileCompleted(null,null);
                 }
+                //pull out because there are no relhax mods to install
                 return;
             }
-            //foreach mod and config, if the crc's don't match, download it
+            //foreach mod and config, if the crc's don't match, add it to the downloadQueue
             string localFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
             foreach (Mod m in modsToInstall)
             {
@@ -1157,7 +1233,8 @@ namespace RelicModManager
                     downloadQueue.Add(new DownloadItem(new Uri(this.downloadURL + c.zipConfigFile), localFilesDir + c.zipConfigFile));
                 }
             }
-            //remove configs tha are value_enter patches
+            /*
+            //DEPRECATED: remove configs tha are value_enter patches
             for (int i = 0; i < configsToInstall.Count; i++)
             {
                 if (parseable(configsToInstall[i].zipConfigFile))
@@ -1166,8 +1243,11 @@ namespace RelicModManager
                     //and remove it from the list
                     configsToInstall.RemoveAt(i);
                 }
-            }
+            }*/
             parrentProgressBar.Maximum = downloadQueue.Count;
+            //at this point, there may be user mods selected,
+            //and there is at least one mod to extract
+            //check for any mods to be install tha also need to be downloaded
             if (downloadQueue.Count > 0)
             {
                 if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
@@ -1182,11 +1262,14 @@ namespace RelicModManager
             }
             else
             {
+                //there are no mods to download, go right to the extraction process
                 downloader_DownloadFileCompleted(null, null);
             }
+            //end the installation process
             return;
         }
 
+        //returns true if the CRC's of each file match, false otherwise
         private bool CRCsMatch(string localFile, string remoteCRC)
         {
             if (!File.Exists(localFile))
@@ -1198,6 +1281,9 @@ namespace RelicModManager
             return false;
         }
 
+        //returns a string of the MD5 hash of an object.
+        //used to determine if a download is corrupted or not,
+        //or if it needs to be updated
         private string GetMd5Hash(MD5 md5Hash, string inputFile)
         {
             // Convert the input string to a byte array and compute the hash.
@@ -1215,6 +1301,8 @@ namespace RelicModManager
             return sBuilder.ToString();
         }
 
+        //DEPRECATED: Determins if the zip file from the config/mod is actually
+        //a number from a text box value_enter for patching the patch file
         private bool parseable(string configzip)
         {
             try
@@ -1228,6 +1316,9 @@ namespace RelicModManager
             }
         }
 
+        //TODO: rename method
+        //TODO: move uninstallation process off of the UI thread
+        //Main method to uninstall the modpack
         private void button2_Click(object sender, EventArgs e)
         {
             modPack = true;
@@ -1244,10 +1335,12 @@ namespace RelicModManager
                 this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
                 return;
             }
+            //verify that the user really wants to uninstall 
             if (MessageBox.Show("This will delete ALL MODS. Are you Sure?", "Um...", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 downloadProgress.Text = "Uninstalling...";
                 Application.DoEvents();
+                //this method will eventually take too long
                 Directory.Delete(tanksLocation + "\\res_mods", true);
                 if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
                 downloadProgress.Text = "Done!";
@@ -1255,6 +1348,7 @@ namespace RelicModManager
             }
         }
 
+        //handler for what happends when the check box "clean install" is checked or not
         private void cleanInstallCB_CheckedChanged(object sender, EventArgs e)
         {
             if (cleanInstallCB.Checked)
@@ -1263,12 +1357,14 @@ namespace RelicModManager
             }
         }
 
+        //method to bring up the crc checker to get the crc values of a mod
         private void CIEplainLabel_Click(object sender, EventArgs e)
         {
             crcCheck crcCHecker = new crcCheck();
             crcCHecker.Show();
         }
 
+        //enalbes the user to use "comic sans" font for the 1 person that would ever want to do that
         private void cancerFontCB_CheckedChanged(object sender, EventArgs e)
         {
             if (cancerFontCB.Checked)
@@ -1280,13 +1376,22 @@ namespace RelicModManager
                 this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             }
         }
+        
+        //logs string info to the log output
+        private void appendToLog(string info)
+        {
+          //the method should automaticly make the file if it's not there
+          File.AppendAllText(Application.StartupPath + "\\RelHaxLog.txt", info + "\n");
+        }
 
     }
 
+    //a class for the downloadQueue list, to make a queue of downloads
     class DownloadItem
     {
         public Uri URL { get; set; }
-        public string zipFile;
+        public string zipFile {get; set;}
+        //create a DownloadItem with the 2 properties set
         public DownloadItem(Uri newURL, String newZipFile)
         {
             URL = newURL;
