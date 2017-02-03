@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Security.Principal;
+using System.Drawing.Text;
 
 namespace RelicModManager
 {
@@ -365,6 +366,14 @@ namespace RelicModManager
             string[] fonts = Directory.GetFiles(tanksLocation + "\\_fonts");
             if (fonts.Count() == 0)
               return;
+            var fontsCollection = new InstalledFontCollection();
+            foreach (var fontFamiliy in fontsCollection.Families)
+            {
+                if (fontFamiliy.Name == "DamageLog")
+                {
+                    //font in installed
+                }
+            }
             DialogResult dr = MessageBox.Show("Do you have admin rights?", "Admin to install fonts?", MessageBoxButtons.YesNo);
             return;
             if (dr == DialogResult.Yes)

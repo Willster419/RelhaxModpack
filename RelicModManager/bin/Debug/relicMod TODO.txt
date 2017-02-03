@@ -1,26 +1,42 @@
 (critical) finish the installation process
-  -install all fonts needs to be fixed
+  -check if font is installed first
+  -foreach font file if it's in the list, remove it
+  -try to copy to C:\windows\fonts
+  -catch exeption, message, "run this as admin"
 
 (normal) update uninstall process
   -go through and get count of every directory and file that needs to be deleted
   -seperate thread (backgroundWorker) to delete everything
   -report progress for each file deleted
 
-(critical) create save and load config methods
+(critical) create save and load config methods (TEST BOTH)
   -create RelHaxConfigs dir if not already there on startup
   -have it load the last used/saved config
   -for each mod, if checked, save it's name and config
+  -for loading, if mod exists and is enalbed, check it, and it's config
 
 (enhancement) update extract process
   -literally take extract process and move it to a backgroundWorker
   
 (normal) comment code and put in log outputs
   
-(critical) add single_dropDown mode for combobox
-  -use the combobox.Text for config.enabled
-  -can group these
-  -make groups in configs
+(critical) add single_dropDown mode for combobox (TEST)
+  -this includes moving the config type to inside the config class(TEST)
   
 (enhancement) add preview feature with title(name), description, and a picture
   -maybe list of pictures later
   
+(enhancement) add backup feature to backup current modpack build before installing new modpack.
+
+(normal) add list of dependency mods, catagory based
+  -every catagory has a depnedency mod, like "Sound mods" has a "memory patch" mod
+  
+(normal) *quick* change check box from enable clean install to disable clean install
+  -doing a clean install should be the default
+  
+(enhancement) have it uninstall only the mods installed
+  -save the old patch folders somehow
+  -keep a log of every extracted zip entry
+  delete every file in the log (if it exists)
+  -recursivly delete each folder if the number of files and folders in it is 0
+  -read each patch file and reverse the patch

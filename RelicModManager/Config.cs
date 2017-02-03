@@ -12,8 +12,8 @@ namespace RelicModManager
         public string crc { get; set; }
         public bool enabled { get; set; }
         public bool configChecked { get; set; }
-        public string patchFileName { get; set; }
-        public string setValue { get; set; }
+        //public string patchFileName { get; set; }
+        public string type { get; set; }
 
         public Config()
         {

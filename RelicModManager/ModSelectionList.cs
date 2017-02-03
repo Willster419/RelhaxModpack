@@ -118,28 +118,41 @@ namespace RelicModManager
             configPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
             configPanel.Controls.Clear();
             //add configs to the panel
+            //create the comboBox outside of the loop
+            //later add it if the items count is above 0
             ComboBox configControlDD = new ComboBox();
+            configControlDD.AutoSize = true;
+            configControlDD.Location = new System.Drawing.Point(0,0);
+            configControlDD.Size = new System.Drawing.Size(150, 15);
+            configControlDD.TabIndex = 1;
+            configControlDD.TabStop = true;
+            configControlDD.Enabled = false;
+            configControlDD.SelectedIndexChanged += new EventHandler(configControlDD_CheckedChanged);
+            configControlDD.Name = t.Text + "_" + m.name + "_DropDown";
+            configControlDD.DropDownStyle = ComboBoxStyle.DropDownList;
+            configControlDD.Items.Clear();
             for (int i = 0; i < m.configs.Count; i++)
             {
-                //make configLabel
-                Label configLabel = new Label();
-                configLabel.AutoSize = true;
                 int yPosition = 15 * (i + 1);
-                configLabel.Location = new System.Drawing.Point(5, yPosition-10);
-                //configLabel.Name = "configLabel";
-                configLabel.Size = new System.Drawing.Size(100, 15);
-                configLabel.TabIndex = 0;
-                configLabel.Text = m.configs[i].name;
-                configLabel.Enabled = false;
-                configPanel.Controls.Add(configLabel);
-                switch (m.configType)
+                //make configLabel if config type is not single_dropDown
+                if (!m.configs[i].type.Equals("single_dropDown"))
                 {
-                    case "single2":
+                    Label configLabel = new Label();
+                    configLabel.AutoSize = true;
+                    configLabel.Location = new System.Drawing.Point(5, yPosition-10);
+                    configLabel.Size = new System.Drawing.Size(100, 15);
+                    configLabel.TabIndex = 0;
+                    configLabel.Text = m.configs[i].name;
+                    configLabel.Enabled = false;
+                    configPanel.Controls.Add(configLabel);
+                }
+                switch (m.configs[i].type)
+                {
+                    case "single":
                         //make a radioButton
                         RadioButton configControlRB = new RadioButton();
                         configControlRB.AutoSize = true;
                         configControlRB.Location = new System.Drawing.Point(100, yPosition-10);
-                        //configControlRB.Name = "configControlRB";
                         configControlRB.Size = new System.Drawing.Size(150, 15);
                         configControlRB.TabIndex = 1;
                         configControlRB.TabStop = true;
@@ -149,17 +162,9 @@ namespace RelicModManager
                         configPanel.Controls.Add(configControlRB);
                         break;
 
-                    case "single":
-                        //make a radioButton
-                        configControlDD.AutoSize = true;
-                        configControlDD.Location = new System.Drawing.Point(100, yPosition - 10);
-                        //configControlDD.Name = "configControlDD";
-                        configControlDD.Size = new System.Drawing.Size(150, 15);
-                        configControlDD.TabIndex = 1;
-                        configControlDD.TabStop = true;
-                        configControlDD.Enabled = false;
-                        configControlDD.SelectedIndexChanged += new EventHandler(configControlDD_CheckedChanged);
-                        configControlDD.Name = t.Text + "_" + m.name + "_" + m.configs[i].name;
+                    case "single_dropDown":
+                        //make a dropDown selection box
+                        if (configControlDD.Location.X == 0 && configControlDD.Location.Y == 0)configControlDD.Location = new System.Drawing.Point(100, yPosition - 10);
                         configControlDD.Items.Add(m.configs[i].name);
                         break;
 
@@ -168,7 +173,6 @@ namespace RelicModManager
                         CheckBox configControlCB = new CheckBox();
                         configControlCB.AutoSize = true;
                         configControlCB.Location = new System.Drawing.Point(100, yPosition - 10);
-                        //configControlCB.Name = "configControlCB";
                         configControlCB.Size = new System.Drawing.Size(150, 15);
                         configControlCB.TabIndex = 1;
                         configControlCB.TabStop = true;
@@ -184,7 +188,6 @@ namespace RelicModManager
                         configControlTB.Text = m.configDefault;
                         configControlTB.AutoSize = true;
                         configControlTB.Location = new System.Drawing.Point(100, yPosition-10);
-                        //configControlTB.Name = "configControlTB";
                         configControlTB.Size = new System.Drawing.Size(150, 15);
                         configControlTB.TabIndex = 1;
                         configControlTB.TabStop = true;
@@ -196,13 +199,12 @@ namespace RelicModManager
                         break;
                 }
             }
-            if (m.configType.Equals("single"))
+            if (configControlDD.Items.Count > 0)
                 configPanel.Controls.Add(configControlDD);
             //make the mod check box
             CheckBox modCheckBox = new CheckBox();
             modCheckBox.AutoSize = true;
             modCheckBox.Location = new System.Drawing.Point(3, 3);
-            //modCheckBox.Name = "modCheckBox";
             modCheckBox.Size = new System.Drawing.Size(49, 17);
             modCheckBox.TabIndex = 1;
             modCheckBox.Text = m.name;
@@ -222,7 +224,6 @@ namespace RelicModManager
                 panelCountYLocation = panelCountYLocation + 5;
             }
             mainPanel.Location = new System.Drawing.Point(5, panelCountYLocation+5);
-            //mainPanel.Name = "mainPanel";
             mainPanel.Size = new System.Drawing.Size(this.Size.Width - 50, 20);
             mainPanel.TabIndex = 0;
             mainPanel.AutoSize = true;
@@ -237,9 +238,30 @@ namespace RelicModManager
 
         }
 
+        //TODO: Handle this lol
+        //this is actually selected index changed
+        //TODO: rename this
         void configControlDD_CheckedChanged(object sender, EventArgs e)
         {
-            
+            //uncheck all other configs
+            ComboBox cb = (ComboBox) sender;
+            //get the mod this config is associated with
+            //this is safe because it will never be a user mod
+            string catagory = cb.Name.Split('_')[0];
+            string mod = cb.Name.Split('_')[1];
+            Mod m = this.getCatagory(catagory).getMod(mod);
+            //uncheck every config for that mod, however,
+            //the list of configs = the list of items in cb
+            //so if the index of the configs == the cb selected index
+            //that is the mods the user selected so enable it
+            for (int i = 0; i < cb.Items.Count; i++)
+            {
+              m.configs[i].configChecked = false;
+              if (i == cb.SelectedIndex)
+              {
+                m.configs[i].configChecked = true;
+              }
+            }
         }
 
         //DEPRECATED: handler for when the config of text box is changed
@@ -265,7 +287,7 @@ namespace RelicModManager
                                 string configName = tb.Name.Split('_')[2];
                                 if (configName.Equals(cc.name))
                                 {
-                                    cc.setValue = tb.Text;
+                                    //cc.setValue = tb.Text;
                                     cc.configChecked = true;
                                 }
                             }
@@ -569,6 +591,9 @@ namespace RelicModManager
                                                         case "configenabled":
                                                             c.enabled = bool.Parse(nnnn.InnerText);
                                                             break;
+                                                        case "configtype":
+                                                            c.type = nnnn.InnerText;
+                                                            break;
                                                     }
                                                 }
                                                 m.configs.Add(c);
@@ -651,11 +676,154 @@ namespace RelicModManager
             return null;
         }
         
+        //returns the mod based and mod name
+        private Mod linkMod(string modName)
+        {
+            foreach (Catagory c in parsedCatagoryList)
+            {
+                foreach (Mod m in c.mods)
+                {
+                    if (m.name.Equals(modName))
+                    {
+                        //found it
+                        return m;
+                    }
+                }
+            }
+            return null;
+        }
+        
+        //returns the catagory based on the catagory name
+        private Catagory getCatagory(string catName)
+        {
+            foreach (Catagory c in parsedCatagoryList)
+            {
+                if (c.name.Equals(catName))return c;
+            }
+            return null;
+        }
+        
+        //gets the name of the user mod based on it's name
+        private Mod getUserMod(string modName)
+        {
+          foreach (Mod m in userMods)
+          {
+            if (m.name.Equals(modName))
+            {
+              return m;
+            }
+          }
+          return null;
+        }
+        
         //logs string info to the log output
         private void appendToLog(string info)
         {
           //the method should automaticly make the file if it's not there
           File.AppendAllText(Application.StartupPath + "\\RelHaxLog.txt", info + "\n");
+        }
+        
+        //saves the currently checked configs and mods
+        private void saveConfig()
+        {
+            //dialog box to ask where to save the config to
+            
+            //XmlDocument save time!
+            /*XmlDocument doc = new XmlDocument();
+            XmlElement modsHolder = new XmlElement();
+            modsHolder.Name = "mods";
+            doc.InsertAfter(modsHolder,doc.FirstChild);
+            //check every mod
+            foreach (Catagory c in parsedCatagoryList)
+            {
+                foreach (Mod m in c.mods)
+                {
+                    if (m.modChecked)
+                    {
+                        //add it to the list
+                        XmlElement mod = new XmlElement();
+                        mod.Name = "mod";
+                        doc.InsertAfter(mod,modsHolder.FirstChild);
+                        XmlElement modName = new XmlElement();
+                        modName.Name = "name";
+                        modName.InnerText = m.name;
+                        doc.InsertAfter(modName,mod);
+                        if (m.configs.Count > 0)
+                        {
+                            XmlElement configsHolder = new XmlElement();
+                            configsHolder.Name = "configs";
+                            doc.InsertAfter(configsHolder,modName.FirstChild);
+                            foreach (Config c in m.configs)
+                            {
+                                if (c.configChecked)
+                                {
+                                    //add the config to the list
+                                    XmlElement config = new XmlElement();
+                                    config.Name = "config";
+                                    doc.InsertAfter(config,configsHolder.FirstChild);
+                                    XmlElement configName = new XmlElement();
+                                    configName.Name = c.name;
+                                    doc.InsertAfter(configName,config);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            string tempPath;
+            doc.Save(tempPath);*/
+        }
+        
+        //loads a saved config from xml and parses it into the memory database
+        private void loadConfig()
+        {
+          string filePath = "lol";
+          XmlDocument doc = new XmlDocument();
+          doc.Load(filePath);
+          //get a list of mods
+          XmlNodeList xmlModList = doc.SelectNodes("//mods/mod");
+          foreach (XmlNode n in xmlModList)
+          {
+              //gets the inside of each mod
+              //also store each config that needsto be enabled
+              Mod m = new Mod();
+              List<Config> cfgQueue = new List<Config>();
+              foreach (XmlNode nn in n.ChildNodes)
+              {
+                  switch (nn.Name)
+                  {
+                      case "name":
+                          m = this.linkMod(nn.InnerText);
+                          if (m == null) continue;
+                          break;
+                      case "configs":
+                          foreach (XmlNode nnn in nn.ChildNodes)
+                          {
+                              Config c = new Config();
+                              foreach (XmlNode nnnn in nnn.ChildNodes)
+                              {
+                                  switch (nnnn.Name)
+                                  {
+                                      case "name":
+                                          c.name = nnnn.InnerText;
+                                          break;
+                                  }
+                              }
+                              cfgQueue.Add(c);
+                          }
+                          break;
+                  }
+              }
+              //fully parsed mod and config
+              if (!m.enabled) continue;
+              m.modChecked = true;
+              foreach (Config c in cfgQueue)
+                  {
+                    Config tmep = m.getConfig(c.name);
+                    if (tmep != null && tmep.enabled) tmep.configChecked = true; 
+                  }
+          }
+          //reload the UI
         }
     }
 }
