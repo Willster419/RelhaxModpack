@@ -1392,7 +1392,129 @@ namespace RelicModManager
           //the method should automaticly make the file if it's not there
           File.AppendAllText(Application.StartupPath + "\\RelHaxLog.txt", info + "\n");
         }
-
+        
+        //uses backgroundWorker to copy files
+        private void backgroundCopy(string source, string dest)
+        {
+            BackgroundWorker copyworker = new BackgroundWorker();
+            copyworker.WorkerReportsProgress = true;
+            copyworker.DoWork += new DoWorkEventHandler(copyworker_DoWork);
+            copyworker.ProgressChanged += new ProgressChangedEventHandler(copyworker_ProgressChanged);
+            copyworker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(copyworker_RunWorkerCompleted);
+            object sourceFolder = source;
+            object destFolder = dest;
+            object[] parameters = new object [] {sourceFolder,destFolder};
+            copyworker.RunWorkerAsync(parameters);
+        }
+        
+        //uses backgroundWorker to delete folder and everything inside
+        //rather destructive if i do say so myself
+        private void backgroundDelete(string folder)
+        {
+            BackgroundWorker deleteworker = new BackgroundWorker();
+            deleteworker.WorkerReportsProgress = true;
+            deleteworker.DoWork += new DoWorkEventHandler(deleteworker_DoWork);
+            deleteworker.ProgressChanged += new ProgressChangedEventHandler(deleteworker_ProgressChanged);
+            deleteworker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(deleteworker_RunWorkerCompleted);
+            object folderToDelete = folder;
+            object[] parameters = new object [] {folderToDelete};
+            deleteworker.RunWorkerAsync(parameters);
+        }
+        
+        //gets the total number of files to process to eithor delete or copy
+        private int numFilesToProcess(string folder)
+        {
+            //TODO: fix to make the int class static
+            int numFiles = 0;
+            // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(folder);
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                numFiles++;
+            }
+            foreach (DirectoryInfo subdir in dirs)
+            {
+                numFilesToProcess(subdir.FullName);
+            }
+            return numFiles;
+        }
+        
+        //handler for the copyworker when it is called
+		//TODO: cast copyWorker as object and verify it works
+        private void copyworker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            object[] parameters = e.Argument as object[];
+            string sourceFolder = (string)parameters[0];
+            string destFolder = (string)parameters[1];
+            int numFilesToCopy = this.numFilesToProcess(sourceFolder);
+            //copyWorker.ReportProgress(numFilesToCopy);
+            this.DirectoryCopy(sourceFolder,destFolder,true);
+        }
+        
+        //handler for the copyworker when progress is made
+        private void copyworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            
+        }
+        
+        //handler for when the copyworker is completed
+        private void copyworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            
+        }
+        
+        //handler for the deleteworker when it is called
+        private void deleteworker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            object[] parameters = e.Argument as object[];
+            string folderToDelete = (string)parameters[0];
+            int numFilesToDelete = this.numFilesToProcess(folderToDelete);
+        }
+        
+        //handler for the deleteworker when progress is made
+        private void deleteworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            
+        }
+        
+        //handler for when the deleteworker is completed
+        private void deleteworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            
+        }
+        
+        //recursivly copies every file from one place to another
+        private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        {
+            // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            // If the destination directory doesn't exist, create it.
+            if (!Directory.Exists(destDirName))
+            {
+                Directory.CreateDirectory(destDirName);
+            }
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string temppath = Path.Combine(destDirName, file.Name);
+                file.CopyTo(temppath, false);
+                //copyWorker.ReportProgress(0);
+            }
+            // If copying subdirectories, copy them and their contents to new location.
+            if (copySubDirs)
+            {
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    string temppath = Path.Combine(destDirName, subdir.Name);
+                    DirectoryCopy(subdir.FullName, temppath, copySubDirs);
+                }
+            }
+        }
     }
 
     //a class for the downloadQueue list, to make a queue of downloads
