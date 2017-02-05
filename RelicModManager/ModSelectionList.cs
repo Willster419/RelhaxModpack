@@ -256,10 +256,15 @@ namespace RelicModManager
             //that is the mods the user selected so enable it
             for (int i = 0; i < cb.Items.Count; i++)
             {
-              m.configs[i].configChecked = false;
-              if (i == cb.SelectedIndex)
+              //m.configs[i].configChecked = false;
+              string configName = (string)cb.Items[i];
+              foreach (Config c in m.configs)
               {
-                m.configs[i].configChecked = true;
+                  if (configName.Equals(c.name))
+                  {
+                      cb.SelectedIndex = i;
+                      c.configChecked = true;
+                  }
               }
             }
         }
@@ -369,7 +374,7 @@ namespace RelicModManager
                         foreach (Config cc in m.configs)
                         {
                             //disable all configs for that mod in memory
-                            cc.configChecked = false;
+                            //cc.configChecked = false;
                         }
                         foreach (Config cc in m.configs)
                         {
