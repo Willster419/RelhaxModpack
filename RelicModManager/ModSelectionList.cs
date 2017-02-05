@@ -250,22 +250,17 @@ namespace RelicModManager
             string catagory = cb.Name.Split('_')[0];
             string mod = cb.Name.Split('_')[1];
             Mod m = this.getCatagory(catagory).getMod(mod);
-            //uncheck every config for that mod, however,
-            //the list of configs = the list of items in cb
-            //so if the index of the configs == the cb selected index
-            //that is the mods the user selected so enable it
-            for (int i = 0; i < cb.Items.Count; i++)
+            string configName = (string)cb.SelectedItem;
+            foreach (Config c in m.configs)
             {
-              //m.configs[i].configChecked = false;
-              string configName = (string)cb.Items[i];
-              foreach (Config c in m.configs)
-              {
-                  if (configName.Equals(c.name))
-                  {
-                      cb.SelectedIndex = i;
-                      c.configChecked = true;
-                  }
-              }
+                if (c.type.Equals("single_dropdown"))
+                {
+                    c.configChecked = false;
+                    if (configName.Equals(c.name))
+                    {
+                        c.configChecked = true;
+                    }
+                }
             }
         }
 
@@ -349,7 +344,7 @@ namespace RelicModManager
                         foreach (Config cc in m.configs)
                         {
                             string configName = cb.Name.Split('_')[2];
-                            if (configName.Equals(cc.name))
+                            if (configName.Equals(cc.name) && cc.type.Equals("multi"))
                             {
                                 cc.configChecked = cb.Checked;
                             }
@@ -379,10 +374,14 @@ namespace RelicModManager
                         foreach (Config cc in m.configs)
                         {
                             string configName = rb.Name.Split('_')[2];
-                            if (configName.Equals(cc.name))
+                            if (cc.type.Equals("single"))
                             {
-                                //enable that config for that mod in memory
-                                cc.configChecked = rb.Checked;
+                                cc.configChecked = false;
+                                if (configName.Equals(cc.name))
+                                {
+                                    //enable that config for that mod in memory
+                                    cc.configChecked = rb.Checked;
+                                }
                             }
                         }
                     }

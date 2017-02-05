@@ -55,7 +55,6 @@ namespace RelicModManager
         string tempOldDownload;
         private List<Mod> userMods;
         int numFilesToProcessInt = 0;
-        bool firstReport;
         int numFilesToCopyDelete = 0;
         bool RelHaxUninstall = false;
 
