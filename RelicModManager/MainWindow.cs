@@ -33,7 +33,7 @@ namespace RelicModManager
         private string modAudioFolder;
         private string tempPath = Path.GetTempPath();
         private static int MBDivisor = 1048576;
-        private string managerVersion = "version 17.3";
+        private string managerVersion = "version 17.4";
         private string tanksLocation;
         private SelectFeatures features = new SelectFeatures();
         private List<DownloadItem> downloadQueue;
@@ -50,9 +50,14 @@ namespace RelicModManager
         private List<Mod> modsToInstall;
         private List<Config> configsToInstall;
         private List<Patch> patchList;
+        private List<Dependency> dependencies;
         bool modPack;
         string tempOldDownload;
         private List<Mod> userMods;
+        int numFilesToProcessInt = 0;
+        bool firstReport;
+        int numFilesToCopyDelete = 0;
+        bool RelHaxUninstall = false;
 
         //The constructur for the application
         public MainWindow()
@@ -243,17 +248,10 @@ namespace RelicModManager
                     if (cleanInstallCB.Checked)
                     {
                         //delete everything in res_mods
-                        if (Directory.Exists(tanksLocation + "\\res_mods")) Directory.Delete(tanksLocation + "\\res_mods", true);
-                        if (!Directory.Exists(tanksLocation + "\\res_mods")) Directory.CreateDirectory(tanksLocation + "\\res_mods");
+                        if (Directory.Exists(tanksLocation + "\\res_mods")) this.backgroundDelete(tanksLocation + "\\res_mods");
+                        return;
                     }
-                    //just a double-check to delete all patches
-                    if (Directory.Exists(tanksLocation + "\\_patch")) Directory.Delete(tanksLocation + "\\_patch", true);
-                    if (Directory.Exists(tanksLocation + "\\_fonts")) Directory.Delete(tanksLocation + "\\_fonts", true);
-                    this.extractZipFilesModPack();
-                    this.patchFiles();
-                    this.extractZipFilesUser();
-                    this.patchFiles();
-                    this.installFonts();
+                    this.finishInstall();
                 }
             }
         }
@@ -271,25 +269,30 @@ namespace RelicModManager
                 parrentProgressBar.Value++;
             }
             this.patchStuff();
-            //this.installFonts();
         }
 
         private void extractZipFilesModPack()
         {
-            speedLabel.Text = "Extracting RelHax...";
-            parrentProgressBar.Maximum = modsToInstall.Count + configsToInstall.Count;
+            speedLabel.Text = "Extracting RelHax Mods...";
+            parrentProgressBar.Maximum = modsToInstall.Count + configsToInstall.Count + dependencies.Count;
             parrentProgressBar.Value = 0;
             string downloadedFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
+            //extract dependencies
+            foreach (Dependency d in dependencies)
+            {
+                if (!d.dependencyZipFile.Equals("")) this.unzip(downloadedFilesDir + d.dependencyZipFile, tanksLocation);
+                parrentProgressBar.Value++;
+            }
             //extract mods
             foreach (Mod m in modsToInstall)
             {
-                this.unzip(downloadedFilesDir + m.modZipFile, tanksLocation);
+                if (!m.modZipFile.Equals("")) this.unzip(downloadedFilesDir + m.modZipFile, tanksLocation);
                 parrentProgressBar.Value++;
             }
             //extract configs
             foreach (Config c in configsToInstall)
             {
-                this.unzip(downloadedFilesDir + c.zipConfigFile, tanksLocation);
+                if (!c.zipConfigFile.Equals("")) this.unzip(downloadedFilesDir + c.zipConfigFile, tanksLocation);
                 parrentProgressBar.Value++;
             }
         }
@@ -314,6 +317,7 @@ namespace RelicModManager
 
         private void patchFiles()
         {
+            speedLabel.Text = "Patching...";
             //don't do anything if the file does not exist
             if (!Directory.Exists(tanksLocation + "\\_patch"))
                 return;
@@ -329,6 +333,7 @@ namespace RelicModManager
             //the actual patch method
             foreach (Patch p in patchList)
             {
+                downloadProgress.Text = p.file;
                 if (p.type.Equals("regx"))
                 {
                     if (p.lines.Count() == 0)
@@ -360,34 +365,70 @@ namespace RelicModManager
         //installs all fonts in the fonts folder, user and custom
         private void installFonts()
         {
-            downloadProgress.Text = "Installing Fonts...";
+            speedLabel.Text = "Installing Fonts...";
             if (!Directory.Exists(tanksLocation + "\\_fonts"))
+            {
+                speedLabel.Text = "";
+                downloadProgress.Text = "Done!";
+                parrentProgressBar.Value = parrentProgressBar.Maximum;
+                childProgressBar.Value = childProgressBar.Maximum;
                 return;
+            }
             string[] fonts = Directory.GetFiles(tanksLocation + "\\_fonts");
             if (fonts.Count() == 0)
-              return;
-            var fontsCollection = new InstalledFontCollection();
-            foreach (var fontFamiliy in fontsCollection.Families)
             {
-                if (fontFamiliy.Name == "DamageLog")
+                //done display
+                speedLabel.Text = "";
+                downloadProgress.Text = "Done!";
+                parrentProgressBar.Value = parrentProgressBar.Maximum;
+                childProgressBar.Value = childProgressBar.Maximum;
+                return;
+            }
+            //convert the array to a list
+            List<String> fontsList = new List<string>();
+            foreach (string s in fonts)
+            {
+                fontsList.Add(s);
+            }
+            //removes any already installed fonts
+            for (int i = 0; i < fontsList.Count; i++)
+            {
+                //get just the name of the font, assumes the name of the font is the filename as well
+                string fName = Path.GetFileNameWithoutExtension(fontsList[i]);
+                //get a list of installed fonts
+                var fontsCollection = new InstalledFontCollection();
+                foreach (var fontFamiliy in fontsCollection.Families)
                 {
-                    //font in installed
+                    //check if the font is installed
+                    if (fontFamiliy.Name == fName)
+                    {
+                        //font in installed
+                        fontsList.RemoveAt(i);
+                    }
                 }
             }
+            if (fontsList.Count == 0)
+            {
+                //done display
+                speedLabel.Text = "";
+                downloadProgress.Text = "Done!";
+                parrentProgressBar.Value = parrentProgressBar.Maximum;
+                childProgressBar.Value = childProgressBar.Maximum;
+                return;
+            }
             DialogResult dr = MessageBox.Show("Do you have admin rights?", "Admin to install fonts?", MessageBoxButtons.YesNo);
-            return;
             if (dr == DialogResult.Yes)
             {
-                //download the fontreg program
-                if (!File.Exists(tanksLocation + "\\_fonts\\FontReg.exe")) downloader.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/RelicMod/tools/FontReg.exe", tanksLocation + "\\_fonts\\FontReg.exe");
+                this.extractEmbeddedResource(tanksLocation + "\\_fonts", "RelicModManager", new List<string>() { "FontReg.exe" });
                 ProcessStartInfo info = new ProcessStartInfo();
-                info.FileName = tanksLocation + "\\_fonts\\FontReg.exe";
+                info.FileName ="FontReg.exe";
                 info.UseShellExecute = true;
                 info.Verb = "runas"; // Provides Run as Administrator
                 info.Arguments = "/copy";
+                info.WorkingDirectory = tanksLocation + "\\_fonts";
                 Process installFontss = new Process();
                 installFontss.StartInfo = info;
-                bool fontsBool = false;
+                bool isAdmin = this.isAdministrator();
                 try
                 {
                     installFontss.Start();
@@ -395,21 +436,15 @@ namespace RelicModManager
                 }
                 catch (Win32Exception)
                 {
-                    MessageBox.Show("Unable to install fonts. Some mods may not work properly. Fonts are located in " + tanksLocation + "\\_fonts");
+                    MessageBox.Show("Unable to install fonts. Some mods may not work properly. Fonts are located in " + tanksLocation + "\\_fonts. Eithor install them yourself or run this again as Administrator");
                     return;
                 }
-                if ( fontsBool == null )
-                { 
-                    MessageBox.Show("Unable to install fonts. Some mods may not work properly. Fonts are located in " + tanksLocation + "\\_fonts");
-                    return;
-                }
-                else
-                {
-                    if (Directory.Exists(tanksLocation + "\\_fonts"))
-                        Directory.Delete(tanksLocation + "\\_fonts", true);
-                    downloadProgress.Text = "Done!";
-                    
-                }
+                if (Directory.Exists(tanksLocation + "\\_fonts"))
+                    Directory.Delete(tanksLocation + "\\_fonts", true);
+                speedLabel.Text = "";
+                downloadProgress.Text = "Done!";
+                parrentProgressBar.Value = parrentProgressBar.Maximum;
+                childProgressBar.Value = childProgressBar.Maximum;
             }
         }
         
@@ -893,12 +928,12 @@ namespace RelicModManager
         //fileLocation is relative to res_mods folder
         private void xmlPatch(string filePath, string xpath, string mode, string search, string replace)
         {
-            //verify the file exists...
-            if (!File.Exists(filePath))
-              return;
             //patch versiondir out of filePath
             filePath = tanksLocation + "\\res_mods" + filePath;
             filePath = Regex.Replace(filePath, "versiondir", this.getFolderVersion(null));
+            //verify the file exists...
+            if (!File.Exists(filePath))
+                return;
             //load document
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
@@ -921,7 +956,7 @@ namespace RelicModManager
                     XmlNodeList currentSoundBanksAdd = doc.SelectNodes(xpath);
                     foreach (XmlElement e in currentSoundBanksAdd)
                     {
-                        if (e.InnerText.Equals(replace))
+                        if (Regex.IsMatch(e.InnerText, replace))
                             return;
                     }
                     //get to the node where to add the element
@@ -963,14 +998,14 @@ namespace RelicModManager
                     XmlNodeList currentSoundBanksEdit = doc.SelectNodes(xpath);
                     foreach (XmlElement e in currentSoundBanksEdit)
                     {
-                        if (e.InnerText.Equals(replace))
+                        if (Regex.IsMatch(e.InnerText, replace))
                             return;
                     }
                     //find and replace
                     XmlNodeList rel1Edit = doc.SelectNodes(xpath);
                     foreach (XmlElement eee in rel1Edit)
                     {
-                        if (eee.InnerText.Equals(search))
+                        if (Regex.IsMatch(eee.InnerText, search))
                         {
                             eee.InnerText = replace;
                         }
@@ -985,7 +1020,7 @@ namespace RelicModManager
                     XmlNodeList currentSoundBanksRemove = doc.SelectNodes(xpath);
                     foreach (XmlElement e in currentSoundBanksRemove)
                     {
-                        if (e.InnerText.Equals(search))
+                        if (Regex.IsMatch(e.InnerText, search))
                         {
                             e.RemoveAll();
                         }
@@ -1034,13 +1069,13 @@ namespace RelicModManager
         //fileLocation is relative to res_mods folder
         private void RegxPatch(string fileLocation, string search, string replace, int lineNumber = 0)
         {
-            //check that the file exists
-            if (!File.Exists(fileLocation))
-              return;
-            
             //patch versiondir out of fileLocation
             fileLocation = tanksLocation + "\\res_mods" + fileLocation;
             fileLocation = Regex.Replace(fileLocation, "versiondir", this.getFolderVersion(null));
+
+            //check that the file exists
+            if (!File.Exists(fileLocation))
+                return;
             
             //load file from disk...
             string file = File.ReadAllText(fileLocation);
@@ -1151,6 +1186,28 @@ namespace RelicModManager
             sw.Reset();
             sw.Start();
             //actual new code
+            if (backupModsCheckBox.Checked)
+            {
+                //backup the mods folder
+                if (Directory.Exists(Application.StartupPath + "\\RelHaxModBackup"))
+                {
+                    this.backgroundDelete(Application.StartupPath + "\\RelHaxModBackup");
+                }
+                else
+                {
+                    copyworker_RunWorkerCompleted(null, null);
+                }
+                return;
+            }
+            this.parseInstallationPart1();
+        }
+
+        //next part of the install process
+        private void parseInstallationPart1()
+        {
+            //reset the childProgresBar value
+            childProgressBar.Maximum = 100;
+            childProgressBar.Value = 0;
             //show the mod selection window
             ModSelectionList list = new ModSelectionList();
             list.ShowDialog();
@@ -1159,11 +1216,13 @@ namespace RelicModManager
             configsToInstall = new List<Config>();
             patchList = new List<Patch>();
             userMods = new List<Mod>();
+            dependencies = new List<Dependency>();
             parsedCatagoryLists = list.parsedCatagoryList;
             //if mod is enabled and checked, add it to list of mods to extract/install
             //same for configs
             foreach (Catagory c in parsedCatagoryLists)
             {
+                bool dependenciesAdded = false;
                 //will itterate through every catagory once
                 foreach (Mod m in c.mods)
                 {
@@ -1173,6 +1232,17 @@ namespace RelicModManager
                         //move each mod that is enalbed and checked to a new
                         //list of mods to install
                         modsToInstall.Add(m);
+                        //at least one mod of this catagory is checked, add any dependencies required
+                        if (!dependenciesAdded)
+                        {
+                            //add dependencies
+                            foreach (Dependency d in c.dependencies)
+                            {
+                                if (d.enabled)
+                                    dependencies.Add(d);
+                            }
+                            dependenciesAdded = true;
+                        }
                         foreach (Config cc in m.configs)
                         {
                             if (cc.enabled && cc.configChecked)
@@ -1205,30 +1275,38 @@ namespace RelicModManager
             //create a new download queue. even if not downloading any
             //relhax modpack mods, still used in downloader code
             downloadQueue = new List<DownloadItem>();
+            //check for any user mods to install
+            for (int i = 0; i < list.userMods.Count; i++)
+            {
+                if (list.userMods[i].enabled && list.userMods[i].modChecked)
+                {
+                    this.userMods.Add(list.userMods[i]);
+                }
+            }
             //if the user did not select any relhax modpack mods to install
             if (modsToInstall.Count == 0)
             {
-                //check for any user mods to install
-                for (int i = 0; i < list.userMods.Count; i++)
-                {
-                    if (list.userMods[i].enabled && list.userMods[i].modChecked)
-                    {
-                        this.userMods.Add(list.userMods[i]);
-                    }
-                }
+                //check for userMods
                 if (userMods.Count > 0)
                 {
                     //skip to the extraction process
-                    this.downloader_DownloadFileCompleted(null,null);
+                    this.downloader_DownloadFileCompleted(null, null);
                 }
-                //pull out because there are no relhax mods to install
+                //pull out because there are no mods to install
                 return;
             }
             //foreach mod and config, if the crc's don't match, add it to the downloadQueue
             string localFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
+            foreach (Dependency d in dependencies)
+            {
+                if (!this.CRCsMatch(localFilesDir + d.dependencyZipFile, d.dependencyZipCRC))
+                {
+                    downloadQueue.Add(new DownloadItem(new Uri(this.downloadURL + d.dependencyZipFile),localFilesDir + d.dependencyZipFile));
+                }
+            }
             foreach (Mod m in modsToInstall)
             {
-                if (!this.CRCsMatch(localFilesDir + m.modZipFile,m.crc))
+                if (!this.CRCsMatch(localFilesDir + m.modZipFile, m.crc))
                 {
                     //crc's don't match, need to re-download
                     downloadQueue.Add(new DownloadItem(new Uri(this.downloadURL + m.modZipFile), localFilesDir + m.modZipFile));
@@ -1348,12 +1426,8 @@ namespace RelicModManager
             if (MessageBox.Show("This will delete ALL MODS. Are you Sure?", "Um...", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 downloadProgress.Text = "Uninstalling...";
-                Application.DoEvents();
-                //this method will eventually take too long
-                Directory.Delete(tanksLocation + "\\res_mods", true);
-                if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
-                downloadProgress.Text = "Done!";
-                Application.DoEvents();
+                RelHaxUninstall = true;
+                this.backgroundDelete(tanksLocation + "\\res_mods");
             }
         }
 
@@ -1396,6 +1470,9 @@ namespace RelicModManager
         //uses backgroundWorker to copy files
         private void backgroundCopy(string source, string dest)
         {
+            numFilesToProcessInt = 0;
+            numFilesToCopyDelete = 0;
+            downloadProgress.Text = "Copying file " + numFilesToCopyDelete + " of " + numFilesToProcessInt;
             BackgroundWorker copyworker = new BackgroundWorker();
             copyworker.WorkerReportsProgress = true;
             copyworker.DoWork += new DoWorkEventHandler(copyworker_DoWork);
@@ -1411,6 +1488,9 @@ namespace RelicModManager
         //rather destructive if i do say so myself
         private void backgroundDelete(string folder)
         {
+            numFilesToProcessInt = 0;
+            numFilesToCopyDelete = 0;
+            downloadProgress.Text = "Copying file " + numFilesToCopyDelete + " of " + numFilesToProcessInt;
             BackgroundWorker deleteworker = new BackgroundWorker();
             deleteworker.WorkerReportsProgress = true;
             deleteworker.DoWork += new DoWorkEventHandler(deleteworker_DoWork);
@@ -1424,8 +1504,6 @@ namespace RelicModManager
         //gets the total number of files to process to eithor delete or copy
         private int numFilesToProcess(string folder)
         {
-            //TODO: fix to make the int class static
-            int numFiles = 0;
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(folder);
             DirectoryInfo[] dirs = dir.GetDirectories();
@@ -1433,61 +1511,90 @@ namespace RelicModManager
             FileInfo[] files = dir.GetFiles();
             foreach (FileInfo file in files)
             {
-                numFiles++;
+                numFilesToProcessInt++;
             }
             foreach (DirectoryInfo subdir in dirs)
             {
+                numFilesToProcessInt++;
                 numFilesToProcess(subdir.FullName);
             }
-            return numFiles;
+            return numFilesToProcessInt;
         }
         
         //handler for the copyworker when it is called
-		//TODO: cast copyWorker as object and verify it works
         private void copyworker_DoWork(object sender, DoWorkEventArgs e)
         {
+            BackgroundWorker copyworker = (BackgroundWorker)sender;
             object[] parameters = e.Argument as object[];
             string sourceFolder = (string)parameters[0];
             string destFolder = (string)parameters[1];
-            int numFilesToCopy = this.numFilesToProcess(sourceFolder);
-            //copyWorker.ReportProgress(numFilesToCopy);
-            this.DirectoryCopy(sourceFolder,destFolder,true);
+            numFilesToProcessInt = 0;
+            numFilesToCopyDelete = 0;
+            this.numFilesToProcess(sourceFolder);
+            this.DirectoryCopy(sourceFolder,destFolder,true,copyworker);
         }
         
         //handler for the copyworker when progress is made
         private void copyworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            
+            downloadProgress.Text = "Copying file " + numFilesToCopyDelete + " of " + numFilesToProcessInt;
+            childProgressBar.Maximum = numFilesToProcessInt;
+            childProgressBar.Value = numFilesToCopyDelete;
         }
         
         //handler for when the copyworker is completed
         private void copyworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            
+            if (backupModsCheckBox.Checked)
+            {
+                this.parseInstallationPart1();
+            }
         }
         
         //handler for the deleteworker when it is called
         private void deleteworker_DoWork(object sender, DoWorkEventArgs e)
         {
+            BackgroundWorker deleteworker = (BackgroundWorker)sender;
             object[] parameters = e.Argument as object[];
             string folderToDelete = (string)parameters[0];
-            int numFilesToDelete = this.numFilesToProcess(folderToDelete);
+            numFilesToProcessInt = 0;
+            numFilesToCopyDelete = 0;
+            this.numFilesToProcess(folderToDelete);
+            this.DirectoryDelete(folderToDelete,true,deleteworker);
         }
         
         //handler for the deleteworker when progress is made
         private void deleteworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            
+            downloadProgress.Text = "Deleting file " + numFilesToCopyDelete + " of " + numFilesToProcessInt;
+            childProgressBar.Maximum = numFilesToProcessInt;
+            childProgressBar.Value = numFilesToCopyDelete;
         }
         
         //handler for when the deleteworker is completed
         private void deleteworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            
+            if (backupModsCheckBox.Checked && !RelHaxUninstall)
+            {
+                this.backgroundCopy(tanksLocation + "\\res_mods", Application.StartupPath + "\\RelHaxModBackup");
+                return;
+            }
+            if (cleanInstallCB.Checked && !RelHaxUninstall)
+            {
+                this.finishInstall();
+                return;
+            }
+            if (RelHaxUninstall)
+            {
+                if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
+                downloadProgress.Text = "Done!";
+                RelHaxUninstall = false;
+                return;
+            }
         }
         
         //recursivly copies every file from one place to another
-        private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, BackgroundWorker copyworker)
         {
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
@@ -1503,7 +1610,7 @@ namespace RelicModManager
             {
                 string temppath = Path.Combine(destDirName, file.Name);
                 file.CopyTo(temppath, false);
-                //copyWorker.ReportProgress(0);
+                copyworker.ReportProgress(numFilesToCopyDelete++);
             }
             // If copying subdirectories, copy them and their contents to new location.
             if (copySubDirs)
@@ -1511,7 +1618,82 @@ namespace RelicModManager
                 foreach (DirectoryInfo subdir in dirs)
                 {
                     string temppath = Path.Combine(destDirName, subdir.Name);
-                    DirectoryCopy(subdir.FullName, temppath, copySubDirs);
+                    DirectoryCopy(subdir.FullName, temppath, copySubDirs, copyworker);
+                }
+            }
+        }
+
+        //recursivly deletes every file from one place to another
+        private void DirectoryDelete(string sourceDirName, bool deleteSubDirs, BackgroundWorker deleteworker)
+        {
+            // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string temppath = Path.Combine(sourceDirName, file.Name);
+                file.Delete();
+                deleteworker.ReportProgress(numFilesToCopyDelete++);
+            }
+            // If copying subdirectories, copy them and their contents to new location.
+            if (deleteSubDirs)
+            {
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    string temppath = Path.Combine(sourceDirName, subdir.Name);
+                    DirectoryDelete(subdir.FullName, deleteSubDirs, deleteworker);
+                    subdir.Delete();
+                    deleteworker.ReportProgress(numFilesToCopyDelete++);
+                }
+            }
+        }
+
+        private void forceManuel_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.forceManuel.Checked)
+            {
+                MessageBox.Show("Enable this if you are having problems with auto-detection");
+            }
+        }
+
+        private void backupModsCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.backupModsCheckBox.Checked)
+            {
+                MessageBox.Show("This will make a backup of your current res-mods folder that you can restore later in case of an error. Tha backup is located in the application directory, under 'RelHaxModBackup'");
+            }
+        }
+
+        private void finishInstall()
+        {
+            //just a double-check to delete all patches
+            if (Directory.Exists(tanksLocation + "\\_patch")) Directory.Delete(tanksLocation + "\\_patch", true);
+            if (Directory.Exists(tanksLocation + "\\_fonts")) Directory.Delete(tanksLocation + "\\_fonts", true);
+            if (!Directory.Exists(tanksLocation + "\\res_mods")) Directory.CreateDirectory(tanksLocation + "\\res_mods");
+            this.extractZipFilesModPack();
+            this.patchFiles();
+            this.extractZipFilesUser();
+            this.patchFiles();
+            this.installFonts();
+        }
+
+        //extracts embeded rescource onto disk
+        private void extractEmbeddedResource(string outputDir, string resourceLocation, List<string> files)
+        {
+            foreach (string file in files)
+            {
+                using (System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceLocation + @"." + file))
+                {
+                    using (System.IO.FileStream fileStream = new System.IO.FileStream(System.IO.Path.Combine(outputDir, file), System.IO.FileMode.Create))
+                    {
+                        for (int i = 0; i < stream.Length; i++)
+                        {
+                            fileStream.WriteByte((byte)stream.ReadByte());
+                        }
+                        fileStream.Close();
+                    }
                 }
             }
         }

@@ -20,12 +20,14 @@
 						<configzipfile>relhax_sounds_standard_config.zip</configzipfile>
 						<configzipcrc>a3bc6cd0999359477bd08971f4d4f1ec</configzipcrc>
 						<configenabled>true</configenabled>
+						<configtype>single</configtype>
 					</config>
 					<config>
 						<name>censored</name>
 						<configzipfile>relhax_sounds_censored_config.zip</configzipfile>
 						<configzipcrc>4e2a382324be2bb96d889fd29513f51c</configzipcrc>
 						<configenabled>true</configenabled>
+						<configtype>single</configtype>
 					</config>
 				</configs>
 				<!-- Implement these parts if time allows -->
@@ -34,6 +36,13 @@
 				<pictureURL>RelHax_picture_file.png</pictureURL>
 				</mod>
 			</mods>
+			<dependencies>
+				<dependency>
+				<dependencyZipFile>increase_sound_memory.zip</dependencyZipFile>
+				<dependencyZipCRC>f7e1f491249118d4c86a6259a3f328a9</dependencyZipCRC>
+				<dependencyenabled>true</dependencyenabled>
+				</dependency>
+			</dependencies>
 		</catagory>
 		<catagory>
 			<name>Zoom Configs</name>
@@ -54,18 +63,21 @@
 						<configzipfile>zoom_out_config_100.zip</configzipfile>
 						<configzipcrc>e44b322d591f22e30ad8b9e461db9fae</configzipcrc>
 						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
 					</config>
 					<config>
 						<name>200</name>
 						<configzipfile>zoom_out_config_200.zip</configzipfile>
 						<configzipcrc>779bc5c678cced1d66df042db0fcfe3a</configzipcrc>
 						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
 					</config>
 					<config>
 						<name>500</name>
 						<configzipfile>zoom_out_config_500.zip</configzipfile>
 						<configzipcrc>5a1bfacdf981d7b7b42b1cb93a0366cc</configzipcrc>
 						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
 					</config>
 				</configs>
 				<!-- Implement these parts if time allows -->

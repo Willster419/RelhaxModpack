@@ -10,6 +10,7 @@ namespace RelicModManager
         public string name { get; set; }
         public string selectionType { get; set; }
         public List<Mod> mods = new List<Mod>();
+        public List<Dependency> dependencies = new List<Dependency>();
         public Catagory() { }
         //returns the mod with the specified name
         //if it does not exist, it returns null

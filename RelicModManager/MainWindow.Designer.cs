@@ -41,8 +41,10 @@
             this.installRelhaxMod = new System.Windows.Forms.Button();
             this.uninstallRelhaxMod = new System.Windows.Forms.Button();
             this.cleanInstallCB = new System.Windows.Forms.CheckBox();
-            this.CIEplainLabel = new System.Windows.Forms.Label();
             this.cancerFontCB = new System.Windows.Forms.CheckBox();
+            this.backupModsCheckBox = new System.Windows.Forms.CheckBox();
+            this.settingsGroupBox = new System.Windows.Forms.GroupBox();
+            this.settingsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // installRelhaxSound
@@ -71,7 +73,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.downloadProgress.AutoSize = true;
-            this.downloadProgress.Location = new System.Drawing.Point(9, 165);
+            this.downloadProgress.Location = new System.Drawing.Point(9, 241);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.Size = new System.Drawing.Size(24, 13);
             this.downloadProgress.TabIndex = 4;
@@ -84,7 +86,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(9, 152);
+            this.statusLabel.Location = new System.Drawing.Point(9, 228);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(53, 13);
             this.statusLabel.TabIndex = 10;
@@ -93,7 +95,7 @@
             // 
             // childProgressBar
             // 
-            this.childProgressBar.Location = new System.Drawing.Point(12, 210);
+            this.childProgressBar.Location = new System.Drawing.Point(12, 286);
             this.childProgressBar.Name = "childProgressBar";
             this.childProgressBar.Size = new System.Drawing.Size(265, 23);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -107,17 +109,18 @@
             // forceManuel
             // 
             this.forceManuel.AutoSize = true;
-            this.forceManuel.Location = new System.Drawing.Point(12, 132);
+            this.forceManuel.Location = new System.Drawing.Point(6, 19);
             this.forceManuel.Name = "forceManuel";
             this.forceManuel.Size = new System.Drawing.Size(166, 17);
             this.forceManuel.TabIndex = 13;
             this.forceManuel.Text = "Force manual game detection";
             this.forceManuel.UseVisualStyleBackColor = true;
+            this.forceManuel.CheckedChanged += new System.EventHandler(this.forceManuel_CheckedChanged);
             // 
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(9, 249);
+            this.formPageLink.Location = new System.Drawing.Point(9, 325);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(84, 13);
             this.formPageLink.TabIndex = 16;
@@ -127,7 +130,7 @@
             // 
             // parrentProgressBar
             // 
-            this.parrentProgressBar.Location = new System.Drawing.Point(12, 181);
+            this.parrentProgressBar.Location = new System.Drawing.Point(12, 257);
             this.parrentProgressBar.Name = "parrentProgressBar";
             this.parrentProgressBar.Size = new System.Drawing.Size(265, 23);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -136,7 +139,7 @@
             // speedLabel
             // 
             this.speedLabel.AutoSize = true;
-            this.speedLabel.Location = new System.Drawing.Point(12, 236);
+            this.speedLabel.Location = new System.Drawing.Point(12, 312);
             this.speedLabel.Name = "speedLabel";
             this.speedLabel.Size = new System.Drawing.Size(24, 13);
             this.speedLabel.TabIndex = 18;
@@ -165,28 +168,20 @@
             // cleanInstallCB
             // 
             this.cleanInstallCB.AutoSize = true;
-            this.cleanInstallCB.Location = new System.Drawing.Point(160, 52);
+            this.cleanInstallCB.Checked = true;
+            this.cleanInstallCB.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cleanInstallCB.Location = new System.Drawing.Point(6, 35);
             this.cleanInstallCB.Name = "cleanInstallCB";
-            this.cleanInstallCB.Size = new System.Drawing.Size(106, 17);
+            this.cleanInstallCB.Size = new System.Drawing.Size(187, 17);
             this.cleanInstallCB.TabIndex = 21;
-            this.cleanInstallCB.Text = "Clean Installation";
+            this.cleanInstallCB.Text = "Clean Installation (Recommended)";
             this.cleanInstallCB.UseVisualStyleBackColor = true;
             this.cleanInstallCB.CheckedChanged += new System.EventHandler(this.cleanInstallCB_CheckedChanged);
-            // 
-            // CIEplainLabel
-            // 
-            this.CIEplainLabel.AutoSize = true;
-            this.CIEplainLabel.Location = new System.Drawing.Point(144, 72);
-            this.CIEplainLabel.Name = "CIEplainLabel";
-            this.CIEplainLabel.Size = new System.Drawing.Size(145, 13);
-            this.CIEplainLabel.TabIndex = 22;
-            this.CIEplainLabel.Text = "(deletes all mods beforehand)";
-            this.CIEplainLabel.Click += new System.EventHandler(this.CIEplainLabel_Click);
             // 
             // cancerFontCB
             // 
             this.cancerFontCB.AutoSize = true;
-            this.cancerFontCB.Location = new System.Drawing.Point(162, 245);
+            this.cancerFontCB.Location = new System.Drawing.Point(6, 65);
             this.cancerFontCB.Name = "cancerFontCB";
             this.cancerFontCB.Size = new System.Drawing.Size(115, 17);
             this.cancerFontCB.TabIndex = 23;
@@ -194,20 +189,41 @@
             this.cancerFontCB.UseVisualStyleBackColor = true;
             this.cancerFontCB.CheckedChanged += new System.EventHandler(this.cancerFontCB_CheckedChanged);
             // 
+            // backupModsCheckBox
+            // 
+            this.backupModsCheckBox.AutoSize = true;
+            this.backupModsCheckBox.Location = new System.Drawing.Point(6, 50);
+            this.backupModsCheckBox.Name = "backupModsCheckBox";
+            this.backupModsCheckBox.Size = new System.Drawing.Size(156, 17);
+            this.backupModsCheckBox.TabIndex = 24;
+            this.backupModsCheckBox.Text = "Backup current mods folder";
+            this.backupModsCheckBox.UseVisualStyleBackColor = true;
+            this.backupModsCheckBox.CheckedChanged += new System.EventHandler(this.backupModsCheckBox_CheckedChanged);
+            // 
+            // settingsGroupBox
+            // 
+            this.settingsGroupBox.Controls.Add(this.forceManuel);
+            this.settingsGroupBox.Controls.Add(this.cancerFontCB);
+            this.settingsGroupBox.Controls.Add(this.backupModsCheckBox);
+            this.settingsGroupBox.Controls.Add(this.cleanInstallCB);
+            this.settingsGroupBox.Location = new System.Drawing.Point(12, 132);
+            this.settingsGroupBox.Name = "settingsGroupBox";
+            this.settingsGroupBox.Size = new System.Drawing.Size(265, 93);
+            this.settingsGroupBox.TabIndex = 25;
+            this.settingsGroupBox.TabStop = false;
+            this.settingsGroupBox.Text = "RelHax ModPack Settings";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(289, 267);
-            this.Controls.Add(this.cancerFontCB);
-            this.Controls.Add(this.CIEplainLabel);
-            this.Controls.Add(this.cleanInstallCB);
+            this.ClientSize = new System.Drawing.Size(289, 341);
+            this.Controls.Add(this.settingsGroupBox);
             this.Controls.Add(this.uninstallRelhaxMod);
             this.Controls.Add(this.installRelhaxMod);
             this.Controls.Add(this.speedLabel);
             this.Controls.Add(this.parrentProgressBar);
             this.Controls.Add(this.formPageLink);
-            this.Controls.Add(this.forceManuel);
             this.Controls.Add(this.childProgressBar);
             this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.downloadProgress);
@@ -218,6 +234,8 @@
             this.Name = "MainWindow";
             this.Text = "RelHax ";
             this.Load += new System.EventHandler(this.MainWindow_Load);
+            this.settingsGroupBox.ResumeLayout(false);
+            this.settingsGroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -238,8 +256,9 @@
         private System.Windows.Forms.Button installRelhaxMod;
         private System.Windows.Forms.Button uninstallRelhaxMod;
         private System.Windows.Forms.CheckBox cleanInstallCB;
-        private System.Windows.Forms.Label CIEplainLabel;
         private System.Windows.Forms.CheckBox cancerFontCB;
+        private System.Windows.Forms.CheckBox backupModsCheckBox;
+        private System.Windows.Forms.GroupBox settingsGroupBox;
     }
 }
 

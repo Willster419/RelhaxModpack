@@ -135,7 +135,7 @@ namespace RelicModManager
             {
                 int yPosition = 15 * (i + 1);
                 //make configLabel if config type is not single_dropDown
-                if (!m.configs[i].type.Equals("single_dropDown"))
+                if (!m.configs[i].type.Equals("single_dropdown"))
                 {
                     Label configLabel = new Label();
                     configLabel.AutoSize = true;
@@ -162,7 +162,7 @@ namespace RelicModManager
                         configPanel.Controls.Add(configControlRB);
                         break;
 
-                    case "single_dropDown":
+                    case "single_dropdown":
                         //make a dropDown selection box
                         if (configControlDD.Location.X == 0 && configControlDD.Location.Y == 0)configControlDD.Location = new System.Drawing.Point(100, yPosition - 10);
                         configControlDD.Items.Add(m.configs[i].name);
@@ -430,6 +430,11 @@ namespace RelicModManager
                         {
                             foreach (Config ccc in m.configs)
                             {
+                                if (cc is ComboBox)
+                                {
+                                    cc.Enabled = m.modChecked;
+                                    break;
+                                }
                                 if (cc.Name.Equals(c.name + "_" + m.name + "_" + ccc.name))
                                 {
                                     //for the checkboxes
@@ -489,6 +494,13 @@ namespace RelicModManager
                             oneSelected = true;
                         }
                     }
+
+                    if (c is ComboBox)
+                    {
+                        //c.Enabled = true;
+                        ComboBox cbox = (ComboBox)c;
+                        if (cbox.SelectedIndex == -1) oneSelected = false;
+                    }
                 }
                 if (!oneSelected)
                 {
@@ -513,6 +525,12 @@ namespace RelicModManager
                                 b.Checked = true;
                                 break;
                             }
+                        }
+
+                        if (c is ComboBox)
+                        {
+                            ComboBox cbox = (ComboBox)c;
+                            cbox.SelectedIndex = 0;
                         }
                     }
                 }
@@ -602,6 +620,29 @@ namespace RelicModManager
                                     }
                                 }
                                 cat.mods.Add(m);
+                            }
+                            break;
+                        case "dependencies":
+                            //parse every config for that mod
+                            foreach (XmlNode nnn in nnnnnn.ChildNodes)
+                            {
+                                Dependency d = new Dependency();
+                                foreach (XmlNode nnnn in nnn.ChildNodes)
+                                {
+                                    switch (nnnn.Name)
+                                    {
+                                        case "dependencyZipFile":
+                                            d.dependencyZipFile = nnnn.InnerText;
+                                            break;
+                                        case "dependencyZipCRC":
+                                            d.dependencyZipCRC = nnnn.InnerText;
+                                            break;
+                                        case "dependencyenabled":
+                                            d.enabled = bool.Parse(nnnn.InnerText);
+                                            break;
+                                    }
+                                }
+                                cat.dependencies.Add(d);
                             }
                             break;
                     }
