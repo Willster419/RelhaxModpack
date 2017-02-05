@@ -1,2 +1,5 @@
 version 17.4:
-began process of making RelHax modpack. Alpha phase.
+Fixed bugs with regex and xml patchers
+moved file operations to seperate threads for UI responsiveness
+changed structure of modpack database -> included dependencies
+embeded FontReg.exe into program rather than download
