@@ -100,7 +100,9 @@ namespace RelicModManager
             modTabGroups.TabPages.Clear();
             foreach (Catagory c in parsedCatagoryList)
             {
-                modTabGroups.TabPages.Add(new TabPage(c.name));
+                TabPage t = new TabPage(c.name);
+                t.AutoScroll = true;
+                modTabGroups.TabPages.Add(t);
             }
         }
 
