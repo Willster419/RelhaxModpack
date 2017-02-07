@@ -1,4 +1,4 @@
-(critical) create save and load config methods (TEST BOTH)
+(critical) create save and load config methods (TEST READ, MAKE WRITE)
   -create RelHaxConfigs dir if not already there on startup
   -have it load the last used/saved config
   -for each mod, if checked, save it's name and config
@@ -8,11 +8,15 @@
   -literally take extract process and move it to a backgroundWorker
   
 (normal) comment code and put in log outputs
+
+(enhancement) optimize and condense code to be better
+
+(critical) add duplicate mod name checker on startup(TEST)
   
 (enhancement) add preview feature with title(name), description, and a picture
   -maybe list of pictures later
   
-(enhancement) have it uninstall only the mods installed
+(optional) have it uninstall only the mods installed
   -save the old patch folders somehow
   -keep a log of every extracted zip entry
   delete every file in the log (if it exists)

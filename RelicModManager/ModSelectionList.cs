@@ -832,7 +832,6 @@ namespace RelicModManager
               //gets the inside of each mod
               //also store each config that needsto be enabled
               Mod m = new Mod();
-              List<Config> cfgQueue = new List<Config>();
               foreach (XmlNode nn in n.ChildNodes)
               {
                   switch (nn.Name)
@@ -840,6 +839,8 @@ namespace RelicModManager
                       case "name":
                           m = this.linkMod(nn.InnerText);
                           if (m == null) continue;
+                          if (m.enabled)
+                            m.modChecked = true;
                           break;
                       case "configs":
                           foreach (XmlNode nnn in nn.ChildNodes)
@@ -850,25 +851,57 @@ namespace RelicModManager
                                   switch (nnnn.Name)
                                   {
                                       case "name":
-                                          c.name = nnnn.InnerText;
+                                          c = m.getConfig(nnnn.InnerText);
+                                          if (c == null)
+                                            continue;
+                                          if (c.enabled)
+                                            c.configChecked = true;
                                           break;
                                   }
                               }
-                              cfgQueue.Add(c);
                           }
                           break;
                   }
               }
-              //fully parsed mod and config
-              if (!m.enabled) continue;
-              m.modChecked = true;
-              foreach (Config c in cfgQueue)
-                  {
-                    Config tmep = m.getConfig(c.name);
-                    if (tmep != null && tmep.enabled) tmep.configChecked = true; 
-                  }
-          }
-          //reload the UI
+              MessageBox.Show("Prefrences Set");
+            }
+            //reload the UI
+            this.makeTabs();
+            this.addAllMods();
+            this.addUserMods();
+        }
+        
+        //checks for duplicates
+        private bool duplicates()
+        {
+            //add every mod name to a new list
+            List<string> modNameList = new List<string>();
+            foreach (Catagory c in parsedCatagoryList)
+            {
+                foreach (Mod m in c.mods)
+                {
+                    modNameList.Add(m.name);
+                }
+            }
+            //itterate through every mod name again
+            foreach (Catagory c in parsedCatagoryList)
+            {
+                foreach (Mod m in c.mods)
+                {
+                    //in theory, there should only be one mathcing mod name
+                    //between the two lists. more indicates a duplicates
+                    int i = 0;
+                    foreach (string s in modNameList)
+                    {
+                      if (s.Equals(m.name))
+                          i++;
+                    }
+                    if (i>1)//if there are 2 or more matching mods
+                        return true;//duplicate detected
+                }
+            }
+            //making it here means there are no duplicates
+            return true;
         }
     }
 }

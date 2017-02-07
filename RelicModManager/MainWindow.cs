@@ -685,6 +685,10 @@ namespace RelicModManager
             wait.Show();
             wait.loadingDescLabel.Text = "Checking for single instance...";
             Application.DoEvents();
+            this.appendToLog("|----------------------------------------------------|");
+            this.appendToLog("|RelHax ModManager " + managerVersion);
+            this.appendToLog("|Build on BUILD_DATE, running at " + DateTime.Today);
+            
             //enforces a single instance of the program
             try
             {
