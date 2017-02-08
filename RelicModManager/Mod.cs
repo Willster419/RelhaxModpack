@@ -16,7 +16,17 @@ namespace RelicModManager
         public string configType { get; set; }
         public List<Config> configs = new List<Config>();
         public string configDefault { get; set; }
-        public Mod() { }
+        public List<string> picturesList = new List<string>();
+        public string updateComment {get; set;}
+        public string description {get; set;}
+        public string devURL {get; set;}
+        
+        public Mod()
+        {
+            //by default make these false
+            enabled = false;
+            modChecked = false;
+        }
         //returns the config of the specified name
         //if it does not exist, it returns null
         public Config getConfig(string configName)

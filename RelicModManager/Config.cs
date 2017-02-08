@@ -14,10 +14,13 @@ namespace RelicModManager
         public bool configChecked { get; set; }
         //public string patchFileName { get; set; }
         public string type { get; set; }
+        public List<string> pictureList = new List<string>();
 
         public Config()
         {
-
+            //by default make these false
+            enabled = false;
+            configChecked = false;
         }
     }
 }

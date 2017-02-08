@@ -1,20 +1,26 @@
-(critical) create save and load config methods (TEST READ, MAKE WRITE)
+(critical) create save and load config methods (TEST BOTH)
   -create RelHaxConfigs dir if not already there on startup
   -have it load the last used/saved config
   -for each mod, if checked, save it's name and config
   -for loading, if mod exists and is enalbed, check it, and it's config
 
-(enhancement) update extract process
+(enhancement) update extract process (MAKE)
   -literally take extract process and move it to a backgroundWorker
+  -might need to break up install process again
   
-(normal) comment code and put in log outputs
+(normal) comment code and put in log outputs (ONGONING)
 
-(enhancement) optimize and condense code to be better
+(critical) check that disabled configs are disabled in UI (TEST)
+
+(enhancement) optimize and condense code to be better(ONGOING)
 
 (critical) add duplicate mod name checker on startup(TEST)
   
-(enhancement) add preview feature with title(name), description, and a picture
-  -maybe list of pictures later
+(enhancement) add preview feature with title(name), description, pictures (TEST)
+  -handle resizing (TODO)
+  
+(normal) add settings for choosing loading animation
+  -this also means have a settings file in general lol
   
 (optional) have it uninstall only the mods installed
   -save the old patch folders somehow
