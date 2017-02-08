@@ -103,12 +103,12 @@
             // devLinkLabel
             // 
             this.devLinkLabel.AutoSize = true;
-            this.devLinkLabel.Location = new System.Drawing.Point(248, 525);
+            this.devLinkLabel.Location = new System.Drawing.Point(205, 525);
             this.devLinkLabel.Name = "devLinkLabel";
-            this.devLinkLabel.Size = new System.Drawing.Size(55, 13);
+            this.devLinkLabel.Size = new System.Drawing.Size(98, 13);
             this.devLinkLabel.TabIndex = 7;
             this.devLinkLabel.TabStop = true;
-            this.devLinkLabel.Text = "linkLabel2";
+            this.devLinkLabel.Text = "Develepor Website";
             // 
             // updateBox
             // 
