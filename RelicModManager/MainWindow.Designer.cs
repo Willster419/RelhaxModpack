@@ -44,6 +44,7 @@
             this.cancerFontCB = new System.Windows.Forms.CheckBox();
             this.backupModsCheckBox = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
+            this.largerFontButton = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -153,7 +154,7 @@
             this.installRelhaxMod.TabIndex = 19;
             this.installRelhaxMod.Text = "Install Relhax ModPack";
             this.installRelhaxMod.UseVisualStyleBackColor = true;
-            this.installRelhaxMod.Click += new System.EventHandler(this.button1_Click);
+            this.installRelhaxMod.Click += new System.EventHandler(this.installRelhaxMod_Click);
             // 
             // uninstallRelhaxMod
             // 
@@ -163,7 +164,7 @@
             this.uninstallRelhaxMod.TabIndex = 20;
             this.uninstallRelhaxMod.Text = "Uninstall Relhax Modpack";
             this.uninstallRelhaxMod.UseVisualStyleBackColor = true;
-            this.uninstallRelhaxMod.Click += new System.EventHandler(this.button2_Click);
+            this.uninstallRelhaxMod.Click += new System.EventHandler(this.uninstallRelhaxMod_Click);
             // 
             // cleanInstallCB
             // 
@@ -202,6 +203,7 @@
             // 
             // settingsGroupBox
             // 
+            this.settingsGroupBox.Controls.Add(this.largerFontButton);
             this.settingsGroupBox.Controls.Add(this.forceManuel);
             this.settingsGroupBox.Controls.Add(this.cancerFontCB);
             this.settingsGroupBox.Controls.Add(this.backupModsCheckBox);
@@ -212,6 +214,17 @@
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "RelHax ModPack Settings";
+            // 
+            // largerFontButton
+            // 
+            this.largerFontButton.AutoSize = true;
+            this.largerFontButton.Location = new System.Drawing.Point(128, 65);
+            this.largerFontButton.Name = "largerFontButton";
+            this.largerFontButton.Size = new System.Drawing.Size(80, 17);
+            this.largerFontButton.TabIndex = 25;
+            this.largerFontButton.Text = "Larger Font";
+            this.largerFontButton.UseVisualStyleBackColor = true;
+            this.largerFontButton.CheckedChanged += new System.EventHandler(this.largerFontButton_CheckedChanged);
             // 
             // MainWindow
             // 
@@ -233,6 +246,7 @@
             this.MaximizeBox = false;
             this.Name = "MainWindow";
             this.Text = "RelHax ";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.settingsGroupBox.ResumeLayout(false);
             this.settingsGroupBox.PerformLayout();
@@ -259,6 +273,7 @@
         private System.Windows.Forms.CheckBox cancerFontCB;
         private System.Windows.Forms.CheckBox backupModsCheckBox;
         private System.Windows.Forms.GroupBox settingsGroupBox;
+        private System.Windows.Forms.CheckBox largerFontButton;
     }
 }
 

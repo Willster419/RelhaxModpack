@@ -40,5 +40,11 @@ namespace RelicModManager
           }
           return null;
         }
+        
+        //sorts the mods
+        public static int CompareMods(Mod x, Mod y)
+        {
+            return x.name.CompareTo(y.name);
+        }
     }
 }

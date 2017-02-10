@@ -21,11 +21,11 @@
 						<configzipcrc>a3bc6cd0999359477bd08971f4d4f1ec</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
-            <pictures>
-              <picture>
-              <URL>RelHax_picture_file.png</URL>
-              </picture>
-            </pictures>
+						<pictures>
+						    <picture>
+						    <URL>RelHax_picture_file.png</URL>
+						    </picture>
+						</pictures>
 					</config>
 					<config>
 						<name>censored</name>
@@ -33,21 +33,22 @@
 						<configzipcrc>4e2a382324be2bb96d889fd29513f51c</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
-            <pictures>
-              <picture>
-              <URL>RelHax_picture_file.png</URL>
-              </picture>
-            </pictures>
+						<pictures>
+						    <picture>
+						    <URL>RelHax_picture_file.png</URL>
+						    </picture>
+						</pictures>
 					</config>
 				</configs>
 				<!-- Implement these parts if time allows -->
 				<description>description here</description>
 				<updateComment>update comment here</updateComment>
+				<devURL>http://relicgaming.com/index.php?topic=697.0</devURL>
 				<pictures>
-          <picture>
-          <URL>RelHax_picture_file.png</URL>
-          </picture>
-        </pictures>
+					<picture>
+					<URL>RelHax_picture_file.png</URL>
+					</picture>
+				</pictures>
 				</mod>
 			</mods>
 			<dependencies>
@@ -68,7 +69,6 @@
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
 				<enabled>true</enabled>
-				<!-- Implement these parts soon -->
 				<configselectiontype>single</configselectiontype>
 				<configdefault>100</configdefault>
 				<configs>
@@ -94,11 +94,10 @@
 						<configtype>single_dropdown</configtype>
 					</config>
 				</configs>
-				<!-- Implement these parts if time allows -->
 				<description>description here</description>
 				<updateComment>update comment here</updateComment>
-				<pictureURL>RelHax_picture_file.png</pictureURL>
 				</mod>
+				
 			</mods>
 		</catagory>
 	</catagories>

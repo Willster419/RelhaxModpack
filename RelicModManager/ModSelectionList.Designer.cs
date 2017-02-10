@@ -43,6 +43,7 @@
             this.continueButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.helpLabel = new System.Windows.Forms.Label();
             this.modTabGroups.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -195,11 +196,21 @@
             this.label1.TabIndex = 7;
             this.label1.Text = "label1";
             // 
+            // helpLabel
+            // 
+            this.helpLabel.AutoSize = true;
+            this.helpLabel.Location = new System.Drawing.Point(9, 431);
+            this.helpLabel.Name = "helpLabel";
+            this.helpLabel.Size = new System.Drawing.Size(173, 13);
+            this.helpLabel.TabIndex = 8;
+            this.helpLabel.Text = "right-click a mod name to preview it";
+            // 
             // ModSelectionList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(992, 473);
+            this.Controls.Add(this.helpLabel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.continueButton);
@@ -232,5 +243,6 @@
         private System.Windows.Forms.Button continueButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label helpLabel;
     }
 }

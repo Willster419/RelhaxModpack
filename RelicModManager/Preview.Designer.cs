@@ -32,9 +32,7 @@
             this.previewPicture = new System.Windows.Forms.PictureBox();
             this.nextPicButton = new System.Windows.Forms.Button();
             this.previousPicButton = new System.Windows.Forms.Button();
-            this.closeButton = new System.Windows.Forms.Button();
             this.pictureCountPanel = new System.Windows.Forms.Panel();
-            this.fullSizeLabel = new System.Windows.Forms.LinkLabel();
             this.devLinkLabel = new System.Windows.Forms.LinkLabel();
             this.updateBox = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.previewPicture)).BeginInit();
@@ -44,7 +42,9 @@
             // 
             this.descriptionBox.Location = new System.Drawing.Point(12, 356);
             this.descriptionBox.Name = "descriptionBox";
-            this.descriptionBox.Size = new System.Drawing.Size(372, 96);
+            this.descriptionBox.ReadOnly = true;
+            this.descriptionBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.descriptionBox.Size = new System.Drawing.Size(378, 96);
             this.descriptionBox.TabIndex = 0;
             this.descriptionBox.Text = "";
             // 
@@ -52,18 +52,21 @@
             // 
             this.previewPicture.Location = new System.Drawing.Point(12, 12);
             this.previewPicture.Name = "previewPicture";
-            this.previewPicture.Size = new System.Drawing.Size(372, 309);
+            this.previewPicture.Size = new System.Drawing.Size(378, 309);
+            this.previewPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.previewPicture.TabIndex = 1;
             this.previewPicture.TabStop = false;
+            this.previewPicture.LoadCompleted += new System.ComponentModel.AsyncCompletedEventHandler(this.previewPicture_LoadCompleted);
             // 
             // nextPicButton
             // 
-            this.nextPicButton.Location = new System.Drawing.Point(309, 327);
+            this.nextPicButton.Location = new System.Drawing.Point(315, 327);
             this.nextPicButton.Name = "nextPicButton";
             this.nextPicButton.Size = new System.Drawing.Size(75, 23);
             this.nextPicButton.TabIndex = 2;
             this.nextPicButton.Text = "next";
             this.nextPicButton.UseVisualStyleBackColor = true;
+            this.nextPicButton.Click += new System.EventHandler(this.nextPicButton_Click);
             // 
             // previousPicButton
             // 
@@ -73,48 +76,34 @@
             this.previousPicButton.TabIndex = 3;
             this.previousPicButton.Text = "previous";
             this.previousPicButton.UseVisualStyleBackColor = true;
-            // 
-            // closeButton
-            // 
-            this.closeButton.Location = new System.Drawing.Point(309, 520);
-            this.closeButton.Name = "closeButton";
-            this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 4;
-            this.closeButton.Text = "close";
-            this.closeButton.UseVisualStyleBackColor = true;
+            this.previousPicButton.Click += new System.EventHandler(this.previousPicButton_Click);
             // 
             // pictureCountPanel
             // 
+            this.pictureCountPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureCountPanel.Location = new System.Drawing.Point(93, 327);
             this.pictureCountPanel.Name = "pictureCountPanel";
-            this.pictureCountPanel.Size = new System.Drawing.Size(210, 23);
+            this.pictureCountPanel.Size = new System.Drawing.Size(216, 23);
             this.pictureCountPanel.TabIndex = 5;
-            // 
-            // fullSizeLabel
-            // 
-            this.fullSizeLabel.AutoSize = true;
-            this.fullSizeLabel.Location = new System.Drawing.Point(12, 525);
-            this.fullSizeLabel.Name = "fullSizeLabel";
-            this.fullSizeLabel.Size = new System.Drawing.Size(82, 13);
-            this.fullSizeLabel.TabIndex = 6;
-            this.fullSizeLabel.TabStop = true;
-            this.fullSizeLabel.Text = "Click for full size";
             // 
             // devLinkLabel
             // 
             this.devLinkLabel.AutoSize = true;
-            this.devLinkLabel.Location = new System.Drawing.Point(205, 525);
+            this.devLinkLabel.Location = new System.Drawing.Point(292, 526);
             this.devLinkLabel.Name = "devLinkLabel";
             this.devLinkLabel.Size = new System.Drawing.Size(98, 13);
             this.devLinkLabel.TabIndex = 7;
             this.devLinkLabel.TabStop = true;
-            this.devLinkLabel.Text = "Develepor Website";
+            this.devLinkLabel.Text = "Developer Website";
+            this.devLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.devLinkLabel_LinkClicked);
             // 
             // updateBox
             // 
             this.updateBox.Location = new System.Drawing.Point(12, 458);
             this.updateBox.Name = "updateBox";
-            this.updateBox.Size = new System.Drawing.Size(372, 56);
+            this.updateBox.ReadOnly = true;
+            this.updateBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.updateBox.Size = new System.Drawing.Size(378, 56);
             this.updateBox.TabIndex = 8;
             this.updateBox.Text = "";
             // 
@@ -122,18 +111,18 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(396, 548);
+            this.ClientSize = new System.Drawing.Size(402, 548);
             this.Controls.Add(this.updateBox);
             this.Controls.Add(this.devLinkLabel);
-            this.Controls.Add(this.fullSizeLabel);
             this.Controls.Add(this.pictureCountPanel);
-            this.Controls.Add(this.closeButton);
             this.Controls.Add(this.previousPicButton);
             this.Controls.Add(this.nextPicButton);
             this.Controls.Add(this.previewPicture);
             this.Controls.Add(this.descriptionBox);
             this.Name = "Preview";
             this.Text = "Preview";
+            this.Load += new System.EventHandler(this.Preview_Load);
+            this.SizeChanged += new System.EventHandler(this.Preview_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.previewPicture)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -146,9 +135,7 @@
         private System.Windows.Forms.PictureBox previewPicture;
         private System.Windows.Forms.Button nextPicButton;
         private System.Windows.Forms.Button previousPicButton;
-        private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.Panel pictureCountPanel;
-        private System.Windows.Forms.LinkLabel fullSizeLabel;
         private System.Windows.Forms.LinkLabel devLinkLabel;
         private System.Windows.Forms.RichTextBox updateBox;
     }
