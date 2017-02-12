@@ -63,6 +63,7 @@ namespace RelicModManager
         private bool isParrentDone;
         private string currentZipEntry;
         BackgroundWorker extractworker;
+        private string versionSave;
 
         //The constructur for the application
         public MainWindow()
@@ -76,6 +77,7 @@ namespace RelicModManager
             this.appendToLog("Install Relhax Sound Mod started");
             modPack = false;
             downloadPath = Application.StartupPath + "\\RelHaxSoundMod";
+            childProgressBar.Maximum = 100;
             //reset the interface
             this.reset();
             //ask the user which features s/he wishes to install
@@ -512,6 +514,7 @@ namespace RelicModManager
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
             if (File.Exists(versionSaveLocation)) File.Delete(versionSaveLocation);
             string version = updater.DownloadString("https://dl.dropboxusercontent.com/u/44191620/RelicMod/manager version.txt");
+            versionSave = version;
             if (!version.Equals(managerVersion))
             {
                 this.appendToLog("exe is out of date. displaying user update window");
@@ -552,7 +555,7 @@ namespace RelicModManager
                 this.Close();
             }
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
-            string version = File.ReadAllText(versionSaveLocation);
+            string version = versionSave;
             string newExeName = Application.StartupPath + "\\RelicModManager " + version + ".exe";
             try
             {
@@ -683,6 +686,7 @@ namespace RelicModManager
                 isParrentDone = true;
                 zip.Dispose();
             }
+            if (modPack)
             extractworker.ReportProgress(0);
         }
 
