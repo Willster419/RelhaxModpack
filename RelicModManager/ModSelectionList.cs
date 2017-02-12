@@ -41,6 +41,16 @@ namespace RelicModManager
             this.addUserMods();
             this.ModSelectionList_SizeChanged(null, null);
             this.Size = new Size(520, 250);
+            if (Program.autoInstall)
+            {
+                //automate the installation process
+                //have it load the config
+                //don't say prefs set
+                //close
+                this.loadConfig();
+                this.cancel = false;
+                this.Close();
+            }
         }
         
         //initializes the userMods list
@@ -961,18 +971,26 @@ namespace RelicModManager
         //loads a saved config from xml and parses it into the memory database
         private void loadConfig()
         {
-          OpenFileDialog loadLocation = new OpenFileDialog();
-          loadLocation.AddExtension = true;
-          loadLocation.DefaultExt = ".xml";
-          loadLocation.Filter = "*.xml|*.xml";
-          loadLocation.InitialDirectory = Application.StartupPath + "\\RelHaxUserConfigs";
-          loadLocation.Title = "Select User pref to load";
-          if (loadLocation.ShowDialog().Equals(DialogResult.Cancel))
-          {
-            //quit
-            return;
-          }
-          string filePath = loadLocation.FileName;
+            OpenFileDialog loadLocation = new OpenFileDialog();
+            string filePath = "";
+            if (Program.autoInstall)
+            {
+                filePath = Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName;
+            }
+            else
+            {
+                loadLocation.AddExtension = true;
+                loadLocation.DefaultExt = ".xml";
+                loadLocation.Filter = "*.xml|*.xml";
+                loadLocation.InitialDirectory = Application.StartupPath + "\\RelHaxUserConfigs";
+                loadLocation.Title = "Select User pref to load";
+                if (loadLocation.ShowDialog().Equals(DialogResult.Cancel))
+                {
+                    //quit
+                    return;
+                }
+                filePath = loadLocation.FileName;
+            }
           this.appendToLog("Unchecking all mods");
           foreach (Catagory c in parsedCatagoryList)
           {
@@ -1065,7 +1083,8 @@ namespace RelicModManager
             }
 
             this.appendToLog("Finished loading mod selections");
-            MessageBox.Show("Prefrences Set");
+            if (!Program.autoInstall)
+                MessageBox.Show("Prefrences Set");
             //reload the UI
             this.makeTabs();
             this.addAllMods();

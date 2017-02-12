@@ -33,7 +33,7 @@ namespace RelicModManager
         private string modAudioFolder;
         private string tempPath = Path.GetTempPath();
         private static int MBDivisor = 1048576;
-        private string managerVersion = "version 18";
+        private string managerVersion = "version 18.1";
         private string tanksLocation;
         private SelectFeatures features = new SelectFeatures();
         private List<DownloadItem> downloadQueue;
@@ -456,8 +456,17 @@ namespace RelicModManager
                 childProgressBar.Value = childProgressBar.Maximum;
                 return;
             }
-            this.appendToLog("Installing fonts, ask for admin rights");
-            DialogResult dr = MessageBox.Show("Do you have admin rights?", "Admin to install fonts?", MessageBoxButtons.YesNo);
+            this.appendToLog("Installing fonts");
+            DialogResult dr = DialogResult.No;
+            if (Program.autoInstall)
+            {
+                //assume rights to install
+                dr = DialogResult.Yes;
+            }
+            else
+            {
+                dr = MessageBox.Show("Do you have admin rights?", "Admin to install fonts?", MessageBoxButtons.YesNo);
+            }
             if (dr == DialogResult.Yes)
             {
                 this.extractEmbeddedResource(tanksLocation + "\\_fonts", "RelicModManager", new List<string>() { "FontReg.exe" });
@@ -772,7 +781,7 @@ namespace RelicModManager
             Application.DoEvents();
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             this.appendToLog("|RelHax ModManager " + managerVersion);
-            this.appendToLog("|Built on 02/11/2017, running at " + DateTime.Now);
+            this.appendToLog("|Built on 02/12/2017, running at " + DateTime.Now);
             this.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -828,6 +837,10 @@ namespace RelicModManager
                     MessageBox.Show("ERROR: clean installation is set to false. You must set this to true and restart the application for auto install to work.");
                     Program.autoInstall = false;
                 }
+            }
+            if (Program.autoInstall)
+            {
+                this.installRelhaxMod_Click(null, null);
             }
             wait.Close();
             Application.DoEvents();

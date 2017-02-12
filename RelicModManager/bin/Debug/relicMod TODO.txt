@@ -1,10 +1,5 @@
 (normal) comment code and put in log outputs
 
-(enhancement)* add /silent-config option auto install with specific config prefrences
-  -must have config file
-  -must have settings file
-  -args from main, if /silent then parse config location and 
-
 (enhancement) optimize and condense code to be better before official release
 
 (optional) add first time loading info stuff

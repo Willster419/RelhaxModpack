@@ -1,12 +1,5 @@
-version 18:
-Major Release!
--Reworked settings so they exist in a static class accessible to all forms,
-as well as made the settings save to xml.
--Removed old res content I didn't need.
--Added a second loading animation option
--Updated UI for settings and for scaling with other and larger fonts.
--Finished moving all work intensive (download, extract, copy, delete)
- operations off of UI thread.
--Added sorting of mods and categories in tabs.
--Fixed a bug with newlines not being present in mod preview description/update.
--Updated update checker to take less time.
+version 18.1:
+-Added /test and /auto-install filename.xml command line switches.
+  -/test loads a modInfo.xml mod databse from local directory
+  -added ability to load config prefs of usermods selection
+  
