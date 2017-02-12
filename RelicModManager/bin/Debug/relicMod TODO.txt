@@ -9,8 +9,6 @@
 
 (optional) add first time loading info stuff
 
-(optional) add /test switch acceptor
-
 (optional) add statistics of how many runs done ever and of what mod
   
 (optional) have it uninstall only the mods installed

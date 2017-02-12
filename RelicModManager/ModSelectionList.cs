@@ -37,32 +37,38 @@ namespace RelicModManager
             }
             this.makeTabs();
             this.addAllMods();
+            this.initUserMods();
             this.addUserMods();
             this.ModSelectionList_SizeChanged(null, null);
             this.Size = new Size(520, 250);
         }
         
-        //adds all usermods to thier own userMods tab
-        private void addUserMods()
+        //initializes the userMods list
+        private void initUserMods()
         {
-            //make the new tab
-            TabPage tb = new TabPage("User Mods");
             //create all the user mod objects
             string modsPath = Application.StartupPath + "\\RelHaxUserMods";
             string[] userModFiles = Directory.GetFiles(modsPath);
             userMods = new List<Mod>();
             foreach (string s in userModFiles)
             {
-              if (Path.GetExtension(s).Equals(".zip"))
-              {
-                  Mod m = new Mod();
-                  m.modZipFile = s;
-                  m.name = Path.GetFileNameWithoutExtension(s);
-                  m.enabled = true;
-                  m.modChecked = false;
-                  userMods.Add(m);
-              }
+                if (Path.GetExtension(s).Equals(".zip"))
+                {
+                    Mod m = new Mod();
+                    m.modZipFile = s;
+                    m.name = Path.GetFileNameWithoutExtension(s);
+                    m.enabled = true;
+                    //m.modChecked = false;
+                    userMods.Add(m);
+                }
             }
+        }
+
+        //adds all usermods to thier own userMods tab
+        private void addUserMods()
+        {
+            //make the new tab
+            TabPage tb = new TabPage("User Mods");
             //add all mods to the tab page
             for (int i = 0; i < userMods.Count; i++)
             {
@@ -75,6 +81,7 @@ namespace RelicModManager
                 modCheckBox.Size = new System.Drawing.Size(49, 17);
                 modCheckBox.TabIndex = 1;
                 modCheckBox.Text = userMods[i].name;
+                modCheckBox.Checked = userMods[i].modChecked;
                 modCheckBox.UseVisualStyleBackColor = true;
                 modCheckBox.Enabled = true;
                 modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
@@ -598,9 +605,14 @@ namespace RelicModManager
         private void createModStructure2()
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load("https://dl.dropboxusercontent.com/u/44191620/RelicMod/mods/modInfo.xml");
-            //DEGUB
-            //doc.Load("modInfo.xml");
+            if (Program.testMode)
+            {
+                doc.Load("modInfo.xml");
+            }
+            else
+            {
+                doc.Load("https://dl.dropboxusercontent.com/u/44191620/RelicMod/mods/modInfo.xml");
+            }
             XmlNodeList catagoryList = doc.SelectNodes("//modInfoAlpha.xml/catagories/catagory");
             parsedCatagoryList = new List<Catagory>();
             foreach (XmlNode nnnnn in catagoryList)
@@ -843,7 +855,7 @@ namespace RelicModManager
             return null;
         }
         
-        //gets the name of the user mod based on it's name
+        //gets the user mod based on it's name
         private Mod getUserMod(string modName)
         {
           foreach (Mod m in userMods)
@@ -882,9 +894,16 @@ namespace RelicModManager
             string savePath = saveLocation.FileName;
             //XmlDocument save time!
             XmlDocument doc = new XmlDocument();
-            //XmlElement root = doc.DocumentElement;
-            XmlElement modsHolder = doc.CreateElement("mods");
-            doc.AppendChild(modsHolder);
+            //mods root
+            XmlElement modsHolderBase = doc.CreateElement("mods");
+            doc.AppendChild(modsHolderBase);
+            //relhax mods root
+            XmlElement modsHolder = doc.CreateElement("relhaxMods");
+            modsHolderBase.AppendChild(modsHolder);
+            //user mods root
+            XmlElement userModsHolder = doc.CreateElement("userMods");
+            modsHolderBase.AppendChild(userModsHolder);
+            //doc.DocumentElement.InsertAfter(userModsHolder, doc.DocumentElement.LastChild);
             //doc.InsertAfter(modsHolder,root);
             //check every mod
             foreach (Catagory c in parsedCatagoryList)
@@ -919,6 +938,22 @@ namespace RelicModManager
                     }
                 }
             }
+            //check user mods
+            
+            foreach (Mod m in userMods)
+            {
+                if (m.modChecked)
+                {
+                    //add it to the list
+                    XmlElement mod = doc.CreateElement("mod");
+                    modsHolder.AppendChild(mod);
+                    XmlElement modName = doc.CreateElement("name");
+                    modName.InnerText = m.name;
+                    mod.AppendChild(modName);
+                    userModsHolder.AppendChild(mod);
+                }
+            }
+
             doc.Save(savePath);
             MessageBox.Show("Config Saved Sucessfully");
         }
@@ -960,7 +995,7 @@ namespace RelicModManager
           XmlDocument doc = new XmlDocument();
           doc.Load(filePath);
           //get a list of mods
-          XmlNodeList xmlModList = doc.SelectNodes("//mods/mod");
+          XmlNodeList xmlModList = doc.SelectNodes("//mods/relhaxMods/mod");
           foreach (XmlNode n in xmlModList)
           {
               //gets the inside of each mod
@@ -1003,8 +1038,32 @@ namespace RelicModManager
                           break;
                   }
               }
-              
             }
+            //user mods
+            XmlNodeList xmlUserModList = doc.SelectNodes("//mods/userMods/mod");
+            foreach (XmlNode n in xmlUserModList)
+            {
+                //gets the inside of each user mod
+                Mod m = new Mod();
+                foreach (XmlNode nn in n.ChildNodes)
+                {
+                    switch (nn.Name)
+                    {
+                        case "name":
+                            m = this.getUserMod(nn.InnerText);
+                            if (m != null)
+                            {
+                                string filename = m.name + ".zip";
+                                if (File.Exists(Application.StartupPath + "\\RelHaxUserMods\\" + filename))
+                                {
+                                    m.modChecked = true;
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+
             this.appendToLog("Finished loading mod selections");
             MessageBox.Show("Prefrences Set");
             //reload the UI

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace RelicModManager
 {
@@ -11,6 +12,9 @@ namespace RelicModManager
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        public static bool testMode = false;
+        public static bool autoInstall = false;
+        public static string configName = "";
         [STAThread]
         static void Main()
         {
@@ -36,6 +40,19 @@ namespace RelicModManager
                 }
 
             };
+            string[] commandArgs = Environment.GetCommandLineArgs();
+            for (int i = 0; i < commandArgs.Count(); i++)
+            {
+                if (Regex.IsMatch(commandArgs[i], "test"))
+                {
+                    testMode = true;
+                }
+                else if (Regex.IsMatch(commandArgs[i], "auto-install"))
+                {
+                    autoInstall = true;
+                    configName = commandArgs[i + 1];
+                }
+            }
             Application.Run(new MainWindow());
             //Application.Run(new ModSelectionList());
         }

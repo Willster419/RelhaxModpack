@@ -808,6 +808,27 @@ namespace RelicModManager
             this.appendToLog("Loading settings");
             Settings.loadSettings();
             this.applySettings();
+            if (Program.testMode)
+            {
+                this.appendToLog("Test Mode is ON, loading local modInfo.xml");
+            }
+            if (Program.autoInstall)
+            {
+                this.appendToLog("Auto Install is ON, checking for config pref xml at " + Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName);
+                if (!File.Exists(Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName))
+                {
+                    this.appendToLog("ERROR: " + Program.configName + " does NOT exist, loading in regualar mode");
+                    MessageBox.Show("ERROR: " + Program.configName + " does NOT exist, loading in regualar mode");
+                    
+                    Program.autoInstall = false;
+                }
+                if (!Settings.cleanInstallation)
+                {
+                    this.appendToLog("ERROR: clean installation is set to false. This must be set to true for auto install to work");
+                    MessageBox.Show("ERROR: clean installation is set to false. You must set this to true and restart the application for auto install to work.");
+                    Program.autoInstall = false;
+                }
+            }
             wait.Close();
             Application.DoEvents();
         }
