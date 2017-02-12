@@ -44,7 +44,7 @@
             this.descriptionBox.Name = "descriptionBox";
             this.descriptionBox.ReadOnly = true;
             this.descriptionBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.descriptionBox.Size = new System.Drawing.Size(378, 96);
+            this.descriptionBox.Size = new System.Drawing.Size(378, 75);
             this.descriptionBox.TabIndex = 0;
             this.descriptionBox.Text = "";
             // 
@@ -89,7 +89,7 @@
             // devLinkLabel
             // 
             this.devLinkLabel.AutoSize = true;
-            this.devLinkLabel.Location = new System.Drawing.Point(292, 526);
+            this.devLinkLabel.Location = new System.Drawing.Point(292, 496);
             this.devLinkLabel.Name = "devLinkLabel";
             this.devLinkLabel.Size = new System.Drawing.Size(98, 13);
             this.devLinkLabel.TabIndex = 7;
@@ -99,7 +99,7 @@
             // 
             // updateBox
             // 
-            this.updateBox.Location = new System.Drawing.Point(12, 458);
+            this.updateBox.Location = new System.Drawing.Point(12, 437);
             this.updateBox.Name = "updateBox";
             this.updateBox.ReadOnly = true;
             this.updateBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
@@ -111,7 +111,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(402, 548);
+            this.ClientSize = new System.Drawing.Size(442, 673);
             this.Controls.Add(this.updateBox);
             this.Controls.Add(this.devLinkLabel);
             this.Controls.Add(this.pictureCountPanel);

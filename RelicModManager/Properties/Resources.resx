@@ -139,6 +139,9 @@
   <data name="loading" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\loading.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="loading_3rdguards" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\loading_3rdguards.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="pen" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\audio\pen.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -153,26 +156,5 @@
   </data>
   <data name="spotted3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\audio\spotted3.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="step1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pictures\step1.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="step1_new" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pictures\step1_new.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="step2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pictures\step2.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="step3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pictures\step3.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="step4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pictures\step4.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="step5" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pictures\step5.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="step5_new" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pictures\step5_new.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -1,24 +1,12 @@
-(critical) create save and load config methods (TEST BOTH)
-  -create RelHaxConfigs dir if not already there on startup
-  -have it load the last used/saved config
-  -for each mod, if checked, save it's name and config
-  -for loading, if mod exists and is enalbed, check it, and it's config
+(normal) comment code and put in log outputs
 
-(enhancement) update extract process (TEST)
-  -literally take extract process and move it to a backgroundWorker
-  -might need to break up install process again
-  
-(normal) comment code and put in log outputs (ONGONING)
+(enhancement)* add /silent-config option auto install with specific config prefrences
+  -must have config file
+  -must have settings file
 
-(critical) check that disabled configs are disabled in UI when loading pref save(TEST)
-  
-(normal) larger font option for all windows. and cancer i guess
+(enhancement) optimize and condense code to be better before official release
 
-(enhancement) optimize and condense code to be better(ONGOING)
-
-(optional) add settings form page and xml save
-
-(optional) add first time loading info box
+(optional) add first time loading info stuff
 
 (optional) add /test switch acceptor
   

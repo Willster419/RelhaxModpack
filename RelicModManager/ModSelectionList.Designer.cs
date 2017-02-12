@@ -44,6 +44,8 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.helpLabel = new System.Windows.Forms.Label();
+            this.loadConfigButton = new System.Windows.Forms.Button();
+            this.saveConfigButton = new System.Windows.Forms.Button();
             this.modTabGroups.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,18 +62,21 @@
             this.modTabGroups.Controls.Add(this.tabPage9);
             this.modTabGroups.Controls.Add(this.tabPage10);
             this.modTabGroups.Controls.Add(this.tabPage11);
-            this.modTabGroups.Location = new System.Drawing.Point(12, 12);
+            this.modTabGroups.Location = new System.Drawing.Point(12, 21);
             this.modTabGroups.Name = "modTabGroups";
             this.modTabGroups.SelectedIndex = 0;
-            this.modTabGroups.Size = new System.Drawing.Size(968, 416);
+            this.modTabGroups.Size = new System.Drawing.Size(968, 400);
             this.modTabGroups.TabIndex = 4;
+            this.modTabGroups.Selected += new System.Windows.Forms.TabControlEventHandler(this.modTabGroups_Selected);
+            this.modTabGroups.TabIndexChanged += new System.EventHandler(this.modTabGroups_TabIndexChanged);
+            this.modTabGroups.Click += new System.EventHandler(this.modTabGroups_Click);
             // 
             // tabPage1
             // 
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(960, 390);
+            this.tabPage1.Size = new System.Drawing.Size(960, 374);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "XVM";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -153,7 +158,7 @@
             // 
             this.tabPage10.Location = new System.Drawing.Point(4, 22);
             this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(960, 390);
+            this.tabPage10.Size = new System.Drawing.Size(960, 374);
             this.tabPage10.TabIndex = 9;
             this.tabPage10.Text = "Sound Mods";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -162,7 +167,7 @@
             // 
             this.tabPage11.Location = new System.Drawing.Point(4, 22);
             this.tabPage11.Name = "tabPage11";
-            this.tabPage11.Size = new System.Drawing.Size(960, 390);
+            this.tabPage11.Size = new System.Drawing.Size(960, 374);
             this.tabPage11.TabIndex = 10;
             this.tabPage11.Text = "Custom UserPackages";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -190,7 +195,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(55, -4);
+            this.label1.Location = new System.Drawing.Point(227, 5);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 7;
@@ -199,17 +204,39 @@
             // helpLabel
             // 
             this.helpLabel.AutoSize = true;
-            this.helpLabel.Location = new System.Drawing.Point(9, 431);
+            this.helpLabel.Location = new System.Drawing.Point(13, 5);
             this.helpLabel.Name = "helpLabel";
             this.helpLabel.Size = new System.Drawing.Size(173, 13);
             this.helpLabel.TabIndex = 8;
             this.helpLabel.Text = "right-click a mod name to preview it";
+            // 
+            // loadConfigButton
+            // 
+            this.loadConfigButton.Location = new System.Drawing.Point(662, 438);
+            this.loadConfigButton.Name = "loadConfigButton";
+            this.loadConfigButton.Size = new System.Drawing.Size(75, 23);
+            this.loadConfigButton.TabIndex = 9;
+            this.loadConfigButton.Text = "Load Pref";
+            this.loadConfigButton.UseVisualStyleBackColor = true;
+            this.loadConfigButton.Click += new System.EventHandler(this.loadConfigButton_Click);
+            // 
+            // saveConfigButton
+            // 
+            this.saveConfigButton.Location = new System.Drawing.Point(743, 438);
+            this.saveConfigButton.Name = "saveConfigButton";
+            this.saveConfigButton.Size = new System.Drawing.Size(75, 23);
+            this.saveConfigButton.TabIndex = 10;
+            this.saveConfigButton.Text = "Save Pref";
+            this.saveConfigButton.UseVisualStyleBackColor = true;
+            this.saveConfigButton.Click += new System.EventHandler(this.saveConfigButton_Click);
             // 
             // ModSelectionList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(992, 473);
+            this.Controls.Add(this.saveConfigButton);
+            this.Controls.Add(this.loadConfigButton);
             this.Controls.Add(this.helpLabel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cancelButton);
@@ -244,5 +271,7 @@
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label helpLabel;
+        private System.Windows.Forms.Button loadConfigButton;
+        private System.Windows.Forms.Button saveConfigButton;
     }
 }

@@ -25,5 +25,11 @@ namespace RelicModManager
           }
           return null;
         }
+
+        //sorts the catagories
+        public static int CompareCatagories(Catagory x, Catagory y)
+        {
+            return x.name.CompareTo(y.name);
+        }
     }
 }

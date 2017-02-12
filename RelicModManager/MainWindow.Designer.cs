@@ -45,7 +45,11 @@
             this.backupModsCheckBox = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
             this.largerFontButton = new System.Windows.Forms.CheckBox();
+            this.loadingImageGroupBox = new System.Windows.Forms.GroupBox();
+            this.standardImageRB = new System.Windows.Forms.RadioButton();
+            this.thirdGuardsLoadingImageRB = new System.Windows.Forms.RadioButton();
             this.settingsGroupBox.SuspendLayout();
+            this.loadingImageGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // installRelhaxSound
@@ -60,7 +64,7 @@
             // 
             // uninstallRelhaxSound
             // 
-            this.uninstallRelhaxSound.Location = new System.Drawing.Point(12, 92);
+            this.uninstallRelhaxSound.Location = new System.Drawing.Point(12, 52);
             this.uninstallRelhaxSound.Name = "uninstallRelhaxSound";
             this.uninstallRelhaxSound.Size = new System.Drawing.Size(129, 34);
             this.uninstallRelhaxSound.TabIndex = 1;
@@ -74,7 +78,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.downloadProgress.AutoSize = true;
-            this.downloadProgress.Location = new System.Drawing.Point(9, 241);
+            this.downloadProgress.Location = new System.Drawing.Point(9, 265);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.Size = new System.Drawing.Size(24, 13);
             this.downloadProgress.TabIndex = 4;
@@ -87,7 +91,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(9, 228);
+            this.statusLabel.Location = new System.Drawing.Point(9, 252);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(53, 13);
             this.statusLabel.TabIndex = 10;
@@ -96,7 +100,7 @@
             // 
             // childProgressBar
             // 
-            this.childProgressBar.Location = new System.Drawing.Point(12, 286);
+            this.childProgressBar.Location = new System.Drawing.Point(12, 310);
             this.childProgressBar.Name = "childProgressBar";
             this.childProgressBar.Size = new System.Drawing.Size(265, 23);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -110,7 +114,7 @@
             // forceManuel
             // 
             this.forceManuel.AutoSize = true;
-            this.forceManuel.Location = new System.Drawing.Point(6, 19);
+            this.forceManuel.Location = new System.Drawing.Point(6, 20);
             this.forceManuel.Name = "forceManuel";
             this.forceManuel.Size = new System.Drawing.Size(166, 17);
             this.forceManuel.TabIndex = 13;
@@ -121,7 +125,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(9, 325);
+            this.formPageLink.Location = new System.Drawing.Point(9, 349);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(84, 13);
             this.formPageLink.TabIndex = 16;
@@ -131,7 +135,7 @@
             // 
             // parrentProgressBar
             // 
-            this.parrentProgressBar.Location = new System.Drawing.Point(12, 257);
+            this.parrentProgressBar.Location = new System.Drawing.Point(12, 281);
             this.parrentProgressBar.Name = "parrentProgressBar";
             this.parrentProgressBar.Size = new System.Drawing.Size(265, 23);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -140,7 +144,7 @@
             // speedLabel
             // 
             this.speedLabel.AutoSize = true;
-            this.speedLabel.Location = new System.Drawing.Point(12, 312);
+            this.speedLabel.Location = new System.Drawing.Point(12, 336);
             this.speedLabel.Name = "speedLabel";
             this.speedLabel.Size = new System.Drawing.Size(24, 13);
             this.speedLabel.TabIndex = 18;
@@ -158,7 +162,7 @@
             // 
             // uninstallRelhaxMod
             // 
-            this.uninstallRelhaxMod.Location = new System.Drawing.Point(147, 92);
+            this.uninstallRelhaxMod.Location = new System.Drawing.Point(147, 52);
             this.uninstallRelhaxMod.Name = "uninstallRelhaxMod";
             this.uninstallRelhaxMod.Size = new System.Drawing.Size(130, 34);
             this.uninstallRelhaxMod.TabIndex = 20;
@@ -184,9 +188,9 @@
             this.cancerFontCB.AutoSize = true;
             this.cancerFontCB.Location = new System.Drawing.Point(6, 65);
             this.cancerFontCB.Name = "cancerFontCB";
-            this.cancerFontCB.Size = new System.Drawing.Size(115, 17);
+            this.cancerFontCB.Size = new System.Drawing.Size(81, 17);
             this.cancerFontCB.TabIndex = 23;
-            this.cancerFontCB.Text = "enable cancer font";
+            this.cancerFontCB.Text = "Cancer font";
             this.cancerFontCB.UseVisualStyleBackColor = true;
             this.cancerFontCB.CheckedChanged += new System.EventHandler(this.cancerFontCB_CheckedChanged);
             // 
@@ -208,9 +212,9 @@
             this.settingsGroupBox.Controls.Add(this.cancerFontCB);
             this.settingsGroupBox.Controls.Add(this.backupModsCheckBox);
             this.settingsGroupBox.Controls.Add(this.cleanInstallCB);
-            this.settingsGroupBox.Location = new System.Drawing.Point(12, 132);
+            this.settingsGroupBox.Location = new System.Drawing.Point(12, 92);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(265, 93);
+            this.settingsGroupBox.Size = new System.Drawing.Size(265, 101);
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "RelHax ModPack Settings";
@@ -218,7 +222,7 @@
             // largerFontButton
             // 
             this.largerFontButton.AutoSize = true;
-            this.largerFontButton.Location = new System.Drawing.Point(128, 65);
+            this.largerFontButton.Location = new System.Drawing.Point(6, 80);
             this.largerFontButton.Name = "largerFontButton";
             this.largerFontButton.Size = new System.Drawing.Size(80, 17);
             this.largerFontButton.TabIndex = 25;
@@ -226,11 +230,47 @@
             this.largerFontButton.UseVisualStyleBackColor = true;
             this.largerFontButton.CheckedChanged += new System.EventHandler(this.largerFontButton_CheckedChanged);
             // 
+            // loadingImageGroupBox
+            // 
+            this.loadingImageGroupBox.Controls.Add(this.thirdGuardsLoadingImageRB);
+            this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(12, 195);
+            this.loadingImageGroupBox.Name = "loadingImageGroupBox";
+            this.loadingImageGroupBox.Size = new System.Drawing.Size(96, 54);
+            this.loadingImageGroupBox.TabIndex = 26;
+            this.loadingImageGroupBox.TabStop = false;
+            this.loadingImageGroupBox.Text = "Loading Image";
+            // 
+            // standardImageRB
+            // 
+            this.standardImageRB.AutoSize = true;
+            this.standardImageRB.Location = new System.Drawing.Point(6, 15);
+            this.standardImageRB.Name = "standardImageRB";
+            this.standardImageRB.Size = new System.Drawing.Size(68, 17);
+            this.standardImageRB.TabIndex = 0;
+            this.standardImageRB.TabStop = true;
+            this.standardImageRB.Text = "Standard";
+            this.standardImageRB.UseVisualStyleBackColor = true;
+            this.standardImageRB.CheckedChanged += new System.EventHandler(this.thirdGuardsLoadingImageRB_CheckedChanged);
+            // 
+            // thirdGuardsLoadingImageRB
+            // 
+            this.thirdGuardsLoadingImageRB.AutoSize = true;
+            this.thirdGuardsLoadingImageRB.Location = new System.Drawing.Point(6, 30);
+            this.thirdGuardsLoadingImageRB.Name = "thirdGuardsLoadingImageRB";
+            this.thirdGuardsLoadingImageRB.Size = new System.Drawing.Size(72, 17);
+            this.thirdGuardsLoadingImageRB.TabIndex = 1;
+            this.thirdGuardsLoadingImageRB.TabStop = true;
+            this.thirdGuardsLoadingImageRB.Text = "3rdguards";
+            this.thirdGuardsLoadingImageRB.UseVisualStyleBackColor = true;
+            this.thirdGuardsLoadingImageRB.CheckedChanged += new System.EventHandler(this.standardImageRB_CheckedChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(289, 341);
+            this.ClientSize = new System.Drawing.Size(289, 364);
+            this.Controls.Add(this.loadingImageGroupBox);
             this.Controls.Add(this.settingsGroupBox);
             this.Controls.Add(this.uninstallRelhaxMod);
             this.Controls.Add(this.installRelhaxMod);
@@ -250,6 +290,8 @@
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.settingsGroupBox.ResumeLayout(false);
             this.settingsGroupBox.PerformLayout();
+            this.loadingImageGroupBox.ResumeLayout(false);
+            this.loadingImageGroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -274,6 +316,9 @@
         private System.Windows.Forms.CheckBox backupModsCheckBox;
         private System.Windows.Forms.GroupBox settingsGroupBox;
         private System.Windows.Forms.CheckBox largerFontButton;
+        private System.Windows.Forms.GroupBox loadingImageGroupBox;
+        private System.Windows.Forms.RadioButton thirdGuardsLoadingImageRB;
+        private System.Windows.Forms.RadioButton standardImageRB;
     }
 }
 

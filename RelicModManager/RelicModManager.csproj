@@ -113,6 +113,7 @@
     <Compile Include="SelectFeatures.Designer.cs">
       <DependentUpon>SelectFeatures.cs</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="VersionInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -165,27 +166,6 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\pictures\step1.PNG" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\pictures\step3.PNG" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\pictures\step5.PNG" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\pictures\step5_new.PNG" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\pictures\step4.PNG" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\pictures\step1_new.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\pictures\step2.PNG" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Ionic.Zip.dll" />
@@ -250,6 +230,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="loading.gif" />
+    <Content Include="loading_3rdguards.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\pictures\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

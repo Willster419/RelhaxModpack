@@ -11,9 +11,14 @@
 				<modzipfile>relhax_sounds_base.zip</modzipfile>
 				<modzipcrc>4734aa7c33ffab0954ffc45273d641c8</modzipcrc>
 				<enabled>true</enabled>
-				<!-- Implement these parts soon -->
-				<configselectiontype>single</configselectiontype>
-				<configdefault>standard</configdefault>
+				<pictures>
+					<picture>
+					<URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
+					</picture>
+				</pictures>
+				<description>here is a sample description@with a newline</description>
+				<updateComment>update comment here</updateComment>
+				<devURL>http://relicgaming.com/index.php?topic=697.0</devURL>
 				<configs>
 					<config>
 						<name>standard</name>
@@ -23,7 +28,7 @@
 						<configtype>single</configtype>
 						<pictures>
 						    <picture>
-						    <URL>RelHax_picture_file.png</URL>
+						    <URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
 						    </picture>
 						</pictures>
 					</config>
@@ -35,20 +40,11 @@
 						<configtype>single</configtype>
 						<pictures>
 						    <picture>
-						    <URL>RelHax_picture_file.png</URL>
+						    <URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
 						    </picture>
 						</pictures>
 					</config>
 				</configs>
-				<!-- Implement these parts if time allows -->
-				<description>description here</description>
-				<updateComment>update comment here</updateComment>
-				<devURL>http://relicgaming.com/index.php?topic=697.0</devURL>
-				<pictures>
-					<picture>
-					<URL>RelHax_picture_file.png</URL>
-					</picture>
-				</pictures>
 				</mod>
 			</mods>
 			<dependencies>
@@ -97,7 +93,6 @@
 				<description>description here</description>
 				<updateComment>update comment here</updateComment>
 				</mod>
-				
 			</mods>
 		</catagory>
 	</catagories>
