@@ -1,3 +1,5 @@
+(normal) change picture structure to List of pictures for displaying if it's mod or config
+
 (normal) comment code and put in log outputs
 
 (enhancement) optimize and condense code to be better before official release

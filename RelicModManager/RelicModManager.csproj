@@ -88,6 +88,7 @@
       <DependentUpon>ModSelectionList.cs</DependentUpon>
     </Compile>
     <Compile Include="Patch.cs" />
+    <Compile Include="Picture.cs" />
     <Compile Include="pleaseWait.cs">
       <SubType>Form</SubType>
     </Compile>
