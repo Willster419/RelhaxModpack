@@ -14,7 +14,7 @@ namespace RelicModManager
         public string modOrConfigName {get; set;}
         public string description {get; set;}
         public string updateComments {get; set;}
-        List<String> pictures = new List<String>();
+        List<Picture> pictures = new List<Picture>();
         private Image loadingImage;
         public string devURL {get; set;}
         private int currentlySelected = 0;
@@ -25,7 +25,7 @@ namespace RelicModManager
             InitializeComponent();
         }
         
-        public Preview(string title, List<String> pictureList, string desc, string update = "", string dev = "")
+        public Preview(string title, List<Picture> pictureList, string desc, string update = "", string dev = "")
         {
             InitializeComponent();
             modOrConfigName = title;
@@ -36,12 +36,12 @@ namespace RelicModManager
             loadingImage = RelicModManager.Properties.Resources.loading;
         }
         
-        public void displayPictures(string URL)
+        public void displayPictures(string name, string URL)
         {
             previewPicture.Image = null;
             previewPicture.Image = Settings.getLoadingImage();
             previewPicture.LoadAsync(URL);
-            this.Text = modOrConfigName + " - " + currentlySelected;
+            this.Text = name + " - " + currentlySelected;
         }
         
         private void makeLinkedLabel(int i)
@@ -66,7 +66,7 @@ namespace RelicModManager
             int i = int.Parse(lb.Text);
             //i--;
             currentlySelected = i;
-            this.displayPictures(pictures[i]);
+            this.displayPictures(pictures[i].name, pictures[i].URL);
         }
 
         private void previewPicture_LoadCompleted(object sender, AsyncCompletedEventArgs e)
@@ -88,7 +88,7 @@ namespace RelicModManager
                 currentlySelected--;
                 return;
             }
-            this.displayPictures(pictures[currentlySelected]);
+            this.displayPictures(pictures[currentlySelected].name, pictures[currentlySelected].URL);
         }
 
         private void previousPicButton_Click(object sender, EventArgs e)
@@ -99,7 +99,7 @@ namespace RelicModManager
                 currentlySelected++;
                 return;
             }
-            this.displayPictures(pictures[currentlySelected]);
+            this.displayPictures(pictures[currentlySelected].name, pictures[currentlySelected].URL);
         }
 
         private void Preview_SizeChanged(object sender, EventArgs e)
@@ -138,7 +138,7 @@ namespace RelicModManager
             if (pictures != null)
             {
                 currentlySelected = 0;
-                this.displayPictures(pictures[0]);
+                this.displayPictures(pictures[currentlySelected].name, pictures[currentlySelected].URL);
             }
             descriptionBox.Lines = description.Split('@');
             updateBox.Lines = updateComments.Split('@');

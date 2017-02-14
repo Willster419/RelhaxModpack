@@ -226,7 +226,7 @@ namespace RelicModManager
                     case "value_enter":
                         //DEPRECATED: make a text box
                         TextBox configControlTB = new TextBox();
-                        configControlTB.Text = m.configDefault;
+                        //configControlTB.Text = m.configDefault;
                         configControlTB.AutoSize = true;
                         configControlTB.Location = new System.Drawing.Point(100, yPosition-10);
                         configControlTB.Size = new System.Drawing.Size(150, 15);
@@ -298,7 +298,7 @@ namespace RelicModManager
                 Mod m = this.getMod(cb.Text);
                 string name = m.name;
                 //get the mod and/or config
-                List<string> picturesList = m.picturesList;
+                List<Picture> picturesList = m.picList;
                 string desc = m.description;
                 string updateNotes = m.updateComment;
                 string devurl = m.devURL;
@@ -314,11 +314,12 @@ namespace RelicModManager
                 Mod m = this.getMod(rb.Text);
                 string name = m.name;
                 //get the mod and/or config
-                List<string> picturesList = m.picturesList;
+                List<Picture> picturesList = m.picList;
                 string desc = m.description;
                 string updateNotes = m.updateComment;
+                string devurl = m.devURL;
                 p.Close();
-                p = new Preview(name, picturesList, desc, updateNotes);
+                p = new Preview(name, picturesList, desc, updateNotes, devurl);
                 p.Show();
             }
             else if (sender is Label)
@@ -328,11 +329,12 @@ namespace RelicModManager
                 Mod m = this.getMod(l.Text);
                 string name = m.name;
                 //get the mod and/or config
-                List<string> picturesList = m.picturesList;
+                List<Picture> picturesList = m.picList;
                 string desc = m.description;
                 string updateNotes = m.updateComment;
+                string devurl = m.devURL;
                 p.Close();
-                p = new Preview(name, picturesList, desc, updateNotes);
+                p = new Preview(name, picturesList, desc, updateNotes, devurl);
                 p.Show();
             }
         }
@@ -661,12 +663,6 @@ namespace RelicModManager
                                         case "enabled":
                                             m.enabled = bool.Parse(nn.InnerText);
                                             break;
-                                        case "configselectiontype":
-                                            m.configType = nn.InnerText;
-                                            break;
-                                        case "configdefault":
-                                            m.configDefault = nn.InnerText;
-                                            break;
                                         case "description":
                                             m.description = nn.InnerText;
                                             break;
@@ -685,7 +681,8 @@ namespace RelicModManager
                                                     switch (nnnnnnnn.Name)
                                                     {
                                                         case "URL":
-                                                            m.picturesList.Add(nnnnnnnn.InnerText);
+                                                            //m.picturesList.Add(nnnnnnnn.InnerText);
+                                                            m.picList.Add(new Picture("Mod: " + m.name,nnnnnnnn.InnerText));
                                                             break;
                                                     }
                                                 }
@@ -724,7 +721,8 @@ namespace RelicModManager
                                                                     switch (nnnnnnnnnn.Name)
                                                                     {
                                                                         case "URL":
-                                                                            m.picturesList.Add(nnnnnnnnnn.InnerText);
+                                                                            //m.picturesList.Add(nnnnnnnnnn.InnerText);
+                                                                            m.picList.Add(new Picture("Config: " + c.name,nnnnnnnn.InnerText));
                                                                             break;
                                                                     }
                                                                 }

@@ -13,13 +13,12 @@ namespace RelicModManager
         public string crc { get; set; }
         public bool enabled { get; set; }
         public bool modChecked { get; set; }
-        public string configType { get; set; }
         public List<Config> configs = new List<Config>();
-        public string configDefault { get; set; }
         public List<string> picturesList = new List<string>();
         public string updateComment {get; set;}
         public string description {get; set;}
         public string devURL {get; set;}
+        public List<Picture> picList = new List<Picture>();
         
         public Mod()
         {
