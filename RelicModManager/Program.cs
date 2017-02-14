@@ -50,7 +50,10 @@ namespace RelicModManager
                 else if (Regex.IsMatch(commandArgs[i], "auto-install"))
                 {
                     autoInstall = true;
+                    //parse the config file
                     configName = commandArgs[i + 1];
+                    //advance the counter past it
+                    i++;
                 }
             }
             Application.Run(new MainWindow());

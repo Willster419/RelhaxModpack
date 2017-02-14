@@ -1,5 +1,4 @@
-version 18.1:
--Added /test and /auto-install filename.xml command line switches.
-  -/test loads a modInfo.xml mod databse from local directory
-  -added ability to load config prefs of usermods selection
+version 18.2:
+-Updated Preview window to let the user know if the picture
+  they are seeing is of the mod, or a specific config
   

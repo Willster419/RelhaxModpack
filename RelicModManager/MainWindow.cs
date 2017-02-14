@@ -33,7 +33,7 @@ namespace RelicModManager
         private string modAudioFolder;
         private string tempPath = Path.GetTempPath();
         private static int MBDivisor = 1048576;
-        private string managerVersion = "version 18.1";
+        private string managerVersion = "version 18.2";
         private string tanksLocation;
         private SelectFeatures features = new SelectFeatures();
         private List<DownloadItem> downloadQueue;
