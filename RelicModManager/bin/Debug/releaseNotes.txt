@@ -1,4 +1,5 @@
-version 18.2:
--Updated Preview window to let the user know if the picture
-  they are seeing is of the mod, or a specific config
-  
+version 18.3:
+-Added feature on first run to explain all the settings
+  won't show again unless settings xml is deleted
+-Added way to show if mod needs to be downloaded
+  bold text or "_bold" appended to a mod/config

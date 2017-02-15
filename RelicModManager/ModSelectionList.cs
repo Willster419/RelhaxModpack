@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace RelicModManager
 {
@@ -52,6 +53,7 @@ namespace RelicModManager
                 this.cancel = false;
                 this.Close();
             }
+            boldLabel.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
         }
 
         //initializes the userMods list
@@ -175,6 +177,22 @@ namespace RelicModManager
                     configLabel.TabIndex = 0;
                     configLabel.Text = m.configs[i].name;
                     configLabel.Enabled = false;
+                    string configDownloadPath3 = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
+                    if (File.Exists(configDownloadPath3))
+                    {
+                        MD5 hash = MD5.Create();
+                        string oldCRC = this.GetMd5Hash(hash, configDownloadPath3);
+                        if (!oldCRC.Equals(m.configs[i].crc))
+                            //file exists and is out of date
+                        {
+                            configLabel.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                        }
+                    }
+                    else if (!(File.Exists(configDownloadPath3)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
+                    {
+                        //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
+                        configLabel.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                    }
                     configPanel.Controls.Add(configLabel);
                 }
                 switch (m.configs[i].type)
@@ -191,13 +209,51 @@ namespace RelicModManager
                         configControlRB.Checked = m.configs[i].configChecked;
                         configControlRB.CheckedChanged += new EventHandler(configControlRB_CheckedChanged);
                         configControlRB.Name = t.Text + "_" + m.name + "_" + m.configs[i].name;
+                        string configDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
+                        if (File.Exists(configDownloadPath))
+                        {
+                            MD5 hash = MD5.Create();
+                            string oldCRC = this.GetMd5Hash(hash, configDownloadPath);
+                            if (!oldCRC.Equals(m.configs[i].crc))
+                            {
+                                configControlRB.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                            }
+                        }
+                        else if (!(File.Exists(configDownloadPath)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
+                        {
+                            //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
+                            configControlRB.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                        }
                         configPanel.Controls.Add(configControlRB);
                         break;
 
                     case "single_dropdown":
                         //make a dropDown selection box
                         if (configControlDD.Location.X == 0 && configControlDD.Location.Y == 0) configControlDD.Location = new System.Drawing.Point(100, yPosition - 10);
-                        if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name);
+                        string configDownloadPath1 = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
+                        if (File.Exists(configDownloadPath1))
+                        {
+                            MD5 hash = MD5.Create();
+                            string oldCRC = this.GetMd5Hash(hash, configDownloadPath1);
+                            if (!oldCRC.Equals(m.configs[i].crc))
+                            {
+                                //configControlDD.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                                if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name + "_bold");
+                                break;
+                            }
+                        }
+                        else if (!(File.Exists(configDownloadPath1)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
+                        {
+                            //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
+                            //configControlDD.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                            if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name + "_bold");
+                            break;
+                        }
+                        
+                        
+                            if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name);
+                        
+                        
                         if (m.configs[i].configChecked) configControlDD.SelectedIndex = i;
                         break;
 
@@ -214,6 +270,21 @@ namespace RelicModManager
                         configControlCB.Checked = m.configs[i].configChecked;
                         configControlCB.CheckedChanged += new EventHandler(configControlCB_CheckedChanged);
                         configControlCB.Name = t.Text + "_" + m.name + "_" + m.configs[i].name;
+                        string configDownloadPath2 = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
+                        if (File.Exists(configDownloadPath2))
+                        {
+                            MD5 hash = MD5.Create();
+                            string oldCRC = this.GetMd5Hash(hash, configDownloadPath2);
+                            if (!oldCRC.Equals(m.configs[i].crc))
+                            {
+                                configControlCB.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                            }
+                        }
+                        else if (!(File.Exists(configDownloadPath2)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
+                        {
+                            //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
+                            configControlCB.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                        }
                         configPanel.Controls.Add(configControlCB);
                         break;
                 }
@@ -227,6 +298,21 @@ namespace RelicModManager
             modCheckBox.Size = new System.Drawing.Size(49, 15);
             modCheckBox.TabIndex = 1;
             modCheckBox.Text = m.name;
+            string modDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.modZipFile;
+            if (File.Exists(modDownloadPath))
+            {
+                MD5 hash = MD5.Create();
+                string oldCRC = this.GetMd5Hash(hash, modDownloadPath);
+                if (!oldCRC.Equals(m.crc))
+                {
+                    modCheckBox.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                }
+            }
+            else if (!(File.Exists(modDownloadPath)) && (m.crc != null) && (!m.crc.Equals("")))
+            {
+                //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
+                modCheckBox.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            }
             modCheckBox.UseVisualStyleBackColor = true;
             modCheckBox.Enabled = m.enabled;
             modCheckBox.MouseDown += new MouseEventHandler(modCheckBox_MouseDown);
@@ -293,6 +379,7 @@ namespace RelicModManager
             string mod = cb.Name.Split('_')[1];
             Mod m = this.getCatagory(catagory).getMod(mod);
             string configName = (string)cb.SelectedItem;
+            configName = configName.Split('_')[0];
             foreach (Config c in m.configs)
             {
                 if (c.type.Equals("single_dropdown"))
@@ -360,6 +447,7 @@ namespace RelicModManager
                     Mod m = this.getUserMod(cbUser.Text);
                     if (m != null)
                         m.modChecked = cbUser.Checked;
+                    return;
                 }
             }
             //update the ui with the change
@@ -1005,6 +1093,25 @@ namespace RelicModManager
         private void modTabGroups_Click(object sender, EventArgs e)
         {
             this.ModSelectionList_SizeChanged(null, null);
+        }
+        //returns a string of the MD5 hash of an object.
+        //used to determine if a download is corrupted or not,
+        //or if it needs to be updated
+        private string GetMd5Hash(MD5 md5Hash, string inputFile)
+        {
+            // Convert the input string to a byte array and compute the hash.
+            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(inputFile));
+            // Create a new Stringbuilder to collect the bytes
+            // and create a string.
+            StringBuilder sBuilder = new StringBuilder();
+            // Loop through each byte of the hashed data 
+            // and format each one as a hexadecimal string.
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+            // Return the hexadecimal string.
+            return sBuilder.ToString();
         }
     }
 }

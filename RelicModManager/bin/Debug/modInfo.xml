@@ -50,7 +50,7 @@
 			<dependencies>
 				<dependency>
 				<dependencyZipFile>increase_sound_memory.zip</dependencyZipFile>
-				<dependencyZipCRC>f7e1f491249118d4c86a6259a3f328a9</dependencyZipCRC>
+				<dependencyZipCRC>857209db20b8a7ff47091de8793a36ed</dependencyZipCRC>
 				<dependencyenabled>true</dependencyenabled>
 				</dependency>
 			</dependencies>
@@ -71,21 +71,21 @@
 					<config>
 						<name>100</name>
 						<configzipfile>zoom_out_config_100.zip</configzipfile>
-						<configzipcrc>e44b322d591f22e30ad8b9e461db9fae</configzipcrc>
+						<configzipcrc>40654487e3545ef5faf6660d662618dd</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single_dropdown</configtype>
 					</config>
 					<config>
 						<name>200</name>
 						<configzipfile>zoom_out_config_200.zip</configzipfile>
-						<configzipcrc>779bc5c678cced1d66df042db0fcfe3a</configzipcrc>
+						<configzipcrc>f92c3f0be1b9e65d8f090019b5a2d058</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single_dropdown</configtype>
 					</config>
 					<config>
 						<name>500</name>
 						<configzipfile>zoom_out_config_500.zip</configzipfile>
-						<configzipcrc>5a1bfacdf981d7b7b42b1cb93a0366cc</configzipcrc>
+						<configzipcrc>f9367c61657fffcf05b9634989af6644</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single_dropdown</configtype>
 					</config>
