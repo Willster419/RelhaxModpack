@@ -10,9 +10,9 @@ using System.Security.Cryptography;
 
 namespace RelicModManager
 {
-    public partial class crcCheck : Form
+    public partial class CRCCheck : Form
     {
-        public crcCheck()
+        public CRCCheck()
         {
             InitializeComponent();
         }

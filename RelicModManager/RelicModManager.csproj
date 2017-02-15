@@ -67,11 +67,11 @@
   <ItemGroup>
     <Compile Include="Catagory.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="crcCheck.cs">
+    <Compile Include="CRCCheck.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="crcCheck.Designer.cs">
-      <DependentUpon>crcCheck.cs</DependentUpon>
+    <Compile Include="CRCCheck.Designer.cs">
+      <DependentUpon>CRCCheck.cs</DependentUpon>
     </Compile>
     <Compile Include="Dependency.cs" />
     <Compile Include="MainWindow.cs">
@@ -89,11 +89,11 @@
     </Compile>
     <Compile Include="Patch.cs" />
     <Compile Include="Picture.cs" />
-    <Compile Include="pleaseWait.cs">
+    <Compile Include="PleaseWait.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="pleaseWait.Designer.cs">
-      <DependentUpon>pleaseWait.cs</DependentUpon>
+    <Compile Include="PleaseWait.Designer.cs">
+      <DependentUpon>PleaseWait.cs</DependentUpon>
     </Compile>
     <Compile Include="Preview.cs">
       <SubType>Form</SubType>
@@ -121,8 +121,8 @@
     <Compile Include="VersionInfo.Designer.cs">
       <DependentUpon>VersionInfo.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="crcCheck.resx">
-      <DependentUpon>crcCheck.cs</DependentUpon>
+    <EmbeddedResource Include="CRCCheck.resx">
+      <DependentUpon>CRCCheck.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
@@ -130,8 +130,8 @@
     <EmbeddedResource Include="ModSelectionList.resx">
       <DependentUpon>ModSelectionList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="pleaseWait.resx">
-      <DependentUpon>pleaseWait.cs</DependentUpon>
+    <EmbeddedResource Include="PleaseWait.resx">
+      <DependentUpon>PleaseWait.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Preview.resx">
       <DependentUpon>Preview.cs</DependentUpon>

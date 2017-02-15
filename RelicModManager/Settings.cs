@@ -22,7 +22,7 @@ namespace RelicModManager
         public static bool largeFont { get; set; }
         public static bool comicSans { get; set; }
         public static bool firstLoad { get; set; }
-        public enum LoadingGifs { standard=0, thirdGuards=1 };
+        public enum LoadingGifs { standard = 0, thirdGuards = 1 };
         public static LoadingGifs gif;
         public const float normalSizeFont = 8.25F;
         public const float largeSizeFont = 10.0F;

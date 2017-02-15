@@ -16,9 +16,9 @@ namespace RelicModManager
         public bool enabled { get; set; }
         public bool modChecked { get; set; }
         public List<Config> configs = new List<Config>();
-        public string updateComment {get; set;}
-        public string description {get; set;}
-        public string devURL {get; set;}
+        public string updateComment { get; set; }
+        public string description { get; set; }
+        public string devURL { get; set; }
         public List<Picture> picList = new List<Picture>();
         //default constructor
         public Mod()
@@ -31,14 +31,14 @@ namespace RelicModManager
         //if it does not exist, it returns null
         public Config getConfig(string configName)
         {
-          if (configs == null || configs.Count == 0)
+            if (configs == null || configs.Count == 0)
+                return null;
+            foreach (Config cfg in configs)
+            {
+                if (cfg.name.Equals(configName))
+                    return cfg;
+            }
             return null;
-          foreach (Config cfg in configs)
-          {
-            if (cfg.name.Equals(configName))
-              return cfg;
-          }
-          return null;
         }
         //sorts the mods
         public static int CompareMods(Mod x, Mod y)

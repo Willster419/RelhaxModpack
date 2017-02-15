@@ -13,12 +13,12 @@ namespace RelicModManager
     //ro config name, pictures, description, and any update comments
     public partial class Preview : Form
     {
-        public string modOrConfigName {get; set;}
-        public string description {get; set;}
-        public string updateComments {get; set;}
+        public string modOrConfigName { get; set; }
+        public string description { get; set; }
+        public string updateComments { get; set; }
         List<Picture> pictures = new List<Picture>();
         private Image loadingImage;
-        public string devURL {get; set;}
+        public string devURL { get; set; }
         private int currentlySelected = 0;
         //Preview constructor that sets all the required values
         public Preview(string title, List<Picture> pictureList, string desc, string update = "", string dev = "")
@@ -51,7 +51,7 @@ namespace RelicModManager
             label.Size = new Size(10, 10);
             label.AutoSize = true;
             int xLocation = 14 * i;
-            label.Location = new Point(xLocation,5);
+            label.Location = new Point(xLocation, 5);
             //fullSizeLabel.Size = new System.Drawing.Size(82, 13);
             label.TabStop = true;
             pictureCountPanel.Controls.Add(label);
@@ -131,7 +131,7 @@ namespace RelicModManager
             }
             descriptionBox.Lines = description.Split('@');
             updateBox.Lines = updateComments.Split('@');
-            this.Preview_SizeChanged(null,null);
+            this.Preview_SizeChanged(null, null);
             this.Size = new Size(450, 700);
         }
     }

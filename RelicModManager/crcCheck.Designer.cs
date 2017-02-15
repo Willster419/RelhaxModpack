@@ -1,6 +1,6 @@
 ﻿namespace RelicModManager
 {
-    partial class crcCheck
+    partial class CRCCheck
     {
         /// <summary>
         /// Required designer variable.

@@ -387,7 +387,7 @@ namespace RelicModManager
                             //perform regex patch on specific file lines
                             //will need to be a standard for loop BTW
                             this.appendToLog("Regex patch, line " + s + ", " + p.file + ", " + p.search + ", " + p.replace);
-                            this.RegxPatch(p.file, p.search, p.replace,int.Parse(s));
+                            this.RegxPatch(p.file, p.search, p.replace, int.Parse(s));
                         }
                     }
                 }
@@ -400,7 +400,7 @@ namespace RelicModManager
             }
             //all done, delete the patch folder
             if (Directory.Exists(tanksLocation + "\\_patch"))
-              Directory.Delete(tanksLocation + "\\_patch",true);
+                Directory.Delete(tanksLocation + "\\_patch", true);
             this.appendToLog("Patching done for Relhax Mod Pack");
         }
         //installs all fonts in the fonts folder, user and custom
@@ -474,7 +474,7 @@ namespace RelicModManager
             {
                 this.extractEmbeddedResource(tanksLocation + "\\_fonts", "RelicModManager", new List<string>() { "FontReg.exe" });
                 ProcessStartInfo info = new ProcessStartInfo();
-                info.FileName ="FontReg.exe";
+                info.FileName = "FontReg.exe";
                 info.UseShellExecute = true;
                 info.Verb = "runas"; // Provides Run as Administrator
                 info.Arguments = "/copy";
@@ -666,7 +666,7 @@ namespace RelicModManager
                 zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
                 zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
             }
-            
+
         }
         //handler for when progress is made in extracting a zip file
         void zip_ExtractProgress(object sender, ExtractProgressEventArgs e)
@@ -684,7 +684,7 @@ namespace RelicModManager
                 zip.Dispose();
             }
             if (modPack)
-            extractworker.ReportProgress(0);
+                extractworker.ReportProgress(0);
         }
         //DEPRECATED: Cleans up after legacy installers
         private void cleanup()
@@ -757,7 +757,7 @@ namespace RelicModManager
             //set window header text to current version so user knows
             this.Text = this.Text + managerVersion;
             //show the wait screen
-            pleaseWait wait = new pleaseWait();
+            PleaseWait wait = new PleaseWait();
             wait.Show();
             wait.loadingDescLabel.Text = "Checking for single instance...";
             Application.DoEvents();
@@ -810,7 +810,7 @@ namespace RelicModManager
                 {
                     this.appendToLog("ERROR: " + Program.configName + " does NOT exist, loading in regualar mode");
                     MessageBox.Show("ERROR: " + Program.configName + " does NOT exist, loading in regualar mode");
-                    
+
                     Program.autoInstall = false;
                 }
                 if (!Settings.cleanInstallation)
@@ -1055,18 +1055,18 @@ namespace RelicModManager
                     //create node(s) to add to the element
                     string[] temp = replace.Split('/');
                     List<XmlElement> nodes = new List<XmlElement>();
-                    for (int i = 0; i < temp.Count()-1; i++)
+                    for (int i = 0; i < temp.Count() - 1; i++)
                     {
                         XmlElement ele = doc.CreateElement(temp[i]);
                         if (i == temp.Count() - 2)
                         {
                             //last node with actual data to add
-                            ele.InnerText = temp[temp.Count()-1];
+                            ele.InnerText = temp[temp.Count() - 1];
                         }
                         nodes.Add(ele);
                     }
                     //add nodes to the element in reverse for hierarchy order
-                    for (int i = nodes.Count-1; i > -1; i--)
+                    for (int i = nodes.Count - 1; i > -1; i--)
                     {
                         if (i == 0)
                         {
@@ -1142,18 +1142,18 @@ namespace RelicModManager
             //if not had header and not has header, no change
             //if had header and not has header, no change
             if (!hadHeader && hasHeader)
+            {
+                XmlDocument doc4 = new XmlDocument();
+                doc4.Load(filePath);
+                foreach (XmlNode node in doc4)
                 {
-                    XmlDocument doc4 = new XmlDocument();
-                    doc4.Load(filePath);
-                    foreach (XmlNode node in doc4)
+                    if (node.NodeType == XmlNodeType.XmlDeclaration)
                     {
-                        if (node.NodeType == XmlNodeType.XmlDeclaration)
-                        {
-                            doc4.RemoveChild(node);
-                        }
+                        doc4.RemoveChild(node);
                     }
-                    doc4.Save(filePath);
                 }
+                doc4.Save(filePath);
+            }
         }
         //method to patch a standard text or json file
         //fileLocation is relative to res_mods folder
@@ -1166,7 +1166,7 @@ namespace RelicModManager
             //check that the file exists
             if (!File.Exists(fileLocation))
                 return;
-            
+
             //load file from disk...
             string file = File.ReadAllText(fileLocation);
             //parse each line into an index array
@@ -1202,8 +1202,8 @@ namespace RelicModManager
         //parses a patch xml file into an xml patch instance in memory to be enqueued
         private void createPatchList(string xmlFile)
         {
-            if(!File.Exists(xmlFile))
-              return;
+            if (!File.Exists(xmlFile))
+                return;
             XmlDocument doc = new XmlDocument();
             doc.Load(xmlFile);
             //loaded the xml file into memory, create an xml list of patchs
@@ -1367,7 +1367,7 @@ namespace RelicModManager
             {
                 if (!this.CRCsMatch(localFilesDir + d.dependencyZipFile, d.dependencyZipCRC))
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(this.downloadURL + d.dependencyZipFile),localFilesDir + d.dependencyZipFile));
+                    downloadQueue.Add(new DownloadItem(new Uri(this.downloadURL + d.dependencyZipFile), localFilesDir + d.dependencyZipFile));
                 }
             }
             foreach (Mod m in modsToInstall)
@@ -1473,7 +1473,7 @@ namespace RelicModManager
         //method to bring up the crc checker to get the crc values of a mod
         private void CIEplainLabel_Click(object sender, EventArgs e)
         {
-            crcCheck crcCHecker = new crcCheck();
+            CRCCheck crcCHecker = new CRCCheck();
             crcCHecker.Show();
         }
         //enalbes the user to use "comic sans" font for the 1 person that would ever want to do that
@@ -1486,8 +1486,8 @@ namespace RelicModManager
         //logs string info to the log output
         private void appendToLog(string info)
         {
-          //the method should automaticly make the file if it's not there
-          File.AppendAllText(Application.StartupPath + "\\RelHaxLog.txt", info + "\n");
+            //the method should automaticly make the file if it's not there
+            File.AppendAllText(Application.StartupPath + "\\RelHaxLog.txt", info + "\n");
         }
         //uses backgroundWorker to copy files
         private void backgroundCopy(string source, string dest)
@@ -1502,7 +1502,7 @@ namespace RelicModManager
             copyworker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(copyworker_RunWorkerCompleted);
             object sourceFolder = source;
             object destFolder = dest;
-            object[] parameters = new object [] {sourceFolder,destFolder};
+            object[] parameters = new object[] { sourceFolder, destFolder };
             copyworker.RunWorkerAsync(parameters);
         }
         //uses backgroundWorker to delete folder and everything inside
@@ -1518,7 +1518,7 @@ namespace RelicModManager
             deleteworker.ProgressChanged += new ProgressChangedEventHandler(deleteworker_ProgressChanged);
             deleteworker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(deleteworker_RunWorkerCompleted);
             object folderToDelete = folder;
-            object[] parameters = new object [] {folderToDelete};
+            object[] parameters = new object[] { folderToDelete };
             deleteworker.RunWorkerAsync(parameters);
         }
         //uses backgroundWorker to extract fileStream
@@ -1535,7 +1535,7 @@ namespace RelicModManager
             zip = new ZipFile();
             zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
 
-            object[] parameters = new object [] {};
+            object[] parameters = new object[] { };
             userExtract = user;
             if (!userExtract)
             {
@@ -1551,7 +1551,7 @@ namespace RelicModManager
                 parrentProgressBar.Value = 0;
                 childProgressBar.Value = 0;
             }
-            
+
             extractworker.RunWorkerAsync(parameters);
         }
         //gets the total number of files to process to eithor delete or copy
@@ -1583,7 +1583,7 @@ namespace RelicModManager
             numFilesToProcessInt = 0;
             numFilesToCopyDeleteExtract = 0;
             this.numFilesToProcess(sourceFolder);
-            this.DirectoryCopy(sourceFolder,destFolder,true,copyworker);
+            this.DirectoryCopy(sourceFolder, destFolder, true, copyworker);
         }
         //handler for the copyworker when progress is made
         private void copyworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -1609,7 +1609,7 @@ namespace RelicModManager
             numFilesToProcessInt = 0;
             numFilesToCopyDeleteExtract = 0;
             this.numFilesToProcess(folderToDelete);
-            this.DirectoryDelete(folderToDelete,true,deleteworker);
+            this.DirectoryDelete(folderToDelete, true, deleteworker);
         }
         //handler for the deleteworker when progress is made
         private void deleteworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -1674,7 +1674,7 @@ namespace RelicModManager
                     extractworker.ReportProgress(1);
                 }
                 this.appendToLog("Finished Relhax Modpack Extraction");
-                
+
             }
             else
             {
@@ -1692,7 +1692,7 @@ namespace RelicModManager
                 }
                 this.appendToLog("Finished Extracting Relhax Modpack User Mod Extraction");
             }
-            
+
         }
         //handler for the extractworker when progress is made
         private void extractworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -1863,7 +1863,7 @@ namespace RelicModManager
     class DownloadItem
     {
         public Uri URL { get; set; }
-        public string zipFile {get; set;}
+        public string zipFile { get; set; }
         //create a DownloadItem with the 2 properties set
         public DownloadItem(Uri newURL, String newZipFile)
         {

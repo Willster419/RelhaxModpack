@@ -10,9 +10,9 @@ using System.Windows.Forms;
 namespace RelicModManager
 {
     //the loading window to show on startup
-    public partial class pleaseWait : Form
+    public partial class PleaseWait : Form
     {
-        public pleaseWait()
+        public PleaseWait()
         {
             InitializeComponent();
         }

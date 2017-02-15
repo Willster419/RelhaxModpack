@@ -1,8 +1,4 @@
 (normal) comment code and put in log outputs (currently done on all files)
-
-(normal) rename crcCheck to CRCCheck, same for pleaseWait
-
-(enhancement) format each document in VS
   
 (enhancement) add first time loading info stuff for the main window settings
 

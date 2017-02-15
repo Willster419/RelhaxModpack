@@ -17,7 +17,7 @@ namespace RelicModManager
         public List<Catagory> parsedCatagoryList;//can be grabbed by MainWindow
         public List<Mod> userMods;//can be grabbed by MainWindow
         public bool cancel = true;//used to determine if the user canceled
-        private Preview p = new Preview(null,null,null);
+        private Preview p = new Preview(null, null, null);
 
         public ModSelectionList()
         {
@@ -53,7 +53,7 @@ namespace RelicModManager
                 this.Close();
             }
         }
-        
+
         //initializes the userMods list
         private void initUserMods()
         {
@@ -86,7 +86,7 @@ namespace RelicModManager
                 //make modCheckBox
                 CheckBox modCheckBox = new CheckBox();
                 modCheckBox.AutoSize = true;
-                int yLocation = 3 + (17*(i));
+                int yLocation = 3 + (17 * (i));
                 modCheckBox.Location = new System.Drawing.Point(3, yLocation);
                 modCheckBox.Size = new System.Drawing.Size(49, 17);
                 modCheckBox.TabIndex = 1;
@@ -153,7 +153,7 @@ namespace RelicModManager
             //later add it if the items count is above 0
             ComboBox configControlDD = new ComboBox();
             configControlDD.AutoSize = true;
-            configControlDD.Location = new System.Drawing.Point(0,0);
+            configControlDD.Location = new System.Drawing.Point(0, 0);
             configControlDD.Size = new System.Drawing.Size(150, 15);
             configControlDD.TabIndex = 1;
             configControlDD.TabStop = true;
@@ -170,7 +170,7 @@ namespace RelicModManager
                 {
                     Label configLabel = new Label();
                     configLabel.AutoSize = true;
-                    configLabel.Location = new System.Drawing.Point(5, yPosition-10);
+                    configLabel.Location = new System.Drawing.Point(5, yPosition - 10);
                     configLabel.Size = new System.Drawing.Size(100, 15);
                     configLabel.TabIndex = 0;
                     configLabel.Text = m.configs[i].name;
@@ -183,7 +183,7 @@ namespace RelicModManager
                         //make a radioButton
                         RadioButton configControlRB = new RadioButton();
                         configControlRB.AutoSize = true;
-                        configControlRB.Location = new System.Drawing.Point(100, yPosition-10);
+                        configControlRB.Location = new System.Drawing.Point(100, yPosition - 10);
                         configControlRB.Size = new System.Drawing.Size(150, 15);
                         configControlRB.TabIndex = 1;
                         configControlRB.TabStop = true;
@@ -196,9 +196,9 @@ namespace RelicModManager
 
                     case "single_dropdown":
                         //make a dropDown selection box
-                        if (configControlDD.Location.X == 0 && configControlDD.Location.Y == 0)configControlDD.Location = new System.Drawing.Point(100, yPosition - 10);
+                        if (configControlDD.Location.X == 0 && configControlDD.Location.Y == 0) configControlDD.Location = new System.Drawing.Point(100, yPosition - 10);
                         if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name);
-                        if(m.configs[i].configChecked) configControlDD.SelectedIndex = i;
+                        if (m.configs[i].configChecked) configControlDD.SelectedIndex = i;
                         break;
 
                     case "multi":
@@ -242,10 +242,10 @@ namespace RelicModManager
             int panelCountYLocation = 70 * (panelCount - 1);
             if (panelCount > 1)
             {
-                panelCountYLocation = (panelCount - 1)*(t.Controls[0].Size.Height);
+                panelCountYLocation = (panelCount - 1) * (t.Controls[0].Size.Height);
                 panelCountYLocation = panelCountYLocation + 5;
             }
-            mainPanel.Location = new System.Drawing.Point(5, panelCountYLocation+5);
+            mainPanel.Location = new System.Drawing.Point(5, panelCountYLocation + 5);
             mainPanel.TabIndex = 0;
             mainPanel.AutoSize = true;
             mainPanel.AutoSizeMode = AutoSizeMode.GrowOnly;
@@ -277,7 +277,7 @@ namespace RelicModManager
                 if (devurl == null)
                     devurl = "";
                 p.Close();
-                p = new Preview(name, picturesList, desc, updateNotes,devurl);
+                p = new Preview(name, picturesList, desc, updateNotes, devurl);
                 p.Show();
             }
         }
@@ -285,7 +285,7 @@ namespace RelicModManager
         void configControlDD_SelectedIndexChanged(object sender, EventArgs e)
         {
             //uncheck all other configs
-            ComboBox cb = (ComboBox) sender;
+            ComboBox cb = (ComboBox)sender;
             //get the mod this config is associated with
             //this is safe because it will never be a user mod
             string catagory = cb.Name.Split('_')[0];
@@ -311,7 +311,7 @@ namespace RelicModManager
             CheckBox cb = (CheckBox)sender;
             string modName = cb.Parent.Parent.Controls[0].Text;
             string catagoryName = cb.Parent.Parent.Parent.Text;
-            Mod m = this.linkMod(modName,catagoryName);
+            Mod m = this.linkMod(modName, catagoryName);
             foreach (Config cc in m.configs)
             {
                 string configName = cb.Name.Split('_')[2];
@@ -328,7 +328,7 @@ namespace RelicModManager
             RadioButton rb = (RadioButton)sender;
             string modName = rb.Parent.Parent.Controls[0].Text;
             string catagoryName = rb.Parent.Parent.Parent.Text;
-            Mod m = this.linkMod(modName,catagoryName);
+            Mod m = this.linkMod(modName, catagoryName);
             foreach (Config cc in m.configs)
             {
                 string configName = rb.Name.Split('_')[2];
@@ -358,7 +358,7 @@ namespace RelicModManager
                     //this is a check from the user checkboxes
                     Mod m = this.getUserMod(cbUser.Text);
                     if (m != null)
-                      m.modChecked = cbUser.Checked;
+                        m.modChecked = cbUser.Checked;
                 }
             }
             //update the ui with the change
@@ -367,7 +367,7 @@ namespace RelicModManager
             Panel innerPanel = (Panel)p.Controls[1];
             if (cb.Checked) innerPanel.BackColor = Color.BlanchedAlmond;
             else innerPanel.BackColor = SystemColors.Control;
-            
+
             foreach (Catagory c in parsedCatagoryList)
             {
                 foreach (Mod m in c.mods)
@@ -544,7 +544,7 @@ namespace RelicModManager
                                                     switch (nnnnnnnn.Name)
                                                     {
                                                         case "URL":
-                                                            m.picList.Add(new Picture("Mod: " + m.name,nnnnnnnn.InnerText));
+                                                            m.picList.Add(new Picture("Mod: " + m.name, nnnnnnnn.InnerText));
                                                             break;
                                                     }
                                                 }
@@ -583,7 +583,7 @@ namespace RelicModManager
                                                                     switch (nnnnnnnnnn.Name)
                                                                     {
                                                                         case "URL":
-                                                                            m.picList.Add(new Picture("Config: " + c.name,nnnnnnnn.InnerText));
+                                                                            m.picList.Add(new Picture("Config: " + c.name, nnnnnnnn.InnerText));
                                                                             break;
                                                                     }
                                                                 }
@@ -626,7 +626,7 @@ namespace RelicModManager
                 }
                 parsedCatagoryList.Add(cat);
             }
-            
+
         }
 
         //resizing handler for the window
@@ -704,37 +704,37 @@ namespace RelicModManager
             }
             return null;
         }
-        
+
         //returns the catagory based on the catagory name
         private Catagory getCatagory(string catName)
         {
             foreach (Catagory c in parsedCatagoryList)
             {
-                if (c.name.Equals(catName))return c;
+                if (c.name.Equals(catName)) return c;
             }
             return null;
         }
-        
+
         //gets the user mod based on it's name
         private Mod getUserMod(string modName)
         {
-          foreach (Mod m in userMods)
-          {
-            if (m.name.Equals(modName))
+            foreach (Mod m in userMods)
             {
-              return m;
+                if (m.name.Equals(modName))
+                {
+                    return m;
+                }
             }
-          }
-          return null;
+            return null;
         }
-        
+
         //logs string info to the log output
         private void appendToLog(string info)
         {
-          //the method should automaticly make the file if it's not there
-          File.AppendAllText(Application.StartupPath + "\\RelHaxLog.txt", info + "\n");
+            //the method should automaticly make the file if it's not there
+            File.AppendAllText(Application.StartupPath + "\\RelHaxLog.txt", info + "\n");
         }
-        
+
         //saves the currently checked configs and mods
         private void saveConfig()
         {
@@ -812,7 +812,7 @@ namespace RelicModManager
             doc.Save(savePath);
             MessageBox.Show("Config Saved Sucessfully");
         }
-        
+
         //loads a saved config from xml and parses it into the memory database
         private void loadConfig()
         {
@@ -836,71 +836,71 @@ namespace RelicModManager
                 }
                 filePath = loadLocation.FileName;
             }
-          this.appendToLog("Unchecking all mods");
-          foreach (Catagory c in parsedCatagoryList)
-          {
-              foreach (Mod m in c.mods)
-              {
-                  if (m.enabled)
-                  {
-                      m.modChecked = false;
-                      foreach (Config cc in m.configs)
-                      {
-                          if (cc.enabled)
-                          {
-                              cc.configChecked = false;
-                          }
-                      }
-                  }
-              }
-          }
-          this.appendToLog("Loading mod selections from " + filePath);
-          XmlDocument doc = new XmlDocument();
-          doc.Load(filePath);
-          //get a list of mods
-          XmlNodeList xmlModList = doc.SelectNodes("//mods/relhaxMods/mod");
-          foreach (XmlNode n in xmlModList)
-          {
-              //gets the inside of each mod
-              //also store each config that needsto be enabled
-              Mod m = new Mod();
-              foreach (XmlNode nn in n.ChildNodes)
-              {
-                  switch (nn.Name)
-                  {
-                      case "name":
-                          m = this.linkMod(nn.InnerText);
-                          if (m == null) continue;
-                          if (m.enabled)
-                          {
-                              this.appendToLog("Checking mod " + m.name);
-                              m.modChecked = true;
-                          }
-                          break;
-                      case "configs":
-                          foreach (XmlNode nnn in nn.ChildNodes)
-                          {
-                              Config c = new Config();
-                              foreach (XmlNode nnnn in nnn.ChildNodes)
-                              {
-                                  switch (nnnn.Name)
-                                  {
-                                      case "name":
-                                          c = m.getConfig(nnnn.InnerText);
-                                          if (c == null)
-                                            continue;
-                                          if (c.enabled)
-                                          {
-                                              this.appendToLog("Checking config " + c.name);
-                                              c.configChecked = true;
-                                          }
-                                          break;
-                                  }
-                              }
-                          }
-                          break;
-                  }
-              }
+            this.appendToLog("Unchecking all mods");
+            foreach (Catagory c in parsedCatagoryList)
+            {
+                foreach (Mod m in c.mods)
+                {
+                    if (m.enabled)
+                    {
+                        m.modChecked = false;
+                        foreach (Config cc in m.configs)
+                        {
+                            if (cc.enabled)
+                            {
+                                cc.configChecked = false;
+                            }
+                        }
+                    }
+                }
+            }
+            this.appendToLog("Loading mod selections from " + filePath);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(filePath);
+            //get a list of mods
+            XmlNodeList xmlModList = doc.SelectNodes("//mods/relhaxMods/mod");
+            foreach (XmlNode n in xmlModList)
+            {
+                //gets the inside of each mod
+                //also store each config that needsto be enabled
+                Mod m = new Mod();
+                foreach (XmlNode nn in n.ChildNodes)
+                {
+                    switch (nn.Name)
+                    {
+                        case "name":
+                            m = this.linkMod(nn.InnerText);
+                            if (m == null) continue;
+                            if (m.enabled)
+                            {
+                                this.appendToLog("Checking mod " + m.name);
+                                m.modChecked = true;
+                            }
+                            break;
+                        case "configs":
+                            foreach (XmlNode nnn in nn.ChildNodes)
+                            {
+                                Config c = new Config();
+                                foreach (XmlNode nnnn in nnn.ChildNodes)
+                                {
+                                    switch (nnnn.Name)
+                                    {
+                                        case "name":
+                                            c = m.getConfig(nnnn.InnerText);
+                                            if (c == null)
+                                                continue;
+                                            if (c.enabled)
+                                            {
+                                                this.appendToLog("Checking config " + c.name);
+                                                c.configChecked = true;
+                                            }
+                                            break;
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
             }
             //user mods
             XmlNodeList xmlUserModList = doc.SelectNodes("//mods/userMods/mod");
@@ -934,7 +934,7 @@ namespace RelicModManager
             this.addAllMods();
             this.addUserMods();
         }
-        
+
         //checks for duplicates
         private bool duplicates()
         {
@@ -957,17 +957,17 @@ namespace RelicModManager
                     int i = 0;
                     foreach (string s in modNameList)
                     {
-                      if (s.Equals(m.name))
-                          i++;
+                        if (s.Equals(m.name))
+                            i++;
                     }
-                    if (i>1)//if there are 2 or more matching mods
+                    if (i > 1)//if there are 2 or more matching mods
                         return true;//duplicate detected
                 }
             }
             //making it here means there are no duplicates
             return false;
         }
-        
+
         //sorts a list of mods alphabetaicaly
         private void sortModsList(List<Mod> modList)
         {

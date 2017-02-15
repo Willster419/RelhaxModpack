@@ -1,6 +1,6 @@
 ﻿namespace RelicModManager
 {
-    partial class pleaseWait
+    partial class PleaseWait
     {
         /// <summary>
         /// Required designer variable.

@@ -26,8 +26,8 @@ namespace RelicModManager
                 return null;
             foreach (Mod m in mods)
             {
-              if (m.name.Equals(modName))
-                  return m;
+                if (m.name.Equals(modName))
+                    return m;
             }
             return null;
         }
