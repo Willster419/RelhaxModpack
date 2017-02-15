@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System;//TODO: I know i don't need all these...
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -25,6 +25,8 @@ using System.Drawing.Text;
 
 namespace RelicModManager
 {
+    //all of the settings for the modpack. kept in a static class
+    //so all the forms have access to a single version of the settings
     public static class Settings
     {
         public static string fontName { get; set; }
@@ -35,6 +37,7 @@ namespace RelicModManager
         public static bool forceManuel { get; set; }
         public static bool largeFont { get; set; }
         public static bool comicSans { get; set; }
+        public static bool firstLoad { get; set; }
         public enum LoadingGifs { standard=0, thirdGuards=1 };
         public static LoadingGifs gif;
         public const float normalSizeFont = 8.25F;
@@ -45,6 +48,7 @@ namespace RelicModManager
         //loads settings from xml file
         public static void loadSettings()
         {
+            Settings.firstLoad = false;
             Settings.appendToLog("Loading application settings");
             if (!File.Exists(settingsXmlFile))
             {
@@ -57,6 +61,7 @@ namespace RelicModManager
                 Settings.loadingGif = (int)LoadingGifs.standard;
                 Settings.forceManuel = false;
                 Settings.gif = Settings.LoadingGifs.standard;
+                Settings.firstLoad = true;
                 Settings.applyInternalSettings();
             }
             else
@@ -93,7 +98,8 @@ namespace RelicModManager
             Settings.applyInternalSettings();
             Settings.appendToLog("Settings loaded sucessfully");
         }
-
+        //apply internal settings (font name, size, loading gif)
+        //based on the boolean settings from above
         public static void applyInternalSettings()
         {
             if (Settings.largeFont)
@@ -122,7 +128,6 @@ namespace RelicModManager
                     break;
             }
         }
-
         //saves settings to xml file
         public static void saveSettings()
         {
@@ -131,31 +136,18 @@ namespace RelicModManager
             XmlDocument doc = new XmlDocument();
             XmlElement settingsHolder = doc.CreateElement("settings");
             doc.AppendChild(settingsHolder);
-            /*
-             * Settings.comicSans = false;
-                Settings.largeFont = false;
-                Settings.backupModFolder = false;
-                Settings.cleanInstallation = true;
-                Settings.loadingGif = (int)LoadingGifs.standard;
-                Settings.forceManuel = false;
-                Settings.gif = Settings.LoadingGifs.standard;
-             */
             XmlElement xcomicSans = doc.CreateElement("comicSans");
             xcomicSans.InnerText = "" + comicSans;
             settingsHolder.AppendChild(xcomicSans);
-
             XmlElement xlargeFont = doc.CreateElement("largeFont");
             xlargeFont.InnerText = "" + largeFont;
             settingsHolder.AppendChild(xlargeFont);
-
             XmlElement xbackupModFolder = doc.CreateElement("backupModFolder");
             xbackupModFolder.InnerText = "" + backupModFolder;
             settingsHolder.AppendChild(xbackupModFolder);
-
             XmlElement xcleanInstallation = doc.CreateElement("cleanInstallation");
             xcleanInstallation.InnerText = "" + cleanInstallation;
             settingsHolder.AppendChild(xcleanInstallation);
-
             switch (Settings.gif)
             {
                 case (Settings.LoadingGifs.standard):
@@ -169,15 +161,12 @@ namespace RelicModManager
                         break;
                     }
             }
-
             XmlElement xloadingGif = doc.CreateElement("loadingGif");
             xloadingGif.InnerText = "" + loadingGif;
             settingsHolder.AppendChild(xloadingGif);
-
             XmlElement xforceManuel = doc.CreateElement("forceManuel");
             xforceManuel.InnerText = "" + forceManuel;
             settingsHolder.AppendChild(xforceManuel);
-
             doc.Save(settingsXmlFile);
             Settings.appendToLog("Settings saved sucessfully");
         }
@@ -203,7 +192,8 @@ namespace RelicModManager
             }
             return null;
         }
-
+        //returns the loading image for the picture viewer, based on
+        //which loading image the user specified
         public static Image getLoadingImage()
         {
             switch (Settings.gif)
@@ -219,7 +209,7 @@ namespace RelicModManager
             }
             return null;
         }
-
+        //returns a new font for the window
         public static Font getFont(string fontName, float fontSize)
         {
             return new System.Drawing.Font(fontName, fontSize, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

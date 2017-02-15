@@ -11,36 +11,38 @@ using System.Net;
 
 namespace RelicModManager
 {
+    //window that is displayed when an update to the application is detected
     public partial class VersionInfo : Form
     {
-
+        //the result returned form this window
         public DialogResult result;
 
         public VersionInfo()
         {
             InitializeComponent();
         }
-
+        //handler for when the user accepts the new version download
         private void updateAcceptButton_Click(object sender, EventArgs e)
         {
+            //set the result ot yes and close
             result = DialogResult.Yes;
             this.Close();
         }
-
+        //handler for when the user declines the new version download
         private void updateDeclineButton_Click(object sender, EventArgs e)
         {
+            //set the result to no and close
             result = DialogResult.No;
             this.Close();
         }
-
+        //handler for before the window is displayed
         private void VersionInfo_Load(object sender, EventArgs e)
         {
-            string temp = newVersionAvailableLabel.Text;
-            newVersionAvailableLabel.Text = "Loading...";
+            //download the latest release notes
             Application.DoEvents();
             WebClient wc = new WebClient();
             downloadedVersionInfo.Text = wc.DownloadString("https://dl.dropboxusercontent.com/u/44191620/RelicMod/releaseNotes.txt");
-            newVersionAvailableLabel.Text = temp;
+            Application.DoEvents();
         }
     }
 }

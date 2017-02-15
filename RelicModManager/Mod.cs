@@ -5,21 +5,22 @@ using System.Text;
 
 namespace RelicModManager
 {
+    //a mod is the core of the modpack. A modification for WoT.
     public class Mod
     {
         public string name { get; set; }
+        //the developer's version of the mod
         public float version { get; set; }
         public string modZipFile { get; set; }
         public string crc { get; set; }
         public bool enabled { get; set; }
         public bool modChecked { get; set; }
         public List<Config> configs = new List<Config>();
-        public List<string> picturesList = new List<string>();
         public string updateComment {get; set;}
         public string description {get; set;}
         public string devURL {get; set;}
         public List<Picture> picList = new List<Picture>();
-        
+        //default constructor
         public Mod()
         {
             //by default make these false
@@ -39,7 +40,6 @@ namespace RelicModManager
           }
           return null;
         }
-        
         //sorts the mods
         public static int CompareMods(Mod x, Mod y)
         {

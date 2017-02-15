@@ -1,12 +1,20 @@
-(normal) change picture structure to List of pictures for displaying if it's mod or config
+(normal) comment code and put in log outputs (currently done on all files)
 
-(normal) comment code and put in log outputs
+(normal) rename crcCheck to CRCCheck, same for pleaseWait
 
-(enhancement) optimize and condense code to be better before official release
+(enhancement) format each document in VS
+  
+(enhancement) add first time loading info stuff for the main window settings
 
-(optional) add first time loading info stuff
+(enhancement) sort picture list by config or mod, then config/mod name
+
+(enhancement) determine if a mod as been updated
+  -save old mod config
+  -make method to return string from getVersion (mod m)
 
 (optional) add statistics of how many runs done ever and of what mod
+  
+(optional) keep in mind hashtables instead of giant lists, or implemenet find
   
 (optional) have it uninstall only the mods installed
   -save the old patch folders somehow

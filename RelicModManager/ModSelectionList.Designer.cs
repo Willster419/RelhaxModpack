@@ -68,7 +68,6 @@
             this.modTabGroups.Size = new System.Drawing.Size(968, 400);
             this.modTabGroups.TabIndex = 4;
             this.modTabGroups.Selected += new System.Windows.Forms.TabControlEventHandler(this.modTabGroups_Selected);
-            this.modTabGroups.TabIndexChanged += new System.EventHandler(this.modTabGroups_TabIndexChanged);
             this.modTabGroups.Click += new System.EventHandler(this.modTabGroups_Click);
             // 
             // tabPage1
@@ -244,7 +243,6 @@
             this.Controls.Add(this.modTabGroups);
             this.Name = "ModSelectionList";
             this.Text = "ModSelectionList";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ModSelectionList_FormClosing);
             this.Load += new System.EventHandler(this.ModSelectionList_Load);
             this.SizeChanged += new System.EventHandler(this.ModSelectionList_SizeChanged);
             this.modTabGroups.ResumeLayout(false);

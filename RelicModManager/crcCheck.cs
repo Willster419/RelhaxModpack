@@ -16,7 +16,7 @@ namespace RelicModManager
         {
             InitializeComponent();
         }
-
+        //handler to get the crc of the file
         private void button1_Click(object sender, EventArgs e)
         {
             //unable to find it in the registry, so ask for it
@@ -28,7 +28,7 @@ namespace RelicModManager
             string crc = this.GetMd5Hash(hash, openFileDialog1.FileName);
             textBox1.Text = crc;
         }
-
+        //returns the md5 hash of the file based on the input file string location
         private string GetMd5Hash(MD5 md5Hash, string inputFile)
         {
             // Convert the input string to a byte array and compute the hash.

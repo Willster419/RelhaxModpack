@@ -56,7 +56,6 @@
             this.previewPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.previewPicture.TabIndex = 1;
             this.previewPicture.TabStop = false;
-            this.previewPicture.LoadCompleted += new System.ComponentModel.AsyncCompletedEventHandler(this.previewPicture_LoadCompleted);
             // 
             // nextPicButton
             // 
