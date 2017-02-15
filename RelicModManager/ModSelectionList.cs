@@ -270,7 +270,8 @@ namespace RelicModManager
                 Mod m = this.linkMod(cb.Text);
                 string name = m.name;
                 //get the mod and/or config
-                List<Picture> picturesList = m.picList;
+                //List<Picture> picturesList = m.picList;
+                List<Picture> picturesList = this.sortPictureList(m.picList);
                 string desc = m.description;
                 string updateNotes = m.updateComment;
                 string devurl = m.devURL;
@@ -978,6 +979,12 @@ namespace RelicModManager
         private void sortCatagoryList(List<Catagory> catagoryList)
         {
             catagoryList.Sort(Catagory.CompareCatagories);
+        }
+        //sorts a list of pictures by mod or config, then name
+        private List<Picture> sortPictureList(List<Picture> pictureList)
+        {
+            pictureList.Sort(Picture.ComparePictures);
+            return pictureList;
         }
         //handler for when the "load config" button is pressed
         private void loadConfigButton_Click(object sender, EventArgs e)

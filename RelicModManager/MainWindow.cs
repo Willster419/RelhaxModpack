@@ -74,6 +74,8 @@ namespace RelicModManager
         //seperate thread for the extraction
         BackgroundWorker extractworker;
         private string versionSave;
+        private FirstLoadHelper helper;
+        string helperText;
         //The constructur for the application
         public MainWindow()
         {
@@ -823,6 +825,13 @@ namespace RelicModManager
             if (Program.autoInstall)
             {
                 this.installRelhaxMod_Click(null, null);
+            }
+            if (Settings.firstLoad)
+            {
+                helper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10 ,this.Location.Y);
+                helperText = helper.helperText.Text;
+                helper.Show();
+                Settings.firstLoad = false;
             }
             wait.Close();
             Application.DoEvents();
@@ -1857,6 +1866,94 @@ namespace RelicModManager
             {
                 Settings.gif = Settings.LoadingGifs.thirdGuards;
             }
+        }
+
+        private void forceManuel_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = "This option is for forcing a manuel World of Tanks game" +
+                    "location detection. Check this if you are having problems with automatically locating the game.";
+        }
+
+        private void forceManuel_MouseLeave(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = helperText;
+        }
+
+        private void cleanInstallCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = "This reccomended option will empty your res_mods folder before installing" +
+                    "your new mod selections. Unless you know what you are doing, it is recommended that you keep this on to avoid problems.";
+        }
+
+        private void cleanInstallCB_MouseLeave(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = helperText;
+        }
+
+        private void backupModsCheckBox_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = "Select this to make a backup of your current res_mods folder." +
+                    "Keep in mind that it only keeps the LATEST BACKUP, meaning if you check this and install," +
+                    "it will delete what is currently in the backup location and copy what you have in your res_mods folder.";
+        }
+
+        private void backupModsCheckBox_MouseLeave(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = helperText;
+        }
+
+        private void cancerFontCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = "Enable Comic Sans. Yes, somebody, somewhere out there actually wanted this crap.";
+        }
+
+        private void cancerFontCB_MouseLeave(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = helperText;
+        }
+
+        private void largerFontButton_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = "Enable this to enlarge all form font.";
+        }
+
+        private void largerFontButton_MouseLeave(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = helperText;
+        }
+
+        private void standardImageRB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = "Select a loading gif for the mod preview window.";
+        }
+
+        private void standardImageRB_MouseLeave(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = helperText;
+        }
+
+        private void thirdGuardsLoadingImageRB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = "Select a loading gif for the mod preview window.";
+        }
+
+        private void thirdGuardsLoadingImageRB_MouseLeave(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = helperText;
         }
     }
     //a class for the downloadQueue list, to make a queue of downloads

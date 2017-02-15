@@ -1,8 +1,4 @@
 (normal) comment code and put in log outputs (currently done on all files)
-  
-(enhancement) add first time loading info stuff for the main window settings
-
-(enhancement) sort picture list by config or mod, then config/mod name
 
 (enhancement) determine if a mod as been updated
   -save old mod config

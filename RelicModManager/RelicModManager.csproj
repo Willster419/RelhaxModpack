@@ -74,6 +74,12 @@
       <DependentUpon>CRCCheck.cs</DependentUpon>
     </Compile>
     <Compile Include="Dependency.cs" />
+    <Compile Include="FirstLoadHelper.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FirstLoadHelper.Designer.cs">
+      <DependentUpon>FirstLoadHelper.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,6 +129,9 @@
     </Compile>
     <EmbeddedResource Include="CRCCheck.resx">
       <DependentUpon>CRCCheck.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FirstLoadHelper.resx">
+      <DependentUpon>FirstLoadHelper.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>

@@ -46,8 +46,8 @@
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
             this.largerFontButton = new System.Windows.Forms.CheckBox();
             this.loadingImageGroupBox = new System.Windows.Forms.GroupBox();
-            this.standardImageRB = new System.Windows.Forms.RadioButton();
             this.thirdGuardsLoadingImageRB = new System.Windows.Forms.RadioButton();
+            this.standardImageRB = new System.Windows.Forms.RadioButton();
             this.settingsGroupBox.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -121,16 +121,18 @@
             this.forceManuel.Text = "Force manual game detection";
             this.forceManuel.UseVisualStyleBackColor = true;
             this.forceManuel.CheckedChanged += new System.EventHandler(this.forceManuel_CheckedChanged);
+            this.forceManuel.MouseEnter += new System.EventHandler(this.forceManuel_MouseEnter);
+            this.forceManuel.MouseLeave += new System.EventHandler(this.forceManuel_MouseLeave);
             // 
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
             this.formPageLink.Location = new System.Drawing.Point(9, 349);
             this.formPageLink.Name = "formPageLink";
-            this.formPageLink.Size = new System.Drawing.Size(84, 13);
+            this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
             this.formPageLink.TabStop = true;
-            this.formPageLink.Text = "View Form Page";
+            this.formPageLink.Text = "View Modpack Form Page";
             this.formPageLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.formPageLink_LinkClicked);
             // 
             // parrentProgressBar
@@ -182,6 +184,8 @@
             this.cleanInstallCB.Text = "Clean Installation (Recommended)";
             this.cleanInstallCB.UseVisualStyleBackColor = true;
             this.cleanInstallCB.CheckedChanged += new System.EventHandler(this.cleanInstallCB_CheckedChanged);
+            this.cleanInstallCB.MouseEnter += new System.EventHandler(this.cleanInstallCB_MouseEnter);
+            this.cleanInstallCB.MouseLeave += new System.EventHandler(this.cleanInstallCB_MouseLeave);
             // 
             // cancerFontCB
             // 
@@ -193,6 +197,8 @@
             this.cancerFontCB.Text = "Cancer font";
             this.cancerFontCB.UseVisualStyleBackColor = true;
             this.cancerFontCB.CheckedChanged += new System.EventHandler(this.cancerFontCB_CheckedChanged);
+            this.cancerFontCB.MouseEnter += new System.EventHandler(this.cancerFontCB_MouseEnter);
+            this.cancerFontCB.MouseLeave += new System.EventHandler(this.cancerFontCB_MouseLeave);
             // 
             // backupModsCheckBox
             // 
@@ -204,6 +210,8 @@
             this.backupModsCheckBox.Text = "Backup current mods folder";
             this.backupModsCheckBox.UseVisualStyleBackColor = true;
             this.backupModsCheckBox.CheckedChanged += new System.EventHandler(this.backupModsCheckBox_CheckedChanged);
+            this.backupModsCheckBox.MouseEnter += new System.EventHandler(this.backupModsCheckBox_MouseEnter);
+            this.backupModsCheckBox.MouseLeave += new System.EventHandler(this.backupModsCheckBox_MouseLeave);
             // 
             // settingsGroupBox
             // 
@@ -229,6 +237,8 @@
             this.largerFontButton.Text = "Larger Font";
             this.largerFontButton.UseVisualStyleBackColor = true;
             this.largerFontButton.CheckedChanged += new System.EventHandler(this.largerFontButton_CheckedChanged);
+            this.largerFontButton.MouseEnter += new System.EventHandler(this.largerFontButton_MouseEnter);
+            this.largerFontButton.MouseLeave += new System.EventHandler(this.largerFontButton_MouseLeave);
             // 
             // loadingImageGroupBox
             // 
@@ -241,18 +251,6 @@
             this.loadingImageGroupBox.TabStop = false;
             this.loadingImageGroupBox.Text = "Loading Image";
             // 
-            // standardImageRB
-            // 
-            this.standardImageRB.AutoSize = true;
-            this.standardImageRB.Location = new System.Drawing.Point(6, 15);
-            this.standardImageRB.Name = "standardImageRB";
-            this.standardImageRB.Size = new System.Drawing.Size(68, 17);
-            this.standardImageRB.TabIndex = 0;
-            this.standardImageRB.TabStop = true;
-            this.standardImageRB.Text = "Standard";
-            this.standardImageRB.UseVisualStyleBackColor = true;
-            this.standardImageRB.CheckedChanged += new System.EventHandler(this.thirdGuardsLoadingImageRB_CheckedChanged);
-            // 
             // thirdGuardsLoadingImageRB
             // 
             this.thirdGuardsLoadingImageRB.AutoSize = true;
@@ -264,6 +262,22 @@
             this.thirdGuardsLoadingImageRB.Text = "3rdguards";
             this.thirdGuardsLoadingImageRB.UseVisualStyleBackColor = true;
             this.thirdGuardsLoadingImageRB.CheckedChanged += new System.EventHandler(this.standardImageRB_CheckedChanged);
+            this.thirdGuardsLoadingImageRB.MouseEnter += new System.EventHandler(this.thirdGuardsLoadingImageRB_MouseEnter);
+            this.thirdGuardsLoadingImageRB.MouseLeave += new System.EventHandler(this.thirdGuardsLoadingImageRB_MouseLeave);
+            // 
+            // standardImageRB
+            // 
+            this.standardImageRB.AutoSize = true;
+            this.standardImageRB.Location = new System.Drawing.Point(6, 15);
+            this.standardImageRB.Name = "standardImageRB";
+            this.standardImageRB.Size = new System.Drawing.Size(68, 17);
+            this.standardImageRB.TabIndex = 0;
+            this.standardImageRB.TabStop = true;
+            this.standardImageRB.Text = "Standard";
+            this.standardImageRB.UseVisualStyleBackColor = true;
+            this.standardImageRB.CheckedChanged += new System.EventHandler(this.thirdGuardsLoadingImageRB_CheckedChanged);
+            this.standardImageRB.MouseEnter += new System.EventHandler(this.standardImageRB_MouseEnter);
+            this.standardImageRB.MouseLeave += new System.EventHandler(this.standardImageRB_MouseLeave);
             // 
             // MainWindow
             // 
