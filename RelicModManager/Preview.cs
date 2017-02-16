@@ -39,6 +39,7 @@ namespace RelicModManager
             previewPicture.Image = Settings.getLoadingImage();
             previewPicture.LoadAsync(URL);
             this.Text = name + " - " + currentlySelected;
+            Settings.appendToLog("Preview: started loading of picture '" + name + "' at URL '" + URL +"'");
         }
         //make the linked labels for each picture in the picturesList
         //so a user can navagate easily through the pictures

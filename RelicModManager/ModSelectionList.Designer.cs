@@ -63,6 +63,7 @@
             this.modTabGroups.Controls.Add(this.tabPage9);
             this.modTabGroups.Controls.Add(this.tabPage10);
             this.modTabGroups.Controls.Add(this.tabPage11);
+            this.modTabGroups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.modTabGroups.Location = new System.Drawing.Point(12, 35);
             this.modTabGroups.Name = "modTabGroups";
             this.modTabGroups.SelectedIndex = 0;
@@ -86,7 +87,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(960, 374);
+            this.tabPage2.Size = new System.Drawing.Size(960, 360);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Zoom Configs";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -95,16 +96,17 @@
             // 
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(960, 374);
+            this.tabPage3.Size = new System.Drawing.Size(960, 360);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Panel Icons";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // tabPage4
             // 
+            this.tabPage4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(960, 374);
+            this.tabPage4.Size = new System.Drawing.Size(960, 360);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Sixth Sense";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -113,7 +115,7 @@
             // 
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(960, 374);
+            this.tabPage5.Size = new System.Drawing.Size(960, 360);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Crosshairs";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -122,7 +124,7 @@
             // 
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(960, 374);
+            this.tabPage6.Size = new System.Drawing.Size(960, 360);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "Damage Panel/Logs";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -131,7 +133,7 @@
             // 
             this.tabPage7.Location = new System.Drawing.Point(4, 22);
             this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Size = new System.Drawing.Size(960, 374);
+            this.tabPage7.Size = new System.Drawing.Size(960, 360);
             this.tabPage7.TabIndex = 6;
             this.tabPage7.Text = "Ingame Mods";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -140,7 +142,7 @@
             // 
             this.tabPage8.Location = new System.Drawing.Point(4, 22);
             this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(960, 374);
+            this.tabPage8.Size = new System.Drawing.Size(960, 360);
             this.tabPage8.TabIndex = 7;
             this.tabPage8.Text = "Hangar Mods";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -149,7 +151,7 @@
             // 
             this.tabPage9.Location = new System.Drawing.Point(4, 22);
             this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Size = new System.Drawing.Size(960, 374);
+            this.tabPage9.Size = new System.Drawing.Size(960, 360);
             this.tabPage9.TabIndex = 8;
             this.tabPage9.Text = "Tank Skins";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -158,7 +160,7 @@
             // 
             this.tabPage10.Location = new System.Drawing.Point(4, 22);
             this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(960, 374);
+            this.tabPage10.Size = new System.Drawing.Size(960, 360);
             this.tabPage10.TabIndex = 9;
             this.tabPage10.Text = "Sound Mods";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -167,7 +169,7 @@
             // 
             this.tabPage11.Location = new System.Drawing.Point(4, 22);
             this.tabPage11.Name = "tabPage11";
-            this.tabPage11.Size = new System.Drawing.Size(960, 374);
+            this.tabPage11.Size = new System.Drawing.Size(960, 360);
             this.tabPage11.TabIndex = 10;
             this.tabPage11.Text = "Custom UserPackages";
             this.tabPage11.UseVisualStyleBackColor = true;

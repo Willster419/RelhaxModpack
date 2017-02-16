@@ -155,7 +155,7 @@ namespace RelicModManager
             Settings.appendToLog("Settings saved sucessfully");
         }
         //logs string info to the log output
-        private static void appendToLog(string info)
+        public static void appendToLog(string info)
         {
             //the method should automaticly make the file if it's not there
             File.AppendAllText(Application.StartupPath + "\\RelHaxLog.txt", info + "\n");

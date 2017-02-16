@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="helperText.Text" xml:space="preserve">
-    <value>Welcome to the RelHax Modpack! I have tried to make the modpack as straight-foreward as possible, but questions may still arize. Here I will explain the settings. You won't see this dialog box again, unless you delete the settings xml file.</value>
+    <value>Welcome to the RelHax Modpack! I have tried to make the modpack as straight-foreward as possible, but questions may still arize. Hover over a setting to have it explained. You won't see this dialog box again, unless you delete the settings xml file.</value>
   </data>
 </root>

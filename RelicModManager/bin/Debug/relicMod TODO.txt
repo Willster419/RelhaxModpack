@@ -1,3 +1,9 @@
+(critical) verify in single cataogry only one mod can be checked
+
+(normal) tab? is bolded if dependencies need updating
+
+(critical) what happends if mod with no config?
+
 (normal) comment code and put in log outputs (currently done on all files)
 
 (optional) add statistics of how many runs done ever and of what mod

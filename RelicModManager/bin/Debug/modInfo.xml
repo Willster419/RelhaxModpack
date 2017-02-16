@@ -95,5 +95,117 @@
 				</mod>
 			</mods>
 		</catagory>
+    <catagory>
+			<name>Damage Logs</name>
+			<selectionType>single</selectionType>
+      <mod>
+				<name>XFT damage log</name>
+				<version>17</version>
+				<modzipfile>relhax_sounds_base.zip</modzipfile>
+				<modzipcrc>4734aa7c33ffab0954ffc45273d641c8</modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
+					</picture>
+				</pictures>
+				<description>a sample version</description>
+				<updateComment>update comment here</updateComment>
+				<devURL>http://relicgaming.com/index.php?topic=697.0</devURL>
+      </mod>
+    </catagory>
+    <catagory>
+      <!-- Make XVM with default config the dependency -->
+      <dependencies>
+				<dependency>
+				<dependencyZipFile>xvm_ver_x_y.zip</dependencyZipFile>
+				<dependencyZipCRC>LOLOLOLOLOLOLOLOL</dependencyZipCRC>
+				<dependencyenabled>true</dependencyenabled>
+				</dependency>
+			</dependencies>
+			<name>XVM prebuilt configs</name>
+			<selectionType>single</selectionType>
+      <mod>
+				<name>Default Config</name>
+				<version>17</version>
+				<modzipfile>relhax_sounds_base.zip</modzipfile>
+				<modzipcrc>4734aa7c33ffab0954ffc45273d641c8</modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
+					</picture>
+				</pictures>
+				<description>a sample version</description>
+				<updateComment>update comment here</updateComment>
+				<devURL>http://relicgaming.com/index.php?topic=697.0</devURL>
+      </mod>
+      <mod>
+				<name>Willster419 Config</name>
+				<version>17</version>
+				<modzipfile>relhax_sounds_base.zip</modzipfile>
+				<modzipcrc>4734aa7c33ffab0954ffc45273d641c8</modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
+					</picture>
+				</pictures>
+				<description>a sample version</description>
+				<updateComment>update comment here</updateComment>
+				<devURL>http://relicgaming.com/index.php?topic=697.0</devURL>
+      </mod>
+    </catagory>
+    <catagory>
+      <!-- Make XVM with default config the dependency -->
+      <dependencies>
+				<dependency>
+				<dependencyZipFile>xvm_ver_x_y.zip</dependencyZipFile>
+				<dependencyZipCRC>LOLOLOLOLOLOLOLOL</dependencyZipCRC>
+				<dependencyenabled>true</dependencyenabled>
+				</dependency>
+			</dependencies>
+			<name>XVM config builder TODO</name>
+      <!-- Xvm default config dependency -->
+			<selectionType>multi</selectionType>
+    </catagory>
+    <catagory>
+			<name>Garage Stat Tracker</name>
+			<selectionType>single</selectionType>
+    </catagory>
+    <catagory>
+			<name>Auto Aim Mods</name>
+			<selectionType>single</selectionType>
+    </catagory>
+    <catagory>
+			<name>Crosshair mods</name>
+			<selectionType>multi</selectionType>
+    </catagory>
+    <catagory>
+			<name>Various Ingame mods</name>
+			<selectionType>multi</selectionType>
+    </catagory>
+    <!-- Comments here -->
+    <catagory>
+      <!-- dependency mlg mod sixthsense -->
+      <dependencies>
+				<dependency>
+				<dependencyZipFile>mlg_sizthsense_mod.zip</dependencyZipFile>
+				<dependencyZipCRC>getthefreakingcrcvalue</dependencyZipCRC>
+				<dependencyenabled>true</dependencyenabled>
+				</dependency>
+			</dependencies>
+			<name>6th sense</name>
+			<selectionType>single</selectionType>
+      <!-- mod of audio patches xvm sound off -->
+      <!-- config of audio patches mld mod sound -->
+      <!-- config of audio patches engine_config -->
+      <!-- mod of icon patches xvm off -->
+      <!-- config of icon patches mlg mod -->
+    </catagory>
+    <catagory>
+			<name>Various garage mods</name>
+			<selectionType>multi</selectionType>
+    </catagory>
 	</catagories>
 </modInfoAlpha.xml>

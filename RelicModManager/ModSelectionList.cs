@@ -129,7 +129,7 @@ namespace RelicModManager
         private void makeTabs()
         {
             modTabGroups.TabPages.Clear();
-            this.sortCatagoryList(parsedCatagoryList);
+            //this.sortCatagoryList(parsedCatagoryList);
             foreach (Catagory c in parsedCatagoryList)
             {
                 TabPage t = new TabPage(c.name);
@@ -292,6 +292,7 @@ namespace RelicModManager
             if (configControlDD.Items.Count > 0)
                 configPanel.Controls.Add(configControlDD);
             //make the mod check box
+            //TODO: single catagory selection needs to make this a radioButton
             CheckBox modCheckBox = new CheckBox();
             modCheckBox.AutoSize = true;
             modCheckBox.Location = new System.Drawing.Point(3, 3);
@@ -339,6 +340,8 @@ namespace RelicModManager
             //add to main panel
             mainPanel.Controls.Clear();
             mainPanel.Controls.Add(modCheckBox);
+            //get this to work so it frees up selection space
+            //if (m.configs.Count > 0)
             mainPanel.Controls.Add(configPanel);
             //add to tab
             t.Controls.Add(mainPanel);
@@ -457,6 +460,23 @@ namespace RelicModManager
             if (cb.Checked) innerPanel.BackColor = Color.BlanchedAlmond;
             else innerPanel.BackColor = SystemColors.Control;
 
+            //check to see if the mod is part of a single selection only catagory
+            foreach (Catagory c in parsedCatagoryList)
+            {
+                foreach (Mod m in c.mods)
+                {
+                    if (m.name.Equals(cb.Text))
+                    {
+                        //mod linked
+                        if (c.selectionType.Equals("single"))
+                        {
+                          //this check must stop
+                          
+                        }
+                    }
+                }
+            }
+            
             foreach (Catagory c in parsedCatagoryList)
             {
                 foreach (Mod m in c.mods)
