@@ -46,7 +46,7 @@
             this.helpLabel = new System.Windows.Forms.Label();
             this.loadConfigButton = new System.Windows.Forms.Button();
             this.saveConfigButton = new System.Windows.Forms.Button();
-            this.boldLabel = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.modTabGroups.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,10 +64,10 @@
             this.modTabGroups.Controls.Add(this.tabPage10);
             this.modTabGroups.Controls.Add(this.tabPage11);
             this.modTabGroups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.modTabGroups.Location = new System.Drawing.Point(12, 35);
+            this.modTabGroups.Location = new System.Drawing.Point(12, 21);
             this.modTabGroups.Name = "modTabGroups";
             this.modTabGroups.SelectedIndex = 0;
-            this.modTabGroups.Size = new System.Drawing.Size(968, 386);
+            this.modTabGroups.Size = new System.Drawing.Size(968, 400);
             this.modTabGroups.TabIndex = 4;
             this.modTabGroups.Selected += new System.Windows.Forms.TabControlEventHandler(this.modTabGroups_Selected);
             this.modTabGroups.Click += new System.EventHandler(this.modTabGroups_Click);
@@ -77,7 +77,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(960, 360);
+            this.tabPage1.Size = new System.Drawing.Size(960, 374);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "XVM";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -197,7 +197,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(201, 5);
+            this.label1.Location = new System.Drawing.Point(375, 5);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 7;
@@ -232,22 +232,21 @@
             this.saveConfigButton.UseVisualStyleBackColor = true;
             this.saveConfigButton.Click += new System.EventHandler(this.saveConfigButton_Click);
             // 
-            // boldLabel
+            // label2
             // 
-            this.boldLabel.AutoSize = true;
-            this.boldLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.boldLabel.Location = new System.Drawing.Point(13, 20);
-            this.boldLabel.Name = "boldLabel";
-            this.boldLabel.Size = new System.Drawing.Size(438, 13);
-            this.boldLabel.TabIndex = 11;
-            this.boldLabel.Text = "bold text (or \"_bold\") indicates mod needs update or not locally downloaded";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(192, 5);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(177, 13);
+            this.label2.TabIndex = 12;
+            this.label2.Text = "\"*\" tab indicates single selection tab";
             // 
             // ModSelectionList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(992, 473);
-            this.Controls.Add(this.boldLabel);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.saveConfigButton);
             this.Controls.Add(this.loadConfigButton);
             this.Controls.Add(this.helpLabel);
@@ -285,6 +284,6 @@
         private System.Windows.Forms.Label helpLabel;
         private System.Windows.Forms.Button loadConfigButton;
         private System.Windows.Forms.Button saveConfigButton;
-        private System.Windows.Forms.Label boldLabel;
+        private System.Windows.Forms.Label label2;
     }
 }

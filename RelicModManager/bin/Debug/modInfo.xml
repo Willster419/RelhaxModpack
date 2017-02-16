@@ -98,7 +98,8 @@
     <catagory>
 			<name>Damage Logs</name>
 			<selectionType>single</selectionType>
-      <mod>
+			<mods>
+				<mod>
 				<name>XFT damage log</name>
 				<version>17</version>
 				<modzipfile>relhax_sounds_base.zip</modzipfile>
@@ -112,7 +113,8 @@
 				<description>a sample version</description>
 				<updateComment>update comment here</updateComment>
 				<devURL>http://relicgaming.com/index.php?topic=697.0</devURL>
-      </mod>
+				</mod>
+			</mods>
     </catagory>
     <catagory>
       <!-- Make XVM with default config the dependency -->

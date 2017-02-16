@@ -36,6 +36,8 @@ namespace RelicModManager
         public void displayPictures(string name, string URL)
         {
             previewPicture.Image = null;
+            if (pictures.Count == 0)
+                return;
             previewPicture.Image = Settings.getLoadingImage();
             previewPicture.LoadAsync(URL);
             this.Text = name + " - " + currentlySelected;
@@ -128,8 +130,13 @@ namespace RelicModManager
             if (pictures != null)
             {
                 currentlySelected = 0;
+                if (pictures.Count > 0)
                 this.displayPictures(pictures[currentlySelected].name, pictures[currentlySelected].URL);
             }
+            if (description == null)
+                description = "No Description Provided";
+            if (updateComments == null)
+                updateComments = "No Update Info Proviced";
             descriptionBox.Lines = description.Split('@');
             updateBox.Lines = updateComments.Split('@');
             this.Preview_SizeChanged(null, null);

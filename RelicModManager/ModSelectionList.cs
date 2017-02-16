@@ -53,7 +53,6 @@ namespace RelicModManager
                 this.cancel = false;
                 this.Close();
             }
-            boldLabel.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
         }
 
         //initializes the userMods list
@@ -109,7 +108,7 @@ namespace RelicModManager
             {
                 foreach (Catagory c in parsedCatagoryList)
                 {
-                    if (c.name.Equals(t.Text))
+                    if (c.name.Equals(t.Name))
                     {
                         //matched the catagory to tab
                         //add to the ui every mod of that catagory
@@ -134,6 +133,11 @@ namespace RelicModManager
             {
                 TabPage t = new TabPage(c.name);
                 t.AutoScroll = true;
+                t.Name = c.name;
+                if (c.selectionType.Equals("single"))
+                {
+                    t.Text = t.Text + "*";
+                }
                 modTabGroups.TabPages.Add(t);
             }
         }
@@ -161,7 +165,7 @@ namespace RelicModManager
             configControlDD.TabStop = true;
             configControlDD.Enabled = false;
             configControlDD.SelectedIndexChanged += new EventHandler(configControlDD_SelectedIndexChanged);
-            configControlDD.Name = t.Text + "_" + m.name + "_DropDown";
+            configControlDD.Name = t.Name + "_" + m.name + "_DropDown";
             configControlDD.DropDownStyle = ComboBoxStyle.DropDownList;
             configControlDD.Items.Clear();
             for (int i = 0; i < m.configs.Count; i++)
@@ -176,6 +180,7 @@ namespace RelicModManager
                     configLabel.Size = new System.Drawing.Size(100, 15);
                     configLabel.TabIndex = 0;
                     configLabel.Text = m.configs[i].name;
+                    configLabel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
                     configLabel.Enabled = false;
                     string configDownloadPath3 = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
                     if (File.Exists(configDownloadPath3))
@@ -185,13 +190,15 @@ namespace RelicModManager
                         if (!oldCRC.Equals(m.configs[i].crc))
                             //file exists and is out of date
                         {
-                            configLabel.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                            //configLabel.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                            //configLabel.Text = configLabel.Text + "(Updated)";
                         }
                     }
                     else if (!(File.Exists(configDownloadPath3)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
                     {
                         //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
-                        configLabel.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                        //configLabel.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                        //configLabel.Text = configLabel.Text + "(Updated)";
                     }
                     configPanel.Controls.Add(configLabel);
                 }
@@ -208,7 +215,7 @@ namespace RelicModManager
                         configControlRB.Enabled = false;
                         configControlRB.Checked = m.configs[i].configChecked;
                         configControlRB.CheckedChanged += new EventHandler(configControlRB_CheckedChanged);
-                        configControlRB.Name = t.Text + "_" + m.name + "_" + m.configs[i].name;
+                        configControlRB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
                         string configDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
                         if (File.Exists(configDownloadPath))
                         {
@@ -216,13 +223,15 @@ namespace RelicModManager
                             string oldCRC = this.GetMd5Hash(hash, configDownloadPath);
                             if (!oldCRC.Equals(m.configs[i].crc))
                             {
-                                configControlRB.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                                //configControlRB.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                                configControlRB.Text = configControlRB.Text + "(Updated)";
                             }
                         }
                         else if (!(File.Exists(configDownloadPath)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
                         {
                             //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
-                            configControlRB.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                            //configControlRB.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                            configControlRB.Text = configControlRB.Text + "(Updated)";
                         }
                         configPanel.Controls.Add(configControlRB);
                         break;
@@ -237,16 +246,14 @@ namespace RelicModManager
                             string oldCRC = this.GetMd5Hash(hash, configDownloadPath1);
                             if (!oldCRC.Equals(m.configs[i].crc))
                             {
-                                //configControlDD.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-                                if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name + "_bold");
+                                if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name + "_updated");
                                 break;
                             }
                         }
                         else if (!(File.Exists(configDownloadPath1)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
                         {
                             //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
-                            //configControlDD.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-                            if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name + "_bold");
+                            if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name + "_updated");
                             break;
                         }
                         
@@ -269,7 +276,7 @@ namespace RelicModManager
                         configControlCB.Enabled = false;
                         configControlCB.Checked = m.configs[i].configChecked;
                         configControlCB.CheckedChanged += new EventHandler(configControlCB_CheckedChanged);
-                        configControlCB.Name = t.Text + "_" + m.name + "_" + m.configs[i].name;
+                        configControlCB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
                         string configDownloadPath2 = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
                         if (File.Exists(configDownloadPath2))
                         {
@@ -277,13 +284,15 @@ namespace RelicModManager
                             string oldCRC = this.GetMd5Hash(hash, configDownloadPath2);
                             if (!oldCRC.Equals(m.configs[i].crc))
                             {
-                                configControlCB.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                                //configControlCB.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                                configControlCB.Text = configControlCB.Text + "(Updated)";
                             }
                         }
                         else if (!(File.Exists(configDownloadPath2)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
                         {
                             //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
-                            configControlCB.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                            //configControlCB.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                            configControlCB.Text = configControlCB.Text + "(Updated)";
                         }
                         configPanel.Controls.Add(configControlCB);
                         break;
@@ -299,6 +308,7 @@ namespace RelicModManager
             modCheckBox.Size = new System.Drawing.Size(49, 15);
             modCheckBox.TabIndex = 1;
             modCheckBox.Text = m.name;
+            modCheckBox.Name = t.Name + "_" + m.name;
             string modDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.modZipFile;
             if (File.Exists(modDownloadPath))
             {
@@ -306,13 +316,15 @@ namespace RelicModManager
                 string oldCRC = this.GetMd5Hash(hash, modDownloadPath);
                 if (!oldCRC.Equals(m.crc))
                 {
-                    modCheckBox.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                    //modCheckBox.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                    modCheckBox.Text = modCheckBox.Text + "(Updated)";
                 }
             }
             else if (!(File.Exists(modDownloadPath)) && (m.crc != null) && (!m.crc.Equals("")))
             {
                 //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
-                modCheckBox.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                //modCheckBox.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                modCheckBox.Text = modCheckBox.Text + "(Updated)";
             }
             modCheckBox.UseVisualStyleBackColor = true;
             modCheckBox.Enabled = m.enabled;
@@ -341,7 +353,7 @@ namespace RelicModManager
             mainPanel.Controls.Clear();
             mainPanel.Controls.Add(modCheckBox);
             //get this to work so it frees up selection space
-            //if (m.configs.Count > 0)
+            if (m.configs.Count > 0)
             mainPanel.Controls.Add(configPanel);
             //add to tab
             t.Controls.Add(mainPanel);
@@ -356,7 +368,7 @@ namespace RelicModManager
             if (sender is CheckBox)
             {
                 CheckBox cb = (CheckBox)sender;
-                Mod m = this.linkMod(cb.Text);
+                Mod m = this.linkMod(cb.Name.Split('_')[1]);
                 string name = m.name;
                 //get the mod and/or config
                 //List<Picture> picturesList = m.picList;
@@ -400,8 +412,8 @@ namespace RelicModManager
         {
             //it's a RelHax modpack config checkBox
             CheckBox cb = (CheckBox)sender;
-            string modName = cb.Parent.Parent.Controls[0].Text;
-            string catagoryName = cb.Parent.Parent.Parent.Text;
+            string modName = cb.Name.Split('_')[1];
+            string catagoryName = cb.Name.Split('_')[0];
             Mod m = this.linkMod(modName, catagoryName);
             foreach (Config cc in m.configs)
             {
@@ -417,8 +429,8 @@ namespace RelicModManager
         void configControlRB_CheckedChanged(object sender, EventArgs e)
         {
             RadioButton rb = (RadioButton)sender;
-            string modName = rb.Parent.Parent.Controls[0].Text;
-            string catagoryName = rb.Parent.Parent.Parent.Text;
+            string modName = rb.Name.Split('_')[1];
+            string catagoryName = rb.Name.Split('_')[0];
             Mod m = this.linkMod(modName, catagoryName);
             foreach (Config cc in m.configs)
             {
@@ -456,22 +468,43 @@ namespace RelicModManager
             //update the ui with the change
             CheckBox cb = (CheckBox)sender;
             Panel p = (Panel)cb.Parent;
-            Panel innerPanel = (Panel)p.Controls[1];
-            if (cb.Checked) innerPanel.BackColor = Color.BlanchedAlmond;
-            else innerPanel.BackColor = SystemColors.Control;
+            string modName = cb.Name.Split('_')[1];
+            string catagoryName = cb.Name.Split('_')[0];
 
             //check to see if the mod is part of a single selection only catagory
             foreach (Catagory c in parsedCatagoryList)
             {
                 foreach (Mod m in c.mods)
                 {
-                    if (m.name.Equals(cb.Text))
+                    if (m.name.Equals(modName))
                     {
                         //mod linked
                         if (c.selectionType.Equals("single"))
                         {
-                          //this check must stop
-                          
+                            if (!cb.Checked)
+                            {
+                                m.modChecked = false;
+                            }
+                            else
+                            {
+                                //check if any other mods in this catagory are already checked
+                                bool anyModsChecked = false;
+                                foreach (Mod mm in c.mods)
+                                {
+                                    if (mm.modChecked)
+                                        anyModsChecked = true;
+                                }
+                                if (!anyModsChecked)
+                                {
+                                    //save to check the mod
+                                    m.modChecked = cb.Checked;
+                                }
+                                else
+                                {
+                                    //not safe to check the mod
+                                    cb.Checked = false;
+                                }
+                            }
                         }
                     }
                 }
@@ -481,104 +514,119 @@ namespace RelicModManager
             {
                 foreach (Mod m in c.mods)
                 {
-                    if (m.name.Equals(cb.Text))
+                    if (m.name.Equals(modName))
                     {
                         //enable the mod in memory
                         m.modChecked = cb.Checked;
-                        //update configs
-                        foreach (Control cc in innerPanel.Controls)
+                        //update configs if they exist
+                        if (p.Controls.Count > 1)
                         {
-                            foreach (Config ccc in m.configs)
+                            Panel innerPanel = (Panel)p.Controls[1];
+                            if (cb.Checked) innerPanel.BackColor = Color.BlanchedAlmond;
+                            else innerPanel.BackColor = SystemColors.Control;
+                            foreach (Control cc in innerPanel.Controls)
                             {
-                                if (cc is ComboBox)
+                                foreach (Config ccc in m.configs)
                                 {
-                                    cc.Enabled = m.modChecked;
-                                    break;
-                                }
-                                if (cc.Name.Equals(c.name + "_" + m.name + "_" + ccc.name))
-                                {
-                                    //for the checkboxes
-                                    if (ccc.enabled && m.enabled && cb.Checked)
+                                    if (cc is ComboBox)
                                     {
-                                        //enable the control
-                                        cc.Enabled = true;
+                                        cc.Enabled = m.modChecked;
+                                        break;
                                     }
-                                    else
+                                    if (cc.Name.Equals(c.name + "_" + m.name + "_" + ccc.name))
                                     {
-                                        cc.Enabled = false;
+                                        //for the checkboxes
+                                        if (ccc.enabled && m.enabled && cb.Checked)
+                                        {
+                                            //enable the control
+                                            cc.Enabled = true;
+                                        }
+                                        else
+                                        {
+                                            cc.Enabled = false;
+                                        }
                                     }
-                                }
-                                //if contgrol text = config name
-                                if (cc.Text.Equals(ccc.name))
-                                {
-                                    //for the lables
-                                    cc.Enabled = cb.Checked;
+                                    //if contgrol text = config name
+                                    if (cc.Text.Equals(ccc.name))
+                                    {
+                                        //for the lables
+                                        cc.Enabled = cb.Checked;
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+            //dealing with config stuffs
             //if the mod checkbox was changed to checked state
-            if (cb.Checked)
+            //and there are configs
+            if (p.Controls.Count > 1)
             {
-                //check to make sure at least one config is selected
-                bool oneSelected = false;
-                foreach (Control c in innerPanel.Controls)
+                //at lease one config exists
+                Panel innerPanel = (Panel)p.Controls[1];
+                if (cb.Checked) innerPanel.BackColor = Color.BlanchedAlmond;
+                else innerPanel.BackColor = SystemColors.Control;
+                if (cb.Checked)
                 {
-                    if (c is RadioButton)
-                    {
-                        RadioButton b = (RadioButton)c;
-                        if (b.Checked)
-                        {
-                            oneSelected = true;
-                        }
-                    }
-
-                    if (c is CheckBox)
-                    {
-                        CheckBox b = (CheckBox)c;
-                        if (b.Checked)
-                        {
-                            oneSelected = true;
-                        }
-                    }
-
-                    if (c is ComboBox)
-                    {
-                        ComboBox cbox = (ComboBox)c;
-                        if (cbox.SelectedIndex == -1) oneSelected = false;
-                    }
-                }
-                if (!oneSelected)
-                {
-                    //select one randomly
+                    //check to make sure at least one config is selected
+                    bool oneSelected = false;
                     foreach (Control c in innerPanel.Controls)
                     {
                         if (c is RadioButton)
                         {
                             RadioButton b = (RadioButton)c;
-                            if (b.Enabled)
+                            if (b.Checked)
                             {
-                                b.Checked = true;
-                                break;
+                                oneSelected = true;
                             }
                         }
 
                         if (c is CheckBox)
                         {
                             CheckBox b = (CheckBox)c;
-                            if (b.Enabled)
+                            if (b.Checked)
                             {
-                                b.Checked = true;
-                                break;
+                                oneSelected = true;
                             }
                         }
 
                         if (c is ComboBox)
                         {
                             ComboBox cbox = (ComboBox)c;
-                            cbox.SelectedIndex = 0;
+                            if (cbox.SelectedIndex == -1) oneSelected = false;
+                        }
+                    }
+                    if (!oneSelected)
+                    {
+                        //select one randomly
+                        foreach (Control c in innerPanel.Controls)
+                        {
+                            if (c is RadioButton)
+                            {
+                                RadioButton b = (RadioButton)c;
+                                if (b.Enabled)
+                                {
+                                    b.Checked = true;
+                                    break;
+                                }
+                            }
+
+                            if (c is CheckBox)
+                            {
+                                CheckBox b = (CheckBox)c;
+                                if (b.Enabled)
+                                {
+                                    b.Checked = true;
+                                    break;
+                                }
+                            }
+
+                            if (c is ComboBox)
+                            {
+                                ComboBox cbox = (ComboBox)c;
+                                cbox.SelectedIndex = 0;
+                            }
                         }
                     }
                 }
