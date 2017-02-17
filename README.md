@@ -64,9 +64,9 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYN
 
 ####*Why is there such a difference in install times?*
  While the major installers are single-threaded, mine is not. What does that mean? Looking at mod zip extraction, for example, when a file is extracted, it is reported to the gui in a syncronus manner. This means that the modpack can only extract as fast as it can pump events to the GUI for each entry extracted in a zip file. This is where multithreading come in. You can create a seperate thread and have it only extract, and asycronously report the progres to the gui. This means three things:
-  -The gui is not laggy during install
-  -The install is not frozen when the ui thread is blocked, like moving the window for example
-  -The extraction is limited to your hard drive speed, not the processor gui reporting speed.
+  - The gui is not laggy during install
+  - The install is not frozen when the ui thread is blocked, like moving the window for example
+  - The extraction is limited to your hard drive speed, not the processor gui reporting speed.
 
 ####*I have a perfect selection of mods that I want. Can I save this selection?*
   Yes. Press the save config button. It will save your config file whereever you tell it to save it. I reccomend you save it in the default folder.
@@ -76,8 +76,8 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYN
 
 ####*How can I use the "auto-install" option?*
   You need to create a shortcut to the application. Right click it, properties. In the target textbox, append "/auto-install config_file.xml", where:
-  -"auto-install " (<--note the space, required!) is the command
-  -"config_file.xml" is the filename of your saved config prefrence file you made from the mod selection window. The config MUST be in the folder "RelHaxUserConfigs" for this feature to work!
+  - "auto-install " (<--note the space, required!) is the command
+  - "config_file.xml" is the filename of your saved config prefrence file you made from the mod selection window. The config MUST be in the folder "RelHaxUserConfigs" for this feature to work!
 
 ####(1)Performance measurements:
 
