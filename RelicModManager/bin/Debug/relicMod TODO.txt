@@ -1,5 +1,3 @@
-(critical) fix UI display
-
 (normal) add mods to the modpack. Kind of a big deal
 
 (normal) comment code and put in log outputs (currently done on all files)

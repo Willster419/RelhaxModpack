@@ -1,5 +1,6 @@
-version 18.3:
--Added feature on first run to explain all the settings
-  won't show again unless settings xml is deleted
--Added way to show if mod needs to be downloaded
-  bold text or "_bold" appended to a mod/config
+version 18.4:
+- Fixed bug with UI in mods not displaying properly
+- Fixed bug with UI in configs not displaying properly
+- Added mods
+- Fixed mod database xml parsing bug
+- Fixed bugs with picture Preview window

@@ -169,9 +169,9 @@ namespace RelicModManager
             {
                 int yPosition = 15 * (i + 1);
                 //make configLabel if config type is not single_dropDown
+                Label configLabel = new Label();
                 if (!m.configs[i].type.Equals("single_dropdown"))
                 {
-                    Label configLabel = new Label();
                     configLabel.AutoSize = true;
                     configLabel.Location = new System.Drawing.Point(5, yPosition - 10);
                     configLabel.Size = new System.Drawing.Size(100, 15);
@@ -187,7 +187,8 @@ namespace RelicModManager
                         //make a radioButton
                         RadioButton configControlRB = new RadioButton();
                         configControlRB.AutoSize = true;
-                        configControlRB.Location = new System.Drawing.Point(100, yPosition - 10);
+                        //configControlRB.Location = new System.Drawing.Point(100, yPosition - 10);
+                        configControlRB.Location = new System.Drawing.Point(configLabel.Location.X + configLabel.Size.Width + 6, yPosition - 10);
                         configControlRB.Size = new System.Drawing.Size(150, 15);
                         configControlRB.TabIndex = 1;
                         configControlRB.TabStop = true;
@@ -243,7 +244,8 @@ namespace RelicModManager
                         //make a checkBox
                         CheckBox configControlCB = new CheckBox();
                         configControlCB.AutoSize = true;
-                        configControlCB.Location = new System.Drawing.Point(100, yPosition - 10);
+                        //configControlCB.Location = new System.Drawing.Point(100, yPosition - 10);
+                        configControlCB.Location = new Point(configLabel.Location.X + configLabel.Size.Width + 6, yPosition - 10);
                         configControlCB.Size = new System.Drawing.Size(150, 15);
                         configControlCB.TabIndex = 1;
                         configControlCB.TabStop = true;
@@ -309,12 +311,19 @@ namespace RelicModManager
             mainPanel.Controls.Add(modCheckBox);
             int panelCountYLocation = 70 * (panelCount - 1);
             //if this is not the first mod being added to the panel
+            int panelYLocation = 6; //tab plus delimiter
             if (panelCount > 1)
             {
+                //create a list of other controlls and put this one 6 pixels below the others
+                foreach (Control c in t.Controls)
+                {
+                    panelYLocation += c.Size.Height;
+                    panelYLocation += 6;
+                }
                 panelCountYLocation = (panelCount - 1) * (t.Controls[0].Size.Height);
                 panelCountYLocation = panelCountYLocation + 5;
             }
-            mainPanel.Location = new System.Drawing.Point(5, panelCountYLocation + 5);
+            mainPanel.Location = new System.Drawing.Point(5, panelYLocation);
             mainPanel.TabIndex = 0;
             mainPanel.AutoSize = true;
             mainPanel.AutoSizeMode = AutoSizeMode.GrowOnly;

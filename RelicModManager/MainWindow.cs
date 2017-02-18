@@ -33,7 +33,7 @@ namespace RelicModManager
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 18.3";
+        private string managerVersion = "version 18.4";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         private SelectFeatures features = new SelectFeatures();
         //queue for downloading mods
@@ -765,7 +765,7 @@ namespace RelicModManager
             Application.DoEvents();
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             this.appendToLog("|RelHax ModManager " + managerVersion);
-            this.appendToLog("|Built on 02/17/2017, running at " + DateTime.Now);
+            this.appendToLog("|Built on 02/18/2017, running at " + DateTime.Now);
             this.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program

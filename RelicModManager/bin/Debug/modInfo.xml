@@ -181,28 +181,28 @@
 						<name>G</name>
 						<configzipfile></configzipfile>
 						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
 					</config>
           <config>
 						<name>J</name>
 						<configzipfile></configzipfile>
 						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
 					</config>
           <config>
 						<name>Middle Mouse</name>
 						<configzipfile></configzipfile>
 						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
 					</config>
           <config>
 						<name>Increased Zoom Speed</name>
 						<configzipfile></configzipfile>
 						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configenabled>true</configenabled>
 						<configtype>multi</configtype>
 					</config>
         </configs>
