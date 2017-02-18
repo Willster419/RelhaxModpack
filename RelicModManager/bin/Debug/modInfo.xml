@@ -1,9 +1,509 @@
 <modInfoAlpha.xml>
-<!-- Comments here -->
+<!-- CATAGORY ORDERS MATTER -->
+<!-- Catagory name -->
+<!-- Catagory selection type -->
+<!-- Catagory Dependecies -->
+<!-- Catagory Mods -->
 	<catagories>
+  <catagory>
+      <!-- Make XVM with default config the dependency -->
+      <name>XVM prebuilt configs</name>
+			<selectionType>single</selectionType>
+      <dependencies>
+				<dependency>
+				<dependencyZipFile></dependencyZipFile>
+				<dependencyZipCRC></dependencyZipCRC>
+				<dependencyenabled>true</dependencyenabled>
+				</dependency>
+			</dependencies>
+      <mod>
+        <!-- Don't actually have zip of default config -->
+				<name>Default Config</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description>The Default Config that comes with XVM</description>
+				<updateComment></updateComment>
+				<devURL>http://www.modxvm.com/en/</devURL>
+      </mod>
+      <mod>
+				<name>Willster419's Config</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description>Config by Willster419. Origionaly based on stock xvm config</description>
+				<updateComment></updateComment>
+				<devURL>https://github.com/Willster419/xvmConfig</devURL>
+      </mod>
+    </catagory>
+    <catagory>
+      <!-- Make XVM with default config the dependency -->
+      <name>XVM config builder TODO</name>
+			<selectionType>multi</selectionType>
+      <dependencies>
+				<dependency>
+				<dependencyZipFile></dependencyZipFile>
+				<dependencyZipCRC></dependencyZipCRC>
+				<dependencyenabled>true</dependencyenabled>
+				</dependency>
+			</dependencies>
+    </catagory>
 		<catagory>
+			<name>Zoom Configs</name>
+			<selectionType>multi</selectionType>
+			<mods>
+				<mod>
+				<name>Zoom Out Config (meters)</name>
+				<version>1</version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<configselectiontype>single</configselectiontype>
+				<configdefault>100</configdefault>
+				<configs>
+					<config>
+						<name>100</name>
+						<configzipfile>zoom_out_config_100.zip</configzipfile>
+						<configzipcrc>40654487e3545ef5faf6660d662618dd</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+					</config>
+					<config>
+						<name>200</name>
+						<configzipfile>zoom_out_config_200.zip</configzipfile>
+						<configzipcrc>f92c3f0be1b9e65d8f090019b5a2d058</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+					</config>
+					<config>
+						<name>500</name>
+						<configzipfile>zoom_out_config_500.zip</configzipfile>
+						<configzipcrc>f9367c61657fffcf05b9634989af6644</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+					</config>
+				</configs>
+				<description>How far you can zoom out in meters</description>
+				<updateComment></updateComment>
+				</mod>
+			</mods>
+		</catagory>
+    <!-- TODO -->
+    <catagory>
+			<name>Crosshair Arcade-Sniper Views</name>
+			<selectionType>single</selectionType>
+      <mods>
+      </mods>
+    </catagory>
+    <!-- TODO -->
+    <catagory>
+			<name>Crosshair Arty Views</name>
+			<selectionType>single</selectionType>
+      <mods>
+      </mods>
+    </catagory>
+    <catagory>
+			<name>Damage Logs</name>
+			<selectionType>single</selectionType>
+			<mods>
+				<mod>
+				<name>Xft's Integrated DamageLogs (Requires XVM)</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL>http://forum.worldoftanks.eu/index.php?/topic/338561-0915-xft-integrated-damagelogs-v022a-30-05-2016/</devURL>
+				</mod>
+        <mod>
+				<name>That other DamageLogs (Requires XVM)</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>default message location</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+					</config>
+					<config>
+						<name>centered message location</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+					</config>
+				</configs>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+			</mods>
+    </catagory>
+    <catagory>
+			<name>Ingame Info</name>
+			<selectionType>multi</selectionType>
+      <mods>
+				<mod>
+				<name>Battle Assistant</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>G</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>J</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>Middle Mouse</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>Increased Zoom Speed</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>multi</configtype>
+					</config>
+        </configs>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL>http://forum.worldoftanks.ru/index.php?/topic/1389614-</devURL>
+				</mod>
+        <mod>
+				<name>ExtraAimInfo</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>default location</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>centered location</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>arty only</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>multi</configtype>
+					</config>
+        </configs>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL>http://4cheat.ru/showthread.php?t=65915</devURL>
+				</mod>
+        <mod>
+				<name>Autoaim indication</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>standard</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>kaeptn</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+        </configs>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL>http://forum.worldoftanks.eu/index.php?/topic/441413-0917-autoaim-indicationaddins-no-proximity-snapping-for-autoaim-but/</devURL>
+				</mod>
+        <mod>
+				<name>Penetration Indicator (not PMOD)</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL>http://4cheat.ru/showthread.php?t=15891</devURL>
+				</mod>
+        <mod>
+				<name>TessuMod, WOT/Teamspeak integration</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL>http://forum.worldoftanks.eu/index.php?/topic/433614-091703-tessumod-wotteamspeak-integration-mod-v0611-05022017/</devURL>
+				</mod>
+        <mod>
+				<name>SpotMessanger</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>lots of configs</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+        </configs>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL>http://forum.worldoftanks.eu/index.php?/topic/562735-09170-spotmessanger-v070-14122016/</devURL>
+				</mod>
+        <mod>
+				<name>Bullet Damage Indicator by qdly</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>lots of configs</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+        </configs>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL>https://wotspeak.ru/paneli-povrezhdeniy-world-of-tanks-wot/321-indikator-napravleniya-damaga-v-vide-puli-world-of-tanks-wot.html</devURL>
+				</mod>
+        <mod>
+				<name>inbattle current rating calculation by dark knight mix rus</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>lots of configs</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+        </configs>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL>http://forum.worldoftanks.ru/index.php?/topic/1421510-</devURL>
+				</mod>
+        <mod>
+				<name>coulord penetration and ricochets on tanks (all)</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>100</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+        </configs>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>Max Farplane mod</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>WG FM Raadio</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL>http://worldoftanks.ru/ru/news/common/new-mod-radio/</devURL>
+				</mod>
+			</mods>
+    </catagory>
+    <catagory>
+			<name>Garage Session Stats</name>
+			<selectionType>single</selectionType>
+      <mods>
+        <mod>
+				<name>Detailed Session Statistics by WorstUnicumEU</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL>http://forum.worldoftanks.eu/index.php?/topic/591220-091701-detailed-session-statistics-by-worstunicumeu-v121/</devURL>
+				</mod>
+        <mod>
+				<name>one by tommy</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>one by yazen crazen</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+      </mods>
+    </catagory>
+    <!-- Comments here -->
+    <catagory>
 			<name>Sound Mods</name>
 			<selectionType>single</selectionType>
+      <dependencies>
+				<dependency>
+				<dependencyZipFile>increase_sound_memory.zip</dependencyZipFile>
+				<dependencyZipCRC>857209db20b8a7ff47091de8793a36ed</dependencyZipCRC>
+				<dependencyenabled>true</dependencyenabled>
+				</dependency>
+			</dependencies>
 			<mods>
 				<mod>
 				<name>Relhax</name>
@@ -46,168 +546,528 @@
 					</config>
 				</configs>
 				</mod>
-			</mods>
-			<dependencies>
-				<dependency>
-				<dependencyZipFile>increase_sound_memory.zip</dependencyZipFile>
-				<dependencyZipCRC>857209db20b8a7ff47091de8793a36ed</dependencyZipCRC>
-				<dependencyenabled>true</dependencyenabled>
-				</dependency>
-			</dependencies>
-		</catagory>
-		<catagory>
-			<name>Zoom Configs</name>
-			<selectionType>multi</selectionType>
-			<mods>
-				<mod>
-				<name>Zoom Out Config (meters)</name>
-				<version>1</version>
+        <mod>
+				<name>Sounds instead of crew voices by vvooj</name>
+				<version>6.1</version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
 				<enabled>true</enabled>
-				<configselectiontype>single</configselectiontype>
-				<configdefault>100</configdefault>
-				<configs>
-					<config>
-						<name>100</name>
-						<configzipfile>zoom_out_config_100.zip</configzipfile>
-						<configzipcrc>40654487e3545ef5faf6660d662618dd</configzipcrc>
-						<configenabled>true</configenabled>
-						<configtype>single_dropdown</configtype>
-					</config>
-					<config>
-						<name>200</name>
-						<configzipfile>zoom_out_config_200.zip</configzipfile>
-						<configzipcrc>f92c3f0be1b9e65d8f090019b5a2d058</configzipcrc>
-						<configenabled>true</configenabled>
-						<configtype>single_dropdown</configtype>
-					</config>
-					<config>
-						<name>500</name>
-						<configzipfile>zoom_out_config_500.zip</configzipfile>
-						<configzipcrc>f9367c61657fffcf05b9634989af6644</configzipcrc>
-						<configenabled>true</configenabled>
-						<configtype>single_dropdown</configtype>
-					</config>
-				</configs>
-				<description>description here</description>
-				<updateComment>update comment here</updateComment>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>UT Countdown</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
 				</mod>
 			</mods>
 		</catagory>
     <catagory>
-			<name>Damage Logs</name>
-			<selectionType>single</selectionType>
-			<mods>
-				<mod>
-				<name>XFT damage log</name>
-				<version>17</version>
-				<modzipfile>relhax_sounds_base.zip</modzipfile>
-				<modzipcrc>4734aa7c33ffab0954ffc45273d641c8</modzipcrc>
-				<enabled>true</enabled>
-				<pictures>
-					<picture>
-					<URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
-					</picture>
-				</pictures>
-				<description>a sample version</description>
-				<updateComment>update comment here</updateComment>
-				<devURL>http://relicgaming.com/index.php?topic=697.0</devURL>
-				</mod>
-			</mods>
-    </catagory>
-    <catagory>
-      <!-- Make XVM with default config the dependency -->
-      <dependencies>
-				<dependency>
-				<dependencyZipFile>xvm_ver_x_y.zip</dependencyZipFile>
-				<dependencyZipCRC>LOLOLOLOLOLOLOLOL</dependencyZipCRC>
-				<dependencyenabled>true</dependencyenabled>
-				</dependency>
-			</dependencies>
-			<name>XVM prebuilt configs</name>
-			<selectionType>single</selectionType>
-      <mod>
-				<name>Default Config</name>
-				<version>17</version>
-				<modzipfile>relhax_sounds_base.zip</modzipfile>
-				<modzipcrc>4734aa7c33ffab0954ffc45273d641c8</modzipcrc>
-				<enabled>true</enabled>
-				<pictures>
-					<picture>
-					<URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
-					</picture>
-				</pictures>
-				<description>a sample version</description>
-				<updateComment>update comment here</updateComment>
-				<devURL>http://relicgaming.com/index.php?topic=697.0</devURL>
-      </mod>
-      <mod>
-				<name>Willster419 Config</name>
-				<version>17</version>
-				<modzipfile>relhax_sounds_base.zip</modzipfile>
-				<modzipcrc>4734aa7c33ffab0954ffc45273d641c8</modzipcrc>
-				<enabled>true</enabled>
-				<pictures>
-					<picture>
-					<URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
-					</picture>
-				</pictures>
-				<description>a sample version</description>
-				<updateComment>update comment here</updateComment>
-				<devURL>http://relicgaming.com/index.php?topic=697.0</devURL>
-      </mod>
-    </catagory>
-    <catagory>
-      <!-- Make XVM with default config the dependency -->
-      <dependencies>
-				<dependency>
-				<dependencyZipFile>xvm_ver_x_y.zip</dependencyZipFile>
-				<dependencyZipCRC>LOLOLOLOLOLOLOLOL</dependencyZipCRC>
-				<dependencyenabled>true</dependencyenabled>
-				</dependency>
-			</dependencies>
-			<name>XVM config builder TODO</name>
-      <!-- Xvm default config dependency -->
+      <name>6th sense</name>
 			<selectionType>multi</selectionType>
-    </catagory>
-    <catagory>
-			<name>Garage Stat Tracker</name>
-			<selectionType>single</selectionType>
-    </catagory>
-    <catagory>
-			<name>Auto Aim Mods</name>
-			<selectionType>single</selectionType>
-    </catagory>
-    <catagory>
-			<name>Crosshair mods</name>
-			<selectionType>multi</selectionType>
-    </catagory>
-    <catagory>
-			<name>Various Ingame mods</name>
-			<selectionType>multi</selectionType>
-    </catagory>
-    <!-- Comments here -->
-    <catagory>
       <!-- dependency mlg mod sixthsense -->
       <dependencies>
 				<dependency>
-				<dependencyZipFile>mlg_sizthsense_mod.zip</dependencyZipFile>
-				<dependencyZipCRC>getthefreakingcrcvalue</dependencyZipCRC>
+				<dependencyZipFile></dependencyZipFile>
+				<dependencyZipCRC></dependencyZipCRC>
 				<dependencyenabled>true</dependencyenabled>
 				</dependency>
 			</dependencies>
-			<name>6th sense</name>
-			<selectionType>single</selectionType>
       <!-- mod of audio patches xvm sound off -->
       <!-- config of audio patches mld mod sound -->
       <!-- config of audio patches engine_config -->
       <!-- mod of icon patches xvm off -->
       <!-- config of icon patches mlg mod -->
+      <mods>
+        <mod>
+				<name>Audio</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>It's a trap!</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single_dropdown</configtype>
+					</config>
+          <config>
+						<name>RelHax</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single_dropdown</configtype>
+					</config>
+        </configs>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>Icon</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>Default Icon Duration</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>8 sec duration</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>10 sec duration</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>It's a trap!</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single_dropdown</configtype>
+					</config>
+        </configs>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+      </mods>
     </catagory>
     <catagory>
-			<name>Various garage mods</name>
+			<name>Tank Skin Collections</name>
+			<selectionType>single</selectionType>
+      <mods>
+        <mod>
+				<name>Contour skins with areas of penetration ( ͡° ͜ʖ ͡°)</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL>https://koreanrandom.com/forum/topic/1400-</devURL>
+				</mod>
+        <mod>
+				<name>Weeaboo tank skin collection</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+      </mods>
+    </catagory>
+    <catagory>
+			<name>Custom Tank Skins</name>
 			<selectionType>multi</selectionType>
+      <mods>
+        <mod>
+				<name>AMX 13 90</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>AMX CDC</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>AMX ELC</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>1</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single_dropdown</configtype>
+					</config>
+          <config>
+						<name>2</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single_dropdown</configtype>
+					</config>
+          <config>
+						<name>3</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single_dropdown</configtype>
+					</config>
+          <config>
+						<name>4</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single_dropdown</configtype>
+					</config>
+        </configs>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>BT-2</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>FV304</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>IS-3</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>CAMU</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>EXPLOSIV</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+        </configs>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>M5 Stuart</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>M24 Chaffee</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>M48A1 Patton</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>MT25 best tier 6 in the game</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>Skorp G</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>Color</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single_dropdown</configtype>
+					</config>
+          <config>
+						<name>Color</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single_dropdown</configtype>
+					</config>
+          <config>
+						<name>Color</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single_dropdown</configtype>
+					</config>
+          <config>
+						<name>Color</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single_dropdown</configtype>
+					</config>
+          <config>
+						<name>Color</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single_dropdown</configtype>
+					</config>
+        </configs>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>Skoda T40</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>T67</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>T110E5</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>OM Edition (RIP OMC Modpack)</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>OMNI Edition (RIP OMC Modpack)</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+        </configs>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>Type 59</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>T34 Heavy</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>T26E4 SuperP</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					<URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+      </mods>
     </catagory>
 	</catagories>
 </modInfoAlpha.xml>

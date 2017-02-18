@@ -765,7 +765,7 @@ namespace RelicModManager
             Application.DoEvents();
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             this.appendToLog("|RelHax ModManager " + managerVersion);
-            this.appendToLog("|Built on 02/14/2017, running at " + DateTime.Now);
+            this.appendToLog("|Built on 02/17/2017, running at " + DateTime.Now);
             this.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -828,7 +828,7 @@ namespace RelicModManager
             }
             if (Settings.firstLoad)
             {
-                helper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10 ,this.Location.Y);
+                helper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
                 helperText = helper.helperText.Text;
                 helper.Show();
                 Settings.firstLoad = false;

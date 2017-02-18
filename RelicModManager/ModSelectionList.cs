@@ -24,7 +24,6 @@ namespace RelicModManager
         {
             InitializeComponent();
         }
-
         //called on application startup
         private void ModSelectionList_Load(object sender, EventArgs e)
         {
@@ -54,8 +53,7 @@ namespace RelicModManager
                 this.Close();
             }
         }
-
-        //initializes the userMods list
+        //initializes the userMods list. This should only be run once
         private void initUserMods()
         {
             //create all the user mod objects
@@ -70,12 +68,10 @@ namespace RelicModManager
                     m.modZipFile = s;
                     m.name = Path.GetFileNameWithoutExtension(s);
                     m.enabled = true;
-                    //m.modChecked = false;
                     userMods.Add(m);
                 }
             }
         }
-
         //adds all usermods to thier own userMods tab
         private void addUserMods()
         {
@@ -123,7 +119,6 @@ namespace RelicModManager
                 }
             }
         }
-
         //adds a tab view for each mod catagory
         private void makeTabs()
         {
@@ -133,15 +128,17 @@ namespace RelicModManager
             {
                 TabPage t = new TabPage(c.name);
                 t.AutoScroll = true;
+                //link the names of catagory and tab so eithor can be searched for
                 t.Name = c.name;
+                //if the catagory selection type is only one mod allowed
                 if (c.selectionType.Equals("single"))
                 {
+                    //append a star so the user knows
                     t.Text = t.Text + "*";
                 }
                 modTabGroups.TabPages.Add(t);
             }
         }
-
         //adds a mod m to a tabpage t
         private void addMod(Mod m, TabPage t, int panelCount)
         {
@@ -182,24 +179,6 @@ namespace RelicModManager
                     configLabel.Text = m.configs[i].name;
                     configLabel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
                     configLabel.Enabled = false;
-                    string configDownloadPath3 = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
-                    if (File.Exists(configDownloadPath3))
-                    {
-                        MD5 hash = MD5.Create();
-                        string oldCRC = this.GetMd5Hash(hash, configDownloadPath3);
-                        if (!oldCRC.Equals(m.configs[i].crc))
-                            //file exists and is out of date
-                        {
-                            //configLabel.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-                            //configLabel.Text = configLabel.Text + "(Updated)";
-                        }
-                    }
-                    else if (!(File.Exists(configDownloadPath3)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
-                    {
-                        //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
-                        //configLabel.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-                        //configLabel.Text = configLabel.Text + "(Updated)";
-                    }
                     configPanel.Controls.Add(configLabel);
                 }
                 switch (m.configs[i].type)
@@ -216,6 +195,7 @@ namespace RelicModManager
                         configControlRB.Checked = m.configs[i].configChecked;
                         configControlRB.CheckedChanged += new EventHandler(configControlRB_CheckedChanged);
                         configControlRB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                        //Check if a mod zip exists locally and if it's out of date
                         string configDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
                         if (File.Exists(configDownloadPath))
                         {
@@ -223,14 +203,13 @@ namespace RelicModManager
                             string oldCRC = this.GetMd5Hash(hash, configDownloadPath);
                             if (!oldCRC.Equals(m.configs[i].crc))
                             {
-                                //configControlRB.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                                //the file exists, but it is out of date
                                 configControlRB.Text = configControlRB.Text + "(Updated)";
                             }
                         }
                         else if (!(File.Exists(configDownloadPath)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
                         {
-                            //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
-                            //configControlRB.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                            //file does not exist, but a crc does. File is not download.
                             configControlRB.Text = configControlRB.Text + "(Updated)";
                         }
                         configPanel.Controls.Add(configControlRB);
@@ -256,11 +235,7 @@ namespace RelicModManager
                             if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name + "_updated");
                             break;
                         }
-                        
-                        
-                            if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name);
-                        
-                        
+                        if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name);
                         if (m.configs[i].configChecked) configControlDD.SelectedIndex = i;
                         break;
 
@@ -284,14 +259,11 @@ namespace RelicModManager
                             string oldCRC = this.GetMd5Hash(hash, configDownloadPath2);
                             if (!oldCRC.Equals(m.configs[i].crc))
                             {
-                                //configControlCB.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                                 configControlCB.Text = configControlCB.Text + "(Updated)";
                             }
                         }
                         else if (!(File.Exists(configDownloadPath2)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
                         {
-                            //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
-                            //configControlCB.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                             configControlCB.Text = configControlCB.Text + "(Updated)";
                         }
                         configPanel.Controls.Add(configControlCB);
@@ -316,14 +288,11 @@ namespace RelicModManager
                 string oldCRC = this.GetMd5Hash(hash, modDownloadPath);
                 if (!oldCRC.Equals(m.crc))
                 {
-                    //modCheckBox.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                     modCheckBox.Text = modCheckBox.Text + "(Updated)";
                 }
             }
             else if (!(File.Exists(modDownloadPath)) && (m.crc != null) && (!m.crc.Equals("")))
             {
-                //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
-                //modCheckBox.Font = new System.Drawing.Font(Settings.fontName, Settings.fontSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 modCheckBox.Text = modCheckBox.Text + "(Updated)";
             }
             modCheckBox.UseVisualStyleBackColor = true;
@@ -339,6 +308,7 @@ namespace RelicModManager
             mainPanel.Controls.Add(configPanel);
             mainPanel.Controls.Add(modCheckBox);
             int panelCountYLocation = 70 * (panelCount - 1);
+            //if this is not the first mod being added to the panel
             if (panelCount > 1)
             {
                 panelCountYLocation = (panelCount - 1) * (t.Controls[0].Size.Height);
@@ -352,9 +322,8 @@ namespace RelicModManager
             //add to main panel
             mainPanel.Controls.Clear();
             mainPanel.Controls.Add(modCheckBox);
-            //get this to work so it frees up selection space
             if (m.configs.Count > 0)
-            mainPanel.Controls.Add(configPanel);
+                mainPanel.Controls.Add(configPanel);
             //add to tab
             t.Controls.Add(mainPanel);
             modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
@@ -371,7 +340,6 @@ namespace RelicModManager
                 Mod m = this.linkMod(cb.Name.Split('_')[1]);
                 string name = m.name;
                 //get the mod and/or config
-                //List<Picture> picturesList = m.picList;
                 List<Picture> picturesList = this.sortPictureList(m.picList);
                 string desc = m.description;
                 string updateNotes = m.updateComment;
@@ -386,7 +354,7 @@ namespace RelicModManager
         //handler for when a config selection is made from the drop down list
         void configControlDD_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //uncheck all other configs
+            //uncheck all other dorp down configs
             ComboBox cb = (ComboBox)sender;
             //get the mod this config is associated with
             //this is safe because it will never be a user mod
@@ -397,9 +365,12 @@ namespace RelicModManager
             configName = configName.Split('_')[0];
             foreach (Config c in m.configs)
             {
+                //verify it is on drodown type
                 if (c.type.Equals("single_dropdown"))
                 {
+                    //uncheck it
                     c.configChecked = false;
+                    //unless it's the one the user selected
                     if (configName.Equals(c.name))
                     {
                         c.configChecked = true;
@@ -410,34 +381,37 @@ namespace RelicModManager
         //handler for when the config checkbox is checked or unchecked
         void configControlCB_CheckedChanged(object sender, EventArgs e)
         {
-            //it's a RelHax modpack config checkBox
+            //checkboxes don't need to be unselected
             CheckBox cb = (CheckBox)sender;
             string modName = cb.Name.Split('_')[1];
             string catagoryName = cb.Name.Split('_')[0];
+            string configName = cb.Name.Split('_')[2];
             Mod m = this.linkMod(modName, catagoryName);
             foreach (Config cc in m.configs)
             {
-                string configName = cb.Name.Split('_')[2];
+                //multi part is not required, but enforces config types for good pratice
                 if (configName.Equals(cc.name) && cc.type.Equals("multi"))
                 {
                     cc.configChecked = cb.Checked;
                 }
             }
         }
-
         //handler for when a config radioButton is pressed
         void configControlRB_CheckedChanged(object sender, EventArgs e)
         {
+            //uncheck all other radioButton mods
             RadioButton rb = (RadioButton)sender;
             string modName = rb.Name.Split('_')[1];
             string catagoryName = rb.Name.Split('_')[0];
+            string configName = rb.Name.Split('_')[2];
             Mod m = this.linkMod(modName, catagoryName);
             foreach (Config cc in m.configs)
             {
-                string configName = rb.Name.Split('_')[2];
+                //verify only unchecking radiobutton ("single") configs
                 if (cc.type.Equals("single"))
                 {
                     cc.configChecked = false;
+                    //unless it's the one the user just selected
                     if (configName.Equals(cc.name))
                     {
                         //enable that config for that mod in memory
@@ -446,7 +420,6 @@ namespace RelicModManager
                 }
             }
         }
-
         //handler for when a mod checkbox is changed
         void modCheckBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -509,7 +482,7 @@ namespace RelicModManager
                     }
                 }
             }
-            
+
             foreach (Catagory c in parsedCatagoryList)
             {
                 foreach (Mod m in c.mods)
@@ -632,7 +605,6 @@ namespace RelicModManager
                 }
             }
         }
-
         //parses the xml mod info into the memory database
         private void createModStructure2()
         {
@@ -672,7 +644,14 @@ namespace RelicModManager
                                             m.name = nn.InnerText;
                                             break;
                                         case "version":
-                                            m.version = float.Parse(nn.InnerText);
+                                            try
+                                            {
+                                                m.version = float.Parse(nn.InnerText);
+                                            }
+                                            catch (FormatException)
+                                            {
+                                                m.version = (float)0.0;
+                                            }
                                             break;
                                         case "modzipfile":
                                             m.modZipFile = nn.InnerText;
@@ -681,7 +660,14 @@ namespace RelicModManager
                                             m.crc = nn.InnerText;
                                             break;
                                         case "enabled":
-                                            m.enabled = bool.Parse(nn.InnerText);
+                                            try
+                                            {
+                                                m.enabled = bool.Parse(nn.InnerText);
+                                            }
+                                            catch (FormatException)
+                                            {
+                                                m.enabled = false;
+                                            }
                                             break;
                                         case "description":
                                             m.description = nn.InnerText;
@@ -726,7 +712,14 @@ namespace RelicModManager
                                                             c.crc = nnnn.InnerText;
                                                             break;
                                                         case "configenabled":
-                                                            c.enabled = bool.Parse(nnnn.InnerText);
+                                                            try
+                                                            {
+                                                                c.enabled = bool.Parse(nnnn.InnerText);
+                                                            }
+                                                            catch (FormatException)
+                                                            {
+                                                                c.enabled = false;
+                                                            }
                                                             break;
                                                         case "configtype":
                                                             c.type = nnnn.InnerText;
@@ -772,7 +765,14 @@ namespace RelicModManager
                                             d.dependencyZipCRC = nnnn.InnerText;
                                             break;
                                         case "dependencyenabled":
-                                            d.enabled = bool.Parse(nnnn.InnerText);
+                                            try
+                                            {
+                                                d.enabled = bool.Parse(nnnn.InnerText);
+                                            }
+                                            catch (FormatException)
+                                            {
+                                                d.enabled = false;
+                                            }
                                             break;
                                     }
                                 }
@@ -785,7 +785,6 @@ namespace RelicModManager
             }
 
         }
-
         //resizing handler for the window
         private void ModSelectionList_SizeChanged(object sender, EventArgs e)
         {
@@ -817,7 +816,6 @@ namespace RelicModManager
                 }
             }
         }
-
         //handler to set the cancel bool to false
         private void continueButton_Click(object sender, EventArgs e)
         {
@@ -861,7 +859,6 @@ namespace RelicModManager
             }
             return null;
         }
-
         //returns the catagory based on the catagory name
         private Catagory getCatagory(string catName)
         {
@@ -871,7 +868,6 @@ namespace RelicModManager
             }
             return null;
         }
-
         //gets the user mod based on it's name
         private Mod getUserMod(string modName)
         {
@@ -884,14 +880,12 @@ namespace RelicModManager
             }
             return null;
         }
-
         //logs string info to the log output
         private void appendToLog(string info)
         {
             //the method should automaticly make the file if it's not there
             File.AppendAllText(Application.StartupPath + "\\RelHaxLog.txt", info + "\n");
         }
-
         //saves the currently checked configs and mods
         private void saveConfig()
         {
@@ -969,7 +963,6 @@ namespace RelicModManager
             doc.Save(savePath);
             MessageBox.Show("Config Saved Sucessfully");
         }
-
         //loads a saved config from xml and parses it into the memory database
         private void loadConfig()
         {
@@ -1091,7 +1084,6 @@ namespace RelicModManager
             this.addAllMods();
             this.addUserMods();
         }
-
         //checks for duplicates
         private bool duplicates()
         {
@@ -1124,7 +1116,6 @@ namespace RelicModManager
             //making it here means there are no duplicates
             return false;
         }
-
         //sorts a list of mods alphabetaicaly
         private void sortModsList(List<Mod> modList)
         {

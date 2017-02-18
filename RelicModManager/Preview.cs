@@ -38,10 +38,12 @@ namespace RelicModManager
             previewPicture.Image = null;
             if (pictures.Count == 0)
                 return;
+            if (URL.Equals(""))
+                return;
             previewPicture.Image = Settings.getLoadingImage();
             previewPicture.LoadAsync(URL);
             this.Text = name + " - " + currentlySelected;
-            Settings.appendToLog("Preview: started loading of picture '" + name + "' at URL '" + URL +"'");
+            Settings.appendToLog("Preview: started loading of picture '" + name + "' at URL '" + URL + "'");
         }
         //make the linked labels for each picture in the picturesList
         //so a user can navagate easily through the pictures
@@ -131,7 +133,7 @@ namespace RelicModManager
             {
                 currentlySelected = 0;
                 if (pictures.Count > 0)
-                this.displayPictures(pictures[currentlySelected].name, pictures[currentlySelected].URL);
+                    this.displayPictures(pictures[currentlySelected].name, pictures[currentlySelected].URL);
             }
             if (description == null)
                 description = "No Description Provided";
