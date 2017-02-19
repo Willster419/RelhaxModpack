@@ -51,6 +51,7 @@ namespace RelicModManager
             }
             Application.Run(new MainWindow());
             //Application.Run(new CRCCheck());
+            //Application.Run(new CRCCHECK2());
         }
     }
 }

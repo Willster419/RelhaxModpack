@@ -22,6 +22,8 @@ namespace RelicModManager
         public static bool largeFont { get; set; }
         public static bool comicSans { get; set; }
         public static bool firstLoad { get; set; }
+        public static int modSelectionHeight { get; set; }
+        public static int modSelectionWidth { get; set; }
         public enum LoadingGifs { standard = 0, thirdGuards = 1 };
         public static LoadingGifs gif;
         public const float normalSizeFont = 8.25F;
@@ -46,6 +48,8 @@ namespace RelicModManager
                 Settings.forceManuel = false;
                 Settings.gif = Settings.LoadingGifs.standard;
                 Settings.firstLoad = true;
+                Settings.modSelectionHeight = 250;
+                Settings.modSelectionWidth = 520;
                 Settings.applyInternalSettings();
             }
             else
@@ -75,6 +79,12 @@ namespace RelicModManager
                             break;
                         case "forceManuel":
                             Settings.forceManuel = bool.Parse(n.InnerText);
+                            break;
+                        case "modSelectionHeight":
+                            Settings.modSelectionHeight = int.Parse(n.InnerText);
+                            break;
+                        case "modSelectionWidth":
+                            Settings.modSelectionWidth = int.Parse(n.InnerText);
                             break;
                     }
                 }
@@ -151,6 +161,12 @@ namespace RelicModManager
             XmlElement xforceManuel = doc.CreateElement("forceManuel");
             xforceManuel.InnerText = "" + forceManuel;
             settingsHolder.AppendChild(xforceManuel);
+            XmlElement xmodSelectionHeight = doc.CreateElement("modSelectionHeight");
+            xmodSelectionHeight.InnerText = "" + modSelectionHeight;
+            settingsHolder.AppendChild(xmodSelectionHeight);
+            XmlElement xmodSelectionWidth = doc.CreateElement("modSelectionWidth");
+            xmodSelectionWidth.InnerText = "" + modSelectionWidth;
+            settingsHolder.AppendChild(xmodSelectionWidth);
             doc.Save(settingsXmlFile);
             Settings.appendToLog("Settings saved sucessfully");
         }

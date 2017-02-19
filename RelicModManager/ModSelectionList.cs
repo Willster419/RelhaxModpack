@@ -19,6 +19,7 @@ namespace RelicModManager
         public List<Mod> userMods;//can be grabbed by MainWindow
         public bool cancel = true;//used to determine if the user canceled
         private Preview p = new Preview(null, null, null);
+        private PleaseWait pw;
 
         public ModSelectionList()
         {
@@ -27,7 +28,11 @@ namespace RelicModManager
         //called on application startup
         private void ModSelectionList_Load(object sender, EventArgs e)
         {
+            pw = new PleaseWait();
+            pw.Show();
             this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
+            pw.loadingDescLabel.Text = "Reading Database...";
+            Application.DoEvents();
             this.createModStructure2();
             bool duplicates = this.duplicates();
             if (duplicates)
@@ -36,12 +41,14 @@ namespace RelicModManager
                 MessageBox.Show("CRITICAL: Duplicate mod name detected!!");
                 Application.Exit();
             }
+            pw.loadingDescLabel.Text = "Building UI...";
+            Application.DoEvents();
             this.makeTabs();
             this.addAllMods();
             this.initUserMods();
             this.addUserMods();
             this.ModSelectionList_SizeChanged(null, null);
-            this.Size = new Size(520, 250);
+            this.Size = new Size(Settings.modSelectionWidth,Settings.modSelectionHeight);
             if (Program.autoInstall)
             {
                 //automate the installation process
@@ -50,8 +57,10 @@ namespace RelicModManager
                 //close
                 this.loadConfig();
                 this.cancel = false;
+                pw.Close();
                 this.Close();
             }
+            pw.Close();
         }
         //initializes the userMods list. This should only be run once
         private void initUserMods()
@@ -218,7 +227,7 @@ namespace RelicModManager
 
                     case "single_dropdown":
                         //make a dropDown selection box
-                        if (configControlDD.Location.X == 0 && configControlDD.Location.Y == 0) configControlDD.Location = new System.Drawing.Point(100, yPosition - 10);
+                        if (configControlDD.Location.X == 0 && configControlDD.Location.Y == 0) configControlDD.Location = new System.Drawing.Point(configLabel.Location.X + configLabel.Size.Width + 6, yPosition - 10);
                         string configDownloadPath1 = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
                         if (File.Exists(configDownloadPath1))
                         {
@@ -696,6 +705,11 @@ namespace RelicModManager
                                                     switch (nnnnnnnn.Name)
                                                     {
                                                         case "URL":
+                                                            string innerText = nnnnnnnn.InnerText;
+                                                            if (innerText == null)
+                                                                continue;
+                                                            if (innerText.Equals(""))
+                                                                continue;
                                                             m.picList.Add(new Picture("Mod: " + m.name, nnnnnnnn.InnerText));
                                                             break;
                                                     }
@@ -742,6 +756,11 @@ namespace RelicModManager
                                                                     switch (nnnnnnnnnn.Name)
                                                                     {
                                                                         case "URL":
+                                                                            string innerText = nnnnnnnn.InnerText;
+                                                                            if (innerText == null)
+                                                                                continue;
+                                                                            if (innerText.Equals(""))
+                                                                                continue;
                                                                             m.picList.Add(new Picture("Config: " + c.name, nnnnnnnn.InnerText));
                                                                             break;
                                                                     }
@@ -1180,6 +1199,12 @@ namespace RelicModManager
             }
             // Return the hexadecimal string.
             return sBuilder.ToString();
+        }
+
+        private void ModSelectionList_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Settings.modSelectionHeight = this.Size.Height;
+            Settings.modSelectionWidth = this.Size.Width;
         }
     }
 }

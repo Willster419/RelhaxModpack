@@ -1,6 +1,5 @@
-version 18.4:
-- Fixed bug with UI in mods not displaying properly
-- Fixed bug with UI in configs not displaying properly
-- Added mods
-- Fixed mod database xml parsing bug
-- Fixed bugs with picture Preview window
+version 18.5:
+- Added more mods to selection. Currently only mods that work are Tank Skins
+- Fixed bugs with preview window
+- Added a loading window for loading the mod selection list
+- Added setting to save the size of the mod selection list window size

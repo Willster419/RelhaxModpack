@@ -47,6 +47,7 @@
             this.descriptionBox.Size = new System.Drawing.Size(378, 75);
             this.descriptionBox.TabIndex = 0;
             this.descriptionBox.Text = "";
+            this.descriptionBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.descriptionBox_LinkClicked);
             // 
             // previewPicture
             // 
@@ -105,6 +106,7 @@
             this.updateBox.Size = new System.Drawing.Size(378, 56);
             this.updateBox.TabIndex = 8;
             this.updateBox.Text = "";
+            this.updateBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.updateBox_LinkClicked);
             // 
             // Preview
             // 

@@ -11,42 +11,95 @@
 			<selectionType>single</selectionType>
       <dependencies>
 				<dependency>
-				<dependencyZipFile></dependencyZipFile>
+				<dependencyZipFile>XVM_base_6.5.4.zip</dependencyZipFile>
 				<dependencyZipCRC></dependencyZipCRC>
 				<dependencyenabled>true</dependencyenabled>
 				</dependency>
 			</dependencies>
-      <mod>
-        <!-- Don't actually have zip of default config -->
-				<name>Default Config</name>
-				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
-				<enabled>true</enabled>
-				<pictures>
-					<picture>
-					<URL></URL>
-					</picture>
-				</pictures>
-				<description>The Default Config that comes with XVM</description>
-				<updateComment></updateComment>
-				<devURL>http://www.modxvm.com/en/</devURL>
-      </mod>
-      <mod>
-				<name>Willster419's Config</name>
-				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
-				<enabled>true</enabled>
-				<pictures>
-					<picture>
-					<URL></URL>
-					</picture>
-				</pictures>
-				<description>Config by Willster419. Origionaly based on stock xvm config</description>
-				<updateComment></updateComment>
-				<devURL>https://github.com/Willster419/xvmConfig</devURL>
-      </mod>
+      <mods>
+        <mod>
+          <!-- Don't actually have zip of default config -->
+          <name>Default Config</name>
+          <version></version>
+          <modzipfile></modzipfile>
+          <modzipcrc></modzipcrc>
+          <enabled>true</enabled>
+          <pictures>
+            <picture>
+            <URL></URL>
+            </picture>
+          </pictures>
+          <description>The Default Config that comes with XVM</description>
+          <updateComment></updateComment>
+          <devURL>http://www.modxvm.com/en/</devURL>
+        </mod>
+        <mod>
+          <name>Willster419's Config</name>
+          <version></version>
+          <modzipfile></modzipfile>
+          <modzipcrc></modzipcrc>
+          <enabled>true</enabled>
+          <pictures>
+            <picture>
+            <URL></URL>
+            </picture>
+          </pictures>
+          <description>Config by Willster419. Origionaly based on stock xvm config</description>
+          <updateComment></updateComment>
+          <devURL>https://github.com/Willster419/xvmConfig</devURL>
+        </mod>
+        <mod>
+          <name>J1mB0's XVM Config</name>
+          <version>6.5.0.1</version>
+          <modzipfile></modzipfile>
+          <modzipcrc></modzipcrc>
+          <enabled>true</enabled>
+          <pictures>
+            <picture>
+              <URL>http://i.imgur.com/2bm1H04.png</URL>
+            </picture>
+            <picture>
+              <URL>http://i.imgur.com/r1BsiSL.png</URL>
+            </picture>
+            <picture>
+              <URL>http://i.imgur.com/mytpRoG.png</URL>
+            </picture>
+            <picture>
+              <URL>http://i.imgur.com/ar2TFi3.png</URL>
+            </picture>
+          </pictures>
+          <description></description>
+          <updateComment></updateComment>
+          <devURL>http://forum.worldoftanks.eu/index.php?/topic/56831-</devURL>
+        </mod>
+        <mod>
+          <name>Bones's XVM Config</name>
+          <version></version>
+          <modzipfile></modzipfile>
+          <modzipcrc></modzipcrc>
+          <enabled>true</enabled>
+          <pictures>
+            <picture>
+              <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/BonesXVMConfigTOP_zps9eb97ba7.jpg</URL>
+            </picture>
+            <picture>
+              <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/BonesXVMConfigMIDNEW_zps284f708b.jpg</URL>
+            </picture>
+            <picture>
+              <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/BonesXVMConfigBOTTOM_zpsc6a77b63.jpg</URL>
+            </picture>
+            <picture>
+              <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/HPinBars_zpsbc2f434c.jpg</URL>
+            </picture>
+            <picture>
+              <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/shot_1427_zpsc15e5fbb.jpg</URL>
+            </picture>
+          </pictures>
+          <description></description>
+          <updateComment></updateComment>
+          <devURL>http://forum.worldoftanks.com/index.php?/topic/316189-091703-xvm-config-by-bones-24jan17/</devURL>
+        </mod>
+      </mods>
     </catagory>
     <catagory>
       <!-- Make XVM with default config the dependency -->
@@ -54,11 +107,17 @@
 			<selectionType>multi</selectionType>
       <dependencies>
 				<dependency>
-				<dependencyZipFile></dependencyZipFile>
+				<dependencyZipFile>XVM_base_6.5.4.zip</dependencyZipFile>
 				<dependencyZipCRC></dependencyZipCRC>
 				<dependencyenabled>true</dependencyenabled>
 				</dependency>
 			</dependencies>
+    </catagory>
+    <catagory>
+			<name>PMOD-based mods</name>
+			<selectionType>single</selectionType>
+      <mods>
+      </mods>
     </catagory>
 		<catagory>
 			<name>Zoom Configs</name>
@@ -75,21 +134,21 @@
 				<configs>
 					<config>
 						<name>100</name>
-						<configzipfile>zoom_out_config_100.zip</configzipfile>
+						<configzipfile>zoom_out_100.zip</configzipfile>
 						<configzipcrc>40654487e3545ef5faf6660d662618dd</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single_dropdown</configtype>
 					</config>
 					<config>
 						<name>200</name>
-						<configzipfile>zoom_out_config_200.zip</configzipfile>
+						<configzipfile>zoom_out_200.zip</configzipfile>
 						<configzipcrc>f92c3f0be1b9e65d8f090019b5a2d058</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single_dropdown</configtype>
 					</config>
 					<config>
 						<name>500</name>
-						<configzipfile>zoom_out_config_500.zip</configzipfile>
+						<configzipfile>zoom_out_500.zip</configzipfile>
 						<configzipcrc>f9367c61657fffcf05b9634989af6644</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single_dropdown</configtype>
@@ -120,13 +179,29 @@
 			<mods>
 				<mod>
 				<name>Xft's Integrated DamageLogs (Requires XVM)</name>
-				<version></version>
+				<version>0.22a</version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
 				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>integrated hitlog</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>hitlog on top</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+        </configs>
 				<pictures>
 					<picture>
-					<URL></URL>
+            <URL>http://i.imgur.com/pjkRzWn.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -134,8 +209,8 @@
 				<devURL>http://forum.worldoftanks.eu/index.php?/topic/338561-0915-xft-integrated-damagelogs-v022a-30-05-2016/</devURL>
 				</mod>
         <mod>
-				<name>That other DamageLogs (Requires XVM)</name>
-				<version></version>
+				<name>Damagelog by GambitER</name>
+				<version>0.4.2</version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
 				<enabled>true</enabled>
@@ -157,12 +232,18 @@
 				</configs>
 				<pictures>
 					<picture>
-					<URL></URL>
+            <URL>http://cdn.modsworldoftanks.com/wp-content/uploads/2016/01/MBkp58k.png</URL>
+					</picture>
+          <picture>
+            <URL>http://cdn.modsworldoftanks.com/wp-content/uploads/2016/01/1.gif</URL>
+					</picture>
+          <picture>
+            <URL>http://s017.radikal.ru/i443/1505/e0/ed51e309393c.gif</URL>
 					</picture>
 				</pictures>
 				<description></description>
 				<updateComment></updateComment>
-				<devURL></devURL>
+				<devURL>http://modsworldoftanks.com/the-damage-panel-from-gambiter-damagelog/</devURL>
 				</mod>
 			</mods>
     </catagory>
@@ -208,7 +289,13 @@
         </configs>
 				<pictures>
 					<picture>
-					<URL></URL>
+            <URL>http://cdn-frm-eu.wargaming.net/wot/ru/uploads/monthly_08_2014/post-6420121-0-91975400-1408203215.jpg</URL>
+					</picture>
+          <picture>
+            <URL>http://cdn-frm-eu.wargaming.net/wot/ru/uploads/monthly_08_2014/post-6420121-0-54067300-1408203191.jpg</URL>
+					</picture>
+          <picture>
+            <URL>http://cdn-frm-eu.wargaming.net/wot/ru/uploads/monthly_08_2014/post-6420121-0-73875800-1408203179.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -235,6 +322,14 @@
 						<configzipcrc></configzipcrc>
 						<configenabled></configenabled>
 						<configtype>single</configtype>
+            <pictures>
+						  <picture>
+						    <URL>http://fs5.directupload.net/images/user/160816/tpgu3xoc.jpg</URL>
+						  </picture>
+              <picture>
+						    <URL>http://fs5.directupload.net/images/user/160816/v7s56u4m.jpg</URL>
+						  </picture>
+						</pictures>
 					</config>
           <config>
 						<name>arty only</name>
@@ -246,7 +341,7 @@
         </configs>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://4cheat.ru/i/view.php?id=14783.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -268,31 +363,54 @@
 						<configtype>single</configtype>
 					</config>
           <config>
-						<name>kaeptn</name>
+						<name>kaeptn text</name>
 						<configzipfile></configzipfile>
 						<configzipcrc></configzipcrc>
 						<configenabled></configenabled>
 						<configtype>single</configtype>
+            <pictures>
+              <picture>
+						    <URL>http://www.mediafire.com/convkey/1e62/t43obw7hh3re7dp6g.jpg</URL>
+						  </picture>
+              <picture>
+						    <URL>http://www.mediafire.com/convkey/6ab3/yyp4dmcyyp3746h6g.jpg</URL>
+						  </picture>
+						</pictures>
+					</config>
+          <config>
+						<name>kaeptn icon</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+						  <picture>
+						    <URL>http://www.mediafire.com/convkey/4646/8y17n8jfrolm76l6g.jpg</URL>
+						  </picture>
+              <picture>
+						    <URL>http://www.mediafire.com/convkey/bc82/3gfmpyrfbop06h66g.jpg</URL>
+						  </picture>
+						</pictures>
 					</config>
         </configs>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://cdn-frm-eu.wargaming.net/wot/eu/uploads/monthly_10_2014/post-506947255-0-02175200-1414274138.jpg</URL>
 					</picture>
 				</pictures>
-				<description></description>
-				<updateComment></updateComment>
+				<description>kaeptn configs@http://forum.worldoftanks.eu/index.php?/topic/441413-0917-autoaim-indicationaddins-no-proximity-snapping-for-autoaim-but/page__st__1580__pid__13686506#entry13686506</description>
+				<updateComment>Latest update locks onto a target when manually highlited, so it is legal now</updateComment>
 				<devURL>http://forum.worldoftanks.eu/index.php?/topic/441413-0917-autoaim-indicationaddins-no-proximity-snapping-for-autoaim-but/</devURL>
 				</mod>
         <mod>
-				<name>Penetration Indicator (not PMOD)</name>
+				<name>Number Indicator of Armor Penetration ( ͡° ͜ʖ ͡°) (not PMOD)</name>
 				<version></version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://4cheat.ru/i/view.php?id=333.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -301,28 +419,50 @@
 				</mod>
         <mod>
 				<name>TessuMod, WOT/Teamspeak integration</name>
-				<version></version>
+				<version>0.6.11</version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
 				<enabled>true</enabled>
+        <configs>
+          <config>
+						<name>3D positional audio</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>multi</configtype>
+					</config>
+        </configs>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>https://dl.dropboxusercontent.com/u/37902077/wot/tessu_mod/trainingroom.png</URL>
+					</picture>
+          <picture>
+					  <URL>https://dl.dropboxusercontent.com/u/37902077/wot/tessu_mod/battle.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>https://dl.dropboxusercontent.com/u/37902077/wot/tessu_mod/notification.png</URL>
 					</picture>
 				</pictures>
-				<description></description>
+				<description>A modification for integrating TeamSpeak into Garage and Battle.</description>
 				<updateComment></updateComment>
 				<devURL>http://forum.worldoftanks.eu/index.php?/topic/433614-091703-tessumod-wotteamspeak-integration-mod-v0611-05022017/</devURL>
 				</mod>
         <mod>
 				<name>SpotMessanger</name>
-				<version></version>
+				<version>0.7.0</version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
 				<enabled>true</enabled>
         <configs>
 					<config>
-						<name>lots of configs</name>
+						<name>active at start, deactive with F11</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>inactive at start, active with F11</name>
 						<configzipfile></configzipfile>
 						<configzipcrc></configzipcrc>
 						<configenabled></configenabled>
@@ -331,7 +471,7 @@
         </configs>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL></URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -339,23 +479,178 @@
 				<devURL>http://forum.worldoftanks.eu/index.php?/topic/562735-09170-spotmessanger-v070-14122016/</devURL>
 				</mod>
         <mod>
-				<name>Bullet Damage Indicator by qdly</name>
+				<name>LightMod by PolyacovYury</name>
+				<version>2</version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>headlights only</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-78083800-1474790872.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Car Pack</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-25565600-1474791402.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-56571700-1474791366.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-29763500-1474791383.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Neon Track Lights</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>multi</configtype>
+            <pictures>
+              <picture>
+                <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-40315100-1474790978.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Spotlight on tank in sight</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>multi</configtype>
+            <pictures>
+              <picture>
+                <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-44270600-1474791048.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>keep daytime lighting</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>multi</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+					</config>
+        </configs>
+				<pictures>
+					<picture>
+					  <URL></URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL>https://koreanrandom.com/forum/topic/19365-</devURL>
+				</mod>
+        <mod>
+				<name>Bullet Damage Indicators</name>
 				<version></version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
 				<enabled>true</enabled>
         <configs>
 					<config>
-						<name>lots of configs</name>
+						<name>qdly</name>
 						<configzipfile></configzipfile>
 						<configzipcrc></configzipcrc>
 						<configenabled></configenabled>
 						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://wotsite.net/images/2016/10/4/11.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>zx80</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://wotsite.net/images/2016/10/4/12.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>marsoff</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://wotsite.net/images/2016/3/15/8.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>lenya69</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://cdn-frm-eu.wargaming.net/wot/ru/uploads/monthly_01_2017/post-188170-0-97028800-1483580564.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>dikey93</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://wotsite.net/images/2016/10/4/10.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>RazNaRok and GreenWarriors</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://wotsite.net/images/2016/10/4/9.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>10 second display</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>multi</configtype>
 					</config>
         </configs>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL></URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -363,28 +658,81 @@
 				<devURL>https://wotspeak.ru/paneli-povrezhdeniy-world-of-tanks-wot/321-indikator-napravleniya-damaga-v-vide-puli-world-of-tanks-wot.html</devURL>
 				</mod>
         <mod>
-				<name>inbattle current rating calculation by dark knight mix rus</name>
+				<name>inbattle current rating calculation by Ekspoint</name>
 				<version></version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
 				<enabled>true</enabled>
         <configs>
 					<config>
-						<name>lots of configs</name>
+						<name>wn8</name>
 						<configzipfile></configzipfile>
 						<configzipcrc></configzipcrc>
 						<configenabled></configenabled>
 						<configtype>single</configtype>
+            <pictures>
+						  <picture>
+						    <URL>http://i.imgur.com/uFDD1ch.jpg</URL>
+						  </picture>
+						</pictures>
+					</config>
+          <config>
+						<name>wn8 and damage</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+						  <picture>
+						    <URL>http://i.imgur.com/qwkYFLE.jpg</URL>
+						  </picture>
+						</pictures>
+					</config>
+          <config>
+						<name>wn8 and damage with background 1</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+						  <picture>
+						    <URL>http://fs5.directupload.net/images/user/160611/orrxsrn4.jpg</URL>
+						  </picture>
+						</pictures>
+					</config>
+          <config>
+						<name>wn8 and damage with background 2</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+						  <picture>
+						    <URL>http://fs5.directupload.net/images/user/160611/22klpkq2.jpg</URL>
+						  </picture>
+						</pictures>
+					</config>
+          <config>
+						<name>wn8 and damage with background 3</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+						  <picture>
+						    <URL>http://fs5.directupload.net/images/user/160611/4yh32w5c.jpg</URL>
+						  </picture>
+						</pictures>
 					</config>
         </configs>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL></URL>
 					</picture>
 				</pictures>
-				<description></description>
+				<description>Kaeptn Config@http://forum.worldoftanks.eu/index.php?/topic/561169-091703-inbattle-wn8-calculator-eff-damage-updated-02022017/page__st__40__pid__12646652#entry12646652</description>
 				<updateComment></updateComment>
-				<devURL>http://forum.worldoftanks.ru/index.php?/topic/1421510-</devURL>
+				<devURL>http://forum.worldoftanks.eu/index.php?/topic/561169-091703-inbattle-wn8-calculator-eff-damage-updated-02022017</devURL>
 				</mod>
         <mod>
 				<name>coulord penetration and ricochets on tanks (all)</name>
@@ -394,21 +742,81 @@
 				<enabled>true</enabled>
         <configs>
 					<config>
-						<name>100</name>
+						<name>Artasan</name>
 						<configzipfile></configzipfile>
 						<configzipcrc></configzipcrc>
 						<configenabled></configenabled>
 						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s1.directupload.net/images/user/131227/74fsriw4.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Leecher</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs2.directupload.net/images/150625/h5uctkik.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>New Version</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs2.directupload.net/images/150625/fbytnioy.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Protanki</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs2.directupload.net/images/150625/rnhp6i6b.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Refaol</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs2.directupload.net/images/150625/88rzon9x.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>VoPV</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs2.directupload.net/images/150625/tvum98ss.jpg</URL>
+              </picture>
+            </pictures>
 					</config>
         </configs>
-				<pictures>
-					<picture>
-					<URL></URL>
-					</picture>
-				</pictures>
 				<description></description>
 				<updateComment></updateComment>
-				<devURL></devURL>
+				<devURL>http://goxwot.blogspot.com/2015/05/98-damage-stickers-7-variants.html</devURL>
 				</mod>
         <mod>
 				<name>Max Farplane mod</name>
@@ -416,14 +824,191 @@
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
 				<enabled>true</enabled>
+        <configs>
+					<config>
+						<name>max visibility</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>fog removal</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>both</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+					</config>
+        </configs>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://s019.radikal.ru/i641/1312/dc/f65367de5257.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
 				<updateComment></updateComment>
+				<devURL>http://forum.worldoftanks.ru/index.php?/topic/1125299-</devURL>
+				</mod>
+        <mod>
+				<name>ATAC</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					  <URL>https://wotspeak.ru/uploads/posts/2015-10/1445335486_shot_019.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>https://wotspeak.ru/uploads/posts/2015-10/1445335476_shot_013.jpg</URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL>https://wotspeak.ru/mody-world-of-tanks-wot/525-mod-atas-informaciya-o-blizhayshem-zasvechennom-tanke-vraga-dlya-world-of-tanks.html</devURL>
+				</mod>
+        <mod>
+				<name>Loading Video</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+        <config>
+						<name>MLG</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>GuP</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+					</config>
+          </configs>
+				<pictures>
+					<picture>
+					  <URL></URL>
+					</picture>
+				</pictures>
+				<description>weeb video@http://forum.worldoftanks.com/index.php?/topic/398152-0917-girls-und-panzer-the-new-mod-collection/@MLG video@http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/</description>
+				<updateComment></updateComment>
 				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>Battle Observer (HP pools)</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					  <URL>http://fs5.directupload.net/images/160727/pu8ywi2f.jpg</URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL>http://forum.worldoftanks.ru/index.php?/topic/1385404-091703-battle-observer-v1067-27012017-teamshp-damage-log-zoommod-debug-time-armorcalculator/</devURL>
+				</mod>
+        <mod>
+				<name>SafeShot</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+          <config>
+						<name>1 Sec no corpse Shot</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>2 sec no corpse shot</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+          </config>
+          <config>
+						<name>block team damage shot</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>multi</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+          </config>
+          <config>
+						<name>send team damage message in chat</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>multi</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+          </config>
+        </configs>
+				<pictures>
+					<picture>
+					  <URL>http://s14.directupload.net/images/131220/mkrjfo7g.jpg</URL>
+					</picture>
+				</pictures>
+				<description>legal info@http://forum.worldoftanks.eu/index.php?/topic/599621-wg-support-safeshot-is-illegal/page__st__20__pid__13403197#entry13403197</description>
+				<updateComment></updateComment>
+				<devURL>http://forum.worldoftanks.ru/index.php?/topic/1769267-</devURL>
 				</mod>
         <mod>
 				<name>WG FM Raadio</name>
@@ -433,12 +1018,49 @@
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://static-ptl-ru.gcdn.co/dcont/fb/image/wotfm_684_243.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://static-ptl-ru.gcdn.co/dcont/fb/image/newmodradio1.png</URL>
+					</picture>
+          <picture>
+					  <URL>http://static-ptl-ru.gcdn.co/dcont/fb/image/newmodradio2.png</URL>
 					</picture>
 				</pictures>
 				<description></description>
 				<updateComment></updateComment>
 				<devURL>http://worldoftanks.ru/ru/news/common/new-mod-radio/</devURL>
+				</mod>
+        <mod>
+        <name>BalCalcMod</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>true</enabled>
+        <configs>
+          <config>
+						<name>F</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>Q</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>single</configtype>
+          </config>
+        </configs>
+				<pictures>
+					<picture>
+					  <URL>http://s1.directupload.net/images/user/140614/qhfyk8zv.jpg</URL>
+					</picture>
+				</pictures>
+				<description>The mod is designed to remedy the situation, it is impossible to aim above the hill on the background cutoff</description>
+				<updateComment></updateComment>
+				<devURL>https://koreanrandom.com/forum/topic/30440-</devURL>
 				</mod>
 			</mods>
     </catagory>
@@ -454,7 +1076,16 @@
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://i.imgur.com/oEMO7BZ.png</URL>
+					</picture>
+          <picture>
+					  <URL>http://i.imgur.com/hhF6e0A.png</URL>
+					</picture>
+          <picture>
+					  <URL>http://i.imgur.com/qDxGpCX.png</URL>
+					</picture>
+          <picture>
+					  <URL>http://i.imgur.com/1zJTcVH.png</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -462,34 +1093,34 @@
 				<devURL>http://forum.worldoftanks.eu/index.php?/topic/591220-091701-detailed-session-statistics-by-worstunicumeu-v121/</devURL>
 				</mod>
         <mod>
-				<name>one by tommy</name>
+				<name>Session Statistics by Tomonik</name>
 				<version></version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
-					<picture>
-					<URL></URL>
+          <picture>
+					  <URL>http://i.imgur.com/UOiwa7n.png</URL>
 					</picture>
 				</pictures>
 				<description></description>
 				<updateComment></updateComment>
-				<devURL></devURL>
+				<devURL>http://forum.worldoftanks.eu/index.php?/topic/572771-091703-session-statistics-and-battle-result-messages/</devURL>
 				</mod>
         <mod>
-				<name>one by yazen crazen</name>
+				<name>YasenKrasen session statistics</name>
 				<version></version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://i.imgur.com/h1kpmRO.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
 				<updateComment></updateComment>
-				<devURL></devURL>
+				<devURL>http://forum.worldoftanks.eu/index.php?/topic/209229-098-yasenkrasen-coloured-messages-session-statistics-eng/</devURL>
 				</mod>
       </mods>
     </catagory>
@@ -513,7 +1144,7 @@
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
+					  <URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
 					</picture>
 				</pictures>
 				<description>here is a sample description@with a newline</description>
@@ -528,7 +1159,7 @@
 						<configtype>single</configtype>
 						<pictures>
 						    <picture>
-						    <URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
+						      <URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
 						    </picture>
 						</pictures>
 					</config>
@@ -540,7 +1171,7 @@
 						<configtype>single</configtype>
 						<pictures>
 						    <picture>
-						    <URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
+						      <URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
 						    </picture>
 						</pictures>
 					</config>
@@ -554,7 +1185,7 @@
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL></URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -569,7 +1200,7 @@
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL></URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -602,27 +1233,90 @@
 				<modzipcrc></modzipcrc>
 				<enabled>true</enabled>
         <configs>
+          <config>
+						<name>RelHax by Willster419</name>
+						<configzipfile>SixthSense_Sound_Relhax_by_Willster419_2016-03-26.zip</configzipfile>
+						<configzipcrc>4cf0fb648776fef8b6fd93eba8ec4ff2</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+					</config>
 					<config>
 						<name>It's a trap!</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
-						<configtype>single_dropdown</configtype>
+						<configzipfile>SixthSense_Sound_GENERAL_ACKBAR_2016-03-26.zip</configzipfile>
+						<configzipcrc>0ad8b6eab90c16e679ce846a70c4ed25</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
 					</config>
           <config>
-						<name>RelHax</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
-						<configtype>single_dropdown</configtype>
+						<name>OMC signal (12 sec)</name>
+						<configzipfile>SixthSense_Sound_normal_2016-03-26.zip</configzipfile>
+						<configzipcrc>b08cb939f5e0f4b5f672ce1f16a6143d</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>OMC signal (9,5 sec) 10db softer</name>
+						<configzipfile>SixthSense_Sound_less_10db_softer_2016-03-26.zip</configzipfile>
+						<configzipcrc>9ed1d1265942dcbc2d00363d2e71b7a5</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>Cyborg by APCR_NOOB</name>
+						<configzipfile>SixthSense_Sound_Cyborg_by_APCR_NOOB_2016-03-26.zip</configzipfile>
+						<configzipcrc>0436792cd5cbf5ff91cc4f8643a5094d</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>German Soldier</name>
+						<configzipfile>SixthSense_Sound_German_Soldier_2016-03-26.zip</configzipfile>
+						<configzipcrc>8a0dfb478aeee83c01e3a98004da463a</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>Metal Gear Solid</name>
+						<configzipfile>SixthSense_Sound_Metal_Gear_Solid_2016-03-26.zip</configzipfile>
+						<configzipcrc>eb91f6c141d63c985aad6034bd91fd8c</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>Minions</name>
+						<configzipfile>SixthSense_Sound_Minions.zip</configzipfile>
+						<configzipcrc>262c7fc5209eb7433de458779d21cf6d</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>Sauron signal</name>
+						<configzipfile>SixthSense_Sound_Sauron_2016-03-26.zip</configzipfile>
+						<configzipcrc>f57139b3e132603d4e0cdb0d1ed038d4</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>Illuminati by Aimdrol</name>
+						<configzipfile>SixthSense_Sound_Illuminati_2016-10-09.zip</configzipfile>
+						<configzipcrc>4f082221755e7086ade189f83d9c795b</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>Timer #1 (10 sec)</name>
+						<configzipfile>SixthSense_Sound_Timer_1_2016-03-26.zip</configzipfile>
+						<configzipcrc>0d5ab29c9eadb4a383d40c06daeb5e44</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
 					</config>
         </configs>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL></URL>
 					</picture>
 				</pictures>
-				<description></description>
+				<description>Change your 6th sense sound to one of these in the list</description>
 				<updateComment></updateComment>
 				<devURL></devURL>
 				</mod>
@@ -637,37 +1331,486 @@
 						<name>Default Icon Duration</name>
 						<configzipfile></configzipfile>
 						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
 					</config>
           <config>
 						<name>8 sec duration</name>
 						<configzipfile></configzipfile>
 						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
 					</config>
           <config>
 						<name>10 sec duration</name>
 						<configzipfile></configzipfile>
 						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
 					</config>
           <config>
 						<name>It's a trap!</name>
+						<configzipfile>SixthSense_Icon_general_akbar_2016-03-26.zip</configzipfile>
+						<configzipcrc>fbeb92984f0c19f5a88cb6ea75f97341</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>OMC Logo</name>
+						<configzipfile>SixthSense_Icon_OMC_Logo_2016-03-26.zip</configzipfile>
+						<configzipcrc>ea88517e0b9aed056357c679a7e4ce6e</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s14.directupload.net/images/user/131220/whrhwpnr.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>OMNI Logo</name>
+						<configzipfile>SixthSense_Icon_OMC_Logo_2016-03-26.zip</configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s1.directupload.net/images/user/131220/4fy3sumh.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Aslain</name>
 						<configzipfile></configzipfile>
 						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configenabled>true</configenabled>
 						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s1.directupload.net/images/user/131220/fpznn3wi.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>blue LED</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s1.directupload.net/images/user/131220/mresvujs.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>blue Lightning</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs1.directupload.net/images/user/150723/bpk7kpug.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Boobs</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s14.directupload.net/images/user/141125/yo97amwu.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>EiKarrRamba</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s7.directupload.net/images/140803/jqshlzne.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>F4CE</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s7.directupload.net/images/user/141005/kf5cg8mv.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Freaky Icecubes</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/151101/oz9ymq42.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Fry</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s7.directupload.net/images/user/131220/qlxjhb9u.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>FS</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs2.directupload.net/images/150208/hpxfvs28.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>General Ackbar</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s1.directupload.net/images/user/140803/3jp2djox.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Granate</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s14.directupload.net/images/140917/ke3pg2nm.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>gRuMM3l</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs1.directupload.net/images/150213/txtord5x.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>gRuMM3lin3</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs2.directupload.net/images/user/150604/hys73j93.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Jeff</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs2.directupload.net/images/user/150602/sd6enrg4.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>J1mB0</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s1.directupload.net/images/user/131220/l8di5uq4.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>JUMBO</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s14.directupload.net/images/user/140603/5e49miiv.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>JUST</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs2.directupload.net/images/user/150524/q2tdamwz.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Kriegstreiber</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s14.directupload.net/images/user/140112/vg48bc2o.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>LEOxx</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/151122/eobzlrs9.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Lightbulb</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s1.directupload.net/images/user/131220/gsbkqmwa.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Minions</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s14.directupload.net/images/user/141120/zau7hcy3.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Mootality</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s1.directupload.net/images/user/140603/tflpgg7r.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>PZK</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s14.directupload.net/images/141015/4zkq744q.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Rageface</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs1.directupload.net/images/user/150601/qsqs5dqx.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Ratz Fatz</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs1.directupload.net/images/user/150215/ygrg569a.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>red Bulb</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs1.directupload.net/images/150215/i44dikgm.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>red warning Sign</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s14.directupload.net/images/user/131220/5yq2o6ip.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Riokat</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s7.directupload.net/images/user/140826/x4p4qsbs.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Sauron</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s1.directupload.net/images/user/131220/mzu6xpcr.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Shark</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s7.directupload.net/images/user/131220/gdpiqqtx.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Superman</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs1.directupload.net/images/user/150215/onydnh3o.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>SWF-A</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://eu.wargaming.net/clans/media/clans/emblems/cl_106/500031106/emblem_195x195.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Yellow Warning Sign</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s7.directupload.net/images/user/131220/lhj8ote6.png</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>animated Illuminati pyramid by Aimdrol</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://i.imgur.com/39C5zrz.gif</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>animated light bulb by Aimdrol</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single_dropdown</configtype>
+            <pictures>
+              <picture>
+                <URL>http://i.imgur.com/KIBZR4P.gif</URL>
+              </picture>
+            </pictures>
 					</config>
         </configs>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL></URL>
 					</picture>
 				</pictures>
-				<description></description>
+				<description>Change your 6th sense icon to one of these from the list</description>
 				<updateComment></updateComment>
 				<devURL></devURL>
 				</mod>
@@ -680,12 +1823,27 @@
         <mod>
 				<name>Contour skins with areas of penetration ( ͡° ͜ʖ ͡°)</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Tank_Skins_HitZone_Skins_black_white_by_Mr.13_0.9.17.0.1_2016-12-13.zip</modzipfile>
+				<modzipcrc>e0736f7d24e97c518a80b0dccda1fce9</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://s1.directupload.net/images/user/140809/o8sxzocx.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://s1.directupload.net/images/user/140809/9zv8tfej.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://s7.directupload.net/images/user/140809/ikyb3tn6.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://s14.directupload.net/images/user/140809/hoypq4ku.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://s14.directupload.net/images/user/140809/kobi2s2t.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://s1.directupload.net/images/user/140809/q4rrjpug.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -693,14 +1851,29 @@
 				<devURL>https://koreanrandom.com/forum/topic/1400-</devURL>
 				</mod>
         <mod>
-				<name>Weeaboo tank skin collection</name>
+				<name>Anime Tank Skins</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Tank_Skins_Anime_Tank_Skins_0.9.15.zip</modzipfile>
+				<modzipcrc>c46fb57a3c7c8c26626867019f316d54</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://fs2.directupload.net/images/user/150624/bsys44bc.png</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs1.directupload.net/images/user/150624/5f8zeqph.png</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs1.directupload.net/images/user/150624/b7ocz98z.png</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs2.directupload.net/images/user/150624/jg8uki6d.png</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs2.directupload.net/images/user/150624/62pu68h8.png</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs2.directupload.net/images/user/150624/btwoze7t.png</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -716,12 +1889,12 @@
         <mod>
 				<name>AMX 13 90</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Custom_Tank_Skins_Racing-Skin_F17_AMX_13_90_RaceControl_0.9.15.1.1.zip</modzipfile>
+				<modzipcrc>ed979abf1749d77b8b0c9542b50a99d6</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://s14.directupload.net/images/user/141011/5jumyfci.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -733,10 +1906,13 @@
 				<version></version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://fs5.directupload.net/images/user/161224/8redvdrb.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs5.directupload.net/images/user/161224/tbjdeuy4.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -751,37 +1927,69 @@
 				<enabled>true</enabled>
         <configs>
 					<config>
-						<name>1</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
-						<configtype>single_dropdown</configtype>
+						<name>YodaSchlumpf</name>
+						<configzipfile>Custom_Tank_Skins_Racing-Skin_F62_ELC_AMX_YodaSchlumpf_0.9.15.2.zip</configzipfile>
+						<configzipcrc>1e128008bda91a664299f8c8785e4ca6</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs2.directupload.net/images/user/150628/9ypr4kxt.jpg</URL>
+              </picture>
+            </pictures>
 					</config>
           <config>
-						<name>2</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
-						<configtype>single_dropdown</configtype>
+						<name>Dukes of Hazzard</name>
+						<configzipfile>Custom_Tank_Skins_Racing-Skin_F62_ELC_AMX_General_Lee_0.9.15.2.zip</configzipfile>
+						<configzipcrc>8198f93ce8c3ffea8c31e895ff142c77</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/151005/wogsgrl9.png</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/151005/kmh4zl9o.png</URL>
+              </picture>
+            </pictures>
 					</config>
           <config>
-						<name>3</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
-						<configtype>single_dropdown</configtype>
+						<name>MONSTER Energy</name>
+						<configzipfile>Custom_Tank_Skins_Racing-Skin_F62_ELC_AMX_MONSTERenergy_0.9.15.2.zip</configzipfile>
+						<configzipcrc>f2a685778a92e0da358e6039b96b4c2d</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs2.directupload.net/images/user/150621/za92sk7o.png</URL>
+              </picture>
+              <picture>
+                <URL>http://fs1.directupload.net/images/user/150621/ef39iaci.png</URL>
+              </picture>
+              <picture>
+                <URL>http://fs1.directupload.net/images/user/150621/3pbgudmp.png</URL>
+              </picture>
+              <picture>
+                <URL>http://fs1.directupload.net/images/user/150621/fmx5jk92.png</URL>
+              </picture>
+            </pictures>
 					</config>
           <config>
-						<name>4</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
-						<configtype>single_dropdown</configtype>
+						<name>Hello Kitty</name>
+						<configzipfile>Custom_Tank_Skins_Racing-Skin_F62_ELC_AMX_HelloKitty_0.9.15.2.zip</configzipfile>
+						<configzipcrc>217b5a6db2f33268dcb9ef5a1175fbb2</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs1.directupload.net/images/user/150626/e5e8m8u5.jpg</URL>
+              </picture>
+            </pictures>
 					</config>
         </configs>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL></URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -791,12 +1999,18 @@
         <mod>
 				<name>BT-2</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Custom_Tank_Skins_Racing-Skin_R08_BT-2_GrillMaxe_0.9.15.2.zip</modzipfile>
+				<modzipcrc>a6b11dbb006a2597166dcedb49956e3b</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://fs2.directupload.net/images/user/150412/6mx6fpao.png</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs2.directupload.net/images/user/150412/sj44zata.png</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs2.directupload.net/images/user/150412/nxkfpoi4.png</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -806,12 +2020,15 @@
         <mod>
 				<name>FV304</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Custom_Tank_Skins_Racing-Skin_GB77_FV304_RaceControl_0.9.16.zip</modzipfile>
+				<modzipcrc>e11b7d505d747c43b7a63acb8c1fdb3e</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://fs5.directupload.net/images/user/161104/isbspraj.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs5.directupload.net/images/user/161104/7nyl6h7q.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -827,22 +2044,44 @@
         <configs>
 					<config>
 						<name>CAMU</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Custom_Tank_Skins_Skin_R19_IS-3_DSS_camo_2016-05-27.zip</configzipfile>
+						<configzipcrc>b2d68e462ab43faca693b7de35ad85c8</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/160527/avk38wur.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/160527/9jnzohyr.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/160527/y9po2wwt.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/160527/i6iaxpfc.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/160527/zsda29j6.jpg</URL>
+              </picture>
+            </pictures>
 					</config>
           <config>
 						<name>EXPLOSIV</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Custom_Tank_Skins_Skin_R19_IS-3_DSS_explosiv_2016-04-11.zip</configzipfile>
+						<configzipcrc>09c9e60f5580a44563d6e5fd86379ca2</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs2.directupload.net/images/user/150811/bxzsjwfm.jpg</URL>
+              </picture>
+            </pictures>
 					</config>
         </configs>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL></URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -852,12 +2091,12 @@
         <mod>
 				<name>M5 Stuart</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Custom_Tank_Skins_Racing-Skin_A22_M5_Stuart_Hotwheels_0.9.15.2.zip</modzipfile>
+				<modzipcrc>89403e78cab7a00ffca7f411bdfc2d1d</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://s14.directupload.net/images/user/141011/ypf839pd.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -867,12 +2106,12 @@
         <mod>
 				<name>M24 Chaffee</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Custom_Tank_Skins_Racing-Skin_A34_M24_Chaffee_RedBull_0.9.15.2.zip</modzipfile>
+				<modzipcrc>376e2e05342bc2b76afb68d99e5b0912</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://s14.directupload.net/images/user/141008/x6p7ykov.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -882,12 +2121,12 @@
         <mod>
 				<name>M48A1 Patton</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Custom_Tank_Skins_Skin_Make_Patton_Great_Again_0.9.16.zip</modzipfile>
+				<modzipcrc>7b41de1ffae714a4a4d8a0c23cdd7860</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://fs5.directupload.net/images/user/161106/hlf63dcx.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -895,17 +2134,44 @@
 				<devURL></devURL>
 				</mod>
         <mod>
-				<name>MT25 best tier 6 in the game</name>
+				<name>Maus</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Custom_Tank_Skins_Skin_G42_Maus_hier_kommt_die_Maus_0.9.16.zip</modzipfile>
+				<modzipcrc>955bf5960940bced09871dbcbd6c755b</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://fs5.directupload.net/images/user/151031/iggrf8ag.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs5.directupload.net/images/user/151031/7zfdegee.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>MT25</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>false</enabled>
+				<pictures>
+					<picture>
+					  <URL>http://fs5.directupload.net/images/user/161224/56h8o3bu.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs5.directupload.net/images/user/161224/sxv9v2p2.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs5.directupload.net/images/user/161224/mldzdy44.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs5.directupload.net/images/user/161224/uwu86893.jpg</URL>
+					</picture>
+				</pictures>
+				<description>best tier 6 in the game</description>
 				<updateComment></updateComment>
 				<devURL></devURL>
 				</mod>
@@ -917,44 +2183,87 @@
 				<enabled>true</enabled>
         <configs>
 					<config>
-						<name>Color</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
-						<configtype>single_dropdown</configtype>
+						<name>Milkyman Remodel</name>
+						<configzipfile>Custom_Tank_Skins_Skin_G114_Rheinmetall_Skorpian_Remodel_v1.0.4_Milkym4n_0.9.16.zip</configzipfile>
+						<configzipcrc>8429779ce7f8c386daf6ae12bd48f77e</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/160909/mtrpnj3t.jpg</URL>
+              </picture>
+            </pictures>
 					</config>
           <config>
-						<name>Color</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
-						<configtype>single_dropdown</configtype>
+						<name>Blue</name>
+						<configzipfile>Custom_Tank_Skins_Skin_G114_Rheinmetall_Skorpian_blue_v1.2_PeNeTrAtOrX_0.9.17.0.zip</configzipfile>
+						<configzipcrc>5285fbcb1a30ec490f9b6233795381bb</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161217/py37fovh.png</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161223/k8bfimy6.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161223/5dfhw7bz.jpg</URL>
+              </picture>
+            </pictures>
 					</config>
           <config>
-						<name>Color</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
-						<configtype>single_dropdown</configtype>
+						<name>Red</name>
+						<configzipfile>Custom_Tank_Skins_Skin_G114_Rheinmetall_Skorpian_red_PeNeTrAtOrX_0.9.17.zip</configzipfile>
+						<configzipcrc>fa53becbdd960b4175cc326a3a988e5f</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161217/mk7ol53j.jpg</URL>
+              </picture>
+            </pictures>
 					</config>
           <config>
-						<name>Color</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
-						<configtype>single_dropdown</configtype>
+						<name>Green</name>
+						<configzipfile>Custom_Tank_Skins_Skin_G114_Rheinmetall_Skorpian_poison_green_PeNeTrAtOrX_0.9.17.zip</configzipfile>
+						<configzipcrc>fc596d1ad81705f6b5c08290e2c73db3</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161217/zvy8vpj2.jpg</URL>
+              </picture>
+            </pictures>
 					</config>
           <config>
-						<name>Color</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
-						<configtype>single_dropdown</configtype>
+						<name>White</name>
+						<configzipfile>Custom_Tank_Skins_Skin_G114_Rheinmetall_Skorpian_white_v1.2_PeNeTrAtOrX_0.9.17.0.zip</configzipfile>
+						<configzipcrc>7c32d343f6d1a9188cc97259aee71162</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161223/9nocx2ql.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161223/a2249a4l.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161223/cnf4o6r7.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161223/abkrj486.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161223/rkm46fwm.jpg</URL>
+              </picture>
+            </pictures>
 					</config>
         </configs>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL></URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -964,12 +2273,39 @@
         <mod>
 				<name>Skoda T40</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Custom_Tank_Skins_Racing-Skin_Cz01_T40_Skoda_T40_Motorsport_0.9.16.zip</modzipfile>
+				<modzipcrc>677ab491161bc55f77e37709e0213878</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://fs5.directupload.net/images/user/161126/yu39p97t.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs5.directupload.net/images/user/161126/l6edhj44.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs5.directupload.net/images/user/161126/ps7wrbgu.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs5.directupload.net/images/user/161126/teh4pspl.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs5.directupload.net/images/user/161126/asiu6six.jpg</URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>SU-14</name>
+				<version></version>
+				<modzipfile>Custom_Tank_Skins_Racing-Skin_R27_SU-14_RaceControl_0.9.15.2.zip</modzipfile>
+				<modzipcrc>df3b271e6261005291d56b959770613f</modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					  <URL>http://s14.directupload.net/images/user/141011/ps4otp5j.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -981,10 +2317,13 @@
 				<version></version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://fs5.directupload.net/images/user/161224/hcmvu8vl.jpg</URL>
+					</picture>
+          <picture>
+					  <URL>http://fs5.directupload.net/images/user/161224/omo3mfcx.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -994,28 +2333,68 @@
         <mod>
 				<name>T110E5</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Custom_Tank_Skins_Skin_A69_T110E5_OM_Edition_YodaSchlumpf_0.9.16.zip</modzipfile>
+				<modzipcrc>04a46e4507ae03cd3f4c9e81b2be5c96</modzipcrc>
 				<enabled>true</enabled>
         <configs>
 					<config>
 						<name>OM Edition (RIP OMC Modpack)</name>
 						<configzipfile></configzipfile>
 						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161023/z5csanpj.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161023/8idntaha.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161023/tb37ltlw.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161023/afsp5ucr.jpg</URL>
+              </picture>
+            </pictures>
 					</config>
           <config>
 						<name>OMNI Edition (RIP OMC Modpack)</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Custom_Tank_Skins_Skin_A69_T110E5_OMNI_Edition_YodaSchlumpf_0.9.16.zip</configzipfile>
+						<configzipcrc>b8e6bae3fb441029ca34c81ca0c544f4</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161023/yg8rqv3i.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161023/9cm73gdt.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161023/hg2qevxk.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161023/2z46ny8f.jpg</URL>
+              </picture>
+            </pictures>
+					</config>
+          <config>
+						<name>Milkym4n Remodel</name>
+						<configzipfile>Custom_Tank_Skins_Skin_A69_T110E5_Remodel_v1.0.4_Milkym4n_0.9.16.zip</configzipfile>
+						<configzipcrc>6120a4195124e45254e3e6ce434c898a</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/161023/bxm5qg2c.jpg</URL>
+              </picture>
+            </pictures>
 					</config>
         </configs>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL></URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -1025,12 +2404,27 @@
         <mod>
 				<name>Type 59</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Custom_Tank_Skins_Skin_Ch01_Type59_Gold_0.9.16.zip</modzipfile>
+				<modzipcrc>582544607ed0feda837c23a3b793783c</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://fs5.directupload.net/images/user/151217/n3a7dljn.jpg</URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL></devURL>
+				</mod>
+        <mod>
+				<name>Type 64 Milkyman Remodel</name>
+				<version></version>
+				<modzipfile>Custom_Tank_Skins_Skin_Ch24_Type64_Remodel_v1.0.2_Milkym4n_0.9.16.zip</modzipfile>
+				<modzipcrc>e2d68370bfaa59870e41c38c2982508b</modzipcrc>
+				<enabled>true</enabled>
+				<pictures>
+					<picture>
+					  <URL>http://fs5.directupload.net/images/user/161105/6jvnmj46.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -1040,12 +2434,12 @@
         <mod>
 				<name>T34 Heavy</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Custom_Tank_Skins_Skin_A13_T34_hvy_Independance_0.9.16.zip</modzipfile>
+				<modzipcrc>76124571f67bae9ba161957107ba8283</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://fs5.directupload.net/images/user/170105/s8uqe7oe.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>
@@ -1055,12 +2449,12 @@
         <mod>
 				<name>T26E4 SuperP</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Custom_Tank_Skins_Skin_A80_T26E4_Independance_0.9.16.zip</modzipfile>
+				<modzipcrc>a8836167835cef2d1fb9c21a3dea750a</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
-					<URL></URL>
+					  <URL>http://fs5.directupload.net/images/user/170105/5gh43lah.jpg</URL>
 					</picture>
 				</pictures>
 				<description></description>

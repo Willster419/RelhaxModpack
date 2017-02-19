@@ -137,12 +137,26 @@ namespace RelicModManager
             }
             if (description == null)
                 description = "No Description Provided";
+            else if (description.Equals(""))
+                description = "No Description Proveded";
             if (updateComments == null)
+                updateComments = "No Update Info Proviced";
+            else if (updateComments.Equals(""))
                 updateComments = "No Update Info Proviced";
             descriptionBox.Lines = description.Split('@');
             updateBox.Lines = updateComments.Split('@');
             this.Preview_SizeChanged(null, null);
             this.Size = new Size(450, 700);
+        }
+
+        private void descriptionBox_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(e.LinkText);
+        }
+
+        private void updateBox_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(e.LinkText);
         }
     }
 }
