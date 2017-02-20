@@ -655,6 +655,7 @@ namespace RelicModManager
             {
                 //modpack
                 string thisVersion = this.getFolderVersion(null);
+                //if (File.Exists(zipFile))
                 zip = ZipFile.Read(zipFile);
                 //for this zip file instance, for each entry in the zip file,
                 //change the "versiondir" path to this version of tanks
@@ -1324,21 +1325,25 @@ namespace RelicModManager
                     {
                         //move each mod that is enalbed and checked to a new
                         //list of mods to install
-                        modsToInstall.Add(m);
+                        //also check that it actually has a zip file
+                        if (!m.modZipFile.Equals(""))
+                            modsToInstall.Add(m);
                         //at least one mod of this catagory is checked, add any dependencies required
                         if (!dependenciesAdded)
                         {
                             //add dependencies
                             foreach (Dependency d in c.dependencies)
                             {
-                                if (d.enabled)
+                                //check dependency is enabled and has a zip file with it
+                                if (d.enabled && !d.dependencyZipFile.Equals(""))
                                     dependencies.Add(d);
                             }
                             dependenciesAdded = true;
                         }
                         foreach (Config cc in m.configs)
                         {
-                            if (cc.enabled && cc.configChecked)
+                            //check to make sureit's enabled and checked and has a valid zip file with it
+                            if (cc.enabled && cc.configChecked && !cc.zipConfigFile.Equals(""))
                             {
                                 //same for configs
                                 configsToInstall.Add(cc);
@@ -1359,7 +1364,7 @@ namespace RelicModManager
                 }
             }
             //if the user did not select any relhax modpack mods to install
-            if (modsToInstall.Count == 0)
+            if (modsToInstall.Count == 0 && configsToInstall.Count == 0)
             {
                 //check for userMods
                 if (userMods.Count > 0)

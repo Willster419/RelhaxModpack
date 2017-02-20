@@ -2333,14 +2333,14 @@
         <mod>
 				<name>T110E5</name>
 				<version></version>
-				<modzipfile>Custom_Tank_Skins_Skin_A69_T110E5_OM_Edition_YodaSchlumpf_0.9.16.zip</modzipfile>
-				<modzipcrc>04a46e4507ae03cd3f4c9e81b2be5c96</modzipcrc>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
 				<enabled>true</enabled>
         <configs>
 					<config>
 						<name>OM Edition (RIP OMC Modpack)</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
+						<configzipfile>Custom_Tank_Skins_Skin_A69_T110E5_OM_Edition_YodaSchlumpf_0.9.16.zip</configzipfile>
+						<configzipcrc>2d5c2b26b5d688f7605ba9b28fb920e1</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
