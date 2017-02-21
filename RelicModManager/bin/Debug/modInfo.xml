@@ -41,10 +41,25 @@
           <enabled>true</enabled>
           <pictures>
             <picture>
-            <URL></URL>
+            <URL>http://fs5.directupload.net/images/user/160816/y76dgx3v.jpg</URL>
+            </picture>
+            <picture>
+            <URL>http://fs5.directupload.net/images/user/160816/igjoy9er.jpg</URL>
+            </picture>
+            <picture>
+            <URL>http://fs5.directupload.net/images/user/160816/ecpzcljv.jpg</URL>
+            </picture>
+            <picture>
+            <URL>http://fs5.directupload.net/images/user/170105/hqdrzc8g.jpg</URL>
+            </picture>
+            <picture>
+            <URL>http://fs5.directupload.net/images/user/170105/57effbeu.jpg</URL>
+            </picture>
+            <picture>
+            <URL>http://fs5.directupload.net/images/user/170105/iy78ukly.jpg</URL>
             </picture>
           </pictures>
-          <description>Config by Willster419. Origionaly based on stock xvm config</description>
+          <description>Config by Willster419. Origionaly based on stock xvm config.@Includes an hp pool and minimap hp circles</description>
           <updateComment></updateComment>
           <devURL>https://github.com/Willster419/xvmConfig</devURL>
         </mod>
@@ -68,7 +83,7 @@
               <URL>http://i.imgur.com/ar2TFi3.png</URL>
             </picture>
           </pictures>
-          <description></description>
+          <description>J1mB0's Config</description>
           <updateComment></updateComment>
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/56831-</devURL>
         </mod>
@@ -95,7 +110,7 @@
               <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/shot_1427_zpsc15e5fbb.jpg</URL>
             </picture>
           </pictures>
-          <description></description>
+          <description>Bones's Config</description>
           <updateComment></updateComment>
           <devURL>http://forum.worldoftanks.com/index.php?/topic/316189-091703-xvm-config-by-bones-24jan17/</devURL>
         </mod>
@@ -117,6 +132,30 @@
 			<name>PMOD-based mods</name>
 			<selectionType>single</selectionType>
       <mods>
+      <mod>
+				<name>Detailed Session Statistics by WorstUnicumEU</name>
+				<version></version>
+				<modzipfile></modzipfile>
+				<modzipcrc></modzipcrc>
+				<enabled>false</enabled>
+				<pictures>
+					<picture>
+					  <URL>http://i.imgur.com/oEMO7BZ.png</URL>
+					</picture>
+          <picture>
+					  <URL>http://i.imgur.com/hhF6e0A.png</URL>
+					</picture>
+          <picture>
+					  <URL>http://i.imgur.com/qDxGpCX.png</URL>
+					</picture>
+          <picture>
+					  <URL>http://i.imgur.com/1zJTcVH.png</URL>
+					</picture>
+				</pictures>
+				<description></description>
+				<updateComment></updateComment>
+				<devURL>http://forum.worldoftanks.eu/index.php?/topic/591220-091701-detailed-session-statistics-by-worstunicumeu-v121/</devURL>
+				</mod>
       </mods>
     </catagory>
 		<catagory>
@@ -134,22 +173,22 @@
 				<configs>
 					<config>
 						<name>100</name>
-						<configzipfile>zoom_out_100.zip</configzipfile>
-						<configzipcrc>40654487e3545ef5faf6660d662618dd</configzipcrc>
+						<configzipfile>Zoom_Configs_Out_100.zip</configzipfile>
+						<configzipcrc>0021332a73caf262d2076b72ad933b1a</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single_dropdown</configtype>
 					</config>
 					<config>
 						<name>200</name>
-						<configzipfile>zoom_out_200.zip</configzipfile>
-						<configzipcrc>f92c3f0be1b9e65d8f090019b5a2d058</configzipcrc>
+						<configzipfile>Zoom_Configs_Out_200.zip</configzipfile>
+						<configzipcrc>68a40b161d7ab156bcd59a651bda7412</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single_dropdown</configtype>
 					</config>
 					<config>
 						<name>500</name>
-						<configzipfile>zoom_out_500.zip</configzipfile>
-						<configzipcrc>f9367c61657fffcf05b9634989af6644</configzipcrc>
+						<configzipfile>Zoom_Configs_Out_500.zip</configzipfile>
+						<configzipcrc>1c67919a5bf953c5bda3b9ad3753aaff</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single_dropdown</configtype>
 					</config>
@@ -178,11 +217,11 @@
 			<selectionType>single</selectionType>
 			<mods>
 				<mod>
-				<name>Xft's Integrated DamageLogs (Requires XVM)</name>
+				<name>Xft's Integrated DamageLogs (Hitlog Requires XVM)</name>
 				<version>0.22a</version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
         <configs>
 					<config>
 						<name>integrated hitlog</name>
@@ -254,35 +293,35 @@
 				<mod>
 				<name>Battle Assistant</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Ingame_Info_Battle_Assistant_Base.zip</modzipfile>
+				<modzipcrc>2a86a7e3fe0ddd032c0654daa6dcb72e</modzipcrc>
 				<enabled>true</enabled>
         <configs>
 					<config>
 						<name>G</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
+						<configzipfile>Ingame_Info_Battle_Assistant_Config_G.zip</configzipfile>
+						<configzipcrc>1047fcf52cec358ede9337e94d1663db</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
 					</config>
           <config>
 						<name>J</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
+						<configzipfile>Ingame_Info_Battle_Assistant_Config_J.zip</configzipfile>
+						<configzipcrc>655307146e2eeba79ea5b07147ef29da</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
 					</config>
           <config>
 						<name>Middle Mouse</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
+						<configzipfile>Ingame_Info_Battle_Assistant_Config_Middle_Mouse.zip</configzipfile>
+						<configzipcrc>ffbdfb0009fcdd1ed93729efcf4b8bdd</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
 					</config>
           <config>
 						<name>Increased Zoom Speed</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
+						<configzipfile>Ingame_Info_Battle_Assistant_Config_Increased_Zoom_Speed.zip</configzipfile>
+						<configzipcrc>c205a4de645901c8dcb5608db7a825d6</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>multi</configtype>
 					</config>
@@ -298,29 +337,36 @@
             <URL>http://cdn-frm-eu.wargaming.net/wot/ru/uploads/monthly_08_2014/post-6420121-0-73875800-1408203179.jpg</URL>
 					</picture>
 				</pictures>
-				<description></description>
+				<description>Enables a Isometric view from Arty.</description>
 				<updateComment></updateComment>
 				<devURL>http://forum.worldoftanks.ru/index.php?/topic/1389614-</devURL>
 				</mod>
         <mod>
 				<name>ExtraAimInfo</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Ingame_Info_ExtraAimInfo_0.9.17.0.1_2017-02-20.zip</modzipfile>
+				<modzipcrc>44976235846a77b9d72f337289d5bd12</modzipcrc>
 				<enabled>true</enabled>
         <configs>
 					<config>
-						<name>default location</name>
+						<name>default config</name>
 						<configzipfile></configzipfile>
 						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
 					</config>
           <config>
-						<name>centered location</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<name>arty only config</name>
+						<configzipfile>Ingame_Info_ExtraAimInfo_config_light_2016-12-22.zip</configzipfile>
+						<configzipcrc>3780760bea62ffa296a602ff1fbc6c8a</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+					</config>
+          <config>
+						<name>old style config</name>
+						<configzipfile>Ingame_Info_ExtraAimInfo_old_style_config_0.9.17.1_2017-01-05.zip</configzipfile>
+						<configzipcrc>050e12e7c7ef5e8c92eb048c4855edb5</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
 						  <picture>
@@ -331,20 +377,13 @@
 						  </picture>
 						</pictures>
 					</config>
-          <config>
-						<name>arty only</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
-						<configtype>multi</configtype>
-					</config>
         </configs>
 				<pictures>
 					<picture>
 					  <URL>http://4cheat.ru/i/view.php?id=14783.jpg</URL>
 					</picture>
 				</pictures>
-				<description></description>
+				<description>arty only config only shows@-aimtime@-accuracy@-flight time@old style places it where it was when the mod first came out</description>
 				<updateComment></updateComment>
 				<devURL>http://4cheat.ru/showthread.php?t=65915</devURL>
 				</mod>
@@ -353,7 +392,7 @@
 				<version></version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
         <configs>
 					<config>
 						<name>standard</name>
@@ -405,8 +444,8 @@
         <mod>
 				<name>Number Indicator of Armor Penetration ( ͡° ͜ʖ ͡°) (not PMOD)</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Ingame_Info_Mod_Armor_Gui_Text_0.9.17.zip</modzipfile>
+				<modzipcrc>f2a47a7023697f98a895e1e4ec3c1757</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -420,18 +459,9 @@
         <mod>
 				<name>TessuMod, WOT/Teamspeak integration</name>
 				<version>0.6.11</version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Ingame_Info_Tessumod_0.6.11.zip</modzipfile>
+				<modzipcrc>8768c14053f612606e343e5c1fb120c8</modzipcrc>
 				<enabled>true</enabled>
-        <configs>
-          <config>
-						<name>3D positional audio</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
-						<configtype>multi</configtype>
-					</config>
-        </configs>
 				<pictures>
 					<picture>
 					  <URL>https://dl.dropboxusercontent.com/u/37902077/wot/tessu_mod/trainingroom.png</URL>
@@ -452,7 +482,7 @@
 				<version>0.7.0</version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
         <configs>
 					<config>
 						<name>active at start, deactive with F11</name>
@@ -483,7 +513,7 @@
 				<version>2</version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
         <configs>
 					<config>
 						<name>headlights only</name>
@@ -570,9 +600,9 @@
         <configs>
 					<config>
 						<name>qdly</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_DamageIndicator_by_qdly_0.9.16.zip</configzipfile>
+						<configzipcrc>a0bba61c1dfd5033c97674274d2709d9</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -582,9 +612,9 @@
 					</config>
           <config>
 						<name>zx80</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_DamageIndicator_big_by_poVitter_0.9.16.zip</configzipfile>
+						<configzipcrc>4f99d72b9d4a988b1aaaf818cd43acb9</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -594,9 +624,9 @@
 					</config>
           <config>
 						<name>marsoff</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_DamageIndicator_by_Harpoon_0.9.17.0.zip</configzipfile>
+						<configzipcrc>7f35c956d1d84db50cc659a7627e621d</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -606,9 +636,9 @@
 					</config>
           <config>
 						<name>lenya69</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_DamageIndicator_wide_0.9.16.zip</configzipfile>
+						<configzipcrc>4cf3ebe8bfd2fa7934a180e6086bbd67</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -618,9 +648,9 @@
 					</config>
           <config>
 						<name>dikey93</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_DamageIndicator_by_dikey93_0.9.16.zip</configzipfile>
+						<configzipcrc>6903912b74ac81e4ba6f697654f420fb</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -630,9 +660,9 @@
 					</config>
           <config>
 						<name>RazNaRok and GreenWarriors</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_DamageIndicator_RazNaRok_0.9.16.zip</configzipfile>
+						<configzipcrc>2104aa348b33a6b9ec022fc1a70fe35a</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -641,10 +671,10 @@
             </pictures>
 					</config>
           <config>
-						<name>10 second display</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<name>14 second display</name>
+						<configzipfile>Ingame_Info_DamageIndicator_Showtime_14sec_base_0.9.17.0.3.zip</configzipfile>
+						<configzipcrc>922aa460384609c2b4fc7e27b0739802</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>multi</configtype>
 					</config>
         </configs>
@@ -660,15 +690,15 @@
         <mod>
 				<name>inbattle current rating calculation by Ekspoint</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
-				<enabled>true</enabled>
+				<modzipfile>Ingame_Info_InBattle_Rating_Base_0.9.17.0_2016-12-12.zip</modzipfile>
+				<modzipcrc>7fe0638f5d453c4b0d0338d5e0c32f44</modzipcrc>
+				<enabled>false</enabled>
         <configs>
 					<config>
 						<name>wn8</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_InBattle_Rating_WN8_Config_2016-07-29_0.9.15.1.zip</configzipfile>
+						<configzipcrc>748d4d4603c07f7df6ac2ed4a8001f11</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
 						  <picture>
@@ -678,9 +708,9 @@
 					</config>
           <config>
 						<name>wn8 and damage</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_InBattle_Rating_WN8_Damage_Config_2016-07-29_0.9.15.1_2.zip</configzipfile>
+						<configzipcrc>79057a56022ad548b89c877a6473d953</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
 						  <picture>
@@ -690,9 +720,9 @@
 					</config>
           <config>
 						<name>wn8 and damage with background 1</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_InBattle_Rating_WN8_Damage_Config_by_Kaeptn_v1_0.9.15.1.zip</configzipfile>
+						<configzipcrc>d61ddb342ab385856f29b3a4b5c30927</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
 						  <picture>
@@ -702,9 +732,9 @@
 					</config>
           <config>
 						<name>wn8 and damage with background 2</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_InBattle_Rating_WN8_Damage_Config_by_Kaeptn_v2_0.9.15.1.zip</configzipfile>
+						<configzipcrc>7b1f426069a9550b7163db285005bedb</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
 						  <picture>
@@ -714,9 +744,9 @@
 					</config>
           <config>
 						<name>wn8 and damage with background 3</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_InBattle_Rating_WN8_Damage_Config_by_Kaeptn_v3_0.9.15.1.zip</configzipfile>
+						<configzipcrc>86b48d321f7f99cd0263d79e2848c2c8</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
 						  <picture>
@@ -735,7 +765,7 @@
 				<devURL>http://forum.worldoftanks.eu/index.php?/topic/561169-091703-inbattle-wn8-calculator-eff-damage-updated-02022017</devURL>
 				</mod>
         <mod>
-				<name>coulord penetration and ricochets on tanks (all)</name>
+				<name>coulord penetration and ricochets on tanks</name>
 				<version></version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
@@ -743,9 +773,9 @@
         <configs>
 					<config>
 						<name>Artasan</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_Colored_penetration_and_ricochets_by_artasan_0.9.15.zip</configzipfile>
+						<configzipcrc>1210aad1494235dff173e2a71cd0a221</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -755,9 +785,9 @@
 					</config>
           <config>
 						<name>Leecher</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_Colored_penetration_and_ricochets_by_leecher_0.9.15.zip</configzipfile>
+						<configzipcrc>5ba976a97bbf5a3f0857bf50cc84644b</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -767,9 +797,9 @@
 					</config>
           <config>
 						<name>New Version</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_Colored_penetration_and_ricochets_new_version_0.9.15.zip</configzipfile>
+						<configzipcrc>c84770b842b9fbc9336c0e7c76f6707e</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -779,9 +809,9 @@
 					</config>
           <config>
 						<name>Protanki</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_Colored_penetration_and_ricochets_by_protanki_0.9.15.zip</configzipfile>
+						<configzipcrc>7f4adeb38a75cc77e4c3b022bd1a252e</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -791,9 +821,9 @@
 					</config>
           <config>
 						<name>Refaol</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_Colored_penetration_and_ricochets_by_refaol_0.9.15.zip</configzipfile>
+						<configzipcrc>ac80fc8b8be81e2ad869c54da9a0769c</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -803,9 +833,9 @@
 					</config>
           <config>
 						<name>VoPV</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_Colored_penetration_and_ricochets_by_vopv_0.9.15.zip</configzipfile>
+						<configzipcrc>f672849354a439863710fccc0d041df7</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -827,9 +857,9 @@
         <configs>
 					<config>
 						<name>max visibility</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_MaxFarplane_LODTex_only_by_atotik_0.9.16.zip</configzipfile>
+						<configzipcrc>506343a9db03623c54c4e4d1495a1feb</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -839,9 +869,9 @@
 					</config>
           <config>
 						<name>fog removal</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_MaxFarplane_delete_fog_only_by_atotik_0.9.16.zip</configzipfile>
+						<configzipcrc>91f007944d6df08e0dcd4192129e034c</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -851,9 +881,9 @@
 					</config>
           <config>
 						<name>both</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_MaxFarplane_and_delete_fog_by_atotik_0.9.16.zip</configzipfile>
+						<configzipcrc>90668f79d9f90e88fb1bbc8139758990</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -874,8 +904,8 @@
         <mod>
 				<name>ATAC</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Ingame_Info_ATAC_0.9.16.zip</modzipfile>
+				<modzipcrc>d6e4b9529faadd4e752060ac3ff000f4</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -898,9 +928,9 @@
         <configs>
         <config>
 						<name>MLG</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_MLG_Loading_Video_0.9.15_2016-06-11.zip</configzipfile>
+						<configzipcrc>884478480bc79da17300817d5ea72c94</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -910,9 +940,9 @@
 					</config>
           <config>
 						<name>GuP</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_GuP_LoadingVideo_0.9.16.zip</configzipfile>
+						<configzipcrc>53c602245ac3b9cc9a20de03d16b2276</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -932,10 +962,24 @@
 				</mod>
         <mod>
 				<name>Battle Observer (HP pools)</name>
-				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<version>1.6</version>
+				<modzipfile>Ingame_Info_Battle_Observer_by_armagomen_v1_6-2_2017-01-12.zip</modzipfile>
+				<modzipcrc>a4682f08012c0885e60f9374e692076f</modzipcrc>
 				<enabled>true</enabled>
+        <configs>
+          <config>
+						<name>Default</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+					</config>
+        </configs>
 				<pictures>
 					<picture>
 					  <URL>http://fs5.directupload.net/images/160727/pu8ywi2f.jpg</URL>
@@ -948,15 +992,15 @@
         <mod>
 				<name>SafeShot</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
-				<enabled>true</enabled>
+				<modzipfile>Ingame_Info_Safeshot_0.9.17.0.zip</modzipfile>
+				<modzipcrc>d1d2acfde415748658a368b34e44ed3b</modzipcrc>
+				<enabled>false</enabled>
         <configs>
           <config>
 						<name>1 Sec no corpse Shot</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_SafeShot_1sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
+						<configzipcrc>8be1657dc6620c40fa64f0324bc944ed</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -966,9 +1010,21 @@
 					</config>
           <config>
 						<name>2 sec no corpse shot</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_SafeShot_2sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
+						<configzipcrc>9ac419493b94d3bb082d531416e76ac2</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+          </config>
+          <config>
+						<name>5 sec no corpse shot</name>
+						<configzipfile>Ingame_Info_SafeShot_5sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
+						<configzipcrc>fa263913e800b04720850b415a6536aa</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
               <picture>
@@ -978,9 +1034,21 @@
           </config>
           <config>
 						<name>block team damage shot</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_SafeShot_no_Team_friendly_fire_patch_0.9.15.1.zip</configzipfile>
+						<configzipcrc>04a976d3540aac937545bcd574401dc1</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>multi</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+          </config>
+          <config>
+						<name>block teamkiller damage shot</name>
+						<configzipfile>Ingame_Info_SafeShot_no_fire_at_Teamkiller_patch_0.9.15.1.zip</configzipfile>
+						<configzipcrc>c34cf9c622d9e16789ec2c1b2ef08e23</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>multi</configtype>
             <pictures>
               <picture>
@@ -990,9 +1058,9 @@
           </config>
           <config>
 						<name>send team damage message in chat</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_SafeShot_send_Msg_to_Team_patch_0.9.15.1.zip</configzipfile>
+						<configzipcrc>8e2f0bc6545e0ab0f50ebf4cb6d0345e</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>multi</configtype>
             <pictures>
               <picture>
@@ -1011,10 +1079,10 @@
 				<devURL>http://forum.worldoftanks.ru/index.php?/topic/1769267-</devURL>
 				</mod>
         <mod>
-				<name>WG FM Raadio</name>
+				<name>WG FM Radio</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Ingame_Info_WG_Radio.zip</modzipfile>
+				<modzipcrc>d6047cf5e2651f1755b2d6a2718bcb86</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -1027,29 +1095,29 @@
 					  <URL>http://static-ptl-ru.gcdn.co/dcont/fb/image/newmodradio2.png</URL>
 					</picture>
 				</pictures>
-				<description></description>
+				<description>Like pandora internet radio, but in your game</description>
 				<updateComment></updateComment>
 				<devURL>http://worldoftanks.ru/ru/news/common/new-mod-radio/</devURL>
 				</mod>
         <mod>
         <name>BalCalcMod</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Ingame_Info_BalCalcMod_Base_0.9.17.1_2017-01-05.zip</modzipfile>
+				<modzipcrc>498abc79e00356c060fe4fff9227a7c1</modzipcrc>
 				<enabled>true</enabled>
         <configs>
           <config>
 						<name>F</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_BalCalcMod_Config_F_0.9.17.1_2017-01-05.zip</configzipfile>
+						<configzipcrc>fbfb2b218d316fd0d8458b2a7181346f</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
 					</config>
           <config>
 						<name>Q</name>
-						<configzipfile></configzipfile>
-						<configzipcrc></configzipcrc>
-						<configenabled></configenabled>
+						<configzipfile>Ingame_Info_BalCalcMod_Config_Q_0.9.17.1_2017-01-05.zip</configzipfile>
+						<configzipcrc>f6c434d44c103d5350cb1cba9cbfb912</configzipcrc>
+						<configenabled>true</configenabled>
 						<configtype>single</configtype>
           </config>
         </configs>
@@ -1069,35 +1137,20 @@
 			<selectionType>single</selectionType>
       <mods>
         <mod>
-				<name>Detailed Session Statistics by WorstUnicumEU</name>
-				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
-				<enabled>true</enabled>
-				<pictures>
-					<picture>
-					  <URL>http://i.imgur.com/oEMO7BZ.png</URL>
-					</picture>
-          <picture>
-					  <URL>http://i.imgur.com/hhF6e0A.png</URL>
-					</picture>
-          <picture>
-					  <URL>http://i.imgur.com/qDxGpCX.png</URL>
-					</picture>
-          <picture>
-					  <URL>http://i.imgur.com/1zJTcVH.png</URL>
-					</picture>
-				</pictures>
-				<description></description>
-				<updateComment></updateComment>
-				<devURL>http://forum.worldoftanks.eu/index.php?/topic/591220-091701-detailed-session-statistics-by-worstunicumeu-v121/</devURL>
-				</mod>
-        <mod>
 				<name>Session Statistics by Tomonik</name>
 				<version></version>
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
 				<enabled>true</enabled>
+        <configs>
+          <config>
+						<name>Daily Reset</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>multi</configtype>
+					</config>
+        </configs>
 				<pictures>
           <picture>
 					  <URL>http://i.imgur.com/UOiwa7n.png</URL>
@@ -1113,6 +1166,15 @@
 				<modzipfile></modzipfile>
 				<modzipcrc></modzipcrc>
 				<enabled>true</enabled>
+        <configs>
+          <config>
+						<name>Daily Reset</name>
+						<configzipfile></configzipfile>
+						<configzipcrc></configzipcrc>
+						<configenabled></configenabled>
+						<configtype>multi</configtype>
+					</config>
+        </configs>
 				<pictures>
 					<picture>
 					  <URL>http://i.imgur.com/h1kpmRO.jpg</URL>
@@ -1130,8 +1192,8 @@
 			<selectionType>single</selectionType>
       <dependencies>
 				<dependency>
-				<dependencyZipFile>increase_sound_memory.zip</dependencyZipFile>
-				<dependencyZipCRC>857209db20b8a7ff47091de8793a36ed</dependencyZipCRC>
+				<dependencyZipFile>Dependency_Sounds_Increase_Sound_Memory.zip</dependencyZipFile>
+				<dependencyZipCRC>472e962044fd67d5a375fa51399900d2</dependencyZipCRC>
 				<dependencyenabled>true</dependencyenabled>
 				</dependency>
 			</dependencies>
@@ -1139,39 +1201,39 @@
 				<mod>
 				<name>Relhax</name>
 				<version>17</version>
-				<modzipfile>relhax_sounds_base.zip</modzipfile>
-				<modzipcrc>4734aa7c33ffab0954ffc45273d641c8</modzipcrc>
+				<modzipfile>Sounds_Relhax_Base.zip</modzipfile>
+				<modzipcrc>d995a33893a2c812b9329ea737d5a821</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
 					  <URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
 					</picture>
 				</pictures>
-				<description>here is a sample description@with a newline</description>
-				<updateComment>update comment here</updateComment>
+				<description>Replaces all crew sounds with hilarious out-of-context sound bytes from people of the RELIC gaming community</description>
+				<updateComment></updateComment>
 				<devURL>http://relicgaming.com/index.php?topic=697.0</devURL>
 				<configs>
 					<config>
 						<name>standard</name>
-						<configzipfile>relhax_sounds_standard_config.zip</configzipfile>
-						<configzipcrc>a3bc6cd0999359477bd08971f4d4f1ec</configzipcrc>
+						<configzipfile>Sounds_Relhax_Config_Regular.zip</configzipfile>
+						<configzipcrc>b4ebe9d8e701f4d7fdd1acecf10d6043</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
 						<pictures>
 						    <picture>
-						      <URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
+						      <URL></URL>
 						    </picture>
 						</pictures>
 					</config>
 					<config>
 						<name>censored</name>
-						<configzipfile>relhax_sounds_censored_config.zip</configzipfile>
-						<configzipcrc>4e2a382324be2bb96d889fd29513f51c</configzipcrc>
+						<configzipfile>Sounds_Relhax_Config_Censored.zip</configzipfile>
+						<configzipcrc>8d814ce3da2cadff43f822a06c7fceba</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
 						<pictures>
 						    <picture>
-						      <URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
+						      <URL></URL>
 						    </picture>
 						</pictures>
 					</config>
@@ -1180,30 +1242,39 @@
         <mod>
 				<name>Sounds instead of crew voices by vvooj</name>
 				<version>6.1</version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Sounds_Simple_Crew_Sounds.zip</modzipfile>
+				<modzipcrc>b2c7a4f094682e6b4c326a9650219eec</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
 					  <URL></URL>
 					</picture>
 				</pictures>
-				<description></description>
-				<updateComment></updateComment>
+				<description>Mutes all crew sounds and replaces them with sounds</description>
+				<updateComment>DEV URL TODO</updateComment>
 				<devURL></devURL>
 				</mod>
         <mod>
 				<name>UT Countdown</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
+				<modzipfile>Sounds_UT_Announcer_updated_by_budyx69_0.9.17.0_2016-12-22.zip</modzipfile>
+				<modzipcrc>53b8ad700e4a05672194cd0f4b31629d</modzipcrc>
 				<enabled>true</enabled>
+        <configs>
+          <config>
+						<name>Webium config</name>
+						<configzipfile>Sounds_UT_voice_webium_config_2016-08-14.zip</configzipfile>
+						<configzipcrc>637a46aeade61574af2119b6d15dd870</configzipcrc>
+						<configenabled>true</configenabled>
+						<configtype>multi</configtype>
+					</config>
+        </configs>
 				<pictures>
 					<picture>
 					  <URL></URL>
 					</picture>
 				</pictures>
-				<description></description>
+				<description>TODO</description>
 				<updateComment></updateComment>
 				<devURL></devURL>
 				</mod>
@@ -1817,14 +1888,14 @@
       </mods>
     </catagory>
     <catagory>
-			<name>Tank Skin Collections</name>
+			<name>Tank Skin Packs</name>
 			<selectionType>single</selectionType>
       <mods>
         <mod>
 				<name>Contour skins with areas of penetration ( ͡° ͜ʖ ͡°)</name>
 				<version></version>
-				<modzipfile>Tank_Skins_HitZone_Skins_black_white_by_Mr.13_0.9.17.0.1_2016-12-13.zip</modzipfile>
-				<modzipcrc>e0736f7d24e97c518a80b0dccda1fce9</modzipcrc>
+				<modzipfile>Tank_Skin_Packs_HitZone_Skins_black_white_by_Mr.13_0.9.17.0.1_2016-12-13.zip</modzipfile>
+				<modzipcrc>153ecff0edfd47e1fbac9c75ff33e47d</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -1853,8 +1924,8 @@
         <mod>
 				<name>Anime Tank Skins</name>
 				<version></version>
-				<modzipfile>Tank_Skins_Anime_Tank_Skins_0.9.15.zip</modzipfile>
-				<modzipcrc>c46fb57a3c7c8c26626867019f316d54</modzipcrc>
+				<modzipfile>Tank_Skin_Packs_Anime_Tank_Skins_0.9.15.zip</modzipfile>
+				<modzipcrc>1d4ae1639546a7036057ba05d88d5ea5</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -1890,7 +1961,7 @@
 				<name>AMX 13 90</name>
 				<version></version>
 				<modzipfile>Custom_Tank_Skins_Racing-Skin_F17_AMX_13_90_RaceControl_0.9.15.1.1.zip</modzipfile>
-				<modzipcrc>ed979abf1749d77b8b0c9542b50a99d6</modzipcrc>
+				<modzipcrc>6052fe435292552277bb2a3cd3afe7d4</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -1904,9 +1975,9 @@
         <mod>
 				<name>AMX CDC</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
-				<enabled>false</enabled>
+				<modzipfile>Custom_Tank_Skins_Skin_F68_AMX_CDC_0.9.17.zip</modzipfile>
+				<modzipcrc>f07fc698168406f8306c2df2a254c149</modzipcrc>
+				<enabled>true</enabled>
 				<pictures>
 					<picture>
 					  <URL>http://fs5.directupload.net/images/user/161224/8redvdrb.jpg</URL>
@@ -1929,7 +2000,7 @@
 					<config>
 						<name>YodaSchlumpf</name>
 						<configzipfile>Custom_Tank_Skins_Racing-Skin_F62_ELC_AMX_YodaSchlumpf_0.9.15.2.zip</configzipfile>
-						<configzipcrc>1e128008bda91a664299f8c8785e4ca6</configzipcrc>
+						<configzipcrc>e8d8c4114042658464846eb60d4d69c5</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
@@ -1941,7 +2012,7 @@
           <config>
 						<name>Dukes of Hazzard</name>
 						<configzipfile>Custom_Tank_Skins_Racing-Skin_F62_ELC_AMX_General_Lee_0.9.15.2.zip</configzipfile>
-						<configzipcrc>8198f93ce8c3ffea8c31e895ff142c77</configzipcrc>
+						<configzipcrc>ce8ff9c536b206fd39b8c399cafb20b3</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
@@ -1956,7 +2027,7 @@
           <config>
 						<name>MONSTER Energy</name>
 						<configzipfile>Custom_Tank_Skins_Racing-Skin_F62_ELC_AMX_MONSTERenergy_0.9.15.2.zip</configzipfile>
-						<configzipcrc>f2a685778a92e0da358e6039b96b4c2d</configzipcrc>
+						<configzipcrc>0399525ff9b68b8af6214048d3adfff7</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
@@ -1977,7 +2048,7 @@
           <config>
 						<name>Hello Kitty</name>
 						<configzipfile>Custom_Tank_Skins_Racing-Skin_F62_ELC_AMX_HelloKitty_0.9.15.2.zip</configzipfile>
-						<configzipcrc>217b5a6db2f33268dcb9ef5a1175fbb2</configzipcrc>
+						<configzipcrc>262e5957b7b7608bb975ac7a193f082f</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
@@ -2000,7 +2071,7 @@
 				<name>BT-2</name>
 				<version></version>
 				<modzipfile>Custom_Tank_Skins_Racing-Skin_R08_BT-2_GrillMaxe_0.9.15.2.zip</modzipfile>
-				<modzipcrc>a6b11dbb006a2597166dcedb49956e3b</modzipcrc>
+				<modzipcrc>1bb33214300c3b021bb44b2b151e62d7</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -2021,7 +2092,7 @@
 				<name>FV304</name>
 				<version></version>
 				<modzipfile>Custom_Tank_Skins_Racing-Skin_GB77_FV304_RaceControl_0.9.16.zip</modzipfile>
-				<modzipcrc>e11b7d505d747c43b7a63acb8c1fdb3e</modzipcrc>
+				<modzipcrc>d2866f06f3de913ddbf5fa23b4cba2b9</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -2045,7 +2116,7 @@
 					<config>
 						<name>CAMU</name>
 						<configzipfile>Custom_Tank_Skins_Skin_R19_IS-3_DSS_camo_2016-05-27.zip</configzipfile>
-						<configzipcrc>b2d68e462ab43faca693b7de35ad85c8</configzipcrc>
+						<configzipcrc>76870b65ba2349ebb978d6d4583c3dbb</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
@@ -2069,7 +2140,7 @@
           <config>
 						<name>EXPLOSIV</name>
 						<configzipfile>Custom_Tank_Skins_Skin_R19_IS-3_DSS_explosiv_2016-04-11.zip</configzipfile>
-						<configzipcrc>09c9e60f5580a44563d6e5fd86379ca2</configzipcrc>
+						<configzipcrc>6adcc100c3929d4dd3127c5ca9cebf5d</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
@@ -2092,7 +2163,7 @@
 				<name>M5 Stuart</name>
 				<version></version>
 				<modzipfile>Custom_Tank_Skins_Racing-Skin_A22_M5_Stuart_Hotwheels_0.9.15.2.zip</modzipfile>
-				<modzipcrc>89403e78cab7a00ffca7f411bdfc2d1d</modzipcrc>
+				<modzipcrc>bbe40b24325f59982c09eab5624d8a17</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -2107,7 +2178,7 @@
 				<name>M24 Chaffee</name>
 				<version></version>
 				<modzipfile>Custom_Tank_Skins_Racing-Skin_A34_M24_Chaffee_RedBull_0.9.15.2.zip</modzipfile>
-				<modzipcrc>376e2e05342bc2b76afb68d99e5b0912</modzipcrc>
+				<modzipcrc>bb34072844c52ead3ab85450a4ae940a</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -2121,8 +2192,8 @@
         <mod>
 				<name>M48A1 Patton</name>
 				<version></version>
-				<modzipfile>Custom_Tank_Skins_Skin_Make_Patton_Great_Again_0.9.16.zip</modzipfile>
-				<modzipcrc>7b41de1ffae714a4a4d8a0c23cdd7860</modzipcrc>
+				<modzipfile>Custom_Tank_Skins_Skin_M48_Make_Patton_Great_Again_0.9.16.zip</modzipfile>
+				<modzipcrc>a7b532eb93ba75f471632d42c93cfd0f</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -2137,7 +2208,7 @@
 				<name>Maus</name>
 				<version></version>
 				<modzipfile>Custom_Tank_Skins_Skin_G42_Maus_hier_kommt_die_Maus_0.9.16.zip</modzipfile>
-				<modzipcrc>955bf5960940bced09871dbcbd6c755b</modzipcrc>
+				<modzipcrc>3fe5d3014822bfec4a22f853e0b0e4a1</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -2153,10 +2224,10 @@
 				</mod>
         <mod>
 				<name>MT25</name>
-				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
-				<enabled>false</enabled>
+				<version>v1.1</version>
+				<modzipfile>Custom_Tank_Skins_Skin_R101_MT25_v1.1_0.9.17.0.zip</modzipfile>
+				<modzipcrc>39b9a035bb857c9437aa0202781d9fa5</modzipcrc>
+				<enabled>true</enabled>
 				<pictures>
 					<picture>
 					  <URL>http://fs5.directupload.net/images/user/161224/56h8o3bu.jpg</URL>
@@ -2185,7 +2256,7 @@
 					<config>
 						<name>Milkyman Remodel</name>
 						<configzipfile>Custom_Tank_Skins_Skin_G114_Rheinmetall_Skorpian_Remodel_v1.0.4_Milkym4n_0.9.16.zip</configzipfile>
-						<configzipcrc>8429779ce7f8c386daf6ae12bd48f77e</configzipcrc>
+						<configzipcrc>1b151a1a50cd492f892ca9a790846d41</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
@@ -2197,7 +2268,7 @@
           <config>
 						<name>Blue</name>
 						<configzipfile>Custom_Tank_Skins_Skin_G114_Rheinmetall_Skorpian_blue_v1.2_PeNeTrAtOrX_0.9.17.0.zip</configzipfile>
-						<configzipcrc>5285fbcb1a30ec490f9b6233795381bb</configzipcrc>
+						<configzipcrc>2c8dc4b3faf85bb35275db2e9e8370fa</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
@@ -2215,7 +2286,7 @@
           <config>
 						<name>Red</name>
 						<configzipfile>Custom_Tank_Skins_Skin_G114_Rheinmetall_Skorpian_red_PeNeTrAtOrX_0.9.17.zip</configzipfile>
-						<configzipcrc>fa53becbdd960b4175cc326a3a988e5f</configzipcrc>
+						<configzipcrc>8768c722920c1d8c5fd6cc7220978604</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
@@ -2227,7 +2298,7 @@
           <config>
 						<name>Green</name>
 						<configzipfile>Custom_Tank_Skins_Skin_G114_Rheinmetall_Skorpian_poison_green_PeNeTrAtOrX_0.9.17.zip</configzipfile>
-						<configzipcrc>fc596d1ad81705f6b5c08290e2c73db3</configzipcrc>
+						<configzipcrc>11c09ad42caa6443442e803965c44d97</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
@@ -2239,7 +2310,7 @@
           <config>
 						<name>White</name>
 						<configzipfile>Custom_Tank_Skins_Skin_G114_Rheinmetall_Skorpian_white_v1.2_PeNeTrAtOrX_0.9.17.0.zip</configzipfile>
-						<configzipcrc>7c32d343f6d1a9188cc97259aee71162</configzipcrc>
+						<configzipcrc>11ce325de17446324663ea7ceff3f00f</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
@@ -2274,7 +2345,7 @@
 				<name>Skoda T40</name>
 				<version></version>
 				<modzipfile>Custom_Tank_Skins_Racing-Skin_Cz01_T40_Skoda_T40_Motorsport_0.9.16.zip</modzipfile>
-				<modzipcrc>677ab491161bc55f77e37709e0213878</modzipcrc>
+				<modzipcrc>a5c0e6cc69cf02b60e7e35517f530f69</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -2301,7 +2372,7 @@
 				<name>SU-14</name>
 				<version></version>
 				<modzipfile>Custom_Tank_Skins_Racing-Skin_R27_SU-14_RaceControl_0.9.15.2.zip</modzipfile>
-				<modzipcrc>df3b271e6261005291d56b959770613f</modzipcrc>
+				<modzipcrc>b399ec08af408680dea0fc2c7d018c7a</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -2315,9 +2386,9 @@
         <mod>
 				<name>T67</name>
 				<version></version>
-				<modzipfile></modzipfile>
-				<modzipcrc></modzipcrc>
-				<enabled>false</enabled>
+				<modzipfile>Custom_Tank_Skins_Skin_A58_T67_0.9.17.0.zip</modzipfile>
+				<modzipcrc>6d7d90c173c2298c79e14d561779ab15</modzipcrc>
+				<enabled>true</enabled>
 				<pictures>
 					<picture>
 					  <URL>http://fs5.directupload.net/images/user/161224/hcmvu8vl.jpg</URL>
@@ -2340,7 +2411,7 @@
 					<config>
 						<name>OM Edition (RIP OMC Modpack)</name>
 						<configzipfile>Custom_Tank_Skins_Skin_A69_T110E5_OM_Edition_YodaSchlumpf_0.9.16.zip</configzipfile>
-						<configzipcrc>2d5c2b26b5d688f7605ba9b28fb920e1</configzipcrc>
+						<configzipcrc>e5d832fe1198d4658c1b43d22699ff97</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
@@ -2361,7 +2432,7 @@
           <config>
 						<name>OMNI Edition (RIP OMC Modpack)</name>
 						<configzipfile>Custom_Tank_Skins_Skin_A69_T110E5_OMNI_Edition_YodaSchlumpf_0.9.16.zip</configzipfile>
-						<configzipcrc>b8e6bae3fb441029ca34c81ca0c544f4</configzipcrc>
+						<configzipcrc>6da3eec973e2b185f37d0dd0de6e8a21</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
@@ -2382,7 +2453,7 @@
           <config>
 						<name>Milkym4n Remodel</name>
 						<configzipfile>Custom_Tank_Skins_Skin_A69_T110E5_Remodel_v1.0.4_Milkym4n_0.9.16.zip</configzipfile>
-						<configzipcrc>6120a4195124e45254e3e6ce434c898a</configzipcrc>
+						<configzipcrc>ccb50d4b99bbccaf81cc1a70af937dd8</configzipcrc>
 						<configenabled>true</configenabled>
 						<configtype>single</configtype>
             <pictures>
@@ -2405,7 +2476,7 @@
 				<name>Type 59</name>
 				<version></version>
 				<modzipfile>Custom_Tank_Skins_Skin_Ch01_Type59_Gold_0.9.16.zip</modzipfile>
-				<modzipcrc>582544607ed0feda837c23a3b793783c</modzipcrc>
+				<modzipcrc>26b49b62bad30551a3a28dcf3894f13e</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -2420,7 +2491,7 @@
 				<name>Type 64 Milkyman Remodel</name>
 				<version></version>
 				<modzipfile>Custom_Tank_Skins_Skin_Ch24_Type64_Remodel_v1.0.2_Milkym4n_0.9.16.zip</modzipfile>
-				<modzipcrc>e2d68370bfaa59870e41c38c2982508b</modzipcrc>
+				<modzipcrc>07b485d5169964e0c9450a9f31f1d55e</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -2435,7 +2506,7 @@
 				<name>T34 Heavy</name>
 				<version></version>
 				<modzipfile>Custom_Tank_Skins_Skin_A13_T34_hvy_Independance_0.9.16.zip</modzipfile>
-				<modzipcrc>76124571f67bae9ba161957107ba8283</modzipcrc>
+				<modzipcrc>9a9bd717139e8d1e719ace76c8f91245</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>
@@ -2450,7 +2521,7 @@
 				<name>T26E4 SuperP</name>
 				<version></version>
 				<modzipfile>Custom_Tank_Skins_Skin_A80_T26E4_Independance_0.9.16.zip</modzipfile>
-				<modzipcrc>a8836167835cef2d1fb9c21a3dea750a</modzipcrc>
+				<modzipcrc>fe5e6779da1a178667676c38f4b3c7f0</modzipcrc>
 				<enabled>true</enabled>
 				<pictures>
 					<picture>

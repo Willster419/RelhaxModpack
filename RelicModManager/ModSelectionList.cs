@@ -1187,7 +1187,9 @@ namespace RelicModManager
         private string GetMd5Hash(MD5 md5Hash, string inputFile)
         {
             // Convert the input string to a byte array and compute the hash.
-            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(inputFile));
+            var stream = File.OpenRead(inputFile);
+            byte[] data = md5Hash.ComputeHash(stream);
+            stream.Close();
             // Create a new Stringbuilder to collect the bytes
             // and create a string.
             StringBuilder sBuilder = new StringBuilder();

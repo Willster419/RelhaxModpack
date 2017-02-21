@@ -1,5 +1,6 @@
-version 18.5:
-- Added more mods to selection. Currently only mods that work are Tank Skins
-- Fixed bugs with preview window
-- Added a loading window for loading the mod selection list
-- Added setting to save the size of the mod selection list window size
+version 18.6:
+- All Tank Skin Packs, Custom Tank Skins, mods Ingame Info mods added
+- Fixed bug with CRC MD5 checksum
+- Added display of file downloading
+- Added notification if trying to clean wot res_mods folder and
+user is still in there, rather than crash

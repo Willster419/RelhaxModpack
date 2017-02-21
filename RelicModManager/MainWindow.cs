@@ -33,7 +33,7 @@ namespace RelicModManager
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 18.5";
+        private string managerVersion = "version 18.6";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         private SelectFeatures features = new SelectFeatures();
         //queue for downloading mods
@@ -76,6 +76,7 @@ namespace RelicModManager
         private string versionSave;
         private FirstLoadHelper helper;
         string helperText;
+        string currentModDownloading;
         //The constructur for the application
         public MainWindow()
         {
@@ -211,7 +212,7 @@ namespace RelicModManager
             double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
             int MBytesIn = (int)bytesIn / MBDivisor;
             int MBytesTotal = (int)totalBytes / MBDivisor;
-            downloadProgress.Text = "Downloaded " + MBytesIn + " MB" + " of " + MBytesTotal + " MB";
+            downloadProgress.Text = "Downloading " + currentModDownloading + " ("+ MBytesIn + " MB" + " of " + MBytesTotal + " MB)";
             childProgressBar.Value = e.ProgressPercentage;
             speedLabel.Text = string.Format("{0} MB/s", (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds).ToString("0.00"));
             if (MBytesIn == 0 && MBytesTotal == 0)
@@ -233,6 +234,7 @@ namespace RelicModManager
                     downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
                     downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
                     downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
+                    //currentModDownloading = downloadQueue[0].zipFile;
                     downloadQueue.RemoveAt(0);
                     parrentProgressBar.Value++;
                     return;
@@ -265,6 +267,7 @@ namespace RelicModManager
                     downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
                     tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
                     this.appendToLog("downloading " + tempOldDownload);
+                    currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile).Substring(0, 15) + "...";
                     downloadQueue.RemoveAt(0);
                     parrentProgressBar.Value++;
                     return;
@@ -766,7 +769,7 @@ namespace RelicModManager
             Application.DoEvents();
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             this.appendToLog("|RelHax ModManager " + managerVersion);
-            this.appendToLog("|Built on 02/19/2017, running at " + DateTime.Now);
+            this.appendToLog("|Built on 02/20/2017, running at " + DateTime.Now);
             this.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1413,6 +1416,7 @@ namespace RelicModManager
                 downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
                 downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
                 tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
+                currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile).Substring(0,15) + "...";
                 downloadQueue.RemoveAt(0);
                 parrentProgressBar.Value++;
             }
@@ -1441,7 +1445,9 @@ namespace RelicModManager
         private string GetMd5Hash(MD5 md5Hash, string inputFile)
         {
             // Convert the input string to a byte array and compute the hash.
-            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(inputFile));
+            var stream = File.OpenRead(inputFile);
+            byte[] data = md5Hash.ComputeHash(stream);
+            stream.Close();
             // Create a new Stringbuilder to collect the bytes
             // and create a string.
             StringBuilder sBuilder = new StringBuilder();
@@ -1784,7 +1790,15 @@ namespace RelicModManager
                 {
                     string temppath = Path.Combine(sourceDirName, subdir.Name);
                     DirectoryDelete(subdir.FullName, deleteSubDirs, deleteworker);
-                    subdir.Delete();
+                    try
+                    {
+                        subdir.Delete();
+                    }
+                    catch (IOException)
+                    {
+                        MessageBox.Show("Please close all explorer windows in the res_mods (or deeper), and click ok to continue.");
+                        subdir.Delete();
+                    }
                     deleteworker.ReportProgress(numFilesToCopyDeleteExtract++);
                 }
             }
