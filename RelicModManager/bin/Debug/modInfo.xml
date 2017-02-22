@@ -11,7 +11,7 @@
     <selectionType>single</selectionType>
     <dependencies>
       <dependency>
-        <dependencyZipFile>Dependency_XVM_6.5.4.zip</dependencyZipFile>
+        <dependencyZipFile>Dependency_XVM_Base_6.5.4.zip</dependencyZipFile>
         <dependencyZipCRC>f</dependencyZipCRC>
         <dependencyenabled>true</dependencyenabled>
       </dependency>
@@ -36,8 +36,8 @@
       <mod>
         <name>Willster419's Config</name>
         <version></version>
-        <modzipfile></modzipfile>
-        <modzipcrc></modzipcrc>
+        <modzipfile>XVM_Prebuilt_Configs_Willster419.zip</modzipfile>
+        <modzipcrc>f</modzipcrc>
         <enabled>true</enabled>
         <pictures>
           <picture>
@@ -66,8 +66,8 @@
       <mod>
         <name>J1mB0's XVM Config</name>
         <version>6.5.0.1</version>
-        <modzipfile></modzipfile>
-        <modzipcrc></modzipcrc>
+        <modzipfile>XVM_Prebuilt_Configs_J1mB0_v6.5.0.1.zip</modzipfile>
+        <modzipcrc>f</modzipcrc>
         <enabled>true</enabled>
         <pictures>
           <picture>
@@ -90,9 +90,53 @@
       <mod>
         <name>Bones's XVM Config</name>
         <version></version>
-        <modzipfile></modzipfile>
-        <modzipcrc></modzipcrc>
+        <modzipfile>XVM_Prebuilt_Configs_Bones_Base.zip</modzipfile>
+        <modzipcrc>f</modzipcrc>
         <enabled>true</enabled>
+        <configs>
+          <config>
+            <name>players panel 1</name>
+            <configzipfile>XVM_Prebuilt_Configs_Bones_Config_players_panel_1.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>players panel 2</name>
+            <configzipfile>XVM_Prebuilt_Configs_Bones_Config_players_panel_2.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>players panel 3</name>
+            <configzipfile>XVM_Prebuilt_Configs_Bones_Config_players_panel_3.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>1 line tank carosel</name>
+            <configzipfile>XVM_Prebuilt_Configs_Bones_Config_1line_carosel.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single_dropdown</configtype>
+          </config>
+          <config>
+            <name>2 line tank carosel</name>
+            <configzipfile>XVM_Prebuilt_Configs_Bones_Config_2line_carosel.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single_dropdown</configtype>
+          </config>
+          <config>
+            <name>3 line tank carosel</name>
+            <configzipfile>XVM_Prebuilt_Configs_Bones_Config_3line_carosel.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single_dropdown</configtype>
+          </config>
+        </configs>
         <pictures>
           <picture>
             <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/BonesXVMConfigTOP_zps9eb97ba7.jpg</URL>
@@ -122,7 +166,7 @@
       <selectionType>multi</selectionType>
       <dependencies>
         <dependency>
-          <dependencyZipFile>Dependency_XVM_6.5.4.zip</dependencyZipFile>
+          <dependencyZipFile>Dependency_XVM_Base_6.5.4.zip</dependencyZipFile>
           <dependencyZipCRC>f</dependencyZipCRC>
           <dependencyenabled>true</dependencyenabled>
         </dependency>
@@ -155,7 +199,7 @@
           <description></description>
           <updateComment></updateComment>
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/591220-091701-detailed-session-statistics-by-worstunicumeu-v121/</devURL>
-          </mod>
+        </mod>
       </mods>
     </catagory>
     <catagory>
@@ -976,94 +1020,106 @@
             <devURL>http://forum.worldoftanks.ru/index.php?/topic/1385404-091703-battle-observer-v1067-27012017-teamshp-damage-log-zoommod-debug-time-armorcalculator/</devURL>
             </mod>
         <mod>
-            <name>SafeShot</name>
-            <version></version>
-            <modzipfile>Ingame_Info_Safeshot_0.9.17.0.zip</modzipfile>
-            <modzipcrc>d1d2acfde415748658a368b34e44ed3b</modzipcrc>
-            <enabled>true</enabled>
-        <configs>
-          <config>
-                  <name>1 Sec no corpse Shot</name>
-                  <configzipfile>Ingame_Info_SafeShot_1sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
-                  <configzipcrc>8be1657dc6620c40fa64f0324bc944ed</configzipcrc>
-                  <configenabled>true</configenabled>
-                  <configtype>single</configtype>
-            <pictures>
-              <picture>
-                <URL></URL>
-              </picture>
-            </pictures>
-               </config>
-          <config>
-                  <name>2 sec no corpse shot</name>
-                  <configzipfile>Ingame_Info_SafeShot_2sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
-                  <configzipcrc>9ac419493b94d3bb082d531416e76ac2</configzipcrc>
-                  <configenabled>true</configenabled>
-                  <configtype>single</configtype>
-            <pictures>
-              <picture>
-                <URL></URL>
-              </picture>
-            </pictures>
-          </config>
-          <config>
-                  <name>5 sec no corpse shot</name>
-                  <configzipfile>Ingame_Info_SafeShot_5sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
-                  <configzipcrc>fa263913e800b04720850b415a6536aa</configzipcrc>
-                  <configenabled>true</configenabled>
-                  <configtype>single</configtype>
-            <pictures>
-              <picture>
-                <URL></URL>
-              </picture>
-            </pictures>
-          </config>
-          <config>
-                  <name>block team damage shot</name>
-                  <configzipfile>Ingame_Info_SafeShot_no_Team_friendly_fire_patch_0.9.15.1.zip</configzipfile>
-                  <configzipcrc>04a976d3540aac937545bcd574401dc1</configzipcrc>
-                  <configenabled>true</configenabled>
-                  <configtype>multi</configtype>
-            <pictures>
-              <picture>
-                <URL></URL>
-              </picture>
-            </pictures>
-          </config>
-          <config>
-                  <name>block teamkiller damage shot</name>
-                  <configzipfile>Ingame_Info_SafeShot_no_fire_at_Teamkiller_patch_0.9.15.1.zip</configzipfile>
-                  <configzipcrc>c34cf9c622d9e16789ec2c1b2ef08e23</configzipcrc>
-                  <configenabled>true</configenabled>
-                  <configtype>multi</configtype>
-            <pictures>
-              <picture>
-                <URL></URL>
-              </picture>
-            </pictures>
-          </config>
-          <config>
-                  <name>send team damage message in chat</name>
-                  <configzipfile>Ingame_Info_SafeShot_send_Msg_to_Team_patch_0.9.15.1.zip</configzipfile>
-                  <configzipcrc>8e2f0bc6545e0ab0f50ebf4cb6d0345e</configzipcrc>
-                  <configenabled>true</configenabled>
-                  <configtype>multi</configtype>
-            <pictures>
-              <picture>
-                <URL></URL>
-              </picture>
-            </pictures>
-          </config>
-        </configs>
-            <pictures>
-               <picture>
-                 <URL>http://s14.directupload.net/images/131220/mkrjfo7g.jpg</URL>
-               </picture>
-            </pictures>
-            <description>legal info@http://forum.worldoftanks.eu/index.php?/topic/599621-wg-support-safeshot-is-illegal/page__st__20__pid__13403197#entry13403197</description>
-            <updateComment></updateComment>
-            <devURL>http://forum.worldoftanks.ru/index.php?/topic/1769267-</devURL>
-            </mod>
+          <name>SafeShot</name>
+          <version></version>
+          <modzipfile>Ingame_Info_Safeshot_0.9.17.0.zip</modzipfile>
+          <modzipcrc>d1d2acfde415748658a368b34e44ed3b</modzipcrc>
+          <enabled>true</enabled>
+          <configs>
+            <config>
+              <name>1 Sec no corpse Shot</name>
+              <configzipfile>Ingame_Info_SafeShot_1sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
+              <configzipcrc>8be1657dc6620c40fa64f0324bc944ed</configzipcrc>
+              <configenabled>true</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL></URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>2 sec no corpse shot</name>
+              <configzipfile>Ingame_Info_SafeShot_2sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
+              <configzipcrc>9ac419493b94d3bb082d531416e76ac2</configzipcrc>
+              <configenabled>true</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL></URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>5 sec no corpse shot</name>
+              <configzipfile>Ingame_Info_SafeShot_5sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
+              <configzipcrc>fa263913e800b04720850b415a6536aa</configzipcrc>
+              <configenabled>true</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL></URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>block team damage shot</name>
+              <configzipfile>Ingame_Info_SafeShot_no_Team_friendly_fire_patch_0.9.15.1.zip</configzipfile>
+              <configzipcrc>04a976d3540aac937545bcd574401dc1</configzipcrc>
+              <configenabled>true</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL></URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>block wasted shots (shots fired into the air, ground, etc.)</name>
+              <configzipfile>Ingame_Info_SafeShot_no_waste_shot_patch_0.9.15.1.zip</configzipfile>
+              <configzipcrc>04a976d3540aac937545bcd574401dc1</configzipcrc>
+              <configenabled>true</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL></URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>block teamkiller damage shot</name>
+              <configzipfile>Ingame_Info_SafeShot_no_fire_at_Teamkiller_patch_0.9.15.1.zip</configzipfile>
+              <configzipcrc>c34cf9c622d9e16789ec2c1b2ef08e23</configzipcrc>
+              <configenabled>true</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL></URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>send team damage message in chat</name>
+              <configzipfile>Ingame_Info_SafeShot_send_Msg_to_Team_patch_0.9.15.1.zip</configzipfile>
+              <configzipcrc>8e2f0bc6545e0ab0f50ebf4cb6d0345e</configzipcrc>
+              <configenabled>true</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL></URL>
+                </picture>
+              </pictures>
+            </config>
+          </configs>
+          <pictures>
+             <picture>
+               <URL>http://s14.directupload.net/images/131220/mkrjfo7g.jpg</URL>
+             </picture>
+          </pictures>
+          <description>legal info@http://forum.worldoftanks.eu/index.php?/topic/599621-wg-support-safeshot-is-illegal/page__st__20__pid__13403197#entry13403197</description>
+          <updateComment></updateComment>
+          <devURL>http://forum.worldoftanks.ru/index.php?/topic/1769267-</devURL>
+        </mod>
         <mod>
             <name>WG FM Radio</name>
             <version></version>
