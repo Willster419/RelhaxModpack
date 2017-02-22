@@ -4,205 +4,198 @@
 <!-- Catagory selection type -->
 <!-- Catagory Dependecies -->
 <!-- Catagory Mods -->
-   <catagories>
+<catagories>
   <catagory>
-      <!-- Make XVM with default config the dependency -->
-      <name>XVM prebuilt configs</name>
-         <selectionType>single</selectionType>
-      <dependencies>
-            <dependency>
-            <dependencyZipFile>Dependency_XVM_6.5.4.zip</dependencyZipFile>
-            <dependencyZipCRC>f</dependencyZipCRC>
-            <dependencyenabled>true</dependencyenabled>
-            </dependency>
-         </dependencies>
-      <mods>
-        <mod>
-          <!-- Don't actually have zip of default config -->
-          <name>Default Config</name>
-          <version></version>
-          <modzipfile></modzipfile>
-          <modzipcrc></modzipcrc>
-          <enabled>true</enabled>
-          <pictures>
-            <picture>
-            <URL></URL>
-            </picture>
-          </pictures>
-          <description>The Default Config that comes with XVM</description>
-          <updateComment></updateComment>
-          <devURL>http://www.modxvm.com/en/</devURL>
-        </mod>
-        <mod>
-          <name>Willster419's Config</name>
-          <version></version>
-          <modzipfile></modzipfile>
-          <modzipcrc></modzipcrc>
-          <enabled>true</enabled>
-          <pictures>
-            <picture>
-            <URL>http://fs5.directupload.net/images/user/160816/y76dgx3v.jpg</URL>
-            </picture>
-            <picture>
-            <URL>http://fs5.directupload.net/images/user/160816/igjoy9er.jpg</URL>
-            </picture>
-            <picture>
-            <URL>http://fs5.directupload.net/images/user/160816/ecpzcljv.jpg</URL>
-            </picture>
-            <picture>
-            <URL>http://fs5.directupload.net/images/user/170105/hqdrzc8g.jpg</URL>
-            </picture>
-            <picture>
-            <URL>http://fs5.directupload.net/images/user/170105/57effbeu.jpg</URL>
-            </picture>
-            <picture>
-            <URL>http://fs5.directupload.net/images/user/170105/iy78ukly.jpg</URL>
-            </picture>
-          </pictures>
-          <description>Config by Willster419. Origionaly based on stock xvm config.@Includes an hp pool and minimap hp circles</description>
-          <updateComment></updateComment>
-          <devURL>https://github.com/Willster419/xvmConfig</devURL>
-        </mod>
-        <mod>
-          <name>J1mB0's XVM Config</name>
-          <version>6.5.0.1</version>
-          <modzipfile></modzipfile>
-          <modzipcrc></modzipcrc>
-          <enabled>true</enabled>
-          <pictures>
-            <picture>
-              <URL>http://i.imgur.com/2bm1H04.png</URL>
-            </picture>
-            <picture>
-              <URL>http://i.imgur.com/r1BsiSL.png</URL>
-            </picture>
-            <picture>
-              <URL>http://i.imgur.com/mytpRoG.png</URL>
-            </picture>
-            <picture>
-              <URL>http://i.imgur.com/ar2TFi3.png</URL>
-            </picture>
-          </pictures>
-          <description>J1mB0's Config</description>
-          <updateComment></updateComment>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/56831-</devURL>
-        </mod>
-        <mod>
-          <name>Bones's XVM Config</name>
-          <version></version>
-          <modzipfile></modzipfile>
-          <modzipcrc></modzipcrc>
-          <enabled>true</enabled>
-          <pictures>
-            <picture>
-              <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/BonesXVMConfigTOP_zps9eb97ba7.jpg</URL>
-            </picture>
-            <picture>
-              <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/BonesXVMConfigMIDNEW_zps284f708b.jpg</URL>
-            </picture>
-            <picture>
-              <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/BonesXVMConfigBOTTOM_zpsc6a77b63.jpg</URL>
-            </picture>
-            <picture>
-              <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/HPinBars_zpsbc2f434c.jpg</URL>
-            </picture>
-            <picture>
-              <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/shot_1427_zpsc15e5fbb.jpg</URL>
-            </picture>
-          </pictures>
-          <description>Bones's Config</description>
-          <updateComment></updateComment>
-          <devURL>http://forum.worldoftanks.com/index.php?/topic/316189-091703-xvm-config-by-bones-24jan17/</devURL>
-        </mod>
-      </mods>
+    <!-- Make XVM with default config the dependency -->
+    <name>XVM prebuilt configs</name>
+    <selectionType>single</selectionType>
+    <dependencies>
+      <dependency>
+        <dependencyZipFile>Dependency_XVM_6.5.4.zip</dependencyZipFile>
+        <dependencyZipCRC>f</dependencyZipCRC>
+        <dependencyenabled>true</dependencyenabled>
+      </dependency>
+    </dependencies>
+    <mods>
+      <mod>
+        <!-- Don't actually have zip of default config -->
+        <name>Default Config</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>true</enabled>
+        <pictures>
+          <picture>
+          <URL></URL>
+          </picture>
+        </pictures>
+        <description>The Default Config that comes with XVM</description>
+        <updateComment></updateComment>
+        <devURL>http://www.modxvm.com/en/</devURL>
+      </mod>
+      <mod>
+        <name>Willster419's Config</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>true</enabled>
+        <pictures>
+          <picture>
+          <URL>http://fs5.directupload.net/images/user/160816/y76dgx3v.jpg</URL>
+          </picture>
+          <picture>
+          <URL>http://fs5.directupload.net/images/user/160816/igjoy9er.jpg</URL>
+          </picture>
+          <picture>
+          <URL>http://fs5.directupload.net/images/user/160816/ecpzcljv.jpg</URL>
+          </picture>
+          <picture>
+          <URL>http://fs5.directupload.net/images/user/170105/hqdrzc8g.jpg</URL>
+          </picture>
+          <picture>
+          <URL>http://fs5.directupload.net/images/user/170105/57effbeu.jpg</URL>
+          </picture>
+          <picture>
+          <URL>http://fs5.directupload.net/images/user/170105/iy78ukly.jpg</URL>
+          </picture>
+        </pictures>
+        <description>Config by Willster419. Origionaly based on stock xvm config.@Includes an hp pool and minimap hp circles</description>
+        <updateComment></updateComment>
+        <devURL>https://github.com/Willster419/xvmConfig</devURL>
+      </mod>
+      <mod>
+        <name>J1mB0's XVM Config</name>
+        <version>6.5.0.1</version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>true</enabled>
+        <pictures>
+          <picture>
+            <URL>http://i.imgur.com/2bm1H04.png</URL>
+          </picture>
+          <picture>
+            <URL>http://i.imgur.com/r1BsiSL.png</URL>
+          </picture>
+          <picture>
+            <URL>http://i.imgur.com/mytpRoG.png</URL>
+          </picture>
+          <picture>
+            <URL>http://i.imgur.com/ar2TFi3.png</URL>
+          </picture>
+        </pictures>
+        <description>J1mB0's Config</description>
+        <updateComment></updateComment>
+        <devURL>http://forum.worldoftanks.eu/index.php?/topic/56831-</devURL>
+      </mod>
+      <mod>
+        <name>Bones's XVM Config</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>true</enabled>
+        <pictures>
+          <picture>
+            <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/BonesXVMConfigTOP_zps9eb97ba7.jpg</URL>
+          </picture>
+          <picture>
+            <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/BonesXVMConfigMIDNEW_zps284f708b.jpg</URL>
+          </picture>
+          <picture>
+            <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/BonesXVMConfigBOTTOM_zpsc6a77b63.jpg</URL>
+          </picture>
+          <picture>
+            <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/HPinBars_zpsbc2f434c.jpg</URL>
+          </picture>
+          <picture>
+            <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/shot_1427_zpsc15e5fbb.jpg</URL>
+          </picture>
+        </pictures>
+        <description>Bones's Config</description>
+        <updateComment></updateComment>
+        <devURL>http://forum.worldoftanks.com/index.php?/topic/316189-091703-xvm-config-by-bones-24jan17/</devURL>
+      </mod>
+    </mods>
     </catagory>
     <catagory>
       <!-- Make XVM with default config the dependency -->
       <name>XVM config builder/addons</name>
-         <selectionType>multi</selectionType>
+      <selectionType>multi</selectionType>
       <dependencies>
-            <dependency>
-            <dependencyZipFile>Dependency_XVM_6.5.4.zip</dependencyZipFile>
-            <dependencyZipCRC>f</dependencyZipCRC>
-            <dependencyenabled>true</dependencyenabled>
-            </dependency>
-         </dependencies>
+        <dependency>
+          <dependencyZipFile>Dependency_XVM_6.5.4.zip</dependencyZipFile>
+          <dependencyZipCRC>f</dependencyZipCRC>
+          <dependencyenabled>true</dependencyenabled>
+        </dependency>
+      </dependencies>
     </catagory>
     <catagory>
-         <name>PMOD-based mods</name>
-         <selectionType>single</selectionType>
-      <mods>
-      <mod>
-            <name>Detailed Session Statistics by WorstUnicumEU</name>
-            <version></version>
-            <modzipfile></modzipfile>
-            <modzipcrc></modzipcrc>
-            <enabled>false</enabled>
-            <pictures>
-               <picture>
-                 <URL>http://i.imgur.com/oEMO7BZ.png</URL>
-               </picture>
-          <picture>
-                 <URL>http://i.imgur.com/hhF6e0A.png</URL>
-               </picture>
-          <picture>
-                 <URL>http://i.imgur.com/qDxGpCX.png</URL>
-               </picture>
-          <picture>
-                 <URL>http://i.imgur.com/1zJTcVH.png</URL>
-               </picture>
-            </pictures>
-            <description></description>
-            <updateComment></updateComment>
-            <devURL>http://forum.worldoftanks.eu/index.php?/topic/591220-091701-detailed-session-statistics-by-worstunicumeu-v121/</devURL>
-            </mod>
-      </mods>
-    </catagory>
-      <catagory>
-         <name>Zoom Configs</name>
-         <selectionType>multi</selectionType>
-         <mods>
-            <mod>
-            <name>Zoom Out Config (meters)</name>
-            <version>1</version>
-            <modzipfile></modzipfile>
-            <modzipcrc></modzipcrc>
-            <enabled>true</enabled>
-            <configselectiontype>single</configselectiontype>
-            <configdefault>100</configdefault>
-            <configs>
-               <config>
-                  <name>100</name>
-                  <configzipfile>Zoom_Configs_Out_100.zip</configzipfile>
-                  <configzipcrc>0021332a73caf262d2076b72ad933b1a</configzipcrc>
-                  <configenabled>true</configenabled>
-                  <configtype>single_dropdown</configtype>
-               </config>
-               <config>
-                  <name>200</name>
-                  <configzipfile>Zoom_Configs_Out_200.zip</configzipfile>
-                  <configzipcrc>68a40b161d7ab156bcd59a651bda7412</configzipcrc>
-                  <configenabled>true</configenabled>
-                  <configtype>single_dropdown</configtype>
-               </config>
-               <config>
-                  <name>500</name>
-                  <configzipfile>Zoom_Configs_Out_500.zip</configzipfile>
-                  <configzipcrc>1c67919a5bf953c5bda3b9ad3753aaff</configzipcrc>
-                  <configenabled>true</configenabled>
-                  <configtype>single_dropdown</configtype>
-               </config>
-            </configs>
-            <description>How far you can zoom out in meters</description>
-            <updateComment></updateComment>
-            </mod>
-         </mods>
-      </catagory>
-    <!-- TODO -->
-    <catagory>
-      <name>Crosshair Mods</name>
+      <name>PMOD-based mods</name>
       <selectionType>single</selectionType>
       <mods>
+        <mod>
+          <name>Detailed Session Statistics by WorstUnicumEU</name>
+          <version></version>
+          <modzipfile></modzipfile>
+          <modzipcrc></modzipcrc>
+          <enabled>false</enabled>
+          <pictures>
+            <picture>
+              <URL>http://i.imgur.com/oEMO7BZ.png</URL>
+            </picture>
+            <picture>
+              <URL>http://i.imgur.com/hhF6e0A.png</URL>
+            </picture>
+            <picture>
+              <URL>http://i.imgur.com/qDxGpCX.png</URL>
+            </picture>
+            <picture>
+              <URL>http://i.imgur.com/1zJTcVH.png</URL>
+            </picture>
+          </pictures>
+          <description></description>
+          <updateComment></updateComment>
+          <devURL>http://forum.worldoftanks.eu/index.php?/topic/591220-091701-detailed-session-statistics-by-worstunicumeu-v121/</devURL>
+          </mod>
+      </mods>
+    </catagory>
+    <catagory>
+      <name>Zoom Configs</name>
+      <selectionType>multi</selectionType>
+      <mods>
+        <mod>
+          <name>Zoom Out Config (meters)</name>
+          <version>1</version>
+          <modzipfile></modzipfile>
+          <modzipcrc></modzipcrc>
+          <enabled>true</enabled>
+          <configselectiontype>single</configselectiontype>
+          <configdefault>100</configdefault>
+          <configs>
+            <config>
+              <name>100</name>
+              <configzipfile>Zoom_Configs_Out_100.zip</configzipfile>
+              <configzipcrc>0021332a73caf262d2076b72ad933b1a</configzipcrc>
+              <configenabled>true</configenabled>
+              <configtype>single_dropdown</configtype>
+            </config>
+            <config>
+              <name>200</name>
+              <configzipfile>Zoom_Configs_Out_200.zip</configzipfile>
+              <configzipcrc>68a40b161d7ab156bcd59a651bda7412</configzipcrc>
+              <configenabled>true</configenabled>
+              <configtype>single_dropdown</configtype>
+            </config>
+            <config>
+              <name>500</name>
+              <configzipfile>Zoom_Configs_Out_500.zip</configzipfile>
+              <configzipcrc>1c67919a5bf953c5bda3b9ad3753aaff</configzipcrc>
+              <configenabled>true</configenabled>
+              <configtype>single_dropdown</configtype>
+            </config>
+          </configs>
+          <description>How far you can zoom out in meters</description>
+          <updateComment></updateComment>
+        </mod>
       </mods>
     </catagory>
     <!-- TODO -->
