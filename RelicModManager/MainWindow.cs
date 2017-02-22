@@ -417,6 +417,7 @@ namespace RelicModManager
                 //no fonts to install, done display
                 speedLabel.Text = "";
                 downloadProgress.Text = "Done!";
+                parrentProgressBar.Maximum = 1;
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Value = childProgressBar.Maximum;
                 return;
@@ -427,6 +428,7 @@ namespace RelicModManager
                 //done display
                 speedLabel.Text = "";
                 downloadProgress.Text = "Done!";
+                parrentProgressBar.Maximum = 1;
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Value = childProgressBar.Maximum;
                 return;
@@ -460,6 +462,7 @@ namespace RelicModManager
                 //done display
                 speedLabel.Text = "";
                 downloadProgress.Text = "Done!";
+                parrentProgressBar.Maximum = 1;
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Value = childProgressBar.Maximum;
                 return;
@@ -502,6 +505,7 @@ namespace RelicModManager
                     Directory.Delete(tanksLocation + "\\_fonts", true);
                 speedLabel.Text = "";
                 downloadProgress.Text = "Done!";
+                parrentProgressBar.Maximum = 1;
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Value = childProgressBar.Maximum;
                 this.appendToLog("Fonts Installed Successfully");
@@ -1723,6 +1727,7 @@ namespace RelicModManager
         //handler for the extractworker when progress is made
         private void extractworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            if (childProgressBar.Maximum != childMaxProgres)
             childProgressBar.Maximum = childMaxProgres;
             childProgressBar.Value = childCurrentProgres;
             downloadProgress.Text = currentZipEntry;
