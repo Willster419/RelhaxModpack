@@ -422,7 +422,7 @@
         <version></version>
         <modzipfile>Ingame_Info_AutoAim_base.zip</modzipfile>
         <modzipcrc>f</modzipcrc>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
         <configs>
           <config>
             <name>2 sec autoaim search</name>
@@ -456,14 +456,14 @@
             <name>repair with T add-on</name>
             <configzipfile>Ingame_Info_AutoAim_config_repair_with_t_enable.zip</configzipfile>
             <configzipcrc>f</configzipcrc>
-            <configenabled>false</configenabled>
+            <configenabled>true</configenabled>
             <configtype>multi</configtype>
           </config>
           <config>
             <name>dead shot blocker add-on</name>
             <configzipfile>Ingame_Info_AutoAim_config_dead_shot_block_enable.zip</configzipfile>
             <configzipcrc>f</configzipcrc>
-            <configenabled>true</configenabled>
+            <configenabled>false</configenabled>
             <configtype>multi</configtype>
           </config>
           <config>
@@ -1014,7 +1014,7 @@
         <version>1.6</version>
         <modzipfile>Ingame_Info_Battle_Observer_by_armagomen_v1_6-2_2017-01-12.zip</modzipfile>
         <modzipcrc>a4682f08012c0885e60f9374e692076f</modzipcrc>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
         <configs>
           <config>
             <name>Default</name>
