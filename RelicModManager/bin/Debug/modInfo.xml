@@ -1161,6 +1161,21 @@
         <devURL>http://worldoftanks.ru/ru/news/common/new-mod-radio/</devURL>
       </mod>
       <mod>
+        <name>Aslains gold premium tanks</name>
+        <version></version>
+        <modzipfile>Ingame_info_Aslains_Gold_Premium_Tanks_0.9.17.0.zip</modzipfile>
+        <modzipcrc>f</modzipcrc>
+        <enabled>true</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description>Gold premium tank icons for the garage</description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
         <name>BalCalcMod</name>
         <version></version>
         <modzipfile>Ingame_Info_BalCalcMod_Base_0.9.17.1_2017-01-05.zip</modzipfile>
@@ -1194,57 +1209,57 @@
     </mods>
   </catagory>
   <catagory>
-       <name>Garage Session Stats</name>
-       <selectionType>single</selectionType>
+    <name>Garage Session Stats</name>
+    <selectionType>single</selectionType>
     <mods>
       <mod>
-          <name>Session Statistics by Tomonik</name>
-          <version></version>
-          <modzipfile></modzipfile>
-          <modzipcrc></modzipcrc>
-          <enabled>false</enabled>
-      <configs>
-        <config>
-                <name>Daily Reset</name>
-                <configzipfile></configzipfile>
-                <configzipcrc></configzipcrc>
-                <configenabled></configenabled>
-                <configtype>multi</configtype>
-             </config>
-      </configs>
-          <pictures>
-        <picture>
-               <URL>http://i.imgur.com/UOiwa7n.png</URL>
-             </picture>
-          </pictures>
-          <description></description>
-          <updateComment></updateComment>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/572771-091703-session-statistics-and-battle-result-messages/</devURL>
-          </mod>
+        <name>Session Statistics by Tomonik</name>
+        <version></version>
+        <modzipfile>Garage_Session_Stats_Tomonik.zip</modzipfile>
+        <modzipcrc>f</modzipcrc>
+        <enabled>true</enabled>
+        <configs>
+          <config>
+            <name>Daily Reset</name>
+            <configzipfile>Garage_Session_Stats_Tomonik_Daily_Reset.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>multi</configtype>
+          </config>
+        </configs>
+        <pictures>
+          <picture>
+            <URL>http://i.imgur.com/UOiwa7n.png</URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL>http://forum.worldoftanks.eu/index.php?/topic/572771-091703-session-statistics-and-battle-result-messages/</devURL>
+      </mod>
       <mod>
-          <name>YasenKrasen session statistics</name>
-          <version></version>
-          <modzipfile></modzipfile>
-          <modzipcrc></modzipcrc>
-          <enabled>false</enabled>
-      <configs>
-        <config>
-                <name>Daily Reset</name>
-                <configzipfile></configzipfile>
-                <configzipcrc></configzipcrc>
-                <configenabled></configenabled>
-                <configtype>multi</configtype>
-             </config>
-      </configs>
-          <pictures>
-             <picture>
-               <URL>http://i.imgur.com/h1kpmRO.jpg</URL>
-             </picture>
-          </pictures>
-          <description></description>
-          <updateComment></updateComment>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/209229-098-yasenkrasen-coloured-messages-session-statistics-eng/</devURL>
-          </mod>
+        <name>YasenKrasen session statistics</name>
+        <version></version>
+        <modzipfile>Garage_Session_Stats_YasenKrasen.zip</modzipfile>
+        <modzipcrc>f</modzipcrc>
+        <enabled>true</enabled>
+        <configs>
+          <config>
+            <name>Daily Reset</name>
+            <configzipfile>Garage_Session_Stats_YasenKrasen_Daily_Reset.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>multi</configtype>
+          </config>
+        </configs>
+        <pictures>
+          <picture>
+            <URL>http://i.imgur.com/h1kpmRO.jpg</URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL>http://forum.worldoftanks.eu/index.php?/topic/209229-098-yasenkrasen-coloured-messages-session-statistics-eng/</devURL>
+      </mod>
     </mods>
   </catagory>
   <!-- Comments here -->

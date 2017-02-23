@@ -1,5 +1,6 @@
 (normal) add mods to the modpack. Kind of a big deal
-- need to add garage stats and xft
+- need to add xft and mlg stuff
+- then get a bunch of crosshairs
 - then start xvm config cancer
 
 (normal) comment code and put in log outputs (currently done on all files)
