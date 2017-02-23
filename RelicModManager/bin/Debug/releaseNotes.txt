@@ -1,6 +1,6 @@
-version 18.6:
-- All Tank Skin Packs, Custom Tank Skins, mods Ingame Info mods added
-- Fixed bug with CRC MD5 checksum
-- Added display of file downloading
-- Added notification if trying to clean wot res_mods folder and
-user is still in there, rather than crash
+version 18.61:
+- Added more mods (mostly ingame catagory, and xvm)
+- fixed bug with regex patcher
+- fixed bug with mod selection of enabling an optional checkbox
+- added "file" mode for regex replacement, looks through entire file
+rather than line by line

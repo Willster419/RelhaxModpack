@@ -420,64 +420,64 @@
       <mod>
         <name>Autoaim indication</name>
         <version></version>
-        <modzipfile></modzipfile>
-        <modzipcrc></modzipcrc>
-        <enabled>false</enabled>
+        <modzipfile>Ingame_Info_AutoAim_base.zip</modzipfile>
+        <modzipcrc>f</modzipcrc>
+        <enabled>true</enabled>
         <configs>
           <config>
             <name>2 sec autoaim search</name>
-            <configzipfile></configzipfile>
-            <configzipcrc></configzipcrc>
-            <configenabled></configenabled>
+            <configzipfile>Ingame_Info_AutoAim_config_2_sec.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
             <configtype>single</configtype>
           </config>
           <config>
             <name>5 sec autoaim search</name>
-            <configzipfile></configzipfile>
-            <configzipcrc></configzipcrc>
-            <configenabled></configenabled>
+            <configzipfile>Ingame_Info_AutoAim_config_5_sec.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
             <configtype>single</configtype>
           </config>
           <config>
             <name>infinite autoaim search</name>
             <configzipfile></configzipfile>
             <configzipcrc></configzipcrc>
-            <configenabled></configenabled>
+            <configenabled>true</configenabled>
             <configtype>single</configtype>
           </config>
           <config>
             <name>auto-announce reload add-on</name>
-            <configzipfile></configzipfile>
-            <configzipcrc></configzipcrc>
-            <configenabled></configenabled>
+            <configzipfile>Ingame_Info_AutoAim_config_announce_reload_enable.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
             <configtype>multi</configtype>
           </config>
           <config>
             <name>repair with T add-on</name>
-            <configzipfile></configzipfile>
-            <configzipcrc></configzipcrc>
-            <configenabled></configenabled>
+            <configzipfile>Ingame_Info_AutoAim_config_repair_with_t_enable.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>false</configenabled>
             <configtype>multi</configtype>
           </config>
           <config>
             <name>dead shot blocker add-on</name>
-            <configzipfile></configzipfile>
-            <configzipcrc></configzipcrc>
-            <configenabled></configenabled>
+            <configzipfile>Ingame_Info_AutoAim_config_dead_shot_block_enable.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
             <configtype>multi</configtype>
           </config>
           <config>
             <name>ally shot blocker add-on</name>
-            <configzipfile></configzipfile>
-            <configzipcrc></configzipcrc>
-            <configenabled></configenabled>
+            <configzipfile>Ingame_Info_AutoAim_config_ally_shot_block_enable.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
             <configtype>multi</configtype>
           </config>
           <config>
             <name>help message when spotted add-on</name>
-            <configzipfile></configzipfile>
-            <configzipcrc></configzipcrc>
-            <configenabled></configenabled>
+            <configzipfile>Ingame_Info_AutoAim_config_help_spotted_enable.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
             <configtype>multi</configtype>
           </config>
         </configs>
@@ -560,15 +560,15 @@
       <mod>
         <name>LightMod by Polyacov-Yury</name>
         <version>2</version>
-        <modzipfile></modzipfile>
-        <modzipcrc></modzipcrc>
-        <enabled>false</enabled>
+        <modzipfile>Ingame_Info_LightMod_LampLights.zip</modzipfile>
+        <modzipcrc>f</modzipcrc>
+        <enabled>true</enabled>
         <configs>
           <config>
             <name>headlights only</name>
-            <configzipfile></configzipfile>
-            <configzipcrc></configzipcrc>
-            <configenabled></configenabled>
+            <configzipfile>Ingame_Info_LightMod_LampLights_HeadLight.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
             <configtype>single</configtype>
             <pictures>
               <picture>
@@ -578,9 +578,9 @@
           </config>
           <config>
             <name>Car Pack</name>
-            <configzipfile></configzipfile>
-            <configzipcrc></configzipcrc>
-            <configenabled></configenabled>
+            <configzipfile>Ingame_Info_LightMod_LampLights_AutoCar.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
             <configtype>single</configtype>
             <pictures>
               <picture>
@@ -596,9 +596,9 @@
           </config>
           <config>
             <name>Neon Track Lights</name>
-            <configzipfile></configzipfile>
-            <configzipcrc></configzipcrc>
-            <configenabled></configenabled>
+            <configzipfile>Ingame_Info_LightMod_LampLights_BottomNeon.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
             <configtype>multi</configtype>
             <pictures>
               <picture>
@@ -608,9 +608,9 @@
           </config>
           <config>
             <name>Spotlight on tank in sight</name>
-            <configzipfile></configzipfile>
-            <configzipcrc></configzipcrc>
-            <configenabled></configenabled>
+            <configzipfile>Ingame_Info_LightMod_LampLights_TargetLight.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
             <configtype>multi</configtype>
             <pictures>
               <picture>
@@ -619,10 +619,10 @@
             </pictures>
           </config>
           <config>
-            <name>keep daytime lighting</name>
-            <configzipfile></configzipfile>
-            <configzipcrc></configzipcrc>
-            <configenabled></configenabled>
+            <name>evening lighting</name>
+            <configzipfile>Ingame_Info_LightMod_SunController.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
             <configtype>multi</configtype>
             <pictures>
               <picture>
@@ -737,11 +737,11 @@
         <devURL>https://wotspeak.ru/paneli-povrezhdeniy-world-of-tanks-wot/321-indikator-napravleniya-damaga-v-vide-puli-world-of-tanks-wot.html</devURL>
       </mod>
       <mod>
-        <name>inbattle current rating calculation by Ekspoint</name>
+        <name>Inbattle current rating calculation by Ekspoint</name>
         <version></version>
         <modzipfile>Ingame_Info_InBattle_Rating_Base_0.9.17.0_2016-12-12.zip</modzipfile>
-        <modzipcrc>7fe0638f5d453c4b0d0338d5e0c32f44</modzipcrc>
-        <enabled>false</enabled>
+        <modzipcrc>f</modzipcrc>
+        <enabled>true</enabled>
         <configs>
           <config>
             <name>wn8</name>
@@ -1263,7 +1263,7 @@
         <name>Relhax</name>
         <version>17</version>
         <modzipfile>Sounds_Relhax_Base.zip</modzipfile>
-        <modzipcrc>d995a33893a2c812b9329ea737d5a821</modzipcrc>
+        <modzipcrc>f</modzipcrc>
         <enabled>true</enabled>
         <pictures>
           <picture>
@@ -1361,8 +1361,8 @@
     <mod>
     <name>Audio</name>
     <version></version>
-    <modzipfile></modzipfile>
-    <modzipcrc></modzipcrc>
+    <modzipfile>Sixth_Sense_Audio_Disable_Stock_Sound.zip</modzipfile>
+    <modzipcrc>f</modzipcrc>
     <enabled>true</enabled>
     <configs>
       <config>
@@ -1455,8 +1455,8 @@
       <mod>
         <name>Icon</name>
         <version></version>
-        <modzipfile></modzipfile>
-        <modzipcrc></modzipcrc>
+        <modzipfile>Sixth_Sense_Icon_Disable_Default_Icon.zip</modzipfile>
+        <modzipcrc>f</modzipcrc>
         <enabled>true</enabled>
         <configs>
           <config>
