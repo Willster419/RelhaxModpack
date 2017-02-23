@@ -379,11 +379,24 @@ namespace RelicModManager
                 downloadProgress.Text = p.file;
                 if (p.type.Equals("regx"))
                 {
+                    string temp = null;
+                    int tempp = 0;
+                    if (p.lines != null)
+                    {
+                        temp = p.lines[0];
+                        tempp = int.Parse(temp);
+                    }
                     if (p.lines == null)
                     {
-                        //perform regex patch on entire file
-                        this.appendToLog("Regex patch, all lines, " + p.file + ", " + p.search + ", " + p.replace);
+                        //perform regex patch on entire file, line by line
+                        this.appendToLog("Regex patch, all lines, line by line, " + p.file + ", " + p.search + ", " + p.replace);
                         this.RegxPatch(p.file, p.search, p.replace);
+                    }
+                    else if (p.lines.Count() == 1 && tempp == -1)
+                    {
+                        //perform regex patch on entire file, as one whole string
+                        this.appendToLog("Regex patch, all lines, whole file, " + p.file + ", " + p.search + ", " + p.replace);
+                        this.RegxPatch(p.file, p.search, p.replace, -1);
                     }
                     else
                     {
@@ -1200,6 +1213,15 @@ namespace RelicModManager
                     }
                     sb.Append(fileParsed[i] + "\n");
                 }
+            }
+            else if (lineNumber == -1)
+            //search entire file and string and make one giant regex replacement
+            {
+                if (Regex.IsMatch(file,search))
+                {
+                    file = Regex.Replace(file,search,replace);
+                }
+                sb.Append(file);
             }
             else
             {

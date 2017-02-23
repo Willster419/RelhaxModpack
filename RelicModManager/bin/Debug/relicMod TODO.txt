@@ -1,14 +1,9 @@
-(critical) fix bug with mod selection and having to have only a single and single_dropdown selected
-
 (normal) add mods to the modpack. Kind of a big deal
- - testing ingame rating(need new version), sixth sense
- - need to add garage stats and xft
- - then add spotted messenger
+ - testing ingame rating(need new version), sixth sense, spotted messenger
+ - need to add garage stats and xft and autoaim
  - then start xvm config cancer
 
 (normal) comment code and put in log outputs (currently done on all files)
-
-(enhancement) re-allign modinfo.xml
 
 (optional) add statistics of how many runs done ever and of what mod
   

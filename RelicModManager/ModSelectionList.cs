@@ -590,7 +590,8 @@ namespace RelicModManager
                     }
                     if (!oneSelected)
                     {
-                        //select one randomly
+                        //enable at least one radioButton and one comboBox selection
+                        bool radioSelected = false;
                         foreach (Control c in innerPanel.Controls)
                         {
                             if (c is RadioButton)
@@ -598,12 +599,13 @@ namespace RelicModManager
                                 RadioButton b = (RadioButton)c;
                                 if (b.Enabled)
                                 {
+                                    if (radioSelected) continue;
                                     b.Checked = true;
-                                    break;
+                                    radioSelected = true;
                                 }
                             }
-
-                            if (c is CheckBox)
+                            //checkboxes are optional and don't need to be checked
+                            /*if (c is CheckBox)
                             {
                                 CheckBox b = (CheckBox)c;
                                 if (b.Enabled)
@@ -611,11 +613,13 @@ namespace RelicModManager
                                     b.Checked = true;
                                     break;
                                 }
-                            }
+                            }*/
 
                             if (c is ComboBox)
                             {
                                 ComboBox cbox = (ComboBox)c;
+                                //only select if the index is on nothing
+                                if (cbox.SelectedIndex == -1)
                                 cbox.SelectedIndex = 0;
                             }
                         }
