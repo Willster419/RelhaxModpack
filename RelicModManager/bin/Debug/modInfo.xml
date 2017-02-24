@@ -232,7 +232,7 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>A dump of all clan tag icons from 2016/8/20</description>
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>
@@ -262,7 +262,7 @@
             <URL>http://i.imgur.com/1zJTcVH.png</URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>This will over-ride any selections in the garage stats selection</description>
         <updateComment></updateComment>
         <devURL>http://forum.worldoftanks.eu/index.php?/topic/591220-091701-detailed-session-statistics-by-worstunicumeu-v121/</devURL>
       </mod>
@@ -303,15 +303,15 @@
             <configtype>single_dropdown</configtype>
           </config>
         </configs>
-        <description>How far you can zoom out in meters</description>
+        <description>How far you can zoom out in arcade mode in meters</description>
         <updateComment></updateComment>
       </mod>
     </mods>
   </catagory>
-  <!-- TODO -->
+  <!-- Note that a user can select more than one croshair of a type (acrade, sniper, etc.) -->
   <catagory>
     <name>Crosshair Mods</name>
-    <selectionType>single</selectionType>
+    <selectionType>multi</selectionType>
     <mods>
     </mods>
   </catagory>
@@ -346,7 +346,7 @@
             <URL>http://i.imgur.com/pjkRzWn.jpg</URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Keeps a list of who shot you and fro how much</description>
         <updateComment></updateComment>
         <devURL>http://forum.worldoftanks.eu/index.php?/topic/338561-0915-xft-integrated-damagelogs-v022a-30-05-2016/</devURL>
       </mod>
@@ -358,7 +358,7 @@
         <enabled>true</enabled>
         <configs>
            <config>
-              <name>move messages to center</name>
+              <name>move damage messages to center</name>
               <configzipfile>Damage_Logs_GambitER_Damage_Log_Message_Patch.zip</configzipfile>
               <configzipcrc>f</configzipcrc>
               <configenabled>true</configenabled>
@@ -376,7 +376,7 @@
             <URL>http://s017.radikal.ru/i443/1505/e0/ed51e309393c.gif</URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Keeps a list of who shot you and for how much. Press alt to see the player name.</description>
         <updateComment></updateComment>
         <devURL>http://modsworldoftanks.com/the-damage-panel-from-gambiter-damagelog/</devURL>
       </mod>
@@ -567,7 +567,7 @@
             <URL>http://4cheat.ru/i/view.php?id=333.jpg</URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Shows a number of chance of penetration. The number is calculated by effective armor minus gun alpha.@Negative number means likely to bounce.@Positive number means likel to pierce.</description>
         <updateComment></updateComment>
         <devURL>http://4cheat.ru/showthread.php?t=15891</devURL>
       </mod>
@@ -619,7 +619,7 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Sends a chat mesage that you are spotted in a grid square, along with the "Help!" command</description>
         <updateComment></updateComment>
         <devURL>http://forum.worldoftanks.eu/index.php?/topic/562735-09170-spotmessanger-v070-14122016/</devURL>
       </mod>
@@ -699,10 +699,10 @@
         </configs>
         <pictures>
            <picture>
-             <URL></URL>
+             <URL>https://koreanrandom.com/forum/uploads/monthly_02_2016/post-8065-0-19679800-1456090716.jpg</URL>
            </picture>
         </pictures>
-        <description></description>
+        <description>MUST HAVE ADVANCED GRAPHICS SETTINGS FOR THIS TO WORK!</description>
         <updateComment></updateComment>
         <devURL>https://koreanrandom.com/forum/topic/19365-</devURL>
       </mod>
@@ -798,7 +798,7 @@
              <URL></URL>
            </picture>
         </pictures>
-        <description></description>
+        <description>Changes the look of the damage indicators when you are shot</description>
         <updateComment></updateComment>
         <devURL>https://wotspeak.ru/paneli-povrezhdeniy-world-of-tanks-wot/321-indikator-napravleniya-damaga-v-vide-puli-world-of-tanks-wot.html</devURL>
       </mod>
@@ -875,7 +875,7 @@
              <URL></URL>
            </picture>
         </pictures>
-        <description>Kaeptn Config@http://forum.worldoftanks.eu/index.php?/topic/561169-091703-inbattle-wn8-calculator-eff-damage-updated-02022017/page__st__40__pid__12646652#entry12646652</description>
+        <description>Kaeptn Config@http://forum.worldoftanks.eu/index.php?/topic/561169-091703-inbattle-wn8-calculator-eff-damage-updated-02022017/page__st__40__pid__12646652#entry12646652@Shows your current stats ingame. Live updates.</description>
         <updateComment></updateComment>
         <devURL>http://forum.worldoftanks.eu/index.php?/topic/561169-091703-inbattle-wn8-calculator-eff-damage-updated-02022017</devURL>
       </mod>
@@ -959,7 +959,7 @@
             </pictures>
           </config>
         </configs>
-        <description></description>
+        <description>Allows you to see where to penetrate the enemy better, or see where the enemy is penetrating you</description>
         <updateComment></updateComment>
         <devURL>http://goxwot.blogspot.com/2015/05/98-damage-stickers-7-variants.html</devURL>
       </mod>
@@ -1012,7 +1012,7 @@
             <URL>http://s019.radikal.ru/i641/1312/dc/f65367de5257.jpg</URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Settings to remove the distance fog and/or enable more map visibility. Does not increase view of seeing enemy tanks.</description>
         <updateComment></updateComment>
         <devURL>http://forum.worldoftanks.ru/index.php?/topic/1125299-</devURL>
       </mod>
@@ -1030,7 +1030,7 @@
             <URL>https://wotspeak.ru/uploads/posts/2015-10/1445335476_shot_013.jpg</URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>A notification if an enemy is near you.</description>
         <updateComment></updateComment>
         <devURL>https://wotspeak.ru/mody-world-of-tanks-wot/525-mod-atas-informaciya-o-blizhayshem-zasvechennom-tanke-vraga-dlya-world-of-tanks.html</devURL>
       </mod>
@@ -1080,7 +1080,7 @@
         <version></version>
         <modzipfile>Ingame_Info_hitmarker_by_aimdrol_0.9.16_2016-10-09.zip</modzipfile>
         <modzipcrc>f</modzipcrc>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
         <configs>
           <config>
             <name>Damage Only</name>
@@ -1102,7 +1102,7 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Shows a CoD style hitmarker whenever you penetrate an enemy tank</description>
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>
@@ -1133,7 +1133,7 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Repaces the standard loading animation circle</description>
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>
@@ -1157,7 +1157,7 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Changes the mastery badges to CoD style badges</description>
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>
@@ -1172,7 +1172,7 @@
             <name>With sound</name>
             <configzipfile>Ingame_Info_mlg_glasses_with_sound_patch.zip</configzipfile>
             <configzipcrc>f</configzipcrc>
-            <configenabled>true</configenabled>
+            <configenabled>false</configenabled>
             <configtype>multi</configtype>
           </config>
         </configs>
@@ -1181,7 +1181,7 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Enables MLG glasses to drop down on your tank when you are in a light tank and an enemy bounces off of you. Enemy caliber gun must be > 90 mm</description>
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>
@@ -1205,7 +1205,7 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Show an illuminati pyrimid "protecting" your tank after your death. (Or during the battle)</description>
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>
@@ -1271,7 +1271,7 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Modifies the standard Marks of Excelence on the gun barrels</description>
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>
@@ -1330,7 +1330,7 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Modifies the standard equipment and consumables icons. Some modify the names as well.</description>
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>
@@ -1359,7 +1359,7 @@
             <URL>http://fs5.directupload.net/images/160727/pu8ywi2f.jpg</URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Shows the total HP of each team at the top of the screen.</description>
         <updateComment></updateComment>
         <devURL>http://forum.worldoftanks.ru/index.php?/topic/1385404-091703-battle-observer-v1067-27012017-teamshp-damage-log-zoommod-debug-time-armorcalculator/</devURL>
       </mod>
@@ -1460,7 +1460,7 @@
             <URL>http://s14.directupload.net/images/131220/mkrjfo7g.jpg</URL>
           </picture>
         </pictures>
-        <description>legal info@http://forum.worldoftanks.eu/index.php?/topic/599621-wg-support-safeshot-is-illegal/page__st__20__pid__13403197#entry13403197</description>
+        <description>legal info@http://forum.worldoftanks.eu/index.php?/topic/599621-wg-support-safeshot-is-illegal/page__st__20__pid__13403197#entry13403197@prevents you from shooting your gun to hit allies/dead tanks/etc.</description>
         <updateComment></updateComment>
         <devURL>http://forum.worldoftanks.ru/index.php?/topic/1769267-</devURL>
       </mod>
@@ -1481,7 +1481,7 @@
             <URL>http://static-ptl-ru.gcdn.co/dcont/fb/image/newmodradio2.png</URL>
           </picture>
         </pictures>
-        <description>Like pandora internet radio, but in your game</description>
+        <description>Like pandora internet radio, but in your game, with a configurable gui settings window</description>
         <updateComment></updateComment>
         <devURL>http://worldoftanks.ru/ru/news/common/new-mod-radio/</devURL>
       </mod>
@@ -1527,7 +1527,7 @@
             <URL>http://s1.directupload.net/images/user/140614/qhfyk8zv.jpg</URL>
           </picture>
         </pictures>
-        <description>The mod is designed to remedy the situation, it is impossible to aim above the hill on the background cutoff</description>
+        <description>The mod is designed to remedy the situation where it is impossible to aim above the hill. (Overshooting)</description>
         <updateComment></updateComment>
         <devURL>https://koreanrandom.com/forum/topic/30440-</devURL>
       </mod>
@@ -1557,7 +1557,7 @@
             <URL>http://i.imgur.com/UOiwa7n.png</URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Shows your statistics for your tanks session in the notifications area of your garage</description>
         <updateComment></updateComment>
         <devURL>http://forum.worldoftanks.eu/index.php?/topic/572771-091703-session-statistics-and-battle-result-messages/</devURL>
       </mod>
@@ -1581,7 +1581,7 @@
             <URL>http://i.imgur.com/h1kpmRO.jpg</URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Shows your statistics for your tanks session in the notifications area of your garage</description>
         <updateComment></updateComment>
         <devURL>http://forum.worldoftanks.eu/index.php?/topic/209229-098-yasenkrasen-coloured-messages-session-statistics-eng/</devURL>
       </mod>
@@ -1604,7 +1604,7 @@
         <version>17</version>
         <modzipfile>Sounds_Relhax_Base.zip</modzipfile>
         <modzipcrc>f</modzipcrc>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
         <pictures>
           <picture>
             <URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
@@ -1645,7 +1645,7 @@
         <version></version>
         <modzipfile>Sounds_mlg_mod_voice_0.9.17.1_2017-01-05.zip</modzipfile>
         <modzipcrc>f</modzipcrc>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
         <configs>
           <config>
             <name>audio only, no visuals</name>
@@ -1665,16 +1665,16 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description>MLG EVERYWHERE</description>
-        <updateComment>DEV URL TODO</updateComment>
-        <devURL></devURL>
+        <description>MLG EVERYWHERE@Also includes awesome visuals.</description>
+        <updateComment></updateComment>
+        <devURL>http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/</devURL>
       </mod>
       <mod>
         <name>Sounds instead of crew voices by vvooj</name>
         <version>6.1</version>
         <modzipfile>Sounds_Simple_Crew_Sounds.zip</modzipfile>
         <modzipcrc>b2c7a4f094682e6b4c326a9650219eec</modzipcrc>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
         <pictures>
           <picture>
             <URL></URL>
@@ -1689,7 +1689,7 @@
         <version></version>
         <modzipfile>Sounds_UT_Announcer_updated_by_budyx69_0.9.17.0_2016-12-22.zip</modzipfile>
         <modzipcrc>53b8ad700e4a05672194cd0f4b31629d</modzipcrc>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
         <configs>
           <config>
             <name>Webium config</name>
@@ -1704,7 +1704,7 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description>TODO</description>
+        <description>Plays certain sounds for when you get a certain number of kills in the game.</description>
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>
@@ -1732,7 +1732,7 @@
     <version></version>
     <modzipfile>Sixth_Sense_Audio_Disable_Stock_Sound.zip</modzipfile>
     <modzipcrc>f</modzipcrc>
-    <enabled>true</enabled>
+    <enabled>false</enabled>
     <configs>
       <config>
         <name>RelHax by Willster419</name>
@@ -1826,7 +1826,7 @@
         <version></version>
         <modzipfile>Sixth_Sense_Icon_Disable_Default_Icon.zip</modzipfile>
         <modzipcrc>f</modzipcrc>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
         <configs>
           <config>
             <name>OMC Logo</name>
@@ -2249,7 +2249,7 @@
             </pictures>
           </config>
           <config>
-            <name>animated Illuminati pyramid by Aimdrol</name>
+            <name>Animated Illuminati pyramid by Aimdrol</name>
             <configzipfile>Sixth_Sense_Icon_Animation_Illuminati_0.9.17.0_2016-12-19.zip</configzipfile>
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
@@ -2261,7 +2261,7 @@
             </pictures>
           </config>
           <config>
-            <name>animated light bulb by Aimdrol</name>
+            <name>Animated light bulb by Aimdrol</name>
             <configzipfile>Sixth_Sense_Icon_Animation_Standard_0.9.17.0.zip</configzipfile>
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
@@ -2314,7 +2314,7 @@
             <URL>http://s1.directupload.net/images/user/140809/q4rrjpug.jpg</URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Shows where to hit tanks for damage or critical hits</description>
         <updateComment></updateComment>
         <devURL>https://koreanrandom.com/forum/topic/1400-</devURL>
       </mod>
@@ -2344,7 +2344,7 @@
           <URL>http://fs2.directupload.net/images/user/150624/btwoze7t.png</URL>
         </picture>
         </pictures>
-        <description></description>
+        <description>For the animae lovers</description>
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>
@@ -2910,7 +2910,7 @@
             <URL>http://fs5.directupload.net/images/user/170105/s8uqe7oe.jpg</URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>America is the best</description>
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>
@@ -2925,7 +2925,7 @@
             <URL>http://fs5.directupload.net/images/user/170105/5gh43lah.jpg</URL>
           </picture>
         </pictures>
-        <description></description>
+        <description>Helps to spread democracy across the battlefield</description>
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>

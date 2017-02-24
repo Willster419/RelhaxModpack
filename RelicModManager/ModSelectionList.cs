@@ -347,12 +347,15 @@ namespace RelicModManager
                 mainPanel.Controls.Add(configPanel);
             //add to tab
             t.Controls.Add(mainPanel);
+            //add the event handler before changing the checked state so the event
+            //event handler is #triggered
             modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
             modCheckBox.Checked = m.modChecked;
         }
         //hander for when any mouse button is clicked on a specific control
         void modCheckBox_MouseDown(object sender, MouseEventArgs e)
         {
+            //we only care about the right mouse click tho
             if (e.Button != MouseButtons.Right)
                 return;
             if (sender is CheckBox)
@@ -611,17 +614,6 @@ namespace RelicModManager
                                     radioSelected = true;
                                 }
                             }
-                            //checkboxes are optional and don't need to be checked
-                            /*if (c is CheckBox)
-                            {
-                                CheckBox b = (CheckBox)c;
-                                if (b.Enabled)
-                                {
-                                    b.Checked = true;
-                                    break;
-                                }
-                            }*/
-
                             if (c is ComboBox)
                             {
                                 ComboBox cbox = (ComboBox)c;
@@ -1254,9 +1246,10 @@ namespace RelicModManager
             // Return the hexadecimal string.
             return sBuilder.ToString();
         }
-
+        //handler for when the close button is pressed
         private void ModSelectionList_FormClosing(object sender, FormClosingEventArgs e)
         {
+            //save the size of this window for later.
             Settings.modSelectionHeight = this.Size.Height;
             Settings.modSelectionWidth = this.Size.Width;
         }

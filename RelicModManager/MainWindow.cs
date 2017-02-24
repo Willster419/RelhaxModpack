@@ -350,8 +350,7 @@ namespace RelicModManager
                 {
                     this.appendToLog("Exracting " + Path.GetFileName(m.modZipFile));
                     this.unzip(downloadedFilesDir + Path.GetFileName(m.modZipFile), tanksLocation);
-                    parrentProgressBar.Value++;
-                    Application.DoEvents();
+                    //parrentProgressBar.Value++;
                 }
             }
             this.appendToLog("Finished Extracting Relhax Modpack User Mod Extraction");
@@ -729,7 +728,7 @@ namespace RelicModManager
             parrentProgressBar.Value = 0;
             statusLabel.Text = "STATUS:";
         }
-        //DEPRECATED: Checks for which parts of the RelHax sound mod it is to download
+        //Checks for which parts of the RelHax sound mod it is to download
         private void createDownloadQueue()
         {
             downloadQueue = new List<DownloadItem>();
@@ -760,7 +759,6 @@ namespace RelicModManager
             if (!File.Exists(tanksLocation)) return null;
             return (string)theObject;
         }
-
         //prompts the user to specify where the "WorldOfTanks.exe" file is
         //return the file path and name of "WorldOfTanks.exe"
         private string manuallyFindTanks()
@@ -1076,11 +1074,13 @@ namespace RelicModManager
                     //check to see if it's already there
                     string[] tempp = replace.Split('/');
                     string tempPath = xpath;
+                    //make the full node path
                     for (int i = 0; i < tempp.Count() - 1; i++)
                     {
                         tempPath = tempPath + "/" + tempp[i];
                     }
                     XmlNodeList currentSoundBanksAdd = doc.SelectNodes(tempPath);
+                    //in each node check if the element exist with the replace innerText
                     foreach (XmlElement e in currentSoundBanksAdd)
                     {
                         string innerText = tempp[tempp.Count() - 1];
