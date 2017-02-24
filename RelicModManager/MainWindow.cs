@@ -33,7 +33,7 @@ namespace RelicModManager
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 18.61";
+        private string managerVersion = "version 18.7";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         private SelectFeatures features = new SelectFeatures();
         //queue for downloading mods
@@ -786,7 +786,7 @@ namespace RelicModManager
             Application.DoEvents();
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             this.appendToLog("|RelHax ModManager " + managerVersion);
-            this.appendToLog("|Built on 02/22/2017, running at " + DateTime.Now);
+            this.appendToLog("|Built on 02/24/2017, running at " + DateTime.Now);
             this.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1074,10 +1074,17 @@ namespace RelicModManager
             {
                 case "add":
                     //check to see if it's already there
-                    XmlNodeList currentSoundBanksAdd = doc.SelectNodes(xpath);
+                    string[] tempp = replace.Split('/');
+                    string tempPath = xpath;
+                    for (int i = 0; i < tempp.Count() - 1; i++)
+                    {
+                        tempPath = tempPath + "/" + tempp[i];
+                    }
+                    XmlNodeList currentSoundBanksAdd = doc.SelectNodes(tempPath);
                     foreach (XmlElement e in currentSoundBanksAdd)
                     {
-                        if (Regex.IsMatch(e.InnerText, replace))
+                        string innerText = tempp[tempp.Count() - 1];
+                        if (Regex.IsMatch(e.InnerText, innerText))
                             return;
                     }
                     //get to the node where to add the element
@@ -1347,6 +1354,11 @@ namespace RelicModManager
             userMods = new List<Mod>();
             dependencies = new List<Dependency>();
             parsedCatagoryLists = list.parsedCatagoryList;
+            //add the global dependencies to the dependency list
+            foreach (Dependency d in list.globalDependencies)
+            {
+                dependencies.Add(d);
+            }
             //if mod is enabled and checked, add it to list of mods to extract/install
             //same for configs
             foreach (Catagory c in parsedCatagoryLists)
@@ -1448,6 +1460,7 @@ namespace RelicModManager
                 downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
                 downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
                 tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
+                this.appendToLog("downloading " + tempOldDownload);
                 currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile).Substring(0,15) + "...";
                 downloadQueue.RemoveAt(0);
                 parrentProgressBar.Value++;

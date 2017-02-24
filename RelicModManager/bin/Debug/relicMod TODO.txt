@@ -1,6 +1,7 @@
-(normal) add mods to the modpack. Kind of a big deal
-- need to add xft and mlg stuff
-- then get a bunch of crosshairs
+(normal) add mods to the modpack. Kind of a big deal.
+- update the modInfo with mod descriptions and dev urls and stuff
+- get all working crosshairs from omc
+- then start pmod stuff
 - then start xvm config cancer
 
 (normal) comment code and put in log outputs (currently done on all files)

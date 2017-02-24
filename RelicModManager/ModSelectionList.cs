@@ -20,6 +20,8 @@ namespace RelicModManager
         public bool cancel = true;//used to determine if the user canceled
         private Preview p = new Preview(null, null, null);
         private PleaseWait pw;
+        public List<Dependency> globalDependencies;
+        private bool loadingConfig = false;
 
         public ModSelectionList()
         {
@@ -127,6 +129,7 @@ namespace RelicModManager
                     }
                 }
             }
+            loadingConfig = false;
         }
         //adds a tab view for each mod catagory
         private void makeTabs()
@@ -493,7 +496,11 @@ namespace RelicModManager
                                 else
                                 {
                                     //not safe to check the mod
-                                    cb.Checked = false;
+                                    if (!loadingConfig)
+                                    {
+                                        cb.Checked = false;
+                                    }
+                                    
                                 }
                             }
                         }
@@ -631,14 +638,54 @@ namespace RelicModManager
         private void createModStructure2()
         {
             XmlDocument doc = new XmlDocument();
-            if (Program.testMode)
+            try
             {
-                doc.Load("modInfo.xml");
+                if (Program.testMode)
+                {
+                    doc.Load("modInfo.xml");
+                }
+                else
+                {
+                    doc.Load("https://dl.dropboxusercontent.com/u/44191620/RelicMod/mods/modInfo.xml");
+                }
             }
-            else
+            catch (XmlException)
             {
-                doc.Load("https://dl.dropboxusercontent.com/u/44191620/RelicMod/mods/modInfo.xml");
+                Settings.appendToLog("CRITICAL: Failed to read database!");
+                MessageBox.Show("CRITICAL: Failed to read database!");
+                Application.Exit();
             }
+            //add the global dependencies
+            globalDependencies = new List<Dependency>();
+            XmlNodeList globalDependenciesList = doc.SelectNodes("//modInfoAlpha.xml/globaldependencies/globaldependency");
+            foreach (XmlNode dependencyNode in globalDependenciesList)
+            {
+                Dependency d = new Dependency();
+                foreach (XmlNode globs in dependencyNode.ChildNodes)
+                {
+                    switch (globs.Name)
+                    {
+                        case "dependencyZipFile":
+                            d.dependencyZipFile = globs.InnerText;
+                            break;
+                        case "dependencyZipCRC":
+                            d.dependencyZipCRC = globs.InnerText;
+                            break;
+                        case "dependencyenabled":
+                            try
+                            {
+                                d.enabled = bool.Parse(globs.InnerText);
+                            }
+                            catch (FormatException)
+                            {
+                                d.enabled = false;
+                            }
+                            break;
+                    }
+                }
+                globalDependencies.Add(d);
+            }
+            
             XmlNodeList catagoryList = doc.SelectNodes("//modInfoAlpha.xml/catagories/catagory");
             parsedCatagoryList = new List<Catagory>();
             foreach (XmlNode nnnnn in catagoryList)
@@ -998,6 +1045,7 @@ namespace RelicModManager
         //loads a saved config from xml and parses it into the memory database
         private void loadConfig()
         {
+            loadingConfig = true;
             OpenFileDialog loadLocation = new OpenFileDialog();
             string filePath = "";
             if (Program.autoInstall)

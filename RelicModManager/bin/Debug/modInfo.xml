@@ -1,4 +1,23 @@
 <modInfoAlpha.xml>
+<!-- Dependencies required on a global scale -->
+<!-- Eithor mods of different catagories use these or alomst every mod could use these -->
+<globaldependencies>
+      <globaldependency>
+        <dependencyZipFile>Dependency_global_fonts.zip</dependencyZipFile>
+        <dependencyZipCRC>f</dependencyZipCRC>
+        <dependencyenabled>true</dependencyenabled>
+      </globaldependency>
+      <globaldependency>
+        <dependencyZipFile>Dependency_global_orig_xmls.zip</dependencyZipFile>
+        <dependencyZipCRC>f</dependencyZipCRC>
+        <dependencyenabled>true</dependencyenabled>
+      </globaldependency>
+      <globaldependency>
+        <dependencyZipFile>Dependency_global_text_locator.zip</dependencyZipFile>
+        <dependencyZipCRC>f</dependencyZipCRC>
+        <dependencyenabled>true</dependencyenabled>
+      </globaldependency>
+</globaldependencies>
 <!-- CATAGORY ORDERS MATTER -->
 <!-- Catagory name -->
 <!-- Catagory selection type -->
@@ -11,7 +30,7 @@
     <selectionType>single</selectionType>
     <dependencies>
       <dependency>
-        <dependencyZipFile>Dependency_XVM_Base_6.5.4.zip</dependencyZipFile>
+        <dependencyZipFile>Dependency_XVM_Base_6.5.5.zip</dependencyZipFile>
         <dependencyZipCRC>f</dependencyZipCRC>
         <dependencyenabled>true</dependencyenabled>
       </dependency>
@@ -59,7 +78,7 @@
             <URL>http://fs5.directupload.net/images/user/170105/iy78ukly.jpg</URL>
           </picture>
         </pictures>
-        <description>Config by Willster419. Origionaly based on stock xvm config.@Includes an hp pool and minimap hp circles</description>
+        <description>Config by Willster419. Origionaly based on stock xvm config.@Includes an hp pool and minimap hp circles@XFT HITLOG IS NOT COMPATIBLE WITH THIS CONFIG</description>
         <updateComment></updateComment>
         <devURL>https://github.com/Willster419/xvmConfig</devURL>
       </mod>
@@ -166,11 +185,58 @@
     <selectionType>multi</selectionType>
     <dependencies>
       <dependency>
-        <dependencyZipFile>Dependency_XVM_Base_6.5.4.zip</dependencyZipFile>
+        <dependencyZipFile>Dependency_XVM_Base_6.5.5.zip</dependencyZipFile>
         <dependencyZipCRC>f</dependencyZipCRC>
         <dependencyenabled>true</dependencyenabled>
       </dependency>
     </dependencies>
+    <mods>
+      <mod>
+        <name>Clan Icons</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>true</enabled>
+        <configs>
+          <config>
+            <name>Default</name>
+            <configzipfile></configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>Full NA</name>
+            <configzipfile>XVM_Config_Builder_clanicons-full-na-2016-08-20.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>Full EU</name>
+            <configzipfile></configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled></configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>Full RU</name>
+            <configzipfile></configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled></configenabled>
+            <configtype>single</configtype>
+          </config>
+        </configs>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+    </mods>
   </catagory>
   <catagory>
     <name>PMOD-based mods</name>
@@ -258,20 +324,20 @@
         <version>0.22a</version>
         <modzipfile></modzipfile>
         <modzipcrc></modzipcrc>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
         <configs>
           <config>
             <name>integrated hitlog</name>
-            <configzipfile></configzipfile>
-            <configzipcrc></configzipcrc>
-            <configenabled></configenabled>
+            <configzipfile>Damage_Logs_XFT_Integrated_both_logs.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
             <configtype>single</configtype>
           </config>
           <config>
             <name>hitlog on top</name>
-            <configzipfile></configzipfile>
-            <configzipcrc></configzipcrc>
-            <configenabled></configenabled>
+            <configzipfile>Damage_Logs_XFT_Split_both_logs.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
             <configtype>single</configtype>
           </config>
         </configs>
@@ -367,7 +433,7 @@
             <URL>http://cdn-frm-eu.wargaming.net/wot/ru/uploads/monthly_08_2014/post-6420121-0-73875800-1408203179.jpg</URL>
           </picture>
         </pictures>
-        <description>Enables a Isometric view from Arty.</description>
+        <description>Enables an isometric view from Arty.</description>
         <updateComment></updateComment>
         <devURL>http://forum.worldoftanks.ru/index.php?/topic/1389614-</devURL>
       </mod>
@@ -376,7 +442,7 @@
         <version></version>
         <modzipfile>Ingame_Info_ExtraAimInfo_0.9.17.0.1_2017-02-20.zip</modzipfile>
         <modzipcrc>44976235846a77b9d72f337289d5bd12</modzipcrc>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
         <configs>
           <config>
             <name>default config</name>
@@ -1010,6 +1076,265 @@
         <devURL></devURL>
       </mod>
       <mod>
+        <name>Hitmarker by Aimdrol</name>
+        <version></version>
+        <modzipfile>Ingame_Info_hitmarker_by_aimdrol_0.9.16_2016-10-09.zip</modzipfile>
+        <modzipcrc>f</modzipcrc>
+        <enabled>true</enabled>
+        <configs>
+          <config>
+            <name>Damage Only</name>
+            <configzipfile></configzipfile>
+            <configzipcrc></configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>Damage, Ramming, Kamakazie</name>
+            <configzipfile>Ingame_Info_hitmarker_by_aimdrol_0.9.14.1_all_patch.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+        </configs>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Loading Animation</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>true</enabled>
+        <configs>
+          <config>
+            <name>Illuminati by Aimdrol</name>
+            <configzipfile>Ingame_Info_loading_animation_illuminati_by_Aimdrol.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>OMC by Technowolf (RIP OMC)</name>
+            <configzipfile>Ingame_Info_loading_animation_OMC_by_Technowolf.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+        </configs>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Mastry Badges</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>true</enabled>
+        <configs>
+          <config>
+            <name>CoD by Aimdrol</name>
+            <configzipfile>Ingame_Info_CS_GO_mlg_marks_results_0.9.17.0.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+        </configs>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>MLG Glasses by Aimdrol</name>
+        <version></version>
+        <modzipfile>Ingame_Info_mlg_glasses_0.9.16.zip</modzipfile>
+        <modzipcrc>f</modzipcrc>
+        <enabled>true</enabled>
+        <configs>
+          <config>
+            <name>With sound</name>
+            <configzipfile>Ingame_Info_mlg_glasses_with_sound_patch.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>multi</configtype>
+          </config>
+        </configs>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Illuminati Companion by Aimdrol</name>
+        <version></version>
+        <modzipfile>Ingame_Info_mlg_illuminati_companion_0.9.16.zip</modzipfile>
+        <modzipcrc>f</modzipcrc>
+        <enabled>true</enabled>
+        <configs>
+          <config>
+            <name>Enable for during battle</name>
+            <configzipfile>Ingame_Info_mlg_illuminati_companion_alive_enable_patch.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>multi</configtype>
+          </config>
+        </configs>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Marks Of Excelence</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>true</enabled>
+        <configs>
+          <config>
+            <name>"8/8 IGN" by Aimdrol</name>
+            <configzipfile>Ingame_Info_marks_of_excellence_8of8_by_Aimdrol.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>Ace Tanker by Aimdrol</name>
+            <configzipfile>Ingame_Info_marks_of_excellence_acetanker_by_Aimdrol.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>V1 by VoPV</name>
+            <configzipfile>Ingame_Info_marks_of_excellence_by_VoPV_v1.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>V2 by VoPV</name>
+            <configzipfile>Ingame_Info_marks_of_excellence_by_VoPV_v2.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>QuickeyBaby by Aimdrol</name>
+            <configzipfile>Ingame_Info_marks_of_excellence_quickeyBaby_by_Aimdrol.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>Illuminati by Aimdrol</name>
+            <configzipfile>Ingame_Info_marks_of_excellence_illuminati_by_Aimdrol.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>xXx_MVP_xXx by Aimdrol</name>
+            <configzipfile>Ingame_Info_marks_of_excellence_mvp_by_Aimdrol.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+        </configs>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Consumables</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>true</enabled>
+        <configs>
+          <config>
+            <name>by Aimdrol</name>
+            <configzipfile>Ingame_Info_Consumables_by_Aimdrol.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>by arasgrandpa</name>
+            <configzipfile>Ingame_Info_Consumables_by_arasgrandpa.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>by LakeOphilD</name>
+            <configzipfile>Ingame_Info_Consumables_by_LakeOphilD.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>by vito74</name>
+            <configzipfile>Ingame_Info_Consumables_by_vito74m.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>by vvooj</name>
+            <configzipfile>Ingame_Info_Consumables_by_vvooj.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+          <config>
+            <name>by YHKEP</name>
+            <configzipfile>Ingame_Info_Consumables_by_YHKEP.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+          </config>
+        </configs>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
         <name>Battle Observer (HP pools)</name>
         <version>1.6</version>
         <modzipfile>Ingame_Info_Battle_Observer_by_armagomen_v1_6-2_2017-01-12.zip</modzipfile>
@@ -1163,7 +1488,7 @@
       <mod>
         <name>Aslains gold premium tanks</name>
         <version></version>
-        <modzipfile>Ingame_info_Aslains_Gold_Premium_Tanks_0.9.17.0.zip</modzipfile>
+        <modzipfile>Ingame_Info_Aslains_Gold_Premium_Tanks_0.9.17.0.zip</modzipfile>
         <modzipcrc>f</modzipcrc>
         <enabled>true</enabled>
         <pictures>
@@ -1314,6 +1639,35 @@
             </pictures>
           </config>
         </configs>
+      </mod>
+      <mod>
+        <name>MLG Mod by Aimdrol</name>
+        <version></version>
+        <modzipfile>Sounds_mlg_mod_voice_0.9.17.1_2017-01-05.zip</modzipfile>
+        <modzipcrc>f</modzipcrc>
+        <enabled>true</enabled>
+        <configs>
+          <config>
+            <name>audio only, no visuals</name>
+            <configzipfile>Sounds_mlg_mod_voice_sound_only_patch.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>multi</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+          </config>
+        </configs>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description>MLG EVERYWHERE</description>
+        <updateComment>DEV URL TODO</updateComment>
+        <devURL></devURL>
       </mod>
       <mod>
         <name>Sounds instead of crew voices by vvooj</name>
