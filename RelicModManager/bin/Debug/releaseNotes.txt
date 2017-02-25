@@ -1,5 +1,4 @@
-version 18.7:
-- Fixed a bug with adding xml patcher, now only adds if it has to
-- Added support for "global dependencies", like origional WoT XML files, system fonts, etc
-- Fixed bug with logging output
-- Fixed a bug with the user config pref loader method
+version 18.7.1:
+- Fixed a bug with the dropdown configs not selecting from loading a config
+- increased download speed
+- decreased waiting time between downloads

@@ -1,12 +1,10 @@
-(critical) test user mods extraction
-
 (normal) add mods to the modpack. Kind of a big deal.
-- update the modInfo with mod descriptions and dev urls and stuff
 - get all working crosshairs from omc
 - then start pmod stuff
 - then start xvm config cancer
 - then add other mods?
-
+- merge the config giles
+giv RKK1945 credit for spellcheck and first closed alhpa tester
 (normal) comment code and put in log outputs (currently done on all files)
 
 (optional) add statistics of how many runs done ever and of what mod

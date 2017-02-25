@@ -239,6 +239,7 @@ namespace RelicModManager
                             if (!oldCRC.Equals(m.configs[i].crc))
                             {
                                 if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name + "_updated");
+                                if (m.configs[i].configChecked) configControlDD.SelectedIndex = i;
                                 break;
                             }
                         }
@@ -246,6 +247,7 @@ namespace RelicModManager
                         {
                             //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
                             if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name + "_updated");
+                            if (m.configs[i].configChecked) configControlDD.SelectedIndex = i;
                             break;
                         }
                         if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name);

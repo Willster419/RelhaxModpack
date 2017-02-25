@@ -33,7 +33,7 @@ namespace RelicModManager
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 18.7";
+        private string managerVersion = "version 18.7.1";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         private SelectFeatures features = new SelectFeatures();
         //queue for downloading mods
@@ -77,6 +77,7 @@ namespace RelicModManager
         private FirstLoadHelper helper;
         string helperText;
         string currentModDownloading;
+        
         //The constructur for the application
         public MainWindow()
         {
@@ -264,6 +265,8 @@ namespace RelicModManager
                     downloader = new WebClient();
                     downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
                     downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
+                    downloader.Proxy = null;
+                    
                     downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
                     tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
                     this.appendToLog("downloading " + tempOldDownload);
@@ -350,7 +353,7 @@ namespace RelicModManager
                 {
                     this.appendToLog("Exracting " + Path.GetFileName(m.modZipFile));
                     this.unzip(downloadedFilesDir + Path.GetFileName(m.modZipFile), tanksLocation);
-                    //parrentProgressBar.Value++;
+                    parrentProgressBar.Value++;
                 }
             }
             this.appendToLog("Finished Extracting Relhax Modpack User Mod Extraction");
@@ -780,6 +783,7 @@ namespace RelicModManager
             //show the wait screen
             PleaseWait wait = new PleaseWait();
             wait.Show();
+            WebRequest.DefaultWebProxy = null;
             wait.loadingDescLabel.Text = "Checking for single instance...";
             Application.DoEvents();
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
@@ -1458,6 +1462,7 @@ namespace RelicModManager
                 downloader = new WebClient();
                 downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
                 downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
+                downloader.Proxy = null;
                 downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
                 tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
                 this.appendToLog("downloading " + tempOldDownload);
