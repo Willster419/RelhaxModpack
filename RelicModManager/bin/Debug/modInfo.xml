@@ -313,6 +313,72 @@
     <name>Crosshair Mods</name>
     <selectionType>multi</selectionType>
     <mods>
+      <mod>
+        <name>J1mB0's Croshair Mod</name>
+        <version>1.05</version>
+        <modzipfile></modzipfile>
+        <modzipcrc>f</modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment>Reworked by Grabaah</updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>HARDscope by Andrey_Hard and KobkaG</name>
+        <version>1.05</version>
+        <modzipfile></modzipfile>
+        <modzipcrc>f</modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment>Reworked by Grabaah</updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Harpoon V3</name>
+        <version>1.05</version>
+        <modzipfile></modzipfile>
+        <modzipcrc>f</modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment>Reworked by Grabaah</updateComment>
+        <devURL></devURL>
+      </mod>
+    </mods>
+  </catagory>
+  <catagory>
+    <name>Contour Icons</name>
+    <selectionType>multi</selectionType>
+    <mods>
+      <mod>
+        <name>Aslain's Contour Icons</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc>f</modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL>http://s1.directupload.net/images/user/131220/s3e8arji.png</URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL>http://forum.worldoftanks.eu/index.php?/topic/35125-</devURL>
+      </mod>
     </mods>
   </catagory>
   <catagory>
@@ -346,7 +412,7 @@
             <URL>http://i.imgur.com/pjkRzWn.jpg</URL>
           </picture>
         </pictures>
-        <description>Keeps a list of who shot you and fro how much</description>
+        <description>Keeps a list of who shot you and for how much</description>
         <updateComment></updateComment>
         <devURL>http://forum.worldoftanks.eu/index.php?/topic/338561-0915-xft-integrated-damagelogs-v022a-30-05-2016/</devURL>
       </mod>
@@ -692,7 +758,7 @@
             <configtype>multi</configtype>
             <pictures>
               <picture>
-                <URL></URL>
+                <URL>http://i.imgur.com/eS1WxI3.jpg</URL>
               </picture>
             </pictures>
           </config>
@@ -700,6 +766,9 @@
         <pictures>
            <picture>
              <URL>https://koreanrandom.com/forum/uploads/monthly_02_2016/post-8065-0-19679800-1456090716.jpg</URL>
+           </picture>
+           <picture>
+             <URL>http://i.imgur.com/VNTgFwt.jpg</URL>
            </picture>
         </pictures>
         <description>MUST HAVE ADVANCED GRAPHICS SETTINGS FOR THIS TO WORK!</description>
@@ -1104,7 +1173,7 @@
         </pictures>
         <description>Shows a CoD style hitmarker whenever you penetrate an enemy tank</description>
         <updateComment></updateComment>
-        <devURL></devURL>
+        <devURL>http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/</devURL>
       </mod>
       <mod>
         <name>Loading Animation</name>
@@ -1119,6 +1188,11 @@
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://i.imgur.com/fsnK4YY.png</URL>
+              </picture>
+            </pictures>
           </config>
           <config>
             <name>OMC by Technowolf (RIP OMC)</name>
@@ -1126,6 +1200,11 @@
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs1.directupload.net/images/150606/annusd34.jpg</URL>
+              </picture>
+            </pictures>
           </config>
         </configs>
         <pictures>
@@ -1133,7 +1212,7 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description>Repaces the standard loading animation circle</description>
+        <description>Repaces the standard loading animation circle@Illuminati - http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/@OMC - </description>
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>
@@ -1150,6 +1229,17 @@
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>https://i.imgur.com/VwEJHo7.png</URL>
+              </picture>
+              <picture>
+                <URL>https://i.imgur.com/kZETgj5.png</URL>
+              </picture>
+              <picture>
+                <URL>https://i.imgur.com/eKAhVfj.png</URL>
+              </picture>
+            </pictures>
           </config>
         </configs>
         <pictures>
@@ -1159,7 +1249,7 @@
         </pictures>
         <description>Changes the mastery badges to CoD style badges</description>
         <updateComment></updateComment>
-        <devURL></devURL>
+        <devURL>http://forum.worldoftanks.eu/index.php?/topic/476721-0914-gtos-mlg-mod-continued-by-aimdrol-marks-of-mailand-pl/</devURL>
       </mod>
       <mod>
         <name>MLG Glasses by Aimdrol</name>
@@ -1178,12 +1268,12 @@
         </configs>
         <pictures>
           <picture>
-            <URL></URL>
+            <URL>http://orig02.deviantart.net/3143/f/2014/148/8/7/fantage_deal_with_it_glasses__c2u__by_fantagestore-d7422m2.png</URL>
           </picture>
         </pictures>
         <description>Enables MLG glasses to drop down on your tank when you are in a light tank and an enemy bounces off of you. Enemy caliber gun must be > 90 mm</description>
         <updateComment></updateComment>
-        <devURL></devURL>
+        <devURL>http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/</devURL>
       </mod>
       <mod>
         <name>Illuminati Companion by Aimdrol</name>
@@ -1207,7 +1297,7 @@
         </pictures>
         <description>Show an illuminati pyrimid "protecting" your tank after your death. (Or during the battle)</description>
         <updateComment></updateComment>
-        <devURL></devURL>
+        <devURL>http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/</devURL>
       </mod>
       <mod>
         <name>Marks Of Excelence</name>
@@ -1222,6 +1312,11 @@
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://i.imgur.com/HaC1Nju.png</URL>
+              </picture>
+            </pictures>
           </config>
           <config>
             <name>Ace Tanker by Aimdrol</name>
@@ -1229,6 +1324,11 @@
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://i.imgur.com/s4L4nVr.png</URL>
+              </picture>
+            </pictures>
           </config>
           <config>
             <name>V1 by VoPV</name>
@@ -1236,6 +1336,11 @@
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/160425/nga9lmm7.png</URL>
+              </picture>
+            </pictures>
           </config>
           <config>
             <name>V2 by VoPV</name>
@@ -1243,6 +1348,11 @@
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs5.directupload.net/images/user/160425/jfhnc4by.png</URL>
+              </picture>
+            </pictures>
           </config>
           <config>
             <name>QuickeyBaby by Aimdrol</name>
@@ -1250,6 +1360,11 @@
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
           </config>
           <config>
             <name>Illuminati by Aimdrol</name>
@@ -1257,6 +1372,11 @@
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://i.imgur.com/DsAezWr.png</URL>
+              </picture>
+            </pictures>
           </config>
           <config>
             <name>xXx_MVP_xXx by Aimdrol</name>
@@ -1264,6 +1384,11 @@
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://i.imgur.com/ZtlPVDN.png</URL>
+              </picture>
+            </pictures>
           </config>
         </configs>
         <pictures>
@@ -1271,7 +1396,7 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description>Modifies the standard Marks of Excelence on the gun barrels</description>
+        <description>Modifies the standard Marks of Excelence on the gun barrels@Aimdrol mods: http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/@VoPV mods: http://www.awolf.eu/load/mods_world_of_tanks/mods_settings/jaskrawe_odznaki_bieglosci_od_vopv_0_9_14/6-1-0-2313</description>
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>
@@ -1288,13 +1413,29 @@
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://i.imgur.com/6mneJsK.png</URL>
+              </picture>
+            </pictures>
           </config>
           <config>
-            <name>by arasgrandpa</name>
+            <name>by Grandpa</name>
             <configzipfile>Ingame_Info_Consumables_by_arasgrandpa.zip</configzipfile>
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs1.directupload.net/images/user/150227/7qj2vuf4.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://s14.directupload.net/images/131222/b3gu95g7.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs2.directupload.net/images/user/150227/td2ma4yy.jpg</URL>
+              </picture>
+            </pictures>
           </config>
           <config>
             <name>by LakeOphilD</name>
@@ -1302,6 +1443,11 @@
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s14.directupload.net/images/user/140802/q4kiwkqq.jpg</URL>
+              </picture>
+            </pictures>
           </config>
           <config>
             <name>by vito74</name>
@@ -1309,6 +1455,14 @@
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s14.directupload.net/images/131222/qzk7ysh6.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://s1.directupload.net/images/131222/lr72rpu2.jpg</URL>
+              </picture>
+            </pictures>
           </config>
           <config>
             <name>by vvooj</name>
@@ -1316,6 +1470,11 @@
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs2.directupload.net/images/user/150830/6xngkui3.png</URL>
+              </picture>
+            </pictures>
           </config>
           <config>
             <name>by YHKEP</name>
@@ -1323,6 +1482,14 @@
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://fs2.directupload.net/images/150227/9wpcpche.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://fs2.directupload.net/images/150227/gxi23tuu.jpg</URL>
+              </picture>
+            </pictures>
           </config>
         </configs>
         <pictures>
@@ -1331,14 +1498,14 @@
           </picture>
         </pictures>
         <description>Modifies the standard equipment and consumables icons. Some modify the names as well.</description>
-        <updateComment></updateComment>
+        <updateComment>DEV URLS:@Aimdrol: http://forum.worldoftanks.eu/index.php?/topic/476721-0914-gtos-mlg-mod-continued-by-aimdrol-marks-of-mailand-pl/@vito74m: http://www.curse.com/wot-mods/worldoftanks/icons-new-era-vito74m#t1:description@YHKEP: http://mirtankov.net/mods/9136-ikonki-modulej-snarjadov-i-rashodnikov-wot.html@Grandpa: http://www.curse.com/wot-mods/worldoftanks/ammo-equipment-crew-icons@LakeOphild: http://forum.worldoftanks.eu/index.php?/topic/402202-@ vvooj:http://www.curse.com/wot-mods/worldoftanks/letter-shell-icons#t1:other-downloads</updateComment>
         <devURL></devURL>
       </mod>
       <mod>
         <name>Battle Observer (HP pools)</name>
         <version>1.6</version>
         <modzipfile>Ingame_Info_Battle_Observer_by_armagomen_v1_6-2_2017-01-12.zip</modzipfile>
-        <modzipcrc>a4682f08012c0885e60f9374e692076f</modzipcrc>
+        <modzipcrc>f</modzipcrc>
         <enabled>false</enabled>
         <configs>
           <config>
@@ -1493,12 +1660,12 @@
         <enabled>true</enabled>
         <pictures>
           <picture>
-            <URL></URL>
+            <URL>http://s7.directupload.net/images/141005/k6hhd94e.jpg</URL>
           </picture>
         </pictures>
         <description>Gold premium tank icons for the garage</description>
         <updateComment></updateComment>
-        <devURL></devURL>
+        <devURL>https://mods.curse.com/wot-mods/worldoftanks/aslains-gold-premium-tanks</devURL>
       </mod>
       <mod>
         <name>BalCalcMod</name>
@@ -1682,7 +1849,7 @@
         </pictures>
         <description>Mutes all crew sounds and replaces them with sounds</description>
         <updateComment>DEV URL TODO</updateComment>
-        <devURL></devURL>
+        <devURL>http://www.curse.com/wot-mods/worldoftanks/simple-sounds</devURL>
       </mod>
       <mod>
         <name>UT Countdown</name>
@@ -1706,7 +1873,7 @@
         </pictures>
         <description>Plays certain sounds for when you get a certain number of kills in the game.</description>
         <updateComment></updateComment>
-        <devURL></devURL>
+        <devURL>http://forum.worldoftanks.eu/index.php?/topic/557716-</devURL>
       </mod>
     </mods>
   </catagory>
@@ -2346,7 +2513,7 @@
         </pictures>
         <description>For the animae lovers</description>
         <updateComment></updateComment>
-        <devURL></devURL>
+        <devURL>http://www.almodi.org/world-of-tanks-wot/sborka-anime-vocaloid-megapack-ot-slayer-the-god#download</devURL>
       </mod>
     </mods>
   </catagory>
