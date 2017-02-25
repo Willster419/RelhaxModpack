@@ -1,6 +1,6 @@
 <modInfoAlpha.xml>
 <!-- Dependencies required on a global scale -->
-<!-- Eithor mods of different catagories use these or alomst every mod could use these -->
+<!-- Either mods of different categories use these or almost every mod could use these -->
 <globaldependencies>
       <globaldependency>
         <dependencyZipFile>Dependency_global_fonts.zip</dependencyZipFile>
@@ -19,10 +19,11 @@
       </globaldependency>
 </globaldependencies>
 <!-- CATAGORY ORDERS MATTER -->
-<!-- Catagory name -->
-<!-- Catagory selection type -->
-<!-- Catagory Dependecies -->
-<!-- Catagory Mods -->
+<!-- Category name -->
+<!-- Category selection type -->
+
+<!-- Category Dependencies -->
+<!-- Category Mods -->
 <catagories>
   <catagory>
     <!-- Make XVM with default config the dependency -->
@@ -135,21 +136,21 @@
             <configtype>single</configtype>
           </config>
           <config>
-            <name>1 line tank carosel</name>
+            <name>1 line tank carousel</name>
             <configzipfile>XVM_Prebuilt_Configs_Bones_Config_1line_carosel.zip</configzipfile>
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single_dropdown</configtype>
           </config>
           <config>
-            <name>2 line tank carosel</name>
+            <name>2 line tank carousel</name>
             <configzipfile>XVM_Prebuilt_Configs_Bones_Config_2line_carosel.zip</configzipfile>
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single_dropdown</configtype>
           </config>
           <config>
-            <name>3 line tank carosel</name>
+            <name>3 line tank carousel</name>
             <configzipfile>XVM_Prebuilt_Configs_Bones_Config_3line_carosel.zip</configzipfile>
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
@@ -619,7 +620,7 @@
            </picture>
         </pictures>
         <description>kaeptn configs@http://forum.worldoftanks.eu/index.php?/topic/441413-0917-autoaim-indicationaddins-no-proximity-snapping-for-autoaim-but/page__st__1580__pid__13686506#entry13686506</description>
-        <updateComment>Latest update locks onto a target when manually highlited, so it is legal now</updateComment>
+        <updateComment>Latest update locks onto a target when manually highlighted, so it is legal now</updateComment>
         <devURL>http://forum.worldoftanks.eu/index.php?/topic/441413-0917-autoaim-indicationaddins-no-proximity-snapping-for-autoaim-but/</devURL>
       </mod>
       <mod>
@@ -633,7 +634,7 @@
             <URL>http://4cheat.ru/i/view.php?id=333.jpg</URL>
           </picture>
         </pictures>
-        <description>Shows a number of chance of penetration. The number is calculated by effective armor minus gun alpha.@Negative number means likely to bounce.@Positive number means likel to pierce.</description>
+        <description>Shows a number of chance of penetration. The number is calculated by effective armor minus gun alpha.@Negative number means likely to bounce.@Positive number means likely to pierce.</description>
         <updateComment></updateComment>
         <devURL>http://4cheat.ru/showthread.php?t=15891</devURL>
       </mod>
@@ -666,14 +667,14 @@
         <enabled>true</enabled>
         <configs>
           <config>
-            <name>active at start, deactive with F11</name>
+            <name>active at start, deactivate with F11</name>
             <configzipfile>Ingame_Info_SpotMessenger_activated_2016-06-04_patch.zip</configzipfile>
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
           </config>
           <config>
-            <name>inactive at start, active with F11</name>
+            <name>inactive at start, activate with F11</name>
             <configzipfile>Ingame_Info_SpotMessenger_deactivated_2016-06-04_patch.zip</configzipfile>
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
@@ -685,7 +686,7 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description>Sends a chat mesage that you are spotted in a grid square, along with the "Help!" command</description>
+        <description>Sends a chat message that you are spotted in a grid square, along with the "Help!" command</description>
         <updateComment></updateComment>
         <devURL>http://forum.worldoftanks.eu/index.php?/topic/562735-09170-spotmessanger-v070-14122016/</devURL>
       </mod>
@@ -949,7 +950,7 @@
         <devURL>http://forum.worldoftanks.eu/index.php?/topic/561169-091703-inbattle-wn8-calculator-eff-damage-updated-02022017</devURL>
       </mod>
       <mod>
-        <name>coulord penetration and ricochets on tanks</name>
+        <name>Colored penetration and ricochets on tanks</name>
         <version></version>
         <modzipfile></modzipfile>
         <modzipcrc></modzipcrc>
@@ -1212,12 +1213,12 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description>Repaces the standard loading animation circle@Illuminati - http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/@OMC - </description>
+        <description>Replaces the standard loading animation circle@Illuminati - http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/@OMC - </description>
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>
       <mod>
-        <name>Mastry Badges</name>
+        <name>Mastery Badges</name>
         <version></version>
         <modzipfile></modzipfile>
         <modzipcrc></modzipcrc>
@@ -1295,12 +1296,12 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description>Show an illuminati pyrimid "protecting" your tank after your death. (Or during the battle)</description>
+        <description>Show an illuminati pyramid "protecting" your tank after your death. (Or during the battle)</description>
         <updateComment></updateComment>
         <devURL>http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/</devURL>
       </mod>
       <mod>
-        <name>Marks Of Excelence</name>
+        <name>Marks Of Excellence</name>
         <version></version>
         <modzipfile></modzipfile>
         <modzipcrc></modzipcrc>
@@ -1396,7 +1397,7 @@
             <URL></URL>
           </picture>
         </pictures>
-        <description>Modifies the standard Marks of Excelence on the gun barrels@Aimdrol mods: http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/@VoPV mods: http://www.awolf.eu/load/mods_world_of_tanks/mods_settings/jaskrawe_odznaki_bieglosci_od_vopv_0_9_14/6-1-0-2313</description>
+        <description>Modifies the standard Marks of Excellence on the gun barrels@Aimdrol mods: http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/@VoPV mods: http://www.awolf.eu/load/mods_world_of_tanks/mods_settings/jaskrawe_odznaki_bieglosci_od_vopv_0_9_14/6-1-0-2313</description>
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>
@@ -1648,7 +1649,7 @@
             <URL>http://static-ptl-ru.gcdn.co/dcont/fb/image/newmodradio2.png</URL>
           </picture>
         </pictures>
-        <description>Like pandora internet radio, but in your game, with a configurable gui settings window</description>
+        <description>Like Pandora internet radio, but in your game, with a configurable gui settings window</description>
         <updateComment></updateComment>
         <devURL>http://worldoftanks.ru/ru/news/common/new-mod-radio/</devURL>
       </mod>
@@ -1880,7 +1881,7 @@
   <catagory>
     <name>6th sense</name>
     <selectionType>multi</selectionType>
-    <!-- dependency mlg mod sixthsense -->
+    <!-- dependency MLG mod sixthsense -->
     <dependencies>
       <dependency>
       <dependencyZipFile>Dependency_Sixth_Sense_Standalone_by_Aimdrol_0.9.17.0_2016-12-19.zip</dependencyZipFile>
@@ -2248,7 +2249,7 @@
             </pictures>
           </config>
           <config>
-            <name>Lightbulb</name>
+            <name>Light-bulb</name>
             <configzipfile>Sixth_Sense_Icon_light_bulb_2016-03-26.zip</configzipfile>
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
@@ -2296,7 +2297,7 @@
             </pictures>
           </config>
           <config>
-            <name>Rageface</name>
+            <name>Rage face</name>
             <configzipfile>Sixth_Sense_Icon_Rageface_2016-03-26.zip</configzipfile>
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
@@ -2511,7 +2512,7 @@
           <URL>http://fs2.directupload.net/images/user/150624/btwoze7t.png</URL>
         </picture>
         </pictures>
-        <description>For the animae lovers</description>
+        <description>For the anime lovers</description>
         <updateComment></updateComment>
         <devURL>http://www.almodi.org/world-of-tanks-wot/sborka-anime-vocaloid-megapack-ot-slayer-the-god#download</devURL>
       </mod>
@@ -2574,7 +2575,7 @@
             </pictures>
            </config>
           <config>
-            <name>Dukes of Hazzard</name>
+            <name>Dukes of Hazard</name>
             <configzipfile>Custom_Tank_Skins_Racing-Skin_F62_ELC_AMX_General_Lee_0.9.15.2.zip</configzipfile>
             <configzipcrc>ce8ff9c536b206fd39b8c399cafb20b3</configzipcrc>
             <configenabled>true</configenabled>
@@ -2811,7 +2812,7 @@
         <devURL></devURL>
       </mod>
       <mod>
-        <name>Skorp G</name>
+        <name>Skorpion G</name>
         <version></version>
         <modzipfile></modzipfile>
         <modzipcrc></modzipcrc>
