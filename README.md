@@ -59,8 +59,8 @@ If you can spare a few dollars and like the Modpack, please consider donating:
 https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2
 
 ##Credits
-OMC Modpack for giving me an internal structure to mirror and improve upon, along with premade zip files to start with.
-Rkk1945 For helping with code edits and rescource support, along with helping with the closed alpha test.
+ - OMC Modpack for giving me an internal structure to mirror and improve upon, along with premade zip files to start with.
+ - Rkk1945 For helping with code edits and resource support, along with helping with the closed alpha test.
 
 ##FAQ
 
