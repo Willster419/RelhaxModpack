@@ -33,7 +33,7 @@ namespace RelicModManager
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 19";
+        private string managerVersion = "version 19.1";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         private SelectFeatures features = new SelectFeatures();
         //queue for downloading mods
@@ -94,7 +94,8 @@ namespace RelicModManager
             extractUserMods = 11,
             patchUserMods = 12,
             installFonts = 13,
-            uninstall = 14
+            uninstallResMods = 14,
+            uninstallMods = 15
         };
         private InstallState state = InstallState.idle;
         
@@ -846,7 +847,7 @@ namespace RelicModManager
             Application.DoEvents();
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             this.appendToLog("|RelHax ModManager " + managerVersion);
-            this.appendToLog("|Built on 02/25/2017, running at " + DateTime.Now);
+            this.appendToLog("|Built on 02/26/2017, running at " + DateTime.Now);
             this.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1418,13 +1419,18 @@ namespace RelicModManager
         //next part of the install process
         private void parseInstallationPart1()
         {
+            state = InstallState.modSelection;
             //reset the childProgresBar value
             childProgressBar.Maximum = 100;
             childProgressBar.Value = 0;
             //show the mod selection window
             ModSelectionList list = new ModSelectionList();
             list.ShowDialog();
-            if (list.cancel) return;
+            if (list.cancel)
+            {
+                state = InstallState.idle;
+                return;
+            }
             modsToInstall = new List<Mod>();
             configsToInstall = new List<Config>();
             patchList = new List<Patch>();
@@ -1608,12 +1614,12 @@ namespace RelicModManager
                 this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
                 return;
             }
-            //verify that the user really wants to uninstall 
+            //verify that the user really wants to uninstall
             if (MessageBox.Show("This will delete ALL INSTALLED MODS. Are you Sure?", "Um...", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 downloadProgress.Text = "Uninstalling...";
                 RelHaxUninstall = true;
-                state = InstallState.uninstall;
+                state = InstallState.uninstallResMods;
                 this.backgroundDelete(tanksLocation + "\\res_mods");
             }
         }
@@ -1822,13 +1828,35 @@ namespace RelicModManager
                 this.backgroundExtract(false);
                 return;
             }
-            else if (state == InstallState.uninstall)
+            else if (state == InstallState.uninstallResMods)
             {
-                //finish uninstall process
+                //uninstall Mods folder
+                if (Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null)))
+                {
+                    state = InstallState.uninstallMods;
+                    this.backgroundDelete(tanksLocation + "\\mods");
+                    return;
+                }
+                else
+                {
+                    //finish uninstallResMods process
+                    state = InstallState.idle;
+                    if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
+                    if (!Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\mods\\" + this.getFolderVersion(null));
+                    downloadProgress.Text = "Done!";
+                    childProgressBar.Value = 0;
+                    RelHaxUninstall = false;
+                    return;
+                }
+            }
+            else if (state == InstallState.uninstallMods)
+            {
+                //finish uninstallResMods process
                 state = InstallState.idle;
                 if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
                 if (!Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\mods\\" + this.getFolderVersion(null));
                 downloadProgress.Text = "Done!";
+                childProgressBar.Value = 0;
                 RelHaxUninstall = false;
                 return;
             }

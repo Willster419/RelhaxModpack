@@ -643,8 +643,8 @@
           </config>
           <config>
             <name>infinite autoaim search</name>
-            <configzipfile></configzipfile>
-            <configzipcrc></configzipcrc>
+            <configzipfile>Ingame_Info_AutoAim_config_inf_sec.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
           </config>
@@ -679,6 +679,13 @@
           <config>
             <name>help message when spotted add-on</name>
             <configzipfile>Ingame_Info_AutoAim_config_help_spotted_enable.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>multi</configtype>
+          </config>
+          <config>
+            <name>lock shell travel distance when enemy dissapeared add-on</name>
+            <configzipfile>Ingame_Info_AutoAim_config_howitzer_distance_lock_enable.zip</configzipfile>
             <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>multi</configtype>
