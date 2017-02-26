@@ -59,7 +59,9 @@ namespace RelicModManager
 
         private void CRCCHECK2_Resize(object sender, EventArgs e)
         {
-            //richTextBox1.Size = new Size(this.Size.Width - 32, this.Size.Height - 40 - richTextBox1.Location.Y);
+            richTextBox1.Size = new Size(this.Size.Width - 32 - richTextBox2.Size.Width - 6, this.Size.Height - 40 - richTextBox1.Location.Y);
+            richTextBox2.Location = new Point(this.Size.Width - 267, richTextBox2.Location.Y);
+            richTextBox2.Size = new Size(richTextBox2.Size.Width, this.Size.Height - 40 - richTextBox1.Location.Y);
         }
     }
 }

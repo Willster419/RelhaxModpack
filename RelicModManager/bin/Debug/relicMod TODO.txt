@@ -1,9 +1,7 @@
 (normal) add mods to the modpack. Kind of a big deal.
-- get all working crosshairs from omc
+- fix autoaim config
 - then start pmod stuff
 - then start xvm config cancer
-- then add other mods?
-- merge the config files??
 
 change downloader api?
 

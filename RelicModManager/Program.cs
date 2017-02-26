@@ -48,10 +48,18 @@ namespace RelicModManager
                     //parse the config file and advance the counter
                     configName = commandArgs[++i];
                 }
+                else if (Regex.IsMatch(commandArgs[i], "crccheck2"))
+                {
+                    Application.Run(new CRCCHECK2());
+                    return;
+                }
+                else if (Regex.IsMatch(commandArgs[i], "crccheck"))
+                {
+                    Application.Run(new CRCCheck());
+                    return;
+                }
             }
             Application.Run(new MainWindow());
-            //Application.Run(new CRCCheck());
-            //Application.Run(new CRCCHECK2());
         }
     }
 }
