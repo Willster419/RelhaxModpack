@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PleaseWait));
             this.label1 = new System.Windows.Forms.Label();
             this.loadingDescLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -50,14 +51,15 @@
             this.loadingDescLabel.TabIndex = 1;
             this.loadingDescLabel.Text = "label2";
             // 
-            // pleaseWait
+            // PleaseWait
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(253, 98);
             this.Controls.Add(this.loadingDescLabel);
             this.Controls.Add(this.label1);
-            this.Name = "pleaseWait";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "PleaseWait";
             this.Text = "pleaseWait";
             this.ResumeLayout(false);
             this.PerformLayout();

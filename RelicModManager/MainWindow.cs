@@ -33,7 +33,7 @@ namespace RelicModManager
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 18.7.1";
+        private string managerVersion = "version 19";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         private SelectFeatures features = new SelectFeatures();
         //queue for downloading mods
@@ -77,6 +77,26 @@ namespace RelicModManager
         private FirstLoadHelper helper;
         string helperText;
         string currentModDownloading;
+        private enum InstallState
+        {
+            error = -1,
+            idle = 0,
+            deleteBackupResMods = 1,
+            deleteBackupMods = 2,
+            backupResMods = 3,
+            backupMods = 4,
+            modSelection = 5,
+            downloading = 6,
+            deleteResMods = 7,
+            deleteMods = 8,
+            extractRelhaxMods = 9,
+            patchRelhaxMods = 10,
+            extractUserMods = 11,
+            patchUserMods = 12,
+            installFonts = 13,
+            uninstall = 14
+        };
+        private InstallState state = InstallState.idle;
         
         //The constructur for the application
         public MainWindow()
@@ -218,7 +238,7 @@ namespace RelicModManager
             speedLabel.Text = string.Format("{0} MB/s", (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds).ToString("0.00"));
             if (MBytesIn == 0 && MBytesTotal == 0)
             {
-                this.downloadProgress.Text = "Complete!";
+                //this.downloadProgress.Text = "Complete!";
             }
         }
         //handler for the mod download file complete event
@@ -254,7 +274,7 @@ namespace RelicModManager
                 {
                     //404
                     this.appendToLog("ERROR: " + tempOldDownload + " failed to download");
-                    MessageBox.Show("Failed to download " + tempOldDownload + ". If you know which mod this is, uncheck it and you should be fine. It will be fixed soon. Restart this when it crashes");
+                    MessageBox.Show("Failed to download " + tempOldDownload + ". If you know which mod this is, uncheck it and you should be fine. It will be fixed soon. Restart this when it exits");
                     Application.Exit();
                 }
                 if (downloadQueue.Count != 0)
@@ -266,28 +286,61 @@ namespace RelicModManager
                     downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
                     downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
                     downloader.Proxy = null;
-                    
                     downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
                     tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
                     this.appendToLog("downloading " + tempOldDownload);
-                    currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile).Substring(0, 15) + "...";
+                    currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile);
+                    if (currentModDownloading.Length >= 30)
+                    {
+                        currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile).Substring(0, 23) + "...";
+                    }
                     downloadQueue.RemoveAt(0);
                     parrentProgressBar.Value++;
                     return;
                 }
                 if (downloadQueue.Count == 0)
                 {
-                    this.appendToLog("Downloading finished");
-                    //tell it to extract the zip files
-                    if (Settings.cleanInstallation)
+                    if (state == InstallState.downloading)
                     {
-                        this.appendToLog("CleanInstallCB checked, running backgroundDelete(" + tanksLocation + "\\res_mods)");
-                        //delete everything in res_mods
-                        if (Directory.Exists(tanksLocation + "\\res_mods")) this.backgroundDelete(tanksLocation + "\\res_mods");
+                        //just finished downloading, needs to start extracting
+                        this.appendToLog("Downloading finished");
+                        if (Settings.cleanInstallation)
+                        {
+                            state = InstallState.deleteResMods;
+                            this.appendToLog("CleanInstallCB checked, running backgroundDelete(" + tanksLocation + "\\res_mods)");
+                            //delete everything in res_mods
+                            if (Directory.Exists(tanksLocation + "\\res_mods")) this.backgroundDelete(tanksLocation + "\\res_mods");
+                            return;
+                        }
+                        this.appendToLog("CleanInstallCB not checked, moving to extraction");
+                        state = InstallState.extractRelhaxMods;
+                        this.backgroundExtract(false);
                         return;
                     }
-                    this.appendToLog("CleanInstallCB not checked, moving to extraction");
-                    this.backgroundExtract(false);
+                    else if (state == InstallState.extractRelhaxMods)
+                    {
+                        if (Settings.cleanInstallation)
+                        {
+                            state = InstallState.deleteResMods;
+                            this.appendToLog("CleanInstallCB checked, running backgroundDelete(" + tanksLocation + "\\res_mods)");
+                            //delete everything in res_mods
+                            if (Directory.Exists(tanksLocation + "\\res_mods")) this.backgroundDelete(tanksLocation + "\\res_mods");
+                            return;
+                        }
+                        state = InstallState.extractRelhaxMods;
+                        this.appendToLog("CleanInstallCB not checked, moving to extraction");
+                        this.backgroundExtract(false);
+                        return;
+                    }
+                    else if (state == InstallState.extractUserMods)
+                    {
+
+                        return;
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
             }
         }
@@ -435,6 +488,7 @@ namespace RelicModManager
                 parrentProgressBar.Maximum = 1;
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Value = childProgressBar.Maximum;
+                state = InstallState.idle;
                 return;
             }
             string[] fonts = Directory.GetFiles(tanksLocation + "\\_fonts");
@@ -446,6 +500,7 @@ namespace RelicModManager
                 parrentProgressBar.Maximum = 1;
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Value = childProgressBar.Maximum;
+                state = InstallState.idle;
                 return;
             }
             //convert the array to a list
@@ -480,6 +535,7 @@ namespace RelicModManager
                 parrentProgressBar.Maximum = 1;
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Value = childProgressBar.Maximum;
+                state = InstallState.idle;
                 return;
             }
             this.appendToLog("Installing fonts");
@@ -523,6 +579,7 @@ namespace RelicModManager
                 parrentProgressBar.Maximum = 1;
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Value = childProgressBar.Maximum;
+                state = InstallState.idle;
                 this.appendToLog("Fonts Installed Successfully");
             }
         }
@@ -545,6 +602,7 @@ namespace RelicModManager
         {
             this.appendToLog("Starting check for application updates");
             WebClient updater = new WebClient();
+            updater.Proxy = null;
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
             if (File.Exists(versionSaveLocation)) File.Delete(versionSaveLocation);
             string version = updater.DownloadString("https://dl.dropboxusercontent.com/u/44191620/RelicMod/manager version.txt");
@@ -788,7 +846,7 @@ namespace RelicModManager
             Application.DoEvents();
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             this.appendToLog("|RelHax ModManager " + managerVersion);
-            this.appendToLog("|Built on 02/24/2017, running at " + DateTime.Now);
+            this.appendToLog("|Built on 02/25/2017, running at " + DateTime.Now);
             this.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -857,6 +915,7 @@ namespace RelicModManager
                 Settings.firstLoad = false;
             }
             wait.Close();
+            state = InstallState.idle;
             Application.DoEvents();
         }
         //starts the patching process for the Relhax Sound Mod
@@ -1308,6 +1367,7 @@ namespace RelicModManager
         {
             //bool to say to the downloader to use the "modpack" code
             modPack = true;
+            state = InstallState.idle;
             downloadPath = Application.StartupPath + "\\RelHaxDownloads";
             //reset the interface
             this.reset();
@@ -1321,6 +1381,7 @@ namespace RelicModManager
             if (this.parseStrings() == null)
             {
                 this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
+                state = InstallState.error;
                 return;
             }
             //the download timers started for download speed measurement
@@ -1329,14 +1390,26 @@ namespace RelicModManager
             //actual new code
             if (Settings.backupModFolder)
             {
-                //backup the mods folder
+                //backupResMods the mods folder
                 if (Directory.Exists(Application.StartupPath + "\\RelHaxModBackup"))
                 {
-                    this.backgroundDelete(Application.StartupPath + "\\RelHaxModBackup");
-                }
-                else
-                {
-                    copyworker_RunWorkerCompleted(null, null);
+                    state = InstallState.deleteBackupResMods;
+                    //need to check for legacy positions
+                    string theCurrentTanksVersion = this.getFolderVersion(null);
+                    if (Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\" + theCurrentTanksVersion))
+                    {
+                        //move all folders info res_mods
+                        Settings.appendToLog("WARNING: Legacy backup structure detected, moving files");
+                        string[] dirsList = Directory.GetDirectories(Application.StartupPath + "\\RelHaxModBackup");
+                        if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\res_mods")) 
+                            Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\res_mods");
+                        foreach (string s in dirsList)
+                        {
+                            string dirName = new DirectoryInfo(s).Name;
+                            Directory.Move(Application.StartupPath + "\\RelHaxModBackup\\" + dirName, Application.StartupPath + "\\RelHaxModBackup\\res_mods\\" + dirName);
+                        }
+                    }
+                    this.backgroundDelete(Application.StartupPath + "\\RelHaxModBackup\\res_mods");
                 }
                 return;
             }
@@ -1421,6 +1494,7 @@ namespace RelicModManager
                 if (userMods.Count > 0)
                 {
                     //skip to the extraction process
+                    state = InstallState.extractUserMods;
                     this.downloader_DownloadFileCompleted(null, null);
                 }
                 //pull out because there are no mods to install
@@ -1457,6 +1531,8 @@ namespace RelicModManager
             //check for any mods to be install tha also need to be downloaded
             if (downloadQueue.Count > 0)
             {
+                state = InstallState.downloading;
+                //delete temp/0kb/corrupt file
                 if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
                 //download new zip file
                 downloader = new WebClient();
@@ -1466,13 +1542,18 @@ namespace RelicModManager
                 downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
                 tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
                 this.appendToLog("downloading " + tempOldDownload);
-                currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile).Substring(0,15) + "...";
+                currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile);
+                if (currentModDownloading.Length >= 30)
+                {
+                    currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile).Substring(0, 23) + "...";
+                }
                 downloadQueue.RemoveAt(0);
                 parrentProgressBar.Value++;
             }
             else
             {
                 //there are no mods to download, go right to the extraction process
+                state = InstallState.extractRelhaxMods;
                 downloader_DownloadFileCompleted(null, null);
             }
             //end the installation process
@@ -1532,6 +1613,7 @@ namespace RelicModManager
             {
                 downloadProgress.Text = "Uninstalling...";
                 RelHaxUninstall = true;
+                state = InstallState.uninstall;
                 this.backgroundDelete(tanksLocation + "\\res_mods");
             }
         }
@@ -1665,9 +1747,21 @@ namespace RelicModManager
         //handler for when the copyworker is completed
         private void copyworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (Settings.backupModFolder)
+            if (state == InstallState.backupResMods)
             {
+                state = InstallState.backupMods;
+                this.backgroundCopy(tanksLocation + "\\mods", Application.StartupPath + "\\RelHaxModBackup\\mods");
+                return;
+            }
+            else if (state == InstallState.backupMods)
+            {
+                state = InstallState.modSelection;
                 this.parseInstallationPart1();
+                return;
+            }
+            else
+            {
+                return;
             }
         }
         //handler for the deleteworker when it is called
@@ -1691,21 +1785,55 @@ namespace RelicModManager
         //handler for when the deleteworker is completed
         private void deleteworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (Settings.backupModFolder && !RelHaxUninstall)
+            if (state == InstallState.deleteBackupResMods)
             {
+                //delete the backup mods as well
+                state = InstallState.deleteBackupMods;
+                if (Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\mods"))
+                {
+                    this.backgroundDelete(Application.StartupPath + "\\RelHaxModBackup\\mods");
+                    return;
+                }
+                else
+                {
+                    //start the backupResMods copy process
+                    state = InstallState.backupResMods;
+                    this.backgroundCopy(tanksLocation + "\\res_mods", Application.StartupPath + "\\RelHaxModBackup");
+                    return;
+                }
+            }
+            else if (state == InstallState.deleteBackupMods)
+            {
+                //start the backupResMods copy process
+                state = InstallState.backupResMods;
                 this.backgroundCopy(tanksLocation + "\\res_mods", Application.StartupPath + "\\RelHaxModBackup");
                 return;
             }
-            if (Settings.cleanInstallation && !RelHaxUninstall)
+            else if (state == InstallState.deleteResMods)
             {
+                state = InstallState.deleteMods;
+                if (Directory.Exists(tanksLocation + "\\mods")) this.backgroundDelete(tanksLocation + "\\mods");
+                return;
+            }
+            else if (state == InstallState.deleteMods)
+            {
+                //start the extraction process
+                state = InstallState.extractRelhaxMods;
                 this.backgroundExtract(false);
                 return;
             }
-            if (RelHaxUninstall)
+            else if (state == InstallState.uninstall)
             {
+                //finish uninstall process
+                state = InstallState.idle;
                 if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
+                if (!Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\mods\\" + this.getFolderVersion(null));
                 downloadProgress.Text = "Done!";
                 RelHaxUninstall = false;
+                return;
+            }
+            else
+            {
                 return;
             }
         }
@@ -1770,7 +1898,10 @@ namespace RelicModManager
             if (childProgressBar.Maximum != childMaxProgres)
             childProgressBar.Maximum = childMaxProgres;
             childProgressBar.Value = childCurrentProgres;
-            downloadProgress.Text = currentZipEntry;
+            if (currentZipEntry.Length >= 47)
+            {
+                downloadProgress.Text = currentZipEntry.Substring(0, 47) + "...";
+            }
             if (isParrentDone)
             {
                 if (parrentProgressBar.Value != parrentProgressBar.Maximum)
@@ -1780,15 +1911,25 @@ namespace RelicModManager
         //handler for when the extractworker is completed
         private void extractworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (!userExtract)
+            if (state == InstallState.extractRelhaxMods)
             {
+                state = InstallState.patchRelhaxMods;
                 this.patchFiles();
+                state = InstallState.extractUserMods;
                 this.backgroundExtract(true);
+                return;
+            }
+            else if (state == InstallState.extractUserMods)
+            {
+                state = InstallState.patchUserMods;
+                this.patchFiles();
+                state = InstallState.installFonts;
+                this.installFonts();
+                return;
             }
             else
             {
-                this.patchFiles();
-                this.installFonts();
+                return;
             }
         }
         //recursivly copies every file from one place to another
@@ -1831,7 +1972,27 @@ namespace RelicModManager
             foreach (FileInfo file in files)
             {
                 string temppath = Path.Combine(sourceDirName, file.Name);
-                file.Delete();
+                bool tryAgain = true;
+                while (tryAgain)
+                {
+                    try
+                    {
+                        file.Delete();
+                        tryAgain = false;
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        DialogResult res = MessageBox.Show("Extraction Error", "Error", MessageBoxButtons.RetryCancel);
+                        if (res == DialogResult.Retry)
+                        {
+                            tryAgain = true;
+                        }
+                        else
+                        {
+                            Application.Exit();
+                        }
+                    }
+                }
                 deleteworker.ReportProgress(numFilesToCopyDeleteExtract++);
             }
             // If copying subdirectories, copy them and their contents to new location.
@@ -1859,7 +2020,7 @@ namespace RelicModManager
         {
             Settings.forceManuel = forceManuel.Checked;
         }
-        //handler for when the "backup mods" checkbox is changed
+        //handler for when the "backupResMods mods" checkbox is changed
         private void backupModsCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Settings.backupModFolder = backupModsCheckBox.Checked;

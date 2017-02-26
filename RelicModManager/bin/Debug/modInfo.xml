@@ -17,6 +17,11 @@
         <dependencyZipCRC>f</dependencyZipCRC>
         <dependencyenabled>true</dependencyenabled>
       </globaldependency>
+      <globaldependency>
+        <dependencyZipFile>Dependency_global_basic_folders.zip</dependencyZipFile>
+        <dependencyZipCRC>f</dependencyZipCRC>
+        <dependencyenabled>true</dependencyenabled>
+      </globaldependency>
 </globaldependencies>
 <!-- CATAGORY ORDERS MATTER -->
 <!-- Category name -->
@@ -109,7 +114,7 @@
       </mod>
       <mod>
         <name>Bones's XVM Config</name>
-        <version></version>
+        <version>6.5.0.1</version>
         <modzipfile>XVM_Prebuilt_Configs_Bones_Base.zip</modzipfile>
         <modzipcrc>f</modzipcrc>
         <enabled>true</enabled>
@@ -285,23 +290,30 @@
           <config>
             <name>100</name>
             <configzipfile>Zoom_Configs_Out_100.zip</configzipfile>
-            <configzipcrc>0021332a73caf262d2076b72ad933b1a</configzipcrc>
+            <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single_dropdown</configtype>
           </config>
           <config>
             <name>200</name>
             <configzipfile>Zoom_Configs_Out_200.zip</configzipfile>
-            <configzipcrc>68a40b161d7ab156bcd59a651bda7412</configzipcrc>
+            <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single_dropdown</configtype>
           </config>
           <config>
             <name>500</name>
             <configzipfile>Zoom_Configs_Out_500.zip</configzipfile>
-            <configzipcrc>1c67919a5bf953c5bda3b9ad3753aaff</configzipcrc>
+            <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single_dropdown</configtype>
+          </config>
+          <config>
+            <name>Increase Scroll Speed</name>
+            <configzipfile>Zoom_Configs_Out_Increase_Scroll_Speed.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>multi</configtype>
           </config>
         </configs>
         <description>How far you can zoom out in arcade mode in meters</description>
@@ -318,67 +330,101 @@
         <name>J1mB0's Croshair Mod</name>
         <version>1.05</version>
         <modzipfile></modzipfile>
-        <modzipcrc>f</modzipcrc>
-        <enabled>false</enabled>
+        <modzipcrc></modzipcrc>
+        <enabled>true</enabled>
+        <configs>
+          <config>
+            <name>Arcade and Sniper</name>
+            <configzipfile>Crosshairs_J1mB0_s_Crosshair_Mod_reworked_by_Grabaah_v1.04_0.9.17.1_Tank.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>multi</configtype>
+          </config>
+        </configs>
         <pictures>
           <picture>
-            <URL></URL>
+            <URL>http://s14.directupload.net/images/user/131227/4t5vr5i3.jpg</URL>
+          </picture>
+          <picture>
+            <URL>http://s7.directupload.net/images/user/131227/o4wsifts.jpg</URL>
           </picture>
         </pictures>
         <description></description>
         <updateComment>Reworked by Grabaah</updateComment>
-        <devURL></devURL>
+        <devURL>http://forum.worldoftanks.eu/index.php?/topic/56831-/page__st__5760__pid__13574904#entry13574904</devURL>
       </mod>
       <mod>
-        <name>HARDscope by Andrey_Hard and KobkaG</name>
-        <version>1.05</version>
+        <name>HARDscope by Andrey-Hard and KobkaG</name>
+        <version>11.9.4</version>
         <modzipfile></modzipfile>
-        <modzipcrc>f</modzipcrc>
-        <enabled>false</enabled>
+        <modzipcrc></modzipcrc>
+        <enabled>true</enabled>
+        <configs>
+          <config>
+            <name>Arcade and Sniper</name>
+            <configzipfile>Crosshairs_HARDscope_by_Andrey_Hard_KobkaG_v11.9.4_0.9.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>multi</configtype>
+          </config>
+        </configs>
         <pictures>
           <picture>
-            <URL></URL>
+            <URL>http://s1.directupload.net/images/user/140822/78qos3z5.jpg</URL>
           </picture>
-        </pictures>
-        <description></description>
-        <updateComment>Reworked by Grabaah</updateComment>
-        <devURL></devURL>
-      </mod>
-      <mod>
-        <name>Harpoon V3</name>
-        <version>1.05</version>
-        <modzipfile></modzipfile>
-        <modzipcrc>f</modzipcrc>
-        <enabled>false</enabled>
-        <pictures>
           <picture>
-            <URL></URL>
-          </picture>
-        </pictures>
-        <description></description>
-        <updateComment>Reworked by Grabaah</updateComment>
-        <devURL></devURL>
-      </mod>
-    </mods>
-  </catagory>
-  <catagory>
-    <name>Contour Icons</name>
-    <selectionType>multi</selectionType>
-    <mods>
-      <mod>
-        <name>Aslain's Contour Icons</name>
-        <version></version>
-        <modzipfile></modzipfile>
-        <modzipcrc>f</modzipcrc>
-        <enabled>false</enabled>
-        <pictures>
-          <picture>
-            <URL>http://s1.directupload.net/images/user/131220/s3e8arji.png</URL>
+            <URL>http://s14.directupload.net/images/user/140822/dbm9r3hb.jpg</URL>
           </picture>
         </pictures>
         <description></description>
         <updateComment></updateComment>
-        <devURL>http://forum.worldoftanks.eu/index.php?/topic/35125-</devURL>
+        <devURL>http://forum.worldoftanks.ru/index.php?/topic/1229310-</devURL>
+      </mod>
+      <mod>
+        <name>Harpoon</name>
+        <version>3</version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>true</enabled>
+        <configs>
+          <config>
+            <name>Arcade and Sniper</name>
+            <configzipfile>Crosshairs_Harpoon_v3_Tank_0.9.17.1_2017-02-25.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>multi</configtype>
+          </config>
+          <config>
+            <name>Arty</name>
+            <configzipfile>Crosshairs_Harpoon_v3_Arty_0.9.17.1_2017-02-25.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>multi</configtype>
+          </config>
+        </configs>
+        <pictures>
+          <picture>
+            <URL>http://fs2.directupload.net/images/user/150413/om6jmi3l.jpg</URL>
+          </picture>
+          <picture>
+            <URL>http://fs2.directupload.net/images/user/150413/79cq7fv9.jpg</URL>
+          </picture>
+          <picture>
+            <URL>http://fs2.directupload.net/images/user/150413/2rixme4a.jpg</URL>
+          </picture>
+          <picture>
+            <URL>http://fs1.directupload.net/images/user/150413/pdcuphkr.jpg</URL>
+          </picture>
+          <picture>
+            <URL>http://fs1.directupload.net/images/user/150413/zjkpprwz.jpg</URL>
+          </picture>
+          <picture>
+            <URL>http://fs1.directupload.net/images/user/150413/qwjy69m8.jpg</URL>
+          </picture>
+        </pictures>
+        <description>by lenya69</description>
+        <updateComment></updateComment>
+        <devURL>http://forum.worldoftanks.ru/index.php?/topic/1419789-</devURL>
       </mod>
     </mods>
   </catagory>
@@ -505,11 +551,35 @@
         <devURL>http://forum.worldoftanks.ru/index.php?/topic/1389614-</devURL>
       </mod>
       <mod>
+        <name>Contour Icons</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>true</enabled>
+        <configs>
+          <config>
+            <name>Aslain's</name>
+            <configzipfile>Ingame_Info_Aslains_Contour_Icon_Mod_0.9.17.1.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s1.directupload.net/images/user/131220/s3e8arji.png</URL>
+              </picture>
+            </pictures>
+          </config>
+        </configs>
+        <description></description>
+        <updateComment>Aslain's : http://forum.worldoftanks.eu/index.php?/topic/35125-</updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
         <name>ExtraAimInfo</name>
         <version></version>
         <modzipfile>Ingame_Info_ExtraAimInfo_0.9.17.0.1_2017-02-20.zip</modzipfile>
         <modzipcrc>44976235846a77b9d72f337289d5bd12</modzipcrc>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
         <configs>
           <config>
             <name>default config</name>
@@ -555,7 +625,7 @@
         <version></version>
         <modzipfile>Ingame_Info_AutoAim_base.zip</modzipfile>
         <modzipcrc>f</modzipcrc>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
         <configs>
           <config>
             <name>2 sec autoaim search</name>
@@ -1042,7 +1112,7 @@
         <configs>
           <config>
             <name>max visibility</name>
-            <configzipfile>Ingame_Info_MaxFarplane_LODTex_only_by_atotik_0.9.16.zip</configzipfile>
+            <configzipfile>Ingame_Info_MaxFarplane_visibility_only_by_atotik_0.9.16.zip</configzipfile>
             <configzipcrc>506343a9db03623c54c4e4d1495a1feb</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
@@ -1257,7 +1327,7 @@
         <version></version>
         <modzipfile>Ingame_Info_mlg_glasses_0.9.16.zip</modzipfile>
         <modzipcrc>f</modzipcrc>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
         <configs>
           <config>
             <name>With sound</name>
@@ -1287,7 +1357,7 @@
             <name>Enable for during battle</name>
             <configzipfile>Ingame_Info_mlg_illuminati_companion_alive_enable_patch.zip</configzipfile>
             <configzipcrc>f</configzipcrc>
-            <configenabled>true</configenabled>
+            <configenabled>false</configenabled>
             <configtype>multi</configtype>
           </config>
         </configs>
@@ -1412,7 +1482,7 @@
             <name>by Aimdrol</name>
             <configzipfile>Ingame_Info_Consumables_by_Aimdrol.zip</configzipfile>
             <configzipcrc>f</configzipcrc>
-            <configenabled>true</configenabled>
+            <configenabled>false</configenabled>
             <configtype>single</configtype>
             <pictures>
               <picture>
@@ -1507,7 +1577,7 @@
         <version>1.6</version>
         <modzipfile>Ingame_Info_Battle_Observer_by_armagomen_v1_6-2_2017-01-12.zip</modzipfile>
         <modzipcrc>f</modzipcrc>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
         <configs>
           <config>
             <name>Default</name>
@@ -1515,6 +1585,42 @@
             <configzipcrc></configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+          </config>
+          <config>
+            <name>Enable Armor Calculator</name>
+            <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_enable_armor_calculator.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>multi</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+          </config>
+          <config>
+            <name>Enable Damage Log (turn off xvm's and/or don't get other damage logs)</name>
+            <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_enable_damage_log.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>multi</configtype>
+            <pictures>
+              <picture>
+                <URL></URL>
+              </picture>
+            </pictures>
+          </config>
+          <config>
+            <name>Enable Players info panel (when you press left alt)</name>
+            <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_enable_players_info_panel.zip</configzipfile>
+            <configzipcrc>f</configzipcrc>
+            <configenabled>true</configenabled>
+            <configtype>multi</configtype>
             <pictures>
               <picture>
                 <URL></URL>
@@ -1535,7 +1641,7 @@
         <name>SafeShot</name>
         <version></version>
         <modzipfile>Ingame_Info_Safeshot_0.9.17.0.zip</modzipfile>
-        <modzipcrc>d1d2acfde415748658a368b34e44ed3b</modzipcrc>
+        <modzipcrc>f</modzipcrc>
         <enabled>true</enabled>
         <configs>
           <config>
@@ -1636,7 +1742,7 @@
         <name>WG FM Radio</name>
         <version></version>
         <modzipfile>Ingame_Info_WG_Radio.zip</modzipfile>
-        <modzipcrc>d6047cf5e2651f1755b2d6a2718bcb86</modzipcrc>
+        <modzipcrc>f</modzipcrc>
         <enabled>true</enabled>
         <pictures>
           <picture>
@@ -3053,19 +3159,58 @@
         <devURL></devURL>
       </mod>
       <mod>
-        <name>Type 64 Milkyman Remodel</name>
+        <name>T29 Patriot</name>
         <version></version>
-        <modzipfile>Custom_Tank_Skins_Skin_Ch24_Type64_Remodel_v1.0.2_Milkym4n_0.9.16.zip</modzipfile>
-        <modzipcrc>07b485d5169964e0c9450a9f31f1d55e</modzipcrc>
+        <modzipfile>Custom_Tank_Skins_Skin_A11_T29_Patriot.zip</modzipfile>
+        <modzipcrc>f</modzipcrc>
         <enabled>true</enabled>
         <pictures>
           <picture>
-            <URL>http://fs5.directupload.net/images/user/161105/6jvnmj46.jpg</URL>
+            <URL>https://media-curse.cursecdn.com/attachments/189/60/d03d47078682b5814367b9ab337c35ea.jpg</URL>
+          </picture>
+          <picture>
+            <URL>https://media-curse.cursecdn.com/attachments/189/61/939d050720a64c7dbdee379b95702b89.jpg</URL>
+          </picture>
+          <picture>
+            <URL>https://media-curse.cursecdn.com/attachments/189/62/9902db45d5c9289e50160d4a87ff9a9a.jpg</URL>
+          </picture>
+          <picture>
+            <URL>https://media-curse.cursecdn.com/attachments/189/63/615be3ff4298c38b9f99fba4f49e0bd4.jpg</URL>
+          </picture>
+          <picture>
+            <URL>https://media-curse.cursecdn.com/attachments/224/128/939d050720a64c7dbdee379b95702b89.jpg</URL>
+          </picture>
+        </pictures>
+        <description>America is the best</description>
+        <updateComment></updateComment>
+        <devURL>https://mods.curse.com/wot-skins/worldoftanks/t29-patriot</devURL>
+      </mod>
+      <mod>
+        <name>A44 Abstract</name>
+        <version></version>
+        <modzipfile>Custom_Tank_Skins_Skin_R59_A44_Abstract.zip</modzipfile>
+        <modzipcrc>f</modzipcrc>
+        <enabled>true</enabled>
+        <pictures>
+          <picture>
+            <URL>https://media-curse.cursecdn.com/attachments/189/498/2ef9b0c4ecfcde4767b18557ad5437ae.jpg</URL>
+          </picture>
+          <picture>
+            <URL>https://media-curse.cursecdn.com/attachments/189/499/97c95897ffd2d790d799cbd234a6251d.jpg</URL>
+          </picture>
+          <picture>
+            <URL>https://media-curse.cursecdn.com/attachments/189/501/7fbd121978bcef9a59455a585809228b.jpg</URL>
+          </picture>
+          <picture>
+            <URL>https://media-curse.cursecdn.com/attachments/189/502/0cbf6a0bfddc584e6a4c150d42f637e3.jpg</URL>
+          </picture>
+          <picture>
+            <URL>https://media-curse.cursecdn.com/attachments/225/625/2ef9b0c4ecfcde4767b18557ad5437ae.jpg</URL>
           </picture>
         </pictures>
         <description></description>
         <updateComment></updateComment>
-        <devURL></devURL>
+        <devURL>https://mods.curse.com/wot-skins/worldoftanks/a44-abstract</devURL>
       </mod>
       <mod>
         <name>T34 Heavy</name>

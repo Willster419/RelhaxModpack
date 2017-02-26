@@ -48,6 +48,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>relicbanner_for_ico.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -250,6 +253,7 @@
   <ItemGroup>
     <Content Include="loading.gif" />
     <Content Include="loading_3rdguards.gif" />
+    <Content Include="relicbanner_for_ico.ico" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\pictures\" />

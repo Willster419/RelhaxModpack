@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VersionInfo));
             this.downloadedVersionInfo = new System.Windows.Forms.RichTextBox();
             this.updateAcceptButton = new System.Windows.Forms.Button();
             this.updateDeclineButton = new System.Windows.Forms.Button();
@@ -93,6 +94,7 @@
             this.Controls.Add(this.updateAcceptButton);
             this.Controls.Add(this.downloadedVersionInfo);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "VersionInfo";
             this.Text = "VersionInfo";
             this.Load += new System.EventHandler(this.VersionInfo_Load);

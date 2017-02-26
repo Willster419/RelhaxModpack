@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Preview));
             this.descriptionBox = new System.Windows.Forms.RichTextBox();
             this.previewPicture = new System.Windows.Forms.PictureBox();
             this.nextPicButton = new System.Windows.Forms.Button();
@@ -120,6 +121,7 @@
             this.Controls.Add(this.nextPicButton);
             this.Controls.Add(this.previewPicture);
             this.Controls.Add(this.descriptionBox);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Preview";
             this.Text = "Preview";
             this.Load += new System.EventHandler(this.Preview_Load);

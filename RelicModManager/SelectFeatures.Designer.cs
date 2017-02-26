@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectFeatures));
             this.relhaxBox = new System.Windows.Forms.CheckBox();
             this.guiBox = new System.Windows.Forms.CheckBox();
             this.sixthSenseBox = new System.Windows.Forms.CheckBox();
@@ -214,6 +215,7 @@
             this.Controls.Add(this.guiBox);
             this.Controls.Add(this.relhaxBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SelectFeatures";
             this.Text = "Select Features";
             this.Load += new System.EventHandler(this.SelectFeatures_Load);

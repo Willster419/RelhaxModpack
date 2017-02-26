@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CRCCheck));
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -54,14 +55,15 @@
             this.textBox1.Size = new System.Drawing.Size(234, 20);
             this.textBox1.TabIndex = 1;
             // 
-            // crcCheck
+            // CRCCheck
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(258, 67);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
-            this.Name = "crcCheck";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "CRCCheck";
             this.Text = "crcCheck";
             this.ResumeLayout(false);
             this.PerformLayout();
