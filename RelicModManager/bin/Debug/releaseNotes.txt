@@ -1,4 +1,4 @@
-version 18.7.1:
-- Fixed a bug with the dropdown configs not selecting from loading a config
-- increased download speed
-- decreased waiting time between downloads
+Version 19:
+- Re-wrote logic for the different asynchronous steps in the application's install process.
+- Added the Official Relic Gaming Community Logo as the Application's icon
+- Minor UI Improvements
