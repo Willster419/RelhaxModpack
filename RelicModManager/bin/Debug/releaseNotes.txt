@@ -1,4 +1,3 @@
-Version 19:
-- Re-wrote logic for the different asynchronous steps in the application's install process.
-- Added the Official Relic Gaming Community Logo as the Application's icon
-- Minor UI Improvements
+Version 19.1:
+- Updated installState for uninstallation process
+- Updated database
