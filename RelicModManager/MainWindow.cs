@@ -2219,6 +2219,11 @@ namespace RelicModManager
             if (helper != null)
                 helper.helperText.Text = helperText;
         }
+
+        private void findBugAddModLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://docs.google.com/spreadsheets/d/1LmPCMAx0RajW4lVYAnguHjjd8jArtWuZIGciFN76AI4/edit?usp=sharing");
+        }
     }
     //a class for the downloadQueue list, to make a queue of downloads
     class DownloadItem

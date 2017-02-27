@@ -49,6 +49,7 @@
             this.loadingImageGroupBox = new System.Windows.Forms.GroupBox();
             this.thirdGuardsLoadingImageRB = new System.Windows.Forms.RadioButton();
             this.standardImageRB = new System.Windows.Forms.RadioButton();
+            this.findBugAddModLabel = new System.Windows.Forms.LinkLabel();
             this.settingsGroupBox.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -128,7 +129,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(9, 349);
+            this.formPageLink.Location = new System.Drawing.Point(9, 373);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -280,11 +281,23 @@
             this.standardImageRB.MouseEnter += new System.EventHandler(this.standardImageRB_MouseEnter);
             this.standardImageRB.MouseLeave += new System.EventHandler(this.standardImageRB_MouseLeave);
             // 
+            // findBugAddModLabel
+            // 
+            this.findBugAddModLabel.AutoSize = true;
+            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 353);
+            this.findBugAddModLabel.Name = "findBugAddModLabel";
+            this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
+            this.findBugAddModLabel.TabIndex = 27;
+            this.findBugAddModLabel.TabStop = true;
+            this.findBugAddModLabel.Text = "Find a bug? Want a mod added?";
+            this.findBugAddModLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.findBugAddModLabel_LinkClicked);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(289, 364);
+            this.ClientSize = new System.Drawing.Size(289, 391);
+            this.Controls.Add(this.findBugAddModLabel);
             this.Controls.Add(this.loadingImageGroupBox);
             this.Controls.Add(this.settingsGroupBox);
             this.Controls.Add(this.uninstallRelhaxMod);
@@ -335,6 +348,7 @@
         private System.Windows.Forms.GroupBox loadingImageGroupBox;
         private System.Windows.Forms.RadioButton thirdGuardsLoadingImageRB;
         private System.Windows.Forms.RadioButton standardImageRB;
+        private System.Windows.Forms.LinkLabel findBugAddModLabel;
     }
 }
 
