@@ -45,9 +45,9 @@
       <mod>
         <!-- Don't actually have zip of default config -->
         <name>Default Config</name>
-        <version></version>
-        <modzipfile></modzipfile>
-        <modzipcrc></modzipcrc>
+        <version>6.5.5</version>
+        <modzipfile>XVM_Prebuilt_Configs_Default.zip</modzipfile>
+        <modzipcrc>f</modzipcrc>
         <enabled>true</enabled>
         <pictures>
           <picture>

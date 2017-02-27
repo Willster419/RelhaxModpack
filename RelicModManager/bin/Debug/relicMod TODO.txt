@@ -4,8 +4,7 @@
 - then start xvm config cancer
 
 change downloader api?
-
-() giv RKK1945 credit for spellcheck and first closed alhpa tester
+move backgroundworkers to general class variables to try to prevent stack overflow lol
 
 (normal) comment code and put in log outputs (currently done on all files)
 

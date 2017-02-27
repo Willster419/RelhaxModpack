@@ -98,6 +98,7 @@ namespace RelicModManager
             uninstallMods = 15
         };
         private InstallState state = InstallState.idle;
+        private string tanksVersion;//0.9.x.y
         
         //The constructur for the application
         public MainWindow()
@@ -287,6 +288,8 @@ namespace RelicModManager
                     downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
                     downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
                     downloader.Proxy = null;
+                    sw.Reset();
+                    sw.Start();
                     downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
                     tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
                     this.appendToLog("downloading " + tempOldDownload);
@@ -1114,7 +1117,7 @@ namespace RelicModManager
         {
             //patch versiondir out of filePath
             filePath = tanksLocation + "\\res_mods" + filePath;
-            filePath = Regex.Replace(filePath, "versiondir", this.getFolderVersion(null));
+            filePath = Regex.Replace(filePath, "versiondir", tanksVersion);
             //verify the file exists...
             if (!File.Exists(filePath))
                 return;
@@ -1262,7 +1265,7 @@ namespace RelicModManager
         {
             //patch versiondir out of fileLocation
             fileLocation = tanksLocation + "\\res_mods" + fileLocation;
-            fileLocation = Regex.Replace(fileLocation, "versiondir", this.getFolderVersion(null));
+            fileLocation = Regex.Replace(fileLocation, "versiondir", tanksVersion);
 
             //check that the file exists
             if (!File.Exists(fileLocation))
@@ -1385,6 +1388,7 @@ namespace RelicModManager
                 state = InstallState.error;
                 return;
             }
+            tanksVersion = this.getFolderVersion(null);
             //the download timers started for download speed measurement
             sw.Reset();
             sw.Start();
@@ -1925,7 +1929,8 @@ namespace RelicModManager
         {
             if (childProgressBar.Maximum != childMaxProgres)
             childProgressBar.Maximum = childMaxProgres;
-            childProgressBar.Value = childCurrentProgres;
+            if (childCurrentProgres != 0)
+                childProgressBar.Value = childCurrentProgres;
             if (currentZipEntry.Length >= 47)
             {
                 downloadProgress.Text = currentZipEntry.Substring(0, 47) + "...";
