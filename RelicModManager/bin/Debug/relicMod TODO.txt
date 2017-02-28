@@ -1,4 +1,8 @@
-(normal) add json patcher
+(normal) verify that update notes window has forced verital scroll line wraping
+
+(normal) add json patching system and extract dll(s) if not exist
+
+(normal) verify xml patcher will simply overwrite in edit mode
 
 (normal) add mods to the modpack. Kind of a big deal.
 - start pmod stuff
@@ -18,11 +22,3 @@
   delete every file in the log (if it exists)
   -recursivly delete each folder if the number of files and folders in it is 0
   -read each patch file and reverse the patch
-https://regex101.com/r/nzw10E/1
-
-
-
-https://regex101.com/r/6FptoP/1
-https://regex101.com/r/6FptoP/2
-https://regex101.com/r/6FptoP/3
-https://regex101.com/r/6FptoP/4

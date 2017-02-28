@@ -18,7 +18,6 @@ namespace RelicModManager
 {
     public partial class PatchTester : Form
     {
-        
         public PatchTester()
         {
             InitializeComponent();
@@ -249,7 +248,7 @@ namespace RelicModManager
                 doc4.Save(filePathSave);
             }
         }
-        //method to patch a standard text or json file
+        //method to patch a standard text file
         //fileLocation is relative to res_mods folder
         private void RegxPatch(string fileLocation, string search, string replace, int lineNumber = 0)
         {
@@ -316,6 +315,25 @@ namespace RelicModManager
             //save the file back into the string and then the file
             file = sb.ToString();
             File.WriteAllText(fileLocationSave, file);
+        }
+        //method to parse json files
+        public void jsonPatch(string jsonFile, string jsonPath, string newValue)
+        {
+            //check that the file exists
+            string fileLocationSave = Path.GetFileNameWithoutExtension(fileLocation) + "_patched" + Path.GetExtension(fileLocation);
+            //load file from disk...
+            string file = File.ReadAllText(jsonFile);
+            JToken root = JToken.Parse(file);
+            foreach (var value in root.SelectTokens(jsonPath).ToList())
+                {
+                    if (value == root)
+                        root = JToken.FromObject(newValue);
+                    else
+                        value.Replace(JToken.FromObject(newValue));
+                }
+            if (File.Exists(fileLocationSave))
+              File.Delete(fileLocationSave);
+            File.WriteAllText(fileLocationSave,root.ToString());
         }
     }
 }
