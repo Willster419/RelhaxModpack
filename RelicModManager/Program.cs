@@ -58,6 +58,11 @@ namespace RelicModManager
                     Application.Run(new CRCCheck());
                     return;
                 }
+                else if (Regex.IsMatch(commandArgs[i], "patchcheck"))
+                {
+                    Application.Run(new PatchTester());
+                    return;
+                }
             }
             Application.Run(new MainWindow());
         }

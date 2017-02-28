@@ -103,6 +103,12 @@
       <DependentUpon>ModSelectionList.cs</DependentUpon>
     </Compile>
     <Compile Include="Patch.cs" />
+    <Compile Include="PatchTester.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PatchTester.Designer.cs">
+      <DependentUpon>PatchTester.cs</DependentUpon>
+    </Compile>
     <Compile Include="Picture.cs" />
     <Compile Include="PleaseWait.cs">
       <SubType>Form</SubType>
@@ -150,6 +156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ModSelectionList.resx">
       <DependentUpon>ModSelectionList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PatchTester.resx">
+      <DependentUpon>PatchTester.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PleaseWait.resx">
       <DependentUpon>PleaseWait.cs</DependentUpon>
