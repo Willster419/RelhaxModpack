@@ -29,311 +29,332 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PatchTester));
-            this.button1 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.regexLoadFileButton = new System.Windows.Forms.Button();
+            this.regexFilePathLabel = new System.Windows.Forms.Label();
+            this.regexFilePathBox = new System.Windows.Forms.RichTextBox();
+            this.regexLineLabel = new System.Windows.Forms.Label();
+            this.regexLineBox = new System.Windows.Forms.TextBox();
+            this.xmlModsGroupBox = new System.Windows.Forms.GroupBox();
+            this.xmlRemoveModeButton = new System.Windows.Forms.RadioButton();
+            this.xmlEditModsButton = new System.Windows.Forms.RadioButton();
+            this.xmlAddModeButton = new System.Windows.Forms.RadioButton();
+            this.regexSearchBox = new System.Windows.Forms.TextBox();
+            this.regexSearchLabel = new System.Windows.Forms.Label();
+            this.regexReplaceBox = new System.Windows.Forms.TextBox();
+            this.regexReplaceLabel = new System.Windows.Forms.Label();
+            this.xmlReplaceBox = new System.Windows.Forms.TextBox();
+            this.xmlReplaceLabel = new System.Windows.Forms.Label();
+            this.xmlSearchBox = new System.Windows.Forms.TextBox();
+            this.xmlSearchLabel = new System.Windows.Forms.Label();
+            this.xmlPathBox = new System.Windows.Forms.TextBox();
+            this.xmlPathLabel = new System.Windows.Forms.Label();
+            this.xmlFilePathBox = new System.Windows.Forms.RichTextBox();
+            this.xmlFilePathLabel = new System.Windows.Forms.Label();
+            this.xmlLoadFileButton = new System.Windows.Forms.Button();
+            this.regexPatchButton = new System.Windows.Forms.Button();
+            this.xmlPatchButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.groupBox1.SuspendLayout();
+            this.xmlPatcherLabel = new System.Windows.Forms.Label();
+            this.regexPatcherLabel = new System.Windows.Forms.Label();
+            this.regexFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.xmlFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.xmlModsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
-            // button1
+            // regexLoadFileButton
             // 
-            this.button1.Location = new System.Drawing.Point(149, 138);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.regexLoadFileButton.Location = new System.Drawing.Point(149, 138);
+            this.regexLoadFileButton.Name = "regexLoadFileButton";
+            this.regexLoadFileButton.Size = new System.Drawing.Size(75, 23);
+            this.regexLoadFileButton.TabIndex = 3;
+            this.regexLoadFileButton.Text = "load file";
+            this.regexLoadFileButton.UseVisualStyleBackColor = true;
+            this.regexLoadFileButton.Click += new System.EventHandler(this.regexLoadFileButton_Click);
             // 
-            // label1
+            // regexFilePathLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 30);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(20, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "file";
+            this.regexFilePathLabel.AutoSize = true;
+            this.regexFilePathLabel.Location = new System.Drawing.Point(12, 30);
+            this.regexFilePathLabel.Name = "regexFilePathLabel";
+            this.regexFilePathLabel.Size = new System.Drawing.Size(44, 13);
+            this.regexFilePathLabel.TabIndex = 1;
+            this.regexFilePathLabel.Text = "file path";
             // 
-            // richTextBox1
+            // regexFilePathBox
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(12, 46);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(212, 86);
-            this.richTextBox1.TabIndex = 3;
-            this.richTextBox1.Text = "";
+            this.regexFilePathBox.Location = new System.Drawing.Point(12, 46);
+            this.regexFilePathBox.Name = "regexFilePathBox";
+            this.regexFilePathBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.regexFilePathBox.Size = new System.Drawing.Size(212, 86);
+            this.regexFilePathBox.TabIndex = 2;
+            this.regexFilePathBox.Text = "F:\\Tanks Stuff\\RelicModManager\\RelicModManager\\bin\\Debug\\mod_autoaim_indicator.js" +
+    "on";
             // 
-            // label2
+            // regexLineLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 161);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(23, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "line";
+            this.regexLineLabel.AutoSize = true;
+            this.regexLineLabel.Location = new System.Drawing.Point(9, 161);
+            this.regexLineLabel.Name = "regexLineLabel";
+            this.regexLineLabel.Size = new System.Drawing.Size(23, 13);
+            this.regexLineLabel.TabIndex = 4;
+            this.regexLineLabel.Text = "line";
             // 
-            // textBox1
+            // regexLineBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 177);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(212, 20);
-            this.textBox1.TabIndex = 5;
+            this.regexLineBox.Location = new System.Drawing.Point(12, 177);
+            this.regexLineBox.Name = "regexLineBox";
+            this.regexLineBox.Size = new System.Drawing.Size(212, 20);
+            this.regexLineBox.TabIndex = 5;
+            this.regexLineBox.Text = "-1";
             // 
-            // groupBox1
+            // xmlModsGroupBox
             // 
-            this.groupBox1.Controls.Add(this.radioButton3);
-            this.groupBox1.Controls.Add(this.radioButton2);
-            this.groupBox1.Controls.Add(this.radioButton1);
-            this.groupBox1.Location = new System.Drawing.Point(250, 138);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(125, 99);
-            this.groupBox1.TabIndex = 6;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Mode";
+            this.xmlModsGroupBox.Controls.Add(this.xmlRemoveModeButton);
+            this.xmlModsGroupBox.Controls.Add(this.xmlEditModsButton);
+            this.xmlModsGroupBox.Controls.Add(this.xmlAddModeButton);
+            this.xmlModsGroupBox.Location = new System.Drawing.Point(250, 138);
+            this.xmlModsGroupBox.Name = "xmlModsGroupBox";
+            this.xmlModsGroupBox.Size = new System.Drawing.Size(125, 81);
+            this.xmlModsGroupBox.TabIndex = 15;
+            this.xmlModsGroupBox.TabStop = false;
+            this.xmlModsGroupBox.Text = "Mode";
             // 
-            // radioButton1
+            // xmlRemoveModeButton
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(6, 19);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(85, 17);
-            this.radioButton1.TabIndex = 7;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "radioButton1";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.xmlRemoveModeButton.AutoSize = true;
+            this.xmlRemoveModeButton.Location = new System.Drawing.Point(6, 58);
+            this.xmlRemoveModeButton.Name = "xmlRemoveModeButton";
+            this.xmlRemoveModeButton.Size = new System.Drawing.Size(60, 17);
+            this.xmlRemoveModeButton.TabIndex = 9;
+            this.xmlRemoveModeButton.TabStop = true;
+            this.xmlRemoveModeButton.Text = "remove";
+            this.xmlRemoveModeButton.UseVisualStyleBackColor = true;
+            this.xmlRemoveModeButton.CheckedChanged += new System.EventHandler(this.xmlRemoveModeButton_CheckedChanged);
             // 
-            // radioButton2
+            // xmlEditModsButton
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(6, 42);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(85, 17);
-            this.radioButton2.TabIndex = 8;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "radioButton2";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.xmlEditModsButton.AutoSize = true;
+            this.xmlEditModsButton.Location = new System.Drawing.Point(6, 39);
+            this.xmlEditModsButton.Name = "xmlEditModsButton";
+            this.xmlEditModsButton.Size = new System.Drawing.Size(42, 17);
+            this.xmlEditModsButton.TabIndex = 8;
+            this.xmlEditModsButton.TabStop = true;
+            this.xmlEditModsButton.Text = "edit";
+            this.xmlEditModsButton.UseVisualStyleBackColor = true;
+            this.xmlEditModsButton.CheckedChanged += new System.EventHandler(this.xmlEditModsButton_CheckedChanged);
             // 
-            // radioButton3
+            // xmlAddModeButton
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(6, 65);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(85, 17);
-            this.radioButton3.TabIndex = 9;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "radioButton3";
-            this.radioButton3.UseVisualStyleBackColor = true;
+            this.xmlAddModeButton.AutoSize = true;
+            this.xmlAddModeButton.Location = new System.Drawing.Point(6, 19);
+            this.xmlAddModeButton.Name = "xmlAddModeButton";
+            this.xmlAddModeButton.Size = new System.Drawing.Size(43, 17);
+            this.xmlAddModeButton.TabIndex = 7;
+            this.xmlAddModeButton.TabStop = true;
+            this.xmlAddModeButton.Text = "add";
+            this.xmlAddModeButton.UseVisualStyleBackColor = true;
+            this.xmlAddModeButton.CheckedChanged += new System.EventHandler(this.xmlAddModeButton_CheckedChanged);
             // 
-            // textBox2
+            // regexSearchBox
             // 
-            this.textBox2.Location = new System.Drawing.Point(12, 216);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(212, 20);
-            this.textBox2.TabIndex = 8;
+            this.regexSearchBox.Location = new System.Drawing.Point(12, 216);
+            this.regexSearchBox.Name = "regexSearchBox";
+            this.regexSearchBox.Size = new System.Drawing.Size(212, 20);
+            this.regexSearchBox.TabIndex = 7;
+            this.regexSearchBox.Text = "none";
             // 
-            // label3
+            // regexSearchLabel
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 200);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(39, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "search";
+            this.regexSearchLabel.AutoSize = true;
+            this.regexSearchLabel.Location = new System.Drawing.Point(9, 200);
+            this.regexSearchLabel.Name = "regexSearchLabel";
+            this.regexSearchLabel.Size = new System.Drawing.Size(39, 13);
+            this.regexSearchLabel.TabIndex = 6;
+            this.regexSearchLabel.Text = "search";
             // 
-            // textBox3
+            // regexReplaceBox
             // 
-            this.textBox3.Location = new System.Drawing.Point(12, 258);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(212, 20);
-            this.textBox3.TabIndex = 10;
+            this.regexReplaceBox.Location = new System.Drawing.Point(12, 258);
+            this.regexReplaceBox.Name = "regexReplaceBox";
+            this.regexReplaceBox.Size = new System.Drawing.Size(212, 20);
+            this.regexReplaceBox.TabIndex = 9;
             // 
-            // label4
+            // regexReplaceLabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(9, 242);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(42, 13);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "replace";
+            this.regexReplaceLabel.AutoSize = true;
+            this.regexReplaceLabel.Location = new System.Drawing.Point(9, 242);
+            this.regexReplaceLabel.Name = "regexReplaceLabel";
+            this.regexReplaceLabel.Size = new System.Drawing.Size(42, 13);
+            this.regexReplaceLabel.TabIndex = 8;
+            this.regexReplaceLabel.Text = "replace";
             // 
-            // textBox4
+            // xmlReplaceBox
             // 
-            this.textBox4.Location = new System.Drawing.Point(250, 337);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(212, 20);
-            this.textBox4.TabIndex = 19;
+            this.xmlReplaceBox.Location = new System.Drawing.Point(250, 320);
+            this.xmlReplaceBox.Name = "xmlReplaceBox";
+            this.xmlReplaceBox.Size = new System.Drawing.Size(212, 20);
+            this.xmlReplaceBox.TabIndex = 21;
             // 
-            // label5
+            // xmlReplaceLabel
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(247, 321);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(42, 13);
-            this.label5.TabIndex = 18;
-            this.label5.Text = "replace";
+            this.xmlReplaceLabel.AutoSize = true;
+            this.xmlReplaceLabel.Location = new System.Drawing.Point(247, 304);
+            this.xmlReplaceLabel.Name = "xmlReplaceLabel";
+            this.xmlReplaceLabel.Size = new System.Drawing.Size(42, 13);
+            this.xmlReplaceLabel.TabIndex = 20;
+            this.xmlReplaceLabel.Text = "replace";
             // 
-            // textBox5
+            // xmlSearchBox
             // 
-            this.textBox5.Location = new System.Drawing.Point(250, 295);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(212, 20);
-            this.textBox5.TabIndex = 17;
+            this.xmlSearchBox.Location = new System.Drawing.Point(250, 278);
+            this.xmlSearchBox.Name = "xmlSearchBox";
+            this.xmlSearchBox.Size = new System.Drawing.Size(212, 20);
+            this.xmlSearchBox.TabIndex = 19;
             // 
-            // label6
+            // xmlSearchLabel
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(247, 279);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(39, 13);
-            this.label6.TabIndex = 16;
-            this.label6.Text = "search";
+            this.xmlSearchLabel.AutoSize = true;
+            this.xmlSearchLabel.Location = new System.Drawing.Point(247, 262);
+            this.xmlSearchLabel.Name = "xmlSearchLabel";
+            this.xmlSearchLabel.Size = new System.Drawing.Size(39, 13);
+            this.xmlSearchLabel.TabIndex = 18;
+            this.xmlSearchLabel.Text = "search";
             // 
-            // textBox6
+            // xmlPathBox
             // 
-            this.textBox6.Location = new System.Drawing.Point(250, 256);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(212, 20);
-            this.textBox6.TabIndex = 15;
+            this.xmlPathBox.Location = new System.Drawing.Point(250, 239);
+            this.xmlPathBox.Name = "xmlPathBox";
+            this.xmlPathBox.Size = new System.Drawing.Size(212, 20);
+            this.xmlPathBox.TabIndex = 17;
             // 
-            // label7
+            // xmlPathLabel
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(247, 240);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(28, 13);
-            this.label7.TabIndex = 14;
-            this.label7.Text = "path";
+            this.xmlPathLabel.AutoSize = true;
+            this.xmlPathLabel.Location = new System.Drawing.Point(247, 223);
+            this.xmlPathLabel.Name = "xmlPathLabel";
+            this.xmlPathLabel.Size = new System.Drawing.Size(28, 13);
+            this.xmlPathLabel.TabIndex = 16;
+            this.xmlPathLabel.Text = "path";
             // 
-            // richTextBox2
+            // xmlFilePathBox
             // 
-            this.richTextBox2.Location = new System.Drawing.Point(250, 46);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(212, 86);
-            this.richTextBox2.TabIndex = 13;
-            this.richTextBox2.Text = "";
+            this.xmlFilePathBox.Location = new System.Drawing.Point(250, 46);
+            this.xmlFilePathBox.Name = "xmlFilePathBox";
+            this.xmlFilePathBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.xmlFilePathBox.Size = new System.Drawing.Size(212, 86);
+            this.xmlFilePathBox.TabIndex = 13;
+            this.xmlFilePathBox.Text = "";
             // 
-            // label8
+            // xmlFilePathLabel
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(247, 30);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(20, 13);
-            this.label8.TabIndex = 12;
-            this.label8.Text = "file";
+            this.xmlFilePathLabel.AutoSize = true;
+            this.xmlFilePathLabel.Location = new System.Drawing.Point(250, 30);
+            this.xmlFilePathLabel.Name = "xmlFilePathLabel";
+            this.xmlFilePathLabel.Size = new System.Drawing.Size(41, 13);
+            this.xmlFilePathLabel.TabIndex = 12;
+            this.xmlFilePathLabel.Text = "filepath";
             // 
-            // button2
+            // xmlLoadFileButton
             // 
-            this.button2.Location = new System.Drawing.Point(387, 138);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 11;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.xmlLoadFileButton.Location = new System.Drawing.Point(387, 138);
+            this.xmlLoadFileButton.Name = "xmlLoadFileButton";
+            this.xmlLoadFileButton.Size = new System.Drawing.Size(75, 23);
+            this.xmlLoadFileButton.TabIndex = 14;
+            this.xmlLoadFileButton.Text = "load file";
+            this.xmlLoadFileButton.UseVisualStyleBackColor = true;
+            this.xmlLoadFileButton.Click += new System.EventHandler(this.xmlLoadFileButton_Click);
             // 
-            // button3
+            // regexPatchButton
             // 
-            this.button3.Location = new System.Drawing.Point(149, 284);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 20;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.regexPatchButton.Location = new System.Drawing.Point(149, 284);
+            this.regexPatchButton.Name = "regexPatchButton";
+            this.regexPatchButton.Size = new System.Drawing.Size(75, 23);
+            this.regexPatchButton.TabIndex = 10;
+            this.regexPatchButton.Text = "patch";
+            this.regexPatchButton.UseVisualStyleBackColor = true;
+            this.regexPatchButton.Click += new System.EventHandler(this.regexPatchButton_Click);
             // 
-            // button4
+            // xmlPatchButton
             // 
-            this.button4.Location = new System.Drawing.Point(387, 363);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 21;
-            this.button4.Text = "button4";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.xmlPatchButton.Location = new System.Drawing.Point(387, 346);
+            this.xmlPatchButton.Name = "xmlPatchButton";
+            this.xmlPatchButton.Size = new System.Drawing.Size(75, 23);
+            this.xmlPatchButton.TabIndex = 22;
+            this.xmlPatchButton.Text = "patch";
+            this.xmlPatchButton.UseVisualStyleBackColor = true;
+            this.xmlPatchButton.Click += new System.EventHandler(this.xmlPatchButton_Click);
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.WindowText;
-            this.panel1.Location = new System.Drawing.Point(234, 9);
+            this.panel1.Location = new System.Drawing.Point(234, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(10, 388);
-            this.panel1.TabIndex = 22;
+            this.panel1.Size = new System.Drawing.Size(10, 392);
+            this.panel1.TabIndex = 23;
             // 
-            // label9
+            // xmlPatcherLabel
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(346, 14);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(35, 13);
-            this.label9.TabIndex = 23;
-            this.label9.Text = "label9";
+            this.xmlPatcherLabel.AutoSize = true;
+            this.xmlPatcherLabel.Location = new System.Drawing.Point(328, 14);
+            this.xmlPatcherLabel.Name = "xmlPatcherLabel";
+            this.xmlPatcherLabel.Size = new System.Drawing.Size(69, 13);
+            this.xmlPatcherLabel.TabIndex = 11;
+            this.xmlPatcherLabel.Text = "XML Patcher";
             // 
-            // label10
+            // regexPatcherLabel
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(98, 14);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(41, 13);
-            this.label10.TabIndex = 24;
-            this.label10.Text = "label10";
+            this.regexPatcherLabel.AutoSize = true;
+            this.regexPatcherLabel.Location = new System.Drawing.Point(80, 14);
+            this.regexPatcherLabel.Name = "regexPatcherLabel";
+            this.regexPatcherLabel.Size = new System.Drawing.Size(78, 13);
+            this.regexPatcherLabel.TabIndex = 0;
+            this.regexPatcherLabel.Text = "Regex Patcher";
+            // 
+            // regexFileDialog
+            // 
+            this.regexFileDialog.FileName = "openFileDialog1";
+            // 
+            // xmlFileDialog
+            // 
+            this.xmlFileDialog.FileName = "openFileDialog2";
             // 
             // PatchTester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(473, 409);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.label9);
+            this.ClientSize = new System.Drawing.Size(473, 392);
+            this.Controls.Add(this.regexPatcherLabel);
+            this.Controls.Add(this.xmlPatcherLabel);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.textBox5);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.textBox6);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.richTextBox2);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.richTextBox1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.xmlPatchButton);
+            this.Controls.Add(this.regexPatchButton);
+            this.Controls.Add(this.xmlReplaceBox);
+            this.Controls.Add(this.xmlReplaceLabel);
+            this.Controls.Add(this.xmlSearchBox);
+            this.Controls.Add(this.xmlSearchLabel);
+            this.Controls.Add(this.xmlPathBox);
+            this.Controls.Add(this.xmlPathLabel);
+            this.Controls.Add(this.xmlFilePathBox);
+            this.Controls.Add(this.xmlFilePathLabel);
+            this.Controls.Add(this.xmlLoadFileButton);
+            this.Controls.Add(this.regexReplaceBox);
+            this.Controls.Add(this.regexReplaceLabel);
+            this.Controls.Add(this.regexSearchBox);
+            this.Controls.Add(this.regexSearchLabel);
+            this.Controls.Add(this.xmlModsGroupBox);
+            this.Controls.Add(this.regexLineBox);
+            this.Controls.Add(this.regexLineLabel);
+            this.Controls.Add(this.regexFilePathBox);
+            this.Controls.Add(this.regexFilePathLabel);
+            this.Controls.Add(this.regexLoadFileButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "PatchTester";
             this.Text = "PatchTester";
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.Load += new System.EventHandler(this.PatchTester_Load);
+            this.xmlModsGroupBox.ResumeLayout(false);
+            this.xmlModsGroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -341,32 +362,34 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.RichTextBox richTextBox2;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button regexLoadFileButton;
+        private System.Windows.Forms.Label regexFilePathLabel;
+        private System.Windows.Forms.RichTextBox regexFilePathBox;
+        private System.Windows.Forms.Label regexLineLabel;
+        private System.Windows.Forms.TextBox regexLineBox;
+        private System.Windows.Forms.GroupBox xmlModsGroupBox;
+        private System.Windows.Forms.RadioButton xmlRemoveModeButton;
+        private System.Windows.Forms.RadioButton xmlEditModsButton;
+        private System.Windows.Forms.RadioButton xmlAddModeButton;
+        private System.Windows.Forms.TextBox regexSearchBox;
+        private System.Windows.Forms.Label regexSearchLabel;
+        private System.Windows.Forms.TextBox regexReplaceBox;
+        private System.Windows.Forms.Label regexReplaceLabel;
+        private System.Windows.Forms.TextBox xmlReplaceBox;
+        private System.Windows.Forms.Label xmlReplaceLabel;
+        private System.Windows.Forms.TextBox xmlSearchBox;
+        private System.Windows.Forms.Label xmlSearchLabel;
+        private System.Windows.Forms.TextBox xmlPathBox;
+        private System.Windows.Forms.Label xmlPathLabel;
+        private System.Windows.Forms.RichTextBox xmlFilePathBox;
+        private System.Windows.Forms.Label xmlFilePathLabel;
+        private System.Windows.Forms.Button xmlLoadFileButton;
+        private System.Windows.Forms.Button regexPatchButton;
+        private System.Windows.Forms.Button xmlPatchButton;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label xmlPatcherLabel;
+        private System.Windows.Forms.Label regexPatcherLabel;
+        private System.Windows.Forms.OpenFileDialog regexFileDialog;
+        private System.Windows.Forms.OpenFileDialog xmlFileDialog;
     }
 }
