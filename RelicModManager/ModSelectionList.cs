@@ -22,6 +22,7 @@ namespace RelicModManager
         private PleaseWait pw;
         public List<Dependency> globalDependencies;
         private bool loadingConfig = false;
+        private EventHandler handler = null;
 
         public ModSelectionList()
         {
@@ -500,10 +501,43 @@ namespace RelicModManager
                                 }
                                 else
                                 {
-                                    //not safe to check the mod
                                     if (!loadingConfig)
                                     {
-                                        cb.Checked = false;
+                                    //not safe to check the mod
+                                    //uncheck the other mod first
+                                    //each checkbox uncheck it
+                                    Panel modPanel = (Panel)cb.Parent;
+                                    TabPage modTab = (TabPage)modPanel.Parent;
+                                    foreach (var cc in modTab.Controls)
+                                    {
+                                        if (cc is Panel)
+                                        {
+                                            Panel pp = (Panel)cc;
+                                            foreach (var ccc in pp.Controls)
+                                            {
+                                                if (ccc is CheckBox)
+                                                {
+                                                    CheckBox cbb = (CheckBox)ccc;
+                                                    //check that this makes the mod object false as well
+                                                    //cbb.CheckedChanged -= modCheckBox_CheckedChanged;
+                                                    cbb.Checked = false;
+                                                    //cbb.CheckedChanged += modCheckBox_CheckedChanged;
+                                                    string otherModName = cbb.Name.Split('_')[1];
+                                                    string otherCatagoryName = cbb.Name.Split('_')[0];
+                                                    Mod otherMod = this.linkMod(otherModName, otherCatagoryName);
+                                                    otherMod.modChecked = false;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    //now it's safe to check the mods
+                                    
+                                        
+                                        m.modChecked = true;
+                                        cb.CheckedChanged -= modCheckBox_CheckedChanged;
+                                        cb.Checked = true;
+                                        cb.CheckedChanged += modCheckBox_CheckedChanged;
+                                        //cb.Checked = false;
                                     }
                                     
                                 }

@@ -33,7 +33,7 @@ namespace RelicModManager
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 19.1";
+        private string managerVersion = "version 19.2";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         private SelectFeatures features = new SelectFeatures();
         //queue for downloading mods
@@ -99,6 +99,8 @@ namespace RelicModManager
         };
         private InstallState state = InstallState.idle;
         private string tanksVersion;//0.9.x.y
+        BackgroundWorker deleteworker;
+        BackgroundWorker copyworker;
         
         //The constructur for the application
         public MainWindow()
@@ -850,7 +852,7 @@ namespace RelicModManager
             Application.DoEvents();
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             this.appendToLog("|RelHax ModManager " + managerVersion);
-            this.appendToLog("|Built on 02/26/2017, running at " + DateTime.Now);
+            this.appendToLog("|Built on 02/27/2017, running at " + DateTime.Now);
             this.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1414,6 +1416,10 @@ namespace RelicModManager
                             Directory.Move(Application.StartupPath + "\\RelHaxModBackup\\" + dirName, Application.StartupPath + "\\RelHaxModBackup\\res_mods\\" + dirName);
                         }
                     }
+                    if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\res_mods"))
+                    {
+                        Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\res_mods");
+                    }
                     this.backgroundDelete(Application.StartupPath + "\\RelHaxModBackup\\res_mods");
                 }
                 return;
@@ -1435,6 +1441,8 @@ namespace RelicModManager
                 state = InstallState.idle;
                 return;
             }
+            downloadProgress.Text = "Loading...";
+            Application.DoEvents();
             modsToInstall = new List<Mod>();
             configsToInstall = new List<Config>();
             patchList = new List<Patch>();
@@ -1657,7 +1665,7 @@ namespace RelicModManager
             numFilesToProcessInt = 0;
             numFilesToCopyDeleteExtract = 0;
             downloadProgress.Text = "Copying file " + numFilesToCopyDeleteExtract + " of " + numFilesToProcessInt;
-            BackgroundWorker copyworker = new BackgroundWorker();
+            copyworker = new BackgroundWorker();
             copyworker.WorkerReportsProgress = true;
             copyworker.DoWork += new DoWorkEventHandler(copyworker_DoWork);
             copyworker.ProgressChanged += new ProgressChangedEventHandler(copyworker_ProgressChanged);
@@ -1674,7 +1682,7 @@ namespace RelicModManager
             numFilesToProcessInt = 0;
             numFilesToCopyDeleteExtract = 0;
             downloadProgress.Text = "Copying file " + numFilesToCopyDeleteExtract + " of " + numFilesToProcessInt;
-            BackgroundWorker deleteworker = new BackgroundWorker();
+            deleteworker = new BackgroundWorker();
             deleteworker.WorkerReportsProgress = true;
             deleteworker.DoWork += new DoWorkEventHandler(deleteworker_DoWork);
             deleteworker.ProgressChanged += new ProgressChangedEventHandler(deleteworker_ProgressChanged);
@@ -1738,14 +1746,13 @@ namespace RelicModManager
         //handler for the copyworker when it is called
         private void copyworker_DoWork(object sender, DoWorkEventArgs e)
         {
-            BackgroundWorker copyworker = (BackgroundWorker)sender;
             object[] parameters = e.Argument as object[];
             string sourceFolder = (string)parameters[0];
             string destFolder = (string)parameters[1];
             numFilesToProcessInt = 0;
             numFilesToCopyDeleteExtract = 0;
             this.numFilesToProcess(sourceFolder);
-            this.DirectoryCopy(sourceFolder, destFolder, true, copyworker);
+            this.DirectoryCopy(sourceFolder, destFolder, true);
         }
         //handler for the copyworker when progress is made
         private void copyworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -1760,6 +1767,10 @@ namespace RelicModManager
             if (state == InstallState.backupResMods)
             {
                 state = InstallState.backupMods;
+                if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\mods"))
+                {
+                    Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\mods");
+                }
                 this.backgroundCopy(tanksLocation + "\\mods", Application.StartupPath + "\\RelHaxModBackup\\mods");
                 return;
             }
@@ -1777,13 +1788,13 @@ namespace RelicModManager
         //handler for the deleteworker when it is called
         private void deleteworker_DoWork(object sender, DoWorkEventArgs e)
         {
-            BackgroundWorker deleteworker = (BackgroundWorker)sender;
+            
             object[] parameters = e.Argument as object[];
             string folderToDelete = (string)parameters[0];
             numFilesToProcessInt = 0;
             numFilesToCopyDeleteExtract = 0;
             this.numFilesToProcess(folderToDelete);
-            this.DirectoryDelete(folderToDelete, true, deleteworker);
+            this.DirectoryDelete(folderToDelete, true);
         }
         //handler for the deleteworker when progress is made
         private void deleteworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -1808,7 +1819,7 @@ namespace RelicModManager
                 {
                     //start the backupResMods copy process
                     state = InstallState.backupResMods;
-                    this.backgroundCopy(tanksLocation + "\\res_mods", Application.StartupPath + "\\RelHaxModBackup");
+                    this.backgroundCopy(tanksLocation + "\\res_mods", Application.StartupPath + "\\RelHaxModBackup\\res_mods");
                     return;
                 }
             }
@@ -1816,7 +1827,7 @@ namespace RelicModManager
             {
                 //start the backupResMods copy process
                 state = InstallState.backupResMods;
-                this.backgroundCopy(tanksLocation + "\\res_mods", Application.StartupPath + "\\RelHaxModBackup");
+                this.backgroundCopy(tanksLocation + "\\res_mods", Application.StartupPath + "\\RelHaxModBackup\\res_mods");
                 return;
             }
             else if (state == InstallState.deleteResMods)
@@ -1966,7 +1977,7 @@ namespace RelicModManager
             }
         }
         //recursivly copies every file from one place to another
-        private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, BackgroundWorker copyworker)
+        private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
@@ -1990,12 +2001,12 @@ namespace RelicModManager
                 foreach (DirectoryInfo subdir in dirs)
                 {
                     string temppath = Path.Combine(destDirName, subdir.Name);
-                    DirectoryCopy(subdir.FullName, temppath, copySubDirs, copyworker);
+                    DirectoryCopy(subdir.FullName, temppath, copySubDirs);
                 }
             }
         }
         //recursivly deletes every file from one place to another
-        private void DirectoryDelete(string sourceDirName, bool deleteSubDirs, BackgroundWorker deleteworker)
+        private void DirectoryDelete(string sourceDirName, bool deleteSubDirs)
         {
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
@@ -2034,7 +2045,7 @@ namespace RelicModManager
                 foreach (DirectoryInfo subdir in dirs)
                 {
                     string temppath = Path.Combine(sourceDirName, subdir.Name);
-                    DirectoryDelete(subdir.FullName, deleteSubDirs, deleteworker);
+                    DirectoryDelete(subdir.FullName, deleteSubDirs);
                     try
                     {
                         subdir.Delete();

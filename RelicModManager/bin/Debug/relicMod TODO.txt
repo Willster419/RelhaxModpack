@@ -1,10 +1,10 @@
-(normal) add mods to the modpack. Kind of a big deal.
-- fix autoaim config
-- then start pmod stuff
-- then start xvm config cancer
+(normal) add patch tester window
 
-change downloader api?
-move backgroundworkers to general class variables to try to prevent stack overflow lol
+(normal) add mods to the modpack. Kind of a big deal.
+- start pmod stuff
+- start xvm config cancer
+
+(enhancement) change downloader api?
 
 (normal) comment code and put in log outputs (currently done on all files)
 
@@ -18,3 +18,4 @@ move backgroundworkers to general class variables to try to prevent stack overfl
   delete every file in the log (if it exists)
   -recursivly delete each folder if the number of files and folders in it is 0
   -read each patch file and reverse the patch
+https://regex101.com/r/nzw10E/1
