@@ -10,11 +10,15 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.IO;
 using System.Xml.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Utilities;
+using Newtonsoft.Json.Linq;
 
 namespace RelicModManager
 {
     public partial class PatchTester : Form
     {
+        
         public PatchTester()
         {
             InitializeComponent();

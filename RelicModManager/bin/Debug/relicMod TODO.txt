@@ -1,4 +1,4 @@
-(normal) add patch tester window
+(normal) add json patcher
 
 (normal) add mods to the modpack. Kind of a big deal.
 - start pmod stuff
