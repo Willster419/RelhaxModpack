@@ -41,6 +41,7 @@
             this.downloadedVersionInfo.Location = new System.Drawing.Point(12, 31);
             this.downloadedVersionInfo.Name = "downloadedVersionInfo";
             this.downloadedVersionInfo.ReadOnly = true;
+            this.downloadedVersionInfo.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.downloadedVersionInfo.Size = new System.Drawing.Size(270, 144);
             this.downloadedVersionInfo.TabIndex = 0;
             this.downloadedVersionInfo.Text = "";

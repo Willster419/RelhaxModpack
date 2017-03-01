@@ -58,6 +58,19 @@
             this.regexPatcherLabel = new System.Windows.Forms.Label();
             this.regexFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.xmlFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.jsonLoadFileButton = new System.Windows.Forms.Button();
+            this.jsonFilePathLabel = new System.Windows.Forms.Label();
+            this.jsonFilePathBox = new System.Windows.Forms.RichTextBox();
+            this.jsonPathLabel = new System.Windows.Forms.Label();
+            this.jsonPathBox = new System.Windows.Forms.TextBox();
+            this.jsonSearchLabel = new System.Windows.Forms.Label();
+            this.jsonSearchBox = new System.Windows.Forms.TextBox();
+            this.jsonReplaceLabel = new System.Windows.Forms.Label();
+            this.jsonReplaceBox = new System.Windows.Forms.TextBox();
+            this.jsonPatchButton = new System.Windows.Forms.Button();
+            this.jsonPatcherLabel = new System.Windows.Forms.Label();
+            this.jsonFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.xmlModsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,9 +89,9 @@
             this.regexFilePathLabel.AutoSize = true;
             this.regexFilePathLabel.Location = new System.Drawing.Point(12, 30);
             this.regexFilePathLabel.Name = "regexFilePathLabel";
-            this.regexFilePathLabel.Size = new System.Drawing.Size(44, 13);
+            this.regexFilePathLabel.Size = new System.Drawing.Size(41, 13);
             this.regexFilePathLabel.TabIndex = 1;
-            this.regexFilePathLabel.Text = "file path";
+            this.regexFilePathLabel.Text = "filepath";
             // 
             // regexFilePathBox
             // 
@@ -87,8 +100,7 @@
             this.regexFilePathBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.regexFilePathBox.Size = new System.Drawing.Size(212, 86);
             this.regexFilePathBox.TabIndex = 2;
-            this.regexFilePathBox.Text = "F:\\Tanks Stuff\\RelicModManager\\RelicModManager\\bin\\Debug\\mod_autoaim_indicator.js" +
-    "on";
+            this.regexFilePathBox.Text = "";
             // 
             // regexLineLabel
             // 
@@ -105,7 +117,6 @@
             this.regexLineBox.Name = "regexLineBox";
             this.regexLineBox.Size = new System.Drawing.Size(212, 20);
             this.regexLineBox.TabIndex = 5;
-            this.regexLineBox.Text = "-1";
             // 
             // xmlModsGroupBox
             // 
@@ -161,7 +172,6 @@
             this.regexSearchBox.Name = "regexSearchBox";
             this.regexSearchBox.Size = new System.Drawing.Size(212, 20);
             this.regexSearchBox.TabIndex = 7;
-            this.regexSearchBox.Text = "none";
             // 
             // regexSearchLabel
             // 
@@ -312,20 +322,131 @@
             // 
             // regexFileDialog
             // 
-            this.regexFileDialog.FileName = "openFileDialog1";
+            this.regexFileDialog.FileName = "regexFileDialog";
             // 
             // xmlFileDialog
             // 
-            this.xmlFileDialog.FileName = "openFileDialog2";
+            this.xmlFileDialog.FileName = "xmlFileDialog";
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.SystemColors.WindowText;
+            this.panel2.Location = new System.Drawing.Point(468, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(10, 392);
+            this.panel2.TabIndex = 24;
+            // 
+            // jsonLoadFileButton
+            // 
+            this.jsonLoadFileButton.Location = new System.Drawing.Point(620, 138);
+            this.jsonLoadFileButton.Name = "jsonLoadFileButton";
+            this.jsonLoadFileButton.Size = new System.Drawing.Size(75, 23);
+            this.jsonLoadFileButton.TabIndex = 3;
+            this.jsonLoadFileButton.Text = "load file";
+            this.jsonLoadFileButton.UseVisualStyleBackColor = true;
+            this.jsonLoadFileButton.Click += new System.EventHandler(this.jsonLoadFileButton_Click);
+            // 
+            // jsonFilePathLabel
+            // 
+            this.jsonFilePathLabel.AutoSize = true;
+            this.jsonFilePathLabel.Location = new System.Drawing.Point(483, 30);
+            this.jsonFilePathLabel.Name = "jsonFilePathLabel";
+            this.jsonFilePathLabel.Size = new System.Drawing.Size(44, 13);
+            this.jsonFilePathLabel.TabIndex = 1;
+            this.jsonFilePathLabel.Text = "file path";
+            // 
+            // jsonFilePathBox
+            // 
+            this.jsonFilePathBox.Location = new System.Drawing.Point(483, 46);
+            this.jsonFilePathBox.Name = "jsonFilePathBox";
+            this.jsonFilePathBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.jsonFilePathBox.Size = new System.Drawing.Size(212, 86);
+            this.jsonFilePathBox.TabIndex = 2;
+            this.jsonFilePathBox.Text = "";
+            // 
+            // jsonPathLabel
+            // 
+            this.jsonPathLabel.AutoSize = true;
+            this.jsonPathLabel.Location = new System.Drawing.Point(480, 161);
+            this.jsonPathLabel.Name = "jsonPathLabel";
+            this.jsonPathLabel.Size = new System.Drawing.Size(28, 13);
+            this.jsonPathLabel.TabIndex = 4;
+            this.jsonPathLabel.Text = "path";
+            // 
+            // jsonPathBox
+            // 
+            this.jsonPathBox.Location = new System.Drawing.Point(483, 177);
+            this.jsonPathBox.Name = "jsonPathBox";
+            this.jsonPathBox.Size = new System.Drawing.Size(212, 20);
+            this.jsonPathBox.TabIndex = 5;
+            // 
+            // jsonSearchLabel
+            // 
+            this.jsonSearchLabel.AutoSize = true;
+            this.jsonSearchLabel.Location = new System.Drawing.Point(480, 200);
+            this.jsonSearchLabel.Name = "jsonSearchLabel";
+            this.jsonSearchLabel.Size = new System.Drawing.Size(39, 13);
+            this.jsonSearchLabel.TabIndex = 6;
+            this.jsonSearchLabel.Text = "search";
+            // 
+            // jsonSearchBox
+            // 
+            this.jsonSearchBox.Enabled = false;
+            this.jsonSearchBox.Location = new System.Drawing.Point(483, 216);
+            this.jsonSearchBox.Name = "jsonSearchBox";
+            this.jsonSearchBox.Size = new System.Drawing.Size(212, 20);
+            this.jsonSearchBox.TabIndex = 7;
+            // 
+            // jsonReplaceLabel
+            // 
+            this.jsonReplaceLabel.AutoSize = true;
+            this.jsonReplaceLabel.Location = new System.Drawing.Point(480, 242);
+            this.jsonReplaceLabel.Name = "jsonReplaceLabel";
+            this.jsonReplaceLabel.Size = new System.Drawing.Size(42, 13);
+            this.jsonReplaceLabel.TabIndex = 8;
+            this.jsonReplaceLabel.Text = "replace";
+            // 
+            // jsonReplaceBox
+            // 
+            this.jsonReplaceBox.Location = new System.Drawing.Point(483, 258);
+            this.jsonReplaceBox.Name = "jsonReplaceBox";
+            this.jsonReplaceBox.Size = new System.Drawing.Size(212, 20);
+            this.jsonReplaceBox.TabIndex = 9;
+            // 
+            // jsonPatchButton
+            // 
+            this.jsonPatchButton.Location = new System.Drawing.Point(620, 284);
+            this.jsonPatchButton.Name = "jsonPatchButton";
+            this.jsonPatchButton.Size = new System.Drawing.Size(75, 23);
+            this.jsonPatchButton.TabIndex = 10;
+            this.jsonPatchButton.Text = "patch";
+            this.jsonPatchButton.UseVisualStyleBackColor = true;
+            this.jsonPatchButton.Click += new System.EventHandler(this.jsonPatchButton_Click);
+            // 
+            // jsonPatcherLabel
+            // 
+            this.jsonPatcherLabel.AutoSize = true;
+            this.jsonPatcherLabel.Location = new System.Drawing.Point(551, 14);
+            this.jsonPatcherLabel.Name = "jsonPatcherLabel";
+            this.jsonPatcherLabel.Size = new System.Drawing.Size(69, 13);
+            this.jsonPatcherLabel.TabIndex = 0;
+            this.jsonPatcherLabel.Text = "Json Patcher";
+            // 
+            // jsonFileDialog
+            // 
+            this.jsonFileDialog.FileName = "jsonFileDialog";
             // 
             // PatchTester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(473, 392);
+            this.ClientSize = new System.Drawing.Size(707, 392);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.jsonPatcherLabel);
             this.Controls.Add(this.regexPatcherLabel);
             this.Controls.Add(this.xmlPatcherLabel);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.jsonPatchButton);
             this.Controls.Add(this.xmlPatchButton);
             this.Controls.Add(this.regexPatchButton);
             this.Controls.Add(this.xmlReplaceBox);
@@ -336,15 +457,24 @@
             this.Controls.Add(this.xmlPathLabel);
             this.Controls.Add(this.xmlFilePathBox);
             this.Controls.Add(this.xmlFilePathLabel);
+            this.Controls.Add(this.jsonReplaceBox);
             this.Controls.Add(this.xmlLoadFileButton);
+            this.Controls.Add(this.jsonReplaceLabel);
             this.Controls.Add(this.regexReplaceBox);
+            this.Controls.Add(this.jsonSearchBox);
             this.Controls.Add(this.regexReplaceLabel);
+            this.Controls.Add(this.jsonSearchLabel);
             this.Controls.Add(this.regexSearchBox);
             this.Controls.Add(this.regexSearchLabel);
+            this.Controls.Add(this.jsonPathBox);
             this.Controls.Add(this.xmlModsGroupBox);
+            this.Controls.Add(this.jsonPathLabel);
             this.Controls.Add(this.regexLineBox);
+            this.Controls.Add(this.jsonFilePathBox);
             this.Controls.Add(this.regexLineLabel);
+            this.Controls.Add(this.jsonFilePathLabel);
             this.Controls.Add(this.regexFilePathBox);
+            this.Controls.Add(this.jsonLoadFileButton);
             this.Controls.Add(this.regexFilePathLabel);
             this.Controls.Add(this.regexLoadFileButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -391,5 +521,18 @@
         private System.Windows.Forms.Label regexPatcherLabel;
         private System.Windows.Forms.OpenFileDialog regexFileDialog;
         private System.Windows.Forms.OpenFileDialog xmlFileDialog;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button jsonLoadFileButton;
+        private System.Windows.Forms.Label jsonFilePathLabel;
+        private System.Windows.Forms.RichTextBox jsonFilePathBox;
+        private System.Windows.Forms.Label jsonPathLabel;
+        private System.Windows.Forms.TextBox jsonPathBox;
+        private System.Windows.Forms.Label jsonSearchLabel;
+        private System.Windows.Forms.TextBox jsonSearchBox;
+        private System.Windows.Forms.Label jsonReplaceLabel;
+        private System.Windows.Forms.TextBox jsonReplaceBox;
+        private System.Windows.Forms.Button jsonPatchButton;
+        private System.Windows.Forms.Label jsonPatcherLabel;
+        private System.Windows.Forms.OpenFileDialog jsonFileDialog;
     }
 }

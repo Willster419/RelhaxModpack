@@ -1,7 +1,5 @@
-Version 19.2:
-- Fixed possible exception when "backup mods" is checked
-- Fixed bug with the backup mods directory feature
-- Fixed bug with both backgroundCopy and backgroundDelete which both improves UI
-performance and prevents a stack overflow exception
-- In single mod selection tabs, instead of having to manually uncheck a mod to
-check another, it now does that for you. (@Rkk1945)
+Version 19.3:
+- Added Json config patching
+- Started converting all regex patches that should be json patches into json patches
+- Started converting all patches to use root folder of "World_of_Tanks" rather than "res_mods". Added support for all 3 scenarios
+- Added feature to extract and place the required application dll's into the applications running directory

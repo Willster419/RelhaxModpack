@@ -284,18 +284,12 @@ namespace RelicModManager
             else if (lineNumber == -1)
             //search entire file and string and make one giant regex replacement
             {
-                /*
+                
                 if (Regex.IsMatch(file, search))
                 {
                     file = Regex.Replace(file, search, replace);
                 }
                 sb.Append(file);
-                */
-                string pattern = "\\\"time_snapping\\\":.*{.*\"enabled\\\":\\ ([a-zA-Z0-9_]*,)";
-                string realPattern = "(time_snapping.*enabled)";
-                Regex r = new Regex(search);
-                Match m = r.Match(file);
-                bool test = m.Success;
             }
             else
             {
@@ -320,7 +314,7 @@ namespace RelicModManager
         public void jsonPatch(string jsonFile, string jsonPath, string newValue)
         {
             //check that the file exists
-            string fileLocationSave = Path.GetFileNameWithoutExtension(fileLocation) + "_patched" + Path.GetExtension(fileLocation);
+            string fileLocationSave = Path.GetFileNameWithoutExtension(jsonFile) + "_patched" + Path.GetExtension(jsonFile);
             //load file from disk...
             string file = File.ReadAllText(jsonFile);
             JToken root = JToken.Parse(file);
@@ -334,6 +328,19 @@ namespace RelicModManager
             if (File.Exists(fileLocationSave))
               File.Delete(fileLocationSave);
             File.WriteAllText(fileLocationSave,root.ToString());
+        }
+
+        private void jsonLoadFileButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = jsonFileDialog.ShowDialog();
+            if (result == DialogResult.Cancel)
+                return;
+            jsonFilePathBox.Text = jsonFileDialog.FileName;
+        }
+
+        private void jsonPatchButton_Click(object sender, EventArgs e)
+        {
+            this.jsonPatch(jsonFilePathBox.Text, jsonPathBox.Text, jsonReplaceBox.Text);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace RelicModManager
 {
@@ -20,6 +21,16 @@ namespace RelicModManager
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            MainWindow temp = new MainWindow();
+            if (!File.Exists(Application.StartupPath + "\\Ionic.Zip.dll"))
+            {
+                temp.extractEmbeddedResource(Application.StartupPath, "RelicModManager", new List<string>() { "Ionic.Zip.dll" });
+            }
+            if (!File.Exists(Application.StartupPath + "\\Newtonsoft.Json.dll"))
+            {
+                temp.extractEmbeddedResource(Application.StartupPath, "RelicModManager", new List<string>() { "Newtonsoft.Json.dll" });
+            }
+            temp.Dispose();
             //handler for using the embeded ionic zip dll
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {

@@ -267,6 +267,7 @@
   <ItemGroup>
     <Content Include="loading.gif" />
     <Content Include="loading_3rdguards.gif" />
+    <EmbeddedResource Include="Newtonsoft.Json.dll" />
     <Content Include="relicbanner_for_ico.ico" />
   </ItemGroup>
   <ItemGroup>

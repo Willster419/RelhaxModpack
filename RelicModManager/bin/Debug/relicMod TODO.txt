@@ -1,12 +1,10 @@
-(normal) verify that update notes window has forced verital scroll line wraping
+(critical) fix regex patches that should be json
 
-(normal) add json patching system and extract dll(s) if not exist
-
-(normal) verify xml patcher will simply overwrite in edit mode
+(critical) fix all patches to be from World_of_Tanks directory
 
 (normal) add mods to the modpack. Kind of a big deal.
 - start pmod stuff
-- start xvm config cancer
+- start xvm config cancer (both should be easier with json patcher)
 
 (enhancement) change downloader api?
 

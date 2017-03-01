@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Drawing.Text;
+using Newtonsoft.Json.Linq;
 
 namespace RelicModManager
 {
@@ -33,7 +34,7 @@ namespace RelicModManager
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 19.2";
+        private string managerVersion = "version 19.3";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         private SelectFeatures features = new SelectFeatures();
         //queue for downloading mods
@@ -476,6 +477,12 @@ namespace RelicModManager
                     this.appendToLog("Xml patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
                     this.xmlPatch(p.file, p.path, p.mode, p.search, p.replace);
                 }
+                else if (p.type.Equals("json"))
+                {
+                    //perform json patch
+                    this.appendToLog("Json patch, " + p.file + ", " + p.path + ", " + p.replace);
+                    this.jsonPatch(p.file, p.path, p.replace);
+                }
             }
             //all done, delete the patch folder
             if (Directory.Exists(tanksLocation + "\\_patch"))
@@ -852,7 +859,7 @@ namespace RelicModManager
             Application.DoEvents();
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             this.appendToLog("|RelHax ModManager " + managerVersion);
-            this.appendToLog("|Built on 02/27/2017, running at " + DateTime.Now);
+            this.appendToLog("|Built on 02/28/2017, running at " + DateTime.Now);
             this.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1117,8 +1124,22 @@ namespace RelicModManager
         //fileLocation is relative to res_mods folder
         private void xmlPatch(string filePath, string xpath, string mode, string search, string replace)
         {
+            if (Regex.IsMatch(filePath, "^\\\\\\\\res_mods"))
+            {
+                //new style patch, res_mods folder
+                filePath = tanksLocation + filePath;
+            }
+            else if (Regex.IsMatch(filePath, "^\\\\\\\\mods"))
+            {
+                //new style patch, mods folder
+                filePath = tanksLocation + filePath;
+            }
+            else
+            {
+                //old style patch
+                filePath = tanksLocation + "\\res_mods" + filePath;
+            }
             //patch versiondir out of filePath
-            filePath = tanksLocation + "\\res_mods" + filePath;
             filePath = Regex.Replace(filePath, "versiondir", tanksVersion);
             //verify the file exists...
             if (!File.Exists(filePath))
@@ -1265,8 +1286,22 @@ namespace RelicModManager
         //fileLocation is relative to res_mods folder
         private void RegxPatch(string fileLocation, string search, string replace, int lineNumber = 0)
         {
+            if (Regex.IsMatch(fileLocation, "^\\\\\\\\res_mods"))
+            {
+                //new style patch, res_mods folder
+                fileLocation = tanksLocation + fileLocation;
+            }
+            else if (Regex.IsMatch(fileLocation, "^\\\\\\\\mods"))
+            {
+                //new style patch, mods folder
+                fileLocation = tanksLocation + fileLocation;
+            }
+            else
+            {
+                //old style patch
+                fileLocation = tanksLocation + "\\res_mods" + fileLocation;
+            }
             //patch versiondir out of fileLocation
-            fileLocation = tanksLocation + "\\res_mods" + fileLocation;
             fileLocation = Regex.Replace(fileLocation, "versiondir", tanksVersion);
 
             //check that the file exists
@@ -1317,6 +1352,45 @@ namespace RelicModManager
             //save the file back into the string and then the file
             file = sb.ToString();
             File.WriteAllText(fileLocation, file);
+        }
+        //method to parse json files
+        public void jsonPatch(string jsonFile, string jsonPath, string newValue)
+        {
+            //check if it's the new structure
+            if (Regex.IsMatch(jsonFile, "^\\\\\\\\res_mods"))
+            {
+                //new style patch, res_mods folder
+                jsonFile = tanksLocation + jsonFile;
+            }
+            else if (Regex.IsMatch(jsonFile, "^\\\\\\\\mods"))
+            {
+                //new style patch, mods folder
+                jsonFile = tanksLocation + jsonFile;
+            }
+            else
+            {
+                //old style patch
+                jsonFile = tanksLocation + "\\res_mods" + jsonFile;
+            }
+
+            //patch versiondir out of fileLocation
+            jsonFile = Regex.Replace(jsonFile, "versiondir", tanksVersion);
+
+            //check that the file exists
+            if (!File.Exists(jsonFile))
+                return;
+
+            //load file from disk...
+            string file = File.ReadAllText(jsonFile);
+            JToken root = JToken.Parse(file);
+            foreach (var value in root.SelectTokens(jsonPath).ToList())
+            {
+                if (value == root)
+                    root = JToken.FromObject(newValue);
+                else
+                    value.Replace(JToken.FromObject(newValue));
+            }
+            File.WriteAllText(jsonFile, root.ToString());
         }
         //parses a patch xml file into an xml patch instance in memory to be enqueued
         private void createPatchList(string xmlFile)
@@ -2070,7 +2144,7 @@ namespace RelicModManager
             Settings.backupModFolder = backupModsCheckBox.Checked;
         }
         //extracts embeded rescource onto disk
-        private void extractEmbeddedResource(string outputDir, string resourceLocation, List<string> files)
+        public void extractEmbeddedResource(string outputDir, string resourceLocation, List<string> files)
         {
             foreach (string file in files)
             {
