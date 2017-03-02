@@ -1,6 +1,6 @@
-(critical) fix regex patches that should be json
+(normal) add json patcher add mode
 
-(critical) fix all patches to be from World_of_Tanks directory
+(normal) test if json patcher will load individual files (test, nbd if no)
 
 (normal) add mods to the modpack. Kind of a big deal.
 - start pmod stuff
