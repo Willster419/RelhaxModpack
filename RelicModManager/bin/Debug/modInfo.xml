@@ -242,14 +242,321 @@
         <updateComment></updateComment>
         <devURL></devURL>
       </mod>
+      <mod>
+        <name>Battle Interface modifications-xvm</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Battle Results modifications-xvm</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Tank Carousel modifications-xvm</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Statistics color step modifications-xvm</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Garage inerface modifications-xvm</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Marker modifications-xvm</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Minimap modifications-xvm</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Players Panel modifications-xvm</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Statistics form (press tab in battle) modifications-xvm</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
     </mods>
   </catagory>
   <catagory>
-    <name>PMOD-based mods</name>
+    <name>PMOD Config Builder</name>
     <selectionType>single</selectionType>
+    <dependencies>
+      <dependency>
+        <dependencyZipFile>Dependency_PMOD_24-4.zip</dependencyZipFile>
+        <dependencyZipCRC>f</dependencyZipCRC>
+        <dependencyenabled>true</dependencyenabled>
+      </dependency>
+    </dependencies>
     <mods>
       <mod>
-        <name>Detailed Session Statistics by WorstUnicumEU</name>
+        <name>Chat modifications-pmod</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Battle Interface modifications-pmod</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Camera modifications-pmod</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Zoom modifications-pmod</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Hangar modifications-pmod</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Garage Interface modifications-pmod</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Crosshair modifications-pmod</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Penetration ( ͡° ͜ʖ ͡°) Indicator modifications-pmod</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Session Stats modifications (over-rides garaga stats tab)-pmod</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Messaging System modifications-pmod</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Free Camera modifications-pmod</name>
+        <version></version>
+        <modzipfile></modzipfile>
+        <modzipcrc></modzipcrc>
+        <enabled>false</enabled>
+        <pictures>
+          <picture>
+            <URL></URL>
+          </picture>
+        </pictures>
+        <description></description>
+        <updateComment></updateComment>
+        <devURL></devURL>
+      </mod>
+      <mod>
+        <name>Detailed Session Statistics by WorstUnicumEU-pmod</name>
         <version></version>
         <modzipfile></modzipfile>
         <modzipcrc></modzipcrc>
@@ -1654,7 +1961,7 @@
           <config>
             <name>1 Sec no corpse Shot</name>
             <configzipfile>Ingame_Info_SafeShot_1sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
-            <configzipcrc>8be1657dc6620c40fa64f0324bc944ed</configzipcrc>
+            <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
             <pictures>
@@ -1666,7 +1973,7 @@
           <config>
             <name>2 sec no corpse shot</name>
             <configzipfile>Ingame_Info_SafeShot_2sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
-            <configzipcrc>9ac419493b94d3bb082d531416e76ac2</configzipcrc>
+            <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
             <pictures>
@@ -1678,7 +1985,7 @@
           <config>
             <name>5 sec no corpse shot</name>
             <configzipfile>Ingame_Info_SafeShot_5sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
-            <configzipcrc>fa263913e800b04720850b415a6536aa</configzipcrc>
+            <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
             <pictures>
@@ -1690,7 +1997,7 @@
           <config>
             <name>block team damage shot</name>
             <configzipfile>Ingame_Info_SafeShot_no_Team_friendly_fire_patch_0.9.15.1.zip</configzipfile>
-            <configzipcrc>04a976d3540aac937545bcd574401dc1</configzipcrc>
+            <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>multi</configtype>
             <pictures>
@@ -1702,7 +2009,7 @@
           <config>
             <name>block wasted shots (shots fired into the air, ground, etc.)</name>
             <configzipfile>Ingame_Info_SafeShot_no_waste_shot_patch_0.9.15.1.zip</configzipfile>
-            <configzipcrc>04a976d3540aac937545bcd574401dc1</configzipcrc>
+            <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>multi</configtype>
             <pictures>
@@ -1714,7 +2021,7 @@
           <config>
             <name>block teamkiller damage shot</name>
             <configzipfile>Ingame_Info_SafeShot_no_fire_at_Teamkiller_patch_0.9.15.1.zip</configzipfile>
-            <configzipcrc>c34cf9c622d9e16789ec2c1b2ef08e23</configzipcrc>
+            <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>multi</configtype>
             <pictures>
@@ -1726,7 +2033,7 @@
           <config>
             <name>send team damage message in chat</name>
             <configzipfile>Ingame_Info_SafeShot_send_Msg_to_Team_patch_0.9.15.1.zip</configzipfile>
-            <configzipcrc>8e2f0bc6545e0ab0f50ebf4cb6d0345e</configzipcrc>
+            <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>multi</configtype>
             <pictures>
@@ -1791,14 +2098,14 @@
           <config>
             <name>F</name>
             <configzipfile>Ingame_Info_BalCalcMod_Config_F_0.9.17.1_2017-01-05.zip</configzipfile>
-            <configzipcrc>fbfb2b218d316fd0d8458b2a7181346f</configzipcrc>
+            <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
           </config>
           <config>
             <name>Q</name>
             <configzipfile>Ingame_Info_BalCalcMod_Config_Q_0.9.17.1_2017-01-05.zip</configzipfile>
-            <configzipcrc>f6c434d44c103d5350cb1cba9cbfb912</configzipcrc>
+            <configzipcrc>f</configzipcrc>
             <configenabled>true</configenabled>
             <configtype>single</configtype>
           </config>
