@@ -20,6 +20,8 @@ namespace RelicModManager
         public string description { get; set; }
         public string devURL { get; set; }
         public List<Picture> picList = new List<Picture>();
+        //size of the mod zip file
+        public float size { get; set; }
         //default constructor
         public Mod()
         {

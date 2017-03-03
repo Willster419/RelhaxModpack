@@ -1,3 +1,6 @@
+(normal) add download file size and time to download to database
+- make a database loading application to parse CRC's and file sizes
+
 (normal) add json patcher add mode
 
 (normal) test if json patcher will load individual files (test, nbd if no)

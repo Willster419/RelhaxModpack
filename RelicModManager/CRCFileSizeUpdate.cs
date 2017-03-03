@@ -6,28 +6,16 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.Security.Cryptography;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace RelicModManager
 {
-    public partial class CRCCheck : Form
+    public partial class CRCFileSizeUpdate : Form
     {
-        public CRCCheck()
+        public CRCFileSizeUpdate()
         {
             InitializeComponent();
-        }
-        //handler to get the crc of the file
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //unable to find it in the registry, so ask for it
-            if (openFileDialog1.ShowDialog().Equals(DialogResult.Cancel))
-            {
-                return;
-            }
-            MD5 hash = MD5.Create();
-            string crc = this.GetMd5Hash(hash, openFileDialog1.FileName);
-            crcTB.Text = crc;
         }
         //returns the md5 hash of the file based on the input file string location
         private string GetMd5Hash(MD5 md5Hash, string inputFile)
@@ -47,6 +35,29 @@ namespace RelicModManager
             }
             // Return the hexadecimal string.
             return sBuilder.ToString();
+        }
+
+        private void loadDatabaseButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void loadZipFilesButton_Click(object sender, EventArgs e)
+        {
+            //check for database
+            //show file dialog
+            //load database
+            //foreach zip file name
+                //link the mod
+                //get the crc value
+                //get the file size
+            //save config file
+        }
+
+        private void CRCFileSizeUpdate_Load(object sender, EventArgs e)
+        {
+            addZipsDialog.InitialDirectory = Application.StartupPath;
+
         }
     }
 }

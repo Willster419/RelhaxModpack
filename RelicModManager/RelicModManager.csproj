@@ -86,6 +86,12 @@
     <Compile Include="CRCCHECK2.Designer.cs">
       <DependentUpon>CRCCHECK2.cs</DependentUpon>
     </Compile>
+    <Compile Include="CRCFileSizeUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CRCFileSizeUpdate.Designer.cs">
+      <DependentUpon>CRCFileSizeUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dependency.cs" />
     <Compile Include="FirstLoadHelper.cs">
       <SubType>Form</SubType>
@@ -151,6 +157,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CRCCHECK2.resx">
       <DependentUpon>CRCCHECK2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CRCFileSizeUpdate.resx">
+      <DependentUpon>CRCFileSizeUpdate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FirstLoadHelper.resx">
       <DependentUpon>FirstLoadHelper.cs</DependentUpon>

@@ -23,6 +23,7 @@ namespace RelicModManager
         public List<Dependency> globalDependencies;
         private bool loadingConfig = false;
         private EventHandler handler = null;
+        private string downloadURL = "http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/";
 
         public ModSelectionList()
         {
@@ -124,6 +125,8 @@ namespace RelicModManager
                         int i = 1;
                         foreach (Mod m in c.mods)
                         {
+                            pw.loadingDescLabel.Text = "Loading " + m.name;
+                            Application.DoEvents();
                             this.addMod(m, t, i++);
                         }
                         break;
@@ -301,6 +304,10 @@ namespace RelicModManager
             string modDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.modZipFile;
             if (File.Exists(modDownloadPath))
             {
+                //get the file size as well
+                //float downloadSizeMB = this.netFileSize(downloadURL + m.modZipFile);
+                //downloadSizeMB = (float)Math.Round(downloadSizeMB, 1);
+                //modCheckBox.Text = modCheckBox.Text + " (" + downloadSizeMB + " MB, ~" + (downloadSizeMB * 2) + " sec)"; 
                 MD5 hash = MD5.Create();
                 string oldCRC = this.GetMd5Hash(hash, modDownloadPath);
                 if (!oldCRC.Equals(m.crc))
@@ -310,6 +317,10 @@ namespace RelicModManager
             }
             else if (!(File.Exists(modDownloadPath)) && (m.crc != null) && (!m.crc.Equals("")))
             {
+                //get the file size as well
+                //float downloadSizeMB = this.netFileSize(downloadURL + m.modZipFile);
+                //downloadSizeMB = (float)Math.Round(downloadSizeMB, 1);
+                //modCheckBox.Text = modCheckBox.Text + " (" + downloadSizeMB + " MB, ~" + (downloadSizeMB * 2) + " sec)";
                 modCheckBox.Text = modCheckBox.Text + "(Updated)";
             }
             modCheckBox.UseVisualStyleBackColor = true;
@@ -674,7 +685,8 @@ namespace RelicModManager
                 }
                 else
                 {
-                    doc.Load("https://dl.dropboxusercontent.com/u/44191620/RelicMod/mods/modInfo.xml");
+                    
+                    doc.Load("http://willster419.atwebpages.com/Applications/RelHaxModPack/modInfo.xml");
                 }
             }
             catch (XmlException)
@@ -1288,6 +1300,23 @@ namespace RelicModManager
             //save the size of this window for later.
             Settings.modSelectionHeight = this.Size.Height;
             Settings.modSelectionWidth = this.Size.Width;
+        }
+        //gets the file size of a download
+        private float netFileSize(string address)
+        {
+            System.Net.WebRequest req = System.Net.HttpWebRequest.Create(address);
+            req.Method = "HEAD";
+            using (System.Net.WebResponse resp = req.GetResponse())
+            {
+                int ContentLength;
+                if (int.TryParse(resp.Headers.Get("Content-Length"), out ContentLength))
+                {
+                    float result = (float)ContentLength;
+                    result = result / (1024 * 1024);//mbytes
+                    return result;
+                }
+            }
+            return -1;
         }
     }
 }

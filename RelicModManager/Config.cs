@@ -17,6 +17,8 @@ namespace RelicModManager
         //can the user select multiple configs or one only?
         public string type { get; set; }
         public List<string> pictureList = new List<string>();
+        //size of the config zip file
+        public float size { get; set; }
         //basic config constructor
         public Config()
         {

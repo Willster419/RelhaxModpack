@@ -51,7 +51,7 @@ namespace RelicModManager
         ZipFile zip;
         //timer to measure download speed
         Stopwatch sw = new Stopwatch();
-        private string downloadURL = "https://dl.dropboxusercontent.com/u/44191620/RelicMod/mods/";
+        private string downloadURL = "http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/";
         private List<Catagory> parsedCatagoryLists;
         private List<Mod> modsToInstall;
         private List<Config> configsToInstall;
@@ -618,7 +618,7 @@ namespace RelicModManager
             updater.Proxy = null;
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
             if (File.Exists(versionSaveLocation)) File.Delete(versionSaveLocation);
-            string version = updater.DownloadString("https://dl.dropboxusercontent.com/u/44191620/RelicMod/manager version.txt");
+            string version = updater.DownloadString("http://willster419.atwebpages.com/Applications/RelHaxModPack/manager version.txt");
             versionSave = version;
             if (!version.Equals(managerVersion))
             {
@@ -637,7 +637,7 @@ namespace RelicModManager
                     updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(updater_DownloadProgressChanged);
                     updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
                     if (File.Exists(newExeName)) File.Delete(newExeName);
-                    updater.DownloadFileAsync(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/" + "RelicModManager.exe"), newExeName);
+                    updater.DownloadFileAsync(new Uri("http://willster419.atwebpages.com/Applications/RelHaxModPack/RelicModManager.exe"), newExeName);
                     this.appendToLog("New application download started");
                 }
                 else
