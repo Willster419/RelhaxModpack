@@ -242,7 +242,12 @@ namespace RelicModManager
 
                     case "single_dropdown":
                         //make a dropDown selection box
-                        if (configControlDD.Location.X == 0 && configControlDD.Location.Y == 0) configControlDD.Location = new System.Drawing.Point(configLabel.Location.X + configLabel.Size.Width + 6, yPosition - 10);
+                        if (configControlDD.Location.X == 0 && configControlDD.Location.Y == 0)
+                        {
+                            //this has been activated
+                            configControlDD.Location = new System.Drawing.Point(configLabel.Location.X + configLabel.Size.Width + 6, yPosition - 10);
+                            configPanel.Controls.Add(configControlDD);
+                        }
                         string configDownloadPath1 = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
                         if (File.Exists(configDownloadPath1))
                         {
@@ -317,8 +322,8 @@ namespace RelicModManager
                     configPanel.Controls.Add(dropDownSizeLabel);
                 }
             }
-            if (configControlDD.Items.Count > 0)
-                configPanel.Controls.Add(configControlDD);
+            //if (configControlDD.Items.Count > 0)
+                //configPanel.Controls.Add(configControlDD);
             //make the mod check box
             //TODO: single catagory selection needs to make this a radioButton
             CheckBox modCheckBox = new CheckBox();
@@ -401,6 +406,11 @@ namespace RelicModManager
             //event handler is #triggered
             modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
             modCheckBox.Checked = m.modChecked;
+            if (loadingConfig)
+            {
+                //trigger the handler
+                this.configControlDD_SelectedIndexChanged(configControlDD, null);
+            }
         }
         //hander for when any mouse button is clicked on a specific control
         void modCheckBox_MouseDown(object sender, MouseEventArgs e)
@@ -436,6 +446,8 @@ namespace RelicModManager
             string mod = cb.Name.Split('_')[1];
             Mod m = this.getCatagory(catagory).getMod(mod);
             string configName = (string)cb.SelectedItem;
+            if (configName == null)
+                return;
             string[] splitConfigName = configName.Split('_');
             configName = splitConfigName[0];
             string updateString = null;
@@ -459,6 +471,8 @@ namespace RelicModManager
             }
             //set the text of the selected label
             Panel configPanel = (Panel)cb.Parent;
+            if (configPanel == null)
+                return;
             foreach (Control c in configPanel.Controls)
             {
                 if (c is Label)

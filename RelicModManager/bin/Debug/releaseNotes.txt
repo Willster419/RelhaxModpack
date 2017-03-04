@@ -1,3 +1,6 @@
+Version 19.4.1:
+- Fixed bug with any drop down configs selection when loading a selection from file pref
+
 Version 19.4:
 - Updated UI show more information during database/UI loading
 - Added maintainence tool to quickly update the database's CRC and filesize values
