@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.loadDatabaseButton = new System.Windows.Forms.Button();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.databaseLocationTextBox = new System.Windows.Forms.RichTextBox();
             this.loadZipFilesButton = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
+            this.updatingLabel = new System.Windows.Forms.Label();
             this.addZipsDialog = new System.Windows.Forms.OpenFileDialog();
+            this.loadDatabaseDialog = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
             // loadDatabaseButton
@@ -46,28 +46,18 @@
             this.loadDatabaseButton.UseVisualStyleBackColor = true;
             this.loadDatabaseButton.Click += new System.EventHandler(this.loadDatabaseButton_Click);
             // 
-            // richTextBox1
+            // databaseLocationTextBox
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(12, 41);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.richTextBox1.Size = new System.Drawing.Size(185, 73);
-            this.richTextBox1.TabIndex = 1;
-            this.richTextBox1.Text = "-none-";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 117);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(92, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Database Loaded";
+            this.databaseLocationTextBox.Location = new System.Drawing.Point(12, 41);
+            this.databaseLocationTextBox.Name = "databaseLocationTextBox";
+            this.databaseLocationTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.databaseLocationTextBox.Size = new System.Drawing.Size(185, 73);
+            this.databaseLocationTextBox.TabIndex = 1;
+            this.databaseLocationTextBox.Text = "-none-";
             // 
             // loadZipFilesButton
             // 
-            this.loadZipFilesButton.Location = new System.Drawing.Point(36, 133);
+            this.loadZipFilesButton.Location = new System.Drawing.Point(38, 120);
             this.loadZipFilesButton.Name = "loadZipFilesButton";
             this.loadZipFilesButton.Size = new System.Drawing.Size(111, 23);
             this.loadZipFilesButton.TabIndex = 3;
@@ -75,33 +65,43 @@
             this.loadZipFilesButton.UseVisualStyleBackColor = true;
             this.loadZipFilesButton.Click += new System.EventHandler(this.loadZipFilesButton_Click);
             // 
-            // label2
+            // updatingLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 159);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Updating...";
+            this.updatingLabel.AutoSize = true;
+            this.updatingLabel.Location = new System.Drawing.Point(9, 146);
+            this.updatingLabel.Name = "updatingLabel";
+            this.updatingLabel.Size = new System.Drawing.Size(24, 13);
+            this.updatingLabel.TabIndex = 4;
+            this.updatingLabel.Text = "Idle";
             // 
             // addZipsDialog
             // 
             this.addZipsDialog.DefaultExt = "xml";
-            this.addZipsDialog.FileName = "openFileDialog1";
-            this.addZipsDialog.Filter = "*.xml|*.xml";
+            this.addZipsDialog.FileName = "file.zip";
+            this.addZipsDialog.Filter = "*.zip|*.zip";
             this.addZipsDialog.Multiselect = true;
+            this.addZipsDialog.RestoreDirectory = true;
             this.addZipsDialog.Title = "select zip files to update";
+            // 
+            // loadDatabaseDialog
+            // 
+            this.loadDatabaseDialog.DefaultExt = "xml";
+            this.loadDatabaseDialog.FileName = "*.xml";
+            this.loadDatabaseDialog.Filter = "*.xml|*.xml";
+            this.loadDatabaseDialog.RestoreDirectory = true;
+            this.loadDatabaseDialog.Title = "load database";
             // 
             // CRCFileSizeUpdate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(202, 193);
-            this.Controls.Add(this.label2);
+            this.ClientSize = new System.Drawing.Size(202, 171);
+            this.Controls.Add(this.updatingLabel);
             this.Controls.Add(this.loadZipFilesButton);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.databaseLocationTextBox);
             this.Controls.Add(this.loadDatabaseButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.MaximizeBox = false;
             this.Name = "CRCFileSizeUpdate";
             this.Text = "CRCFileSizeUpdate";
             this.Load += new System.EventHandler(this.CRCFileSizeUpdate_Load);
@@ -113,10 +113,10 @@
         #endregion
 
         private System.Windows.Forms.Button loadDatabaseButton;
-        private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.RichTextBox databaseLocationTextBox;
         private System.Windows.Forms.Button loadZipFilesButton;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label updatingLabel;
         private System.Windows.Forms.OpenFileDialog addZipsDialog;
+        private System.Windows.Forms.OpenFileDialog loadDatabaseDialog;
     }
 }

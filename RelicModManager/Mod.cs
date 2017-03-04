@@ -10,7 +10,7 @@ namespace RelicModManager
     {
         public string name { get; set; }
         //the developer's version of the mod
-        public float version { get; set; }
+        public string version { get; set; }
         public string modZipFile { get; set; }
         public string crc { get; set; }
         public bool enabled { get; set; }

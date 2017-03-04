@@ -22,8 +22,6 @@ namespace RelicModManager
         private PleaseWait pw;
         public List<Dependency> globalDependencies;
         private bool loadingConfig = false;
-        private EventHandler handler = null;
-        private string downloadURL = "http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/";
 
         public ModSelectionList()
         {
@@ -181,6 +179,8 @@ namespace RelicModManager
             configControlDD.Name = t.Name + "_" + m.name + "_DropDown";
             configControlDD.DropDownStyle = ComboBoxStyle.DropDownList;
             configControlDD.Items.Clear();
+            Label dropDownSizeLabel = new Label();
+            dropDownSizeLabel.Location = new Point(0, 0);
             for (int i = 0; i < m.configs.Count; i++)
             {
                 int yPosition = 15 * (i + 1);
@@ -222,12 +222,20 @@ namespace RelicModManager
                             {
                                 //the file exists, but it is out of date
                                 configControlRB.Text = configControlRB.Text + "(Updated)";
+                                if (m.configs[i].size > 0.0f)
+                                {
+                                    configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB, ~" + (m.configs[i].size * 2) + " sec)";
+                                }
                             }
                         }
                         else if (!(File.Exists(configDownloadPath)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
                         {
                             //file does not exist, but a crc does. File is not download.
                             configControlRB.Text = configControlRB.Text + "(Updated)";
+                            if (m.configs[i].size > 0.0f)
+                            {
+                                configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB, ~" + (m.configs[i].size * 2) + " sec)";
+                            }
                         }
                         configPanel.Controls.Add(configControlRB);
                         break;
@@ -280,14 +288,33 @@ namespace RelicModManager
                             if (!oldCRC.Equals(m.configs[i].crc))
                             {
                                 configControlCB.Text = configControlCB.Text + "(Updated)";
+                                if (m.configs[i].size > 0.0f)
+                                {
+                                    configControlCB.Text = configControlCB.Text + " (" + m.configs[i].size + " MB, ~" + (m.configs[i].size * 2) + " sec)";
+                                }
                             }
                         }
                         else if (!(File.Exists(configDownloadPath2)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
                         {
                             configControlCB.Text = configControlCB.Text + "(Updated)";
+                            if (m.configs[i].size > 0.0f)
+                            {
+                                configControlCB.Text = configControlCB.Text + " (" + m.configs[i].size + " MB, ~" + (m.configs[i].size * 2) + " sec)";
+                            }
                         }
                         configPanel.Controls.Add(configControlCB);
                         break;
+                }
+                if (m.configs[i].type.Equals("single_dropdown") && dropDownSizeLabel.Location.X == 0 && dropDownSizeLabel.Location.Y == 0)
+                {
+                    //add the label with text nothing selected
+                    dropDownSizeLabel.AutoSize = true;
+                    dropDownSizeLabel.Location = new Point(configControlDD.Location.X + configControlDD.Size.Width + 6, configControlDD.Location.Y + 3);
+                    dropDownSizeLabel.TabIndex = 0;
+                    dropDownSizeLabel.Text = "Nothing Selected";
+                    dropDownSizeLabel.Name = t.Name + "_" + m.name + "_size";
+                    dropDownSizeLabel.Enabled = true;
+                    configPanel.Controls.Add(dropDownSizeLabel);
                 }
             }
             if (configControlDD.Items.Count > 0)
@@ -307,13 +334,18 @@ namespace RelicModManager
                 //get the file size as well
                 //float downloadSizeMB = this.netFileSize(downloadURL + m.modZipFile);
                 //downloadSizeMB = (float)Math.Round(downloadSizeMB, 1);
-                //modCheckBox.Text = modCheckBox.Text + " (" + downloadSizeMB + " MB, ~" + (downloadSizeMB * 2) + " sec)"; 
+                
                 MD5 hash = MD5.Create();
                 string oldCRC = this.GetMd5Hash(hash, modDownloadPath);
                 if (!oldCRC.Equals(m.crc))
                 {
                     modCheckBox.Text = modCheckBox.Text + "(Updated)";
+                    if (m.size > 0.0f)
+                    {
+                        modCheckBox.Text = modCheckBox.Text + " (" + m.size + " MB, ~" + (m.size * 2) + " sec)";
+                    }
                 }
+                
             }
             else if (!(File.Exists(modDownloadPath)) && (m.crc != null) && (!m.crc.Equals("")))
             {
@@ -322,6 +354,10 @@ namespace RelicModManager
                 //downloadSizeMB = (float)Math.Round(downloadSizeMB, 1);
                 //modCheckBox.Text = modCheckBox.Text + " (" + downloadSizeMB + " MB, ~" + (downloadSizeMB * 2) + " sec)";
                 modCheckBox.Text = modCheckBox.Text + "(Updated)";
+                if (m.size > 0.0f)
+                {
+                    modCheckBox.Text = modCheckBox.Text + " (" + m.size + " MB, ~" + (m.size * 2) + " sec)";
+                }
             }
             modCheckBox.UseVisualStyleBackColor = true;
             modCheckBox.Enabled = m.enabled;
@@ -400,7 +436,12 @@ namespace RelicModManager
             string mod = cb.Name.Split('_')[1];
             Mod m = this.getCatagory(catagory).getMod(mod);
             string configName = (string)cb.SelectedItem;
-            configName = configName.Split('_')[0];
+            string[] splitConfigName = configName.Split('_');
+            configName = splitConfigName[0];
+            string updateString = null;
+            if (splitConfigName.Count() > 1)
+                updateString = splitConfigName[1];
+            Config save = null;
             foreach (Config c in m.configs)
             {
                 //verify it is on drodown type
@@ -412,6 +453,22 @@ namespace RelicModManager
                     if (configName.Equals(c.name))
                     {
                         c.configChecked = true;
+                        save = c;
+                    }
+                }
+            }
+            //set the text of the selected label
+            Panel configPanel = (Panel)cb.Parent;
+            foreach (Control c in configPanel.Controls)
+            {
+                if (c is Label)
+                {
+                    if (c.Name.Equals(catagory + "_" + mod + "_size"))
+                    {
+                        if (updateString != null)
+                            c.Text = save.size + " MB, ~" + (save.size * 2) + " sec)";
+                        else
+                            c.Text = "";
                     }
                 }
             }
@@ -753,13 +810,16 @@ namespace RelicModManager
                                             m.name = nn.InnerText;
                                             break;
                                         case "version":
+                                            m.version = nn.InnerText;
+                                            break;
+                                        case "size":
                                             try
                                             {
-                                                m.version = float.Parse(nn.InnerText);
+                                                m.size = float.Parse(nn.InnerText);
                                             }
                                             catch (FormatException)
                                             {
-                                                m.version = (float)0.0;
+                                                m.size = (float)0.0;
                                             }
                                             break;
                                         case "modzipfile":
@@ -833,6 +893,16 @@ namespace RelicModManager
                                                             catch (FormatException)
                                                             {
                                                                 c.enabled = false;
+                                                            }
+                                                            break;
+                                                        case "size":
+                                                            try
+                                                            {
+                                                                c.size = float.Parse(nnnn.InnerText);
+                                                            }
+                                                            catch (FormatException)
+                                                            {
+                                                                c.size = (float)0.0;
                                                             }
                                                             break;
                                                         case "configtype":

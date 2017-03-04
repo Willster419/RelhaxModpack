@@ -1,5 +1,7 @@
-Version 19.3:
-- Added Json config patching
-- Started converting all regex patches that should be json patches into json patches
-- Started converting all patches to use root folder of "World_of_Tanks" rather than "res_mods". Added support for all 3 scenarios
-- Added feature to extract and place the required application dll's into the applications running directory
+Version 19.4:
+- Updated UI show more information during database/UI loading
+- Added maintainence tool to quickly update the database's CRC and filesize values
+- Added downlaod file sizes and download time estimations
+- Changed hosting providers since dropbox will be removing public folders
+- Other code optimizations
+- Rebuild database

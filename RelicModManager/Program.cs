@@ -74,6 +74,11 @@ namespace RelicModManager
                     Application.Run(new PatchTester());
                     return;
                 }
+                else if (Regex.IsMatch(commandArgs[i], "databaseupdate"))
+                {
+                    Application.Run(new CRCFileSizeUpdate());
+                    return;
+                }
             }
             Application.Run(new MainWindow());
         }

@@ -45,7 +45,7 @@
             // loadingDescLabel
             // 
             this.loadingDescLabel.AutoSize = true;
-            this.loadingDescLabel.Location = new System.Drawing.Point(68, 65);
+            this.loadingDescLabel.Location = new System.Drawing.Point(21, 67);
             this.loadingDescLabel.Name = "loadingDescLabel";
             this.loadingDescLabel.Size = new System.Drawing.Size(35, 13);
             this.loadingDescLabel.TabIndex = 1;
