@@ -1,7 +1,7 @@
 # The Relhax Modpack
-The official dedicated modpack installer for the RELIC Gaming Community
+The official modpack installer for the RELIC Gaming Community
 ###Description and reason for development
-  This entire effort is dedicated to the OMC ModPack team (which includes me, :P). O7 to them, and grumpelumpf, the work done of the modpack over the years will not be forgotten.
+  This project is in dedication of the RELIC Gaming Community, as well as the OMC modpack dev team (which includes me, :P). A big thank you to them and their origional work, especially to grumpelumpf. The work done of the modpack over the years will not be forgotten.
   
   When I looked at the current modpack installers, they all look the same: in size, in UI, and were all made with the inno setup creator. Many describe these installers as "clunkey and slow". Trying to get that perfect mod setup can sometimes take hours. Have you ever had a "modpack setup night"?
   
