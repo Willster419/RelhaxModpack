@@ -51,7 +51,7 @@ https://github.com/Willster419/RelicModManager/blob/master/RelicModManager/bin/D
 ##Download
 You can download the modpack from this link:
 
-put link here (donate link)
+http://adf.ly/1l28oP (donate link)
 
 http://willster419.atwebpages.com/Applications/RelHaxModPack/RelicModManager.exe (direct link)
 
