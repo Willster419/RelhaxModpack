@@ -53,7 +53,7 @@ You can download the modpack from this link:
 
 put link here (donate link)
 
-https://dl.dropboxusercontent.com/u/44191620/RelicMod/RelicModManager.exe (direct link)
+http://willster419.atwebpages.com/Applications/RelHaxModPack/RelicModManager.exe (direct link)
 
 If you can spare a few dollars and like the Modpack, please consider donating:
 https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2
@@ -81,6 +81,9 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYN
   - "auto-install "(<--note the space, required!) is the command
   - "config_file.xml" is the filename of your saved config preference file you made from the mod selection window. The config MUST be in the folder "RelHaxUserConfigs" for this feature to work!
 
+####*Why is the downloading so slow? I know I have a fast connection!*
+  This is because I had to purchase a private file hosting server for the modpack. It's a low end service, and has a speed limitation of about .5 MB/s. There's not much I can do about it, because it is a cheap server and I didn't want to invest a large amount of money into a free/donate supported project. Thank you for understanding this.
+  
 ####(1)Performance measurements:
 
 #####Time from program execution to mod selection on a hard drive:
