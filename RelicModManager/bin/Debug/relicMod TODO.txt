@@ -1,10 +1,4 @@
-(normal) add json patcher add mode
-
-(normal) test if json patcher will load individual files (test, nbd if no)
-
-(normal) add mods to the modpack. Kind of a big deal.
-- start pmod stuff
-- start xvm config cancer (both should be easier with json patcher)
+(normal) add json patcher add mode?
 
 (enhancement) change downloader api?
 

@@ -118,43 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ammoRack" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\audio\ammoRack.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ammoRackCensored" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\audio\ammoRackCensored.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="battleCountdown1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\audio\battleCountdown1.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="battleCountdown2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\audio\battleCountdown2.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="battleStart" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\audio\battleStart.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="enemySighted1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\audio\enemySighted1.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="loading" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\loading.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="loading_3rdguards" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\loading_3rdguards.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="pen" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\audio\pen.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="playerDied" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\audio\playerDied.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="spotted1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\audio\spotted1.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="spotted2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\audio\spotted2.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="spotted3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\audio\spotted3.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

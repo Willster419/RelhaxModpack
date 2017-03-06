@@ -1,3 +1,9 @@
+Version 20:
+- (OFFICIAL BETA RELEASE)
+- Fixed bugs with json patcher
+- Finished adding all origional requested mods to the modpack
+- Added a ETA estimator to the downloading of mods
+
 Version 19.4.1:
 - Fixed bug with any drop down configs selection when loading a selection from file pref
 

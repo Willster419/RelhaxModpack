@@ -313,17 +313,72 @@ namespace RelicModManager
         //method to parse json files
         public void jsonPatch(string jsonFile, string jsonPath, string newValue)
         {
+            //try to convert the new value to an int or double first
+            int newValueInt = -69420;
+            double newValueDouble = -69420.0d;
+            bool useInt = false;
+            bool useDouble = false;
+            try
+            {
+                newValueDouble = double.Parse(newValue);
+                useDouble = true;
+            }
+            catch (FormatException)
+            {
+
+            }
+            try
+            {
+                newValueInt = int.Parse(newValue);
+                useInt = true;
+                useDouble = false;
+            }
+            catch (FormatException)
+            {
+
+            }
             //check that the file exists
-            string fileLocationSave = Path.GetFileNameWithoutExtension(jsonFile) + "_patched" + Path.GetExtension(jsonFile);
+            string fileLocationSave = Path.GetDirectoryName(jsonFile) + "\\" + Path.GetFileNameWithoutExtension(jsonFile) + "_patched" + Path.GetExtension(jsonFile);
             //load file from disk...
             string file = File.ReadAllText(jsonFile);
+            //patch any single line comments out of it
+            StringBuilder backTogether = new StringBuilder();
+            string[] removeComments = file.Split('\n');
+            for (int i = 0; i < removeComments.Count(); i++)
+            {
+                string temp = removeComments[i];
+                if (Regex.IsMatch(temp, @"^ *//.*"))
+                    temp = Regex.Replace(temp, @"//.*", "");
+                backTogether.Append(temp + "\n");
+            }
+            file = backTogether.ToString();
+            //remove any stuff that would cause it to fail...
+            //like newlines
+            file = Regex.Replace(file, "\n", "");
+            file = Regex.Replace(file, "\r", "");
+            //like block comments
+            file = Regex.Replace(file, @"/\*.*\*/", "");
+            //file.Trim();
             JToken root = JToken.Parse(file);
             foreach (var value in root.SelectTokens(jsonPath).ToList())
                 {
                     if (value == root)
                         root = JToken.FromObject(newValue);
                     else
-                        value.Replace(JToken.FromObject(newValue));
+                    {
+                        if (useInt)
+                        {
+                            value.Replace(JToken.FromObject(newValueInt));
+                        }
+                        else if (useDouble)
+                        {
+                            value.Replace(JToken.FromObject(newValueDouble));
+                        }
+                        else
+                        {
+                            value.Replace(JToken.FromObject(newValue));
+                        }
+                    }
                 }
             if (File.Exists(fileLocationSave))
               File.Delete(fileLocationSave);

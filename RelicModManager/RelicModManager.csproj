@@ -146,6 +146,7 @@
       <DependentUpon>SelectFeatures.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
+    <Compile Include="StringSave.cs" />
     <Compile Include="VersionInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -238,39 +239,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\audio\ammoRack.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\audio\battleStart.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\audio\pen.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\audio\playerDied.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\audio\ammoRackCensored.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\audio\spotted2.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\audio\spotted3.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\audio\spotted1.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\audio\battleCountdown1.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\audio\battleCountdown2.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\audio\enemySighted1.wav" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="FontReg.exe" />
   </ItemGroup>
   <ItemGroup>
@@ -280,6 +248,7 @@
     <Content Include="relicbanner_for_ico.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Resources\audio\" />
     <Folder Include="Resources\pictures\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

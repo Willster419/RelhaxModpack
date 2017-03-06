@@ -256,7 +256,7 @@ namespace RelicModManager
                             if (!oldCRC.Equals(m.configs[i].crc))
                             {
                                 if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name + "_updated");
-                                if (m.configs[i].configChecked) configControlDD.SelectedIndex = i;
+                                if (m.configs[i].configChecked) configControlDD.SelectedItem = m.configs[i].name + "_updated";
                                 break;
                             }
                         }
@@ -264,11 +264,11 @@ namespace RelicModManager
                         {
                             //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
                             if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name + "_updated");
-                            if (m.configs[i].configChecked) configControlDD.SelectedIndex = i;
+                            if (m.configs[i].configChecked) configControlDD.SelectedItem = m.configs[i].name + "_updated";
                             break;
                         }
                         if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name);
-                        if (m.configs[i].configChecked) configControlDD.SelectedIndex = i;
+                        if (m.configs[i].configChecked) configControlDD.SelectedItem = m.configs[i].name;
                         break;
 
                     case "multi":
@@ -318,7 +318,7 @@ namespace RelicModManager
                     dropDownSizeLabel.TabIndex = 0;
                     dropDownSizeLabel.Text = "Nothing Selected";
                     dropDownSizeLabel.Name = t.Name + "_" + m.name + "_size";
-                    dropDownSizeLabel.Enabled = true;
+                    dropDownSizeLabel.Enabled = false;
                     configPanel.Controls.Add(dropDownSizeLabel);
                 }
             }
@@ -692,6 +692,13 @@ namespace RelicModManager
                     bool oneSelected = false;
                     foreach (Control c in innerPanel.Controls)
                     {
+                        if (c is Label)
+                        {
+                            if (c.Name.Equals(catagoryName + "_" + modName + "_size"))
+                            {
+                                c.Enabled = true;
+                            }
+                        }
                         if (c is RadioButton)
                         {
                             RadioButton b = (RadioButton)c;
@@ -737,7 +744,20 @@ namespace RelicModManager
                                 ComboBox cbox = (ComboBox)c;
                                 //only select if the index is on nothing
                                 if (cbox.SelectedIndex == -1)
-                                cbox.SelectedIndex = 0;
+                                    cbox.SelectedIndex = 0;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (Control c in innerPanel.Controls)
+                    {
+                        if (c is Label)
+                        {
+                            if (c.Name.Equals(catagoryName + "_" + modName + "_size"))
+                            {
+                                c.Enabled = false;
                             }
                         }
                     }

@@ -34,7 +34,7 @@ namespace RelicModManager
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 19.4.1";
+        private string managerVersion = "version 20";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         private SelectFeatures features = new SelectFeatures();
         //queue for downloading mods
@@ -101,6 +101,8 @@ namespace RelicModManager
         private string tanksVersion;//0.9.x.y
         BackgroundWorker deleteworker;
         BackgroundWorker copyworker;
+        List<double> timeRemainArray = new List<double>();
+        double actualTimeRemain = 0;
         
         //The constructur for the application
         public MainWindow()
@@ -240,6 +242,18 @@ namespace RelicModManager
             downloadProgress.Text = "Downloading " + currentModDownloading + " ("+ MBytesIn + " MB" + " of " + MBytesTotal + " MB)";
             childProgressBar.Value = e.ProgressPercentage;
             speedLabel.Text = string.Format("{0} MB/s", (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds).ToString("0.00"));
+            double totalTimeToDownload =  MBytesTotal / (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds);
+            double timeRemain = totalTimeToDownload - sw.Elapsed.TotalSeconds;
+            timeRemainArray.Add(timeRemain);
+            if (timeRemainArray.Count == 10)
+            {
+                double timeAverageRemain = 0;
+                foreach (double d in timeRemainArray)
+                    timeAverageRemain += d;
+                actualTimeRemain = timeAverageRemain / 10;
+                timeRemainArray.Clear();
+            }
+            speedLabel.Text = speedLabel.Text + " ETA: " + Math.Round(actualTimeRemain,0) + " sec";
             if (MBytesIn == 0 && MBytesTotal == 0)
             {
                 //this.downloadProgress.Text = "Complete!";
@@ -290,6 +304,8 @@ namespace RelicModManager
                     downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
                     downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
                     downloader.Proxy = null;
+                    timeRemainArray.Clear();
+                    actualTimeRemain = 0;
                     sw.Reset();
                     sw.Start();
                     downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
@@ -421,6 +437,7 @@ namespace RelicModManager
         private void patchFiles()
         {
             speedLabel.Text = "Patching...";
+            Application.DoEvents();
             this.appendToLog("Starting to patch Relhax Mod Pack");
             //don't do anything if the file does not exist
             if (!Directory.Exists(tanksLocation + "\\_patch"))
@@ -437,7 +454,8 @@ namespace RelicModManager
             //the actual patch method
             foreach (Patch p in patchList)
             {
-                downloadProgress.Text = p.file;
+                downloadProgress.Text = "patching " + p.file;
+                Application.DoEvents();
                 if (p.type.Equals("regx"))
                 {
                     string temp = null;
@@ -858,7 +876,7 @@ namespace RelicModManager
             Application.DoEvents();
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             this.appendToLog("|RelHax ModManager " + managerVersion);
-            this.appendToLog("|Built on 03/03/2017, running at " + DateTime.Now);
+            this.appendToLog("|Built on 03/05/2017, running at " + DateTime.Now);
             this.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1327,10 +1345,13 @@ namespace RelicModManager
             else if (lineNumber == -1)
             //search entire file and string and make one giant regex replacement
             {
+                //but remove newlines first
+                file = Regex.Replace(file, "\n", "newline");
                 if (Regex.IsMatch(file,search))
                 {
                     file = Regex.Replace(file,search,replace);
                 }
+                file = Regex.Replace(file, "newline", "\n");
                 sb.Append(file);
             }
             else
@@ -1355,6 +1376,43 @@ namespace RelicModManager
         //method to parse json files
         public void jsonPatch(string jsonFile, string jsonPath, string newValue)
         {
+            //try to convert the new value to an int or double first
+            bool newValueBool = false;
+            int newValueInt = -69420;
+            double newValueDouble = -69420.0d;
+            bool useBool = false;
+            bool useInt = false;
+            bool useDouble = false;
+            try
+            {
+                newValueBool = bool.Parse(newValue);
+                useBool = true;
+                useInt = false;
+                useDouble = false;
+            }
+            catch (FormatException)
+            {
+
+            }
+            try
+            {
+                newValueDouble = double.Parse(newValue);
+                useDouble = true;
+            }
+            catch (FormatException)
+            {
+
+            }
+            try
+            {
+                newValueInt = int.Parse(newValue);
+                useInt = true;
+                useDouble = false;
+            }
+            catch (FormatException)
+            {
+
+            }
             //check if it's the new structure
             if (Regex.IsMatch(jsonFile, "^\\\\\\\\res_mods"))
             {
@@ -1381,15 +1439,94 @@ namespace RelicModManager
 
             //load file from disk...
             string file = File.ReadAllText(jsonFile);
+            //save the "$" lines
+            List<StringSave> ssList = new List<StringSave>();
+            //patch any single line comments out of it
+            StringBuilder backTogether = new StringBuilder();
+            string[] removeComments = file.Split('\n');
+            for (int i = 0; i < removeComments.Count(); i++)
+            {
+                string temp = removeComments[i];
+                //replace tabs with spaces
+                temp = Regex.Replace(temp, "\t", " ");
+                //remove single comment lines
+                if (Regex.IsMatch(temp, @"^ *//.*"))
+                    temp = Regex.Replace(temp, @"//.*", "");
+                //remove comments after values
+                if (Regex.IsMatch(temp, @" +\/\/.*$"))
+                {
+                    temp = Regex.Replace(temp, @" *\/\/.*$","");
+                }
+                if (Regex.IsMatch(temp, @"\${"))
+                {
+                    bool hadComma = false;
+                    if (Regex.IsMatch(temp,","))
+                    {
+                        hadComma = true;
+                    }
+                    StringSave ss = new StringSave();
+                    ss.name = temp.Split('"')[1];
+                    ss.value = temp.Split('$')[1];
+                    ssList.Add(ss);
+                    temp = "\"" + ss.name + "\"" + ": -69420" ;
+                    if (hadComma)
+                        temp = temp + ",";
+                }
+                backTogether.Append(temp + "\n");
+            }
+            file = backTogether.ToString();
+            //remove any stuff that would cause it to fail...
+            //like newlines
+            file = Regex.Replace(file, "\n", "");
+            file = Regex.Replace(file, "\r", "");
+            //like block comments
+            file = Regex.Replace(file, @"/\*.*?\*/", "");
             JToken root = JToken.Parse(file);
             foreach (var value in root.SelectTokens(jsonPath).ToList())
             {
                 if (value == root)
                     root = JToken.FromObject(newValue);
                 else
-                    value.Replace(JToken.FromObject(newValue));
+                {
+                    if (useBool)
+                    {
+                        value.Replace(JToken.FromObject(newValueBool));
+                    }
+                    else if (useInt)
+                    {
+                        value.Replace(JToken.FromObject(newValueInt));
+                    }
+                    else if (useDouble)
+                    {
+                        value.Replace(JToken.FromObject(newValueDouble));
+                    }
+                    else
+                    {
+                        value.Replace(JToken.FromObject(newValue));
+                    }
+                }
             }
-            File.WriteAllText(jsonFile, root.ToString());
+            StringBuilder rebuilder = new StringBuilder();
+            string[] putBackDollas = root.ToString().Split('\n');
+            for (int i = 0; i < putBackDollas.Count(); i++)
+            {
+                string temp = putBackDollas[i];
+                if (Regex.IsMatch(temp,"-69420"))
+                {
+                    string name = temp.Split('"')[1];
+                    for (int j = 0; j < ssList.Count; j++)
+                    {
+                        if (name.Equals(ssList[j].name))
+                        {
+                            temp = "\"" + ssList[j].name + "\"" + ": $" + ssList[j].value;
+                            putBackDollas[i] = temp;
+                            ssList.RemoveAt(j);
+                        }
+                    }
+                }
+                rebuilder.Append(putBackDollas[i] + "\n");
+            }
+            File.WriteAllText(jsonFile, rebuilder.ToString());
         }
         //parses a patch xml file into an xml patch instance in memory to be enqueued
         private void createPatchList(string xmlFile)
@@ -1525,7 +1662,8 @@ namespace RelicModManager
             //add the global dependencies to the dependency list
             foreach (Dependency d in list.globalDependencies)
             {
-                dependencies.Add(d);
+                if (d.enabled)
+                    dependencies.Add(d);
             }
             //if mod is enabled and checked, add it to list of mods to extract/install
             //same for configs

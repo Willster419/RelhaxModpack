@@ -19,6 +19,7 @@ namespace RelicModManager
         private int censoredScroll;
         private int sixthSenseScroll;
         private int guiScroll;
+        private string soundURL = "http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/audio/";
 
         public SelectFeatures()
         {
@@ -52,14 +53,15 @@ namespace RelicModManager
 
         private void sampleIngameVoice_Click(object sender, EventArgs e)
         {
+            
             ingameScroll++;
-            if (ingameScroll == 1) thePlayah.Stream = RelicModManager.Properties.Resources.ammoRack;
-            if (ingameScroll == 2) thePlayah.Stream = RelicModManager.Properties.Resources.battleStart;
-            if (ingameScroll == 3) thePlayah.Stream = RelicModManager.Properties.Resources.pen;
+            if (ingameScroll == 1) thePlayah.SoundLocation = soundURL + "ammoRack.wav";
+            if (ingameScroll == 2) thePlayah.SoundLocation = soundURL + "battleStart.wav";
+            if (ingameScroll == 3) thePlayah.SoundLocation = soundURL + "pen.wav";
             if (ingameScroll == 4)
             {
                 ingameScroll = 0;
-                thePlayah.Stream = RelicModManager.Properties.Resources.playerDied;
+                thePlayah.SoundLocation = soundURL + "playerDied.wav";
             }
             thePlayah.Play();
         }
@@ -69,7 +71,7 @@ namespace RelicModManager
             censoredScroll++;
             if (censoredScroll == 1)
             {
-                thePlayah.Stream = RelicModManager.Properties.Resources.ammoRackCensored;
+                thePlayah.SoundLocation = soundURL + "ammoRackCensored.wav";
                 censoredScroll = 0;
             }
             thePlayah.Play();
@@ -78,11 +80,11 @@ namespace RelicModManager
         private void sampleGui_Click(object sender, EventArgs e)
         {
             guiScroll++;
-            if (guiScroll == 1) thePlayah.Stream = RelicModManager.Properties.Resources.battleCountdown1;
-            if (guiScroll == 2) thePlayah.Stream = RelicModManager.Properties.Resources.battleCountdown2;
+            if (guiScroll == 1) thePlayah.SoundLocation = soundURL + "battleCountdown1.wav";
+            if (guiScroll == 2) thePlayah.SoundLocation = soundURL + "battleCountdown2.wav";
             if (guiScroll == 3)
             {
-                thePlayah.Stream = RelicModManager.Properties.Resources.enemySighted1;
+                thePlayah.SoundLocation = soundURL + "enemySighted1.wav";
                 guiScroll = 0;
             }
             thePlayah.Play();
@@ -91,11 +93,11 @@ namespace RelicModManager
         private void sampleSixthSense_Click(object sender, EventArgs e)
         {
             sixthSenseScroll++;
-            if (sixthSenseScroll == 1) thePlayah.Stream = RelicModManager.Properties.Resources.spotted1;
-            if (sixthSenseScroll == 2) thePlayah.Stream = RelicModManager.Properties.Resources.spotted2;
+            if (sixthSenseScroll == 1) thePlayah.SoundLocation = soundURL + "spotted1.wav";
+            if (sixthSenseScroll == 2) thePlayah.SoundLocation = soundURL + "spotted2.wav";
             if (sixthSenseScroll == 3)
             {
-                thePlayah.Stream = RelicModManager.Properties.Resources.spotted3;
+                thePlayah.SoundLocation = soundURL + "spotted3.wav";
                 sixthSenseScroll = 0;
             }
             thePlayah.Play();

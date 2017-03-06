@@ -1,6 +1,11 @@
 <modInfoAlpha.xml>
   <globaldependencies>
     <globaldependency>
+      <dependencyZipFile>Dependency_global_basic_folders.zip</dependencyZipFile>
+      <dependencyZipCRC>8b54419cf2b008a93080bfa4aea0b9ac</dependencyZipCRC>
+      <dependencyenabled>True</dependencyenabled>
+    </globaldependency>
+    <globaldependency>
       <dependencyZipFile>Dependency_global_fonts.zip</dependencyZipFile>
       <dependencyZipCRC>5fc9851f518f769b9fe4385d99b33cbf</dependencyZipCRC>
       <dependencyenabled>True</dependencyenabled>
@@ -13,11 +18,6 @@
     <globaldependency>
       <dependencyZipFile>Dependency_global_text_locator.zip</dependencyZipFile>
       <dependencyZipCRC>53399117c9e9e82ee0943a73e2717e8e</dependencyZipCRC>
-      <dependencyenabled>True</dependencyenabled>
-    </globaldependency>
-    <globaldependency>
-      <dependencyZipFile>Dependency_global_basic_folders.zip</dependencyZipFile>
-      <dependencyZipCRC>8b54419cf2b008a93080bfa4aea0b9ac</dependencyZipCRC>
       <dependencyenabled>True</dependencyenabled>
     </globaldependency>
   </globaldependencies>
@@ -219,7 +219,7 @@
           <pictures />
           <configs>
             <config>
-              <name>Default</name>
+              <name>Top Clans only (default)</name>
               <configzipfile>
               </configzipfile>
               <configzipcrc>f</configzipcrc>
@@ -265,7 +265,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Battle Interface modifications-xvm</name>
+          <name>Battle Interface modifications - 6th sense (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -273,9 +273,37 @@
           <modzipcrc>
           </modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <pictures />
-          <configs />
+          <configs>
+            <config>
+              <name>2 sec 6th sense icon</name>
+              <configzipfile>XVM_config_builder_sixth_sense_duration_2_sec_patch.zip</configzipfile>
+              <configzipcrc>cdae2fae5a9eccb00b0d27dea771a2d5</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>5 sec 6th sense icon</name>
+              <configzipfile>XVM_config_builder_sixth_sense_duration_5_sec_patch.zip</configzipfile>
+              <configzipcrc>993fe8656171479344a9366e57fae380</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>10 sec 6th sense icon</name>
+              <configzipfile>XVM_config_builder_sixth_sense_duration_10_sec_patch.zip</configzipfile>
+              <configzipcrc>28d6126abd6e8b884ec99d4dfb4a0132</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
           <description>
           </description>
           <updateComment>
@@ -284,7 +312,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Battle Results modifications-xvm</name>
+          <name>Battle Interface modifications - Hitlog (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -292,9 +320,435 @@
           <modzipcrc>
           </modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <pictures />
-          <configs />
+          <configs>
+            <config>
+              <name>Enable</name>
+              <configzipfile>XVM_config_builder_hitlog_enable.zip</configzipfile>
+              <configzipcrc>53b1fa7210866b98cb6f8878a2dfa813</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disable</name>
+              <configzipfile>XVM_config_builder_hitlog_disable.zip</configzipfile>
+              <configzipcrc>49e48a27287df395bbb450a91788739e</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Battle Interface modifications - total HP (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enable total HP</name>
+              <configzipfile>XVM_config_builder_total_hp_enable.zip</configzipfile>
+              <configzipcrc>870b2528e8dd2cff9340bd4a451d3ed7</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disable total HP</name>
+              <configzipfile>XVM_config_builder_total_hp_disable.zip</configzipfile>
+              <configzipcrc>94449733560ca722077b295f8a033818</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Battle Interface modifications - avgerage damage (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enable</name>
+              <configzipfile>XVM_config_builder_avgerage_damage_enable.zip</configzipfile>
+              <configzipcrc>24f17bc2a29514fc8a2ef522fd4b19cf</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disable</name>
+              <configzipfile>XVM_config_builder_avgerage_damage_disable.zip</configzipfile>
+              <configzipcrc>ced2987875b6cdd626688bc93a24cc8e</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Battle Interface modifications - high caliber tracker (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enable</name>
+              <configzipfile>XVM_config_builder_high_caliber_enable.zip</configzipfile>
+              <configzipcrc>b4ce301f0758a4c351ce23a882bd5c1b</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disable</name>
+              <configzipfile>XVM_config_builder_high_caliber_disable.zip</configzipfile>
+              <configzipcrc>f0b1aaf5e97a3cca1df86531017a6e8d</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Battle Interface modifications - win chance (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enable</name>
+              <configzipfile>XVM_config_builder_win_chance_enable.zip</configzipfile>
+              <configzipcrc>df8c705c6c24dc601bfab7517cb7b8bd</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disable</name>
+              <configzipfile>XVM_config_builder_win_chance_disable.zip</configzipfile>
+              <configzipcrc>a16a74494098f781a684e61749f8cb64</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Battle Interface modifications - damage log (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enable</name>
+              <configzipfile>XVM_config_builder_damage_log_enable.zip</configzipfile>
+              <configzipcrc>6d3fd2b0238cc0dc5ad59a95da52715b</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disable</name>
+              <configzipfile>XVM_config_builder_damage_log_disable.zip</configzipfile>
+              <configzipcrc>98e962776b8c4baea52579c3d2b6f251</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Battle Interface modifications - last hit announcer (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enable</name>
+              <configzipfile>XVM_config_builder_last_hit_enable.zip</configzipfile>
+              <configzipcrc>85ba4027fdc45174d601f61aa143c995</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disable</name>
+              <configzipfile>XVM_config_builder_last_hit_disable.zip</configzipfile>
+              <configzipcrc>cdb7cb7a1f89ddc61a5ff968182aa202</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Battle Interface modifications - vechile on file announcer (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enable</name>
+              <configzipfile>XVM_config_builder_vehicle_fire_enable.zip</configzipfile>
+              <configzipcrc>de3740a3754344fb63c08485cb96650c</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disable</name>
+              <configzipfile>XVM_config_builder_vehicle_fire_disable.zip</configzipfile>
+              <configzipcrc>777fe98307cf4067b649aa56f98e0853</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Battle Interface modifications - total efficiency (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enable</name>
+              <configzipfile>XVM_config_builder_total_eff_enable.zip</configzipfile>
+              <configzipcrc>93046efe67bd3a8b5808143bc470483c</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disable</name>
+              <configzipfile>XVM_config_builder_total_eff_disable.zip</configzipfile>
+              <configzipcrc>2f1dfba55e06b816550864dcfa935207</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Battle Interface modifications - damage panel repair timers (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enable</name>
+              <configzipfile>XVM_config_builder_repair_timers_enable.zip</configzipfile>
+              <configzipcrc>026d968625e1d7f9c58f247e38805097</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disable</name>
+              <configzipfile>XVM_config_builder_repair_timers_disable.zip</configzipfile>
+              <configzipcrc>bb9697e89d303f6d3706d66983a62613</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Battle Results modifications (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Show Battle Tier</name>
+              <configzipfile>XVM_config_builder_battle_results_show_tier_enable.zip</configzipfile>
+              <configzipcrc>cbf8fd8b1b9b77b085a1b930278631a3</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Hide Battle Tier</name>
+              <configzipfile>XVM_config_builder_battle_results_show_tier_disable.zip</configzipfile>
+              <configzipcrc>0e057d64573025b86a81036c933782fd</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Init Battle Results page 1</name>
+              <configzipfile>XVM_config_builder_battle_results_start_page_1.zip</configzipfile>
+              <configzipcrc>3fd591c6db742a1e3ec303b399d15cc8</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Init Battle Results page 2</name>
+              <configzipfile>XVM_config_builder_battle_results_start_page_2.zip</configzipfile>
+              <configzipcrc>03d5f168a93a2d45567797a64ea36aea</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Init Battle Results page 3</name>
+              <configzipfile>XVM_config_builder_battle_results_start_page_3.zip</configzipfile>
+              <configzipcrc>3b4ab82c72a9c45abd02cfa73b789a06</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
           <description>
           </description>
           <updateComment>
@@ -311,9 +765,64 @@
           <modzipcrc>
           </modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <pictures />
-          <configs />
+          <configs>
+            <config>
+              <name>Rows - 3</name>
+              <configzipfile>XVM_config_builder_carousel_3_row.zip</configzipfile>
+              <configzipcrc>aba96db1c57cc438dd3d48a4b317d46e</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Rows - 2</name>
+              <configzipfile>XVM_config_builder_carousel_2_row.zip</configzipfile>
+              <configzipcrc>0f0c7aec3a5d3baec6e16e900bc2b45a</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Rows - 1</name>
+              <configzipfile>XVM_config_builder_carousel_1_row.zip</configzipfile>
+              <configzipcrc>c4edb9a3467107bb34c9894c54ab45c1</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Rows - Use client setting</name>
+              <configzipfile>XVM_config_builder_carousel_0_row.zip</configzipfile>
+              <configzipcrc>28819f047cd48e526211f0b4f6b0bd5d</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_carousel_enable.zip</configzipfile>
+              <configzipcrc>9786aab2cd314147e6a051ec332a7763</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_carousel_disable.zip</configzipfile>
+              <configzipcrc>19429e58d039be7cdee08aadf19a7673</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
           <description>
           </description>
           <updateComment>
@@ -322,7 +831,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Statistics color step modifications-xvm</name>
+          <name>Tank Carousel Cell modifications (enable above setting first) (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -332,7 +841,58 @@
           <size>0</size>
           <enabled>False</enabled>
           <pictures />
-          <configs />
+          <configs>
+            <config>
+              <name>Show Nation flag</name>
+              <configzipfile>
+              </configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Show tank icon</name>
+              <configzipfile>
+              </configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Show tank name</name>
+              <configzipfile>
+              </configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Show tank stats</name>
+              <configzipfile>
+              </configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Show tank win rate</name>
+              <configzipfile>
+              </configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+            </config>
+          </configs>
           <description>
           </description>
           <updateComment>
@@ -341,7 +901,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Garage inerface modifications-xvm</name>
+          <name>Statistics color step modifications (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -349,9 +909,38 @@
           <modzipcrc>
           </modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <pictures />
-          <configs />
+          <configs>
+            <config>
+              <name>default config's colorscale</name>
+              <configzipfile>
+              </configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>6 step xvm colorscale</name>
+              <configzipfile>XVM_config_builder_color_scale_6_step_xvm.zip</configzipfile>
+              <configzipcrc>72cd3bf82adfe9f489891278e251fbef</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>10 step wotlabs</name>
+              <configzipfile>XVM_config_builder_color_scale_10_step_wotlabs.zip</configzipfile>
+              <configzipcrc>2506639bc0e2ed276e4410c93d9488bb</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
           <description>
           </description>
           <updateComment>
@@ -360,7 +949,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Marker modifications-xvm</name>
+          <name>Garage Interface Modifications - Clock (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -368,9 +957,28 @@
           <modzipcrc>
           </modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <pictures />
-          <configs />
+          <configs>
+            <config>
+              <name>Enable</name>
+              <configzipfile>XVM_config_builder_clock_enable.zip</configzipfile>
+              <configzipcrc>78dbc95e4e84757978d45587dbb511b7</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disable</name>
+              <configzipfile>XVM_config_builder_clock_disable.zip</configzipfile>
+              <configzipcrc>67490ec606ee00a9980cffbe9b1d0e4a</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
           <description>
           </description>
           <updateComment>
@@ -379,7 +987,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Minimap modifications-xvm</name>
+          <name>Garage interface modifications - gold locker (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -387,9 +995,28 @@
           <modzipcrc>
           </modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <pictures />
-          <configs />
+          <configs>
+            <config>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_garage_gold_lock_enable.zip</configzipfile>
+              <configzipcrc>77662c062c46e6a4d85d5b1a0675f447</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_garage_gold_lock_disable.zip</configzipfile>
+              <configzipcrc>bca4c8ecf1dd4c2129ba28230e5a3e5a</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
           <description>
           </description>
           <updateComment>
@@ -398,7 +1025,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Players Panel modifications-xvm</name>
+          <name>Garage interface modifications - free xp locker (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -406,9 +1033,28 @@
           <modzipcrc>
           </modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <pictures />
-          <configs />
+          <configs>
+            <config>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_garage_free_xp_lock_enable.zip</configzipfile>
+              <configzipcrc>633fc4b7315216cae385c835ff8c2034</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_garage_free_xp_lock_disable.zip</configzipfile>
+              <configzipcrc>01620a6a1d4f2d1742c36764c81207c0</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
           <description>
           </description>
           <updateComment>
@@ -417,7 +1063,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Statistics form (press tab in battle) modifications-xvm</name>
+          <name>Garage interface modifications - default currency (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -425,9 +1071,587 @@
           <modzipcrc>
           </modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <pictures />
-          <configs />
+          <configs>
+            <config>
+              <name>Credits</name>
+              <configzipfile>XVM_config_builder_garage_default_currency_credits.zip</configzipfile>
+              <configzipcrc>a48d26ee23a57e693a9e7c3f733a8222</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Gold</name>
+              <configzipfile>XVM_config_builder_garage_default_currency_gold.zip</configzipfile>
+              <configzipcrc>8c154d16a1123f42a2beae24f9a71289</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Garage interface modifications - tech tree free xp convert option (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_garage_free_xp_module_enable.zip</configzipfile>
+              <configzipcrc>ddff79b95e26310ac5d2986670b36247</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_garage_free_xp_module_disable.zip</configzipfile>
+              <configzipcrc>6537e86b2ef88799933fa0439b812b97</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Garage interface modifications - Crew Auto return (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_garage_crew_auto_return_enable.zip</configzipfile>
+              <configzipcrc>fa87434f0e479b4d8feb2a774c93c9a9</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_garage_crew_auto_return_disable.zip</configzipfile>
+              <configzipcrc>6301a3da2c6bf05f87e3b5f2652a7340</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Garage interface modifications - removable equipment auto return (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_garage_removable_equipment_auto_return_enable.zip</configzipfile>
+              <configzipcrc>deb225edec0f5bde3fcaf72e56043650</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_garage_removable_equipment_auto_return_disable.zip</configzipfile>
+              <configzipcrc>7c6e5c8899b3d04d6879966815b01395</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Garage interface modifications - block vechile if ammo is lower than... (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>disabled</name>
+              <configzipfile>XVM_config_builder_garage_block_vehicle_ammo_disable.zip</configzipfile>
+              <configzipcrc>da5d68964c162d1ff023d28bba40f77c</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>20%</name>
+              <configzipfile>XVM_config_builder_garage_block_vehicle_ammo_20.zip</configzipfile>
+              <configzipcrc>adaadf17bba2dae3959b70b8e45a3642</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>50%</name>
+              <configzipfile>XVM_config_builder_garage_block_vehicle_ammo_50.zip</configzipfile>
+              <configzipcrc>9ccfeb428d6da6a05c0af8d4a2138841</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Garage interface modifications - server ping (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_garage_server_ping_enable.zip</configzipfile>
+              <configzipcrc>59eac4f8428e08706ae616fdbcb1c22e</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_garage_server_ping_disable.zip</configzipfile>
+              <configzipcrc>95184966061de2597df67553b239e5a8</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Garage interface modifications - additional server infromation (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_garage_server_info_enable.zip</configzipfile>
+              <configzipcrc>822e2fd16c19419149be1431376f589c</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_garage_server_info_disable.zip</configzipfile>
+              <configzipcrc>bfe2e16f193af907ec0f844ecbccd0c9</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Marker modifications (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_markers_enabled.zip</configzipfile>
+              <configzipcrc>ff50b6fb2146b569754702382f55c1dc</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_markers_disabled.zip</configzipfile>
+              <configzipcrc>67fb1f23cc5898e021dfaa6f47214c7e</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Login modifications - autologin(xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_login_auto_enable.zip</configzipfile>
+              <configzipcrc>f036c47aaf6f79cddb59136f06564839</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_login_auto_disable.zip</configzipfile>
+              <configzipcrc>cbdd1d2bdc7432826d3adb6423eae371</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Login modifications - hide old replay confirmation window(xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_login_hide_replay_confirm_window.zip</configzipfile>
+              <configzipcrc>f46a247539e5816c98e078bd79b181e3</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_login_show_replay_confirm_window.zip</configzipfile>
+              <configzipcrc>c788564605fde55eb221ffe479c038b5</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Login modifications - show server ping(xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_login_server_ping_enable.zip</configzipfile>
+              <configzipcrc>bca098b482aed140b29d32125fcb4feb</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_login_server_ping_disable.zip</configzipfile>
+              <configzipcrc>938c835a6d47a9b6b0a6efead8e59e65</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Login modifications - show servers information(xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_login_server_info_enable.zip</configzipfile>
+              <configzipcrc>25b3f5da3ee5b521e0842284513c265d</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_login_server_info_disabel.zip</configzipfile>
+              <configzipcrc>53ff4383bfb4fb4bf23fbff4172d54e3</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Minimap modifications (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_minimap_enable.zip</configzipfile>
+              <configzipcrc>7759e0513319a01200d5079ee62d4785</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_minimap_disable.zip</configzipfile>
+              <configzipcrc>c169b9f428ef4c14f3d6b12394fc99ab</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Minimap zoom - bottom right</name>
+              <configzipfile>XVM_config_builder_minimap_zoom_bottom_right.zip</configzipfile>
+              <configzipcrc>172991249d59533fb340677f966fbc4f</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Minimap zoom - centered</name>
+              <configzipfile>XVM_config_builder_minimap_zoom_center.zip</configzipfile>
+              <configzipcrc>b9cc2748dcc177cf5f4130fb7c3c61ee</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Minimap zoom hotkey (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Left CTRL</name>
+              <configzipfile>XVM_config_builder_minimap_zoom_left_ctrl.zip</configzipfile>
+              <configzipcrc>8740786c019a0943470c6fd8693385e0</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Left ALT</name>
+              <configzipfile>XVM_config_builder_minimap_zoom_left_alt.zip</configzipfile>
+              <configzipcrc>836508041790ba54d1d0e99980eb47ab</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Sound modifications (Custom sounds) (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_sounds_enabled.zip</configzipfile>
+              <configzipcrc>d246272c63f1cb3d773b9fef1cf5007b</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_sounds_disabled.zip</configzipfile>
+              <configzipcrc>292c233257c62f923fbaea79570b22fd</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
           <description>
           </description>
           <updateComment>
@@ -438,28 +1662,112 @@
       </mods>
     </catagory>
     <catagory>
-      <name>PMOD Config Builder</name>
-      <selectionType>single</selectionType>
+      <name>PMOD Config Builder/Addons</name>
+      <selectionType>multi</selectionType>
       <dependencies>
         <dependency>
           <dependencyZipFile>Dependency_PMOD_24-4.zip</dependencyZipFile>
-          <dependencyZipCRC>d819129a587b3b8576bcbd961ce1fb15</dependencyZipCRC>
+          <dependencyZipCRC>d89fc1e976cc5327927eb5e9eccf6c8f</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
       <mods>
         <mod>
-          <name>Chat modifications-pmod</name>
+          <name>Session statistics modifications (pmod)</name>
           <version>
           </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>False</enabled>
+          <modzipfile>pmod_session_stat_enable_patch.zip</modzipfile>
+          <modzipcrc>2e2bb02acc0cbfb586ef9e08334b1e9e</modzipcrc>
+          <size>0.1</size>
+          <enabled>True</enabled>
           <pictures />
-          <configs />
+          <configs>
+            <config>
+              <name>default</name>
+              <configzipfile>pmod_session_stat_default.zip</configzipfile>
+              <configzipcrc>3e698b775a0e3d292f486f8c4de37332</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Session Statistics by WorstUnicumEU</name>
+              <configzipfile>
+              </configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>False</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i.imgur.com/oEMO7BZ.png</URL>
+                </picture>
+                <picture>
+                  <URL>http://i.imgur.com/hhF6e0A.png</URL>
+                </picture>
+                <picture>
+                  <URL>http://i.imgur.com/qDxGpCX.png</URL>
+                </picture>
+                <picture>
+                  <URL>http://i.imgur.com/1zJTcVH.png</URL>
+                </picture>
+              </pictures>
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>WorstUnicumEU:@http://forum.worldoftanks.eu/index.php?/topic/591220-091701-detailed-session-statistics-by-worstunicumeu-v121/</updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Battle Interface modifications - Server Reticle (pmod)</name>
+          <version>
+          </version>
+          <modzipfile>pmod_server_reticle_enable_patch.zip</modzipfile>
+          <modzipcrc>a13a5f37cff8555b81d75be7ef6ad4af</modzipcrc>
+          <size>0.1</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>blue</name>
+              <configzipfile>pmod_server_reticle_blue_patch.zip</configzipfile>
+              <configzipcrc>efd4d1f4c56ca39a2e589c7b1498545a</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>green</name>
+              <configzipfile>pmod_server_reticle_green_patch.zip</configzipfile>
+              <configzipcrc>f56c23d4ad87129922c4fe271f980905</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>black and white</name>
+              <configzipfile>pmod_server_reticle_black_and_white_patch.zip</configzipfile>
+              <configzipcrc>a94f6798ac3a8c3e835ced7045b8c930</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>meltymaps mathmod</name>
+              <configzipfile>pmod_server_reticle_meltyMaps_patch.zip</configzipfile>
+              <configzipcrc>2b7801657c28d0d3df6661dc22427827</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
           <description>
           </description>
           <updateComment>
@@ -468,224 +1776,49 @@
           </devURL>
         </mod>
         <mod>
-          <name>Battle Interface modifications-pmod</name>
+          <name>Battle Interface modifications - Penetration ( ͡° ͜ʖ ͡°) Indicator (pmod)</name>
           <version>
           </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>False</enabled>
+          <modzipfile>pmod_reduced_armor_enable_patch.zip</modzipfile>
+          <modzipcrc>b773f24418213f969c34b9028d0730cc</modzipcrc>
+          <size>0.1</size>
+          <enabled>True</enabled>
           <pictures />
-          <configs />
+          <configs>
+            <config>
+              <name>font size small (18)</name>
+              <configzipfile>pmod_reduced_armor_font_small_patch.zip</configzipfile>
+              <configzipcrc>28f24b2b69b9bcfb4326b2957bb45255</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>font size medium (24)</name>
+              <configzipfile>pmod_reduced_armor_font_medium_patch.zip</configzipfile>
+              <configzipcrc>446b0839a1dc42c2f3d04110ee624933</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>font size large (30)</name>
+              <configzipfile>pmod_reduced_armor_font_large_patch.zip</configzipfile>
+              <configzipcrc>8351cd7822bd685ebe390dba9e33863b</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
           <description>
           </description>
           <updateComment>
           </updateComment>
           <devURL>
           </devURL>
-        </mod>
-        <mod>
-          <name>Camera modifications-pmod</name>
-          <version>
-          </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>False</enabled>
-          <pictures />
-          <configs />
-          <description>
-          </description>
-          <updateComment>
-          </updateComment>
-          <devURL>
-          </devURL>
-        </mod>
-        <mod>
-          <name>Zoom modifications-pmod</name>
-          <version>
-          </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>False</enabled>
-          <pictures />
-          <configs />
-          <description>
-          </description>
-          <updateComment>
-          </updateComment>
-          <devURL>
-          </devURL>
-        </mod>
-        <mod>
-          <name>Hangar modifications-pmod</name>
-          <version>
-          </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>False</enabled>
-          <pictures />
-          <configs />
-          <description>
-          </description>
-          <updateComment>
-          </updateComment>
-          <devURL>
-          </devURL>
-        </mod>
-        <mod>
-          <name>Garage Interface modifications-pmod</name>
-          <version>
-          </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>False</enabled>
-          <pictures />
-          <configs />
-          <description>
-          </description>
-          <updateComment>
-          </updateComment>
-          <devURL>
-          </devURL>
-        </mod>
-        <mod>
-          <name>Crosshair modifications-pmod</name>
-          <version>
-          </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>False</enabled>
-          <pictures />
-          <configs />
-          <description>
-          </description>
-          <updateComment>
-          </updateComment>
-          <devURL>
-          </devURL>
-        </mod>
-        <mod>
-          <name>Penetration ( ͡° ͜ʖ ͡°) Indicator modifications-pmod</name>
-          <version>
-          </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>False</enabled>
-          <pictures />
-          <configs />
-          <description>
-          </description>
-          <updateComment>
-          </updateComment>
-          <devURL>
-          </devURL>
-        </mod>
-        <mod>
-          <name>Session Stats modifications (over-rides garaga stats tab)-pmod</name>
-          <version>
-          </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>False</enabled>
-          <pictures />
-          <configs />
-          <description>
-          </description>
-          <updateComment>
-          </updateComment>
-          <devURL>
-          </devURL>
-        </mod>
-        <mod>
-          <name>Messaging System modifications-pmod</name>
-          <version>
-          </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>False</enabled>
-          <pictures />
-          <configs />
-          <description>
-          </description>
-          <updateComment>
-          </updateComment>
-          <devURL>
-          </devURL>
-        </mod>
-        <mod>
-          <name>Free Camera modifications-pmod</name>
-          <version>
-          </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>False</enabled>
-          <pictures />
-          <configs />
-          <description>
-          </description>
-          <updateComment>
-          </updateComment>
-          <devURL>
-          </devURL>
-        </mod>
-        <mod>
-          <name>Detailed Session Statistics by WorstUnicumEU-pmod</name>
-          <version>
-          </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>False</enabled>
-          <pictures>
-            <picture>
-              <URL>http://i.imgur.com/oEMO7BZ.png</URL>
-            </picture>
-            <picture>
-              <URL>http://i.imgur.com/hhF6e0A.png</URL>
-            </picture>
-            <picture>
-              <URL>http://i.imgur.com/qDxGpCX.png</URL>
-            </picture>
-            <picture>
-              <URL>http://i.imgur.com/1zJTcVH.png</URL>
-            </picture>
-          </pictures>
-          <configs />
-          <description>This will over-ride any selections in the garage stats selection</description>
-          <updateComment>
-          </updateComment>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/591220-091701-detailed-session-statistics-by-worstunicumeu-v121/</devURL>
         </mod>
       </mods>
     </catagory>
