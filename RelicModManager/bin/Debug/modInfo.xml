@@ -1695,7 +1695,7 @@
               <name>Session Statistics by WorstUnicumEU</name>
               <configzipfile>pmod_session_stat_WorstUnicumEU.zip</configzipfile>
               <configzipcrc>688fa9da5f461cf6f58e6385c2f7acd4</configzipcrc>
-              <size>0</size>
+              <size>0.4</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
