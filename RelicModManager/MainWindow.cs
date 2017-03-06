@@ -23,6 +23,8 @@ using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Drawing.Text;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace RelicModManager
 {
@@ -1481,7 +1483,22 @@ namespace RelicModManager
             file = Regex.Replace(file, "\r", "");
             //like block comments
             file = Regex.Replace(file, @"/\*.*?\*/", "");
-            JToken root = JToken.Parse(file);
+            JToken root = null;
+            try
+            {
+                root = JToken.Parse(file);
+            }
+            catch (JsonReaderException)
+            {
+                Settings.appendToLog("ERROR: Failed to patch " + jsonFile);
+                MessageBox.Show("ERROR: Failed to patch " + jsonFile);
+                if (Program.testMode)
+                {
+                    throw new JsonReaderException();
+                }
+            }
+            if (root == null)
+                return;
             foreach (var value in root.SelectTokens(jsonPath).ToList())
             {
                 if (value == root)
