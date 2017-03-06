@@ -1693,11 +1693,10 @@
             </config>
             <config>
               <name>Session Statistics by WorstUnicumEU</name>
-              <configzipfile>
-              </configzipfile>
-              <configzipcrc>f</configzipcrc>
+              <configzipfile>pmod_session_stat_WorstUnicumEU.zip</configzipfile>
+              <configzipcrc>688fa9da5f461cf6f58e6385c2f7acd4</configzipcrc>
               <size>0</size>
-              <configenabled>False</configenabled>
+              <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
