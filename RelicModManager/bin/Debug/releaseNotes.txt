@@ -1,3 +1,6 @@
+Version 20.1:
+- Fixed a bug with the json patcher. Again.
+
 Version 20:
 - (OFFICIAL BETA RELEASE)
 - Fixed bugs with json patcher
