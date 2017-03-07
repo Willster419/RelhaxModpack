@@ -1684,8 +1684,8 @@
           <configs>
             <config>
               <name>default</name>
-              <configzipfile>pmod_session_stat_default.zip</configzipfile>
-              <configzipcrc>3e698b775a0e3d292f486f8c4de37332</configzipcrc>
+              <configzipfile>pmod_session_stat_default_english.zip</configzipfile>
+              <configzipcrc>714ca37a2ef7b0dd2f98ea246e62bf00</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -1760,7 +1760,7 @@
             <config>
               <name>meltymaps mathmod</name>
               <configzipfile>pmod_server_reticle_meltyMaps_patch.zip</configzipfile>
-              <configzipcrc>2b7801657c28d0d3df6661dc22427827</configzipcrc>
+              <configzipcrc>2c1753c4cb62bf2c8e579e4499c961f2</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3196,8 +3196,8 @@
           <configs>
             <config>
               <name>by Aimdrol</name>
-              <configzipfile>Ingame_Info_Consumables_by_Aimdrol.zip</configzipfile>
-              <configzipcrc>5833253219074d78734318018b6e3adf</configzipcrc>
+              <configzipfile>Ingame_Info_Consumables_by_Aimdrol_0.9.17.1_2017-03-06.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
               <size>4</size>
               <configenabled>False</configenabled>
               <configtype>single</configtype>
@@ -3631,10 +3631,10 @@
           <name>MLG Mod by Aimdrol</name>
           <version>
           </version>
-          <modzipfile>Sounds_mlg_mod_voice_0.9.17.1_2017-01-05.zip</modzipfile>
+          <modzipfile>Sounds_mlg_mod_voice_0.9.17.1_2017-03-06.zip</modzipfile>
           <modzipcrc>f</modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <pictures />
           <configs>
             <config>
@@ -3669,16 +3669,16 @@
           <name>UT Countdown</name>
           <version>
           </version>
-          <modzipfile>Sounds_UT_Announcer_updated_by_budyx69_0.9.17.0_2016-12-22.zip</modzipfile>
-          <modzipcrc>53b8ad700e4a05672194cd0f4b31629d</modzipcrc>
+          <modzipfile>Sounds_UT_Announcer_updated_by_budyx69_0.9.17.1_2017-03-06.zip</modzipfile>
+          <modzipcrc>f</modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <pictures />
           <configs>
             <config>
               <name>Webium config</name>
-              <configzipfile>Sounds_UT_voice_webium_config_2016-08-14.zip</configzipfile>
-              <configzipcrc>637a46aeade61574af2119b6d15dd870</configzipcrc>
+              <configzipfile>Sounds_UT_voice_webium_config_2017-03-06.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
               <size>0</size>
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
@@ -3697,8 +3697,8 @@
       <selectionType>multi</selectionType>
       <dependencies>
         <dependency>
-          <dependencyZipFile>Dependency_Sixth_Sense_Standalone_by_Aimdrol_0.9.17.0_2016-12-19.zip</dependencyZipFile>
-          <dependencyZipCRC>9e25f612454a6105d1d0cda786ed203b</dependencyZipCRC>
+          <dependencyZipFile>Dependency_Sixth_Sense_Standalone_by_Aimdrol_0.9.17.1_2017-02-23.zip</dependencyZipFile>
+          <dependencyZipCRC>f</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
@@ -3715,8 +3715,8 @@
           <configs>
             <config>
               <name>RelHax by Willster419</name>
-              <configzipfile>Sixth_Sense_Audio_Relhax_by_Willster419_2016-03-26.zip</configzipfile>
-              <configzipcrc>4cf0fb648776fef8b6fd93eba8ec4ff2</configzipcrc>
+              <configzipfile>Sixth_Sense_Audio_Relhax_by_Willster419_2017-02-06.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
               <size>1.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3724,8 +3724,8 @@
             </config>
             <config>
               <name>It's a trap!</name>
-              <configzipfile>Sixth_Sense_Audio_GENERAL_ACKBAR_2016-03-26.zip</configzipfile>
-              <configzipcrc>0ad8b6eab90c16e679ce846a70c4ed25</configzipcrc>
+              <configzipfile>Sixth_Sense_Audio_GENERAL_ACKBAR_2017-02-06.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
               <size>1.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3734,16 +3734,16 @@
             <config>
               <name>OMC signal (12 sec)</name>
               <configzipfile>Sixth_Sense_Audio_normal_2016-03-26.zip</configzipfile>
-              <configzipcrc>b08cb939f5e0f4b5f672ce1f16a6143d</configzipcrc>
+              <configzipcrc>f</configzipcrc>
               <size>0</size>
-              <configenabled>True</configenabled>
+              <configenabled>False</configenabled>
               <configtype>single</configtype>
               <pictures />
             </config>
             <config>
               <name>OMC signal (9,5 sec) 10db softer</name>
-              <configzipfile>Sixth_Sense_Audio_less_10db_softer_2016-03-26.zip</configzipfile>
-              <configzipcrc>9ed1d1265942dcbc2d00363d2e71b7a5</configzipcrc>
+              <configzipfile>Sixth_Sense_Audio_less_10db_softer_2017-02-06.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
               <size>1.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3751,8 +3751,8 @@
             </config>
             <config>
               <name>Cyborg by APCR_NOOB</name>
-              <configzipfile>Sixth_Sense_Audio_Cyborg_by_APCR_NOOB_2016-03-26.zip</configzipfile>
-              <configzipcrc>0436792cd5cbf5ff91cc4f8643a5094d</configzipcrc>
+              <configzipfile>Sixth_Sense_Audio_Cyborg_by_APCR_NOOB_2017-02-06.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
               <size>1.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3760,8 +3760,8 @@
             </config>
             <config>
               <name>German Soldier</name>
-              <configzipfile>Sixth_Sense_Audio_German_Soldier_2016-03-26.zip</configzipfile>
-              <configzipcrc>8a0dfb478aeee83c01e3a98004da463a</configzipcrc>
+              <configzipfile>Sixth_Sense_Audio_German_Soldier_2017-02-06.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
               <size>1.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3769,8 +3769,8 @@
             </config>
             <config>
               <name>Metal Gear Solid</name>
-              <configzipfile>Sixth_Sense_Audio_Metal_Gear_Solid_2016-03-26.zip</configzipfile>
-              <configzipcrc>eb91f6c141d63c985aad6034bd91fd8c</configzipcrc>
+              <configzipfile>Sixth_Sense_Audio_Metal_Gear_Solid_2017-02-06.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
               <size>1.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3778,8 +3778,8 @@
             </config>
             <config>
               <name>Minions</name>
-              <configzipfile>Sixth_Sense_Audio_Minions.zip</configzipfile>
-              <configzipcrc>262c7fc5209eb7433de458779d21cf6d</configzipcrc>
+              <configzipfile>Sixth_Sense_Audio_Minions_2017-02-06.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
               <size>1.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3787,8 +3787,8 @@
             </config>
             <config>
               <name>Sauron signal</name>
-              <configzipfile>Sixth_Sense_Audio_Sauron_2016-03-26.zip</configzipfile>
-              <configzipcrc>f57139b3e132603d4e0cdb0d1ed038d4</configzipcrc>
+              <configzipfile>Sixth_Sense_Audio_Sauron_2017-02-06.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
               <size>1.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3796,8 +3796,8 @@
             </config>
             <config>
               <name>Illuminati by Aimdrol</name>
-              <configzipfile>Sixth_Sense_Audio_Illuminati_2016-10-09.zip</configzipfile>
-              <configzipcrc>4f082221755e7086ade189f83d9c795b</configzipcrc>
+              <configzipfile>Sixth_Sense_Audio_Illuminati_2017-02-06.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
               <size>0.4</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3805,8 +3805,8 @@
             </config>
             <config>
               <name>Timer #1 (10 sec)</name>
-              <configzipfile>Sixth_Sense_Audio_Timer_1_2016-03-26.zip</configzipfile>
-              <configzipcrc>0d5ab29c9eadb4a383d40c06daeb5e44</configzipcrc>
+              <configzipfile>Sixth_Sense_Audio_Timer_1_2017-02-06.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
               <size>1.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
