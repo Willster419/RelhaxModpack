@@ -1490,6 +1490,44 @@
           </devURL>
         </mod>
         <mod>
+          <name>Login modifications - save last server</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures />
+          <configs>
+            <config>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_login_save_last_server_disable.zip</configzipfile>
+              <configzipcrc>c40c72442b71f851d6c312bd6a4678f0</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_login_save_last_server_enable.zip</configzipfile>
+              <configzipcrc>87bc36515f588832146e834d7f53a57d</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
           <name>Login modifications - show servers information(xvm)</name>
           <version>
           </version>
@@ -3634,7 +3672,7 @@
           <modzipfile>Sounds_mlg_mod_voice_0.9.17.1_2017-03-06.zip</modzipfile>
           <modzipcrc>f</modzipcrc>
           <size>0</size>
-          <enabled>True</enabled>
+          <enabled>False</enabled>
           <pictures />
           <configs>
             <config>
@@ -3672,7 +3710,7 @@
           <modzipfile>Sounds_UT_Announcer_updated_by_budyx69_0.9.17.1_2017-03-06.zip</modzipfile>
           <modzipcrc>f</modzipcrc>
           <size>0</size>
-          <enabled>True</enabled>
+          <enabled>False</enabled>
           <pictures />
           <configs>
             <config>

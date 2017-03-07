@@ -41,7 +41,7 @@ namespace RelicModManager
             //download the latest release notes
             Application.DoEvents();
             WebClient wc = new WebClient();
-            downloadedVersionInfo.Text = wc.DownloadString("https://dl.dropboxusercontent.com/u/44191620/RelicMod/releaseNotes.txt");
+            downloadedVersionInfo.Text = wc.DownloadString("http://willster419.atwebpages.com/Applications/RelHaxModPack/releaseNotes.txt");
             Application.DoEvents();
         }
     }

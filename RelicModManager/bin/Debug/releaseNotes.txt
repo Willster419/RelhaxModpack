@@ -1,3 +1,7 @@
+Version 20.2.1:
+- Fixed bug with displaying release notes (this)
+- Updated database
+
 Version 20.2:
 - Commented Code, code optimizations
 - Fixed the "best json api" patching. Again. Again:/
