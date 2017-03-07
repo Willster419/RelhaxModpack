@@ -1,3 +1,17 @@
+(normal) database work
+ -update pmod with english messages (test)
+ -update meltymaps server crosshair (figure out)
+ -update sixth sense (test)
+ -update database (finish and test)
+ -update mlg voice (test)
+ -update UT (test)
+ -update relhax (todo)
+ -give oneshot his config
+ -follow up with primalsavage about updates, and he can advertise now
+ -tell loz it's ready
+ -make WoT page about it
+ -submit it to i made this for WG
+
 (normal) add json patcher add mode?
 
 (enhancement) change downloader api?

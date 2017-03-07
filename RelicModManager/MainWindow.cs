@@ -103,7 +103,9 @@ namespace RelicModManager
         private string tanksVersion;//0.9.x.y
         BackgroundWorker deleteworker;
         BackgroundWorker copyworker;
+        //list to maintain the refrence lines in a json patch
         List<double> timeRemainArray = new List<double>();
+        //the ETA variable for downlading
         double actualTimeRemain = 0;
         
         //The constructur for the application
@@ -1378,13 +1380,14 @@ namespace RelicModManager
         //method to parse json files
         public void jsonPatch(string jsonFile, string jsonPath, string newValue)
         {
-            //try to convert the new value to an int or double first
+            //try to convert the new value to a bool or an int or double first
             bool newValueBool = false;
             int newValueInt = -69420;
             double newValueDouble = -69420.0d;
             bool useBool = false;
             bool useInt = false;
             bool useDouble = false;
+            //try a bool first, only works with "true" and "false"
             try
             {
                 newValueBool = bool.Parse(newValue);
@@ -1396,6 +1399,7 @@ namespace RelicModManager
             {
 
             }
+            //try a double nixt. it will parse a double and int. at this point it could be eithor
             try
             {
                 newValueDouble = double.Parse(newValue);
@@ -1405,6 +1409,7 @@ namespace RelicModManager
             {
 
             }
+            //try an int next. if it works than turn double to false and int to true
             try
             {
                 newValueInt = int.Parse(newValue);
@@ -1443,7 +1448,7 @@ namespace RelicModManager
             string file = File.ReadAllText(jsonFile);
             //save the "$" lines
             List<StringSave> ssList = new List<StringSave>();
-            //patch any single line comments out of it
+            //patch any single line comments out of it by doing regex line by line
             StringBuilder backTogether = new StringBuilder();
             string[] removeComments = file.Split('\n');
             for (int i = 0; i < removeComments.Count(); i++)
@@ -1482,13 +1487,13 @@ namespace RelicModManager
                 backTogether.Append(temp + "\n");
             }
             file = backTogether.ToString();
-            //remove any stuff that would cause it to fail...
-            //like newlines
+            //remove any newlines
             file = Regex.Replace(file, "\n", "");
             file = Regex.Replace(file, "\r", "");
-            //like block comments
+            //remove any block comments
             file = Regex.Replace(file, @"/\*.*?\*/", "");
             JToken root = null;
+            //it could still fail, cause it's such an awesome api
             try
             {
                 root = JToken.Parse(file);
@@ -1499,11 +1504,14 @@ namespace RelicModManager
                 MessageBox.Show("ERROR: Failed to patch " + jsonFile);
                 if (Program.testMode)
                 {
-                    //throw new JsonReaderException();
+                    //in test mode this is worthy of an exeption
+                    throw new JsonReaderException();
                 }
             }
+            //if it failed to parse show the message (above) and pull out
             if (root == null)
                 return;
+            //the actual patch method
             foreach (var value in root.SelectTokens(jsonPath).ToList())
             {
                 if (value == root)
@@ -1522,7 +1530,7 @@ namespace RelicModManager
                     {
                         value.Replace(JToken.FromObject(newValueDouble));
                     }
-                    else
+                    else //string
                     {
                         value.Replace(JToken.FromObject(newValue));
                     }
@@ -1533,13 +1541,14 @@ namespace RelicModManager
             for (int i = 0; i < putBackDollas.Count(); i++)
             {
                 string temp = putBackDollas[i];
-                if (Regex.IsMatch(temp,"-69420"))
+                if (Regex.IsMatch(temp,"-69420"))//look for the temp value
                 {
                     string name = temp.Split('"')[1];
                     for (int j = 0; j < ssList.Count; j++)
                     {
                         if (name.Equals(ssList[j].name))
                         {
+                            //remake the line
                             temp = "\"" + ssList[j].name + "\"" + ": $" + ssList[j].value;
                             putBackDollas[i] = temp;
                             ssList.RemoveAt(j);

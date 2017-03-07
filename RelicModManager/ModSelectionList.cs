@@ -179,6 +179,8 @@ namespace RelicModManager
             configControlDD.Name = t.Name + "_" + m.name + "_DropDown";
             configControlDD.DropDownStyle = ComboBoxStyle.DropDownList;
             configControlDD.Items.Clear();
+            //label for the dropdown selection. shows the mod size
+            //and the eta download time (if applicable)
             Label dropDownSizeLabel = new Label();
             dropDownSizeLabel.Location = new Point(0, 0);
             for (int i = 0; i < m.configs.Count; i++)
@@ -322,10 +324,7 @@ namespace RelicModManager
                     configPanel.Controls.Add(dropDownSizeLabel);
                 }
             }
-            //if (configControlDD.Items.Count > 0)
-                //configPanel.Controls.Add(configControlDD);
             //make the mod check box
-            //TODO: single catagory selection needs to make this a radioButton
             CheckBox modCheckBox = new CheckBox();
             modCheckBox.AutoSize = true;
             modCheckBox.Location = new System.Drawing.Point(3, 3);
@@ -336,10 +335,6 @@ namespace RelicModManager
             string modDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.modZipFile;
             if (File.Exists(modDownloadPath))
             {
-                //get the file size as well
-                //float downloadSizeMB = this.netFileSize(downloadURL + m.modZipFile);
-                //downloadSizeMB = (float)Math.Round(downloadSizeMB, 1);
-                
                 MD5 hash = MD5.Create();
                 string oldCRC = this.GetMd5Hash(hash, modDownloadPath);
                 if (!oldCRC.Equals(m.crc))
@@ -350,7 +345,6 @@ namespace RelicModManager
                         modCheckBox.Text = modCheckBox.Text + " (" + m.size + " MB, ~" + (m.size * 2) + " sec)";
                     }
                 }
-                
             }
             else if (!(File.Exists(modDownloadPath)) && (m.crc != null) && (!m.crc.Equals("")))
             {
@@ -448,9 +442,11 @@ namespace RelicModManager
             string configName = (string)cb.SelectedItem;
             if (configName == null)
                 return;
+            //in case "_updated" was appended, split the string
             string[] splitConfigName = configName.Split('_');
             configName = splitConfigName[0];
             string updateString = null;
+            //TODO: find out what this is
             if (splitConfigName.Count() > 1)
                 updateString = splitConfigName[1];
             Config save = null;
@@ -547,13 +543,14 @@ namespace RelicModManager
                     return;
                 }
             }
-            //update the ui with the change
+            //get all required info for this checkbox change
             CheckBox cb = (CheckBox)sender;
             Panel p = (Panel)cb.Parent;
             string modName = cb.Name.Split('_')[1];
             string catagoryName = cb.Name.Split('_')[0];
 
             //check to see if the mod is part of a single selection only catagory
+            //if it is uncheck the other mods first. this for loop only deals with mods
             foreach (Catagory c in parsedCatagoryList)
             {
                 foreach (Mod m in c.mods)
@@ -628,7 +625,7 @@ namespace RelicModManager
                     }
                 }
             }
-
+            //this loop deals with enabling the config(s) with the mod, if there are any
             foreach (Catagory c in parsedCatagoryList)
             {
                 foreach (Mod m in c.mods)
@@ -776,7 +773,6 @@ namespace RelicModManager
                 }
                 else
                 {
-                    
                     doc.Load("http://willster419.atwebpages.com/Applications/RelHaxModPack/modInfo.xml");
                 }
             }
