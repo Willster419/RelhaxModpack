@@ -1,5 +1,6 @@
 Version 20.2.1:
 - Fixed bug with displaying release notes (this)
+- Fixed spelling issues on first time loader
 - Updated database
 
 Version 20.2:

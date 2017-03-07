@@ -5,8 +5,6 @@
  -update UT (test)
  -update relhax (todo)
  -update database (finish and test)
- -give oneshot his config
- -follow up with primalsavage about updates, and he can advertise now
  -tell loz it's ready
  -make WoT page about it
  -submit it to i made this for WG
