@@ -2386,7 +2386,7 @@ namespace RelicModManager
         private void forceManuel_MouseEnter(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = "This option is for forcing a manuel World of Tanks game" +
+                helper.helperText.Text = "This option is for forcing a manual World of Tanks game" +
                     "location detection. Check this if you are having problems with automatically locating the game.";
         }
 
@@ -2399,7 +2399,7 @@ namespace RelicModManager
         private void cleanInstallCB_MouseEnter(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = "This reccomended option will empty your res_mods folder before installing" +
+                helper.helperText.Text = "This recommended option will empty your res_mods folder before installing" +
                     "your new mod selections. Unless you know what you are doing, it is recommended that you keep this on to avoid problems.";
         }
 
