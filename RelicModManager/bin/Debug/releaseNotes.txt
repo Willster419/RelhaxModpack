@@ -1,3 +1,7 @@
+Version 20.2:
+- Commented Code, code optimizations
+- Fixed the "best json api" patching. Again. Again:/
+
 Version 20.1:
 - Fixed a bug with the json patcher. Again.
 
