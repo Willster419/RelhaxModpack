@@ -1,10 +1,3 @@
-(normal) database work
- -login save last server enable
- -update sixth sense (test)
- -update mlg voice (test)
- -update UT (test)
- -update relhax (todo)
- -update database (finish and test)
  -tell loz it's ready
  -make WoT page about it
  -submit it to i made this for WG
@@ -15,7 +8,7 @@
 
 (normal) comment code and put in log outputs (currently done on all files)
   
-(enhancement) keep in mind hashtables instead of giant lists, or implemenet find
+(enhancement) keep in mind hashtables instead of giant lists
   
 (optional) have it uninstall only the mods installed
   -save the old patch folders somehow

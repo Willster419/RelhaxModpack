@@ -12,7 +12,7 @@
     </globaldependency>
     <globaldependency>
       <dependencyZipFile>Dependency_global_orig_xmls.zip</dependencyZipFile>
-      <dependencyZipCRC>bfd8cb73d3958f673320782ddab8ed65</dependencyZipCRC>
+      <dependencyZipCRC>46fc1529e59b6ae792540e49f5ffa8e3</dependencyZipCRC>
       <dependencyenabled>True</dependencyenabled>
     </globaldependency>
     <globaldependency>
@@ -249,6 +249,26 @@
             </config>
             <config>
               <name>Full RU</name>
+              <configzipfile>
+              </configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>False</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Full KR</name>
+              <configzipfile>
+              </configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>False</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Full ASIA</name>
               <configzipfile>
               </configzipfile>
               <configzipcrc>f</configzipcrc>
@@ -3622,19 +3642,19 @@
       <selectionType>single</selectionType>
       <dependencies>
         <dependency>
-          <dependencyZipFile>Dependency_Sounds_Increase_Sound_Memory.zip</dependencyZipFile>
-          <dependencyZipCRC>472e962044fd67d5a375fa51399900d2</dependencyZipCRC>
+          <dependencyZipFile>Dependency_Sounds_Increase_Sound_Memory_2017_03_09.zip</dependencyZipFile>
+          <dependencyZipCRC>77a3a94087aec30c33a3c06155b80417</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
       <mods>
         <mod>
           <name>Relhax</name>
-          <version>17</version>
-          <modzipfile>Sounds_Relhax_Base.zip</modzipfile>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
-          <enabled>False</enabled>
+          <version>18</version>
+          <modzipfile>Sounds_Relhax_Base_2017-03-09.zip</modzipfile>
+          <modzipcrc>4173002c1fa312db55468374ab58950b</modzipcrc>
+          <size>52.8</size>
+          <enabled>True</enabled>
           <pictures>
             <picture>
               <URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
@@ -3643,18 +3663,18 @@
           <configs>
             <config>
               <name>standard</name>
-              <configzipfile>Sounds_Relhax_Config_Regular.zip</configzipfile>
-              <configzipcrc>b4ebe9d8e701f4d7fdd1acecf10d6043</configzipcrc>
-              <size>0</size>
+              <configzipfile>Sounds_Relhax_Config_Regular_2017-03-09.zip</configzipfile>
+              <configzipcrc>ba68bc2012a0aa93cc19f0efd5637f2d</configzipcrc>
+              <size>34.6</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
             </config>
             <config>
               <name>censored</name>
-              <configzipfile>Sounds_Relhax_Config_Censored.zip</configzipfile>
-              <configzipcrc>8d814ce3da2cadff43f822a06c7fceba</configzipcrc>
-              <size>0</size>
+              <configzipfile>Sounds_Relhax_Config_Censored_2017-03-09.zip</configzipfile>
+              <configzipcrc>0748980e254c5f0482fc0ac7589ec39b</configzipcrc>
+              <size>34.2</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
@@ -3736,7 +3756,7 @@
       <dependencies>
         <dependency>
           <dependencyZipFile>Dependency_Sixth_Sense_Standalone_by_Aimdrol_0.9.17.1_2017-02-23.zip</dependencyZipFile>
-          <dependencyZipCRC>f</dependencyZipCRC>
+          <dependencyZipCRC>61eb565342112b76a7cf6cfeae486ccf</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
@@ -3745,89 +3765,98 @@
           <name>Audio</name>
           <version>
           </version>
-          <modzipfile>Sixth_Sense_Audio_Disable_Stock_Sound.zip</modzipfile>
-          <modzipcrc>8a856efdc6b060fa63b1e34fb5e5f604</modzipcrc>
+          <modzipfile>Sixth_Sense_Audio_Disable_Stock_Sound_2017-03-09.zip</modzipfile>
+          <modzipcrc>a4686316841540b9abe0821e4aae8abd</modzipcrc>
           <size>0.1</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <pictures />
           <configs>
             <config>
               <name>RelHax by Willster419</name>
-              <configzipfile>Sixth_Sense_Audio_Relhax_by_Willster419_2017-02-06.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>1.1</size>
+              <configzipfile>Sixth_Sense_Audio_Relhax_by_Willster419_2017-03-09.zip</configzipfile>
+              <configzipcrc>7fa01fc0864070bc3dc0597b55a30340</configzipcrc>
+              <size>0.3</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
             </config>
             <config>
-              <name>It's a trap!</name>
-              <configzipfile>Sixth_Sense_Audio_GENERAL_ACKBAR_2017-02-06.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>1.1</size>
+              <name>Admiral Ackbar</name>
+              <configzipfile>Sixth_Sense_Audio_GENERAL_ACKBAR_2017-03-09.zip</configzipfile>
+              <configzipcrc>c8ccc4b8424c10b0d8bd4b77e30b9d28</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
             </config>
             <config>
-              <name>OMC signal (12 sec)</name>
-              <configzipfile>Sixth_Sense_Audio_normal_2016-03-26.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
-              <configenabled>False</configenabled>
+              <name>OMC signal (8 sec)</name>
+              <configzipfile>Sixth_Sense_Audio_Timer_1_2017-03-09.zip</configzipfile>
+              <configzipcrc>e884985396c965178bce5167a6b5e1e0</configzipcrc>
+              <size>0.4</size>
+              <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
             </config>
             <config>
-              <name>OMC signal (9,5 sec) 10db softer</name>
-              <configzipfile>Sixth_Sense_Audio_less_10db_softer_2017-02-06.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>1.1</size>
+              <name>OMC signal (8 sec) 10db softer</name>
+              <configzipfile>Sixth_Sense_Audio_less_10db_softer_2017-03-09.zip</configzipfile>
+              <configzipcrc>b981ecc89ffc381c94f205d01038ccf7</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Standard signal (10 sec)</name>
+              <configzipfile>Sixth_Sense_Audio_Timer_10_sec_2017-03-09.zip</configzipfile>
+              <configzipcrc>e22c4bc10a5d8e521f41daa69c90c9e2</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
             </config>
             <config>
               <name>Cyborg by APCR_NOOB</name>
-              <configzipfile>Sixth_Sense_Audio_Cyborg_by_APCR_NOOB_2017-02-06.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>1.1</size>
+              <configzipfile>Sixth_Sense_Audio_Cyborg_by_APCR_NOOB_2017-03-09.zip</configzipfile>
+              <configzipcrc>362da0aad1606edc73aa06dd74808b7d</configzipcrc>
+              <size>1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
             </config>
             <config>
               <name>German Soldier</name>
-              <configzipfile>Sixth_Sense_Audio_German_Soldier_2017-02-06.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>1.1</size>
+              <configzipfile>Sixth_Sense_Audio_German_Soldier_2017-03-09.zip</configzipfile>
+              <configzipcrc>2a59351f82d1ec9f99290330c91bc821</configzipcrc>
+              <size>0.2</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
             </config>
             <config>
               <name>Metal Gear Solid</name>
-              <configzipfile>Sixth_Sense_Audio_Metal_Gear_Solid_2017-02-06.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>1.1</size>
+              <configzipfile>Sixth_Sense_Audio_Metal_Gear_Solid_2017-03-09.zip</configzipfile>
+              <configzipcrc>1a45f59cc6f3122fd9712ce2a6168897</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
             </config>
             <config>
               <name>Minions</name>
-              <configzipfile>Sixth_Sense_Audio_Minions_2017-02-06.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>1.1</size>
+              <configzipfile>Sixth_Sense_Audio_Minions_2017-03-09.zip</configzipfile>
+              <configzipcrc>36c28163c56aaf865c1e6941499d62f0</configzipcrc>
+              <size>0.2</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
             </config>
             <config>
               <name>Sauron signal</name>
-              <configzipfile>Sixth_Sense_Audio_Sauron_2017-02-06.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>1.1</size>
+              <configzipfile>Sixth_Sense_Audio_Sauron_2017-03-09.zip</configzipfile>
+              <configzipcrc>376ca51ef8bd8bbc741ee0011e38dad9</configzipcrc>
+              <size>0.4</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
@@ -3837,16 +3866,7 @@
               <configzipfile>Sixth_Sense_Audio_Illuminati_2017-02-06.zip</configzipfile>
               <configzipcrc>f</configzipcrc>
               <size>0.4</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures />
-            </config>
-            <config>
-              <name>Timer #1 (10 sec)</name>
-              <configzipfile>Sixth_Sense_Audio_Timer_1_2017-02-06.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>1.1</size>
-              <configenabled>True</configenabled>
+              <configenabled>False</configenabled>
               <configtype>single</configtype>
               <pictures />
             </config>
@@ -3864,7 +3884,7 @@
           <modzipfile>Sixth_Sense_Icon_Disable_Default_Icon.zip</modzipfile>
           <modzipcrc>3f0a682223145ef02ea31c8ccd175684</modzipcrc>
           <size>0.1</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <pictures />
           <configs>
             <config>
