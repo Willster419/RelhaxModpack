@@ -22,6 +22,7 @@ namespace RelicModManager
         public static bool largeFont { get; set; }
         public static bool comicSans { get; set; }
         public static bool firstLoad { get; set; }
+        public static bool saveLastConfig { get; set; }
         public static int modSelectionHeight { get; set; }
         public static int modSelectionWidth { get; set; }
         public enum LoadingGifs { standard = 0, thirdGuards = 1 };
@@ -48,6 +49,7 @@ namespace RelicModManager
                 Settings.forceManuel = false;
                 Settings.gif = Settings.LoadingGifs.standard;
                 Settings.firstLoad = true;
+                Settings.saveLastConfig = false;
                 Settings.modSelectionHeight = 250;
                 Settings.modSelectionWidth = 520;
                 Settings.applyInternalSettings();
@@ -85,6 +87,9 @@ namespace RelicModManager
                             break;
                         case "modSelectionWidth":
                             Settings.modSelectionWidth = int.Parse(n.InnerText);
+                            break;
+                        case "saveLastConfig":
+                            Settings.saveLastConfig = bool.Parse(n.InnerText);
                             break;
                     }
                 }
@@ -142,6 +147,9 @@ namespace RelicModManager
             XmlElement xcleanInstallation = doc.CreateElement("cleanInstallation");
             xcleanInstallation.InnerText = "" + cleanInstallation;
             settingsHolder.AppendChild(xcleanInstallation);
+            XmlElement xsaveLastConfig = doc.CreateElement("saveLastConfig");
+            xsaveLastConfig.InnerText = "" + Settings.saveLastConfig;
+            settingsHolder.AppendChild(xsaveLastConfig);
             switch (Settings.gif)
             {
                 case (Settings.LoadingGifs.standard):

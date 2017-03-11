@@ -33,7 +33,7 @@ namespace RelicModManager
             pw = new PleaseWait();
             pw.Show();
             this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
-            pw.loadingDescLabel.Text = "Reading Database...";
+            pw.loadingDescBox.Text = "Reading Database...";
             Application.DoEvents();
             this.createModStructure2();
             bool duplicates = this.duplicates();
@@ -43,11 +43,16 @@ namespace RelicModManager
                 MessageBox.Show("CRITICAL: Duplicate mod name detected!!");
                 Application.Exit();
             }
-            pw.loadingDescLabel.Text = "Building UI...";
+            pw.loadingDescBox.Text = "Building UI...";
             Application.DoEvents();
+            this.initUserMods();
+            //load the last selection if setting is set
+            if (Settings.saveLastConfig && !Program.autoInstall)
+            {
+                this.loadConfig();
+            }
             this.makeTabs();
             this.addAllMods();
-            this.initUserMods();
             this.addUserMods();
             this.ModSelectionList_SizeChanged(null, null);
             this.Size = new Size(Settings.modSelectionWidth,Settings.modSelectionHeight);
@@ -123,7 +128,7 @@ namespace RelicModManager
                         int i = 1;
                         foreach (Mod m in c.mods)
                         {
-                            pw.loadingDescLabel.Text = "Loading " + m.name;
+                            pw.loadingDescBox.Text = "Loading " + m.name;
                             Application.DoEvents();
                             this.addMod(m, t, i++);
                         }
@@ -226,7 +231,10 @@ namespace RelicModManager
                                 configControlRB.Text = configControlRB.Text + "(Updated)";
                                 if (m.configs[i].size > 0.0f)
                                 {
-                                    configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB, ~" + (m.configs[i].size * 2) + " sec)";
+                                    int totalSec = (int)m.configs[i].size * 2;
+                                    int totalRealMin = totalSec / 60;
+                                    int totalRealSec = totalSec % 60;
+                                    configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
                                 }
                             }
                         }
@@ -236,7 +244,10 @@ namespace RelicModManager
                             configControlRB.Text = configControlRB.Text + "(Updated)";
                             if (m.configs[i].size > 0.0f)
                             {
-                                configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB, ~" + (m.configs[i].size * 2) + " sec)";
+                                int totalSec = (int)m.configs[i].size * 2;
+                                int totalRealMin = totalSec / 60;
+                                int totalRealSec = totalSec % 60;
+                                configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
                             }
                         }
                         configPanel.Controls.Add(configControlRB);
@@ -297,7 +308,10 @@ namespace RelicModManager
                                 configControlCB.Text = configControlCB.Text + "(Updated)";
                                 if (m.configs[i].size > 0.0f)
                                 {
-                                    configControlCB.Text = configControlCB.Text + " (" + m.configs[i].size + " MB, ~" + (m.configs[i].size * 2) + " sec)";
+                                    int totalSec = (int)m.configs[i].size * 2;
+                                    int totalRealMin = totalSec / 60;
+                                    int totalRealSec = totalSec % 60;
+                                    configControlCB.Text = configControlCB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
                                 }
                             }
                         }
@@ -306,7 +320,10 @@ namespace RelicModManager
                             configControlCB.Text = configControlCB.Text + "(Updated)";
                             if (m.configs[i].size > 0.0f)
                             {
-                                configControlCB.Text = configControlCB.Text + " (" + m.configs[i].size + " MB, ~" + (m.configs[i].size * 2) + " sec)";
+                                int totalSec = (int)m.configs[i].size * 2;
+                                int totalRealMin = totalSec / 60;
+                                int totalRealSec = totalSec % 60;
+                                configControlCB.Text = configControlCB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
                             }
                         }
                         configPanel.Controls.Add(configControlCB);
@@ -342,7 +359,10 @@ namespace RelicModManager
                     modCheckBox.Text = modCheckBox.Text + "(Updated)";
                     if (m.size > 0.0f)
                     {
-                        modCheckBox.Text = modCheckBox.Text + " (" + m.size + " MB, ~" + (m.size * 2) + " sec)";
+                        int totalSec = (int)m.size * 2;
+                        int totalRealMin = totalSec / 60;
+                        int totalRealSec = totalSec % 60;
+                        modCheckBox.Text = modCheckBox.Text + " (" + m.size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
                     }
                 }
             }
@@ -355,7 +375,10 @@ namespace RelicModManager
                 modCheckBox.Text = modCheckBox.Text + "(Updated)";
                 if (m.size > 0.0f)
                 {
-                    modCheckBox.Text = modCheckBox.Text + " (" + m.size + " MB, ~" + (m.size * 2) + " sec)";
+                    int totalSec = (int)m.size * 2;
+                    int totalRealMin = totalSec / 60;
+                    int totalRealSec = totalSec % 60;
+                    modCheckBox.Text = modCheckBox.Text + " (" + m.size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
                 }
             }
             modCheckBox.UseVisualStyleBackColor = true;
@@ -476,7 +499,12 @@ namespace RelicModManager
                     if (c.Name.Equals(catagory + "_" + mod + "_size"))
                     {
                         if (updateString != null)
-                            c.Text = save.size + " MB, ~" + (save.size * 2) + " sec)";
+                        {
+                            int totalSec = (int)save.size * 2;
+                            int totalRealMin = totalSec / 60;
+                            int totalRealSec = totalSec % 60;
+                            c.Text = save.size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
+                        }
                         else
                             c.Text = "";
                     }
@@ -1013,6 +1041,7 @@ namespace RelicModManager
             label1.Text = "" + this.Size.Width + " x " + this.Size.Height;
             loadConfigButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width - 6 - loadConfigButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height);
             saveConfigButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height);
+            clearSelectionsButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width - 6 - loadConfigButton.Size.Width - 6 - clearSelectionsButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height);
             if (this.Size.Height < 250) this.Size = new Size(this.Size.Width, 250);
             if (this.Size.Width < 520) this.Size = new Size(520, this.Size.Height);
             foreach (TabPage t in modTabGroups.TabPages)
@@ -1039,6 +1068,11 @@ namespace RelicModManager
         private void continueButton_Click(object sender, EventArgs e)
         {
             cancel = false;
+            //save the last config if told to do so
+            if (Settings.saveLastConfig)
+            {
+                this.saveConfig();
+            }
             this.Close();
         }
         //handler for when the cancal button is clicked
@@ -1115,12 +1149,20 @@ namespace RelicModManager
             saveLocation.Filter = "*.xml|*.xml";
             saveLocation.InitialDirectory = Application.StartupPath + "\\RelHaxUserConfigs";
             saveLocation.Title = "Select where to save user prefs";
-            if (saveLocation.ShowDialog().Equals(DialogResult.Cancel))
+            if (!Settings.saveLastConfig)
             {
-                //cancel
-                return;
+                if (saveLocation.ShowDialog().Equals(DialogResult.Cancel))
+                {
+                    //cancel
+                    return;
+                }
             }
             string savePath = saveLocation.FileName;
+            if (Settings.saveLastConfig)
+            {
+                savePath = Application.StartupPath + "\\RelHaxUserConfigs\\lastInstalledConfig.xml";
+                Settings.appendToLog("Save last config checked, saving to " + savePath);
+            }
             //XmlDocument save time!
             XmlDocument doc = new XmlDocument();
             //mods root
@@ -1180,7 +1222,10 @@ namespace RelicModManager
                 }
             }
             doc.Save(savePath);
-            MessageBox.Show("Config Saved Sucessfully");
+            if (!Settings.saveLastConfig)
+            {
+                MessageBox.Show("Config Saved Sucessfully");
+            }
         }
         //loads a saved config from xml and parses it into the memory database
         private void loadConfig()
@@ -1191,6 +1236,19 @@ namespace RelicModManager
             if (Program.autoInstall)
             {
                 filePath = Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName;
+            }
+            else if (Settings.saveLastConfig)
+            {
+                filePath = Application.StartupPath + "\\RelHaxUserConfigs\\lastInstalledConfig.xml";
+                if (File.Exists(filePath))
+                {
+                    Settings.appendToLog("save last config checked, loading config from " + filePath);
+                }
+                else
+                {
+                    Settings.appendToLog("ERROR: lastInstalledConfig.xml not found, not loading configs");
+                    return;
+                }
             }
             else
             {
@@ -1206,24 +1264,7 @@ namespace RelicModManager
                 }
                 filePath = loadLocation.FileName;
             }
-            this.appendToLog("Unchecking all mods");
-            foreach (Catagory c in parsedCatagoryList)
-            {
-                foreach (Mod m in c.mods)
-                {
-                    if (m.enabled)
-                    {
-                        m.modChecked = false;
-                        foreach (Config cc in m.configs)
-                        {
-                            if (cc.enabled)
-                            {
-                                cc.configChecked = false;
-                            }
-                        }
-                    }
-                }
-            }
+            this.clearSelectionMemory();
             this.appendToLog("Loading mod selections from " + filePath);
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
@@ -1297,7 +1338,9 @@ namespace RelicModManager
                 }
             }
             this.appendToLog("Finished loading mod selections");
-            if (!Program.autoInstall)
+            if (Settings.saveLastConfig)
+                return;
+            if (!Program.autoInstall || !Settings.saveLastConfig)
                 MessageBox.Show("Prefrences Set");
             //reload the UI
             this.makeTabs();
@@ -1417,6 +1460,39 @@ namespace RelicModManager
                 }
             }
             return -1;
+        }
+        //unchecks all mods from memory
+        private void clearSelectionMemory()
+        {
+            this.appendToLog("Unchecking all mods");
+            foreach (Catagory c in parsedCatagoryList)
+            {
+                foreach (Mod m in c.mods)
+                {
+                    if (m.enabled)
+                    {
+                        m.modChecked = false;
+                        foreach (Config cc in m.configs)
+                        {
+                            if (cc.enabled)
+                            {
+                                cc.configChecked = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void clearSelectionsButton_Click(object sender, EventArgs e)
+        {
+            this.clearSelectionMemory();
+            Settings.appendToLog("clearSelectionsButton pressed, clearing selections");
+            MessageBox.Show("Selections cleared");
+            //reload the UI
+            this.makeTabs();
+            this.addAllMods();
+            this.addUserMods();
         }
     }
 }

@@ -36,7 +36,7 @@ namespace RelicModManager
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 20.2.1";
+        private string managerVersion = "version 20.3";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         private SelectFeatures features = new SelectFeatures();
         //queue for downloading mods
@@ -243,7 +243,10 @@ namespace RelicModManager
             double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
             int MBytesIn = (int)bytesIn / MBDivisor;
             int MBytesTotal = (int)totalBytes / MBDivisor;
-            downloadProgress.Text = "Downloading " + currentModDownloading + " ("+ MBytesIn + " MB" + " of " + MBytesTotal + " MB)";
+            string currentModDownloadingShort = currentModDownloading;
+            if (currentModDownloading.Length > 15)
+              currentModDownloadingShort = currentModDownloading.Substring(0,15) + "...";
+            downloadProgress.Text = "Downloading " + currentModDownloadingShort + " ("+ MBytesIn + " MB" + " of " + MBytesTotal + " MB)";
             childProgressBar.Value = e.ProgressPercentage;
             speedLabel.Text = string.Format("{0} MB/s", (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds).ToString("0.00"));
             double totalTimeToDownload =  MBytesTotal / (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds);
@@ -257,7 +260,14 @@ namespace RelicModManager
                 actualTimeRemain = timeAverageRemain / 10;
                 timeRemainArray.Clear();
             }
-            speedLabel.Text = speedLabel.Text + " ETA: " + Math.Round(actualTimeRemain,0) + " sec";
+            actualTimeRemain = Math.Round(actualTimeRemain,0);
+            if (actualTimeRemain < 0)
+                actualTimeRemain = 0;
+            int actualTimeMins = (int)actualTimeRemain / 60;
+            int actualTimeSecs = (int)actualTimeRemain % 60;
+            //Application.DoEvents();
+            speedLabel.Text = speedLabel.Text + " ETA: " + actualTimeMins + " min " + actualTimeSecs + " sec";
+            //Application.DoEvents();
             if (MBytesIn == 0 && MBytesTotal == 0)
             {
                 //this.downloadProgress.Text = "Complete!";
@@ -266,6 +276,17 @@ namespace RelicModManager
         //handler for the mod download file complete event
         void downloader_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
+            //check to see if the user cancled the download
+            if (e != null  && e.Cancelled)
+            {
+                //update the UI and download state
+                state = InstallState.idle;
+                speedLabel.Text = "";
+                downloadProgress.Text = "Idle";
+                parrentProgressBar.Value = 0;
+                childProgressBar.Value = 0;
+                return;
+            }
             if (!modPack)
             {
                 //old relhax sound mod code
@@ -301,6 +322,8 @@ namespace RelicModManager
                 }
                 if (downloadQueue.Count != 0)
                 {
+                    cancelDownloadButton.Enabled = true;
+                    cancelDownloadButton.Visible = true;
                     //for the next file in the queue, delete it.
                     if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
                     //download new zip file
@@ -326,6 +349,8 @@ namespace RelicModManager
                 }
                 if (downloadQueue.Count == 0)
                 {
+                    cancelDownloadButton.Enabled = false;
+                    cancelDownloadButton.Visible = false;
                     if (state == InstallState.downloading)
                     {
                         //just finished downloading, needs to start extracting
@@ -458,7 +483,10 @@ namespace RelicModManager
             //the actual patch method
             foreach (Patch p in patchList)
             {
-                downloadProgress.Text = "patching " + p.file;
+                string patchFileOutput = p.file;
+                if (p.file.Length > 15)
+                  patchFileOutput = p.file.Substring(0,15);
+                downloadProgress.Text = "patching " + patchFileOutput + "...";
                 Application.DoEvents();
                 if (p.type.Equals("regx"))
                 {
@@ -876,11 +904,11 @@ namespace RelicModManager
             PleaseWait wait = new PleaseWait();
             wait.Show();
             WebRequest.DefaultWebProxy = null;
-            wait.loadingDescLabel.Text = "Checking for single instance...";
+            wait.loadingDescBox.Text = "Checking for single instance...";
             Application.DoEvents();
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             this.appendToLog("|RelHax ModManager " + managerVersion);
-            this.appendToLog("|Built on 03/06/2017, running at " + DateTime.Now);
+            this.appendToLog("|Built on 03/10/2017, running at " + DateTime.Now);
             this.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             this.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -897,14 +925,14 @@ namespace RelicModManager
                 MessageBox.Show("CRITICAL: Another Instance of the relic mod manager is already running");
                 this.Close();
             }
-            wait.loadingDescLabel.Text = "Doing Random Cleanup...";
+            wait.loadingDescBox.Text = "Doing Random Cleanup...";
             Application.DoEvents();
             //cleans up after any previous relicModManager versions
             this.cleanup();
-            wait.loadingDescLabel.Text = "Checking for updates...";
+            wait.loadingDescBox.Text = "Checking for updates...";
             Application.DoEvents();
             this.checkmanagerUpdates();
-            wait.loadingDescLabel.Text = "Verifying Directory Structure...";
+            wait.loadingDescBox.Text = "Verifying Directory Structure...";
             Application.DoEvents();
             //create directory structures
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxDownloads")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxDownloads");
@@ -912,7 +940,7 @@ namespace RelicModManager
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup");
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxUserConfigs")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxUserConfigs");
             //load settings
-            wait.loadingDescLabel.Text = "Loading Settings...";
+            wait.loadingDescBox.Text = "Loading Settings...";
             this.appendToLog("Loading settings");
             Settings.loadSettings();
             this.applySettings();
@@ -1793,6 +1821,8 @@ namespace RelicModManager
             if (downloadQueue.Count > 0)
             {
                 state = InstallState.downloading;
+                cancelDownloadButton.Enabled = true;
+                cancelDownloadButton.Visible = true;
                 //delete temp/0kb/corrupt file
                 if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
                 //download new zip file
@@ -2351,6 +2381,7 @@ namespace RelicModManager
             this.backupModsCheckBox.Checked = Settings.backupModFolder;
             this.cancerFontCB.Checked = Settings.comicSans;
             this.largerFontButton.Checked = Settings.largeFont;
+            this.saveLastInstallCB.Checked = Settings.saveLastConfig;
             this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
             switch (Settings.gif)
             {
@@ -2474,6 +2505,86 @@ namespace RelicModManager
         private void findBugAddModLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://docs.google.com/spreadsheets/d/1LmPCMAx0RajW4lVYAnguHjjd8jArtWuZIGciFN76AI4/edit?usp=sharing");
+        }
+
+        private void saveLastInstallCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.saveLastConfig = saveLastInstallCB.Checked;
+        }
+
+        private void saveLastInstallCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = "If this is selected, the installer will, upon selection window showing, load the last installed config you used.";
+        }
+
+        private void saveLastInstallCB_MouseLeave(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = helperText;
+        }
+
+        private void cancelDownloadButton_Click(object sender, EventArgs e)
+        {
+            downloader.CancelAsync();
+        }
+
+        private void forceManuel_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = "This option is for forcing a manual World of Tanks game" +
+                    "location detection. Check this if you are having problems with automatically locating the game.";
+            newHelper.ShowDialog();
+        }
+
+        private void cleanInstallCB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = "This recommended option will empty your res_mods folder before installing" +
+                    "your new mod selections. Unless you know what you are doing, it is recommended that you keep this on to avoid problems.";
+            newHelper.ShowDialog();
+        }
+
+        private void backupModsCheckBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = "Select this to make a backup of your current res_mods folder." +
+                    "Keep in mind that it only keeps the LATEST BACKUP, meaning if you check this and install," +
+                    "it will delete what is currently in the backup location and copy what you have in your res_mods folder.";
+            newHelper.ShowDialog();
+        }
+
+        private void cancerFontCB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = "Enable Comic Sans. Yes, somebody, somewhere out there actually wanted this crap.";
+            newHelper.ShowDialog();
+        }
+
+        private void largerFontButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = "Enable this to enlarge all form font.";
+            newHelper.ShowDialog();
+        }
+
+        private void saveLastInstallCB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = "If this is selected, the installer will, upon selection window showing, load the last installed config you used.";
+            newHelper.ShowDialog();
         }
     }
     //a class for the downloadQueue list, to make a queue of downloads

@@ -1,3 +1,12 @@
+Version 20.3: (UI update)
+- Updated ETA and estimated seconds to be in mins/secs
+- Improved display of patch file and download zip file
+- Added feature to right click a setting in the main window to have it explained
+- Added feature to cancel the installation from the download phase
+- Added feature to automatically load the last installed user config
+- Added feature to clear currently selected mods from the selection window
+- Changed display of loading window so it wraps text rather than goes off the screen
+
 Version 20.2.1:
 - Fixed bug with displaying release notes (this)
 - Fixed spelling issues on first time loader

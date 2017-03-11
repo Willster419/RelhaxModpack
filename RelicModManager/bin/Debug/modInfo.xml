@@ -1522,7 +1522,7 @@
           <pictures />
           <configs>
             <config>
-              <name>Enabled</name>
+              <name>Disabled</name>
               <configzipfile>XVM_config_builder_login_save_last_server_disable.zip</configzipfile>
               <configzipcrc>c40c72442b71f851d6c312bd6a4678f0</configzipcrc>
               <size>0.1</size>
@@ -1531,7 +1531,7 @@
               <pictures />
             </config>
             <config>
-              <name>Disabled</name>
+              <name>Enabled</name>
               <configzipfile>XVM_config_builder_login_save_last_server_enable.zip</configzipfile>
               <configzipcrc>87bc36515f588832146e834d7f53a57d</configzipcrc>
               <size>0.1</size>
@@ -3657,7 +3657,7 @@
           <enabled>True</enabled>
           <pictures>
             <picture>
-              <URL>https://dl.dropboxusercontent.com/u/44191620/RelicMod/pictures/RelHax_picture_file.png</URL>
+              <URL>http://i.imgur.com/uWih1kD.jpg</URL>
             </picture>
           </pictures>
           <configs>

@@ -1,3 +1,4 @@
+ (promote)
  -tell loz it's ready
  -make WoT page about it
  -submit it to i made this for WG

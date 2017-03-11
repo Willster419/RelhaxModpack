@@ -45,11 +45,13 @@
             this.cancerFontCB = new System.Windows.Forms.CheckBox();
             this.backupModsCheckBox = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
+            this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
             this.largerFontButton = new System.Windows.Forms.CheckBox();
             this.loadingImageGroupBox = new System.Windows.Forms.GroupBox();
             this.thirdGuardsLoadingImageRB = new System.Windows.Forms.RadioButton();
             this.standardImageRB = new System.Windows.Forms.RadioButton();
             this.findBugAddModLabel = new System.Windows.Forms.LinkLabel();
+            this.cancelDownloadButton = new System.Windows.Forms.Button();
             this.settingsGroupBox.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -80,7 +82,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.downloadProgress.AutoSize = true;
-            this.downloadProgress.Location = new System.Drawing.Point(9, 265);
+            this.downloadProgress.Location = new System.Drawing.Point(9, 278);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.Size = new System.Drawing.Size(24, 13);
             this.downloadProgress.TabIndex = 4;
@@ -93,7 +95,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(9, 252);
+            this.statusLabel.Location = new System.Drawing.Point(9, 265);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(53, 13);
             this.statusLabel.TabIndex = 10;
@@ -102,7 +104,7 @@
             // 
             // childProgressBar
             // 
-            this.childProgressBar.Location = new System.Drawing.Point(12, 310);
+            this.childProgressBar.Location = new System.Drawing.Point(12, 323);
             this.childProgressBar.Name = "childProgressBar";
             this.childProgressBar.Size = new System.Drawing.Size(265, 23);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -123,13 +125,14 @@
             this.forceManuel.Text = "Force manual game detection";
             this.forceManuel.UseVisualStyleBackColor = true;
             this.forceManuel.CheckedChanged += new System.EventHandler(this.forceManuel_CheckedChanged);
+            this.forceManuel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.forceManuel_MouseDown);
             this.forceManuel.MouseEnter += new System.EventHandler(this.forceManuel_MouseEnter);
             this.forceManuel.MouseLeave += new System.EventHandler(this.forceManuel_MouseLeave);
             // 
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(9, 373);
+            this.formPageLink.Location = new System.Drawing.Point(9, 386);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -139,7 +142,7 @@
             // 
             // parrentProgressBar
             // 
-            this.parrentProgressBar.Location = new System.Drawing.Point(12, 281);
+            this.parrentProgressBar.Location = new System.Drawing.Point(12, 294);
             this.parrentProgressBar.Name = "parrentProgressBar";
             this.parrentProgressBar.Size = new System.Drawing.Size(265, 23);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -148,7 +151,7 @@
             // speedLabel
             // 
             this.speedLabel.AutoSize = true;
-            this.speedLabel.Location = new System.Drawing.Point(12, 336);
+            this.speedLabel.Location = new System.Drawing.Point(12, 349);
             this.speedLabel.Name = "speedLabel";
             this.speedLabel.Size = new System.Drawing.Size(24, 13);
             this.speedLabel.TabIndex = 18;
@@ -186,6 +189,7 @@
             this.cleanInstallCB.Text = "Clean Installation (Recommended)";
             this.cleanInstallCB.UseVisualStyleBackColor = true;
             this.cleanInstallCB.CheckedChanged += new System.EventHandler(this.cleanInstallCB_CheckedChanged);
+            this.cleanInstallCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cleanInstallCB_MouseDown);
             this.cleanInstallCB.MouseEnter += new System.EventHandler(this.cleanInstallCB_MouseEnter);
             this.cleanInstallCB.MouseLeave += new System.EventHandler(this.cleanInstallCB_MouseLeave);
             // 
@@ -199,6 +203,7 @@
             this.cancerFontCB.Text = "Cancer font";
             this.cancerFontCB.UseVisualStyleBackColor = true;
             this.cancerFontCB.CheckedChanged += new System.EventHandler(this.cancerFontCB_CheckedChanged);
+            this.cancerFontCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cancerFontCB_MouseDown);
             this.cancerFontCB.MouseEnter += new System.EventHandler(this.cancerFontCB_MouseEnter);
             this.cancerFontCB.MouseLeave += new System.EventHandler(this.cancerFontCB_MouseLeave);
             // 
@@ -212,11 +217,13 @@
             this.backupModsCheckBox.Text = "Backup current mods folder";
             this.backupModsCheckBox.UseVisualStyleBackColor = true;
             this.backupModsCheckBox.CheckedChanged += new System.EventHandler(this.backupModsCheckBox_CheckedChanged);
+            this.backupModsCheckBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.backupModsCheckBox_MouseDown);
             this.backupModsCheckBox.MouseEnter += new System.EventHandler(this.backupModsCheckBox_MouseEnter);
             this.backupModsCheckBox.MouseLeave += new System.EventHandler(this.backupModsCheckBox_MouseLeave);
             // 
             // settingsGroupBox
             // 
+            this.settingsGroupBox.Controls.Add(this.saveLastInstallCB);
             this.settingsGroupBox.Controls.Add(this.largerFontButton);
             this.settingsGroupBox.Controls.Add(this.forceManuel);
             this.settingsGroupBox.Controls.Add(this.cancerFontCB);
@@ -224,10 +231,24 @@
             this.settingsGroupBox.Controls.Add(this.cleanInstallCB);
             this.settingsGroupBox.Location = new System.Drawing.Point(12, 92);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(265, 101);
+            this.settingsGroupBox.Size = new System.Drawing.Size(265, 115);
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "RelHax ModPack Settings";
+            // 
+            // saveLastInstallCB
+            // 
+            this.saveLastInstallCB.AutoSize = true;
+            this.saveLastInstallCB.Location = new System.Drawing.Point(6, 95);
+            this.saveLastInstallCB.Name = "saveLastInstallCB";
+            this.saveLastInstallCB.Size = new System.Drawing.Size(138, 17);
+            this.saveLastInstallCB.TabIndex = 26;
+            this.saveLastInstallCB.Text = "Save last install\'s config";
+            this.saveLastInstallCB.UseVisualStyleBackColor = true;
+            this.saveLastInstallCB.CheckedChanged += new System.EventHandler(this.saveLastInstallCB_CheckedChanged);
+            this.saveLastInstallCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.saveLastInstallCB_MouseDown);
+            this.saveLastInstallCB.MouseEnter += new System.EventHandler(this.saveLastInstallCB_MouseEnter);
+            this.saveLastInstallCB.MouseLeave += new System.EventHandler(this.saveLastInstallCB_MouseLeave);
             // 
             // largerFontButton
             // 
@@ -239,6 +260,7 @@
             this.largerFontButton.Text = "Larger Font";
             this.largerFontButton.UseVisualStyleBackColor = true;
             this.largerFontButton.CheckedChanged += new System.EventHandler(this.largerFontButton_CheckedChanged);
+            this.largerFontButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.largerFontButton_MouseDown);
             this.largerFontButton.MouseEnter += new System.EventHandler(this.largerFontButton_MouseEnter);
             this.largerFontButton.MouseLeave += new System.EventHandler(this.largerFontButton_MouseLeave);
             // 
@@ -246,7 +268,7 @@
             // 
             this.loadingImageGroupBox.Controls.Add(this.thirdGuardsLoadingImageRB);
             this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(12, 195);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(12, 208);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
             this.loadingImageGroupBox.Size = new System.Drawing.Size(96, 54);
             this.loadingImageGroupBox.TabIndex = 26;
@@ -284,7 +306,7 @@
             // findBugAddModLabel
             // 
             this.findBugAddModLabel.AutoSize = true;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 353);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 366);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
             this.findBugAddModLabel.TabIndex = 27;
@@ -292,11 +314,24 @@
             this.findBugAddModLabel.Text = "Find a bug? Want a mod added?";
             this.findBugAddModLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.findBugAddModLabel_LinkClicked);
             // 
+            // cancelDownloadButton
+            // 
+            this.cancelDownloadButton.Enabled = false;
+            this.cancelDownloadButton.Location = new System.Drawing.Point(178, 366);
+            this.cancelDownloadButton.Name = "cancelDownloadButton";
+            this.cancelDownloadButton.Size = new System.Drawing.Size(99, 23);
+            this.cancelDownloadButton.TabIndex = 28;
+            this.cancelDownloadButton.Text = "Cancel Download";
+            this.cancelDownloadButton.UseVisualStyleBackColor = true;
+            this.cancelDownloadButton.Visible = false;
+            this.cancelDownloadButton.Click += new System.EventHandler(this.cancelDownloadButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(289, 391);
+            this.ClientSize = new System.Drawing.Size(289, 407);
+            this.Controls.Add(this.cancelDownloadButton);
             this.Controls.Add(this.findBugAddModLabel);
             this.Controls.Add(this.loadingImageGroupBox);
             this.Controls.Add(this.settingsGroupBox);
@@ -349,6 +384,8 @@
         private System.Windows.Forms.RadioButton thirdGuardsLoadingImageRB;
         private System.Windows.Forms.RadioButton standardImageRB;
         private System.Windows.Forms.LinkLabel findBugAddModLabel;
+        private System.Windows.Forms.CheckBox saveLastInstallCB;
+        private System.Windows.Forms.Button cancelDownloadButton;
     }
 }
 

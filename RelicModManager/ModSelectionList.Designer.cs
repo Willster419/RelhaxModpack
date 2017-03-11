@@ -48,6 +48,7 @@
             this.loadConfigButton = new System.Windows.Forms.Button();
             this.saveConfigButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.clearSelectionsButton = new System.Windows.Forms.Button();
             this.modTabGroups.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -177,9 +178,9 @@
             // 
             // continueButton
             // 
-            this.continueButton.Location = new System.Drawing.Point(905, 438);
+            this.continueButton.Location = new System.Drawing.Point(921, 438);
             this.continueButton.Name = "continueButton";
-            this.continueButton.Size = new System.Drawing.Size(75, 23);
+            this.continueButton.Size = new System.Drawing.Size(59, 23);
             this.continueButton.TabIndex = 5;
             this.continueButton.Text = "Continue";
             this.continueButton.UseVisualStyleBackColor = true;
@@ -187,9 +188,9 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(824, 438);
+            this.cancelButton.Location = new System.Drawing.Point(866, 438);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.Size = new System.Drawing.Size(49, 23);
             this.cancelButton.TabIndex = 6;
             this.cancelButton.Text = "cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
@@ -215,9 +216,9 @@
             // 
             // loadConfigButton
             // 
-            this.loadConfigButton.Location = new System.Drawing.Point(662, 438);
+            this.loadConfigButton.Location = new System.Drawing.Point(728, 438);
             this.loadConfigButton.Name = "loadConfigButton";
-            this.loadConfigButton.Size = new System.Drawing.Size(75, 23);
+            this.loadConfigButton.Size = new System.Drawing.Size(62, 23);
             this.loadConfigButton.TabIndex = 9;
             this.loadConfigButton.Text = "Load Pref";
             this.loadConfigButton.UseVisualStyleBackColor = true;
@@ -225,9 +226,9 @@
             // 
             // saveConfigButton
             // 
-            this.saveConfigButton.Location = new System.Drawing.Point(743, 438);
+            this.saveConfigButton.Location = new System.Drawing.Point(796, 438);
             this.saveConfigButton.Name = "saveConfigButton";
-            this.saveConfigButton.Size = new System.Drawing.Size(75, 23);
+            this.saveConfigButton.Size = new System.Drawing.Size(64, 23);
             this.saveConfigButton.TabIndex = 10;
             this.saveConfigButton.Text = "Save Pref";
             this.saveConfigButton.UseVisualStyleBackColor = true;
@@ -242,11 +243,22 @@
             this.label2.TabIndex = 12;
             this.label2.Text = "\"*\" tab indicates single selection tab";
             // 
+            // clearSelectionsButton
+            // 
+            this.clearSelectionsButton.Location = new System.Drawing.Point(634, 438);
+            this.clearSelectionsButton.Name = "clearSelectionsButton";
+            this.clearSelectionsButton.Size = new System.Drawing.Size(88, 23);
+            this.clearSelectionsButton.TabIndex = 13;
+            this.clearSelectionsButton.Text = "clear selections";
+            this.clearSelectionsButton.UseVisualStyleBackColor = true;
+            this.clearSelectionsButton.Click += new System.EventHandler(this.clearSelectionsButton_Click);
+            // 
             // ModSelectionList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(992, 473);
+            this.Controls.Add(this.clearSelectionsButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.saveConfigButton);
             this.Controls.Add(this.loadConfigButton);
@@ -288,5 +300,6 @@
         private System.Windows.Forms.Button loadConfigButton;
         private System.Windows.Forms.Button saveConfigButton;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button clearSelectionsButton;
     }
 }
