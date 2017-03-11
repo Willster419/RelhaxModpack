@@ -49,7 +49,7 @@ namespace RelicModManager
             //load the last selection if setting is set
             if (Settings.saveLastConfig && !Program.autoInstall)
             {
-                this.loadConfig();
+                this.loadConfig(false);
             }
             this.makeTabs();
             this.addAllMods();
@@ -62,7 +62,7 @@ namespace RelicModManager
                 //have it load the config
                 //don't say prefs set
                 //close
-                this.loadConfig();
+                this.loadConfig(false);
                 this.cancel = false;
                 pw.Close();
                 this.Close();
@@ -1071,7 +1071,7 @@ namespace RelicModManager
             //save the last config if told to do so
             if (Settings.saveLastConfig)
             {
-                this.saveConfig();
+                this.saveConfig(false);
             }
             this.Close();
         }
@@ -1140,7 +1140,7 @@ namespace RelicModManager
             File.AppendAllText(Application.StartupPath + "\\RelHaxLog.txt", info + "\n");
         }
         //saves the currently checked configs and mods
-        private void saveConfig()
+        private void saveConfig(bool fromButton)
         {
             //dialog box to ask where to save the config to
             SaveFileDialog saveLocation = new SaveFileDialog();
@@ -1149,7 +1149,7 @@ namespace RelicModManager
             saveLocation.Filter = "*.xml|*.xml";
             saveLocation.InitialDirectory = Application.StartupPath + "\\RelHaxUserConfigs";
             saveLocation.Title = "Select where to save user prefs";
-            if (!Settings.saveLastConfig)
+            if (fromButton)
             {
                 if (saveLocation.ShowDialog().Equals(DialogResult.Cancel))
                 {
@@ -1158,7 +1158,7 @@ namespace RelicModManager
                 }
             }
             string savePath = saveLocation.FileName;
-            if (Settings.saveLastConfig)
+            if (Settings.saveLastConfig && !fromButton)
             {
                 savePath = Application.StartupPath + "\\RelHaxUserConfigs\\lastInstalledConfig.xml";
                 Settings.appendToLog("Save last config checked, saving to " + savePath);
@@ -1222,13 +1222,13 @@ namespace RelicModManager
                 }
             }
             doc.Save(savePath);
-            if (!Settings.saveLastConfig)
+            if (fromButton)
             {
                 MessageBox.Show("Config Saved Sucessfully");
             }
         }
         //loads a saved config from xml and parses it into the memory database
-        private void loadConfig()
+        private void loadConfig(bool fromButton)
         {
             loadingConfig = true;
             OpenFileDialog loadLocation = new OpenFileDialog();
@@ -1237,7 +1237,7 @@ namespace RelicModManager
             {
                 filePath = Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName;
             }
-            else if (Settings.saveLastConfig)
+            else if (Settings.saveLastConfig && !fromButton)
             {
                 filePath = Application.StartupPath + "\\RelHaxUserConfigs\\lastInstalledConfig.xml";
                 if (File.Exists(filePath))
@@ -1338,7 +1338,7 @@ namespace RelicModManager
                 }
             }
             this.appendToLog("Finished loading mod selections");
-            if (Settings.saveLastConfig)
+            if (Settings.saveLastConfig && !fromButton)
                 return;
             if (!Program.autoInstall || !Settings.saveLastConfig)
                 MessageBox.Show("Prefrences Set");
@@ -1399,12 +1399,12 @@ namespace RelicModManager
         //handler for when the "load config" button is pressed
         private void loadConfigButton_Click(object sender, EventArgs e)
         {
-            this.loadConfig();
+            this.loadConfig(true);
         }
         //handler for when the "save config" button is pressed
         private void saveConfigButton_Click(object sender, EventArgs e)
         {
-            this.saveConfig();
+            this.saveConfig(true);
         }
         //handler for when a new tab page is selected
         private void modTabGroups_Selected(object sender, TabControlEventArgs e)

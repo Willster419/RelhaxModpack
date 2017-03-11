@@ -36,7 +36,7 @@ namespace RelicModManager
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 20.3";
+        private string managerVersion = "version 20.3.1";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         private SelectFeatures features = new SelectFeatures();
         //queue for downloading mods
