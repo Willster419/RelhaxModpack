@@ -76,7 +76,7 @@
             </picture>
           </pictures>
           <configs />
-          <description>Config by Willster419. Origionaly based on stock xvm config.@Includes an hp pool and minimap hp circles@XFT HITLOG IS NOT COMPATIBLE WITH THIS CONFIG</description>
+          <description>Config by Willster419. Origionaly based on stock xvm config.@Includes an hp pool and minimap hp circles</description>
           <updateComment>
           </updateComment>
           <devURL>https://github.com/Willster419/xvmConfig</devURL>
@@ -2013,6 +2013,41 @@
           <devURL>http://forum.worldoftanks.ru/index.php?/topic/1229310-</devURL>
         </mod>
         <mod>
+          <name>Arty mod by Pro-Arty (Shows splash radius and shell travel time)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <pictures>
+            <picture>
+              <URL>http://s23.postimg.org/ixh0brz8b/Pro_Arty_News11112vx.jpg</URL>
+            </picture>
+            <picture>
+              <URL>http://s23.postimg.org/birojedcr/Pro_A09_tutvx.jpg</URL>
+            </picture>
+          </pictures>
+          <configs>
+            <config>
+              <name>Arty</name>
+              <configzipfile>Crosshairs_ProArty_9.17.1_2017-03-11.zip</configzipfile>
+              <configzipcrc>4731d16df31f21e872aca3766def0bf5</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://forum.worldoftanks.ru/index.php?/topic/1229310-</devURL>
+        </mod>
+        <mod>
           <name>Harpoon</name>
           <version>3</version>
           <modzipfile>
@@ -3651,8 +3686,8 @@
         <mod>
           <name>Relhax</name>
           <version>18</version>
-          <modzipfile>Sounds_Relhax_Base_2017-03-09.zip</modzipfile>
-          <modzipcrc>4173002c1fa312db55468374ab58950b</modzipcrc>
+          <modzipfile>Sounds_Relhax_Base_2017-03-11.zip</modzipfile>
+          <modzipcrc>9fb70cff47f69c52a0a2a332223f5a26</modzipcrc>
           <size>52.8</size>
           <enabled>True</enabled>
           <pictures>
@@ -3713,14 +3748,15 @@
         <mod>
           <name>Sounds instead of crew voices by vvooj</name>
           <version>6.1</version>
-          <modzipfile>Sounds_Simple_Crew_Sounds.zip</modzipfile>
-          <modzipcrc>b2c7a4f094682e6b4c326a9650219eec</modzipcrc>
-          <size>0</size>
-          <enabled>False</enabled>
+          <modzipfile>Sounds_Simple_Crew_Sounds_2017-03-11.zip</modzipfile>
+          <modzipcrc>1dca974f0626222178bbf6020f146099</modzipcrc>
+          <size>0.1</size>
+          <enabled>True</enabled>
           <pictures />
           <configs />
           <description>Mutes all crew sounds and replaces them with sounds</description>
-          <updateComment>DEV URL TODO</updateComment>
+          <updateComment>
+          </updateComment>
           <devURL>http://www.curse.com/wot-mods/worldoftanks/simple-sounds</devURL>
         </mod>
         <mod>
@@ -3871,7 +3907,7 @@
               <pictures />
             </config>
           </configs>
-          <description>Change your 6th sense sound to one of these in the list</description>
+          <description>Change your 6th sense sound to one of these in the list@you can preview them from this link:@http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/audio/sixthSensePreview/@suprise_sound is metal gear solid</description>
           <updateComment>
           </updateComment>
           <devURL>
