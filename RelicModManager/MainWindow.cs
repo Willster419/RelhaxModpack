@@ -36,7 +36,7 @@ namespace RelicModManager
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 20.4";
+        private string managerVersion = "version 20.4.1";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         private SelectFeatures features = new SelectFeatures();
         //queue for downloading mods
@@ -496,8 +496,9 @@ namespace RelicModManager
             foreach (Patch p in patchList)
             {
                 string patchFileOutput = p.file;
-                if (p.file.Length > 15)
-                  patchFileOutput = p.file.Substring(0,30);
+                int maxLength = 30;
+                if (p.file.Length > maxLength)
+                    patchFileOutput = p.file.Substring(0, maxLength);
                 downloadProgress.Text = "patching " + patchFileOutput + "...";
                 Application.DoEvents();
                 if (p.type.Equals("regx"))
@@ -2216,18 +2217,28 @@ namespace RelicModManager
         //handler for the extractworker when progress is made
         private void extractworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            if (childProgressBar.Maximum != childMaxProgres)
-            childProgressBar.Maximum = childMaxProgres;
-            if (childCurrentProgres != 0)
-                childProgressBar.Value = childCurrentProgres;
-            if (currentZipEntry.Length >= 47)
+            try
             {
-                downloadProgress.Text = currentZipEntry.Substring(0, 47) + "...";
+                if (childProgressBar.Maximum != childMaxProgres)
+                    childProgressBar.Maximum = childMaxProgres;
+                if (childCurrentProgres != 0)
+                    childProgressBar.Value = childCurrentProgres;
+                if (currentZipEntry.Length >= 47)
+                {
+                    downloadProgress.Text = currentZipEntry.Substring(0, 47) + "...";
+                }
+                if (isParrentDone)
+                {
+                    if (parrentProgressBar.Value != parrentProgressBar.Maximum)
+                        parrentProgressBar.Value++;
+                }
             }
-            if (isParrentDone)
+            catch (NullReferenceException ne)
             {
-                if (parrentProgressBar.Value != parrentProgressBar.Maximum)
-                    parrentProgressBar.Value++;
+                Settings.appendToLog("EXEPTION: traceback from instance: " + ne.InnerException);
+                Settings.appendToLog("Message: " + ne.Message);
+                Settings.appendToLog("From source: " + ne.Source);
+                Settings.appendToLog("Callstack: " + ne.StackTrace);
             }
         }
         //handler for when the extractworker is completed
