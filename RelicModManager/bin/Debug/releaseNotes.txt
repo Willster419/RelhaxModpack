@@ -1,3 +1,10 @@
+Version 20.4:
+- Added feature to backup user created data files to restore after modpack installation (like session stats)
+- Improved downlader UI
+- Other code optimizations
+- Updated database
+- Created retry loop for extraction error display of when you have an explorer window in res_mods and need to close it.
+
 Version 20.3.1:
 - Fixed bug where you could not load of save config when loadLastConfig checkbox was checked
 

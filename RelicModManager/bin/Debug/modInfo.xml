@@ -40,6 +40,7 @@
           <modzipcrc>aba6b3574dec748eaba3490571722605</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs />
           <description>The Default Config that comes with XVM</description>
@@ -55,6 +56,7 @@
           <modzipcrc>9179b84308aafb1b6a9682ec1ad8137c</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://fs5.directupload.net/images/user/160816/y76dgx3v.jpg</URL>
@@ -88,6 +90,7 @@
           <modzipcrc>57b614ff61f0784f86dec7a1f8318618</modzipcrc>
           <size>6.8</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://i.imgur.com/2bm1H04.png</URL>
@@ -115,6 +118,7 @@
           <modzipcrc>9ccbe20d12d5901729101560c04ac29f</modzipcrc>
           <size>2.4</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://i1269.photobucket.com/albums/jj581/bones_wot/BonesXVMConfigTOP_zps9eb97ba7.jpg</URL>
@@ -216,6 +220,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -294,6 +299,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -341,6 +347,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -379,6 +386,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -417,6 +425,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -455,6 +464,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -493,6 +503,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -531,6 +542,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -569,6 +581,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -607,6 +620,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -645,6 +659,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -683,6 +698,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -721,6 +737,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -786,6 +803,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -860,6 +878,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>False</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -930,6 +949,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -978,6 +998,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1016,6 +1037,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1054,6 +1076,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1092,6 +1115,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1130,6 +1154,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1168,6 +1193,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1206,6 +1232,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1244,6 +1271,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1291,6 +1319,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1329,6 +1358,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1367,6 +1397,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1405,6 +1436,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1443,6 +1475,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1481,6 +1514,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1519,6 +1553,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1557,6 +1592,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1595,6 +1631,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1651,6 +1688,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1689,6 +1727,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1738,6 +1777,7 @@
           <modzipcrc>2e2bb02acc0cbfb586ef9e08334b1e9e</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1786,6 +1826,7 @@
           <modzipcrc>a13a5f37cff8555b81d75be7ef6ad4af</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1840,6 +1881,7 @@
           <modzipcrc>b773f24418213f969c34b9028d0730cc</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1893,6 +1935,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -1954,6 +1997,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://s14.directupload.net/images/user/131227/4t5vr5i3.jpg</URL>
@@ -1987,6 +2031,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://s1.directupload.net/images/user/140822/78qos3z5.jpg</URL>
@@ -2022,6 +2067,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://s23.postimg.org/ixh0brz8b/Pro_Arty_News11112vx.jpg</URL>
@@ -2056,6 +2102,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://fs2.directupload.net/images/user/150413/om6jmi3l.jpg</URL>
@@ -2117,6 +2164,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://i.imgur.com/pjkRzWn.jpg</URL>
@@ -2154,6 +2202,7 @@
           <modzipcrc>4e6e337d1a5bbe66b73f6d766530774d</modzipcrc>
           <size>0.2</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://cdn.modsworldoftanks.com/wp-content/uploads/2016/01/MBkp58k.png</URL>
@@ -2196,6 +2245,7 @@
           <modzipcrc>2a86a7e3fe0ddd032c0654daa6dcb72e</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://cdn-frm-eu.wargaming.net/wot/ru/uploads/monthly_08_2014/post-6420121-0-91975400-1408203215.jpg</URL>
@@ -2260,6 +2310,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -2290,6 +2341,7 @@
           <modzipcrc>44976235846a77b9d72f337289d5bd12</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://4cheat.ru/i/view.php?id=14783.jpg</URL>
@@ -2346,6 +2398,7 @@
           <modzipcrc>45b40b822ee0647c12cfd59009d5b46c</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://cdn-frm-eu.wargaming.net/wot/eu/uploads/monthly_10_2014/post-506947255-0-02175200-1414274138.jpg</URL>
@@ -2446,6 +2499,7 @@
           <modzipcrc>f2a47a7023697f98a895e1e4ec3c1757</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://4cheat.ru/i/view.php?id=333.jpg</URL>
@@ -2464,6 +2518,7 @@
           <modzipcrc>8768c14053f612606e343e5c1fb120c8</modzipcrc>
           <size>5.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>https://dl.dropboxusercontent.com/u/37902077/wot/tessu_mod/trainingroom.png</URL>
@@ -2488,6 +2543,7 @@
           <modzipcrc>36488511d781a3545bd11b076c1ee9dd</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -2521,6 +2577,7 @@
           <modzipcrc>bb872e0705fc77dad2f6c7b86e1ebb2e</modzipcrc>
           <size>0.2</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>https://koreanrandom.com/forum/uploads/monthly_02_2016/post-8065-0-19679800-1456090716.jpg</URL>
@@ -2617,6 +2674,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -2720,6 +2778,7 @@
           <modzipcrc>79cb7a53a131941d4f823ce188758b50</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -2803,6 +2862,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -2899,6 +2959,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://s019.radikal.ru/i641/1312/dc/f65367de5257.jpg</URL>
@@ -2946,6 +3007,7 @@
           <modzipcrc>d6e4b9529faadd4e752060ac3ff000f4</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>https://wotspeak.ru/uploads/posts/2015-10/1445335486_shot_019.jpg</URL>
@@ -2970,6 +3032,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -3005,6 +3068,7 @@
           <modzipcrc>a193ad398bde52d14d037e643b890042</modzipcrc>
           <size>5.6</size>
           <enabled>False</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -3043,6 +3107,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -3088,6 +3153,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -3123,6 +3189,7 @@
           <modzipcrc>975f213b6357ba537f6f119f793e6633</modzipcrc>
           <size>6</size>
           <enabled>False</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://orig02.deviantart.net/3143/f/2014/148/8/7/fantage_deal_with_it_glasses__c2u__by_fantagestore-d7422m2.png</URL>
@@ -3152,6 +3219,7 @@
           <modzipcrc>496d329a87472131924cb136cc810349</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -3179,6 +3247,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -3285,6 +3354,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -3390,6 +3460,7 @@
           <modzipcrc>1da40777c690eed26e06abc8da89422b</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://fs5.directupload.net/images/160727/pu8ywi2f.jpg</URL>
@@ -3448,6 +3519,7 @@
           <modzipcrc>37e7d6915cb92c8af83d09ea04222944</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://s14.directupload.net/images/131220/mkrjfo7g.jpg</URL>
@@ -3531,6 +3603,7 @@
           <modzipcrc>5aae566466a4d093e1b227d32fb3de9e</modzipcrc>
           <size>1.4</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://static-ptl-ru.gcdn.co/dcont/fb/image/wotfm_684_243.jpg</URL>
@@ -3556,6 +3629,7 @@
           <modzipcrc>143c76c6801cec925ea4a557b4f36284</modzipcrc>
           <size>13.5</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://s7.directupload.net/images/141005/k6hhd94e.jpg</URL>
@@ -3575,6 +3649,7 @@
           <modzipcrc>498abc79e00356c060fe4fff9227a7c1</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://s1.directupload.net/images/user/140614/qhfyk8zv.jpg</URL>
@@ -3620,6 +3695,10 @@
           <modzipcrc>5be410a9500e4057023ffc543c63fa96</modzipcrc>
           <size>0.3</size>
           <enabled>True</enabled>
+          <userDatas>
+            <userData>\\res_mods\\configs\\wotstat\\cache.json</userData>
+          </userDatas>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://i.imgur.com/UOiwa7n.png</URL>
@@ -3649,6 +3728,9 @@
           <modzipcrc>c540bf6b354f61ad6398367f56f5b3e8</modzipcrc>
           <size>1.9</size>
           <enabled>True</enabled>
+          <userDatas>
+            <userData>\\res_mods\\configs\\YasenKrasen\\cache.json</userData>
+          </userDatas>
           <pictures>
             <picture>
               <URL>http://i.imgur.com/h1kpmRO.jpg</URL>
@@ -3690,6 +3772,7 @@
           <modzipcrc>9fb70cff47f69c52a0a2a332223f5a26</modzipcrc>
           <size>52.8</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://i.imgur.com/uWih1kD.jpg</URL>
@@ -3728,6 +3811,7 @@
           <modzipcrc>f</modzipcrc>
           <size>0</size>
           <enabled>False</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -3752,6 +3836,7 @@
           <modzipcrc>1dca974f0626222178bbf6020f146099</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs />
           <description>Mutes all crew sounds and replaces them with sounds</description>
@@ -3767,6 +3852,7 @@
           <modzipcrc>f</modzipcrc>
           <size>0</size>
           <enabled>False</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -3805,6 +3891,7 @@
           <modzipcrc>a4686316841540b9abe0821e4aae8abd</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -3921,6 +4008,7 @@
           <modzipcrc>3f0a682223145ef02ea31c8ccd175684</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -4426,6 +4514,7 @@
           <modzipcrc>153ecff0edfd47e1fbac9c75ff33e47d</modzipcrc>
           <size>453.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://s1.directupload.net/images/user/140809/o8sxzocx.jpg</URL>
@@ -4460,6 +4549,7 @@
           <modzipcrc>1d4ae1639546a7036057ba05d88d5ea5</modzipcrc>
           <size>194.5</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://fs2.directupload.net/images/user/150624/bsys44bc.png</URL>
@@ -4501,6 +4591,7 @@
           <modzipcrc>6052fe435292552277bb2a3cd3afe7d4</modzipcrc>
           <size>1.3</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://s14.directupload.net/images/user/141011/5jumyfci.jpg</URL>
@@ -4522,6 +4613,7 @@
           <modzipcrc>f07fc698168406f8306c2df2a254c149</modzipcrc>
           <size>9.4</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://fs5.directupload.net/images/user/161224/8redvdrb.jpg</URL>
@@ -4548,6 +4640,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -4630,6 +4723,7 @@
           <modzipcrc>1bb33214300c3b021bb44b2b151e62d7</modzipcrc>
           <size>2</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://fs2.directupload.net/images/user/150412/6mx6fpao.png</URL>
@@ -4657,6 +4751,7 @@
           <modzipcrc>d2866f06f3de913ddbf5fa23b4cba2b9</modzipcrc>
           <size>2.3</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://fs5.directupload.net/images/user/161104/isbspraj.jpg</URL>
@@ -4683,6 +4778,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -4739,6 +4835,7 @@
           <modzipcrc>bbe40b24325f59982c09eab5624d8a17</modzipcrc>
           <size>19.4</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://s14.directupload.net/images/user/141011/ypf839pd.jpg</URL>
@@ -4760,6 +4857,7 @@
           <modzipcrc>bb34072844c52ead3ab85450a4ae940a</modzipcrc>
           <size>17.7</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://s14.directupload.net/images/user/141008/x6p7ykov.jpg</URL>
@@ -4781,6 +4879,7 @@
           <modzipcrc>a7b532eb93ba75f471632d42c93cfd0f</modzipcrc>
           <size>1.2</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://fs5.directupload.net/images/user/161106/hlf63dcx.jpg</URL>
@@ -4802,6 +4901,7 @@
           <modzipcrc>3fe5d3014822bfec4a22f853e0b0e4a1</modzipcrc>
           <size>1.6</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://fs5.directupload.net/images/user/151031/iggrf8ag.jpg</URL>
@@ -4825,6 +4925,7 @@
           <modzipcrc>39b9a035bb857c9437aa0202781d9fa5</modzipcrc>
           <size>23.4</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://fs5.directupload.net/images/user/161224/56h8o3bu.jpg</URL>
@@ -4856,6 +4957,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -4957,6 +5059,7 @@
           <modzipcrc>a5c0e6cc69cf02b60e7e35517f530f69</modzipcrc>
           <size>8.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://fs5.directupload.net/images/user/161126/yu39p97t.jpg</URL>
@@ -4990,6 +5093,7 @@
           <modzipcrc>b399ec08af408680dea0fc2c7d018c7a</modzipcrc>
           <size>16.8</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://s14.directupload.net/images/user/141011/ps4otp5j.jpg</URL>
@@ -5011,6 +5115,7 @@
           <modzipcrc>6d7d90c173c2298c79e14d561779ab15</modzipcrc>
           <size>13.7</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://fs5.directupload.net/images/user/161224/hcmvu8vl.jpg</URL>
@@ -5037,6 +5142,7 @@
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures />
           <configs>
             <config>
@@ -5112,6 +5218,7 @@
           <modzipcrc>26b49b62bad30551a3a28dcf3894f13e</modzipcrc>
           <size>7.8</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://fs5.directupload.net/images/user/151217/n3a7dljn.jpg</URL>
@@ -5133,6 +5240,7 @@
           <modzipcrc>2e5c46ec03bb5f588924ecbe5dd8e7cc</modzipcrc>
           <size>14.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>https://media-curse.cursecdn.com/attachments/189/60/d03d47078682b5814367b9ab337c35ea.jpg</URL>
@@ -5164,6 +5272,7 @@
           <modzipcrc>2cfca3de289cb7da5c24a7135ff51fb2</modzipcrc>
           <size>20.8</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>https://media-curse.cursecdn.com/attachments/189/498/2ef9b0c4ecfcde4767b18557ad5437ae.jpg</URL>
@@ -5196,6 +5305,7 @@
           <modzipcrc>9a9bd717139e8d1e719ace76c8f91245</modzipcrc>
           <size>3.6</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://fs5.directupload.net/images/user/170105/s8uqe7oe.jpg</URL>
@@ -5216,6 +5326,7 @@
           <modzipcrc>fe5e6779da1a178667676c38f4b3c7f0</modzipcrc>
           <size>4.1</size>
           <enabled>True</enabled>
+          <userDatas />
           <pictures>
             <picture>
               <URL>http://fs5.directupload.net/images/user/170105/5gh43lah.jpg</URL>

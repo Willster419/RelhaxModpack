@@ -39,7 +39,7 @@ namespace RelicModManager
             bool duplicates = this.duplicates();
             if (duplicates)
             {
-                this.appendToLog("CRITICAL: Duplicate mod name detected!!");
+                Settings.appendToLog("CRITICAL: Duplicate mod name detected!!");
                 MessageBox.Show("CRITICAL: Duplicate mod name detected!!");
                 Application.Exit();
             }
@@ -905,6 +905,24 @@ namespace RelicModManager
                                         case "devURL":
                                             m.devURL = nn.InnerText;
                                             break;
+                                        case "userDatas":
+                                            foreach (XmlNode nnnnnnn in nn.ChildNodes)
+                                            {
+
+                                                switch (nnnnnnn.Name)
+                                                    {
+                                                        case "userData":
+                                                            string innerText = nnnnnnn.InnerText;
+                                                            if (innerText == null)
+                                                                continue;
+                                                            if (innerText.Equals(""))
+                                                                continue;
+                                                            m.userFiles.Add(innerText);
+                                                            break;
+                                                    }
+                                                
+                                            }
+                                            break;
                                         case "pictures":
                                             //parse every picture
                                             foreach (XmlNode nnnnnnn in nn.ChildNodes)
@@ -1133,12 +1151,6 @@ namespace RelicModManager
             }
             return null;
         }
-        //logs string info to the log output
-        private void appendToLog(string info)
-        {
-            //the method should automaticly make the file if it's not there
-            File.AppendAllText(Application.StartupPath + "\\RelHaxLog.txt", info + "\n");
-        }
         //saves the currently checked configs and mods
         private void saveConfig(bool fromButton)
         {
@@ -1265,7 +1277,7 @@ namespace RelicModManager
                 filePath = loadLocation.FileName;
             }
             this.clearSelectionMemory();
-            this.appendToLog("Loading mod selections from " + filePath);
+            Settings.appendToLog("Loading mod selections from " + filePath);
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
             //get a list of mods
@@ -1284,7 +1296,7 @@ namespace RelicModManager
                             if (m == null) continue;
                             if (m.enabled)
                             {
-                                this.appendToLog("Checking mod " + m.name);
+                                Settings.appendToLog("Checking mod " + m.name);
                                 m.modChecked = true;
                             }
                             break;
@@ -1302,7 +1314,7 @@ namespace RelicModManager
                                                 continue;
                                             if (c.enabled)
                                             {
-                                                this.appendToLog("Checking config " + c.name);
+                                                Settings.appendToLog("Checking config " + c.name);
                                                 c.configChecked = true;
                                             }
                                             break;
@@ -1337,7 +1349,7 @@ namespace RelicModManager
                     }
                 }
             }
-            this.appendToLog("Finished loading mod selections");
+            Settings.appendToLog("Finished loading mod selections");
             if (Settings.saveLastConfig && !fromButton)
                 return;
             if (!Program.autoInstall || !Settings.saveLastConfig)
@@ -1464,7 +1476,7 @@ namespace RelicModManager
         //unchecks all mods from memory
         private void clearSelectionMemory()
         {
-            this.appendToLog("Unchecking all mods");
+            Settings.appendToLog("Unchecking all mods");
             foreach (Catagory c in parsedCatagoryList)
             {
                 foreach (Mod m in c.mods)

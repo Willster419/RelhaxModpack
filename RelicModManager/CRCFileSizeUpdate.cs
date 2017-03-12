@@ -279,6 +279,24 @@ namespace RelicModManager
                                         case "devURL":
                                             m.devURL = nn.InnerText;
                                             break;
+                                        case "userDatas":
+                                            foreach (XmlNode nnnnnnn in nn.ChildNodes)
+                                            {
+
+                                                switch (nnnnnnn.Name)
+                                                {
+                                                    case "userData":
+                                                        string innerText = nnnnnnn.InnerText;
+                                                        if (innerText == null)
+                                                            continue;
+                                                        if (innerText.Equals(""))
+                                                            continue;
+                                                        m.userFiles.Add(innerText);
+                                                        break;
+                                                }
+
+                                            }
+                                            break;
                                         case "pictures":
                                             //parse every picture
                                             foreach (XmlNode nnnnnnn in nn.ChildNodes)
@@ -538,6 +556,15 @@ namespace RelicModManager
                     XmlElement modEnabled = doc.CreateElement("enabled");
                     modEnabled.InnerText = "" + m.enabled;
                     modRoot.AppendChild(modEnabled);
+                    //datas for the mods
+                    XmlElement modDatas = doc.CreateElement("userDatas");
+                    foreach (string s in m.userFiles)
+                    {
+                        XmlElement userData = doc.CreateElement("userData");
+                        userData.InnerText = s;
+                        modDatas.AppendChild(userData);
+                    }
+                    modRoot.AppendChild(modDatas);
                     //pictures for the mods
                     XmlElement modPictures = doc.CreateElement("pictures");
                     foreach (Picture p in m.picList)

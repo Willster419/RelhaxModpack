@@ -52,6 +52,7 @@
             this.standardImageRB = new System.Windows.Forms.RadioButton();
             this.findBugAddModLabel = new System.Windows.Forms.LinkLabel();
             this.cancelDownloadButton = new System.Windows.Forms.Button();
+            this.saveUserDataCB = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -82,7 +83,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.downloadProgress.AutoSize = true;
-            this.downloadProgress.Location = new System.Drawing.Point(9, 278);
+            this.downloadProgress.Location = new System.Drawing.Point(9, 306);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.Size = new System.Drawing.Size(24, 13);
             this.downloadProgress.TabIndex = 4;
@@ -95,7 +96,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(9, 265);
+            this.statusLabel.Location = new System.Drawing.Point(9, 293);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(53, 13);
             this.statusLabel.TabIndex = 10;
@@ -104,7 +105,7 @@
             // 
             // childProgressBar
             // 
-            this.childProgressBar.Location = new System.Drawing.Point(12, 323);
+            this.childProgressBar.Location = new System.Drawing.Point(12, 351);
             this.childProgressBar.Name = "childProgressBar";
             this.childProgressBar.Size = new System.Drawing.Size(265, 23);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -132,7 +133,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(9, 386);
+            this.formPageLink.Location = new System.Drawing.Point(9, 414);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -142,7 +143,7 @@
             // 
             // parrentProgressBar
             // 
-            this.parrentProgressBar.Location = new System.Drawing.Point(12, 294);
+            this.parrentProgressBar.Location = new System.Drawing.Point(12, 322);
             this.parrentProgressBar.Name = "parrentProgressBar";
             this.parrentProgressBar.Size = new System.Drawing.Size(265, 23);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -151,7 +152,7 @@
             // speedLabel
             // 
             this.speedLabel.AutoSize = true;
-            this.speedLabel.Location = new System.Drawing.Point(12, 349);
+            this.speedLabel.Location = new System.Drawing.Point(12, 377);
             this.speedLabel.Name = "speedLabel";
             this.speedLabel.Size = new System.Drawing.Size(24, 13);
             this.speedLabel.TabIndex = 18;
@@ -223,6 +224,7 @@
             // 
             // settingsGroupBox
             // 
+            this.settingsGroupBox.Controls.Add(this.saveUserDataCB);
             this.settingsGroupBox.Controls.Add(this.saveLastInstallCB);
             this.settingsGroupBox.Controls.Add(this.largerFontButton);
             this.settingsGroupBox.Controls.Add(this.forceManuel);
@@ -231,7 +233,7 @@
             this.settingsGroupBox.Controls.Add(this.cleanInstallCB);
             this.settingsGroupBox.Location = new System.Drawing.Point(12, 92);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(265, 115);
+            this.settingsGroupBox.Size = new System.Drawing.Size(265, 138);
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "RelHax ModPack Settings";
@@ -268,7 +270,7 @@
             // 
             this.loadingImageGroupBox.Controls.Add(this.thirdGuardsLoadingImageRB);
             this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(12, 208);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(12, 236);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
             this.loadingImageGroupBox.Size = new System.Drawing.Size(96, 54);
             this.loadingImageGroupBox.TabIndex = 26;
@@ -306,7 +308,7 @@
             // findBugAddModLabel
             // 
             this.findBugAddModLabel.AutoSize = true;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 366);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 394);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
             this.findBugAddModLabel.TabIndex = 27;
@@ -317,7 +319,7 @@
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(178, 366);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(178, 394);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
             this.cancelDownloadButton.Size = new System.Drawing.Size(99, 23);
             this.cancelDownloadButton.TabIndex = 28;
@@ -326,11 +328,25 @@
             this.cancelDownloadButton.Visible = false;
             this.cancelDownloadButton.Click += new System.EventHandler(this.cancelDownloadButton_Click);
             // 
+            // saveUserDataCB
+            // 
+            this.saveUserDataCB.AutoSize = true;
+            this.saveUserDataCB.Location = new System.Drawing.Point(6, 110);
+            this.saveUserDataCB.Name = "saveUserDataCB";
+            this.saveUserDataCB.Size = new System.Drawing.Size(139, 17);
+            this.saveUserDataCB.TabIndex = 27;
+            this.saveUserDataCB.Text = "Save User created data";
+            this.saveUserDataCB.UseVisualStyleBackColor = true;
+            this.saveUserDataCB.CheckedChanged += new System.EventHandler(this.saveUserDataCB_CheckedChanged);
+            this.saveUserDataCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.saveUserDataCB_MouseDown);
+            this.saveUserDataCB.MouseEnter += new System.EventHandler(this.saveUserDataCB_MouseEnter);
+            this.saveUserDataCB.MouseLeave += new System.EventHandler(this.saveUserDataCB_MouseLeave);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(289, 407);
+            this.ClientSize = new System.Drawing.Size(289, 429);
             this.Controls.Add(this.cancelDownloadButton);
             this.Controls.Add(this.findBugAddModLabel);
             this.Controls.Add(this.loadingImageGroupBox);
@@ -386,6 +402,7 @@
         private System.Windows.Forms.LinkLabel findBugAddModLabel;
         private System.Windows.Forms.CheckBox saveLastInstallCB;
         private System.Windows.Forms.Button cancelDownloadButton;
+        private System.Windows.Forms.CheckBox saveUserDataCB;
     }
 }
 
