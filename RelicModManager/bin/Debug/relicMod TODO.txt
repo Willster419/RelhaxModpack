@@ -1,5 +1,4 @@
  (normal) program fixes
- -make downloader more accurate
 
  (promote)
  -tell loz it's ready
@@ -9,8 +8,6 @@
 (normal) add json patcher add mode?
 
 (enhancement) change downloader api?
-
-(normal) comment code and put in log outputs (currently done on all files)
   
 (enhancement) keep in mind hashtables instead of giant lists
   

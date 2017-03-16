@@ -25,28 +25,8 @@ namespace RelhaxModpack
             {
                 return;
             }
-            MD5 hash = MD5.Create();
-            string crc = this.GetMd5Hash(hash, openFileDialog1.FileName);
+            string crc = Settings.GetMd5Hash(openFileDialog1.FileName);
             crcTB.Text = crc;
-        }
-        //returns the md5 hash of the file based on the input file string location
-        private string GetMd5Hash(MD5 md5Hash, string inputFile)
-        {
-            // Convert the input string to a byte array and compute the hash.
-            var stream = File.OpenRead(inputFile);
-            byte[] data = md5Hash.ComputeHash(stream);
-            stream.Close();
-            // Create a new Stringbuilder to collect the bytes
-            // and create a string.
-            StringBuilder sBuilder = new StringBuilder();
-            // Loop through each byte of the hashed data 
-            // and format each one as a hexadecimal string.
-            for (int i = 0; i < data.Length; i++)
-            {
-                sBuilder.Append(data[i].ToString("x2"));
-            }
-            // Return the hexadecimal string.
-            return sBuilder.ToString();
         }
     }
 }

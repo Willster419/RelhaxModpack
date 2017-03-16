@@ -1,3 +1,5 @@
-copy RelicModManager_update.exe RelicModManager.exe
+copy RelhaxModpack_update.exe RelhaxModpack.exe
 del RelicModManager_update.exe
-start "" "RelicModManager.exe"
+del RelhaxModpack_update.exe
+del RelicModManager.exe
+start "" "RelhaxModpack.exe"

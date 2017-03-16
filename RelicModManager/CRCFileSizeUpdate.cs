@@ -20,27 +20,7 @@ namespace RelhaxModpack
         {
             InitializeComponent();
         }
-        //returns the md5 hash of the file based on the input file string location
-        private string GetMd5Hash(string inputFile)
-        {
-            MD5 md5Hash = MD5.Create();
-            // Convert the input string to a byte array and compute the hash.
-            var stream = File.OpenRead(inputFile);
-            byte[] data = md5Hash.ComputeHash(stream);
-            stream.Close();
-            // Create a new Stringbuilder to collect the bytes
-            // and create a string.
-            StringBuilder sBuilder = new StringBuilder();
-            // Loop through each byte of the hashed data 
-            // and format each one as a hexadecimal string.
-            for (int i = 0; i < data.Length; i++)
-            {
-                sBuilder.Append(data[i].ToString("x2"));
-            }
-            // Return the hexadecimal string.
-            return sBuilder.ToString();
-        }
-
+        
         private void loadDatabaseButton_Click(object sender, EventArgs e)
         {
             if (loadDatabaseDialog.ShowDialog() == DialogResult.Cancel)
@@ -86,7 +66,7 @@ namespace RelhaxModpack
                 }
                 if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
                 {
-                    d.dependencyZipCRC = this.GetMd5Hash(addZipsDialog.FileNames[index]);
+                    d.dependencyZipCRC = Settings.GetMd5Hash(addZipsDialog.FileNames[index]);
                     globalDepsSB.Append(d.dependencyZipFile + "\n");
                 }
             }
@@ -101,7 +81,7 @@ namespace RelhaxModpack
                     }
                     if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
                     {
-                        d.dependencyZipCRC = this.GetMd5Hash(addZipsDialog.FileNames[index]);
+                        d.dependencyZipCRC = Settings.GetMd5Hash(addZipsDialog.FileNames[index]);
                         dependenciesSB.Append(d.dependencyZipFile + "\n");
                     }
                 }
@@ -113,7 +93,7 @@ namespace RelhaxModpack
                         m.size = this.getFileSize(addZipsDialog.FileNames[index]);
                         if (m.crc == null || m.crc.Equals("") || m.crc.Equals("f"))
                         {
-                            m.crc = this.GetMd5Hash(addZipsDialog.FileNames[index]);
+                            m.crc = Settings.GetMd5Hash(addZipsDialog.FileNames[index]);
                             
                             modsSB.Append(m.modZipFile + "\n");
                         }
@@ -126,7 +106,7 @@ namespace RelhaxModpack
                             cat.size = this.getFileSize(addZipsDialog.FileNames[cindex]);
                             if (cat.crc == null || cat.crc.Equals("") || cat.crc.Equals("f"))
                             {
-                                cat.crc = this.GetMd5Hash(addZipsDialog.FileNames[cindex]);
+                                cat.crc = Settings.GetMd5Hash(addZipsDialog.FileNames[cindex]);
                                 
                                 configsSB.Append(cat.zipConfigFile + "\n");
                             }

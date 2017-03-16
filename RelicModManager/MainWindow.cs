@@ -36,9 +36,8 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 20.4.2";
+        private string managerVersion = "version 20.5.2";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
-        private SelectFeatures features = new SelectFeatures();
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
         //directory path of where the application was started form
@@ -115,142 +114,24 @@ namespace RelhaxModpack
         {
             InitializeComponent();
         }
-        //install RelHax
-        private void installRelhax_Click(object sender, EventArgs e)
-        {
-            Settings.appendToLog("Install Relhax Sound Mod started");
-            modPack = false;
-            downloadPath = Application.StartupPath + "\\RelHaxSoundMod";
-            childProgressBar.Maximum = 100;
-            //reset the interface
-            this.reset();
-            //ask the user which features s/he wishes to install
-            Settings.appendToLog("Asking the user parts of mod to install");
-            this.features.ShowDialog();
-            if (features.canceling)
-            {
-                downloadProgress.Text = "Canceled";
-                Settings.appendToLog("Install Cancled");
-                return;
-            }
-            //attempt to locate the tanks directory
-            if (this.autoFindTanks() == null || Settings.forceManuel)
-            {
-                Settings.appendToLog("Auto find tanks failed or manual tanks locating selected");
-                if (this.manuallyFindTanks() == null)
-                {
-                    Settings.appendToLog("manuallyFindTanks returned null");
-                    return;
-                }
-            }
-            //parse all strings
-            if (this.parseStrings() == null)
-            {
-                Settings.appendToLog("WARNING: parseStrings() returned null");
-                this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
-                return;
-            }
-
-            if (!Directory.Exists(downloadPath)) Directory.CreateDirectory(downloadPath);
-
-            sw.Reset();
-            sw.Start();
-
-            this.createDownloadQueue();
-            Settings.appendToLog("Relhax Sound Mod Install Moving to download method");
-            this.downloader_DownloadFileCompleted(null, null);
-        }
-        //uninstall RelHax
-        private void uninstallRelhax_Click(object sender, EventArgs e)
-        {
-            Settings.appendToLog("Uninstall of Relhax Sound Mod started");
-            this.reset();
-            childProgressBar.Maximum = 100;
-            downloadProgress.Text = "Preparing...";
-            if (this.autoFindTanks() == null || Settings.forceManuel)
-            {
-                if (this.manuallyFindTanks() == null) return;
-            }
-            if (this.parseStrings() == null)
-            {
-                this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
-                return;
-            }
-            //all of the stock files are in the res folder
-            //only matters is if this copied to res mods
-            downloadProgress.Text = "Removing Audio...";
-            childProgressBar.Value = 20;
-            Application.DoEvents();
-            //delete only relHax audio files
-            if (Directory.Exists(modAudioFolder))
-            {
-                if (File.Exists(modAudioFolder + "\\RelHaxGui.bnk")) File.Delete(modAudioFolder + "\\RelHaxGui.bnk");
-                if (File.Exists(modAudioFolder + "\\RelHaxChatShotcuts.bnk")) File.Delete(modAudioFolder + "\\RelHaxChatShotcuts.bnk");
-                if (File.Exists(modAudioFolder + "\\RelHaxMusicSources.bnk")) File.Delete(modAudioFolder + "\\RelHaxMusicSources.bnk");
-                if (File.Exists(modAudioFolder + "\\sixthsense.bnk")) File.Delete(modAudioFolder + "\\sixthsense.bnk");
-                if (Directory.Exists(modAudioFolder + "\\uk")) Directory.Delete(modAudioFolder + "\\uk", true);
-                if (Directory.Exists(modAudioFolder + "\\usa")) Directory.Delete(modAudioFolder + "\\usa", true);
-                if (Directory.Exists(modAudioFolder + "\\relicModVersion")) Directory.Delete(modAudioFolder + "\\relicModVersion", true);
-            }
-            //if audioww is empty, delete it as well
-            int totalFilesAndFoldersLeft = this.anythingElseRemaining(modAudioFolder);
-            if (totalFilesAndFoldersLeft == 0) Directory.Delete(modAudioFolder);
-            childProgressBar.Value = 50;
-            Application.DoEvents();
-
-            downloadProgress.Text = "Removing gui stuff...";
-            childProgressBar.Value = 85;
-            Application.DoEvents();
-            //delete gui file
-            if (File.Exists(modGuiFolder + "\\main_sound_modes.xml")) File.Delete(modGuiFolder + "\\main_sound_modes.xml");
-            if (this.anythingElseRemaining(modGuiFolder) == 0) Directory.Delete(modGuiFolder);
-            if (this.anythingElseRemaining(modGuiFolderBase) == 0) Directory.Delete(modGuiFolderBase);
-            downloadProgress.Text = "Removing scripts...";
-            if (File.Exists(parsedModsFolder + "\\scripts\\client\\gui\\mods\\mod_ChatCommandsVoice.pyc")) File.Delete(parsedModsFolder + "\\scripts\\client\\gui\\mods\\mod_ChatCommandsVoice.pyc");
-            if (File.Exists(parsedModsFolder + "\\scripts\\client\\gui\\mods\\mod_SoundMapper.pyc")) File.Delete(parsedModsFolder + "\\scripts\\client\\gui\\mods\\mod_SoundMapper.pyc");
-            if (this.anythingElseRemaining(parsedModsFolder + "\\scripts\\client\\gui\\mods") == 0) Directory.Delete(parsedModsFolder + "\\scripts\\client\\gui\\mods");
-            if (this.anythingElseRemaining(parsedModsFolder + "\\scripts\\client\\gui") == 0) Directory.Delete(parsedModsFolder + "\\scripts\\client\\gui");
-            if (this.anythingElseRemaining(parsedModsFolder + "\\scripts\\client") == 0) Directory.Delete(parsedModsFolder + "\\scripts\\client");
-            if (this.anythingElseRemaining(parsedModsFolder + "\\scripts") == 0) Directory.Delete(parsedModsFolder + "\\scripts");
-
-            if (File.Exists(tanksLocation + "\\res_mods\\configs\\D2R52\\mod_SoundMapper.xml")) File.Delete(tanksLocation + "\\res_mods\\configs\\D2R52\\mod_SoundMapper.xml");
-            if (this.anythingElseRemaining(tanksLocation + "\\res_mods\\configs\\D2R52") == 0) Directory.Delete(tanksLocation + "\\res_mods\\configs\\D2R52");
-            if (this.anythingElseRemaining(tanksLocation + "\\res_mods\\configs") == 0) Directory.Delete(tanksLocation + "\\res_mods\\configs");
-
-            downloadProgress.Text = "Unpatching xml files...";
-            childProgressBar.Value = 95;
-            if (File.Exists(parsedModsFolder + "\\engine_config.xml"))
-            {
-                this.decreaseSoundMemory();
-                this.removeBank("RelHax_1.bnk");
-                this.removeBank("RelHax_2.bnk");
-                this.removeBank("RelHax_3.bnk");
-                this.removeBank("RelHax_4.bnk");
-                this.removeBank("RelHaxChatShotcuts.bnk");
-                this.removeBank("RelHaxMusicSources.bnk");
-                this.removeBank("RelHaxGui.bnk");
-                this.addBank("voiceover.bnk");
-                this.removeDeclaration();
-            }
-            downloadProgress.Text = "Complete!";
-            childProgressBar.Value = 100;
-            Application.DoEvents();
-            Settings.appendToLog("Relhax Sound Mod uninstall complete");
-        }
         //handler for the mod download file progress
         void downloader_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            double msElapsed = sw.Elapsed.TotalMilliseconds;
-            double bytesIn = double.Parse(e.BytesReceived.ToString());
-            double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
+            //get the download information into numeric classes
+            float bytesIn = float.Parse(e.BytesReceived.ToString());
+            float totalBytes = float.Parse(e.TotalBytesToReceive.ToString());
             float MBytesIn = (float)bytesIn / MBDivisor;
             float MBytesTotal = (float)totalBytes / MBDivisor;
+            //create the download progress string
             string currentModDownloadingShort = currentModDownloading;
             if (currentModDownloading.Length > 15)
               currentModDownloadingShort = currentModDownloading.Substring(0,15) + "...";
             downloadProgress.Text = "Downloading " + currentModDownloadingShort + " (" + Math.Round(MBytesIn, 1) + " MB" + " of " + Math.Round(MBytesTotal, 1) + " MB)";
+            //set the progress bar
             childProgressBar.Value = e.ProgressPercentage;
+            //set the download speed
             speedLabel.Text = string.Format("{0} MB/s", (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds).ToString("0.00"));
+            //get the ETA for the download
             double totalTimeToDownload =  MBytesTotal / (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds);
             double timeRemain = totalTimeToDownload - sw.Elapsed.TotalSeconds;
             timeRemainArray.Add(timeRemain);
@@ -261,20 +142,16 @@ namespace RelhaxModpack
                     timeAverageRemain += d;
                 actualTimeRemain = timeAverageRemain / 10;
                 timeRemainArray.Clear();
-                //sw.Restart();
             }
+            //round to a whole number
             actualTimeRemain = Math.Round(actualTimeRemain,0);
+            //prevent the eta from becomming less than 0
             if (actualTimeRemain < 0)
                 actualTimeRemain = 0;
+            //convert the total seconds to mins and seconds
             int actualTimeMins = (int)actualTimeRemain / 60;
             int actualTimeSecs = (int)actualTimeRemain % 60;
-            //Application.DoEvents();
             speedLabel.Text = speedLabel.Text + " ETA: " + actualTimeMins + " min " + actualTimeSecs + " sec";
-            //Application.DoEvents();
-            if (MBytesIn == 0 && MBytesTotal == 0)
-            {
-                //this.downloadProgress.Text = "Complete!";
-            }
         }
         //handler for the mod download file complete event
         void downloader_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
@@ -290,31 +167,9 @@ namespace RelhaxModpack
                 childProgressBar.Value = 0;
                 return;
             }
-            if (!modPack)
-            {
-                //old relhax sound mod code
-                if (downloadQueue.Count != 0)
-                {
-                    if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
-                    //download new zip file
-                    downloader = new WebClient();
-                    downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
-                    downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
-                    downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
-                    //currentModDownloading = downloadQueue[0].zipFile;
-                    downloadQueue.RemoveAt(0);
-                    parrentProgressBar.Value++;
-                    return;
-                }
-                if (downloadQueue.Count == 0)
-                {
-                    //tell it to extract the zip files
-                    Settings.appendToLog("Relhax sound mod downloading finished, moving to zip extraction");
-                    this.extractZipFiles();
-                }
-            }
-            else
-            {
+            
+            
+            
                 //new relhax modpack code
                 if (e != null && e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
                 {
@@ -406,24 +261,7 @@ namespace RelhaxModpack
                         return;
                     }
                 }
-            }
-        }
-        //Extracts the zip files downloaded for the Relhax Sound Mod (not modpack)
-        private void extractZipFiles()
-        {
-            speedLabel.Text = "Extracting...";
-            Settings.appendToLog("Starting Relhax Sound Mod Extraction");
-            string[] fileNames = Directory.GetFiles(downloadPath);
-            parrentProgressBar.Maximum = fileNames.Count();
-            parrentProgressBar.Value = 0;
-            foreach (string fName in fileNames)
-            {
-                Settings.appendToLog("Extracting " + fName);
-                this.unzip(fName, tanksLocation);
-                parrentProgressBar.Value++;
-            }
-            Settings.appendToLog("Finished extracting, moving to patching");
-            this.patchStuff();
+            
         }
         //extracts the zip files downloaded fro the Relhax Modpack
         private void extractZipFilesModPack()
@@ -627,7 +465,7 @@ namespace RelhaxModpack
             }
             if (dr == DialogResult.Yes)
             {
-                this.extractEmbeddedResource(tanksLocation + "\\_fonts", "RelhaxModpack", new List<string>() { "FontReg.exe" });
+                Settings.extractEmbeddedResource(tanksLocation + "\\_fonts", "RelhaxModpack", new List<string>() { "FontReg.exe" });
                 ProcessStartInfo info = new ProcessStartInfo();
                 info.FileName = "FontReg.exe";
                 info.UseShellExecute = true;
@@ -723,7 +561,7 @@ namespace RelhaxModpack
             }
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
             string version = versionSave;
-            this.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "RelicCopyUpdate.bat" });
+            Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "RelicCopyUpdate.bat" });
             string newExeName = Application.StartupPath + "\\RelicCopyUpdate.bat";
             try
             {
@@ -794,27 +632,8 @@ namespace RelhaxModpack
         //main unzip worker method
         private void unzip(string zipFile, string extractFolder)
         {
-            if (!modPack)
-            {
-                //regualr sound mod
-                string thisVersion = this.getFolderVersion(null);
-                zip = ZipFile.Read(zipFile);
-                //for this zip file instance, for each entry in the zip file,
-                //change the "versiondir" path to this version of tanks
-                for (int i = 0; i < zip.Entries.Count; i++)
-                {
-                    if (Regex.IsMatch(zip[i].FileName, "versiondir"))
-                    {
-                        zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", thisVersion);
-                    }
-                }
-                zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
-                childProgressBar.Maximum = zip.Entries.Count;
-                childProgressBar.Value = 0;
-                zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
-            }
-            else
-            {
+            
+            
                 //modpack
                 string thisVersion = this.getFolderVersion(null);
                 //if (File.Exists(zipFile))
@@ -830,7 +649,7 @@ namespace RelhaxModpack
                 }
                 zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
                 zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
-            }
+            
 
         }
         //handler for when progress is made in extracting a zip file
@@ -846,22 +665,22 @@ namespace RelhaxModpack
             if (e.EventType == ZipProgressEventType.Extracting_AfterExtractAll)
             {
                 isParrentDone = true;
+                string thisVersion = this.getFolderVersion(null);
+                foreach (ZipEntry ze in zip.Entries)
+                {
+                    //regex again
+                    string s = ze.FileName;
+                    if (Regex.IsMatch(s, "versiondir"))
+                    {
+                        s = Regex.Replace(s, "versiondir",thisVersion);
+                    }
+                    //put the entries on disk
+                    File.AppendAllText(s + "\n", tanksLocation + "\\installedRelhaxFiles.log");
+                }
                 zip.Dispose();
             }
             if (modPack)
                 extractworker.ReportProgress(0);
-        }
-        //DEPRECATED: Cleans up after legacy installers
-        private void cleanup()
-        {
-            Settings.appendToLog("WARNING: using deprecated method cleanup()");
-            if (File.Exists(tempPath + "\\relic.zip")) System.IO.File.Delete(tempPath + "\\relic.zip");
-            if (File.Exists(tempPath + "\\relic_censored.zip")) System.IO.File.Delete(tempPath + "\\relic_censored.zip");
-            if (File.Exists(tempPath + "\\gui.zip")) System.IO.File.Delete(tempPath + "\\gui.zip");
-            if (File.Exists(tempPath + "\\6thSense.zip")) System.IO.File.Delete(tempPath + "\\6thSense.zip");
-            if (File.Exists(tempPath + "\\origional.zip")) System.IO.File.Delete(tempPath + "\\origional.zip");
-            if (File.Exists(tempPath + "\\version.zip")) System.IO.File.Delete(tempPath + "\\version.zip");
-            if (Directory.Exists(tempPath + "\\versionCheck")) Directory.Delete(tempPath + "\\versionCheck", true);
         }
         //reset the UI and critical componets
         private void reset()
@@ -870,23 +689,6 @@ namespace RelhaxModpack
             childProgressBar.Value = 0;
             parrentProgressBar.Value = 0;
             statusLabel.Text = "STATUS:";
-        }
-        //Checks for which parts of the RelHax sound mod it is to download
-        private void createDownloadQueue()
-        {
-            downloadQueue = new List<DownloadItem>();
-            //install RelHax
-            if (this.features.relhaxBox.Checked)
-            {
-                downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/RelHax.zip"), downloadPath + "\\RelHax.zip"));
-            }
-            //install RelHax Censored version
-            if (this.features.relhaxBoxCen.Checked)
-            {
-                downloadQueue.Add(new DownloadItem(new Uri("https://dl.dropboxusercontent.com/u/44191620/RelicMod/RelHaxCen.zip"), downloadPath + "\\RelHax.zip"));
-            }
-            parrentProgressBar.Maximum = downloadQueue.Count;
-            parrentProgressBar.Minimum = 0;
         }
         //checks the registry to get the location of where WoT is installed
         //idea: if the user can open replay files, this can get the WoT exe filepath
@@ -946,10 +748,6 @@ namespace RelhaxModpack
                 MessageBox.Show("CRITICAL: Another Instance of the relic mod manager is already running");
                 this.Close();
             }
-            wait.loadingDescBox.Text = "Doing Random Cleanup...";
-            Application.DoEvents();
-            //cleans up after any previous RelhaxModpack versions
-            this.cleanup();
             wait.loadingDescBox.Text = "Checking for updates...";
             Application.DoEvents();
             this.checkmanagerUpdates();
@@ -1012,166 +810,6 @@ namespace RelhaxModpack
             state = InstallState.idle;
             Application.DoEvents();
         }
-        //starts the patching process for the Relhax Sound Mod
-        private void patchStuff()
-        {
-            this.downloadProgress.Text = "patching xml file...";
-            if (!File.Exists(parsedModsFolder + "\\engine_config.xml"))
-            {
-                downloader.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/RelicMod/stock_engine_config.xml", parsedModsFolder + "\\engine_config.xml");
-            }
-            this.increaseSoundMemory();
-            this.addBank("RelHax_1.bnk");
-            this.addBank("RelHax_2.bnk");
-            this.addBank("RelHax_3.bnk");
-            this.addBank("RelHax_4.bnk");
-            this.addBank("RelHaxChatShotcuts.bnk");
-            this.addBank("RelHaxMusicSources.bnk");
-            this.addBank("RelHaxGui.bnk");
-            this.removeDeclaration();
-            this.downloadProgress.Text = "Complete!";
-            childProgressBar.Value = childProgressBar.Maximum;
-        }
-        //patches the engine config xml to increase the sound memory available
-        private void increaseSoundMemory()
-        {
-            XmlDocument doc = new XmlDocument();
-            int temp = 0;
-            doc.Load(parsedModsFolder + "\\engine_config.xml");
-            //patch defaultPool
-            XmlNode defaultPool = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/defaultPool");
-            temp = int.Parse(defaultPool.InnerText);
-            if (temp < 32)
-                defaultPool.InnerText = "32";
-            //patch defaultPool
-            XmlNode lowEnginePool = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/lowEnginePool");
-            temp = int.Parse(lowEnginePool.InnerText);
-            if (temp < 24)
-                lowEnginePool.InnerText = "24";
-            //patch defaultPool
-            XmlNode preparedPool = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/preparedPool");
-            temp = int.Parse(preparedPool.InnerText);
-            if (temp < 256)
-                preparedPool.InnerText = "256";
-            //patch defaultPool
-            XmlNode streamingPool = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/streamingPool");
-            temp = int.Parse(streamingPool.InnerText);
-            if (temp < 8)
-                streamingPool.InnerText = "8";
-            //patch defaultPool
-            XmlNode IOPoolSize = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/IOPoolSize");
-            temp = int.Parse(IOPoolSize.InnerText);
-            if (temp < 12)
-                IOPoolSize.InnerText = "12";
-            if (File.Exists("engine_config_test.xml")) File.Delete("engine_config_test.xml");
-            doc.Save(parsedModsFolder + "\\engine_config.xml");
-        }
-        //patches the engine config xml to increase the sound memory available
-        private void decreaseSoundMemory()
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(parsedModsFolder + "\\engine_config.xml");
-            //patch defaultPool
-            XmlNode defaultPool = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/defaultPool");
-            defaultPool.InnerText = "12";
-            //patch defaultPool
-            XmlNode lowEnginePool = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/lowEnginePool");
-            lowEnginePool.InnerText = "10";
-            //patch defaultPool
-            XmlNode preparedPool = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/preparedPool");
-            preparedPool.InnerText = "106";
-            //patch defaultPool
-            XmlNode streamingPool = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/streamingPool");
-            streamingPool.InnerText = "2";
-            //patch defaultPool
-            XmlNode IOPoolSize = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/IOPoolSize");
-            IOPoolSize.InnerText = "4";
-            if (File.Exists("engine_config_test.xml")) File.Delete("engine_config_test.xml");
-            doc.Save(parsedModsFolder + "\\engine_config.xml");
-        }
-        //adds a sound bank to the engine config xml file
-        private void addBank(string bankName)
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(parsedModsFolder + "\\engine_config.xml");
-            //check to see if the list is empty
-            XmlNode rel11 = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/voice_soundbanks/project/name");
-            if (rel11 == null)
-            //no soundbanks
-            {
-                XmlNode reff = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/voice_soundbanks");
-                //create project node
-                XmlElement project = doc.CreateElement("project");
-                //create new soundbank node
-                XmlElement rel2 = doc.CreateElement("name");
-                rel2.InnerText = bankName;
-                //insert soundbank into project
-                project.InsertAfter(rel2, project.FirstChild);
-                //insert project into voice_soundbanks
-                reff.InsertAfter(project, reff.FirstChild);
-                if (File.Exists(parsedModsFolder + "\\engine_config.xml")) File.Delete(parsedModsFolder + "\\engine_config.xml");
-                doc.Save(parsedModsFolder + "\\engine_config.xml");
-                return;
-            }
-
-            //check to see if it's already there
-            XmlNodeList currentSoundBanks = doc.SelectNodes("//engine_config.xml/soundMgr/WWISE_adv_profile/voice_soundbanks/project/name");
-            foreach (XmlElement e in currentSoundBanks)
-            {
-                if (e.InnerText.Equals(bankName))
-                    return;
-            }
-
-            //find and replace voiceover.bnk first
-            XmlNodeList rel1 = doc.SelectNodes("//engine_config.xml/soundMgr/WWISE_adv_profile/voice_soundbanks/project/name");
-            foreach (XmlElement e in rel1)
-            {
-                if (e.InnerText.Equals("voiceover.bnk"))
-                {
-                    e.InnerText = bankName;
-                    if (File.Exists(parsedModsFolder + "\\engine_config.xml")) File.Delete(parsedModsFolder + "\\engine_config.xml");
-                    doc.Save(parsedModsFolder + "\\engine_config.xml");
-                    return;
-                }
-            }
-
-            {
-                //create refrence node
-                XmlNode reff = doc.SelectSingleNode("//engine_config.xml/soundMgr/WWISE_adv_profile/voice_soundbanks");
-                //create project node
-                XmlElement project = doc.CreateElement("project");
-                //create new soundbank node
-                XmlElement rel2 = doc.CreateElement("name");
-                rel2.InnerText = bankName;
-                //insert soundbank into project
-                project.InsertAfter(rel2, project.FirstChild);
-                //insert project into voice_soundbanks
-                reff.InsertAfter(project, reff.FirstChild);
-            }
-            if (File.Exists("engine_config_test.xml")) File.Delete("engine_config_test.xml");
-            doc.Save(parsedModsFolder + "\\engine_config.xml");
-        }
-        //removes a sound bank to the engine config xml file
-        private void removeBank(string bankName)
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(parsedModsFolder + "\\engine_config.xml");
-            //check to see if it's already there
-            XmlNodeList nl = doc.SelectNodes("//engine_config.xml/soundMgr/WWISE_adv_profile/voice_soundbanks/project/name");
-            foreach (XmlElement e in nl)
-            {
-                if (e.InnerText.Equals(bankName))
-                    e.RemoveAll();
-            }
-            //save
-            if (File.Exists(parsedModsFolder + "\\engine_config.xml")) File.Delete(parsedModsFolder + "\\engine_config.xml");
-            doc.Save(parsedModsFolder + "\\engine_config.xml");
-            //remove empty elements
-            XDocument doc2 = XDocument.Load(parsedModsFolder + "\\engine_config.xml");
-            doc2.Descendants().Elements("project").Where(e => string.IsNullOrEmpty(e.Value)).Remove();
-            if (File.Exists(parsedModsFolder + "\\engine_config.xml")) File.Delete(parsedModsFolder + "\\engine_config.xml");
-            doc2.Save(parsedModsFolder + "\\engine_config.xml");
-        }
         //removes the declaration statement at the start of the doc
         private void removeDeclaration()
         {
@@ -1185,16 +823,6 @@ namespace RelhaxModpack
                 }
             }
             doc.Save(parsedModsFolder + "\\engine_config.xml");
-        }
-        //checks for any files and folders left in the directory
-        private int anythingElseRemaining(string folderName)
-        {
-            int total = 0;
-            if (!Directory.Exists(folderName))
-                return -1;
-            total = total + Directory.GetFiles(folderName).Count();
-            total = total + Directory.GetDirectories(folderName).Count();
-            return total;
         }
         //when the "visit form page" link is clicked. the link clicked handler
         private void formPageLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -1887,32 +1515,10 @@ namespace RelhaxModpack
         {
             if (!File.Exists(localFile))
                 return false;
-            MD5 hash = MD5.Create();
-            string crc = this.GetMd5Hash(hash, localFile);
+            string crc = Settings.GetMd5Hash(localFile);
             if (crc.Equals(remoteCRC))
                 return true;
             return false;
-        }
-        //returns a string of the MD5 hash of an object.
-        //used to determine if a download is corrupted or not,
-        //or if it needs to be updated
-        private string GetMd5Hash(MD5 md5Hash, string inputFile)
-        {
-            // Convert the input string to a byte array and compute the hash.
-            var stream = File.OpenRead(inputFile);
-            byte[] data = md5Hash.ComputeHash(stream);
-            stream.Close();
-            // Create a new Stringbuilder to collect the bytes
-            // and create a string.
-            StringBuilder sBuilder = new StringBuilder();
-            // Loop through each byte of the hashed data 
-            // and format each one as a hexadecimal string.
-            for (int i = 0; i < data.Length; i++)
-            {
-                sBuilder.Append(data[i].ToString("x2"));
-            }
-            // Return the hexadecimal string.
-            return sBuilder.ToString();
         }
         //Main method to uninstall the modpack
         private void uninstallRelhaxMod_Click(object sender, EventArgs e)
@@ -2186,6 +1792,11 @@ namespace RelhaxModpack
             if (!Directory.Exists(tanksLocation + "\\res_mods")) Directory.CreateDirectory(tanksLocation + "\\res_mods");
             if (!userExtract)
             {
+                //create an installed entries log for uninstall later
+                if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
+                {
+                    File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
+                }
                 //extract RelHax Mods
                 Settings.appendToLog("Starting Relhax Modpack Extraction");
                 string downloadedFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
@@ -2383,24 +1994,6 @@ namespace RelhaxModpack
         private void backupModsCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Settings.backupModFolder = backupModsCheckBox.Checked;
-        }
-        //extracts embeded rescource onto disk
-        public void extractEmbeddedResource(string outputDir, string resourceLocation, List<string> files)
-        {
-            foreach (string file in files)
-            {
-                using (System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceLocation + @"." + file))
-                {
-                    using (System.IO.FileStream fileStream = new System.IO.FileStream(System.IO.Path.Combine(outputDir, file), System.IO.FileMode.Create))
-                    {
-                        for (int i = 0; i < stream.Length; i++)
-                        {
-                            fileStream.WriteByte((byte)stream.ReadByte());
-                        }
-                        fileStream.Close();
-                    }
-                }
-            }
         }
         //handler for when the window is goingto be closed
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)

@@ -28,8 +28,8 @@
     <TargetCulture>en-US</TargetCulture>
     <ProductName>Relhax Modpack</ProductName>
     <PublisherName>Willard Wider</PublisherName>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>0.20.4.%2a</ApplicationVersion>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>0.20.5.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -144,12 +144,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SelectFeatures.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SelectFeatures.Designer.cs">
-      <DependentUpon>SelectFeatures.cs</DependentUpon>
-    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="StringSave.cs" />
     <Compile Include="VersionInfo.cs">
@@ -189,9 +183,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SelectFeatures.resx">
-      <DependentUpon>SelectFeatures.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VersionInfo.resx">
       <DependentUpon>VersionInfo.cs</DependentUpon>

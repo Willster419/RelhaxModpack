@@ -28,33 +28,11 @@ namespace RelhaxModpack
             StringBuilder sb2 = new StringBuilder();
             foreach (string s in files)
             {
-                MD5 hash = MD5.Create();
                 sb.Append(Path.GetFileName(s) + System.Environment.NewLine);
-                sb2.Append(GetMd5Hash(hash, s) + System.Environment.NewLine);
+                sb2.Append(Settings.GetMd5Hash(s) + System.Environment.NewLine);
             }
             richTextBox1.Text = sb.ToString();
             richTextBox2.Text = sb2.ToString();
-        }
-        //returns a string of the MD5 hash of an object.
-        //used to determine if a download is corrupted or not,
-        //or if it needs to be updated
-        private string GetMd5Hash(MD5 md5Hash, string inputFile)
-        {
-            // Convert the input string to a byte array and compute the hash.
-            var stream = File.OpenRead(inputFile);
-            byte[] data = md5Hash.ComputeHash(stream);
-            stream.Close();
-            // Create a new Stringbuilder to collect the bytes
-            // and create a string.
-            StringBuilder sBuilder = new StringBuilder();
-            // Loop through each byte of the hashed data 
-            // and format each one as a hexadecimal string.
-            for (int i = 0; i < data.Length; i++)
-            {
-                sBuilder.Append(data[i].ToString("x2"));
-            }
-            // Return the hexadecimal string.
-            return sBuilder.ToString();
         }
 
         private void CRCCHECK2_Resize(object sender, EventArgs e)

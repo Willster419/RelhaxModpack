@@ -21,16 +21,14 @@ namespace RelhaxModpack
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            MainWindow temp = new MainWindow();//the Text field will still show "RelhaxModpack"
             if (!File.Exists(Application.StartupPath + "\\Ionic.Zip.dll"))
             {
-                temp.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "Ionic.Zip.dll" });
+                Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "Ionic.Zip.dll" });
             }
             if (!File.Exists(Application.StartupPath + "\\Newtonsoft.Json.dll"))
             {
-                temp.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "Newtonsoft.Json.dll" });
+                Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "Newtonsoft.Json.dll" });
             }
-            temp.Dispose();
             //get the command line args for testing of auto install
             string[] commandArgs = Environment.GetCommandLineArgs();
             for (int i = 0; i < commandArgs.Count(); i++)

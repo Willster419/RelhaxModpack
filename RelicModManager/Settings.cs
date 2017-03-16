@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using System.Xml;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace RelhaxModpack
 {
@@ -229,6 +231,44 @@ namespace RelhaxModpack
         public static Font getFont(string fontName, float fontSize)
         {
             return new System.Drawing.Font(fontName, fontSize, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        }
+        //extracts embeded rescource onto disk
+        public static void extractEmbeddedResource(string outputDir, string resourceLocation, List<string> files)
+        {
+            foreach (string file in files)
+            {
+                using (System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceLocation + @"." + file))
+                {
+                    using (System.IO.FileStream fileStream = new System.IO.FileStream(System.IO.Path.Combine(outputDir, file), System.IO.FileMode.Create))
+                    {
+                        for (int i = 0; i < stream.Length; i++)
+                        {
+                            fileStream.WriteByte((byte)stream.ReadByte());
+                        }
+                        fileStream.Close();
+                    }
+                }
+            }
+        }
+        //returns the md5 hash of the file based on the input file string location
+        public static string GetMd5Hash(string inputFile)
+        {
+            MD5 md5Hash = MD5.Create();
+            // Convert the input string to a byte array and compute the hash.
+            var stream = File.OpenRead(inputFile);
+            byte[] data = md5Hash.ComputeHash(stream);
+            stream.Close();
+            // Create a new Stringbuilder to collect the bytes
+            // and create a string.
+            StringBuilder sBuilder = new StringBuilder();
+            // Loop through each byte of the hashed data 
+            // and format each one as a hexadecimal string.
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+            // Return the hexadecimal string.
+            return sBuilder.ToString();
         }
     }
 }

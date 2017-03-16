@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            this.installRelhaxSound = new System.Windows.Forms.Button();
-            this.uninstallRelhaxSound = new System.Windows.Forms.Button();
             this.downloadProgress = new System.Windows.Forms.Label();
             this.statusLabel = new System.Windows.Forms.Label();
             this.childProgressBar = new System.Windows.Forms.ProgressBar();
@@ -56,28 +54,6 @@
             this.settingsGroupBox.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // installRelhaxSound
-            // 
-            this.installRelhaxSound.Enabled = false;
-            this.installRelhaxSound.Location = new System.Drawing.Point(12, 12);
-            this.installRelhaxSound.Name = "installRelhaxSound";
-            this.installRelhaxSound.Size = new System.Drawing.Size(129, 34);
-            this.installRelhaxSound.TabIndex = 0;
-            this.installRelhaxSound.Text = "Install Relhax Soundmod";
-            this.installRelhaxSound.UseVisualStyleBackColor = true;
-            this.installRelhaxSound.Click += new System.EventHandler(this.installRelhax_Click);
-            // 
-            // uninstallRelhaxSound
-            // 
-            this.uninstallRelhaxSound.Enabled = false;
-            this.uninstallRelhaxSound.Location = new System.Drawing.Point(12, 52);
-            this.uninstallRelhaxSound.Name = "uninstallRelhaxSound";
-            this.uninstallRelhaxSound.Size = new System.Drawing.Size(129, 34);
-            this.uninstallRelhaxSound.TabIndex = 1;
-            this.uninstallRelhaxSound.Text = "Uninstall Relhax Soundmod";
-            this.uninstallRelhaxSound.UseVisualStyleBackColor = true;
-            this.uninstallRelhaxSound.Click += new System.EventHandler(this.uninstallRelhax_Click);
             // 
             // downloadProgress
             // 
@@ -162,9 +138,9 @@
             // 
             // installRelhaxMod
             // 
-            this.installRelhaxMod.Location = new System.Drawing.Point(147, 12);
+            this.installRelhaxMod.Location = new System.Drawing.Point(12, 12);
             this.installRelhaxMod.Name = "installRelhaxMod";
-            this.installRelhaxMod.Size = new System.Drawing.Size(130, 34);
+            this.installRelhaxMod.Size = new System.Drawing.Size(265, 34);
             this.installRelhaxMod.TabIndex = 19;
             this.installRelhaxMod.Text = "Install Relhax ModPack";
             this.installRelhaxMod.UseVisualStyleBackColor = true;
@@ -172,9 +148,9 @@
             // 
             // uninstallRelhaxMod
             // 
-            this.uninstallRelhaxMod.Location = new System.Drawing.Point(147, 52);
+            this.uninstallRelhaxMod.Location = new System.Drawing.Point(12, 52);
             this.uninstallRelhaxMod.Name = "uninstallRelhaxMod";
-            this.uninstallRelhaxMod.Size = new System.Drawing.Size(130, 34);
+            this.uninstallRelhaxMod.Size = new System.Drawing.Size(265, 34);
             this.uninstallRelhaxMod.TabIndex = 20;
             this.uninstallRelhaxMod.Text = "Uninstall Relhax Modpack";
             this.uninstallRelhaxMod.UseVisualStyleBackColor = true;
@@ -361,8 +337,6 @@
             this.Controls.Add(this.childProgressBar);
             this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.downloadProgress);
-            this.Controls.Add(this.uninstallRelhaxSound);
-            this.Controls.Add(this.installRelhaxSound);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -381,8 +355,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Button installRelhaxSound;
-        private System.Windows.Forms.Button uninstallRelhaxSound;
         private System.Windows.Forms.Label downloadProgress;
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.ProgressBar childProgressBar;

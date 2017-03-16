@@ -248,8 +248,7 @@ namespace RelhaxModpack
                         string configDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
                         if (File.Exists(configDownloadPath))
                         {
-                            MD5 hash = MD5.Create();
-                            string oldCRC = this.GetMd5Hash(hash, configDownloadPath);
+                            string oldCRC = Settings.GetMd5Hash(configDownloadPath);
                             if (!oldCRC.Equals(m.configs[i].crc))
                             {
                                 //the file exists, but it is out of date
@@ -289,8 +288,7 @@ namespace RelhaxModpack
                         string configDownloadPath1 = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
                         if (File.Exists(configDownloadPath1))
                         {
-                            MD5 hash = MD5.Create();
-                            string oldCRC = this.GetMd5Hash(hash, configDownloadPath1);
+                            string oldCRC = Settings.GetMd5Hash(configDownloadPath1);
                             if (!oldCRC.Equals(m.configs[i].crc))
                             {
                                 if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name + "_updated");
@@ -326,8 +324,7 @@ namespace RelhaxModpack
                         string configDownloadPath2 = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
                         if (File.Exists(configDownloadPath2))
                         {
-                            MD5 hash = MD5.Create();
-                            string oldCRC = this.GetMd5Hash(hash, configDownloadPath2);
+                            string oldCRC = Settings.GetMd5Hash(configDownloadPath2);
                             if (!oldCRC.Equals(m.configs[i].crc))
                             {
                                 configControlCB.Text = configControlCB.Text + "(Updated)";
@@ -377,8 +374,7 @@ namespace RelhaxModpack
             string modDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.modZipFile;
             if (File.Exists(modDownloadPath))
             {
-                MD5 hash = MD5.Create();
-                string oldCRC = this.GetMd5Hash(hash, modDownloadPath);
+                string oldCRC = Settings.GetMd5Hash(modDownloadPath);
                 if (!oldCRC.Equals(m.crc))
                 {
                     modCheckBox.Text = modCheckBox.Text + "(Updated)";
@@ -1445,27 +1441,6 @@ namespace RelhaxModpack
         private void modTabGroups_Click(object sender, EventArgs e)
         {
             this.ModSelectionList_SizeChanged(null, null);
-        }
-        //returns a string of the MD5 hash of an object.
-        //used to determine if a download is corrupted or not,
-        //or if it needs to be updated
-        private string GetMd5Hash(MD5 md5Hash, string inputFile)
-        {
-            // Convert the input string to a byte array and compute the hash.
-            var stream = File.OpenRead(inputFile);
-            byte[] data = md5Hash.ComputeHash(stream);
-            stream.Close();
-            // Create a new Stringbuilder to collect the bytes
-            // and create a string.
-            StringBuilder sBuilder = new StringBuilder();
-            // Loop through each byte of the hashed data 
-            // and format each one as a hexadecimal string.
-            for (int i = 0; i < data.Length; i++)
-            {
-                sBuilder.Append(data[i].ToString("x2"));
-            }
-            // Return the hexadecimal string.
-            return sBuilder.ToString();
         }
         //handler for when the close button is pressed
         private void ModSelectionList_FormClosing(object sender, FormClosingEventArgs e)
