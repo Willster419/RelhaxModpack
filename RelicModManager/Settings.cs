@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Xml;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     //all of the settings for the modpack. kept in a static class
     //so all the forms have access to a single version of the settings
@@ -199,11 +199,11 @@ namespace RelicModManager
             {
                 case (LoadingGifs.standard):
                     {
-                        return RelicModManager.Properties.Resources.loading;
+                        return RelhaxModpack.Properties.Resources.loading;
                     }
                 case (LoadingGifs.thirdGuards):
                     {
-                        return RelicModManager.Properties.Resources.loading_3rdguards;
+                        return RelhaxModpack.Properties.Resources.loading_3rdguards;
                     }
             }
             return null;
@@ -216,11 +216,11 @@ namespace RelicModManager
             {
                 case (LoadingGifs.standard):
                     {
-                        return RelicModManager.Properties.Resources.loading;
+                        return RelhaxModpack.Properties.Resources.loading;
                     }
                 case (LoadingGifs.thirdGuards):
                     {
-                        return RelicModManager.Properties.Resources.loading_3rdguards;
+                        return RelhaxModpack.Properties.Resources.loading_3rdguards;
                     }
             }
             return null;

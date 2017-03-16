@@ -26,7 +26,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     public partial class MainWindow : Form
     {
@@ -627,7 +627,7 @@ namespace RelicModManager
             }
             if (dr == DialogResult.Yes)
             {
-                this.extractEmbeddedResource(tanksLocation + "\\_fonts", "RelicModManager", new List<string>() { "FontReg.exe" });
+                this.extractEmbeddedResource(tanksLocation + "\\_fonts", "RelhaxModpack", new List<string>() { "FontReg.exe" });
                 ProcessStartInfo info = new ProcessStartInfo();
                 info.FileName = "FontReg.exe";
                 info.UseShellExecute = true;
@@ -696,11 +696,11 @@ namespace RelicModManager
                     //download new version
                     sw.Reset();
                     sw.Start();
-                    string newExeName = Application.StartupPath + "\\RelicModManager_update" + ".exe";
+                    string newExeName = Application.StartupPath + "\\RelhaxModpack_update" + ".exe";
                     updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(updater_DownloadProgressChanged);
                     updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
                     if (File.Exists(newExeName)) File.Delete(newExeName);
-                    updater.DownloadFileAsync(new Uri("http://willster419.atwebpages.com/Applications/RelHaxModPack/RelicModManager.exe"), newExeName);
+                    updater.DownloadFileAsync(new Uri("http://willster419.atwebpages.com/Applications/RelHaxModPack/RelhaxModpack.exe"), newExeName);
                     Settings.appendToLog("New application download started");
                 }
                 else
@@ -723,7 +723,7 @@ namespace RelicModManager
             }
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
             string version = versionSave;
-            this.extractEmbeddedResource(Application.StartupPath,"RelicModManager",new List<string>(){"RelicCopyUpdate.bat"});
+            this.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "RelicCopyUpdate.bat" });
             string newExeName = Application.StartupPath + "\\RelicCopyUpdate.bat";
             try
             {
@@ -948,7 +948,7 @@ namespace RelicModManager
             }
             wait.loadingDescBox.Text = "Doing Random Cleanup...";
             Application.DoEvents();
-            //cleans up after any previous relicModManager versions
+            //cleans up after any previous RelhaxModpack versions
             this.cleanup();
             wait.loadingDescBox.Text = "Checking for updates...";
             Application.DoEvents();

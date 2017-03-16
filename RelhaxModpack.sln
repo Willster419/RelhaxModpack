@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelicModManager", "RelicModManager\RelicModManager.csproj", "{DF74BB4B-6A3F-4102-99AA-9D888D84859F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelhaxModpack", "RelicModManager\RelhaxModpack.csproj", "{DF74BB4B-6A3F-4102-99AA-9D888D84859F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,4 @@
  (normal) program fixes
- -edit metadata of release
- -change project name?
  -make downloader more accurate
 
  (promote)

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     //The window will show on the applications first load. Its text will change
     //based on where the mouse is hovering

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     //the loading window to show on startup
     public partial class PleaseWait : Form

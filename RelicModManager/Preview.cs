@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     //the preview window to preview a mod. will show the mod name,
     //ro config name, pictures, description, and any update comments
@@ -29,7 +29,7 @@ namespace RelicModManager
             updateComments = update;
             description = desc;
             devURL = dev;
-            loadingImage = RelicModManager.Properties.Resources.loading;
+            loadingImage = RelhaxModpack.Properties.Resources.loading;
         }
         //sets the window title to reflect the new picture, and
         //begine the async process of loading the new picture

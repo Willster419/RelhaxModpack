@@ -10,7 +10,7 @@ using System.Xml;
 using System.IO;
 using System.Security.Cryptography;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     //the mod selectin window. allows users to select which mods they wish to install
     public partial class ModSelectionList : Form

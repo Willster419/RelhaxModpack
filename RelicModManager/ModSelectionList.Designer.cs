@@ -1,4 +1,4 @@
-﻿namespace RelicModManager
+﻿namespace RelhaxModpack
 {
     partial class ModSelectionList
     {

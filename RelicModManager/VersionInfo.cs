@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Net;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     //window that is displayed when an update to the application is detected
     public partial class VersionInfo : Form

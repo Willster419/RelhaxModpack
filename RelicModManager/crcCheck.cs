@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.Security.Cryptography;
 using System.IO;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     public partial class CRCCheck : Form
     {

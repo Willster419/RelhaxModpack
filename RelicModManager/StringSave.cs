@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     //This class is for saving all the lines in an .xc xvm config file
     //the "best json api" can't handle "$" refrences, so they must be removed

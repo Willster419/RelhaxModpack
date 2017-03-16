@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     //a mod is the core of the modpack. A modification for WoT.
     public class Mod

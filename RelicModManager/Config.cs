@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     //a config is a configuration for a mod to make the mod function if a certain way
     public class Config

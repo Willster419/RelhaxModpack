@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     //a dependency is a zip file like mod that is required for any of the mods to work
     //i.e. and sound mods require the sound memory to be increased

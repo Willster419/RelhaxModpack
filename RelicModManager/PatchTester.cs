@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Utilities;
 using Newtonsoft.Json.Linq;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     public partial class PatchTester : Form
     {

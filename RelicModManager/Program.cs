@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.IO;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     static class Program
     {
@@ -21,29 +21,16 @@ namespace RelicModManager
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            MainWindow temp = new MainWindow();//the Text field will still show "RelicModManager"
+            MainWindow temp = new MainWindow();//the Text field will still show "RelhaxModpack"
             if (!File.Exists(Application.StartupPath + "\\Ionic.Zip.dll"))
             {
-                temp.extractEmbeddedResource(Application.StartupPath, "RelicModManager", new List<string>() { "Ionic.Zip.dll" });
+                temp.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "Ionic.Zip.dll" });
             }
             if (!File.Exists(Application.StartupPath + "\\Newtonsoft.Json.dll"))
             {
-                temp.extractEmbeddedResource(Application.StartupPath, "RelicModManager", new List<string>() { "Newtonsoft.Json.dll" });
+                temp.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "Newtonsoft.Json.dll" });
             }
             temp.Dispose();
-            //handler for using the embeded ionic zip dll
-            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
-            {
-                String resourceName = "AssemblyLoadingAndReflection." +
-                   new AssemblyName(args.Name).Name + ".dll";
-                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("RelicModManager.Ionic.Zip.dll"))
-                {
-                    Byte[] assemblyData = new Byte[stream.Length];
-                    stream.Read(assemblyData, 0, assemblyData.Length);
-                    return Assembly.Load(assemblyData);
-                }
-
-            };
             //get the command line args for testing of auto install
             string[] commandArgs = Environment.GetCommandLineArgs();
             for (int i = 0; i < commandArgs.Count(); i++)

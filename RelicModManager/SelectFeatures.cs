@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Media;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     //DEPRECATED: the window for when the user clicks to install the Relhax Sound Mod
     public partial class SelectFeatures : Form

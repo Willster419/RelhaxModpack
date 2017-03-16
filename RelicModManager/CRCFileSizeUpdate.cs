@@ -10,7 +10,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Xml;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     public partial class CRCFileSizeUpdate : Form
     {

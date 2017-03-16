@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RelicModManager
+namespace RelhaxModpack
 {
     //the catagory class. a catagory is what makes up each tab in
     //the mod selection dislpay window
