@@ -21,7 +21,7 @@ namespace RelicModManager
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            MainWindow temp = new MainWindow();
+            MainWindow temp = new MainWindow();//the Text field will still show "RelicModManager"
             if (!File.Exists(Application.StartupPath + "\\Ionic.Zip.dll"))
             {
                 temp.extractEmbeddedResource(Application.StartupPath, "RelicModManager", new List<string>() { "Ionic.Zip.dll" });

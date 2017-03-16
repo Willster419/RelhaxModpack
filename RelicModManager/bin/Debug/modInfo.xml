@@ -27,8 +27,8 @@
       <selectionType>single</selectionType>
       <dependencies>
         <dependency>
-          <dependencyZipFile>Dependency_XVM_Base_6.5.5.zip</dependencyZipFile>
-          <dependencyZipCRC>a50a67ad20107b8b30efd06df890eecf</dependencyZipCRC>
+          <dependencyZipFile>Dependency_XVM_Base_6.5.6.zip</dependencyZipFile>
+          <dependencyZipCRC>a0e0a0b1c8556bfea3fdfe979537235a</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
@@ -204,8 +204,8 @@
       <selectionType>multi</selectionType>
       <dependencies>
         <dependency>
-          <dependencyZipFile>Dependency_XVM_Base_6.5.5.zip</dependencyZipFile>
-          <dependencyZipCRC>a50a67ad20107b8b30efd06df890eecf</dependencyZipCRC>
+          <dependencyZipFile>Dependency_XVM_Base_6.5.6.zip</dependencyZipFile>
+          <dependencyZipCRC>a0e0a0b1c8556bfea3fdfe979537235a</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
@@ -3455,10 +3455,10 @@
         </mod>
         <mod>
           <name>Battle Observer (HP pools)</name>
-          <version>1.6</version>
-          <modzipfile>Ingame_Info_Battle_Observer_by_armagomen_v1_6-2_2017-01-12.zip</modzipfile>
-          <modzipcrc>1da40777c690eed26e06abc8da89422b</modzipcrc>
-          <size>0.1</size>
+          <version>1.7</version>
+          <modzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-03-14.zip</modzipfile>
+          <modzipcrc>b37c8090bd6951cdee37c56506caca34</modzipcrc>
+          <size>0.2</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>
@@ -3468,45 +3468,34 @@
           </pictures>
           <configs>
             <config>
-              <name>Default</name>
-              <configzipfile>
-              </configzipfile>
-              <configzipcrc>
-              </configzipcrc>
-              <size>0</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures />
-            </config>
-            <config>
-              <name>Enable Armor Calculator</name>
-              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_enable_armor_calculator.zip</configzipfile>
-              <configzipcrc>bda0a64dc879e26867e67d9193b1c216</configzipcrc>
+              <name>Enable High Caliber Display</name>
+              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-03-14_show_high_caliber.zip</configzipfile>
+              <configzipcrc>48f50c25dcc9fff8675da2a5287a9da9</configzipcrc>
               <size>0.1</size>
-              <configenabled>True</configenabled>
+              <configenabled>False</configenabled>
               <configtype>multi</configtype>
               <pictures />
             </config>
             <config>
-              <name>Enable Damage Log (turn off xvm's and/or don't get other damage logs)</name>
-              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_enable_damage_log.zip</configzipfile>
-              <configzipcrc>befc6040a3a830aae10742d7584dc634</configzipcrc>
+              <name>Show player spotted status in panels (possible xvm conflict)</name>
+              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-03-14_show_spotted_status.zip</configzipfile>
+              <configzipcrc>3c5fa27a2cf4623a7e94218dcf07a878</configzipcrc>
               <size>0.1</size>
-              <configenabled>True</configenabled>
+              <configenabled>False</configenabled>
               <configtype>multi</configtype>
               <pictures />
             </config>
             <config>
               <name>Enable Players info panel (when you press left alt)</name>
-              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_enable_players_info_panel.zip</configzipfile>
-              <configzipcrc>7800c75546e6b3901c33443a22c10fd5</configzipcrc>
+              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-03-14_show_players_info_panel.zip</configzipfile>
+              <configzipcrc>ef8a226c79067b02bad4375a56488b1b</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
             </config>
           </configs>
-          <description>Shows the total HP of each team at the top of the screen.</description>
+          <description>Shows the total HP of each team at the top of the screen.@High caliber config will show how much damage you need to get high caliber.@players info panel will show the hp of both teams when left alt is pressed.@Show spotted status will show in the players panel when an enemy is spotted. It might conflict with xvm.</description>
           <updateComment>
           </updateComment>
           <devURL>http://forum.worldoftanks.ru/index.php?/topic/1385404-091703-battle-observer-v1067-27012017-teamshp-damage-log-zoommod-debug-time-armorcalculator/</devURL>
@@ -3698,7 +3687,6 @@
           <userDatas>
             <userData>\\res_mods\\configs\\wotstat\\cache.json</userData>
           </userDatas>
-          <userDatas />
           <pictures>
             <picture>
               <URL>http://i.imgur.com/UOiwa7n.png</URL>

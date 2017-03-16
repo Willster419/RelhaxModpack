@@ -1,3 +1,7 @@
+Version 20.4.2:
+- Fixed bug with auto install feature
+- Re-wrote update process to delete previous versions of the application
+
 Version 20.4.1:
 - Fixed bug with patching exeption on UI display
 - Minimized UI impact from non-critical bug that will soon be fixed.

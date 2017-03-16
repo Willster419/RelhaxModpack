@@ -201,6 +201,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="RelicCopyUpdate.bat" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Shell32">

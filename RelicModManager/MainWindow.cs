@@ -36,7 +36,7 @@ namespace RelicModManager
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 20.4.1";
+        private string managerVersion = "version 20.4.2";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         private SelectFeatures features = new SelectFeatures();
         //queue for downloading mods
@@ -261,6 +261,7 @@ namespace RelicModManager
                     timeAverageRemain += d;
                 actualTimeRemain = timeAverageRemain / 10;
                 timeRemainArray.Clear();
+                //sw.Restart();
             }
             actualTimeRemain = Math.Round(actualTimeRemain,0);
             if (actualTimeRemain < 0)
@@ -695,7 +696,7 @@ namespace RelicModManager
                     //download new version
                     sw.Reset();
                     sw.Start();
-                    string newExeName = Application.StartupPath + "\\RelicModManager " + version + ".exe";
+                    string newExeName = Application.StartupPath + "\\RelicModManager_update" + ".exe";
                     updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(updater_DownloadProgressChanged);
                     updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
                     if (File.Exists(newExeName)) File.Delete(newExeName);
@@ -722,17 +723,23 @@ namespace RelicModManager
             }
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
             string version = versionSave;
-            string newExeName = Application.StartupPath + "\\RelicModManager " + version + ".exe";
+            this.extractEmbeddedResource(Application.StartupPath,"RelicModManager",new List<string>(){"RelicCopyUpdate.bat"});
+            string newExeName = Application.StartupPath + "\\RelicCopyUpdate.bat";
             try
             {
-                System.Diagnostics.Process.Start(newExeName);
+                //System.Diagnostics.Process.Start(newExeName + " /updateExeReplace");
+                ProcessStartInfo info = new ProcessStartInfo();
+                info.FileName = newExeName;
+                Process installUpdate = new Process();
+                installUpdate.StartInfo = info;
+                installUpdate.Start();
             }
             catch (Win32Exception)
             {
                 Settings.appendToLog("WARNING: could not start new application version");
                 MessageBox.Show("Unable to start application, but it is located in \n" + newExeName);
             }
-            this.Close();
+            Application.Exit();
         }
         //handler for the update download progress
         void updater_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -920,8 +927,8 @@ namespace RelicModManager
             wait.loadingDescBox.Text = "Checking for single instance...";
             Application.DoEvents();
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
-            Settings.appendToLog("|RelHax ModManager " + managerVersion);
-            Settings.appendToLog("|Built on 03/12/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|RelHax Modpack " + managerVersion);
+            Settings.appendToLog("|Built on 03/15/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -968,21 +975,31 @@ namespace RelicModManager
                 Settings.appendToLog("Auto Install is ON, checking for config pref xml at " + Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName);
                 if (!File.Exists(Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName))
                 {
-                    Settings.appendToLog("ERROR: " + Program.configName + " does NOT exist, loading in regualar mode");
-                    MessageBox.Show("ERROR: " + Program.configName + " does NOT exist, loading in regualar mode");
-
+                    Settings.appendToLog("ERROR: " + Program.configName + " does NOT exist, loading in regular mode");
+                    MessageBox.Show("ERROR: " + Program.configName + " does NOT exist, loading in regular mode");
                     Program.autoInstall = false;
                 }
                 if (!Settings.cleanInstallation)
                 {
-                    Settings.appendToLog("ERROR: clean installation is set to false. This must be set to true for auto install to work");
-                    MessageBox.Show("ERROR: clean installation is set to false. You must set this to true and restart the application for auto install to work.");
+                    Settings.appendToLog("ERROR: clean installation is set to false. This must be set to true for auto install to work. Loading in regular mode.");
+                    MessageBox.Show("ERROR: clean installation is set to false. You must set this to true and restart the application for auto install to work. Loading in regular mode.");
+                    Program.autoInstall = false;
+                }
+                if (Settings.firstLoad)
+                {
+                    Settings.appendToLog("ERROR: First time loading cannot be an auto install mode, loading in regular mode");
+                    MessageBox.Show("ERROR: First time loading cannot be an auto install mode, loading in regular mode");
                     Program.autoInstall = false;
                 }
             }
+            //check if it can still load in autoInstall config mode
             if (Program.autoInstall)
             {
+                Settings.appendToLog("Program.autoInstall still true, loading in auto install mode");
+                wait.Close();
+                state = InstallState.idle;
                 this.installRelhaxMod_Click(null, null);
+                return;
             }
             if (Settings.firstLoad)
             {
@@ -2239,6 +2256,7 @@ namespace RelicModManager
                 Settings.appendToLog("Message: " + ne.Message);
                 Settings.appendToLog("From source: " + ne.Source);
                 Settings.appendToLog("Callstack: " + ne.StackTrace);
+                MessageBox.Show("If you are seeing this, it means that you have a specific computer configuration that is affected by a bug I can't replicate on my developer system. It's harmless, but if you could send your relHaxLog to me I can fix it and you can stop seeing this message");
             }
         }
         //handler for when the extractworker is completed

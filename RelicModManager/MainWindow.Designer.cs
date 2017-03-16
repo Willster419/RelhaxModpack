@@ -45,6 +45,7 @@
             this.cancerFontCB = new System.Windows.Forms.CheckBox();
             this.backupModsCheckBox = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
+            this.saveUserDataCB = new System.Windows.Forms.CheckBox();
             this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
             this.largerFontButton = new System.Windows.Forms.CheckBox();
             this.loadingImageGroupBox = new System.Windows.Forms.GroupBox();
@@ -52,13 +53,13 @@
             this.standardImageRB = new System.Windows.Forms.RadioButton();
             this.findBugAddModLabel = new System.Windows.Forms.LinkLabel();
             this.cancelDownloadButton = new System.Windows.Forms.Button();
-            this.saveUserDataCB = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // installRelhaxSound
             // 
+            this.installRelhaxSound.Enabled = false;
             this.installRelhaxSound.Location = new System.Drawing.Point(12, 12);
             this.installRelhaxSound.Name = "installRelhaxSound";
             this.installRelhaxSound.Size = new System.Drawing.Size(129, 34);
@@ -69,6 +70,7 @@
             // 
             // uninstallRelhaxSound
             // 
+            this.uninstallRelhaxSound.Enabled = false;
             this.uninstallRelhaxSound.Location = new System.Drawing.Point(12, 52);
             this.uninstallRelhaxSound.Name = "uninstallRelhaxSound";
             this.uninstallRelhaxSound.Size = new System.Drawing.Size(129, 34);
@@ -238,6 +240,20 @@
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "RelHax ModPack Settings";
             // 
+            // saveUserDataCB
+            // 
+            this.saveUserDataCB.AutoSize = true;
+            this.saveUserDataCB.Location = new System.Drawing.Point(6, 110);
+            this.saveUserDataCB.Name = "saveUserDataCB";
+            this.saveUserDataCB.Size = new System.Drawing.Size(139, 17);
+            this.saveUserDataCB.TabIndex = 27;
+            this.saveUserDataCB.Text = "Save User created data";
+            this.saveUserDataCB.UseVisualStyleBackColor = true;
+            this.saveUserDataCB.CheckedChanged += new System.EventHandler(this.saveUserDataCB_CheckedChanged);
+            this.saveUserDataCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.saveUserDataCB_MouseDown);
+            this.saveUserDataCB.MouseEnter += new System.EventHandler(this.saveUserDataCB_MouseEnter);
+            this.saveUserDataCB.MouseLeave += new System.EventHandler(this.saveUserDataCB_MouseLeave);
+            // 
             // saveLastInstallCB
             // 
             this.saveLastInstallCB.AutoSize = true;
@@ -327,20 +343,6 @@
             this.cancelDownloadButton.UseVisualStyleBackColor = true;
             this.cancelDownloadButton.Visible = false;
             this.cancelDownloadButton.Click += new System.EventHandler(this.cancelDownloadButton_Click);
-            // 
-            // saveUserDataCB
-            // 
-            this.saveUserDataCB.AutoSize = true;
-            this.saveUserDataCB.Location = new System.Drawing.Point(6, 110);
-            this.saveUserDataCB.Name = "saveUserDataCB";
-            this.saveUserDataCB.Size = new System.Drawing.Size(139, 17);
-            this.saveUserDataCB.TabIndex = 27;
-            this.saveUserDataCB.Text = "Save User created data";
-            this.saveUserDataCB.UseVisualStyleBackColor = true;
-            this.saveUserDataCB.CheckedChanged += new System.EventHandler(this.saveUserDataCB_CheckedChanged);
-            this.saveUserDataCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.saveUserDataCB_MouseDown);
-            this.saveUserDataCB.MouseEnter += new System.EventHandler(this.saveUserDataCB_MouseEnter);
-            this.saveUserDataCB.MouseLeave += new System.EventHandler(this.saveUserDataCB_MouseLeave);
             // 
             // MainWindow
             // 

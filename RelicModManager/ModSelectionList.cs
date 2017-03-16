@@ -22,6 +22,14 @@ namespace RelicModManager
         private PleaseWait pw;
         public List<Dependency> globalDependencies;
         private bool loadingConfig = false;
+        private enum loadConfigMode
+        {
+            error = -1,
+            fromButton = 0,//this is the default state
+            fromSaveLastConfig = 1,//this is the state if the user selected the setting "save last install's selection"
+            fromAutoInstall = 2//this is for when the user started the application in auto install mode. this takes precedence over the above 2
+        };
+        private loadConfigMode loadMode = loadConfigMode.fromButton;
 
         public ModSelectionList()
         {
@@ -30,12 +38,17 @@ namespace RelicModManager
         //called on application startup
         private void ModSelectionList_Load(object sender, EventArgs e)
         {
+            //create the loading window
             pw = new PleaseWait();
             pw.Show();
+            //set the font from settings
             this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
             pw.loadingDescBox.Text = "Reading Database...";
             Application.DoEvents();
-            this.createModStructure2();
+            string databaseURL = "http://willster419.atwebpages.com/Applications/RelHaxModPack/modInfo.xml";
+            if (Program.testMode)
+                databaseURL = "modInfo.xml";
+            this.createModStructure2(databaseURL);
             bool duplicates = this.duplicates();
             if (duplicates)
             {
@@ -43,30 +56,42 @@ namespace RelicModManager
                 MessageBox.Show("CRITICAL: Duplicate mod name detected!!");
                 Application.Exit();
             }
+            this.initUserMods();
             pw.loadingDescBox.Text = "Building UI...";
             Application.DoEvents();
-            this.initUserMods();
-            //load the last selection if setting is set
-            if (Settings.saveLastConfig && !Program.autoInstall)
+            //the default loadConfig mode shold be from clicking the button
+            loadMode = loadConfigMode.fromButton;
+            //if the load config from last selection is checked, then set the mode to it
+            if (Settings.saveLastConfig)
             {
-                this.loadConfig(false);
+                loadMode = loadConfigMode.fromSaveLastConfig;
             }
-            this.makeTabs();
-            this.addAllMods();
-            this.addUserMods();
-            this.ModSelectionList_SizeChanged(null, null);
-            this.Size = new Size(Settings.modSelectionWidth,Settings.modSelectionHeight);
+            //if this is in auto install mode, then it takes precedence
             if (Program.autoInstall)
             {
-                //automate the installation process
-                //have it load the config
-                //don't say prefs set
-                //close
-                this.loadConfig(false);
+                loadMode = loadConfigMode.fromAutoInstall;
+            }
+            //check which mode the load config is in and act accordingly. it should only load the config in one of the following scenarios
+            if (loadMode == loadConfigMode.fromSaveLastConfig)
+            {
+                this.loadConfig(loadMode);
+            }
+            else if (loadMode == loadConfigMode.fromAutoInstall)
+            {
+                this.loadConfig(loadMode);
                 this.cancel = false;
                 pw.Close();
                 this.Close();
+                return;
             }
+            //actually build the UI display
+            this.makeTabs();
+            this.addAllMods();
+            this.addUserMods();
+            //force a resize
+            this.ModSelectionList_SizeChanged(null, null);
+            //set the size to the last closed size
+            this.Size = new Size(Settings.modSelectionWidth,Settings.modSelectionHeight);
             pw.Close();
         }
         //initializes the userMods list. This should only be run once
@@ -790,19 +815,12 @@ namespace RelicModManager
             }
         }
         //parses the xml mod info into the memory database
-        private void createModStructure2()
+        private void createModStructure2(string databaseURL)
         {
             XmlDocument doc = new XmlDocument();
             try
             {
-                if (Program.testMode)
-                {
-                    doc.Load("modInfo.xml");
-                }
-                else
-                {
-                    doc.Load("http://willster419.atwebpages.com/Applications/RelHaxModPack/modInfo.xml");
-                }
+                doc.Load(databaseURL);
             }
             catch (XmlException)
             {
@@ -1240,26 +1258,27 @@ namespace RelicModManager
             }
         }
         //loads a saved config from xml and parses it into the memory database
-        private void loadConfig(bool fromButton)
+        private void loadConfig(loadConfigMode loadMode)
         {
             loadingConfig = true;
             OpenFileDialog loadLocation = new OpenFileDialog();
             string filePath = "";
-            if (Program.autoInstall)
+            if (loadMode == loadConfigMode.fromAutoInstall)
             {
                 filePath = Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName;
+                if (!File.Exists(filePath))
+                {
+                    Settings.appendToLog("ERROR: " + filePath + " not found, not loading configs");
+                    MessageBox.Show("The config file could not be loaded, loading in standard mode");
+                }
             }
-            else if (Settings.saveLastConfig && !fromButton)
+            else if (loadMode == loadConfigMode.fromSaveLastConfig)
             {
                 filePath = Application.StartupPath + "\\RelHaxUserConfigs\\lastInstalledConfig.xml";
-                if (File.Exists(filePath))
+                if (!File.Exists(filePath))
                 {
-                    Settings.appendToLog("save last config checked, loading config from " + filePath);
-                }
-                else
-                {
-                    Settings.appendToLog("ERROR: lastInstalledConfig.xml not found, not loading configs");
-                    return;
+                    Settings.appendToLog("ERROR: " + filePath + " not found, not loading configs");
+                    MessageBox.Show("The config file could not be loaded, loading in standard mode");
                 }
             }
             else
@@ -1350,9 +1369,7 @@ namespace RelicModManager
                 }
             }
             Settings.appendToLog("Finished loading mod selections");
-            if (Settings.saveLastConfig && !fromButton)
-                return;
-            if (!Program.autoInstall || !Settings.saveLastConfig)
+            if (loadMode == loadConfigMode.fromButton)
                 MessageBox.Show("Prefrences Set");
             //reload the UI
             this.makeTabs();
@@ -1411,7 +1428,8 @@ namespace RelicModManager
         //handler for when the "load config" button is pressed
         private void loadConfigButton_Click(object sender, EventArgs e)
         {
-            this.loadConfig(true);
+            loadMode = loadConfigMode.fromButton;
+            this.loadConfig(loadMode);
         }
         //handler for when the "save config" button is pressed
         private void saveConfigButton_Click(object sender, EventArgs e)
