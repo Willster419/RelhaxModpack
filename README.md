@@ -3,6 +3,8 @@ The official modpack installer for the RELIC Gaming Community
 
 **[Skip to download link](https://github.com/Willster419/RelicModManager#download)**
 
+**[Virustotal scan](https://www.virustotal.com/en/file/15c959ac79c5f3935c792b8bc5e0c72d1974ab5bab4fa0a75d0c3a9860aa206a/analysis/1489435329/)**
+
 ### Description and reason for development
   This project is in dedication of the RELIC Gaming Community, as well as the OMC modpack dev team (which includes me, :P). A big thank you to them and their origional work, especially to grumpelumpf. The work done of the modpack over the years will not be forgotten.
   
