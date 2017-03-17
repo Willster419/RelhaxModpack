@@ -675,7 +675,7 @@ namespace RelhaxModpack
                         s = Regex.Replace(s, "versiondir",thisVersion);
                     }
                     //put the entries on disk
-                    File.AppendAllText(s + "\n", tanksLocation + "\\installedRelhaxFiles.log");
+                    //File.AppendAllText(s + "\n", tanksLocation + "\\installedRelhaxFiles.log");
                 }
                 zip.Dispose();
             }
