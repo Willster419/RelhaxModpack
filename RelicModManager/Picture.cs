@@ -37,7 +37,7 @@ namespace RelhaxModpack
                 return xName.CompareTo(yName);
             }
             //mod first, then config
-            return typeResult*-1;
+            return typeResult * -1;
         }
     }
 }

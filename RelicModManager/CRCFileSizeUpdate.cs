@@ -20,7 +20,7 @@ namespace RelhaxModpack
         {
             InitializeComponent();
         }
-        
+
         private void loadDatabaseButton_Click(object sender, EventArgs e)
         {
             if (loadDatabaseDialog.ShowDialog() == DialogResult.Cancel)
@@ -94,7 +94,7 @@ namespace RelhaxModpack
                         if (m.crc == null || m.crc.Equals("") || m.crc.Equals("f"))
                         {
                             m.crc = Settings.GetMd5Hash(addZipsDialog.FileNames[index]);
-                            
+
                             modsSB.Append(m.modZipFile + "\n");
                         }
                     }
@@ -107,7 +107,7 @@ namespace RelhaxModpack
                             if (cat.crc == null || cat.crc.Equals("") || cat.crc.Equals("f"))
                             {
                                 cat.crc = Settings.GetMd5Hash(addZipsDialog.FileNames[cindex]);
-                                
+
                                 configsSB.Append(cat.zipConfigFile + "\n");
                             }
                         }
@@ -132,7 +132,7 @@ namespace RelhaxModpack
             float fileSizeBytes = fi.Length;
             float fileSizeKBytes = fileSizeBytes / 1024;
             float fileSizeMBytes = fileSizeKBytes / 1024;
-            fileSizeMBytes = (float) Math.Round(fileSizeMBytes,1);
+            fileSizeMBytes = (float)Math.Round(fileSizeMBytes, 1);
             if (fileSizeMBytes == 0.0)
                 fileSizeMBytes = 0.1f;
             return fileSizeMBytes;

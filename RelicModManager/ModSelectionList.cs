@@ -91,7 +91,7 @@ namespace RelhaxModpack
             //force a resize
             this.ModSelectionList_SizeChanged(null, null);
             //set the size to the last closed size
-            this.Size = new Size(Settings.modSelectionWidth,Settings.modSelectionHeight);
+            this.Size = new Size(Settings.modSelectionWidth, Settings.modSelectionHeight);
             pw.Close();
         }
         //initializes the userMods list. This should only be run once
@@ -631,43 +631,43 @@ namespace RelhaxModpack
                                 {
                                     if (!loadingConfig)
                                     {
-                                    //not safe to check the mod
-                                    //uncheck the other mod first
-                                    //each checkbox uncheck it
-                                    Panel modPanel = (Panel)cb.Parent;
-                                    TabPage modTab = (TabPage)modPanel.Parent;
-                                    foreach (var cc in modTab.Controls)
-                                    {
-                                        if (cc is Panel)
+                                        //not safe to check the mod
+                                        //uncheck the other mod first
+                                        //each checkbox uncheck it
+                                        Panel modPanel = (Panel)cb.Parent;
+                                        TabPage modTab = (TabPage)modPanel.Parent;
+                                        foreach (var cc in modTab.Controls)
                                         {
-                                            Panel pp = (Panel)cc;
-                                            foreach (var ccc in pp.Controls)
+                                            if (cc is Panel)
                                             {
-                                                if (ccc is CheckBox)
+                                                Panel pp = (Panel)cc;
+                                                foreach (var ccc in pp.Controls)
                                                 {
-                                                    CheckBox cbb = (CheckBox)ccc;
-                                                    //check that this makes the mod object false as well
-                                                    //cbb.CheckedChanged -= modCheckBox_CheckedChanged;
-                                                    cbb.Checked = false;
-                                                    //cbb.CheckedChanged += modCheckBox_CheckedChanged;
-                                                    string otherModName = cbb.Name.Split('_')[1];
-                                                    string otherCatagoryName = cbb.Name.Split('_')[0];
-                                                    Mod otherMod = this.linkMod(otherModName, otherCatagoryName);
-                                                    otherMod.modChecked = false;
+                                                    if (ccc is CheckBox)
+                                                    {
+                                                        CheckBox cbb = (CheckBox)ccc;
+                                                        //check that this makes the mod object false as well
+                                                        //cbb.CheckedChanged -= modCheckBox_CheckedChanged;
+                                                        cbb.Checked = false;
+                                                        //cbb.CheckedChanged += modCheckBox_CheckedChanged;
+                                                        string otherModName = cbb.Name.Split('_')[1];
+                                                        string otherCatagoryName = cbb.Name.Split('_')[0];
+                                                        Mod otherMod = this.linkMod(otherModName, otherCatagoryName);
+                                                        otherMod.modChecked = false;
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
-                                    //now it's safe to check the mods
-                                    
-                                        
+                                        //now it's safe to check the mods
+
+
                                         m.modChecked = true;
                                         cb.CheckedChanged -= modCheckBox_CheckedChanged;
                                         cb.Checked = true;
                                         cb.CheckedChanged += modCheckBox_CheckedChanged;
                                         //cb.Checked = false;
                                     }
-                                    
+
                                 }
                             }
                         }
@@ -854,7 +854,7 @@ namespace RelhaxModpack
                 }
                 globalDependencies.Add(d);
             }
-            
+
             XmlNodeList catagoryList = doc.SelectNodes("//modInfoAlpha.xml/catagories/catagory");
             parsedCatagoryList = new List<Catagory>();
             foreach (XmlNode nnnnn in catagoryList)
@@ -924,17 +924,17 @@ namespace RelhaxModpack
                                             {
 
                                                 switch (nnnnnnn.Name)
-                                                    {
-                                                        case "userData":
-                                                            string innerText = nnnnnnn.InnerText;
-                                                            if (innerText == null)
-                                                                continue;
-                                                            if (innerText.Equals(""))
-                                                                continue;
-                                                            m.userFiles.Add(innerText);
-                                                            break;
-                                                    }
-                                                
+                                                {
+                                                    case "userData":
+                                                        string innerText = nnnnnnn.InnerText;
+                                                        if (innerText == null)
+                                                            continue;
+                                                        if (innerText.Equals(""))
+                                                            continue;
+                                                        m.userFiles.Add(innerText);
+                                                        break;
+                                                }
+
                                             }
                                             break;
                                         case "pictures":

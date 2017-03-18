@@ -110,7 +110,7 @@ namespace RelhaxModpack
         float currentTotalBytesDownloaded = 0;
         float differenceTotalBytesDownloaded = 0;
         float sessionDownloadSpeed = 0;
-        
+
         //The constructur for the application
         public MainWindow()
         {
@@ -131,15 +131,15 @@ namespace RelhaxModpack
             //create the download progress string
             string currentModDownloadingShort = currentModDownloading;
             if (currentModDownloading.Length > 15)
-              currentModDownloadingShort = currentModDownloading.Substring(0,15) + "...";
+                currentModDownloadingShort = currentModDownloading.Substring(0, 15) + "...";
             downloadProgress.Text = "Downloading " + currentModDownloadingShort + " (" + Math.Round(MBytesIn, 1) + " MB" + " of " + Math.Round(MBytesTotal, 1) + " MB)";
             //set the progress bar
             childProgressBar.Value = e.ProgressPercentage;
             //set the download speed
-            sessionDownloadSpeed = (float) Math.Round(sessionDownloadSpeed, 2);
+            sessionDownloadSpeed = (float)Math.Round(sessionDownloadSpeed, 2);
             totalSpeedLabel = "" + sessionDownloadSpeed + " MB/s";
             //get the ETA for the download
-            double totalTimeToDownload =  MBytesTotal / (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds);
+            double totalTimeToDownload = MBytesTotal / (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds);
             double timeRemain = totalTimeToDownload - sw.Elapsed.TotalSeconds;
             timeRemainArray.Add(timeRemain);
             if (timeRemainArray.Count == 10)
@@ -151,7 +151,7 @@ namespace RelhaxModpack
                 timeRemainArray.Clear();
             }
             //round to a whole number
-            actualTimeRemain = Math.Round(actualTimeRemain,0);
+            actualTimeRemain = Math.Round(actualTimeRemain, 0);
             //prevent the eta from becomming less than 0
             if (actualTimeRemain < 0)
                 actualTimeRemain = 0;
@@ -165,7 +165,7 @@ namespace RelhaxModpack
         void downloader_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
             //check to see if the user cancled the download
-            if (e != null  && e.Cancelled)
+            if (e != null && e.Cancelled)
             {
                 //update the UI and download state
                 state = InstallState.idle;
@@ -176,100 +176,100 @@ namespace RelhaxModpack
                 return;
             }
             downloadTimer.Enabled = false;
-            
-            
-                //new relhax modpack code
-                if (e != null && e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
+
+
+            //new relhax modpack code
+            if (e != null && e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
+            {
+                //404
+                Settings.appendToLog("ERROR: " + tempOldDownload + " failed to download");
+                MessageBox.Show("Failed to download " + tempOldDownload + ". If you know which mod this is, uncheck it and you should be fine. It will be fixed soon. Restart this when it exits");
+                Application.Exit();
+            }
+            if (downloadQueue.Count != 0)
+            {
+                cancelDownloadButton.Enabled = true;
+                cancelDownloadButton.Visible = true;
+                //for the next file in the queue, delete it.
+                if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
+                //download new zip file
+                downloader = new WebClient();
+                downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
+                downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
+                downloader.Proxy = null;
+                timeRemainArray.Clear();
+                actualTimeRemain = 0;
+                sw.Reset();
+                sw.Start();
+                downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
+                tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
+                Settings.appendToLog("downloading " + tempOldDownload);
+                currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile);
+                if (currentModDownloading.Length >= 30)
                 {
-                    //404
-                    Settings.appendToLog("ERROR: " + tempOldDownload + " failed to download");
-                    MessageBox.Show("Failed to download " + tempOldDownload + ". If you know which mod this is, uncheck it and you should be fine. It will be fixed soon. Restart this when it exits");
-                    Application.Exit();
+                    currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile).Substring(0, 23) + "...";
                 }
-                if (downloadQueue.Count != 0)
+                downloadQueue.RemoveAt(0);
+                parrentProgressBar.Value++;
+                return;
+            }
+            if (downloadQueue.Count == 0)
+            {
+                cancelDownloadButton.Enabled = false;
+                cancelDownloadButton.Visible = false;
+                //check if backing up user cache files
+                if (Settings.saveUserData)
                 {
-                    cancelDownloadButton.Enabled = true;
-                    cancelDownloadButton.Visible = true;
-                    //for the next file in the queue, delete it.
-                    if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
-                    //download new zip file
-                    downloader = new WebClient();
-                    downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
-                    downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
-                    downloader.Proxy = null;
-                    timeRemainArray.Clear();
-                    actualTimeRemain = 0;
-                    sw.Reset();
-                    sw.Start();
-                    downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
-                    tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
-                    Settings.appendToLog("downloading " + tempOldDownload);
-                    currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile);
-                    if (currentModDownloading.Length >= 30)
+                    Settings.appendToLog("saveUserData checked, saving user cache data");
+                    int tempState = (int)state;
+                    state = InstallState.backupUserData;
+                    //backup user data on UI thread. it won't be long
+                    this.backupUserData();
+                    state = (InstallState)tempState;
+                }
+                if (state == InstallState.downloading)
+                {
+                    Settings.appendToLog("Downloading finished");
+                    //just finished downloading, needs to start extracting
+                    if (Settings.cleanInstallation)
                     {
-                        currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile).Substring(0, 23) + "...";
+                        state = InstallState.deleteResMods;
+                        Settings.appendToLog("CleanInstallCB checked, running backgroundDelete(" + tanksLocation + "\\res_mods)");
+                        //delete everything in res_mods
+                        if (Directory.Exists(tanksLocation + "\\res_mods")) this.backgroundDelete(tanksLocation + "\\res_mods");
+                        return;
                     }
-                    downloadQueue.RemoveAt(0);
-                    parrentProgressBar.Value++;
+                    Settings.appendToLog("CleanInstallCB not checked, moving to extraction");
+                    state = InstallState.extractRelhaxMods;
+                    this.backgroundExtract(false);
                     return;
                 }
-                if (downloadQueue.Count == 0)
+                else if (state == InstallState.extractRelhaxMods)
                 {
-                    cancelDownloadButton.Enabled = false;
-                    cancelDownloadButton.Visible = false;
-                    //check if backing up user cache files
-                    if (Settings.saveUserData)
+                    if (Settings.cleanInstallation)
                     {
-                        Settings.appendToLog("saveUserData checked, saving user cache data");
-                        int tempState = (int)state;
-                        state = InstallState.backupUserData;
-                        //backup user data on UI thread. it won't be long
-                        this.backupUserData();
-                        state = (InstallState)tempState;
-                    }
-                    if (state == InstallState.downloading)
-                    {
-                        Settings.appendToLog("Downloading finished");
-                        //just finished downloading, needs to start extracting
-                        if (Settings.cleanInstallation)
-                        {
-                            state = InstallState.deleteResMods;
-                            Settings.appendToLog("CleanInstallCB checked, running backgroundDelete(" + tanksLocation + "\\res_mods)");
-                            //delete everything in res_mods
-                            if (Directory.Exists(tanksLocation + "\\res_mods")) this.backgroundDelete(tanksLocation + "\\res_mods");
-                            return;
-                        }
-                        Settings.appendToLog("CleanInstallCB not checked, moving to extraction");
-                        state = InstallState.extractRelhaxMods;
-                        this.backgroundExtract(false);
+                        state = InstallState.deleteResMods;
+                        Settings.appendToLog("CleanInstallCB checked, running backgroundDelete(" + tanksLocation + "\\res_mods)");
+                        //delete everything in res_mods
+                        if (Directory.Exists(tanksLocation + "\\res_mods")) this.backgroundDelete(tanksLocation + "\\res_mods");
                         return;
                     }
-                    else if (state == InstallState.extractRelhaxMods)
-                    {
-                        if (Settings.cleanInstallation)
-                        {
-                            state = InstallState.deleteResMods;
-                            Settings.appendToLog("CleanInstallCB checked, running backgroundDelete(" + tanksLocation + "\\res_mods)");
-                            //delete everything in res_mods
-                            if (Directory.Exists(tanksLocation + "\\res_mods")) this.backgroundDelete(tanksLocation + "\\res_mods");
-                            return;
-                        }
-                        state = InstallState.extractRelhaxMods;
-                        Settings.appendToLog("CleanInstallCB not checked, moving to extraction");
-                        this.backgroundExtract(false);
-                        return;
-                    }
-                    else if (state == InstallState.extractUserMods)
-                    {
-
-                        return;
-                    }
-                    else
-                    {
-                        return;
-                    }
+                    state = InstallState.extractRelhaxMods;
+                    Settings.appendToLog("CleanInstallCB not checked, moving to extraction");
+                    this.backgroundExtract(false);
+                    return;
                 }
-            
+                else if (state == InstallState.extractUserMods)
+                {
+
+                    return;
+                }
+                else
+                {
+                    return;
+                }
+            }
+
         }
         //extracts the zip files downloaded fro the Relhax Modpack
         private void extractZipFilesModPack()
@@ -627,24 +627,24 @@ namespace RelhaxModpack
         //main unzip worker method
         private void unzip(string zipFile, string extractFolder)
         {
-            
-            
-                //modpack
-                string thisVersion = this.getFolderVersion(null);
-                //if (File.Exists(zipFile))
-                zip = ZipFile.Read(zipFile);
-                //for this zip file instance, for each entry in the zip file,
-                //change the "versiondir" path to this version of tanks
-                for (int i = 0; i < zip.Entries.Count; i++)
+
+
+            //modpack
+            string thisVersion = this.getFolderVersion(null);
+            //if (File.Exists(zipFile))
+            zip = ZipFile.Read(zipFile);
+            //for this zip file instance, for each entry in the zip file,
+            //change the "versiondir" path to this version of tanks
+            for (int i = 0; i < zip.Entries.Count; i++)
+            {
+                if (Regex.IsMatch(zip[i].FileName, "versiondir"))
                 {
-                    if (Regex.IsMatch(zip[i].FileName, "versiondir"))
-                    {
-                        zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", thisVersion);
-                    }
+                    zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", thisVersion);
                 }
-                zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
-                zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
-            
+            }
+            zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
+            zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
+
 
         }
         //handler for when progress is made in extracting a zip file
@@ -667,10 +667,10 @@ namespace RelhaxModpack
                     string s = ze.FileName;
                     if (Regex.IsMatch(s, "versiondir"))
                     {
-                        s = Regex.Replace(s, "versiondir",thisVersion);
+                        s = Regex.Replace(s, "versiondir", thisVersion);
                     }
                     //put the entries on disk
-                    File.AppendAllText(tanksLocation + "\\installedRelhaxFiles.log", s + "\n" );
+                    File.AppendAllText(tanksLocation + "\\installedRelhaxFiles.log", s + "\n");
                 }
                 zip.Dispose();
             }
@@ -1034,9 +1034,9 @@ namespace RelhaxModpack
             {
                 //but remove newlines first
                 file = Regex.Replace(file, "\n", "newline");
-                if (Regex.IsMatch(file,search))
+                if (Regex.IsMatch(file, search))
                 {
-                    file = Regex.Replace(file,search,replace);
+                    file = Regex.Replace(file, search, replace);
                 }
                 file = Regex.Replace(file, "newline", "\n");
                 sb.Append(file);
@@ -1145,7 +1145,7 @@ namespace RelhaxModpack
                 //remove comments after values
                 if (Regex.IsMatch(temp, @" +//.*$"))
                 {
-                    temp = Regex.Replace(temp, @" +//.*$","");
+                    temp = Regex.Replace(temp, @" +//.*$", "");
                 }
                 //remove more comments after values
                 if (Regex.IsMatch(temp, @",//.*$"))
@@ -1155,7 +1155,7 @@ namespace RelhaxModpack
                 if (Regex.IsMatch(temp, @"\${"))
                 {
                     bool hadComma = false;
-                    if (Regex.IsMatch(temp,","))
+                    if (Regex.IsMatch(temp, ","))
                     {
                         hadComma = true;
                     }
@@ -1163,7 +1163,7 @@ namespace RelhaxModpack
                     ss.name = temp.Split('"')[1];
                     ss.value = temp.Split('$')[1];
                     ssList.Add(ss);
-                    temp = "\"" + ss.name + "\"" + ": -69420" ;
+                    temp = "\"" + ss.name + "\"" + ": -69420";
                     if (hadComma)
                         temp = temp + ",";
                 }
@@ -1224,7 +1224,7 @@ namespace RelhaxModpack
             for (int i = 0; i < putBackDollas.Count(); i++)
             {
                 string temp = putBackDollas[i];
-                if (Regex.IsMatch(temp,"-69420"))//look for the temp value
+                if (Regex.IsMatch(temp, "-69420"))//look for the temp value
                 {
                     string name = temp.Split('"')[1];
                     for (int j = 0; j < ssList.Count; j++)
@@ -1332,7 +1332,7 @@ namespace RelhaxModpack
                         //move all folders info res_mods
                         Settings.appendToLog("WARNING: Legacy backup structure detected, moving files");
                         string[] dirsList = Directory.GetDirectories(Application.StartupPath + "\\RelHaxModBackup");
-                        if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\res_mods")) 
+                        if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\res_mods"))
                             Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\res_mods");
                         foreach (string s in dirsList)
                         {
@@ -1695,7 +1695,7 @@ namespace RelhaxModpack
         //handler for the deleteworker when it is called
         private void deleteworker_DoWork(object sender, DoWorkEventArgs e)
         {
-            
+
             object[] parameters = e.Argument as object[];
             string folderToDelete = (string)parameters[0];
             numFilesToProcessInt = 0;
@@ -1976,7 +1976,7 @@ namespace RelhaxModpack
                         }
                         catch (IOException)
                         {
-                            DialogResult result = MessageBox.Show("Please close all explorer windows in the res_mods (or deeper), and click ok to continue.","close out of res_mods",MessageBoxButtons.RetryCancel);
+                            DialogResult result = MessageBox.Show("Please close all explorer windows in the res_mods (or deeper), and click ok to continue.", "close out of res_mods", MessageBoxButtons.RetryCancel);
                             if (result == DialogResult.Cancel)
                                 Application.Exit();
                         }
@@ -2268,7 +2268,7 @@ namespace RelhaxModpack
                         if (thePath.Equals(parsedFileName))
                         {
                             //the file has been found in the temp directory
-                            if(!Directory.Exists(tanksLocation + "\\" + Path.GetFullPath(s)))
+                            if (!Directory.Exists(tanksLocation + "\\" + Path.GetFullPath(s)))
                                 Directory.CreateDirectory(tanksLocation + "\\" + Path.GetDirectoryName(s));
                             if (File.Exists(tanksLocation + "\\" + s))
                                 File.Delete(tanksLocation + "\\" + s);
@@ -2308,7 +2308,7 @@ namespace RelhaxModpack
         private void newUninstallMethod()
         {
             Settings.appendToLog("Started Uninstallation process");
-            if(!File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
+            if (!File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
             {
                 Settings.appendToLog("ERROR: installedRelhaxFiles.log does not exist, prompt user to delete everything instead");
                 DialogResult result = MessageBox.Show("The log file containg the installed files list (installedRelhaxFiles.log) does not exist. Would you like to remove all mods instead?", "Remove all mods", MessageBoxButtons.YesNo);
@@ -2338,7 +2338,7 @@ namespace RelhaxModpack
                 else
                 {
                     //it's a folder
-                    if (Regex.IsMatch(s,"res_mods"))
+                    if (Regex.IsMatch(s, "res_mods"))
                     {
                         //it's a res_mods folder
                         resModsFolders.Add(s);
@@ -2365,7 +2365,7 @@ namespace RelhaxModpack
                     childProgressBar.Value++;
                     string ss = filePath;
                     if (ss.Length > 20)
-                        ss = ss.Substring(0,20);
+                        ss = ss.Substring(0, 20);
                     downloadProgress.Text = "Deleting file " + ss;
                     Application.DoEvents();
                 }
@@ -2393,14 +2393,14 @@ namespace RelhaxModpack
             foreach (var directory in Directory.GetDirectories(startLocation))
             {
                 processDirectory(directory);
-                if (Directory.GetFiles(directory).Length == 0 && 
+                if (Directory.GetFiles(directory).Length == 0 &&
                     Directory.GetDirectories(directory).Length == 0)
                 {
                     Settings.appendToLog("Deleting directory " + directory);
                     Directory.Delete(directory, false);
                     string ss = directory;
                     if (ss.Length > 20)
-                        ss = ss.Substring(0,20);
+                        ss = ss.Substring(0, 20);
                     downloadProgress.Text = "Deleting folder " + ss;
                     Application.DoEvents();
                 }

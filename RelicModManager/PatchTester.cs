@@ -75,7 +75,7 @@ namespace RelhaxModpack
             {
                 i = 0;
             }
-            this.RegxPatch(regexFilePathBox.Text,regexSearchBox.Text,regexReplaceBox.Text,i);
+            this.RegxPatch(regexFilePathBox.Text, regexSearchBox.Text, regexReplaceBox.Text, i);
         }
 
         private void xmlPatchButton_Click(object sender, EventArgs e)
@@ -284,7 +284,7 @@ namespace RelhaxModpack
             else if (lineNumber == -1)
             //search entire file and string and make one giant regex replacement
             {
-                
+
                 if (Regex.IsMatch(file, search))
                 {
                     file = Regex.Replace(file, search, replace);
@@ -361,28 +361,28 @@ namespace RelhaxModpack
             //file.Trim();
             JToken root = JToken.Parse(file);
             foreach (var value in root.SelectTokens(jsonPath).ToList())
+            {
+                if (value == root)
+                    root = JToken.FromObject(newValue);
+                else
                 {
-                    if (value == root)
-                        root = JToken.FromObject(newValue);
+                    if (useInt)
+                    {
+                        value.Replace(JToken.FromObject(newValueInt));
+                    }
+                    else if (useDouble)
+                    {
+                        value.Replace(JToken.FromObject(newValueDouble));
+                    }
                     else
                     {
-                        if (useInt)
-                        {
-                            value.Replace(JToken.FromObject(newValueInt));
-                        }
-                        else if (useDouble)
-                        {
-                            value.Replace(JToken.FromObject(newValueDouble));
-                        }
-                        else
-                        {
-                            value.Replace(JToken.FromObject(newValue));
-                        }
+                        value.Replace(JToken.FromObject(newValue));
                     }
                 }
+            }
             if (File.Exists(fileLocationSave))
-              File.Delete(fileLocationSave);
-            File.WriteAllText(fileLocationSave,root.ToString());
+                File.Delete(fileLocationSave);
+            File.WriteAllText(fileLocationSave, root.ToString());
         }
 
         private void jsonLoadFileButton_Click(object sender, EventArgs e)
