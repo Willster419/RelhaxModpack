@@ -1,5 +1,5 @@
 # The Relhax Modpack
-The official modpack installer for the RELIC Gaming Community
+The fastest WoT modpack installer in the world
 
 **[Skip to download link](https://github.com/Willster419/RelicModManager#download)**
 
