@@ -1,3 +1,10 @@
+Version 20.6:
+- Rewrote download speed estimator
+- Improved UI display of download speed and ETA (less flashing)
+- Enabled the application updator to use the new UI download speed as well
+- Added feature to uninstall only mods installed by the modpack
+- code optimizations
+
 Version 20.5.2:
 - Renamed the application to RelhaxModpack
 - Code Optimizations

@@ -1,5 +1,4 @@
  (normal) program fixes
-  -reformat documents
 
  (promote)
   -tell loz it's ready
