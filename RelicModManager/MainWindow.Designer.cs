@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.downloadProgress = new System.Windows.Forms.Label();
             this.statusLabel = new System.Windows.Forms.Label();
@@ -51,6 +52,8 @@
             this.standardImageRB = new System.Windows.Forms.RadioButton();
             this.findBugAddModLabel = new System.Windows.Forms.LinkLabel();
             this.cancelDownloadButton = new System.Windows.Forms.Button();
+            this.downloadTimer = new System.Windows.Forms.Timer(this.components);
+            this.cleanUninstallCB = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -97,7 +100,7 @@
             // forceManuel
             // 
             this.forceManuel.AutoSize = true;
-            this.forceManuel.Location = new System.Drawing.Point(6, 20);
+            this.forceManuel.Location = new System.Drawing.Point(6, 15);
             this.forceManuel.Name = "forceManuel";
             this.forceManuel.Size = new System.Drawing.Size(166, 17);
             this.forceManuel.TabIndex = 13;
@@ -161,7 +164,7 @@
             this.cleanInstallCB.AutoSize = true;
             this.cleanInstallCB.Checked = true;
             this.cleanInstallCB.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cleanInstallCB.Location = new System.Drawing.Point(6, 35);
+            this.cleanInstallCB.Location = new System.Drawing.Point(6, 30);
             this.cleanInstallCB.Name = "cleanInstallCB";
             this.cleanInstallCB.Size = new System.Drawing.Size(187, 17);
             this.cleanInstallCB.TabIndex = 21;
@@ -175,7 +178,7 @@
             // cancerFontCB
             // 
             this.cancerFontCB.AutoSize = true;
-            this.cancerFontCB.Location = new System.Drawing.Point(6, 65);
+            this.cancerFontCB.Location = new System.Drawing.Point(6, 60);
             this.cancerFontCB.Name = "cancerFontCB";
             this.cancerFontCB.Size = new System.Drawing.Size(81, 17);
             this.cancerFontCB.TabIndex = 23;
@@ -189,7 +192,7 @@
             // backupModsCheckBox
             // 
             this.backupModsCheckBox.AutoSize = true;
-            this.backupModsCheckBox.Location = new System.Drawing.Point(6, 50);
+            this.backupModsCheckBox.Location = new System.Drawing.Point(6, 45);
             this.backupModsCheckBox.Name = "backupModsCheckBox";
             this.backupModsCheckBox.Size = new System.Drawing.Size(156, 17);
             this.backupModsCheckBox.TabIndex = 24;
@@ -202,6 +205,7 @@
             // 
             // settingsGroupBox
             // 
+            this.settingsGroupBox.Controls.Add(this.cleanUninstallCB);
             this.settingsGroupBox.Controls.Add(this.saveUserDataCB);
             this.settingsGroupBox.Controls.Add(this.saveLastInstallCB);
             this.settingsGroupBox.Controls.Add(this.largerFontButton);
@@ -211,7 +215,7 @@
             this.settingsGroupBox.Controls.Add(this.cleanInstallCB);
             this.settingsGroupBox.Location = new System.Drawing.Point(12, 92);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(265, 138);
+            this.settingsGroupBox.Size = new System.Drawing.Size(265, 140);
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "RelHax ModPack Settings";
@@ -219,7 +223,7 @@
             // saveUserDataCB
             // 
             this.saveUserDataCB.AutoSize = true;
-            this.saveUserDataCB.Location = new System.Drawing.Point(6, 110);
+            this.saveUserDataCB.Location = new System.Drawing.Point(6, 105);
             this.saveUserDataCB.Name = "saveUserDataCB";
             this.saveUserDataCB.Size = new System.Drawing.Size(139, 17);
             this.saveUserDataCB.TabIndex = 27;
@@ -233,7 +237,7 @@
             // saveLastInstallCB
             // 
             this.saveLastInstallCB.AutoSize = true;
-            this.saveLastInstallCB.Location = new System.Drawing.Point(6, 95);
+            this.saveLastInstallCB.Location = new System.Drawing.Point(6, 90);
             this.saveLastInstallCB.Name = "saveLastInstallCB";
             this.saveLastInstallCB.Size = new System.Drawing.Size(138, 17);
             this.saveLastInstallCB.TabIndex = 26;
@@ -247,7 +251,7 @@
             // largerFontButton
             // 
             this.largerFontButton.AutoSize = true;
-            this.largerFontButton.Location = new System.Drawing.Point(6, 80);
+            this.largerFontButton.Location = new System.Drawing.Point(6, 75);
             this.largerFontButton.Name = "largerFontButton";
             this.largerFontButton.Size = new System.Drawing.Size(80, 17);
             this.largerFontButton.TabIndex = 25;
@@ -320,6 +324,25 @@
             this.cancelDownloadButton.Visible = false;
             this.cancelDownloadButton.Click += new System.EventHandler(this.cancelDownloadButton_Click);
             // 
+            // downloadTimer
+            // 
+            this.downloadTimer.Interval = 1000;
+            this.downloadTimer.Tick += new System.EventHandler(this.downloadTimer_Tick);
+            // 
+            // cleanUninstallCB
+            // 
+            this.cleanUninstallCB.AutoSize = true;
+            this.cleanUninstallCB.Location = new System.Drawing.Point(6, 120);
+            this.cleanUninstallCB.Name = "cleanUninstallCB";
+            this.cleanUninstallCB.Size = new System.Drawing.Size(117, 17);
+            this.cleanUninstallCB.TabIndex = 29;
+            this.cleanUninstallCB.Text = "Clean uninstallation";
+            this.cleanUninstallCB.UseVisualStyleBackColor = true;
+            this.cleanUninstallCB.CheckedChanged += new System.EventHandler(this.cleanUninstallCB_CheckedChanged);
+            this.cleanUninstallCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cleanUninstallCB_MouseDown);
+            this.cleanUninstallCB.MouseEnter += new System.EventHandler(this.cleanUninstallCB_MouseEnter);
+            this.cleanUninstallCB.MouseLeave += new System.EventHandler(this.cleanUninstallCB_MouseLeave);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -377,6 +400,8 @@
         private System.Windows.Forms.CheckBox saveLastInstallCB;
         private System.Windows.Forms.Button cancelDownloadButton;
         private System.Windows.Forms.CheckBox saveUserDataCB;
+        private System.Windows.Forms.Timer downloadTimer;
+        private System.Windows.Forms.CheckBox cleanUninstallCB;
     }
 }
 

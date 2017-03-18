@@ -36,7 +36,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 20.5.2";
+        private string managerVersion = "version 20.6";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -65,9 +65,7 @@ namespace RelhaxModpack
         int numFilesToProcessInt = 0;
         int numFilesToCopyDeleteExtract = 0;
         bool userExtract = false;
-        //childProgresBar.Maximum
         private int childMaxProgres;
-        //childProgresBar.Value
         private int childCurrentProgres;
         private bool isParrentDone;
         //current file being processed in the zip archive
@@ -108,6 +106,10 @@ namespace RelhaxModpack
         List<double> timeRemainArray = new List<double>();
         //the ETA variable for downlading
         double actualTimeRemain = 0;
+        float previousTotalBytesDownloaded = 0;
+        float currentTotalBytesDownloaded = 0;
+        float differenceTotalBytesDownloaded = 0;
+        float sessionDownloadSpeed = 0;
         
         //The constructur for the application
         public MainWindow()
@@ -117,11 +119,15 @@ namespace RelhaxModpack
         //handler for the mod download file progress
         void downloader_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
+            if (!downloadTimer.Enabled)
+                downloadTimer.Enabled = true;
+            string totalSpeedLabel = "";
             //get the download information into numeric classes
             float bytesIn = float.Parse(e.BytesReceived.ToString());
             float totalBytes = float.Parse(e.TotalBytesToReceive.ToString());
             float MBytesIn = (float)bytesIn / MBDivisor;
             float MBytesTotal = (float)totalBytes / MBDivisor;
+            currentTotalBytesDownloaded = bytesIn;
             //create the download progress string
             string currentModDownloadingShort = currentModDownloading;
             if (currentModDownloading.Length > 15)
@@ -130,7 +136,8 @@ namespace RelhaxModpack
             //set the progress bar
             childProgressBar.Value = e.ProgressPercentage;
             //set the download speed
-            speedLabel.Text = string.Format("{0} MB/s", (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds).ToString("0.00"));
+            sessionDownloadSpeed = (float) Math.Round(sessionDownloadSpeed, 2);
+            totalSpeedLabel = "" + sessionDownloadSpeed + " MB/s";
             //get the ETA for the download
             double totalTimeToDownload =  MBytesTotal / (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds);
             double timeRemain = totalTimeToDownload - sw.Elapsed.TotalSeconds;
@@ -151,7 +158,8 @@ namespace RelhaxModpack
             //convert the total seconds to mins and seconds
             int actualTimeMins = (int)actualTimeRemain / 60;
             int actualTimeSecs = (int)actualTimeRemain % 60;
-            speedLabel.Text = speedLabel.Text + " ETA: " + actualTimeMins + " min " + actualTimeSecs + " sec";
+            totalSpeedLabel = totalSpeedLabel + " " + actualTimeMins + " mins " + actualTimeSecs + " secs ";
+            speedLabel.Text = totalSpeedLabel;
         }
         //handler for the mod download file complete event
         void downloader_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
@@ -167,7 +175,7 @@ namespace RelhaxModpack
                 childProgressBar.Value = 0;
                 return;
             }
-            
+            downloadTimer.Enabled = false;
             
             
                 //new relhax modpack code
@@ -535,11 +543,12 @@ namespace RelhaxModpack
                     sw.Reset();
                     sw.Start();
                     string newExeName = Application.StartupPath + "\\RelhaxModpack_update" + ".exe";
-                    updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(updater_DownloadProgressChanged);
+                    updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
                     updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
                     if (File.Exists(newExeName)) File.Delete(newExeName);
                     updater.DownloadFileAsync(new Uri("http://willster419.atwebpages.com/Applications/RelHaxModPack/RelhaxModpack.exe"), newExeName);
                     Settings.appendToLog("New application download started");
+                    currentModDownloading = "update ";
                 }
                 else
                 {
@@ -552,6 +561,7 @@ namespace RelhaxModpack
         //handler for when the update download is complete
         void updater_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
+            downloadTimer.Enabled = false;
             if (e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
             {
                 //404
@@ -578,21 +588,6 @@ namespace RelhaxModpack
                 MessageBox.Show("Unable to start application, but it is located in \n" + newExeName);
             }
             Application.Exit();
-        }
-        //handler for the update download progress
-        void updater_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            double bytesIn = double.Parse(e.BytesReceived.ToString());
-            double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
-            int MBytesIn = (int)bytesIn / MBDivisor;
-            int MBytesTotal = (int)totalBytes / MBDivisor;
-            downloadProgress.Text = "Downloaded " + MBytesIn + " MB" + " of " + MBytesTotal + " MB";
-            childProgressBar.Value = e.ProgressPercentage;
-            speedLabel.Text = string.Format("{0} MB/s", (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds).ToString("0.00"));
-            if (MBytesIn == 0 && MBytesTotal == 0)
-            {
-                this.downloadProgress.Text = "Complete!";
-            }
         }
         //parses all instance strings to be used for (un)install processes
         private String parseStrings()
@@ -675,7 +670,7 @@ namespace RelhaxModpack
                         s = Regex.Replace(s, "versiondir",thisVersion);
                     }
                     //put the entries on disk
-                    //File.AppendAllText(s + "\n", tanksLocation + "\\installedRelhaxFiles.log");
+                    File.AppendAllText(tanksLocation + "\\installedRelhaxFiles.log", s + "\n" );
                 }
                 zip.Dispose();
             }
@@ -730,7 +725,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 03/15/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 03/18/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1359,7 +1354,7 @@ namespace RelhaxModpack
         private void parseInstallationPart1()
         {
             state = InstallState.modSelection;
-            //reset the childProgresBar value
+            //reset the childProgressBar value
             childProgressBar.Maximum = 100;
             childProgressBar.Value = 0;
             //show the mod selection window
@@ -1370,6 +1365,8 @@ namespace RelhaxModpack
                 state = InstallState.idle;
                 return;
             }
+            if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
+                File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
             downloadProgress.Text = "Loading...";
             Application.DoEvents();
             modsToInstall = new List<Mod>();
@@ -1537,12 +1534,18 @@ namespace RelhaxModpack
                 this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
                 return;
             }
-            //verify that the user really wants to uninstall
-            if (MessageBox.Show("This will delete ALL INSTALLED MODS. Are you Sure?", "Um...", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Confirm you wish to uninstall?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                downloadProgress.Text = "Uninstalling...";
-                state = InstallState.uninstallResMods;
-                this.backgroundDelete(tanksLocation + "\\res_mods");
+                if (Settings.cleanUninstall)
+                {
+                    downloadProgress.Text = "Uninstalling...";
+                    state = InstallState.uninstallResMods;
+                    this.backgroundDelete(tanksLocation + "\\res_mods");
+                }
+                else
+                {
+                    this.newUninstallMethod();
+                }
             }
         }
         //handler for what happends when the check box "clean install" is checked or not
@@ -1771,6 +1774,8 @@ namespace RelhaxModpack
             {
                 //finish uninstallResMods process
                 state = InstallState.idle;
+                if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
+                    File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
                 if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
                 if (!Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\mods\\" + this.getFolderVersion(null));
                 downloadProgress.Text = "Done!";
@@ -1792,11 +1797,6 @@ namespace RelhaxModpack
             if (!Directory.Exists(tanksLocation + "\\res_mods")) Directory.CreateDirectory(tanksLocation + "\\res_mods");
             if (!userExtract)
             {
-                //create an installed entries log for uninstall later
-                if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
-                {
-                    File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
-                }
                 //extract RelHax Mods
                 Settings.appendToLog("Starting Relhax Modpack Extraction");
                 string downloadedFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
@@ -2021,6 +2021,7 @@ namespace RelhaxModpack
             this.largerFontButton.Checked = Settings.largeFont;
             this.saveLastInstallCB.Checked = Settings.saveLastConfig;
             this.saveUserDataCB.Checked = Settings.saveUserData;
+            this.cleanUninstallCB.Checked = Settings.cleanUninstall;
             this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
             switch (Settings.gif)
             {
@@ -2302,6 +2303,146 @@ namespace RelhaxModpack
         {
             if (helper != null)
                 helper.helperText.Text = helperText;
+        }
+        //new unistall method
+        private void newUninstallMethod()
+        {
+            Settings.appendToLog("Started Uninstallation process");
+            if(!File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
+            {
+                Settings.appendToLog("ERROR: installedRelhaxFiles.log does not exist, prompt user to delete everything instead");
+                DialogResult result = MessageBox.Show("The log file containg the installed files list (installedRelhaxFiles.log) does not exist. Would you like to remove all mods instead?", "Remove all mods", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    state = InstallState.uninstallResMods;
+                    Settings.appendToLog("User said yes to delete");
+                    this.backgroundDelete(tanksLocation + "\\res_mods");
+                    return;
+                }
+                Settings.appendToLog("User said no, aborting");
+                return;
+            }
+            state = InstallState.uninstallMods;
+            string[] createdFiles = File.ReadAllLines(tanksLocation + "\\installedRelhaxFiles.log");
+            //sort into directories and files
+            List<string> files = new List<string>();
+            List<string> resModsFolders = new List<string>();
+            List<string> modsFolders = new List<string>();
+            foreach (string s in createdFiles)
+            {
+                if (Regex.IsMatch(s, @"\.[A-Za-z0-9_\-]*$"))
+                {
+                    //it's a files
+                    files.Add(s);
+                }
+                else
+                {
+                    //it's a folder
+                    if (Regex.IsMatch(s,"res_mods"))
+                    {
+                        //it's a res_mods folder
+                        resModsFolders.Add(s);
+                    }
+                    else
+                    {
+                        //it's a mods folder
+                        modsFolders.Add(s);
+                    }
+                }
+            }
+            parrentProgressBar.Maximum = 3;
+            parrentProgressBar.Value = 1;
+            childProgressBar.Maximum = files.Count;
+            childProgressBar.Value = 0;
+            //delete all the files
+            foreach (string s in files)
+            {
+                string filePath = tanksLocation + "\\" + s;
+                if (File.Exists(filePath))
+                {
+                    Settings.appendToLog("Deleting file " + filePath);
+                    File.Delete(filePath);
+                    childProgressBar.Value++;
+                    string ss = filePath;
+                    if (ss.Length > 20)
+                        ss = ss.Substring(0,20);
+                    downloadProgress.Text = "Deleting file " + ss;
+                    Application.DoEvents();
+                }
+            }
+            //delete all the folders if nothing else is in them
+            parrentProgressBar.Value++;
+            childProgressBar.Value = 0;
+            childProgressBar.Maximum = modsFolders.Count;
+            this.processDirectory(tanksLocation + "\\mods");
+            parrentProgressBar.Value++;
+            childProgressBar.Value = 0;
+            childProgressBar.Maximum = resModsFolders.Count;
+            this.processDirectory(tanksLocation + "\\res_mods");
+            downloadProgress.Text = "Complete!";
+            childProgressBar.Value = 0;
+            parrentProgressBar.Value = 0;
+            if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
+            if (!Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\mods\\" + this.getFolderVersion(null));
+            Settings.appendToLog("Uninstall complete");
+            state = InstallState.idle;
+        }
+        //deletes all empty directories from a given start location
+        private void processDirectory(string startLocation)
+        {
+            foreach (var directory in Directory.GetDirectories(startLocation))
+            {
+                processDirectory(directory);
+                if (Directory.GetFiles(directory).Length == 0 && 
+                    Directory.GetDirectories(directory).Length == 0)
+                {
+                    Settings.appendToLog("Deleting directory " + directory);
+                    Directory.Delete(directory, false);
+                    string ss = directory;
+                    if (ss.Length > 20)
+                        ss = ss.Substring(0,20);
+                    downloadProgress.Text = "Deleting folder " + ss;
+                    Application.DoEvents();
+                }
+                childProgressBar.Value++;
+            }
+        }
+
+        private void downloadTimer_Tick(object sender, EventArgs e)
+        {
+            differenceTotalBytesDownloaded = currentTotalBytesDownloaded - previousTotalBytesDownloaded;
+            float intervalInSeconds = (float)downloadTimer.Interval / 1000;
+            float sessionMBytesDownloaded = differenceTotalBytesDownloaded / MBDivisor;
+            sessionDownloadSpeed = sessionMBytesDownloaded / intervalInSeconds;
+
+            //set the previous for the last amount of bytes downloaded
+            previousTotalBytesDownloaded = currentTotalBytesDownloaded;
+        }
+
+        private void cleanUninstallCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.cleanUninstall = cleanUninstallCB.Checked;
+        }
+
+        private void cleanUninstallCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = "Selected - All mods will be erased\nNot Selected - Only Modpack installed mods will be erased";
+        }
+
+        private void cleanUninstallCB_MouseLeave(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = helperText;
+        }
+
+        private void cleanUninstallCB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = "Selected - All mods will be erased\nNot Selected - Only Modpack installed mods will be erased";
+            newHelper.ShowDialog();
         }
     }
     //a class for the downloadQueue list, to make a queue of downloads

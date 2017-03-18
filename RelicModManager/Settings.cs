@@ -28,6 +28,7 @@ namespace RelhaxModpack
         public static bool saveUserData { get; set; }
         public static int modSelectionHeight { get; set; }
         public static int modSelectionWidth { get; set; }
+        public static bool cleanUninstall { get; set; }
         public enum LoadingGifs { standard = 0, thirdGuards = 1 };
         public static LoadingGifs gif;
         public const float normalSizeFont = 8.25F;
@@ -54,6 +55,7 @@ namespace RelhaxModpack
                 Settings.firstLoad = true;
                 Settings.saveLastConfig = false;
                 Settings.saveUserData = false;
+                Settings.cleanUninstall = false;
                 Settings.modSelectionHeight = 250;
                 Settings.modSelectionWidth = 520;
                 Settings.applyInternalSettings();
@@ -97,6 +99,9 @@ namespace RelhaxModpack
                             break;
                         case "saveUserData":
                             Settings.saveUserData = bool.Parse(n.InnerText);
+                            break;
+                        case "cleanUninstall":
+                            Settings.cleanUninstall = bool.Parse(n.InnerText);
                             break;
                     }
                 }
@@ -160,6 +165,9 @@ namespace RelhaxModpack
             XmlElement xsaveUserData = doc.CreateElement("saveUserData");
             xsaveUserData.InnerText = "" + Settings.saveUserData;
             settingsHolder.AppendChild(xsaveUserData);
+            XmlElement xcleanUninstall = doc.CreateElement("cleanUninstall");
+            xcleanUninstall.InnerText = "" + Settings.cleanUninstall;
+            settingsHolder.AppendChild(xcleanUninstall);
             switch (Settings.gif)
             {
                 case (Settings.LoadingGifs.standard):
