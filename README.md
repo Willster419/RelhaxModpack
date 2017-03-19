@@ -1,7 +1,7 @@
 # The Relhax Modpack
 The fastest WoT modpack installer in the world
 
-**[Skip to download link](https://github.com/Willster419/RelicModManager#download)**
+**[Skip to download link](https://github.com/Willster419/RelhaxModpack#download)**
 
 **[Virustotal scan](https://www.virustotal.com/en/file/15c959ac79c5f3935c792b8bc5e0c72d1974ab5bab4fa0a75d0c3a9860aa206a/analysis/1489435329/)**
 
