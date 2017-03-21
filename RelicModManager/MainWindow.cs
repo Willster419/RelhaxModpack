@@ -36,7 +36,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 20.6";
+        private string managerVersion = "version 20.7";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -96,12 +96,14 @@ namespace RelhaxModpack
             restoreUserData = 14,
             installFonts = 15,
             uninstallResMods = 16,
-            uninstallMods = 17
+            uninstallMods = 17,
+            smartUninstall = 18
         };
         private InstallState state = InstallState.idle;
         private string tanksVersion;//0.9.x.y
         BackgroundWorker deleteworker;
         BackgroundWorker copyworker;
+        BackgroundWorker smartDeleteworker;
         //list to maintain the refrence lines in a json patch
         List<double> timeRemainArray = new List<double>();
         //the ETA variable for downlading
@@ -725,7 +727,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 03/18/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 03/21/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1538,12 +1540,14 @@ namespace RelhaxModpack
             {
                 if (Settings.cleanUninstall)
                 {
+                    //run the recursive complete uninstaller
                     downloadProgress.Text = "Uninstalling...";
                     state = InstallState.uninstallResMods;
                     this.backgroundDelete(tanksLocation + "\\res_mods");
                 }
                 else
                 {
+                    //run the smart uninstaller
                     this.newUninstallMethod();
                 }
             }
@@ -1630,6 +1634,21 @@ namespace RelhaxModpack
             }
 
             extractworker.RunWorkerAsync(parameters);
+        }
+        //uses a backgroundWorker to smart uninstall
+        private void backgroundSmartUninstall()
+        {
+            numFilesToProcessInt = 0;
+            numFilesToCopyDeleteExtract = 0;
+            parrentProgressBar.Value = parrentProgressBar.Maximum;
+            downloadProgress.Text = "Starting smart uninstall";
+            Settings.appendToLog("Starting smart uninstall");
+            smartDeleteworker = new BackgroundWorker();
+            smartDeleteworker.WorkerReportsProgress = true;
+            smartDeleteworker.DoWork += new DoWorkEventHandler(smartDeleteworker_DoWork);
+            smartDeleteworker.ProgressChanged += new ProgressChangedEventHandler(smartDeleteworker_ProgressChanged);
+            smartDeleteworker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(smartDeleteworker_RunWorkerCompleted);
+            smartDeleteworker.RunWorkerAsync();
         }
         //gets the total number of files to process to eithor delete or copy
         private int numFilesToProcess(string folder)
@@ -1895,6 +1914,74 @@ namespace RelhaxModpack
             {
                 return;
             }
+        }
+        //the main worker method for the smart uninstaller
+        private void smartDeleteworker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            string[] createdFiles = File.ReadAllLines(tanksLocation + "\\installedRelhaxFiles.log");
+            //sort into directories and files
+            List<string> files = new List<string>();
+            List<string> resModsFolders = new List<string>();
+            List<string> modsFolders = new List<string>();
+            foreach (string s in createdFiles)
+            {
+                if (Regex.IsMatch(s, @"\.[A-Za-z0-9_\-]*$"))
+                {
+                    //it's a files
+                    files.Add(s);
+                }
+                else
+                {
+                    //it's a folder
+                    if (Regex.IsMatch(s, "res_mods"))
+                    {
+                        //it's a res_mods folder
+                        resModsFolders.Add(s);
+                    }
+                    else
+                    {
+                        //it's a mods folder
+                        modsFolders.Add(s);
+                    }
+                }
+            }
+            numFilesToProcessInt = files.Count;
+            //delete all the files
+            foreach (string s in files)
+            {
+                string filePath = tanksLocation + "\\" + s;
+                if (File.Exists(filePath))
+                {
+                    Settings.appendToLog("Deleting file " + filePath);
+                    File.Delete(filePath);
+                    smartDeleteworker.ReportProgress(numFilesToCopyDeleteExtract++);
+                }
+            }
+            //delete all the folders if nothing else is in them
+            Settings.appendToLog("Finished deleting, processing mods folder");
+            this.processDirectory(tanksLocation + "\\mods");
+            Settings.appendToLog("processing res_mods folder");
+            this.processDirectory(tanksLocation + "\\res_mods");
+            Settings.appendToLog("creating directories if they arn't already there");
+            if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
+            if (!Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\mods\\" + this.getFolderVersion(null));
+        }
+        //the method to update the UI on the uninstall process
+        private void smartDeleteworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            downloadProgress.Text = "Deleting file " + numFilesToCopyDeleteExtract + " of " + numFilesToProcessInt;
+            childProgressBar.Maximum = numFilesToProcessInt;
+            if (numFilesToCopyDeleteExtract < numFilesToProcessInt)
+                childProgressBar.Value = numFilesToCopyDeleteExtract;
+        }
+        //the method to run when the smart uninstall is compete
+        private void smartDeleteworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            downloadProgress.Text = "Complete!";
+            childProgressBar.Value = 0;
+            parrentProgressBar.Value = 0;
+            Settings.appendToLog("Uninstall complete");
+            state = InstallState.idle;
         }
         //recursivly copies every file from one place to another
         private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
@@ -2322,70 +2409,9 @@ namespace RelhaxModpack
                 Settings.appendToLog("User said no, aborting");
                 return;
             }
-            state = InstallState.uninstallMods;
-            string[] createdFiles = File.ReadAllLines(tanksLocation + "\\installedRelhaxFiles.log");
-            //sort into directories and files
-            List<string> files = new List<string>();
-            List<string> resModsFolders = new List<string>();
-            List<string> modsFolders = new List<string>();
-            foreach (string s in createdFiles)
-            {
-                if (Regex.IsMatch(s, @"\.[A-Za-z0-9_\-]*$"))
-                {
-                    //it's a files
-                    files.Add(s);
-                }
-                else
-                {
-                    //it's a folder
-                    if (Regex.IsMatch(s, "res_mods"))
-                    {
-                        //it's a res_mods folder
-                        resModsFolders.Add(s);
-                    }
-                    else
-                    {
-                        //it's a mods folder
-                        modsFolders.Add(s);
-                    }
-                }
-            }
-            parrentProgressBar.Maximum = 3;
-            parrentProgressBar.Value = 1;
-            childProgressBar.Maximum = files.Count;
-            childProgressBar.Value = 0;
-            //delete all the files
-            foreach (string s in files)
-            {
-                string filePath = tanksLocation + "\\" + s;
-                if (File.Exists(filePath))
-                {
-                    Settings.appendToLog("Deleting file " + filePath);
-                    File.Delete(filePath);
-                    childProgressBar.Value++;
-                    string ss = filePath;
-                    if (ss.Length > 20)
-                        ss = ss.Substring(0, 20);
-                    downloadProgress.Text = "Deleting file " + ss;
-                    Application.DoEvents();
-                }
-            }
-            //delete all the folders if nothing else is in them
-            parrentProgressBar.Value++;
-            childProgressBar.Value = 0;
-            childProgressBar.Maximum = modsFolders.Count;
-            this.processDirectory(tanksLocation + "\\mods");
-            parrentProgressBar.Value++;
-            childProgressBar.Value = 0;
-            childProgressBar.Maximum = resModsFolders.Count;
-            this.processDirectory(tanksLocation + "\\res_mods");
-            downloadProgress.Text = "Complete!";
-            childProgressBar.Value = 0;
-            parrentProgressBar.Value = 0;
-            if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
-            if (!Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\mods\\" + this.getFolderVersion(null));
-            Settings.appendToLog("Uninstall complete");
-            state = InstallState.idle;
+            state = InstallState.smartUninstall;
+            this.backgroundSmartUninstall();
+            return;
         }
         //deletes all empty directories from a given start location
         private void processDirectory(string startLocation)
@@ -2398,13 +2424,10 @@ namespace RelhaxModpack
                 {
                     Settings.appendToLog("Deleting directory " + directory);
                     Directory.Delete(directory, false);
-                    string ss = directory;
-                    if (ss.Length > 20)
-                        ss = ss.Substring(0, 20);
-                    downloadProgress.Text = "Deleting folder " + ss;
-                    Application.DoEvents();
+                    //downloadProgress.Text = "Deleting folders... ";
+                    
                 }
-                childProgressBar.Value++;
+                
             }
         }
 
