@@ -29,6 +29,11 @@ The fastest WoT modpack installer in the world
 - Automation:
   - The modpack and be set at command line with a "/auto-install config_file_name.xml" switch to automatically install the modpack, with your preference of mods selected. In this situation, you could install without any interaction, and update all your mods in seconds.
   
+### What does the mod look like?
+![MainWindow](https://github.com/Willster419/RelhaxModpack/raw/master/RelicModManager/PreviewPicture1.PNG "Main Window")
+
+![ModSelection](https://github.com/Willster419/RelhaxModpack/raw/master/RelicModManager/PreviewPicture2.PNG "Mod Selection")
+
 ### Additional Information
 The modpack is currently in alpha, proof of concept. I am still adding minor features and adding finishing touches to the application. This means that bugs may still exist. To prevent possible loss of your "perfect modpack configuration" it is recommended to back it up editor manually or using the "backup mods" checkbox option.
   
