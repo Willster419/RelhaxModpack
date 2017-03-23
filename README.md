@@ -98,14 +98,14 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYN
 
 ##### Time from program execution to mod selection on a hard drive:
 
-  OMC: 52 seconds
+  OMC: 48 seconds
   
-  Aslains: 46 seconds
+  Aslains: 24 seconds
   
-  Relhax: 8 seconds - **5.75X (475%) faster**
+  Relhax: 4 seconds - **Time reduced by 92% from OMC and 84% from Aslains**
 
 
-##### Time from mod selection to install completion (installing the same number of similar mods) on a hard drive:
+##### Time from mod selection to install completion (installing the same number or similar mods) on a hard drive:
 
 Mod Selection: Zoom 100m patch, Relhax Sound Mod (or equivalent)
 
@@ -113,10 +113,10 @@ Mod Selection: Zoom 100m patch, Relhax Sound Mod (or equivalent)
   
   Aslains: 9 seconds
   
-  Relhax: 4 seconds - **2.25X (125)% faster**
+  Relhax: 4 seconds - **Time reduced by 60% from OMC and 56% from Aslains
   
 ---
-This puts a whole new meaning to your quote in my form sig ScoutCub, <3 you plz don`t kick me
+This puts a whole new meaning to your quote in my form sig ScoutCub, <3 you plz don`t kick me from REL2
 
 The Relhax Modpack ~ *"Would you rather spend time on your mods, or your gameplay?"* ~
 
