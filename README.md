@@ -63,7 +63,7 @@ You can download the modpack from this link:
 
 http://adf.ly/1l28oP (donate link)
 
-http://willster419.atwebpages.com/Applications/RelHaxModPack/RelicModManager.exe (direct link)
+http://willster419.atwebpages.com/Applications/RelHaxModPack/RelhaxModpack.exe (direct link)
 
 If you can spare a few dollars and like the Modpack, please consider donating:
 https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2
