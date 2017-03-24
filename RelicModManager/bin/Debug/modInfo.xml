@@ -5331,8 +5331,8 @@
           <name>FV4202 (P) Battle-Hardened Remodel (Milkym4n)</name>
           <version>1.0.4.1</version>
           <modzipfile>Custom_Tank_Skins_Skin_GB70_FV4202-1.0.4.1.zip</modzipfile>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
+          <modzipcrc>55de006488339f76ebd2d264386f2f06</modzipcrc>
+          <size>24.1</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>
@@ -5341,7 +5341,8 @@
             </picture>
           </pictures>
           <configs />
-          <description></description>
+          <description>
+          </description>
           <updateComment>
           </updateComment>
           <devURL>https://github.com/MilkysModShop/FV4202/releases/tag/1.0.4.1</devURL>
@@ -5350,8 +5351,8 @@
           <name>Matilda Black Prince HD Remodel (Milkym4n)</name>
           <version>1.0.4</version>
           <modzipfile>Custom_Tank_Skins_Skin_GB68_Matilda_BP-1.0.4.zip</modzipfile>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
+          <modzipcrc>f1dc03560ab8bcc7cc544322f151470e</modzipcrc>
+          <size>17.5</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>
@@ -5360,7 +5361,8 @@
             </picture>
           </pictures>
           <configs />
-          <description></description>
+          <description>
+          </description>
           <updateComment>
           </updateComment>
           <devURL>https://github.com/MilkysModShop/Matilda_BP/releases/tag/1.0.4</devURL>
@@ -5369,8 +5371,8 @@
           <name>Churchill III Lend-Lease Remodel (Milkym4n)</name>
           <version>1.0.4</version>
           <modzipfile>Custom_Tank_Skins_Skin_R33_Churchill_3_WT-1.0.4.zip</modzipfile>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
+          <modzipcrc>e4f6de838b66f8c7d3f9438ed922841f</modzipcrc>
+          <size>11.7</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>
@@ -5388,8 +5390,8 @@
           <name>Cromwell Knight Skin (Milkym4n)</name>
           <version>1.0.4</version>
           <modzipfile>Custom_Tank_Skins_Skin_GB21_Cromwell_Knight-1.0.4.zip</modzipfile>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
+          <modzipcrc>0e8e419d9ad385b7fc5f9c1cde02bb29</modzipcrc>
+          <size>4.9</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>
@@ -5398,7 +5400,8 @@
             </picture>
           </pictures>
           <configs />
-          <description></description>
+          <description>
+          </description>
           <updateComment>
           </updateComment>
           <devURL>https://github.com/MilkysModShop/Cromwell_Knight/releases/tag/1.0.4</devURL>
@@ -5407,8 +5410,8 @@
           <name>Cromwell Knight-B Skin (Milkym4n)</name>
           <version>1.0.4</version>
           <modzipfile>Custom_Tank_Skins_Skin_GB85_Cromwell_Knight_B-1.0.4.zip</modzipfile>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
+          <modzipcrc>7cfb05f4c38625a096a041499c359b99</modzipcrc>
+          <size>21.6</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>
@@ -5417,7 +5420,8 @@
             </picture>
           </pictures>
           <configs />
-          <description></description>
+          <description>
+          </description>
           <updateComment>
           </updateComment>
           <devURL>https://github.com/MilkysModShop/Cromwell_Knight_B/releases</devURL>
