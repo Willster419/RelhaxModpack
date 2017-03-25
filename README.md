@@ -95,7 +95,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYN
   This is because I had to purchase a private file hosting server for the modpack. It's a low end service, and has a speed limitation of about .5 MB/s. There's not much I can do about it, because it is a cheap server and I didn't want to invest a large amount of money into a free/donate supported project. Thank you for understanding this.
   
 #### (1)Performance measurements:
-
+Hard drive used is a Toshiba 5400 RPM 2.5 inch laptop hard drive, 8MB cache
 ##### Time from program execution to mod selection on a hard drive:
 
   OMC: 48 seconds
