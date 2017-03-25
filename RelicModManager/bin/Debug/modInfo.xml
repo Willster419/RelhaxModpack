@@ -5452,7 +5452,7 @@
           <modzipfile>Custom_Tank_Skins_Skin_Ch14_T-34-3-1.0.2.zip</modzipfile>
           <modzipcrc>f</modzipcrc>
           <size>0</size>
-          <enabled>True</enabled>
+          <enabled>False</enabled>
           <userDatas />
           <pictures>
             <picture>
