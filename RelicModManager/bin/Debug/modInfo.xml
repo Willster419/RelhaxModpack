@@ -5425,6 +5425,26 @@
           <updateComment>
           </updateComment>
           <devURL>https://github.com/MilkysModShop/Cromwell_Knight_B/releases</devURL>
+        </mod> 
+        <mod>
+          <name>WZ-120 HD Remodel (Milkym4n)</name>
+          <version>1.0.2</version>
+          <modzipfile>Custom_Tank_Skins_Skin_Ch18_WZ-120-1.0.2.zip</modzipfile>
+          <modzipcrc>f</modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>http://i.imgur.com/o4TYUoW.jpg</URL>
+            </picture>
+          </pictures>
+          <configs />
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>https://github.com/MilkysModShop/WZ-120/releases/tag/1.0.2</devURL>
         </mod>
       </mods>
     </catagory>
