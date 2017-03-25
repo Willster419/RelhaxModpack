@@ -44,5 +44,10 @@ namespace RelhaxModpack
             downloadedVersionInfo.Text = wc.DownloadString("http://willster419.atwebpages.com/Applications/RelHaxModPack/releaseNotes.txt");
             Application.DoEvents();
         }
+
+        private void clickHereUpdateLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/Willster419/RelhaxModpack/releases/latest");
+        }
     }
 }

@@ -1,3 +1,6 @@
+Version 20.7.2:
+- Fixed a bug with the updater making an update loop. Also added a link on the update window to github latest version.
+
 Version 20.7.1:
 - Fixed bug where exception would occur if a mod previously saved in a config preference was renamed or deleted in the database.
 
