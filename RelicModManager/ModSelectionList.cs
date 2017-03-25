@@ -1308,7 +1308,12 @@ namespace RelhaxModpack
                     {
                         case "name":
                             m = this.linkMod(nn.InnerText);
-                            if (m == null) continue;
+                            if (m == null)
+                            {
+                                Settings.appendToLog("WARNING: mod \"" + nn.InnerText + "\" not found");
+                                MessageBox.Show("The mod, \"" + nn.InnerText + "\" was not found in the modpack. It has eithor been renamed or was deleted.");
+                                continue;
+                            }
                             if (m.enabled)
                             {
                                 Settings.appendToLog("Checking mod " + m.name);
@@ -1318,6 +1323,10 @@ namespace RelhaxModpack
                         case "configs":
                             foreach (XmlNode nnn in nn.ChildNodes)
                             {
+                                if (m == null)
+                                {
+                                    continue;
+                                }
                                 Config c = new Config();
                                 foreach (XmlNode nnnn in nnn.ChildNodes)
                                 {

@@ -1,3 +1,6 @@
+Version 20.7.1:
+- Fixed bug where exception would occur if a mod previously saved in a config preference was renamed or deleted in the database.
+
 Version 20.7:
 - Moved the smart uninstaller to a seperate asynchronous background thread. (Removed UI lag)
 
