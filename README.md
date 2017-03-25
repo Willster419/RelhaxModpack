@@ -1,5 +1,5 @@
 # The Relhax Modpack
-The fastest WoT modpack installer in the world
+The fastest WoT modpack installer in the world. A refresh of OMC modpack
 
 **[Skip to download link](https://github.com/Willster419/RelhaxModpack#download)**
 
