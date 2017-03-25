@@ -27,17 +27,17 @@
       <selectionType>single</selectionType>
       <dependencies>
         <dependency>
-          <dependencyZipFile>Dependency_XVM_Base_6.5.6.zip</dependencyZipFile>
-          <dependencyZipCRC>a0e0a0b1c8556bfea3fdfe979537235a</dependencyZipCRC>
+          <dependencyZipFile>Dependency_XVM_Base_6.5.7.zip</dependencyZipFile>
+          <dependencyZipCRC>dabf6bb3aa95d6c969abc0316c991ed6</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
       <mods>
         <mod>
           <name>Default Config</name>
-          <version>6.5.5</version>
-          <modzipfile>XVM_Prebuilt_Configs_Default.zip</modzipfile>
-          <modzipcrc>aba6b3574dec748eaba3490571722605</modzipcrc>
+          <version>6.5.7</version>
+          <modzipfile>XVM_Prebuilt_Configs_Default_2017_03-24.zip</modzipfile>
+          <modzipcrc>7bb0408f6500065a9eb85818c46a1680</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
           <userDatas />
@@ -204,8 +204,8 @@
       <selectionType>multi</selectionType>
       <dependencies>
         <dependency>
-          <dependencyZipFile>Dependency_XVM_Base_6.5.6.zip</dependencyZipFile>
-          <dependencyZipCRC>a0e0a0b1c8556bfea3fdfe979537235a</dependencyZipCRC>
+          <dependencyZipFile>Dependency_XVM_Base_6.5.7.zip</dependencyZipFile>
+          <dependencyZipCRC>dabf6bb3aa95d6c969abc0316c991ed6</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
