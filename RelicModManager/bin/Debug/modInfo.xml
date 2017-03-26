@@ -2517,7 +2517,7 @@
           <modzipfile>Ingame_Info_Tessumod_0.6.11.zip</modzipfile>
           <modzipcrc>8768c14053f612606e343e5c1fb120c8</modzipcrc>
           <size>5.1</size>
-          <enabled>True</enabled>
+          <enabled>False</enabled>
           <userDatas />
           <pictures>
             <picture>
