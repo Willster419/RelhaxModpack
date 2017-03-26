@@ -3709,15 +3709,111 @@
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/572771-091703-session-statistics-and-battle-result-messages/</devURL>
         </mod>
         <mod>
-          <name>YasenKrasen session statistics</name>
+          <name>YasenKrasen session statistics - vanilla</name>
           <version>
           </version>
-          <modzipfile>Garage_Session_Stats_YasenKrasen.zip</modzipfile>
-          <modzipcrc>c540bf6b354f61ad6398367f56f5b3e8</modzipcrc>
-          <size>1.9</size>
+          <modzipfile>Garage_Session_Stats_YasenKrasen_vanilla_2017_03_26.zip</modzipfile>
+          <modzipcrc>7aed924cf3b62b30d1cbd8a16c0b9a39</modzipcrc>
+          <size>0.4</size>
           <enabled>True</enabled>
           <userDatas>
-            <userData>\\res_mods\\configs\\YasenKrasen\\cache.json</userData>
+            <userData>\\mods\\configs\\yk-stats\\cache.json</userData>
+          </userDatas>
+          <pictures>
+            <picture>
+              <URL>http://i.imgur.com/h1kpmRO.jpg</URL>
+            </picture>
+          </pictures>
+          <configs>
+            <config>
+              <name>Daily Reset</name>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_Daily_Reset.zip</configzipfile>
+              <configzipcrc>8330d61b975f5d6da52f39869f7173ff</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>Shows your statistics for your tanks session in the notifications area of your garage</description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://forum.worldoftanks.eu/index.php?/topic/209229-098-yasenkrasen-coloured-messages-session-statistics-eng/</devURL>
+        </mod>
+        <mod>
+          <name>YasenKrasen session statistics - v1</name>
+          <version>
+          </version>
+          <modzipfile>Garage_Session_Stats_YasenKrasen_v1_2017_03_26.zip</modzipfile>
+          <modzipcrc>e6a20ce783cfb1bd9ee9a6161acf9be5</modzipcrc>
+          <size>1.6</size>
+          <enabled>True</enabled>
+          <userDatas>
+            <userData>\\mods\\configs\\yk-stats\\cache.json</userData>
+          </userDatas>
+          <pictures>
+            <picture>
+              <URL>http://i.imgur.com/h1kpmRO.jpg</URL>
+            </picture>
+          </pictures>
+          <configs>
+            <config>
+              <name>Daily Reset</name>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_Daily_Reset.zip</configzipfile>
+              <configzipcrc>8330d61b975f5d6da52f39869f7173ff</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>Shows your statistics for your tanks session in the notifications area of your garage</description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://forum.worldoftanks.eu/index.php?/topic/209229-098-yasenkrasen-coloured-messages-session-statistics-eng/</devURL>
+        </mod>
+        <mod>
+          <name>YasenKrasen session statistics - v2</name>
+          <version>
+          </version>
+          <modzipfile>Garage_Session_Stats_YasenKrasen_v2_2017_03_26.zip</modzipfile>
+          <modzipcrc>70a06d5070a3550f3863b373c064ed4b</modzipcrc>
+          <size>1.7</size>
+          <enabled>True</enabled>
+          <userDatas>
+            <userData>\\mods\\configs\\yk-stats\\cache.json</userData>
+          </userDatas>
+          <pictures>
+            <picture>
+              <URL>http://i.imgur.com/h1kpmRO.jpg</URL>
+            </picture>
+          </pictures>
+          <configs>
+            <config>
+              <name>Daily Reset</name>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_Daily_Reset.zip</configzipfile>
+              <configzipcrc>8330d61b975f5d6da52f39869f7173ff</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+            </config>
+          </configs>
+          <description>Shows your statistics for your tanks session in the notifications area of your garage</description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://forum.worldoftanks.eu/index.php?/topic/209229-098-yasenkrasen-coloured-messages-session-statistics-eng/</devURL>
+        </mod>
+        <mod>
+          <name>YasenKrasen session statistics - v3</name>
+          <version>
+          </version>
+          <modzipfile>Garage_Session_Stats_YasenKrasen_v3_2017_03_26.zip</modzipfile>
+          <modzipcrc>0f327ae12af48bb741918ee259647057</modzipcrc>
+          <size>1.5</size>
+          <enabled>True</enabled>
+          <userDatas>
+            <userData>\\mods\\configs\\yk-stats\\cache.json</userData>
           </userDatas>
           <pictures>
             <picture>
