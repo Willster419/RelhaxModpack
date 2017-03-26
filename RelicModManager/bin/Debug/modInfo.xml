@@ -338,7 +338,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Battle Interface modifications - Hitlog (xvm)</name>
+          <name>Battle Interface modifications - hitlog (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -611,7 +611,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Battle Interface modifications - vechile on file announcer (xvm)</name>
+          <name>Battle Interface modifications - vehicle on file announcer (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -794,7 +794,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Tank Carousel modifications-xvm</name>
+          <name>Tank Carousel modifications (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -1262,7 +1262,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Garage interface modifications - block vechile if ammo is lower than... (xvm)</name>
+          <name>Garage interface modifications - block vehicle if ammo is lower than... (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -1427,7 +1427,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Login modifications - autologin(xvm)</name>
+          <name>Login modifications - autologin (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -1466,7 +1466,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Login modifications - hide old replay confirmation window(xvm)</name>
+          <name>Login modifications - hide old replay confirmation window (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -1505,7 +1505,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Login modifications - show server ping(xvm)</name>
+          <name>Login modifications - show server ping (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -1544,7 +1544,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Login modifications - save last server</name>
+          <name>Login modifications - save last server (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -1583,7 +1583,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Login modifications - show servers information(xvm)</name>
+          <name>Login modifications - show servers information (xvm)</name>
           <version>
           </version>
           <modzipfile>
