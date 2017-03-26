@@ -4660,6 +4660,242 @@
           </updateComment>
           <devURL>http://www.almodi.org/world-of-tanks-wot/sborka-anime-vocaloid-megapack-ot-slayer-the-god#download</devURL>
         </mod>
+        <mod>
+          <name>Classic's Wotshop - Nation Vehicle Skins</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>Chinese Military Green</name>
+              <configzipfile>Tank_Skin_Packs_Chinese-Military-Green-1.0.zip</configzipfile>
+              <configzipcrc>edf5197f33f456526f8d1aaa0e422476</configzipcrc>
+              <size>104</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-079_orig.jpg</URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>Czech Primer Grey</name>
+              <configzipfile>Tank_Skin_Packs_Czechoslovak-Primer-Grey-1.01.zip</configzipfile>
+              <configzipcrc>5578a4fe0a50480eb3e45690b1bdda4d</configzipcrc>
+              <size>66.2</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-066.jpg</URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>Czech Ultra Dark</name>
+              <configzipfile>Tank_Skin_Packs_Czechoslovak-Ultra-Dark-1.01.zip</configzipfile>
+              <configzipcrc>aaede062f029f54ef67465c30277e7db</configzipcrc>
+              <size>46.9</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/czdark.jpg</URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>French Artillery Green</name>
+              <configzipfile>Tank_Skin_Packs_French-Artillery-Green-1.0.zip</configzipfile>
+              <configzipcrc>851d06faa263a1871f655a7eeb5b2994</configzipcrc>
+              <size>148.6</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-125.png</URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>French Dark Green</name>
+              <configzipfile>Tank_Skin_Packs_French-Dark-Green-1.1.zip</configzipfile>
+              <configzipcrc>463b7be1fb816811a8d23fc8678573b6</configzipcrc>
+              <size>151.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-322.jpg</URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>German Bundeswehr Green</name>
+              <configzipfile>Tank_Skin_Packs_German-Bundeswehr-Green-1.1.zip</configzipfile>
+              <configzipcrc>c655de2fd530e7d5c61177b35481ca61</configzipcrc>
+              <size>54.9</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/2-xpjua6l.jpg</URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>German Neue Dunkelgelb</name>
+              <configzipfile>Tank_Skin_Packs_German-Neue-Dunkelgelb-1.4.zip</configzipfile>
+              <configzipcrc>7f3ccc042ef798c0737b2d8dce6af142</configzipcrc>
+              <size>410.5</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-448.jpg</URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>German Primer Red</name>
+              <configzipfile>Tank_Skin_Packs_German-Red-Primer-0.13b.zip</configzipfile>
+              <configzipcrc>9fdc8ceb4f3962f17847e8d17400ab88</configzipcrc>
+              <size>126.8</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-281.jpg</URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>Japanese Reddish Brown</name>
+              <configzipfile>Tank_Skin_Packs_Japanese-Reddish-Brown-1.1.zip</configzipfile>
+              <configzipcrc>1c2d7ac490b8b067bc7a3f7b477e8a6b</configzipcrc>
+              <size>122</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-536.jpg</URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>Japanese Warship Grey</name>
+              <configzipfile>Tank_Skin_Packs_Japanese-Warship-Grey-1.0.zip</configzipfile>
+              <configzipcrc>79849f519024e395548ed1c832ef555b</configzipcrc>
+              <size>94.8</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-067_1.jpg</URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>UK Olive Green</name>
+              <configzipfile>Tank_Skin_Packs_UK-Olive-Green-1.2.zip</configzipfile>
+              <configzipcrc>ef2a7f92909c06f16696f70ba2c9cabc</configzipcrc>
+              <size>394.6</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-208.jpg</URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>US Dark Olive</name>
+              <configzipfile>Tank_Skin_Packs_US-Dark-Olive-1.2.zip</configzipfile>
+              <configzipcrc>224302acde45a1cd92e6080796c069a6</configzipcrc>
+              <size>334.7</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/01-t20.jpg</URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>USSR 4BO-1 Green</name>
+              <configzipfile>Tank_Skin_Packs_USSR-4BO-1-Green-1.31.zip</configzipfile>
+              <configzipcrc>33550328698c977a73fc1502850fa870</configzipcrc>
+              <size>368.2</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/9-ervcbok.jpg</URL>
+                </picture>
+              </pictures>
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://classicswotworkshop.weebly.com/</devURL>
+        </mod>
+        <mod>
+          <name>Classic's Wotshop - Other Vehicle Skins</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>Israeli Desert Sand</name>
+              <configzipfile>Tank_Skin_Packs_Israeli-Desert-Sand-0.12.zip</configzipfile>
+              <configzipcrc>7f52b8a204c1ddf349380751def44483</configzipcrc>
+              <size>35.9</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-612.jpg</URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>Zephyr Multicolor Camo Pack</name>
+              <configzipfile>Tank_Skin_Packs_Multicolor-Zephyr-Camo_UserRequest-1.0.zip</configzipfile>
+              <configzipcrc>6ad8f923cfac2abe7cabf60686dcf606</configzipcrc>
+              <size>30.3</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-695.jpg</URL>
+                </picture>
+              </pictures>
+            </config>
+          </configs>
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
       </mods>
     </catagory>
     <catagory>
@@ -5561,6 +5797,26 @@
           <updateComment>
           </updateComment>
           <devURL>https://github.com/MilkysModShop/T-34-3/releases/tag/1.0.1</devURL>
+        </mod>
+        <mod>
+          <name>FV215b HD Remodel (Milkym4n)</name>
+          <version>1.0.4</version>
+          <modzipfile>Custom_Tank_Skins_Skin_GB13_FV215b-1.0.4.zip</modzipfile>
+          <modzipcrc>0a74f26fdf32463f72e7a4a08f6cc9b1</modzipcrc>
+          <size>25</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>http://i.imgur.com/LbpJWbw.jpg</URL>
+            </picture>
+          </pictures>
+          <configs />
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>https://github.com/MilkysModShop/FV215b/releases/latest</devURL>
         </mod>
       </mods>
     </catagory>
