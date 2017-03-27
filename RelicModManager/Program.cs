@@ -34,32 +34,32 @@ namespace RelhaxModpack
             for (int i = 0; i < commandArgs.Count(); i++)
             {
                 //check what type of arg each one is
-                if (Regex.IsMatch(commandArgs[i], "test"))
+                if (Regex.IsMatch(commandArgs[i], @"bin$"))
                 {
                     testMode = true;
                 }
-                else if (Regex.IsMatch(commandArgs[i], "auto-install"))
+                else if (Regex.IsMatch(commandArgs[i], @"auto-install$"))
                 {
                     autoInstall = true;
                     //parse the config file and advance the counter
                     configName = commandArgs[++i];
                 }
-                else if (Regex.IsMatch(commandArgs[i], "crccheck2"))
+                else if (Regex.IsMatch(commandArgs[i], @"crccheck2$"))
                 {
                     Application.Run(new CRCCHECK2());
                     return;
                 }
-                else if (Regex.IsMatch(commandArgs[i], "crccheck"))
+                else if (Regex.IsMatch(commandArgs[i], @"crccheck$"))
                 {
                     Application.Run(new CRCCheck());
                     return;
                 }
-                else if (Regex.IsMatch(commandArgs[i], "patchcheck"))
+                else if (Regex.IsMatch(commandArgs[i], @"patchcheck$"))
                 {
                     Application.Run(new PatchTester());
                     return;
                 }
-                else if (Regex.IsMatch(commandArgs[i], "databaseupdate"))
+                else if (Regex.IsMatch(commandArgs[i], @"databaseupdate$"))
                 {
                     Application.Run(new CRCFileSizeUpdate());
                     return;
