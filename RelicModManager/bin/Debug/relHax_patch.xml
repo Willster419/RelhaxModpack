@@ -14,7 +14,6 @@
   <!-- the file to perform patching on -->
   <!-- relative to World_of_Tanks directory -->
   <!-- Use "versiondir" as the placeholder for the world of tanks mods folder version e.g. 0.9.17.1 -->
-  <!-- TODO: Move file paths relative from "res_mods" to "World_of_Tanks" -->
   <file>\\res_mods\\versiondir\\folder\\mod_name.xml</file>
   
   <!-- the location of the xml node to patch, xpath style -->
@@ -46,15 +45,16 @@
   <!-- the file to perform patching on -->
   <!-- relative to World_of_Tanks directory -->
   <!-- Use "versiondir" as the placeholder for the world of tanks mods folder version e.g. 0.9.17.1 -->
-  <!-- TODO: Move file paths relative from "res_mods" to "World_of_Tanks" -->
   <file>mods\\versiondir\\configs\\folder\\mod_name_config.txt</file>
   
   <!-- the line number(s) in the file for patching -->
-  <!-- if specefied, mathcing search must also be in those lines -->
+  <!-- if specefied, matching search must also be in those lines -->
   <!-- can be left blank to patch all matches of search -->
+  <!-- can use -1 to indicate to load the entire file and do one regex patch on it -->
   <line>69,420</line>
   
   <!-- the value or phrase to search for in a single line -->
+  <!-- Regex syntax supported -->
   <search>value</search>
   
   <!-- the value or phrase to replace <search> with -->
@@ -69,7 +69,7 @@
   <!-- options: xml, regex, json -->
   <type>json</type>
   
-  <!-- the xml patch mode to perform -->
+  <!-- the json patch mode to perform -->
   <!-- options: edit -->
   <!-- TODO: Figure out if we need add and remove modes -->
   <mode>edit</mode>
@@ -77,8 +77,7 @@
   <!-- the file to perform patching on -->
   <!-- relative to World_of_Tanks directory -->
   <!-- Use "versiondir" as the placeholder for the world of tanks mods folder version e.g. 0.9.17.1 -->
-  <!-- XVM config files ".xc" are json and should be patched with this method -->
-  <!-- TODO: Move file paths relative from "res_mods" to "World_of_Tanks" -->
+  <!-- NOTE: XVM config files ".xc" are json and should be patched with this method -->
   <file>\\configs\\folder\\mod_autoaim_indicator.json</file>
   
   <!-- the location of the json value to patch, jsonpath style -->
