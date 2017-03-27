@@ -5818,6 +5818,26 @@
           </updateComment>
           <devURL>https://github.com/MilkysModShop/FV215b/releases/latest</devURL>
         </mod>
+        <mod>
+          <name>T-62A Battlehardened Remodel (Milkym4n)</name>
+          <version>1.0.2</version>
+          <modzipfile>Custom_Tank_Skins_Skin_R87_T62A-1.1.1.zip</modzipfile>
+          <modzipcrc>f</modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>http://i.imgur.com/ZaEhACM.jpg"</URL>
+            </picture>
+          </pictures>
+          <configs />
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>https://github.com/MilkysModShop/T-62A/releases/tag/1.1.1</devURL>
+        </mod>
       </mods>
     </catagory>
   </catagories>
