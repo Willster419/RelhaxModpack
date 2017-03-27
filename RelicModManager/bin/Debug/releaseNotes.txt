@@ -1,3 +1,6 @@
+Version 20.7.4:
+- Fixed a bug with the command line switches. Made updater script look less weird
+
 Version 20.7.3:
 - Fixed a bug where it would not install user mods if only user mods were selected
 

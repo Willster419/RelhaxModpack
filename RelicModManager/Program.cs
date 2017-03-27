@@ -34,7 +34,7 @@ namespace RelhaxModpack
             for (int i = 0; i < commandArgs.Count(); i++)
             {
                 //check what type of arg each one is
-                if (Regex.IsMatch(commandArgs[i], @"bin$"))
+                if (Regex.IsMatch(commandArgs[i], @"test$"))
                 {
                     testMode = true;
                 }
