@@ -263,7 +263,7 @@ namespace RelhaxModpack
                 }
                 else if (state == InstallState.extractUserMods)
                 {
-
+                    this.backgroundExtract(true);
                     return;
                 }
                 else
