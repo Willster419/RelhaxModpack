@@ -189,7 +189,7 @@ namespace RelhaxModpack
             //make config panel
             Panel configPanel = new Panel();
             configPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            configPanel.Location = new System.Drawing.Point(3, 26);
+            configPanel.Location = new System.Drawing.Point(3, 10);
             configPanel.TabIndex = 2;
             configPanel.AutoSize = true;
             configPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
@@ -215,48 +215,60 @@ namespace RelhaxModpack
             dropDownSizeLabel.Location = new Point(0, 0);
             //create the placeholders for up to 4 possible individual selections
             //panel 1
-            Panel configSelection1 = null;
-            Panel configSelection2 = null;
-            Panel configSelection3 = null;
-            Panel configSelection4 = null;
+            Panel configSelection1 = new Panel();
+            configSelection1.Location = new System.Drawing.Point(0, 0);
+            Panel configSelection2 = new Panel();
+            configSelection2.Location = new System.Drawing.Point(0, 0);
+            Panel configSelection3 = new Panel();
+            configSelection3.Location = new System.Drawing.Point(0, 0);
+            Panel configSelection4 = new Panel();
+            configSelection4.Location = new System.Drawing.Point(0, 0);
+            int yPosition = 15;
             for (int i = 0; i < m.configs.Count; i++)
             {
-                int yPosition = 20 * (i + 1);
-                //make configLabel if config type is not single_dropDown
-                Label configLabel = new Label();
-                if (!m.configs[i].type.Equals("single_dropdown"))
-                {
-                    configLabel.AutoSize = true;
-                    configLabel.Location = new System.Drawing.Point(5, yPosition - 10);
-                    configLabel.Size = new System.Drawing.Size(100, 15);
-                    configLabel.TabIndex = 0;
-                    configLabel.Text = m.configs[i].name;
-                    configLabel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
-                    configLabel.Enabled = false;
-                    configPanel.Controls.Add(configLabel);
-                }
+                Label configLabel = null;
                 switch (m.configs[i].type)
                 {
-                    case "single" || "single1":
+                    case "single":
                         //check to see if the configSelection1 panel needs to be
-                        if (configSelection1 == null)
+                        if (configSelection1.Location.X == 0 && configSelection1.Location.Y == 0)
                         {
                             //initialize it
-                            configSelection1 = new Panel();
                             configSelection1.Name = m.configs[i].type;
                             configSelection1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-                            configSelection1.Location = new System.Drawing.Point(configLabel.Location.X + configLabel.Size.Width + 6, yPosition - 10);
+                            configSelection1.Location = new System.Drawing.Point(3, getYLocation(configPanel.Controls));
                             configSelection1.TabIndex = 2;
                             configSelection1.AutoSize = true;
                             configSelection1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
                             configSelection1.Size = new System.Drawing.Size(t.Size.Width - 35, 30);
                             configSelection1.Controls.Clear();
+                            yPosition += 5;
+                            CheckBox EnableCB = new CheckBox();
+                            EnableCB.AutoSize = true;
+                            EnableCB.Location = new System.Drawing.Point(5, (15 * (configSelection1.Controls.Count / 2)) + 5);
+                            EnableCB.Size = new System.Drawing.Size(100, 15);
+                            EnableCB.TabIndex = 0;
+                            EnableCB.Text = "";
+                            EnableCB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name + "-" + m.configs[i].type + "_sectionEnabler";
+                            EnableCB.Enabled = false;
+                            EnableCB.CheckedChanged += new EventHandler(EnableCB_CheckedChanged);
+                            configSelection1.Controls.Add(EnableCB);
                         }
+                        //make configLabel if config type is not single_dropDown
+                        configLabel = new Label();
+                        configLabel.AutoSize = true;
+                        configLabel.Location = new System.Drawing.Point(5, (15 * ((configSelection1.Controls.Count+1) / 2)) + 5);
+                        configLabel.Size = new System.Drawing.Size(100, 15);
+                        configLabel.TabIndex = 0;
+                        configLabel.Text = m.configs[i].name;
+                        configLabel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                        configLabel.Enabled = false;
+                        configSelection1.Controls.Add(configLabel);
                         //make a radioButton
                         RadioButton configControlRB = new RadioButton();
                         configControlRB.AutoSize = true;
                         //configControlRB.Location = new System.Drawing.Point(100, yPosition - 10);
-                        configControlRB.Location = new System.Drawing.Point(3,(15 * (configSelection1.Controls.Count)) + 3);
+                        configControlRB.Location = new System.Drawing.Point(configLabel.Location.X + configLabel.Size.Width + 6, (15 * (configSelection1.Controls.Count / 2)) + 5);
                         configControlRB.Size = new System.Drawing.Size(150, 15);
                         configControlRB.TabIndex = 1;
                         configControlRB.TabStop = true;
@@ -297,14 +309,16 @@ namespace RelhaxModpack
                         //configPanel.Controls.Add(configControlRB);
                         configSelection1.Controls.Add(configControlRB);
                         //now the configSelection1 loads the radiobuttons and later the configPanel loads the configSelection panels
+                        configPanel.Controls.Add(configSelection1);
                         break;
 
                     case "single_dropdown":
+
                         //make a dropDown selection box
                         if (configControlDD.Location.X == 0 && configControlDD.Location.Y == 0)
                         {
                             //this has been activated
-                            configControlDD.Location = new System.Drawing.Point(configLabel.Location.X + configLabel.Size.Width + 6, yPosition - 10);
+                            configControlDD.Location = new System.Drawing.Point(6, getYLocation(configPanel.Controls));
                             configPanel.Controls.Add(configControlDD);
                         }
                         string configDownloadPath1 = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
@@ -327,14 +341,26 @@ namespace RelhaxModpack
                         }
                         if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name);
                         if (m.configs[i].configChecked) configControlDD.SelectedItem = m.configs[i].name;
+                        yPosition += 5;
                         break;
 
                     case "multi":
+                        //make configLabel if config type is not single_dropDown
+                        configLabel = new Label();
+                        configLabel.AutoSize = true;
+                        configLabel.Location = new System.Drawing.Point(5, yPosition);
+                        configLabel.Size = new System.Drawing.Size(100, 15);
+                        configLabel.TabIndex = 0;
+                        configLabel.Text = m.configs[i].name;
+                        configLabel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                        configLabel.Enabled = false;
+                        configLabel.Location = new Point(configLabel.Location.X, getYLocation(configPanel.Controls));
+                        configPanel.Controls.Add(configLabel);
                         //make a checkBox
                         CheckBox configControlCB = new CheckBox();
                         configControlCB.AutoSize = true;
                         //configControlCB.Location = new System.Drawing.Point(100, yPosition - 10);
-                        configControlCB.Location = new Point(configLabel.Location.X + configLabel.Size.Width + 6, yPosition - 10);
+                        configControlCB.Location = new Point(configLabel.Location.X + configLabel.Size.Width + 6, getYLocation(configPanel.Controls));
                         configControlCB.Size = new System.Drawing.Size(150, 15);
                         configControlCB.TabIndex = 1;
                         configControlCB.TabStop = true;
@@ -384,16 +410,17 @@ namespace RelhaxModpack
                     dropDownSizeLabel.Enabled = false;
                     configPanel.Controls.Add(dropDownSizeLabel);
                 }
+                yPosition += 15;
             }
             //if used, add the configSelection Panels to the configPanel
-            if (configSelection1 != null)
+            /*if (configSelection1.Location.X != 0 && configSelection1.Location.Y != 0)
               configPanel.Controls.Add(configSelection1);
-            if (configSelection2 != null)
-              configPanel.Controls.Add(configSelection1);
-            if (configSelection3 != null)
-              configPanel.Controls.Add(configSelection1);
-            if (configSelection4 != null)
-              configPanel.Controls.Add(configSelection1);
+            if (configSelection2.Location.X != 0 && configSelection2.Location.Y != 0)
+              configPanel.Controls.Add(configSelection2);
+            if (configSelection3.Location.X != 0 && configSelection3.Location.Y != 0)
+              configPanel.Controls.Add(configSelection3);
+            if (configSelection4.Location.X != 0 && configSelection4.Location.Y != 0)
+              configPanel.Controls.Add(configSelection4);*/
             //make the mod check box
             CheckBox modCheckBox = new CheckBox();
             modCheckBox.AutoSize = true;
@@ -439,7 +466,7 @@ namespace RelhaxModpack
             //in theory it should trigger the handler for checked
             //when initially made it should be false, if enabled from
             //from user configs
-            configPanel.Location = new Point(configPanel.Location.X, modCheckBox.Size.Height + 15);
+            configPanel.Location = new Point(configPanel.Location.X, modCheckBox.Size.Height + 5);
             //make the main panel
             Panel mainPanel = new Panel();
             mainPanel.BorderStyle = BorderStyle.FixedSingle;
@@ -480,6 +507,84 @@ namespace RelhaxModpack
                 //trigger the handler
                 this.configControlDD_SelectedIndexChanged(configControlDD, null);
             }
+        }
+
+        void EnableCB_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox cb = (CheckBox)sender;
+            string catagoryName = cb.Name.Split('_')[0];
+            string modName = cb.Name.Split('_')[1];
+            Panel selectionPanel = (Panel)cb.Parent;
+            Mod m = this.linkMod(modName, catagoryName);
+            if (cb.Checked)
+            {
+
+                selectionPanel.BackColor = Color.BlanchedAlmond;
+                //enable the radioButtons
+                foreach (Control radioControls in selectionPanel.Controls)
+                {
+                    if (radioControls is RadioButton)
+                    {
+                        Config cfg = m.getConfig(radioControls.Name.Split('_')[2]);
+                        if (cfg != null)
+                        {
+                            if (cfg.enabled && m.modChecked)
+                                radioControls.Enabled = true;
+                        }
+                    }
+                    if (radioControls is Label)
+                    {
+                        radioControls.Enabled = true;
+                    }
+                }
+            }
+            else
+            {
+
+                selectionPanel.BackColor = SystemColors.Control;
+                //disable the radiobuttons
+                foreach (Control radioControls in selectionPanel.Controls)
+                {
+                    if (radioControls is RadioButton)
+                    {
+                        radioControls.Enabled = false;
+                    }
+                    if (radioControls is Label)
+                    {
+                        radioControls.Enabled = false;
+                    }
+                }
+            }
+        }
+        //method for finding the location of which to put a control
+        private int getYLocation(System.Windows.Forms.Control.ControlCollection ctrl)
+        {
+            int y = 0;
+            //the first 5 pixels to give it room
+            y += 5;
+            //only look for the dropDown menu options or checkboxes
+            foreach (Control c in ctrl)
+            {
+                if (c is CheckBox)
+                {
+                    y += c.Size.Height;
+                    //spacing
+                    y += 2;
+                }
+                if (c is ComboBox)
+                {
+                    y += c.Size.Height;
+                    //spacing
+                    y += 2;
+                }
+                if (c is Panel)
+                {
+                    y += c.Size.Height;
+                    //spacing
+                    y += 2;
+                }
+            }
+            return y;
         }
         //hander for when any mouse button is clicked on a specific control
         void modCheckBox_MouseDown(object sender, MouseEventArgs e)
@@ -589,8 +694,10 @@ namespace RelhaxModpack
             string modName = rb.Name.Split('_')[1];
             string catagoryName = rb.Name.Split('_')[0];
             string configName = rb.Name.Split('_')[2];
-            Panel configSelection = rb.Parent;
+            Panel configSelection = (Panel)rb.Parent;
             Mod m = this.linkMod(modName, catagoryName);
+            Config c = m.getConfig(configName);
+            
             foreach (Config cc in m.configs)
             {
                 //verify only unchecking radiobutton ("single") configs
@@ -618,9 +725,9 @@ namespace RelhaxModpack
                 if (t.Text.Equals("User Mods"))
                 {
                     //this is a check from the user checkboxes
-                    Mod m = this.getUserMod(cbUser.Text);
-                    if (m != null)
-                        m.modChecked = cbUser.Checked;
+                    Mod m2 = this.getUserMod(cbUser.Text);
+                    if (m2 != null)
+                        m2.modChecked = cbUser.Checked;
                     return;
                 }
             }
@@ -709,7 +816,7 @@ namespace RelhaxModpack
                     else if (cc is CheckBox)
                     {
                         //enable the checkBox
-                        Config cfg = m.getConfig(cc.Name.Split("_")[2]);
+                        Config cfg = m.getConfig(cc.Name.Split('_')[2]);
                         if (cfg.enabled && m.modChecked)
                           cc.Enabled = true;
                     }
@@ -719,27 +826,12 @@ namespace RelhaxModpack
                         cc.Enabled = cb.Checked;
                         //find out if panel enabled handler will work here
                         //or just do it manually like the others
-                        if (cb.Checked)
+                        
+                        //enable the checkbox
+                        foreach (Control ccc in cc.Controls)
                         {
-                            cc.Enabled = true;
-                            cc.BackColor = Color.BlanchedAlmond;
-                            //enable the radioButtons
-                            foreach (Control radioControls in cc.Controls)
-                            {
-                                Config cfg = m.getConfig(radioControls.Name.Split("_")[2]);
-                                if (cfg.enabled && m.modChecked)
-                                    radioControls.Enabled = true;
-                            }
-                        }
-                        else
-                        {
-                            cc.Enabled = false;
-                            cc.BackColor = SystemColors.Control;
-                            //disable the radiobuttons
-                            foreach (Control radioControls in cc.Controls)
-                            {
-                                radioControls.Enabled = false;
-                            }
+                            if (ccc is CheckBox)
+                                ccc.Enabled = cb.Checked;
                         }
                     }
                     else if (cc is Label)
@@ -761,8 +853,9 @@ namespace RelhaxModpack
                         if (c is ComboBox)
                         {
                             ComboBox cbox = (ComboBox)c;
-                            if (cbox.SelectedIndex == -1) cbox.SelectedIndex == 0;
+                            if (cbox.SelectedIndex == -1) cbox.SelectedIndex = 0;
                         }
+                        /*
                         //check the panels of radioButtons
                         if (c is Panel)
                         {
@@ -771,25 +864,30 @@ namespace RelhaxModpack
                             Panel csp = (Panel)c;
                             foreach (Control cont in csp.Controls)
                             {
-                                RadioButton button = (RadioButton)cont;
-                                if (button.Checked)
-                                    rbAlreadyChecked = true;
+                                if (cont is RadioButton)
+                                {
+                                    RadioButton button = (RadioButton)cont;
+                                    if (button.Checked)
+                                        rbAlreadyChecked = true;
+                                }
                             }
                             if (rbAlreadyChecked)
                                 break;
                             //getting here means that no radioButons are enabled
                             foreach (Control cont in csp.Controls)
                             {
-                                bool aRadioButtonSelected = false;
-                                RadioButton button = (RadioButton)cont;
-                                Config cfg = m.getConfig(button.Name.Split("_")[2]);
-                                if (cfg.enabled && button.Enabled)
+                                if (cont is RadioButton)
                                 {
-                                    button.Checked = true;
-                                    break;
+                                    RadioButton button = (RadioButton)cont;
+                                    Config cfg = m.getConfig(button.Name.Split('_')[2]);
+                                    if (cfg.enabled && button.Enabled)
+                                    {
+                                        button.Checked = true;
+                                        break;
+                                    }
                                 }
                             }
-                        }
+                        }*/
                     }
                 }
             }
