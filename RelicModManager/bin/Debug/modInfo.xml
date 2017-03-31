@@ -143,7 +143,7 @@
               <configzipcrc>42075b1ec7bc47df4b15a16e7f5d0724</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>single</configtype>
+              <configtype>single_dropdown</configtype>
               <pictures />
             </config>
             <config>
@@ -152,7 +152,7 @@
               <configzipcrc>e85b27fe60a8b0c6f4b78c11fb63ba4e</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>single</configtype>
+              <configtype>single_dropdown</configtype>
               <pictures />
             </config>
             <config>
@@ -161,7 +161,7 @@
               <configzipcrc>78d251c0d4c3c06417b14ddfe94b5f6e</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>single</configtype>
+              <configtype>single_dropdown</configtype>
               <pictures />
             </config>
             <config>
@@ -170,7 +170,7 @@
               <configzipcrc>43f08572c27b89a2e6998c0384326ae5</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>single_dropdown</configtype>
+              <configtype>single_dropdown2</configtype>
               <pictures />
             </config>
             <config>
@@ -179,7 +179,7 @@
               <configzipcrc>b712c2e0b1955f6fdf5c758d64e1b54b</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>single_dropdown</configtype>
+              <configtype>single_dropdown2</configtype>
               <pictures />
             </config>
             <config>
@@ -188,7 +188,7 @@
               <configzipcrc>e2e434c647029627f3134a768766a70f</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>single_dropdown</configtype>
+              <configtype>single_dropdown2</configtype>
               <pictures />
             </config>
           </configs>
@@ -3325,7 +3325,7 @@
               </pictures>
             </config>
             <config>
-              <name>xXx_MVP_xXx by Aimdrol</name>
+              <name>xXx-MVP-xXx by Aimdrol</name>
               <configzipfile>Ingame_Info_marks_of_excellence_mvp_by_Aimdrol.zip</configzipfile>
               <configzipcrc>255a9e921830b29589e466bebe81a1e2</configzipcrc>
               <size>0.1</size>
@@ -4024,7 +4024,7 @@
               <pictures />
             </config>
             <config>
-              <name>Cyborg by APCR_NOOB</name>
+              <name>Cyborg by APCR-NOOB</name>
               <configzipfile>Sixth_Sense_Audio_Cyborg_by_APCR_NOOB_2017-03-09.zip</configzipfile>
               <configzipcrc>362da0aad1606edc73aa06dd74808b7d</configzipcrc>
               <size>1</size>

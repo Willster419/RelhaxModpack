@@ -1,3 +1,11 @@
+Version 21:
+- MAJOR UI UPDATE (80% of which you won't notice)
+  - Re-wrote entire UI build process. Now divided into two parts: UI build and human UI modification
+  - Added more config options: more drop down config selections and check-able radio button selections
+  - Changed UI curser to waiting when loading UI
+  - Re-wrote how config UI components are placed and now they are closer and more compact
+- Changed UI curser to waiting when loading application
+
 Version 20.7.4:
 - Fixed a bug with the command line switches. Made updater script look less weird
 
