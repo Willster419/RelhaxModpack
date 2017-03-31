@@ -201,7 +201,7 @@ namespace RelhaxModpack
             ComboBox configControlDD = new ComboBox();
             configControlDD.AutoSize = true;
             configControlDD.Location = new System.Drawing.Point(0, 0);
-            configControlDD.Size = new System.Drawing.Size(150, 15);
+            configControlDD.Size = new System.Drawing.Size(200, 15);
             configControlDD.TabIndex = 1;
             configControlDD.TabStop = true;
             configControlDD.Enabled = false;
@@ -209,6 +209,17 @@ namespace RelhaxModpack
             configControlDD.Name = t.Name + "_" + m.name + "_DropDown";
             configControlDD.DropDownStyle = ComboBoxStyle.DropDownList;
             configControlDD.Items.Clear();
+            ComboBox configControlDD2 = new ComboBox();
+            configControlDD2.AutoSize = true;
+            configControlDD2.Location = new System.Drawing.Point(0, 0);
+            configControlDD2.Size = new System.Drawing.Size(200, 15);
+            configControlDD2.TabIndex = 1;
+            configControlDD2.TabStop = true;
+            configControlDD2.Enabled = false;
+            configControlDD2.SelectedIndexChanged += new EventHandler(configControlDD_SelectedIndexChanged);
+            configControlDD2.Name = t.Name + "_" + m.name + "_DropDown2";
+            configControlDD2.DropDownStyle = ComboBoxStyle.DropDownList;
+            configControlDD2.Items.Clear();
             //label for the dropdown selection. shows the mod size
             //and the eta download time (if applicable)
             Label dropDownSizeLabel = new Label();
@@ -227,76 +238,80 @@ namespace RelhaxModpack
             for (int i = 0; i < m.configs.Count; i++)
             {
                 Label configLabel = null;
-                switch (m.configs[i].type)
+                if (m.configs[i].type.Equals("single") || m.configs[i].type.Equals("single1") || m.configs[i].type.Equals("single2") || m.configs[i].type.Equals("single3") || m.configs[i].type.Equals("single4"))
                 {
-                    case "single":
-                        //check to see if the configSelection1 panel needs to be
-                        if (configSelection1.Location.X == 0 && configSelection1.Location.Y == 0)
+                    //check to see if the configSelection1 panel needs to be
+                    Panel configSelectionAll = null;
+                    ComboBox configControlDDALL = null;
+                    if (m.configs[i].type.Equals("single") || m.configs[i].type.Equals("single1"))
+                    {
+                        configSelectionAll = configSelection1;
+                    }
+                    else if (m.configs[i].type.Equals("single2"))
+                    {
+                        configSelectionAll = configSelection2;
+                    }
+                    else if (m.configs[i].type.Equals("single3"))
+                    {
+                        configSelectionAll = configSelection3;
+                    }
+                    else if (m.configs[i].type.Equals("single4"))
+                    {
+                        configSelectionAll = configSelection4;
+                    }
+                    if (configSelectionAll.Location.X == 0 && configSelectionAll.Location.Y == 0)
+                    {
+                        //initialize it
+                        configSelectionAll.Name = m.configs[i].type;
+                        configSelectionAll.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+                        configSelectionAll.Location = new System.Drawing.Point(3, getYLocation(configPanel.Controls));
+                        configSelectionAll.TabIndex = 2;
+                        configSelectionAll.AutoSize = true;
+                        configSelectionAll.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
+                        configSelectionAll.Size = new System.Drawing.Size(t.Size.Width - 35, 30);
+                        configSelectionAll.Controls.Clear();
+                        yPosition += 5;
+                        CheckBox EnableCB = new CheckBox();
+                        EnableCB.AutoSize = true;
+                        EnableCB.Location = new System.Drawing.Point(5, (15 * (configSelectionAll.Controls.Count / 2)) + 5);
+                        EnableCB.Size = new System.Drawing.Size(100, 15);
+                        EnableCB.TabIndex = 0;
+                        EnableCB.Text = "";
+                        EnableCB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name + "-" + m.configs[i].type + "_sectionEnabler";
+                        EnableCB.Enabled = false;
+                        EnableCB.CheckedChanged += new EventHandler(EnableCB_CheckedChanged);
+                        configSelectionAll.Controls.Add(EnableCB);
+                    }
+                    //make configLabel if config type is not single_dropDown
+                    configLabel = new Label();
+                    configLabel.AutoSize = true;
+                    configLabel.Location = new System.Drawing.Point(5, (15 * ((configSelectionAll.Controls.Count+1) / 2)) + 5);
+                    configLabel.Size = new System.Drawing.Size(100, 15);
+                    configLabel.TabIndex = 0;
+                    configLabel.Text = m.configs[i].name;
+                    configLabel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    configLabel.Enabled = false;
+                    configSelectionAll.Controls.Add(configLabel);
+                    //make a radioButton
+                    RadioButton configControlRB = new RadioButton();
+                    configControlRB.AutoSize = true;
+                    //configControlRB.Location = new System.Drawing.Point(100, yPosition - 10);
+                    configControlRB.Location = new System.Drawing.Point(configLabel.Location.X + configLabel.Size.Width + 6, (15 * (configSelectionAll.Controls.Count / 2)) + 5);
+                    configControlRB.Size = new System.Drawing.Size(150, 15);
+                    configControlRB.TabIndex = 1;
+                    configControlRB.TabStop = true;
+                    configControlRB.Enabled = false;
+                    configControlRB.Checked = m.configs[i].configChecked;
+                    configControlRB.CheckedChanged += new EventHandler(configControlRB_CheckedChanged);
+                    configControlRB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    //Check if a mod zip exists locally and if it's out of date
+                    string configDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
+                    if (File.Exists(configDownloadPath))
+                    {
+                        string oldCRC = Settings.GetMd5Hash(configDownloadPath);
+                        if (!oldCRC.Equals(m.configs[i].crc))
                         {
-                            //initialize it
-                            configSelection1.Name = m.configs[i].type;
-                            configSelection1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-                            configSelection1.Location = new System.Drawing.Point(3, getYLocation(configPanel.Controls));
-                            configSelection1.TabIndex = 2;
-                            configSelection1.AutoSize = true;
-                            configSelection1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
-                            configSelection1.Size = new System.Drawing.Size(t.Size.Width - 35, 30);
-                            configSelection1.Controls.Clear();
-                            yPosition += 5;
-                            CheckBox EnableCB = new CheckBox();
-                            EnableCB.AutoSize = true;
-                            EnableCB.Location = new System.Drawing.Point(5, (15 * (configSelection1.Controls.Count / 2)) + 5);
-                            EnableCB.Size = new System.Drawing.Size(100, 15);
-                            EnableCB.TabIndex = 0;
-                            EnableCB.Text = "";
-                            EnableCB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name + "-" + m.configs[i].type + "_sectionEnabler";
-                            EnableCB.Enabled = false;
-                            EnableCB.CheckedChanged += new EventHandler(EnableCB_CheckedChanged);
-                            configSelection1.Controls.Add(EnableCB);
-                        }
-                        //make configLabel if config type is not single_dropDown
-                        configLabel = new Label();
-                        configLabel.AutoSize = true;
-                        configLabel.Location = new System.Drawing.Point(5, (15 * ((configSelection1.Controls.Count+1) / 2)) + 5);
-                        configLabel.Size = new System.Drawing.Size(100, 15);
-                        configLabel.TabIndex = 0;
-                        configLabel.Text = m.configs[i].name;
-                        configLabel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
-                        configLabel.Enabled = false;
-                        configSelection1.Controls.Add(configLabel);
-                        //make a radioButton
-                        RadioButton configControlRB = new RadioButton();
-                        configControlRB.AutoSize = true;
-                        //configControlRB.Location = new System.Drawing.Point(100, yPosition - 10);
-                        configControlRB.Location = new System.Drawing.Point(configLabel.Location.X + configLabel.Size.Width + 6, (15 * (configSelection1.Controls.Count / 2)) + 5);
-                        configControlRB.Size = new System.Drawing.Size(150, 15);
-                        configControlRB.TabIndex = 1;
-                        configControlRB.TabStop = true;
-                        configControlRB.Enabled = false;
-                        configControlRB.Checked = m.configs[i].configChecked;
-                        configControlRB.CheckedChanged += new EventHandler(configControlRB_CheckedChanged);
-                        configControlRB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
-                        //Check if a mod zip exists locally and if it's out of date
-                        string configDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
-                        if (File.Exists(configDownloadPath))
-                        {
-                            string oldCRC = Settings.GetMd5Hash(configDownloadPath);
-                            if (!oldCRC.Equals(m.configs[i].crc))
-                            {
-                                //the file exists, but it is out of date
-                                configControlRB.Text = configControlRB.Text + "(Updated)";
-                                if (m.configs[i].size > 0.0f)
-                                {
-                                    int totalSec = (int)m.configs[i].size * 2;
-                                    int totalRealMin = totalSec / 60;
-                                    int totalRealSec = totalSec % 60;
-                                    configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
-                                }
-                            }
-                        }
-                        else if (!(File.Exists(configDownloadPath)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
-                        {
-                            //file does not exist, but a crc does. File is not download.
+                            //the file exists, but it is out of date
                             configControlRB.Text = configControlRB.Text + "(Updated)";
                             if (m.configs[i].size > 0.0f)
                             {
@@ -306,86 +321,97 @@ namespace RelhaxModpack
                                 configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
                             }
                         }
-                        //configPanel.Controls.Add(configControlRB);
-                        configSelection1.Controls.Add(configControlRB);
-                        //now the configSelection1 loads the radiobuttons and later the configPanel loads the configSelection panels
-                        configPanel.Controls.Add(configSelection1);
-                        break;
-
-                    case "single_dropdown":
-
-                        //make a dropDown selection box
-                        if (configControlDD.Location.X == 0 && configControlDD.Location.Y == 0)
+                    }
+                    else if (!(File.Exists(configDownloadPath)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
+                    {
+                        //file does not exist, but a crc does. File is not download.
+                        configControlRB.Text = configControlRB.Text + "(Updated)";
+                        if (m.configs[i].size > 0.0f)
                         {
-                            //this has been activated
-                            configControlDD.Location = new System.Drawing.Point(6, getYLocation(configPanel.Controls));
-                            configPanel.Controls.Add(configControlDD);
+                            int totalSec = (int)m.configs[i].size * 2;
+                            int totalRealMin = totalSec / 60;
+                            int totalRealSec = totalSec % 60;
+                            configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
                         }
-                        string configDownloadPath1 = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
-                        if (File.Exists(configDownloadPath1))
+                    }
+                    //configPanel.Controls.Add(configControlRB);
+                    configSelectionAll.Controls.Add(configControlRB);
+                    //now the configSelectionAll loads the radiobuttons and later the configPanel loads the configSelection panels
+                    configPanel.Controls.Add(configSelectionAll);
+                    continue;
+                }
+                //may eventually have a second drop down menu option
+                else if (m.configs[i].type.Equals("single_dropdown") || m.configs[i].type.Equals("single_dropdown1") || m.configs[i].type.Equals("single_dropdown2"))
+                {
+                    if (m.configs[i].type.Equals("single_dropdown") || m.configs[i].type.Equals("single_dropdown1"))
+                    {
+                        configControlDDALL = configControlDD;
+                    }
+                    else if (m.configs[i].type.Equals("single_dropdown2"))
+                    {
+                        configControlDDALL = configControlDD2;
+                    }
+                    //make a dropDown selection box
+                    if (configControlDDALL.Location.X == 0 && configControlDDALL.Location.Y == 0)
+                    {
+                        //this has been activated
+                        configControlDDALL.Location = new System.Drawing.Point(6, getYLocation(configPanel.Controls));
+                        configPanel.Controls.Add(configControlDDALL);
+                    }
+                    string configDownloadPath1 = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
+                    if (File.Exists(configDownloadPath1))
+                    {
+                        string oldCRC = Settings.GetMd5Hash(configDownloadPath1);
+                        if (!oldCRC.Equals(m.configs[i].crc))
                         {
-                            string oldCRC = Settings.GetMd5Hash(configDownloadPath1);
-                            if (!oldCRC.Equals(m.configs[i].crc))
-                            {
-                                if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name + "_updated");
-                                if (m.configs[i].configChecked) configControlDD.SelectedItem = m.configs[i].name + "_updated";
-                                break;
-                            }
-                        }
-                        else if (!(File.Exists(configDownloadPath1)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
-                        {
-                            //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
-                            if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name + "_updated");
-                            if (m.configs[i].configChecked) configControlDD.SelectedItem = m.configs[i].name + "_updated";
+                            if (m.configs[i].enabled) configControlDDALL.Items.Add(m.configs[i].name + "_updated");
+                            if (m.configs[i].configChecked) configControlDDALL.SelectedItem = m.configs[i].name + "_updated";
                             break;
                         }
-                        if (m.configs[i].enabled) configControlDD.Items.Add(m.configs[i].name);
-                        if (m.configs[i].configChecked) configControlDD.SelectedItem = m.configs[i].name;
-                        yPosition += 5;
+                    }
+                    else if (!(File.Exists(configDownloadPath1)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
+                    {
+                        //mod/config zip file does not exist locally, but a crc for it does, implying that the file needs to be downloaded
+                        if (m.configs[i].enabled) configControlDDALL.Items.Add(m.configs[i].name + "_updated");
+                        if (m.configs[i].configChecked) configControlDDALL.SelectedItem = m.configs[i].name + "_updated";
                         break;
-
-                    case "multi":
-                        //make configLabel if config type is not single_dropDown
-                        configLabel = new Label();
-                        configLabel.AutoSize = true;
-                        configLabel.Location = new System.Drawing.Point(5, yPosition);
-                        configLabel.Size = new System.Drawing.Size(100, 15);
-                        configLabel.TabIndex = 0;
-                        configLabel.Text = m.configs[i].name;
-                        configLabel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
-                        configLabel.Enabled = false;
-                        configLabel.Location = new Point(configLabel.Location.X, getYLocation(configPanel.Controls));
-                        configPanel.Controls.Add(configLabel);
-                        //make a checkBox
-                        CheckBox configControlCB = new CheckBox();
-                        configControlCB.AutoSize = true;
-                        //configControlCB.Location = new System.Drawing.Point(100, yPosition - 10);
-                        configControlCB.Location = new Point(configLabel.Location.X + configLabel.Size.Width + 6, getYLocation(configPanel.Controls));
-                        configControlCB.Size = new System.Drawing.Size(150, 15);
-                        configControlCB.TabIndex = 1;
-                        configControlCB.TabStop = true;
-                        //the handler for modCheckBox should take care of the enabled stuff
-                        configControlCB.Enabled = false;
-                        configControlCB.Checked = m.configs[i].configChecked;
-                        configControlCB.CheckedChanged += new EventHandler(configControlCB_CheckedChanged);
-                        configControlCB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
-                        string configDownloadPath2 = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
-                        if (File.Exists(configDownloadPath2))
-                        {
-                            string oldCRC = Settings.GetMd5Hash(configDownloadPath2);
-                            if (!oldCRC.Equals(m.configs[i].crc))
-                            {
-                                configControlCB.Text = configControlCB.Text + "(Updated)";
-                                if (m.configs[i].size > 0.0f)
-                                {
-                                    int totalSec = (int)m.configs[i].size * 2;
-                                    int totalRealMin = totalSec / 60;
-                                    int totalRealSec = totalSec % 60;
-                                    configControlCB.Text = configControlCB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
-                                }
-                            }
-                        }
-                        else if (!(File.Exists(configDownloadPath2)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
+                    }
+                    if (m.configs[i].enabled) configControlDDALL.Items.Add(m.configs[i].name);
+                    if (m.configs[i].configChecked) configControlDDALL.SelectedItem = m.configs[i].name;
+                    yPosition += 5;
+                    continue;
+                }
+                else if (m.configs[i].type.Equals("multi"))
+                {
+                    //make configLabel if config type is not single_dropDown
+                    configLabel = new Label();
+                    configLabel.AutoSize = true;
+                    configLabel.Location = new System.Drawing.Point(5, yPosition);
+                    configLabel.Size = new System.Drawing.Size(100, 15);
+                    configLabel.TabIndex = 0;
+                    configLabel.Text = m.configs[i].name;
+                    configLabel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    configLabel.Enabled = false;
+                    configLabel.Location = new Point(configLabel.Location.X, getYLocation(configPanel.Controls));
+                    configPanel.Controls.Add(configLabel);
+                    //make a checkBox
+                    CheckBox configControlCB = new CheckBox();
+                    configControlCB.AutoSize = true;
+                    //configControlCB.Location = new System.Drawing.Point(100, yPosition - 10);
+                    configControlCB.Location = new Point(configLabel.Location.X + configLabel.Size.Width + 6, getYLocation(configPanel.Controls));
+                    configControlCB.Size = new System.Drawing.Size(150, 15);
+                    configControlCB.TabIndex = 1;
+                    configControlCB.TabStop = true;
+                    //the handler for modCheckBox should take care of the enabled stuff
+                    configControlCB.Enabled = false;
+                    configControlCB.Checked = m.configs[i].configChecked;
+                    configControlCB.CheckedChanged += new EventHandler(configControlCB_CheckedChanged);
+                    configControlCB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    string configDownloadPath2 = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
+                    if (File.Exists(configDownloadPath2))
+                    {
+                        string oldCRC = Settings.GetMd5Hash(configDownloadPath2);
+                        if (!oldCRC.Equals(m.configs[i].crc))
                         {
                             configControlCB.Text = configControlCB.Text + "(Updated)";
                             if (m.configs[i].size > 0.0f)
@@ -396,14 +422,30 @@ namespace RelhaxModpack
                                 configControlCB.Text = configControlCB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
                             }
                         }
-                        configPanel.Controls.Add(configControlCB);
-                        break;
+                    }
+                    else if (!(File.Exists(configDownloadPath2)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
+                    {
+                        configControlCB.Text = configControlCB.Text + "(Updated)";
+                        if (m.configs[i].size > 0.0f)
+                        {
+                            int totalSec = (int)m.configs[i].size * 2;
+                            int totalRealMin = totalSec / 60;
+                            int totalRealSec = totalSec % 60;
+                            configControlCB.Text = configControlCB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
+                        }
+                    }
+                    configPanel.Controls.Add(configControlCB);
+                    continue;
+                }
+                else
+                {
+                    Settings.appendToLog("WANRING: Unknown config type for " + m.configs[i].name + ": " + m.configs[i].type);
                 }
                 if (m.configs[i].type.Equals("single_dropdown") && dropDownSizeLabel.Location.X == 0 && dropDownSizeLabel.Location.Y == 0)
                 {
                     //add the label with text nothing selected
                     dropDownSizeLabel.AutoSize = true;
-                    dropDownSizeLabel.Location = new Point(configControlDD.Location.X + configControlDD.Size.Width + 6, configControlDD.Location.Y + 3);
+                    dropDownSizeLabel.Location = new Point(configControlDDALL.Location.X + configControlDDALL.Size.Width + 6, configControlDDALL.Location.Y + 3);
                     dropDownSizeLabel.TabIndex = 0;
                     dropDownSizeLabel.Text = "Nothing Selected";
                     dropDownSizeLabel.Name = t.Name + "_" + m.name + "_size";
@@ -506,6 +548,7 @@ namespace RelhaxModpack
             {
                 //trigger the handler
                 this.configControlDD_SelectedIndexChanged(configControlDD, null);
+                this.configControlDD_SelectedIndexChanged(configControlDD2, null);
             }
         }
 
@@ -854,23 +897,44 @@ namespace RelhaxModpack
                         //find out if panel enabled handler will work here
                         //or just do it manually like the others
                         cc.BackColor = SystemColors.Control;
-                        //enable the checkbox
+                        //enable and check the checkbox if any of the radioButtons are enabled
+                        bool aRadioButtonIsEnabled = false;
                         foreach (Control ccc in cc.Controls)
                         {
-                            if (ccc is CheckBox)
+                            
+                            if (ccc is RadioButton)
                             {
-                                CheckBox acdc = (CheckBox)ccc;
-                                ccc.Enabled = cb.Checked;
-                                if (acdc.Checked && cc.Enabled)
+                                string catagoryName1 = ccc.Name.Split('_')[0];
+                                string modName1 = ccc.Name.Split('_')[1];
+                                string configName1 = ccc.Name.Split('_')[2];
+                                Config theConfig = this.linkMod(modName1, catagoryName1).getConfig(configName1);
+                                ccc.Enabled = theConfig.enabled;
+                                if (ccc.Enabled)
+                                  aRadioButtonIsEnabled = true;
+                            }
+                        }
+                        if (aRadioButtonIsEnabled)
+                        {
+                            foreach (Control ccc in cc.Controls)
+                            {
+                                if (ccc is CheckBox)
                                 {
-                                    cc.BackColor = Color.BlanchedAlmond;
-                                }
-                                else
-                                {
-                                    cc.BackColor = SystemColors.Control;
+                                    CheckBox acdc = (CheckBox)ccc;
+                                    acdc.Enabled = true;
+                                    if (acdc.Checked && cc.Enabled)
+                                    {
+                                        cc.BackColor = Color.BlanchedAlmond;
+                                    }
+                                    else
+                                    {
+                                        cc.BackColor = SystemColors.Control;
+                                    }
                                 }
                             }
-
+                        }
+                        else
+                        {
+                            cc.Enabled = false;
                         }
                     }
                     else if (cc is Label)
@@ -896,6 +960,7 @@ namespace RelhaxModpack
                         }
                         if (loadingConfig)
                         {
+                            //run the config panel code
                             if (c is Panel)
                             {
                                 //this is an inner panel
@@ -932,6 +997,41 @@ namespace RelhaxModpack
                                 //check for an enabled config
                                 //if it is then enable the checkbox, the mod, and set the color to blanched almond
                             }
+                        }
+                        else
+                        {
+                            //run the init mod selection code
+                            if (c is Panel)
+                            {
+                                Panel configSelectionPanel = (Panel)c;
+                                if (configSelection.Name.Equals("single") || configSelection.Name.Equals("single1"))
+                                {
+                                    //the first config selection panel must be enabled and checked by default
+                                    if (configSelectionPanel.Enabled)
+                                    {
+                                        //enable the checkbox, remove the handler and check a radioButton
+                                        foreach (Control rbctrl in configSelectionPanel)
+                                        {
+                                            if (rbctrl is RadioButton)
+                                            {
+                                                RadioButton rbctrl2 = rbctrl;
+                                                rbctrl2.Checked = true;
+                                                break;
+                                            }
+                                        }
+                                        foreach (Control rbctrl in configSelectionPanel)
+                                        {
+                                            if (rbctrl is CheckBox)
+                                            {
+                                                rbctrl.CheckedChanged -= EnableCB_CheckedChanged;
+                                                rbctrl.Checked = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    
+                                }
+                            } 
                         }
                     }
                 }
@@ -1438,7 +1538,7 @@ namespace RelhaxModpack
                             if (m == null)
                             {
                                 Settings.appendToLog("WARNING: mod \"" + nn.InnerText + "\" not found");
-                                MessageBox.Show("The mod, \"" + nn.InnerText + "\" was not found in the modpack. It has eithor been renamed or was deleted.");
+                                MessageBox.Show("The mod, \"" + nn.InnerText + "\" was not found in the modpack. It could have been renamed or removed.");
                                 continue;
                             }
                             if (m.enabled)
@@ -1462,6 +1562,8 @@ namespace RelhaxModpack
                                         case "name":
                                             c = m.getConfig(nnnn.InnerText);
                                             if (c == null)
+                                                Settings.appendToLog("WARNING: config \"" + nnnn.InnerText + "\" not found for mod \"" + nn.InnerText + "\"");
+                                              MessageBox.Show("The config \"" + nnnn.InnerText + "\" not found for mod \"" + nn.InnerText + "\". It could have been renamed or removed.");
                                                 continue;
                                             if (c.enabled)
                                             {
