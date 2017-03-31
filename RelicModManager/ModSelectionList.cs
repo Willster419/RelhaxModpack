@@ -245,15 +245,75 @@ namespace RelhaxModpack
                 ComboBox configControlDDALL = null;
                 Label configLabel = null;
                 Panel configSelectionAll = null;
-                if (m.configs[i].type.Equals("single") || m.configs[i].type.Equals("single1") || m.configs[i].type.Equals("single2") || m.configs[i].type.Equals("single3") || m.configs[i].type.Equals("single4"))
+                if (m.configs[i].type.Equals("single") || m.configs[i].type.Equals("single1"))
+                {
+                    //make default radioButton
+                    //label
+                    configLabel = new Label();
+                    configLabel.AutoSize = true;
+                    configLabel.Location = new System.Drawing.Point(5, yPosition);
+                    configLabel.Size = new System.Drawing.Size(100, 15);
+                    configLabel.TabIndex = 0;
+                    configLabel.Text = m.configs[i].name;
+                    configLabel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    if (m.enabled && m.modChecked)
+                        configLabel.Enabled = true;
+                    else
+                        configLabel.Enabled = false;
+                    configLabel.Location = new Point(configLabel.Location.X, getYLocation(configPanel.Controls));
+                    configPanel.Controls.Add(configLabel);
+                    //then radioButton
+                    RadioButton configControlRB = new RadioButton();
+                    configControlRB.AutoSize = true;
+                    //configControlRB.Location = new System.Drawing.Point(100, yPosition - 10);
+                    configControlRB.Location = new Point(configLabel.Location.X + configLabel.Size.Width + 6, getYLocation(configPanel.Controls));
+                    configControlRB.Size = new System.Drawing.Size(150, 15);
+                    configControlRB.TabIndex = 1;
+                    configControlRB.TabStop = true;
+                    if (m.enabled && m.modChecked && m.configs[i].enabled)
+                        configControlRB.Enabled = true;
+                    else
+                        configControlRB.Enabled = false;
+                    if (m.enabled && m.modChecked && m.configs[i].enabled && m.configs[i].configChecked)
+                        configControlRB.Checked = true;
+                    else
+                        configControlRB.Checked = false;
+                    configControlRB.CheckedChanged += new EventHandler(configControlRB_CheckedChanged);
+                    configControlRB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    string configDownloadPath2 = Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile;
+                    if (File.Exists(configDownloadPath2))
+                    {
+                        string oldCRC = Settings.GetMd5Hash(configDownloadPath2);
+                        if (!oldCRC.Equals(m.configs[i].crc))
+                        {
+                            configControlRB.Text = configControlRB.Text + "(Updated)";
+                            if (m.configs[i].size > 0.0f)
+                            {
+                                int totalSec = (int)m.configs[i].size * 2;
+                                int totalRealMin = totalSec / 60;
+                                int totalRealSec = totalSec % 60;
+                                configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
+                            }
+                        }
+                    }
+                    else if (!(File.Exists(configDownloadPath2)) && (m.configs[i].crc != null) && (!m.configs[i].crc.Equals("")))
+                    {
+                        configControlRB.Text = configControlRB.Text + "(Updated)";
+                        if (m.configs[i].size > 0.0f)
+                        {
+                            int totalSec = (int)m.configs[i].size * 2;
+                            int totalRealMin = totalSec / 60;
+                            int totalRealSec = totalSec % 60;
+                            configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
+                        }
+                    }
+                    configPanel.Controls.Add(configControlRB);
+                    continue;
+                }
+                else if (m.configs[i].type.Equals("single2") || m.configs[i].type.Equals("single3") || m.configs[i].type.Equals("single4"))
                 {
                     //check to see if the configSelection1 panel needs to be
-                    
-                    if (m.configs[i].type.Equals("single") || m.configs[i].type.Equals("single1"))
-                    {
-                        configSelectionAll = configSelection1;
-                    }
-                    else if (m.configs[i].type.Equals("single2"))
+                    if (m.configs[i].type.Equals("single2"))
                     {
                         configSelectionAll = configSelection2;
                     }
@@ -506,15 +566,6 @@ namespace RelhaxModpack
                 
                 yPosition += 15;
             }
-            //if used, add the configSelection Panels to the configPanel
-            /*if (configSelection1.Location.X != 0 && configSelection1.Location.Y != 0)
-              configPanel.Controls.Add(configSelection1);
-            if (configSelection2.Location.X != 0 && configSelection2.Location.Y != 0)
-              configPanel.Controls.Add(configSelection2);
-            if (configSelection3.Location.X != 0 && configSelection3.Location.Y != 0)
-              configPanel.Controls.Add(configSelection3);
-            if (configSelection4.Location.X != 0 && configSelection4.Location.Y != 0)
-              configPanel.Controls.Add(configSelection4);*/
             //make the mod check box
             CheckBox modCheckBox = new CheckBox();
             modCheckBox.AutoSize = true;
@@ -615,9 +666,11 @@ namespace RelhaxModpack
             {
                 if (radioControl is RadioButton)
                 {
-                    Config cgf = m.getConfig(radioControl.Name.Split('_'))[2];
-                    radioControl.Enabled = cgf.enabled;
-                    configControlRB_CheckedChanged(radioControl,null);
+                    RadioButton radioControlRB = (RadioButton)radioControl;
+                    Config cgf = m.getConfig(radioControlRB.Name.Split('_'))[2];
+                    radioControlRB.Enabled = cgf.enabled;
+                    radioControlRB.Checked = cgf.configChecked;
+                    configControlRB_CheckedChanged(radioControlRB,null);
                 }
             }
             if (cb.Enabled && cb.Checked)
@@ -682,6 +735,11 @@ namespace RelhaxModpack
                 {
                     y += c.Size.Height;
                     //spacing
+                    y += 2;
+                }
+                if (c is RadioButton)
+                {
+                    y += c.Size.Height;
                     y += 2;
                 }
             }
@@ -990,6 +1048,55 @@ namespace RelhaxModpack
                     {
                         //toggle the label
                         cc.Enabled = cb.Checked;
+                    }
+                    else if (cc is RadioButton)
+                    {
+                        RadioButton ccRB = (RadioButton)
+                        if (cb.Checked && cfg.enabled)
+                        {
+                            ccRB.Enabled = true;
+                            ccRB.Checked = cfg.configChecked;
+                            configControlRB_CheckedChanged(ccRB,null);
+                        }
+                        else
+                        {
+                            ccRB.Enabled = false;
+                            configControlRB_CheckedChanged(ccRB,null);
+                            return;
+                        }
+                        //chech to make sure at least one radiobutton is checked
+                        bool oneIsChecked = false;
+                        foreach (Control radioControl in configPanel.Controls)
+                        {
+                            if (radioControl is RadioButton)
+                            {
+                                RadioButton rb = (RadioButton)radioControl;
+                                if (rb.Checked)
+                                  oneIsChecked = true;
+                            }
+                        }
+                        if (!oneIsChecked)
+                        {
+                            //one needs to be checked
+                            foreach (Control radioControl in configPanel.Controls)
+                            {
+                                if (radioControl is RadioButton)
+                                {
+                                    RadioButton rb = (RadioButton)radioControl; 
+                                    Config cgf = m.getConfig(rb.Name.Split('_'))[2];
+                                    if (cgf.enabled)
+                                    {
+                                        rb.Checked = true;
+                                        //means button is enabled
+                                        //set config true in database and trigger
+                                        cfg.configChecked = true;
+                                        configControlRB_CheckedChanged(rb,null);
+                                        break;
+                                    }
+                                    
+                                }
+                            }
+                        }
                     }
                 }
             }
