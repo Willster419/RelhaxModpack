@@ -454,6 +454,7 @@ namespace RelhaxModpack
                         configControlDDALL.Location = new System.Drawing.Point(6, getYLocation(configPanel.Controls));
                         configPanel.Controls.Add(configControlDDALL);
                         //add the label with text nothing selected
+                        dropDownSizeLabel = new Label();
                         dropDownSizeLabel.AutoSize = true;
                         dropDownSizeLabel.Location = new Point(configControlDDALL.Location.X + configControlDDALL.Size.Width + 6, configControlDDALL.Location.Y + 3);
                         dropDownSizeLabel.TabIndex = 0;
@@ -659,20 +660,44 @@ namespace RelhaxModpack
             Panel selectionPanel = (Panel)cb.Parent;
             Mod m = this.linkMod(modName, catagoryName);
             if (cb.Enabled && cb.Checked)
-                selectionPanel.BackColor = Color.BlanchedAlmond;
-            else
-                selectionPanel.BackColor = SystemColors.Control;
-            foreach (Control radioControl in selectionPanel.Controls)
             {
-                if (radioControl is RadioButton)
+                foreach (Control radioControl in selectionPanel.Controls)
                 {
-                    RadioButton radioControlRB = (RadioButton)radioControl;
-                    Config cgf = m.getConfig(radioControlRB.Name.Split('_'))[2];
-                    radioControlRB.Enabled = cgf.enabled;
-                    radioControlRB.Checked = cgf.configChecked;
-                    configControlRB_CheckedChanged(radioControlRB,null);
+                    if (radioControl is RadioButton)
+                    {
+                        RadioButton radioControlRB = (RadioButton)radioControl;
+                        Config cgf = m.getConfig(radioControlRB.Name.Split('_')[2]);
+                        radioControlRB.Enabled = cgf.enabled;
+                        radioControlRB.Checked = cgf.configChecked;
+                        configControlRB_CheckedChanged(radioControlRB, null);
+                    }
+                    if (radioControl is Label)
+                    {
+                        radioControl.Enabled = true;
+                    }
                 }
+                selectionPanel.BackColor = Color.BlanchedAlmond;
             }
+            else
+            {
+                foreach (Control radioControl in selectionPanel.Controls)
+                {
+                    if (radioControl is RadioButton)
+                    {
+                        RadioButton radioControlRB = (RadioButton)radioControl;
+                        Config cgf = m.getConfig(radioControlRB.Name.Split('_')[2]);
+                        radioControlRB.Enabled = false;
+                        //radioControlRB.Checked = false;
+                        configControlRB_CheckedChanged(radioControlRB, null);
+                    }
+                    if (radioControl is Label)
+                    {
+                        radioControl.Enabled = false;
+                    }
+                }
+                selectionPanel.BackColor = SystemColors.Control;
+            }
+            
             if (cb.Enabled && cb.Checked)
             {
                 //chech to make sure at least one radiobutton is checked
@@ -693,14 +718,14 @@ namespace RelhaxModpack
                     {
                         if (radioControl is RadioButton)
                         {
-                            RadioButton rb = (RadioButton)radioControl; 
-                            Config cgf = m.getConfig(rb.Name.Split('_'))[2];
+                            RadioButton rb = (RadioButton)radioControl;
+                            Config cgf = m.getConfig(rb.Name.Split('_')[2]);
                             if (cgf.enabled)
                             {
                                 rb.Checked = true;
                                 //means button is enabled
                                 //set config true in database and trigger
-                                cfg.configChecked = true;
+                                cgf.configChecked = true;
                                 configControlRB_CheckedChanged(rb,null);
                                 break;
                             }
@@ -789,23 +814,34 @@ namespace RelhaxModpack
             //in case "_updated" was appended, split the string
             string[] splitConfigName = configName.Split('_');
             configName = splitConfigName[0];
-            string dropDownConfigType = m.getConfig(configName).type;
             string updateString = null;
-            if (splitConfigName.Count() > 1)
-                updateString = splitConfigName[1];
             Config save = null;
-            foreach (Config c in m.configs)
+            if (!cb.Enabled)
             {
-                //verify it is on correct type
-                if (c.type.Equals(dropDownConfigType))
+                //disable the mod and return
+                save = m.getConfig(configName);
+                save.configChecked = false;
+            }
+            else
+            {
+                string dropDownConfigType = m.getConfig(configName).type;
+                
+                if (splitConfigName.Count() > 1)
+                    updateString = splitConfigName[1];
+                
+                foreach (Config c in m.configs)
                 {
-                    //uncheck it
-                    c.configChecked = false;
-                    //unless it's the one the user selected
-                    if (configName.Equals(c.name) && cb.Enabled)
+                    //verify it is on correct type
+                    if (c.type.Equals(dropDownConfigType))
                     {
-                        c.configChecked = true;
-                        save = c;
+                        //uncheck it
+                        c.configChecked = false;
+                        //unless it's the one the user selected
+                        if (configName.Equals(c.name) && cb.Enabled)
+                        {
+                            c.configChecked = true;
+                            save = c;
+                        }
                     }
                 }
             }
@@ -869,7 +905,7 @@ namespace RelhaxModpack
             
             if (rb.Enabled && rb.Checked)
             {
-                foreach (Control ctrl in Panel.Controls)
+                foreach (Control ctrl in configSelection.Controls)
                 {
                     if (ctrl is RadioButton)
                     {
@@ -886,6 +922,7 @@ namespace RelhaxModpack
                 }
                 rb.CheckedChanged -= configControlRB_CheckedChanged;
                 rb.Checked = true;
+                c.configChecked = true;
                 rb.CheckedChanged += configControlRB_CheckedChanged;
             }
             else
@@ -1008,7 +1045,7 @@ namespace RelhaxModpack
                 else configPanel.BackColor = SystemColors.Control;
                 foreach (Control cc in configPanel.Controls)
                 {
-                    Config cfg = m.getConfig(cc.Name.Split('_')[2]);
+                    Config cfg = null;
                     if (cc is ComboBox)
                     {
                         //comboBox could be recieved as enabled(configs of this type exist), but with 0 enabled configs which means count would be 0
@@ -1022,6 +1059,7 @@ namespace RelhaxModpack
                     }
                     else if (cc is CheckBox)
                     {
+                        cfg = m.getConfig(cc.Name.Split('_')[2]);
                         //checkbox is enabled if mod is checked AND config is enabled
                         //toggle enabledness of checkbox based on cb checked
                         //and trigger the checkbox handler
@@ -1051,7 +1089,8 @@ namespace RelhaxModpack
                     }
                     else if (cc is RadioButton)
                     {
-                        RadioButton ccRB = (RadioButton)
+                        cfg = m.getConfig(cc.Name.Split('_')[2]);
+                        RadioButton ccRB = (RadioButton)cc;
                         if (cb.Checked && cfg.enabled)
                         {
                             ccRB.Enabled = true;
@@ -1062,7 +1101,7 @@ namespace RelhaxModpack
                         {
                             ccRB.Enabled = false;
                             configControlRB_CheckedChanged(ccRB,null);
-                            return;
+                            continue;
                         }
                         //chech to make sure at least one radiobutton is checked
                         bool oneIsChecked = false;
@@ -1083,7 +1122,7 @@ namespace RelhaxModpack
                                 if (radioControl is RadioButton)
                                 {
                                     RadioButton rb = (RadioButton)radioControl; 
-                                    Config cgf = m.getConfig(rb.Name.Split('_'))[2];
+                                    Config cgf = m.getConfig(rb.Name.Split('_')[2]);
                                     if (cgf.enabled)
                                     {
                                         rb.Checked = true;
@@ -1381,6 +1420,14 @@ namespace RelhaxModpack
                             {
                                 Panel pp = (Panel)cc;
                                 pp.Size = new Size(t.Size.Width - 35, pp.Size.Height);
+                                foreach (Control ccc in pp.Controls)
+                                {
+                                    if (ccc is Panel)
+                                    {
+                                        Panel ppp = (Panel)ccc;
+                                        ppp.Size = new Size(t.Size.Width - 45, ppp.Size.Height);
+                                    }
+                                }
                             }
                         }
                     }
