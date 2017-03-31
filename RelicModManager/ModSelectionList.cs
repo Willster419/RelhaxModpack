@@ -518,7 +518,6 @@ namespace RelhaxModpack
             Mod m = this.linkMod(modName, catagoryName);
             if (cb.Checked)
             {
-
                 selectionPanel.BackColor = Color.BlanchedAlmond;
                 //enable the radioButtons
                 foreach (Control radioControls in selectionPanel.Controls)
@@ -535,6 +534,34 @@ namespace RelhaxModpack
                     if (radioControls is Label)
                     {
                         radioControls.Enabled = true;
+                    }
+                }
+                //check to see if a radioButton is already checked first
+                bool rbAlreadyChecked = false;
+                foreach (Control cont in selectionPanel.Controls)
+                {
+                    if (cont is RadioButton)
+                    {
+                        RadioButton button = (RadioButton)cont;
+                        if (button.Checked)
+                            rbAlreadyChecked = true;
+                    }
+                }
+                if (rbAlreadyChecked)
+                    return;
+                //getting here means that no radioButons are enabled
+                foreach (Control cont in selectionPanel.Controls)
+                {
+                    if (cont is RadioButton)
+                    {
+                        RadioButton button = (RadioButton)cont;
+                        Config cfg = m.getConfig(button.Name.Split('_')[2]);
+                        if (cfg.enabled && button.Enabled)
+                        {
+                            button.Checked = true;
+                            cfg.configChecked = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -826,12 +853,24 @@ namespace RelhaxModpack
                         cc.Enabled = cb.Checked;
                         //find out if panel enabled handler will work here
                         //or just do it manually like the others
-                        
+                        cc.BackColor = SystemColors.Control;
                         //enable the checkbox
                         foreach (Control ccc in cc.Controls)
                         {
                             if (ccc is CheckBox)
+                            {
+                                CheckBox acdc = (CheckBox)ccc;
                                 ccc.Enabled = cb.Checked;
+                                if (acdc.Checked && cc.Enabled)
+                                {
+                                    cc.BackColor = Color.BlanchedAlmond;
+                                }
+                                else
+                                {
+                                    cc.BackColor = SystemColors.Control;
+                                }
+                            }
+
                         }
                     }
                     else if (cc is Label)
@@ -855,39 +894,45 @@ namespace RelhaxModpack
                             ComboBox cbox = (ComboBox)c;
                             if (cbox.SelectedIndex == -1) cbox.SelectedIndex = 0;
                         }
-                        /*
-                        //check the panels of radioButtons
-                        if (c is Panel)
+                        if (loadingConfig)
                         {
-                            //check to see if a radioButton is already checked first
-                            bool rbAlreadyChecked = false;
-                            Panel csp = (Panel)c;
-                            foreach (Control cont in csp.Controls)
+                            if (c is Panel)
                             {
-                                if (cont is RadioButton)
+                                //this is an inner panel
+                                Panel configSectionPanel = (Panel)c;
+                                bool configInHereIsSet = false;
+                                foreach (Control ctrl in configSectionPanel.Controls)
                                 {
-                                    RadioButton button = (RadioButton)cont;
-                                    if (button.Checked)
-                                        rbAlreadyChecked = true;
-                                }
-                            }
-                            if (rbAlreadyChecked)
-                                break;
-                            //getting here means that no radioButons are enabled
-                            foreach (Control cont in csp.Controls)
-                            {
-                                if (cont is RadioButton)
-                                {
-                                    RadioButton button = (RadioButton)cont;
-                                    Config cfg = m.getConfig(button.Name.Split('_')[2]);
-                                    if (cfg.enabled && button.Enabled)
+                                    if (ctrl is RadioButton)
                                     {
-                                        button.Checked = true;
-                                        break;
+                                        RadioButton ctrlRB = (RadioButton)ctrl;
+                                        string catagoryName1 = ctrl.Name.Split('_')[0];
+                                        string modName1 = ctrl.Name.Split('_')[1];
+                                        string configName1 = ctrl.Name.Split('_')[2];
+                                        Config theConfig = this.linkMod(modName1, catagoryName1).getConfig(configName1);
+                                        if (theConfig.enabled && theConfig.configChecked)
+                                        {
+                                            ctrlRB.Checked = true;
+                                            configInHereIsSet = true;
+                                        }
                                     }
                                 }
+                                if (configInHereIsSet)
+                                {
+                                    configSectionPanel.BackColor = Color.BlanchedAlmond;
+                                    foreach (Control ctrl in configSectionPanel.Controls)
+                                    {
+                                        if (ctrl is CheckBox)
+                                        {
+                                            CheckBox ctrlCBV = (CheckBox)ctrl;
+                                            ctrlCBV.Checked = true;
+                                        }
+                                    }
+                                }
+                                //check for an enabled config
+                                //if it is then enable the checkbox, the mod, and set the color to blanched almond
                             }
-                        }*/
+                        }
                     }
                 }
             }
