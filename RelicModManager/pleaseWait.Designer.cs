@@ -42,6 +42,7 @@
             this.label1.Size = new System.Drawing.Size(116, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Loading...please wait...";
+            this.label1.UseWaitCursor = true;
             // 
             // loadingDescLabel
             // 
@@ -52,6 +53,7 @@
             this.loadingDescLabel.Size = new System.Drawing.Size(35, 13);
             this.loadingDescLabel.TabIndex = 1;
             this.loadingDescLabel.Text = "label2";
+            this.loadingDescLabel.UseWaitCursor = true;
             this.loadingDescLabel.Visible = false;
             // 
             // loadingDescBox
@@ -63,6 +65,7 @@
             this.loadingDescBox.Size = new System.Drawing.Size(262, 56);
             this.loadingDescBox.TabIndex = 2;
             this.loadingDescBox.Text = "";
+            this.loadingDescBox.UseWaitCursor = true;
             // 
             // PleaseWait
             // 
@@ -77,6 +80,7 @@
             this.MinimizeBox = false;
             this.Name = "PleaseWait";
             this.Text = "pleaseWait";
+            this.UseWaitCursor = true;
             this.ResumeLayout(false);
             this.PerformLayout();
 
