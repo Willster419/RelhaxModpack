@@ -213,9 +213,15 @@ namespace RelhaxModpack
             //and the eta download time (if applicable)
             Label dropDownSizeLabel = new Label();
             dropDownSizeLabel.Location = new Point(0, 0);
+            //create the placeholders for up to 4 possible individual selections
+            //panel 1
+            Panel configSelection1 = null;
+            Panel configSelection2 = null;
+            Panel configSelection3 = null;
+            Panel configSelection4 = null;
             for (int i = 0; i < m.configs.Count; i++)
             {
-                int yPosition = 15 * (i + 1);
+                int yPosition = 20 * (i + 1);
                 //make configLabel if config type is not single_dropDown
                 Label configLabel = new Label();
                 if (!m.configs[i].type.Equals("single_dropdown"))
@@ -231,12 +237,26 @@ namespace RelhaxModpack
                 }
                 switch (m.configs[i].type)
                 {
-                    case "single":
+                    case "single" || "single1":
+                        //check to see if the configSelection1 panel needs to be
+                        if (configSelection1 == null)
+                        {
+                            //initialize it
+                            configSelection1 = new Panel();
+                            configSelection1.Name = m.configs[i].type;
+                            configSelection1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+                            configSelection1.Location = new System.Drawing.Point(configLabel.Location.X + configLabel.Size.Width + 6, yPosition - 10);
+                            configSelection1.TabIndex = 2;
+                            configSelection1.AutoSize = true;
+                            configSelection1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
+                            configSelection1.Size = new System.Drawing.Size(t.Size.Width - 35, 30);
+                            configSelection1.Controls.Clear();
+                        }
                         //make a radioButton
                         RadioButton configControlRB = new RadioButton();
                         configControlRB.AutoSize = true;
                         //configControlRB.Location = new System.Drawing.Point(100, yPosition - 10);
-                        configControlRB.Location = new System.Drawing.Point(configLabel.Location.X + configLabel.Size.Width + 6, yPosition - 10);
+                        configControlRB.Location = new System.Drawing.Point(3,(15 * (configSelection1.Controls.Count)) + 3);
                         configControlRB.Size = new System.Drawing.Size(150, 15);
                         configControlRB.TabIndex = 1;
                         configControlRB.TabStop = true;
@@ -274,7 +294,9 @@ namespace RelhaxModpack
                                 configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
                             }
                         }
-                        configPanel.Controls.Add(configControlRB);
+                        //configPanel.Controls.Add(configControlRB);
+                        configSelection1.Controls.Add(configControlRB);
+                        //now the configSelection1 loads the radiobuttons and later the configPanel loads the configSelection panels
                         break;
 
                     case "single_dropdown":
@@ -363,6 +385,15 @@ namespace RelhaxModpack
                     configPanel.Controls.Add(dropDownSizeLabel);
                 }
             }
+            //if used, add the configSelection Panels to the configPanel
+            if (configSelection1 != null)
+              configPanel.Controls.Add(configSelection1);
+            if (configSelection2 != null)
+              configPanel.Controls.Add(configSelection1);
+            if (configSelection3 != null)
+              configPanel.Controls.Add(configSelection1);
+            if (configSelection4 != null)
+              configPanel.Controls.Add(configSelection1);
             //make the mod check box
             CheckBox modCheckBox = new CheckBox();
             modCheckBox.AutoSize = true;
@@ -553,16 +584,17 @@ namespace RelhaxModpack
         //handler for when a config radioButton is pressed
         void configControlRB_CheckedChanged(object sender, EventArgs e)
         {
-            //uncheck all other radioButton mods
+            //uncheck all other radioButton mods of the same type
             RadioButton rb = (RadioButton)sender;
             string modName = rb.Name.Split('_')[1];
             string catagoryName = rb.Name.Split('_')[0];
             string configName = rb.Name.Split('_')[2];
+            Panel configSelection = rb.Parent;
             Mod m = this.linkMod(modName, catagoryName);
             foreach (Config cc in m.configs)
             {
                 //verify only unchecking radiobutton ("single") configs
-                if (cc.type.Equals("single"))
+                if (cc.type.Equals(configSelection.Name))
                 {
                     cc.configChecked = false;
                     //unless it's the one the user just selected
@@ -594,216 +626,168 @@ namespace RelhaxModpack
             }
             //get all required info for this checkbox change
             CheckBox cb = (CheckBox)sender;
+            //this parent could nwo be the radioButton config selection panel or the config panel
             Panel p = (Panel)cb.Parent;
             string modName = cb.Name.Split('_')[1];
             string catagoryName = cb.Name.Split('_')[0];
 
             //check to see if the mod is part of a single selection only catagory
-            //if it is uncheck the other mods first. this for loop only deals with mods
-            foreach (Catagory c in parsedCatagoryList)
+            //if it is uncheck the other mods first, then deal with mod loop selection
+            Mod m = this.linkMod(modName,catagoryName);
+            Catagory cat = this.getCatagory(catagoryName);
+            if (cb.Checked)
             {
-                foreach (Mod m in c.mods)
+                if (cat.selectionType.Equals("single"))
                 {
-                    if (m.name.Equals(modName))
+                    //check if any other mods in this catagory are already checked
+                    bool anyModsChecked = false;
+                    foreach (Mod mm in cat.mods)
                     {
-                        //mod linked
-                        if (c.selectionType.Equals("single"))
+                        if (mm.modChecked)
+                            anyModsChecked = true;
+                    }
+                    if (anyModsChecked)
+                    {
+                        if (!loadingConfig)
                         {
-                            if (!cb.Checked)
+                            //not safe to check the mod
+                            //uncheck the other mod first
+                            //each checkbox uncheck it
+                            Panel modPanel = (Panel)cb.Parent;
+                            TabPage modTab = (TabPage)modPanel.Parent;
+                            foreach (var cc in modTab.Controls)
                             {
-                                m.modChecked = false;
-                            }
-                            else
-                            {
-                                //check if any other mods in this catagory are already checked
-                                bool anyModsChecked = false;
-                                foreach (Mod mm in c.mods)
+                                if (cc is Panel)
                                 {
-                                    if (mm.modChecked)
-                                        anyModsChecked = true;
-                                }
-                                if (!anyModsChecked)
-                                {
-                                    //save to check the mod
-                                    m.modChecked = cb.Checked;
-                                }
-                                else
-                                {
-                                    if (!loadingConfig)
+                                    Panel pp = (Panel)cc;
+                                    foreach (var ccc in pp.Controls)
                                     {
-                                        //not safe to check the mod
-                                        //uncheck the other mod first
-                                        //each checkbox uncheck it
-                                        Panel modPanel = (Panel)cb.Parent;
-                                        TabPage modTab = (TabPage)modPanel.Parent;
-                                        foreach (var cc in modTab.Controls)
+                                        if (ccc is CheckBox)
                                         {
-                                            if (cc is Panel)
-                                            {
-                                                Panel pp = (Panel)cc;
-                                                foreach (var ccc in pp.Controls)
-                                                {
-                                                    if (ccc is CheckBox)
-                                                    {
-                                                        CheckBox cbb = (CheckBox)ccc;
-                                                        //check that this makes the mod object false as well
-                                                        //cbb.CheckedChanged -= modCheckBox_CheckedChanged;
-                                                        cbb.Checked = false;
-                                                        //cbb.CheckedChanged += modCheckBox_CheckedChanged;
-                                                        string otherModName = cbb.Name.Split('_')[1];
-                                                        string otherCatagoryName = cbb.Name.Split('_')[0];
-                                                        Mod otherMod = this.linkMod(otherModName, otherCatagoryName);
-                                                        otherMod.modChecked = false;
-                                                    }
-                                                }
-                                            }
+                                            CheckBox cbb = (CheckBox)ccc;
+                                            //check that this makes the mod object false as well
+                                            //cbb.CheckedChanged -= modCheckBox_CheckedChanged;
+                                            cbb.Checked = false;
+                                            //cbb.CheckedChanged += modCheckBox_CheckedChanged;
+                                            string otherModName = cbb.Name.Split('_')[1];
+                                            string otherCatagoryName = cbb.Name.Split('_')[0];
+                                            Mod otherMod = this.linkMod(otherModName, otherCatagoryName);
+                                            otherMod.modChecked = false;
                                         }
-                                        //now it's safe to check the mods
-
-
-                                        m.modChecked = true;
-                                        cb.CheckedChanged -= modCheckBox_CheckedChanged;
-                                        cb.Checked = true;
-                                        cb.CheckedChanged += modCheckBox_CheckedChanged;
-                                        //cb.Checked = false;
                                     }
-
                                 }
+                            }
+                            //now it's safe to check the mods
+                            cb.CheckedChanged -= modCheckBox_CheckedChanged;
+                            cb.Checked = true;
+                            cb.CheckedChanged += modCheckBox_CheckedChanged;
+                            //cb.Checked = false;
+                        }
+
+                    }
+                    
+                }
+            }
+            //toggle the mod in memory
+            m.modChecked = cb.Checked;
+            //this deals with enabling (only, not checking) the config ui componets
+            //checkbox and dropDownList, including if loading a config, if there are any
+            if (p.Controls.Count > 1)
+            {
+                //the second one is always the config panel
+                Panel innerPanel = (Panel)p.Controls[1];
+                if (cb.Checked) innerPanel.BackColor = Color.BlanchedAlmond;
+                else innerPanel.BackColor = SystemColors.Control;
+                foreach (Control cc in innerPanel.Controls)
+                {
+                    if (cc is ComboBox)
+                    {
+                        //enable the comboBox and stop the config update loop
+                        cc.Enabled = m.modChecked;
+                        
+                    }
+                    else if (cc is CheckBox)
+                    {
+                        //enable the checkBox
+                        Config cfg = m.getConfig(cc.Name.Split("_")[2]);
+                        if (cfg.enabled && m.modChecked)
+                          cc.Enabled = true;
+                    }
+                    else if (cc is Panel)
+                    {
+                        //enable the panel and all it's radio buttons
+                        cc.Enabled = cb.Checked;
+                        //find out if panel enabled handler will work here
+                        //or just do it manually like the others
+                        if (cb.Checked)
+                        {
+                            cc.Enabled = true;
+                            cc.BackColor = Color.BlanchedAlmond;
+                            //enable the radioButtons
+                            foreach (Control radioControls in cc.Controls)
+                            {
+                                Config cfg = m.getConfig(radioControls.Name.Split("_")[2]);
+                                if (cfg.enabled && m.modChecked)
+                                    radioControls.Enabled = true;
+                            }
+                        }
+                        else
+                        {
+                            cc.Enabled = false;
+                            cc.BackColor = SystemColors.Control;
+                            //disable the radiobuttons
+                            foreach (Control radioControls in cc.Controls)
+                            {
+                                radioControls.Enabled = false;
                             }
                         }
                     }
-                }
-            }
-            //this loop deals with enabling the config(s) with the mod, if there are any
-            foreach (Catagory c in parsedCatagoryList)
-            {
-                foreach (Mod m in c.mods)
-                {
-                    if (m.name.Equals(modName))
+                    else if (cc is Label)
                     {
-                        //enable the mod in memory
-                        m.modChecked = cb.Checked;
-                        //update configs if they exist
-                        if (p.Controls.Count > 1)
-                        {
-                            Panel innerPanel = (Panel)p.Controls[1];
-                            if (cb.Checked) innerPanel.BackColor = Color.BlanchedAlmond;
-                            else innerPanel.BackColor = SystemColors.Control;
-                            foreach (Control cc in innerPanel.Controls)
-                            {
-                                foreach (Config ccc in m.configs)
-                                {
-                                    if (cc is ComboBox)
-                                    {
-                                        cc.Enabled = m.modChecked;
-                                        break;
-                                    }
-                                    if (cc.Name.Equals(c.name + "_" + m.name + "_" + ccc.name))
-                                    {
-                                        //for the checkboxes
-                                        if (ccc.enabled && m.enabled && cb.Checked)
-                                        {
-                                            //enable the control
-                                            cc.Enabled = true;
-                                        }
-                                        else
-                                        {
-                                            cc.Enabled = false;
-                                        }
-                                    }
-                                    //if contgrol text = config name
-                                    if (cc.Text.Equals(ccc.name))
-                                    {
-                                        //for the lables
-                                        cc.Enabled = cb.Checked;
-                                    }
-                                }
-                            }
-                        }
+                        cc.Enabled = cb.Checked;
                     }
                 }
             }
-            //dealing with config stuffs
-            //if the mod checkbox was changed to checked state
-            //and there are configs
+            //this deals with (i think) checking at least one radioButton and comboBox
             if (p.Controls.Count > 1)
             {
                 //at lease one config exists
                 Panel innerPanel = (Panel)p.Controls[1];
-                if (cb.Checked) innerPanel.BackColor = Color.BlanchedAlmond;
-                else innerPanel.BackColor = SystemColors.Control;
                 if (cb.Checked)
                 {
-                    //check to make sure at least one config is selected
-                    bool oneSelected = false;
                     foreach (Control c in innerPanel.Controls)
                     {
-                        if (c is Label)
-                        {
-                            if (c.Name.Equals(catagoryName + "_" + modName + "_size"))
-                            {
-                                c.Enabled = true;
-                            }
-                        }
-                        if (c is RadioButton)
-                        {
-                            RadioButton b = (RadioButton)c;
-                            if (b.Checked)
-                            {
-                                oneSelected = true;
-                            }
-                        }
-
-                        if (c is CheckBox)
-                        {
-                            CheckBox b = (CheckBox)c;
-                            if (b.Checked)
-                            {
-                                oneSelected = true;
-                            }
-                        }
-
+                        //check the comboBoxes
                         if (c is ComboBox)
                         {
                             ComboBox cbox = (ComboBox)c;
-                            if (cbox.SelectedIndex == -1) oneSelected = false;
+                            if (cbox.SelectedIndex == -1) cbox.SelectedIndex == 0;
                         }
-                    }
-                    if (!oneSelected)
-                    {
-                        //enable at least one radioButton and one comboBox selection
-                        bool radioSelected = false;
-                        foreach (Control c in innerPanel.Controls)
+                        //check the panels of radioButtons
+                        if (c is Panel)
                         {
-                            if (c is RadioButton)
+                            //check to see if a radioButton is already checked first
+                            bool rbAlreadyChecked = false;
+                            Panel csp = (Panel)c;
+                            foreach (Control cont in csp.Controls)
                             {
-                                RadioButton b = (RadioButton)c;
-                                if (b.Enabled)
+                                RadioButton button = (RadioButton)cont;
+                                if (button.Checked)
+                                    rbAlreadyChecked = true;
+                            }
+                            if (rbAlreadyChecked)
+                                break;
+                            //getting here means that no radioButons are enabled
+                            foreach (Control cont in csp.Controls)
+                            {
+                                bool aRadioButtonSelected = false;
+                                RadioButton button = (RadioButton)cont;
+                                Config cfg = m.getConfig(button.Name.Split("_")[2]);
+                                if (cfg.enabled && button.Enabled)
                                 {
-                                    if (radioSelected) continue;
-                                    b.Checked = true;
-                                    radioSelected = true;
+                                    button.Checked = true;
+                                    break;
                                 }
-                            }
-                            if (c is ComboBox)
-                            {
-                                ComboBox cbox = (ComboBox)c;
-                                //only select if the index is on nothing
-                                if (cbox.SelectedIndex == -1)
-                                    cbox.SelectedIndex = 0;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (Control c in innerPanel.Controls)
-                    {
-                        if (c is Label)
-                        {
-                            if (c.Name.Equals(catagoryName + "_" + modName + "_size"))
-                            {
-                                c.Enabled = false;
                             }
                         }
                     }

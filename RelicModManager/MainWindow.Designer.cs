@@ -44,6 +44,7 @@
             this.cancerFontCB = new System.Windows.Forms.CheckBox();
             this.backupModsCheckBox = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
+            this.cleanUninstallCB = new System.Windows.Forms.CheckBox();
             this.saveUserDataCB = new System.Windows.Forms.CheckBox();
             this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
             this.largerFontButton = new System.Windows.Forms.CheckBox();
@@ -53,7 +54,6 @@
             this.findBugAddModLabel = new System.Windows.Forms.LinkLabel();
             this.cancelDownloadButton = new System.Windows.Forms.Button();
             this.downloadTimer = new System.Windows.Forms.Timer(this.components);
-            this.cleanUninstallCB = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -220,6 +220,20 @@
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "RelHax ModPack Settings";
             // 
+            // cleanUninstallCB
+            // 
+            this.cleanUninstallCB.AutoSize = true;
+            this.cleanUninstallCB.Location = new System.Drawing.Point(6, 120);
+            this.cleanUninstallCB.Name = "cleanUninstallCB";
+            this.cleanUninstallCB.Size = new System.Drawing.Size(117, 17);
+            this.cleanUninstallCB.TabIndex = 29;
+            this.cleanUninstallCB.Text = "Clean uninstallation";
+            this.cleanUninstallCB.UseVisualStyleBackColor = true;
+            this.cleanUninstallCB.CheckedChanged += new System.EventHandler(this.cleanUninstallCB_CheckedChanged);
+            this.cleanUninstallCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cleanUninstallCB_MouseDown);
+            this.cleanUninstallCB.MouseEnter += new System.EventHandler(this.cleanUninstallCB_MouseEnter);
+            this.cleanUninstallCB.MouseLeave += new System.EventHandler(this.cleanUninstallCB_MouseLeave);
+            // 
             // saveUserDataCB
             // 
             this.saveUserDataCB.AutoSize = true;
@@ -328,20 +342,6 @@
             // 
             this.downloadTimer.Interval = 1000;
             this.downloadTimer.Tick += new System.EventHandler(this.downloadTimer_Tick);
-            // 
-            // cleanUninstallCB
-            // 
-            this.cleanUninstallCB.AutoSize = true;
-            this.cleanUninstallCB.Location = new System.Drawing.Point(6, 120);
-            this.cleanUninstallCB.Name = "cleanUninstallCB";
-            this.cleanUninstallCB.Size = new System.Drawing.Size(117, 17);
-            this.cleanUninstallCB.TabIndex = 29;
-            this.cleanUninstallCB.Text = "Clean uninstallation";
-            this.cleanUninstallCB.UseVisualStyleBackColor = true;
-            this.cleanUninstallCB.CheckedChanged += new System.EventHandler(this.cleanUninstallCB_CheckedChanged);
-            this.cleanUninstallCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cleanUninstallCB_MouseDown);
-            this.cleanUninstallCB.MouseEnter += new System.EventHandler(this.cleanUninstallCB_MouseEnter);
-            this.cleanUninstallCB.MouseLeave += new System.EventHandler(this.cleanUninstallCB_MouseLeave);
             // 
             // MainWindow
             // 
