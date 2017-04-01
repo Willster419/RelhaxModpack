@@ -3634,8 +3634,8 @@
           <name>BalCalcMod</name>
           <version>
           </version>
-          <modzipfile>Ingame_Info_BalCalcMod_Base_0.9.17.1_2017-01-05.zip</modzipfile>
-          <modzipcrc>498abc79e00356c060fe4fff9227a7c1</modzipcrc>
+          <modzipfile>Ingame_Info_BalCalcMod_Base_0.9.17.1_2017-03-31.zip</modzipfile>
+          <modzipcrc>aededd6ffef24a0f1db70834f8076272</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
           <userDatas />
@@ -3647,8 +3647,8 @@
           <configs>
             <config>
               <name>F</name>
-              <configzipfile>Ingame_Info_BalCalcMod_Config_F_0.9.17.1_2017-01-05.zip</configzipfile>
-              <configzipcrc>a64fffeb1ee63ca144e4ab6008fa1fa8</configzipcrc>
+              <configzipfile>Ingame_Info_BalCalcMod_Config_F_0.9.17.1_2017-03-31.zip</configzipfile>
+              <configzipcrc>3c344f9f12dbedc153bf543e7c99d89c</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3656,8 +3656,8 @@
             </config>
             <config>
               <name>Q</name>
-              <configzipfile>Ingame_Info_BalCalcMod_Config_Q_0.9.17.1_2017-01-05.zip</configzipfile>
-              <configzipcrc>b19bb292126400d24ccec62b8a0f3ddc</configzipcrc>
+              <configzipfile>Ingame_Info_BalCalcMod_Config_Q_0.9.17.1_2017-03-31.zip</configzipfile>
+              <configzipcrc>2ef42eb6e6b184b65dba9b44130a0597</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>

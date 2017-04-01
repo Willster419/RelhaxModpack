@@ -36,7 +36,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 21";
+        private string managerVersion = "version 21.0.1";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -272,56 +272,6 @@ namespace RelhaxModpack
                 }
             }
 
-        }
-        //extracts the zip files downloaded fro the Relhax Modpack
-        private void extractZipFilesModPack()
-        {
-            speedLabel.Text = "Extracting RelHax Mods...";
-            Settings.appendToLog("Starting Relhax Modpack Extraction");
-            parrentProgressBar.Maximum = modsToInstall.Count + configsToInstall.Count + dependencies.Count;
-            parrentProgressBar.Value = 0;
-            string downloadedFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
-            //extract dependencies
-            foreach (Dependency d in dependencies)
-            {
-                Settings.appendToLog("Extracting Dependency " + d.dependencyZipFile);
-                if (!d.dependencyZipFile.Equals("")) this.unzip(downloadedFilesDir + d.dependencyZipFile, tanksLocation);
-                parrentProgressBar.Value++;
-            }
-            //extract mods
-            foreach (Mod m in modsToInstall)
-            {
-                Settings.appendToLog("Extracting Mod " + m.modZipFile);
-                if (!m.modZipFile.Equals("")) this.unzip(downloadedFilesDir + m.modZipFile, tanksLocation);
-                parrentProgressBar.Value++;
-            }
-            //extract configs
-            foreach (Config c in configsToInstall)
-            {
-                Settings.appendToLog("Extracting Config " + c.zipConfigFile);
-                if (!c.zipConfigFile.Equals("")) this.unzip(downloadedFilesDir + c.zipConfigFile, tanksLocation);
-                parrentProgressBar.Value++;
-            }
-            Settings.appendToLog("Finished Relhax Modpack Extraction");
-        }
-        //extract all the selected user mods
-        private void extractZipFilesUser()
-        {
-            speedLabel.Text = "Extracting User Mods...";
-            Settings.appendToLog("Starting Relhax Modpack User Mod Extraction");
-            parrentProgressBar.Maximum = userMods.Count;
-            parrentProgressBar.Value = 0;
-            string downloadedFilesDir = Application.StartupPath + "\\RelHaxUserMods\\";
-            foreach (Mod m in userMods)
-            {
-                if (m.modChecked)
-                {
-                    Settings.appendToLog("Exracting " + Path.GetFileName(m.modZipFile));
-                    this.unzip(downloadedFilesDir + Path.GetFileName(m.modZipFile), tanksLocation);
-                    parrentProgressBar.Value++;
-                }
-            }
-            Settings.appendToLog("Finished Extracting Relhax Modpack User Mod Extraction");
         }
         //main method for executing all Modpack and user patches
         private void patchFiles()
@@ -629,8 +579,6 @@ namespace RelhaxModpack
         //main unzip worker method
         private void unzip(string zipFile, string extractFolder)
         {
-
-
             //modpack
             string thisVersion = this.getFolderVersion(null);
             //if (File.Exists(zipFile))
@@ -646,8 +594,6 @@ namespace RelhaxModpack
             }
             zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
             zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
-
-
         }
         //handler for when progress is made in extracting a zip file
         void zip_ExtractProgress(object sender, ExtractProgressEventArgs e)
@@ -727,7 +673,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 03/30/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 03/31/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -747,7 +693,14 @@ namespace RelhaxModpack
             }
             wait.loadingDescBox.Text = "Checking for updates...";
             Application.DoEvents();
-            this.checkmanagerUpdates();
+            if (Program.skipUpdate)
+            {
+                Settings.appendToLog("/skip-update switch detected, skipping application update");
+            }
+            else
+            {
+                this.checkmanagerUpdates();
+            }
             wait.loadingDescBox.Text = "Verifying Directory Structure...";
             Application.DoEvents();
             //create directory structures
@@ -1841,7 +1794,6 @@ namespace RelhaxModpack
                     extractworker.ReportProgress(1);
                 }
                 Settings.appendToLog("Finished Relhax Modpack Extraction");
-
             }
             else
             {
@@ -2033,7 +1985,7 @@ namespace RelhaxModpack
                     }
                     catch (UnauthorizedAccessException)
                     {
-                        DialogResult res = MessageBox.Show("Extraction Error", "Error", MessageBoxButtons.RetryCancel);
+                        DialogResult res = MessageBox.Show("Extraction Error. Is World of Tanks running?", "Error", MessageBoxButtons.RetryCancel);
                         if (res == DialogResult.Retry)
                         {
                             tryAgain = true;

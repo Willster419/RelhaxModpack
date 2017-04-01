@@ -1,3 +1,8 @@
+Version 21.0.1:
+- Added a command line switch to disable update check
+- Made the "extraction error" message more informative
+- other code optimizations
+
 Version 21:
 - MAJOR UI UPDATE (80% of which you won't notice)
   - Re-wrote entire UI build process. Now divided into two parts: UI build and human UI modification
