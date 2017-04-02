@@ -283,7 +283,7 @@
               <pictures />
             </config>
           </configs>
-          <description>A dump of all clan tag icons from 2016/8/20</description>
+          <description>A dump of all clan icons from 8/20/2016</description>
           <updateComment>
           </updateComment>
           <devURL>
@@ -330,8 +330,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
-          </description>
+          <description>Configure how long the 6th sense icon stays on your screen          </description>
           <updateComment>
           </updateComment>
           <devURL>
@@ -369,7 +368,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Toggle the xvm hitlog (Shows a log of your total damage for the duration of the game)
           </description>
           <updateComment>
           </updateComment>
@@ -408,8 +407,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
-          </description>
+          <description>Shows the total combined hp of each team          </description>
           <updateComment>
           </updateComment>
           <devURL>
@@ -486,7 +484,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Shows how much damage you need to do to get high caliber
           </description>
           <updateComment>
           </updateComment>
@@ -525,7 +523,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Show the percent chance of winning when you press tab
           </description>
           <updateComment>
           </updateComment>
@@ -564,7 +562,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Show the xvm damage log (displays to right of damage panel (lower left)
           </description>
           <updateComment>
           </updateComment>
@@ -603,7 +601,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Will display a message of who just shot you and for how much
           </description>
           <updateComment>
           </updateComment>
@@ -642,7 +640,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Visual notification if you vehicle is on fire.@In case the fire in your vehicle isn't enough
           </description>
           <updateComment>
           </updateComment>
@@ -681,7 +679,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Displays at the bottom left, shows spotting damage and assistance damage
           </description>
           <updateComment>
           </updateComment>
@@ -720,7 +718,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Shows a number in the picture of the damaged modules in the players panel
           </description>
           <updateComment>
           </updateComment>
@@ -786,7 +784,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Show the tier of the battle (max tier)@also change which results page is displayed first when you enter the garage from the battle@page 1 is battle summary@page 2 is teams score@page 3 is your detailed battle stats
           </description>
           <updateComment>
           </updateComment>
@@ -861,7 +859,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Choose how many tank rows are displayed in your garage.@also enable or disable the xvm garage
           </description>
           <updateComment>
           </updateComment>
@@ -932,7 +930,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>This is not a thing. please don't use it.
           </description>
           <updateComment>
           </updateComment>
@@ -981,7 +979,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Choose which color scale you use to display player's tank stats
           </description>
           <updateComment>
           </updateComment>
@@ -1020,7 +1018,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Enable or disable the clock in the garage
           </description>
           <updateComment>
           </updateComment>
@@ -1059,7 +1057,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Prevent you from using gold in your garage
           </description>
           <updateComment>
           </updateComment>
@@ -1098,7 +1096,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Prevent you from using free xp in your garage
           </description>
           <updateComment>
           </updateComment>
@@ -1137,7 +1135,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Change the default form of currency for purchasing shells, consumables, etc.
           </description>
           <updateComment>
           </updateComment>
@@ -1176,7 +1174,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Enable an option where, when trying to research a module or tank, if you do not have enough xp, it will present you with a window to convert enough free xp to research the item
           </description>
           <updateComment>
           </updateComment>
@@ -1215,7 +1213,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Automatically return your crew between tanks
           </description>
           <updateComment>
           </updateComment>
@@ -1254,7 +1252,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>automatically return removable equipment
           </description>
           <updateComment>
           </updateComment>
@@ -1302,7 +1300,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Prevent you from entering a battle if you vehicle is low on ammo
           </description>
           <updateComment>
           </updateComment>
@@ -1380,7 +1378,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Display number of people on the server
           </description>
           <updateComment>
           </updateComment>
@@ -1419,7 +1417,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Toggle the xvm markers in the game. Disabling them will enable the configurations in the game
           </description>
           <updateComment>
           </updateComment>
@@ -1458,7 +1456,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Automatiacly log into the game
           </description>
           <updateComment>
           </updateComment>
@@ -1497,7 +1495,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Will not ask you if you want to confirm loading an old version replay. Will load it automaticly
           </description>
           <updateComment>
           </updateComment>
@@ -1536,7 +1534,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Show server pings from the login screen
           </description>
           <updateComment>
           </updateComment>
@@ -1575,7 +1573,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Save the last server that you logged into
           </description>
           <updateComment>
           </updateComment>
@@ -1614,7 +1612,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Show the servers population in the login screen
           </description>
           <updateComment>
           </updateComment>
@@ -1671,7 +1669,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Toggle the xvm minimap modifications@also select if the minimap, when zoomed, is shown in the center of your screen or enlarged in the lower right
           </description>
           <updateComment>
           </updateComment>
@@ -1710,7 +1708,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Change the key that shows minimap zoom
           </description>
           <updateComment>
           </updateComment>
@@ -1749,7 +1747,7 @@
               <pictures />
             </config>
           </configs>
-          <description>
+          <description>Toggle the xvm sounds
           </description>
           <updateComment>
           </updateComment>
