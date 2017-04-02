@@ -1,3 +1,7 @@
+Version 21.1.0:
+- Moved status text to textbox so it can wrap and show exactly what it's doing, rather that cutting it
+- Minor database updates
+
 Version 21.0.1:
 - Added a command line switch to disable update check
 - Made the "extraction error" message more informative

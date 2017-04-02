@@ -36,7 +36,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 21.0.1";
+        private string managerVersion = "version 21.1.0";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -132,7 +132,7 @@ namespace RelhaxModpack
             currentTotalBytesDownloaded = bytesIn;
             //create the download progress string
             string currentModDownloadingShort = currentModDownloading;
-            if (currentModDownloading.Length > 15)
+            if (currentModDownloading.Length > 200)
                 currentModDownloadingShort = currentModDownloading.Substring(0, 15) + "...";
             downloadProgress.Text = "Downloading " + currentModDownloadingShort + " (" + Math.Round(MBytesIn, 1) + " MB" + " of " + Math.Round(MBytesTotal, 1) + " MB)";
             //set the progress bar
@@ -207,7 +207,7 @@ namespace RelhaxModpack
                 tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
                 Settings.appendToLog("downloading " + tempOldDownload);
                 currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile);
-                if (currentModDownloading.Length >= 30)
+                if (currentModDownloading.Length >= 200)
                 {
                     currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile).Substring(0, 23) + "...";
                 }
@@ -295,7 +295,7 @@ namespace RelhaxModpack
             foreach (Patch p in patchList)
             {
                 string patchFileOutput = p.file;
-                int maxLength = 30;
+                int maxLength = 200;
                 if (p.file.Length > maxLength)
                     patchFileOutput = p.file.Substring(0, maxLength);
                 downloadProgress.Text = "patching " + patchFileOutput + "...";
@@ -673,7 +673,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 03/31/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 04/02/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1446,7 +1446,7 @@ namespace RelhaxModpack
                 tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
                 Settings.appendToLog("downloading " + tempOldDownload);
                 currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile);
-                if (currentModDownloading.Length >= 30)
+                if (currentModDownloading.Length >= 200)
                 {
                     currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile).Substring(0, 23) + "...";
                 }
@@ -1822,9 +1822,9 @@ namespace RelhaxModpack
                     childProgressBar.Maximum = childMaxProgres;
                 if (childCurrentProgres != 0)
                     childProgressBar.Value = childCurrentProgres;
-                if (currentZipEntry.Length >= 47)
+                if (true)
                 {
-                    downloadProgress.Text = currentZipEntry.Substring(0, 47) + "...";
+                    downloadProgress.Text = currentZipEntry + "...";
                 }
                 if (isParrentDone)
                 {

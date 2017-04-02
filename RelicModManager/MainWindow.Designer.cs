@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            this.downloadProgress = new System.Windows.Forms.Label();
             this.statusLabel = new System.Windows.Forms.Label();
             this.childProgressBar = new System.Windows.Forms.ProgressBar();
             this.findWotExe = new System.Windows.Forms.OpenFileDialog();
@@ -54,22 +53,10 @@
             this.findBugAddModLabel = new System.Windows.Forms.LinkLabel();
             this.cancelDownloadButton = new System.Windows.Forms.Button();
             this.downloadTimer = new System.Windows.Forms.Timer(this.components);
+            this.downloadProgress = new System.Windows.Forms.RichTextBox();
             this.settingsGroupBox.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // downloadProgress
-            // 
-            this.downloadProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.downloadProgress.AutoSize = true;
-            this.downloadProgress.Location = new System.Drawing.Point(9, 306);
-            this.downloadProgress.Name = "downloadProgress";
-            this.downloadProgress.Size = new System.Drawing.Size(24, 13);
-            this.downloadProgress.TabIndex = 4;
-            this.downloadProgress.Text = "Idle";
-            this.downloadProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // statusLabel
             // 
@@ -86,7 +73,7 @@
             // 
             // childProgressBar
             // 
-            this.childProgressBar.Location = new System.Drawing.Point(12, 351);
+            this.childProgressBar.Location = new System.Drawing.Point(12, 396);
             this.childProgressBar.Name = "childProgressBar";
             this.childProgressBar.Size = new System.Drawing.Size(265, 23);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -114,7 +101,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(9, 414);
+            this.formPageLink.Location = new System.Drawing.Point(9, 459);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -124,7 +111,7 @@
             // 
             // parrentProgressBar
             // 
-            this.parrentProgressBar.Location = new System.Drawing.Point(12, 322);
+            this.parrentProgressBar.Location = new System.Drawing.Point(12, 367);
             this.parrentProgressBar.Name = "parrentProgressBar";
             this.parrentProgressBar.Size = new System.Drawing.Size(265, 23);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -133,7 +120,7 @@
             // speedLabel
             // 
             this.speedLabel.AutoSize = true;
-            this.speedLabel.Location = new System.Drawing.Point(12, 377);
+            this.speedLabel.Location = new System.Drawing.Point(12, 422);
             this.speedLabel.Name = "speedLabel";
             this.speedLabel.Size = new System.Drawing.Size(24, 13);
             this.speedLabel.TabIndex = 18;
@@ -318,7 +305,7 @@
             // findBugAddModLabel
             // 
             this.findBugAddModLabel.AutoSize = true;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 394);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 439);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
             this.findBugAddModLabel.TabIndex = 27;
@@ -329,7 +316,7 @@
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(178, 394);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(178, 439);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
             this.cancelDownloadButton.Size = new System.Drawing.Size(99, 23);
             this.cancelDownloadButton.TabIndex = 28;
@@ -343,11 +330,22 @@
             this.downloadTimer.Interval = 1000;
             this.downloadTimer.Tick += new System.EventHandler(this.downloadTimer_Tick);
             // 
+            // downloadProgress
+            // 
+            this.downloadProgress.Location = new System.Drawing.Point(12, 309);
+            this.downloadProgress.Name = "downloadProgress";
+            this.downloadProgress.ReadOnly = true;
+            this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.downloadProgress.Size = new System.Drawing.Size(265, 52);
+            this.downloadProgress.TabIndex = 29;
+            this.downloadProgress.Text = "";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(289, 429);
+            this.ClientSize = new System.Drawing.Size(289, 482);
+            this.Controls.Add(this.downloadProgress);
             this.Controls.Add(this.cancelDownloadButton);
             this.Controls.Add(this.findBugAddModLabel);
             this.Controls.Add(this.loadingImageGroupBox);
@@ -359,7 +357,6 @@
             this.Controls.Add(this.formPageLink);
             this.Controls.Add(this.childProgressBar);
             this.Controls.Add(this.statusLabel);
-            this.Controls.Add(this.downloadProgress);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -378,7 +375,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Label downloadProgress;
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.ProgressBar childProgressBar;
         private System.Windows.Forms.OpenFileDialog findWotExe;
@@ -402,6 +398,7 @@
         private System.Windows.Forms.CheckBox saveUserDataCB;
         private System.Windows.Forms.Timer downloadTimer;
         private System.Windows.Forms.CheckBox cleanUninstallCB;
+        private System.Windows.Forms.RichTextBox downloadProgress;
     }
 }
 
