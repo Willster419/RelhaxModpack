@@ -1,3 +1,7 @@
+Version 21.2.0:
+- Added application blocker for patch day, with database manager command line override
+- Fixed Json patcher to be faster and suck less
+
 Version 21.1.0:
 - Moved status text to textbox so it can wrap and show exactly what it's doing, rather that cutting it
 - Minor database updates

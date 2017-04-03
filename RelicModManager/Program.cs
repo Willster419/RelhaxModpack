@@ -16,6 +16,8 @@ namespace RelhaxModpack
         public static bool testMode = false;
         public static bool autoInstall = false;
         public static bool skipUpdate = false;
+        public static bool patchDayTest = false;
+        public static bool saveSettings = false;
         public static string configName = "";
         [STAThread]
         static void Main()
@@ -42,6 +44,10 @@ namespace RelhaxModpack
                 else if (Regex.IsMatch(commandArgs[i], @"skip-update$"))
                 {
                     skipUpdate = true;
+                }
+                else if (Regex.IsMatch(commandArgs[i], @"patchday$"))
+                {
+                    patchDayTest = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"auto-install$"))
                 {

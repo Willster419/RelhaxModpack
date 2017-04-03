@@ -36,7 +36,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 21.1.0";
+        private string managerVersion = "version 21.2.0";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -342,7 +342,7 @@ namespace RelhaxModpack
                 {
                     //perform json patch
                     Settings.appendToLog("Json patch, " + p.file + ", " + p.path + ", " + p.replace);
-                    this.jsonPatch(p.file, p.path, p.replace);
+                    this.jsonPatch(p.file, p.path, p.replace, p.mode);
                 }
             }
             //all done, delete the patch folder
@@ -673,7 +673,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 04/02/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 04/03/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -700,6 +700,16 @@ namespace RelhaxModpack
             else
             {
                 this.checkmanagerUpdates();
+            }
+            //add method to disable the modpack for during patch day
+            //this will involve having a hard coded true or false, along with a command line arguement to over-ride
+            //to disable from patch day set it to false.
+            //to enable for patch day (prevent users to use it), set it to true.
+            if (false && !Program.patchDayTest)
+            {
+                Settings.appendToLog("Patch day disable detected. Remember To override use /patchday");
+                MessageBox.Show("The modpack is curretly down for patch day testing and mods updating. Sorry for the inconvience. If you are a database manager, please add the command arguement");
+                this.Close();
             }
             wait.loadingDescBox.Text = "Verifying Directory Structure...";
             Application.DoEvents();
@@ -759,6 +769,7 @@ namespace RelhaxModpack
             wait.Close();
             state = InstallState.idle;
             Application.DoEvents();
+            Program.saveSettings = true;
         }
         //removes the declaration statement at the start of the doc
         private void removeDeclaration()
@@ -1016,7 +1027,7 @@ namespace RelhaxModpack
             File.WriteAllText(fileLocation, file);
         }
         //method to parse json files
-        public void jsonPatch(string jsonFile, string jsonPath, string newValue)
+        public void jsonPatch(string jsonFile, string jsonPath, string newValue, string mode)
         {
             //try to convert the new value to a bool or an int or double first
             bool newValueBool = false;
@@ -1086,27 +1097,11 @@ namespace RelhaxModpack
             string file = File.ReadAllText(jsonFile);
             //save the "$" lines
             List<StringSave> ssList = new List<StringSave>();
-            //patch any single line comments out of it by doing regex line by line
             StringBuilder backTogether = new StringBuilder();
             string[] removeComments = file.Split('\n');
             for (int i = 0; i < removeComments.Count(); i++)
             {
                 string temp = removeComments[i];
-                //replace tabs with spaces
-                temp = Regex.Replace(temp, "\t", " ");
-                //remove single comment lines
-                if (Regex.IsMatch(temp, @"^ *//.*"))
-                    temp = Regex.Replace(temp, @"^ *//.*", "");
-                //remove comments after values
-                if (Regex.IsMatch(temp, @" +//.*$"))
-                {
-                    temp = Regex.Replace(temp, @" +//.*$", "");
-                }
-                //remove more comments after values
-                if (Regex.IsMatch(temp, @",//.*$"))
-                {
-                    temp = Regex.Replace(temp, @",//.*$", ",");
-                }
                 if (Regex.IsMatch(temp, @"\${"))
                 {
                     bool hadComma = false;
@@ -1125,16 +1120,12 @@ namespace RelhaxModpack
                 backTogether.Append(temp + "\n");
             }
             file = backTogether.ToString();
-            //remove any newlines
-            file = Regex.Replace(file, "\n", "");
-            file = Regex.Replace(file, "\r", "");
-            //remove any block comments
-            file = Regex.Replace(file, @"/\*.*?\*/", "");
-            JToken root = null;
-            //it could still fail, cause it's such an awesome api
+            JsonLoadSettings settings = new JsonLoadSettings();
+            settings.CommentHandling = CommentHandling.Load;
+            JObject root = null;
             try
             {
-                root = JToken.Parse(file);
+                root = JObject.Parse(file,settings);
             }
             catch (JsonReaderException)
             {
@@ -1150,29 +1141,27 @@ namespace RelhaxModpack
             if (root == null)
                 return;
             //the actual patch method
-            foreach (var value in root.SelectTokens(jsonPath).ToList())
+            JValue newObject = (JValue)root.SelectToken(jsonPath);
+            //pull out if it failed to get the selection
+            if (newObject == null)
             {
-                if (value == root)
-                    root = JToken.FromObject(newValue);
-                else
-                {
-                    if (useBool)
-                    {
-                        value.Replace(JToken.FromObject(newValueBool));
-                    }
-                    else if (useInt)
-                    {
-                        value.Replace(JToken.FromObject(newValueInt));
-                    }
-                    else if (useDouble)
-                    {
-                        value.Replace(JToken.FromObject(newValueDouble));
-                    }
-                    else //string
-                    {
-                        value.Replace(JToken.FromObject(newValue));
-                    }
-                }
+                Settings.appendToLog("ERROR: path " + jsonPath + " not found for " + Path.GetFileName(jsonFile));
+            }
+            if (useBool)
+            {
+                newObject.Value = newValueBool;
+            }
+            else if (useInt)
+            {
+                newObject.Value = newValueInt;
+            }
+            else if (useDouble)
+            {
+                newObject.Value = newValueDouble;
+            }
+            else //string
+            {
+                newObject.Value = newValue;
             }
             StringBuilder rebuilder = new StringBuilder();
             string[] putBackDollas = root.ToString().Split('\n');
@@ -2038,7 +2027,7 @@ namespace RelhaxModpack
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             //save settings
-            Settings.saveSettings();
+            if (Program.saveSettings) Settings.saveSettings();
             Settings.appendToLog("Application Closing");
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
         }
