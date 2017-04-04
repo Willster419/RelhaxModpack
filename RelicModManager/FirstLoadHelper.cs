@@ -27,6 +27,7 @@ namespace RelhaxModpack
         {
             Settings.appendToLog("FirstLoadHelper: startup location is x: " + x + ", y: " + y);
             this.Location = new Point(x, y);
+            Settings.setUIColor(this);
         }
     }
 }

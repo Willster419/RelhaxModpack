@@ -81,6 +81,7 @@
             this.Name = "PleaseWait";
             this.Text = "pleaseWait";
             this.UseWaitCursor = true;
+            this.Load += new System.EventHandler(this.PleaseWait_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

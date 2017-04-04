@@ -26,6 +26,7 @@ namespace RelhaxModpack
         public static bool firstLoad { get; set; }
         public static bool saveLastConfig { get; set; }
         public static bool saveUserData { get; set; }
+        public static bool darkUI { get; set; }
         public static int modSelectionHeight { get; set; }
         public static int modSelectionWidth { get; set; }
         public static bool cleanUninstall { get; set; }
@@ -277,6 +278,105 @@ namespace RelhaxModpack
             }
             // Return the hexadecimal string.
             return sBuilder.ToString();
+        }
+        //sets a form to have a dark UI
+        public static void setUIColor(System.Windows.Forms.Form window)
+        {
+            Color backColor;
+            Color textColor;
+            if (Settings.darkUI)
+            {
+                backColor = SystemColors.ControlDarkDark;
+                textColor = Color.White;
+            }
+            else
+            {
+                backColor = SystemColors.Control;
+                textColor = SystemColors.ControlText;
+            }
+            window.BackColor = backColor;
+            foreach (Control c in window.Controls)
+            {
+                if (c is CheckBox || c is RadioButton || c is Label)
+                {
+                    c.ForeColor = textColor;
+                }
+                else if (c is Panel || c is GroupBox)
+                {
+                    c.BackColor = backColor;
+                    c.ForeColor = textColor;
+                    foreach (Control subC in c.Controls)
+                    {
+                        if (subC is CheckBox || subC is RadioButton || subC is Label)
+                        {
+                            subC.ForeColor = textColor;
+                        }
+                        else if (subC is Panel || subC is GroupBox)
+                        {
+                            subC.BackColor = backColor;
+                            subC.ForeColor = textColor;
+                            foreach (Control subC2 in subC.Controls)
+                            {
+                                if (subC2 is CheckBox || subC2 is RadioButton || subC2 is Label)
+                                {
+                                    subC2.ForeColor = textColor;
+                                }
+                                else if (subC2 is Panel || subC2 is GroupBox)
+                                {
+                                    subC2.BackColor = backColor;
+                                    subC2.ForeColor = textColor;
+                                    foreach (Control subC3 in subC2.Controls)
+                                    {
+                                        if (subC3 is CheckBox || subC3 is RadioButton || subC3 is Label)
+                                        {
+                                            subC3.ForeColor = textColor;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (c is PictureBox)
+                {
+                    c.BackColor = backColor;
+                }
+                else if (c is TabControl)
+                {
+                    //c.ForeColor = textColor;
+                    c.BackColor = backColor;
+                    foreach (TabPage t in c.Controls)
+                    {
+                        t.BackColor = backColor;
+                        foreach (Control subC in t.Controls)
+                        {
+                            foreach (Control subC2 in subC.Controls)
+                            {
+                                if (subC2 is CheckBox)
+                                {
+                                    subC2.ForeColor = textColor;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        public static Color getTextColor()
+        {
+            if (Settings.darkUI)
+                return Color.White;
+
+            else
+                return SystemColors.ControlText;
+        }
+        public static Color getBackColor()
+        {
+            if (Settings.darkUI)
+                return SystemColors.ControlDark;
+            
+            else
+                return SystemColors.Control;
         }
     }
 }

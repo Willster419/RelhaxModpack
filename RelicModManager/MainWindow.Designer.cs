@@ -43,6 +43,7 @@
             this.cancerFontCB = new System.Windows.Forms.CheckBox();
             this.backupModsCheckBox = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
+            this.darkUICB = new System.Windows.Forms.CheckBox();
             this.cleanUninstallCB = new System.Windows.Forms.CheckBox();
             this.saveUserDataCB = new System.Windows.Forms.CheckBox();
             this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
@@ -64,7 +65,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(9, 293);
+            this.statusLabel.Location = new System.Drawing.Point(9, 308);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(53, 13);
             this.statusLabel.TabIndex = 10;
@@ -73,7 +74,7 @@
             // 
             // childProgressBar
             // 
-            this.childProgressBar.Location = new System.Drawing.Point(12, 396);
+            this.childProgressBar.Location = new System.Drawing.Point(12, 411);
             this.childProgressBar.Name = "childProgressBar";
             this.childProgressBar.Size = new System.Drawing.Size(265, 23);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -101,7 +102,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(9, 459);
+            this.formPageLink.Location = new System.Drawing.Point(9, 474);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -111,7 +112,7 @@
             // 
             // parrentProgressBar
             // 
-            this.parrentProgressBar.Location = new System.Drawing.Point(12, 367);
+            this.parrentProgressBar.Location = new System.Drawing.Point(12, 382);
             this.parrentProgressBar.Name = "parrentProgressBar";
             this.parrentProgressBar.Size = new System.Drawing.Size(265, 23);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -120,7 +121,7 @@
             // speedLabel
             // 
             this.speedLabel.AutoSize = true;
-            this.speedLabel.Location = new System.Drawing.Point(12, 422);
+            this.speedLabel.Location = new System.Drawing.Point(12, 437);
             this.speedLabel.Name = "speedLabel";
             this.speedLabel.Size = new System.Drawing.Size(24, 13);
             this.speedLabel.TabIndex = 18;
@@ -192,6 +193,7 @@
             // 
             // settingsGroupBox
             // 
+            this.settingsGroupBox.Controls.Add(this.darkUICB);
             this.settingsGroupBox.Controls.Add(this.cleanUninstallCB);
             this.settingsGroupBox.Controls.Add(this.saveUserDataCB);
             this.settingsGroupBox.Controls.Add(this.saveLastInstallCB);
@@ -202,10 +204,21 @@
             this.settingsGroupBox.Controls.Add(this.cleanInstallCB);
             this.settingsGroupBox.Location = new System.Drawing.Point(12, 92);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(265, 140);
+            this.settingsGroupBox.Size = new System.Drawing.Size(265, 155);
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "RelHax ModPack Settings";
+            // 
+            // darkUICB
+            // 
+            this.darkUICB.AutoSize = true;
+            this.darkUICB.Location = new System.Drawing.Point(6, 135);
+            this.darkUICB.Name = "darkUICB";
+            this.darkUICB.Size = new System.Drawing.Size(63, 17);
+            this.darkUICB.TabIndex = 30;
+            this.darkUICB.Text = "Dark UI";
+            this.darkUICB.UseVisualStyleBackColor = true;
+            this.darkUICB.CheckedChanged += new System.EventHandler(this.darkUICB_CheckedChanged);
             // 
             // cleanUninstallCB
             // 
@@ -267,7 +280,7 @@
             // 
             this.loadingImageGroupBox.Controls.Add(this.thirdGuardsLoadingImageRB);
             this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(12, 236);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(12, 251);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
             this.loadingImageGroupBox.Size = new System.Drawing.Size(96, 54);
             this.loadingImageGroupBox.TabIndex = 26;
@@ -305,7 +318,7 @@
             // findBugAddModLabel
             // 
             this.findBugAddModLabel.AutoSize = true;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 439);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 454);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
             this.findBugAddModLabel.TabIndex = 27;
@@ -316,7 +329,7 @@
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(178, 439);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(178, 454);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
             this.cancelDownloadButton.Size = new System.Drawing.Size(99, 23);
             this.cancelDownloadButton.TabIndex = 28;
@@ -332,7 +345,7 @@
             // 
             // downloadProgress
             // 
-            this.downloadProgress.Location = new System.Drawing.Point(12, 309);
+            this.downloadProgress.Location = new System.Drawing.Point(12, 324);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
             this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
@@ -344,7 +357,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(289, 482);
+            this.ClientSize = new System.Drawing.Size(289, 497);
             this.Controls.Add(this.downloadProgress);
             this.Controls.Add(this.cancelDownloadButton);
             this.Controls.Add(this.findBugAddModLabel);
@@ -399,6 +412,7 @@
         private System.Windows.Forms.Timer downloadTimer;
         private System.Windows.Forms.CheckBox cleanUninstallCB;
         private System.Windows.Forms.RichTextBox downloadProgress;
+        private System.Windows.Forms.CheckBox darkUICB;
     }
 }
 

@@ -1,3 +1,7 @@
+Version 21.3.0:
+- Fixed bug where not every font was changed to comic sans/large
+- Added dark UI option
+
 Version 21.2.0:
 - Added application blocker for patch day, with database manager command line override
 - Fixed Json patcher to be faster and suck less

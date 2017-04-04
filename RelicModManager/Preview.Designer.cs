@@ -52,6 +52,7 @@
             // 
             // previewPicture
             // 
+            this.previewPicture.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.previewPicture.Location = new System.Drawing.Point(12, 12);
             this.previewPicture.Name = "previewPicture";
             this.previewPicture.Size = new System.Drawing.Size(378, 309);

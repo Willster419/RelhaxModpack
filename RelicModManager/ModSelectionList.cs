@@ -92,6 +92,8 @@ namespace RelhaxModpack
             this.ModSelectionList_SizeChanged(null, null);
             //set the size to the last closed size
             this.Size = new Size(Settings.modSelectionWidth, Settings.modSelectionHeight);
+            //set the UI colors
+            Settings.setUIColor(this);
             pw.Close();
         }
         //initializes the userMods list. This should only be run once
@@ -167,6 +169,7 @@ namespace RelhaxModpack
         private void makeTabs()
         {
             modTabGroups.TabPages.Clear();
+            modTabGroups.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
             //this.sortCatagoryList(parsedCatagoryList);
             foreach (Catagory c in parsedCatagoryList)
             {
@@ -198,7 +201,7 @@ namespace RelhaxModpack
             if (m.enabled && m.modChecked)
                 configPanel.BackColor = Color.BlanchedAlmond;
             else
-                configPanel.BackColor = SystemColors.Control;
+                configPanel.BackColor = Settings.getBackColor();
             configPanel.Controls.Clear();
             //add configs to the panel
             //create the comboBox outside of the loop
@@ -256,6 +259,7 @@ namespace RelhaxModpack
                     configLabel.TabIndex = 0;
                     configLabel.Text = m.configs[i].name;
                     configLabel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    configLabel.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
                     if (m.enabled && m.modChecked)
                         configLabel.Enabled = true;
                     else
@@ -270,6 +274,7 @@ namespace RelhaxModpack
                     configControlRB.Size = new System.Drawing.Size(150, 15);
                     configControlRB.TabIndex = 1;
                     configControlRB.TabStop = true;
+                    configControlRB.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
                     if (m.enabled && m.modChecked && m.configs[i].enabled)
                         configControlRB.Enabled = true;
                     else
@@ -336,7 +341,7 @@ namespace RelhaxModpack
                         configSelectionAll.AutoSize = true;
                         configSelectionAll.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
                         configSelectionAll.Size = new System.Drawing.Size(t.Size.Width - 35, 30);
-                        configSelectionAll.BackColor = SystemColors.Control;
+                        configSelectionAll.BackColor = Settings.getBackColor();
                         configSelectionAll.Controls.Clear();
                         yPosition += 5;
                         CheckBox EnableCB = new CheckBox();
@@ -376,6 +381,7 @@ namespace RelhaxModpack
                     configLabel.TabIndex = 0;
                     configLabel.Text = m.configs[i].name;
                     configLabel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    configLabel.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
                     if (m.enabled && m.modChecked)
                         configLabel.Enabled = true;
                     else
@@ -389,6 +395,7 @@ namespace RelhaxModpack
                     configControlRB.Size = new System.Drawing.Size(150, 15);
                     configControlRB.TabIndex = 1;
                     configControlRB.TabStop = true;
+                    configControlRB.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
                     if (m.enabled && m.modChecked && m.configs[i].enabled)
                         configControlRB.Enabled = true;
                     else
@@ -460,6 +467,8 @@ namespace RelhaxModpack
                         dropDownSizeLabel.TabIndex = 0;
                         dropDownSizeLabel.Text = "Nothing Selected";
                         dropDownSizeLabel.Name = t.Name + "_" + m.name + "_" + m.configs[i].type + "_size";
+                        dropDownSizeLabel.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
+                        configControlDDALL.Size = new Size(configControlDDALL.Size.Width, dropDownSizeLabel.Size.Height);
                         if (m.enabled && m.modChecked)
                         {
                             dropDownSizeLabel.Enabled = true;
@@ -506,6 +515,7 @@ namespace RelhaxModpack
                     configLabel.TabIndex = 0;
                     configLabel.Text = m.configs[i].name;
                     configLabel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    configLabel.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
                     if (m.enabled && m.modChecked)
                         configLabel.Enabled = true;
                     else
@@ -520,6 +530,7 @@ namespace RelhaxModpack
                     configControlCB.Size = new System.Drawing.Size(150, 15);
                     configControlCB.TabIndex = 1;
                     configControlCB.TabStop = true;
+                    configControlCB.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
                     if (m.enabled && m.modChecked && m.configs[i].enabled)
                         configControlCB.Enabled = true;
                     else
@@ -575,6 +586,7 @@ namespace RelhaxModpack
             modCheckBox.TabIndex = 1;
             modCheckBox.Text = m.name;
             modCheckBox.Name = t.Name + "_" + m.name;
+            modCheckBox.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
             string modDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.modZipFile;
             if (File.Exists(modDownloadPath))
             {
@@ -612,7 +624,9 @@ namespace RelhaxModpack
             //in theory it should trigger the handler for checked
             //when initially made it should be false, if enabled from
             //from user configs
-            configPanel.Location = new Point(configPanel.Location.X, modCheckBox.Size.Height + 5);
+            int spacer = modCheckBox.Location.Y + modCheckBox.Size.Height + 5;
+            if (Settings.largeFont) spacer += 3;
+            configPanel.Location = new Point(configPanel.Location.X, spacer);
             //make the main panel
             Panel mainPanel = new Panel();
             mainPanel.BorderStyle = BorderStyle.FixedSingle;
@@ -695,7 +709,7 @@ namespace RelhaxModpack
                         radioControl.Enabled = false;
                     }
                 }
-                selectionPanel.BackColor = SystemColors.Control;
+                selectionPanel.BackColor = Settings.getBackColor();
             }
             
             if (cb.Enabled && cb.Checked)
@@ -1042,7 +1056,7 @@ namespace RelhaxModpack
                 //the second one is always the config panel
                 Panel configPanel = (Panel)modPanel.Controls[1];
                 if (cb.Checked) configPanel.BackColor = Color.BlanchedAlmond;
-                else configPanel.BackColor = SystemColors.Control;
+                else configPanel.BackColor = Settings.getBackColor();
                 foreach (Control cc in configPanel.Controls)
                 {
                     Config cfg = null;

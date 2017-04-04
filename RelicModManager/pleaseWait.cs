@@ -16,5 +16,10 @@ namespace RelhaxModpack
         {
             InitializeComponent();
         }
+
+        private void PleaseWait_Load(object sender, EventArgs e)
+        {
+            Settings.setUIColor(this);
+        }
     }
 }

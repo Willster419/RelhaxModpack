@@ -2408,6 +2408,13 @@ namespace RelhaxModpack
             newHelper.helperText.Text = "Selected - All mods will be erased\nNot Selected - Only Modpack installed mods will be erased";
             newHelper.ShowDialog();
         }
+
+        private void darkUICB_CheckedChanged(object sender, EventArgs e)
+        {
+            //set the thing
+            Settings.darkUI = darkUICB.Checked;
+            Settings.setUIColor(this);
+        }
     }
     //a class for the downloadQueue list, to make a queue of downloads
     class DownloadItem

@@ -42,6 +42,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             WebClient wc = new WebClient();
             downloadedVersionInfo.Text = wc.DownloadString("http://willster419.atwebpages.com/Applications/RelHaxModPack/releaseNotes.txt");
+            Settings.setUIColor(this);
             Application.DoEvents();
         }
 
