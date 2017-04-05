@@ -219,6 +219,9 @@
             this.darkUICB.Text = "Dark UI";
             this.darkUICB.UseVisualStyleBackColor = true;
             this.darkUICB.CheckedChanged += new System.EventHandler(this.darkUICB_CheckedChanged);
+            this.darkUICB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.darkUICB_MouseDown);
+            this.darkUICB.MouseEnter += new System.EventHandler(this.darkUICB_MouseEnter);
+            this.darkUICB.MouseLeave += new System.EventHandler(this.darkUICB_MouseLeave);
             // 
             // cleanUninstallCB
             // 

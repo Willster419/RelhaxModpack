@@ -1,8 +1,6 @@
- (normal) program fixes
+(normal) program fixes
 
- (promote)
-  -tell loz it's ready
-  -make WoT page about it
+(promote)
   -submit it to i made this for WG
 
 (normal) add json patcher add mode?

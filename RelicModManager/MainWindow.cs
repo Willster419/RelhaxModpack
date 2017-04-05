@@ -36,7 +36,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 21.2.0";
+        private string managerVersion = "version 21.3.0";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -673,7 +673,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 04/03/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 04/04/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -788,7 +788,7 @@ namespace RelhaxModpack
         //when the "visit form page" link is clicked. the link clicked handler
         private void formPageLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/Willster419/RelicModManager");
+            System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-09171-the-relhax-modpack/");
         }
         //method to patch a part of an xml file
         //fileLocation is relative to res_mods folder
@@ -1123,6 +1123,7 @@ namespace RelhaxModpack
             JsonLoadSettings settings = new JsonLoadSettings();
             settings.CommentHandling = CommentHandling.Load;
             JObject root = null;
+            //load json for editing
             try
             {
                 root = JObject.Parse(file,settings);
@@ -1140,28 +1141,47 @@ namespace RelhaxModpack
             //if it failed to parse show the message (above) and pull out
             if (root == null)
                 return;
-            //the actual patch method
-            JValue newObject = (JValue)root.SelectToken(jsonPath);
-            //pull out if it failed to get the selection
-            if (newObject == null)
+            if (mode == null || mode.Equals("") || mode.Equals("edit") || mode.Equals("arrayEdit"))
             {
-                Settings.appendToLog("ERROR: path " + jsonPath + " not found for " + Path.GetFileName(jsonFile));
+                //the actual patch method
+                JValue newObject = (JValue)root.SelectToken(jsonPath);
+                //pull out if it failed to get the selection
+                if (newObject == null)
+                {
+                    Settings.appendToLog("ERROR: path " + jsonPath + " not found for " + Path.GetFileName(jsonFile));
+                }
+                if (useBool)
+                {
+                    newObject.Value = newValueBool;
+                }
+                else if (useInt)
+                {
+                    newObject.Value = newValueInt;
+                }
+                else if (useDouble)
+                {
+                    newObject.Value = newValueDouble;
+                }
+                else //string
+                {
+                    newObject.Value = newValue;
+                }
             }
-            if (useBool)
+            else if (mode.Equals("remove") || mode.Equals("arrayRemove"))
             {
-                newObject.Value = newValueBool;
+                //TODO
             }
-            else if (useInt)
+            else if (mode.Equals("add"))
             {
-                newObject.Value = newValueInt;
+                //TODO
             }
-            else if (useDouble)
+            else if (mode.Equals("arrayAdd"))
             {
-                newObject.Value = newValueDouble;
+                //TODO
             }
-            else //string
+            else
             {
-                newObject.Value = newValue;
+                Settings.appendToLog("ERROR: Unknown json patch mode, " + mode);
             }
             StringBuilder rebuilder = new StringBuilder();
             string[] putBackDollas = root.ToString().Split('\n');
@@ -2050,6 +2070,7 @@ namespace RelhaxModpack
             this.saveLastInstallCB.Checked = Settings.saveLastConfig;
             this.saveUserDataCB.Checked = Settings.saveUserData;
             this.cleanUninstallCB.Checked = Settings.cleanUninstall;
+            this.darkUICB.Checked = Settings.darkUI;
             this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
             switch (Settings.gif)
             {
@@ -2414,6 +2435,27 @@ namespace RelhaxModpack
             //set the thing
             Settings.darkUI = darkUICB.Checked;
             Settings.setUIColor(this);
+        }
+        
+        private void darkUICB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = "Toggle the DarkUI mode";
+        }
+
+        private void darkUICB_MouseLeave(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = helperText;
+        }
+
+        private void darkUICB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = "Toggle the DarkUI mode";
+            newHelper.ShowDialog();
         }
     }
     //a class for the downloadQueue list, to make a queue of downloads

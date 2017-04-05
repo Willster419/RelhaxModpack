@@ -15,11 +15,8 @@ namespace RelhaxModpack
     //so all the forms have access to a single version of the settings
     public static class Settings
     {
-        public static string fontName { get; set; }
-        public static float fontSize { get; set; }
         public static bool backupModFolder { get; set; }
         public static bool cleanInstallation { get; set; }
-        public static int loadingGif { get; set; }
         public static bool forceManuel { get; set; }
         public static bool largeFont { get; set; }
         public static bool comicSans { get; set; }
@@ -27,16 +24,19 @@ namespace RelhaxModpack
         public static bool saveLastConfig { get; set; }
         public static bool saveUserData { get; set; }
         public static bool darkUI { get; set; }
+        public static bool cleanUninstall { get; set; }
         public static int modSelectionHeight { get; set; }
         public static int modSelectionWidth { get; set; }
-        public static bool cleanUninstall { get; set; }
+        public static int loadingGif { get; set; }
+        public static float fontSize { get; set; }
+        public static string fontName { get; set; }
+        public static string settingsXmlFile = Application.StartupPath + "\\RelHaxSettings.xml";
         public enum LoadingGifs { standard = 0, thirdGuards = 1 };
         public static LoadingGifs gif;
         public const float normalSizeFont = 8.25F;
         public const float largeSizeFont = 10.0F;
         public const string defaultFontType = "Microsoft Sance Serif";
         public const string comicSansFontType = "Comic Sans MS";
-        public static string settingsXmlFile = Application.StartupPath + "\\RelHaxSettings.xml";
         //loads settings from xml file
         public static void loadSettings()
         {
@@ -104,6 +104,9 @@ namespace RelhaxModpack
                         case "cleanUninstall":
                             Settings.cleanUninstall = bool.Parse(n.InnerText);
                             break;
+                        case "darkUI":
+                            Settings.darkUI = bool.Parse(n.InnerText);
+                            break;
                     }
                 }
             }
@@ -169,6 +172,9 @@ namespace RelhaxModpack
             XmlElement xcleanUninstall = doc.CreateElement("cleanUninstall");
             xcleanUninstall.InnerText = "" + Settings.cleanUninstall;
             settingsHolder.AppendChild(xcleanUninstall);
+            XmlElement xdarkUI = doc.CreateElement("darkUI");
+            xdarkUI.InnerText = "" + Settings.darkUI;
+            settingsHolder.AppendChild(xdarkUI);
             switch (Settings.gif)
             {
                 case (Settings.LoadingGifs.standard):
