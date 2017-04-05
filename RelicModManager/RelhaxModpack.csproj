@@ -104,6 +104,12 @@
     <Compile Include="FirstLoadHelper.Designer.cs">
       <DependentUpon>FirstLoadHelper.cs</DependentUpon>
     </Compile>
+    <Compile Include="GifPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GifPreview.Designer.cs">
+      <DependentUpon>GifPreview.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -146,6 +152,8 @@
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="StringSave.cs" />
+    <Compile Include="Translation.cs" />
+    <Compile Include="Translations.cs" />
     <Compile Include="VersionInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -163,6 +171,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FirstLoadHelper.resx">
       <DependentUpon>FirstLoadHelper.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GifPreview.resx">
+      <DependentUpon>GifPreview.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>

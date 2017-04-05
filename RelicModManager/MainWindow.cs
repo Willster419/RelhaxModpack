@@ -2457,6 +2457,16 @@ namespace RelhaxModpack
             newHelper.helperText.Text = "Toggle the DarkUI mode";
             newHelper.ShowDialog();
         }
+
+        private void standardImageRB_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void thirdGuardsLoadingImageRB_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
     }
     //a class for the downloadQueue list, to make a queue of downloads
     class DownloadItem

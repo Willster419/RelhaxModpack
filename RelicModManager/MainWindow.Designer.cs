@@ -55,8 +55,12 @@
             this.cancelDownloadButton = new System.Windows.Forms.Button();
             this.downloadTimer = new System.Windows.Forms.Timer(this.components);
             this.downloadProgress = new System.Windows.Forms.RichTextBox();
+            this.languageSelectionGB = new System.Windows.Forms.GroupBox();
+            this.languageENG = new System.Windows.Forms.RadioButton();
+            this.languageGER = new System.Windows.Forms.RadioButton();
             this.settingsGroupBox.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
+            this.languageSelectionGB.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusLabel
@@ -301,6 +305,7 @@
             this.thirdGuardsLoadingImageRB.Text = "3rdguards";
             this.thirdGuardsLoadingImageRB.UseVisualStyleBackColor = true;
             this.thirdGuardsLoadingImageRB.CheckedChanged += new System.EventHandler(this.standardImageRB_CheckedChanged);
+            this.thirdGuardsLoadingImageRB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.thirdGuardsLoadingImageRB_MouseDown);
             this.thirdGuardsLoadingImageRB.MouseEnter += new System.EventHandler(this.thirdGuardsLoadingImageRB_MouseEnter);
             this.thirdGuardsLoadingImageRB.MouseLeave += new System.EventHandler(this.thirdGuardsLoadingImageRB_MouseLeave);
             // 
@@ -315,6 +320,7 @@
             this.standardImageRB.Text = "Standard";
             this.standardImageRB.UseVisualStyleBackColor = true;
             this.standardImageRB.CheckedChanged += new System.EventHandler(this.thirdGuardsLoadingImageRB_CheckedChanged);
+            this.standardImageRB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.standardImageRB_MouseDown);
             this.standardImageRB.MouseEnter += new System.EventHandler(this.standardImageRB_MouseEnter);
             this.standardImageRB.MouseLeave += new System.EventHandler(this.standardImageRB_MouseLeave);
             // 
@@ -356,11 +362,46 @@
             this.downloadProgress.TabIndex = 29;
             this.downloadProgress.Text = "";
             // 
+            // languageSelectionGB
+            // 
+            this.languageSelectionGB.Controls.Add(this.languageGER);
+            this.languageSelectionGB.Controls.Add(this.languageENG);
+            this.languageSelectionGB.Location = new System.Drawing.Point(114, 253);
+            this.languageSelectionGB.Name = "languageSelectionGB";
+            this.languageSelectionGB.Size = new System.Drawing.Size(163, 52);
+            this.languageSelectionGB.TabIndex = 30;
+            this.languageSelectionGB.TabStop = false;
+            this.languageSelectionGB.Text = "Language Selection";
+            // 
+            // languageENG
+            // 
+            this.languageENG.AutoSize = true;
+            this.languageENG.Checked = true;
+            this.languageENG.Location = new System.Drawing.Point(6, 13);
+            this.languageENG.Name = "languageENG";
+            this.languageENG.Size = new System.Drawing.Size(48, 17);
+            this.languageENG.TabIndex = 0;
+            this.languageENG.TabStop = true;
+            this.languageENG.Text = "ENG";
+            this.languageENG.UseVisualStyleBackColor = true;
+            // 
+            // languageGER
+            // 
+            this.languageGER.AutoSize = true;
+            this.languageGER.Enabled = false;
+            this.languageGER.Location = new System.Drawing.Point(6, 29);
+            this.languageGER.Name = "languageGER";
+            this.languageGER.Size = new System.Drawing.Size(48, 17);
+            this.languageGER.TabIndex = 1;
+            this.languageGER.Text = "GER";
+            this.languageGER.UseVisualStyleBackColor = true;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(289, 497);
+            this.Controls.Add(this.languageSelectionGB);
             this.Controls.Add(this.downloadProgress);
             this.Controls.Add(this.cancelDownloadButton);
             this.Controls.Add(this.findBugAddModLabel);
@@ -384,6 +425,8 @@
             this.settingsGroupBox.PerformLayout();
             this.loadingImageGroupBox.ResumeLayout(false);
             this.loadingImageGroupBox.PerformLayout();
+            this.languageSelectionGB.ResumeLayout(false);
+            this.languageSelectionGB.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -416,6 +459,9 @@
         private System.Windows.Forms.CheckBox cleanUninstallCB;
         private System.Windows.Forms.RichTextBox downloadProgress;
         private System.Windows.Forms.CheckBox darkUICB;
+        private System.Windows.Forms.GroupBox languageSelectionGB;
+        private System.Windows.Forms.RadioButton languageGER;
+        private System.Windows.Forms.RadioButton languageENG;
     }
 }
 
