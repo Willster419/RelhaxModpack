@@ -56,8 +56,8 @@
             this.downloadTimer = new System.Windows.Forms.Timer(this.components);
             this.downloadProgress = new System.Windows.Forms.RichTextBox();
             this.languageSelectionGB = new System.Windows.Forms.GroupBox();
-            this.languageENG = new System.Windows.Forms.RadioButton();
             this.languageGER = new System.Windows.Forms.RadioButton();
+            this.languageENG = new System.Windows.Forms.RadioButton();
             this.settingsGroupBox.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
@@ -305,9 +305,9 @@
             this.thirdGuardsLoadingImageRB.Text = "3rdguards";
             this.thirdGuardsLoadingImageRB.UseVisualStyleBackColor = true;
             this.thirdGuardsLoadingImageRB.CheckedChanged += new System.EventHandler(this.standardImageRB_CheckedChanged);
-            this.thirdGuardsLoadingImageRB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.thirdGuardsLoadingImageRB_MouseDown);
-            this.thirdGuardsLoadingImageRB.MouseEnter += new System.EventHandler(this.thirdGuardsLoadingImageRB_MouseEnter);
-            this.thirdGuardsLoadingImageRB.MouseLeave += new System.EventHandler(this.thirdGuardsLoadingImageRB_MouseLeave);
+            this.thirdGuardsLoadingImageRB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.standardImageRB_MouseDown);
+            this.thirdGuardsLoadingImageRB.MouseEnter += new System.EventHandler(this.standardImageRB_MouseEnter);
+            this.thirdGuardsLoadingImageRB.MouseLeave += new System.EventHandler(this.standardImageRB_MouseLeave);
             // 
             // standardImageRB
             // 
@@ -319,7 +319,7 @@
             this.standardImageRB.TabStop = true;
             this.standardImageRB.Text = "Standard";
             this.standardImageRB.UseVisualStyleBackColor = true;
-            this.standardImageRB.CheckedChanged += new System.EventHandler(this.thirdGuardsLoadingImageRB_CheckedChanged);
+            this.standardImageRB.CheckedChanged += new System.EventHandler(this.standardImageRB_CheckedChanged);
             this.standardImageRB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.standardImageRB_MouseDown);
             this.standardImageRB.MouseEnter += new System.EventHandler(this.standardImageRB_MouseEnter);
             this.standardImageRB.MouseLeave += new System.EventHandler(this.standardImageRB_MouseLeave);
@@ -373,6 +373,18 @@
             this.languageSelectionGB.TabStop = false;
             this.languageSelectionGB.Text = "Language Selection";
             // 
+            // languageGER
+            // 
+            this.languageGER.AutoSize = true;
+            this.languageGER.Enabled = false;
+            this.languageGER.Location = new System.Drawing.Point(6, 29);
+            this.languageGER.Name = "languageGER";
+            this.languageGER.Size = new System.Drawing.Size(48, 17);
+            this.languageGER.TabIndex = 1;
+            this.languageGER.Text = "GER";
+            this.languageGER.UseVisualStyleBackColor = true;
+            this.languageGER.CheckedChanged += new System.EventHandler(this.languageGER_CheckedChanged);
+            // 
             // languageENG
             // 
             this.languageENG.AutoSize = true;
@@ -384,17 +396,7 @@
             this.languageENG.TabStop = true;
             this.languageENG.Text = "ENG";
             this.languageENG.UseVisualStyleBackColor = true;
-            // 
-            // languageGER
-            // 
-            this.languageGER.AutoSize = true;
-            this.languageGER.Enabled = false;
-            this.languageGER.Location = new System.Drawing.Point(6, 29);
-            this.languageGER.Name = "languageGER";
-            this.languageGER.Size = new System.Drawing.Size(48, 17);
-            this.languageGER.TabIndex = 1;
-            this.languageGER.Text = "GER";
-            this.languageGER.UseVisualStyleBackColor = true;
+            this.languageENG.CheckedChanged += new System.EventHandler(this.languageENG_CheckedChanged);
             // 
             // MainWindow
             // 

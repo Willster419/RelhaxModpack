@@ -19,6 +19,7 @@ namespace RelhaxModpack
 
         private void PleaseWait_Load(object sender, EventArgs e)
         {
+            label1.Text = Translations.getTranslatedString(label1.Name);
             Settings.setUIColor(this);
         }
     }

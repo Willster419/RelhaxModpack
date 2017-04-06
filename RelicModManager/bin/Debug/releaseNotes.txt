@@ -1,3 +1,8 @@
+Version 21.4.0:
+- Added ability to preview loading gifs from the main window
+- Enabled support for translations. Need volunteers to translate.
+- Fixed (from spreadsheet) bug #2: "Preview Pictures to small". You can now click on the preview picture to maximize the window
+
 Version 21.3.0:
 - Fixed bug where not every font was changed to comic sans/large
 - Added dark UI option

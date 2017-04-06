@@ -9,11 +9,22 @@ using System.Windows.Forms;
 
 namespace RelhaxModpack
 {
-    public partial class GifPreview : Form
+    public partial class loadingGifPreview : Form
     {
-        public GifPreview()
+        int x, y;
+        public loadingGifPreview(int newX, int newY)
         {
             InitializeComponent();
+            x = newX;
+            y = newY;
+        }
+        //use load to move the location of the form
+        private void GifPreview_Load(object sender, EventArgs e)
+        {
+            Settings.appendToLog("GifPreview: opening at x: " + x + ", y: " +y);
+            this.Location = new Point(x,y);
+            Settings.setUIColor(this);
+            gifPreviewBox.Image = Settings.getLoadingImage();
         }
     }
 }

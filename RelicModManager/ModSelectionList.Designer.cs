@@ -216,9 +216,9 @@
             // 
             // loadConfigButton
             // 
-            this.loadConfigButton.Location = new System.Drawing.Point(728, 438);
+            this.loadConfigButton.Location = new System.Drawing.Point(671, 438);
             this.loadConfigButton.Name = "loadConfigButton";
-            this.loadConfigButton.Size = new System.Drawing.Size(62, 23);
+            this.loadConfigButton.Size = new System.Drawing.Size(90, 23);
             this.loadConfigButton.TabIndex = 9;
             this.loadConfigButton.Text = "Load Pref";
             this.loadConfigButton.UseVisualStyleBackColor = true;
@@ -226,9 +226,9 @@
             // 
             // saveConfigButton
             // 
-            this.saveConfigButton.Location = new System.Drawing.Point(796, 438);
+            this.saveConfigButton.Location = new System.Drawing.Point(767, 438);
             this.saveConfigButton.Name = "saveConfigButton";
-            this.saveConfigButton.Size = new System.Drawing.Size(64, 23);
+            this.saveConfigButton.Size = new System.Drawing.Size(93, 23);
             this.saveConfigButton.TabIndex = 10;
             this.saveConfigButton.Text = "Save Pref";
             this.saveConfigButton.UseVisualStyleBackColor = true;
@@ -245,7 +245,7 @@
             // 
             // clearSelectionsButton
             // 
-            this.clearSelectionsButton.Location = new System.Drawing.Point(634, 438);
+            this.clearSelectionsButton.Location = new System.Drawing.Point(577, 438);
             this.clearSelectionsButton.Name = "clearSelectionsButton";
             this.clearSelectionsButton.Size = new System.Drawing.Size(88, 23);
             this.clearSelectionsButton.TabIndex = 13;

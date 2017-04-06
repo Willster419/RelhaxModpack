@@ -35,6 +35,18 @@ namespace RelhaxModpack
         {
             InitializeComponent();
         }
+
+        private void applyTranslations()
+        {
+            continueButton.Text = Translations.getTranslatedString(continueButton.Name);
+            cancelButton.Text = Translations.getTranslatedString(cancelButton.Name);
+            helpLabel.Text = Translations.getTranslatedString(helpLabel.Name);
+            loadConfigButton.Text = Translations.getTranslatedString(loadConfigButton.Name);
+            saveConfigButton.Text = Translations.getTranslatedString(saveConfigButton.Name);
+            label2.Text = Translations.getTranslatedString(label2.Name);
+            clearSelectionsButton.Text = Translations.getTranslatedString(clearSelectionsButton.Name);
+        }
+
         //called on application startup
         private void ModSelectionList_Load(object sender, EventArgs e)
         {
@@ -43,7 +55,9 @@ namespace RelhaxModpack
             pw.Show();
             //set the font from settings
             this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
-            pw.loadingDescBox.Text = "Reading Database...";
+            //apply the translations
+            this.applyTranslations();
+            pw.loadingDescBox.Text = Translations.getTranslatedString("readingDatabase");
             Application.DoEvents();
             string databaseURL = "http://willster419.atwebpages.com/Applications/RelHaxModPack/modInfo.xml";
             if (Program.testMode)
@@ -57,7 +71,7 @@ namespace RelhaxModpack
                 Application.Exit();
             }
             this.initUserMods();
-            pw.loadingDescBox.Text = "Building UI...";
+            pw.loadingDescBox.Text = Translations.getTranslatedString("buildingUI");
             Application.DoEvents();
             //the default loadConfig mode shold be from clicking the button
             loadMode = loadConfigMode.fromButton;
@@ -155,7 +169,7 @@ namespace RelhaxModpack
                         int i = 1;
                         foreach (Mod m in c.mods)
                         {
-                            pw.loadingDescBox.Text = "Loading " + m.name;
+                            pw.loadingDescBox.Text = Translations.getTranslatedString("loading") + " " + m.name;
                             Application.DoEvents();
                             this.addMod(m, t, i++);
                         }
@@ -1165,7 +1179,7 @@ namespace RelhaxModpack
             catch (XmlException)
             {
                 Settings.appendToLog("CRITICAL: Failed to read database!");
-                MessageBox.Show("CRITICAL: Failed to read database!");
+                MessageBox.Show(Translations.getTranslatedString("databaseReadFailed"));
                 Application.Exit();
             }
             //add the global dependencies
@@ -1602,7 +1616,7 @@ namespace RelhaxModpack
             doc.Save(savePath);
             if (fromButton)
             {
-                MessageBox.Show("Config Saved Sucessfully");
+                MessageBox.Show(Translations.getTranslatedString("configSaveSucess"));
             }
         }
         //loads a saved config from xml and parses it into the memory database
@@ -1617,7 +1631,7 @@ namespace RelhaxModpack
                 if (!File.Exists(filePath))
                 {
                     Settings.appendToLog("ERROR: " + filePath + " not found, not loading configs");
-                    MessageBox.Show("The config file could not be loaded, loading in standard mode");
+                    MessageBox.Show(Translations.getTranslatedString("configLoadFailed"));
                 }
             }
             else if (loadMode == loadConfigMode.fromSaveLastConfig)
@@ -1626,7 +1640,7 @@ namespace RelhaxModpack
                 if (!File.Exists(filePath))
                 {
                     Settings.appendToLog("ERROR: " + filePath + " not found, not loading configs");
-                    MessageBox.Show("The config file could not be loaded, loading in standard mode");
+                    MessageBox.Show(Translations.getTranslatedString("configLoadFailed"));
                 }
             }
             else
@@ -1635,7 +1649,7 @@ namespace RelhaxModpack
                 loadLocation.DefaultExt = ".xml";
                 loadLocation.Filter = "*.xml|*.xml";
                 loadLocation.InitialDirectory = Application.StartupPath + "\\RelHaxUserConfigs";
-                loadLocation.Title = "Select User pref to load";
+                loadLocation.Title = Translations.getTranslatedString("selectConfigFile");
                 if (loadLocation.ShowDialog().Equals(DialogResult.Cancel))
                 {
                     //quit
@@ -1663,7 +1677,7 @@ namespace RelhaxModpack
                             if (m == null)
                             {
                                 Settings.appendToLog("WARNING: mod \"" + nn.InnerText + "\" not found");
-                                MessageBox.Show("The mod, \"" + nn.InnerText + "\" was not found in the modpack. It could have been renamed or removed.");
+                                MessageBox.Show(Translations.getTranslatedString("modNotFound_1") + nn.InnerText + Translations.getTranslatedString("modNotFound_2"));
                                 continue;
                             }
                             if (m.enabled)
@@ -1689,7 +1703,7 @@ namespace RelhaxModpack
                                             if (c == null)
                                             {
                                                 Settings.appendToLog("WARNING: config \"" + nnnn.InnerText + "\" not found for mod \"" + nn.InnerText + "\"");
-                                                MessageBox.Show("The config \"" + nnnn.InnerText + "\" not found for mod \"" + nn.InnerText + "\". It could have been renamed or removed.");
+                                                MessageBox.Show(Translations.getTranslatedString("configNotFound_1") + nnnn.InnerText + Translations.getTranslatedString("configNotFound_2") + nn.InnerText + Translations.getTranslatedString("configNotFound_3"));
                                                 continue;
                                             }
                                             if (c.enabled)
@@ -1731,7 +1745,7 @@ namespace RelhaxModpack
             }
             Settings.appendToLog("Finished loading mod selections");
             if (loadMode == loadConfigMode.fromButton)
-                MessageBox.Show("Prefrences Set");
+                MessageBox.Show(Translations.getTranslatedString("prefrencesSet"));
             //reload the UI
             this.UseWaitCursor = true;
             this.makeTabs();
@@ -1860,7 +1874,7 @@ namespace RelhaxModpack
         {
             this.clearSelectionMemory();
             Settings.appendToLog("clearSelectionsButton pressed, clearing selections");
-            MessageBox.Show("Selections cleared");
+            MessageBox.Show(Translations.getTranslatedString("selectionsCleared"));
             //reload the UI
             this.UseWaitCursor = true;
             this.makeTabs();

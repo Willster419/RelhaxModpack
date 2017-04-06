@@ -36,7 +36,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 21.3.0";
+        private string managerVersion = "version 21.4.0";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -112,6 +112,7 @@ namespace RelhaxModpack
         float currentTotalBytesDownloaded = 0;
         float differenceTotalBytesDownloaded = 0;
         float sessionDownloadSpeed = 0;
+        private loadingGifPreview gp;
 
         //The constructur for the application
         public MainWindow()
@@ -134,7 +135,7 @@ namespace RelhaxModpack
             string currentModDownloadingShort = currentModDownloading;
             if (currentModDownloading.Length > 200)
                 currentModDownloadingShort = currentModDownloading.Substring(0, 15) + "...";
-            downloadProgress.Text = "Downloading " + currentModDownloadingShort + " (" + Math.Round(MBytesIn, 1) + " MB" + " of " + Math.Round(MBytesTotal, 1) + " MB)";
+            downloadProgress.Text = Translations.getTranslatedString("Downloading") + currentModDownloadingShort + " (" + Math.Round(MBytesIn, 1) + " MB" + " of " + Math.Round(MBytesTotal, 1) + " MB)";
             //set the progress bar
             childProgressBar.Value = e.ProgressPercentage;
             //set the download speed
@@ -171,8 +172,9 @@ namespace RelhaxModpack
             {
                 //update the UI and download state
                 state = InstallState.idle;
+                toggleUIButtons(true);
                 speedLabel.Text = "";
-                downloadProgress.Text = "Idle";
+                downloadProgress.Text = Translations.getTranslatedString("idle");
                 parrentProgressBar.Value = 0;
                 childProgressBar.Value = 0;
                 return;
@@ -185,7 +187,7 @@ namespace RelhaxModpack
             {
                 //404
                 Settings.appendToLog("ERROR: " + tempOldDownload + " failed to download");
-                MessageBox.Show("Failed to download " + tempOldDownload + ". If you know which mod this is, uncheck it and you should be fine. It will be fixed soon. Restart this when it exits");
+                MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + tempOldDownload + Translations.getTranslatedString("failedToDownload_2"));
                 Application.Exit();
             }
             if (downloadQueue.Count != 0)
@@ -276,7 +278,7 @@ namespace RelhaxModpack
         //main method for executing all Modpack and user patches
         private void patchFiles()
         {
-            speedLabel.Text = "Patching...";
+            speedLabel.Text = Translations.getTranslatedString("patching") + "...";
             Application.DoEvents();
             Settings.appendToLog("Starting to patch Relhax Mod Pack");
             //don't do anything if the file does not exist
@@ -298,7 +300,7 @@ namespace RelhaxModpack
                 int maxLength = 200;
                 if (p.file.Length > maxLength)
                     patchFileOutput = p.file.Substring(0, maxLength);
-                downloadProgress.Text = "patching " + patchFileOutput + "...";
+                downloadProgress.Text = Translations.getTranslatedString("patching") + patchFileOutput + "...";
                 Application.DoEvents();
                 if (p.type.Equals("regx"))
                 {
@@ -353,16 +355,17 @@ namespace RelhaxModpack
         //installs all fonts in the fonts folder, user and custom
         private void installFonts()
         {
-            speedLabel.Text = "Installing Fonts...";
+            speedLabel.Text = Translations.getTranslatedString("installingFonts") + "...";
             if (!Directory.Exists(tanksLocation + "\\_fonts"))
             {
                 //no fonts to install, done display
                 speedLabel.Text = "";
-                downloadProgress.Text = "Done!";
+                downloadProgress.Text = Translations.getTranslatedString("done");
                 parrentProgressBar.Maximum = 1;
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Value = childProgressBar.Maximum;
                 state = InstallState.idle;
+                toggleUIButtons(true);
                 return;
             }
             string[] fonts = Directory.GetFiles(tanksLocation + "\\_fonts");
@@ -370,11 +373,12 @@ namespace RelhaxModpack
             {
                 //done display
                 speedLabel.Text = "";
-                downloadProgress.Text = "Done!";
+                downloadProgress.Text = Translations.getTranslatedString("done");
                 parrentProgressBar.Maximum = 1;
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Value = childProgressBar.Maximum;
                 state = InstallState.idle;
+                toggleUIButtons(true);
                 return;
             }
             //convert the array to a list
@@ -405,11 +409,12 @@ namespace RelhaxModpack
             {
                 //done display
                 speedLabel.Text = "";
-                downloadProgress.Text = "Done!";
+                downloadProgress.Text = Translations.getTranslatedString("done");
                 parrentProgressBar.Maximum = 1;
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Value = childProgressBar.Maximum;
                 state = InstallState.idle;
+                toggleUIButtons(true);
                 return;
             }
             Settings.appendToLog("Installing fonts");
@@ -443,17 +448,18 @@ namespace RelhaxModpack
                 catch (Win32Exception)
                 {
                     Settings.appendToLog("ERROR: could not start font installer");
-                    MessageBox.Show("Unable to install fonts. Some mods may not work properly. Fonts are located in " + tanksLocation + "\\_fonts. Eithor install them yourself or run this again as Administrator");
+                    MessageBox.Show(Translations.getTranslatedString("fontsPromptError_1") + tanksLocation + Translations.getTranslatedString("fontsPromptError_1"));
                     return;
                 }
                 if (Directory.Exists(tanksLocation + "\\_fonts"))
                     Directory.Delete(tanksLocation + "\\_fonts", true);
                 speedLabel.Text = "";
-                downloadProgress.Text = "Done!";
+                downloadProgress.Text = Translations.getTranslatedString("done");
                 parrentProgressBar.Maximum = 1;
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Value = childProgressBar.Maximum;
                 state = InstallState.idle;
+                toggleUIButtons(true);
                 Settings.appendToLog("Fonts Installed Successfully");
             }
         }
@@ -518,7 +524,7 @@ namespace RelhaxModpack
             {
                 //404
                 Settings.appendToLog("ERROR: unable to download new application version");
-                MessageBox.Show("Unable to download new version, exiting!");
+                MessageBox.Show(Translations.getTranslatedString("cantDownloadNewVersion"));
                 this.Close();
             }
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
@@ -537,7 +543,7 @@ namespace RelhaxModpack
             catch (Win32Exception)
             {
                 Settings.appendToLog("WARNING: could not start new application version");
-                MessageBox.Show("Unable to start application, but it is located in \n" + newExeName);
+                MessageBox.Show(Translations.getTranslatedString("cantStartNewApp") + newExeName);
             }
             Application.Exit();
         }
@@ -568,13 +574,6 @@ namespace RelhaxModpack
             string version = temp[0].Trim();
             version = version.Substring(2);
             return version;
-        }
-        //Method for displaying an error message
-        private void displayError(String errorText, String errorHandle)
-        {
-            if (errorHandle == null) MessageBox.Show(errorText);
-            else MessageBox.Show(errorText, errorHandle);
-            downloadProgress.Text = "Aborted";
         }
         //main unzip worker method
         private void unzip(string zipFile, string extractFolder)
@@ -628,10 +627,10 @@ namespace RelhaxModpack
         //reset the UI and critical componets
         private void reset()
         {
-            downloadProgress.Text = "Idle";
+            downloadProgress.Text = Translations.getTranslatedString("idle");
             childProgressBar.Value = 0;
             parrentProgressBar.Value = 0;
-            statusLabel.Text = "STATUS:";
+            statusLabel.Text = Translations.getTranslatedString("status");
         }
         //checks the registry to get the location of where WoT is installed
         //idea: if the user can open replay files, this can get the WoT exe filepath
@@ -654,7 +653,7 @@ namespace RelhaxModpack
             //unable to find it in the registry, so ask for it
             if (findWotExe.ShowDialog().Equals(DialogResult.Cancel))
             {
-                downloadProgress.Text = "Canceled";
+                downloadProgress.Text = Translations.getTranslatedString("canceled");
                 return null;
             }
             tanksLocation = findWotExe.FileName;
@@ -669,11 +668,11 @@ namespace RelhaxModpack
             PleaseWait wait = new PleaseWait();
             wait.Show();
             WebRequest.DefaultWebProxy = null;
-            wait.loadingDescBox.Text = "Checking for single instance...";
+            wait.loadingDescBox.Text = "Verifying single instance...";
             Application.DoEvents();
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 04/04/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 04/05/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -691,11 +690,17 @@ namespace RelhaxModpack
                 MessageBox.Show("CRITICAL: Another Instance of the relic mod manager is already running");
                 this.Close();
             }
-            wait.loadingDescBox.Text = "Checking for updates...";
+            //load translations
+            wait.loadingDescBox.Text = Translations.getTranslatedString("loadingTranslations");
+            Settings.appendToLog("started loading translations");
+            Application.DoEvents();
+            Translations.loadHashes();
+            wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
             Application.DoEvents();
             if (Program.skipUpdate)
             {
                 Settings.appendToLog("/skip-update switch detected, skipping application update");
+                if (!Program.testMode) MessageBox.Show(Translations.getTranslatedString("skipUpdateWarning"));
             }
             else
             {
@@ -708,10 +713,10 @@ namespace RelhaxModpack
             if (false && !Program.patchDayTest)
             {
                 Settings.appendToLog("Patch day disable detected. Remember To override use /patchday");
-                MessageBox.Show("The modpack is curretly down for patch day testing and mods updating. Sorry for the inconvience. If you are a database manager, please add the command arguement");
+                MessageBox.Show(Translations.getTranslatedString("patchDayMessage"));
                 this.Close();
             }
-            wait.loadingDescBox.Text = "Verifying Directory Structure...";
+            wait.loadingDescBox.Text = Translations.getTranslatedString("verDirStructure");
             Application.DoEvents();
             //create directory structures
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxDownloads")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxDownloads");
@@ -719,8 +724,9 @@ namespace RelhaxModpack
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup");
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxUserConfigs")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxUserConfigs");
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxTemp")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxTemp");
+            
             //load settings
-            wait.loadingDescBox.Text = "Loading Settings...";
+            wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
             Settings.appendToLog("Loading settings");
             Settings.loadSettings();
             this.applySettings();
@@ -733,20 +739,20 @@ namespace RelhaxModpack
                 Settings.appendToLog("Auto Install is ON, checking for config pref xml at " + Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName);
                 if (!File.Exists(Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName))
                 {
-                    Settings.appendToLog("ERROR: " + Program.configName + " does NOT exist, loading in regular mode");
+                    Settings.appendToLog(Translations.getTranslatedString("extractionErrorHeader") + ": " + Program.configName + " does NOT exist, loading in regular mode");
                     MessageBox.Show("ERROR: " + Program.configName + " does NOT exist, loading in regular mode");
                     Program.autoInstall = false;
                 }
                 if (!Settings.cleanInstallation)
                 {
                     Settings.appendToLog("ERROR: clean installation is set to false. This must be set to true for auto install to work. Loading in regular mode.");
-                    MessageBox.Show("ERROR: clean installation is set to false. You must set this to true and restart the application for auto install to work. Loading in regular mode.");
+                    MessageBox.Show(Translations.getTranslatedString("autoAndClean"));
                     Program.autoInstall = false;
                 }
                 if (Settings.firstLoad)
                 {
                     Settings.appendToLog("ERROR: First time loading cannot be an auto install mode, loading in regular mode");
-                    MessageBox.Show("ERROR: First time loading cannot be an auto install mode, loading in regular mode");
+                    MessageBox.Show(Translations.getTranslatedString("autoAndFirst"));
                     Program.autoInstall = false;
                 }
             }
@@ -768,6 +774,7 @@ namespace RelhaxModpack
             }
             wait.Close();
             state = InstallState.idle;
+            toggleUIButtons(true);
             Application.DoEvents();
             Program.saveSettings = true;
         }
@@ -1131,7 +1138,7 @@ namespace RelhaxModpack
             catch (JsonReaderException)
             {
                 Settings.appendToLog("ERROR: Failed to patch " + jsonFile);
-                MessageBox.Show("ERROR: Failed to patch " + jsonFile);
+                //MessageBox.Show("ERROR: Failed to patch " + jsonFile);
                 if (Program.testMode)
                 {
                     //in test mode this is worthy of an exeption
@@ -1261,6 +1268,7 @@ namespace RelhaxModpack
         {
             //bool to say to the downloader to use the "modpack" code
             modPack = true;
+            toggleUIButtons(false);
             state = InstallState.idle;
             downloadPath = Application.StartupPath + "\\RelHaxDownloads";
             //reset the interface
@@ -1274,8 +1282,9 @@ namespace RelhaxModpack
             //parse all strings for installation
             if (this.parseStrings() == null)
             {
-                this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
+                MessageBox.Show(Translations.getTranslatedString("autoDetectFailed"));
                 state = InstallState.error;
+                toggleUIButtons(true);
                 return;
             }
             tanksVersion = this.getFolderVersion(null);
@@ -1327,11 +1336,12 @@ namespace RelhaxModpack
             if (list.cancel)
             {
                 state = InstallState.idle;
+                toggleUIButtons(true);
                 return;
             }
             if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
                 File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
-            downloadProgress.Text = "Loading...";
+            downloadProgress.Text = Translations.getTranslatedString("loading");
             Application.DoEvents();
             modsToInstall = new List<Mod>();
             configsToInstall = new List<Config>();
@@ -1407,7 +1417,8 @@ namespace RelhaxModpack
                     this.downloader_DownloadFileCompleted(null, null);
                 }
                 //pull out because there are no mods to install
-                downloadProgress.Text = "Idle";
+                downloadProgress.Text = Translations.getTranslatedString("idle");
+                toggleUIButtons(true);
                 return;
             }
             //foreach mod and config, if the crc's don't match, add it to the downloadQueue
@@ -1485,6 +1496,7 @@ namespace RelhaxModpack
         private void uninstallRelhaxMod_Click(object sender, EventArgs e)
         {
             modPack = true;
+            toggleUIButtons(false);
             //reset the interface
             this.reset();
             //attempt to locate the tanks directory
@@ -1495,15 +1507,15 @@ namespace RelhaxModpack
             //parse all strings
             if (this.parseStrings() == null)
             {
-                this.displayError("The auto-detection failed. Please use the 'force manual' option", null);
+                MessageBox.Show(Translations.getTranslatedString("autoDetectFailed"));
                 return;
             }
-            if (MessageBox.Show("Confirm you wish to uninstall?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show(Translations.getTranslatedString("confirmUninstallMessage"), Translations.getTranslatedString("confirmUninstallHeader"), MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 if (Settings.cleanUninstall)
                 {
                     //run the recursive complete uninstaller
-                    downloadProgress.Text = "Uninstalling...";
+                    downloadProgress.Text = Translations.getTranslatedString("uninstalling") + "...";
                     state = InstallState.uninstallResMods;
                     this.backgroundDelete(tanksLocation + "\\res_mods");
                 }
@@ -1537,7 +1549,7 @@ namespace RelhaxModpack
         {
             numFilesToProcessInt = 0;
             numFilesToCopyDeleteExtract = 0;
-            downloadProgress.Text = "Copying file " + numFilesToCopyDeleteExtract + " of " + numFilesToProcessInt;
+            downloadProgress.Text = Translations.getTranslatedString("copyingFile") + numFilesToCopyDeleteExtract + Translations.getTranslatedString("of") + numFilesToProcessInt;
             copyworker = new BackgroundWorker();
             copyworker.WorkerReportsProgress = true;
             copyworker.DoWork += new DoWorkEventHandler(copyworker_DoWork);
@@ -1554,7 +1566,7 @@ namespace RelhaxModpack
         {
             numFilesToProcessInt = 0;
             numFilesToCopyDeleteExtract = 0;
-            downloadProgress.Text = "Copying file " + numFilesToCopyDeleteExtract + " of " + numFilesToProcessInt;
+            downloadProgress.Text = Translations.getTranslatedString("deletingFile") + numFilesToCopyDeleteExtract + Translations.getTranslatedString("of") + numFilesToProcessInt;
             deleteworker = new BackgroundWorker();
             deleteworker.WorkerReportsProgress = true;
             deleteworker.DoWork += new DoWorkEventHandler(deleteworker_DoWork);
@@ -1569,7 +1581,7 @@ namespace RelhaxModpack
         {
             numFilesToProcessInt = 0;
             numFilesToCopyDeleteExtract = 0;
-            downloadProgress.Text = "Loading Extraction Text...";
+            downloadProgress.Text = Translations.getTranslatedString("loadingExtractionText") + "...";
             extractworker = new BackgroundWorker();
             extractworker.WorkerReportsProgress = true;
             extractworker.DoWork += new DoWorkEventHandler(extractworker_DoWork);
@@ -1582,14 +1594,14 @@ namespace RelhaxModpack
             userExtract = user;
             if (!userExtract)
             {
-                speedLabel.Text = "Extracting RelHax Mods...";
+                speedLabel.Text = Translations.getTranslatedString("extractingRelhaxMods") + "...";
                 parrentProgressBar.Maximum = modsToInstall.Count + configsToInstall.Count + dependencies.Count;
                 parrentProgressBar.Value = 0;
                 childProgressBar.Value = 0;
             }
             else
             {
-                speedLabel.Text = "Extracting User Mods...";
+                speedLabel.Text = Translations.getTranslatedString("extractingUserMods") + "...";
                 parrentProgressBar.Maximum = userMods.Count;
                 parrentProgressBar.Value = 0;
                 childProgressBar.Value = 0;
@@ -1603,7 +1615,7 @@ namespace RelhaxModpack
             numFilesToProcessInt = 0;
             numFilesToCopyDeleteExtract = 0;
             parrentProgressBar.Value = parrentProgressBar.Maximum;
-            downloadProgress.Text = "Starting smart uninstall";
+            downloadProgress.Text = Translations.getTranslatedString("startingSmartUninstall");
             Settings.appendToLog("Starting smart uninstall");
             smartDeleteworker = new BackgroundWorker();
             smartDeleteworker.WorkerReportsProgress = true;
@@ -1645,7 +1657,7 @@ namespace RelhaxModpack
         //handler for the copyworker when progress is made
         private void copyworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            downloadProgress.Text = "Copying file " + numFilesToCopyDeleteExtract + " of " + numFilesToProcessInt;
+            downloadProgress.Text = Translations.getTranslatedString("copyingFile") + numFilesToCopyDeleteExtract + Translations.getTranslatedString("of") + numFilesToProcessInt;
             childProgressBar.Maximum = numFilesToProcessInt;
             childProgressBar.Value = numFilesToCopyDeleteExtract;
         }
@@ -1687,7 +1699,7 @@ namespace RelhaxModpack
         //handler for the deleteworker when progress is made
         private void deleteworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            downloadProgress.Text = "Deleting file " + numFilesToCopyDeleteExtract + " of " + numFilesToProcessInt;
+            downloadProgress.Text = Translations.getTranslatedString("deletingFile") + numFilesToCopyDeleteExtract + Translations.getTranslatedString("of") + numFilesToProcessInt;
             childProgressBar.Maximum = numFilesToProcessInt;
             childProgressBar.Value = numFilesToCopyDeleteExtract;
         }
@@ -1744,9 +1756,10 @@ namespace RelhaxModpack
                 {
                     //finish uninstallResMods process
                     state = InstallState.idle;
+                    toggleUIButtons(true);
                     if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
                     if (!Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\mods\\" + this.getFolderVersion(null));
-                    downloadProgress.Text = "Done!";
+                    downloadProgress.Text = Translations.getTranslatedString("done");
                     childProgressBar.Value = 0;
                     return;
                 }
@@ -1755,11 +1768,12 @@ namespace RelhaxModpack
             {
                 //finish uninstallResMods process
                 state = InstallState.idle;
+                toggleUIButtons(true);
                 if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
                     File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
                 if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
                 if (!Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\mods\\" + this.getFolderVersion(null));
-                downloadProgress.Text = "Done!";
+                downloadProgress.Text = Translations.getTranslatedString("done");
                 childProgressBar.Value = 0;
                 return;
             }
@@ -1847,7 +1861,7 @@ namespace RelhaxModpack
                 Settings.appendToLog("Message: " + ne.Message);
                 Settings.appendToLog("From source: " + ne.Source);
                 Settings.appendToLog("Callstack: " + ne.StackTrace);
-                MessageBox.Show("If you are seeing this, it means that you have a specific computer configuration that is affected by a bug I can't replicate on my developer system. It's harmless, but if you could send your relHaxLog to me I can fix it and you can stop seeing this message");
+                MessageBox.Show(Translations.getTranslatedString("specialMessage1"));
             }
         }
         //handler for when the extractworker is completed
@@ -1913,7 +1927,7 @@ namespace RelhaxModpack
                 string filePath = tanksLocation + "\\" + s;
                 if (File.Exists(filePath))
                 {
-                    Settings.appendToLog("Deleting file " + filePath);
+                    //Settings.appendToLog("Deleting file " + filePath);
                     File.Delete(filePath);
                     smartDeleteworker.ReportProgress(numFilesToCopyDeleteExtract++);
                 }
@@ -1930,7 +1944,7 @@ namespace RelhaxModpack
         //the method to update the UI on the uninstall process
         private void smartDeleteworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            downloadProgress.Text = "Deleting file " + numFilesToCopyDeleteExtract + " of " + numFilesToProcessInt;
+            downloadProgress.Text = Translations.getTranslatedString("deletingFile") + numFilesToCopyDeleteExtract + Translations.getTranslatedString("of") + numFilesToProcessInt;
             childProgressBar.Maximum = numFilesToProcessInt;
             if (numFilesToCopyDeleteExtract < numFilesToProcessInt)
                 childProgressBar.Value = numFilesToCopyDeleteExtract;
@@ -1938,11 +1952,12 @@ namespace RelhaxModpack
         //the method to run when the smart uninstall is compete
         private void smartDeleteworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            downloadProgress.Text = "Complete!";
+            downloadProgress.Text = Translations.getTranslatedString("done");
             childProgressBar.Value = 0;
             parrentProgressBar.Value = 0;
             Settings.appendToLog("Uninstall complete");
             state = InstallState.idle;
+            toggleUIButtons(true);
         }
         //recursivly copies every file from one place to another
         private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
@@ -1994,7 +2009,7 @@ namespace RelhaxModpack
                     }
                     catch (UnauthorizedAccessException)
                     {
-                        DialogResult res = MessageBox.Show("Extraction Error. Is World of Tanks running?", "Error", MessageBoxButtons.RetryCancel);
+                        DialogResult res = MessageBox.Show(Translations.getTranslatedString("extractionErrorMessage"), Translations.getTranslatedString("extractionErrorHeader"), MessageBoxButtons.RetryCancel);
                         if (res == DialogResult.Retry)
                         {
                             tryAgain = true;
@@ -2024,7 +2039,7 @@ namespace RelhaxModpack
                         }
                         catch (IOException)
                         {
-                            DialogResult result = MessageBox.Show("Please close all explorer windows in the res_mods (or deeper), and click ok to continue.", "close out of res_mods", MessageBoxButtons.RetryCancel);
+                            DialogResult result = MessageBox.Show(Translations.getTranslatedString("deleteErrorMessage"), Translations.getTranslatedString("deleteErrorHeader"), MessageBoxButtons.RetryCancel);
                             if (result == DialogResult.Cancel)
                                 Application.Exit();
                         }
@@ -2063,14 +2078,23 @@ namespace RelhaxModpack
         {
             //apply all checkmarks
             this.forceManuel.Checked = Settings.forceManuel;
+            this.forceManuel.Text = Translations.getTranslatedString(forceManuel.Name);
             this.cleanInstallCB.Checked = Settings.cleanInstallation;
+            this.cleanInstallCB.Text = Translations.getTranslatedString(cleanInstallCB.Name);
             this.backupModsCheckBox.Checked = Settings.backupModFolder;
+            this.backupModsCheckBox.Text = Translations.getTranslatedString(backupModsCheckBox.Name);
             this.cancerFontCB.Checked = Settings.comicSans;
+            this.cancerFontCB.Text = Translations.getTranslatedString(cancerFontCB.Name);
             this.largerFontButton.Checked = Settings.largeFont;
+            this.largerFontButton.Text = Translations.getTranslatedString(largerFontButton.Name);
             this.saveLastInstallCB.Checked = Settings.saveLastConfig;
+            this.saveLastInstallCB.Text = Translations.getTranslatedString(saveLastInstallCB.Name);
             this.saveUserDataCB.Checked = Settings.saveUserData;
+            this.saveUserDataCB.Text = Translations.getTranslatedString(saveUserDataCB.Name);
             this.cleanUninstallCB.Checked = Settings.cleanUninstall;
+            this.cleanUninstallCB.Text = Translations.getTranslatedString(cleanUninstallCB.Name);
             this.darkUICB.Checked = Settings.darkUI;
+            this.darkUICB.Text = Translations.getTranslatedString(darkUICB.Name);
             this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
             switch (Settings.gif)
             {
@@ -2093,11 +2117,7 @@ namespace RelhaxModpack
             {
                 Settings.gif = Settings.LoadingGifs.standard;
             }
-        }
-        //handler for when the "thirdguards" loading aimation is clicked
-        private void thirdGuardsLoadingImageRB_CheckedChanged(object sender, EventArgs e)
-        {
-            if (thirdGuardsLoadingImageRB.Checked)
+            else if (thirdGuardsLoadingImageRB.Checked)
             {
                 Settings.gif = Settings.LoadingGifs.thirdGuards;
             }
@@ -2106,89 +2126,73 @@ namespace RelhaxModpack
         private void forceManuel_MouseEnter(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = "This option is for forcing a manual World of Tanks game" +
-                    "location detection. Check this if you are having problems with automatically locating the game.";
+                helper.helperText.Text = Translations.getTranslatedString("forceManuelDescription");
         }
 
         private void forceManuel_MouseLeave(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = helperText;
+                helper.helperText.Text = Translations.getTranslatedString("helperText");
         }
 
         private void cleanInstallCB_MouseEnter(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = "This recommended option will empty your res_mods folder before installing" +
-                    "your new mod selections. Unless you know what you are doing, it is recommended that you keep this on to avoid problems.";
+                helper.helperText.Text = Translations.getTranslatedString("cleanInstallDescription");
         }
 
         private void cleanInstallCB_MouseLeave(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = helperText;
+                helper.helperText.Text = Translations.getTranslatedString("helperText");
         }
 
         private void backupModsCheckBox_MouseEnter(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = "Select this to make a backup of your current res_mods folder." +
-                    "Keep in mind that it only keeps the LATEST BACKUP, meaning if you check this and install," +
-                    "it will delete what is currently in the backup location and copy what you have in your res_mods folder.";
+                helper.helperText.Text = Translations.getTranslatedString("backupModsDescription");
         }
 
         private void backupModsCheckBox_MouseLeave(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = helperText;
+                helper.helperText.Text = Translations.getTranslatedString("helperText");
         }
 
         private void cancerFontCB_MouseEnter(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = "Enable Comic Sans. Yes, somebody, somewhere out there actually wanted this crap.";
+                helper.helperText.Text = Translations.getTranslatedString("comicSansDescription");
         }
 
         private void cancerFontCB_MouseLeave(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = helperText;
+                helper.helperText.Text = Translations.getTranslatedString("helperText");
         }
 
         private void largerFontButton_MouseEnter(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = "Enable this to enlarge all form font.";
+                helper.helperText.Text = Translations.getTranslatedString("enlargeFontDescription");
         }
 
         private void largerFontButton_MouseLeave(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = helperText;
+                helper.helperText.Text = Translations.getTranslatedString("helperText");
         }
 
         private void standardImageRB_MouseEnter(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = "Select a loading gif for the mod preview window.";
+                helper.helperText.Text = Translations.getTranslatedString("selectGifDesc");
         }
 
         private void standardImageRB_MouseLeave(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = helperText;
-        }
-
-        private void thirdGuardsLoadingImageRB_MouseEnter(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = "Select a loading gif for the mod preview window.";
-        }
-
-        private void thirdGuardsLoadingImageRB_MouseLeave(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = helperText;
+                helper.helperText.Text = Translations.getTranslatedString("helperText");
         }
 
         private void findBugAddModLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -2204,13 +2208,13 @@ namespace RelhaxModpack
         private void saveLastInstallCB_MouseEnter(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = "If this is selected, the installer will, upon selection window showing, load the last installed config you used.";
+                helper.helperText.Text = Translations.getTranslatedString("saveLastConfigInstall");
         }
 
         private void saveLastInstallCB_MouseLeave(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = helperText;
+                helper.helperText.Text = Translations.getTranslatedString("helperText");
         }
 
         private void cancelDownloadButton_Click(object sender, EventArgs e)
@@ -2223,8 +2227,7 @@ namespace RelhaxModpack
             if (e.Button != MouseButtons.Right)
                 return;
             FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = "This option is for forcing a manual World of Tanks game" +
-                    "location detection. Check this if you are having problems with automatically locating the game.";
+            newHelper.helperText.Text = Translations.getTranslatedString("forceManuelDescription");
             newHelper.ShowDialog();
         }
 
@@ -2233,8 +2236,7 @@ namespace RelhaxModpack
             if (e.Button != MouseButtons.Right)
                 return;
             FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = "This recommended option will empty your res_mods folder before installing" +
-                    "your new mod selections. Unless you know what you are doing, it is recommended that you keep this on to avoid problems.";
+            newHelper.helperText.Text = Translations.getTranslatedString("cleanInstallDescription");
             newHelper.ShowDialog();
         }
 
@@ -2243,9 +2245,7 @@ namespace RelhaxModpack
             if (e.Button != MouseButtons.Right)
                 return;
             FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = "Select this to make a backup of your current res_mods folder." +
-                    "Keep in mind that it only keeps the LATEST BACKUP, meaning if you check this and install," +
-                    "it will delete what is currently in the backup location and copy what you have in your res_mods folder.";
+            newHelper.helperText.Text = Translations.getTranslatedString("backupModsDescription");
             newHelper.ShowDialog();
         }
 
@@ -2254,7 +2254,7 @@ namespace RelhaxModpack
             if (e.Button != MouseButtons.Right)
                 return;
             FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = "Enable Comic Sans. Yes, somebody, somewhere out there actually wanted this crap.";
+            newHelper.helperText.Text = Translations.getTranslatedString("comicSansDescription");
             newHelper.ShowDialog();
         }
 
@@ -2263,7 +2263,7 @@ namespace RelhaxModpack
             if (e.Button != MouseButtons.Right)
                 return;
             FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = "Enable this to enlarge all form font.";
+            newHelper.helperText.Text = Translations.getTranslatedString("enlargeFontDescription");
             newHelper.ShowDialog();
         }
 
@@ -2272,7 +2272,7 @@ namespace RelhaxModpack
             if (e.Button != MouseButtons.Right)
                 return;
             FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = "If this is selected, the installer will, upon selection window showing, load the last installed config you used.";
+            newHelper.helperText.Text = Translations.getTranslatedString("saveLastConfigInstall");
             newHelper.ShowDialog();
         }
 
@@ -2338,20 +2338,20 @@ namespace RelhaxModpack
             if (e.Button != MouseButtons.Right)
                 return;
             FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = "If this is selected, the installer will save user created data (like session stats from previous battles)";
+            newHelper.helperText.Text = Translations.getTranslatedString("saveUserDataDesc");
             newHelper.ShowDialog();
         }
 
         private void saveUserDataCB_MouseEnter(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = "If this is selected, the installer will save user created data (like session stats from previous battles)";
+                helper.helperText.Text = Translations.getTranslatedString("saveUserDataDesc");
         }
 
         private void saveUserDataCB_MouseLeave(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = helperText;
+                helper.helperText.Text = Translations.getTranslatedString("helperText");
         }
         //new unistall method
         private void newUninstallMethod()
@@ -2360,7 +2360,7 @@ namespace RelhaxModpack
             if (!File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
             {
                 Settings.appendToLog("ERROR: installedRelhaxFiles.log does not exist, prompt user to delete everything instead");
-                DialogResult result = MessageBox.Show("The log file containg the installed files list (installedRelhaxFiles.log) does not exist. Would you like to remove all mods instead?", "Remove all mods", MessageBoxButtons.YesNo);
+                DialogResult result = MessageBox.Show(Translations.getTranslatedString("noUninstallLogMessage"), Translations.getTranslatedString("noUninstallLogHeader"), MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
                 {
                     state = InstallState.uninstallResMods;
@@ -2384,12 +2384,9 @@ namespace RelhaxModpack
                 if (Directory.GetFiles(directory).Length == 0 &&
                     Directory.GetDirectories(directory).Length == 0)
                 {
-                    Settings.appendToLog("Deleting directory " + directory);
+                    Settings.appendToLog("Deleting empty directory " + directory);
                     Directory.Delete(directory, false);
-                    //downloadProgress.Text = "Deleting folders... ";
-                    
                 }
-                
             }
         }
 
@@ -2412,13 +2409,13 @@ namespace RelhaxModpack
         private void cleanUninstallCB_MouseEnter(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = "Selected - All mods will be erased\nNot Selected - Only Modpack installed mods will be erased";
+                helper.helperText.Text = Translations.getTranslatedString("cleanUninstallDescription");
         }
 
         private void cleanUninstallCB_MouseLeave(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = helperText;
+                helper.helperText.Text = Translations.getTranslatedString("helperText");
         }
 
         private void cleanUninstallCB_MouseDown(object sender, MouseEventArgs e)
@@ -2426,7 +2423,7 @@ namespace RelhaxModpack
             if (e.Button != MouseButtons.Right)
                 return;
             FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = "Selected - All mods will be erased\nNot Selected - Only Modpack installed mods will be erased";
+            newHelper.helperText.Text = Translations.getTranslatedString("cleanUninstallDescription");
             newHelper.ShowDialog();
         }
 
@@ -2440,13 +2437,13 @@ namespace RelhaxModpack
         private void darkUICB_MouseEnter(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = "Toggle the DarkUI mode";
+                helper.helperText.Text = Translations.getTranslatedString("darkUIDesc");
         }
 
         private void darkUICB_MouseLeave(object sender, EventArgs e)
         {
             if (helper != null)
-                helper.helperText.Text = helperText;
+                helper.helperText.Text = Translations.getTranslatedString("helperText");
         }
 
         private void darkUICB_MouseDown(object sender, MouseEventArgs e)
@@ -2454,18 +2451,62 @@ namespace RelhaxModpack
             if (e.Button != MouseButtons.Right)
                 return;
             FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = "Toggle the DarkUI mode";
+            newHelper.helperText.Text = Translations.getTranslatedString("darkUIDesc");
             newHelper.ShowDialog();
         }
 
         private void standardImageRB_MouseDown(object sender, MouseEventArgs e)
         {
-
+            if (e.Button != System.Windows.Forms.MouseButtons.Right)
+                return;
+            RadioButton rb = (RadioButton)sender;
+            Settings.LoadingGifs backup = Settings.gif;
+            if (rb.Name.Equals("standardImageRB"))
+            {
+                Settings.gif = Settings.LoadingGifs.standard;
+            }
+            else if (rb.Name.Equals("thirdGuardsLoadingImageRB"))
+            {
+                Settings.gif = Settings.LoadingGifs.thirdGuards;
+            }
+            else
+                return;
+            //create the preview
+            if (gp != null)
+            {
+                gp.Close();
+                gp = null;
+            }
+            gp = new loadingGifPreview(this.Location.X + this.Size.Width + 5, this.Location.Y);
+            gp.Show();
+            Settings.gif = backup;
         }
-
-        private void thirdGuardsLoadingImageRB_MouseDown(object sender, MouseEventArgs e)
+        //toggle UI buttons to be enalbed or disabled
+        private void toggleUIButtons(bool enableToggle)
         {
-
+            forceManuel.Enabled = enableToggle;
+            installRelhaxMod.Enabled = enableToggle;
+            uninstallRelhaxMod.Enabled = enableToggle;
+            cleanInstallCB.Enabled = enableToggle;
+            cancerFontCB.Enabled = enableToggle;
+            backupModsCheckBox.Enabled = enableToggle;
+            darkUICB.Enabled = enableToggle;
+            cleanUninstallCB.Enabled = enableToggle;
+            saveUserDataCB.Enabled = enableToggle;
+            saveLastInstallCB.Enabled = enableToggle;
+            largerFontButton.Enabled = enableToggle;
+        }
+        
+        private void languageENG_CheckedChanged(object sender, EventArgs e)
+        {
+            Translations.language = Translations.Languages.English;
+            this.applySettings();
+        }
+        
+        private void languageGER_CheckedChanged(object sender, EventArgs e)
+        {
+            Translations.language = Translations.Languages.German;
+            this.applySettings();
         }
     }
     //a class for the downloadQueue list, to make a queue of downloads

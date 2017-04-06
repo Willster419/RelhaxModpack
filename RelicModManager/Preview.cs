@@ -118,9 +118,18 @@ namespace RelhaxModpack
             if (this.Size.Height < 700) this.Size = new Size(this.Size.Width, 700);
             if (this.Size.Width < 450) this.Size = new Size(450, this.Size.Height);
         }
+        //applies translations
+        private void applyTranslations()
+        {
+            nextPicButton.Text = Translations.getTranslatedString(nextPicButton.Name);
+            previousPicButton.Text = Translations.getTranslatedString(previousPicButton.Name);
+            devLinkLabel.Text = Translations.getTranslatedString(devLinkLabel.Name);
+        }
         //handler that triggeres right before the window is shown
         private void Preview_Load(object sender, EventArgs e)
         {
+            //update for translations
+            this.applyTranslations();
             this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
             this.Text = modOrConfigName;
             for (int i = 0; i < pictures.Count; i++)
@@ -138,11 +147,11 @@ namespace RelhaxModpack
             if (description == null)
                 description = "No Description Provided";
             else if (description.Equals(""))
-                description = "No Description Proveded";
+                description = "No Description Provided";
             if (updateComments == null)
-                updateComments = "No Update Info Proviced";
+                updateComments = "No Update Info Provided";
             else if (updateComments.Equals(""))
-                updateComments = "No Update Info Proviced";
+                updateComments = "No Update Info Provided";
             descriptionBox.Lines = description.Split('@');
             updateBox.Lines = updateComments.Split('@');
             this.Preview_SizeChanged(null, null);
@@ -158,6 +167,14 @@ namespace RelhaxModpack
         private void updateBox_LinkClicked(object sender, LinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start(e.LinkText);
+        }
+
+        private void previewPicture_Click(object sender, EventArgs e)
+        {
+            if (this.WindowState != FormWindowState.Maximized)
+                this.WindowState = FormWindowState.Maximized;
+            else
+                this.WindowState = FormWindowState.Normal;
         }
     }
 }
