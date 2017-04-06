@@ -37,6 +37,7 @@ namespace RelhaxModpack
         public const float largeSizeFont = 10.0F;
         public const string defaultFontType = "Microsoft Sance Serif";
         public const string comicSansFontType = "Comic Sans MS";
+        private static int tempLoadedLanguage = -1;
         //loads settings from xml file
         public static void loadSettings()
         {
@@ -57,6 +58,7 @@ namespace RelhaxModpack
                 Settings.saveLastConfig = false;
                 Settings.saveUserData = false;
                 Settings.cleanUninstall = false;
+                Settings.tempLoadedLanguage = 0;
                 Settings.modSelectionHeight = 250;
                 Settings.modSelectionWidth = 520;
                 Settings.applyInternalSettings();
@@ -107,6 +109,9 @@ namespace RelhaxModpack
                         case "darkUI":
                             Settings.darkUI = bool.Parse(n.InnerText);
                             break;
+                        case "language":
+                            Settings.tempLoadedLanguage = int.Parse(n.InnerText);
+                            break;
                     }
                 }
             }
@@ -142,6 +147,17 @@ namespace RelhaxModpack
                     Settings.gif = Settings.LoadingGifs.thirdGuards;
                     break;
             }
+            switch (Settings.tempLoadedLanguage)
+            {
+                case 0:
+                    //english
+                    Translations.language = Translations.Languages.English;
+                    break;
+                case 1:
+                    //german
+                    Translations.language = Translations.Languages.German;
+                    break;
+            }
         }
         //saves settings to xml file
         public static void saveSettings()
@@ -175,6 +191,9 @@ namespace RelhaxModpack
             XmlElement xdarkUI = doc.CreateElement("darkUI");
             xdarkUI.InnerText = "" + Settings.darkUI;
             settingsHolder.AppendChild(xdarkUI);
+            XmlElement xlanguage = doc.CreateElement("language");
+            xlanguage.InnerText = "" + (int)Translations.language;
+            settingsHolder.AppendChild(xlanguage);
             switch (Settings.gif)
             {
                 case (Settings.LoadingGifs.standard):

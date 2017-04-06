@@ -2109,6 +2109,21 @@ namespace RelhaxModpack
                         break;
                     }
             }
+            switch (Translations.language)
+            {
+                case (Translations.Languages.English):
+                    //set english button
+                    languageENG.CheckedChanged -= languageENG_CheckedChanged;
+                    languageENG.Checked = true;
+                    languageENG.CheckedChanged += languageENG_CheckedChanged;
+                    break;
+                case (Translations.Languages.German):
+                    //set english button
+                    languageGER.CheckedChanged -= languageGER_CheckedChanged;
+                    languageGER.Checked = true;
+                    languageGER.CheckedChanged += languageGER_CheckedChanged;
+                    break;
+            }
         }
         //handler for when the "standard" loading animation is cleicked
         private void standardImageRB_CheckedChanged(object sender, EventArgs e)
