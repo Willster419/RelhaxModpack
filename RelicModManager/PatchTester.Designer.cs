@@ -79,7 +79,7 @@
             this.regexLoadFileButton.Location = new System.Drawing.Point(149, 138);
             this.regexLoadFileButton.Name = "regexLoadFileButton";
             this.regexLoadFileButton.Size = new System.Drawing.Size(75, 23);
-            this.regexLoadFileButton.TabIndex = 3;
+            this.regexLoadFileButton.TabIndex = 1;
             this.regexLoadFileButton.Text = "load file";
             this.regexLoadFileButton.UseVisualStyleBackColor = true;
             this.regexLoadFileButton.Click += new System.EventHandler(this.regexLoadFileButton_Click);
@@ -99,7 +99,7 @@
             this.regexFilePathBox.Name = "regexFilePathBox";
             this.regexFilePathBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.regexFilePathBox.Size = new System.Drawing.Size(212, 86);
-            this.regexFilePathBox.TabIndex = 2;
+            this.regexFilePathBox.TabIndex = 0;
             this.regexFilePathBox.Text = "";
             // 
             // regexLineLabel
@@ -116,7 +116,7 @@
             this.regexLineBox.Location = new System.Drawing.Point(12, 177);
             this.regexLineBox.Name = "regexLineBox";
             this.regexLineBox.Size = new System.Drawing.Size(212, 20);
-            this.regexLineBox.TabIndex = 5;
+            this.regexLineBox.TabIndex = 2;
             // 
             // xmlModsGroupBox
             // 
@@ -136,7 +136,7 @@
             this.xmlRemoveModeButton.Location = new System.Drawing.Point(6, 58);
             this.xmlRemoveModeButton.Name = "xmlRemoveModeButton";
             this.xmlRemoveModeButton.Size = new System.Drawing.Size(60, 17);
-            this.xmlRemoveModeButton.TabIndex = 9;
+            this.xmlRemoveModeButton.TabIndex = 2;
             this.xmlRemoveModeButton.TabStop = true;
             this.xmlRemoveModeButton.Text = "remove";
             this.xmlRemoveModeButton.UseVisualStyleBackColor = true;
@@ -148,7 +148,7 @@
             this.xmlEditModsButton.Location = new System.Drawing.Point(6, 39);
             this.xmlEditModsButton.Name = "xmlEditModsButton";
             this.xmlEditModsButton.Size = new System.Drawing.Size(42, 17);
-            this.xmlEditModsButton.TabIndex = 8;
+            this.xmlEditModsButton.TabIndex = 1;
             this.xmlEditModsButton.TabStop = true;
             this.xmlEditModsButton.Text = "edit";
             this.xmlEditModsButton.UseVisualStyleBackColor = true;
@@ -160,7 +160,7 @@
             this.xmlAddModeButton.Location = new System.Drawing.Point(6, 19);
             this.xmlAddModeButton.Name = "xmlAddModeButton";
             this.xmlAddModeButton.Size = new System.Drawing.Size(43, 17);
-            this.xmlAddModeButton.TabIndex = 7;
+            this.xmlAddModeButton.TabIndex = 0;
             this.xmlAddModeButton.TabStop = true;
             this.xmlAddModeButton.Text = "add";
             this.xmlAddModeButton.UseVisualStyleBackColor = true;
@@ -171,7 +171,7 @@
             this.regexSearchBox.Location = new System.Drawing.Point(12, 216);
             this.regexSearchBox.Name = "regexSearchBox";
             this.regexSearchBox.Size = new System.Drawing.Size(212, 20);
-            this.regexSearchBox.TabIndex = 7;
+            this.regexSearchBox.TabIndex = 3;
             // 
             // regexSearchLabel
             // 
@@ -187,7 +187,7 @@
             this.regexReplaceBox.Location = new System.Drawing.Point(12, 258);
             this.regexReplaceBox.Name = "regexReplaceBox";
             this.regexReplaceBox.Size = new System.Drawing.Size(212, 20);
-            this.regexReplaceBox.TabIndex = 9;
+            this.regexReplaceBox.TabIndex = 4;
             // 
             // regexReplaceLabel
             // 
@@ -203,7 +203,7 @@
             this.xmlReplaceBox.Location = new System.Drawing.Point(250, 320);
             this.xmlReplaceBox.Name = "xmlReplaceBox";
             this.xmlReplaceBox.Size = new System.Drawing.Size(212, 20);
-            this.xmlReplaceBox.TabIndex = 21;
+            this.xmlReplaceBox.TabIndex = 10;
             // 
             // xmlReplaceLabel
             // 
@@ -219,7 +219,7 @@
             this.xmlSearchBox.Location = new System.Drawing.Point(250, 278);
             this.xmlSearchBox.Name = "xmlSearchBox";
             this.xmlSearchBox.Size = new System.Drawing.Size(212, 20);
-            this.xmlSearchBox.TabIndex = 19;
+            this.xmlSearchBox.TabIndex = 9;
             // 
             // xmlSearchLabel
             // 
@@ -235,7 +235,7 @@
             this.xmlPathBox.Location = new System.Drawing.Point(250, 239);
             this.xmlPathBox.Name = "xmlPathBox";
             this.xmlPathBox.Size = new System.Drawing.Size(212, 20);
-            this.xmlPathBox.TabIndex = 17;
+            this.xmlPathBox.TabIndex = 8;
             // 
             // xmlPathLabel
             // 
@@ -252,7 +252,7 @@
             this.xmlFilePathBox.Name = "xmlFilePathBox";
             this.xmlFilePathBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.xmlFilePathBox.Size = new System.Drawing.Size(212, 86);
-            this.xmlFilePathBox.TabIndex = 13;
+            this.xmlFilePathBox.TabIndex = 6;
             this.xmlFilePathBox.Text = "";
             // 
             // xmlFilePathLabel
@@ -269,7 +269,7 @@
             this.xmlLoadFileButton.Location = new System.Drawing.Point(387, 138);
             this.xmlLoadFileButton.Name = "xmlLoadFileButton";
             this.xmlLoadFileButton.Size = new System.Drawing.Size(75, 23);
-            this.xmlLoadFileButton.TabIndex = 14;
+            this.xmlLoadFileButton.TabIndex = 7;
             this.xmlLoadFileButton.Text = "load file";
             this.xmlLoadFileButton.UseVisualStyleBackColor = true;
             this.xmlLoadFileButton.Click += new System.EventHandler(this.xmlLoadFileButton_Click);
@@ -279,7 +279,7 @@
             this.regexPatchButton.Location = new System.Drawing.Point(149, 284);
             this.regexPatchButton.Name = "regexPatchButton";
             this.regexPatchButton.Size = new System.Drawing.Size(75, 23);
-            this.regexPatchButton.TabIndex = 10;
+            this.regexPatchButton.TabIndex = 5;
             this.regexPatchButton.Text = "patch";
             this.regexPatchButton.UseVisualStyleBackColor = true;
             this.regexPatchButton.Click += new System.EventHandler(this.regexPatchButton_Click);
@@ -289,7 +289,7 @@
             this.xmlPatchButton.Location = new System.Drawing.Point(387, 346);
             this.xmlPatchButton.Name = "xmlPatchButton";
             this.xmlPatchButton.Size = new System.Drawing.Size(75, 23);
-            this.xmlPatchButton.TabIndex = 22;
+            this.xmlPatchButton.TabIndex = 11;
             this.xmlPatchButton.Text = "patch";
             this.xmlPatchButton.UseVisualStyleBackColor = true;
             this.xmlPatchButton.Click += new System.EventHandler(this.xmlPatchButton_Click);
@@ -341,7 +341,7 @@
             this.jsonLoadFileButton.Location = new System.Drawing.Point(620, 138);
             this.jsonLoadFileButton.Name = "jsonLoadFileButton";
             this.jsonLoadFileButton.Size = new System.Drawing.Size(75, 23);
-            this.jsonLoadFileButton.TabIndex = 3;
+            this.jsonLoadFileButton.TabIndex = 13;
             this.jsonLoadFileButton.Text = "load file";
             this.jsonLoadFileButton.UseVisualStyleBackColor = true;
             this.jsonLoadFileButton.Click += new System.EventHandler(this.jsonLoadFileButton_Click);
@@ -361,7 +361,7 @@
             this.jsonFilePathBox.Name = "jsonFilePathBox";
             this.jsonFilePathBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.jsonFilePathBox.Size = new System.Drawing.Size(212, 86);
-            this.jsonFilePathBox.TabIndex = 2;
+            this.jsonFilePathBox.TabIndex = 12;
             this.jsonFilePathBox.Text = "";
             // 
             // jsonPathLabel
@@ -378,7 +378,7 @@
             this.jsonPathBox.Location = new System.Drawing.Point(483, 177);
             this.jsonPathBox.Name = "jsonPathBox";
             this.jsonPathBox.Size = new System.Drawing.Size(212, 20);
-            this.jsonPathBox.TabIndex = 5;
+            this.jsonPathBox.TabIndex = 14;
             // 
             // jsonSearchLabel
             // 
@@ -395,7 +395,7 @@
             this.jsonSearchBox.Location = new System.Drawing.Point(483, 216);
             this.jsonSearchBox.Name = "jsonSearchBox";
             this.jsonSearchBox.Size = new System.Drawing.Size(212, 20);
-            this.jsonSearchBox.TabIndex = 7;
+            this.jsonSearchBox.TabIndex = 15;
             // 
             // jsonReplaceLabel
             // 
@@ -411,14 +411,14 @@
             this.jsonReplaceBox.Location = new System.Drawing.Point(483, 258);
             this.jsonReplaceBox.Name = "jsonReplaceBox";
             this.jsonReplaceBox.Size = new System.Drawing.Size(212, 20);
-            this.jsonReplaceBox.TabIndex = 9;
+            this.jsonReplaceBox.TabIndex = 16;
             // 
             // jsonPatchButton
             // 
             this.jsonPatchButton.Location = new System.Drawing.Point(620, 284);
             this.jsonPatchButton.Name = "jsonPatchButton";
             this.jsonPatchButton.Size = new System.Drawing.Size(75, 23);
-            this.jsonPatchButton.TabIndex = 10;
+            this.jsonPatchButton.TabIndex = 17;
             this.jsonPatchButton.Text = "patch";
             this.jsonPatchButton.UseVisualStyleBackColor = true;
             this.jsonPatchButton.Click += new System.EventHandler(this.jsonPatchButton_Click);

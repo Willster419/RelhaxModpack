@@ -36,7 +36,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 21.4.0";
+        private string managerVersion = "version 21.4.1";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -778,20 +778,6 @@ namespace RelhaxModpack
             Application.DoEvents();
             Program.saveSettings = true;
         }
-        //removes the declaration statement at the start of the doc
-        private void removeDeclaration()
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(parsedModsFolder + "\\engine_config.xml");
-            foreach (XmlNode node in doc)
-            {
-                if (node.NodeType == XmlNodeType.XmlDeclaration)
-                {
-                    doc.RemoveChild(node);
-                }
-            }
-            doc.Save(parsedModsFolder + "\\engine_config.xml");
-        }
         //when the "visit form page" link is clicked. the link clicked handler
         private void formPageLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -799,7 +785,7 @@ namespace RelhaxModpack
         }
         //method to patch a part of an xml file
         //fileLocation is relative to res_mods folder
-        private void xmlPatch(string filePath, string xpath, string mode, string search, string replace)
+        public void xmlPatch(string filePath, string xpath, string mode, string search, string replace, bool testMods = false)
         {
             if (Regex.IsMatch(filePath, "^\\\\\\\\res_mods"))
             {
@@ -811,13 +797,26 @@ namespace RelhaxModpack
                 //new style patch, mods folder
                 filePath = tanksLocation + filePath;
             }
+            else if (testMods)
+            {
+
+            }
             else
             {
                 //old style patch
                 filePath = tanksLocation + "\\res_mods" + filePath;
             }
-            //patch versiondir out of filePath
-            filePath = Regex.Replace(filePath, "versiondir", tanksVersion);
+
+            if (testMods)
+            {
+
+            }
+            else
+            {
+                //patch versiondir out of filePath
+                filePath = Regex.Replace(filePath, "versiondir", tanksVersion);
+            }
+            
             //verify the file exists...
             if (!File.Exists(filePath))
                 return;
@@ -961,7 +960,7 @@ namespace RelhaxModpack
         }
         //method to patch a standard text or json file
         //fileLocation is relative to res_mods folder
-        private void RegxPatch(string fileLocation, string search, string replace, int lineNumber = 0)
+        public void RegxPatch(string fileLocation, string search, string replace, int lineNumber = 0, bool testMods = false)
         {
             if (Regex.IsMatch(fileLocation, "^\\\\\\\\res_mods"))
             {
@@ -973,13 +972,25 @@ namespace RelhaxModpack
                 //new style patch, mods folder
                 fileLocation = tanksLocation + fileLocation;
             }
+            else if (testMods)
+            {
+
+            }
             else
             {
                 //old style patch
                 fileLocation = tanksLocation + "\\res_mods" + fileLocation;
             }
-            //patch versiondir out of fileLocation
-            fileLocation = Regex.Replace(fileLocation, "versiondir", tanksVersion);
+
+            if (testMods)
+            {
+
+            }
+            else
+            {
+                //patch versiondir out of fileLocation
+                fileLocation = Regex.Replace(fileLocation, "versiondir", tanksVersion);
+            }
 
             //check that the file exists
             if (!File.Exists(fileLocation))
@@ -1034,7 +1045,7 @@ namespace RelhaxModpack
             File.WriteAllText(fileLocation, file);
         }
         //method to parse json files
-        public void jsonPatch(string jsonFile, string jsonPath, string newValue, string mode)
+        public void jsonPatch(string jsonFile, string jsonPath, string newValue, string mode, bool testMods = false)
         {
             //try to convert the new value to a bool or an int or double first
             bool newValueBool = false;
@@ -1087,6 +1098,10 @@ namespace RelhaxModpack
                 //new style patch, mods folder
                 jsonFile = tanksLocation + jsonFile;
             }
+            else if (testMods)
+            {
+
+            }
             else
             {
                 //old style patch
@@ -1094,7 +1109,14 @@ namespace RelhaxModpack
             }
 
             //patch versiondir out of fileLocation
-            jsonFile = Regex.Replace(jsonFile, "versiondir", tanksVersion);
+            if (testMods)
+            {
+
+            }
+            else
+            {
+                jsonFile = Regex.Replace(jsonFile, "versiondir", tanksVersion);
+            }
 
             //check that the file exists
             if (!File.Exists(jsonFile))
