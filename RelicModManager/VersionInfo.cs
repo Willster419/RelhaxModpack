@@ -56,5 +56,10 @@ namespace RelhaxModpack
         {
             System.Diagnostics.Process.Start("https://github.com/Willster419/RelhaxModpack/releases/latest");
         }
+
+        private void downloadedVersionInfo_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(e.LinkText);
+        }
     }
 }

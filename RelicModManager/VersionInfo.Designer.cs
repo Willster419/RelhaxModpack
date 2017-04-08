@@ -47,6 +47,7 @@
             this.downloadedVersionInfo.Size = new System.Drawing.Size(443, 144);
             this.downloadedVersionInfo.TabIndex = 0;
             this.downloadedVersionInfo.Text = "";
+            this.downloadedVersionInfo.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.downloadedVersionInfo_LinkClicked);
             // 
             // updateAcceptButton
             // 
