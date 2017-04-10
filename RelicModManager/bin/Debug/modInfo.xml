@@ -779,7 +779,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Tank Carousel modifications (xvm)</name>
+          <name>Tank Carousel base modifications (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -792,48 +792,12 @@
           <pictures />
           <configs>
             <config>
-              <name>Rows - 3</name>
-              <configzipfile>XVM_config_builder_carousel_3_row.zip</configzipfile>
-              <configzipcrc>aba96db1c57cc438dd3d48a4b317d46e</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single_dropdown</configtype>
-              <pictures />
-            </config>
-            <config>
-              <name>Rows - 2</name>
-              <configzipfile>XVM_config_builder_carousel_2_row.zip</configzipfile>
-              <configzipcrc>0f0c7aec3a5d3baec6e16e900bc2b45a</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single_dropdown</configtype>
-              <pictures />
-            </config>
-            <config>
-              <name>Rows - 1</name>
-              <configzipfile>XVM_config_builder_carousel_1_row.zip</configzipfile>
-              <configzipcrc>c4edb9a3467107bb34c9894c54ab45c1</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single_dropdown</configtype>
-              <pictures />
-            </config>
-            <config>
-              <name>Rows - Use client setting</name>
-              <configzipfile>XVM_config_builder_carousel_0_row.zip</configzipfile>
-              <configzipcrc>28819f047cd48e526211f0b4f6b0bd5d</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single_dropdown</configtype>
-              <pictures />
-            </config>
-            <config>
               <name>Enabled</name>
               <configzipfile>XVM_config_builder_carousel_enable.zip</configzipfile>
               <configzipcrc>9786aab2cd314147e6a051ec332a7763</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>single</configtype>
+              <configtype>single1</configtype>
               <pictures />
             </config>
             <config>
@@ -842,7 +806,124 @@
               <configzipcrc>19429e58d039be7cdee08aadf19a7673</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>single</configtype>
+              <configtype>single1</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Rows - 1</name>
+              <configzipfile>XVM_config_builder_carousel_1_row.zip</configzipfile>
+              <configzipcrc>c4edb9a3467107bb34c9894c54ab45c1</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown1</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Rows - 2</name>
+              <configzipfile>XVM_config_builder_carousel_2_row.zip</configzipfile>
+              <configzipcrc>0f0c7aec3a5d3baec6e16e900bc2b45a</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown1</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Rows - 3</name>
+              <configzipfile>XVM_config_builder_carousel_3_row.zip</configzipfile>
+              <configzipcrc>aba96db1c57cc438dd3d48a4b317d46e</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown1</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Rows - Ingame setting</name>
+              <configzipfile>XVM_config_builder_carousel_0_row.zip</configzipfile>
+              <configzipcrc>28819f047cd48e526211f0b4f6b0bd5d</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown1</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Cell Type normal</name>
+              <configzipfile>XVM_config_builder_carousel_normal_cell.zip</configzipfile>
+              <configzipcrc>e59c009cafa7dea617bc27f40c94998c</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single2</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Cell Type small</name>
+              <configzipfile>XVM_config_builder_carousel_small_cell.zip</configzipfile>
+              <configzipcrc>e1c8d14be77837db3d52c9709e9585ab</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single2</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Cell Type ingame setting</name>
+              <configzipfile>XVM_config_builder_carousel_ingame_cell.zip</configzipfile>
+              <configzipcrc>41276ad2ffdee66646ef08d161bdafff</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single2</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Hide "Buy Tank" cell</name>
+              <configzipfile>XVM_config_builder_carousel_hide_buy_tank_hide_total_slots.zip</configzipfile>
+              <configzipcrc>313a612d874c04bd8cdff08ff2230785</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single3</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Show "Buy Tank" cell, hide total slots</name>
+              <configzipfile>XVM_config_builder_carousel_show_buy_tank_hide_total_slots.zip</configzipfile>
+              <configzipcrc>c97cedf8849650a6f16b206c367a7a0d</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single3</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Show "Buy Tank" cell, show total slots</name>
+              <configzipfile>XVM_config_builder_carousel_show_buy_tank_show_total_slots.zip</configzipfile>
+              <configzipcrc>0b9cc6a60661ba5254bd5bef29fd5cba</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single3</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Hide "Buy Slot" cell</name>
+              <configzipfile>XVM_config_builder_carousel_hide_buy_slot_hide_used_slots.zip</configzipfile>
+              <configzipcrc>b869305de1835e6966b59b7e4eb7feba</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single4</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Show "Buy Slot" cell, hide total used slots</name>
+              <configzipfile>XVM_config_builder_carousel_show_buy_slot_hide_used_slots.zip</configzipfile>
+              <configzipcrc>4b223b2e71f813107033952e7297d4d1</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single4</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Show "Buy Slot" cell, show total used slots</name>
+              <configzipfile>XVM_config_builder_carousel_show_buy_slot_show_used_slots.zip</configzipfile>
+              <configzipcrc>0238565d59b83d1f10dbf857693a74c1</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single4</configtype>
               <pictures />
             </config>
           </configs>
@@ -854,7 +935,7 @@
           </devURL>
         </mod>
         <mod>
-          <name>Tank Carousel Cell modifications (enable above setting first) (xvm)</name>
+          <name>Tank Carousel cell modifications [requires carousel base mod enabled] (xvm)</name>
           <version>
           </version>
           <modzipfile>
@@ -862,62 +943,66 @@
           <modzipcrc>
           </modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <userDatas />
           <pictures />
           <configs>
             <config>
-              <name>Show Nation flag</name>
-              <configzipfile>
-              </configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <name>Average Damage Enable (normal cell only)</name>
+              <configzipfile>XVM_config_builder_carousel_cell_average_damage_enable.zip</configzipfile>
+              <configzipcrc>87891e073b1ce433cec5705dc44540ff</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>multi</configtype>
+              <configtype>single2</configtype>
               <pictures />
             </config>
             <config>
-              <name>Show tank icon</name>
-              <configzipfile>
-              </configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <name>Average Damage Disable (normal cell only)</name>
+              <configzipfile>XVM_config_builder_carousel_cell_average_damage_disable.zip</configzipfile>
+              <configzipcrc>d3cdce95e5aa90473632c1438209b294</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>multi</configtype>
+              <configtype>single2</configtype>
               <pictures />
             </config>
             <config>
-              <name>Show tank name</name>
-              <configzipfile>
-              </configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <name>Battles Count Enable (normal cell only)</name>
+              <configzipfile>XVM_config_builder_carousel_cell_battle_count_enable.zip</configzipfile>
+              <configzipcrc>940ccb4c90e86ff530bbfb0ac4983928</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>multi</configtype>
+              <configtype>single3</configtype>
               <pictures />
             </config>
             <config>
-              <name>Show tank stats</name>
-              <configzipfile>
-              </configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <name>Battles Count Disable (normal cell only)</name>
+              <configzipfile>XVM_config_builder_carousel_cell_battle_count_disable.zip</configzipfile>
+              <configzipcrc>4ec932387b8c400cca923aa0d93d1000</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>multi</configtype>
+              <configtype>single3</configtype>
               <pictures />
             </config>
             <config>
-              <name>Show tank win rate</name>
-              <configzipfile>
-              </configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <name>Win Rate Enable</name>
+              <configzipfile>XVM_config_builder_carousel_cell_win_rate_enable.zip</configzipfile>
+              <configzipcrc>95d81a679bf6b699e34533af6803e1a7</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>multi</configtype>
+              <configtype>single4</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>Win Rate Disable</name>
+              <configzipfile>XVM_config_builder_carousel_cell_win_rate_disable.zip</configzipfile>
+              <configzipcrc>a0041100b10ac098aa730f85270865e2</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single4</configtype>
               <pictures />
             </config>
           </configs>
-          <description>This is not a thing. please don't use it.
+          <description>
           </description>
           <updateComment>
           </updateComment>
@@ -2086,6 +2171,19 @@
                 </picture>
                 <picture>
                   <URL>http://s7.directupload.net/images/user/131227/o4wsifts.jpg</URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>MeltyMapsMathMod</name>
+              <configzipfile>Crosshairs_MeltyMapsMathMod_Tank_2017_04_07.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>https://puu.sh/veTG5/b7687203d6.png</URL>
                 </picture>
               </pictures>
             </config>
@@ -3686,12 +3784,13 @@
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/572771-091703-session-statistics-and-battle-result-messages/</devURL>
         </mod>
         <mod>
-          <name>YasenKrasen session statistics - vanilla</name>
+          <name>YasenKrasen session statistics</name>
           <version>
           </version>
-          <modzipfile>Garage_Session_Stats_YasenKrasen_vanilla_2017_03_26.zip</modzipfile>
-          <modzipcrc>7aed924cf3b62b30d1cbd8a16c0b9a39</modzipcrc>
-          <size>0.4</size>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>f</modzipcrc>
+          <size>0</size>
           <enabled>True</enabled>
           <userDatas>
             <userData>\\mods\\configs\\yk-stats\\cache.json</userData>
@@ -3703,101 +3802,59 @@
           </pictures>
           <configs>
             <config>
-              <name>Daily Reset</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_Daily_Reset.zip</configzipfile>
-              <configzipcrc>8330d61b975f5d6da52f39869f7173ff</configzipcrc>
-              <size>0.1</size>
+              <name>Vanilla</name>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_vanilla_2017_04_09.zip</configzipfile>
+              <configzipcrc>6f5d55031239b32521ac50db297099f4</configzipcrc>
+              <size>0.4</size>
               <configenabled>True</configenabled>
-              <configtype>multi</configtype>
+              <configtype>single1</configtype>
               <pictures />
             </config>
-          </configs>
-          <description>Shows your statistics for your tanks session in the notifications area of your garage</description>
-          <updateComment>
-          </updateComment>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/209229-098-yasenkrasen-coloured-messages-session-statistics-eng/</devURL>
-        </mod>
-        <mod>
-          <name>YasenKrasen session statistics - v1</name>
-          <version>
-          </version>
-          <modzipfile>Garage_Session_Stats_YasenKrasen_v1_2017_03_26.zip</modzipfile>
-          <modzipcrc>e6a20ce783cfb1bd9ee9a6161acf9be5</modzipcrc>
-          <size>1.6</size>
-          <enabled>True</enabled>
-          <userDatas>
-            <userData>\\mods\\configs\\yk-stats\\cache.json</userData>
-          </userDatas>
-          <pictures>
-            <picture>
-              <URL>http://i.imgur.com/h1kpmRO.jpg</URL>
-            </picture>
-          </pictures>
-          <configs>
             <config>
-              <name>Daily Reset</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_Daily_Reset.zip</configzipfile>
-              <configzipcrc>8330d61b975f5d6da52f39869f7173ff</configzipcrc>
-              <size>0.1</size>
+              <name>V1</name>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_v1_2017_04_09.zip</configzipfile>
+              <configzipcrc>0ccbfdae786065ab706bcd4f609350de</configzipcrc>
+              <size>1.6</size>
               <configenabled>True</configenabled>
-              <configtype>multi</configtype>
+              <configtype>single1</configtype>
               <pictures />
             </config>
-          </configs>
-          <description>Shows your statistics for your tanks session in the notifications area of your garage</description>
-          <updateComment>
-          </updateComment>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/209229-098-yasenkrasen-coloured-messages-session-statistics-eng/</devURL>
-        </mod>
-        <mod>
-          <name>YasenKrasen session statistics - v2</name>
-          <version>
-          </version>
-          <modzipfile>Garage_Session_Stats_YasenKrasen_v2_2017_03_26.zip</modzipfile>
-          <modzipcrc>70a06d5070a3550f3863b373c064ed4b</modzipcrc>
-          <size>1.7</size>
-          <enabled>True</enabled>
-          <userDatas>
-            <userData>\\mods\\configs\\yk-stats\\cache.json</userData>
-          </userDatas>
-          <pictures>
-            <picture>
-              <URL>http://i.imgur.com/h1kpmRO.jpg</URL>
-            </picture>
-          </pictures>
-          <configs>
             <config>
-              <name>Daily Reset</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_Daily_Reset.zip</configzipfile>
-              <configzipcrc>8330d61b975f5d6da52f39869f7173ff</configzipcrc>
-              <size>0.1</size>
+              <name>V2</name>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_v2_2017_04_09.zip</configzipfile>
+              <configzipcrc>0b162c250bedd5b3e4ad3a08cd13beef</configzipcrc>
+              <size>1.7</size>
               <configenabled>True</configenabled>
-              <configtype>multi</configtype>
+              <configtype>single1</configtype>
               <pictures />
             </config>
-          </configs>
-          <description>Shows your statistics for your tanks session in the notifications area of your garage</description>
-          <updateComment>
-          </updateComment>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/209229-098-yasenkrasen-coloured-messages-session-statistics-eng/</devURL>
-        </mod>
-        <mod>
-          <name>YasenKrasen session statistics - v3</name>
-          <version>
-          </version>
-          <modzipfile>Garage_Session_Stats_YasenKrasen_v3_2017_03_26.zip</modzipfile>
-          <modzipcrc>0f327ae12af48bb741918ee259647057</modzipcrc>
-          <size>1.5</size>
-          <enabled>True</enabled>
-          <userDatas>
-            <userData>\\mods\\configs\\yk-stats\\cache.json</userData>
-          </userDatas>
-          <pictures>
-            <picture>
-              <URL>http://i.imgur.com/h1kpmRO.jpg</URL>
-            </picture>
-          </pictures>
-          <configs>
+            <config>
+              <name>V3</name>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_v3_2017_04_09.zip</configzipfile>
+              <configzipcrc>8fe7191a31a69403da0be992b3715d06</configzipcrc>
+              <size>1.5</size>
+              <configenabled>True</configenabled>
+              <configtype>single1</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>English</name>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_english_2017_04_07.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown1</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>German</name>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_german_2017_04_07.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown1</configtype>
+              <pictures />
+            </config>
             <config>
               <name>Daily Reset</name>
               <configzipfile>Garage_Session_Stats_YasenKrasen_Daily_Reset.zip</configzipfile>

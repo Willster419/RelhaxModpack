@@ -1,3 +1,8 @@
+Version 21.4.2:
+- Added support for Json Array patching
+- Per user request, XVM tank carousel modifications have been added
+- Fixed a bug with the dark UI mode not being applied after clearning selections or loading selection prefrence
+
 Version 21.4.1:
 - Dev update. If you're not a dev or database manager, you won't notice anything.
 - Devs/Database Managers: Test patch window has been integrated to using the main patching system, so we don't have to maintain two versions of the sam code. This means that when you write your patch tests, make a backup of the file (or know what you are patching to unpatch it). Now, it directly overwrites the file you select.

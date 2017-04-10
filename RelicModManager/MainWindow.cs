@@ -36,7 +36,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 21.4.1";
+        private string managerVersion = "version 21.4.2";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -672,7 +672,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 04/07/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 04/09/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1150,7 +1150,7 @@ namespace RelhaxModpack
             }
             file = backTogether.ToString();
             JsonLoadSettings settings = new JsonLoadSettings();
-            settings.CommentHandling = CommentHandling.Load;
+            settings.CommentHandling = CommentHandling.Ignore;
             JObject root = null;
             //load json for editing
             try
@@ -1179,7 +1179,7 @@ namespace RelhaxModpack
                 {
                     Settings.appendToLog("ERROR: path " + jsonPath + " not found for " + Path.GetFileName(jsonFile));
                 }
-                if (useBool)
+                else if (useBool)
                 {
                     newObject.Value = newValueBool;
                 }
@@ -1196,7 +1196,11 @@ namespace RelhaxModpack
                     newObject.Value = newValue;
                 }
             }
-            else if (mode.Equals("remove") || mode.Equals("arrayRemove"))
+            else if (mode.Equals("remove"))
+            {
+                //TODO
+            }
+            else if (mode.Equals("arrayRemove"))
             {
                 //TODO
             }

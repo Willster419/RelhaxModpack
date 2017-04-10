@@ -1749,8 +1749,10 @@ namespace RelhaxModpack
             //reload the UI
             this.UseWaitCursor = true;
             this.makeTabs();
+            Settings.setUIColor(this);
             this.addAllMods();
             this.addUserMods();
+            Settings.setUIColor(this);
             this.UseWaitCursor = false;
         }
         //checks for duplicates
@@ -1878,8 +1880,10 @@ namespace RelhaxModpack
             //reload the UI
             this.UseWaitCursor = true;
             this.makeTabs();
+            Settings.setUIColor(this);
             this.addAllMods();
             this.addUserMods();
+            Settings.setUIColor(this);
             this.UseWaitCursor = false;
         }
     }
