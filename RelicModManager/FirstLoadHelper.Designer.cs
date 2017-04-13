@@ -54,6 +54,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FirstLoadHelper";
+            this.ShowInTaskbar = false;
             this.Text = "FirstLoadHelper";
             this.Load += new System.EventHandler(this.FirstLoadHelper_Load);
             this.ResumeLayout(false);

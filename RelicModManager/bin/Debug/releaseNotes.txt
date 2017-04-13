@@ -1,3 +1,8 @@
+Version 21.4.3:
+- Added German Translations (Thanks dirty20067)
+- Added catch for if the patching system directory fails to get all patch files
+- Removed some windows from taskbar
+
 Version 21.4.2:
 - Added support for Json Array patching
 - Per user request, XVM tank carousel modifications have been added

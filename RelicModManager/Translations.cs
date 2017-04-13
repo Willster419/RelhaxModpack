@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -114,8 +114,8 @@ namespace RelhaxModpack
             
             //Componet: loadingImageGroupBox
             //
-            english.Add("loadingImageGroupBox","Preview Loading Image");
-            german.Add("loadingImageGroupBox","Vorschaubild laden");
+            english.Add("loadingImageGroupBox","Loading Image");
+            german.Add("loadingImageGroupBox", "Bild laden");
             
             //Componet: standardImageRB
             //
@@ -582,6 +582,16 @@ namespace RelhaxModpack
             //
             english.Add("selectionsCleared","selections cleared");
             german.Add("selectionsCleared","Auswahlen geloescht");
+
+            //Componet: 
+            //
+            english.Add("patchingSystemDeneidAccessMessage", "The patching system was denied access to the patch folder. Please retry. If you see this again, try running as administrator");
+            german.Add("patchingSystemDeneidAccessMessage", "Dem Patching-System wurde der Zugriff auf den Patch-Ordner verweigert. Bitte erneut versuchen. Wenn Sie dies wieder sehen, versuchen Sie es als Administrator");
+
+            //Componet: 
+            //
+            english.Add("patchingSystemDeneidAccessHeader", "Access Deneid");
+            german.Add("patchingSystemDeneidAccessHeader", "Zugriff abgelehnt");
         }
     }
 }

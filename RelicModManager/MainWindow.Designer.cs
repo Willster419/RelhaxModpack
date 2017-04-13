@@ -376,7 +376,6 @@
             // languageGER
             // 
             this.languageGER.AutoSize = true;
-            this.languageGER.Enabled = false;
             this.languageGER.Location = new System.Drawing.Point(6, 29);
             this.languageGER.Name = "languageGER";
             this.languageGER.Size = new System.Drawing.Size(48, 17);
@@ -388,12 +387,10 @@
             // languageENG
             // 
             this.languageENG.AutoSize = true;
-            this.languageENG.Checked = true;
             this.languageENG.Location = new System.Drawing.Point(6, 13);
             this.languageENG.Name = "languageENG";
             this.languageENG.Size = new System.Drawing.Size(48, 17);
             this.languageENG.TabIndex = 0;
-            this.languageENG.TabStop = true;
             this.languageENG.Text = "ENG";
             this.languageENG.UseVisualStyleBackColor = true;
             this.languageENG.CheckedChanged += new System.EventHandler(this.languageENG_CheckedChanged);

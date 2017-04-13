@@ -79,6 +79,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "PleaseWait";
+            this.ShowInTaskbar = false;
             this.Text = "pleaseWait";
             this.UseWaitCursor = true;
             this.Load += new System.EventHandler(this.PleaseWait_Load);

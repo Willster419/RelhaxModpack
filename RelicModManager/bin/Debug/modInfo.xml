@@ -18,7 +18,7 @@
     <globaldependency>
       <dependencyZipFile>Dependency_global_text_locator.zip</dependencyZipFile>
       <dependencyZipCRC>53399117c9e9e82ee0943a73e2717e8e</dependencyZipCRC>
-      <dependencyenabled>True</dependencyenabled>
+      <dependencyenabled>False</dependencyenabled>
     </globaldependency>
   </globaldependencies>
   <catagories>
@@ -3437,7 +3437,7 @@
               <configzipfile>Ingame_Info_Consumables_by_Aimdrol_2017_03_16.zip</configzipfile>
               <configzipcrc>2f7316b5e528315ebacd1d1a08946c8a</configzipcrc>
               <size>4.2</size>
-              <configenabled>True</configenabled>
+              <configenabled>False</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
@@ -3928,7 +3928,7 @@
           <modzipfile>Sounds_mlg_mod_voice_2017_03_16.zip</modzipfile>
           <modzipcrc>240a3e5046fa1a67fec9170e6efc7046</modzipcrc>
           <size>14.8</size>
-          <enabled>True</enabled>
+          <enabled>False</enabled>
           <userDatas />
           <pictures />
           <configs>

@@ -36,7 +36,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 21.4.2";
+        private string managerVersion = "version 21.4.3";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -284,8 +284,32 @@ namespace RelhaxModpack
             //don't do anything if the file does not exist
             if (!Directory.Exists(tanksLocation + "\\_patch"))
                 return;
-            //get every patch file in the folder
-            string[] patchFiles = Directory.GetFiles(tanksLocation + "\\_patch");
+            //Give the OS time to process the folder change...
+            System.Threading.Thread.Sleep(100);
+            string[] patchFiles = null;
+            bool kontinue = false;
+            while (!kontinue)
+            {
+                try
+                {
+                    //get every patch file in the folder
+                    patchFiles = Directory.GetFiles(tanksLocation + "\\_patch", @"*.xml");
+                    kontinue = true;
+                }
+                catch (UnauthorizedAccessException e)
+                {
+                    Settings.appendToLog("EXEPTION: UnauthorizedAccessException (trackback)");
+                    Settings.appendToLog(e.StackTrace);
+                    Settings.appendToLog("inner message: " + e.Message);
+                    Settings.appendToLog("source: " + e.Source);
+                    Settings.appendToLog("target: " + e.TargetSite);
+                    DialogResult res = MessageBox.Show(Translations.getTranslatedString("patchingSystemDeneidAccessMessage"), Translations.getTranslatedString("patchingSystemDeneidAccessHeader"), MessageBoxButtons.RetryCancel);
+                    if (res == DialogResult.Cancel)
+                    {
+                        Application.Exit();
+                    }
+                }
+            }
             //get any other old patches out of memory
             patchList.Clear();
             for (int i = 0; i < patchFiles.Count(); i++)
@@ -672,7 +696,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 04/09/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 04/12/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -2121,6 +2145,15 @@ namespace RelhaxModpack
             this.cleanUninstallCB.Text = Translations.getTranslatedString(cleanUninstallCB.Name);
             this.darkUICB.Checked = Settings.darkUI;
             this.darkUICB.Text = Translations.getTranslatedString(darkUICB.Name);
+            this.installRelhaxMod.Text = Translations.getTranslatedString(installRelhaxMod.Name);
+            this.uninstallRelhaxMod.Text = Translations.getTranslatedString(uninstallRelhaxMod.Name);
+            this.settingsGroupBox.Text = Translations.getTranslatedString(settingsGroupBox.Name);
+            this.loadingImageGroupBox.Text = Translations.getTranslatedString(loadingImageGroupBox.Name);
+            this.languageSelectionGB.Text = Translations.getTranslatedString(languageSelectionGB.Name);
+            this.statusLabel.Text = Translations.getTranslatedString("status");
+            this.findBugAddModLabel.Text = Translations.getTranslatedString(findBugAddModLabel.Name);
+            this.formPageLink.Text = Translations.getTranslatedString(formPageLink.Name);
+
             this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
             switch (Settings.gif)
             {

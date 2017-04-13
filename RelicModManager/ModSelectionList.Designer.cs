@@ -269,6 +269,7 @@
             this.Controls.Add(this.modTabGroups);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ModSelectionList";
+            this.ShowInTaskbar = false;
             this.Text = "ModSelectionList";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ModSelectionList_FormClosing);
             this.Load += new System.EventHandler(this.ModSelectionList_Load);

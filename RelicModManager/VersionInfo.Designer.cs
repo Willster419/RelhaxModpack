@@ -123,6 +123,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "VersionInfo";
+            this.ShowInTaskbar = false;
             this.Text = "VersionInfo";
             this.Load += new System.EventHandler(this.VersionInfo_Load);
             this.ResumeLayout(false);
