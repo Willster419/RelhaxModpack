@@ -1,0 +1,306 @@
+<mods>
+  <relhaxMods>
+    <mod>
+      <name>Willster419's Config</name>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - 6th sense (xvm)</name>
+      <configs>
+        <config>
+          <name>10 sec 6th sense icon</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - average damage (xvm)</name>
+      <configs>
+        <config>
+          <name>Enable</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - damage log (xvm)</name>
+      <configs>
+        <config>
+          <name>Enable</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - damage panel repair timers (xvm)</name>
+      <configs>
+        <config>
+          <name>Enable</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - hitlog (xvm)</name>
+      <configs>
+        <config>
+          <name>Enable</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - last hit announcer (xvm)</name>
+      <configs>
+        <config>
+          <name>Enable</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - total efficiency (xvm)</name>
+      <configs>
+        <config>
+          <name>Enable</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - total HP (xvm)</name>
+      <configs>
+        <config>
+          <name>Enable total HP</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - win chance (xvm)</name>
+      <configs>
+        <config>
+          <name>Enable</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage interface modifications - additional server infromation (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage interface modifications - block vehicle if ammo is lower than... (xvm)</name>
+      <configs>
+        <config>
+          <name>50%</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage Interface Modifications - Clock (xvm)</name>
+      <configs>
+        <config>
+          <name>Enable</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage interface modifications - Crew Auto return (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage interface modifications - free xp locker (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage interface modifications - gold locker (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage interface modifications - removable equipment auto return (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage interface modifications - server ping (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage interface modifications - tech tree free xp convert option (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Login modifications - save last server (xvm)</name>
+      <configs>
+        <config>
+          <name>Disabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Login modifications - show server ping (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Minimap modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+        <config>
+          <name>Minimap zoom - centered</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Statistics color step modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>10 step wotlabs</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Tank Carousel base modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+        <config>
+          <name>Rows - Ingame setting</name>
+        </config>
+        <config>
+          <name>Cell Type small</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Tank Carousel cell modifications [requires carousel base mod enabled] (xvm)</name>
+      <configs>
+        <config>
+          <name>Average Damage Enable (normal cell only)</name>
+        </config>
+        <config>
+          <name>Win Rate Enable</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Zoom Out Config (meters)</name>
+      <configs>
+        <config>
+          <name>500</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Arcade and Sniper</name>
+      <configs>
+        <config>
+          <name>J1mBOs Corsshair mod</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Arty</name>
+      <configs>
+        <config>
+          <name>Pro-Arty</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Xft's Integrated DamageLogs (Hitlog Requires XVM)</name>
+      <configs>
+        <config>
+          <name>integrated hitlog</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Aslains gold premium tanks</name>
+    </mod>
+    <mod>
+      <name>Autoaim indication</name>
+      <configs>
+        <config>
+          <name>5 sec autoaim search</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Assistant</name>
+      <configs>
+        <config>
+          <name>G</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Colored penetration and ricochets on tanks</name>
+      <configs>
+        <config>
+          <name>Artasan</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Consumables</name>
+      <configs>
+        <config>
+          <name>by Grandpa</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Inbattle current rating calculation by Ekspoint</name>
+      <configs>
+        <config>
+          <name>wn8 and damage with background 2</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Number Indicator of Armor Penetration ( ͡° ͜ʖ ͡°) (not PMOD)</name>
+    </mod>
+    <mod>
+      <name>Audio</name>
+      <configs>
+        <config>
+          <name>German Soldier</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Icon</name>
+      <configs>
+        <config>
+          <name>Light-bulb</name>
+        </config>
+      </configs>
+    </mod>
+  </relhaxMods>
+  <userMods />
+</mods>
