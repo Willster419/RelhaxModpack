@@ -323,7 +323,7 @@
             </config>
           </configs>
           <dependencies />
-          <description>Configure how long the 6th sense icon stays on your screen          </description>
+          <description>Configure how long the 6th sense icon stays on your screen</description>
           <updateComment>
           </updateComment>
           <devURL>
@@ -3500,11 +3500,24 @@
           <pictures />
           <configs>
             <config>
-              <name>by Aimdrol</name>
-              <configzipfile>Ingame_Info_Consumables_by_Aimdrol_2017_03_16.zip</configzipfile>
-              <configzipcrc>2f7316b5e528315ebacd1d1a08946c8a</configzipcrc>
+              <name>by Aimdrol without text modifications</name>
+              <configzipfile>Ingame_Info_Consumables_by_Aimdrol_without_text_2017_04_16.zip</configzipfile>
+              <configzipcrc>03989f04fee802fb5186bb102df07398</configzipcrc>
               <size>4.2</size>
-              <configenabled>False</configenabled>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i.imgur.com/6mneJsK.png</URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>by Aimdrol with text modifications (english only)</name>
+              <configzipfile>Ingame_Info_Consumables_by_Aimdrol_with_text_2017_04_16.zip</configzipfile>
+              <configzipcrc>84a4670f8b4d371a48b1281c5b7b8f0e</configzipcrc>
+              <size>4.9</size>
+              <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
