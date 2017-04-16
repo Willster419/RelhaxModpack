@@ -28,8 +28,8 @@
     <TargetCulture>en-US</TargetCulture>
     <ProductName>Relhax Modpack</ProductName>
     <PublisherName>Willard Wider</PublisherName>
-    <ApplicationRevision>3</ApplicationRevision>
-    <ApplicationVersion>0.21.4.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>0.21.5.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -65,6 +65,7 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

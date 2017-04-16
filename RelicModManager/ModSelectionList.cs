@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using System.Xml;
 using System.IO;
 using System.Security.Cryptography;
+using System.Runtime.InteropServices;
+
 
 namespace RelhaxModpack
 {
@@ -22,6 +24,7 @@ namespace RelhaxModpack
         private PleaseWait pw;
         public List<Dependency> globalDependencies;
         private bool loadingConfig = false;
+        private bool taskBarHidden = false;
         private enum loadConfigMode
         {
             error = -1,
@@ -30,7 +33,68 @@ namespace RelhaxModpack
             fromAutoInstall = 2//this is for when the user started the application in auto install mode. this takes precedence over the above 2
         };
         private loadConfigMode loadMode = loadConfigMode.fromButton;
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern IntPtr FindWindow(string strClassName, string strWindowName);
 
+        [DllImport("shell32.dll")]
+        public static extern UInt32 SHAppBarMessage(UInt32 dwMessage, ref APPBARDATA pData);
+
+        public enum AppBarMessages
+        {
+            New = 0x00,
+            Remove = 0x01,
+            QueryPos = 0x02,
+            SetPos = 0x03,
+            GetState = 0x04,
+            GetTaskBarPos = 0x05,
+            Activate = 0x06,
+            GetAutoHideBar = 0x07,
+            SetAutoHideBar = 0x08,
+            WindowPosChanged = 0x09,
+            SetState = 0x0a
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct APPBARDATA
+        {
+            public UInt32 cbSize;
+            public IntPtr hWnd;
+            public UInt32 uCallbackMessage;
+            public UInt32 uEdge;
+            public Rectangle rc;
+            public Int32 lParam;
+        }
+
+        public enum AppBarStates
+        {
+            AutoHide = 0x01,
+            AlwaysOnTop = 0x02
+        }
+
+        /// <summary>
+        /// Set the Taskbar State option
+        /// </summary>
+        /// <param name="option">AppBarState to activate</param>
+        public void SetTaskbarState(AppBarStates option)
+        {
+            APPBARDATA msgData = new APPBARDATA();
+            msgData.cbSize = (UInt32)Marshal.SizeOf(msgData);
+            msgData.hWnd = FindWindow("System_TrayWnd", null);
+            msgData.lParam = (Int32)(option);
+            SHAppBarMessage((UInt32)AppBarMessages.SetState, ref msgData);
+        }
+
+        /// <summary>
+        /// Gets the current Taskbar state
+        /// </summary>
+        /// <returns>current Taskbar state</returns>
+        public AppBarStates GetTaskbarState()
+        {
+            APPBARDATA msgData = new APPBARDATA();
+            msgData.cbSize = (UInt32)Marshal.SizeOf(msgData);
+            msgData.hWnd = FindWindow("System_TrayWnd", null);
+            return (AppBarStates)SHAppBarMessage((UInt32)AppBarMessages.GetState, ref msgData);
+        }
         public ModSelectionList()
         {
             InitializeComponent();
@@ -109,6 +173,16 @@ namespace RelhaxModpack
             //set the UI colors
             Settings.setUIColor(this);
             pw.Close();
+            //if the task bar was set to auto hide, set it to always on top
+            //it will be set back to auto hide when this window closes
+            AppBarStates currentState = GetTaskbarState();
+            if (currentState == AppBarStates.AutoHide)
+            {
+                taskBarHidden = true;
+                SetTaskbarState(AppBarStates.AlwaysOnTop);
+            }
+            //get the maximum height of the screen
+            this.MaximumSize = Screen.FromControl(this).WorkingArea.Size;
         }
         //initializes the userMods list. This should only be run once
         private void initUserMods()
@@ -203,6 +277,9 @@ namespace RelhaxModpack
         //adds a mod m to a tabpage t
         private void addMod(Mod m, TabPage t, int panelCount)
         {
+            //bool for keeping track if a radioButton config has been selected
+            bool hasRadioButtonConfigSelected = false;
+            bool modHasRadioButtons = false;
             //make config panel
             Panel configPanel = new Panel();
             configPanel.Enabled = true;
@@ -264,6 +341,7 @@ namespace RelhaxModpack
                 Panel configSelectionAll = null;
                 if (m.configs[i].type.Equals("single") || m.configs[i].type.Equals("single1"))
                 {
+                    modHasRadioButtons = true;
                     //make default radioButton
                     //label
                     configLabel = new Label();
@@ -294,7 +372,10 @@ namespace RelhaxModpack
                     else
                         configControlRB.Enabled = false;
                     if (m.enabled && m.modChecked && m.configs[i].enabled && m.configs[i].configChecked)
+                    {
                         configControlRB.Checked = true;
+                        hasRadioButtonConfigSelected = true;
+                    }
                     else
                         configControlRB.Checked = false;
                     configControlRB.CheckedChanged += new EventHandler(configControlRB_CheckedChanged);
@@ -675,6 +756,12 @@ namespace RelhaxModpack
             //add the event handler before changing the checked state so the event
             //event handler is #triggered
             modCheckBox.Checked = m.modChecked;
+            if (modHasRadioButtons && modCheckBox.Checked && !hasRadioButtonConfigSelected)
+            {
+                //getting here means that the user has saved the prefrence for a selected mandatory radiobutton config that has been disabled, so his selection of that mod needs to be disabled
+                modCheckBox.Checked = false;
+                m.modChecked = false;
+            }
             modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
         }
 
@@ -696,7 +783,8 @@ namespace RelhaxModpack
                         RadioButton radioControlRB = (RadioButton)radioControl;
                         Config cgf = m.getConfig(radioControlRB.Name.Split('_')[2]);
                         radioControlRB.Enabled = cgf.enabled;
-                        radioControlRB.Checked = cgf.configChecked;
+                        //radioControlRB.Checked = cgf.configChecked;
+                        cgf.configChecked = radioControlRB.Checked;
                         configControlRB_CheckedChanged(radioControlRB, null);
                     }
                     if (radioControl is Label)
@@ -1212,7 +1300,6 @@ namespace RelhaxModpack
                 }
                 globalDependencies.Add(d);
             }
-
             XmlNodeList catagoryList = doc.SelectNodes("//modInfoAlpha.xml/catagories/catagory");
             parsedCatagoryList = new List<Catagory>();
             foreach (XmlNode nnnnn in catagoryList)
@@ -1313,6 +1400,36 @@ namespace RelhaxModpack
                                                             break;
                                                     }
                                                 }
+                                            }
+                                            break;
+                                        case "dependencies":
+                                            //parse all dependencies
+                                            foreach (XmlNode nnnnnnn in nn.ChildNodes)
+                                            {
+                                                Dependency d = new Dependency();
+                                                foreach (XmlNode nnnnnnnn in nnnnnnn.ChildNodes)
+                                                {
+                                                    switch (nnnnnnnn.Name)
+                                                    {
+                                                        case "dependencyZipFile":
+                                                            d.dependencyZipFile = nnnnnnnn.InnerText;
+                                                            break;
+                                                        case "dependencyZipCRC":
+                                                            d.dependencyZipCRC = nnnnnnnn.InnerText;
+                                                            break;
+                                                        case "dependencyenabled":
+                                                            try
+                                                            {
+                                                                d.enabled = bool.Parse(nnnnnnnn.InnerText);
+                                                            }
+                                                            catch (FormatException)
+                                                            {
+                                                                d.enabled = false;
+                                                            }
+                                                            break;
+                                                    }
+                                                }
+                                                m.modDependencies.Add(d);
                                             }
                                             break;
                                         case "configs":
@@ -1632,6 +1749,7 @@ namespace RelhaxModpack
                 {
                     Settings.appendToLog("ERROR: " + filePath + " not found, not loading configs");
                     MessageBox.Show(Translations.getTranslatedString("configLoadFailed"));
+                    return;
                 }
             }
             else if (loadMode == loadConfigMode.fromSaveLastConfig)
@@ -1640,7 +1758,8 @@ namespace RelhaxModpack
                 if (!File.Exists(filePath))
                 {
                     Settings.appendToLog("ERROR: " + filePath + " not found, not loading configs");
-                    MessageBox.Show(Translations.getTranslatedString("configLoadFailed"));
+                    //MessageBox.Show(Translations.getTranslatedString("configLoadFailed"));
+                    return;
                 }
             }
             else
@@ -1744,16 +1863,18 @@ namespace RelhaxModpack
                 }
             }
             Settings.appendToLog("Finished loading mod selections");
-            if (loadMode == loadConfigMode.fromButton)
-                MessageBox.Show(Translations.getTranslatedString("prefrencesSet"));
-            //reload the UI
-            this.UseWaitCursor = true;
-            this.makeTabs();
-            Settings.setUIColor(this);
-            this.addAllMods();
-            this.addUserMods();
-            Settings.setUIColor(this);
-            this.UseWaitCursor = false;
+            if (loadMode == loadConfigMode.fromButton || loadMode == loadConfigMode.fromAutoInstall)
+            {
+                if (loadMode == loadConfigMode.fromButton) MessageBox.Show(Translations.getTranslatedString("prefrencesSet"));
+                //reload the UI
+                this.UseWaitCursor = true;
+                this.makeTabs();
+                Settings.setUIColor(this);
+                this.addAllMods();
+                this.addUserMods();
+                Settings.setUIColor(this);
+                this.UseWaitCursor = false;
+            }
         }
         //checks for duplicates
         private bool duplicates()
@@ -1831,6 +1952,8 @@ namespace RelhaxModpack
             //save the size of this window for later.
             Settings.modSelectionHeight = this.Size.Height;
             Settings.modSelectionWidth = this.Size.Width;
+            if (taskBarHidden)
+                SetTaskbarState(AppBarStates.AutoHide);
         }
         //gets the file size of a download
         private float netFileSize(string address)

@@ -1,3 +1,10 @@
+Version 21.5.0:
+- Database structure change: A mod can now have a dependency along with a catagory. Imroves database internal structure.
+- Added feature to only add dependencies when it's unique, meaning it won't download and install duplicate versions. It will decrease install time.
+- Fixed a bug where a mod would be checked from a user config preference, but the required config radio button selection for said mod was disabled, putting the selection in an invalid state. This was fixed to uncheck the mod, the user now has to go into the selection list and check it again with an enabled and valid config. If you're wondering why a mod is not being installed from an auto-install, this is probably why.
+- Attempted a fix for bug where when the taskbar was in auto hide mode, it would cut off the bottom of the window. A fix was introduced to limit the window's maximum size to the screen's maximum "working area" (excludes taskbar, pinned bars, etc.). It will also when opening the selection window set the taskbar to always on top, and puts it back to auto hide when the window closes.
+- Fixed a bug where the application would crash if it could not find the lastInstalledConfig.xml, for when the user enabled the setting "save last installed config". Also fixed other problems involving this bug.
+
 Version 21.4.3:
 - Added German Translations (Thanks dirty20067)
 - Added catch for if the patching system directory fails to get all patch files

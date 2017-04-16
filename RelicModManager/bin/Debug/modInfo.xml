@@ -43,6 +43,7 @@
           <userDatas />
           <pictures />
           <configs />
+          <dependencies />
           <description>The Default Config that comes with XVM</description>
           <updateComment>
           </updateComment>
@@ -78,6 +79,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>Config by Willster419. Origionaly based on stock xvm config.@Includes an hp pool and minimap hp circles</description>
           <updateComment>
           </updateComment>
@@ -106,6 +108,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>J1mB0's Config</description>
           <updateComment>
           </updateComment>
@@ -192,6 +195,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Bones's Config</description>
           <updateComment>
           </updateComment>
@@ -270,6 +274,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>all clan icons from 04/02/2017</description>
           <updateComment>
           </updateComment>
@@ -317,6 +322,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Configure how long the 6th sense icon stays on your screen          </description>
           <updateComment>
           </updateComment>
@@ -355,6 +361,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Toggle the xvm hitlog (Shows a log of your total damage for the duration of the game)
           </description>
           <updateComment>
@@ -394,6 +401,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Shows the total combined hp of each team          </description>
           <updateComment>
           </updateComment>
@@ -432,6 +440,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -471,6 +480,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Shows how much damage you need to do to get high caliber
           </description>
           <updateComment>
@@ -510,6 +520,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Show the percent chance of winning when you press tab
           </description>
           <updateComment>
@@ -549,6 +560,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Show the xvm damage log (displays to right of damage panel (lower left)
           </description>
           <updateComment>
@@ -588,6 +600,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Will display a message of who just shot you and for how much
           </description>
           <updateComment>
@@ -627,6 +640,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Visual notification if you vehicle is on fire.@In case the fire in your vehicle isn't enough
           </description>
           <updateComment>
@@ -666,6 +680,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Displays at the bottom left, shows spotting damage and assistance damage
           </description>
           <updateComment>
@@ -705,6 +720,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Shows a number in the picture of the damaged modules in the players panel
           </description>
           <updateComment>
@@ -771,6 +787,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Show the tier of the battle (max tier)@also change which results page is displayed first when you enter the garage from the battle@page 1 is battle summary@page 2 is teams score@page 3 is your detailed battle stats
           </description>
           <updateComment>
@@ -927,6 +944,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Choose how many tank rows are displayed in your garage.@also enable or disable the xvm garage
           </description>
           <updateComment>
@@ -1002,6 +1020,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -1051,6 +1070,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Choose which color scale you use to display player's tank stats
           </description>
           <updateComment>
@@ -1108,6 +1128,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Enable or disable the clock in the garage. Also select 12 or 24 hour clock
           </description>
           <updateComment>
@@ -1147,6 +1168,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Prevent you from using gold in your garage
           </description>
           <updateComment>
@@ -1186,6 +1208,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Prevent you from using free xp in your garage
           </description>
           <updateComment>
@@ -1225,6 +1248,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Change the default form of currency for purchasing shells, consumables, etc.
           </description>
           <updateComment>
@@ -1264,6 +1288,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Enable an option where, when trying to research a module or tank, if you do not have enough xp, it will present you with a window to convert enough free xp to research the item
           </description>
           <updateComment>
@@ -1303,6 +1328,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Automatically return your crew between tanks
           </description>
           <updateComment>
@@ -1342,6 +1368,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>automatically return removable equipment
           </description>
           <updateComment>
@@ -1390,6 +1417,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Prevent you from entering a battle if you vehicle is low on ammo
           </description>
           <updateComment>
@@ -1429,6 +1457,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -1468,6 +1497,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Display number of people on the server
           </description>
           <updateComment>
@@ -1507,6 +1537,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Toggle the xvm markers in the game. Disabling them will enable the configurations in the game
           </description>
           <updateComment>
@@ -1546,6 +1577,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Automatiacly log into the game
           </description>
           <updateComment>
@@ -1585,6 +1617,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Will not ask you if you want to confirm loading an old version replay. Will load it automaticly
           </description>
           <updateComment>
@@ -1624,6 +1657,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Show server pings from the login screen
           </description>
           <updateComment>
@@ -1663,6 +1697,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Save the last server that you logged into
           </description>
           <updateComment>
@@ -1702,6 +1737,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Show the servers population in the login screen
           </description>
           <updateComment>
@@ -1759,6 +1795,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Toggle the xvm minimap modifications@also select if the minimap, when zoomed, is shown in the center of your screen or enlarged in the lower right
           </description>
           <updateComment>
@@ -1798,6 +1835,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Change the key that shows minimap zoom
           </description>
           <updateComment>
@@ -1837,6 +1875,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Toggle the xvm sounds
           </description>
           <updateComment>
@@ -1900,6 +1939,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>
           </description>
           <updateComment>WorstUnicumEU:@http://forum.worldoftanks.eu/index.php?/topic/591220-091701-detailed-session-statistics-by-worstunicumeu-v121/</updateComment>
@@ -1954,6 +1994,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Shows where the server thinks you are aiming. Server crosshair mustbe enabled in game settings.
           </description>
           <updateComment>
@@ -2000,6 +2041,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Shows wether or not you can penetrate an enemy, factoring in armor angles and normalization, in the form@ avg_gun_penetration/enemy_effective_armor
           </description>
           <updateComment>
@@ -2063,6 +2105,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>How far you can zoom out in arcade mode in meters</description>
           <updateComment>
           </updateComment>
@@ -2122,6 +2165,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>Pro Arty: http://forum.worldoftanks.ru/index.php?/topic/1229310-@Harpoon: http://forum.worldoftanks.ru/index.php?/topic/1419789-
           </description>
           <updateComment>
@@ -2216,6 +2260,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>Harpoon: http://forum.worldoftanks.ru/index.php?/topic/1419789-@HARDscope: http://forum.worldoftanks.ru/index.php?/topic/1229310-@J1mBO: http://forum.worldoftanks.eu/index.php?/topic/56831-/page__st__5760__pid__13574904#entry13574904
           </description>
           <updateComment>
@@ -2265,6 +2310,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Keeps a list of who shot you and for how much</description>
           <updateComment>
           </updateComment>
@@ -2300,6 +2346,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Keeps a list of who shot you and for how much. Press alt to see the player name.</description>
           <updateComment>
           </updateComment>
@@ -2370,6 +2417,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Enables an isometric view from Arty.</description>
           <updateComment>
           </updateComment>
@@ -2402,6 +2450,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>
           </description>
           <updateComment>Aslain's : http://forum.worldoftanks.eu/index.php?/topic/35125-</updateComment>
@@ -2460,6 +2509,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>arty only config only shows@-aimtime@-accuracy@-flight time@old style places it where it was when the mod first came out</description>
           <updateComment>
           </updateComment>
@@ -2562,6 +2612,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>kaeptn configs@http://forum.worldoftanks.eu/index.php?/topic/441413-0917-autoaim-indicationaddins-no-proximity-snapping-for-autoaim-but/page__st__1580__pid__13686506#entry13686506</description>
           <updateComment>Latest update locks onto a target when manually highlighted, so it is legal now</updateComment>
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/441413-0917-autoaim-indicationaddins-no-proximity-snapping-for-autoaim-but/</devURL>
@@ -2581,6 +2632,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>Shows a number of chance of penetration. The number is calculated by (enemy_effective_armor-gun_average_penetration).@Negative number means likely to bounce.@Positive number means likely to pierce.</description>
           <updateComment>
           </updateComment>
@@ -2606,6 +2658,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>A modification for integrating TeamSpeak into Garage and Battle.</description>
           <updateComment>
           </updateComment>
@@ -2640,6 +2693,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Sends a chat message that you are spotted in a grid square, along with the "Help!" command</description>
           <updateComment>
           </updateComment>
@@ -2734,6 +2788,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>MUST HAVE ADVANCED GRAPHICS SETTINGS FOR THIS TO WORK!</description>
           <updateComment>
           </updateComment>
@@ -2840,6 +2895,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Changes the look of the damage indicators when you are shot</description>
           <updateComment>
           </updateComment>
@@ -2922,6 +2978,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>Kaeptn Config@http://forum.worldoftanks.eu/index.php?/topic/561169-091703-inbattle-wn8-calculator-eff-damage-updated-02022017/page__st__40__pid__12646652#entry12646652@Shows your current stats ingame. Live updates.</description>
           <updateComment>
           </updateComment>
@@ -3019,6 +3076,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>Allows you to see where to penetrate the enemy better, or see where the enemy is penetrating you</description>
           <updateComment>
           </updateComment>
@@ -3069,6 +3127,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Settings to remove the distance fog and/or enable more map visibility. Does not increase view of seeing enemy tanks.</description>
           <updateComment>
           </updateComment>
@@ -3092,6 +3151,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>A notification if an enemy is near you.</description>
           <updateComment>
           </updateComment>
@@ -3129,6 +3189,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>GuP video@http://forum.worldoftanks.com/index.php?/topic/398152-0917-girls-und-panzer-the-new-mod-collection/@MLG video@http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/</description>
           <updateComment>
           </updateComment>
@@ -3167,6 +3228,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Shows a CoD style hitmarker whenever you penetrate ( ͡° ͜ʖ ͡°) an enemy tank</description>
           <updateComment>
           </updateComment>
@@ -3212,6 +3274,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>Replaces the standard loading animation circle@Illuminati - http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/</description>
           <updateComment>
           </updateComment>
@@ -3251,6 +3314,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>Changes the mastery badges to CoD style badges</description>
           <updateComment>
           </updateComment>
@@ -3281,6 +3345,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Enables MLG glasses to drop down on your tank when you are in a light tank and an enemy bounces off of you. Enemy caliber gun must be &gt; 90 mm</description>
           <updateComment>
           </updateComment>
@@ -3307,6 +3372,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Show an illuminati pyramid "protecting" your tank after your death. (Or during the battle)</description>
           <updateComment>
           </updateComment>
@@ -3413,6 +3479,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>Modifies the standard Marks of Excellence on the gun barrels@Aimdrol mods: http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/@VoPV mods: http://www.awolf.eu/load/mods_world_of_tanks/mods_settings/jaskrawe_odznaki_bieglosci_od_vopv_0_9_14/6-1-0-2313</description>
           <updateComment>
           </updateComment>
@@ -3523,6 +3590,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>Modifies the standard equipment and consumables icons. Some modify the names as well.</description>
           <updateComment>DEV URLS:@Aimdrol: http://forum.worldoftanks.eu/index.php?/topic/476721-0914-gtos-mlg-mod-continued-by-aimdrol-marks-of-mailand-pl/@vito74m: http://www.curse.com/wot-mods/worldoftanks/icons-new-era-vito74m#t1:description@YHKEP: http://mirtankov.net/mods/9136-ikonki-modulej-snarjadov-i-rashodnikov-wot.html@Grandpa: http://www.curse.com/wot-mods/worldoftanks/ammo-equipment-crew-icons@LakeOphild: http://forum.worldoftanks.eu/index.php?/topic/402202-@ vvooj:http://www.curse.com/wot-mods/worldoftanks/letter-shell-icons#t1:other-downloads</updateComment>
           <devURL>
@@ -3570,6 +3638,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Shows the total HP of each team at the top of the screen.@High caliber config will show how much damage you need to get high caliber.@players info panel will show the hp of both teams when left alt is pressed.@Show spotted status will show in the players panel when an enemy is spotted. It might conflict with xvm.</description>
           <updateComment>
           </updateComment>
@@ -3654,6 +3723,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>legal info@http://forum.worldoftanks.eu/index.php?/topic/599621-wg-support-safeshot-is-illegal/page__st__20__pid__13403197#entry13403197@prevents you from shooting your gun to hit allies/dead tanks/etc.</description>
           <updateComment>
           </updateComment>
@@ -3680,6 +3750,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>Like Pandora internet radio, but in your game, with a configurable gui settings window</description>
           <updateComment>
           </updateComment>
@@ -3700,6 +3771,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>Gold premium tank icons for the garage</description>
           <updateComment>
           </updateComment>
@@ -3739,6 +3811,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>The mod is designed to remedy the situation where it is impossible to aim above the hill. (Overshooting)</description>
           <updateComment>
           </updateComment>
@@ -3778,6 +3851,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Shows your statistics for your tanks session in the notifications area of your garage</description>
           <updateComment>
           </updateComment>
@@ -3865,6 +3939,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Shows your statistics for your tanks session in the notifications area of your garage</description>
           <updateComment>
           </updateComment>
@@ -3916,6 +3991,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Replaces all crew sounds with hilarious out-of-context sound bytes from people of the RELIC gaming community</description>
           <updateComment>
           </updateComment>
@@ -3942,6 +4018,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>MLG EVERYWHERE@Also includes awesome visuals.</description>
           <updateComment>
           </updateComment>
@@ -3957,6 +4034,7 @@
           <userDatas />
           <pictures />
           <configs />
+          <dependencies />
           <description>Mutes all crew sounds and replaces them with sounds</description>
           <updateComment>
           </updateComment>
@@ -3983,6 +4061,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Plays certain sounds for when you get a certain number of kills in the game.</description>
           <updateComment>
           </updateComment>
@@ -4112,6 +4191,7 @@
               <pictures />
             </config>
           </configs>
+          <dependencies />
           <description>Change your 6th sense sound to one of these in the list@you can preview them from this link:@http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/audio/sixthSensePreview/@suprise_sound is metal gear solid</description>
           <updateComment>
           </updateComment>
@@ -4611,6 +4691,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>Change your 6th sense icon to one of these from the list</description>
           <updateComment>
           </updateComment>
@@ -4654,6 +4735,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>Shows where to hit tanks for damage or critical hits</description>
           <updateComment>
           </updateComment>
@@ -4689,6 +4771,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>For the anime lovers</description>
           <updateComment>
           </updateComment>
@@ -4877,6 +4960,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -4923,6 +5007,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -4952,6 +5037,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -4977,6 +5063,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5062,6 +5149,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5090,6 +5178,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5115,6 +5204,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5174,6 +5264,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5196,6 +5287,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5218,6 +5310,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5240,6 +5333,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5265,6 +5359,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5295,6 +5390,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>best tier 6 in the game</description>
           <updateComment>
           </updateComment>
@@ -5398,6 +5494,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5432,6 +5529,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5454,6 +5552,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5479,6 +5578,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5557,6 +5657,7 @@
               </pictures>
             </config>
           </configs>
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5579,6 +5680,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5613,6 +5715,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>America is the best</description>
           <updateComment>
           </updateComment>
@@ -5645,6 +5748,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5666,6 +5770,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>America is the best</description>
           <updateComment>
           </updateComment>
@@ -5687,6 +5792,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>Helps to spread democracy across the battlefield</description>
           <updateComment>
           </updateComment>
@@ -5707,6 +5813,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5727,6 +5834,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5747,6 +5855,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>I think it looks really nice</description>
           <updateComment>
           </updateComment>
@@ -5766,6 +5875,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5786,6 +5896,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5806,6 +5917,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5826,6 +5938,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5846,6 +5959,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>
@@ -5866,6 +5980,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>
           </description>
           <updateComment>

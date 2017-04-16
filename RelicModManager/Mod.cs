@@ -21,6 +21,7 @@ namespace RelhaxModpack
         public string devURL { get; set; }
         public List<Picture> picList = new List<Picture>();
         public List<string> userFiles = new List<string>();
+        public List<Dependency> modDependencies = new List<Dependency>();
         //size of the mod zip file
         public float size { get; set; }
         //default constructor

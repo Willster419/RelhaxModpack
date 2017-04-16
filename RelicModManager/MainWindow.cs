@@ -1409,7 +1409,6 @@ namespace RelhaxModpack
             //same for configs
             foreach (Catagory c in parsedCatagoryLists)
             {
-                bool dependenciesAdded = false;
                 //will itterate through every catagory once
                 foreach (Mod m in c.mods)
                 {
@@ -1422,16 +1421,12 @@ namespace RelhaxModpack
                         if (!m.modZipFile.Equals(""))
                             modsToInstall.Add(m);
                         //at least one mod of this catagory is checked, add any dependencies required
-                        if (!dependenciesAdded)
+                        //add dependencies
+                        foreach (Dependency d in c.dependencies)
                         {
-                            //add dependencies
-                            foreach (Dependency d in c.dependencies)
-                            {
-                                //check dependency is enabled and has a zip file with it
-                                if (d.enabled && !d.dependencyZipFile.Equals(""))
-                                    dependencies.Add(d);
-                            }
-                            dependenciesAdded = true;
+                            //check dependency is enabled and has a zip file with it
+                            if (d.enabled && !d.dependencyZipFile.Equals(""))
+                                this.addUniqueDependency(d);
                         }
                         foreach (Config cc in m.configs)
                         {
@@ -1441,6 +1436,12 @@ namespace RelhaxModpack
                                 //same for configs
                                 configsToInstall.Add(cc);
                             }
+                        }
+                        foreach (Dependency d in m.modDependencies)
+                        {
+                            //check dependency is enabled and has a zip file with it
+                            if (d.enabled && !d.dependencyZipFile.Equals(""))
+                                this.addUniqueDependency(d);
                         }
                     }
                 }
@@ -2153,7 +2154,10 @@ namespace RelhaxModpack
             this.statusLabel.Text = Translations.getTranslatedString("status");
             this.findBugAddModLabel.Text = Translations.getTranslatedString(findBugAddModLabel.Name);
             this.formPageLink.Text = Translations.getTranslatedString(formPageLink.Name);
-
+            if (helper != null)
+            {
+                helper.helperText.Text = Translations.getTranslatedString("helperText");
+            }
             this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
             switch (Settings.gif)
             {
@@ -2581,6 +2585,18 @@ namespace RelhaxModpack
         {
             Translations.language = Translations.Languages.German;
             this.applySettings();
+        }
+        //adds a dependency to the dependency list only if it is not already added
+        private void addUniqueDependency(Dependency toAdd)
+        {
+            foreach (Dependency existing in dependencies)
+            {
+                //check if the mod zip name is the same
+                if (existing.dependencyZipFile.Equals(toAdd.dependencyZipFile))
+                    return;
+            }
+            //getting here means that the dependency to add is unique
+            dependencies.Add(toAdd);
         }
     }
     //a class for the downloadQueue list, to make a queue of downloads

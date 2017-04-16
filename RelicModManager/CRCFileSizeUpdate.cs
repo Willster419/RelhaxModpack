@@ -112,6 +112,19 @@ namespace RelhaxModpack
                             }
                         }
                     }
+                    foreach (Dependency d in m.modDependencies)
+                    {
+                        int mindex = this.getZipIndex(d.dependencyZipFile);
+                        if (mindex == -1)
+                        {
+                            continue;
+                        }
+                        if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
+                        {
+                            d.dependencyZipCRC = Settings.GetMd5Hash(addZipsDialog.FileNames[mindex]);
+                            dependenciesSB.Append(d.dependencyZipFile + "\n");
+                        }
+                    }
                 }
             }
             //update the crc value
@@ -295,6 +308,36 @@ namespace RelhaxModpack
                                                             break;
                                                     }
                                                 }
+                                            }
+                                            break;
+                                        case "dependencies":
+                                            //parse all dependencies
+                                            foreach (XmlNode nnnnnnn in nn.ChildNodes)
+                                            {
+                                                Dependency d = new Dependency();
+                                                foreach (XmlNode nnnnnnnn in nnnnnnn.ChildNodes)
+                                                {
+                                                    switch (nnnnnnnn.Name)
+                                                    {
+                                                        case "dependencyZipFile":
+                                                            d.dependencyZipFile = nnnnnnnn.InnerText;
+                                                            break;
+                                                        case "dependencyZipCRC":
+                                                            d.dependencyZipCRC = nnnnnnnn.InnerText;
+                                                            break;
+                                                        case "dependencyenabled":
+                                                            try
+                                                            {
+                                                                d.enabled = bool.Parse(nnnnnnnn.InnerText);
+                                                            }
+                                                            catch (FormatException)
+                                                            {
+                                                                d.enabled = false;
+                                                            }
+                                                            break;
+                                                    }
+                                                }
+                                                m.modDependencies.Add(d);
                                             }
                                             break;
                                         case "configs":
@@ -595,6 +638,25 @@ namespace RelhaxModpack
                         configsHolder.AppendChild(configRoot);
                     }
                     modRoot.AppendChild(configsHolder);
+                    XmlElement modDependencies = doc.CreateElement("dependencies");
+                    foreach (Dependency d in m.modDependencies)
+                    {
+                        //declare dependency root
+                        XmlElement DependencyRoot = doc.CreateElement("dependency");
+                        //make dependency
+                        XmlElement DepZipFile = doc.CreateElement("dependencyZipFile");
+                        DepZipFile.InnerText = d.dependencyZipFile;
+                        DependencyRoot.AppendChild(DepZipFile);
+                        XmlElement DepCRC = doc.CreateElement("dependencyZipCRC");
+                        DepCRC.InnerText = d.dependencyZipCRC;
+                        DependencyRoot.AppendChild(DepCRC);
+                        XmlElement DepEnabled = doc.CreateElement("dependencyenabled");
+                        DepEnabled.InnerText = "" + d.enabled;
+                        DependencyRoot.AppendChild(DepEnabled);
+                        //attach dependency root
+                        modDependencies.AppendChild(DependencyRoot);
+                    }
+                    modRoot.AppendChild(modDependencies);
                     XmlElement modDescription = doc.CreateElement("description");
                     modDescription.InnerText = m.description;
                     modRoot.AppendChild(modDescription);
