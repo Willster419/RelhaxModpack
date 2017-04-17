@@ -2276,51 +2276,11 @@
       <dependencies />
       <mods>
         <mod>
-          <name>Xft's Integrated DamageLogs (Hitlog Requires XVM)</name>
-          <version>0.22a</version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>True</enabled>
-          <userDatas />
-          <pictures>
-            <picture>
-              <URL>http://i.imgur.com/pjkRzWn.jpg</URL>
-            </picture>
-          </pictures>
-          <configs>
-            <config>
-              <name>integrated hitlog</name>
-              <configzipfile>Damage_Logs_XFT_Integrated_both_logs.zip</configzipfile>
-              <configzipcrc>7afc5d5682fb4a760ebc84eabfc2f66a</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures />
-            </config>
-            <config>
-              <name>hitlog on top</name>
-              <configzipfile>Damage_Logs_XFT_Split_both_logs.zip</configzipfile>
-              <configzipcrc>cd870cccd2e63c4c4e4cbc90afbbf373</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures />
-            </config>
-          </configs>
-          <dependencies />
-          <description>Keeps a list of who shot you and for how much</description>
-          <updateComment>
-          </updateComment>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/338561-0915-xft-integrated-damagelogs-v022a-30-05-2016/</devURL>
-        </mod>
-        <mod>
           <name>Damagelog by GambitER</name>
-          <version>0.4.2</version>
-          <modzipfile>Damage_Logs_Damage_Log_by_GambitER_v0.4.0_base_0.9.17.0_2016-12-11.zip</modzipfile>
-          <modzipcrc>4e6e337d1a5bbe66b73f6d766530774d</modzipcrc>
+          <version>
+          </version>
+          <modzipfile>Damage_Logs_Damage_Log_by_GambitER_base_2017-04-16.zip</modzipfile>
+          <modzipcrc>e9b5f638fbdab60f09b74089d56b6539</modzipcrc>
           <size>0.2</size>
           <enabled>True</enabled>
           <userDatas />
@@ -2337,6 +2297,37 @@
           </pictures>
           <configs>
             <config>
+              <name>config from OMC</name>
+              <configzipfile>Damage_Logs_GambitER_Damage_Log_OMC_config_2017-04-16.zip</configzipfile>
+              <configzipcrc>990f0ff57adedfc4723098957623dd38</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
+              <name>XFT config with integrated hitlog (xvm needed for hitlog)</name>
+              <configzipfile>Damage_Logs_GambitER_Damage_Log_XFT_Integrated_config_2017-04-16.zip</configzipfile>
+              <configzipcrc>f0d68092a176138fc3bff525c274cf00</configzipcrc>
+              <size>0.1</size>
+              <configenabled>False</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i.imgur.com/pjkRzWn.jpg</URL>
+                </picture>
+              </pictures>
+            </config>
+            <config>
+              <name>XFT config with hitlog on top (xvm needed for hitlog)</name>
+              <configzipfile>Damage_Logs_GambitER_Damage_Log_XFT_Split_configs_2017-04-16.zip</configzipfile>
+              <configzipcrc>8c87e3da0e46b4814835b837cd8ecbdf</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+            </config>
+            <config>
               <name>move damage messages to center</name>
               <configzipfile>Damage_Logs_GambitER_Damage_Log_Message_Patch.zip</configzipfile>
               <configzipcrc>a26f075a6739cc60bb1b75c0da354c93</configzipcrc>
@@ -2347,7 +2338,7 @@
             </config>
           </configs>
           <dependencies />
-          <description>Keeps a list of who shot you and for how much. Press alt to see the player name.</description>
+          <description>Keeps a list of who shot you and for how much. In OMC config, press right alt to see the player name.@XFT Config Website:@http://forum.worldoftanks.eu/index.php?/topic/338561-0915-xft-integrated-damagelogs-v022a-30-05-2016/</description>
           <updateComment>
           </updateComment>
           <devURL>http://modsworldoftanks.com/the-damage-panel-from-gambiter-damagelog/</devURL>
