@@ -76,6 +76,8 @@ namespace RelhaxModpack
                     return;
                 }
             }
+            //load the translations
+            Translations.loadHashes();
             Application.Run(new MainWindow());
         }
     }
