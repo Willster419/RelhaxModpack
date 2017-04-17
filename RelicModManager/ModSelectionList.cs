@@ -208,6 +208,7 @@ namespace RelhaxModpack
         {
             //make the new tab
             TabPage tb = new TabPage("User Mods");
+            tb.AutoScroll = true;
             //add all mods to the tab page
             for (int i = 0; i < userMods.Count; i++)
             {

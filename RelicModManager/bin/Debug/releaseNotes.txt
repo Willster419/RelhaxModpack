@@ -1,3 +1,8 @@
+Version 21.5.1:
+- Fix for bug from bug tracker spreadsheet: Added a scroll bar for the user mods tab
+- Updated mods in the database: XFT damage/hit logs and In battle rating calculation.
+- Mod updates in the database are independant of application updates, but I can put them here just so you know :)
+
 Version 21.5.0:
 - Database structure change: A mod can now have a dependency along with a catagory. Imroves database internal structure.
 - Added feature to only add dependencies when it's unique, meaning it won't download and install duplicate versions. It will decrease install time.
