@@ -24,9 +24,9 @@ namespace RelhaxModpack
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            if (!File.Exists(Application.StartupPath + "\\Ionic.Zip.dll"))
+            if (!File.Exists(Application.StartupPath + "\\DotNetZip.dll"))
             {
-                Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "Ionic.Zip.dll" });
+                Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "DotNetZip.dll" });
             }
             if (!File.Exists(Application.StartupPath + "\\Newtonsoft.Json.dll"))
             {
