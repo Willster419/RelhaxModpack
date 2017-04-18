@@ -199,7 +199,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(375, 5);
+            this.label1.Location = new System.Drawing.Point(410, 5);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 7;
@@ -268,6 +268,7 @@
             this.Controls.Add(this.continueButton);
             this.Controls.Add(this.modTabGroups);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(520, 250);
             this.Name = "ModSelectionList";
             this.Text = "ModSelectionList";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ModSelectionList_FormClosing);

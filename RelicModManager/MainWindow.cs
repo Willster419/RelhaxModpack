@@ -36,7 +36,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 21.5.1";
+        private string managerVersion = "version 21.6.1";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -1571,6 +1571,10 @@ namespace RelhaxModpack
                     //run the smart uninstaller
                     this.newUninstallMethod();
                 }
+            }
+            else
+            {
+                toggleUIButtons(true);
             }
         }
         //handler for what happends when the check box "clean install" is checked or not

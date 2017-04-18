@@ -88,9 +88,9 @@
         <mod>
           <name>J1mB0's XVM Config</name>
           <version>6.5.0.1</version>
-          <modzipfile>XVM_Prebuilt_Configs_J1mB0_v6.5.0.1.zip</modzipfile>
-          <modzipcrc>57b614ff61f0784f86dec7a1f8318618</modzipcrc>
-          <size>6.8</size>
+          <modzipfile>XVM_Prebuilt_Configs_J1mB0_2017-04-17.zip</modzipfile>
+          <modzipcrc>457a699c6d041c688d3cc42e9a291e59</modzipcrc>
+          <size>0.1</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>
@@ -116,10 +116,11 @@
         </mod>
         <mod>
           <name>Bones's XVM Config</name>
-          <version>6.5.0.1</version>
-          <modzipfile>XVM_Prebuilt_Configs_Bones_Base.zip</modzipfile>
-          <modzipcrc>9ccbe20d12d5901729101560c04ac29f</modzipcrc>
-          <size>2.4</size>
+          <version>
+          </version>
+          <modzipfile>XVM_Prebuilt_Configs_Bones_Base_2017-04-17.zip</modzipfile>
+          <modzipcrc>183b0bb4c5aaf264f59ce335c6c71dee</modzipcrc>
+          <size>0.1</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>

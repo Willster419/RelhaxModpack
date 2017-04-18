@@ -1,3 +1,9 @@
+Version 21.6.1:
+- Fixed the black screen bug issue. Hooray!
+- Fixed a bug where the UI would not re-enable if the user declined to confirm to uninstall
+- Fixed a bug where when the German language was selected, the window size text in the mod selection window would be cut off
+- Fixed a bug where if you have a large font for the title bar, the buttons in the mod selection list get cut off
+
 Version 21.5.1:
 - Fix for bug from bug tracker spreadsheet: Added a scroll bar for the user mods tab
 - Updated mods in the database: XFT damage/hit logs and In battle rating calculation.

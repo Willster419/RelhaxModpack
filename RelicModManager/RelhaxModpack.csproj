@@ -29,7 +29,7 @@
     <ProductName>Relhax Modpack</ProductName>
     <PublisherName>Willard Wider</PublisherName>
     <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>0.21.5.%2a</ApplicationVersion>
+    <ApplicationVersion>0.21.6.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -55,6 +55,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>relicbanner_for_ico.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>RelhaxModpack.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">

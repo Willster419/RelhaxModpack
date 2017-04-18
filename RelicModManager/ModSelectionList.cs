@@ -25,6 +25,8 @@ namespace RelhaxModpack
         public List<Dependency> globalDependencies;
         private bool loadingConfig = false;
         private bool taskBarHidden = false;
+        private const int titleBar = 23;//set origionally for 23
+        private int difference = 0;
         private enum loadConfigMode
         {
             error = -1,
@@ -166,8 +168,6 @@ namespace RelhaxModpack
             this.makeTabs();
             this.addAllMods();
             this.addUserMods();
-            //force a resize
-            this.ModSelectionList_SizeChanged(null, null);
             //set the size to the last closed size
             this.Size = new Size(Settings.modSelectionWidth, Settings.modSelectionHeight);
             //set the UI colors
@@ -183,6 +183,17 @@ namespace RelhaxModpack
             }
             //get the maximum height of the screen
             this.MaximumSize = Screen.FromControl(this).WorkingArea.Size;
+            //get the size of the title bar window
+            Rectangle screenRektangle = RectangleToScreen(this.ClientRectangle);
+            int titleHeight = screenRektangle.Top - this.Top;
+            //largest possible is 46
+            //mine (programmed for) is 23
+            if (titleHeight > titleBar)
+            {
+                difference = titleHeight - titleBar;
+            }
+            //force a resize
+            this.ModSelectionList_SizeChanged(null, null);
         }
         //initializes the userMods list. This should only be run once
         private void initUserMods()
@@ -1543,13 +1554,13 @@ namespace RelhaxModpack
         //resizing handler for the window
         private void ModSelectionList_SizeChanged(object sender, EventArgs e)
         {
-            continueButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height);
-            cancelButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height);
-            modTabGroups.Size = new Size(this.Size.Width - 20 - modTabGroups.Location.X, this.Size.Height - modTabGroups.Location.Y - 39 - continueButton.Size.Height - 6);
+            continueButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
+            cancelButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
+            modTabGroups.Size = new Size(this.Size.Width - 20 - modTabGroups.Location.X, this.Size.Height - modTabGroups.Location.Y - 39 - continueButton.Size.Height - 6 - difference);
             label1.Text = "" + this.Size.Width + " x " + this.Size.Height;
-            loadConfigButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width - 6 - loadConfigButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height);
-            saveConfigButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height);
-            clearSelectionsButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width - 6 - loadConfigButton.Size.Width - 6 - clearSelectionsButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height);
+            loadConfigButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width - 6 - loadConfigButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
+            saveConfigButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
+            clearSelectionsButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width - 6 - loadConfigButton.Size.Width - 6 - clearSelectionsButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
             if (this.Size.Height < 250) this.Size = new Size(this.Size.Width, 250);
             if (this.Size.Width < 520) this.Size = new Size(520, this.Size.Height);
             foreach (TabPage t in modTabGroups.TabPages)
