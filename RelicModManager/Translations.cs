@@ -147,7 +147,7 @@ namespace RelhaxModpack
             //Componet: cancelButton
             //
             english.Add("cancelButton","cancel");
-            german.Add("cancelButton","Cancel");
+            german.Add("cancelButton","Abbrechen");
             
             //Componet: helpLabel
             //
@@ -266,7 +266,7 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("canceled","canceled");
-            german.Add("canceled","canceled");
+            german.Add("canceled","abgebrochen");
             
             //Componet: 
             //
