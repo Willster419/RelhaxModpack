@@ -142,7 +142,7 @@ namespace RelhaxModpack
             //Componet: continueButton
             //
             english.Add("continueButton","continue");
-            german.Add("continueButton","Fortsetzen");
+            german.Add("continueButton","Weiter");
             
             //Componet: cancelButton
             //
@@ -167,7 +167,7 @@ namespace RelhaxModpack
             //Componet: label2
             //
             english.Add("label2","\"*\" tab indicates single selection tab");
-            german.Add("label2","\"*\" tab Zeigt eine einzelne Auswahl an tab");
+            german.Add("label2"," Zeigt eine einzelne Auswahl an");
             
             //Componet: clearSelectionsButton
             //
