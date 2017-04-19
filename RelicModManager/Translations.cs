@@ -167,7 +167,7 @@ namespace RelhaxModpack
             //Componet: label2
             //
             english.Add("label2","\"*\" tab indicates single selection tab");
-            german.Add("label2"," Zeigt eine einzelne Auswahl an");
+            german.Add("label2","Zeigt eine einzelne Auswahl an");
             
             //Componet: clearSelectionsButton
             //
@@ -193,7 +193,7 @@ namespace RelhaxModpack
             //Componet: previousPicButton
             //
             english.Add("previousPicButton","previous");
-            german.Add("previousPicButton","vorherige");
+            german.Add("previousPicButton","vorheriges");
             
             //Componet: devLinkLabel
             //
