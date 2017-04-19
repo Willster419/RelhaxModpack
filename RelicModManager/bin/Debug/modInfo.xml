@@ -6,13 +6,13 @@
       <dependencyenabled>True</dependencyenabled>
     </globaldependency>
     <globaldependency>
-      <dependencyZipFile>Dependency_global_fonts.zip</dependencyZipFile>
-      <dependencyZipCRC>5fc9851f518f769b9fe4385d99b33cbf</dependencyZipCRC>
+      <dependencyZipFile>Dependency_global_fonts_2017-04-18.zip</dependencyZipFile>
+      <dependencyZipCRC>23cb8ecf5357d4164928cd3704f17d71</dependencyZipCRC>
       <dependencyenabled>True</dependencyenabled>
     </globaldependency>
     <globaldependency>
-      <dependencyZipFile>Dependency_global_orig_xmls.zip</dependencyZipFile>
-      <dependencyZipCRC>46fc1529e59b6ae792540e49f5ffa8e3</dependencyZipCRC>
+      <dependencyZipFile>Dependency_global_orig_xmls_2017-04-18.zip</dependencyZipFile>
+      <dependencyZipCRC>2b6642bdf49b3a491ae69924d47657f0</dependencyZipCRC>
       <dependencyenabled>True</dependencyenabled>
     </globaldependency>
     <globaldependency>
@@ -27,15 +27,15 @@
       <selectionType>single</selectionType>
       <dependencies>
         <dependency>
-          <dependencyZipFile>Dependency_XVM_Base_6.5.7.zip</dependencyZipFile>
-          <dependencyZipCRC>dabf6bb3aa95d6c969abc0316c991ed6</dependencyZipCRC>
+          <dependencyZipFile>Dependency_XVM_Base_6.6.0.zip</dependencyZipFile>
+          <dependencyZipCRC>350a3f0ff2921f3429eee8a575d61b09</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
       <mods>
         <mod>
           <name>Default Config</name>
-          <version>6.5.7</version>
+          <version>6.6.0</version>
           <modzipfile>XVM_Prebuilt_Configs_Default_2017_03-24.zip</modzipfile>
           <modzipcrc>7bb0408f6500065a9eb85818c46a1680</modzipcrc>
           <size>0.1</size>
@@ -209,8 +209,8 @@
       <selectionType>multi</selectionType>
       <dependencies>
         <dependency>
-          <dependencyZipFile>Dependency_XVM_Base_6.5.7.zip</dependencyZipFile>
-          <dependencyZipCRC>dabf6bb3aa95d6c969abc0316c991ed6</dependencyZipCRC>
+          <dependencyZipFile>Dependency_XVM_Base_6.6.0.zip</dependencyZipFile>
+          <dependencyZipCRC>350a3f0ff2921f3429eee8a575d61b09</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
@@ -2224,7 +2224,7 @@
               <configzipfile>Crosshairs_MeltyMapsMathMod_Tank_2017_04_07.zip</configzipfile>
               <configzipcrc>f</configzipcrc>
               <size>0</size>
-              <configenabled>True</configenabled>
+              <configenabled>False</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
@@ -2358,7 +2358,7 @@
           <modzipfile>Ingame_Info_Battle_Assistant_Base.zip</modzipfile>
           <modzipcrc>2a86a7e3fe0ddd032c0654daa6dcb72e</modzipcrc>
           <size>0.1</size>
-          <enabled>True</enabled>
+          <enabled>False</enabled>
           <userDatas />
           <pictures>
             <picture>
@@ -2424,7 +2424,7 @@
           <modzipcrc>
           </modzipcrc>
           <size>0</size>
-          <enabled>True</enabled>
+          <enabled>False</enabled>
           <userDatas />
           <pictures />
           <configs>
@@ -2662,7 +2662,7 @@
           <modzipfile>Ingame_Info_SpotMessenger_v0.7.0_2016-12-14.zip</modzipfile>
           <modzipcrc>36488511d781a3545bd11b076c1ee9dd</modzipcrc>
           <size>0.1</size>
-          <enabled>True</enabled>
+          <enabled>False</enabled>
           <userDatas />
           <pictures />
           <configs>
@@ -2697,7 +2697,7 @@
           <modzipfile>Ingame_Info_LightMod_LampLights.zip</modzipfile>
           <modzipcrc>bb872e0705fc77dad2f6c7b86e1ebb2e</modzipcrc>
           <size>0.2</size>
-          <enabled>True</enabled>
+          <enabled>False</enabled>
           <userDatas />
           <pictures>
             <picture>
@@ -3548,7 +3548,7 @@
               <configzipfile>Ingame_Info_Consumables_by_Aimdrol_with_text_2017_04_16.zip</configzipfile>
               <configzipcrc>84a4670f8b4d371a48b1281c5b7b8f0e</configzipcrc>
               <size>4.9</size>
-              <configenabled>True</configenabled>
+              <configenabled>False</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
@@ -3780,7 +3780,7 @@
           <modzipfile>Ingame_Info_WG_Radio.zip</modzipfile>
           <modzipcrc>5aae566466a4d093e1b227d32fb3de9e</modzipcrc>
           <size>1.4</size>
-          <enabled>True</enabled>
+          <enabled>False</enabled>
           <userDatas />
           <pictures>
             <picture>
@@ -3828,7 +3828,7 @@
           <modzipfile>Ingame_Info_BalCalcMod_Base_0.9.17.1_2017-03-31.zip</modzipfile>
           <modzipcrc>aededd6ffef24a0f1db70834f8076272</modzipcrc>
           <size>0.1</size>
-          <enabled>True</enabled>
+          <enabled>False</enabled>
           <userDatas />
           <pictures>
             <picture>
@@ -3958,8 +3958,8 @@
             <config>
               <name>English</name>
               <configzipfile>Garage_Session_Stats_YasenKrasen_english_2017_04_07.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>320d4e28e0a9afda15f5279b8c429f31</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single_dropdown1</configtype>
               <pictures />
@@ -3967,8 +3967,8 @@
             <config>
               <name>German</name>
               <configzipfile>Garage_Session_Stats_YasenKrasen_german_2017_04_07.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>586dd6319b7f885b635ff54d25328b75</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single_dropdown1</configtype>
               <pictures />

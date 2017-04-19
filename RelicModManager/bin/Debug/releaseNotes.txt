@@ -1,3 +1,8 @@
+Version 21.7.0:
+- WoT 0.9.18 support!!
+- Updated zip API from 2011 to 2016.
+- Many mods have been disabled. I will be doing daily checks for mod updates. When the mod devs update them, I will add them.
+
 Version 21.6.1:
 - Fixed the black screen bug issue. Hooray!
 - Fixed a bug where the UI would not re-enable if the user declined to confirm to uninstall
