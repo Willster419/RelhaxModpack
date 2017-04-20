@@ -27,6 +27,7 @@ namespace RelhaxModpack
         private bool taskBarHidden = false;
         private const int titleBar = 23;//set origionally for 23
         private int difference = 0;
+        private string tanksVersion = "";
         private enum loadConfigMode
         {
             error = -1,
@@ -97,9 +98,10 @@ namespace RelhaxModpack
             msgData.hWnd = FindWindow("System_TrayWnd", null);
             return (AppBarStates)SHAppBarMessage((UInt32)AppBarMessages.GetState, ref msgData);
         }
-        public ModSelectionList()
+        public ModSelectionList(string version)
         {
             InitializeComponent();
+            tanksVersion = version;
         }
 
         private void applyTranslations()
@@ -125,7 +127,7 @@ namespace RelhaxModpack
             this.applyTranslations();
             pw.loadingDescBox.Text = Translations.getTranslatedString("readingDatabase");
             Application.DoEvents();
-            string databaseURL = "http://willster419.atwebpages.com/Applications/RelHaxModPack/modInfo.xml";
+            string databaseURL = "http://willster419.atwebpages.com/Applications/RelHaxModPack/modInfo_" + tanksVersion + ".xml";
             if (Program.testMode)
                 databaseURL = "modInfo.xml";
             this.createModStructure2(databaseURL);

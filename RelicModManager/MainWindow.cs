@@ -1377,7 +1377,7 @@ namespace RelhaxModpack
             childProgressBar.Maximum = 100;
             childProgressBar.Value = 0;
             //show the mod selection window
-            ModSelectionList list = new ModSelectionList();
+            ModSelectionList list = new ModSelectionList(tanksVersion);
             list.ShowDialog();
             if (list.cancel)
             {

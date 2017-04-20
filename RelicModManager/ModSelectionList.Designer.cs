@@ -188,9 +188,9 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(866, 438);
+            this.cancelButton.Location = new System.Drawing.Point(845, 438);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(49, 23);
+            this.cancelButton.Size = new System.Drawing.Size(70, 23);
             this.cancelButton.TabIndex = 6;
             this.cancelButton.Text = "cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
@@ -216,7 +216,7 @@
             // 
             // loadConfigButton
             // 
-            this.loadConfigButton.Location = new System.Drawing.Point(671, 438);
+            this.loadConfigButton.Location = new System.Drawing.Point(650, 438);
             this.loadConfigButton.Name = "loadConfigButton";
             this.loadConfigButton.Size = new System.Drawing.Size(90, 23);
             this.loadConfigButton.TabIndex = 9;
@@ -226,7 +226,7 @@
             // 
             // saveConfigButton
             // 
-            this.saveConfigButton.Location = new System.Drawing.Point(767, 438);
+            this.saveConfigButton.Location = new System.Drawing.Point(746, 438);
             this.saveConfigButton.Name = "saveConfigButton";
             this.saveConfigButton.Size = new System.Drawing.Size(93, 23);
             this.saveConfigButton.TabIndex = 10;
@@ -245,9 +245,9 @@
             // 
             // clearSelectionsButton
             // 
-            this.clearSelectionsButton.Location = new System.Drawing.Point(577, 438);
+            this.clearSelectionsButton.Location = new System.Drawing.Point(513, 438);
             this.clearSelectionsButton.Name = "clearSelectionsButton";
-            this.clearSelectionsButton.Size = new System.Drawing.Size(88, 23);
+            this.clearSelectionsButton.Size = new System.Drawing.Size(131, 23);
             this.clearSelectionsButton.TabIndex = 13;
             this.clearSelectionsButton.Text = "clear selections";
             this.clearSelectionsButton.UseVisualStyleBackColor = true;
