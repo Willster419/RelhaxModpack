@@ -142,12 +142,12 @@ namespace RelhaxModpack
             //Componet: continueButton
             //
             english.Add("continueButton","continue");
-            german.Add("continueButton","Fortsetzen");
+            german.Add("continueButton","Weiter");
             
             //Componet: cancelButton
             //
             english.Add("cancelButton","cancel");
-            german.Add("cancelButton","Cancel");
+            german.Add("cancelButton","Abbrechen");
             
             //Componet: helpLabel
             //
@@ -167,7 +167,7 @@ namespace RelhaxModpack
             //Componet: label2
             //
             english.Add("label2","\"*\" tab indicates single selection tab");
-            german.Add("label2","\"*\" tab Zeigt eine einzelne Auswahl an tab");
+            german.Add("label2","\"*\" tab zeigt eine einzelne Tab-Auswahl an");
             
             //Componet: clearSelectionsButton
             //
@@ -193,7 +193,7 @@ namespace RelhaxModpack
             //Componet: previousPicButton
             //
             english.Add("previousPicButton","previous");
-            german.Add("previousPicButton","vorherige");
+            german.Add("previousPicButton","vorheriges");
             
             //Componet: devLinkLabel
             //
@@ -266,7 +266,7 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("canceled","canceled");
-            german.Add("canceled","canceled");
+            german.Add("canceled","abgebrochen");
             
             //Componet: 
             //
