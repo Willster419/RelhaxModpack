@@ -36,7 +36,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 21.7.0";
+        private string managerVersion = "version 21.7.1";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -280,9 +280,9 @@ namespace RelhaxModpack
         {
             speedLabel.Text = Translations.getTranslatedString("patching") + "...";
             Application.DoEvents();
-            Settings.appendToLog("Starting to patch Relhax Mod Pack");
+            //Settings.appendToLog("Starting to patch Relhax Mod Pack");
             //don't do anything if the file does not exist
-            if (!Directory.Exists(tanksLocation + "\\_patch"))
+            if (!Directory.Exists(tanksLocation + @"\_patch"))
                 return;
             //Give the OS time to process the folder change...
             System.Threading.Thread.Sleep(100);
@@ -293,12 +293,12 @@ namespace RelhaxModpack
                 try
                 {
                     //get every patch file in the folder
-                    patchFiles = Directory.GetFiles(tanksLocation + "\\_patch", @"*.xml");
+                    patchFiles = Directory.GetFiles(tanksLocation + @"\_patch", @"*.xml");
                     kontinue = true;
                 }
                 catch (UnauthorizedAccessException e)
                 {
-                    Settings.appendToLog("EXEPTION: UnauthorizedAccessException (trackback)");
+                    Settings.appendToLog("EXEPTION: UnauthorizedAccessException (call stack traceback)");
                     Settings.appendToLog(e.StackTrace);
                     Settings.appendToLog("inner message: " + e.Message);
                     Settings.appendToLog("source: " + e.Source);
@@ -379,6 +379,7 @@ namespace RelhaxModpack
         //installs all fonts in the fonts folder, user and custom
         private void installFonts()
         {
+            Settings.appendToLog("Checking for fonts to install");
             speedLabel.Text = Translations.getTranslatedString("installingFonts") + "...";
             if (!Directory.Exists(tanksLocation + "\\_fonts"))
             {
@@ -390,6 +391,7 @@ namespace RelhaxModpack
                 childProgressBar.Value = childProgressBar.Maximum;
                 state = InstallState.idle;
                 toggleUIButtons(true);
+                Settings.appendToLog("Installation done");
                 return;
             }
             string[] fonts = Directory.GetFiles(tanksLocation + "\\_fonts");
@@ -403,6 +405,7 @@ namespace RelhaxModpack
                 childProgressBar.Value = childProgressBar.Maximum;
                 state = InstallState.idle;
                 toggleUIButtons(true);
+                Settings.appendToLog("Installation done");
                 return;
             }
             //convert the array to a list
@@ -439,6 +442,7 @@ namespace RelhaxModpack
                 childProgressBar.Value = childProgressBar.Maximum;
                 state = InstallState.idle;
                 toggleUIButtons(true);
+                Settings.appendToLog("Installation done");
                 return;
             }
             Settings.appendToLog("Installing fonts");
@@ -485,6 +489,7 @@ namespace RelhaxModpack
                 state = InstallState.idle;
                 toggleUIButtons(true);
                 Settings.appendToLog("Fonts Installed Successfully");
+                Settings.appendToLog("Installation done");
             }
         }
         //checks to see if the application is indeed in admin mode
@@ -696,7 +701,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 04/18/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 04/19/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1908,7 +1913,7 @@ namespace RelhaxModpack
             }
             catch (NullReferenceException ne)
             {
-                Settings.appendToLog("EXEPTION: traceback from instance: " + ne.InnerException);
+                Settings.appendToLog("EXCEPTION: traceback from instance: " + ne.InnerException);
                 Settings.appendToLog("Message: " + ne.Message);
                 Settings.appendToLog("From source: " + ne.Source);
                 Settings.appendToLog("Callstack: " + ne.StackTrace);
@@ -1921,6 +1926,7 @@ namespace RelhaxModpack
             if (state == InstallState.extractRelhaxMods)
             {
                 state = InstallState.patchRelhaxMods;
+                Settings.appendToLog("Starting to patch Relhax Modpack Mods");
                 this.patchFiles();
                 state = InstallState.extractUserMods;
                 this.backgroundExtract(true);
@@ -1929,6 +1935,7 @@ namespace RelhaxModpack
             else if (state == InstallState.extractUserMods)
             {
                 state = InstallState.patchUserMods;
+                Settings.appendToLog("Starting to patch Relhax User Mods");
                 this.patchFiles();
                 state = InstallState.restoreUserData;
                 this.restoreUserData();
