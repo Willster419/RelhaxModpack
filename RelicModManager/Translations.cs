@@ -167,7 +167,7 @@ namespace RelhaxModpack
             //Componet: label2
             //
             english.Add("label2","\"*\" tab indicates single selection tab");
-            german.Add("label2","Zeigt eine einzelne Auswahl an");
+            german.Add("label2","\"*\" tab zeigt eine einzelne Tab-Auswahl an");
             
             //Componet: clearSelectionsButton
             //
