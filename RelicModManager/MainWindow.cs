@@ -36,7 +36,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 21.7.1";
+        private string managerVersion = "version 21.7.2";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -117,6 +117,7 @@ namespace RelhaxModpack
         //The constructur for the application
         public MainWindow()
         {
+            Settings.appendToLog("MainWindow Constructed");
             InitializeComponent();
         }
         //handler for the mod download file progress
@@ -286,6 +287,8 @@ namespace RelhaxModpack
                 return;
             //Give the OS time to process the folder change...
             System.Threading.Thread.Sleep(100);
+            //set the folder properties to read write
+            File.SetAttributes(tanksLocation + @"\_patch", FileAttributes.Normal);
             string[] patchFiles = null;
             bool kontinue = false;
             while (!kontinue)
@@ -298,7 +301,7 @@ namespace RelhaxModpack
                 }
                 catch (UnauthorizedAccessException e)
                 {
-                    Settings.appendToLog("EXEPTION: UnauthorizedAccessException (call stack traceback)");
+                    Settings.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
                     Settings.appendToLog(e.StackTrace);
                     Settings.appendToLog("inner message: " + e.Message);
                     Settings.appendToLog("source: " + e.Source);
@@ -314,6 +317,8 @@ namespace RelhaxModpack
             patchList.Clear();
             for (int i = 0; i < patchFiles.Count(); i++)
             {
+                //set the attributes to normall
+                File.SetAttributes(patchFiles[i],FileAttributes.Normal);
                 //add patches to patchList
                 this.createPatchList(patchFiles[i]);
             }
@@ -699,11 +704,11 @@ namespace RelhaxModpack
             WebRequest.DefaultWebProxy = null;
             wait.loadingDescBox.Text = "Verifying single instance...";
             Application.DoEvents();
-            Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
+            //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 04/19/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 04/20/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
-            Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
+            //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
             try
             {
@@ -711,7 +716,7 @@ namespace RelhaxModpack
                 File.OpenWrite(tempPath + "\\RelHaxOneInstance.txt");
                 Settings.appendToLog("Successfully made single instance text file");
             }
-            //catching an exeption means that this is not the only instance open
+            //catching an EXCEPTION means that this is not the only instance open
             catch (IOException)
             {
                 wait.Close();
@@ -1188,7 +1193,7 @@ namespace RelhaxModpack
                 //MessageBox.Show("ERROR: Failed to patch " + jsonFile);
                 if (Program.testMode)
                 {
-                    //in test mode this is worthy of an exeption
+                    //in test mode this is worthy of an EXCEPTION
                     throw new JsonReaderException();
                 }
             }
@@ -2062,11 +2067,17 @@ namespace RelhaxModpack
                 {
                     try
                     {
+                        File.SetAttributes(file.FullName, FileAttributes.Normal);
                         file.Delete();
                         tryAgain = false;
                     }
-                    catch (UnauthorizedAccessException)
+                    catch (UnauthorizedAccessException e)
                     {
+                        Settings.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
+                        Settings.appendToLog(e.StackTrace);
+                        Settings.appendToLog("inner message: " + e.Message);
+                        Settings.appendToLog("source: " + e.Source);
+                        Settings.appendToLog("target: " + e.TargetSite);
                         DialogResult res = MessageBox.Show(Translations.getTranslatedString("extractionErrorMessage"), Translations.getTranslatedString("extractionErrorHeader"), MessageBoxButtons.RetryCancel);
                         if (res == DialogResult.Retry)
                         {
@@ -2092,11 +2103,28 @@ namespace RelhaxModpack
                     {
                         try
                         {
+                            File.SetAttributes(subdir.FullName, FileAttributes.Normal);
                             subdir.Delete();
                             tryAgain = false;
                         }
-                        catch (IOException)
+                        catch (IOException e)
                         {
+                            Settings.appendToLog("EXCEPTION: IOException (call stack traceback)");
+                            Settings.appendToLog(e.StackTrace);
+                            Settings.appendToLog("inner message: " + e.Message);
+                            Settings.appendToLog("source: " + e.Source);
+                            Settings.appendToLog("target: " + e.TargetSite);
+                            DialogResult result = MessageBox.Show(Translations.getTranslatedString("deleteErrorMessage"), Translations.getTranslatedString("deleteErrorHeader"), MessageBoxButtons.RetryCancel);
+                            if (result == DialogResult.Cancel)
+                                Application.Exit();
+                        }
+                        catch (UnauthorizedAccessException e)
+                        {
+                            Settings.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
+                            Settings.appendToLog(e.StackTrace);
+                            Settings.appendToLog("inner message: " + e.Message);
+                            Settings.appendToLog("source: " + e.Source);
+                            Settings.appendToLog("target: " + e.TargetSite);
                             DialogResult result = MessageBox.Show(Translations.getTranslatedString("deleteErrorMessage"), Translations.getTranslatedString("deleteErrorHeader"), MessageBoxButtons.RetryCancel);
                             if (result == DialogResult.Cancel)
                                 Application.Exit();

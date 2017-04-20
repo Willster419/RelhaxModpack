@@ -22,6 +22,8 @@ namespace RelhaxModpack
         [STAThread]
         static void Main()
         {
+            Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
+            Settings.appendToLog("Main Entry point launched");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             if (!File.Exists(Application.StartupPath + "\\DotNetZip.dll"))
@@ -77,8 +79,18 @@ namespace RelhaxModpack
                 }
             }
             //load the translations
+            Settings.appendToLog("Loading translation hashes");
             Translations.loadHashes();
-            Application.Run(new MainWindow());
+            Settings.appendToLog("Attempting to load MainWindow");
+            try
+            {
+                Application.Run(new MainWindow());
+            }
+            catch (Exception ex)
+            {
+                Settings.appendToLog("EXCEPTION: Application load");
+                Settings.appendToLog(ex.ToString());
+            }
         }
     }
 }
