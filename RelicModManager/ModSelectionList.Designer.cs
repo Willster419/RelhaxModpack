@@ -66,10 +66,10 @@
             this.modTabGroups.Controls.Add(this.tabPage10);
             this.modTabGroups.Controls.Add(this.tabPage11);
             this.modTabGroups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.modTabGroups.Location = new System.Drawing.Point(12, 21);
+            this.modTabGroups.Location = new System.Drawing.Point(12, 36);
             this.modTabGroups.Name = "modTabGroups";
             this.modTabGroups.SelectedIndex = 0;
-            this.modTabGroups.Size = new System.Drawing.Size(968, 400);
+            this.modTabGroups.Size = new System.Drawing.Size(968, 385);
             this.modTabGroups.TabIndex = 4;
             this.modTabGroups.Selected += new System.Windows.Forms.TabControlEventHandler(this.modTabGroups_Selected);
             this.modTabGroups.Click += new System.EventHandler(this.modTabGroups_Click);
@@ -79,7 +79,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(960, 374);
+            this.tabPage1.Size = new System.Drawing.Size(960, 359);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "XVM";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -199,7 +199,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(410, 5);
+            this.label1.Location = new System.Drawing.Point(276, 20);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 7;
@@ -216,9 +216,9 @@
             // 
             // loadConfigButton
             // 
-            this.loadConfigButton.Location = new System.Drawing.Point(650, 438);
+            this.loadConfigButton.Location = new System.Drawing.Point(591, 438);
             this.loadConfigButton.Name = "loadConfigButton";
-            this.loadConfigButton.Size = new System.Drawing.Size(90, 23);
+            this.loadConfigButton.Size = new System.Drawing.Size(113, 23);
             this.loadConfigButton.TabIndex = 9;
             this.loadConfigButton.Text = "Load Pref";
             this.loadConfigButton.UseVisualStyleBackColor = true;
@@ -226,9 +226,9 @@
             // 
             // saveConfigButton
             // 
-            this.saveConfigButton.Location = new System.Drawing.Point(746, 438);
+            this.saveConfigButton.Location = new System.Drawing.Point(710, 438);
             this.saveConfigButton.Name = "saveConfigButton";
-            this.saveConfigButton.Size = new System.Drawing.Size(93, 23);
+            this.saveConfigButton.Size = new System.Drawing.Size(129, 23);
             this.saveConfigButton.TabIndex = 10;
             this.saveConfigButton.Text = "Save Pref";
             this.saveConfigButton.UseVisualStyleBackColor = true;
@@ -237,7 +237,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(192, 5);
+            this.label2.Location = new System.Drawing.Point(13, 20);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(177, 13);
             this.label2.TabIndex = 12;
@@ -245,9 +245,9 @@
             // 
             // clearSelectionsButton
             // 
-            this.clearSelectionsButton.Location = new System.Drawing.Point(513, 438);
+            this.clearSelectionsButton.Location = new System.Drawing.Point(481, 438);
             this.clearSelectionsButton.Name = "clearSelectionsButton";
-            this.clearSelectionsButton.Size = new System.Drawing.Size(131, 23);
+            this.clearSelectionsButton.Size = new System.Drawing.Size(104, 23);
             this.clearSelectionsButton.TabIndex = 13;
             this.clearSelectionsButton.Text = "clear selections";
             this.clearSelectionsButton.UseVisualStyleBackColor = true;
