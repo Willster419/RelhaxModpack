@@ -110,5 +110,20 @@ namespace RelhaxModpack
         {
             mw.jsonPatch(jsonFilePathBox.Text, jsonPathBox.Text, jsonReplaceBox.Text,"edit",true);
         }
+
+        private void regexMakePatchButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void xmlMakePatchButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void jsonMakePatchButton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

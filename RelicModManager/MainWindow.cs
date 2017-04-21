@@ -1048,12 +1048,19 @@ namespace RelhaxModpack
             {
                 //but remove newlines first
                 file = Regex.Replace(file, "\n", "newline");
-                if (Regex.IsMatch(file, search))
+                try
                 {
-                    file = Regex.Replace(file, search, replace);
+                    if (Regex.IsMatch(file, search))
+                    {
+                        file = Regex.Replace(file, search, replace);
+                    }
+                    file = Regex.Replace(file, "newline", "\n");
+                    sb.Append(file);
                 }
-                file = Regex.Replace(file, "newline", "\n");
-                sb.Append(file);
+                catch (ArgumentException)
+                {
+                    if (testMods) MessageBox.Show("invalid regex command");
+                }
             }
             else
             {
