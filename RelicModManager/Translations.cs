@@ -156,13 +156,13 @@ namespace RelhaxModpack
             
             //Componet: loadConfigButton
             //
-            english.Add("loadConfigButton","load preference");
-            german.Add("loadConfigButton","Lade Praeferenzen");
+            english.Add("loadConfigButton","Load selection");
+            german.Add("loadConfigButton", "Auswahl laden");
             
             //Componet: saveConfigButton
             //
-            english.Add("saveConfigButton","save preference");
-            german.Add("saveConfigButton","Speichere Praeferenzen");
+            english.Add("saveConfigButton","Save selection");
+            german.Add("saveConfigButton", "Auswahl speichern");
             
             //Componet: label2
             //
@@ -171,7 +171,7 @@ namespace RelhaxModpack
             
             //Componet: clearSelectionsButton
             //
-            english.Add("clearSelectionsButton","clear selections");
+            english.Add("clearSelectionsButton","Clear Selections");
             german.Add("clearSelectionsButton","Auswahl loeschen");
             
             //Componet: readingDatabase

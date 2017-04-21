@@ -1,6 +1,7 @@
 Version 21.7.3:
--Developer/Modpack Manager update. If you just a user, you (hopefully) should not notice anything
+-Developer/Modpack Manager update.
 -MANAGERS, I have made writing patches 1000x easier. You can now export the physical patch xml file right from the patch builder GUI! Ask me for details.
+-Updated translations
 
 Version 21.7.2:
 -Added more output to log file to debug file and startup issues
