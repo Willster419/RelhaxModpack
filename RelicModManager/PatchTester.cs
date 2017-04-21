@@ -77,6 +77,8 @@ namespace RelhaxModpack
             {
                 i = 0;
             }
+            //convert actual newlines to "newlines"
+            string newReg = Regex.Replace(regexReplaceBox.Text, @"\n", "newline");
             mw.RegxPatch(regexFilePathBox.Text, regexSearchBox.Text, regexReplaceBox.Text, i,true);
         }
 
@@ -113,7 +115,28 @@ namespace RelhaxModpack
 
         private void regexMakePatchButton_Click(object sender, EventArgs e)
         {
-
+            string fileName = Path.GetFileName(regexFilePathBox.Text) + "_patch.xml";
+            XmlDocument doc = new XmlDocument();
+            XmlElement patchHolder = doc.CreateElement("patchs");
+            doc.AppendChild(patchHolder);
+            XmlElement patch = doc.CreateElement("patch");
+            patchHolder.AppendChild(patch);
+            XmlElement type = doc.CreateElement("type");
+            type.InnerText = "regex";
+            patch.AppendChild(type);
+            XmlElement file = doc.CreateElement("file");
+            file.InnerText = regexFilePathBox.Text;
+            patch.AppendChild(file);
+            XmlElement line = doc.CreateElement("line");
+            line.InnerText = regexLineBox.Text;
+            patch.AppendChild(line);
+            XmlElement search = doc.CreateElement("search");
+            search.InnerText = regexSearchBox.Text;
+            patch.AppendChild(search);
+            XmlElement replace = doc.CreateElement("replace");
+            replace.InnerText = Regex.Replace(regexReplaceBox.Text, @"\n", "newline");
+            patch.AppendChild(replace);
+            doc.Save(fileName);
         }
 
         private void xmlMakePatchButton_Click(object sender, EventArgs e)
