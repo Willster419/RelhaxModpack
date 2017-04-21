@@ -455,6 +455,7 @@
             this.regexReplaceBox.Size = new System.Drawing.Size(212, 96);
             this.regexReplaceBox.TabIndex = 28;
             this.regexReplaceBox.Text = "";
+            this.regexReplaceBox.WordWrap = false;
             // 
             // xmlReplaceBox
             // 
@@ -463,6 +464,7 @@
             this.xmlReplaceBox.Size = new System.Drawing.Size(212, 38);
             this.xmlReplaceBox.TabIndex = 29;
             this.xmlReplaceBox.Text = "";
+            this.xmlReplaceBox.WordWrap = false;
             // 
             // jsonReplaceBox
             // 
@@ -471,6 +473,7 @@
             this.jsonReplaceBox.Size = new System.Drawing.Size(212, 100);
             this.jsonReplaceBox.TabIndex = 30;
             this.jsonReplaceBox.Text = "";
+            this.jsonReplaceBox.WordWrap = false;
             // 
             // PatchTester
             // 

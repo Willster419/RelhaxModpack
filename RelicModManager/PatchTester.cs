@@ -121,18 +121,23 @@ namespace RelhaxModpack
             doc.AppendChild(patchHolder);
             XmlElement patch = doc.CreateElement("patch");
             patchHolder.AppendChild(patch);
+
             XmlElement type = doc.CreateElement("type");
             type.InnerText = "regex";
             patch.AppendChild(type);
+
             XmlElement file = doc.CreateElement("file");
             file.InnerText = regexFilePathBox.Text;
             patch.AppendChild(file);
+
             XmlElement line = doc.CreateElement("line");
             line.InnerText = regexLineBox.Text;
             patch.AppendChild(line);
+
             XmlElement search = doc.CreateElement("search");
             search.InnerText = regexSearchBox.Text;
             patch.AppendChild(search);
+
             XmlElement replace = doc.CreateElement("replace");
             replace.InnerText = Regex.Replace(regexReplaceBox.Text, @"\n", "newline");
             patch.AppendChild(replace);
@@ -141,12 +146,86 @@ namespace RelhaxModpack
 
         private void xmlMakePatchButton_Click(object sender, EventArgs e)
         {
+            string fileName = Path.GetFileName(xmlFilePathBox.Text) + "_patch.xml";
+            XmlDocument doc = new XmlDocument();
+            XmlElement patchHolder = doc.CreateElement("patchs");
+            doc.AppendChild(patchHolder);
+            XmlElement patch = doc.CreateElement("patch");
+            patchHolder.AppendChild(patch);
 
+            XmlElement type = doc.CreateElement("type");
+            type.InnerText = "xml";
+            patch.AppendChild(type);
+
+            XmlElement mode = doc.CreateElement("mode");
+            if (xmlAddModeButton.Checked)
+            {
+                mode.InnerText = "add";
+            }
+            else if (xmlEditModsButton.Checked)
+            {
+                mode.InnerText = "edit";
+            }
+            else if (xmlRemoveModeButton.Checked)
+            {
+                mode.InnerText = "remove";
+            }
+            patch.AppendChild(mode);
+
+
+            XmlElement file = doc.CreateElement("file");
+            file.InnerText = xmlFilePathBox.Text;
+            patch.AppendChild(file);
+
+            XmlElement line = doc.CreateElement("path");
+            line.InnerText = xmlPathBox.Text;
+            patch.AppendChild(line);
+
+            XmlElement search = doc.CreateElement("search");
+            search.InnerText = xmlSearchBox.Text;
+            patch.AppendChild(search);
+
+            XmlElement replace = doc.CreateElement("replace");
+            replace.InnerText = xmlReplaceBox.Text;
+            patch.AppendChild(replace);
+
+            doc.Save(fileName);
         }
 
         private void jsonMakePatchButton_Click(object sender, EventArgs e)
         {
+            string fileName = Path.GetFileName(jsonFilePathBox.Text) + "_patch.xml";
+            XmlDocument doc = new XmlDocument();
+            XmlElement patchHolder = doc.CreateElement("patchs");
+            doc.AppendChild(patchHolder);
+            XmlElement patch = doc.CreateElement("patch");
+            patchHolder.AppendChild(patch);
 
+            XmlElement type = doc.CreateElement("type");
+            type.InnerText = "json";
+            patch.AppendChild(type);
+
+            XmlElement mode = doc.CreateElement("mode");
+            mode.InnerText = "edit";
+            patch.AppendChild(mode);
+
+            XmlElement file = doc.CreateElement("file");
+            file.InnerText = jsonFilePathBox.Text;
+            patch.AppendChild(file);
+
+            XmlElement line = doc.CreateElement("path");
+            line.InnerText = jsonPathBox.Text;
+            patch.AppendChild(line);
+
+            XmlElement search = doc.CreateElement("search");
+            search.InnerText = jsonSearchBox.Text;
+            patch.AppendChild(search);
+
+            XmlElement replace = doc.CreateElement("replace");
+            replace.InnerText = jsonReplaceBox.Text;
+            patch.AppendChild(replace);
+
+            doc.Save(fileName);
         }
     }
 }
