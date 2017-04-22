@@ -3868,7 +3868,7 @@
           <modzipfile>Ingame_Info_research_watchdog_2017_03_03.zip</modzipfile>
           <modzipcrc>f</modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <userDatas />
           <pictures>
             <picture>
