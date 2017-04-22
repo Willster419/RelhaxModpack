@@ -3861,6 +3861,29 @@
           </updateComment>
           <devURL>https://koreanrandom.com/forum/topic/30440-</devURL>
         </mod>
+        <mod>
+          <name>Research Watchdog</name>
+          <version>
+          </version>
+          <modzipfile>Ingame_Info_research_watchdog_2017_03_03.zip</modzipfile>
+          <modzipcrc>f</modzipcrc>
+          <size>0</size>
+          <enabled>False</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>http://cdn-frm-eu.wargaming.net/wot/eu/uploads/monthly_12_2014/post-506947255-0-68687800-1419083785.png</URL>
+            </picture>
+            <picture>
+              <URL>http://cdn-frm-eu.wargaming.net/wot/eu/uploads/monthly_01_2015/post-506947255-0-71238500-1420301166.png</URL>
+            </picture>
+          </pictures>
+          <configs />
+          <description>notifies when there is enough XP to unlock module@optionally alerts when vehicle goes elite and accelerate crew training is off</description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://forum.worldoftanks.eu/index.php?/topic/457788-0917-research-watchdog/-</devURL>
+        </mod>
       </mods>
     </catagory>
     <catagory>
