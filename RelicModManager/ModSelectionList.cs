@@ -1507,6 +1507,36 @@ namespace RelhaxModpack
                                                                 }
                                                             }
                                                             break;
+                                                        case "dependencies":
+                                                            //parse all dependencies
+                                                            foreach (XmlNode nnnnnnn in nnnn.ChildNodes)
+                                                            {
+                                                                Dependency d = new Dependency();
+                                                                foreach (XmlNode nnnnnnnn in nnnnnnn.ChildNodes)
+                                                                {
+                                                                    switch (nnnnnnnn.Name)
+                                                                    {
+                                                                        case "dependencyZipFile":
+                                                                            d.dependencyZipFile = nnnnnnnn.InnerText;
+                                                                            break;
+                                                                        case "dependencyZipCRC":
+                                                                            d.dependencyZipCRC = nnnnnnnn.InnerText;
+                                                                            break;
+                                                                        case "dependencyenabled":
+                                                                            try
+                                                                            {
+                                                                                d.enabled = bool.Parse(nnnnnnnn.InnerText);
+                                                                            }
+                                                                            catch (FormatException)
+                                                                            {
+                                                                                d.enabled = false;
+                                                                            }
+                                                                            break;
+                                                                    }
+                                                                }
+                                                                m.modDependencies.Add(d);
+                                                            }
+                                                            break;
                                                     }
                                                 }
                                                 m.configs.Add(c);

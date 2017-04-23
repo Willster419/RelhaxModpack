@@ -17,6 +17,8 @@ namespace RelhaxModpack
         //can the user select multiple configs or one only?
         public string type { get; set; }
         public List<string> pictureList = new List<string>();
+        //the list of dependencies for this catagory
+        public List<Dependency> catDependencies = new List<Dependency>();
         //size of the config zip file
         public float size { get; set; }
         //basic config constructor

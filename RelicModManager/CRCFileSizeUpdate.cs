@@ -125,6 +125,22 @@ namespace RelhaxModpack
                             dependenciesSB.Append(d.dependencyZipFile + "\n");
                         }
                     }
+                    foreach (Config cc in m.configs)
+                    {
+                        foreach (Dependency d in cc.catDependencies)
+                        {
+                            int cindex = this.getZipIndex(d.dependencyZipFile);
+                            if (cindex == -1)
+                            {
+                                continue;
+                            }
+                            if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
+                            {
+                                d.dependencyZipCRC = Settings.GetMd5Hash(addZipsDialog.FileNames[cindex]);
+                                dependenciesSB.Append(d.dependencyZipFile + "\n");
+                            }
+                        }
+                    }
                 }
             }
             //update the crc value
@@ -381,6 +397,36 @@ namespace RelhaxModpack
                                                         case "configtype":
                                                             c.type = nnnn.InnerText;
                                                             break;
+                                                        case "dependencies":
+                                                            //parse all dependencies
+                                                            foreach (XmlNode nnnnnnn in nnnn.ChildNodes)
+                                                            {
+                                                                Dependency d = new Dependency();
+                                                                foreach (XmlNode nnnnnnnn in nnnnnnn.ChildNodes)
+                                                                {
+                                                                    switch (nnnnnnnn.Name)
+                                                                    {
+                                                                        case "dependencyZipFile":
+                                                                            d.dependencyZipFile = nnnnnnnn.InnerText;
+                                                                            break;
+                                                                        case "dependencyZipCRC":
+                                                                            d.dependencyZipCRC = nnnnnnnn.InnerText;
+                                                                            break;
+                                                                        case "dependencyenabled":
+                                                                            try
+                                                                            {
+                                                                                d.enabled = bool.Parse(nnnnnnnn.InnerText);
+                                                                            }
+                                                                            catch (FormatException)
+                                                                            {
+                                                                                d.enabled = false;
+                                                                            }
+                                                                            break;
+                                                                    }
+                                                                }
+                                                                m.modDependencies.Add(d);
+                                                            }
+                                                            break;
                                                         case "pictures":
                                                             //parse every picture
                                                             foreach (XmlNode nnnnnnnn in nnnn.ChildNodes)
@@ -635,6 +681,26 @@ namespace RelhaxModpack
                             configPictures.AppendChild(configpictureRoot);
                         }
                         configRoot.AppendChild(configPictures);
+                        //dependencies for the configs
+                        XmlElement catDependencies = doc.CreateElement("dependencies");
+                        foreach (Dependency d in cc.catDependencies)
+                        {
+                            //declare dependency root
+                            XmlElement DependencyRoot = doc.CreateElement("dependency");
+                            //make dependency
+                            XmlElement DepZipFile = doc.CreateElement("dependencyZipFile");
+                            DepZipFile.InnerText = d.dependencyZipFile;
+                            DependencyRoot.AppendChild(DepZipFile);
+                            XmlElement DepCRC = doc.CreateElement("dependencyZipCRC");
+                            DepCRC.InnerText = d.dependencyZipCRC;
+                            DependencyRoot.AppendChild(DepCRC);
+                            XmlElement DepEnabled = doc.CreateElement("dependencyenabled");
+                            DepEnabled.InnerText = "" + d.enabled;
+                            DependencyRoot.AppendChild(DepEnabled);
+                            //attach dependency root
+                            catDependencies.AppendChild(DependencyRoot);
+                        }
+                        configRoot.AppendChild(catDependencies);
                         configsHolder.AppendChild(configRoot);
                     }
                     modRoot.AppendChild(configsHolder);

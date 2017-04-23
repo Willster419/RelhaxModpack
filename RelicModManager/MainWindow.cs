@@ -697,7 +697,8 @@ namespace RelhaxModpack
         private void MainWindow_Load(object sender, EventArgs e)
         {
             //set window header text to current version so user knows
-            this.Text = this.Text + managerVersion;
+            this.Text = this.Text + managerVersion.Substring(8);
+            if (Program.testMode) this.Text = this.Text + " TEST MODE";
             //show the wait screen
             PleaseWait wait = new PleaseWait();
             wait.Show();
@@ -1448,6 +1449,16 @@ namespace RelhaxModpack
                             {
                                 //same for configs
                                 configsToInstall.Add(cc);
+                            }
+                            //check to see if any catagory dependencies need to be added
+                            if (cc.enabled && cc.configChecked)
+                            {
+                                foreach (Dependency d in cc.catDependencies)
+                                {
+                                    //check dependency is enabled and has a zip file with it
+                                    if (d.enabled && !d.dependencyZipFile.Equals(""))
+                                        this.addUniqueDependency(d);
+                                }
                             }
                         }
                         foreach (Dependency d in m.modDependencies)
