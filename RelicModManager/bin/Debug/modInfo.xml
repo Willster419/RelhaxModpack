@@ -149,6 +149,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>players panel 2</name>
@@ -158,6 +159,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>players panel 3</name>
@@ -167,6 +169,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>1 line tank carousel</name>
@@ -176,6 +179,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown2</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>2 line tank carousel</name>
@@ -185,6 +189,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown2</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>3 line tank carousel</name>
@@ -194,6 +199,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown2</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -237,6 +243,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Full NA</name>
@@ -246,6 +253,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Full EU</name>
@@ -255,6 +263,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Full RU</name>
@@ -264,6 +273,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Full ASIA</name>
@@ -273,6 +283,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -303,6 +314,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>5 sec 6th sense icon</name>
@@ -312,6 +324,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>10 sec 6th sense icon</name>
@@ -321,6 +334,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -351,6 +365,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disable</name>
@@ -360,6 +375,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -391,6 +407,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disable total HP</name>
@@ -400,6 +417,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -430,6 +448,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disable</name>
@@ -439,6 +458,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -470,6 +490,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disable</name>
@@ -479,6 +500,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -510,6 +532,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disable</name>
@@ -519,6 +542,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -550,6 +574,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disable</name>
@@ -559,6 +584,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -590,6 +616,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disable</name>
@@ -599,6 +626,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -630,6 +658,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disable</name>
@@ -639,6 +668,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -670,6 +700,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disable</name>
@@ -679,6 +710,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -710,6 +742,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disable</name>
@@ -719,6 +752,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -750,6 +784,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Hide Battle Tier</name>
@@ -759,6 +794,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Init Battle Results page 1</name>
@@ -768,6 +804,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Init Battle Results page 2</name>
@@ -777,6 +814,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Init Battle Results page 3</name>
@@ -786,6 +824,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -817,6 +856,7 @@
               <configenabled>True</configenabled>
               <configtype>single1</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disabled</name>
@@ -826,6 +866,7 @@
               <configenabled>True</configenabled>
               <configtype>single1</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Rows - 1</name>
@@ -835,6 +876,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown1</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Rows - 2</name>
@@ -844,6 +886,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown1</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Rows - 3</name>
@@ -853,6 +896,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown1</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Rows - Ingame setting</name>
@@ -862,6 +906,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown1</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Cell Type normal</name>
@@ -871,6 +916,7 @@
               <configenabled>True</configenabled>
               <configtype>single2</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Cell Type small</name>
@@ -880,6 +926,7 @@
               <configenabled>True</configenabled>
               <configtype>single2</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Cell Type ingame setting</name>
@@ -889,6 +936,7 @@
               <configenabled>True</configenabled>
               <configtype>single2</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Hide "Buy Tank" cell</name>
@@ -898,6 +946,7 @@
               <configenabled>True</configenabled>
               <configtype>single3</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Show "Buy Tank" cell, hide total slots</name>
@@ -907,6 +956,7 @@
               <configenabled>True</configenabled>
               <configtype>single3</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Show "Buy Tank" cell, show total slots</name>
@@ -916,6 +966,7 @@
               <configenabled>True</configenabled>
               <configtype>single3</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Hide "Buy Slot" cell</name>
@@ -925,6 +976,7 @@
               <configenabled>True</configenabled>
               <configtype>single4</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Show "Buy Slot" cell, hide total used slots</name>
@@ -934,6 +986,7 @@
               <configenabled>True</configenabled>
               <configtype>single4</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Show "Buy Slot" cell, show total used slots</name>
@@ -943,6 +996,7 @@
               <configenabled>True</configenabled>
               <configtype>single4</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -974,6 +1028,7 @@
               <configenabled>True</configenabled>
               <configtype>single2</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Average Damage Disable (normal cell only)</name>
@@ -983,6 +1038,7 @@
               <configenabled>True</configenabled>
               <configtype>single2</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Battles Count Enable (normal cell only)</name>
@@ -992,6 +1048,7 @@
               <configenabled>True</configenabled>
               <configtype>single3</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Battles Count Disable (normal cell only)</name>
@@ -1001,6 +1058,7 @@
               <configenabled>True</configenabled>
               <configtype>single3</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Win Rate Enable</name>
@@ -1010,6 +1068,7 @@
               <configenabled>True</configenabled>
               <configtype>single4</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Win Rate Disable</name>
@@ -1019,6 +1078,7 @@
               <configenabled>True</configenabled>
               <configtype>single4</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1051,6 +1111,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>6 step xvm colorscale</name>
@@ -1060,6 +1121,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>10 step wotlabs</name>
@@ -1069,6 +1131,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1100,6 +1163,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disable</name>
@@ -1109,6 +1173,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>12 hour</name>
@@ -1118,6 +1183,7 @@
               <configenabled>True</configenabled>
               <configtype>single2</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>24 hour</name>
@@ -1127,6 +1193,7 @@
               <configenabled>True</configenabled>
               <configtype>single2</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1158,6 +1225,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disabled</name>
@@ -1167,6 +1235,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1198,6 +1267,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disabled</name>
@@ -1207,6 +1277,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1238,6 +1309,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Gold</name>
@@ -1247,6 +1319,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1278,6 +1351,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disabled</name>
@@ -1287,6 +1361,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1318,6 +1393,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disabled</name>
@@ -1327,6 +1403,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1358,6 +1435,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disabled</name>
@@ -1367,6 +1445,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1398,6 +1477,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>20%</name>
@@ -1407,6 +1487,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>50%</name>
@@ -1416,6 +1497,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1447,6 +1529,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disabled</name>
@@ -1456,6 +1539,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1487,6 +1571,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disabled</name>
@@ -1496,6 +1581,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1527,6 +1613,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disabled</name>
@@ -1536,6 +1623,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1567,6 +1655,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disabled</name>
@@ -1576,6 +1665,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1607,6 +1697,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disabled</name>
@@ -1616,6 +1707,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1647,6 +1739,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disabled</name>
@@ -1656,6 +1749,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1687,6 +1781,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Enabled</name>
@@ -1696,6 +1791,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1727,6 +1823,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disabled</name>
@@ -1736,6 +1833,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1767,6 +1865,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disabled</name>
@@ -1776,6 +1875,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Minimap zoom - bottom right</name>
@@ -1785,6 +1885,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Minimap zoom - centered</name>
@@ -1794,6 +1895,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1825,6 +1927,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Left ALT</name>
@@ -1834,6 +1937,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1865,6 +1969,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Disabled</name>
@@ -1874,6 +1979,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1916,6 +2022,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Session Statistics by WorstUnicumEU</name>
@@ -1938,6 +2045,7 @@
                   <URL>http://i.imgur.com/1zJTcVH.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -1966,6 +2074,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>green</name>
@@ -1975,6 +2084,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>black and white</name>
@@ -1984,6 +2094,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>meltymaps mathmod</name>
@@ -1993,6 +2104,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -2022,6 +2134,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>font size medium (24)</name>
@@ -2031,6 +2144,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>font size large (30)</name>
@@ -2040,6 +2154,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -2077,6 +2192,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>200</name>
@@ -2086,6 +2202,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>500</name>
@@ -2095,6 +2212,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Increase Scroll Speed</name>
@@ -2104,6 +2222,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -2148,6 +2267,7 @@
                   <URL>http://s23.postimg.org/birojedcr/Pro_A09_tutvx.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Harpoon</name>
@@ -2164,6 +2284,7 @@
                   <URL>http://s23.postimg.org/birojedcr/Pro_A09_tutvx.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -2202,6 +2323,7 @@
                   <URL>http://s14.directupload.net/images/user/140822/dbm9r3hb.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>J1mBOs Corsshair mod</name>
@@ -2218,6 +2340,7 @@
                   <URL>http://s7.directupload.net/images/user/131227/o4wsifts.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>MeltyMapsMathMod</name>
@@ -2231,6 +2354,7 @@
                   <URL>https://puu.sh/veTG5/b7687203d6.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Harpoon</name>
@@ -2259,6 +2383,7 @@
                   <URL>http://fs1.directupload.net/images/user/150413/qwjy69m8.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -2305,6 +2430,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>XFT config with integrated hitlog (xvm needed for hitlog)</name>
@@ -2318,6 +2444,7 @@
                   <URL>http://i.imgur.com/pjkRzWn.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>XFT config with hitlog on top (xvm needed for hitlog)</name>
@@ -2327,6 +2454,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>move damage messages to center</name>
@@ -2336,6 +2464,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -2380,6 +2509,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>J</name>
@@ -2389,6 +2519,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Middle Mouse</name>
@@ -2398,6 +2529,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Increased Zoom Speed</name>
@@ -2407,6 +2539,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -2440,6 +2573,7 @@
                   <URL>http://s1.directupload.net/images/user/131220/s3e8arji.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -2474,6 +2608,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>arty only config</name>
@@ -2483,6 +2618,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>old style config</name>
@@ -2499,6 +2635,7 @@
                   <URL>http://fs5.directupload.net/images/user/160816/v7s56u4m.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -2530,6 +2667,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>5 sec autoaim search</name>
@@ -2539,6 +2677,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>infinite autoaim search</name>
@@ -2548,6 +2687,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>auto-announce reload add-on</name>
@@ -2557,6 +2697,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>repair with T add-on</name>
@@ -2566,6 +2707,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>dead shot blocker add-on</name>
@@ -2575,6 +2717,7 @@
               <configenabled>False</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>ally shot blocker add-on</name>
@@ -2584,6 +2727,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>help message when spotted add-on</name>
@@ -2593,6 +2737,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>lock shell travel distance when enemy dissapeared add-on</name>
@@ -2602,6 +2747,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -2674,6 +2820,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>inactive at start, activate with F11</name>
@@ -2683,6 +2830,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -2720,6 +2868,7 @@
                   <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-78083800-1474790872.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Car Pack</name>
@@ -2739,6 +2888,7 @@
                   <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-29763500-1474791383.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Neon Track Lights</name>
@@ -2752,6 +2902,7 @@
                   <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-40315100-1474790978.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Spotlight on tank in sight</name>
@@ -2765,6 +2916,7 @@
                   <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-44270600-1474791048.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>evening lighting</name>
@@ -2778,6 +2930,7 @@
                   <URL>http://i.imgur.com/eS1WxI3.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -2811,6 +2964,7 @@
                   <URL>http://wotsite.net/images/2016/10/4/11.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>zx80</name>
@@ -2824,6 +2978,7 @@
                   <URL>http://wotsite.net/images/2016/10/4/12.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>marsoff</name>
@@ -2837,6 +2992,7 @@
                   <URL>http://wotsite.net/images/2016/3/15/8.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>lenya69</name>
@@ -2850,6 +3006,7 @@
                   <URL>http://cdn-frm-eu.wargaming.net/wot/ru/uploads/monthly_01_2017/post-188170-0-97028800-1483580564.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>dikey93</name>
@@ -2863,6 +3020,7 @@
                   <URL>http://wotsite.net/images/2016/10/4/10.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>RazNaRok and GreenWarriors</name>
@@ -2876,6 +3034,7 @@
                   <URL>http://wotsite.net/images/2016/10/4/9.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>14 second display</name>
@@ -2885,6 +3044,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -2916,6 +3076,7 @@
                   <URL>http://i.imgur.com/L7o8Ls4.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>wn8 and damage</name>
@@ -2929,6 +3090,7 @@
                   <URL>http://i.imgur.com/eQdm4MK.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>damage</name>
@@ -2942,6 +3104,7 @@
                   <URL>http://i.imgur.com/qL7SHsM.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>wn8 and eff</name>
@@ -2955,6 +3118,7 @@
                   <URL>http://i.imgur.com/huDwkMr.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>wn8, eff, damage</name>
@@ -2968,6 +3132,7 @@
                   <URL>http://i.imgur.com/1Hdrwj6.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>eff</name>
@@ -2981,6 +3146,7 @@
                   <URL>http://i.imgur.com/6zDGTzQ.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>eff and damage</name>
@@ -2994,6 +3160,7 @@
                   <URL>http://i.imgur.com/5YesK36.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>ProTANKI config</name>
@@ -3007,6 +3174,7 @@
                   <URL>http://i.imgur.com/qKwtYEb.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -3040,6 +3208,7 @@
                   <URL>http://s1.directupload.net/images/user/131227/74fsriw4.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Leecher</name>
@@ -3053,6 +3222,7 @@
                   <URL>http://fs2.directupload.net/images/150625/h5uctkik.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>New Version</name>
@@ -3066,6 +3236,7 @@
                   <URL>http://fs2.directupload.net/images/150625/fbytnioy.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Protanki</name>
@@ -3079,6 +3250,7 @@
                   <URL>http://fs2.directupload.net/images/150625/rnhp6i6b.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Refaol</name>
@@ -3092,6 +3264,7 @@
                   <URL>http://fs2.directupload.net/images/150625/88rzon9x.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>VoPV</name>
@@ -3105,6 +3278,7 @@
                   <URL>http://fs2.directupload.net/images/150625/tvum98ss.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -3138,6 +3312,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>fog removal</name>
@@ -3147,6 +3322,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>both</name>
@@ -3156,6 +3332,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -3209,6 +3386,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>GuP</name>
@@ -3218,6 +3396,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -3248,6 +3427,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Damage, Ramming, Kamakazie</name>
@@ -3257,6 +3437,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -3290,6 +3471,7 @@
                   <URL>http://i.imgur.com/fsnK4YY.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>OMC by Technowolf (RIP OMC)</name>
@@ -3303,6 +3485,7 @@
                   <URL>http://fs1.directupload.net/images/150606/annusd34.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -3343,6 +3526,7 @@
                   <URL>https://i.imgur.com/eKAhVfj.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -3374,6 +3558,7 @@
               <configenabled>False</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -3401,6 +3586,7 @@
               <configenabled>False</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -3434,6 +3620,7 @@
                   <URL>http://i.imgur.com/HaC1Nju.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Ace Tanker by Aimdrol</name>
@@ -3447,6 +3634,7 @@
                   <URL>http://i.imgur.com/s4L4nVr.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>V1 by VoPV</name>
@@ -3460,6 +3648,7 @@
                   <URL>http://fs5.directupload.net/images/user/160425/nga9lmm7.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>V2 by VoPV</name>
@@ -3473,6 +3662,7 @@
                   <URL>http://fs5.directupload.net/images/user/160425/jfhnc4by.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>QuickeyBaby by Aimdrol</name>
@@ -3482,6 +3672,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Illuminati by Aimdrol</name>
@@ -3495,6 +3686,7 @@
                   <URL>http://i.imgur.com/DsAezWr.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>xXx-MVP-xXx by Aimdrol</name>
@@ -3508,6 +3700,7 @@
                   <URL>http://i.imgur.com/ZtlPVDN.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -3542,6 +3735,7 @@
                   <URL>http://i.imgur.com/6mneJsK.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>by Aimdrol with text modifications (english only)</name>
@@ -3555,6 +3749,7 @@
                   <URL>http://i.imgur.com/6mneJsK.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>by Grandpa</name>
@@ -3574,6 +3769,7 @@
                   <URL>http://fs2.directupload.net/images/user/150227/td2ma4yy.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>by LakeOphilD</name>
@@ -3587,6 +3783,7 @@
                   <URL>http://s14.directupload.net/images/user/140802/q4kiwkqq.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>by vito74</name>
@@ -3603,6 +3800,7 @@
                   <URL>http://s1.directupload.net/images/131222/lr72rpu2.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>by vvooj</name>
@@ -3616,6 +3814,7 @@
                   <URL>http://fs2.directupload.net/images/user/150830/6xngkui3.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>by YHKEP</name>
@@ -3632,6 +3831,7 @@
                   <URL>http://fs2.directupload.net/images/150227/gxi23tuu.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -3662,6 +3862,7 @@
               <configenabled>False</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Show player spotted status in panels (possible xvm conflict)</name>
@@ -3671,6 +3872,7 @@
               <configenabled>False</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Enable Players info panel (when you press left alt)</name>
@@ -3680,6 +3882,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -3711,6 +3914,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>2 sec no corpse shot</name>
@@ -3720,6 +3924,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>5 sec no corpse shot</name>
@@ -3729,6 +3934,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>block team damage shot</name>
@@ -3738,6 +3944,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>block wasted shots (shots fired into the air, ground, etc.)</name>
@@ -3747,6 +3954,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>block teamkiller damage shot</name>
@@ -3756,6 +3964,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>send team damage message in chat</name>
@@ -3765,6 +3974,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -3844,6 +4054,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Q</name>
@@ -3853,6 +4064,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -3866,8 +4078,8 @@
           <version>
           </version>
           <modzipfile>Ingame_Info_research_watchdog_2017_03_03.zip</modzipfile>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
+          <modzipcrc>d42e4b719a5231f01a4961472ce9d3cd</modzipcrc>
+          <size>0.1</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>
@@ -3879,6 +4091,7 @@
             </picture>
           </pictures>
           <configs />
+          <dependencies />
           <description>notifies when there is enough XP to unlock module@optionally alerts when vehicle goes elite and accelerate crew training is off</description>
           <updateComment>
           </updateComment>
@@ -3916,6 +4129,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -3930,7 +4144,8 @@
           </version>
           <modzipfile>
           </modzipfile>
-          <modzipcrc>f</modzipcrc>
+          <modzipcrc>
+          </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
           <userDatas>
@@ -3950,6 +4165,7 @@
               <configenabled>True</configenabled>
               <configtype>single1</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>V1</name>
@@ -3959,6 +4175,7 @@
               <configenabled>True</configenabled>
               <configtype>single1</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>V2</name>
@@ -3968,6 +4185,7 @@
               <configenabled>True</configenabled>
               <configtype>single1</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>V3</name>
@@ -3977,6 +4195,7 @@
               <configenabled>True</configenabled>
               <configtype>single1</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>English</name>
@@ -3986,6 +4205,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown1</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>German</name>
@@ -3995,6 +4215,7 @@
               <configenabled>True</configenabled>
               <configtype>single_dropdown1</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Daily Reset</name>
@@ -4004,6 +4225,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -4047,6 +4269,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>censored</name>
@@ -4056,6 +4279,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -4083,6 +4307,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -4126,6 +4351,7 @@
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -4166,6 +4392,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Admiral Ackbar</name>
@@ -4175,6 +4402,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>OMC signal (8 sec)</name>
@@ -4184,6 +4412,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>OMC signal (8 sec) 10db softer</name>
@@ -4193,6 +4422,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Standard signal (10 sec)</name>
@@ -4202,6 +4432,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Cyborg by APCR-NOOB</name>
@@ -4211,6 +4442,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>German Soldier</name>
@@ -4220,6 +4452,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Metal Gear Solid</name>
@@ -4229,6 +4462,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Minions</name>
@@ -4238,6 +4472,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Sauron signal</name>
@@ -4247,6 +4482,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
             <config>
               <name>Illuminati by Aimdrol</name>
@@ -4256,6 +4492,7 @@
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -4288,6 +4525,7 @@
                   <URL>http://s14.directupload.net/images/user/131220/whrhwpnr.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>OMNI Logo</name>
@@ -4301,6 +4539,7 @@
                   <URL>http://s1.directupload.net/images/user/131220/4fy3sumh.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Aslain</name>
@@ -4314,6 +4553,7 @@
                   <URL>http://s1.directupload.net/images/user/131220/fpznn3wi.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>blue LED</name>
@@ -4327,6 +4567,7 @@
                   <URL>http://s1.directupload.net/images/user/131220/mresvujs.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>blue Lightning</name>
@@ -4340,6 +4581,7 @@
                   <URL>http://fs1.directupload.net/images/user/150723/bpk7kpug.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Boobs</name>
@@ -4353,6 +4595,7 @@
                   <URL>http://s14.directupload.net/images/user/141125/yo97amwu.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>EiKarrRamba</name>
@@ -4366,6 +4609,7 @@
                   <URL>http://s7.directupload.net/images/140803/jqshlzne.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>F4CE</name>
@@ -4379,6 +4623,7 @@
                   <URL>http://s7.directupload.net/images/user/141005/kf5cg8mv.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Freaky Icecubes</name>
@@ -4392,6 +4637,7 @@
                   <URL>http://fs5.directupload.net/images/user/151101/oz9ymq42.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Fry</name>
@@ -4405,6 +4651,7 @@
                   <URL>http://s7.directupload.net/images/user/131220/qlxjhb9u.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>FS</name>
@@ -4418,6 +4665,7 @@
                   <URL>http://fs2.directupload.net/images/150208/hpxfvs28.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>General Ackbar</name>
@@ -4431,6 +4679,7 @@
                   <URL>http://s1.directupload.net/images/user/140803/3jp2djox.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Granate</name>
@@ -4444,6 +4693,7 @@
                   <URL>http://s14.directupload.net/images/140917/ke3pg2nm.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>gRuMM3l</name>
@@ -4457,6 +4707,7 @@
                   <URL>http://fs1.directupload.net/images/150213/txtord5x.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>gRuMM3lin3</name>
@@ -4470,6 +4721,7 @@
                   <URL>http://fs2.directupload.net/images/user/150604/hys73j93.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Jeff</name>
@@ -4483,6 +4735,7 @@
                   <URL>http://fs2.directupload.net/images/user/150602/sd6enrg4.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>J1mB0</name>
@@ -4496,6 +4749,7 @@
                   <URL>http://s1.directupload.net/images/user/131220/l8di5uq4.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>JUMBO</name>
@@ -4509,6 +4763,7 @@
                   <URL>http://s14.directupload.net/images/user/140603/5e49miiv.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>JUST</name>
@@ -4522,6 +4777,7 @@
                   <URL>http://fs2.directupload.net/images/user/150524/q2tdamwz.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Kriegstreiber</name>
@@ -4535,6 +4791,7 @@
                   <URL>http://s14.directupload.net/images/user/140112/vg48bc2o.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>LEOxx</name>
@@ -4548,6 +4805,7 @@
                   <URL>http://fs5.directupload.net/images/user/151122/eobzlrs9.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Light-bulb</name>
@@ -4561,6 +4819,7 @@
                   <URL>http://s1.directupload.net/images/user/131220/gsbkqmwa.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Minions</name>
@@ -4574,6 +4833,7 @@
                   <URL>http://s14.directupload.net/images/user/141120/zau7hcy3.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Mootality</name>
@@ -4587,6 +4847,7 @@
                   <URL>http://s1.directupload.net/images/user/140603/tflpgg7r.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>PZK</name>
@@ -4600,6 +4861,7 @@
                   <URL>http://s14.directupload.net/images/141015/4zkq744q.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Rage face</name>
@@ -4613,6 +4875,7 @@
                   <URL>http://fs1.directupload.net/images/user/150601/qsqs5dqx.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Ratz Fatz</name>
@@ -4626,6 +4889,7 @@
                   <URL>http://fs1.directupload.net/images/user/150215/ygrg569a.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Red Bulb</name>
@@ -4639,6 +4903,7 @@
                   <URL>http://fs1.directupload.net/images/150215/i44dikgm.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Red warning Sign</name>
@@ -4652,6 +4917,7 @@
                   <URL>http://s14.directupload.net/images/user/131220/5yq2o6ip.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Riokat</name>
@@ -4665,6 +4931,7 @@
                   <URL>http://s7.directupload.net/images/user/140826/x4p4qsbs.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Sauron</name>
@@ -4678,6 +4945,7 @@
                   <URL>http://s1.directupload.net/images/user/131220/mzu6xpcr.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Shark</name>
@@ -4691,6 +4959,7 @@
                   <URL>http://s7.directupload.net/images/user/131220/gdpiqqtx.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Spiderman</name>
@@ -4704,6 +4973,7 @@
                   <URL>http://fs1.directupload.net/images/user/150215/onydnh3o.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>SWF-A</name>
@@ -4717,6 +4987,7 @@
                   <URL>http://eu.wargaming.net/clans/media/clans/emblems/cl_106/500031106/emblem_195x195.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Yellow Warning Sign</name>
@@ -4730,6 +5001,7 @@
                   <URL>http://s7.directupload.net/images/user/131220/lhj8ote6.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Animated Illuminati pyramid by Aimdrol</name>
@@ -4743,6 +5015,7 @@
                   <URL>http://i.imgur.com/39C5zrz.gif</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Animated light bulb by Aimdrol</name>
@@ -4756,6 +5029,7 @@
                   <URL>http://i.imgur.com/KIBZR4P.gif</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -4869,6 +5143,7 @@
                   <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-079_orig.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Czech Primer Grey</name>
@@ -4882,6 +5157,7 @@
                   <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-066.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Czech Ultra Dark</name>
@@ -4895,6 +5171,7 @@
                   <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/czdark.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>French Artillery Green</name>
@@ -4908,6 +5185,7 @@
                   <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-125.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>French Dark Green</name>
@@ -4921,6 +5199,7 @@
                   <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-322.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>German Bundeswehr Green</name>
@@ -4934,6 +5213,7 @@
                   <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/2-xpjua6l.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>German Neue Dunkelgelb</name>
@@ -4947,6 +5227,7 @@
                   <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-448.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>German Primer Red</name>
@@ -4960,6 +5241,7 @@
                   <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-281.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Japanese Reddish Brown</name>
@@ -4973,6 +5255,7 @@
                   <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-536.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Japanese Warship Grey</name>
@@ -4986,6 +5269,7 @@
                   <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-067_1.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>UK Olive Green</name>
@@ -4999,6 +5283,7 @@
                   <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-208.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>US Dark Olive</name>
@@ -5012,6 +5297,7 @@
                   <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/01-t20.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>USSR 4BO-1 Green</name>
@@ -5025,6 +5311,7 @@
                   <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/9-ervcbok.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -5059,6 +5346,7 @@
                   <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-612.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Zephyr Multicolor Camo Pack</name>
@@ -5072,6 +5360,7 @@
                   <URL>http://classicswotworkshop.weebly.com/uploads/7/3/1/4/7314066/shot-695.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -5163,6 +5452,7 @@
                   <URL>http://fs2.directupload.net/images/user/150628/9ypr4kxt.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Dukes of Hazard</name>
@@ -5179,6 +5469,7 @@
                   <URL>http://fs5.directupload.net/images/user/151005/kmh4zl9o.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>MONSTER Energy</name>
@@ -5201,6 +5492,7 @@
                   <URL>http://fs1.directupload.net/images/user/150621/fmx5jk92.png</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Hello Kitty</name>
@@ -5214,6 +5506,7 @@
                   <URL>http://fs1.directupload.net/images/user/150626/e5e8m8u5.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -5257,7 +5550,7 @@
           <name>FV304</name>
           <version>
           </version>
-		  <modzipfile>
+          <modzipfile>
           </modzipfile>
           <modzipcrc>
           </modzipcrc>
@@ -5268,37 +5561,40 @@
           <configs>
             <config>
               <name>RaceControl</name>
-          <configzipfile>Custom_Tank_Skins_Racing-Skin_GB77_FV304_RaceControl_0.9.16.zip</configzipfile>
-          <modzipcrc>d2866f06f3de913ddbf5fa23b4cba2b9</modzipcrc>
-          <size>2.3</size>
-            <configenabled>True</configenabled>
-            <configtype>single</configtype>
-          <pictures>
-            <picture>
-              <URL>http://fs5.directupload.net/images/user/161104/isbspraj.jpg</URL>
-            </picture>
-            <picture>
-              <URL>http://fs5.directupload.net/images/user/161104/7nyl6h7q.jpg</URL>
-            </picture>
-          </pictures>
-          </config>
-		  <config>
+              <configzipfile>Custom_Tank_Skins_Racing-Skin_GB77_FV304_RaceControl_0.9.16.zip</configzipfile>
+              <configzipcrc>
+              </configzipcrc>
+              <size>2.3</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://fs5.directupload.net/images/user/161104/isbspraj.jpg</URL>
+                </picture>
+                <picture>
+                  <URL>http://fs5.directupload.net/images/user/161104/7nyl6h7q.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
               <name>Police (remodel)</name>
               <configzipfile>Custom_Tank_Skins_Racing-Skin_GB77_FV304_Police_0.9.18.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>41a0147d45f325d8d43fb0a19fe7f157</configzipcrc>
+              <size>11.7</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
                   <URL>https://scontent-fra3-1.xx.fbcdn.net/t45.5328-0/c210.0.540.540/p180x540/17266327_1706154812743138_8445419705677643776_n.jpg</URL>
                 </picture>
-				<picture>
-					<URL>https://scontent-fra3-1.xx.fbcdn.net/t45.5328-0/c210.0.540.540/p180x540/16649933_1248046751938383_7437339706771111936_n.jpg</URL>
-				</picture>
+                <picture>
+                  <URL>https://scontent-fra3-1.xx.fbcdn.net/t45.5328-0/c210.0.540.540/p180x540/16649933_1248046751938383_7437339706771111936_n.jpg</URL>
+                </picture>
               </pictures>
+              <dependencies />
             </config>
-			</configs>
+          </configs>
           <dependencies />
           <description>Police (remodel) from PeNeTrAtOrX@https://www.facebook.com/commerce/products/1405436806197683/?hc_location=ufi
           </description>
@@ -5344,6 +5640,7 @@
                   <URL>http://fs5.directupload.net/images/user/160527/zsda29j6.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>EXPLOSIV</name>
@@ -5357,6 +5654,7 @@
                   <URL>http://fs2.directupload.net/images/user/150811/bxzsjwfm.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -5517,6 +5815,7 @@
                   <URL>http://fs5.directupload.net/images/user/160909/mtrpnj3t.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Blue</name>
@@ -5536,6 +5835,7 @@
                   <URL>http://fs5.directupload.net/images/user/161223/5dfhw7bz.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Red</name>
@@ -5549,6 +5849,7 @@
                   <URL>http://fs5.directupload.net/images/user/161217/mk7ol53j.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Green</name>
@@ -5562,6 +5863,7 @@
                   <URL>http://fs5.directupload.net/images/user/161217/zvy8vpj2.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>White</name>
@@ -5587,6 +5889,7 @@
                   <URL>http://fs5.directupload.net/images/user/161223/rkm46fwm.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
@@ -5715,6 +6018,7 @@
                   <URL>http://fs5.directupload.net/images/user/161023/afsp5ucr.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>OMNI Edition (RIP OMC Modpack)</name>
@@ -5737,6 +6041,7 @@
                   <URL>http://fs5.directupload.net/images/user/161023/2z46ny8f.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
             <config>
               <name>Milkym4n Remodel</name>
@@ -5750,6 +6055,7 @@
                   <URL>http://fs5.directupload.net/images/user/161023/bxm5qg2c.jpg</URL>
                 </picture>
               </pictures>
+              <dependencies />
             </config>
           </configs>
           <dependencies />
