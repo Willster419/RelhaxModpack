@@ -4159,38 +4159,18 @@
           <configs>
             <config>
               <name>Vanilla</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_vanilla_2017_04_09.zip</configzipfile>
-              <configzipcrc>6f5d55031239b32521ac50db297099f4</configzipcrc>
-              <size>0.4</size>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_Vanilla_0.9.17.1d_2017-04-22.zip</configzipfile>
+              <configzipcrc>63dafb30f4cb96a9065acf1922bec803</configzipcrc>
+              <size>0.5</size>
               <configenabled>True</configenabled>
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
             </config>
             <config>
-              <name>V1</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_v1_2017_04_09.zip</configzipfile>
-              <configzipcrc>0ccbfdae786065ab706bcd4f609350de</configzipcrc>
-              <size>1.6</size>
-              <configenabled>True</configenabled>
-              <configtype>single1</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>V2</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_v2_2017_04_09.zip</configzipfile>
-              <configzipcrc>0b162c250bedd5b3e4ad3a08cd13beef</configzipcrc>
-              <size>1.7</size>
-              <configenabled>True</configenabled>
-              <configtype>single1</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>V3</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_v3_2017_04_09.zip</configzipfile>
-              <configzipcrc>8fe7191a31a69403da0be992b3715d06</configzipcrc>
+              <name>Core</name>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_Core_0.9.17.1d_2017-04-22.zip</configzipfile>
+              <configzipcrc>0b867c1a7e1416b4379860fbc45ae60c</configzipcrc>
               <size>1.5</size>
               <configenabled>True</configenabled>
               <configtype>single1</configtype>
@@ -4198,9 +4178,39 @@
               <dependencies />
             </config>
             <config>
+              <name>Background V1</name>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_Backgrounds_V1_0.9.17.1d_2017-04-22.zip</configzipfile>
+              <configzipcrc>007603463ccbbb8eb098d84402e77b9a</configzipcrc>
+              <size>0.4</size>
+              <configenabled>True</configenabled>
+              <configtype>single2</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Background V2</name>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_Backgrounds_V2_0.9.17.1d_2017-04-22.zip</configzipfile>
+              <configzipcrc>2186392725c0ea4bd263e56ea08eac6d</configzipcrc>
+              <size>0.5</size>
+              <configenabled>True</configenabled>
+              <configtype>single2</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Background V3</name>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_Backgrounds_V3_0.9.17.1d_2017-04-22.zip</configzipfile>
+              <configzipcrc>8fb91c64b0efb684f94c190dee65415d</configzipcrc>
+              <size>0.4</size>
+              <configenabled>True</configenabled>
+              <configtype>single2</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
               <name>English</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_english_2017_04_07.zip</configzipfile>
-              <configzipcrc>320d4e28e0a9afda15f5279b8c429f31</configzipcrc>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_english_2017_04_23.zip</configzipfile>
+              <configzipcrc>4e762ba53339a05059aee40557eeb1df</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single_dropdown1</configtype>
@@ -4209,8 +4219,8 @@
             </config>
             <config>
               <name>German</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_german_2017_04_07.zip</configzipfile>
-              <configzipcrc>586dd6319b7f885b635ff54d25328b75</configzipcrc>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_german_2017_04_23.zip</configzipfile>
+              <configzipcrc>20e4c8d93f0d187fbea5489d692f1ff9</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single_dropdown1</configtype>
@@ -4232,7 +4242,7 @@
           <description>Shows your statistics for your tanks session in the notifications area of your garage</description>
           <updateComment>
           </updateComment>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/209229-098-yasenkrasen-coloured-messages-session-statistics-eng/</devURL>
+          <devURL>http://forum.worldoftanks.eu/index.php?/topic/583433-09171-yasenkrasen-colored-messages-session-statistics-eng-11042017/</devURL>
         </mod>
       </mods>
     </catagory>
@@ -5660,6 +5670,44 @@
           <dependencies />
           <description>
           </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Dead White Tanks</name>
+          <version>aslain</version>
+          <modzipfile>Custom_Tank_Skins_dead_white_tanks_2017-04-23.zip</modzipfile>
+          <modzipcrc>57792a0f15d65450ec03ea46d3bf4290</modzipcrc>
+          <size>12.9</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>...and dead white tracks</name>
+              <configzipfile>Custom_Tank_Skins_dead_white_tracks_2017-04-23.zip</configzipfile>
+              <configzipcrc>bbbaff50d1d381755d3fe8ae81cb9552</configzipcrc>
+              <size>3</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>...and dead white wagons</name>
+              <configzipfile>Custom_Tank_Skins_dead_white_wagons_2017-04-23.zip</configzipfile>
+              <configzipcrc>276f72ca8e0c960f39be83fa5158cb3d</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>Helps to easily determine which tanks are dead, or tracks, etc. Usefull for trying to shoot around dead tanks.</description>
           <updateComment>
           </updateComment>
           <devURL>
