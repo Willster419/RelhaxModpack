@@ -1,3 +1,8 @@
+Version 21.7.4:
+-Database structure change: configs can now have dependencies
+-Updated translations
+-Added mods: research watchdog, Fv304 re-skin: police
+
 Version 21.7.3:
 -Developer/Modpack Manager update.
 -MANAGERS, I have made writing patches 1000x easier. You can now export the physical patch xml file right from the patch builder GUI! Ask me for details.
