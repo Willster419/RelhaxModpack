@@ -136,7 +136,7 @@ namespace RelhaxModpack
             string currentModDownloadingShort = currentModDownloading;
             if (currentModDownloading.Length > 200)
                 currentModDownloadingShort = currentModDownloading.Substring(0, 15) + "...";
-            downloadProgress.Text = Translations.getTranslatedString("Downloading") + currentModDownloadingShort + " (" + Math.Round(MBytesIn, 1) + " MB" + " of " + Math.Round(MBytesTotal, 1) + " MB)";
+            downloadProgress.Text = Translations.getTranslatedString("Downloading")  + " " + currentModDownloadingShort + " (" + Math.Round(MBytesIn, 1) + " MB" + " of " + Math.Round(MBytesTotal, 1) + " MB)";
             //set the progress bar
             childProgressBar.Value = e.ProgressPercentage;
             //set the download speed
@@ -241,7 +241,11 @@ namespace RelhaxModpack
                         state = InstallState.deleteResMods;
                         Settings.appendToLog("CleanInstallCB checked, running backgroundDelete(" + tanksLocation + "\\res_mods)");
                         //delete everything in res_mods
-                        if (Directory.Exists(tanksLocation + "\\res_mods")) this.backgroundDelete(tanksLocation + "\\res_mods");
+                        if (!Directory.Exists(tanksLocation + "\\res_mods"))
+                            Directory.CreateDirectory(tanksLocation + "\\res_mods");
+                        if (!Directory.Exists(tanksLocation + "\\mods"))
+                            Directory.CreateDirectory(tanksLocation + "\\mods");
+                        this.backgroundDelete(tanksLocation + "\\res_mods");
                         return;
                     }
                     Settings.appendToLog("CleanInstallCB not checked, moving to extraction");
