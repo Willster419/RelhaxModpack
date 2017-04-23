@@ -95,7 +95,7 @@ namespace RelhaxModpack
             //Componet: darkUICB
             //
             english.Add("darkUICB","Dark UI");
-            german.Add("darkUICB","Dark UI");
+            german.Add("darkUICB", "Dunkle Benutzeroberflaeche");
             
             //Componet: cleanUninstallCB
             //
@@ -251,12 +251,12 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("done","done");
-            german.Add("done","done");
+            german.Add("done", "fertig");
             
             //Componet: 
             //
             english.Add("idle","idle");
-            german.Add("idle","idle");
+            german.Add("idle", "Leerlauf");
             
             //Componet: 
             //
