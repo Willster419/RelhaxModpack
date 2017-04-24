@@ -5,6 +5,8 @@ The fastest WoT modpack installer in the world. A refresh of OMC modpack
 
 **[Virustotal scan](https://www.virustotal.com/en/file/15c959ac79c5f3935c792b8bc5e0c72d1974ab5bab4fa0a75d0c3a9860aa206a/analysis/1489435329/)**
 
+[Donate to help buy a new server with download speeds of this century]( https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2)
+
 Support Teamspeak Server: tna.dyndns.org
 
 ### Description and reason for development
