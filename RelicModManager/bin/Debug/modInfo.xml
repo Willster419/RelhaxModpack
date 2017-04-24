@@ -27,8 +27,8 @@
       <selectionType>single</selectionType>
       <dependencies>
         <dependency>
-          <dependencyZipFile>Dependency_XVM_Base_6.6.0.zip</dependencyZipFile>
-          <dependencyZipCRC>350a3f0ff2921f3429eee8a575d61b09</dependencyZipCRC>
+          <dependencyZipFile>Dependency_XVM_Base_6.6.2.zip</dependencyZipFile>
+          <dependencyZipCRC>ff8f43fe2eb44e49a8aa513a59ebba51</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
@@ -215,8 +215,8 @@
       <selectionType>multi</selectionType>
       <dependencies>
         <dependency>
-          <dependencyZipFile>Dependency_XVM_Base_6.6.0.zip</dependencyZipFile>
-          <dependencyZipCRC>350a3f0ff2921f3429eee8a575d61b09</dependencyZipCRC>
+          <dependencyZipFile>Dependency_XVM_Base_6.6.2.zip</dependencyZipFile>
+          <dependencyZipCRC>ff8f43fe2eb44e49a8aa513a59ebba51</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
