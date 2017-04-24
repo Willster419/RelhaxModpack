@@ -421,7 +421,7 @@
             </config>
           </configs>
           <dependencies />
-          <description>Shows the total combined hp of each team          </description>
+          <description>Shows the total combined hp of each team</description>
           <updateComment>
           </updateComment>
           <devURL>
@@ -899,6 +899,26 @@
               <dependencies />
             </config>
             <config>
+              <name>Rows - 4</name>
+              <configzipfile>XVM_config_builder_carousel_4_row.zip</configzipfile>
+              <configzipcrc>41a88a86e2e040711f545b936b3e6e12</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown1</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Rows - 5</name>
+              <configzipfile>XVM_config_builder_carousel_5_row.zip</configzipfile>
+              <configzipcrc>3be6f56687122ff82b2e172c820f234e</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown1</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
               <name>Rows - Ingame setting</name>
               <configzipfile>XVM_config_builder_carousel_0_row.zip</configzipfile>
               <configzipcrc>28819f047cd48e526211f0b4f6b0bd5d</configzipcrc>
@@ -912,6 +932,26 @@
               <name>Cell Type normal</name>
               <configzipfile>XVM_config_builder_carousel_normal_cell.zip</configzipfile>
               <configzipcrc>e59c009cafa7dea617bc27f40c94998c</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single2</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Cell Type normal - 0.8 scale</name>
+              <configzipfile>XVM_config_builder_carousel_normal_cell_scale_0.8.zip</configzipfile>
+              <configzipcrc>ef418f604ab8537dc474b585c3af48c1</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single2</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Cell Type normal - 0.6 scale</name>
+              <configzipfile>XVM_config_builder_carousel_normal_cell_scale_0.6.zip</configzipfile>
+              <configzipcrc>e08086c87715e05e7943d115af4c3526</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single2</configtype>
