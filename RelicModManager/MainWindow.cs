@@ -36,7 +36,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 21.7.4";
+        private string managerVersion = "version 21.7.5";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -711,7 +711,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 04/22/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 04/23/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program

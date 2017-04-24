@@ -1,3 +1,8 @@
+Version 21.7.5:
+-Fixed bug with deleting folders if they don't exist
+-Minor UI improvements
+-Added more xvm configurations per user request: 4 and 5 row tank carousels, and scaling the normal size by 0.8 and 0.6
+
 Version 21.7.4:
 -Database structure change: configs can now have dependencies
 -Updated translations
