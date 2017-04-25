@@ -53,8 +53,8 @@
           <name>Willster419's Config</name>
           <version>
           </version>
-          <modzipfile>XVM_Prebuilt_Configs_Willster419.zip</modzipfile>
-          <modzipcrc>9179b84308aafb1b6a9682ec1ad8137c</modzipcrc>
+          <modzipfile>XVM_Prebuilt_Configs_Willster419_2017-04-24.zip</modzipfile>
+          <modzipcrc>735fd9b749d37b100c01fba603d5b517</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
           <userDatas />
@@ -1197,8 +1197,8 @@
           <configs>
             <config>
               <name>Enable</name>
-              <configzipfile>XVM_config_builder_clock_enable.zip</configzipfile>
-              <configzipcrc>78dbc95e4e84757978d45587dbb511b7</configzipcrc>
+              <configzipfile>XVM_config_builder_clock_enable_2017-04-24.zip</configzipfile>
+              <configzipcrc>705a0262a102daad6581ed369a208b8b</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -1207,8 +1207,8 @@
             </config>
             <config>
               <name>Disable</name>
-              <configzipfile>XVM_config_builder_clock_disable.zip</configzipfile>
-              <configzipcrc>67490ec606ee00a9980cffbe9b1d0e4a</configzipcrc>
+              <configzipfile>XVM_config_builder_clock_disable_2017-04-24.zip</configzipfile>
+              <configzipcrc>e45d043d7674cce24a83992f8025a3c1</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -1220,7 +1220,7 @@
               <configzipfile>XVM_config_builder_clock_12_hour.zip</configzipfile>
               <configzipcrc>b8265d2b59955bbeb9217567e5bc0b8d</configzipcrc>
               <size>0.1</size>
-              <configenabled>True</configenabled>
+              <configenabled>False</configenabled>
               <configtype>single2</configtype>
               <pictures />
               <dependencies />
@@ -1230,7 +1230,7 @@
               <configzipfile>XVM_config_builder_clock_24_hour.zip</configzipfile>
               <configzipcrc>b22d91157f332ee829218eed9f2ed114</configzipcrc>
               <size>0.1</size>
-              <configenabled>True</configenabled>
+              <configenabled>False</configenabled>
               <configtype>single2</configtype>
               <pictures />
               <dependencies />
@@ -3328,7 +3328,7 @@
           <devURL>http://goxwot.blogspot.com/2015/05/98-damage-stickers-7-variants.html</devURL>
         </mod>
         <mod>
-          <name>Max Farplane mod</name>
+          <name>WoT Tweaker</name>
           <version>
           </version>
           <modzipfile>
@@ -3345,38 +3345,149 @@
           </pictures>
           <configs>
             <config>
-              <name>max visibility</name>
-              <configzipfile>Ingame_Info_MaxFarplane_visibility_only_by_atotik_0.9.16.zip</configzipfile>
-              <configzipcrc>506343a9db03623c54c4e4d1495a1feb</configzipcrc>
+              <name>Enable max visibility</name>
+              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_enable_max_visibility_2017-04-24.zip</configzipfile>
+              <configzipcrc>3ef541a2a92af13640a9a9f0029bde22</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>single</configtype>
+              <configtype>multi</configtype>
               <pictures />
               <dependencies />
             </config>
             <config>
-              <name>fog removal</name>
-              <configzipfile>Ingame_Info_MaxFarplane_delete_fog_only_by_atotik_0.9.16.zip</configzipfile>
-              <configzipcrc>91f007944d6df08e0dcd4192129e034c</configzipcrc>
+              <name>Disable fog</name>
+              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_fog_2017-04-24.zip</configzipfile>
+              <configzipcrc>aedb427883d2fdc0b286c6ddf5ef9139</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>single</configtype>
+              <configtype>multi</configtype>
               <pictures />
               <dependencies />
             </config>
             <config>
-              <name>both</name>
-              <configzipfile>Ingame_Info_MaxFarplane_and_delete_fog_by_atotik_0.9.16.zip</configzipfile>
-              <configzipcrc>90668f79d9f90e88fb1bbc8139758990</configzipcrc>
+              <name>Disable clouds</name>
+              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_clouds_2017-04-24.zip</configzipfile>
+              <configzipcrc>ea3d510662102ee6455e74ec05759248</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>single</configtype>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Disable tank exhaust smoke</name>
+              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_exhaust_smoke_2017-04-24.zip</configzipfile>
+              <configzipcrc>78bf0974064d493dbedff6c76d5349d6</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Disable effects from shooting</name>
+              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_flame_shots_2017-04-24.zip</configzipfile>
+              <configzipcrc>dac32ffaa06d15c2ebbe52deebd34feb</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Disable misc object effects</name>
+              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_misc_effects_2017-04-24.zip</configzipfile>
+              <configzipcrc>8a61f0f532cd8bbe66c84f246c1a52d9</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Disable shell impact effects</name>
+              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_shell_impact_effects_2017-04-24.zip</configzipfile>
+              <configzipcrc>ab30ec822e42bd19b6e256b8f03601bf</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Disable tank death effects</name>
+              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_tank_dead_effects_2017-04-24.zip</configzipfile>
+              <configzipcrc>d6150a6455d9638f33742316a826e94c</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Disable tank death smoke</name>
+              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_tank_dead_smoke_2017-04-24.zip</configzipfile>
+              <configzipcrc>a18aeec4487cd1c40680f89579cdff46</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Disable tank hit effects</name>
+              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_tank_hit_effects_2017-04-24.zip</configzipfile>
+              <configzipcrc>988b0b1603ddad86d209c053b9f7ff4d</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Disable tree effects? this is an option?</name>
+              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_tree_effects_2017-04-24.zip</configzipfile>
+              <configzipcrc>aa930151a36d37b7ef1a85e95cd072e7</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Disable shadows under tanks</name>
+              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_under_tank_shadows_2017-04-24.zip</configzipfile>
+              <configzipcrc>4c3cdf832e1df453953eea3b2cc40a2a</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Disable weather</name>
+              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_weather_2017-04-24.zip</configzipfile>
+              <configzipcrc>b8eabc0c0e7bccdebd2eaf3874088648</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Disable noobs on allied team</name>
+              <configzipfile>
+              </configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>False</configenabled>
+              <configtype>multi</configtype>
               <pictures />
               <dependencies />
             </config>
           </configs>
           <dependencies />
-          <description>Settings to remove the distance fog and/or enable more map visibility. Does not increase view of seeing enemy tanks.</description>
+          <description>Settings to disable effects and increase framerate for those still playing on Windows 95@also can be used to increase visibility</description>
           <updateComment>
           </updateComment>
           <devURL>http://forum.worldoftanks.ru/index.php?/topic/1125299-</devURL>
