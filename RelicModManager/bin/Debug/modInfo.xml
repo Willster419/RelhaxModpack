@@ -109,7 +109,7 @@
           </pictures>
           <configs />
           <dependencies />
-          <description>J1mB0's Config</description>
+          <description>J1mB0's Config@The xvm repair timer configs do NOT work with this config</description>
           <updateComment>
           </updateComment>
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/56831-</devURL>
@@ -118,8 +118,8 @@
           <name>Bones's XVM Config</name>
           <version>
           </version>
-          <modzipfile>XVM_Prebuilt_Configs_Bones_Base_2017-04-17.zip</modzipfile>
-          <modzipcrc>183b0bb4c5aaf264f59ce335c6c71dee</modzipcrc>
+          <modzipfile>XVM_Prebuilt_Configs_Bones_Base_2017-04-25.zip</modzipfile>
+          <modzipcrc>617e9c2ef4b53355e10d9dbc4c4d506c</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
           <userDatas />
@@ -143,8 +143,8 @@
           <configs>
             <config>
               <name>players panel 1</name>
-              <configzipfile>XVM_Prebuilt_Configs_Bones_Config_players_panel_1.zip</configzipfile>
-              <configzipcrc>42075b1ec7bc47df4b15a16e7f5d0724</configzipcrc>
+              <configzipfile>XVM_Prebuilt_Configs_Bones_Config_players_panel_1_2017-04-25.zip</configzipfile>
+              <configzipcrc>e0846315cd8781344f6f35effca1a747</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
@@ -153,8 +153,8 @@
             </config>
             <config>
               <name>players panel 2</name>
-              <configzipfile>XVM_Prebuilt_Configs_Bones_Config_players_panel_2.zip</configzipfile>
-              <configzipcrc>e85b27fe60a8b0c6f4b78c11fb63ba4e</configzipcrc>
+              <configzipfile>XVM_Prebuilt_Configs_Bones_Config_players_panel_2_2017-04-25.zip</configzipfile>
+              <configzipcrc>26732bd8df585f7b2a3ae72d69b2012e</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
@@ -163,8 +163,8 @@
             </config>
             <config>
               <name>players panel 3</name>
-              <configzipfile>XVM_Prebuilt_Configs_Bones_Config_players_panel_3.zip</configzipfile>
-              <configzipcrc>78d251c0d4c3c06417b14ddfe94b5f6e</configzipcrc>
+              <configzipfile>XVM_Prebuilt_Configs_Bones_Config_players_panel_3_2017-04-25.zip</configzipfile>
+              <configzipcrc>7d36f4aafa04ae28784084fdd47b2b47</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
@@ -173,8 +173,8 @@
             </config>
             <config>
               <name>1 line tank carousel</name>
-              <configzipfile>XVM_Prebuilt_Configs_Bones_Config_1line_carosel.zip</configzipfile>
-              <configzipcrc>43f08572c27b89a2e6998c0384326ae5</configzipcrc>
+              <configzipfile>XVM_Prebuilt_Configs_Bones_Config_1line_carosel_2017-04-25.zip</configzipfile>
+              <configzipcrc>8a03c7b452fa8e48930e520a3f46a0a1</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single_dropdown2</configtype>
@@ -183,8 +183,8 @@
             </config>
             <config>
               <name>2 line tank carousel</name>
-              <configzipfile>XVM_Prebuilt_Configs_Bones_Config_2line_carosel.zip</configzipfile>
-              <configzipcrc>b712c2e0b1955f6fdf5c758d64e1b54b</configzipcrc>
+              <configzipfile>XVM_Prebuilt_Configs_Bones_Config_2line_carosel_2017-04-25.zip</configzipfile>
+              <configzipcrc>594c8e341a926893ff7699cab80aa415</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single_dropdown2</configtype>
@@ -193,17 +193,27 @@
             </config>
             <config>
               <name>3 line tank carousel</name>
-              <configzipfile>XVM_Prebuilt_Configs_Bones_Config_3line_carosel.zip</configzipfile>
-              <configzipcrc>e2e434c647029627f3134a768766a70f</configzipcrc>
+              <configzipfile>XVM_Prebuilt_Configs_Bones_Config_3line_carosel_2017-04-25.zip</configzipfile>
+              <configzipcrc>d33d06e1e5d55fa4660d41ed8f3a2674</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single_dropdown2</configtype>
               <pictures />
               <dependencies />
             </config>
+            <config>
+              <name>hp on minimap</name>
+              <configzipfile>XVM_Prebuilt_Configs_Bones_Config_minimap_hp_enable_2017-04-25.zip</configzipfile>
+              <configzipcrc>ae13a59e9903a323c280cc6cca3c07e3</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
           </configs>
           <dependencies />
-          <description>Bones's Config</description>
+          <description>Bones's Config@The xvm repair timer configs do NOT work with this config</description>
           <updateComment>
           </updateComment>
           <devURL>http://forum.worldoftanks.com/index.php?/topic/316189-091703-xvm-config-by-bones-24jan17/</devURL>
@@ -1917,6 +1927,46 @@
               <pictures />
               <dependencies />
             </config>
+          </configs>
+          <dependencies />
+          <description>Toggle the xvm minimap modifications@also select if the minimap, when zoomed, is shown in the center of your screen or enlarged in the lower right
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Minimap zoom modifications (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>XVM_config_builder_minimap_zoom_enable.zip</modzipfile>
+          <modzipcrc>b5d31703c4b6ca7faedd9f600a31e5b3</modzipcrc>
+          <size>0.1</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>Hotkey Left CTRL</name>
+              <configzipfile>XVM_config_builder_minimap_zoom_left_ctrl.zip</configzipfile>
+              <configzipcrc>8740786c019a0943470c6fd8693385e0</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Hotkey Left ALT</name>
+              <configzipfile>XVM_config_builder_minimap_zoom_left_alt.zip</configzipfile>
+              <configzipcrc>836508041790ba54d1d0e99980eb47ab</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
             <config>
               <name>Minimap zoom - bottom right</name>
               <configzipfile>XVM_config_builder_minimap_zoom_bottom_right.zip</configzipfile>
@@ -1934,48 +1984,6 @@
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-          </configs>
-          <dependencies />
-          <description>Toggle the xvm minimap modifications@also select if the minimap, when zoomed, is shown in the center of your screen or enlarged in the lower right
-          </description>
-          <updateComment>
-          </updateComment>
-          <devURL>
-          </devURL>
-        </mod>
-        <mod>
-          <name>Minimap zoom hotkey (xvm)</name>
-          <version>
-          </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>True</enabled>
-          <userDatas />
-          <pictures />
-          <configs>
-            <config>
-              <name>Left CTRL</name>
-              <configzipfile>XVM_config_builder_minimap_zoom_left_ctrl.zip</configzipfile>
-              <configzipcrc>8740786c019a0943470c6fd8693385e0</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Left ALT</name>
-              <configzipfile>XVM_config_builder_minimap_zoom_left_alt.zip</configzipfile>
-              <configzipcrc>836508041790ba54d1d0e99980eb47ab</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
               <pictures />
               <dependencies />
             </config>
