@@ -1,3 +1,8 @@
+Version 21.8.0:
+-Increased compatibility of patching system
+-Increased performance of zip extraction by up to 48% (fixed the issue where the application would hang on the last file after a large zip file).
+-Updated translations
+
 Version 21.7.5:
 -Fixed bug with deleting folders if they don't exist
 -Minor UI improvements

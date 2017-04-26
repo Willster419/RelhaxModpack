@@ -494,8 +494,8 @@ namespace RelhaxModpack
             
             //Componet: 
             //
-            english.Add("extractionErrorMessage","Extraction Error. Is World of Tanks running?");
-            german.Add("extractionErrorMessage","Extraktionsfehler. Wird World of Tanks gerade ausgeführt?");
+            english.Add("extractionErrorMessage","Error deleting the folder res_mods or mods. Either World of Tanks is running or your file and folder security permissions are incorrect");
+            german.Add("extractionErrorMessage","Fehler beim Löschen des Ordners res_mods oder Mods. Entweder World of Tanks läuft oder Ihre Datei- und Ordnersicherheitsberechtigungen sind falsch");
             
             //Componet: 
             //
@@ -585,8 +585,8 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("patchingSystemDeneidAccessMessage", "The patching system was denied access to the patch folder. Please retry. If you see this again, try running as administrator");
-            german.Add("patchingSystemDeneidAccessMessage", "Dem Patching-System wurde der Zugriff auf den Patch-Ordner verweigert. Bitte erneut versuchen. Wenn Sie dies wieder sehen, versuchen Sie es als Administrator");
+            english.Add("patchingSystemDeneidAccessMessage", "The patching system was denied access to the patch folder. Retry as Administrator. If you see this again, you need to fix your file and folder security permissions");
+            german.Add("patchingSystemDeneidAccessMessage", "Dem Patching-System wurde der Zugriff auf den Patch-Ordner verweigert. Wiederholen als Administrator. Wenn Sie dies wieder sehen, müssen Sie Ihre Datei- und Ordnersicherheitsberechtigungen reparieren");
 
             //Componet: 
             //

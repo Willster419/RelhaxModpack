@@ -49,7 +49,7 @@ namespace RelhaxModpack
         private string modGuiFolder;
         private string modGuiFolderBase;
         private string customUserMods;
-        ZipFile zip;
+        //ZipFile zip;
         //timer to measure download speed
         Stopwatch sw = new Stopwatch();
         private string downloadURL = "http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/";
@@ -293,14 +293,17 @@ namespace RelhaxModpack
             System.Threading.Thread.Sleep(100);
             //set the folder properties to read write
             File.SetAttributes(tanksLocation + @"\_patch", FileAttributes.Normal);
-            string[] patchFiles = null;
+            DirectoryInfo di = new DirectoryInfo(tanksLocation + @"\_patch");
+            FileInfo[] diArr = null;
+            //string[] patchFilesList = null;
             bool kontinue = false;
             while (!kontinue)
             {
                 try
                 {
                     //get every patch file in the folder
-                    patchFiles = Directory.GetFiles(tanksLocation + @"\_patch", @"*.xml");
+                    //patchFilesList = Directory.GetFiles(tanksLocation + @"\_patch", @"*.xml");
+                    diArr = di.GetFiles(@"*.xml",SearchOption.TopDirectoryOnly);
                     kontinue = true;
                 }
                 catch (UnauthorizedAccessException e)
@@ -319,12 +322,12 @@ namespace RelhaxModpack
             }
             //get any other old patches out of memory
             patchList.Clear();
-            for (int i = 0; i < patchFiles.Count(); i++)
+            for (int i = 0; i < diArr.Count(); i++)
             {
                 //set the attributes to normall
-                File.SetAttributes(patchFiles[i],FileAttributes.Normal);
+                File.SetAttributes(diArr[i].FullName,FileAttributes.Normal);
                 //add patches to patchList
-                this.createPatchList(patchFiles[i]);
+                this.createPatchList(diArr[i].FullName);
             }
             //the actual patch method
             foreach (Patch p in patchList)
@@ -618,25 +621,42 @@ namespace RelhaxModpack
         {
             //modpack
             string thisVersion = this.getFolderVersion(null);
+            //OLD
             //if (File.Exists(zipFile))
-            zip = ZipFile.Read(zipFile);
-            //for this zip file instance, for each entry in the zip file,
-            //change the "versiondir" path to this version of tanks
-            for (int i = 0; i < zip.Entries.Count; i++)
+            //zip = ZipFile.Read(zipFile);
+            //New
+            //create a filestream to append installed files log data
+            using (FileStream fs = new FileStream(tanksLocation + "\\installedRelhaxFiles.log", FileMode.Append, FileAccess.Write))
             {
-                if (Regex.IsMatch(zip[i].FileName, "versiondir"))
+                using (ZipFile zip = new ZipFile(zipFile))
                 {
-                    zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", thisVersion);
+                    //hacks to get it to lag less possibly
+                    //zip.BufferSize = 65536*16; //1MB buffer
+                    //zip.CodecBufferSize = 65536*16; //1MB buffer
+                    //zip.ParallelDeflateThreshold = -1; //single threaded
+                    //for this zip file instance, for each entry in the zip file,
+                    //change the "versiondir" path to this version of tanks
+                    childMaxProgres = zip.Entries.Count;
+                    for (int i = 0; i < zip.Entries.Count; i++)
+                    {
+                        if (Regex.IsMatch(zip[i].FileName, "versiondir"))
+                        {
+                            zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", thisVersion);
+                        }
+                        //put the entries on disk
+                        fs.Write(Encoding.UTF8.GetBytes(zip[i].FileName + "\n"), 0, Encoding.UTF8.GetByteCount(zip[i].FileName + "\n"));
+                    }
+                    zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
+                    zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
                 }
+                //fs.Dispose();
             }
-            zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
-            zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
         }
         //handler for when progress is made in extracting a zip file
         void zip_ExtractProgress(object sender, ExtractProgressEventArgs e)
         {
             childCurrentProgres = e.EntriesExtracted;
-            childMaxProgres = zip.Entries.Count;
+            //childMaxProgres = e.EntriesTotal;
             isParrentDone = false;
             if (e.CurrentEntry != null)
             {
@@ -645,19 +665,7 @@ namespace RelhaxModpack
             if (e.EventType == ZipProgressEventType.Extracting_AfterExtractAll)
             {
                 isParrentDone = true;
-                string thisVersion = this.getFolderVersion(null);
-                foreach (ZipEntry ze in zip.Entries)
-                {
-                    //regex again
-                    string s = ze.FileName;
-                    if (Regex.IsMatch(s, "versiondir"))
-                    {
-                        s = Regex.Replace(s, "versiondir", thisVersion);
-                    }
-                    //put the entries on disk
-                    File.AppendAllText(tanksLocation + "\\installedRelhaxFiles.log", s + "\n");
-                }
-                zip.Dispose();
+                //zip.Dispose();
             }
             if (modPack)
                 extractworker.ReportProgress(0);
@@ -711,7 +719,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 04/23/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 04/25/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1670,8 +1678,8 @@ namespace RelhaxModpack
             extractworker.DoWork += new DoWorkEventHandler(extractworker_DoWork);
             extractworker.ProgressChanged += new ProgressChangedEventHandler(extractworker_ProgressChanged);
             extractworker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(extractworker_RunWorkerCompleted);
-            zip = new ZipFile();
-            zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
+            //zip = new ZipFile();
+            //zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
 
             object[] parameters = new object[] { };
             userExtract = user;
@@ -1926,7 +1934,7 @@ namespace RelhaxModpack
             {
                 if (childProgressBar.Maximum != childMaxProgres)
                     childProgressBar.Maximum = childMaxProgres;
-                if (childCurrentProgres != 0)
+                if (childCurrentProgres != 0 && childMaxProgres > childCurrentProgres)
                     childProgressBar.Value = childCurrentProgres;
                 if (true)
                 {
