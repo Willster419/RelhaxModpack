@@ -4247,7 +4247,7 @@
           <devURL>https://mods.curse.com/wot-mods/worldoftanks/aslains-gold-premium-tanks</devURL>
         </mod>
         <mod>
-          <name>Research Watchdog</name>
+          <name>Research Watchdog Without Free Experience</name>
           <version>
           </version>
           <modzipfile>Ingame_Info_research_watchdog_2017_03_03.zip</modzipfile>
@@ -4263,7 +4263,18 @@
               <URL>http://cdn-frm-eu.wargaming.net/wot/eu/uploads/monthly_01_2015/post-506947255-0-71238500-1420301166.png</URL>
             </picture>
           </pictures>
-          <configs />
+          <configs>
+            <config>
+              <name>With Free Experience</name>
+              <configzipfile>ingame_info_research_watchdog_config_2017_04_26.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+          </configs>
           <dependencies />
           <description>notifies when there is enough XP to unlock module@optionally alerts when vehicle goes elite and accelerate crew training is off</description>
           <updateComment>
