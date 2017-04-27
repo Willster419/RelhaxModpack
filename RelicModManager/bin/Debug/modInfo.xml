@@ -2524,7 +2524,7 @@
       </mods>
     </catagory>
     <catagory>
-      <name>Ingame Info</name>
+      <name>Ingame Aim</name>
       <selectionType>multi</selectionType>
       <dependencies />
       <mods>
@@ -2595,41 +2595,6 @@
           <updateComment>
           </updateComment>
           <devURL>http://forum.worldoftanks.ru/index.php?/topic/1389614-</devURL>
-        </mod>
-        <mod>
-          <name>Contour Icons</name>
-          <version>
-          </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>False</enabled>
-          <userDatas />
-          <pictures />
-          <configs>
-            <config>
-              <name>Aslain's</name>
-              <configzipfile>Ingame_Info_Aslains_Contour_Icon_Mod_0.9.17.1.zip</configzipfile>
-              <configzipcrc>e6cc14e7e1dce614481bbbb4434aad8d</configzipcrc>
-              <size>4.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL>http://s1.directupload.net/images/user/131220/s3e8arji.png</URL>
-                </picture>
-              </pictures>
-              <dependencies />
-            </config>
-          </configs>
-          <dependencies />
-          <description>
-          </description>
-          <updateComment>Aslain's : http://forum.worldoftanks.eu/index.php?/topic/35125-</updateComment>
-          <devURL>
-          </devURL>
         </mod>
         <mod>
           <name>ExtraAimInfo</name>
@@ -2823,6 +2788,182 @@
           <updateComment>
           </updateComment>
           <devURL>http://4cheat.ru/showthread.php?t=15891</devURL>
+        </mod>
+        <mod>
+          <name>SafeShot</name>
+          <version>
+          </version>
+          <modzipfile>Ingame_Info_Safeshot_0.9.17.0.zip</modzipfile>
+          <modzipcrc>37e7d6915cb92c8af83d09ea04222944</modzipcrc>
+          <size>0.1</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>http://s14.directupload.net/images/131220/mkrjfo7g.jpg</URL>
+            </picture>
+          </pictures>
+          <configs>
+            <config>
+              <name>1 Sec no corpse Shot</name>
+              <configzipfile>Ingame_Info_SafeShot_1sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
+              <configzipcrc>2c1907940855da9cd91989648ca3618e</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>2 sec no corpse shot</name>
+              <configzipfile>Ingame_Info_SafeShot_2sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
+              <configzipcrc>19d8b03abbedca55b1ca38c2e871d262</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>5 sec no corpse shot</name>
+              <configzipfile>Ingame_Info_SafeShot_5sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
+              <configzipcrc>20126c9365d2e48ca33a47bc7f0890c0</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>block team damage shot</name>
+              <configzipfile>Ingame_Info_SafeShot_no_Team_friendly_fire_patch_0.9.15.1.zip</configzipfile>
+              <configzipcrc>f349469e88cb73527497fd985a04ac75</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>block wasted shots (shots fired into the air, ground, etc.)</name>
+              <configzipfile>Ingame_Info_SafeShot_no_waste_shot_patch_0.9.15.1.zip</configzipfile>
+              <configzipcrc>cb6cc95b90d2001ef43f1287c007da04</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>block teamkiller damage shot</name>
+              <configzipfile>Ingame_Info_SafeShot_no_fire_at_Teamkiller_patch_0.9.15.1.zip</configzipfile>
+              <configzipcrc>bbe2910451add891db439ff49666e631</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>send team damage message in chat</name>
+              <configzipfile>Ingame_Info_SafeShot_send_Msg_to_Team_patch_0.9.15.1.zip</configzipfile>
+              <configzipcrc>3f98baadd92005df0725e223a2fb05a4</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>legal info@http://forum.worldoftanks.eu/index.php?/topic/599621-wg-support-safeshot-is-illegal/page__st__20__pid__13403197#entry13403197@prevents you from shooting your gun to hit allies/dead tanks/etc.</description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://forum.worldoftanks.ru/index.php?/topic/1769267-</devURL>
+        </mod>
+        <mod>
+          <name>BalCalcMod</name>
+          <version>
+          </version>
+          <modzipfile>Ingame_Info_BalCalcMod_Base_0.9.17.1_2017-03-31.zip</modzipfile>
+          <modzipcrc>aededd6ffef24a0f1db70834f8076272</modzipcrc>
+          <size>0.1</size>
+          <enabled>False</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>http://s1.directupload.net/images/user/140614/qhfyk8zv.jpg</URL>
+            </picture>
+          </pictures>
+          <configs>
+            <config>
+              <name>F</name>
+              <configzipfile>Ingame_Info_BalCalcMod_Config_F_0.9.17.1_2017-03-31.zip</configzipfile>
+              <configzipcrc>3c344f9f12dbedc153bf543e7c99d89c</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Q</name>
+              <configzipfile>Ingame_Info_BalCalcMod_Config_Q_0.9.17.1_2017-03-31.zip</configzipfile>
+              <configzipcrc>2ef42eb6e6b184b65dba9b44130a0597</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>The mod is designed to remedy the situation where it is impossible to aim above the hill. (Overshooting)</description>
+          <updateComment>
+          </updateComment>
+          <devURL>https://koreanrandom.com/forum/topic/30440-</devURL>
+        </mod>
+      </mods>
+    </catagory>
+    <catagory>
+      <name>Ingame Info</name>
+      <selectionType>multi</selectionType>
+      <dependencies />
+      <mods>
+        <mod>
+          <name>Contour Icons</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>False</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>Aslain's</name>
+              <configzipfile>Ingame_Info_Aslains_Contour_Icon_Mod_0.9.17.1.zip</configzipfile>
+              <configzipcrc>e6cc14e7e1dce614481bbbb4434aad8d</configzipcrc>
+              <size>4.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://s1.directupload.net/images/user/131220/s3e8arji.png</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>
+          </description>
+          <updateComment>Aslain's : http://forum.worldoftanks.eu/index.php?/topic/35125-</updateComment>
+          <devURL>
+          </devURL>
         </mod>
         <mod>
           <name>TessuMod, WOT/Teamspeak integration</name>
@@ -3525,47 +3666,6 @@
           <devURL>https://wotspeak.ru/mody-world-of-tanks-wot/525-mod-atas-informaciya-o-blizhayshem-zasvechennom-tanke-vraga-dlya-world-of-tanks.html</devURL>
         </mod>
         <mod>
-          <name>Loading Video</name>
-          <version>
-          </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>True</enabled>
-          <userDatas />
-          <pictures />
-          <configs>
-            <config>
-              <name>MLG</name>
-              <configzipfile>Ingame_Info_MLG_Loading_Video_0.9.15_2016-06-11.zip</configzipfile>
-              <configzipcrc>884478480bc79da17300817d5ea72c94</configzipcrc>
-              <size>27.4</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>GuP</name>
-              <configzipfile>Ingame_Info_GuP_LoadingVideo_0.9.16.zip</configzipfile>
-              <configzipcrc>53c602245ac3b9cc9a20de03d16b2276</configzipcrc>
-              <size>220.5</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-          </configs>
-          <dependencies />
-          <description>GuP video@http://forum.worldoftanks.com/index.php?/topic/398152-0917-girls-und-panzer-the-new-mod-collection/@MLG video@http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/</description>
-          <updateComment>
-          </updateComment>
-          <devURL>
-          </devURL>
-        </mod>
-        <mod>
           <name>Hitmarker by Aimdrol</name>
           <version>
           </version>
@@ -3604,95 +3704,6 @@
           <updateComment>
           </updateComment>
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/</devURL>
-        </mod>
-        <mod>
-          <name>Loading Animation</name>
-          <version>
-          </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>True</enabled>
-          <userDatas />
-          <pictures />
-          <configs>
-            <config>
-              <name>Illuminati by Aimdrol</name>
-              <configzipfile>Ingame_Info_loading_animation_illuminati_by_Aimdrol.zip</configzipfile>
-              <configzipcrc>93f4a22a73fbea48e5c97cba27eafbe5</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL>http://i.imgur.com/fsnK4YY.png</URL>
-                </picture>
-              </pictures>
-              <dependencies />
-            </config>
-            <config>
-              <name>OMC by Technowolf (RIP OMC)</name>
-              <configzipfile>Ingame_Info_loading_animation_OMC_by_Technowolf.zip</configzipfile>
-              <configzipcrc>2ca583ca25411e67cb9637e8a2477f04</configzipcrc>
-              <size>0.4</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL>http://fs1.directupload.net/images/150606/annusd34.jpg</URL>
-                </picture>
-              </pictures>
-              <dependencies />
-            </config>
-          </configs>
-          <dependencies />
-          <description>Replaces the standard loading animation circle@Illuminati - http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/</description>
-          <updateComment>
-          </updateComment>
-          <devURL>
-          </devURL>
-        </mod>
-        <mod>
-          <name>Mastery Badges</name>
-          <version>
-          </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>True</enabled>
-          <userDatas />
-          <pictures />
-          <configs>
-            <config>
-              <name>CoD by Aimdrol</name>
-              <configzipfile>Ingame_Info_CS_GO_mlg_marks_results_0.9.17.0.zip</configzipfile>
-              <configzipcrc>70c9c05d9dc919b153ba71ae6a722d34</configzipcrc>
-              <size>0.9</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL>https://i.imgur.com/VwEJHo7.png</URL>
-                </picture>
-                <picture>
-                  <URL>https://i.imgur.com/kZETgj5.png</URL>
-                </picture>
-                <picture>
-                  <URL>https://i.imgur.com/eKAhVfj.png</URL>
-                </picture>
-              </pictures>
-              <dependencies />
-            </config>
-          </configs>
-          <dependencies />
-          <description>Changes the mastery badges to CoD style badges</description>
-          <updateComment>
-          </updateComment>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/476721-0914-gtos-mlg-mod-continued-by-aimdrol-marks-of-mailand-pl/</devURL>
         </mod>
         <mod>
           <name>MLG Glasses by Aimdrol</name>
@@ -4051,98 +4062,6 @@
           <devURL>http://forum.worldoftanks.ru/index.php?/topic/1385404-091703-battle-observer-v1067-27012017-teamshp-damage-log-zoommod-debug-time-armorcalculator/</devURL>
         </mod>
         <mod>
-          <name>SafeShot</name>
-          <version>
-          </version>
-          <modzipfile>Ingame_Info_Safeshot_0.9.17.0.zip</modzipfile>
-          <modzipcrc>37e7d6915cb92c8af83d09ea04222944</modzipcrc>
-          <size>0.1</size>
-          <enabled>True</enabled>
-          <userDatas />
-          <pictures>
-            <picture>
-              <URL>http://s14.directupload.net/images/131220/mkrjfo7g.jpg</URL>
-            </picture>
-          </pictures>
-          <configs>
-            <config>
-              <name>1 Sec no corpse Shot</name>
-              <configzipfile>Ingame_Info_SafeShot_1sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
-              <configzipcrc>2c1907940855da9cd91989648ca3618e</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>2 sec no corpse shot</name>
-              <configzipfile>Ingame_Info_SafeShot_2sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
-              <configzipcrc>19d8b03abbedca55b1ca38c2e871d262</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>5 sec no corpse shot</name>
-              <configzipfile>Ingame_Info_SafeShot_5sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
-              <configzipcrc>20126c9365d2e48ca33a47bc7f0890c0</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>block team damage shot</name>
-              <configzipfile>Ingame_Info_SafeShot_no_Team_friendly_fire_patch_0.9.15.1.zip</configzipfile>
-              <configzipcrc>f349469e88cb73527497fd985a04ac75</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>multi</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>block wasted shots (shots fired into the air, ground, etc.)</name>
-              <configzipfile>Ingame_Info_SafeShot_no_waste_shot_patch_0.9.15.1.zip</configzipfile>
-              <configzipcrc>cb6cc95b90d2001ef43f1287c007da04</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>multi</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>block teamkiller damage shot</name>
-              <configzipfile>Ingame_Info_SafeShot_no_fire_at_Teamkiller_patch_0.9.15.1.zip</configzipfile>
-              <configzipcrc>bbe2910451add891db439ff49666e631</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>multi</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>send team damage message in chat</name>
-              <configzipfile>Ingame_Info_SafeShot_send_Msg_to_Team_patch_0.9.15.1.zip</configzipfile>
-              <configzipcrc>3f98baadd92005df0725e223a2fb05a4</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>multi</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-          </configs>
-          <dependencies />
-          <description>legal info@http://forum.worldoftanks.eu/index.php?/topic/599621-wg-support-safeshot-is-illegal/page__st__20__pid__13403197#entry13403197@prevents you from shooting your gun to hit allies/dead tanks/etc.</description>
-          <updateComment>
-          </updateComment>
-          <devURL>http://forum.worldoftanks.ru/index.php?/topic/1769267-</devURL>
-        </mod>
-        <mod>
           <name>WG FM Radio</name>
           <version>
           </version>
@@ -4169,6 +4088,143 @@
           </updateComment>
           <devURL>http://worldoftanks.ru/ru/news/common/new-mod-radio/</devURL>
         </mod>
+      </mods>
+    </catagory>
+    <catagory>
+      <name>Garage Mods</name>
+      <selectionType>multi</selectionType>
+      <dependencies />
+      <mods>
+        <mod>
+          <name>Loading Video</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>MLG</name>
+              <configzipfile>Ingame_Info_MLG_Loading_Video_0.9.15_2016-06-11.zip</configzipfile>
+              <configzipcrc>884478480bc79da17300817d5ea72c94</configzipcrc>
+              <size>27.4</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>GuP</name>
+              <configzipfile>Ingame_Info_GuP_LoadingVideo_0.9.16.zip</configzipfile>
+              <configzipcrc>53c602245ac3b9cc9a20de03d16b2276</configzipcrc>
+              <size>220.5</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>GuP video@http://forum.worldoftanks.com/index.php?/topic/398152-0917-girls-und-panzer-the-new-mod-collection/@MLG video@http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/</description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Loading Animation</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>Illuminati by Aimdrol</name>
+              <configzipfile>Ingame_Info_loading_animation_illuminati_by_Aimdrol.zip</configzipfile>
+              <configzipcrc>93f4a22a73fbea48e5c97cba27eafbe5</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i.imgur.com/fsnK4YY.png</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>OMC by Technowolf (RIP OMC)</name>
+              <configzipfile>Ingame_Info_loading_animation_OMC_by_Technowolf.zip</configzipfile>
+              <configzipcrc>2ca583ca25411e67cb9637e8a2477f04</configzipcrc>
+              <size>0.4</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://fs1.directupload.net/images/150606/annusd34.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>Replaces the standard loading animation circle@Illuminati - http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/</description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Mastery Badges</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>CoD by Aimdrol</name>
+              <configzipfile>Ingame_Info_CS_GO_mlg_marks_results_0.9.17.0.zip</configzipfile>
+              <configzipcrc>70c9c05d9dc919b153ba71ae6a722d34</configzipcrc>
+              <size>0.9</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>https://i.imgur.com/VwEJHo7.png</URL>
+                </picture>
+                <picture>
+                  <URL>https://i.imgur.com/kZETgj5.png</URL>
+                </picture>
+                <picture>
+                  <URL>https://i.imgur.com/eKAhVfj.png</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>Changes the mastery badges to CoD style badges</description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://forum.worldoftanks.eu/index.php?/topic/476721-0914-gtos-mlg-mod-continued-by-aimdrol-marks-of-mailand-pl/</devURL>
+        </mod>
         <mod>
           <name>Aslains gold premium tanks</name>
           <version>
@@ -4189,48 +4245,6 @@
           <updateComment>
           </updateComment>
           <devURL>https://mods.curse.com/wot-mods/worldoftanks/aslains-gold-premium-tanks</devURL>
-        </mod>
-        <mod>
-          <name>BalCalcMod</name>
-          <version>
-          </version>
-          <modzipfile>Ingame_Info_BalCalcMod_Base_0.9.17.1_2017-03-31.zip</modzipfile>
-          <modzipcrc>aededd6ffef24a0f1db70834f8076272</modzipcrc>
-          <size>0.1</size>
-          <enabled>False</enabled>
-          <userDatas />
-          <pictures>
-            <picture>
-              <URL>http://s1.directupload.net/images/user/140614/qhfyk8zv.jpg</URL>
-            </picture>
-          </pictures>
-          <configs>
-            <config>
-              <name>F</name>
-              <configzipfile>Ingame_Info_BalCalcMod_Config_F_0.9.17.1_2017-03-31.zip</configzipfile>
-              <configzipcrc>3c344f9f12dbedc153bf543e7c99d89c</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Q</name>
-              <configzipfile>Ingame_Info_BalCalcMod_Config_Q_0.9.17.1_2017-03-31.zip</configzipfile>
-              <configzipcrc>2ef42eb6e6b184b65dba9b44130a0597</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-          </configs>
-          <dependencies />
-          <description>The mod is designed to remedy the situation where it is impossible to aim above the hill. (Overshooting)</description>
-          <updateComment>
-          </updateComment>
-          <devURL>https://koreanrandom.com/forum/topic/30440-</devURL>
         </mod>
         <mod>
           <name>Research Watchdog</name>
@@ -4255,6 +4269,47 @@
           <updateComment>
           </updateComment>
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/457788-0917-research-watchdog/-</devURL>
+        </mod>
+        <mod>
+          <name>Vertical TechTree</name>
+          <version>
+          </version>
+          <modzipfile>Garage_mods_veritcal_techTree_2017-04-26_base.zip</modzipfile>
+          <modzipcrc>f</modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+          </pictures>
+          <configs>
+            <config>
+              <name>English</name>
+              <configzipfile></configzipfile>
+              <configzipcrc></configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>Russian</name>
+              <configzipfile>Garage_mods_veritcal_techTree_2017-04-26_russian.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+              </pictures>
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>shows a vertical version of the tech tree</description>
+          <updateComment>
+          </updateComment>
+          <devURL></devURL>
         </mod>
       </mods>
     </catagory>
