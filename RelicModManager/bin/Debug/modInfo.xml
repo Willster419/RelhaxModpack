@@ -2939,16 +2939,16 @@
           <modzipcrc>
           </modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <userDatas />
           <pictures />
           <configs>
             <config>
-              <name>Aslain's</name>
+              <name>Aslains</name>
               <configzipfile>Ingame_Info_Aslains_Contour_Icon_Mod_0.9.17.1.zip</configzipfile>
               <configzipcrc>e6cc14e7e1dce614481bbbb4434aad8d</configzipcrc>
               <size>4.1</size>
-              <configenabled>False</configenabled>
+              <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
@@ -2958,7 +2958,7 @@
               <dependencies />
             </config>
             <config>
-              <name>Blackspy's</name>
+              <name>Blackspys</name>
               <configzipfile>Ingame_Info_BlackSpy_Contour_Icon_Mod_0.9.18.0.zip</configzipfile>
               <configzipcrc>f</configzipcrc>
               <size>0</size>
@@ -2972,7 +2972,7 @@
               <dependencies />
             </config>
             <config>
-              <name>Blackspy's Yasha Edition</name>
+              <name>Blackspys Yasha Edition</name>
               <configzipfile>Ingame_Info_BlackSpy_Yasha_Edition_Contour_Icon_Mod_0.9.18.0.zip</configzipfile>
               <configzipcrc>f</configzipcrc>
               <size>0</size>
@@ -3009,6 +3009,20 @@
               <pictures>
                 <picture>
                   <URL>http://4put.ru/pictures/max/479/1473513.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>Wizards</name>
+              <configzipfile>Ingame_Info_Wizards_Contour_Icon_Mod.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://www.mediafire.com/convkey/8b02/j54dgu613a7iwwszg.jpg?size_id=5</URL>
                 </picture>
               </pictures>
               <dependencies />
