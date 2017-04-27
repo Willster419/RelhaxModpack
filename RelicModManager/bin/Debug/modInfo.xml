@@ -2934,9 +2934,8 @@
           <name>Contour Icons</name>
           <version>
           </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
+          <modzipfile>Ingame_Info_Contour_Icon_Mod_patch.zip</modzipfile>
+          <modzipcrc>f
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
