@@ -248,7 +248,8 @@
               <name>Top Clans only (default)</name>
               <configzipfile>
               </configzipfile>
-              <configzipcrc>f</configzipcrc>
+              <configzipcrc>
+              </configzipcrc>
               <size>0</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -1156,7 +1157,8 @@
               <name>default config's colorscale</name>
               <configzipfile>
               </configzipfile>
-              <configzipcrc>f</configzipcrc>
+              <configzipcrc>
+              </configzipcrc>
               <size>0</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -2935,9 +2937,8 @@
           <version>
           </version>
           <modzipfile>Ingame_Info_Contour_Icon_Mod_patch.zip</modzipfile>
-          <modzipcrc>f
-          </modzipcrc>
-          <size>0</size>
+          <modzipcrc>a670241168676533192ca08d4e30d496</modzipcrc>
+          <size>0.1</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures />
@@ -2945,8 +2946,8 @@
             <config>
               <name>Aslains</name>
               <configzipfile>Ingame_Info_Aslains_Contour_Icon_Mod_0.9.18.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>77fc657de6c30af8f31e89b8014a52a3</configzipcrc>
+              <size>4</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -2959,50 +2960,38 @@
             <config>
               <name>Blackspys</name>
               <configzipfile>Ingame_Info_BlackSpy_Contour_Icon_Mod_0.9.18.0.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>0fec7a663779067b1ac9113f64c170c5</configzipcrc>
+              <size>8.2</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL></URL>
-                </picture>
-              </pictures>
+              <pictures />
               <dependencies />
             </config>
             <config>
               <name>Blackspys Yasha Edition</name>
               <configzipfile>Ingame_Info_BlackSpy_Yasha_Edition_Contour_Icon_Mod_0.9.18.0.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>ff2b51ec81e62c821cef8195aec688f4</configzipcrc>
+              <size>8.3</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL></URL>
-                </picture>
-              </pictures>
+              <pictures />
               <dependencies />
             </config>
             <config>
               <name>HARDicons</name>
               <configzipfile>Ingame_Info_HARDicons_Contour_Icon_Mod_0.9.18.0.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>880f0e5953a8f2ba2cf96d0092c4d058</configzipcrc>
+              <size>5.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL></URL>
-                </picture>
-              </pictures>
+              <pictures />
               <dependencies />
             </config>
             <config>
               <name>HARDicons colored</name>
               <configzipfile>Ingame_Info_HARDicons_Colored_Contour_Icon_Mod_0.9.18.0.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>649f6df9984c2de8847fee0948553bf3</configzipcrc>
+              <size>5.2</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -3015,8 +3004,8 @@
             <config>
               <name>Man1aq basic</name>
               <configzipfile>Ingame_Info_Man1aqContourIconMod_basic.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>5b2a95d47040cd1777236f0cbc979fab</configzipcrc>
+              <size>3.3</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -3029,8 +3018,8 @@
             <config>
               <name>Man1aq Premium Alternative</name>
               <configzipfile>Ingame_Info_Man1aqContourIconMod_premalt.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>88c2e7cfe1ab9c5068ed69c6c03ff2bf</configzipcrc>
+              <size>3.3</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -3043,8 +3032,8 @@
             <config>
               <name>Wizards</name>
               <configzipfile>Ingame_Info_Wizards_Contour_Icon_Mod.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>e95a75e957eb9d433bed240b19f53ae0</configzipcrc>
+              <size>8.2</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -3724,7 +3713,8 @@
               <name>Disable noobs on allied team</name>
               <configzipfile>
               </configzipfile>
-              <configzipcrc>f</configzipcrc>
+              <configzipcrc>
+              </configzipcrc>
               <size>0</size>
               <configenabled>False</configenabled>
               <configtype>multi</configtype>
@@ -4364,8 +4354,8 @@
             <config>
               <name>With Free Experience</name>
               <configzipfile>ingame_info_research_watchdog_config_2017_04_26.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>427c44eb722be4f2e3b4079f2e7e9c1c</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
@@ -4383,33 +4373,32 @@
           <version>
           </version>
           <modzipfile>Garage_mods_veritcal_techTree_2017-04-26_base.zip</modzipfile>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
+          <modzipcrc>9e017dc3be7cab1e4a20b4a15323f12c</modzipcrc>
+          <size>1.6</size>
           <enabled>True</enabled>
           <userDatas />
-          <pictures>
-          </pictures>
+          <pictures />
           <configs>
             <config>
               <name>English</name>
-              <configzipfile></configzipfile>
-              <configzipcrc></configzipcrc>
+              <configzipfile>
+              </configzipfile>
+              <configzipcrc>
+              </configzipcrc>
               <size>0</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
-              <pictures>
-              </pictures>
+              <pictures />
               <dependencies />
             </config>
             <config>
               <name>Russian</name>
               <configzipfile>Garage_mods_veritcal_techTree_2017-04-26_russian.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>25ce0ff5e237ec3b472970deb3af2c41</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
-              <pictures>
-              </pictures>
+              <pictures />
               <dependencies />
             </config>
           </configs>
@@ -4417,7 +4406,8 @@
           <description>shows a vertical version of the tech tree</description>
           <updateComment>
           </updateComment>
-          <devURL></devURL>
+          <devURL>
+          </devURL>
         </mod>
       </mods>
     </catagory>
