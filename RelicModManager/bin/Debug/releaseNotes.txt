@@ -1,3 +1,11 @@
+Version 21.8.1:
+-Added more exception handling and logging
+-Started work on making application more anti-virus friendly
+-Database Updates:
+  -Added a bunch of contour icons. (dirty20067)
+  -Added vertical techtree. (Willster419)
+  -Added Research Watchdog. (Xantier)
+
 Version 21.8.0:
 -Increased compatibility of patching system
 -Increased performance of zip extraction by up to 48% (fixed the issue where the application would hang on the last file after a large zip file).
