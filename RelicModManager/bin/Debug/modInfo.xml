@@ -2934,17 +2934,16 @@
           <name>Contour Icons</name>
           <version>
           </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
+          <modzipfile>Ingame_Info_Contour_Icon_Mod_patch.zip</modzipfile>
+          <modzipcrc>f
           </modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <userDatas />
           <pictures />
           <configs>
             <config>
-              <name>Aslain's</name>
+              <name>Aslains</name>
               <configzipfile>Ingame_Info_Aslains_Contour_Icon_Mod_0.9.17.1.zip</configzipfile>
               <configzipcrc>e6cc14e7e1dce614481bbbb4434aad8d</configzipcrc>
               <size>4.1</size>
@@ -2957,11 +2956,109 @@
               </pictures>
               <dependencies />
             </config>
+            <config>
+              <name>Blackspys</name>
+              <configzipfile>Ingame_Info_BlackSpy_Contour_Icon_Mod_0.9.18.0.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL></URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>Blackspys Yasha Edition</name>
+              <configzipfile>Ingame_Info_BlackSpy_Yasha_Edition_Contour_Icon_Mod_0.9.18.0.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL></URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>HARDicons</name>
+              <configzipfile>Ingame_Info_HARDicons_Contour_Icon_Mod_0.9.18.0.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL></URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>HARDicons colored</name>
+              <configzipfile>Ingame_Info_HARDicons_Colored_Contour_Icon_Mod_0.9.18.0.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://4put.ru/pictures/max/479/1473513.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>Man1aq basic</name>
+              <configzipfile>Ingame_Info_Man1aqContourIconMod_basic.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i.imgur.com/JlN2RVQ.png</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>Man1aq Premium Alternative</name>
+              <configzipfile>Ingame_Info_Man1aqContourIconMod_premalt.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i.imgur.com/JlN2RVQ.png</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>Wizards</name>
+              <configzipfile>Ingame_Info_Wizards_Contour_Icon_Mod.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://www.mediafire.com/convkey/8b02/j54dgu613a7iwwszg.jpg?size_id=5</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
           </configs>
           <dependencies />
           <description>
           </description>
-          <updateComment>Aslain's : http://forum.worldoftanks.eu/index.php?/topic/35125-</updateComment>
+          <updateComment>Aslain's : http://forum.worldoftanks.eu/index.php?/topic/35125- @Blackspy by_Romkyns: http://forum.worldoftanks.eu/index.php?/topic/318315-917-tank-icon-maker-v051-13-march-2017/ @HARDicons: http://forum.worldoftanks.ru/index.php?/topic/374544-</updateComment>
           <devURL>
           </devURL>
         </mod>
@@ -4247,7 +4344,7 @@
           <devURL>https://mods.curse.com/wot-mods/worldoftanks/aslains-gold-premium-tanks</devURL>
         </mod>
         <mod>
-          <name>Research Watchdog</name>
+          <name>Research Watchdog Without Free Experience</name>
           <version>
           </version>
           <modzipfile>Ingame_Info_research_watchdog_2017_03_03.zip</modzipfile>
@@ -4263,7 +4360,18 @@
               <URL>http://cdn-frm-eu.wargaming.net/wot/eu/uploads/monthly_01_2015/post-506947255-0-71238500-1420301166.png</URL>
             </picture>
           </pictures>
-          <configs />
+          <configs>
+            <config>
+              <name>With Free Experience</name>
+              <configzipfile>ingame_info_research_watchdog_config_2017_04_26.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+          </configs>
           <dependencies />
           <description>notifies when there is enough XP to unlock module@optionally alerts when vehicle goes elite and accelerate crew training is off</description>
           <updateComment>
