@@ -2933,6 +2933,27 @@
       <dependencies />
       <mods>
         <mod>
+          <name>Crew Skill Informer</name>
+          <version>v0.11
+          </version>
+          <modzipfile>Ingame_Info_Crew_Skill_Informer_0.9.17.1.zip</modzipfile>
+          <modzipcrc>f</modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>http://i61.tinypic.com/34errds.jpg</URL>
+            </picture>
+          </pictures>
+          <configs />
+          <dependencies />
+          <description>Crew Skill Informer is WoT mod to visualize crews skills and perks meanwhile the battle.</description>
+          <updateComment>by Voytello and Dumadidak
+          </updateComment>
+          <devURL>http://forum.worldoftanks.eu/index.php?/topic/481984-09171-crewskillinformer-crews-skills-and-perks-in-battle-window-update-23022017-v011/</devURL>
+        </mod>
+        <mod>
           <name>Contour Icons</name>
           <version>
           </version>
