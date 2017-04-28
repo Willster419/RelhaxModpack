@@ -1284,6 +1284,17 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.getTranslatedString("databaseReadFailed"));
                 Application.Exit();
             }
+            catch (System.Net.WebException e)
+            {
+                Settings.appendToLog("EXCEPTION: WebException (call stack traceback)");
+                Settings.appendToLog(e.StackTrace);
+                Settings.appendToLog("inner message: " + e.Message);
+                Settings.appendToLog("source: " + e.Source);
+                Settings.appendToLog("target: " + e.TargetSite);
+                Settings.appendToLog("Additional Info: Tried to access " + databaseURL);
+                MessageBox.Show(Translations.getTranslatedString("databaseNotFound"));
+                Application.Exit();
+            }
             //add the global dependencies
             globalDependencies = new List<Dependency>();
             XmlNodeList globalDependenciesList = doc.SelectNodes("//modInfoAlpha.xml/globaldependencies/globaldependency");

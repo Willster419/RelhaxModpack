@@ -592,6 +592,11 @@ namespace RelhaxModpack
             //
             english.Add("patchingSystemDeneidAccessHeader", "Access Deneid");
             german.Add("patchingSystemDeneidAccessHeader", "Zugriff abgelehnt");
+
+            //Componet: 
+            //
+            english.Add("databaseNotFound", "Database not found at supplied URL");
+            german.Add("databaseNotFound", "Datenbank nicht bei der angegebenen URL gefunden");
         }
     }
 }
