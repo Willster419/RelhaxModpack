@@ -1,3 +1,7 @@
+Version 21.8.2: "anti-virus friendly" update
+-Slimmed down the application to decrease file size and number of references. Should help with antivirus false detection.
+-Rewrote a section of code that is probably the cause to why anti virus applications are freaking out
+
 Version 21.8.1:
 -Added more exception handling and logging
 -Started work on making application more anti-virus friendly

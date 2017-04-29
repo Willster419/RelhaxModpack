@@ -461,10 +461,19 @@ namespace RelhaxModpack
             }
             if (dr == DialogResult.Yes)
             {
-                //Settings.extractEmbeddedResource(tanksLocation + "\\_fonts", "RelhaxModpack", new List<string>() { "FontReg.exe" });
+                
                 if (File.Exists(Application.StartupPath + "\\_fonts\\FontReg.exe"))
                 {
-                    downloader.DownloadFile("http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/external/FontReg.exe", Application.StartupPath + "\\_fonts\\FontReg.exe");
+                    //Settings.extractEmbeddedResource(tanksLocation + "\\_fonts", "RelhaxModpack", new List<string>() { "FontReg.exe" });
+                    try
+                    {
+                        downloader.DownloadFile("http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/external/FontReg.exe", Application.StartupPath + "\\_fonts\\FontReg.exe");
+                    }
+                    catch (WebException)
+                    {
+                        Settings.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " FontReg.exe");
+                        MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " FontReg.exe");
+                    }
                 }
                 ProcessStartInfo info = new ProcessStartInfo();
                 info.FileName = "FontReg.exe";
@@ -565,10 +574,20 @@ namespace RelhaxModpack
             }
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
             string version = versionSave;
-            //Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "RelicCopyUpdate.bat" });
+            
             if (File.Exists(Application.StartupPath + "\\RelicCopyUpdate.bat"))
             {
-                downloader.DownloadFile("http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/external/RelicCopyUpdate.bat", Application.StartupPath + "\\RelicCopyUpdate.bat");
+                //Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "RelicCopyUpdate.bat" });
+                try
+                {
+                    downloader.DownloadFile("http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/external/RelicCopyUpdate.bat", Application.StartupPath + "\\RelicCopyUpdate.bat");
+                }
+                catch (WebException)
+                {
+                    Settings.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " RelicCopyUpdate.bat");
+                    MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " RelicCopyUpdate.bat");
+                    Application.Exit();
+                }
             }
             string newExeName = Application.StartupPath + "\\RelicCopyUpdate.bat";
             try
@@ -718,7 +737,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 04/27/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 04/28/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -771,12 +790,30 @@ namespace RelhaxModpack
             if (!File.Exists(Application.StartupPath + "\\DotNetZip.dll"))
             {
                 //Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "DotNetZip.dll" });
-                downloader.DownloadFile("http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/external/DotNetZip.dll", Application.StartupPath + "\\DotNetZip.dll"); 
+                try
+                {
+                    downloader.DownloadFile("http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/external/DotNetZip.dll", Application.StartupPath + "\\DotNetZip.dll");
+                }
+                catch (WebException)
+                {
+                    Settings.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " DotNetZip.dll");
+                    MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " DotNetZip.dll");
+                    Application.Exit();
+                }
             }
             if (!File.Exists(Application.StartupPath + "\\Newtonsoft.Json.dll"))
             {
                 //Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "Newtonsoft.Json.dll" });
-                downloader.DownloadFile("http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/external/Newtonsoft.Json.dll", Application.StartupPath + "\\Newtonsoft.Json.dll");
+                try
+                {
+                    downloader.DownloadFile("http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/external/Newtonsoft.Json.dll", Application.StartupPath + "\\Newtonsoft.Json.dll");
+                }
+                catch (WebException)
+                {
+                    Settings.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " Newtonsoft.Json.dll");
+                    MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " Newtonsoft.Json.dll");
+                    Application.Exit();
+                }
             }
 
             //load settings
