@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
 using System.IO;
-using System.Xml;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace RelhaxModpack
 {
@@ -266,6 +263,8 @@ namespace RelhaxModpack
         {
             return new System.Drawing.Font(fontName, fontSize, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
         }
+        /*
+         * DEACTIVATED to determine where the antivirus issue is
         //extracts embeded rescource onto disk
         public static void extractEmbeddedResource(string outputDir, string resourceLocation, List<string> files)
         {
@@ -283,7 +282,7 @@ namespace RelhaxModpack
                     }
                 }
             }
-        }
+        }*/
         //returns the md5 hash of the file based on the input file string location
         public static string GetMd5Hash(string inputFile)
         {
@@ -399,7 +398,7 @@ namespace RelhaxModpack
         {
             if (Settings.darkUI)
                 return SystemColors.ControlDark;
-            
+
             else
                 return SystemColors.Control;
         }

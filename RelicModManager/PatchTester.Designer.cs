@@ -79,11 +79,11 @@
             // 
             // regexLoadFileButton
             // 
-            this.regexLoadFileButton.Location = new System.Drawing.Point(149, 138);
+            this.regexLoadFileButton.Location = new System.Drawing.Point(73, 138);
             this.regexLoadFileButton.Name = "regexLoadFileButton";
-            this.regexLoadFileButton.Size = new System.Drawing.Size(75, 23);
+            this.regexLoadFileButton.Size = new System.Drawing.Size(151, 23);
             this.regexLoadFileButton.TabIndex = 1;
-            this.regexLoadFileButton.Text = "load file";
+            this.regexLoadFileButton.Text = "load file to patch";
             this.regexLoadFileButton.UseVisualStyleBackColor = true;
             this.regexLoadFileButton.Click += new System.EventHandler(this.regexLoadFileButton_Click);
             // 
@@ -255,11 +255,11 @@
             // 
             // xmlLoadFileButton
             // 
-            this.xmlLoadFileButton.Location = new System.Drawing.Point(387, 138);
+            this.xmlLoadFileButton.Location = new System.Drawing.Point(381, 138);
             this.xmlLoadFileButton.Name = "xmlLoadFileButton";
-            this.xmlLoadFileButton.Size = new System.Drawing.Size(75, 23);
+            this.xmlLoadFileButton.Size = new System.Drawing.Size(81, 36);
             this.xmlLoadFileButton.TabIndex = 7;
-            this.xmlLoadFileButton.Text = "load file";
+            this.xmlLoadFileButton.Text = "load file to patch";
             this.xmlLoadFileButton.UseVisualStyleBackColor = true;
             this.xmlLoadFileButton.Click += new System.EventHandler(this.xmlLoadFileButton_Click);
             // 
@@ -269,7 +269,7 @@
             this.regexPatchButton.Name = "regexPatchButton";
             this.regexPatchButton.Size = new System.Drawing.Size(95, 23);
             this.regexPatchButton.TabIndex = 5;
-            this.regexPatchButton.Text = "patch loaded file";
+            this.regexPatchButton.Text = "test patch";
             this.regexPatchButton.UseVisualStyleBackColor = true;
             this.regexPatchButton.Click += new System.EventHandler(this.regexPatchButton_Click);
             // 
@@ -279,7 +279,7 @@
             this.xmlPatchButton.Name = "xmlPatchButton";
             this.xmlPatchButton.Size = new System.Drawing.Size(95, 23);
             this.xmlPatchButton.TabIndex = 11;
-            this.xmlPatchButton.Text = "patch loaded file";
+            this.xmlPatchButton.Text = "test patch";
             this.xmlPatchButton.UseVisualStyleBackColor = true;
             this.xmlPatchButton.Click += new System.EventHandler(this.xmlPatchButton_Click);
             // 
@@ -327,11 +327,11 @@
             // 
             // jsonLoadFileButton
             // 
-            this.jsonLoadFileButton.Location = new System.Drawing.Point(620, 138);
+            this.jsonLoadFileButton.Location = new System.Drawing.Point(554, 138);
             this.jsonLoadFileButton.Name = "jsonLoadFileButton";
-            this.jsonLoadFileButton.Size = new System.Drawing.Size(75, 23);
+            this.jsonLoadFileButton.Size = new System.Drawing.Size(141, 23);
             this.jsonLoadFileButton.TabIndex = 13;
-            this.jsonLoadFileButton.Text = "load file";
+            this.jsonLoadFileButton.Text = "load file to patch";
             this.jsonLoadFileButton.UseVisualStyleBackColor = true;
             this.jsonLoadFileButton.Click += new System.EventHandler(this.jsonLoadFileButton_Click);
             // 
@@ -401,7 +401,7 @@
             this.jsonPatchButton.Name = "jsonPatchButton";
             this.jsonPatchButton.Size = new System.Drawing.Size(95, 23);
             this.jsonPatchButton.TabIndex = 17;
-            this.jsonPatchButton.Text = "patch loaded file";
+            this.jsonPatchButton.Text = "test patch";
             this.jsonPatchButton.UseVisualStyleBackColor = true;
             this.jsonPatchButton.Click += new System.EventHandler(this.jsonPatchButton_Click);
             // 

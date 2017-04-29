@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace RelhaxModpack
 {
     //a patch is an instruction of how to modify a text file

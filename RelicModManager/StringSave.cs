@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace RelhaxModpack
 {
     //This class is for saving all the lines in an .xc xvm config file

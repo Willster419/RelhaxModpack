@@ -28,7 +28,7 @@
     <TargetCulture>en-US</TargetCulture>
     <ProductName>Relhax Modpack</ProductName>
     <PublisherName>Willard Wider</PublisherName>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>0.21.8.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -212,7 +212,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="RelicCopyUpdate.bat" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Shell32">
@@ -248,13 +247,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FontReg.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DotNetZip.dll" />
     <Content Include="loading.gif" />
     <Content Include="loading_3rdguards.gif" />
-    <EmbeddedResource Include="Newtonsoft.Json.dll" />
     <Content Include="relicbanner_for_ico.ico" />
   </ItemGroup>
   <ItemGroup>

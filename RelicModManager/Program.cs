@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace RelhaxModpack
 {
@@ -26,14 +25,6 @@ namespace RelhaxModpack
             Settings.appendToLog("Main Entry point launched");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            if (!File.Exists(Application.StartupPath + "\\DotNetZip.dll"))
-            {
-                Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "DotNetZip.dll" });
-            }
-            if (!File.Exists(Application.StartupPath + "\\Newtonsoft.Json.dll"))
-            {
-                Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "Newtonsoft.Json.dll" });
-            }
             //get the command line args for testing of auto install
             string[] commandArgs = Environment.GetCommandLineArgs();
             for (int i = 0; i < commandArgs.Count(); i++)

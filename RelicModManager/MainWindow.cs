@@ -1,30 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Net;
-using System.IO;
-using System.IO.Compression;
-using Ionic.Zip;
-using System.Reflection;
-using Microsoft.Win32;
-using System.Threading;
-using System.Xml;
-using System.Xml.XPath;
-using System.Xml.Linq;
-using System.Threading.Tasks;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.Security.Cryptography;
-using System.Security.Principal;
 using System.Drawing.Text;
-using Newtonsoft.Json.Linq;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Security.Principal;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
+using Ionic.Zip;
+using Microsoft.Win32;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Linq;
 
 namespace RelhaxModpack
 {
@@ -136,7 +127,7 @@ namespace RelhaxModpack
             string currentModDownloadingShort = currentModDownloading;
             if (currentModDownloading.Length > 200)
                 currentModDownloadingShort = currentModDownloading.Substring(0, 15) + "...";
-            downloadProgress.Text = Translations.getTranslatedString("Downloading")  + " " + currentModDownloadingShort + " (" + Math.Round(MBytesIn, 1) + " MB" + " of " + Math.Round(MBytesTotal, 1) + " MB)";
+            downloadProgress.Text = Translations.getTranslatedString("Downloading") + " " + currentModDownloadingShort + " (" + Math.Round(MBytesIn, 1) + " MB" + " of " + Math.Round(MBytesTotal, 1) + " MB)";
             //set the progress bar
             childProgressBar.Value = e.ProgressPercentage;
             //set the download speed
@@ -303,7 +294,7 @@ namespace RelhaxModpack
                 {
                     //get every patch file in the folder
                     //patchFilesList = Directory.GetFiles(tanksLocation + @"\_patch", @"*.xml");
-                    diArr = di.GetFiles(@"*.xml",SearchOption.TopDirectoryOnly);
+                    diArr = di.GetFiles(@"*.xml", SearchOption.TopDirectoryOnly);
                     kontinue = true;
                 }
                 catch (UnauthorizedAccessException e)
@@ -325,7 +316,7 @@ namespace RelhaxModpack
             for (int i = 0; i < diArr.Count(); i++)
             {
                 //set the attributes to normall
-                File.SetAttributes(diArr[i].FullName,FileAttributes.Normal);
+                File.SetAttributes(diArr[i].FullName, FileAttributes.Normal);
                 //add patches to patchList
                 this.createPatchList(diArr[i].FullName);
             }
@@ -470,7 +461,11 @@ namespace RelhaxModpack
             }
             if (dr == DialogResult.Yes)
             {
-                Settings.extractEmbeddedResource(tanksLocation + "\\_fonts", "RelhaxModpack", new List<string>() { "FontReg.exe" });
+                //Settings.extractEmbeddedResource(tanksLocation + "\\_fonts", "RelhaxModpack", new List<string>() { "FontReg.exe" });
+                if (File.Exists(Application.StartupPath + "\\_fonts\\FontReg.exe"))
+                {
+                    downloader.DownloadFile("http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/external/FontReg.exe", Application.StartupPath + "\\_fonts\\FontReg.exe");
+                }
                 ProcessStartInfo info = new ProcessStartInfo();
                 info.FileName = "FontReg.exe";
                 info.UseShellExecute = true;
@@ -570,7 +565,11 @@ namespace RelhaxModpack
             }
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
             string version = versionSave;
-            Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "RelicCopyUpdate.bat" });
+            //Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "RelicCopyUpdate.bat" });
+            if (File.Exists(Application.StartupPath + "\\RelicCopyUpdate.bat"))
+            {
+                downloader.DownloadFile("http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/external/RelicCopyUpdate.bat", Application.StartupPath + "\\RelicCopyUpdate.bat");
+            }
             string newExeName = Application.StartupPath + "\\RelicCopyUpdate.bat";
             try
             {
@@ -767,7 +766,19 @@ namespace RelhaxModpack
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup");
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxUserConfigs")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxUserConfigs");
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxTemp")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxTemp");
-            
+
+            //check for required external application libraries (dlls only)
+            if (!File.Exists(Application.StartupPath + "\\DotNetZip.dll"))
+            {
+                //Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "DotNetZip.dll" });
+                downloader.DownloadFile("http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/external/DotNetZip.dll", Application.StartupPath + "\\DotNetZip.dll"); 
+            }
+            if (!File.Exists(Application.StartupPath + "\\Newtonsoft.Json.dll"))
+            {
+                //Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "Newtonsoft.Json.dll" });
+                downloader.DownloadFile("http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/external/Newtonsoft.Json.dll", Application.StartupPath + "\\Newtonsoft.Json.dll");
+            }
+
             //load settings
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
             Settings.appendToLog("Loading settings");
@@ -859,7 +870,7 @@ namespace RelhaxModpack
                 //patch versiondir out of filePath
                 filePath = Regex.Replace(filePath, "versiondir", tanksVersion);
             }
-            
+
             //verify the file exists...
             if (!File.Exists(filePath))
                 return;
@@ -1205,7 +1216,7 @@ namespace RelhaxModpack
             //load json for editing
             try
             {
-                root = JObject.Parse(file,settings);
+                root = JObject.Parse(file, settings);
             }
             catch (JsonReaderException)
             {
@@ -1353,7 +1364,11 @@ namespace RelhaxModpack
             //if it fails, it will prompt the user to return the world of tanks exe
             if (this.autoFindTanks() == null || Settings.forceManuel)
             {
-                if (this.manuallyFindTanks() == null) return;
+                if (this.manuallyFindTanks() == null)
+                {
+                    toggleUIButtons(true);
+                    return;
+                }
             }
             //parse all strings for installation
             if (this.parseStrings() == null)
@@ -2576,7 +2591,7 @@ namespace RelhaxModpack
             Settings.darkUI = darkUICB.Checked;
             Settings.setUIColor(this);
         }
-        
+
         private void darkUICB_MouseEnter(object sender, EventArgs e)
         {
             if (helper != null)
@@ -2639,13 +2654,13 @@ namespace RelhaxModpack
             saveLastInstallCB.Enabled = enableToggle;
             largerFontButton.Enabled = enableToggle;
         }
-        
+
         private void languageENG_CheckedChanged(object sender, EventArgs e)
         {
             Translations.language = Translations.Languages.English;
             this.applySettings();
         }
-        
+
         private void languageGER_CheckedChanged(object sender, EventArgs e)
         {
             Translations.language = Translations.Languages.German;
