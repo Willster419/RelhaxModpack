@@ -481,7 +481,7 @@ namespace RelhaxModpack
                     }
                     configLabel = new Label();
                     configLabel.AutoSize = true;
-                    configLabel.Location = new System.Drawing.Point(5, (15 * ((configSelectionAll.Controls.Count + 1) / 2)) + 5);
+                    configLabel.Location = new System.Drawing.Point(5, getYLocation(configSelectionAll.Controls));
                     configLabel.Size = new System.Drawing.Size(100, 15);
                     configLabel.TabIndex = 0;
                     configLabel.Text = m.configs[i].name;
@@ -496,7 +496,7 @@ namespace RelhaxModpack
                     RadioButton configControlRB = new RadioButton();
                     configControlRB.AutoSize = true;
                     //configControlRB.Location = new System.Drawing.Point(100, yPosition - 10);
-                    configControlRB.Location = new System.Drawing.Point(configLabel.Location.X + configLabel.Size.Width + 6, (15 * (configSelectionAll.Controls.Count / 2)) + 5);
+                    configControlRB.Location = new System.Drawing.Point(configLabel.Location.X + configLabel.Size.Width + 6, getYLocation(configSelectionAll.Controls));
                     configControlRB.Size = new System.Drawing.Size(150, 15);
                     configControlRB.TabIndex = 1;
                     configControlRB.TabStop = true;
