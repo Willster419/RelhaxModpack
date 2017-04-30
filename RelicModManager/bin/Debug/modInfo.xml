@@ -15,11 +15,6 @@
       <dependencyZipCRC>2b6642bdf49b3a491ae69924d47657f0</dependencyZipCRC>
       <dependencyenabled>True</dependencyenabled>
     </globaldependency>
-    <globaldependency>
-      <dependencyZipFile>Dependency_global_text_locator.zip</dependencyZipFile>
-      <dependencyZipCRC>53399117c9e9e82ee0943a73e2717e8e</dependencyZipCRC>
-      <dependencyenabled>False</dependencyenabled>
-    </globaldependency>
   </globaldependencies>
   <catagories>
     <catagory>
@@ -221,7 +216,7 @@
       </mods>
     </catagory>
     <catagory>
-      <name>XVM config builder/addons</name>
+      <name>XVM config builder</name>
       <selectionType>multi</selectionType>
       <dependencies>
         <dependency>
@@ -2033,8 +2028,7 @@
             </config>
           </configs>
           <dependencies />
-          <description>Toggle the xvm sounds
-          </description>
+          <description>Toggle the xvm sounds</description>
           <updateComment>
           </updateComment>
           <devURL>
@@ -2043,7 +2037,7 @@
       </mods>
     </catagory>
     <catagory>
-      <name>PMOD Config Builder/Addons</name>
+      <name>PMOD Config Builder</name>
       <selectionType>multi</selectionType>
       <dependencies>
         <dependency>
@@ -2218,73 +2212,6 @@
       </mods>
     </catagory>
     <catagory>
-      <name>Zoom Configs</name>
-      <selectionType>multi</selectionType>
-      <dependencies />
-      <mods>
-        <mod>
-          <name>Zoom Out Config (meters)</name>
-          <version>1</version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>True</enabled>
-          <userDatas />
-          <pictures />
-          <configs>
-            <config>
-              <name>100</name>
-              <configzipfile>Zoom_Configs_Out_100.zip</configzipfile>
-              <configzipcrc>54cd0e85274cfd906de930fe2fc02224</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single_dropdown</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>200</name>
-              <configzipfile>Zoom_Configs_Out_200.zip</configzipfile>
-              <configzipcrc>8e6d76d7d10806bc4e7efebe1653809d</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single_dropdown</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>500</name>
-              <configzipfile>Zoom_Configs_Out_500.zip</configzipfile>
-              <configzipcrc>309244af910de9b80f0ca6ff83df1d6c</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single_dropdown</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Increase Scroll Speed</name>
-              <configzipfile>Zoom_Configs_Out_Increase_Scroll_Speed.zip</configzipfile>
-              <configzipcrc>fbc9bcfbea22a0312b14a0098515c75b</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>multi</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-          </configs>
-          <dependencies />
-          <description>How far you can zoom out in arcade mode in meters</description>
-          <updateComment>
-          </updateComment>
-          <devURL>
-          </devURL>
-        </mod>
-      </mods>
-    </catagory>
-    <catagory>
       <name>Crosshairs</name>
       <selectionType>multi</selectionType>
       <dependencies />
@@ -2338,8 +2265,7 @@
             </config>
           </configs>
           <dependencies />
-          <description>Pro Arty: http://forum.worldoftanks.ru/index.php?/topic/1229310-@Harpoon: http://forum.worldoftanks.ru/index.php?/topic/1419789-
-          </description>
+          <description>Pro Arty: http://forum.worldoftanks.ru/index.php?/topic/1229310-@Harpoon: http://forum.worldoftanks.ru/index.php?/topic/1419789-</description>
           <updateComment>
           </updateComment>
           <devURL>
@@ -2437,8 +2363,7 @@
             </config>
           </configs>
           <dependencies />
-          <description>Harpoon: http://forum.worldoftanks.ru/index.php?/topic/1419789-@HARDscope: http://forum.worldoftanks.ru/index.php?/topic/1229310-@J1mBO: http://forum.worldoftanks.eu/index.php?/topic/56831-/page__st__5760__pid__13574904#entry13574904
-          </description>
+          <description>Harpoon: http://forum.worldoftanks.ru/index.php?/topic/1419789-@HARDscope: http://forum.worldoftanks.ru/index.php?/topic/1229310-@J1mBO: http://forum.worldoftanks.eu/index.php?/topic/56831-/page__st__5760__pid__13574904#entry13574904</description>
           <updateComment>
           </updateComment>
           <devURL>
@@ -2933,6 +2858,66 @@
       <dependencies />
       <mods>
         <mod>
+          <name>Zoom Out Config (meters)</name>
+          <version>1</version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>100</name>
+              <configzipfile>Zoom_Configs_Out_100.zip</configzipfile>
+              <configzipcrc>54cd0e85274cfd906de930fe2fc02224</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>200</name>
+              <configzipfile>Zoom_Configs_Out_200.zip</configzipfile>
+              <configzipcrc>8e6d76d7d10806bc4e7efebe1653809d</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>500</name>
+              <configzipfile>Zoom_Configs_Out_500.zip</configzipfile>
+              <configzipcrc>309244af910de9b80f0ca6ff83df1d6c</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Increase Scroll Speed</name>
+              <configzipfile>Zoom_Configs_Out_Increase_Scroll_Speed.zip</configzipfile>
+              <configzipcrc>fbc9bcfbea22a0312b14a0098515c75b</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>How far you can zoom out in arcade mode in meters</description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
           <name>Crew Skill Informer</name>
           <version>v0.11
           </version>
@@ -3134,106 +3119,6 @@
           <updateComment>
           </updateComment>
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/562735-09170-spotmessanger-v070-14122016/</devURL>
-        </mod>
-        <mod>
-          <name>LightMod by Polyacov-Yury</name>
-          <version>2</version>
-          <modzipfile>Ingame_Info_LightMod_LampLights.zip</modzipfile>
-          <modzipcrc>bb872e0705fc77dad2f6c7b86e1ebb2e</modzipcrc>
-          <size>0.2</size>
-          <enabled>False</enabled>
-          <userDatas />
-          <pictures>
-            <picture>
-              <URL>https://koreanrandom.com/forum/uploads/monthly_02_2016/post-8065-0-19679800-1456090716.jpg</URL>
-            </picture>
-            <picture>
-              <URL>http://i.imgur.com/VNTgFwt.jpg</URL>
-            </picture>
-          </pictures>
-          <configs>
-            <config>
-              <name>headlights only</name>
-              <configzipfile>Ingame_Info_LightMod_LampLights_HeadLight.zip</configzipfile>
-              <configzipcrc>54277428f1111dcfc008c7f71e7f0b2d</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-78083800-1474790872.jpg</URL>
-                </picture>
-              </pictures>
-              <dependencies />
-            </config>
-            <config>
-              <name>Car Pack</name>
-              <configzipfile>Ingame_Info_LightMod_LampLights_AutoCar.zip</configzipfile>
-              <configzipcrc>433769680ddee265fb6c5445b70f39c7</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-25565600-1474791402.jpg</URL>
-                </picture>
-                <picture>
-                  <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-56571700-1474791366.jpg</URL>
-                </picture>
-                <picture>
-                  <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-29763500-1474791383.jpg</URL>
-                </picture>
-              </pictures>
-              <dependencies />
-            </config>
-            <config>
-              <name>Neon Track Lights</name>
-              <configzipfile>Ingame_Info_LightMod_LampLights_BottomNeon.zip</configzipfile>
-              <configzipcrc>cacb54c3b2e81f66863417b51ba4a6bd</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>multi</configtype>
-              <pictures>
-                <picture>
-                  <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-40315100-1474790978.jpg</URL>
-                </picture>
-              </pictures>
-              <dependencies />
-            </config>
-            <config>
-              <name>Spotlight on tank in sight</name>
-              <configzipfile>Ingame_Info_LightMod_LampLights_TargetLight.zip</configzipfile>
-              <configzipcrc>415d043a6937c48c1cc9d4fae677dedb</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>multi</configtype>
-              <pictures>
-                <picture>
-                  <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-44270600-1474791048.jpg</URL>
-                </picture>
-              </pictures>
-              <dependencies />
-            </config>
-            <config>
-              <name>evening lighting</name>
-              <configzipfile>Ingame_Info_LightMod_SunController.zip</configzipfile>
-              <configzipcrc>4377781bdad09759366c2fc49dfaccf5</configzipcrc>
-              <size>0.2</size>
-              <configenabled>True</configenabled>
-              <configtype>multi</configtype>
-              <pictures>
-                <picture>
-                  <URL>http://i.imgur.com/eS1WxI3.jpg</URL>
-                </picture>
-              </pictures>
-              <dependencies />
-            </config>
-          </configs>
-          <dependencies />
-          <description>MUST HAVE ADVANCED GRAPHICS SETTINGS FOR THIS TO WORK!</description>
-          <updateComment>
-          </updateComment>
-          <devURL>https://koreanrandom.com/forum/topic/19365-</devURL>
         </mod>
         <mod>
           <name>Bullet Damage Indicators</name>
@@ -3584,6 +3469,303 @@
           <devURL>http://goxwot.blogspot.com/2015/05/98-damage-stickers-7-variants.html</devURL>
         </mod>
         <mod>
+          <name>ATAC</name>
+          <version>
+          </version>
+          <modzipfile>Ingame_Info_ATAC_0.9.16.zip</modzipfile>
+          <modzipcrc>d6e4b9529faadd4e752060ac3ff000f4</modzipcrc>
+          <size>0.1</size>
+          <enabled>False</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>https://wotspeak.ru/uploads/posts/2015-10/1445335486_shot_019.jpg</URL>
+            </picture>
+            <picture>
+              <URL>https://wotspeak.ru/uploads/posts/2015-10/1445335476_shot_013.jpg</URL>
+            </picture>
+          </pictures>
+          <configs />
+          <dependencies />
+          <description>A notification if an enemy is near you.</description>
+          <updateComment>
+          </updateComment>
+          <devURL>https://wotspeak.ru/mody-world-of-tanks-wot/525-mod-atas-informaciya-o-blizhayshem-zasvechennom-tanke-vraga-dlya-world-of-tanks.html</devURL>
+        </mod>
+        <mod>
+          <name>Marks Of Excellence</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>"8/8 IGN" by Aimdrol</name>
+              <configzipfile>Ingame_Info_marks_of_excellence_8of8_by_Aimdrol.zip</configzipfile>
+              <configzipcrc>9ca9b18c165da3fed26367e8dd910010</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i.imgur.com/HaC1Nju.png</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>Ace Tanker by Aimdrol</name>
+              <configzipfile>Ingame_Info_marks_of_excellence_acetanker_by_Aimdrol.zip</configzipfile>
+              <configzipcrc>539e7ec372fecd911b14c19f10ec9641</configzipcrc>
+              <size>0.2</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i.imgur.com/s4L4nVr.png</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>V1 by VoPV</name>
+              <configzipfile>Ingame_Info_marks_of_excellence_by_VoPV_v1.zip</configzipfile>
+              <configzipcrc>91dd57aaaf03980e6ed8ce0b912bac91</configzipcrc>
+              <size>0.4</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://fs5.directupload.net/images/user/160425/nga9lmm7.png</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>V2 by VoPV</name>
+              <configzipfile>Ingame_Info_marks_of_excellence_by_VoPV_v2.zip</configzipfile>
+              <configzipcrc>cd065c97ddbb84b501537ae341d80ca9</configzipcrc>
+              <size>0.4</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://fs5.directupload.net/images/user/160425/jfhnc4by.png</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>QuickeyBaby by Aimdrol</name>
+              <configzipfile>Ingame_Info_marks_of_excellence_quickeyBaby_by_Aimdrol.zip</configzipfile>
+              <configzipcrc>2d4c0b0cde5c97c2a0ccf1544949ff69</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Illuminati by Aimdrol</name>
+              <configzipfile>Ingame_Info_marks_of_excellence_illuminati_by_Aimdrol.zip</configzipfile>
+              <configzipcrc>ba35c7461e4d38872d5f12f1c55e9fab</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i.imgur.com/DsAezWr.png</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>xXx-MVP-xXx by Aimdrol</name>
+              <configzipfile>Ingame_Info_marks_of_excellence_mvp_by_Aimdrol.zip</configzipfile>
+              <configzipcrc>255a9e921830b29589e466bebe81a1e2</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i.imgur.com/ZtlPVDN.png</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>Modifies the standard Marks of Excellence on the gun barrels@Aimdrol mods: http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/@VoPV mods: http://www.awolf.eu/load/mods_world_of_tanks/mods_settings/jaskrawe_odznaki_bieglosci_od_vopv_0_9_14/6-1-0-2313</description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
+          <name>Battle Observer (HP pools)</name>
+          <version>1.7</version>
+          <modzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-03-14.zip</modzipfile>
+          <modzipcrc>b37c8090bd6951cdee37c56506caca34</modzipcrc>
+          <size>0.2</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>http://fs5.directupload.net/images/160727/pu8ywi2f.jpg</URL>
+            </picture>
+          </pictures>
+          <configs>
+            <config>
+              <name>Enable High Caliber Display</name>
+              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-03-14_show_high_caliber.zip</configzipfile>
+              <configzipcrc>48f50c25dcc9fff8675da2a5287a9da9</configzipcrc>
+              <size>0.1</size>
+              <configenabled>False</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Show player spotted status in panels (possible xvm conflict)</name>
+              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-03-14_show_spotted_status.zip</configzipfile>
+              <configzipcrc>3c5fa27a2cf4623a7e94218dcf07a878</configzipcrc>
+              <size>0.1</size>
+              <configenabled>False</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Enable Players info panel (when you press left alt)</name>
+              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-03-14_show_players_info_panel.zip</configzipfile>
+              <configzipcrc>ef8a226c79067b02bad4375a56488b1b</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>Shows the total HP of each team at the top of the screen.@High caliber config will show how much damage you need to get high caliber.@players info panel will show the hp of both teams when left alt is pressed.@Show spotted status will show in the players panel when an enemy is spotted. It might conflict with xvm.</description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://forum.worldoftanks.ru/index.php?/topic/1385404-091703-battle-observer-v1067-27012017-teamshp-damage-log-zoommod-debug-time-armorcalculator/</devURL>
+        </mod>
+      </mods>
+    </catagory>
+    <catagory>
+      <name>Ingame Misc</name>
+      <selectionType>multi</selectionType>
+      <dependencies />
+      <mods>
+      <mod>
+          <name>LightMod by Polyacov-Yury</name>
+          <version>2</version>
+          <modzipfile>Ingame_Info_LightMod_LampLights.zip</modzipfile>
+          <modzipcrc>bb872e0705fc77dad2f6c7b86e1ebb2e</modzipcrc>
+          <size>0.2</size>
+          <enabled>False</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>https://koreanrandom.com/forum/uploads/monthly_02_2016/post-8065-0-19679800-1456090716.jpg</URL>
+            </picture>
+            <picture>
+              <URL>http://i.imgur.com/VNTgFwt.jpg</URL>
+            </picture>
+          </pictures>
+          <configs>
+            <config>
+              <name>headlights only</name>
+              <configzipfile>Ingame_Info_LightMod_LampLights_HeadLight.zip</configzipfile>
+              <configzipcrc>54277428f1111dcfc008c7f71e7f0b2d</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-78083800-1474790872.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>Car Pack</name>
+              <configzipfile>Ingame_Info_LightMod_LampLights_AutoCar.zip</configzipfile>
+              <configzipcrc>433769680ddee265fb6c5445b70f39c7</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-25565600-1474791402.jpg</URL>
+                </picture>
+                <picture>
+                  <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-56571700-1474791366.jpg</URL>
+                </picture>
+                <picture>
+                  <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-29763500-1474791383.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>Neon Track Lights</name>
+              <configzipfile>Ingame_Info_LightMod_LampLights_BottomNeon.zip</configzipfile>
+              <configzipcrc>cacb54c3b2e81f66863417b51ba4a6bd</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-40315100-1474790978.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>Spotlight on tank in sight</name>
+              <configzipfile>Ingame_Info_LightMod_LampLights_TargetLight.zip</configzipfile>
+              <configzipcrc>415d043a6937c48c1cc9d4fae677dedb</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>https://koreanrandom.com/forum/uploads/monthly_09_2016/post-8065-0-44270600-1474791048.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>evening lighting</name>
+              <configzipfile>Ingame_Info_LightMod_SunController.zip</configzipfile>
+              <configzipcrc>4377781bdad09759366c2fc49dfaccf5</configzipcrc>
+              <size>0.2</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i.imgur.com/eS1WxI3.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>MUST HAVE ADVANCED GRAPHICS SETTINGS FOR THIS TO WORK!</description>
+          <updateComment>
+          </updateComment>
+          <devURL>https://koreanrandom.com/forum/topic/19365-</devURL>
+        </mod>
+        <mod>
           <name>WoT Tweaker</name>
           <version>
           </version>
@@ -3750,30 +3932,6 @@
           <devURL>http://forum.worldoftanks.ru/index.php?/topic/1125299-</devURL>
         </mod>
         <mod>
-          <name>ATAC</name>
-          <version>
-          </version>
-          <modzipfile>Ingame_Info_ATAC_0.9.16.zip</modzipfile>
-          <modzipcrc>d6e4b9529faadd4e752060ac3ff000f4</modzipcrc>
-          <size>0.1</size>
-          <enabled>False</enabled>
-          <userDatas />
-          <pictures>
-            <picture>
-              <URL>https://wotspeak.ru/uploads/posts/2015-10/1445335486_shot_019.jpg</URL>
-            </picture>
-            <picture>
-              <URL>https://wotspeak.ru/uploads/posts/2015-10/1445335476_shot_013.jpg</URL>
-            </picture>
-          </pictures>
-          <configs />
-          <dependencies />
-          <description>A notification if an enemy is near you.</description>
-          <updateComment>
-          </updateComment>
-          <devURL>https://wotspeak.ru/mody-world-of-tanks-wot/525-mod-atas-informaciya-o-blizhayshem-zasvechennom-tanke-vraga-dlya-world-of-tanks.html</devURL>
-        </mod>
-        <mod>
           <name>Hitmarker by Aimdrol</name>
           <version>
           </version>
@@ -3874,119 +4032,31 @@
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/</devURL>
         </mod>
         <mod>
-          <name>Marks Of Excellence</name>
+          <name>WG FM Radio</name>
           <version>
           </version>
-          <modzipfile>
-          </modzipfile>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>True</enabled>
+          <modzipfile>Ingame_Info_WG_Radio.zip</modzipfile>
+          <modzipcrc>5aae566466a4d093e1b227d32fb3de9e</modzipcrc>
+          <size>1.4</size>
+          <enabled>False</enabled>
           <userDatas />
-          <pictures />
-          <configs>
-            <config>
-              <name>"8/8 IGN" by Aimdrol</name>
-              <configzipfile>Ingame_Info_marks_of_excellence_8of8_by_Aimdrol.zip</configzipfile>
-              <configzipcrc>9ca9b18c165da3fed26367e8dd910010</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL>http://i.imgur.com/HaC1Nju.png</URL>
-                </picture>
-              </pictures>
-              <dependencies />
-            </config>
-            <config>
-              <name>Ace Tanker by Aimdrol</name>
-              <configzipfile>Ingame_Info_marks_of_excellence_acetanker_by_Aimdrol.zip</configzipfile>
-              <configzipcrc>539e7ec372fecd911b14c19f10ec9641</configzipcrc>
-              <size>0.2</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL>http://i.imgur.com/s4L4nVr.png</URL>
-                </picture>
-              </pictures>
-              <dependencies />
-            </config>
-            <config>
-              <name>V1 by VoPV</name>
-              <configzipfile>Ingame_Info_marks_of_excellence_by_VoPV_v1.zip</configzipfile>
-              <configzipcrc>91dd57aaaf03980e6ed8ce0b912bac91</configzipcrc>
-              <size>0.4</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL>http://fs5.directupload.net/images/user/160425/nga9lmm7.png</URL>
-                </picture>
-              </pictures>
-              <dependencies />
-            </config>
-            <config>
-              <name>V2 by VoPV</name>
-              <configzipfile>Ingame_Info_marks_of_excellence_by_VoPV_v2.zip</configzipfile>
-              <configzipcrc>cd065c97ddbb84b501537ae341d80ca9</configzipcrc>
-              <size>0.4</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL>http://fs5.directupload.net/images/user/160425/jfhnc4by.png</URL>
-                </picture>
-              </pictures>
-              <dependencies />
-            </config>
-            <config>
-              <name>QuickeyBaby by Aimdrol</name>
-              <configzipfile>Ingame_Info_marks_of_excellence_quickeyBaby_by_Aimdrol.zip</configzipfile>
-              <configzipcrc>2d4c0b0cde5c97c2a0ccf1544949ff69</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Illuminati by Aimdrol</name>
-              <configzipfile>Ingame_Info_marks_of_excellence_illuminati_by_Aimdrol.zip</configzipfile>
-              <configzipcrc>ba35c7461e4d38872d5f12f1c55e9fab</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL>http://i.imgur.com/DsAezWr.png</URL>
-                </picture>
-              </pictures>
-              <dependencies />
-            </config>
-            <config>
-              <name>xXx-MVP-xXx by Aimdrol</name>
-              <configzipfile>Ingame_Info_marks_of_excellence_mvp_by_Aimdrol.zip</configzipfile>
-              <configzipcrc>255a9e921830b29589e466bebe81a1e2</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL>http://i.imgur.com/ZtlPVDN.png</URL>
-                </picture>
-              </pictures>
-              <dependencies />
-            </config>
-          </configs>
+          <pictures>
+            <picture>
+              <URL>http://static-ptl-ru.gcdn.co/dcont/fb/image/wotfm_684_243.jpg</URL>
+            </picture>
+            <picture>
+              <URL>http://static-ptl-ru.gcdn.co/dcont/fb/image/newmodradio1.png</URL>
+            </picture>
+            <picture>
+              <URL>http://static-ptl-ru.gcdn.co/dcont/fb/image/newmodradio2.png</URL>
+            </picture>
+          </pictures>
+          <configs />
           <dependencies />
-          <description>Modifies the standard Marks of Excellence on the gun barrels@Aimdrol mods: http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/@VoPV mods: http://www.awolf.eu/load/mods_world_of_tanks/mods_settings/jaskrawe_odznaki_bieglosci_od_vopv_0_9_14/6-1-0-2313</description>
+          <description>Like Pandora internet radio, but in your game, with a configurable gui settings window</description>
           <updateComment>
           </updateComment>
-          <devURL>
-          </devURL>
+          <devURL>http://worldoftanks.ru/ru/news/common/new-mod-radio/</devURL>
         </mod>
         <mod>
           <name>Consumables</name>
@@ -4117,84 +4187,6 @@
           <updateComment>DEV URLS:@Aimdrol: http://forum.worldoftanks.eu/index.php?/topic/476721-0914-gtos-mlg-mod-continued-by-aimdrol-marks-of-mailand-pl/@vito74m: http://www.curse.com/wot-mods/worldoftanks/icons-new-era-vito74m#t1:description@YHKEP: http://mirtankov.net/mods/9136-ikonki-modulej-snarjadov-i-rashodnikov-wot.html@Grandpa: http://www.curse.com/wot-mods/worldoftanks/ammo-equipment-crew-icons@LakeOphild: http://forum.worldoftanks.eu/index.php?/topic/402202-@ vvooj:http://www.curse.com/wot-mods/worldoftanks/letter-shell-icons#t1:other-downloads</updateComment>
           <devURL>
           </devURL>
-        </mod>
-        <mod>
-          <name>Battle Observer (HP pools)</name>
-          <version>1.7</version>
-          <modzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-03-14.zip</modzipfile>
-          <modzipcrc>b37c8090bd6951cdee37c56506caca34</modzipcrc>
-          <size>0.2</size>
-          <enabled>True</enabled>
-          <userDatas />
-          <pictures>
-            <picture>
-              <URL>http://fs5.directupload.net/images/160727/pu8ywi2f.jpg</URL>
-            </picture>
-          </pictures>
-          <configs>
-            <config>
-              <name>Enable High Caliber Display</name>
-              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-03-14_show_high_caliber.zip</configzipfile>
-              <configzipcrc>48f50c25dcc9fff8675da2a5287a9da9</configzipcrc>
-              <size>0.1</size>
-              <configenabled>False</configenabled>
-              <configtype>multi</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Show player spotted status in panels (possible xvm conflict)</name>
-              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-03-14_show_spotted_status.zip</configzipfile>
-              <configzipcrc>3c5fa27a2cf4623a7e94218dcf07a878</configzipcrc>
-              <size>0.1</size>
-              <configenabled>False</configenabled>
-              <configtype>multi</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Enable Players info panel (when you press left alt)</name>
-              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-03-14_show_players_info_panel.zip</configzipfile>
-              <configzipcrc>ef8a226c79067b02bad4375a56488b1b</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>multi</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-          </configs>
-          <dependencies />
-          <description>Shows the total HP of each team at the top of the screen.@High caliber config will show how much damage you need to get high caliber.@players info panel will show the hp of both teams when left alt is pressed.@Show spotted status will show in the players panel when an enemy is spotted. It might conflict with xvm.</description>
-          <updateComment>
-          </updateComment>
-          <devURL>http://forum.worldoftanks.ru/index.php?/topic/1385404-091703-battle-observer-v1067-27012017-teamshp-damage-log-zoommod-debug-time-armorcalculator/</devURL>
-        </mod>
-        <mod>
-          <name>WG FM Radio</name>
-          <version>
-          </version>
-          <modzipfile>Ingame_Info_WG_Radio.zip</modzipfile>
-          <modzipcrc>5aae566466a4d093e1b227d32fb3de9e</modzipcrc>
-          <size>1.4</size>
-          <enabled>False</enabled>
-          <userDatas />
-          <pictures>
-            <picture>
-              <URL>http://static-ptl-ru.gcdn.co/dcont/fb/image/wotfm_684_243.jpg</URL>
-            </picture>
-            <picture>
-              <URL>http://static-ptl-ru.gcdn.co/dcont/fb/image/newmodradio1.png</URL>
-            </picture>
-            <picture>
-              <URL>http://static-ptl-ru.gcdn.co/dcont/fb/image/newmodradio2.png</URL>
-            </picture>
-          </pictures>
-          <configs />
-          <dependencies />
-          <description>Like Pandora internet radio, but in your game, with a configurable gui settings window</description>
-          <updateComment>
-          </updateComment>
-          <devURL>http://worldoftanks.ru/ru/news/common/new-mod-radio/</devURL>
         </mod>
       </mods>
     </catagory>
