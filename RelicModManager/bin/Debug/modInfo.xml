@@ -4285,9 +4285,19 @@
               </pictures>
               <dependencies />
             </config>
+            <config>
+              <name>English EU-Server</name>
+              <configzipfile>Garage_mods_replay_manager_EU_english.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
           </configs>
           <dependencies />
-          <description>by STL1te_P0LIR0ID @German Translation by DOC73</description>
+          <description>by STL1te_P0LIR0ID @German Translation by DOC73 @@German EU-Server and English EU-Server: wotreplays.eu @English NA-Server: wotreplays.com</description>
           <updateComment>
           </updateComment>
           <devURL>
