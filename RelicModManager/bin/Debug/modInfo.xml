@@ -2723,7 +2723,7 @@
           <modzipfile>Ingame_Info_Safeshot_0.9.17.0.zip</modzipfile>
           <modzipcrc>37e7d6915cb92c8af83d09ea04222944</modzipcrc>
           <size>0.1</size>
-          <enabled>True</enabled>
+          <enabled>false</enabled>
           <userDatas />
           <pictures>
             <picture>
