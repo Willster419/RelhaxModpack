@@ -22,8 +22,8 @@
       <selectionType>single</selectionType>
       <dependencies>
         <dependency>
-          <dependencyZipFile>Dependency_XVM_Base_6.6.2.zip</dependencyZipFile>
-          <dependencyZipCRC>ff8f43fe2eb44e49a8aa513a59ebba51</dependencyZipCRC>
+          <dependencyZipFile>Dependency_XVM_Base_6.6.4.zip</dependencyZipFile>
+          <dependencyZipCRC>f</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
@@ -220,8 +220,8 @@
       <selectionType>multi</selectionType>
       <dependencies>
         <dependency>
-          <dependencyZipFile>Dependency_XVM_Base_6.6.2.zip</dependencyZipFile>
-          <dependencyZipCRC>ff8f43fe2eb44e49a8aa513a59ebba51</dependencyZipCRC>
+          <dependencyZipFile>Dependency_XVM_Base_6.6.4.zip</dependencyZipFile>
+          <dependencyZipCRC>f</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
