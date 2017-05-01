@@ -4247,6 +4247,53 @@
           </devURL>
         </mod>
         <mod>
+          <name>Replay Manager</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>f
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>German EU-Server</name>
+              <configzipfile>Garage_mods_replay_manager_EU_german.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i1228.photobucket.com/albums/ee455/dirty20067/OMC%20Modpack/ReplaysManager_3.0.5_STL1te_P0LIR0ID_DE-DOC73_001_zpsk5pujp8u.jpg</URL>
+                </picture>
+                <picture>
+                  <URL>http://i1228.photobucket.com/albums/ee455/dirty20067/OMC%20Modpack/ReplaysManager_3.0.5_STL1te_P0LIR0ID_DE-DOC73_004_zps5r2a37qz.jpg</URL>
+                </picture>
+                <picture>
+                  <URL>http://i1228.photobucket.com/albums/ee455/dirty20067/OMC%20Modpack/ReplaysManager_3.0.5_STL1te_P0LIR0ID_DE-DOC73_002_zpsx5cbowrw.jpg</URL>
+                </picture>
+                <picture>
+                  <URL>http://i1228.photobucket.com/albums/ee455/dirty20067/OMC%20Modpack/ReplaysManager_3.0.5_STL1te_P0LIR0ID_DE-DOC73_005_zpsot6lpfmk.jpg</URL>
+                </picture>
+                <picture>
+                  <URL>http://i1228.photobucket.com/albums/ee455/dirty20067/OMC%20Modpack/ReplaysManager_3.0.5_STL1te_P0LIR0ID_DE-DOC73_003_zpsee5lvmvp.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>by STL1te_P0LIR0ID @German Translation by DOC73</description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
           <name>Loading Animation</name>
           <version>
           </version>
