@@ -1,3 +1,7 @@
+Version 21.8.4:
+-Fixed a critical bug with the Regex patcher
+-Added several mods including zoom in configs, td brake toggle, disable gun shake, and more
+
 Version 21.8.3:
 -Fixed a minor bug in the UI, the placement of the optional radio button configs.
 
