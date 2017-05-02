@@ -2374,7 +2374,13 @@
     <catagory>
       <name>Damage Logs</name>
       <selectionType>single</selectionType>
-      <dependencies />
+      <dependencies>
+        <dependency>
+          <dependencyZipFile>XVM_config_builder_damage_log_disable.zip</dependencyZipFile>
+          <dependencyZipCRC>98e962776b8c4baea52579c3d2b6f251</dependencyZipCRC>
+          <dependencyenabled>True</dependencyenabled>
+        </dependency>
+      </dependencies>
       <mods>
         <mod>
           <name>Damagelog by GambitER</name>
