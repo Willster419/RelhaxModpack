@@ -2248,9 +2248,9 @@
             </config>
             <config>
               <name>Harpoon</name>
-              <configzipfile>Crosshairs_ProArty_9.17.1_2017-03-11.zip</configzipfile>
-              <configzipcrc>4731d16df31f21e872aca3766def0bf5</configzipcrc>
-              <size>0.1</size>
+              <configzipfile>Crosshairs_Harpoon_v3_Arty_0.9.18.0_2017-05-02.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -2334,9 +2334,9 @@
             </config>
             <config>
               <name>Harpoon</name>
-              <configzipfile>Crosshairs_Harpoon_v3_Tank_0.9.17.1_2017-02-25.zip</configzipfile>
-              <configzipcrc>bd277789766ed3d11bd209e9427380a5</configzipcrc>
-              <size>0.7</size>
+              <configzipfile>Crosshairs_Harpoon_v3_Tank_0.9.18.0_2017-05-02.zip</configzipfile>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
