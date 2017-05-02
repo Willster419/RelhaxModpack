@@ -983,7 +983,7 @@ namespace RelhaxModpack
                     XmlNodeList currentSoundBanksEdit = doc.SelectNodes(xpath);
                     foreach (XmlElement e in currentSoundBanksEdit)
                     {
-                        if (Regex.IsMatch(e.InnerText, replace))
+                        if (e.InnerText.Equals(replace))
                             return;
                     }
                     //find and replace
