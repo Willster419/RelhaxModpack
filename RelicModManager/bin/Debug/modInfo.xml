@@ -23,7 +23,7 @@
       <dependencies>
         <dependency>
           <dependencyZipFile>Dependency_XVM_Base_6.6.4.zip</dependencyZipFile>
-          <dependencyZipCRC>f</dependencyZipCRC>
+          <dependencyZipCRC>fd7973c67944768e41fc0251b065dad5</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
@@ -221,7 +221,7 @@
       <dependencies>
         <dependency>
           <dependencyZipFile>Dependency_XVM_Base_6.6.4.zip</dependencyZipFile>
-          <dependencyZipCRC>f</dependencyZipCRC>
+          <dependencyZipCRC>fd7973c67944768e41fc0251b065dad5</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
@@ -2209,6 +2209,127 @@
           <devURL>
           </devURL>
         </mod>
+        <mod>
+          <name>Zoom modifications - zoom in (pmod)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>2, 4, 8, 16, 25 (client default)</name>
+              <configzipfile>pmod_zoomin_config_1_2017-05-01.zip</configzipfile>
+              <configzipcrc>59bda55b8c0cdb194ff4dc75f455e240</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single1</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>2, 4, 8, 12, 16, 20, 26, 32</name>
+              <configzipfile>pmod_zoomin_config_2_2017-05-01.zip</configzipfile>
+              <configzipcrc>e9a97f955bd4abecd60119bb3def4674</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single1</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>2, 4, 8, 12, 16, 20, 26, 32, 40, 48</name>
+              <configzipfile>pmod_zoomin_config_3_2017-05-01.zip</configzipfile>
+              <configzipcrc>d2acc10333680e9710e3da9c666eb2d6</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single1</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>td brake on</name>
+              <configzipfile>pmod_td_brake_on_2017-05-01.zip</configzipfile>
+              <configzipcrc>00ca229c0c5992665d3530b0028e91da</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown1</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>td brake off</name>
+              <configzipfile>pmod_td_brake_off_2017-05-01.zip</configzipfile>
+              <configzipcrc>a8ad683c18c4fe2aec4fdf8e003bcf97</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown1</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>starting zoom 2x (client default)</name>
+              <configzipfile>pmod_default_zoom_2x_2017-05-01.zip</configzipfile>
+              <configzipcrc>2e4c0083cac767966fb6d754febe7599</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown2</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>starting zoom 4x</name>
+              <configzipfile>pmod_default_zoom_4x_2017-05-01.zip</configzipfile>
+              <configzipcrc>756585f5aff83b8250ff9efeeb742a0c</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown2</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>starting zoom 8x</name>
+              <configzipfile>pmod_default_zoom_8x_2017-05-01.zip</configzipfile>
+              <configzipcrc>f382b11ef5a5f9c8bfff046432ddc401</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown2</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>starting zoom 16x</name>
+              <configzipfile>pmod_default_zoom_16x_2017-05-01.zip</configzipfile>
+              <configzipcrc>81800557a31381e034946318b99dc9f5</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown2</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>enable pmod zoom indicator</name>
+              <configzipfile>pmod_enable_zoom_indicator_2017-05-01.zip</configzipfile>
+              <configzipcrc>94874e344024b246057b0ca6e24e38bd</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>Allows you to change the ammount that you can zoom in.@Default zoom changes the first zoom in when you go to sniper mode@td brake allows you to change wether the tank moves when you point your gun out of gun range</description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
       </mods>
     </catagory>
     <catagory>
@@ -2723,7 +2844,7 @@
           <modzipfile>Ingame_Info_Safeshot_0.9.17.0.zip</modzipfile>
           <modzipcrc>37e7d6915cb92c8af83d09ea04222944</modzipcrc>
           <size>0.1</size>
-          <enabled>false</enabled>
+          <enabled>False</enabled>
           <userDatas />
           <pictures>
             <picture>
@@ -2909,9 +3030,19 @@
               <pictures />
               <dependencies />
             </config>
+            <config>
+              <name>Disable gun shake</name>
+              <configzipfile>ingame_aim_zoom_disable_gun_shake_2017-05-01.zip</configzipfile>
+              <configzipcrc>d47930eba82b976cf517f9d3e6e1dbe4</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
           </configs>
           <dependencies />
-          <description>How far you can zoom out in arcade mode in meters</description>
+          <description>How far you can zoom out in arcade mode in meters@increase scroll speed - your mouse wheel will be faster to scroll@disable gun shake - your aim will not shake when you are hit</description>
           <updateComment>
           </updateComment>
           <devURL>
@@ -2919,11 +3050,10 @@
         </mod>
         <mod>
           <name>Crew Skill Informer</name>
-          <version>v0.11
-          </version>
+          <version>v0.11</version>
           <modzipfile>Ingame_Info_Crew_Skill_Informer_0.9.17.1.zip</modzipfile>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
+          <modzipcrc>3d846a1a700f63f743abcf27f4a74cb3</modzipcrc>
+          <size>0.2</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>
@@ -2933,9 +3063,8 @@
           </pictures>
           <configs />
           <dependencies />
-          <description>Crew Skill Informer is WoT mod to visualize crews skills and perks meanwhile the battle.</description>
-          <updateComment>by Voytello and Dumadidak
-          </updateComment>
+          <description>Crew Skill Informer is WoT mod to visualize crews skills and perks meanwhile the battle. Activate it by pressing backspace</description>
+          <updateComment>by Voytello and Dumadidak</updateComment>
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/481984-09171-crewskillinformer-crews-skills-and-perks-in-battle-window-update-23022017-v011/</devURL>
         </mod>
         <mod>
@@ -2986,8 +3115,8 @@
             <config>
               <name>Druids</name>
               <configzipfile>Ingame_Info_Druids_Contour_Icon_Mod.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>59ebd79fa6e79ac62f9345abac6e567e</configzipcrc>
+              <size>9.8</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
@@ -3675,7 +3804,7 @@
       <selectionType>multi</selectionType>
       <dependencies />
       <mods>
-      <mod>
+        <mod>
           <name>LightMod by Polyacov-Yury</name>
           <version>2</version>
           <modzipfile>Ingame_Info_LightMod_LampLights.zip</modzipfile>
@@ -4262,8 +4391,8 @@
             <config>
               <name>German EU-Server</name>
               <configzipfile>Garage_mods_replay_manager_EU_german.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>83cd18013556f3b41b6be4f0bd05d769</configzipcrc>
+              <size>0.7</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -4288,8 +4417,8 @@
             <config>
               <name>English EU-Server</name>
               <configzipfile>Garage_mods_replay_manager_EU_english.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>0336ac7d801526bf40c2988ad2e392af</configzipcrc>
+              <size>0.7</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
@@ -4298,8 +4427,8 @@
             <config>
               <name>English NA-Server</name>
               <configzipfile>Garage_mods_replay_manager_NA_english.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>338878df14f30d1d1a8cd1c402bae400</configzipcrc>
+              <size>0.7</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
