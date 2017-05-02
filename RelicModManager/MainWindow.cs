@@ -329,7 +329,7 @@ namespace RelhaxModpack
                     patchFileOutput = p.file.Substring(0, maxLength);
                 downloadProgress.Text = Translations.getTranslatedString("patching") + patchFileOutput + "...";
                 Application.DoEvents();
-                if (p.type.Equals("regx"))
+                if (p.type.Equals("regx") || p.type.Equals("regex"))
                 {
                     string temp = null;
                     int tempp = 0;
