@@ -2580,10 +2580,10 @@
           <name>Battle Assistant</name>
           <version>
           </version>
-          <modzipfile>Ingame_Info_Battle_Assistant_Base.zip</modzipfile>
-          <modzipcrc>2a86a7e3fe0ddd032c0654daa6dcb72e</modzipcrc>
-          <size>0.1</size>
-          <enabled>False</enabled>
+          <modzipfile>Ingame_Aim_Battle_Assistant_Base_2017-05-02.zip</modzipfile>
+          <modzipcrc>2e0b5b2dc54d926d8539db4f021d5b0c</modzipcrc>
+          <size>0.2</size>
+          <enabled>True</enabled>
           <userDatas />
           <pictures>
             <picture>
@@ -2599,8 +2599,8 @@
           <configs>
             <config>
               <name>G</name>
-              <configzipfile>Ingame_Info_Battle_Assistant_Config_G.zip</configzipfile>
-              <configzipcrc>1047fcf52cec358ede9337e94d1663db</configzipcrc>
+              <configzipfile>Ingame_Aim_Battle_Assistant_Config_G_2017-05-02.zip</configzipfile>
+              <configzipcrc>85f41b7d4463c101b88767eaf2559132</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -2609,8 +2609,8 @@
             </config>
             <config>
               <name>J</name>
-              <configzipfile>Ingame_Info_Battle_Assistant_Config_J.zip</configzipfile>
-              <configzipcrc>655307146e2eeba79ea5b07147ef29da</configzipcrc>
+              <configzipfile>Ingame_Aim_Battle_Assistant_Config_J_2017-05-02.zip</configzipfile>
+              <configzipcrc>397fc2c47f27d156a1ff46f47f233291</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -2619,8 +2619,8 @@
             </config>
             <config>
               <name>Middle Mouse</name>
-              <configzipfile>Ingame_Info_Battle_Assistant_Config_Middle_Mouse.zip</configzipfile>
-              <configzipcrc>ffbdfb0009fcdd1ed93729efcf4b8bdd</configzipcrc>
+              <configzipfile>Ingame_Aim_Battle_Assistant_Config_Middle_Mouse_2017-05-02.zip</configzipfile>
+              <configzipcrc>2699fd0dcbec6fe0acedae6642573279</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -2639,7 +2639,7 @@
             </config>
           </configs>
           <dependencies />
-          <description>Enables an isometric view from Arty.</description>
+          <description>TO USE THIS MOD YOU MUST ACTIVATE (PURCHASE OR AD SUPPORTED) HERE:http://armorinspector.com/en/battleassistant @Enables an isometric view from Arty.</description>
           <updateComment>
           </updateComment>
           <devURL>http://forum.worldoftanks.ru/index.php?/topic/1389614-</devURL>
@@ -2709,8 +2709,8 @@
           <name>Autoaim indication</name>
           <version>
           </version>
-          <modzipfile>Ingame_Info_AutoAim_base.zip</modzipfile>
-          <modzipcrc>45b40b822ee0647c12cfd59009d5b46c</modzipcrc>
+          <modzipfile>Ingame_Info_AutoAim_base_2017-05-02.zip</modzipfile>
+          <modzipcrc>fcb28bf9c3a9f40bd24222bdd325855c</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
           <userDatas />
@@ -2897,7 +2897,7 @@
               <configzipfile>Ingame_Info_SafeShot_no_waste_shot_patch_0.9.15.1.zip</configzipfile>
               <configzipcrc>cb6cc95b90d2001ef43f1287c007da04</configzipcrc>
               <size>0.1</size>
-              <configenabled>True</configenabled>
+              <configenabled>False</configenabled>
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
@@ -2925,18 +2925,17 @@
           </configs>
           <dependencies />
           <description>legal info@http://forum.worldoftanks.eu/index.php?/topic/599621-wg-support-safeshot-is-illegal/page__st__20__pid__13403197#entry13403197@prevents you from shooting your gun to hit allies/dead tanks/etc.</description>
-          <updateComment>
-          </updateComment>
+          <updateComment>Disabled "block wasted shot" because it restricts too much</updateComment>
           <devURL>http://forum.worldoftanks.ru/index.php?/topic/1769267-</devURL>
         </mod>
         <mod>
           <name>BalCalcMod</name>
           <version>
           </version>
-          <modzipfile>Ingame_Info_BalCalcMod_Base_0.9.17.1_2017-03-31.zip</modzipfile>
-          <modzipcrc>aededd6ffef24a0f1db70834f8076272</modzipcrc>
+          <modzipfile>Ingame_Aim_BalCalcMod_Base_0.9.18_2017-05-02.zip</modzipfile>
+          <modzipcrc>e16c03ddbd0118fe1b1b4e1e8cedd638</modzipcrc>
           <size>0.1</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <userDatas />
           <pictures>
             <picture>
@@ -2946,7 +2945,7 @@
           <configs>
             <config>
               <name>F</name>
-              <configzipfile>Ingame_Info_BalCalcMod_Config_F_0.9.17.1_2017-03-31.zip</configzipfile>
+              <configzipfile>Ingame_Aim_BalCalcMod_Config_F_0.9.18_2017-05-02.zip</configzipfile>
               <configzipcrc>3c344f9f12dbedc153bf543e7c99d89c</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
@@ -2956,7 +2955,7 @@
             </config>
             <config>
               <name>Q</name>
-              <configzipfile>Ingame_Info_BalCalcMod_Config_Q_0.9.17.1_2017-03-31.zip</configzipfile>
+              <configzipfile>Ingame_Aim_BalCalcMod_Config_Q_0.9.18_2017-05-02.zip</configzipfile>
               <configzipcrc>2ef42eb6e6b184b65dba9b44130a0597</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
@@ -3198,11 +3197,11 @@
         </mod>
         <mod>
           <name>TessuMod, WOT/Teamspeak integration</name>
-          <version>0.6.11</version>
-          <modzipfile>Ingame_Info_Tessumod_0.6.11.zip</modzipfile>
-          <modzipcrc>8768c14053f612606e343e5c1fb120c8</modzipcrc>
+          <version>0.6.13</version>
+          <modzipfile>Ingame_Info_Tessumod_0.6.13_2017-05-02.zip</modzipfile>
+          <modzipcrc>d4a5de49acb61b6063c64001a78cd4a2</modzipcrc>
           <size>5.1</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <userDatas />
           <pictures>
             <picture>
@@ -3217,25 +3216,25 @@
           </pictures>
           <configs />
           <dependencies />
-          <description>A modification for integrating TeamSpeak into Garage and Battle.</description>
+          <description>YOU MUST ACTIVATE THE MOD IN TEAMSPEAK. Instructions here: http://forum.worldoftanks.eu/index.php?/topic/433614-09171-tessumod-wotteamspeak-integration-mod-v0613-26032017/#topmost @A modification for integrating TeamSpeak into Garage and Battle.</description>
           <updateComment>
           </updateComment>
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/433614-091703-tessumod-wotteamspeak-integration-mod-v0611-05022017/</devURL>
         </mod>
         <mod>
           <name>SpotMessanger</name>
-          <version>0.7.0</version>
-          <modzipfile>Ingame_Info_SpotMessenger_v0.7.0_2016-12-14.zip</modzipfile>
-          <modzipcrc>36488511d781a3545bd11b076c1ee9dd</modzipcrc>
+          <version>1.0.0</version>
+          <modzipfile>Ingame_Info_SpotMessenger_v1.0.0_2017-05-02.zip</modzipfile>
+          <modzipcrc>74f58278f151aec5b82ad8b58a654434</modzipcrc>
           <size>0.1</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <userDatas />
           <pictures />
           <configs>
             <config>
               <name>active at start, deactivate with F11</name>
-              <configzipfile>Ingame_Info_SpotMessenger_activated_2016-06-04_patch.zip</configzipfile>
-              <configzipcrc>d1a6d35c9fc43cc471083c5e4666fd85</configzipcrc>
+              <configzipfile>Ingame_Info_SpotMessenger_activated_2017-05-02.zip</configzipfile>
+              <configzipcrc>292ca07322d6c844655b037857e6b97f</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3244,8 +3243,8 @@
             </config>
             <config>
               <name>inactive at start, activate with F11</name>
-              <configzipfile>Ingame_Info_SpotMessenger_deactivated_2016-06-04_patch.zip</configzipfile>
-              <configzipcrc>1e147dce0f57f7bc64092b74ec9c4638</configzipcrc>
+              <configzipfile>Ingame_Info_SpotMessenger_deactivated_2017-05-02.zip</configzipfile>
+              <configzipcrc>07ae6a5d0e28eed29f1d885368780351</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3377,8 +3376,8 @@
           <name>Inbattle current rating calculation by Ekspoint</name>
           <version>
           </version>
-          <modzipfile>Ingame_Info_InBattle_Rating_Base_2017_04_16.zip</modzipfile>
-          <modzipcrc>8079011f103ee0d19bfd43f53271055f</modzipcrc>
+          <modzipfile>Ingame_Info_InBattle_Rating_Base_2017_05-02.zip</modzipfile>
+          <modzipcrc>a240165a535df8ff84e1953977482214</modzipcrc>
           <size>0.1</size>
           <enabled>True</enabled>
           <userDatas />
@@ -3611,10 +3610,10 @@
           <name>ATAC</name>
           <version>
           </version>
-          <modzipfile>Ingame_Info_ATAC_0.9.16.zip</modzipfile>
-          <modzipcrc>d6e4b9529faadd4e752060ac3ff000f4</modzipcrc>
+          <modzipfile>Ingame_Info_ATAC_0.9.18_2017-05-02.zip</modzipfile>
+          <modzipcrc>5bc423caca97b82928ee30fc29f61542</modzipcrc>
           <size>0.1</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <userDatas />
           <pictures>
             <picture>
@@ -3806,11 +3805,11 @@
       <mods>
         <mod>
           <name>LightMod by Polyacov-Yury</name>
-          <version>2</version>
-          <modzipfile>Ingame_Info_LightMod_LampLights.zip</modzipfile>
-          <modzipcrc>bb872e0705fc77dad2f6c7b86e1ebb2e</modzipcrc>
+          <version>0.9.18_2</version>
+          <modzipfile>Ingame_Misc_LightMod_LampLights_2017-05-02.zip</modzipfile>
+          <modzipcrc>7f1669dc72428edb25950b7654824328</modzipcrc>
           <size>0.2</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <userDatas />
           <pictures>
             <picture>
@@ -3823,8 +3822,8 @@
           <configs>
             <config>
               <name>headlights only</name>
-              <configzipfile>Ingame_Info_LightMod_LampLights_HeadLight.zip</configzipfile>
-              <configzipcrc>54277428f1111dcfc008c7f71e7f0b2d</configzipcrc>
+              <configzipfile>Ingame_Misc_LightMod_LampLights_HeadLight_2017-05-02.zip</configzipfile>
+              <configzipcrc>a30f814c7cf3dc89a719fee758906c6e</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3837,8 +3836,8 @@
             </config>
             <config>
               <name>Car Pack</name>
-              <configzipfile>Ingame_Info_LightMod_LampLights_AutoCar.zip</configzipfile>
-              <configzipcrc>433769680ddee265fb6c5445b70f39c7</configzipcrc>
+              <configzipfile>Ingame_Misc_LightMod_LampLights_AutoCar_2017-05-02.zip</configzipfile>
+              <configzipcrc>0e103f853885ebe6659fe04136c5c252</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3857,8 +3856,8 @@
             </config>
             <config>
               <name>Neon Track Lights</name>
-              <configzipfile>Ingame_Info_LightMod_LampLights_BottomNeon.zip</configzipfile>
-              <configzipcrc>cacb54c3b2e81f66863417b51ba4a6bd</configzipcrc>
+              <configzipfile>Ingame_Misc_LightMod_LampLights_BottomNeon_2017-05-02.zip</configzipfile>
+              <configzipcrc>024f73583bd584ac00b367786b5fd1a7</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
@@ -3871,8 +3870,8 @@
             </config>
             <config>
               <name>Spotlight on tank in sight</name>
-              <configzipfile>Ingame_Info_LightMod_LampLights_TargetLight.zip</configzipfile>
-              <configzipcrc>415d043a6937c48c1cc9d4fae677dedb</configzipcrc>
+              <configzipfile>Ingame_Misc_LightMod_LampLights_TargetLight_2017-05-02.zip</configzipfile>
+              <configzipcrc>cd34071411923c74073fdb8d92137537</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
@@ -3885,8 +3884,8 @@
             </config>
             <config>
               <name>evening lighting</name>
-              <configzipfile>Ingame_Info_LightMod_SunController.zip</configzipfile>
-              <configzipcrc>4377781bdad09759366c2fc49dfaccf5</configzipcrc>
+              <configzipfile>Ingame_Misc_LightMod_SunController_2017-05-02.zip</configzipfile>
+              <configzipcrc>a9d19b1e5322e90b0960ac36c5bf166f</configzipcrc>
               <size>0.2</size>
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
@@ -3898,7 +3897,13 @@
               <dependencies />
             </config>
           </configs>
-          <dependencies />
+          <dependencies>
+            <dependency>
+              <dependencyZipFile>Dependency_poleroid_mods_list_api_2017_05-02.zip</dependencyZipFile>
+              <dependencyZipCRC>33b677f0690e54b8e9e60709d2784588</dependencyZipCRC>
+              <dependencyenabled>True</dependencyenabled>
+            </dependency>
+          </dependencies>
           <description>MUST HAVE ADVANCED GRAPHICS SETTINGS FOR THIS TO WORK!</description>
           <updateComment>
           </updateComment>
@@ -4058,7 +4063,7 @@
               <configzipcrc>
               </configzipcrc>
               <size>0</size>
-              <configenabled>False</configenabled>
+              <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
@@ -4174,10 +4179,10 @@
           <name>WG FM Radio</name>
           <version>
           </version>
-          <modzipfile>Ingame_Info_WG_Radio.zip</modzipfile>
-          <modzipcrc>5aae566466a4d093e1b227d32fb3de9e</modzipcrc>
-          <size>1.4</size>
-          <enabled>False</enabled>
+          <modzipfile>Ingame_Misc_WG_Radio_2017-05-02.zip</modzipfile>
+          <modzipcrc>2579a7899664d4eee1f805b372578124</modzipcrc>
+          <size>1.2</size>
+          <enabled>True</enabled>
           <userDatas />
           <pictures>
             <picture>
@@ -4191,7 +4196,13 @@
             </picture>
           </pictures>
           <configs />
-          <dependencies />
+          <dependencies>
+            <dependency>
+              <dependencyZipFile>Dependency_poleroid_mods_list_api_2017_05-02.zip</dependencyZipFile>
+              <dependencyZipCRC>33b677f0690e54b8e9e60709d2784588</dependencyZipCRC>
+              <dependencyenabled>True</dependencyenabled>
+            </dependency>
+          </dependencies>
           <description>Like Pandora internet radio, but in your game, with a configurable gui settings window</description>
           <updateComment>
           </updateComment>
@@ -4390,9 +4401,9 @@
           <configs>
             <config>
               <name>German EU-Server</name>
-              <configzipfile>Garage_mods_replay_manager_EU_german.zip</configzipfile>
-              <configzipcrc>83cd18013556f3b41b6be4f0bd05d769</configzipcrc>
-              <size>0.7</size>
+              <configzipfile>Garage_mods_replay_manager_EU_german_2017-05-02.zip</configzipfile>
+              <configzipcrc>4806e998212ce4a5cbdbf35fb11a5e51</configzipcrc>
+              <size>0.6</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -4416,9 +4427,9 @@
             </config>
             <config>
               <name>English EU-Server</name>
-              <configzipfile>Garage_mods_replay_manager_EU_english.zip</configzipfile>
-              <configzipcrc>0336ac7d801526bf40c2988ad2e392af</configzipcrc>
-              <size>0.7</size>
+              <configzipfile>Garage_mods_replay_manager_EU_english_2017-05-02.zip</configzipfile>
+              <configzipcrc>2578c5779cecace3bb854ed6ea7b5924</configzipcrc>
+              <size>0.6</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
@@ -4426,16 +4437,22 @@
             </config>
             <config>
               <name>English NA-Server</name>
-              <configzipfile>Garage_mods_replay_manager_NA_english.zip</configzipfile>
-              <configzipcrc>338878df14f30d1d1a8cd1c402bae400</configzipcrc>
-              <size>0.7</size>
+              <configzipfile>Garage_mods_replay_manager_NA_english_2017-05-02.zip</configzipfile>
+              <configzipcrc>05f8b791859fc699a7b47e2a5c004d3c</configzipcrc>
+              <size>0.6</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
               <dependencies />
             </config>
           </configs>
-          <dependencies />
+          <dependencies>
+            <dependency>
+              <dependencyZipFile>Dependency_poleroid_mods_list_api_2017_05-02.zip</dependencyZipFile>
+              <dependencyZipCRC>33b677f0690e54b8e9e60709d2784588</dependencyZipCRC>
+              <dependencyenabled>True</dependencyenabled>
+            </dependency>
+          </dependencies>
           <description>by STL1te_P0LIR0ID @German Translation by DOC73 @@German EU-Server and English EU-Server: wotreplays.eu @English NA-Server: wotreplays.com</description>
           <updateComment>
           </updateComment>
@@ -4637,10 +4654,9 @@
       <mods>
         <mod>
           <name>Session Statistics by Tomonik</name>
-          <version>
-          </version>
-          <modzipfile>Garage_Session_Stats_Tomonik.zip</modzipfile>
-          <modzipcrc>5be410a9500e4057023ffc543c63fa96</modzipcrc>
+          <version>0.9.18_r01</version>
+          <modzipfile>Garage_Session_Stats_Tomonik_2017-05-02.zip</modzipfile>
+          <modzipcrc>6f6b835da64566c7afc92aa2683fb496</modzipcrc>
           <size>0.3</size>
           <enabled>True</enabled>
           <userDatas>
@@ -4671,8 +4687,7 @@
         </mod>
         <mod>
           <name>YasenKrasen session statistics</name>
-          <version>
-          </version>
+          <version>0.9.18.0c</version>
           <modzipfile>
           </modzipfile>
           <modzipcrc>
@@ -4690,8 +4705,8 @@
           <configs>
             <config>
               <name>Vanilla</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_Vanilla_0.9.17.1d_2017-04-22.zip</configzipfile>
-              <configzipcrc>63dafb30f4cb96a9065acf1922bec803</configzipcrc>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_Vanilla_0.9.18.0c_2017-05-02.zip</configzipfile>
+              <configzipcrc>bcb135324cc9af962349000d37f3f818</configzipcrc>
               <size>0.5</size>
               <configenabled>True</configenabled>
               <configtype>single1</configtype>
@@ -4700,9 +4715,9 @@
             </config>
             <config>
               <name>Core</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_Core_0.9.17.1d_2017-04-22.zip</configzipfile>
-              <configzipcrc>0b867c1a7e1416b4379860fbc45ae60c</configzipcrc>
-              <size>1.5</size>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_Core_0.9.18.0c_2017-05-02.zip</configzipfile>
+              <configzipcrc>3aaf5ae2cc53ecb5afafcbafbb9e623d</configzipcrc>
+              <size>1.6</size>
               <configenabled>True</configenabled>
               <configtype>single1</configtype>
               <pictures />
@@ -4710,8 +4725,8 @@
             </config>
             <config>
               <name>Background V1</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_Backgrounds_V1_0.9.17.1d_2017-04-22.zip</configzipfile>
-              <configzipcrc>007603463ccbbb8eb098d84402e77b9a</configzipcrc>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_Backgrounds_V1_0.9.18.0c_2017-05-02.zip</configzipfile>
+              <configzipcrc>f46fd6480689ebb9fcef579db01bae0c</configzipcrc>
               <size>0.4</size>
               <configenabled>True</configenabled>
               <configtype>single2</configtype>
@@ -4720,8 +4735,8 @@
             </config>
             <config>
               <name>Background V2</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_Backgrounds_V2_0.9.17.1d_2017-04-22.zip</configzipfile>
-              <configzipcrc>2186392725c0ea4bd263e56ea08eac6d</configzipcrc>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_Backgrounds_V2_0.9.18.0c_2017-05-02.zip</configzipfile>
+              <configzipcrc>88dd2a211bdf3cf80f589a4957d53e10</configzipcrc>
               <size>0.5</size>
               <configenabled>True</configenabled>
               <configtype>single2</configtype>
@@ -4730,9 +4745,29 @@
             </config>
             <config>
               <name>Background V3</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_Backgrounds_V3_0.9.17.1d_2017-04-22.zip</configzipfile>
-              <configzipcrc>8fb91c64b0efb684f94c190dee65415d</configzipcrc>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_Backgrounds_V3_0.9.18.0c_2017-05-02.zip</configzipfile>
+              <configzipcrc>378e21bac8c03632d3fabe0f5565665d</configzipcrc>
               <size>0.4</size>
+              <configenabled>True</configenabled>
+              <configtype>single2</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Background V4</name>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_Backgrounds_V4_0.9.18.0c_2017-05-02.zip</configzipfile>
+              <configzipcrc>79a4cb94948f9901c4fcf4f6e9aeb330</configzipcrc>
+              <size>1.2</size>
+              <configenabled>True</configenabled>
+              <configtype>single2</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Background V5</name>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_Backgrounds_V5_0.9.18.0c_2017-05-02.zip</configzipfile>
+              <configzipcrc>249671d191f20dfc300b2959fa434997</configzipcrc>
+              <size>1.7</size>
               <configenabled>True</configenabled>
               <configtype>single2</configtype>
               <pictures />
