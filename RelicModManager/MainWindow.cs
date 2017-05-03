@@ -27,7 +27,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 21.8.4";
+        private string managerVersion = "version 21.8.5";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -941,7 +941,10 @@ namespace RelhaxModpack
                     foreach (XmlElement e in currentSoundBanksAdd)
                     {
                         string innerText = tempp[tempp.Count() - 1];
-                        if (Regex.IsMatch(e.InnerText, innerText))
+                        //remove any tabs and whitespaces first
+                        innerText = Regex.Replace(innerText, @"\t", "");
+                        innerText = innerText.Trim();
+                        if (e.InnerText.Equals(innerText))
                             return;
                     }
                     //get to the node where to add the element
@@ -983,6 +986,9 @@ namespace RelhaxModpack
                     XmlNodeList currentSoundBanksEdit = doc.SelectNodes(xpath);
                     foreach (XmlElement e in currentSoundBanksEdit)
                     {
+                        string innerText = e.InnerText;
+                        innerText = Regex.Replace(innerText, "\t", "");
+                        innerText = innerText.Trim();
                         if (e.InnerText.Equals(replace))
                             return;
                     }
@@ -1321,20 +1327,16 @@ namespace RelhaxModpack
                 string temp = putBackDollas[i];
                 if (Regex.IsMatch(temp, "-69420"))//look for the temp value
                 {
-                    string name = temp.Split('"')[1];
-                    for (int j = 0; j < ssList.Count; j++)
-                    {
-                        if (name.Equals(ssList[j].name))
-                        {
-                            //remake the line
-                            temp = "\"" + ssList[j].name + "\"" + ": $" + ssList[j].value;
-                            putBackDollas[i] = temp;
-                            ssList.RemoveAt(j);
-                        }
-                    }
+                    //array of string save and text file are in sync, so when one is found,
+                    //take it from index 0 and remove from the list at index 0
+                    temp = "\"" + ssList[0].name + "\"" + ": $" + ssList[0].value;
+                    putBackDollas[i] = temp;
+                    ssList.RemoveAt(0);
                 }
                 rebuilder.Append(putBackDollas[i] + "\n");
             }
+            if (ssList.Count != 0)
+                Settings.appendToLog("There was an error with patching the file " + jsonFile + ", with extra refrences");
             File.WriteAllText(jsonFile, rebuilder.ToString());
         }
         //parses a patch xml file into an xml patch instance in memory to be enqueued

@@ -1,3 +1,7 @@
+Version 21.8.5:
+-Fixed a minor bug with the xml patcher
+-Fixed a major bug with the json patcher, causing issues with xvm's markers.xc configuration settings
+
 Version 21.8.4:
 -Fixed a critical bug with the Regex patcher
 -Added several mods including zoom in configs, td brake toggle, disable gun shake, and more
