@@ -6917,10 +6917,10 @@
         <mod>
           <name>Churchill III Lend-Lease Remodel (Milkym4n)</name>
           <version>1.0.4</version>
-          <modzipfile>Custom_Tank_Skins_Skin_R33_Churchill_3_WT-1.0.4.zip</modzipfile>
-          <modzipcrc>e4f6de838b66f8c7d3f9438ed922841f</modzipcrc>
-          <size>11.7</size>
-          <enabled>False</enabled>
+          <modzipfile>Custom_Tank_Skins_Skin_R33_Churchill_3_WT-1.0.4_9.18.zip</modzipfile>
+          <modzipcrc>f</modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
           <userDatas />
           <pictures>
             <picture>
