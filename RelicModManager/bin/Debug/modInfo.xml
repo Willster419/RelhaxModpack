@@ -7000,10 +7000,10 @@
         <mod>
           <name>T-34-3 HD Remodel (Milkym4n)</name>
           <version>1.0.2</version>
-          <modzipfile>Custom_Tank_Skins_Skin_Ch14_T-34-3-1.0.2.zip</modzipfile>
+          <modzipfile>Custom_Tank_Skins_Skin_Ch14_T-34-3_9.18.zip</modzipfile>
           <modzipcrc>f</modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <userDatas />
           <pictures>
             <picture>
@@ -7016,7 +7016,7 @@
           </description>
           <updateComment>
           </updateComment>
-          <devURL>https://github.com/MilkysModShop/T-34-3/releases/tag/1.0.1</devURL>
+          <devURL>https://modshop.milkym4n.com/</devURL>
         </mod>
         <mod>
           <name>FV215b HD Remodel (Milkym4n)</name>
