@@ -4915,7 +4915,7 @@
             </config>
           </configs>
           <dependencies />
-          <description>MLG EVERYWHERE@Also includes awesome visuals.</description>
+          <description>Must have sound crew language set to "standard"@MLG EVERYWHERE@Also includes awesome visuals.</description>
           <updateComment>
           </updateComment>
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/</devURL>
@@ -4935,6 +4935,36 @@
           <updateComment>
           </updateComment>
           <devURL>http://www.curse.com/wot-mods/worldoftanks/simple-sounds</devURL>
+        </mod>
+        <mod>
+          <name>Julie Voice Pack</name>
+          <version>0.9.18_2017-05-02</version>
+          <modzipfile>Sounds_Julie_Voice_Pack.zip</modzipfile>
+          <modzipcrc>f2c274197493002ddededf8d00ef29f5</modzipcrc>
+          <size>4.6</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs />
+          <dependencies />
+          <description>Must have sound crew language set to "standard"</description>
+          <updateComment>updated by niserius</updateComment>
+          <devURL>http://forum.worldoftanks.eu/index.php?/topic/559722-julie-voice-others/</devURL>
+        </mod>
+        <mod>
+          <name>Romanian crew voices</name>
+          <version>0.9.18_2017-05-02</version>
+          <modzipfile>Sounds_Romainian_2017-05-02.zip</modzipfile>
+          <modzipcrc>28572ffbdd8d672d0117b22d334a5a7e</modzipcrc>
+          <size>8.8</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs />
+          <dependencies />
+          <description>Must have sound crew language set to "standard"</description>
+          <updateComment>updated by niserius</updateComment>
+          <devURL>http://forum.worldoftanks.eu/index.php?/topic/559722-julie-voice-others/</devURL>
         </mod>
         <mod>
           <name>UT Countdown</name>
