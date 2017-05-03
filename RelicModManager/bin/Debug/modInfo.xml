@@ -3073,6 +3073,28 @@
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/481984-09171-crewskillinformer-crews-skills-and-perks-in-battle-window-update-23022017-v011/</devURL>
         </mod>
         <mod>
+          <name>Arty Log Extended by OldSkool</name>
+          <version>0.9.18_2017-05-02</version>
+          <modzipfile>Ingame_Info_Artylog_by_oldskool_2017-05-02.zip</modzipfile>
+          <modzipcrc>8a7a6ecee88503fc67fc8c169d1b2444</modzipcrc>
+          <size>0.1</size>
+          <enabled>True</enabled>
+          <userDatas>
+            <userData>\\mods\\configs\\oldskool\\artylog\\cache.json</userData>
+          </userDatas>
+          <pictures>
+            <picture>
+              <URL>https://scontent.xx.fbcdn.net/v/t1.0-0/s480x480/17426089_1839831972941768_1868782179473412876_n.png?oh=8041200f6f79da412528c14070f542a4&amp;oe=595716D0</URL>
+            </picture>
+          </pictures>
+          <configs />
+          <dependencies />
+          <description>Shows how much damage arty actually causes vs. other tanks that damage you</description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://forum.worldoftanks.eu/index.php?/topic/621874-0918-arty-log-extended-by-oldskool/</devURL>
+        </mod>
+        <mod>
           <name>Contour Icons</name>
           <version>
           </version>
