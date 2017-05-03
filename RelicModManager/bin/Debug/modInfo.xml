@@ -6480,7 +6480,7 @@
               <configzipfile>Custom_Tank_Skins_Skin_G114_Rheinmetall_Skorpian_Remodel_v1.0.4_Milkym4n_0.9.16.zip</configzipfile>
               <configzipcrc>1b151a1a50cd492f892ca9a790846d41</configzipcrc>
               <size>28.3</size>
-              <configenabled>False</configenabled>
+              <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
