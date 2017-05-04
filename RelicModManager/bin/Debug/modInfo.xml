@@ -3218,8 +3218,8 @@
             <config>
               <name>J1mB0</name>
               <configzipfile>Ingame_Info_J1mB0s_Contour_Icon_Mod.zip</configzipfile>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>b29dc54c95614d40428ce6aff6bb0beb</configzipcrc>
+              <size>7.9</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -6932,8 +6932,8 @@
           <name>Churchill III Lend-Lease Remodel (Milkym4n)</name>
           <version>1.0.4</version>
           <modzipfile>Custom_Tank_Skins_Skin_R33_Churchill_3_WT-1.0.4_9.18.zip</modzipfile>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
+          <modzipcrc>1dd35e9d5deab0a4147721db62ecf30a</modzipcrc>
+          <size>11.1</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>
@@ -7015,8 +7015,8 @@
           <name>T-34-3 HD Remodel (Milkym4n)</name>
           <version>1.0.2</version>
           <modzipfile>Custom_Tank_Skins_Skin_Ch14_T-34-3_9.18.zip</modzipfile>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
+          <modzipcrc>8e6465d2f237e682b571a1be32c53b3a</modzipcrc>
+          <size>21.1</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>
