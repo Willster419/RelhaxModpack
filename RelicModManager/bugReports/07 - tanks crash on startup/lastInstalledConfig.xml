@@ -1,0 +1,405 @@
+<mods>
+  <relhaxMods>
+    <mod>
+      <name>Default Config</name>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - 6th sense (xvm)</name>
+      <configs>
+        <config>
+          <name>5 sec 6th sense icon</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - damage panel repair timers (xvm)</name>
+      <configs>
+        <config>
+          <name>Enable</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - hitlog (xvm)</name>
+      <configs>
+        <config>
+          <name>Enable</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - last hit announcer (xvm)</name>
+      <configs>
+        <config>
+          <name>Enable</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - total efficiency (xvm)</name>
+      <configs>
+        <config>
+          <name>Enable</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - total HP (xvm)</name>
+      <configs>
+        <config>
+          <name>Enable total HP</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - win chance (xvm)</name>
+      <configs>
+        <config>
+          <name>Enable</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Results modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Show Battle Tier</name>
+        </config>
+        <config>
+          <name>Init Battle Results page 2</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage interface modifications - additional server infromation (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage interface modifications - block vehicle if ammo is lower than... (xvm)</name>
+      <configs>
+        <config>
+          <name>50%</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage Interface Modifications - Clock (xvm)</name>
+      <configs>
+        <config>
+          <name>Enable</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage interface modifications - Crew Auto return (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage interface modifications - default currency (xvm)</name>
+      <configs>
+        <config>
+          <name>Credits</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage interface modifications - free xp locker (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage interface modifications - gold locker (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage interface modifications - removable equipment auto return (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage interface modifications - tech tree free xp convert option (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Login modifications - autologin (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Login modifications - hide old replay confirmation window (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Login modifications - save last server (xvm)</name>
+      <configs>
+        <config>
+          <name>Disabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Login modifications - show server ping (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Login modifications - show servers information (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Marker modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Minimap modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Minimap zoom modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Hotkey Left CTRL</name>
+        </config>
+        <config>
+          <name>Minimap zoom - bottom right</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Statistics color step modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>10 step wotlabs</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Tank Carousel base modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+        <config>
+          <name>Rows - 3</name>
+        </config>
+        <config>
+          <name>Cell Type normal</name>
+        </config>
+        <config>
+          <name>Hide "Buy Tank" cell</name>
+        </config>
+        <config>
+          <name>Hide "Buy Slot" cell</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Tank Carousel cell modifications [requires carousel base mod enabled] (xvm)</name>
+      <configs>
+        <config>
+          <name>Average Damage Enable (normal cell only)</name>
+        </config>
+        <config>
+          <name>Win Rate Enable</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - Penetration ( ͡° ͜ʖ ͡°) Indicator (pmod)</name>
+      <configs>
+        <config>
+          <name>font size medium (24)</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Autoaim indication</name>
+      <configs>
+        <config>
+          <name>infinite autoaim search</name>
+        </config>
+        <config>
+          <name>auto-announce reload add-on</name>
+        </config>
+        <config>
+          <name>lock shell travel distance when enemy dissapeared add-on</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>BalCalcMod</name>
+      <configs>
+        <config>
+          <name>F</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Bullet Damage Indicators</name>
+      <configs>
+        <config>
+          <name>RazNaRok and GreenWarriors</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Inbattle current rating calculation by Ekspoint</name>
+      <configs>
+        <config>
+          <name>wn8</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Zoom Out Config (meters)</name>
+      <configs>
+        <config>
+          <name>200</name>
+        </config>
+        <config>
+          <name>Increase Scroll Speed</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Hitmarker by Aimdrol</name>
+      <configs>
+        <config>
+          <name>Damage Only</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>WoT Tweaker</name>
+      <configs>
+        <config>
+          <name>Disable tree effects? this is an option?</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Aslains gold premium tanks</name>
+    </mod>
+    <mod>
+      <name>Loading Animation</name>
+      <configs>
+        <config>
+          <name>Illuminati by Aimdrol</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Research Watchdog Without Free Experience</name>
+      <configs />
+    </mod>
+    <mod>
+      <name>Vertical TechTree</name>
+      <configs>
+        <config>
+          <name>English</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>YasenKrasen session statistics</name>
+      <configs>
+        <config>
+          <name>Vanilla</name>
+        </config>
+        <config>
+          <name>English</name>
+        </config>
+        <config>
+          <name>Daily Reset</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Icon</name>
+      <configs>
+        <config>
+          <name>Animated Illuminati pyramid by Aimdrol</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Dead White Tanks</name>
+      <configs>
+        <config>
+          <name>...and dead white tracks</name>
+        </config>
+        <config>
+          <name>...and dead white wagons</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>FV215b HD Remodel (Milkym4n)</name>
+    </mod>
+    <mod>
+      <name>FV4202 (P) Battle-Hardened Remodel (Milkym4n)</name>
+    </mod>
+    <mod>
+      <name>Matilda Black Prince HD Remodel (Milkym4n)</name>
+    </mod>
+    <mod>
+      <name>T110E5</name>
+      <configs>
+        <config>
+          <name>Milkym4n Remodel</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>T-62A Battlehardened Remodel (Milkym4n)</name>
+    </mod>
+    <mod>
+      <name>WZ-120 HD Remodel (Milkym4n)</name>
+    </mod>
+  </relhaxMods>
+  <userMods />
+</mods>

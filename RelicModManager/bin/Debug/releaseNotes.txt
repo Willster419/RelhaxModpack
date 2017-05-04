@@ -1,3 +1,6 @@
+Version 21.8.7:
+-Rolled back part of the changes made in 21.8.6
+
 Version 21.8.6:
 -Improved compatibility of json patcher with xvm config options
 -Database Updates:

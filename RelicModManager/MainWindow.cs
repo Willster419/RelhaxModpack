@@ -27,7 +27,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 21.8.6";
+        private string managerVersion = "version 21.8.7";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -737,7 +737,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 05/03/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 05/04/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1359,7 +1359,7 @@ namespace RelhaxModpack
             }
             if (ssList.Count != 0)
                 Settings.appendToLog("There was an error with patching the file " + jsonFile + ", with extra refrences");
-            File.WriteAllText(jsonFile, rebuilder.ToString(),Encoding.UTF8);
+            File.WriteAllText(jsonFile, rebuilder.ToString());
         }
         //parses a patch xml file into an xml patch instance in memory to be enqueued
         private void createPatchList(string xmlFile)
