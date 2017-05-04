@@ -27,7 +27,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 21.8.5";
+        private string managerVersion = "version 21.8.6";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -737,7 +737,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 05/02/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 05/03/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1235,21 +1235,36 @@ namespace RelhaxModpack
             for (int i = 0; i < removeComments.Count(); i++)
             {
                 string temp = removeComments[i];
-                if (Regex.IsMatch(temp, @"\${"))
+                //determine if it has (had) a comma at the end of the string
+                bool hadComma = false;
+                bool modified = false;
+                if (Regex.IsMatch(temp, @",[ \t\r]*$"))
+                    hadComma = true;
+                
+                //determine if it is a illegal refrence in jarray or jobject
+                StringSave ss = new StringSave();
+                if (Regex.IsMatch(temp, @"^[ \t]*\"".*\"" *: *\$\{ *\"".*\""\ *}"))
                 {
-                    bool hadComma = false;
-                    if (Regex.IsMatch(temp, ","))
-                    {
-                        hadComma = true;
-                    }
-                    StringSave ss = new StringSave();
+                    modified = true;
+                    //jobject
                     ss.name = temp.Split('"')[1];
                     ss.value = temp.Split('$')[1];
                     ssList.Add(ss);
                     temp = "\"" + ss.name + "\"" + ": -69420";
-                    if (hadComma)
-                        temp = temp + ",";
                 }
+                else if (Regex.IsMatch(temp, @"^[ \t]*\$ *\{ *\"".*\"" *\}"))
+                {
+                    modified = true;
+                    //jarray
+                    string comment = "//\"comment_Willster419\"";
+                    temp = comment + temp;
+                    ss.name = temp.Split('"')[1];
+                    ss.value = temp.Split('$')[1];
+                    ssList.Add(ss);
+                    temp = "-42069";
+                }
+                if (hadComma && modified)
+                    temp = temp + ",";
                 backTogether.Append(temp + "\n");
             }
             file = backTogether.ToString();
@@ -1261,14 +1276,14 @@ namespace RelhaxModpack
             {
                 root = JObject.Parse(file, settings);
             }
-            catch (JsonReaderException)
+            catch (JsonReaderException j)
             {
                 Settings.appendToLog("ERROR: Failed to patch " + jsonFile);
                 //MessageBox.Show("ERROR: Failed to patch " + jsonFile);
                 if (Program.testMode)
                 {
                     //in test mode this is worthy of an EXCEPTION
-                    throw new JsonReaderException();
+                    throw new JsonReaderException(j.Message);
                 }
             }
             //if it failed to parse show the message (above) and pull out
@@ -1278,6 +1293,7 @@ namespace RelhaxModpack
             {
                 //the actual patch method
                 JValue newObject = (JValue)root.SelectToken(jsonPath);
+                //JValue newObject = null;
                 //pull out if it failed to get the selection
                 if (newObject == null)
                 {
@@ -1333,11 +1349,17 @@ namespace RelhaxModpack
                     putBackDollas[i] = temp;
                     ssList.RemoveAt(0);
                 }
+                else if (Regex.IsMatch(temp, "-42069"))
+                {
+                    temp = "$" + ssList[0].value;
+                    putBackDollas[i] = temp;
+                    ssList.RemoveAt(0);
+                }
                 rebuilder.Append(putBackDollas[i] + "\n");
             }
             if (ssList.Count != 0)
                 Settings.appendToLog("There was an error with patching the file " + jsonFile + ", with extra refrences");
-            File.WriteAllText(jsonFile, rebuilder.ToString());
+            File.WriteAllText(jsonFile, rebuilder.ToString(),Encoding.UTF8);
         }
         //parses a patch xml file into an xml patch instance in memory to be enqueued
         private void createPatchList(string xmlFile)

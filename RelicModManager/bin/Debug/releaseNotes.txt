@@ -1,3 +1,11 @@
+Version 21.8.6:
+-Improved compatibility of json patcher with xvm config options
+-Database Updates:
+  -Updated Churchill 3 HD remodel
+  -Updated T-34-3 HD remodel
+  -Updated Skorpion G HD remodel
+  -Added J1mB0's Contour Icons
+
 Version 21.8.5:
 -Fixed a minor bug with the xml patcher
 -Fixed a major bug with the json patcher, causing issues with xvm's markers.xc configuration settings
