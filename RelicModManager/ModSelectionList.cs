@@ -1307,6 +1307,12 @@ namespace RelhaxModpack
                         case "dependencyZipCRC":
                             d.dependencyZipCRC = globs.InnerText;
                             break;
+                        case "startAddress":
+                            d.startAddress = globs.InnerText;
+                            break;
+                        case "endAddress":
+                            d.endAddress = globs.InnerText;
+                            break;
                         case "dependencyenabled":
                             try
                             {
@@ -1362,6 +1368,12 @@ namespace RelhaxModpack
                                             break;
                                         case "modzipfile":
                                             m.modZipFile = nn.InnerText;
+                                            break;
+                                        case "startAddress":
+                                            m.startAddress = nn.InnerText;
+                                            break;
+                                        case "endAddress":
+                                            m.endAddress = nn.InnerText;
                                             break;
                                         case "modzipcrc":
                                             m.crc = nn.InnerText;
@@ -1438,6 +1450,12 @@ namespace RelhaxModpack
                                                         case "dependencyZipCRC":
                                                             d.dependencyZipCRC = nnnnnnnn.InnerText;
                                                             break;
+                                                        case "startAddress":
+                                                            d.startAddress = nnnnnnnn.InnerText;
+                                                            break;
+                                                        case "endAddress":
+                                                            d.endAddress = nnnnnnnn.InnerText;
+                                                            break;
                                                         case "dependencyenabled":
                                                             try
                                                             {
@@ -1467,6 +1485,12 @@ namespace RelhaxModpack
                                                             break;
                                                         case "configzipfile":
                                                             c.zipConfigFile = nnnn.InnerText;
+                                                            break;
+                                                        case "startAddress":
+                                                            c.startAddress = nnnn.InnerText;
+                                                            break;
+                                                        case "endAddress":
+                                                            c.endAddress = nnnn.InnerText;
                                                             break;
                                                         case "configzipcrc":
                                                             c.crc = nnnn.InnerText;
@@ -1529,6 +1553,12 @@ namespace RelhaxModpack
                                                                         case "dependencyZipCRC":
                                                                             d.dependencyZipCRC = nnnnnnnn.InnerText;
                                                                             break;
+                                                                        case "startAddress":
+                                                                            d.startAddress = nnnnnnnn.InnerText;
+                                                                            break;
+                                                                        case "endAddress":
+                                                                            d.endAddress = nnnnnnnn.InnerText;
+                                                                            break;
                                                                         case "dependencyenabled":
                                                                             try
                                                                             {
@@ -1568,6 +1598,12 @@ namespace RelhaxModpack
                                             break;
                                         case "dependencyZipCRC":
                                             d.dependencyZipCRC = nnnn.InnerText;
+                                            break;
+                                        case "startAddress":
+                                            d.startAddress = nnnn.InnerText;
+                                            break;
+                                        case "endAddress":
+                                            d.endAddress = nnnn.InnerText;
                                             break;
                                         case "dependencyenabled":
                                             try

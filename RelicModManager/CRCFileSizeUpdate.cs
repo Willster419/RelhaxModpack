@@ -205,6 +205,12 @@ namespace RelhaxModpack
                         case "dependencyZipCRC":
                             d.dependencyZipCRC = globs.InnerText;
                             break;
+                        case "startAddress":
+                            d.startAddress = globs.InnerText;
+                            break;
+                        case "endAddress":
+                            d.endAddress = globs.InnerText;
+                            break;
                         case "dependencyenabled":
                             try
                             {
@@ -261,6 +267,12 @@ namespace RelhaxModpack
                                             break;
                                         case "modzipfile":
                                             m.modZipFile = nn.InnerText;
+                                            break;
+                                        case "startAddress":
+                                            m.startAddress = nn.InnerText;
+                                            break;
+                                        case "endAddress":
+                                            m.endAddress = nn.InnerText;
                                             break;
                                         case "modzipcrc":
                                             m.crc = nn.InnerText;
@@ -334,6 +346,12 @@ namespace RelhaxModpack
                                                         case "dependencyZipFile":
                                                             d.dependencyZipFile = nnnnnnnn.InnerText;
                                                             break;
+                                                        case "startAddress":
+                                                            d.startAddress = nnnnnnnn.InnerText;
+                                                            break;
+                                                        case "endAddress":
+                                                            d.endAddress = nnnnnnnn.InnerText;
+                                                            break;
                                                         case "dependencyZipCRC":
                                                             d.dependencyZipCRC = nnnnnnnn.InnerText;
                                                             break;
@@ -366,6 +384,12 @@ namespace RelhaxModpack
                                                             break;
                                                         case "configzipfile":
                                                             c.zipConfigFile = nnnn.InnerText;
+                                                            break;
+                                                        case "startAddress":
+                                                            c.startAddress = nnnn.InnerText;
+                                                            break;
+                                                        case "endAddress":
+                                                            c.endAddress = nnnn.InnerText;
                                                             break;
                                                         case "configzipcrc":
                                                             c.crc = nnnn.InnerText;
@@ -404,6 +428,12 @@ namespace RelhaxModpack
                                                                     {
                                                                         case "dependencyZipFile":
                                                                             d.dependencyZipFile = nnnnnnnn.InnerText;
+                                                                            break;
+                                                                        case "startAddress":
+                                                                            d.startAddress = nnnnnnnn.InnerText;
+                                                                            break;
+                                                                        case "endAddress":
+                                                                            d.endAddress = nnnnnnnn.InnerText;
                                                                             break;
                                                                         case "dependencyZipCRC":
                                                                             d.dependencyZipCRC = nnnnnnnn.InnerText;
@@ -465,6 +495,12 @@ namespace RelhaxModpack
                                     {
                                         case "dependencyZipFile":
                                             d.dependencyZipFile = nnnn.InnerText;
+                                            break;
+                                        case "startAddress":
+                                            d.startAddress = nnnn.InnerText;
+                                            break;
+                                        case "endAddress":
+                                            d.endAddress = nnnn.InnerText;
                                             break;
                                         case "dependencyZipCRC":
                                             d.dependencyZipCRC = nnnn.InnerText;
@@ -554,6 +590,12 @@ namespace RelhaxModpack
                 XmlElement globalDepZipFile = doc.CreateElement("dependencyZipFile");
                 globalDepZipFile.InnerText = d.dependencyZipFile;
                 globalDependencyRoot.AppendChild(globalDepZipFile);
+                XmlElement globalDepStartAddress = doc.CreateElement("startAddress");
+                globalDepStartAddress.InnerText = d.startAddress;
+                globalDependencyRoot.AppendChild(globalDepStartAddress);
+                XmlElement globalDepEndAddress = doc.CreateElement("endAddress");
+                globalDepEndAddress.InnerText = d.endAddress;
+                globalDependencyRoot.AppendChild(globalDepEndAddress);
                 XmlElement globalDepCRC = doc.CreateElement("dependencyZipCRC");
                 globalDepCRC.InnerText = d.dependencyZipCRC;
                 globalDependencyRoot.AppendChild(globalDepCRC);
@@ -587,6 +629,12 @@ namespace RelhaxModpack
                     XmlElement DepZipFile = doc.CreateElement("dependencyZipFile");
                     DepZipFile.InnerText = d.dependencyZipFile;
                     DependencyRoot.AppendChild(DepZipFile);
+                    XmlElement DepStartAddress = doc.CreateElement("startAddress");
+                    DepStartAddress.InnerText = d.startAddress;
+                    DependencyRoot.AppendChild(DepStartAddress);
+                    XmlElement DepEndAddress = doc.CreateElement("endAddress");
+                    DepEndAddress.InnerText = d.endAddress;
+                    DependencyRoot.AppendChild(DepEndAddress);
                     XmlElement DepCRC = doc.CreateElement("dependencyZipCRC");
                     DepCRC.InnerText = d.dependencyZipCRC;
                     DependencyRoot.AppendChild(DepCRC);
@@ -612,6 +660,12 @@ namespace RelhaxModpack
                     XmlElement modZipFile = doc.CreateElement("modzipfile");
                     modZipFile.InnerText = m.modZipFile;
                     modRoot.AppendChild(modZipFile);
+                    XmlElement modStartAddress = doc.CreateElement("startAddress");
+                    modStartAddress.InnerText = m.startAddress;
+                    modRoot.AppendChild(modStartAddress);
+                    XmlElement modEndAddress = doc.CreateElement("endAddress");
+                    modEndAddress.InnerText = m.endAddress;
+                    modRoot.AppendChild(modEndAddress);
                     XmlElement modZipCRC = doc.CreateElement("modzipcrc");
                     modZipCRC.InnerText = m.crc;
                     modRoot.AppendChild(modZipCRC);
@@ -654,6 +708,12 @@ namespace RelhaxModpack
                         XmlElement configZipFile = doc.CreateElement("configzipfile");
                         configZipFile.InnerText = cc.zipConfigFile;
                         configRoot.AppendChild(configZipFile);
+                        XmlElement configStartAddress = doc.CreateElement("startAddress");
+                        configStartAddress.InnerText = cc.startAddress;
+                        configRoot.AppendChild(configStartAddress);
+                        XmlElement configEndAddress = doc.CreateElement("endAddress");
+                        configEndAddress.InnerText = cc.endAddress;
+                        configRoot.AppendChild(configEndAddress);
                         XmlElement configZipCRC = doc.CreateElement("configzipcrc");
                         configZipCRC.InnerText = cc.crc;
                         configRoot.AppendChild(configZipCRC);
@@ -687,6 +747,12 @@ namespace RelhaxModpack
                             XmlElement DepZipFile = doc.CreateElement("dependencyZipFile");
                             DepZipFile.InnerText = d.dependencyZipFile;
                             DependencyRoot.AppendChild(DepZipFile);
+                            XmlElement DepStartAddress = doc.CreateElement("startAddress");
+                            DepStartAddress.InnerText = d.startAddress;
+                            DependencyRoot.AppendChild(DepStartAddress);
+                            XmlElement DepEndAddress = doc.CreateElement("endAddress");
+                            DepEndAddress.InnerText = d.endAddress;
+                            DependencyRoot.AppendChild(DepEndAddress);
                             XmlElement DepCRC = doc.CreateElement("dependencyZipCRC");
                             DepCRC.InnerText = d.dependencyZipCRC;
                             DependencyRoot.AppendChild(DepCRC);
@@ -709,6 +775,12 @@ namespace RelhaxModpack
                         XmlElement DepZipFile = doc.CreateElement("dependencyZipFile");
                         DepZipFile.InnerText = d.dependencyZipFile;
                         DependencyRoot.AppendChild(DepZipFile);
+                        XmlElement DepStartAddress = doc.CreateElement("startAddress");
+                        DepStartAddress.InnerText = d.startAddress;
+                        DependencyRoot.AppendChild(DepStartAddress);
+                        XmlElement DepEndAddress = doc.CreateElement("endAddress");
+                        DepEndAddress.InnerText = d.endAddress;
+                        DependencyRoot.AppendChild(DepEndAddress);
                         XmlElement DepCRC = doc.CreateElement("dependencyZipCRC");
                         DepCRC.InnerText = d.dependencyZipCRC;
                         DependencyRoot.AppendChild(DepCRC);

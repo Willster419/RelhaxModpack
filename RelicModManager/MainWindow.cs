@@ -43,7 +43,10 @@ namespace RelhaxModpack
         //ZipFile zip;
         //timer to measure download speed
         Stopwatch sw = new Stopwatch();
-        private string downloadURL = "http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/";
+        //private string downloadURL = "http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/";
+        //private string downloadURL = "http://www.mediafire.com/file/b9o3d8gyfcc7zyy/";
+        //http://www.mediafire.com/file/b9o3d8gyfcc7zyy/Tank_Skin_Packs_HitZone_Skins_black_white_by_Mr.13_0.9.17.0.1_2016-12-13.zip
+        //private string downloadURL = "https://www.dropbox.com/s/l9tanod0z9cr8qy/";
         private List<Catagory> parsedCatagoryLists;
         private List<Mod> modsToInstall;
         private List<Config> configsToInstall;
@@ -1590,7 +1593,7 @@ namespace RelhaxModpack
             {
                 if (!this.CRCsMatch(localFilesDir + d.dependencyZipFile, d.dependencyZipCRC))
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(this.downloadURL + d.dependencyZipFile), localFilesDir + d.dependencyZipFile));
+                    downloadQueue.Add(new DownloadItem(new Uri(d.startAddress + d.dependencyZipFile + d.endAddress), localFilesDir + d.dependencyZipFile));
                 }
             }
             foreach (Mod m in modsToInstall)
@@ -1598,7 +1601,7 @@ namespace RelhaxModpack
                 if (!this.CRCsMatch(localFilesDir + m.modZipFile, m.crc))
                 {
                     //crc's don't match, need to re-download
-                    downloadQueue.Add(new DownloadItem(new Uri(this.downloadURL + m.modZipFile), localFilesDir + m.modZipFile));
+                    downloadQueue.Add(new DownloadItem(new Uri(m.startAddress + m.modZipFile + m.endAddress), localFilesDir + m.modZipFile));
                 }
             }
             foreach (Config c in configsToInstall)
@@ -1606,7 +1609,7 @@ namespace RelhaxModpack
                 if (!this.CRCsMatch(localFilesDir + c.zipConfigFile, c.crc))
                 {
                     //crc's don't match, need to re-download
-                    downloadQueue.Add(new DownloadItem(new Uri(this.downloadURL + c.zipConfigFile), localFilesDir + c.zipConfigFile));
+                    downloadQueue.Add(new DownloadItem(new Uri(c.startAddress + c.zipConfigFile + c.endAddress), localFilesDir + c.zipConfigFile));
                 }
             }
             parrentProgressBar.Maximum = downloadQueue.Count;
@@ -1625,6 +1628,7 @@ namespace RelhaxModpack
                 downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
                 downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
                 downloader.Proxy = null;
+                //Uri newURI = new Uri(downloadQueue[0].URL + "?dl=1");
                 downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
                 tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
                 Settings.appendToLog("downloading " + tempOldDownload);

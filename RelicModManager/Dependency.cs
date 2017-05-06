@@ -8,6 +8,11 @@ namespace RelhaxModpack
         public string dependencyZipFile { get; set; }
         public string dependencyZipCRC { get; set; }
         public bool enabled { get; set; }
+        //the start address of the zip file location. enabled us to use sites that
+        //generate random filenames for publicly shared files.
+        public string startAddress { get; set; }
+        //the end address of the zip file location. enables us to use dropbox (?dl=1)
+        public string endAddress { get; set; }
         public Dependency() { }
     }
 }

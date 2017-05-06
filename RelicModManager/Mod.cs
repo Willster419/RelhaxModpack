@@ -21,6 +21,11 @@ namespace RelhaxModpack
         public List<Dependency> modDependencies = new List<Dependency>();
         //size of the mod zip file
         public float size { get; set; }
+        //the start address of the zip file location. enabled us to use sites that
+        //generate random filenames for publicly shared files.
+        public string startAddress { get; set; }
+        //the end address of the zip file location. enables us to use dropbox (?dl=1)
+        public string endAddress { get; set; }
         //default constructor
         public Mod()
         {
