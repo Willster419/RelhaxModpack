@@ -32,7 +32,7 @@
       <dependencies>
         <dependency>
           <dependencyZipFile>Dependency_XVM_Base_6.6.4.zip</dependencyZipFile>
-          <startAddress>http://www.mediafire.com/file/q12by3gmwus8qs5/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/</startAddress>
           <endAddress>
           </endAddress>
           <dependencyZipCRC>fd7973c67944768e41fc0251b065dad5</dependencyZipCRC>
@@ -266,7 +266,7 @@
       <dependencies>
         <dependency>
           <dependencyZipFile>Dependency_XVM_Base_6.6.4.zip</dependencyZipFile>
-          <startAddress>http://www.mediafire.com/file/q12by3gmwus8qs5/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/</startAddress>
           <endAddress>
           </endAddress>
           <dependencyZipCRC>fd7973c67944768e41fc0251b065dad5</dependencyZipCRC>
@@ -5017,7 +5017,7 @@
               <name>Disable noobs on allied team</name>
               <configzipfile>
               </configzipfile>
-              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/</startAddress>
+              <startAddress></startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>
@@ -5500,7 +5500,7 @@
           </version>
           <modzipfile>
           </modzipfile>
-          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/</startAddress>
+          <startAddress></startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>
