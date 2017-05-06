@@ -32,7 +32,7 @@
       <dependencies>
         <dependency>
           <dependencyZipFile>Dependency_XVM_Base_6.6.4.zip</dependencyZipFile>
-          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/</startAddress>
+          <startAddress>http://www.mediafire.com/file/q12by3gmwus8qs5/</startAddress>
           <endAddress>
           </endAddress>
           <dependencyZipCRC>fd7973c67944768e41fc0251b065dad5</dependencyZipCRC>
@@ -266,7 +266,7 @@
       <dependencies>
         <dependency>
           <dependencyZipFile>Dependency_XVM_Base_6.6.4.zip</dependencyZipFile>
-          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/</startAddress>
+          <startAddress>http://www.mediafire.com/file/q12by3gmwus8qs5/</startAddress>
           <endAddress>
           </endAddress>
           <dependencyZipCRC>fd7973c67944768e41fc0251b065dad5</dependencyZipCRC>
@@ -308,7 +308,7 @@
             <config>
               <name>Full NA</name>
               <configzipfile>XVM_config_builder_clanicons-full-na-2017-04-02.zip</configzipfile>
-              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/</startAddress>
+              <startAddress>http://www.mediafire.com/file/n69fqtcq57749en/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>7fbea38e8be72ae09b671fcee9c97492</configzipcrc>
@@ -7178,7 +7178,7 @@
             <config>
               <name>Japanese Reddish Brown</name>
               <configzipfile>Tank_Skin_Packs_Japanese-Reddish-Brown-1.1.zip</configzipfile>
-              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/</startAddress>
+              <startAddress>http://www.mediafire.com/file/c07q1auk6i8qs47/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>1c2d7ac490b8b067bc7a3f7b477e8a6b</configzipcrc>
@@ -8170,7 +8170,7 @@
           <version>
           </version>
           <modzipfile>Custom_Tank_Skins_Skin_Ch01_Type59_Gold_0.9.16.zip</modzipfile>
-          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/</startAddress>
+          <startAddress>http://www.mediafire.com/file/ukg9gw3itq25z7v/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>26b49b62bad30551a3a28dcf3894f13e</modzipcrc>
