@@ -402,7 +402,7 @@ namespace RelhaxModpack
                                 int totalSec = (int)m.configs[i].size * 2;
                                 int totalRealMin = totalSec / 60;
                                 int totalRealSec = totalSec % 60;
-                                configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
+                                configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB)";
                             }
                         }
                     }
@@ -414,7 +414,7 @@ namespace RelhaxModpack
                             int totalSec = (int)m.configs[i].size * 2;
                             int totalRealMin = totalSec / 60;
                             int totalRealSec = totalSec % 60;
-                            configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
+                            configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB)";
                         }
                     }
                     configPanel.Controls.Add(configControlRB);
@@ -525,7 +525,7 @@ namespace RelhaxModpack
                                 int totalSec = (int)m.configs[i].size * 2;
                                 int totalRealMin = totalSec / 60;
                                 int totalRealSec = totalSec % 60;
-                                configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
+                                configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB)";
                             }
                         }
                     }
@@ -538,7 +538,7 @@ namespace RelhaxModpack
                             int totalSec = (int)m.configs[i].size * 2;
                             int totalRealMin = totalSec / 60;
                             int totalRealSec = totalSec % 60;
-                            configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
+                            configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB)";
                         }
                     }
                     //configPanel.Controls.Add(configControlRB);
@@ -658,7 +658,7 @@ namespace RelhaxModpack
                                 int totalSec = (int)m.configs[i].size * 2;
                                 int totalRealMin = totalSec / 60;
                                 int totalRealSec = totalSec % 60;
-                                configControlCB.Text = configControlCB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
+                                configControlCB.Text = configControlCB.Text + " (" + m.configs[i].size + " MB)";
                             }
                         }
                     }
@@ -670,7 +670,7 @@ namespace RelhaxModpack
                             int totalSec = (int)m.configs[i].size * 2;
                             int totalRealMin = totalSec / 60;
                             int totalRealSec = totalSec % 60;
-                            configControlCB.Text = configControlCB.Text + " (" + m.configs[i].size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
+                            configControlCB.Text = configControlCB.Text + " (" + m.configs[i].size + " MB)";
                         }
                     }
                     configPanel.Controls.Add(configControlCB);
@@ -698,13 +698,13 @@ namespace RelhaxModpack
                 string oldCRC = Settings.GetMd5Hash(modDownloadPath);
                 if (!oldCRC.Equals(m.crc))
                 {
-                    modCheckBox.Text = modCheckBox.Text + "(Updated)";
+                    modCheckBox.Text = modCheckBox.Text + " (Updated)";
                     if (m.size > 0.0f)
                     {
                         int totalSec = (int)m.size * 2;
                         int totalRealMin = totalSec / 60;
                         int totalRealSec = totalSec % 60;
-                        modCheckBox.Text = modCheckBox.Text + " (" + m.size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
+                        modCheckBox.Text = modCheckBox.Text + " (" + m.size + " MB)";
                     }
                 }
             }
@@ -714,13 +714,13 @@ namespace RelhaxModpack
                 //float downloadSizeMB = this.netFileSize(downloadURL + m.modZipFile);
                 //downloadSizeMB = (float)Math.Round(downloadSizeMB, 1);
                 //modCheckBox.Text = modCheckBox.Text + " (" + downloadSizeMB + " MB, ~" + (downloadSizeMB * 2) + " sec)";
-                modCheckBox.Text = modCheckBox.Text + "(Updated)";
+                modCheckBox.Text = modCheckBox.Text + " (Updated)";
                 if (m.size > 0.0f)
                 {
                     int totalSec = (int)m.size * 2;
                     int totalRealMin = totalSec / 60;
                     int totalRealSec = totalSec % 60;
-                    modCheckBox.Text = modCheckBox.Text + " (" + m.size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
+                    modCheckBox.Text = modCheckBox.Text + " (" + m.size + " MB)";
                 }
             }
             modCheckBox.UseVisualStyleBackColor = true;
@@ -986,7 +986,7 @@ namespace RelhaxModpack
                             int totalSec = (int)save.size * 2;
                             int totalRealMin = totalSec / 60;
                             int totalRealSec = totalSec % 60;
-                            c.Text = save.size + " MB, ~" + totalRealMin + " min " + totalRealSec + " sec)";
+                            c.Text = save.size + " MB)";
                         }
                         else
                             c.Text = "";
