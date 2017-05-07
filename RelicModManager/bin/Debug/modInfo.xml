@@ -31,11 +31,11 @@
       <selectionType>single</selectionType>
       <dependencies>
         <dependency>
-          <dependencyZipFile>Dependency_XVM_Base_6.6.4.zip</dependencyZipFile>
+          <dependencyZipFile>Dependency_XVM_Base_6.6.5.zip</dependencyZipFile>
           <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
-          <dependencyZipCRC>fd7973c67944768e41fc0251b065dad5</dependencyZipCRC>
+          <dependencyZipCRC>67cab0214c727cc73581a8ef7a84b850</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
@@ -265,11 +265,11 @@
       <selectionType>multi</selectionType>
       <dependencies>
         <dependency>
-          <dependencyZipFile>Dependency_XVM_Base_6.6.4.zip</dependencyZipFile>
+          <dependencyZipFile>Dependency_XVM_Base_6.6.5.zip</dependencyZipFile>
           <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
-          <dependencyZipCRC>fd7973c67944768e41fc0251b065dad5</dependencyZipCRC>
+          <dependencyZipCRC>67cab0214c727cc73581a8ef7a84b850</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
@@ -2506,11 +2506,11 @@
       <selectionType>multi</selectionType>
       <dependencies>
         <dependency>
-          <dependencyZipFile>Dependency_PMOD_24-4.zip</dependencyZipFile>
+          <dependencyZipFile>Dependency_PMOD_2017-05-06.zip</dependencyZipFile>
           <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
-          <dependencyZipCRC>d89fc1e976cc5327927eb5e9eccf6c8f</dependencyZipCRC>
+          <dependencyZipCRC>dc1f664d918c912670a651141e2fb871</dependencyZipCRC>
           <dependencyenabled>True</dependencyenabled>
         </dependency>
       </dependencies>
@@ -3254,7 +3254,7 @@
           </endAddress>
           <modzipcrc>44976235846a77b9d72f337289d5bd12</modzipcrc>
           <size>0.1</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <userDatas />
           <pictures>
             <picture>
@@ -3468,7 +3468,7 @@
           </endAddress>
           <modzipcrc>f2a47a7023697f98a895e1e4ec3c1757</modzipcrc>
           <size>0.1</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <userDatas />
           <pictures>
             <picture>
@@ -3486,13 +3486,13 @@
           <name>SafeShot</name>
           <version>
           </version>
-          <modzipfile>Ingame_Aim_Safeshot_0.9.17.0.zip</modzipfile>
+          <modzipfile>Ingame_Aim_Safeshot_0.9.18.0_2017-05-06.zip</modzipfile>
           <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc>37e7d6915cb92c8af83d09ea04222944</modzipcrc>
+          <modzipcrc>3fab76de84e2dd52c03976bab0c128f1</modzipcrc>
           <size>0.1</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <userDatas />
           <pictures>
             <picture>
@@ -5017,7 +5017,8 @@
               <name>Disable noobs on allied team</name>
               <configzipfile>
               </configzipfile>
-              <startAddress></startAddress>
+              <startAddress>
+              </startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>
@@ -5362,7 +5363,8 @@
           </version>
           <modzipfile>
           </modzipfile>
-          <startAddress></startAddress>
+          <startAddress>
+          </startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>
@@ -5412,7 +5414,8 @@
           </version>
           <modzipfile>
           </modzipfile>
-          <startAddress></startAddress>
+          <startAddress>
+          </startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>f
@@ -5500,7 +5503,8 @@
           </version>
           <modzipfile>
           </modzipfile>
-          <startAddress></startAddress>
+          <startAddress>
+          </startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>
@@ -5764,7 +5768,8 @@
           <version>0.9.18.0c</version>
           <modzipfile>
           </modzipfile>
-          <startAddress></startAddress>
+          <startAddress>
+          </startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>
@@ -7274,7 +7279,8 @@
           </version>
           <modzipfile>
           </modzipfile>
-          <startAddress></startAddress>
+          <startAddress>
+          </startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>
@@ -7532,7 +7538,8 @@
           </version>
           <modzipfile>
           </modzipfile>
-          <startAddress></startAddress>
+          <startAddress>
+          </startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>
@@ -7598,7 +7605,8 @@
           </version>
           <modzipfile>
           </modzipfile>
-          <startAddress></startAddress>
+          <startAddress>
+          </startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>
@@ -7856,7 +7864,8 @@
           </version>
           <modzipfile>
           </modzipfile>
-          <startAddress></startAddress>
+          <startAddress>
+          </startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>
@@ -8077,7 +8086,8 @@
           </version>
           <modzipfile>
           </modzipfile>
-          <startAddress></startAddress>
+          <startAddress>
+          </startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>
