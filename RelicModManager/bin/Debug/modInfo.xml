@@ -3502,11 +3502,11 @@
           <configs>
             <config>
               <name>1 Sec no corpse Shot</name>
-              <configzipfile>Ingame_Aim_SafeShot_1sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
+              <configzipfile>Ingame_Aim_SafeShot_1sec_no_deadshot_patch_0.9.18.0.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>2c1907940855da9cd91989648ca3618e</configzipcrc>
+              <configzipcrc>105fe28d78121ffd0405405d00868b95</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3515,11 +3515,11 @@
             </config>
             <config>
               <name>2 sec no corpse shot</name>
-              <configzipfile>Ingame_Aim_SafeShot_2sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
+              <configzipfile>Ingame_Aim_SafeShot_2sec_no_deadshot_patch_0.9.18.0.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>19d8b03abbedca55b1ca38c2e871d262</configzipcrc>
+              <configzipcrc>2ab514062047d02c25b0a4c3ae7fe228</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -3528,11 +3528,11 @@
             </config>
             <config>
               <name>5 sec no corpse shot</name>
-              <configzipfile>Ingame_Aim_SafeShot_5sec_no_deadshot_patch_0.9.15.1.zip</configzipfile>
+              <configzipfile>Ingame_Aim_SafeShot_5sec_no_deadshot_patch_0.9.18.0.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>20126c9365d2e48ca33a47bc7f0890c0</configzipcrc>
+              <configzipcrc>a7b6c61e80ac13ab9ad7337789355794</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
