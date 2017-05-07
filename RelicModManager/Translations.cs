@@ -353,11 +353,9 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("backupModsDescription", "Select this to make a backup of your current res_mods folder." +
-                    "Keep in mind that it only keeps the LATEST BACKUP, meaning if you check this and install," +
-                    "it will delete what is currently in the backup location and copy what you have in your res_mods folder.");
+                    "They are stored in the 'RelHaxModBackup' folder, saved in a folder inside by a time stamp.");
             german.Add("backupModsDescription", "Waehle diese Option, um eine Sicherungskopie Deines aktuellen res_mods-Ordners zu erstellen." +
-                    "Bedenke, dass es ausschliesslich die letzte Sicherung behaelt, dass bedeutet, wenn Du dies auswählst und installierst," +
-                    "loescht es alles, was derzeit im Sicherungsordner ist und kopiert den res_mods Ordner in diesen.");
+                    "Sie werden im Ordner 'RelHaxModBackup' gespeichert und in einem Ordner nach innen durch einen Zeitstempel gespeichert.");
             //Componet: 
             //
             english.Add("comicSansDescription", "Enable Comic Sans font");
