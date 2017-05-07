@@ -5886,12 +5886,12 @@
             </config>
             <config>
               <name>German</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_german_2017_04_23.zip</configzipfile>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_german_2017_05_07.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>20e4c8d93f0d187fbea5489d692f1ff9</configzipcrc>
-              <size>0.1</size>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
               <configenabled>True</configenabled>
               <configtype>single_dropdown1</configtype>
               <pictures />
