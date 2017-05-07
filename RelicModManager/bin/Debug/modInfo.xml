@@ -3724,7 +3724,7 @@
             </config>
             <config>
               <name>Disable gun shake</name>
-              <configzipfile>Ingame_aim_zoom_disable_gun_shake_2017-05-01.zip</configzipfile>
+              <configzipfile>Ingame_Aim_zoom_disable_gun_shake_2017-05-01.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -4846,7 +4846,7 @@
           <configs>
             <config>
               <name>Enable max visibility</name>
-              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_enable_max_visibility_2017-04-24.zip</configzipfile>
+              <configzipfile>Ingame_Misc_WOT_Tweaker_by_atotik_enable_max_visibility_2017-04-24.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -4859,7 +4859,7 @@
             </config>
             <config>
               <name>Disable fog</name>
-              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_fog_2017-04-24.zip</configzipfile>
+              <configzipfile>Ingame_Misc_WOT_Tweaker_by_atotik_disable_fog_2017-04-24.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -4872,7 +4872,7 @@
             </config>
             <config>
               <name>Disable clouds</name>
-              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_clouds_2017-04-24.zip</configzipfile>
+              <configzipfile>Ingame_Misc_WOT_Tweaker_by_atotik_disable_clouds_2017-04-24.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -4885,7 +4885,7 @@
             </config>
             <config>
               <name>Disable tank exhaust smoke</name>
-              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_exhaust_smoke_2017-04-24.zip</configzipfile>
+              <configzipfile>Ingame_Misc_WOT_Tweaker_by_atotik_disable_exhaust_smoke_2017-04-24.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -4898,7 +4898,7 @@
             </config>
             <config>
               <name>Disable effects from shooting</name>
-              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_flame_shots_2017-04-24.zip</configzipfile>
+              <configzipfile>Ingame_Misc_WOT_Tweaker_by_atotik_disable_flame_shots_2017-04-24.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -4911,7 +4911,7 @@
             </config>
             <config>
               <name>Disable misc object effects</name>
-              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_misc_effects_2017-04-24.zip</configzipfile>
+              <configzipfile>Ingame_Misc_WOT_Tweaker_by_atotik_disable_misc_effects_2017-04-24.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -4924,7 +4924,7 @@
             </config>
             <config>
               <name>Disable shell impact effects</name>
-              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_shell_impact_effects_2017-04-24.zip</configzipfile>
+              <configzipfile>Ingame_Misc_WOT_Tweaker_by_atotik_disable_shell_impact_effects_2017-04-24.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -4937,7 +4937,7 @@
             </config>
             <config>
               <name>Disable tank death effects</name>
-              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_tank_dead_effects_2017-04-24.zip</configzipfile>
+              <configzipfile>Ingame_Misc_WOT_Tweaker_by_atotik_disable_tank_dead_effects_2017-04-24.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -4950,7 +4950,7 @@
             </config>
             <config>
               <name>Disable tank death smoke</name>
-              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_tank_dead_smoke_2017-04-24.zip</configzipfile>
+              <configzipfile>Ingame_Misc_WOT_Tweaker_by_atotik_disable_tank_dead_smoke_2017-04-24.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -4963,7 +4963,7 @@
             </config>
             <config>
               <name>Disable tank hit effects</name>
-              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_tank_hit_effects_2017-04-24.zip</configzipfile>
+              <configzipfile>Ingame_Misc_WOT_Tweaker_by_atotik_disable_tank_hit_effects_2017-04-24.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -4976,7 +4976,7 @@
             </config>
             <config>
               <name>Disable tree effects? this is an option?</name>
-              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_tree_effects_2017-04-24.zip</configzipfile>
+              <configzipfile>Ingame_Misc_WOT_Tweaker_by_atotik_disable_tree_effects_2017-04-24.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -4989,7 +4989,7 @@
             </config>
             <config>
               <name>Disable shadows under tanks</name>
-              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_under_tank_shadows_2017-04-24.zip</configzipfile>
+              <configzipfile>Ingame_Misc_WOT_Tweaker_by_atotik_disable_under_tank_shadows_2017-04-24.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -5002,7 +5002,7 @@
             </config>
             <config>
               <name>Disable weather</name>
-              <configzipfile>Ingame_Info_WOT_Tweaker_by_atotik_disable_weather_2017-04-24.zip</configzipfile>
+              <configzipfile>Ingame_Misc_WOT_Tweaker_by_atotik_disable_weather_2017-04-24.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -5039,7 +5039,7 @@
           <name>Hitmarker by Aimdrol</name>
           <version>
           </version>
-          <modzipfile>Ingame_Info_hitmarker_by_aimdrol_2017_03_16.zip</modzipfile>
+          <modzipfile>Ingame_Misc_hitmarker_by_aimdrol_2017_03_16.zip</modzipfile>
           <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
@@ -5066,7 +5066,7 @@
             </config>
             <config>
               <name>Damage, Ramming, Kamakazie</name>
-              <configzipfile>Ingame_Info_hitmarker_by_aimdrol_0.9.14.1_all_patch.zip</configzipfile>
+              <configzipfile>Ingame_Misc_hitmarker_by_aimdrol_0.9.14.1_all_patch.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -5088,7 +5088,7 @@
           <name>MLG Glasses by Aimdrol</name>
           <version>
           </version>
-          <modzipfile>Ingame_Info_mlg_glasses_0.9.16.zip</modzipfile>
+          <modzipfile>Ingame_Misc_mlg_glasses_0.9.16.zip</modzipfile>
           <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
@@ -5104,7 +5104,7 @@
           <configs>
             <config>
               <name>With sound</name>
-              <configzipfile>Ingame_Info_mlg_glasses_with_sound_patch.zip</configzipfile>
+              <configzipfile>Ingame_Misc_mlg_glasses_with_sound_patch.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -5126,7 +5126,7 @@
           <name>Illuminati Companion by Aimdrol</name>
           <version>
           </version>
-          <modzipfile>Ingame_Info_mlg_illuminati_companion_0.9.16.zip</modzipfile>
+          <modzipfile>Ingame_Misc_mlg_illuminati_companion_0.9.16.zip</modzipfile>
           <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
@@ -5138,7 +5138,7 @@
           <configs>
             <config>
               <name>Enable for during battle</name>
-              <configzipfile>Ingame_Info_mlg_illuminati_companion_alive_enable_patch.zip</configzipfile>
+              <configzipfile>Ingame_Misc_mlg_illuminati_companion_alive_enable_patch.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -5213,7 +5213,7 @@
           <configs>
             <config>
               <name>by Aimdrol without text modifications</name>
-              <configzipfile>Ingame_Info_Consumables_by_Aimdrol_without_text_2017_04_16.zip</configzipfile>
+              <configzipfile>Ingame_Misc_Consumables_by_Aimdrol_without_text_2017_04_16.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -5230,7 +5230,7 @@
             </config>
             <config>
               <name>by Aimdrol with text modifications (english only)</name>
-              <configzipfile>Ingame_Info_Consumables_by_Aimdrol_with_text_2017_04_16.zip</configzipfile>
+              <configzipfile>Ingame_Misc_Consumables_by_Aimdrol_with_text_2017_04_16.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -5247,7 +5247,7 @@
             </config>
             <config>
               <name>by Grandpa</name>
-              <configzipfile>Ingame_Info_Consumables_by_arasgrandpa.zip</configzipfile>
+              <configzipfile>Ingame_Misc_Consumables_by_arasgrandpa.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -5270,7 +5270,7 @@
             </config>
             <config>
               <name>by LakeOphilD</name>
-              <configzipfile>Ingame_Info_Consumables_by_LakeOphilD.zip</configzipfile>
+              <configzipfile>Ingame_Misc_Consumables_by_LakeOphilD.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -5287,7 +5287,7 @@
             </config>
             <config>
               <name>by vito74</name>
-              <configzipfile>Ingame_Info_Consumables_by_vito74m.zip</configzipfile>
+              <configzipfile>Ingame_Misc_Consumables_by_vito74m.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -5307,7 +5307,7 @@
             </config>
             <config>
               <name>by vvooj</name>
-              <configzipfile>Ingame_Info_Consumables_by_vvooj.zip</configzipfile>
+              <configzipfile>Ingame_Misc_Consumables_by_vvooj.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -5324,7 +5324,7 @@
             </config>
             <config>
               <name>by YHKEP</name>
-              <configzipfile>Ingame_Info_Consumables_by_YHKEP.zip</configzipfile>
+              <configzipfile>Ingame_Misc_Consumables_by_YHKEP.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -5645,7 +5645,7 @@
           <configs>
             <config>
               <name>With Free Experience</name>
-              <configzipfile>ingame_info_research_watchdog_config_2017_04_26.zip</configzipfile>
+              <configzipfile>Ingame_info_research_watchdog_config_2017_04_26.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
