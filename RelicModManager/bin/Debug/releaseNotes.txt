@@ -1,3 +1,9 @@
+Version 22.0.1:
+-Increased accuracy of download timer estimation
+-Application will now only backup mods after an installation has been started, rather than just when you press the "install modpack" button
+-Added a check to verify that WoT is not running
+-updated translations
+
 Version 22.0.0:
 -Hello everyone, please welcome version 22.0.0!
 -This update enables us to store our mod zip files into different locations. This means that we can store our larger files on a new hosting service, where the download speed is 6-10x faster!

@@ -27,7 +27,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 22.0.0";
+        private string managerVersion = "version 22.0.1";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -108,6 +108,7 @@ namespace RelhaxModpack
         float sessionDownloadSpeed = 0;
         private loadingGifPreview gp;
         private ModSelectionList list;
+        private string fodlerDateName;
 
         //The constructur for the application
         public MainWindow()
@@ -743,7 +744,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 05/06/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 05/07/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1462,31 +1463,16 @@ namespace RelhaxModpack
             //do a backup if requested
             if (Settings.backupModFolder)
             {
+                state = InstallState.backupResMods;
                 //backupResMods the mods folder
-                if (Directory.Exists(Application.StartupPath + "\\RelHaxModBackup"))
-                {
-                    state = InstallState.deleteBackupResMods;
-                    //need to check for legacy positions
-                    string theCurrentTanksVersion = this.getFolderVersion(null);
-                    if (Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\" + theCurrentTanksVersion))
-                    {
-                        //move all folders info res_mods
-                        Settings.appendToLog("WARNING: Legacy backup structure detected, moving files");
-                        string[] dirsList = Directory.GetDirectories(Application.StartupPath + "\\RelHaxModBackup");
-                        if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\res_mods"))
-                            Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\res_mods");
-                        foreach (string s in dirsList)
-                        {
-                            string dirName = new DirectoryInfo(s).Name;
-                            Directory.Move(Application.StartupPath + "\\RelHaxModBackup\\" + dirName, Application.StartupPath + "\\RelHaxModBackup\\res_mods\\" + dirName);
-                        }
-                    }
-                    if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\res_mods"))
-                    {
-                        Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\res_mods");
-                    }
-                    this.backgroundDelete(Application.StartupPath + "\\RelHaxModBackup\\res_mods");
-                }
+                if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup"))
+                    Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup");
+                //create a new mods folder based on date and time
+                //yyyy-MM-dd-HH-mm-ss
+                DateTime now = DateTime.Now;
+                fodlerDateName = String.Format("{0:yyyy-MM-dd-HH-mm-ss}", now);
+                Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\" + fodlerDateName + "\\res_mods");
+                this.backgroundCopy(tanksLocation + "\\res_mods", Application.StartupPath + "\\RelHaxModBackup\\"+ fodlerDateName + "\\res_mods");
                 return;
             }
             //actual new code
@@ -1627,7 +1613,9 @@ namespace RelhaxModpack
                     downloadQueue.Add(new DownloadItem(new Uri(c.startAddress + c.zipConfigFile + c.endAddress), localFilesDir + c.zipConfigFile));
                 }
             }
+            //reset the progress bars for download mods
             parrentProgressBar.Maximum = downloadQueue.Count;
+            childProgressBar.Maximum = 100;
             //at this point, there may be user mods selected,
             //and there is at least one mod to extract
             //check for any mods to be install tha also need to be downloaded
@@ -1855,11 +1843,11 @@ namespace RelhaxModpack
             if (state == InstallState.backupResMods)
             {
                 state = InstallState.backupMods;
-                if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\mods"))
+                if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\" + fodlerDateName + "\\mods"))
                 {
-                    Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\mods");
+                    Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\" + fodlerDateName + "\\mods");
                 }
-                this.backgroundCopy(tanksLocation + "\\mods", Application.StartupPath + "\\RelHaxModBackup\\mods");
+                this.backgroundCopy(tanksLocation + "\\mods", Application.StartupPath + "\\RelHaxModBackup\\" + fodlerDateName + "\\mods");
                 return;
             }
             else if (state == InstallState.backupMods)
