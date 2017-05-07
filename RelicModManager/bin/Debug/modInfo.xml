@@ -5737,12 +5737,54 @@
           <userDatas>
             <userData>\\res_mods\\configs\\wotstat\\cache.json</userData>
           </userDatas>
-          <pictures>
-            <picture>
-              <URL>http://i.imgur.com/UOiwa7n.png</URL>
-            </picture>
-          </pictures>
           <configs>
+            <config>
+              <name>English</name>
+              <configzipfile></configzipfile>
+              <startAddress></startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc></configzipcrc>
+              <size></size>
+              <pictures>
+                <picture>
+                  <URL>http://i.imgur.com/UOiwa7n.png</URL>
+                </picture>
+              </pictures>
+              <configenabled>True</configenabled>
+              <configtype>single1</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>German modified Version</name>
+              <configzipfile>Garage_Session_Stats_Tomonik_German Editon_dirty20067_2017-05_07.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single1</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i1228.photobucket.com/albums/ee455/dirty20067/OMC%20Modpack/Ashampoo_Snap_2017.05.07_08h31m23s_008__zpsowstlro0.png</URL>
+                </picture>
+                <picture>
+                  <URL>http://i1228.photobucket.com/albums/ee455/dirty20067/OMC%20Modpack/Ashampoo_Snap_2017.05.07_08h30m19s_006__zpsiys3pcbg.png</URL>
+                </picture>
+                <picture>
+                  <URL>http://i1228.photobucket.com/albums/ee455/dirty20067/OMC%20Modpack/Ashampoo_Snap_2017.05.07_08h30m51s_007__zpsiybdexvg.png</URL>
+                </picture>
+                <picture>
+                  <URL>http://i1228.photobucket.com/albums/ee455/dirty20067/OMC%20Modpack/Ashampoo_Snap_2017.05.07_08h40m14s_009__zpsq89crlzr.png</URL>
+                </picture>
+                <picture>
+                  <URL>http://i1228.photobucket.com/albums/ee455/dirty20067/OMC%20Modpack/Ashampoo_Snap_2017.05.07_09h14m14s_010__zpss1ukvhsl.png</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
             <config>
               <name>Daily Reset</name>
               <configzipfile>Garage_Session_Stats_Tomonik_Daily_Reset.zip</configzipfile>
@@ -5758,7 +5800,7 @@
             </config>
           </configs>
           <dependencies />
-          <description>Shows your statistics for your tanks session in the notifications area of your garage</description>
+          <description>Shows your statistics for your tanks session in the notifications area of your garage @German modified Version by dirty20067</description>
           <updateComment>
           </updateComment>
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/572771-091703-session-statistics-and-battle-result-messages/</devURL>
