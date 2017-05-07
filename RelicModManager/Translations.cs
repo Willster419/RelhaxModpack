@@ -593,6 +593,16 @@ namespace RelhaxModpack
             //
             english.Add("databaseNotFound", "Database not found at supplied URL");
             german.Add("databaseNotFound", "Datenbank nicht bei der angegebenen URL gefunden");
+
+            //Componet:
+            //
+            english.Add("WoTRunningHeader", "WoT is Running");
+            german.Add("WoTRunningHeader", "WoT wird gerade ausgeführt.");
+
+            //Componet:
+            //
+            english.Add("WoTRunningMessage", "Please close World of Tanks to continue");
+            german.Add("WoTRunningMessage", "Um Fortzufahren, schliesse bitte World of Tanks.");
         }
     }
 }
