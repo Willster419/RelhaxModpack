@@ -1494,6 +1494,20 @@ namespace RelhaxModpack
                 toggleUIButtons(true);
                 return;
             }
+            //check to see if WoT is running
+            bool WoTRunning = true;
+            while (WoTRunning)
+            {
+                WoTRunning = false;
+                foreach (Process p in Process.GetProcesses())
+                {
+                    if (p.MainWindowTitle.Equals("WoT Client"))
+                        WoTRunning = true;
+                }
+                if (!WoTRunning)
+                    break;
+                MessageBox.Show(Translations.getTranslatedString("WoTRunningMessage"), Translations.getTranslatedString("WoTRunningHeader"));
+            }
             if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
                 File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
             downloadProgress.Text = Translations.getTranslatedString("loading");
