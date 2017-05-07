@@ -2912,13 +2912,13 @@
             </config>
             <config>
               <name>Harpoon</name>
-              <configzipfile>Crosshairs_ProArty_9.17.1_2017-03-11.zip</configzipfile>
+              <configzipfile>Crosshairs_Harpoon_v3_Arty_0.9.18.0_2017-05-02.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>4731d16df31f21e872aca3766def0bf5</configzipcrc>
-              <size>0.1</size>
-              <configenabled>False</configenabled>
+              <configzipcrc>9644cbb74c25b8c0baea7f5818a15f09</configzipcrc>
+              <size>0.5</size>
+              <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
@@ -3013,13 +3013,13 @@
             </config>
             <config>
               <name>Harpoon</name>
-              <configzipfile>Crosshairs_Harpoon_v3_Tank_0.9.17.1_2017-02-25.zip</configzipfile>
+              <configzipfile>Crosshairs_Harpoon_v3_Tank_0.9.18.0_2017-05-02.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>bd277789766ed3d11bd209e9427380a5</configzipcrc>
+              <configzipcrc>8de734eda49f9e620a47ff2b82414f1c</configzipcrc>
               <size>0.7</size>
-              <configenabled>False</configenabled>
+              <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
@@ -5737,23 +5737,26 @@
           <userDatas>
             <userData>\\res_mods\\configs\\wotstat\\cache.json</userData>
           </userDatas>
+          <pictures />
           <configs>
             <config>
               <name>English</name>
-              <configzipfile></configzipfile>
-              <startAddress></startAddress>
+              <configzipfile>
+              </configzipfile>
+              <startAddress>
+              </startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc></configzipcrc>
-              <size></size>
+              <configzipcrc>
+              </configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single1</configtype>
               <pictures>
                 <picture>
                   <URL>http://i.imgur.com/UOiwa7n.png</URL>
                 </picture>
               </pictures>
-              <configenabled>True</configenabled>
-              <configtype>single1</configtype>
-              <pictures />
               <dependencies />
             </config>
             <config>
@@ -5762,8 +5765,8 @@
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>af1cc44828e91ac42f17ec53b27cc7dc</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single1</configtype>
               <pictures>
@@ -6993,15 +6996,18 @@
       <dependencies />
       <mods>
         <mod>
-          <name>Contour skins with areas of penetration ( ͡° ͜ʖ ͡°)</name>
+          <name>Contour skins black and white with areas of penetration ( ͡° ͜ʖ ͡°) by Mr.13</name>
           <version>
           </version>
-          <modzipfile>Tank_Skin_Packs_HitZone_Skins_black_white_by_Mr.13_0.9.17.0.1_2016-12-13.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/oeaoki61ecdrf3e/</startAddress>
+          <modzipfile>
+          </modzipfile>
+          <startAddress>
+          </startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc>153ecff0edfd47e1fbac9c75ff33e47d</modzipcrc>
-          <size>453.1</size>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>
@@ -7024,12 +7030,108 @@
               <URL>http://s1.directupload.net/images/user/140809/q4rrjpug.jpg</URL>
             </picture>
           </pictures>
-          <configs />
+          <configs>
+            <config>
+              <name>no trunk marks</name>
+              <configzipfile>Tank_Skin_Packs_HitZone_Skins_black_white_by_Mr.13_no_trunk_marks_0.9.18.0._2017-05-07.zip</configzipfile>
+              <startAddress>http://www.mediafire.com/file/8a2aj3raatvbqn1/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>81736e8dfcb4466bf5b517326678a4b2</configzipcrc>
+              <size>487.9</size>
+              <configenabled>True</configenabled>
+              <configtype>single1</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>with trunk marks</name>
+              <configzipfile>Tank_Skin_Packs_HitZone_Skins_black_white_by_Mr.13_trunk_marks_0.9.18.0._2017-05-07.zip</configzipfile>
+              <startAddress>http://www.mediafire.com/file/h6doyw3bd7xnjod/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>5d5de766e24ba645620a823938b10465</configzipcrc>
+              <size>489.3</size>
+              <configenabled>True</configenabled>
+              <configtype>single1</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+          </configs>
           <dependencies />
           <description>Shows where to hit tanks for damage or critical hits</description>
           <updateComment>
           </updateComment>
           <devURL>https://koreanrandom.com/forum/topic/1400-</devURL>
+        </mod>
+        <mod>
+          <name>Contour skins with areas of penetration ( ͡° ͜ʖ ͡°) by GoHa</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <startAddress>
+          </startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>http://images.pub.goha.ru/ghadd/1450789321/addons/addon/59331/230/344/image-1/skins_rus.png</URL>
+            </picture>
+            <picture>
+              <URL>http://images.pub.goha.ru/ghadd/1450789321/addons/addon/59331/230/344/screenshot-1/1.png</URL>
+            </picture>
+            <picture>
+              <URL>http://images.pub.goha.ru/ghadd/1450789321/addons/addon/59331/230/344/screenshot-3/3.png</URL>
+            </picture>
+            <picture>
+              <URL>http://images.pub.goha.ru/ghadd/1450789321/addons/addon/59331/230/344/screenshot-4/4.png</URL>
+            </picture>
+            <picture>
+              <URL>http://images.pub.goha.ru/ghadd/1450789321/addons/addon/59331/230/344/screenshot-2/2.png</URL>
+            </picture>
+            <picture>
+              <URL>http://images.pub.goha.ru/ghadd/1450789984/addons/addon/59331/231/345/screenshot-2/2.png</URL>
+            </picture>
+          </pictures>
+          <configs>
+            <config>
+              <name>SD</name>
+              <configzipfile>Tank_Skin_Packs_HitZone_Skins_goharu_wot_skins_0.9.18.0_SD.zip</configzipfile>
+              <startAddress>http://www.mediafire.com/file/8bepd95bf7bzbpm/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>cf58ec72c9d1f393bb15ea549f34d159</configzipcrc>
+              <size>200.8</size>
+              <configenabled>True</configenabled>
+              <configtype>single1</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>HD</name>
+              <configzipfile>Tank_Skin_Packs_HitZone_Skins_goharu_wot_skins_0.9.18.0_HD.zip</configzipfile>
+              <startAddress>http://www.mediafire.com/file/ihdddaiwdpmmmhz/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>c48097f92b9db177d3ed9b20edcfb1c7</configzipcrc>
+              <size>765.3</size>
+              <configenabled>True</configenabled>
+              <configtype>single1</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>Shows where to hit tanks for damage or critical hits</description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://www.wotdb.info/addons#!/</devURL>
         </mod>
         <mod>
           <name>Anime Tank Skins</name>
