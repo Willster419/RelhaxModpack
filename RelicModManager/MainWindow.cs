@@ -107,6 +107,7 @@ namespace RelhaxModpack
         float differenceTotalBytesDownloaded = 0;
         float sessionDownloadSpeed = 0;
         private loadingGifPreview gp;
+        private ModSelectionList list;
 
         //The constructur for the application
         public MainWindow()
@@ -134,6 +135,8 @@ namespace RelhaxModpack
             //set the progress bar
             childProgressBar.Value = e.ProgressPercentage;
             //set the download speed
+            if (sessionDownloadSpeed < 0)
+                sessionDownloadSpeed = 0;
             sessionDownloadSpeed = (float)Math.Round(sessionDownloadSpeed, 2);
             totalSpeedLabel = "" + sessionDownloadSpeed + " MB/s";
             //get the ETA for the download
@@ -1443,10 +1446,20 @@ namespace RelhaxModpack
                 return;
             }
             tanksVersion = this.getFolderVersion(null);
-            //the download timers started for download speed measurement
-            sw.Reset();
-            sw.Start();
-            //actual new code
+            state = InstallState.modSelection;
+            //reset the childProgressBar value
+            childProgressBar.Maximum = 100;
+            childProgressBar.Value = 0;
+            //show the mod selection window
+            list = new ModSelectionList(tanksVersion);
+            list.ShowDialog();
+            if (list.cancel)
+            {
+                state = InstallState.idle;
+                toggleUIButtons(true);
+                return;
+            }
+            //do a backup if requested
             if (Settings.backupModFolder)
             {
                 //backupResMods the mods folder
@@ -1476,24 +1489,12 @@ namespace RelhaxModpack
                 }
                 return;
             }
+            //actual new code
             this.parseInstallationPart1();
         }
         //next part of the install process
         private void parseInstallationPart1()
         {
-            state = InstallState.modSelection;
-            //reset the childProgressBar value
-            childProgressBar.Maximum = 100;
-            childProgressBar.Value = 0;
-            //show the mod selection window
-            ModSelectionList list = new ModSelectionList(tanksVersion);
-            list.ShowDialog();
-            if (list.cancel)
-            {
-                state = InstallState.idle;
-                toggleUIButtons(true);
-                return;
-            }
             //check to see if WoT is running
             bool WoTRunning = true;
             while (WoTRunning)
@@ -1642,7 +1643,9 @@ namespace RelhaxModpack
                 downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
                 downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
                 downloader.Proxy = null;
-                //Uri newURI = new Uri(downloadQueue[0].URL + "?dl=1");
+                //the download timers started for download speed measurement
+                sw.Reset();
+                sw.Start();
                 downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
                 tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
                 Settings.appendToLog("downloading " + tempOldDownload);
