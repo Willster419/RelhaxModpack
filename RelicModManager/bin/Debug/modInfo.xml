@@ -4124,6 +4124,23 @@
               </pictures>
               <dependencies />
             </config>
+             <config>
+              <name>Pogs Contour Icons</name>
+              <configzipfile>Ingame_Info_Pogs_Contour_Icon_2017_05_07.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://www.armchairgeneral.com/wordpress/wp-content/image/2011/Games/World-of-Tanks-Mods/World-of-Tanks-Mods-Roster.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
             <config>
               <name>Wizards</name>
               <configzipfile>Ingame_Info_Wizards_Contour_Icon_Mod.zip</configzipfile>
