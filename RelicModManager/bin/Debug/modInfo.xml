@@ -3043,6 +3043,23 @@
               </pictures>
               <dependencies />
             </config>
+            <config>
+              <name>Sight Taipan</name>
+              <configzipfile>Crosshairs_sight_taipan_2017_05_07_.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://cdn.modsworldoftanks.com/wp-content/uploads/2016/02/5.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
           </configs>
           <dependencies />
           <description>Harpoon: http://forum.worldoftanks.ru/index.php?/topic/1419789-@HARDscope: http://forum.worldoftanks.ru/index.php?/topic/1229310-@J1mBO: http://forum.worldoftanks.eu/index.php?/topic/56831-/page__st__5760__pid__13574904#entry13574904</description>
