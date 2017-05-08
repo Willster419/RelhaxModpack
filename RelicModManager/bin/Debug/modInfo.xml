@@ -3049,8 +3049,8 @@
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>785661387f06b594591a439865c27e17</configzipcrc>
+              <size>0.3</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -5841,7 +5841,7 @@
           <version>
           </version>
           <modzipfile>Ingame_Info_Aslains_Gold_Premium_Tanks_0.9.17.0.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/bcv789tyyoh3bcx/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>143c76c6801cec925ea4a557b4f36284</modzipcrc>
@@ -6294,7 +6294,7 @@
           <version>
           </version>
           <modzipfile>Sounds_mlg_mod_voice_2017_03_16.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/sqaft7bp8jwbx9a/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>240a3e5046fa1a67fec9170e6efc7046</modzipcrc>
@@ -7745,7 +7745,7 @@
           <version>
           </version>
           <modzipfile>Custom_Tank_Skins_Racing-Skin_F17_AMX_13_90_RaceControl_0.9.15.1.1.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/l4rnuiy7osct1k1/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>6052fe435292552277bb2a3cd3afe7d4</modzipcrc>
@@ -7771,7 +7771,7 @@
           <version>
           </version>
           <modzipfile>Custom_Tank_Skins_Skin_F68_AMX_CDC_0.9.17.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/z6s7malfwputtcn/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>f07fc698168406f8306c2df2a254c149</modzipcrc>
@@ -7801,7 +7801,8 @@
           </version>
           <modzipfile>
           </modzipfile>
-          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+          <startAddress>
+          </startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>
@@ -7814,7 +7815,7 @@
             <config>
               <name>YodaSchlumpf</name>
               <configzipfile>Custom_Tank_Skins_Racing-Skin_F62_ELC_AMX_YodaSchlumpf_0.9.15.2.zip</configzipfile>
-              <startAddress>http://www.mediafire.com/file/nyl3y5tda4qyrpr/</startAddress>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>e8d8c4114042658464846eb60d4d69c5</configzipcrc>
@@ -7831,7 +7832,7 @@
             <config>
               <name>Dukes of Hazard</name>
               <configzipfile>Custom_Tank_Skins_Racing-Skin_F62_ELC_AMX_General_Lee_0.9.15.2.zip</configzipfile>
-              <startAddress>http://www.mediafire.com/file/l04he6wlk8vn2je/</startAddress>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>ce8ff9c536b206fd39b8c399cafb20b3</configzipcrc>
@@ -7851,7 +7852,7 @@
             <config>
               <name>MONSTER Energy</name>
               <configzipfile>Custom_Tank_Skins_Racing-Skin_F62_ELC_AMX_MONSTERenergy_0.9.15.2.zip</configzipfile>
-              <startAddress>http://www.mediafire.com/file/78fst84sgsf5lgt/</startAddress>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>0399525ff9b68b8af6214048d3adfff7</configzipcrc>
@@ -7877,7 +7878,7 @@
             <config>
               <name>Hello Kitty</name>
               <configzipfile>Custom_Tank_Skins_Racing-Skin_F62_ELC_AMX_HelloKitty_0.9.15.2.zip</configzipfile>
-              <startAddress>http://www.mediafire.com/file/ikthtr272ioymcc/</startAddress>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>262e5957b7b7608bb975ac7a193f082f</configzipcrc>
@@ -7905,7 +7906,7 @@
           <version>
           </version>
           <modzipfile>Custom_Tank_Skins_Racing-Skin_R08_BT-2_GrillMaxe_0.9.15.2.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/y1l8ep9gbbcgvad/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>1bb33214300c3b021bb44b2b151e62d7</modzipcrc>
@@ -7952,7 +7953,7 @@
             <config>
               <name>RaceControl</name>
               <configzipfile>Custom_Tank_Skins_Racing-Skin_GB77_FV304_RaceControl_0.9.16.zip</configzipfile>
-              <startAddress>http://www.mediafire.com/file/j3eh6lekjms206z/</startAddress>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>
@@ -7973,7 +7974,7 @@
             <config>
               <name>Police (remodel)</name>
               <configzipfile>Custom_Tank_Skins_Racing-Skin_GB77_FV304_Police_0.9.18.zip</configzipfile>
-              <startAddress>http://www.mediafire.com/file/xlh8mg1tioldu1g/</startAddress>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>41a0147d45f325d8d43fb0a19fe7f157</configzipcrc>
@@ -8019,7 +8020,7 @@
             <config>
               <name>CAMU</name>
               <configzipfile>Custom_Tank_Skins_Skin_R19_IS-3_DSS_camo_2016-05-27.zip</configzipfile>
-              <startAddress>http://www.mediafire.com/file/0kfm9fff292yx9j/</startAddress>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>76870b65ba2349ebb978d6d4583c3dbb</configzipcrc>
@@ -8048,7 +8049,7 @@
             <config>
               <name>EXPLOSIV</name>
               <configzipfile>Custom_Tank_Skins_Skin_R19_IS-3_DSS_explosiv_2016-04-11.zip</configzipfile>
-              <startAddress>http://www.mediafire.com/file/yvda64g7dc59svr/</startAddress>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>6adcc100c3929d4dd3127c5ca9cebf5d</configzipcrc>
@@ -8075,7 +8076,7 @@
           <name>Dead White Tanks</name>
           <version>aslain</version>
           <modzipfile>Custom_Tank_Skins_dead_white_tanks_2017-04-23.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/zf3p5xwx7w50hk3/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>57792a0f15d65450ec03ea46d3bf4290</modzipcrc>
@@ -8087,7 +8088,7 @@
             <config>
               <name>...and dead white tracks</name>
               <configzipfile>Custom_Tank_Skins_dead_white_tracks_2017-04-23.zip</configzipfile>
-              <startAddress>http://www.mediafire.com/file/7ni6ia2fuu29ru8/</startAddress>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>bbbaff50d1d381755d3fe8ae81cb9552</configzipcrc>
@@ -8100,7 +8101,7 @@
             <config>
               <name>...and dead white wagons</name>
               <configzipfile>Custom_Tank_Skins_dead_white_wagons_2017-04-23.zip</configzipfile>
-              <startAddress>http://www.mediafire.com/file/ogy5c8wk48r4y6i/</startAddress>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>276f72ca8e0c960f39be83fa5158cb3d</configzipcrc>
@@ -8175,7 +8176,7 @@
           <version>
           </version>
           <modzipfile>Custom_Tank_Skins_Skin_M48_Make_Patton_Great_Again_0.9.16.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/4fz1izmbtva0e8u/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>a7b532eb93ba75f471632d42c93cfd0f</modzipcrc>
@@ -8201,7 +8202,7 @@
           <version>
           </version>
           <modzipfile>Custom_Tank_Skins_Skin_G42_Maus_hier_kommt_die_Maus_0.9.16.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/4rtmdchmy4dmwy3/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>3fe5d3014822bfec4a22f853e0b0e4a1</modzipcrc>
@@ -8318,7 +8319,7 @@
             <config>
               <name>Red</name>
               <configzipfile>Custom_Tank_Skins_Skin_G114_Rheinmetall_Skorpian_red_PeNeTrAtOrX_0.9.17.zip</configzipfile>
-              <startAddress>http://www.mediafire.com/file/v58kd33obleyork/</startAddress>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>8768c722920c1d8c5fd6cc7220978604</configzipcrc>
@@ -8335,7 +8336,7 @@
             <config>
               <name>Green</name>
               <configzipfile>Custom_Tank_Skins_Skin_G114_Rheinmetall_Skorpian_poison_green_PeNeTrAtOrX_0.9.17.zip</configzipfile>
-              <startAddress>http://www.mediafire.com/file/3vf5k8s8sbyd9a1/</startAddress>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>11c09ad42caa6443442e803965c44d97</configzipcrc>
@@ -8352,7 +8353,7 @@
             <config>
               <name>White</name>
               <configzipfile>Custom_Tank_Skins_Skin_G114_Rheinmetall_Skorpian_white_v1.2_PeNeTrAtOrX_0.9.17.0.zip</configzipfile>
-              <startAddress>http://www.mediafire.com/file/3g8pvbhbz3wdcaj/</startAddress>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>11ce325de17446324663ea7ceff3f00f</configzipcrc>
@@ -8392,7 +8393,7 @@
           <version>
           </version>
           <modzipfile>Custom_Tank_Skins_Racing-Skin_Cz01_T40_Skoda_T40_Motorsport_0.9.16.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/c9aq8jof3oawv5y/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>a5c0e6cc69cf02b60e7e35517f530f69</modzipcrc>
@@ -8456,7 +8457,7 @@
           <version>
           </version>
           <modzipfile>Custom_Tank_Skins_Skin_A58_T67_0.9.17.0.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/m69wd1asc2p6ayp/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>6d7d90c173c2298c79e14d561779ab15</modzipcrc>
@@ -8500,7 +8501,7 @@
             <config>
               <name>OM Edition (RIP OMC Modpack)</name>
               <configzipfile>Custom_Tank_Skins_Skin_A69_T110E5_OM_Edition_YodaSchlumpf_0.9.16.zip</configzipfile>
-              <startAddress>http://www.mediafire.com/file/47hu7f42cvm0ftq/</startAddress>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>e5d832fe1198d4658c1b43d22699ff97</configzipcrc>
@@ -8526,7 +8527,7 @@
             <config>
               <name>OMNI Edition (RIP OMC Modpack)</name>
               <configzipfile>Custom_Tank_Skins_Skin_A69_T110E5_OMNI_Edition_YodaSchlumpf_0.9.16.zip</configzipfile>
-              <startAddress>http://www.mediafire.com/file/dfey4wrh42vpive/</startAddress>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>6da3eec973e2b185f37d0dd0de6e8a21</configzipcrc>
@@ -8580,7 +8581,7 @@
           <version>
           </version>
           <modzipfile>Custom_Tank_Skins_Skin_Ch01_Type59_Gold_0.9.16.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/ukg9gw3itq25z7v/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>26b49b62bad30551a3a28dcf3894f13e</modzipcrc>
@@ -8606,7 +8607,7 @@
           <version>
           </version>
           <modzipfile>Custom_Tank_Skins_Skin_A11_T29_Patriot.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/999mbs25lgkvuqm/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>2e5c46ec03bb5f588924ecbe5dd8e7cc</modzipcrc>
@@ -8679,7 +8680,7 @@
           <version>
           </version>
           <modzipfile>Custom_Tank_Skins_Skin_A13_T34_hvy_Independance_0.9.16.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/5dprg8tkbnrqdge/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>9a9bd717139e8d1e719ace76c8f91245</modzipcrc>
@@ -8704,7 +8705,7 @@
           <version>
           </version>
           <modzipfile>Custom_Tank_Skins_Skin_A80_T26E4_Independance_0.9.16.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/777jpv7tvnmncim/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>fe5e6779da1a178667676c38f4b3c7f0</modzipcrc>
@@ -8776,7 +8777,7 @@
           <name>Churchill III Lend-Lease Remodel (Milkym4n)</name>
           <version>1.0.4</version>
           <modzipfile>Custom_Tank_Skins_Skin_R33_Churchill_3_WT-1.0.4_9.18.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/zhlpjx74f51svu6/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>1dd35e9d5deab0a4147721db62ecf30a</modzipcrc>
@@ -8799,7 +8800,7 @@
           <name>Cromwell Knight Skin (Milkym4n)</name>
           <version>1.0.4</version>
           <modzipfile>Custom_Tank_Skins_Skin_GB21_Cromwell_Knight-1.0.4.zip</modzipfile>
-          <startAddress>http://www.mediafire.com/file/u1ewfy5w69n194d/</startAddress>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>0e8e419d9ad385b7fc5f9c1cde02bb29</modzipcrc>
