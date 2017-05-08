@@ -1,3 +1,6 @@
+Version 22.0.2:
+-Added WoT version display and install location on the ModSelectionList
+
 Version 22.0.1:
 -Increased accuracy of download timer estimation
 -Application will now only backup mods after an installation has been started, rather than just when you press the "install modpack" button
