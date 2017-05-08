@@ -3656,6 +3656,206 @@
       <dependencies />
       <mods>
         <mod>
+          <name>15m Spot Circle</name>
+          <version>0.8.10.03</version>
+          <modzipfile>Ingame_Info_15m_Circle_Base_0.9.18.0.zip</modzipfile>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>9c064e975470ec17e6fe26883930b26e</modzipcrc>
+          <size>0.1</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>Toggle ON-OFF with NUMPAD0</name>
+              <configzipfile>Ingame_Info_15m_Circle_toggle_patch.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>a12abcaf7965ab2287add5ab18a75f74</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Enabled by Default</name>
+              <configzipfile>Ingame_Info_15m_Circle_123Gauss_toggle_patch.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>e2e8f7ba9bcc388ace5ecd3681756b1d</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>green</name>
+              <configzipfile>Ingame_Info_15m_Circle_green.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>740d9fd3972bdf07ecae03a8cef4b799</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://s1.directupload.net/images/user/140615/suw92utp.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>light violet</name>
+              <configzipfile>Ingame_Info_15m_Circle_light-violet.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f376dca587b990f624c3ca53c873af63</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://s1.directupload.net/images/user/140615/swi2fl8z.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>light &amp; dark violet</name>
+              <configzipfile>Ingame_Info_15m_Circle_light_+_dark-violet.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f0b786e0515849befe765f36111f3463</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://s1.directupload.net/images/user/140615/bqst76uh.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>light turquoise &amp; green</name>
+              <configzipfile>Ingame_Info_15m_Circle_light-turquoise_+_green.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>5f9b65b888218228c00862a2d6d37e52</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://s14.directupload.net/images/user/140615/2gsjc3iu.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>turquoise &amp; pink</name>
+              <configzipfile>Ingame_Info_15m_Circle_turquoise_+_pink.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>7712c03d29de33dac5b5b6909d3d6de4</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://s14.directupload.net/images/user/140615/5vjs4vlm.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>turquoise &amp; violet &amp; red </name>
+              <configzipfile>Ingame_Info_15m_Circle_turquoise_+_violet_+_red.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>4c0e50f2b56d6db66aa32a9c9dd9561a</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://s14.directupload.net/images/user/140615/l2xj6zuz.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>turquoise</name>
+              <configzipfile>Ingame_Info_15m_Circle_turquoise.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>a0d4c50745c7555cfd334d8300c81a7d</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://s1.directupload.net/images/user/140615/s3lp5m8x.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>violet</name>
+              <configzipfile>Ingame_Info_15m_Circle_violet.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>c908f3222a1d0d0147e94c70b2d2b18e</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://s7.directupload.net/images/user/140615/7ew4vpk8.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>light green</name>
+              <configzipfile>Ingame_Info_15m_Circle_light-green.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>aeab5bfd3b1a372a4a2e12e1fc299e58</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single_dropdown</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://s14.directupload.net/images/user/140615/rrydpely.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>Shows a 15m Circle around your tank. Its the minimum distance behind bushes if you are shooting you stay hidden. In the sniper scope ring is not displayed.
+          </description>
+          <updateComment>updated to 0.9.18.0</updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
           <name>Zoom Out Config (meters)</name>
           <version>1</version>
           <modzipfile>
@@ -5983,6 +6183,28 @@
         </dependency>
       </dependencies>
       <mods>
+        <mod>
+          <name>Grandpas Favorite Voices and Sounds Mod</name>
+          <version>4.19.17</version>
+          <modzipfile>Sounds_Grandpas_Crew_Voices_and_Sounds.zip</modzipfile>
+          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>5d69d517150744f6d9ab6bb1bd16ccdc</modzipcrc>
+          <size>6.7</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>https://media-curse.cursecdn.com/attachments/88/867/b52eea772c5f121931775c098c68a4b6.jpg</URL>
+            </picture>
+          </pictures>
+          <configs />
+          <dependencies />
+          <description>Audio mod with various voices from@Duke Nukem, Team Fortress, Left 4 Dead, Minnions@and some female voices, gun reloaded notification and sixth sense sound.</description>
+          <updateComment>v4.19.17 - updated to 0.9.18.0</updateComment>
+          <devURL>https://mods.curse.com/wot-mods/worldoftanks/grandpas-favorite-voices-mod</devURL>
+        </mod>
         <mod>
           <name>Relhax</name>
           <version>18</version>
