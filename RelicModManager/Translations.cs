@@ -605,7 +605,7 @@ namespace RelhaxModpack
             //Componet:
             //
             english.Add("InstallingTo", "Installing to");
-            german.Add("InstallingTo", "Intallation auf");
+            german.Add("InstallingTo", "Installiere nach");
         }
     }
 }
