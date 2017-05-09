@@ -6538,6 +6538,7 @@
           <updateComment>v4.19.17 - updated to 0.9.18.0</updateComment>
           <devURL>https://mods.curse.com/wot-mods/worldoftanks/grandpas-favorite-voices-mod</devURL>
         </mod>
+        
         <mod>
           <name>Relhax</name>
           <version>18</version>
@@ -6659,6 +6660,55 @@
           <updateComment>updated by niserius</updateComment>
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/559722-julie-voice-others/</devURL>
         </mod>
+        <mod>
+          <name>Monty Python Voice Mod</name>
+          <version>1.3</version>
+          <modzipfile></modzipfile>
+          <startAddress></startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>f</modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL></URL>
+            </picture>
+          </pictures>
+          <configs>
+            <config>
+              <name>standard</name>
+              <configzipfile>Sounds_Monty_Python_2017_05_07.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Kid Safe</name>
+              <configzipfile>Sounds_Monty_Python_Kid_Safe_2017_05_07.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+          </configs>
+         <description>Replaces crew sounds with Monty Python Sound bites. Must have sound crew language set to "standard"</description>
+          <updateComment>
+          </updateComment>
+          <devURL></devURL>
+          </mod>
         <mod>
           <name>Romanian crew voices</name>
           <version>0.9.18_2017-05-02</version>

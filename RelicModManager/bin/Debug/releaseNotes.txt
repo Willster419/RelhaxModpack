@@ -1,3 +1,9 @@
+Version 22.0.3:
+-Fixed spreadsheet bug "updater fails"
+-Attemped fix for incompatibility bug
+-PreviewWindow will now close when ModSelectionList is closed
+-Updated translations
+
 Version 22.0.2:
 -Added WoT version display and install location on the ModSelectionList
 

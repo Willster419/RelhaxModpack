@@ -2046,6 +2046,9 @@ namespace RelhaxModpack
             Settings.modSelectionWidth = this.Size.Width;
             if (taskBarHidden)
                 SetTaskbarState(AppBarStates.AutoHide);
+            //close the preview window if it is open
+            if (p != null)
+                p.Close();
         }
         //gets the file size of a download
         private float netFileSize(string address)

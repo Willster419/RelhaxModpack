@@ -27,7 +27,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 22.0.2";
+        private string managerVersion = "version 22.0.3";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -582,7 +582,7 @@ namespace RelhaxModpack
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
             string version = versionSave;
             
-            if (File.Exists(Application.StartupPath + "\\RelicCopyUpdate.bat"))
+            if (!File.Exists(Application.StartupPath + "\\RelicCopyUpdate.bat"))
             {
                 //Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "RelicCopyUpdate.bat" });
                 try
