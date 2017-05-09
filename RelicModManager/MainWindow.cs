@@ -27,7 +27,7 @@ namespace RelhaxModpack
         private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 22.0.1";
+        private string managerVersion = "version 22.0.3";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -582,7 +582,7 @@ namespace RelhaxModpack
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
             string version = versionSave;
             
-            if (File.Exists(Application.StartupPath + "\\RelicCopyUpdate.bat"))
+            if (!File.Exists(Application.StartupPath + "\\RelicCopyUpdate.bat"))
             {
                 //Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "RelicCopyUpdate.bat" });
                 try
@@ -744,7 +744,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 05/07/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 05/08/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1452,7 +1452,7 @@ namespace RelhaxModpack
             childProgressBar.Maximum = 100;
             childProgressBar.Value = 0;
             //show the mod selection window
-            list = new ModSelectionList(tanksVersion);
+            list = new ModSelectionList(tanksVersion,tanksLocation);
             list.ShowDialog();
             if (list.cancel)
             {

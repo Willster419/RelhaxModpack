@@ -601,6 +601,11 @@ namespace RelhaxModpack
             //
             english.Add("WoTRunningMessage", "Please close World of Tanks to continue");
             german.Add("WoTRunningMessage", "Um Fortzufahren, schliesse bitte World of Tanks.");
+
+            //Componet:
+            //
+            english.Add("InstallingTo", "Installing to");
+            german.Add("InstallingTo", "Installiere nach");
         }
     }
 }

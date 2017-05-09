@@ -6429,19 +6429,31 @@
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/559722-julie-voice-others/</devURL>
         </mod>
         <mod>
-          <name>UT Countdown</name>
+          <name>UT Countdown Announcer</name>
           <version>
           </version>
-          <modzipfile>Sounds_UT_Announcer_updated_by_budyx69_0.9.17.1_2017-03-06.zip</modzipfile>
-          <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
-          <endAddress>
-          </endAddress>
+          <modzipfile></modzipfile>
+          <startAddress></startAddress>
+          <endAddress></endAddress>
           <modzipcrc>f</modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>true</enabled>
           <userDatas />
           <pictures />
           <configs>
+            <config>
+              <name>Locastan origanal config</name>
+              <configzipfile>Sounds_UT_Announcer_updated_by_budyx69_0.9.17.1_2017-03-06.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+            </config>
             <config>
               <name>Webium config</name>
               <configzipfile>Sounds_UT_voice_webium_config_2017-03-06.zip</configzipfile>
@@ -6457,7 +6469,7 @@
             </config>
           </configs>
           <dependencies />
-          <description>Plays certain sounds for when you get a certain number of kills in the game.</description>
+          <description>Plays certain sounds for when you get a certain number of kills in the game. @@Locastans original config: continued by budyx69 @Webium config: modified by webium</description>
           <updateComment>
           </updateComment>
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/557716-</devURL>

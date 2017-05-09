@@ -24,6 +24,7 @@ namespace RelhaxModpack
         private const int titleBar = 23;//set origionally for 23
         private int difference = 0;
         private string tanksVersion = "";
+        private string tanksLocation = "";
         private enum loadConfigMode
         {
             error = -1,
@@ -94,10 +95,11 @@ namespace RelhaxModpack
             msgData.hWnd = FindWindow("System_TrayWnd", null);
             return (AppBarStates)SHAppBarMessage((UInt32)AppBarMessages.GetState, ref msgData);
         }
-        public ModSelectionList(string version)
+        public ModSelectionList(string version, string theTanksVersion)
         {
             InitializeComponent();
             tanksVersion = version;
+            tanksLocation = theTanksVersion;
         }
 
         private void applyTranslations()
@@ -171,6 +173,9 @@ namespace RelhaxModpack
             //set the UI colors
             Settings.setUIColor(this);
             pw.Close();
+            //set label properties
+            TanksVersionLabel.Text = TanksVersionLabel.Text + tanksVersion;
+            TanksPath.Text = Translations.getTranslatedString("InstallingTo") + " " + tanksLocation;
             //if the task bar was set to auto hide, set it to always on top
             //it will be set back to auto hide when this window closes
             AppBarStates currentState = GetTaskbarState();
@@ -2041,6 +2046,9 @@ namespace RelhaxModpack
             Settings.modSelectionWidth = this.Size.Width;
             if (taskBarHidden)
                 SetTaskbarState(AppBarStates.AutoHide);
+            //close the preview window if it is open
+            if (p != null)
+                p.Close();
         }
         //gets the file size of a download
         private float netFileSize(string address)
