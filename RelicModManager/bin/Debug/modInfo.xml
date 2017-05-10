@@ -3672,7 +3672,306 @@
       <selectionType>multi</selectionType>
       <dependencies />
       <mods>
-        <mod>
+      <mod>
+        <name>Wide Border of Maps</name>
+        <version>0.9.18</version>
+        <modzipfile></modzipfile>
+        <startAddress></startAddress>
+        <endAddress>
+        </endAddress>
+        <modzipcrc>f</modzipcrc>
+        <size>0</size>
+        <enabled>True</enabled>
+        <userDatas />
+        <pictures>
+          <picture>
+            <URL>https://media-elerium.cursecdn.com/attachments/148/158/Logo.png</URL>
+          </picture>
+          <picture>
+            <URL>https://media-elerium.cursecdn.com/attachments/148/143/53_ALL_COLOR_BLIND.jpg</URL>
+          </picture>
+          <picture>
+            <URL>https://media-elerium.cursecdn.com/attachments/148/171/LIGHT___FULL_version__ENG_.jpg</URL>
+          </picture>
+          <picture>
+            <URL>http://img-fotki.yandex.ru/get/9751/9261163.14/0_81368_670f1b83_orig.jpg</URL>
+          </picture>
+          <picture>
+            <URL>http://s1.directupload.net/images/user/131226/56qkj3qm.jpg</URL>
+          </picture>
+        </pictures>
+        <configs>
+          <config>
+            <name>WIDE Full</name>
+            <configzipfile>Ingame_Info_Wide_Border_Of_Maps_WIDE_full_colorblind_support.zip</configzipfile>
+            <startAddress>http://www.mediafire.com/file/2q43i7re7j7454o/</startAddress>
+            <endAddress></endAddress>
+            <configzipcrc>f</configzipcrc>
+            <size>0</size>
+            <configenabled>True</configenabled>
+            <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/117/01_WIDE_002.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/130/11_WIDE_001.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://s1.directupload.net/images/user/131226/56qkj3qm.jpg</URL>
+              </picture>            
+            </pictures>
+            <dependencies />
+          </config>
+          <config>
+            <name>EXTRAGRID Full</name>
+            <configzipfile>Ingame_Info_Wide_Border_Of_Maps_EXTRAGRID_colorblind_support.zip</configzipfile>
+            <startAddress>http://www.mediafire.com/file/3xf19yu7b762270/</startAddress>
+            <endAddress></endAddress>
+            <configzipcrc>f</configzipcrc>
+            <size>0</size>
+            <configenabled>True</configenabled>
+            <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/144/EXTRAGRID_000.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/147/EXTRAGRID_002.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/148/EXTRAGRID_003.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/151/EXTRAGRID_004.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/157/96_prohorovka_defense.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/159/1.jpg</URL>
+              </picture>
+            </pictures>
+            <dependencies />
+          </config>
+          <config>
+            <name>COMMAND Full</name>
+            <configzipfile>Ingame_Info_Wide_Border_Of_Maps_COMMAND_full_colorblind_support.zip</configzipfile>
+            <startAddress>http://www.mediafire.com/file/l4qqcdb8ns619c8/</startAddress>
+            <endAddress></endAddress>
+            <configzipcrc>f</configzipcrc>
+            <size>0</size>
+            <configenabled>True</configenabled>
+            <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/111/COMMAND.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://img-fotki.yandex.ru/get/9251/9261163.15/0_81455_ca0f6591_orig.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/135/14_COMMAND_001.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/129/04_COMMAND_002.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/139/33_COMMAND_003.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/141/51_SPG_003.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/142/52_SPG_004.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://s14.directupload.net/images/user/131226/edtdxlqk.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://s7.directupload.net/images/user/131226/tw2bkcqz.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://s7.directupload.net/images/user/131226/7wm96t2i.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://s1.directupload.net/images/user/131226/4sershwd.jpg</URL>
+              </picture>
+            </pictures>
+            <dependencies />
+          </config>
+          <config>
+            <name>GRID Full</name>
+            <configzipfile>Ingame_Info_Wide_Border_Of_Maps_GRID_full_colorblind_support.zip</configzipfile>
+            <startAddress>http://www.mediafire.com/file/m618bswodrspoyr/</startAddress>
+            <endAddress></endAddress>
+            <configzipcrc>f</configzipcrc>
+            <size>0</size>
+            <configenabled>True</configenabled>
+            <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s7.directupload.net/images/user/131226/w2a32yqj.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/165/GRID.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/133/13_GRID_001.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/127/03_GRID_002.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/136/31_GRID_003.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/138/32_GRID_004.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://img-fotki.yandex.ru/get/9796/9261163.14/0_8144f_196c27d1_orig.jpg</URL>
+              </picture>
+            </pictures>
+            <dependencies />
+          </config>
+          <config>
+            <name>INTENSIVE Full</name>
+            <configzipfile>Ingame_Info_Wide_Border_Of_Maps_INTENSIVE_full_colorblind_support.zip</configzipfile>
+            <startAddress>http://www.mediafire.com/file/vtx58y6bctfzcad/</startAddress>
+            <endAddress></endAddress>
+            <configzipcrc>f</configzipcrc>
+            <size>0</size>
+            <configenabled>True</configenabled>
+            <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>http://s7.directupload.net/images/user/131226/khu2l4w9.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/132/12_INTENSIVE_001.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/123/02_INTENSIVE_002.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/164/WIDE___INTENSIVE.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://img-fotki.yandex.ru/get/9816/9261163.14/0_8144d_ada80bb0_orig.jpg</URL>
+              </picture>
+            </pictures>
+            <dependencies />
+          </config>
+          <config>
+            <name>SPG Full</name>
+            <configzipfile>Ingame_Info_Wide_Border_Of_Maps_SPG_full_colorblind_support.zip</configzipfile>
+            <startAddress>http://www.mediafire.com/file/ixsjbwhsl6z67jc/</startAddress>
+            <endAddress></endAddress>
+            <configzipcrc>f</configzipcrc>
+            <size>0</size>
+            <configenabled>True</configenabled>
+            <configtype>single</configtype>
+            <pictures>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/114/SPG.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/160/3.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/154/02_SPG.jpg</URL>
+              </picture>
+              <picture>
+                <URL>https://media-elerium.cursecdn.com/attachments/148/155/03_SPG.jpg</URL>
+              </picture>
+              <picture>
+                <URL>http://s7.directupload.net/images/user/140421/2mqevmv6.jpg</URL>
+              </picture>
+            </pictures>
+            <dependencies />
+          </config>
+          <config>
+            <name>WIDE light</name>
+            <configzipfile>Ingame_Info_Wide_Border_Of_Maps_WIDE_light_colorblind_support.zip</configzipfile>
+            <startAddress>http://www.mediafire.com/file/1iarz56rrld4dt7/</startAddress>
+            <endAddress></endAddress>
+            <configzipcrc>f</configzipcrc>
+            <size>0</size>
+            <configenabled>True</configenabled>
+            <configtype>single</configtype>
+            <pictures></pictures>
+            <dependencies />
+          </config>
+          <config>
+            <name>EXTRAGRID light</name>
+            <configzipfile>Ingame_Info_Wide_Border_Of_Maps_EXTRAGRID_light_colorblind_support.zip</configzipfile>
+            <startAddress>http://www.mediafire.com/file/6cddyi7plyugpox/</startAddress>
+            <endAddress></endAddress>
+            <configzipcrc>f</configzipcrc>
+            <size>0</size>
+            <configenabled>True</configenabled>
+            <configtype>single</configtype>
+            <pictures></pictures>
+            <dependencies />
+          </config>
+          <config>
+            <name>COMMAND light</name>
+            <configzipfile>Ingame_Info_Wide_Border_Of_Maps_COMMAND_light_colorblind_support.zip</configzipfile>
+            <startAddress>http://www.mediafire.com/file/cg10fi6epuk6rr4/</startAddress>
+            <endAddress></endAddress>
+            <configzipcrc>f</configzipcrc>
+            <size>0</size>
+            <configenabled>True</configenabled>
+            <configtype>single</configtype>
+            <pictures></pictures>
+            <dependencies />
+          </config>
+          <config>
+            <name>GRID light</name>
+            <configzipfile>Ingame_Info_Wide_Border_Of_Maps_GRID_light_colorblind_support.zip</configzipfile>
+            <startAddress>http://www.mediafire.com/file/5786vad2hhdc8ak/</startAddress>
+            <endAddress></endAddress>
+            <configzipcrc>f</configzipcrc>
+            <size>0</size>
+            <configenabled>True</configenabled>
+            <configtype>single</configtype>
+            <pictures></pictures>
+            <dependencies />
+          </config>
+          <config>
+            <name>INTENSIVE light</name>
+            <configzipfile>Ingame_Info_Wide_Border_Of_Maps_INTENSIVE_light_colorblind_support.zip</configzipfile>
+            <startAddress>http://www.mediafire.com/file/22gz0m76vj3tq1p/</startAddress>
+            <endAddress></endAddress>
+            <configzipcrc>f</configzipcrc>
+            <size>0</size>
+            <configenabled>True</configenabled>
+            <configtype>single</configtype>
+            <pictures></pictures>
+            <dependencies />
+          </config>
+          <config>
+            <name>SPG light</name>
+            <configzipfile>Ingame_Info_Wide_Border_Of_Maps_SPG_light_colorblind_support.zip</configzipfile>
+            <startAddress>http://www.mediafire.com/file/e76v55fv3h57ke9/</startAddress>
+            <endAddress></endAddress>
+            <configzipcrc>f</configzipcrc>
+            <size>0</size>
+            <configenabled>True</configenabled>
+            <configtype>single</configtype>
+            <pictures></pictures>
+            <dependencies />
+          </config>
+          </configs>
+        <dependencies />
+        <description>Mod is made to help people with color blindness. The line, that indicates the border of maps, is expanded to the edges of the map. Now don't notice her is almost impossible. "Full" and "Light" differ only in the degree of compressibility. @WIDE - the border of maps is expanded to the edges of the map. INTENSIVE - the border of maps is made in the thickness of 20 pixels (on the standard = 1 pixel).@GRID - into the version "INTENSIVE" added the grid lines 10x10. EXTRAGRID - into the version "INTENSIVE" added the grid lines 50x50.@COMMAND - into the version "GRID" added the big numbering squares card. SPG - into the version "GRID" added the small numbering squares card.
+        </description>
+        <updateComment>updated to 0.9.18.0</updateComment>
+        <devURL>http://www.koreanrandom.com/forum/topic/5930-</devURL>
+        <devURL>https://mods.curse.com/wot-mods/worldoftanks/wide-border-maps</devURL>
+        <devURL>https://www.facebook.com/WideBorderOfMaps/</devURL>
+      </mod>
+      <mod>
           <name>15m Spot Circle</name>
           <version>0.8.10.03</version>
           <modzipfile>Ingame_Info_15m_Circle_Base_0.9.18.0.zip</modzipfile>
@@ -6239,6 +6538,7 @@
           <updateComment>v4.19.17 - updated to 0.9.18.0</updateComment>
           <devURL>https://mods.curse.com/wot-mods/worldoftanks/grandpas-favorite-voices-mod</devURL>
         </mod>
+        
         <mod>
           <name>Relhax</name>
           <version>18</version>
@@ -6360,6 +6660,55 @@
           <updateComment>updated by niserius</updateComment>
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/559722-julie-voice-others/</devURL>
         </mod>
+        <mod>
+          <name>Monty Python Voice Mod</name>
+          <version>1.3</version>
+          <modzipfile></modzipfile>
+          <startAddress></startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>f</modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL></URL>
+            </picture>
+          </pictures>
+          <configs>
+            <config>
+              <name>standard</name>
+              <configzipfile>Sounds_Monty_Python_2017_05_07.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Kid Safe</name>
+              <configzipfile>Sounds_Monty_Python_Kid_Safe_2017_05_07.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+          </configs>
+         <description>Replaces crew sounds with Monty Python Sound bites. Must have sound crew language set to "standard"</description>
+          <updateComment>
+          </updateComment>
+          <devURL></devURL>
+          </mod>
         <mod>
           <name>Romanian crew voices</name>
           <version>0.9.18_2017-05-02</version>
