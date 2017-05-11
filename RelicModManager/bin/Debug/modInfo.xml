@@ -6308,12 +6308,12 @@
       <mods>
         <mod>
           <name>Session Statistics by Tomonik</name>
-          <version>0.9.18_r01</version>
-          <modzipfile>Garage_Session_Stats_Tomonik_2017-05-02.zip</modzipfile>
+          <version>0.9.18_r02</version>
+          <modzipfile>Garage_Session_Stats_Tomonik_2017-05-11.zip</modzipfile>
           <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc>6f6b835da64566c7afc92aa2683fb496</modzipcrc>
+          <modzipcrc>bb5176b218becf43f646386b973bc850</modzipcrc>
           <size>0.3</size>
           <enabled>True</enabled>
           <userDatas>
@@ -6372,11 +6372,11 @@
             </config>
             <config>
               <name>Daily Reset</name>
-              <configzipfile>Garage_Session_Stats_Tomonik_Daily_Reset.zip</configzipfile>
+              <configzipfile>Garage_Session_Stats_Tomonik_Daily_Reset_2017_05_11.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>897bc99c9cc27a40a7b4dead7afacc97</configzipcrc>
+              <configzipcrc>93d09dcc82076d07876f4edd47936760</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
@@ -6531,11 +6531,11 @@
             </config>
             <config>
               <name>Daily Reset</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_Daily_Reset.zip</configzipfile>
+              <configzipfile>Garage_Session_Stats_YasenKrasen_Daily_Reset_2017_05_11.zip</configzipfile>
               <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>8330d61b975f5d6da52f39869f7173ff</configzipcrc>
+              <configzipcrc>55e568599a979b3b4d7e07f9c7d6ce56</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
