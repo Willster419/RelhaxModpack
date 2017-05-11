@@ -1,3 +1,10 @@
+Version 22.0.4:
+-moved location of "WoT" version in ModSelectionList
+-changed "Install Modpack" button to "Select Mods" button. The "Continue" button is not the "Install" button.
+-Database Updates:
+ -Added Wide Border Maps
+ -Added monty python sound mod
+
 Version 22.0.3:
 -Fixed spreadsheet bug "updater fails"
 -Attemped fix for incompatibility bug
