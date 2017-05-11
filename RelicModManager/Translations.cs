@@ -41,7 +41,7 @@ namespace RelhaxModpack
             //Componet: installRelhaxMod
             //The button for installing the modpack
             english.Add("installRelhaxMod", "Start Mod Selection");
-            german.Add("installRelhaxMod", "Auswahl der Änderungen");
+            german.Add("installRelhaxMod", "Auswahl der Modifikationen");
 
             //Componet: uninstallRelhaxMod
             //
