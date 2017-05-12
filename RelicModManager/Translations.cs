@@ -606,6 +606,21 @@ namespace RelhaxModpack
             //
             english.Add("InstallingTo", "Installing to");
             german.Add("InstallingTo", "Installiere nach");
+
+            //Componet:
+            //
+            english.Add("zipReadingErrorHeader", "Incomplete Download");
+            german.Add("zipReadingErrorHeader", "Installiere nach");
+
+            //Componet:
+            //
+            english.Add("zipReadingErrorMessage1", "The zip file");
+            german.Add("zipReadingErrorMessage1", "Installiere nach");
+
+            //Componet:
+            //
+            english.Add("zipReadingErrorMessage2", "failed to be read, most likely to an incomplete download. It will be skipped. Please try downloading again.");
+            german.Add("zipReadingErrorMessage2", "Installiere nach");
         }
     }
 }

@@ -43,10 +43,7 @@ namespace RelhaxModpack
         //ZipFile zip;
         //timer to measure download speed
         Stopwatch sw = new Stopwatch();
-        //private string downloadURL = "http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/";
-        //private string downloadURL = "http://www.mediafire.com/file/b9o3d8gyfcc7zyy/";
-        //http://www.mediafire.com/file/b9o3d8gyfcc7zyy/Tank_Skin_Packs_HitZone_Skins_black_white_by_Mr.13_0.9.17.0.1_2016-12-13.zip
-        //private string downloadURL = "https://www.dropbox.com/s/l9tanod0z9cr8qy/";
+        //private string downloadURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/mods/";
         private List<Catagory> parsedCatagoryLists;
         private List<Mod> modsToInstall;
         private List<Config> configsToInstall;
@@ -474,7 +471,7 @@ namespace RelhaxModpack
                     //Settings.extractEmbeddedResource(tanksLocation + "\\_fonts", "RelhaxModpack", new List<string>() { "FontReg.exe" });
                     try
                     {
-                        downloader.DownloadFile("http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/external/FontReg.exe", Application.StartupPath + "\\_fonts\\FontReg.exe");
+                        downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/FontReg.exe", Application.StartupPath + "\\_fonts\\FontReg.exe");
                     }
                     catch (WebException)
                     {
@@ -537,7 +534,7 @@ namespace RelhaxModpack
             updater.Proxy = null;
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
             if (File.Exists(versionSaveLocation)) File.Delete(versionSaveLocation);
-            string version = updater.DownloadString("http://willster419.atwebpages.com/Applications/RelHaxModPack/manager version.txt");
+            string version = updater.DownloadString("http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt");
             versionSave = version;
             if (!version.Equals(managerVersion))
             {
@@ -556,7 +553,7 @@ namespace RelhaxModpack
                     updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
                     updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
                     if (File.Exists(newExeName)) File.Delete(newExeName);
-                    updater.DownloadFileAsync(new Uri("http://willster419.atwebpages.com/Applications/RelHaxModPack/RelhaxModpack.exe"), newExeName);
+                    updater.DownloadFileAsync(new Uri("http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe"), newExeName);
                     Settings.appendToLog("New application download started");
                     currentModDownloading = "update ";
                 }
@@ -587,7 +584,7 @@ namespace RelhaxModpack
                 //Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "RelicCopyUpdate.bat" });
                 try
                 {
-                    downloader.DownloadFile("http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/external/RelicCopyUpdate.bat", Application.StartupPath + "\\RelicCopyUpdate.bat");
+                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/RelicCopyUpdate.bat", Application.StartupPath + "\\RelicCopyUpdate.bat");
                 }
                 catch (WebException)
                 {
@@ -653,26 +650,42 @@ namespace RelhaxModpack
             //create a filestream to append installed files log data
             using (FileStream fs = new FileStream(tanksLocation + "\\installedRelhaxFiles.log", FileMode.Append, FileAccess.Write))
             {
-                using (ZipFile zip = new ZipFile(zipFile))
+                try
                 {
-                    //hacks to get it to lag less possibly
-                    //zip.BufferSize = 65536*16; //1MB buffer
-                    //zip.CodecBufferSize = 65536*16; //1MB buffer
-                    //zip.ParallelDeflateThreshold = -1; //single threaded
-                    //for this zip file instance, for each entry in the zip file,
-                    //change the "versiondir" path to this version of tanks
-                    childMaxProgres = zip.Entries.Count;
-                    for (int i = 0; i < zip.Entries.Count; i++)
+                    using (ZipFile zip = new ZipFile(zipFile))
                     {
-                        if (Regex.IsMatch(zip[i].FileName, "versiondir"))
+                        //hacks to get it to lag less possibly
+                        //zip.BufferSize = 65536*16; //1MB buffer
+                        //zip.CodecBufferSize = 65536*16; //1MB buffer
+                        //zip.ParallelDeflateThreshold = -1; //single threaded
+                        //for this zip file instance, for each entry in the zip file,
+                        //change the "versiondir" path to this version of tanks
+                        childMaxProgres = zip.Entries.Count;
+                        for (int i = 0; i < zip.Entries.Count; i++)
                         {
-                            zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", thisVersion);
+                            if (Regex.IsMatch(zip[i].FileName, "versiondir"))
+                            {
+                                zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", thisVersion);
+                            }
+                            //put the entries on disk
+                            fs.Write(Encoding.UTF8.GetBytes(zip[i].FileName + "\n"), 0, Encoding.UTF8.GetByteCount(zip[i].FileName + "\n"));
                         }
-                        //put the entries on disk
-                        fs.Write(Encoding.UTF8.GetBytes(zip[i].FileName + "\n"), 0, Encoding.UTF8.GetByteCount(zip[i].FileName + "\n"));
+                        zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
+                        zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
                     }
-                    zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
-                    zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
+                }
+                catch (ZipException e)
+                {
+                    //append the exception to the log
+                    Settings.appendToLog("EXCEPTION: ZipException (call stack traceback)");
+                    Settings.appendToLog(e.StackTrace);
+                    Settings.appendToLog("inner message: " + e.Message);
+                    Settings.appendToLog("source: " + e.Source);
+                    Settings.appendToLog("target: " + e.TargetSite);
+                    //show the error message
+                    MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + Path.GetFileName(zipFile) + Translations.getTranslatedString("zipReadingErrorMessage2"), Translations.getTranslatedString("zipReadingErrorHeader"));
+                    //exit the application
+                    //Application.Exit();
                 }
                 //fs.Dispose();
             }
@@ -799,7 +812,7 @@ namespace RelhaxModpack
                 //Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "DotNetZip.dll" });
                 try
                 {
-                    downloader.DownloadFile("http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/external/DotNetZip.dll", Application.StartupPath + "\\DotNetZip.dll");
+                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll", Application.StartupPath + "\\DotNetZip.dll");
                 }
                 catch (WebException)
                 {
@@ -813,7 +826,7 @@ namespace RelhaxModpack
                 //Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "Newtonsoft.Json.dll" });
                 try
                 {
-                    downloader.DownloadFile("http://willster419.atwebpages.com/Applications/RelHaxModPack/Resources/external/Newtonsoft.Json.dll", Application.StartupPath + "\\Newtonsoft.Json.dll");
+                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll", Application.StartupPath + "\\Newtonsoft.Json.dll");
                 }
                 catch (WebException)
                 {
