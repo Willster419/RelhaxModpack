@@ -8718,13 +8718,13 @@
             </config>
             <config>
               <name>Blue</name>
-              <configzipfile>Custom_Tank_Skins_Skin_G114_Rheinmetall_Skorpian_blue_v1.2_PeNeTrAtOrX_0.9.17.0.zip</configzipfile>
+              <configzipfile>Custom_Tank_Skins_Skin_G114_Rheinmetall_Skorpian_blue_v1.3.1_PeNeTrAtOrX_0.9.18.0.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>2c8dc4b3faf85bb35275db2e9e8370fa</configzipcrc>
-              <size>31.4</size>
-              <configenabled>True</configenabled>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>False</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
@@ -8781,7 +8781,7 @@
               </endAddress>
               <configzipcrc>11ce325de17446324663ea7ceff3f00f</configzipcrc>
               <size>33.8</size>
-              <configenabled>True</configenabled>
+              <configenabled>False</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
