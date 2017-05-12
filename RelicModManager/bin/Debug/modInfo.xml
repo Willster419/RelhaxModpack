@@ -8724,7 +8724,7 @@
               </endAddress>
               <configzipcrc>f</configzipcrc>
               <size>0</size>
-              <configenabled>False</configenabled>
+              <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
