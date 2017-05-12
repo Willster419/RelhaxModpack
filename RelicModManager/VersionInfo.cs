@@ -40,7 +40,7 @@ namespace RelhaxModpack
             //download the latest release notes
             Application.DoEvents();
             WebClient wc = new WebClient();
-            downloadedVersionInfo.Text = wc.DownloadString("http://willster419.atwebpages.com/Applications/RelHaxModPack/releaseNotes.txt");
+            downloadedVersionInfo.Text = wc.DownloadString("http://wotmods.relhaxmodpack.com/RelhaxModpack/releaseNotes.txt");
             Settings.setUIColor(this);
             Application.DoEvents();
         }
