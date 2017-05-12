@@ -1,3 +1,9 @@
+Version 22.1.0:
+-We have moved to a new permanent web hoster, with 30x faster download speeds, a forms site, and an official website!
+-Fixed a bug with the mod preview window dev link being cut off
+-Moved the resolution text display in modSelectionList
+-Updated translations
+
 Version 22.0.4:
 -moved location of "WoT" version in ModSelectionList
 -changed "Install Modpack" button to "Select Mods" button. The "Continue" button is not the "Install" button.

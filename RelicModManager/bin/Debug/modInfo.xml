@@ -5636,7 +5636,7 @@
               <name>Damage Only</name>
               <configzipfile>
               </configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <startAddress></startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>
@@ -5958,7 +5958,7 @@
           <configs>
             <config>
               <name>MLG</name>
-              <configzipfile>Ingame_Info_MLG_Loading_Video_0.9.15_2016-06-11.zip</configzipfile>
+              <configzipfile>Garage_mods_MLG_Loading_Video_0.9.15_2016-06-11.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -5971,7 +5971,7 @@
             </config>
             <config>
               <name>GuP</name>
-              <configzipfile>Ingame_Misc_GuP_LoadingVideo_0.9.16.zip</configzipfile>
+              <configzipfile>Garage_mods_GuP_LoadingVideo_0.9.16.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -6000,7 +6000,7 @@
           </startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc>f
+          <modzipcrc>
           </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
@@ -6098,7 +6098,7 @@
           <configs>
             <config>
               <name>Illuminati by Aimdrol</name>
-              <configzipfile>Ingame_Info_loading_animation_illuminati_by_Aimdrol.zip</configzipfile>
+              <configzipfile>Garage_mods_loading_animation_illuminati_by_Aimdrol.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -6115,7 +6115,7 @@
             </config>
             <config>
               <name>OMC by Technowolf (RIP OMC)</name>
-              <configzipfile>Ingame_Info_loading_animation_OMC_by_Technowolf.zip</configzipfile>
+              <configzipfile>Garage_mods_loading_animation_OMC_by_Technowolf.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -6156,7 +6156,7 @@
           <configs>
             <config>
               <name>CoD by Aimdrol</name>
-              <configzipfile>Ingame_Info_CS_GO_mlg_marks_results_0.9.17.0.zip</configzipfile>
+              <configzipfile>Garage_mods_CS_GO_mlg_marks_results_0.9.17.0.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
@@ -6212,7 +6212,7 @@
           <name>Research Watchdog Without Free Experience</name>
           <version>
           </version>
-          <modzipfile>Ingame_Info_research_watchdog_2017_03_03.zip</modzipfile>
+          <modzipfile>Garage_mods_research_watchdog_2017_03_03.zip</modzipfile>
           <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
@@ -6231,7 +6231,7 @@
           <configs>
             <config>
               <name>With Free Experience</name>
-              <configzipfile>Ingame_info_research_watchdog_config_2017_04_26.zip</configzipfile>
+              <configzipfile>Garage_mods_research_watchdog_config_2017_04_26.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>

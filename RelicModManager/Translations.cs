@@ -41,7 +41,7 @@ namespace RelhaxModpack
             //Componet: installRelhaxMod
             //The button for installing the modpack
             english.Add("installRelhaxMod", "Start Mod Selection");
-            german.Add("installRelhaxMod", "Auswahl der Modifikationen");
+            german.Add("installRelhaxMod", "Auswahl der Mods");
 
             //Componet: uninstallRelhaxMod
             //
@@ -610,16 +610,16 @@ namespace RelhaxModpack
             //Componet:
             //
             english.Add("zipReadingErrorHeader", "Incomplete Download");
-            german.Add("zipReadingErrorHeader", "Installiere nach");
+            german.Add("zipReadingErrorHeader", "Unvollstaendiger Download");
 
             //Componet:
             //
             english.Add("zipReadingErrorMessage1", "The zip file");
-            german.Add("zipReadingErrorMessage1", "Installiere nach");
+            german.Add("zipReadingErrorMessage1", "Die Zip-Datei");
 
             //Componet:
             //
-            english.Add("zipReadingErrorMessage2", "failed to be read, most likely to an incomplete download. It will be skipped. Please try downloading again.");
+            english.Add("zipReadingErrorMessage2", "konnte nicht gelesen werden, da es hoechstwahrscheinlich ein unvollständiger Download ist. Dies wird uebersprungen. Bitte versuche es spaeter erneut herungerzuladen.");
             german.Add("zipReadingErrorMessage2", "Installiere nach");
         }
     }

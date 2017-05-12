@@ -125,7 +125,7 @@ namespace RelhaxModpack
             this.applyTranslations();
             pw.loadingDescBox.Text = Translations.getTranslatedString("readingDatabase");
             Application.DoEvents();
-            string databaseURL = "http://willster419.atwebpages.com/Applications/RelHaxModPack/modInfo_" + tanksVersion + ".xml";
+            string databaseURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/modInfo_" + tanksVersion + ".xml";
             if (Program.testMode)
                 databaseURL = "modInfo.xml";
             this.createModStructure2(databaseURL);
