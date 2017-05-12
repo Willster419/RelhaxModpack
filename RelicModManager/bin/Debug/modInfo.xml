@@ -5636,7 +5636,8 @@
               <name>Damage Only</name>
               <configzipfile>
               </configzipfile>
-              <startAddress></startAddress>
+              <startAddress>
+              </startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>
@@ -8722,8 +8723,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>641b55d8a317fc38399e60f0f301a700</configzipcrc>
+              <size>26.6</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
