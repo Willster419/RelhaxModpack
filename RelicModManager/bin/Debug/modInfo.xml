@@ -6139,6 +6139,46 @@
           </devURL>
         </mod>
         <mod>
+          <name>Medals</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>with Effect of Glass</name>
+              <configzipfile>Garage_mods_Medals_with_Effect_of_Glass.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>https://mod-wot.com/_ld/0/36054156.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>Changes the medals with the Effect under the glass.</description>
+          <updateComment>
+          </updateComment>
+          <devURL>https://mod-wot.com/load/official_mods_for_world_of_tanks_wot/a_new_kind_of_medals_with_the_effect_under_the_glass_mod_for_world_of_tanks/2-1-0-42</devURL>
+        </mod>
+        <mod>
           <name>Mastery Badges</name>
           <version>
           </version>
