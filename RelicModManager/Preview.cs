@@ -113,8 +113,6 @@ namespace RelhaxModpack
             pictureCountPanel.Location = new Point(12 + previousPicButton.Size.Width + 12, 12 + previewPicture.Size.Height + 6);
             pictureCountPanel.Size = new Size(width - pictureCountPanel.Location.X - nextPicButton.Size.Width - 4, pictureCountPanel.Size.Height);
             devLinkLabel.Location = new Point(this.Size.Width - 12 - devLinkLabel.Size.Width -4, applicationHeight - 49 - difference);
-            if (this.Size.Height < 700) this.Size = new Size(this.Size.Width, 700);
-            if (this.Size.Width < 450) this.Size = new Size(450, this.Size.Height);
         }
         //applies translations
         private void applyTranslations()
@@ -165,6 +163,8 @@ namespace RelhaxModpack
             this.Preview_SizeChanged(null, null);
             this.Size = new Size(450, 700);
             Settings.setUIColor(this);
+            //specify the start location
+            this.Location = new Point(Settings.previewX, Settings.previewY);
         }
 
         private void descriptionBox_LinkClicked(object sender, LinkClickedEventArgs e)
@@ -183,6 +183,12 @@ namespace RelhaxModpack
                 this.WindowState = FormWindowState.Maximized;
             else
                 this.WindowState = FormWindowState.Normal;
+        }
+
+        private void Preview_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Settings.previewX = this.Location.X;
+            Settings.previewY = this.Location.Y;
         }
     }
 }

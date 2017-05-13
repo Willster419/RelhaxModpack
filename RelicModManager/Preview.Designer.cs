@@ -45,7 +45,7 @@
             this.descriptionBox.Name = "descriptionBox";
             this.descriptionBox.ReadOnly = true;
             this.descriptionBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.descriptionBox.Size = new System.Drawing.Size(378, 75);
+            this.descriptionBox.Size = new System.Drawing.Size(418, 75);
             this.descriptionBox.TabIndex = 0;
             this.descriptionBox.Text = "";
             this.descriptionBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.descriptionBox_LinkClicked);
@@ -55,7 +55,7 @@
             this.previewPicture.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.previewPicture.Location = new System.Drawing.Point(12, 12);
             this.previewPicture.Name = "previewPicture";
-            this.previewPicture.Size = new System.Drawing.Size(378, 309);
+            this.previewPicture.Size = new System.Drawing.Size(418, 309);
             this.previewPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.previewPicture.TabIndex = 1;
             this.previewPicture.TabStop = false;
@@ -63,7 +63,7 @@
             // 
             // nextPicButton
             // 
-            this.nextPicButton.Location = new System.Drawing.Point(315, 327);
+            this.nextPicButton.Location = new System.Drawing.Point(355, 327);
             this.nextPicButton.Name = "nextPicButton";
             this.nextPicButton.Size = new System.Drawing.Size(75, 23);
             this.nextPicButton.TabIndex = 2;
@@ -86,13 +86,13 @@
             this.pictureCountPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureCountPanel.Location = new System.Drawing.Point(93, 327);
             this.pictureCountPanel.Name = "pictureCountPanel";
-            this.pictureCountPanel.Size = new System.Drawing.Size(216, 23);
+            this.pictureCountPanel.Size = new System.Drawing.Size(256, 23);
             this.pictureCountPanel.TabIndex = 5;
             // 
             // devLinkLabel
             // 
             this.devLinkLabel.AutoSize = true;
-            this.devLinkLabel.Location = new System.Drawing.Point(292, 496);
+            this.devLinkLabel.Location = new System.Drawing.Point(332, 496);
             this.devLinkLabel.Name = "devLinkLabel";
             this.devLinkLabel.Size = new System.Drawing.Size(98, 13);
             this.devLinkLabel.TabIndex = 7;
@@ -106,7 +106,7 @@
             this.updateBox.Name = "updateBox";
             this.updateBox.ReadOnly = true;
             this.updateBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.updateBox.Size = new System.Drawing.Size(378, 56);
+            this.updateBox.Size = new System.Drawing.Size(418, 56);
             this.updateBox.TabIndex = 8;
             this.updateBox.Text = "";
             this.updateBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.updateBox_LinkClicked);
@@ -115,7 +115,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(442, 673);
+            this.ClientSize = new System.Drawing.Size(442, 667);
             this.Controls.Add(this.updateBox);
             this.Controls.Add(this.devLinkLabel);
             this.Controls.Add(this.pictureCountPanel);
@@ -124,8 +124,10 @@
             this.Controls.Add(this.previewPicture);
             this.Controls.Add(this.descriptionBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(450, 700);
             this.Name = "Preview";
             this.Text = "Preview";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Preview_FormClosing);
             this.Load += new System.EventHandler(this.Preview_Load);
             this.SizeChanged += new System.EventHandler(this.Preview_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.previewPicture)).EndInit();

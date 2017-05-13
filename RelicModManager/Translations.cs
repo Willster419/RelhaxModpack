@@ -142,7 +142,7 @@ namespace RelhaxModpack
 
             //Componet: cancelButton
             //
-            english.Add("cancelButton", "cancel");
+            english.Add("cancelButton", "Cancel");
             german.Add("cancelButton", "Abbrechen");
 
             //Componet: helpLabel
@@ -167,7 +167,7 @@ namespace RelhaxModpack
 
             //Componet: clearSelectionsButton
             //
-            english.Add("clearSelectionsButton", "Clear Selections");
+            english.Add("clearSelectionsButton", "Clear selections");
             german.Add("clearSelectionsButton", "Auswahl loeschen");
 
             //Componet: readingDatabase
@@ -256,7 +256,7 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("status", "status:");
+            english.Add("status", "Status:");
             german.Add("status", "Status:");
 
             //Componet: 
