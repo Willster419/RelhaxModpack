@@ -4793,7 +4793,7 @@
               <dependencies />
             </config>
             <config>
-              <name>wn8 and damage</name>
+              <name>wn8 and damage with Last Hit Damage</name>
               <configzipfile>Ingame_Info_InBattle_Rating_WN8_Damage_2017_04_16.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
@@ -4805,6 +4805,23 @@
               <pictures>
                 <picture>
                   <URL>http://i.imgur.com/eQdm4MK.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+           <config>
+              <name>wn8 and damage without Last Hit Damage</name>
+              <configzipfile>Ingame_Info_InBattle_Rating_WN8_Damage_without_LastHit_2017_05_09.zip</configzipfile>
+              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL></URL>
                 </picture>
               </pictures>
               <dependencies />
