@@ -6551,9 +6551,32 @@
               </pictures>
               <dependencies />
             </config>
+            <config>
+              <name>Techtree Mod horizontal and vertical (English Settings)</name>
+              <configzipfile>Garage_mods_Interface_by_P_H_A_R_A_O_N_Techtree_horizontal_vertikal_0.9.18.0_2017-05-14.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i1228.photobucket.com/albums/ee455/dirty20067/OMC%20Modpack/Techtree%20Settings_zpsv8kh9mag.jpg</URL>
+                </picture>
+                <picture>
+                  <URL>http://i1228.photobucket.com/albums/ee455/dirty20067/OMC%20Modpack/Techtree%20horizontal_zpsq6mtkwjb.jpg</URL>
+                </picture>
+                <picture>
+                  <URL>http://i1228.photobucket.com/albums/ee455/dirty20067/OMC%20Modpack/Techtree%20vertical_zpswwtuxfjt.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
           </configs>
           <dependencies />
-          <description>Changes the complete Interface of WoT. @Its looking a little bit other like the pictures shows you, because old pictures.</description>
+          <description>Interface by Pharaon: Changes the complete Interface of WoT. Its looking a little bit other, because the pictures arent up-to-date. @Techtree Mod: There are different settings, so you can style your own Techtree like you want. It could be horizontal and vertical. The choice is yours.</description>
           <updateComment>
           </updateComment>
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/541231-interface-for-09180-by-p-h-a-r-a-o-n//</devURL>
