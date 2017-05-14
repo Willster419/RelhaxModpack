@@ -5364,12 +5364,12 @@
         <mod>
           <name>Battle Observer (HP pools)</name>
           <version>1.7</version>
-          <modzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-03-14.zip</modzipfile>
+          <modzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-05-14.zip</modzipfile>
           <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc>b37c8090bd6951cdee37c56506caca34</modzipcrc>
-          <size>0.2</size>
+          <modzipcrc>f</modzipcrc>
+          <size>0</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>
@@ -5379,39 +5379,52 @@
           </pictures>
           <configs>
             <config>
-              <name>Enable High Caliber Display</name>
-              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-03-14_show_high_caliber.zip</configzipfile>
+              <name>By Armagomen</name>
+              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-05-14_xvm_disable_patch.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>48f50c25dcc9fff8675da2a5287a9da9</configzipcrc>
-              <size>0.1</size>
-              <configenabled>False</configenabled>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Enable High Caliber Display (possible xvm conflict)</name>
+              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-05-14_show_high_caliber_patch.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
             </config>
             <config>
               <name>Show player spotted status in panels (possible xvm conflict)</name>
-              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-03-14_show_spotted_status.zip</configzipfile>
+              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-05-14_show_spotted_status_patch.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>3c5fa27a2cf4623a7e94218dcf07a878</configzipcrc>
-              <size>0.1</size>
-              <configenabled>False</configenabled>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
             </config>
             <config>
               <name>Enable Players info panel (when you press left alt)</name>
-              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-03-14_show_players_info_panel.zip</configzipfile>
+              <configzipfile>Ingame_Info_Battle_Observer_by_armagomen_2017-05-14_show_players_info_panel_patch.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>ef8a226c79067b02bad4375a56488b1b</configzipcrc>
-              <size>0.1</size>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
