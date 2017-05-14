@@ -6407,6 +6407,50 @@
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/439322-09180-hangar-manager-hangman/</devURL>
         </mod>
         <mod>
+          <name>Hangars</name>
+          <version>
+          </version>
+          <modzipfile></modzipfile>
+          <startAddress></startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>f</modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>WoTSpeak</name>
+              <configzipfile>Garage_Mods_Hangar_Wotspeak_2017-05-14.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://worldof-tanks.com/wp-content/uploads/2017/03/8755-580x324.png</URL>
+                </picture>
+                <picture>
+                  <URL>http://worldof-tanks.com/wp-content/uploads/2017/03/87735-580x329.png</URL>
+                </picture>
+                <picture>
+                  <URL>http://worldof-tanks.com/wp-content/uploads/2017/03/787-580x329.png</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>Changes your hangar to whatever style you like!</description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://worldof-tanks.com/hangar-wotspeak-for-world-of-tanks/</devURL>
+        </mod>
+        <mod>
           <name>Mastery Badges</name>
           <version>
           </version>
