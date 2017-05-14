@@ -6457,6 +6457,19 @@
               <dependencies />
             </config>
             <config>
+              <name>Cave - Flag Germany</name>
+              <configzipfile>Garage_mods_Hangar_Cave_German_Flag_2017-05-14.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
               <name>WoTSpeak</name>
               <configzipfile>Garage_Mods_Hangar_Wotspeak_2017-05-14.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -6481,7 +6494,7 @@
             </config>
           </configs>
           <dependencies />
-          <description>Changes your hangar! @Cave: http://worldof-tanks.com/technology-hangar/ @WotSpeak: http://worldof-tanks.com/hangar-wotspeak-for-world-of-tanks/</description>
+          <description>Changes your hangar! @Cave with different Flags: http://worldof-tanks.com/technology-hangar/ @WotSpeak: http://worldof-tanks.com/hangar-wotspeak-for-world-of-tanks/</description>
           <updateComment>
           </updateComment>
           <devURL></devURL>
