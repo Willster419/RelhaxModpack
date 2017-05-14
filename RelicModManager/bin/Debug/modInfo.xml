@@ -6437,6 +6437,26 @@
           <pictures />
           <configs>
             <config>
+              <name>Cave - Flag USA</name>
+              <configzipfile>Garage_mods_Hangar_Cave_USA_2017-05-14.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://worldof-tanks.com/wp-content/uploads/2013/12/shot_032-400x225.jpg</URL>
+                </picture>
+                <picture>
+                  <URL>http://worldof-tanks.com/wp-content/uploads/2013/12/shot_031-400x225.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
               <name>WoTSpeak</name>
               <configzipfile>Garage_Mods_Hangar_Wotspeak_2017-05-14.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -6461,10 +6481,10 @@
             </config>
           </configs>
           <dependencies />
-          <description>Changes your hangar to whatever style you like!</description>
+          <description>Changes your hangar! @Cave: http://worldof-tanks.com/technology-hangar/ @WotSpeak: http://worldof-tanks.com/hangar-wotspeak-for-world-of-tanks/</description>
           <updateComment>
           </updateComment>
-          <devURL>http://worldof-tanks.com/hangar-wotspeak-for-world-of-tanks/</devURL>
+          <devURL></devURL>
         </mod>
         <mod>
           <name>Mastery Badges</name>
