@@ -6513,8 +6513,8 @@
           <devURL></devURL>
         </mod>
         <mod>
-          <name>Interface (English)</name>
-          <version>
+          <name>Interface for WoT(English)</name>
+          <version>0.9.18.0
           </version>
           <modzipfile>
           </modzipfile>
@@ -6537,7 +6537,7 @@
               <configzipcrc>f</configzipcrc>
               <size>0</size>
               <configenabled>True</configenabled>
-              <configtype>single</configtype>
+              <configtype>single1</configtype>
               <pictures>
                 <picture>
                   <URL>http://s8.hostingkartinok.com/uploads/images/2016/02/923c167f44b50843da30a52b355cf575.jpg</URL>
@@ -6552,15 +6552,15 @@
               <dependencies />
             </config>
             <config>
-              <name>Techtree Mod horizontal and vertical (English Settings)</name>
-              <configzipfile>Garage_mods_Interface_by_P_H_A_R_A_O_N_Techtree_horizontal_vertikal_0.9.18.0_2017-05-14.zip</configzipfile>
+              <name>Techtree Mod (English Settings)</name>
+              <configzipfile>Garage_mods_Interface_by_P_H_A_R_A_O_N_Techtree_horizontal_vertical_English_0.9.18.0_2017-05-14.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>f</configzipcrc>
               <size>0</size>
               <configenabled>True</configenabled>
-              <configtype>multi</configtype>
+              <configtype>single2</configtype>
               <pictures>
                 <picture>
                   <URL>http://i1228.photobucket.com/albums/ee455/dirty20067/OMC%20Modpack/Techtree%20Settings_zpsv8kh9mag.jpg</URL>
@@ -6574,12 +6574,25 @@
               </pictures>
               <dependencies />
             </config>
+            <config>
+              <name>Techtree Mod (German Settings)</name>
+              <configzipfile>Garage_mods_Interface_by_P_H_A_R_A_O_N_Techtree_horizontal_vertical_German_0.9.18.0_2017-05-14.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single2</configtype>
+              <pictures />
+              <dependencies />
+            </config>
           </configs>
           <dependencies />
-          <description>Interface by Pharaon: Changes the complete Interface of WoT. Its looking a little bit other, because the pictures arent up-to-date. @Techtree Mod: There are different settings, so you can style your own Techtree like you want. It could be horizontal and vertical. The choice is yours.</description>
+          <description>Interface for WoT (English) by ____P_H_A_R_A_O_N____: @Changes the complete Interface of WoT. Its looking pretty cool, nice colours. Just Test It. @@Techtree Mod (with Settings in English and German): @Mainfeatures: @- 11 different Layout options (8 vertical, 3 horizontal) @- 5 graphic options @- Show hidden, removed Premium and special tanks in techtree @- Geniesse ueber 490 tanks in your techtree @- Nice, centered nations button bar @- Compatiblity with all screen resolutions @- In-game UI mod settings (press F8 key for Changes, press F7 key for reloading Data base) @- Allows preview and tank compare features for all tanks in game @@Because there are different options, you can style the Techtree using different combinations.</description>
           <updateComment>
           </updateComment>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/541231-interface-for-09180-by-p-h-a-r-a-o-n//</devURL>
+          <devURL>http://forum.worldoftanks.eu/index.php?/topic/541231-interface-for-09180-by-p-h-a-r-a-o-n/</devURL>
         </mod>
         <mod>
           <name>Mastery Badges</name>
