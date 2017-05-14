@@ -6513,6 +6513,52 @@
           <devURL></devURL>
         </mod>
         <mod>
+          <name>Interface (English)</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>by PHARAON</name>
+              <configzipfile>Garage_mods_Interface_by_P_H_A_R_A_O_N_0.9.18.0_2017-05-14.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://s8.hostingkartinok.com/uploads/images/2016/02/923c167f44b50843da30a52b355cf575.jpg</URL>
+                </picture>
+                <picture>
+                  <URL>http://s8.hostingkartinok.com/uploads/images/2016/02/ffbfa3edd1e0a26235833fd1e6658711.jpg</URL>
+                </picture>
+                <picture>
+                  <URL>http://s8.hostingkartinok.com/uploads/images/2016/02/89126f7256e63a7f9b994f98cb4aa737.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>Changes the complete Interface of WoT. @Its looking a little bit other like the pictures shows you, because old pictures.</description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://forum.worldoftanks.eu/index.php?/topic/541231-interface-for-09180-by-p-h-a-r-a-o-n//</devURL>
+        </mod>
+        <mod>
           <name>Mastery Badges</name>
           <version>
           </version>
