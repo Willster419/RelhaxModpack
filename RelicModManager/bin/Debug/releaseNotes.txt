@@ -4,6 +4,8 @@ Version 22.2.0:
 -Moved the loading window to a visable location, so it's not shown behind the main window
 -The ModSelectionList window now remembers if the application was fullscreen
 -The preview window now remembers where you last closed it
+-Improved debug log output
+-Fixed bugs when only "user mods" are being installed
 -Updated translations
 
 Version 22.1.0:
