@@ -6181,12 +6181,28 @@
               </pictures>
               <dependencies />
             </config>
+            <config>
+              <name>Minions</name>
+              <configzipfile>Garage_mods_Crew_Icons_Minions_2017-05-14.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress></endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i59.tinypic.com/wgvsyu.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
           </configs>
           <dependencies />
-          <description></description>
+          <description>Anime: https://mod-wot.com/load/icons_for_world_of_tanks_wot/anime_crew_icons_for_world_of_tanks/7-1-0-341 @Minions http://forum.worldoftanks.eu/index.php?/topic/426145-0916-minion-crew-mod/#topmost</description>
           <updateComment>
           </updateComment>
-          <devURL>https://mod-wot.com/load/icons_for_world_of_tanks_wot/anime_crew_icons_for_world_of_tanks/7-1-0-341</devURL>
+          <devURL></devURL>
         </mod>
         <mod>
           <name>Replay Manager</name>
