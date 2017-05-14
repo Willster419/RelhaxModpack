@@ -4502,8 +4502,8 @@
           <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc>a670241168676533192ca08d4e30d496</modzipcrc>
-          <size>0.1</size>
+          <modzipcrc>f</modzipcrc>
+          <size>0</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures />
