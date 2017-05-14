@@ -78,7 +78,7 @@
   <!-- relative to World_of_Tanks directory -->
   <!-- Use "versiondir" as the placeholder for the world of tanks mods folder version e.g. 0.9.17.1 -->
   <!-- NOTE: XVM config files ".xc" are json and should be patched with this method -->
-  <file>\\configs\\folder\\mod_autoaim_indicator.json</file>
+  <file>\\res_mods\\configs\\folder\\mod_autoaim_indicator.json</file>
   
   <!-- the location of the json value to patch, jsonpath style -->
   <!-- jsonpath information: http://goessner.net/articles/JsonPath/ -->

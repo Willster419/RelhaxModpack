@@ -265,6 +265,16 @@ namespace RelhaxModpack
                 }
                 else if (state == InstallState.extractUserMods)
                 {
+                    //check for clean installation first
+                    if (Settings.cleanInstallation)
+                    {
+                        state = InstallState.deleteResMods;
+                        Settings.appendToLog("CleanInstallCB checked, running backgroundDelete(" + tanksLocation + "\\res_mods)");
+                        //delete everything in res_mods
+                        if (Directory.Exists(tanksLocation + "\\res_mods")) this.backgroundDelete(tanksLocation + "\\res_mods");
+                        return;
+                    }
+                    Settings.appendToLog("CleanInstallCB not checked, moving to extraction");
                     this.backgroundExtract(true);
                     return;
                 }
@@ -283,7 +293,17 @@ namespace RelhaxModpack
             //Settings.appendToLog("Starting to patch Relhax Mod Pack");
             //don't do anything if the file does not exist
             if (!Directory.Exists(tanksLocation + @"\_patch"))
+            {
+                if (state == InstallState.patchRelhaxMods)
+                {
+                    Settings.appendToLog("Patching done for Relhax Mod Pack Mods");
+                }
+                else if (state == InstallState.patchUserMods)
+                {
+                    Settings.appendToLog("Patching done for Relhax User Mods");
+                } 
                 return;
+            }
             //Give the OS time to process the folder change...
             System.Threading.Thread.Sleep(100);
             //set the folder properties to read write
@@ -382,7 +402,14 @@ namespace RelhaxModpack
             //all done, delete the patch folder
             if (Directory.Exists(tanksLocation + "\\_patch"))
                 Directory.Delete(tanksLocation + "\\_patch", true);
-            Settings.appendToLog("Patching done for Relhax Mod Pack");
+            if (state == InstallState.patchRelhaxMods)
+            {
+                Settings.appendToLog("Patching done for Relhax Mod Pack Mods");
+            }
+            else if (state == InstallState.patchUserMods)
+            {
+                Settings.appendToLog("Patching done for Relhax User Mods");
+            } 
         }
         //installs all fonts in the fonts folder, user and custom
         private void installFonts()
@@ -391,6 +418,7 @@ namespace RelhaxModpack
             speedLabel.Text = Translations.getTranslatedString("installingFonts") + "...";
             if (!Directory.Exists(tanksLocation + "\\_fonts"))
             {
+                Settings.appendToLog("No fonts to install");
                 //no fonts to install, done display
                 speedLabel.Text = "";
                 downloadProgress.Text = Translations.getTranslatedString("done");
@@ -406,6 +434,7 @@ namespace RelhaxModpack
             if (fonts.Count() == 0)
             {
                 //done display
+                Settings.appendToLog("No fonts to install");
                 speedLabel.Text = "";
                 downloadProgress.Text = Translations.getTranslatedString("done");
                 parrentProgressBar.Maximum = 1;
@@ -442,6 +471,7 @@ namespace RelhaxModpack
             //re-check the fonts to install list
             if (fontsList.Count == 0)
             {
+                Settings.appendToLog("No fonts to install");
                 //done display
                 speedLabel.Text = "";
                 downloadProgress.Text = Translations.getTranslatedString("done");
@@ -1614,6 +1644,8 @@ namespace RelhaxModpack
             //if the user did not select any relhax modpack mods to install
             if (modsToInstall.Count == 0 && configsToInstall.Count == 0)
             {
+                //clear any dependencies since this is a user mod only installation
+                dependencies.Clear();
                 //check for userMods
                 if (userMods.Count > 0)
                 {
@@ -2046,7 +2078,7 @@ namespace RelhaxModpack
                         extractworker.ReportProgress(1);
                     }
                 }
-                Settings.appendToLog("Finished Extracting Relhax Modpack User Mod Extraction");
+                Settings.appendToLog("Finished Relhax Modpack User Mod Extraction");
             }
 
         }
