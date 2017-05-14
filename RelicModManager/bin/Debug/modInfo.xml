@@ -6470,6 +6470,19 @@
               <dependencies />
             </config>
             <config>
+              <name>Cave - Flag GB</name>
+              <configzipfile>Garage_mods_Hangar_Cave_GB_Flag_2017-05-14.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
               <name>WoTSpeak</name>
               <configzipfile>Garage_Mods_Hangar_Wotspeak_2017-05-14.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
