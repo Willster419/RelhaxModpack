@@ -35,6 +35,9 @@ namespace RelhaxModpack
         public const string defaultFontType = "Microsoft Sance Serif";
         public const string comicSansFontType = "Comic Sans MS";
         private static int tempLoadedLanguage = -1;
+        public static bool ModSelectionFullscreen = false;
+        public static int previewX = 0;
+        public static int previewY = 0;
         //loads settings from xml file
         public static void loadSettings()
         {
@@ -58,6 +61,9 @@ namespace RelhaxModpack
                 Settings.tempLoadedLanguage = 0;
                 Settings.modSelectionHeight = 250;
                 Settings.modSelectionWidth = 520;
+                ModSelectionFullscreen = false;
+                previewX = 0;
+                previewY = 0;
                 Settings.applyInternalSettings();
             }
             else
@@ -108,6 +114,15 @@ namespace RelhaxModpack
                             break;
                         case "language":
                             Settings.tempLoadedLanguage = int.Parse(n.InnerText);
+                            break;
+                        case "ModSelectionFullscreen":
+                            Settings.ModSelectionFullscreen = bool.Parse(n.InnerText);
+                            break;
+                        case "previewX":
+                            Settings.previewX = int.Parse(n.InnerText);
+                            break;
+                        case "previewY":
+                            Settings.previewY = int.Parse(n.InnerText);
                             break;
                     }
                 }
@@ -216,6 +231,16 @@ namespace RelhaxModpack
             XmlElement xmodSelectionWidth = doc.CreateElement("modSelectionWidth");
             xmodSelectionWidth.InnerText = "" + modSelectionWidth;
             settingsHolder.AppendChild(xmodSelectionWidth);
+            XmlElement xModSelectionFullscreen = doc.CreateElement("ModSelectionFullscreen");
+            xModSelectionFullscreen.InnerText = "" + ModSelectionFullscreen;
+            settingsHolder.AppendChild(xModSelectionFullscreen);
+            XmlElement xpreviewX = doc.CreateElement("previewX");
+            xpreviewX.InnerText = "" + previewX;
+            settingsHolder.AppendChild(xpreviewX);
+            XmlElement xpreviewY = doc.CreateElement("previewY");
+            xpreviewY.InnerText = "" + previewY;
+            settingsHolder.AppendChild(xpreviewY);
+
             doc.Save(settingsXmlFile);
             Settings.appendToLog("Settings saved sucessfully");
         }

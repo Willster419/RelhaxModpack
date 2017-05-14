@@ -25,6 +25,8 @@ namespace RelhaxModpack
         private int difference = 0;
         private string tanksVersion = "";
         private string tanksLocation = "";
+        private int mainWindowStartX = 0;
+        private int mainWindowStartY = 0;
         private enum loadConfigMode
         {
             error = -1,
@@ -95,11 +97,13 @@ namespace RelhaxModpack
             msgData.hWnd = FindWindow("System_TrayWnd", null);
             return (AppBarStates)SHAppBarMessage((UInt32)AppBarMessages.GetState, ref msgData);
         }
-        public ModSelectionList(string version, string theTanksVersion)
+        public ModSelectionList(string version, string theTanksVersion, int mainWindowX, int mainWindowY)
         {
             InitializeComponent();
             tanksVersion = version;
             tanksLocation = theTanksVersion;
+            mainWindowStartX = mainWindowX;
+            mainWindowStartY = mainWindowY;
         }
 
         private void applyTranslations()
@@ -117,7 +121,7 @@ namespace RelhaxModpack
         private void ModSelectionList_Load(object sender, EventArgs e)
         {
             //create the loading window
-            pw = new PleaseWait();
+            pw = new PleaseWait(mainWindowStartX,mainWindowStartY);
             pw.Show();
             //set the font from settings
             this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
@@ -197,6 +201,10 @@ namespace RelhaxModpack
             }
             //force a resize
             this.ModSelectionList_SizeChanged(null, null);
+            if (Settings.ModSelectionFullscreen)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
         }
         //initializes the userMods list. This should only be run once
         private void initUserMods()
@@ -2046,6 +2054,11 @@ namespace RelhaxModpack
             Settings.modSelectionWidth = this.Size.Width;
             if (taskBarHidden)
                 SetTaskbarState(AppBarStates.AutoHide);
+            //save wether the window was in fullscreen mods before closing
+            if (this.WindowState == FormWindowState.Maximized)
+                Settings.ModSelectionFullscreen = true;
+            else
+                Settings.ModSelectionFullscreen = false;
             //close the preview window if it is open
             if (p != null)
                 p.Close();

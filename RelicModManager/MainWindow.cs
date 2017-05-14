@@ -287,8 +287,7 @@ namespace RelhaxModpack
             //Give the OS time to process the folder change...
             System.Threading.Thread.Sleep(100);
             //set the folder properties to read write
-            File.SetAttributes(tanksLocation + @"\_patch", FileAttributes.Normal);
-            DirectoryInfo di = new DirectoryInfo(tanksLocation + @"\_patch");
+            DirectoryInfo di = null;
             FileInfo[] diArr = null;
             //string[] patchFilesList = null;
             bool kontinue = false;
@@ -296,6 +295,8 @@ namespace RelhaxModpack
             {
                 try
                 {
+                    File.SetAttributes(tanksLocation + @"\_patch", FileAttributes.Normal);
+                    di = new DirectoryInfo(tanksLocation + @"\_patch");
                     //get every patch file in the folder
                     //patchFilesList = Directory.GetFiles(tanksLocation + @"\_patch", @"*.xml");
                     diArr = di.GetFiles(@"*.xml", SearchOption.TopDirectoryOnly);
@@ -465,13 +466,13 @@ namespace RelhaxModpack
             }
             if (dr == DialogResult.Yes)
             {
-                
-                if (File.Exists(Application.StartupPath + "\\_fonts\\FontReg.exe"))
+
+                if (!File.Exists(tanksLocation + "\\_fonts\\FontReg.exe"))
                 {
                     //Settings.extractEmbeddedResource(tanksLocation + "\\_fonts", "RelhaxModpack", new List<string>() { "FontReg.exe" });
                     try
                     {
-                        downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/FontReg.exe", Application.StartupPath + "\\_fonts\\FontReg.exe");
+                        downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/FontReg.exe", tanksLocation + "\\_fonts\\FontReg.exe");
                     }
                     catch (WebException)
                     {
@@ -493,10 +494,23 @@ namespace RelhaxModpack
                     installFontss.Start();
                     installFontss.WaitForExit();
                 }
-                catch (Win32Exception)
+                catch (Win32Exception e)
                 {
+                    Settings.appendToLog("EXCEPTION: Win32Exception (call stack traceback)");
+                    Settings.appendToLog(e.StackTrace);
+                    Settings.appendToLog("inner message: " + e.Message);
+                    Settings.appendToLog("source: " + e.Source);
+                    Settings.appendToLog("target: " + e.TargetSite);
                     Settings.appendToLog("ERROR: could not start font installer");
-                    MessageBox.Show(Translations.getTranslatedString("fontsPromptError_1") + tanksLocation + Translations.getTranslatedString("fontsPromptError_1"));
+                    MessageBox.Show(Translations.getTranslatedString("fontsPromptError_1") + tanksLocation + Translations.getTranslatedString("fontsPromptError_2"));
+                    speedLabel.Text = "";
+                    downloadProgress.Text = Translations.getTranslatedString("done");
+                    parrentProgressBar.Maximum = 1;
+                    parrentProgressBar.Value = parrentProgressBar.Maximum;
+                    childProgressBar.Value = childProgressBar.Maximum;
+                    state = InstallState.idle;
+                    toggleUIButtons(true);
+                    Settings.appendToLog("Installation done, but fonts install failed");
                     return;
                 }
                 if (Directory.Exists(tanksLocation + "\\_fonts"))
@@ -510,6 +524,17 @@ namespace RelhaxModpack
                 toggleUIButtons(true);
                 Settings.appendToLog("Fonts Installed Successfully");
                 Settings.appendToLog("Installation done");
+            }
+            else
+            {
+                speedLabel.Text = "";
+                downloadProgress.Text = Translations.getTranslatedString("done");
+                parrentProgressBar.Maximum = 1;
+                parrentProgressBar.Value = parrentProgressBar.Maximum;
+                childProgressBar.Value = childProgressBar.Maximum;
+                state = InstallState.idle;
+                toggleUIButtons(true);
+                Settings.appendToLog("Installation done, but fonts install failed");
             }
         }
         //checks to see if the application is indeed in admin mode
@@ -1465,7 +1490,7 @@ namespace RelhaxModpack
             childProgressBar.Maximum = 100;
             childProgressBar.Value = 0;
             //show the mod selection window
-            list = new ModSelectionList(tanksVersion,tanksLocation);
+            list = new ModSelectionList(tanksVersion,tanksLocation,this.Location.X + this.Size.Width, this.Location.Y);
             list.ShowDialog();
             if (list.cancel)
             {
