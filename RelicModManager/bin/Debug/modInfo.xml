@@ -6157,6 +6157,41 @@
           </devURL>
         </mod>
         <mod>
+          <name>Crew Icons</name>
+          <version></version>
+          <modzipfile></modzipfile>
+          <startAddress></startAddress>
+          <endAddress></endAddress>
+          <modzipcrc>f</modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>Anime</name>
+              <configzipfile>Garage_mods_Crew_Icons_Anime_2017-05-14.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress></endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>https://mod-wot.com/_ld/3/45391429.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description></description>
+          <updateComment>
+          </updateComment>
+          <devURL>https://mod-wot.com/load/icons_for_world_of_tanks_wot/anime_crew_icons_for_world_of_tanks/7-1-0-341</devURL>
+        </mod>
+        <mod>
           <name>Replay Manager</name>
           <version>
           </version>
