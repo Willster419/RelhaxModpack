@@ -17,11 +17,11 @@
       <dependencyenabled>True</dependencyenabled>
     </globaldependency>
     <globaldependency>
-      <dependencyZipFile>Dependency_global_orig_xmls_2017-04-18.zip</dependencyZipFile>
+      <dependencyZipFile>Dependency_global_orig_xmls_2017-05-13.zip</dependencyZipFile>
       <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
       <endAddress>
       </endAddress>
-      <dependencyZipCRC>2b6642bdf49b3a491ae69924d47657f0</dependencyZipCRC>
+      <dependencyZipCRC>ec101698a23095d97c77dd18d3b278b6</dependencyZipCRC>
       <dependencyenabled>True</dependencyenabled>
     </globaldependency>
   </globaldependencies>
@@ -3207,6 +3207,33 @@
           </updateComment>
           <devURL>http://modsworldoftanks.com/the-damage-panel-from-gambiter-damagelog/</devURL>
         </mod>
+        <mod>
+          <name>Damagelog by bionick with custom panel</name>
+          <version>
+          </version>
+          <modzipfile>Damage_Logs_bionick_with_panel_2017-05-13.zip</modzipfile>
+          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>f5fa68a5f0933b9702803ecd9ec2f18a</modzipcrc>
+          <size>0.8</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>http://fs5.directupload.net/images/user/161121/opeir2ex.jpg</URL>
+            </picture>
+            <picture>
+              <URL>http://wotsite.net/images/2013/09/27/1.jpg</URL>
+            </picture>
+          </pictures>
+          <configs />
+          <dependencies />
+          <description>Keeps a list of who shot you and for how much. Includes a custom damage panel</description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://wotsite.net/paneli-povrezhdenij/10331-peredelannaya-panel-povrezhdenij-ot-bionick-dlya-world-of-tanks.html</devURL>
+        </mod>
       </mods>
     </catagory>
     <catagory>
@@ -4331,6 +4358,118 @@
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/481984-09171-crewskillinformer-crews-skills-and-perks-in-battle-window-update-23022017-v011/</devURL>
         </mod>
         <mod>
+          <name>Marking Industructable Structures</name>
+          <version>
+          </version>
+          <modzipfile>Ingame_Info_Mark_Industructable_Structures.zip</modzipfile>
+          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>8d31c2cc877fb95a29991d9aa2380d8b</modzipcrc>
+          <size>1.1</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>http://drongo-lab.ru/wp-content/uploads/2013/05/World-of-tanks-5.jpg</URL>
+            </picture>
+          </pictures>
+          <configs />
+          <dependencies />
+          <description>Shows which structures can not be destroyed</description>
+          <updateComment>by White-Cow</updateComment>
+          <devURL>http://drongo-lab.ru/pomechennye-neochevidno-nerazrushaemye-stroeniya/</devURL>
+        </mod>
+        <mod>
+          <name>Gold Visibility Mod by lgfrbcsgo</name>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <startAddress>
+          </startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>
+          </modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>http://r17.imgup.net/WorldOfTan710c.png</URL>
+            </picture>
+            <picture>
+              <URL>http://f40.imgup.net/WorldOfTan65e6.png</URL>
+            </picture>
+            <picture>
+              <URL>http://p02.imgup.net/WorldOfTane558.png</URL>
+            </picture>
+            <picture>
+              <URL>http://c42.imgup.net/WorldOfTana3f2.png</URL>
+            </picture>
+          </pictures>
+          <configs>
+            <config>
+              <name>Red APCR, Blue HEAT</name>
+              <configzipfile>Ingame_Info_Gold_Shell_Visibility_red_blue_2017_05_13.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>86f6e4af13b870a9f812f59ae16d5f09</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single1</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Red APCR, Gold HEAT</name>
+              <configzipfile>Ingame_Info_Gold_Shell_Visibility_red_gold_2017_05_13.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>d5f7810a89fb7f8d0d27de2d161f58bd</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single1</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Silver APCR, Gold HEAT</name>
+              <configzipfile>Ingame_Info_Gold_Shell_Visibility_silver_gold_2017_05_13.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>9b48c794374f1f5fbc6fe04ecee132a8</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single1</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+            <config>
+              <name>Silver APCR, Blue HEAT</name>
+              <configzipfile>Ingame_Info_Gold_Shell_Visibility_silver_blue_2017_05_13.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f81f3c019e78b1345cb7de9b493dc375</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single1</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>This mod adds a short sparkling effect to penetrating APCR/HEAT hits. Not only will you be able to tell if an enemy tank is shooting gold rounds at your allied tanks (or at you), but also if one of your allies is a gold spammer. This information will help you determining whether to engage or not to engage an enemy.</description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://forum.worldoftanks.eu/index.php?/topic/399571-095-gold-ammo-visibility-mod-makes-apcrheat-hits-visible/</devURL>
+        </mod>
+        <mod>
           <name>Arty Log Extended by OldSkool</name>
           <version>0.9.18_2017-05-02</version>
           <modzipfile>Ingame_Info_Artylog_by_oldskool_2017-05-02.zip</modzipfile>
@@ -4809,21 +4948,17 @@
               </pictures>
               <dependencies />
             </config>
-           <config>
+            <config>
               <name>wn8 and damage without Last Hit Damage</name>
               <configzipfile>Ingame_Info_InBattle_Rating_WN8_Damage_without_LastHit_2017_05_09.zip</configzipfile>
-              <startAddress>http://willster419.atwebpages.com/Applications/RelHaxModPack/mods/0.9.18.0/</startAddress>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>47e6865b4e246b806aafedbe79e1109d</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL></URL>
-                </picture>
-              </pictures>
+              <pictures />
               <dependencies />
             </config>
             <config>
@@ -6178,8 +6313,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>91cba41157737fd88c72b623f339b568</configzipcrc>
+              <size>16.2</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -6195,6 +6330,36 @@
           <updateComment>
           </updateComment>
           <devURL>https://mod-wot.com/load/official_mods_for_world_of_tanks_wot/a_new_kind_of_medals_with_the_effect_under_the_glass_mod_for_world_of_tanks/2-1-0-42</devURL>
+        </mod>
+        <mod>
+          <name>Hangar Manager (HangMan)</name>
+          <version>
+          </version>
+          <modzipfile>Garage_mods_HangMan_0.9.18.0_2017-05-13.zip</modzipfile>
+          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>40585c58a709c78d8cc306172764853d</modzipcrc>
+          <size>0.3</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>http://www.goofy67-wot.de/media/files/2.0_preview.jpg</URL>
+            </picture>
+            <picture>
+              <URL>http://www.goofy67-wot.de/media/files/preview_window.jpg</URL>
+            </picture>
+            <picture>
+              <URL>https://puu.sh/vPfc2/7a0f9e5cad.jpg</URL>
+            </picture>
+          </pictures>
+          <configs />
+          <dependencies />
+          <description>Changes your hangar to whatever style you like!</description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://forum.worldoftanks.eu/index.php?/topic/439322-09180-hangar-manager-hangman/</devURL>
         </mod>
         <mod>
           <name>Mastery Badges</name>
@@ -7434,8 +7599,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>9ae624732755b9a7862e6b7008084abc</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
               <pictures>
