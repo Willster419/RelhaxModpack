@@ -2374,6 +2374,9 @@ namespace RelhaxModpack
             this.statusLabel.Text = Translations.getTranslatedString("status");
             this.findBugAddModLabel.Text = Translations.getTranslatedString(findBugAddModLabel.Name);
             this.formPageLink.Text = Translations.getTranslatedString(formPageLink.Name);
+            this.viewTypeGB.Text = Translations.getTranslatedString("ModSelectionListViewSelection");
+            this.selectionDefault.Text = Translations.getTranslatedString(selectionDefault.Name);
+            this.selectionLegacy.Text = Translations.getTranslatedString(selectionLegacy.Name);
             if (helper != null)
             {
                 helper.helperText.Text = Translations.getTranslatedString("helperText");
@@ -2405,6 +2408,20 @@ namespace RelhaxModpack
                     languageGER.CheckedChanged -= languageGER_CheckedChanged;
                     languageGER.Checked = true;
                     languageGER.CheckedChanged += languageGER_CheckedChanged;
+                    break;
+            }
+            switch (Settings.sView)
+            {
+                case (Settings.SelectionView.defaultt):
+                    //set default button, but disable checkedChanged handler to prevent stack overflow
+                    selectionDefault.CheckedChanged -= selectionDefault_CheckedChanged;
+                    selectionDefault.Checked = true;
+                    selectionDefault.CheckedChanged += selectionDefault_CheckedChanged;
+                    break;
+                case (Settings.SelectionView.legacy):
+                    selectionLegacy.CheckedChanged -= selectionLegacy_CheckedChanged;
+                    selectionLegacy.Checked = true;
+                    selectionLegacy.CheckedChanged += selectionLegacy_CheckedChanged;
                     break;
             }
         }
@@ -2817,6 +2834,36 @@ namespace RelhaxModpack
             }
             //getting here means that the dependency to add is unique
             dependencies.Add(toAdd);
+        }
+
+        private void selectionDefault_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("selectionViewMode");
+            newHelper.ShowDialog();
+        }
+
+        private void selectionLegacy_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("selectionViewMode");
+            newHelper.ShowDialog();
+        }
+
+        private void selectionDefault_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.sView = Settings.SelectionView.defaultt;
+            this.applySettings();
+        }
+
+        private void selectionLegacy_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.sView = Settings.SelectionView.legacy;
+            this.applySettings();
         }
     }
     //a class for the downloadQueue list, to make a queue of downloads

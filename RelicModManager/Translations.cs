@@ -55,8 +55,8 @@ namespace RelhaxModpack
 
             //Componet: forceManuel
             //
-            english.Add("languageSelectionGB", "Language Selection");
-            german.Add("languageSelectionGB", "Sprachauswahl");
+            english.Add("languageSelectionGB", "Language");
+            german.Add("languageSelectionGB", "Sprache");
 
             //Componet: formPageLink
             //
@@ -619,8 +619,28 @@ namespace RelhaxModpack
 
             //Componet:
             //
-            english.Add("zipReadingErrorMessage2", "konnte nicht gelesen werden, da es hoechstwahrscheinlich ein unvollständiger Download ist. Dies wird uebersprungen. Bitte versuche es spaeter erneut herungerzuladen.");
-            german.Add("zipReadingErrorMessage2", "Installiere nach");
+            english.Add("zipReadingErrorMessage2", "Could not be read, most likely due to an incomplete download. Please try again.");
+            german.Add("zipReadingErrorMessage2", "konnte nicht gelesen werden, da es hoechstwahrscheinlich ein unvollständiger Download ist. Dies wird uebersprungen. Bitte versuche es spaeter erneut herungerzuladen.");
+
+            //Componet: Mod Selection view Group Box
+            //
+            english.Add("ModSelectionListViewSelection", "Selection View");
+            german.Add("ModSelectionListViewSelection", "Auswahlansicht");
+
+            //Componet: Mod selection view default (relhax)
+            //
+            english.Add("selectionDefault", "Default");
+            german.Add("selectionDefault", "Default");
+
+            //Componet:Mod selection view legacy (OMC)
+            //
+            english.Add("selectionLegacy", "Legacy");
+            german.Add("selectionLegacy", "Erbe");
+
+            //Componet:Mod selection explanation
+            //
+            english.Add("selectionViewMode", "Select a mod selection list view mode\nDefault: Relhax list view mode\nLegacy: OMC tree list view mode");
+            german.Add("selectionViewMode", "TODO, SEE GERMAN");
         }
     }
 }

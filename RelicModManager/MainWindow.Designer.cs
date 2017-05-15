@@ -58,9 +58,14 @@
             this.languageSelectionGB = new System.Windows.Forms.GroupBox();
             this.languageGER = new System.Windows.Forms.RadioButton();
             this.languageENG = new System.Windows.Forms.RadioButton();
+            this.viewTypeGB = new System.Windows.Forms.GroupBox();
+            this.selectionLegacy = new System.Windows.Forms.RadioButton();
+            this.selectionDefault = new System.Windows.Forms.RadioButton();
+            this.languagePL = new System.Windows.Forms.RadioButton();
             this.settingsGroupBox.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
+            this.viewTypeGB.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusLabel
@@ -69,7 +74,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(9, 308);
+            this.statusLabel.Location = new System.Drawing.Point(9, 363);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(53, 13);
             this.statusLabel.TabIndex = 10;
@@ -78,9 +83,9 @@
             // 
             // childProgressBar
             // 
-            this.childProgressBar.Location = new System.Drawing.Point(12, 411);
+            this.childProgressBar.Location = new System.Drawing.Point(12, 466);
             this.childProgressBar.Name = "childProgressBar";
-            this.childProgressBar.Size = new System.Drawing.Size(265, 23);
+            this.childProgressBar.Size = new System.Drawing.Size(275, 23);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.childProgressBar.TabIndex = 11;
             // 
@@ -106,7 +111,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(9, 474);
+            this.formPageLink.Location = new System.Drawing.Point(9, 529);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -116,16 +121,16 @@
             // 
             // parrentProgressBar
             // 
-            this.parrentProgressBar.Location = new System.Drawing.Point(12, 382);
+            this.parrentProgressBar.Location = new System.Drawing.Point(12, 437);
             this.parrentProgressBar.Name = "parrentProgressBar";
-            this.parrentProgressBar.Size = new System.Drawing.Size(265, 23);
+            this.parrentProgressBar.Size = new System.Drawing.Size(275, 23);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.parrentProgressBar.TabIndex = 17;
             // 
             // speedLabel
             // 
             this.speedLabel.AutoSize = true;
-            this.speedLabel.Location = new System.Drawing.Point(12, 437);
+            this.speedLabel.Location = new System.Drawing.Point(12, 492);
             this.speedLabel.Name = "speedLabel";
             this.speedLabel.Size = new System.Drawing.Size(24, 13);
             this.speedLabel.TabIndex = 18;
@@ -135,7 +140,7 @@
             // 
             this.installRelhaxMod.Location = new System.Drawing.Point(12, 12);
             this.installRelhaxMod.Name = "installRelhaxMod";
-            this.installRelhaxMod.Size = new System.Drawing.Size(265, 34);
+            this.installRelhaxMod.Size = new System.Drawing.Size(275, 34);
             this.installRelhaxMod.TabIndex = 19;
             this.installRelhaxMod.Text = "Install Relhax ModPack";
             this.installRelhaxMod.UseVisualStyleBackColor = true;
@@ -145,7 +150,7 @@
             // 
             this.uninstallRelhaxMod.Location = new System.Drawing.Point(12, 52);
             this.uninstallRelhaxMod.Name = "uninstallRelhaxMod";
-            this.uninstallRelhaxMod.Size = new System.Drawing.Size(265, 34);
+            this.uninstallRelhaxMod.Size = new System.Drawing.Size(275, 34);
             this.uninstallRelhaxMod.TabIndex = 20;
             this.uninstallRelhaxMod.Text = "Uninstall Relhax Modpack";
             this.uninstallRelhaxMod.UseVisualStyleBackColor = true;
@@ -208,7 +213,7 @@
             this.settingsGroupBox.Controls.Add(this.cleanInstallCB);
             this.settingsGroupBox.Location = new System.Drawing.Point(12, 92);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(265, 155);
+            this.settingsGroupBox.Size = new System.Drawing.Size(275, 155);
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "RelHax ModPack Settings";
@@ -289,7 +294,7 @@
             this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
             this.loadingImageGroupBox.Location = new System.Drawing.Point(12, 251);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
-            this.loadingImageGroupBox.Size = new System.Drawing.Size(96, 54);
+            this.loadingImageGroupBox.Size = new System.Drawing.Size(113, 54);
             this.loadingImageGroupBox.TabIndex = 26;
             this.loadingImageGroupBox.TabStop = false;
             this.loadingImageGroupBox.Text = "Loading Image";
@@ -297,7 +302,7 @@
             // thirdGuardsLoadingImageRB
             // 
             this.thirdGuardsLoadingImageRB.AutoSize = true;
-            this.thirdGuardsLoadingImageRB.Location = new System.Drawing.Point(6, 30);
+            this.thirdGuardsLoadingImageRB.Location = new System.Drawing.Point(6, 29);
             this.thirdGuardsLoadingImageRB.Name = "thirdGuardsLoadingImageRB";
             this.thirdGuardsLoadingImageRB.Size = new System.Drawing.Size(72, 17);
             this.thirdGuardsLoadingImageRB.TabIndex = 1;
@@ -312,7 +317,7 @@
             // standardImageRB
             // 
             this.standardImageRB.AutoSize = true;
-            this.standardImageRB.Location = new System.Drawing.Point(6, 15);
+            this.standardImageRB.Location = new System.Drawing.Point(6, 13);
             this.standardImageRB.Name = "standardImageRB";
             this.standardImageRB.Size = new System.Drawing.Size(68, 17);
             this.standardImageRB.TabIndex = 0;
@@ -327,7 +332,7 @@
             // findBugAddModLabel
             // 
             this.findBugAddModLabel.AutoSize = true;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 454);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 509);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
             this.findBugAddModLabel.TabIndex = 27;
@@ -338,7 +343,7 @@
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(178, 454);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(188, 509);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
             this.cancelDownloadButton.Size = new System.Drawing.Size(99, 23);
             this.cancelDownloadButton.TabIndex = 28;
@@ -354,24 +359,25 @@
             // 
             // downloadProgress
             // 
-            this.downloadProgress.Location = new System.Drawing.Point(12, 324);
+            this.downloadProgress.Location = new System.Drawing.Point(12, 379);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
             this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.downloadProgress.Size = new System.Drawing.Size(265, 52);
+            this.downloadProgress.Size = new System.Drawing.Size(275, 52);
             this.downloadProgress.TabIndex = 29;
             this.downloadProgress.Text = "";
             // 
             // languageSelectionGB
             // 
+            this.languageSelectionGB.Controls.Add(this.languagePL);
             this.languageSelectionGB.Controls.Add(this.languageGER);
             this.languageSelectionGB.Controls.Add(this.languageENG);
-            this.languageSelectionGB.Location = new System.Drawing.Point(114, 253);
+            this.languageSelectionGB.Location = new System.Drawing.Point(131, 251);
             this.languageSelectionGB.Name = "languageSelectionGB";
-            this.languageSelectionGB.Size = new System.Drawing.Size(163, 52);
+            this.languageSelectionGB.Size = new System.Drawing.Size(156, 54);
             this.languageSelectionGB.TabIndex = 30;
             this.languageSelectionGB.TabStop = false;
-            this.languageSelectionGB.Text = "Language Selection";
+            this.languageSelectionGB.Text = "Language";
             // 
             // languageGER
             // 
@@ -395,11 +401,60 @@
             this.languageENG.UseVisualStyleBackColor = true;
             this.languageENG.CheckedChanged += new System.EventHandler(this.languageENG_CheckedChanged);
             // 
+            // viewTypeGB
+            // 
+            this.viewTypeGB.Controls.Add(this.selectionLegacy);
+            this.viewTypeGB.Controls.Add(this.selectionDefault);
+            this.viewTypeGB.Location = new System.Drawing.Point(11, 311);
+            this.viewTypeGB.Name = "viewTypeGB";
+            this.viewTypeGB.Size = new System.Drawing.Size(95, 49);
+            this.viewTypeGB.TabIndex = 31;
+            this.viewTypeGB.TabStop = false;
+            this.viewTypeGB.Text = "Selection View";
+            // 
+            // selectionLegacy
+            // 
+            this.selectionLegacy.AutoSize = true;
+            this.selectionLegacy.Location = new System.Drawing.Point(6, 29);
+            this.selectionLegacy.Name = "selectionLegacy";
+            this.selectionLegacy.Size = new System.Drawing.Size(60, 17);
+            this.selectionLegacy.TabIndex = 1;
+            this.selectionLegacy.TabStop = true;
+            this.selectionLegacy.Text = "Legacy";
+            this.selectionLegacy.UseVisualStyleBackColor = true;
+            this.selectionLegacy.CheckedChanged += new System.EventHandler(this.selectionLegacy_CheckedChanged);
+            this.selectionLegacy.MouseDown += new System.Windows.Forms.MouseEventHandler(this.selectionLegacy_MouseDown);
+            // 
+            // selectionDefault
+            // 
+            this.selectionDefault.AutoSize = true;
+            this.selectionDefault.Location = new System.Drawing.Point(6, 13);
+            this.selectionDefault.Name = "selectionDefault";
+            this.selectionDefault.Size = new System.Drawing.Size(59, 17);
+            this.selectionDefault.TabIndex = 0;
+            this.selectionDefault.TabStop = true;
+            this.selectionDefault.Text = "Default";
+            this.selectionDefault.UseVisualStyleBackColor = true;
+            this.selectionDefault.CheckedChanged += new System.EventHandler(this.selectionDefault_CheckedChanged);
+            this.selectionDefault.MouseDown += new System.Windows.Forms.MouseEventHandler(this.selectionDefault_MouseDown);
+            // 
+            // languagePL
+            // 
+            this.languagePL.AutoSize = true;
+            this.languagePL.Location = new System.Drawing.Point(57, 13);
+            this.languagePL.Name = "languagePL";
+            this.languagePL.Size = new System.Drawing.Size(38, 17);
+            this.languagePL.TabIndex = 2;
+            this.languagePL.TabStop = true;
+            this.languagePL.Text = "PL";
+            this.languagePL.UseVisualStyleBackColor = true;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(289, 497);
+            this.ClientSize = new System.Drawing.Size(299, 549);
+            this.Controls.Add(this.viewTypeGB);
             this.Controls.Add(this.languageSelectionGB);
             this.Controls.Add(this.downloadProgress);
             this.Controls.Add(this.cancelDownloadButton);
@@ -417,7 +472,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainWindow";
-            this.Text = "RelHax ";
+            this.Text = "Relhax ";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.settingsGroupBox.ResumeLayout(false);
@@ -426,6 +481,8 @@
             this.loadingImageGroupBox.PerformLayout();
             this.languageSelectionGB.ResumeLayout(false);
             this.languageSelectionGB.PerformLayout();
+            this.viewTypeGB.ResumeLayout(false);
+            this.viewTypeGB.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -461,6 +518,10 @@
         private System.Windows.Forms.GroupBox languageSelectionGB;
         private System.Windows.Forms.RadioButton languageGER;
         private System.Windows.Forms.RadioButton languageENG;
+        private System.Windows.Forms.GroupBox viewTypeGB;
+        private System.Windows.Forms.RadioButton selectionLegacy;
+        private System.Windows.Forms.RadioButton selectionDefault;
+        private System.Windows.Forms.RadioButton languagePL;
     }
 }
 
