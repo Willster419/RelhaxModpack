@@ -6500,6 +6500,23 @@
               <dependencies />
             </config>
             <config>
+              <name>Turquoise</name>
+              <configzipfile>Garage_mods_Hangar_turquoise_2017-05-15.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i1228.photobucket.com/albums/ee455/dirty20067/OMC%20Modpack/hangar_turquoise_zpswz7tjdra.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
               <name>WoTSpeak</name>
               <configzipfile>Garage_Mods_Hangar_Wotspeak_2017-05-14.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -6524,13 +6541,13 @@
             </config>
           </configs>
           <dependencies />
-          <description>Changes your hangar! @Cave with different Flags: http://worldof-tanks.com/technology-hangar/ @WotSpeak: http://worldof-tanks.com/hangar-wotspeak-for-world-of-tanks/</description>
+          <description>Changes your hangar! @Cave with different Flags: http://worldof-tanks.com/technology-hangar/ @Concrete Floor: http://forum.worldoftanks.ru/index.php?/topic/1874858-ангар/  @Turquoise: http://forum.worldoftanks.ru/index.php?/topic/1874858-ангар/ It looks very good compared with the Interface for WoT (English), because is same colour. @WotSpeak: http://worldof-tanks.com/hangar-wotspeak-for-world-of-tanks/</description>
           <updateComment>
           </updateComment>
           <devURL></devURL>
         </mod>
         <mod>
-          <name>Interface for WoT(English)</name>
+          <name>Interface for WoT (English)</name>
           <version>0.9.18.0
           </version>
           <modzipfile>
