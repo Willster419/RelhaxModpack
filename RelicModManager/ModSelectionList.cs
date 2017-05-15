@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Xml;
+using System.Windows.Forms.Integration;
 
 
 namespace RelhaxModpack
@@ -264,11 +265,39 @@ namespace RelhaxModpack
                         //add to the ui every mod of that catagory
                         this.sortModsList(c.mods);
                         int i = 1;
+                        LegacySelectionList lsl = null;
+                        if (Settings.sView == Settings.SelectionView.legacy)
+                        {
+                            //create the WPF host for this tabPage
+                            ElementHost host = new ElementHost();
+                            host.Location = new Point(5, 5);
+                            host.Size = new Size(t.Size.Width - 5 - 5, t.Size.Height - 5 - 5);
+                            host.BackColorTransparent = false;
+                            host.BackColor = Color.White;
+                            lsl = new LegacySelectionList();
+                            host.Child = lsl;
+                            lsl.legacyTreeView.Items.Clear();
+                            t.Controls.Add(host);
+                        }
                         foreach (Mod m in c.mods)
                         {
                             pw.loadingDescBox.Text = Translations.getTranslatedString("loading") + " " + m.name;
                             Application.DoEvents();
-                            this.addMod(m, t, i++);
+                            if (Settings.sView == Settings.SelectionView.defaultt)
+                            {
+                                //use default UI
+                                this.addMod(m, t, i++);
+                            }
+                            else if (Settings.sView == Settings.SelectionView.legacy)
+                            {
+                                //use legacy OMC UI
+                                this.addModTreeview(m, t, i++, lsl, c);
+                            }
+                            else
+                            {
+                                //default case, use default
+                                this.addMod(m, t, i++);
+                            }
                         }
                         break;
                     }
@@ -297,6 +326,37 @@ namespace RelhaxModpack
                 modTabGroups.TabPages.Add(t);
             }
         }
+        //adds a mod m to a tabpage t, OMC treeview style
+        private void addModTreeview(Mod m, TabPage t, int panelCount, LegacySelectionList lsl, Catagory c)
+        {
+            System.Windows.Controls.CheckBox cb = new System.Windows.Controls.CheckBox();
+            cb.Content = m.name;
+            System.Windows.Controls.TreeViewItem tvi = new System.Windows.Controls.TreeViewItem();
+            tvi.Header = cb;
+            cb.MouseDown += new System.Windows.Input.MouseButtonEventHandler(cb_MouseDown);
+            cb.Click += new System.Windows.RoutedEventHandler(cb_Click);
+            lsl.legacyTreeView.Items.Add(tvi);
+            foreach (Config con in m.configs)
+            {
+                System.Windows.Controls.TreeViewItem tviC = new System.Windows.Controls.TreeViewItem();
+                System.Windows.Controls.CheckBox cbC = new System.Windows.Controls.CheckBox();
+                cbC.Content = con.name;
+                tviC.Header = cbC;
+                tvi.Items.Add(tviC);
+            }
+        }
+
+        void cb_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            
+        }
+
+        void cb_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            
+        }
+
+
         //adds a mod m to a tabpage t
         private void addMod(Mod m, TabPage t, int panelCount)
         {
@@ -1675,6 +1735,15 @@ namespace RelhaxModpack
                                 }
                             }
                         }
+                    }
+                    else if (c is ElementHost)
+                    {
+                        ElementHost eh = (ElementHost)c;
+                        eh.Size = new Size(t.Size.Width - 12, t.Size.Height - 10);
+                        LegacySelectionList lsl = (LegacySelectionList)eh.Child;
+                        lsl.RenderSize = new System.Windows.Size(eh.Size.Width - 2, eh.Size.Height - 2);
+                        lsl.legacyTreeView.Width = eh.Size.Width - 4;
+                        lsl.legacyTreeView.Height = eh.Size.Height - 4;
                     }
                 }
             }

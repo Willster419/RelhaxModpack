@@ -38,6 +38,10 @@ namespace RelhaxModpack
         public static bool ModSelectionFullscreen = false;
         public static int previewX = 0;
         public static int previewY = 0;
+        //enumeration for the type of mod selection list view
+        public enum SelectionView { defaultt = 0, legacy = 1 };
+        public static SelectionView sView = SelectionView.defaultt;
+        public static int tempLoadedView = 0;
         //loads settings from xml file
         public static void loadSettings()
         {
@@ -64,6 +68,7 @@ namespace RelhaxModpack
                 ModSelectionFullscreen = false;
                 previewX = 0;
                 previewY = 0;
+                Settings.sView = SelectionView.defaultt;
                 Settings.applyInternalSettings();
             }
             else
@@ -124,6 +129,9 @@ namespace RelhaxModpack
                         case "previewY":
                             Settings.previewY = int.Parse(n.InnerText);
                             break;
+                        case "SelectionView":
+                            Settings.tempLoadedView = int.Parse(n.InnerText);
+                            break;
                     }
                 }
             }
@@ -170,6 +178,18 @@ namespace RelhaxModpack
                     Translations.language = Translations.Languages.German;
                     break;
             }
+            //apply the internal setting of the view selection
+            switch (Settings.tempLoadedView)
+            {
+                case 0:
+                    //default (relhax)
+                    Settings.sView = SelectionView.defaultt;
+                    break;
+                case 1:
+                    //legacy (OMC)
+                    Settings.sView = SelectionView.legacy;
+                    break;
+            }
         }
         //saves settings to xml file
         public static void saveSettings()
@@ -206,6 +226,9 @@ namespace RelhaxModpack
             XmlElement xlanguage = doc.CreateElement("language");
             xlanguage.InnerText = "" + (int)Translations.language;
             settingsHolder.AppendChild(xlanguage);
+            XmlElement xSelectionView = doc.CreateElement("SelectionView");
+            xSelectionView.InnerText = "" + (int)Settings.sView;
+            settingsHolder.AppendChild(xSelectionView);
             switch (Settings.gif)
             {
                 case (Settings.LoadingGifs.standard):
