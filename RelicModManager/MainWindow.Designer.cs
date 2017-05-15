@@ -56,12 +56,12 @@
             this.downloadTimer = new System.Windows.Forms.Timer(this.components);
             this.downloadProgress = new System.Windows.Forms.RichTextBox();
             this.languageSelectionGB = new System.Windows.Forms.GroupBox();
+            this.languagePL = new System.Windows.Forms.RadioButton();
             this.languageGER = new System.Windows.Forms.RadioButton();
             this.languageENG = new System.Windows.Forms.RadioButton();
             this.viewTypeGB = new System.Windows.Forms.GroupBox();
             this.selectionLegacy = new System.Windows.Forms.RadioButton();
             this.selectionDefault = new System.Windows.Forms.RadioButton();
-            this.languagePL = new System.Windows.Forms.RadioButton();
             this.settingsGroupBox.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
@@ -379,10 +379,21 @@
             this.languageSelectionGB.TabStop = false;
             this.languageSelectionGB.Text = "Language";
             // 
+            // languagePL
+            // 
+            this.languagePL.AutoSize = true;
+            this.languagePL.Location = new System.Drawing.Point(57, 13);
+            this.languagePL.Name = "languagePL";
+            this.languagePL.Size = new System.Drawing.Size(38, 17);
+            this.languagePL.TabIndex = 2;
+            this.languagePL.TabStop = true;
+            this.languagePL.Text = "PL";
+            this.languagePL.UseVisualStyleBackColor = true;
+            // 
             // languageGER
             // 
             this.languageGER.AutoSize = true;
-            this.languageGER.Location = new System.Drawing.Point(6, 29);
+            this.languageGER.Location = new System.Drawing.Point(101, 13);
             this.languageGER.Name = "languageGER";
             this.languageGER.Size = new System.Drawing.Size(48, 17);
             this.languageGER.TabIndex = 1;
@@ -437,17 +448,6 @@
             this.selectionDefault.UseVisualStyleBackColor = true;
             this.selectionDefault.CheckedChanged += new System.EventHandler(this.selectionDefault_CheckedChanged);
             this.selectionDefault.MouseDown += new System.Windows.Forms.MouseEventHandler(this.selectionDefault_MouseDown);
-            // 
-            // languagePL
-            // 
-            this.languagePL.AutoSize = true;
-            this.languagePL.Location = new System.Drawing.Point(57, 13);
-            this.languagePL.Name = "languagePL";
-            this.languagePL.Size = new System.Drawing.Size(38, 17);
-            this.languagePL.TabIndex = 2;
-            this.languagePL.TabStop = true;
-            this.languagePL.Text = "PL";
-            this.languagePL.UseVisualStyleBackColor = true;
             // 
             // MainWindow
             // 

@@ -6159,7 +6159,7 @@
           <modzipfile></modzipfile>
           <startAddress></startAddress>
           <endAddress></endAddress>
-          <modzipcrc>f</modzipcrc>
+          <modzipcrc></modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
           <userDatas />
@@ -6430,7 +6430,7 @@
           <startAddress></startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc>f</modzipcrc>
+          <modzipcrc></modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
           <userDatas />
@@ -6548,11 +6548,10 @@
         </mod>
         <mod>
           <name>Interface for WoT (English)</name>
-          <version>0.9.18.0
-          </version>
+          <version>0.9.18.0</version>
           <modzipfile>
           </modzipfile>
-          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+          <startAddress></startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>
