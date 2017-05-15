@@ -6483,6 +6483,23 @@
               <dependencies />
             </config>
             <config>
+              <name>Concrete Floor</name>
+              <configzipfile>Garage_mods_Hangar_concrete_floor_2017-05-15.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://i1228.photobucket.com/albums/ee455/dirty20067/OMC%20Modpack/hangar_concrete_floor_zpsj5s91ajc.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
               <name>WoTSpeak</name>
               <configzipfile>Garage_Mods_Hangar_Wotspeak_2017-05-14.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
