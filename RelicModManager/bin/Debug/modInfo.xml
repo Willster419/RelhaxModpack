@@ -4506,6 +4506,26 @@
           <pictures />
           <configs>
             <config>
+              <name>TORQue - Inspired by Witblitz</name>
+              <configzipfile>Ingame_Info_TORQue_Contour_Icon_Mod_v2.1.2_0.9.18.0.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://fs5.directupload.net/images/user/170103/6s4dp6tv.jpg</URL>
+                </picture>
+                <picture>
+                  <URL>https://s21.postimg.org/qjo652xyv/TORQue-_Contour-_Mod_icons.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
               <name>Aslains</name>
               <configzipfile>Ingame_Info_Aslains_Contour_Icon_Mod_0.9.18.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -4680,7 +4700,7 @@
           <dependencies />
           <description>
           </description>
-          <updateComment>Aslain's : http://forum.worldoftanks.eu/index.php?/topic/35125- @Blackspy by_Romkyns: http://forum.worldoftanks.eu/index.php?/topic/318315-917-tank-icon-maker-v051-13-march-2017/ @Druids: http://forum.worldoftanks.com/index.php?/topic/390563-druids-icon-mod-revisited/#topmost @J1mB0s: http://forum.worldoftanks.eu/index.php?/topic/34259-09180-j1mb0s-contour-icon-mod/ @HARDicons: http://forum.worldoftanks.ru/index.php?/topic/374544-</updateComment>
+          <updateComment>Aslain's : http://forum.worldoftanks.eu/index.php?/topic/35125- @Blackspy by_Romkyns: http://forum.worldoftanks.eu/index.php?/topic/318315-917-tank-icon-maker-v051-13-march-2017/ @Druids: http://forum.worldoftanks.com/index.php?/topic/390563-druids-icon-mod-revisited/#topmost @J1mB0s: http://forum.worldoftanks.eu/index.php?/topic/34259-09180-j1mb0s-contour-icon-mod/ @HARDicons: http://forum.worldoftanks.ru/index.php?/topic/374544- @TORQue - Inspired by Witblitz: http://forum.worldoftanks.eu/index.php?/topic/283444-</updateComment>
           <devURL>
           </devURL>
         </mod>
