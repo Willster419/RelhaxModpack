@@ -7862,12 +7862,12 @@
             </config>
             <config>
               <name>LEOTM</name>
-              <configzipfile>Sixth_Sense_Icon_LEOTM_2017-05-13.zip</configzipfile>
+              <configzipfile>Sixth_Sense_Icon_LEOTM_2017-05-15.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>9ae624732755b9a7862e6b7008084abc</configzipcrc>
-              <size>0.1</size>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
               <pictures>
