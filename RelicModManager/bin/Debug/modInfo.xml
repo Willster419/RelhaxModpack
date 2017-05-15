@@ -4072,12 +4072,12 @@
             </config>
             <config>
               <name>Enabled by Default</name>
-              <configzipfile>Ingame_Info_15m_Circle_123Gauss_toggle_patch.zip</configzipfile>
+              <configzipfile>Ingame_Info_15m_Circle_123Gauss_toggle_patchV2.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>e2e8f7ba9bcc388ace5ecd3681756b1d</configzipcrc>
-              <size>0.1</size>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
