@@ -4492,7 +4492,7 @@
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/621874-0918-arty-log-extended-by-oldskool/</devURL>
         </mod>
         <mod>
-          <name>Contour Icons</name>
+          <name>Contour Icons (requires xvm to mirrow the Icons)</name>
           <version>
           </version>
           <modzipfile>Ingame_Info_Contour_Icon_Mod_patch.zip</modzipfile>
@@ -4697,19 +4697,10 @@
               <dependencies />
             </config>
           </configs>
-          <dependencies>
-            <dependency>
-              <dependencyZipFile>Dependency_XVM_Base_6.6.5.zip</dependencyZipFile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <dependencyZipCRC>67cab0214c727cc73581a8ef7a84b850</dependencyZipCRC>
-              <dependencyenabled>True</dependencyenabled>
-            </dependency>
-          </dependencies>
-          <description>
+          <dependencies />
+          <description>Aslain's : http://forum.worldoftanks.eu/index.php?/topic/35125- @Blackspy by_Romkyns: http://forum.worldoftanks.eu/index.php?/topic/318315-917-tank-icon-maker-v051-13-march-2017/ @Druids: http://forum.worldoftanks.com/index.php?/topic/390563-druids-icon-mod-revisited/#topmost @J1mB0s: http://forum.worldoftanks.eu/index.php?/topic/34259-09180-j1mb0s-contour-icon-mod/ @HARDicons: http://forum.worldoftanks.ru/index.php?/topic/374544- @TORQue - Inspired by Witblitz: http://forum.worldoftanks.eu/index.php?/topic/283444-
           </description>
-          <updateComment>Aslain's : http://forum.worldoftanks.eu/index.php?/topic/35125- @Blackspy by_Romkyns: http://forum.worldoftanks.eu/index.php?/topic/318315-917-tank-icon-maker-v051-13-march-2017/ @Druids: http://forum.worldoftanks.com/index.php?/topic/390563-druids-icon-mod-revisited/#topmost @J1mB0s: http://forum.worldoftanks.eu/index.php?/topic/34259-09180-j1mb0s-contour-icon-mod/ @HARDicons: http://forum.worldoftanks.ru/index.php?/topic/374544- @TORQue - Inspired by Witblitz: http://forum.worldoftanks.eu/index.php?/topic/283444-</updateComment>
+          <updateComment></updateComment>
           <devURL>
           </devURL>
         </mod>
