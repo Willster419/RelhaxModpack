@@ -6683,6 +6683,29 @@
           <devURL>https://mods.curse.com/wot-mods/worldoftanks/aslains-gold-premium-tanks</devURL>
         </mod>
         <mod>
+          <name>WotXP Crew Exp </name>
+          <version>0.9.18.0</version>
+          <modzipfile>Garage_mods_WotXP_CrewXP_by_tratatank_0.9.18.0.zip</modzipfile>
+          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>f</modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>http://fs2.directupload.net/images/150630/r8khlrlx.jpg</URL>
+            </picture>
+          </pictures>
+          <configs />
+          <dependencies />
+          <description>Mod displays the number of fights and experience required for the next 1%-step and for 100%.</description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://www.koreanrandom.com/forum/topic/24591-</devURL>
+        </mod>
+        <mod>
           <name>Research Watchdog Without Free Experience</name>
           <version>
           </version>
