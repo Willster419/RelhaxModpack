@@ -29,7 +29,7 @@ if exist "%programfiles%\FileZilla FTP Client\uninstall.exe" "%programfiles%\Fil
 if exist "%programfiles(x86)%\FileZilla FTP Client\uninstall.exe" "%programfiles(x86)%\FileZilla FTP Client\uninstall.exe" /S
 %~dp0FileZilla.exe /S
 
-echo "copying filezilla site manager"
+echo "copying filezilla configuration"
 copy %~dp0filezilla.xml "%APPDATA%\FileZilla"
 
 echo "Cloneing the repo..."
@@ -38,16 +38,19 @@ echo "Cloneing the repo..."
 echo "copying shortcuts"
 MD C:\Relhax\Working_on_MOD
 copy %~dp0RELHAX.lnk %public%\desktop
-copy %~dp0FileZilla.lnk c:\Relhax
-copy %~dp0ModpackPatchCheck.lnk c:\Relhax
-copy %~dp0ModpackTest.lnk c:\Relhax
-copy %~dp0MODXML.lnk c:\Relhax
-copy %~dp0RelhaxModpack.exe c:\Relhax
-copy %~dp0Settings.lnk c:\Relhax
-copy %~dp0Slack.lnk c:\Relhax
-copy %~dp0MediaFire.url c:\Relhax
+copy %~dp0FileZilla.lnk C:\Relhax
+copy %~dp0ModpackPatchCheck.lnk C:\Relhax
+copy %~dp0ModpackTest.lnk C:\Relhax
+copy %~dp0MODXML.lnk C:\Relhax
+copy %~dp0RelhaxModpack.exe C:\Relhax
+copy %~dp0Remote.exe C:\Relhax
+copy %~dp0Settings.lnk C:\Relhax
+copy %~dp0Slack.lnk C:\Relhax
+copy %~dp0XMLValidation.url C:\Relhax
 
 echo "You now need to run the setup wizard for tortoiseGit"
 echo "(programs->tortoiseGit->settings->general->run wizard)"
 
 pause
+
+SHUTDOWN /r /t 120 /c "Shutdown in progress, you have 2 minutes to save your work untill pc restart"

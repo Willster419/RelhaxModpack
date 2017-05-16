@@ -55,14 +55,14 @@
 		<Setting name="Auto Ascii no extension">1</Setting>
 		<Setting name="Auto Ascii dotfiles">1</Setting>
 		<Setting name="Language Code" />
-		<Setting name="Last Server Path">1 0 26 willster419.atwebpages.com 12 Applications 13 RelHaxModPack 4 mods</Setting>
+		<Setting name="Last Server Path">1 0 14 DeploymentTool</Setting>
 		<Setting name="Concurrent download limit">0</Setting>
 		<Setting name="Concurrent upload limit">0</Setting>
 		<Setting name="Update Check">1</Setting>
 		<Setting name="Update Check Interval">7</Setting>
-		<Setting name="Last automatic update check">2017-05-03 03:47:56</Setting>
+		<Setting name="Last automatic update check">2017-05-12 01:04:27</Setting>
 		<Setting name="Last automatic update version">3.25.2</Setting>
-		<Setting name="Update Check New Version">nightly 2017-05-02 http://filezilla-project.org/nightlies/2017-05-02/x86_64-w64-mingw32/FileZilla_3_setup.exe 7562688 sha512 39f945ac77a55e9f7124b6e83427310fc72c3ae771744dbdae117a82086bd3ce92d2fbf3ff6a91d9b4126200994ba111d1ff3a01e53dee8591a30ebbfb653363 
+		<Setting name="Update Check New Version">nightly 2017-05-11 http://filezilla-project.org/nightlies/2017-05-11/x86_64-w64-mingw32/FileZilla_3_setup.exe 7565752 sha512 45a58faa8a980c42cdcffc9abcbe0fae8c31329a0c4dda24c9b28011ee368908a42f7c3e14fa880757cc3a2253f7d277edb3d06de4eda9d1ffa5a5b75b0b6e6a 
 release 3.25.2 http://downloads.sourceforge.net/filezilla/FileZilla_3.25.2_win64-setup.exe 7013752 sha512 e45d2717dd9bb2e3e93b46e29d8b4aa9aaf5a3f04943668f4556e9a78cc75a088410bcade9cb459fb888a9ce8682051a4c0d5fc309be4fb5be928608f4d6775c
 </Setting>
 		<Setting name="Update Check Check Beta">0</Setting>
@@ -77,14 +77,14 @@ release 3.25.2 http://downloads.sourceforge.net/filezilla/FileZilla_3.25.2_win64
 		<Setting name="Show Tree Remote">1</Setting>
 		<Setting name="File Pane Layout">0</Setting>
 		<Setting name="File Pane Swap">0</Setting>
-		<Setting name="Last local directory">C:\Relhax\Working_on_MOD\</Setting>
+		<Setting name="Last local directory">C:\Relhax\</Setting>
 		<Setting name="Filelist directory sort">0</Setting>
 		<Setting name="Filelist name sort">0</Setting>
 		<Setting name="Queue successful autoclear">0</Setting>
 		<Setting name="Queue column widths">180 60 180 80 60 150</Setting>
-		<Setting name="Local filelist colwidths">120 80 100 120</Setting>
+		<Setting name="Local filelist colwidths">258 80 100 120</Setting>
 		<Setting name="Remote filelist colwidths">364 75 80 100 80 80</Setting>
-		<Setting name="Window position and size">0 360 45 1184 841 </Setting>
+		<Setting name="Window position and size">1 278 0 1184 841 </Setting>
 		<Setting name="Splitter positions (v2)">97 -131 500000000 227 227 500000000</Setting>
 		<Setting name="Local filelist sortorder">0 0</Setting>
 		<Setting name="Remote filelist sortorder">0 0</Setting>
@@ -102,7 +102,7 @@ release 3.25.2 http://downloads.sourceforge.net/filezilla/FileZilla_3.25.2_win64
 		<Setting name="Icon theme">default</Setting>
 		<Setting name="Icon scale">125</Setting>
 		<Setting name="Timestamp in message log">0</Setting>
-		<Setting name="Sitemanager last selected">0/Relhax</Setting>
+		<Setting name="Sitemanager last selected">0/Relhax.com</Setting>
 		<Setting name="Local filelist shown columns">1111</Setting>
 		<Setting name="Remote filelist shown columns">111111</Setting>
 		<Setting name="Local filelist column order">0,1,2,3</Setting>
@@ -111,7 +111,7 @@ release 3.25.2 http://downloads.sourceforge.net/filezilla/FileZilla_3.25.2_win64
 		<Setting name="Filter toggle state">0</Setting>
 		<Setting name="Show quickconnect bar">1</Setting>
 		<Setting name="Messagelog position">0</Setting>
-		<Setting name="Last connected site">0/Relhax</Setting>
+		<Setting name="Last connected site">0/Relhax.com</Setting>
 		<Setting name="File doubleclock action">0</Setting>
 		<Setting name="Dir doubleclock action">0</Setting>
 		<Setting name="Minimize to tray">0</Setting>
@@ -143,7 +143,7 @@ release 3.25.2 http://downloads.sourceforge.net/filezilla/FileZilla_3.25.2_win64
 		<Setting name="Disable update check">0</Setting>
 		<Setting name="Cache directory" />
 		<LastServer>
-			<Host>willster419.atwebpages.com</Host>
+			<Host>ftp.relhaxmodpack.com</Host>
 			<Port>21</Port>
 			<Protocol>0</Protocol>
 			<Type>0</Type>
@@ -155,7 +155,7 @@ release 3.25.2 http://downloads.sourceforge.net/filezilla/FileZilla_3.25.2_win64
 			<MaximumMultipleConnections>0</MaximumMultipleConnections>
 			<EncodingType>Auto</EncodingType>
 			<BypassProxy>0</BypassProxy>
-			<Name>Relhax</Name>
+			<Name>Relhax.com</Name>
 		</LastServer>
 	</Settings>
 </FileZilla3>
