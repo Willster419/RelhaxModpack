@@ -6174,15 +6174,15 @@
           </devURL>
         </mod>
         <mod>
-          <name>Auto-Equip Mod (doesnt work with removable equipment auto return (xvm)</name>
+          <name>Auto-Equip Mod</name>
           <version>
           </version>
-          <modzipfile>Garage_mods_auto-equip_2017-05-17.zip</modzipfile>
+          <modzipfile>XVM_config_builder_garage_removable_equipment_auto_return_disable.zip</modzipfile>
           <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
+          <modzipcrc>7c6e5c8899b3d04d6879966815b01395</modzipcrc>
+          <size>0.1</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>
@@ -6190,7 +6190,21 @@
               <URL>http://wotsite.net/images/2014/1/30/1.jpg</URL>
             </picture>
           </pictures>
-          <configs />
+          <configs>
+            <config>
+              <name>by Ekspoint</name>
+              <configzipfile>Garage_mods_auto-equip_2017-05-17.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+          </configs>
           <dependencies />
           <description></description>
           <updateComment>
