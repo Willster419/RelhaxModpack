@@ -6174,6 +6174,30 @@
           </devURL>
         </mod>
         <mod>
+          <name>Auto-Equip Mod (doesnt work with removable equipment auto return (xvm)</name>
+          <version>
+          </version>
+          <modzipfile>Garage_mods_auto-equip_2017-05-17.zip</modzipfile>
+          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>f</modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>http://wotsite.net/images/2014/1/30/1.jpg</URL>
+            </picture>
+          </pictures>
+          <configs />
+          <dependencies />
+          <description></description>
+          <updateComment>
+          </updateComment>
+          <devURL>http://wotsite.net/mody-dlya-world-of-tanks/12066-autoequip-mod-avtomaticheskoj-ustanovki-stereotruby.html</devURL>
+        </mod>
+        <mod>
           <name>Crew Icons</name>
           <version></version>
           <modzipfile></modzipfile>
