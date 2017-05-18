@@ -427,6 +427,7 @@
             // selectionLegacy
             // 
             this.selectionLegacy.AutoSize = true;
+            this.selectionLegacy.Enabled = false;
             this.selectionLegacy.Location = new System.Drawing.Point(6, 29);
             this.selectionLegacy.Name = "selectionLegacy";
             this.selectionLegacy.Size = new System.Drawing.Size(60, 17);

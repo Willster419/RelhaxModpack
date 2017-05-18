@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Xml;
 using System.Windows.Forms.Integration;
-using System.Text.RegularExpressions;
 
 
 namespace RelhaxModpack

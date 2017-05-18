@@ -1,3 +1,7 @@
+Version 22.3.0:
+-Fixed a bug to now allow the modpack to work in sandbox and common test versions. That does not, however, mean that the mods work in those versions.
+-Added polish translations, big thanks to Neoros of the EU server!
+
 Version 22.2.0:
 -Added more exception handling to the patching system for file and folder permissions
 -Fixed many bugs in the font installation system
