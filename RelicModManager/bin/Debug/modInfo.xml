@@ -1435,9 +1435,8 @@
           <pictures />
           <configs>
             <config>
-              <name>small</name>
-              <configzipfile>XVM_config_builder_playerspanel_start_small_patch.zip
-              </configzipfile>
+              <name>short</name>
+              <configzipfile>XVM_config_builder_playerspanel_start_short_patch.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
