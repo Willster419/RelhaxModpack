@@ -329,13 +329,50 @@ namespace RelhaxModpack
         //adds a mod m to a tabpage t, OMC treeview style
         private void addModTreeview(Mod m, TabPage t, int panelCount, LegacySelectionList lsl, Catagory c)
         {
-            System.Windows.Controls.CheckBox cb = new System.Windows.Controls.CheckBox();
-            cb.Content = m.name;
+            //helpfull stuff
+            string modDownloadFilePath = Application.StartupPath + "\\RelHaxDownloads\\" + m.modZipFile;
+            //create base mod checkbox
+            System.Windows.Controls.CheckBox modCheckBox = new System.Windows.Controls.CheckBox();
+            modCheckBox.Name = t.Name + "_" + m.name;
+            modCheckBox.FontSize = (double)Settings.fontSize;
+            modCheckBox.Content = m.name;
+            //if file exists, get md5 on it, otherwise just say it's updated.
+            if (File.Exists(modDownloadFilePath))
+            {
+                string oldCRC = Settings.GetMd5Hash(modDownloadFilePath);
+                if (!oldCRC.Equals(m.crc))
+                {
+                    //crcs do not match, needs to redownloaded
+                    modCheckBox.Content = modCheckBox.Content + " ( Updated)";
+                    if (m.size > 0.0f)
+                        modCheckBox.Content = modCheckBox.Content + " (" + m.size + " MB)";
+                }
+            }
+            else
+            {
+                //files does not exist, needs to re-download
+                modCheckBox.Content = modCheckBox.Content + " ( Updated)";
+                if (m.size > 0.0f)
+                    modCheckBox.Content = modCheckBox.Content + " (" + m.size + " MB)";
+            }
+            //set mod's enabled status
+            modCheckBox.IsEnabled = m.enabled;
+            //make the tree view item for the modCheckBox
             System.Windows.Controls.TreeViewItem tvi = new System.Windows.Controls.TreeViewItem();
-            tvi.Header = cb;
-            cb.MouseDown += new System.Windows.Input.MouseButtonEventHandler(cb_MouseDown);
-            cb.Click += new System.Windows.RoutedEventHandler(cb_Click);
-            lsl.legacyTreeView.Items.Add(tvi);
+            tvi.Header = modCheckBox;
+            //add it's handlers, right click and when checked
+            modCheckBox.MouseDown += new System.Windows.Input.MouseButtonEventHandler(modCheckBoxL_MouseDown);
+            modCheckBox.Click += new System.Windows.RoutedEventHandler(modCheckBoxL_Click);
+            //create the twp possible drop down options, and the mod optional config check box i guess
+            System.Windows.Controls.ComboBox configControlDD = new System.Windows.Controls.ComboBox();
+            configControlDD.Items.Clear();
+            configControlDD.IsEditable = false;
+            configControlDD.FontSize = (double)Settings.fontSize;
+            System.Windows.Controls.ComboBox configControlDD2 = new System.Windows.Controls.ComboBox();
+            configControlDD2.Items.Clear();
+            configControlDD2.IsEditable = false;
+            configControlDD2.FontSize = (double)Settings.fontSize;
+            //process the configs
             foreach (Config con in m.configs)
             {
                 System.Windows.Controls.TreeViewItem tviC = new System.Windows.Controls.TreeViewItem();
@@ -344,14 +381,16 @@ namespace RelhaxModpack
                 tviC.Header = cbC;
                 tvi.Items.Add(tviC);
             }
+            //add the mod check box to the legacy tree view
+            lsl.legacyTreeView.Items.Add(tvi);
         }
 
-        void cb_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        void modCheckBoxL_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             
         }
 
-        void cb_Click(object sender, System.Windows.RoutedEventArgs e)
+        void modCheckBoxL_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             
         }
@@ -1224,7 +1263,7 @@ namespace RelhaxModpack
                         cb.CheckedChanged -= modCheckBox_CheckedChanged;
                         cb.Checked = true;
                         cb.CheckedChanged += modCheckBox_CheckedChanged;
-                        //cb.Checked = false;
+                        //modCheckBox.Checked = false;
                     }
 
                 }
@@ -1260,7 +1299,7 @@ namespace RelhaxModpack
                     {
                         cfg = m.getConfig(cc.Name.Split('_')[2]);
                         //checkbox is enabled if mod is checked AND config is enabled
-                        //toggle enabledness of checkbox based on cb checked
+                        //toggle enabledness of checkbox based on modCheckBox checked
                         //and trigger the checkbox handler
                         if (cb.Checked && cfg.enabled)
                             cc.Enabled = true;
