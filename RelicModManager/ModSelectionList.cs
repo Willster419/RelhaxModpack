@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Xml;
 using System.Windows.Forms.Integration;
+using System.Text.RegularExpressions;
 
 
 namespace RelhaxModpack
@@ -333,8 +334,9 @@ namespace RelhaxModpack
             string modDownloadFilePath = Application.StartupPath + "\\RelHaxDownloads\\" + m.modZipFile;
             //create base mod checkbox
             System.Windows.Controls.CheckBox modCheckBox = new System.Windows.Controls.CheckBox();
-            modCheckBox.Name = t.Name + "_" + m.name;
-            modCheckBox.FontSize = (double)Settings.fontSize;
+            //apparnetly spaces arn't cool, so let's ger rid of them
+            //modCheckBox.Name = t.Name + "_" + m.name;
+            //modCheckBox.FontSize = (double)Settings.fontSize;
             modCheckBox.Content = m.name;
             //if file exists, get md5 on it, otherwise just say it's updated.
             if (File.Exists(modDownloadFilePath))
@@ -367,19 +369,173 @@ namespace RelhaxModpack
             System.Windows.Controls.ComboBox configControlDD = new System.Windows.Controls.ComboBox();
             configControlDD.Items.Clear();
             configControlDD.IsEditable = false;
-            configControlDD.FontSize = (double)Settings.fontSize;
+            //configControlDD.FontSize = Settings.fontSize;
+            configControlDD.Name = "notAddedYet";
             System.Windows.Controls.ComboBox configControlDD2 = new System.Windows.Controls.ComboBox();
             configControlDD2.Items.Clear();
             configControlDD2.IsEditable = false;
-            configControlDD2.FontSize = (double)Settings.fontSize;
+            //configControlDD2.FontSize = Settings.fontSize;
+            configControlDD2.Name = "notAddedYet";
             //process the configs
-            foreach (Config con in m.configs)
+            for (int i = 0; i < m.configs.Count; i++)
             {
-                System.Windows.Controls.TreeViewItem tviC = new System.Windows.Controls.TreeViewItem();
-                System.Windows.Controls.CheckBox cbC = new System.Windows.Controls.CheckBox();
-                cbC.Content = con.name;
-                tviC.Header = cbC;
-                tvi.Items.Add(tviC);
+                //create the init stuff for each config
+                System.Windows.Controls.ComboBox configControlDDALL = null;
+                if (m.configs[i].type.Equals("single") || m.configs[i].type.Equals("single1"))
+                {
+                    //make the radio button
+                    System.Windows.Controls.RadioButton configControlRB = new System.Windows.Controls.RadioButton();
+                    //configControlRB.FontSize = Settings.fontSize;
+                    //configControlRB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    //the logic for enabling it
+                    //set them to false first
+                    configControlRB.IsEnabled = false;
+                    configControlRB.IsChecked = false;
+                    if (m.enabled && m.configs[i].enabled)
+                    {
+                        configControlRB.IsEnabled = true;
+                        //the logic for checking it
+                        if (m.modChecked && m.configs[i].configChecked)
+                            configControlRB.IsChecked = true;
+                    }
+                    //run the checksum logix
+                    configControlRB.Content = m.configs[i].name;
+                    string oldCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
+                    if (!oldCRC.Equals(m.configs[i].crc))
+                    {
+                        configControlRB.Content = configControlRB.Content + " (Updated)";
+                        if (m.configs[i].size > 0.0f)
+                            configControlRB.Content = configControlRB.Content + " (" + m.configs[i].size + " MB)";
+                    }
+                    //add the handlers at the end
+
+                    //add it to the mod config list
+                    System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
+                    configControlTVI.Header = configControlRB;
+                    tvi.Items.Add(configControlTVI);
+                }
+                else if (m.configs[i].type.Equals("single2") || m.configs[i].type.Equals("single3") || m.configs[i].type.Equals("single4"))
+                {
+                    string enableCBName = m.configs[i].type + "_enableCB";
+                    //make the radio button
+                    System.Windows.Controls.RadioButton configControlRB = new System.Windows.Controls.RadioButton();
+                    //configControlRB.FontSize = Settings.fontSize;
+                    //configControlRB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    //the logic for enabling it
+                    //set them to false first
+                    configControlRB.IsEnabled = false;
+                    configControlRB.IsChecked = false;
+                    if (m.enabled && m.configs[i].enabled)
+                    {
+                        configControlRB.IsEnabled = true;
+                        //the logic for checking it
+                        if (m.modChecked && m.configs[i].configChecked)
+                            configControlRB.IsChecked = true;
+                    }
+                    //run the checksum logix
+                    configControlRB.Content = m.configs[i].name;
+                    string oldCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
+                    if (!oldCRC.Equals(m.configs[i].crc))
+                    {
+                        configControlRB.Content = configControlRB.Content + " (Updated)";
+                        if (m.configs[i].size > 0.0f)
+                            configControlRB.Content = configControlRB.Content + " (" + m.configs[i].size + " MB)";
+                    }
+                    //add the handlers at the end
+
+                    //clobber the tree view for it
+                    //first set it to null
+                    System.Windows.Controls.TreeViewItem configControlOCBTVI = null;
+                    foreach (System.Windows.Controls.Control cont in tvi.Items)
+                    {
+                        //if it has found it, link it
+                        if (cont.Name.Equals(enableCBName))
+                            configControlOCBTVI = (System.Windows.Controls.TreeViewItem)cont;
+                    }
+                    //if it still has not found it, it is new, make it and add it
+                    if (configControlOCBTVI == null)
+                    {
+                        configControlOCBTVI = new System.Windows.Controls.TreeViewItem();
+                        System.Windows.Controls.CheckBox configControlOCB = new System.Windows.Controls.CheckBox();
+                        configControlOCBTVI.Header = configControlOCB;
+                        configControlOCBTVI.Name = enableCBName;
+                        tvi.Items.Add(configControlOCBTVI);
+                    }
+                    //add it to the mod config list
+                    System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
+                    configControlTVI.Header = configControlRB;
+                    configControlOCBTVI.Items.Add(configControlTVI);
+                    
+                }
+                else if (m.configs[i].type.Equals("single_dropdown") || m.configs[i].type.Equals("single_dropdown1") || m.configs[i].type.Equals("single_dropdown2"))
+                {
+                    //set the all to whichever one it actually is
+                    if (m.configs[i].type.Equals("single_dropdown") || m.configs[i].type.Equals("single_dropdown1"))
+                    {
+                        configControlDDALL = configControlDD;
+                    }
+                    else if (m.configs[i].type.Equals("single_dropdown2"))
+                    {
+                        configControlDDALL = configControlDD2;
+                    }
+                    //make the dropdown selection list
+                    configControlDDALL.MinWidth = 100;
+                    //run the crc logics
+                    string oldCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
+                    if (!oldCRC.Equals(m.configs[i].crc))
+                    {
+                        //add it with _updated
+                        if (m.configs[i].enabled) configControlDDALL.Items.Add(m.configs[i].name + "_updated");
+                        if (m.configs[i].configChecked) configControlDDALL.SelectedItem = m.configs[i].name + "_updated";
+                    }
+                    else
+                    {
+                        //add it
+                        if (m.configs[i].enabled) configControlDDALL.Items.Add(m.configs[i].name);
+                        if (m.configs[i].configChecked) configControlDDALL.SelectedItem = m.configs[i].name;
+                    }
+                    //add the dropdown to the thing. it will only run this once
+                    if(configControlDDALL.Name.Equals("notAddedYet"))
+                    {
+                        configControlDDALL.Name = "added";
+                        System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
+                        configControlTVI.Header = configControlDDALL;
+                        tvi.Items.Add(configControlTVI);
+                    }
+                }
+                else if (m.configs[i].type.Equals("multi"))
+                {
+                    //make the checkbox
+                    System.Windows.Controls.CheckBox configControlCB = new System.Windows.Controls.CheckBox();
+                    //configControlCB.FontSize = Settings.fontSize;
+                    //configControlCB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    //the logic for enabling it
+                    //set them to false first
+                    configControlCB.IsEnabled = false;
+                    configControlCB.IsChecked = false;
+                    if (m.enabled && m.configs[i].enabled)
+                    {
+                        configControlCB.IsEnabled = true;
+                        //the logic for checking it
+                        if (m.modChecked && m.configs[i].configChecked)
+                            configControlCB.IsChecked = true;
+                    }
+                    //run the checksum logix
+                    configControlCB.Content = m.configs[i].name;
+                    string oldCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
+                    if (!oldCRC.Equals(m.configs[i].crc))
+                    {
+                        configControlCB.Content = configControlCB.Content + " (Updated)";
+                        if (m.configs[i].size > 0.0f)
+                            configControlCB.Content = configControlCB.Content + " (" + m.configs[i].size + " MB)";
+                    }
+                    //add the handlers at the end
+
+                    //add it to the mod config list
+                    System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
+                    configControlTVI.Header = configControlCB;
+                    tvi.Items.Add(configControlTVI);
+                }
             }
             //add the mod check box to the legacy tree view
             lsl.legacyTreeView.Items.Add(tvi);

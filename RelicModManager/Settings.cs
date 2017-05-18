@@ -334,6 +334,9 @@ namespace RelhaxModpack
         //returns the md5 hash of the file based on the input file string location
         public static string GetMd5Hash(string inputFile)
         {
+            //first, return if the file does not exist
+            if (!File.Exists(inputFile))
+                return "-1";
             MD5 md5Hash = MD5.Create();
             // Convert the input string to a byte array and compute the hash.
             var stream = File.OpenRead(inputFile);
