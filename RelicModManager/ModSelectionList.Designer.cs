@@ -46,9 +46,9 @@
             // 
             // continueButton
             // 
-            this.continueButton.Location = new System.Drawing.Point(921, 438);
+            this.continueButton.Location = new System.Drawing.Point(907, 420);
             this.continueButton.Name = "continueButton";
-            this.continueButton.Size = new System.Drawing.Size(59, 23);
+            this.continueButton.Size = new System.Drawing.Size(73, 41);
             this.continueButton.TabIndex = 5;
             this.continueButton.Text = "Continue";
             this.continueButton.UseVisualStyleBackColor = true;
@@ -56,11 +56,11 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(845, 438);
+            this.cancelButton.Location = new System.Drawing.Point(831, 420);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(70, 23);
+            this.cancelButton.Size = new System.Drawing.Size(70, 41);
             this.cancelButton.TabIndex = 6;
-            this.cancelButton.Text = "cancel";
+            this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
@@ -84,9 +84,9 @@
             // 
             // loadConfigButton
             // 
-            this.loadConfigButton.Location = new System.Drawing.Point(591, 438);
+            this.loadConfigButton.Location = new System.Drawing.Point(577, 420);
             this.loadConfigButton.Name = "loadConfigButton";
-            this.loadConfigButton.Size = new System.Drawing.Size(113, 23);
+            this.loadConfigButton.Size = new System.Drawing.Size(113, 41);
             this.loadConfigButton.TabIndex = 9;
             this.loadConfigButton.Text = "Load Pref";
             this.loadConfigButton.UseVisualStyleBackColor = true;
@@ -94,9 +94,9 @@
             // 
             // saveConfigButton
             // 
-            this.saveConfigButton.Location = new System.Drawing.Point(710, 438);
+            this.saveConfigButton.Location = new System.Drawing.Point(696, 420);
             this.saveConfigButton.Name = "saveConfigButton";
-            this.saveConfigButton.Size = new System.Drawing.Size(129, 23);
+            this.saveConfigButton.Size = new System.Drawing.Size(129, 41);
             this.saveConfigButton.TabIndex = 10;
             this.saveConfigButton.Text = "Save Pref";
             this.saveConfigButton.UseVisualStyleBackColor = true;
@@ -113,11 +113,11 @@
             // 
             // clearSelectionsButton
             // 
-            this.clearSelectionsButton.Location = new System.Drawing.Point(481, 438);
+            this.clearSelectionsButton.Location = new System.Drawing.Point(467, 420);
             this.clearSelectionsButton.Name = "clearSelectionsButton";
-            this.clearSelectionsButton.Size = new System.Drawing.Size(104, 23);
+            this.clearSelectionsButton.Size = new System.Drawing.Size(104, 41);
             this.clearSelectionsButton.TabIndex = 13;
-            this.clearSelectionsButton.Text = "clear selections";
+            this.clearSelectionsButton.Text = "Clear Selections";
             this.clearSelectionsButton.UseVisualStyleBackColor = true;
             this.clearSelectionsButton.Click += new System.EventHandler(this.clearSelectionsButton_Click);
             // 
@@ -143,7 +143,7 @@
             // 
             this.tabPage11.Location = new System.Drawing.Point(4, 22);
             this.tabPage11.Name = "tabPage11";
-            this.tabPage11.Size = new System.Drawing.Size(960, 330);
+            this.tabPage11.Size = new System.Drawing.Size(960, 312);
             this.tabPage11.TabIndex = 10;
             this.tabPage11.Text = "Custom UserPackages";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -155,7 +155,7 @@
             this.modTabGroups.Location = new System.Drawing.Point(12, 76);
             this.modTabGroups.Name = "modTabGroups";
             this.modTabGroups.SelectedIndex = 0;
-            this.modTabGroups.Size = new System.Drawing.Size(968, 356);
+            this.modTabGroups.Size = new System.Drawing.Size(968, 338);
             this.modTabGroups.TabIndex = 4;
             this.modTabGroups.Selected += new System.Windows.Forms.TabControlEventHandler(this.modTabGroups_Selected);
             this.modTabGroups.Click += new System.EventHandler(this.modTabGroups_Click);
@@ -177,7 +177,7 @@
             this.Controls.Add(this.continueButton);
             this.Controls.Add(this.modTabGroups);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(520, 250);
+            this.MinimumSize = new System.Drawing.Size(550, 250);
             this.Name = "ModSelectionList";
             this.Text = "ModSelectionList";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ModSelectionList_FormClosing);

@@ -2410,6 +2410,12 @@ namespace RelhaxModpack
                     languageGER.Checked = true;
                     languageGER.CheckedChanged += languageGER_CheckedChanged;
                     break;
+                case (Translations.Languages.Polish):
+                    //set polish translation
+                    languagePL.CheckedChanged -= languagePL_CheckedChanged;
+                    languagePL.Checked = true;
+                    languagePL.CheckedChanged += languagePL_CheckedChanged;
+                    break;
             }
             switch (Settings.sView)
             {
@@ -2864,6 +2870,12 @@ namespace RelhaxModpack
         private void selectionLegacy_CheckedChanged(object sender, EventArgs e)
         {
             Settings.sView = Settings.SelectionView.legacy;
+            this.applySettings();
+        }
+
+        private void languagePL_CheckedChanged(object sender, EventArgs e)
+        {
+            Translations.language = Translations.Languages.Polish;
             this.applySettings();
         }
     }

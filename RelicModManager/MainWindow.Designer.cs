@@ -85,7 +85,7 @@
             // 
             this.childProgressBar.Location = new System.Drawing.Point(12, 466);
             this.childProgressBar.Name = "childProgressBar";
-            this.childProgressBar.Size = new System.Drawing.Size(275, 23);
+            this.childProgressBar.Size = new System.Drawing.Size(294, 23);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.childProgressBar.TabIndex = 11;
             // 
@@ -123,7 +123,7 @@
             // 
             this.parrentProgressBar.Location = new System.Drawing.Point(12, 437);
             this.parrentProgressBar.Name = "parrentProgressBar";
-            this.parrentProgressBar.Size = new System.Drawing.Size(275, 23);
+            this.parrentProgressBar.Size = new System.Drawing.Size(294, 23);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.parrentProgressBar.TabIndex = 17;
             // 
@@ -140,7 +140,7 @@
             // 
             this.installRelhaxMod.Location = new System.Drawing.Point(12, 12);
             this.installRelhaxMod.Name = "installRelhaxMod";
-            this.installRelhaxMod.Size = new System.Drawing.Size(275, 34);
+            this.installRelhaxMod.Size = new System.Drawing.Size(294, 34);
             this.installRelhaxMod.TabIndex = 19;
             this.installRelhaxMod.Text = "Install Relhax ModPack";
             this.installRelhaxMod.UseVisualStyleBackColor = true;
@@ -150,7 +150,7 @@
             // 
             this.uninstallRelhaxMod.Location = new System.Drawing.Point(12, 52);
             this.uninstallRelhaxMod.Name = "uninstallRelhaxMod";
-            this.uninstallRelhaxMod.Size = new System.Drawing.Size(275, 34);
+            this.uninstallRelhaxMod.Size = new System.Drawing.Size(294, 34);
             this.uninstallRelhaxMod.TabIndex = 20;
             this.uninstallRelhaxMod.Text = "Uninstall Relhax Modpack";
             this.uninstallRelhaxMod.UseVisualStyleBackColor = true;
@@ -213,7 +213,7 @@
             this.settingsGroupBox.Controls.Add(this.cleanInstallCB);
             this.settingsGroupBox.Location = new System.Drawing.Point(12, 92);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(275, 155);
+            this.settingsGroupBox.Size = new System.Drawing.Size(294, 155);
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "RelHax ModPack Settings";
@@ -343,7 +343,7 @@
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(188, 509);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(207, 509);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
             this.cancelDownloadButton.Size = new System.Drawing.Size(99, 23);
             this.cancelDownloadButton.TabIndex = 28;
@@ -363,7 +363,7 @@
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
             this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.downloadProgress.Size = new System.Drawing.Size(275, 52);
+            this.downloadProgress.Size = new System.Drawing.Size(294, 52);
             this.downloadProgress.TabIndex = 29;
             this.downloadProgress.Text = "";
             // 
@@ -372,7 +372,7 @@
             this.languageSelectionGB.Controls.Add(this.languagePL);
             this.languageSelectionGB.Controls.Add(this.languageGER);
             this.languageSelectionGB.Controls.Add(this.languageENG);
-            this.languageSelectionGB.Location = new System.Drawing.Point(131, 251);
+            this.languageSelectionGB.Location = new System.Drawing.Point(150, 251);
             this.languageSelectionGB.Name = "languageSelectionGB";
             this.languageSelectionGB.Size = new System.Drawing.Size(156, 54);
             this.languageSelectionGB.TabIndex = 30;
@@ -389,6 +389,7 @@
             this.languagePL.TabStop = true;
             this.languagePL.Text = "PL";
             this.languagePL.UseVisualStyleBackColor = true;
+            this.languagePL.CheckedChanged += new System.EventHandler(this.languagePL_CheckedChanged);
             // 
             // languageGER
             // 
@@ -453,7 +454,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(299, 549);
+            this.ClientSize = new System.Drawing.Size(318, 549);
             this.Controls.Add(this.viewTypeGB);
             this.Controls.Add(this.languageSelectionGB);
             this.Controls.Add(this.downloadProgress);

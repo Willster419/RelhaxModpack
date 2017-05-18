@@ -1905,7 +1905,7 @@ namespace RelhaxModpack
             saveConfigButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
             clearSelectionsButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width - 6 - loadConfigButton.Size.Width - 6 - clearSelectionsButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
             if (this.Size.Height < 250) this.Size = new Size(this.Size.Width, 250);
-            if (this.Size.Width < 520) this.Size = new Size(520, this.Size.Height);
+            if (this.Size.Width < 550) this.Size = new Size(550, this.Size.Height);
             foreach (TabPage t in modTabGroups.TabPages)
             {
                 foreach (Control c in t.Controls)
