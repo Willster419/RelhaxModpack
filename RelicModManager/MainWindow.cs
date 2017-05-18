@@ -691,6 +691,7 @@ namespace RelhaxModpack
             string[] temp = node.InnerText.Split('#');
             string version = temp[0].Trim();
             version = version.Substring(2);
+            version = version.Split(' ')[0];
             return version;
         }
         //main unzip worker method
