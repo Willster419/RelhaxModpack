@@ -6,28 +6,36 @@ namespace RelhaxModpack
     public static class Translations
     {
         //Enumerator to determine which translated string to return
-        public enum Languages { English = 0, German = 1 };
+        public enum Languages { English = 0, German = 1, Polish = 2 };
         public static Languages language = Languages.English;//set it to this default
         public static Hashtable english = new Hashtable();
         public static Hashtable german = new Hashtable();
+        public static Hashtable polish = new Hashtable();
         //load hashes on application startup
         //Translations.loadHashes();
 
         public static string getTranslatedString(string componetName)
         {
-            if (language == Languages.English)
+            switch (language)
             {
-                if (english.Contains(componetName))
-                {
-                    return (string)english[componetName];
-                }
-            }
-            else if (language == Languages.German)
-            {
-                if (german.Contains(componetName))
-                {
-                    return (string)german[componetName];
-                }
+                case(Languages.English):
+                    if (english.Contains(componetName))
+                    {
+                        return (string)english[componetName];
+                    }
+                    break;
+                case (Languages.German):
+                    if (german.Contains(componetName))
+                    {
+                        return (string)german[componetName];
+                    }
+                    break;
+                case (Languages.Polish):
+                    if (polish.Contains(componetName))
+                    {
+                        return (string)german[componetName];
+                    }
+                    break;
             }
             Settings.appendToLog("ERROR: no value in language hash for key: " + componetName + ": Language: " + language);
             return componetName;
