@@ -278,14 +278,11 @@
           <name>Clan Icons</name>
           <version>
           </version>
-          <modzipfile>
-          </modzipfile>
-          <startAddress>
-          </startAddress>
+          <modzipfile>XVM_config_builder_clanicons_patch.zip</modzipfile>
+          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc>
-          </modzipcrc>
+          <modzipcrc>f</modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
           <userDatas />
