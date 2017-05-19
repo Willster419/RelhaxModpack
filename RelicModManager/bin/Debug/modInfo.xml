@@ -2344,12 +2344,12 @@
           <pictures />
           <configs>
             <config>
-              <name>Disabled</name>
-              <configzipfile>XVM_config_builder_login_save_last_server_disable.zip</configzipfile>
+              <name>Enabled</name>
+              <configzipfile>XVM_config_builder_login_save_last_server_enable.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>c40c72442b71f851d6c312bd6a4678f0</configzipcrc>
+              <configzipcrc>87bc36515f588832146e834d7f53a57d</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
@@ -2357,12 +2357,12 @@
               <dependencies />
             </config>
             <config>
-              <name>Enabled</name>
-              <configzipfile>XVM_config_builder_login_save_last_server_enable.zip</configzipfile>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_login_save_last_server_disable.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>87bc36515f588832146e834d7f53a57d</configzipcrc>
+              <configzipcrc>c40c72442b71f851d6c312bd6a4678f0</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
