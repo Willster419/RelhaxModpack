@@ -1,3 +1,7 @@
+Version 22.3.1:
+-Added a feature to detect if the user WoT client version is supported or not. If it's not, you can still install, but the mods are not guaranteed to work.
+-Updated translations
+
 Version 22.3.0:
 -Fixed a bug to now allow the modpack to work in sandbox and common test versions. That does not, however, mean that the mods work in those versions.
 -Added polish translations, big thanks to Neoros of the EU server!
