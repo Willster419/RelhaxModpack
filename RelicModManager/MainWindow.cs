@@ -1552,7 +1552,7 @@ namespace RelhaxModpack
                 //log and inform the user
                 Settings.appendToLog("WARNING: Detected client version is " + tanksVersion + ", not supported");
                 Settings.appendToLog("Supported versions are: " + suportedVersions);
-                MessageBox.Show(Translations.getTranslatedString("detectedClientVersion") + " " + tanksVersion + "\n" + Translations.getTranslatedString("supportedClientVersions") + " " + suportedVersions + "\n" + Translations.getTranslatedString("supportNotGuarnteed"));
+                MessageBox.Show(Translations.getTranslatedString("detectedClientVersion") + ": " + tanksVersion + "\n" + Translations.getTranslatedString("supportedClientVersions") + ": " + suportedVersions + "\n" + Translations.getTranslatedString("supportNotGuarnteed"));
                 selectionListTanksVersion = supportedVersions[supportedVersions.Count() - 1];
             }
             state = InstallState.modSelection;
