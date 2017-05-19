@@ -777,6 +777,24 @@ namespace RelhaxModpack
             english.Add("selectionViewMode", "Select a mod selection list view mode\nDefault: Relhax list view mode\nLegacy: OMC tree list view mode");
             german.Add("selectionViewMode", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nAlternativ: OMC Baumstruktur");
             polish.Add("selectionViewMode", "Wybierz tryb widoku wyborów modyfikacji\nDomyślnie: Tryb widoku listy RelHax\nSpuścizna: Tryb widoku listy OMC");
+            
+            //Componet:Detected client version
+            //
+            english.Add("detectedClientVersion", "Detected client version is");
+            german.Add("detectedClientVersion", "TODO");
+            polish.Add("detectedClientVersion", "TODO");
+            
+            //Componet:Supported client versions
+            //
+            english.Add("supportedClientVersions", "Supported clients are");
+            german.Add("supportedClientVersions", "TODO");
+            polish.Add("supportedClientVersions", "TODO");
+            
+            //Componet:Supported clients notice
+            //
+            english.Add("supportNotGuarnteed", "This client version is not offically supported by the modpack. Mods may not work.");
+            german.Add("supportNotGuarnteed", "TODO");
+            polish.Add("supportNotGuarnteed", "TODO");
         }
     }
 }

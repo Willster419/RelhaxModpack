@@ -106,6 +106,8 @@ namespace RelhaxModpack
         private loadingGifPreview gp;
         private ModSelectionList list;
         private string fodlerDateName;
+        private string suportedVersions = null;
+        string[] supportedVersions = null;
 
         //The constructur for the application
         public MainWindow()
@@ -693,6 +695,33 @@ namespace RelhaxModpack
             version = version.Substring(2);
             version = version.Split(' ')[0];
             return version;
+        }
+        //check to see if the supplied version of tanks is on the list of supported client versions
+        private bool isClientVersionSupported(string detectedVersion)
+        {
+            //download a string of supported versions
+            try
+            {
+                suportedVersions = downloader.DownloadString("http://wotmods.relhaxmodpack.com/RelhaxModpack/supported_clients.txt");
+            }
+            catch (WebException e)
+            {
+                Settings.appendToLog("EXCEPTION: WebException (call stack traceback)");
+                Settings.appendToLog(e.StackTrace);
+                Settings.appendToLog("inner message: " + e.Message);
+                Settings.appendToLog("source: " + e.Source);
+                Settings.appendToLog("target: " + e.TargetSite);
+                Settings.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/supported_clients.txt");
+                MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " supported_clients.txt");
+                Application.Exit();
+            }
+            supportedVersions = suportedVersions.Split(',');
+            foreach (string s in supportedVersions)
+            {
+                if (s.Equals(detectedVersion))
+                    return true;
+            }
+            return false;
         }
         //main unzip worker method
         private void unzip(string zipFile, string extractFolder)
@@ -1516,12 +1545,22 @@ namespace RelhaxModpack
                 return;
             }
             tanksVersion = this.getFolderVersion(null);
+            //determine if the tanks client version is supported
+            string selectionListTanksVersion = tanksVersion;
+            if (!isClientVersionSupported(tanksVersion))
+            {
+                //log and inform the user
+                Settings.appendToLog("WARNING: Detected client version is " + tanksVersion + ", not supported");
+                Settings.appendToLog("Supported versions are: " + suportedVersions);
+                MessageBox.Show(Translations.getTranslatedString("detectedClientVersion") + " " + tanksVersion + "\n" + Translations.getTranslatedString("supportedClientVersions") + " " + suportedVersions + "\n" + Translations.getTranslatedString("supportNotGuarnteed"));
+                selectionListTanksVersion = supportedVersions[supportedVersions.Count() - 1];
+            }
             state = InstallState.modSelection;
             //reset the childProgressBar value
             childProgressBar.Maximum = 100;
             childProgressBar.Value = 0;
             //show the mod selection window
-            list = new ModSelectionList(tanksVersion,tanksLocation,this.Location.X + this.Size.Width, this.Location.Y);
+            list = new ModSelectionList(selectionListTanksVersion, tanksLocation, this.Location.X + this.Size.Width, this.Location.Y);
             list.ShowDialog();
             if (list.cancel)
             {
