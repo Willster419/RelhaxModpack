@@ -1440,8 +1440,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>e803c98cb38f8480f210ce310502c60b</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
@@ -1453,8 +1453,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>b0f36ad5ff11927b336a2f25fbcecc59</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
@@ -1466,8 +1466,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>ddc6ea6395e2a2de7ad339cb1c354c31</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
@@ -1479,8 +1479,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>6b1ad6373e0c39fa2816f6ae4aa174df</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
@@ -1488,8 +1488,7 @@
             </config>
           </configs>
           <dependencies />
-          <description>Choose with which Players Panel position you will start.
-          </description>
+          <description>Choose with which Players Panel position you will start.</description>
           <updateComment>
           </updateComment>
           <devURL>
@@ -2077,8 +2076,8 @@
           <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
+          <modzipcrc>85b1919c2666791ea43eb852559b8ba0</modzipcrc>
+          <size>0.1</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures />
@@ -2344,19 +2343,6 @@
           <pictures />
           <configs>
             <config>
-              <name>Disabled</name>
-              <configzipfile>XVM_config_builder_login_save_last_server_disable.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>c40c72442b71f851d6c312bd6a4678f0</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
               <name>Enabled</name>
               <configzipfile>XVM_config_builder_login_save_last_server_enable.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -2369,10 +2355,22 @@
               <pictures />
               <dependencies />
             </config>
+            <config>
+              <name>Disabled</name>
+              <configzipfile>XVM_config_builder_login_save_last_server_disable.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>c40c72442b71f851d6c312bd6a4678f0</configzipcrc>
+              <size>0.1</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
           </configs>
           <dependencies />
-          <description>Save the last server that you logged into
-          </description>
+          <description>Save the last server that you logged into</description>
           <updateComment>
           </updateComment>
           <devURL>
@@ -4154,8 +4152,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>4600f38154e512ba57a21176cec6ede0</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
@@ -4577,8 +4575,8 @@
           <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
+          <modzipcrc>a39583824f7b3d3ed8275faec7114828</modzipcrc>
+          <size>0.1</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures />
@@ -4589,8 +4587,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>e6e4517da46e0abb196154a9f5c3f35e</configzipcrc>
+              <size>6.6</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -4778,7 +4776,8 @@
           <dependencies />
           <description>Aslain's : http://forum.worldoftanks.eu/index.php?/topic/35125- @Blackspy by_Romkyns: http://forum.worldoftanks.eu/index.php?/topic/318315-917-tank-icon-maker-v051-13-march-2017/ @Druids: http://forum.worldoftanks.com/index.php?/topic/390563-druids-icon-mod-revisited/#topmost @J1mB0s: http://forum.worldoftanks.eu/index.php?/topic/34259-09180-j1mb0s-contour-icon-mod/ @HARDicons: http://forum.worldoftanks.ru/index.php?/topic/374544- @TORQue - Inspired by Witblitz: http://forum.worldoftanks.eu/index.php?/topic/283444-
           </description>
-          <updateComment></updateComment>
+          <updateComment>
+          </updateComment>
           <devURL>
           </devURL>
         </mod>
@@ -5463,8 +5462,8 @@
           <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
+          <modzipcrc>6a201474889a5545d59ae14df17c8e34</modzipcrc>
+          <size>0.1</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>
@@ -5479,8 +5478,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>713583677679a67e827216a02f4986e4</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
@@ -5492,8 +5491,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>dea2d125e2e72578a2419dd99467b574</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
@@ -5505,8 +5504,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>e926b3242b9350a4af73c21626450996</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
@@ -5518,8 +5517,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>44d5f31d82d2d711da5a44041d61c543</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
@@ -6275,8 +6274,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>ba25f5cfd8d738486267b32c2073009d</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
@@ -6284,18 +6283,24 @@
             </config>
           </configs>
           <dependencies />
-          <description></description>
+          <description>
+          </description>
           <updateComment>
           </updateComment>
           <devURL>http://wotsite.net/mody-dlya-world-of-tanks/12066-autoequip-mod-avtomaticheskoj-ustanovki-stereotruby.html</devURL>
         </mod>
         <mod>
           <name>Crew Icons</name>
-          <version></version>
-          <modzipfile></modzipfile>
-          <startAddress></startAddress>
-          <endAddress></endAddress>
-          <modzipcrc>f</modzipcrc>
+          <version>
+          </version>
+          <modzipfile>
+          </modzipfile>
+          <startAddress>
+          </startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>
+          </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
           <userDatas />
@@ -6305,9 +6310,10 @@
               <name>Anime</name>
               <configzipfile>Garage_mods_Crew_Icons_Anime_2017-05-14.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress></endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>e0c8a54b7e60c888709ad5c05164b872</configzipcrc>
+              <size>18.9</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -6321,9 +6327,10 @@
               <name>Minions</name>
               <configzipfile>Garage_mods_Crew_Icons_Minions_2017-05-14.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress></endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>5f2997171d3a64f04742aaf0c2dc1806</configzipcrc>
+              <size>18.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -6338,7 +6345,8 @@
           <description>Anime: https://mod-wot.com/load/icons_for_world_of_tanks_wot/anime_crew_icons_for_world_of_tanks/7-1-0-341 @Minions http://forum.worldoftanks.eu/index.php?/topic/426145-0916-minion-crew-mod/#topmost</description>
           <updateComment>
           </updateComment>
-          <devURL></devURL>
+          <devURL>
+          </devURL>
         </mod>
         <mod>
           <name>ModPack Button Support Tool by Budyx69</name>
@@ -6621,8 +6629,10 @@
           <name>Hangars</name>
           <version>
           </version>
-          <modzipfile></modzipfile>
-          <startAddress></startAddress>
+          <modzipfile>
+          </modzipfile>
+          <startAddress>
+          </startAddress>
           <endAddress>
           </endAddress>
           <modzipcrc>f</modzipcrc>
@@ -6637,8 +6647,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>62d1d81d86585fdd4ad519740b9ebbb8</configzipcrc>
+              <size>30.2</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -6657,8 +6667,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>8db947cc6807037e51fa635f99c685ca</configzipcrc>
+              <size>29.9</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
@@ -6670,8 +6680,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>2b1f78d52b4b655ceaba152ed79f1feb</configzipcrc>
+              <size>30.2</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
@@ -6683,8 +6693,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>20fc9941f9c3320df0f3f4c05b2015ae</configzipcrc>
+              <size>4.6</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -6700,8 +6710,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>d9444b177edc30758e86e082fdc578b1</configzipcrc>
+              <size>23.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -6717,8 +6727,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>8406f190a0540d948e67ddbffe3981f1</configzipcrc>
+              <size>5.6</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -6739,7 +6749,8 @@
           <description>Changes your hangar! @Cave with different Flags: http://worldof-tanks.com/technology-hangar/ @Concrete Floor: http://forum.worldoftanks.ru/index.php?/topic/1874858-ангар/  @Turquoise: http://forum.worldoftanks.ru/index.php?/topic/1874858-ангар/ It looks very good compared with the Interface for WoT (English), because is same colour. @WotSpeak: http://worldof-tanks.com/hangar-wotspeak-for-world-of-tanks/</description>
           <updateComment>
           </updateComment>
-          <devURL></devURL>
+          <devURL>
+          </devURL>
         </mod>
         <mod>
           <name>Interface for WoT (English)</name>
@@ -6763,8 +6774,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>8c80afc76edc722be983af93e0dbcf9c</configzipcrc>
+              <size>207</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -6864,8 +6875,8 @@
           <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
+          <modzipcrc>8f063e25b4212fd8d480b40b871fd85b</modzipcrc>
+          <size>0.1</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures>
@@ -6925,11 +6936,13 @@
           <name>Techtrees</name>
           <version>
           </version>
-          <modzipfile></modzipfile>
+          <modzipfile>
+          </modzipfile>
           <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc></modzipcrc>
+          <modzipcrc>
+          </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
           <userDatas />
@@ -6939,7 +6952,8 @@
               <name>Vertical Techtree (English/Russian)</name>
               <configzipfile>Garage_mods_veritcal_techTree_2017-04-26_base.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress></endAddress>
+              <endAddress>
+              </endAddress>
               <configzipcrc>9e017dc3be7cab1e4a20b4a15323f12c</configzipcrc>
               <size>1.6</size>
               <configenabled>True</configenabled>
@@ -6977,11 +6991,14 @@
             </config>
             <config>
               <name>Techtree Mod (German/English Settings)</name>
-              <configzipfile></configzipfile>
+              <configzipfile>
+              </configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress></endAddress>
-              <configzipcrc></configzipcrc>
-              <size></size>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>
+              </configzipcrc>
+              <size>0</size>
               <configenabled>True</configenabled>
               <configtype>single1</configtype>
               <pictures>
@@ -7003,8 +7020,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>dea85a5f9b81ab58e8b1040ca82852e6</configzipcrc>
+              <size>2.4</size>
               <configenabled>True</configenabled>
               <configtype>single3</configtype>
               <pictures />
@@ -7254,8 +7271,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>904eab0c86036fd88bd2e146f2c185b7</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single_dropdown1</configtype>
               <pictures />
@@ -7389,8 +7406,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>c46a3d2c3701290363a0c7115ab63e37</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
@@ -8108,8 +8125,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>639aeaa3489b4a04c9fe021984f739b7</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single_dropdown</configtype>
               <pictures>
