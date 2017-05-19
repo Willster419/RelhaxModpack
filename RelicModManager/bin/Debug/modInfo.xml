@@ -1430,7 +1430,7 @@
           <modzipcrc>
           </modzipcrc>
           <size>0</size>
-          <enabled>False</enabled>
+          <enabled>True</enabled>
           <userDatas />
           <pictures />
           <configs>
