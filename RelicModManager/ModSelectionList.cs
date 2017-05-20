@@ -1800,14 +1800,7 @@ namespace RelhaxModpack
                             d.endAddress = globs.InnerText;
                             break;
                         case "dependencyenabled":
-                            try
-                            {
-                                d.enabled = bool.Parse(globs.InnerText);
-                            }
-                            catch (FormatException)
-                            {
-                                d.enabled = false;
-                            }
+                            d.enabled = Settings.parseBool(globs.InnerText, false);
                             break;
                     }
                 }
@@ -1815,82 +1808,68 @@ namespace RelhaxModpack
             }
             XmlNodeList catagoryList = doc.SelectNodes("//modInfoAlpha.xml/catagories/catagory");
             parsedCatagoryList = new List<Catagory>();
-            foreach (XmlNode nnnnn in catagoryList)
+            foreach (XmlNode catagoryHolder in catagoryList)
             {
                 Catagory cat = new Catagory();
-                foreach (XmlNode nnnnnn in nnnnn.ChildNodes)
+                foreach (XmlNode catagoryNode in catagoryHolder.ChildNodes)
                 {
-                    switch (nnnnnn.Name)
+                    switch (catagoryNode.Name)
                     {
                         case "name":
-                            cat.name = nnnnnn.InnerText;
+                            cat.name = catagoryNode.InnerText;
                             break;
                         case "selectionType":
-                            cat.selectionType = nnnnnn.InnerText;
+                            cat.selectionType = catagoryNode.InnerText;
                             break;
                         case "mods":
-                            foreach (XmlNode n in nnnnnn.ChildNodes)
+                            foreach (XmlNode modHolder in catagoryNode.ChildNodes)
                             {
                                 Mod m = new Mod();
-                                foreach (XmlNode nn in n.ChildNodes)
+                                foreach (XmlNode modNode in modHolder.ChildNodes)
                                 {
-                                    switch (nn.Name)
+                                    switch (modNode.Name)
                                     {
                                         case "name":
-                                            m.name = nn.InnerText;
+                                            m.name = modNode.InnerText;
                                             break;
                                         case "version":
-                                            m.version = nn.InnerText;
+                                            m.version = modNode.InnerText;
                                             break;
                                         case "size":
-                                            try
-                                            {
-                                                m.size = float.Parse(nn.InnerText);
-                                            }
-                                            catch (FormatException)
-                                            {
-                                                m.size = (float)0.0;
-                                            }
+                                            m.size = Settings.parseFloat(modNode.InnerText, 0.0f);
                                             break;
                                         case "modzipfile":
-                                            m.modZipFile = nn.InnerText;
+                                            m.modZipFile = modNode.InnerText;
                                             break;
                                         case "startAddress":
-                                            m.startAddress = nn.InnerText;
+                                            m.startAddress = modNode.InnerText;
                                             break;
                                         case "endAddress":
-                                            m.endAddress = nn.InnerText;
+                                            m.endAddress = modNode.InnerText;
                                             break;
                                         case "modzipcrc":
-                                            m.crc = nn.InnerText;
+                                            m.crc = modNode.InnerText;
                                             break;
                                         case "enabled":
-                                            try
-                                            {
-                                                m.enabled = bool.Parse(nn.InnerText);
-                                            }
-                                            catch (FormatException)
-                                            {
-                                                m.enabled = false;
-                                            }
+                                            m.enabled = Settings.parseBool(modNode.InnerText, false);
                                             break;
                                         case "description":
-                                            m.description = nn.InnerText;
+                                            m.description = modNode.InnerText;
                                             break;
                                         case "updateComment":
-                                            m.updateComment = nn.InnerText;
+                                            m.updateComment = modNode.InnerText;
                                             break;
                                         case "devURL":
-                                            m.devURL = nn.InnerText;
+                                            m.devURL = modNode.InnerText;
                                             break;
                                         case "userDatas":
-                                            foreach (XmlNode nnnnnnn in nn.ChildNodes)
+                                            foreach (XmlNode userDataNode in modNode.ChildNodes)
                                             {
 
-                                                switch (nnnnnnn.Name)
+                                                switch (userDataNode.Name)
                                                 {
                                                     case "userData":
-                                                        string innerText = nnnnnnn.InnerText;
+                                                        string innerText = userDataNode.InnerText;
                                                         if (innerText == null)
                                                             continue;
                                                         if (innerText.Equals(""))
@@ -1903,19 +1882,19 @@ namespace RelhaxModpack
                                             break;
                                         case "pictures":
                                             //parse every picture
-                                            foreach (XmlNode nnnnnnn in nn.ChildNodes)
+                                            foreach (XmlNode pictureHolder in modNode.ChildNodes)
                                             {
-                                                foreach (XmlNode nnnnnnnn in nnnnnnn.ChildNodes)
+                                                foreach (XmlNode pictureNode in pictureHolder.ChildNodes)
                                                 {
-                                                    switch (nnnnnnnn.Name)
+                                                    switch (pictureNode.Name)
                                                     {
                                                         case "URL":
-                                                            string innerText = nnnnnnnn.InnerText;
+                                                            string innerText = pictureNode.InnerText;
                                                             if (innerText == null)
                                                                 continue;
                                                             if (innerText.Equals(""))
                                                                 continue;
-                                                            m.picList.Add(new Picture("Mod: " + m.name, nnnnnnnn.InnerText));
+                                                            m.picList.Add(new Picture("Mod: " + m.name, pictureNode.InnerText));
                                                             break;
                                                     }
                                                 }
@@ -1923,34 +1902,27 @@ namespace RelhaxModpack
                                             break;
                                         case "dependencies":
                                             //parse all dependencies
-                                            foreach (XmlNode nnnnnnn in nn.ChildNodes)
+                                            foreach (XmlNode dependencyHolder in modNode.ChildNodes)
                                             {
                                                 Dependency d = new Dependency();
-                                                foreach (XmlNode nnnnnnnn in nnnnnnn.ChildNodes)
+                                                foreach (XmlNode dependencyNode in dependencyHolder.ChildNodes)
                                                 {
-                                                    switch (nnnnnnnn.Name)
+                                                    switch (dependencyNode.Name)
                                                     {
                                                         case "dependencyZipFile":
-                                                            d.dependencyZipFile = nnnnnnnn.InnerText;
+                                                            d.dependencyZipFile = dependencyNode.InnerText;
                                                             break;
                                                         case "dependencyZipCRC":
-                                                            d.dependencyZipCRC = nnnnnnnn.InnerText;
+                                                            d.dependencyZipCRC = dependencyNode.InnerText;
                                                             break;
                                                         case "startAddress":
-                                                            d.startAddress = nnnnnnnn.InnerText;
+                                                            d.startAddress = dependencyNode.InnerText;
                                                             break;
                                                         case "endAddress":
-                                                            d.endAddress = nnnnnnnn.InnerText;
+                                                            d.endAddress = dependencyNode.InnerText;
                                                             break;
                                                         case "dependencyenabled":
-                                                            try
-                                                            {
-                                                                d.enabled = bool.Parse(nnnnnnnn.InnerText);
-                                                            }
-                                                            catch (FormatException)
-                                                            {
-                                                                d.enabled = false;
-                                                            }
+                                                            d.enabled = Settings.parseBool(dependencyNode.InnerText, false);
                                                             break;
                                                     }
                                                 }
@@ -1959,101 +1931,170 @@ namespace RelhaxModpack
                                             break;
                                         case "configs":
                                             //parse every config for that mod
-                                            foreach (XmlNode nnn in nn.ChildNodes)
+                                            foreach (XmlNode configHolder in modNode.ChildNodes)
                                             {
                                                 Config c = new Config();
-                                                foreach (XmlNode nnnn in nnn.ChildNodes)
+                                                foreach (XmlNode configNode in configHolder.ChildNodes)
                                                 {
-                                                    switch (nnnn.Name)
+                                                    switch (configNode.Name)
                                                     {
                                                         case "name":
-                                                            c.name = nnnn.InnerText;
+                                                            c.name = configNode.InnerText;
                                                             break;
                                                         case "configzipfile":
-                                                            c.zipConfigFile = nnnn.InnerText;
+                                                            c.zipConfigFile = configNode.InnerText;
                                                             break;
                                                         case "startAddress":
-                                                            c.startAddress = nnnn.InnerText;
+                                                            c.startAddress = configNode.InnerText;
                                                             break;
                                                         case "endAddress":
-                                                            c.endAddress = nnnn.InnerText;
+                                                            c.endAddress = configNode.InnerText;
                                                             break;
                                                         case "configzipcrc":
-                                                            c.crc = nnnn.InnerText;
+                                                            c.crc = configNode.InnerText;
                                                             break;
                                                         case "configenabled":
-                                                            try
-                                                            {
-                                                                c.enabled = bool.Parse(nnnn.InnerText);
-                                                            }
-                                                            catch (FormatException)
-                                                            {
-                                                                c.enabled = false;
-                                                            }
+                                                            c.enabled = Settings.parseBool(configNode.InnerText, false);
                                                             break;
                                                         case "size":
-                                                            try
-                                                            {
-                                                                c.size = float.Parse(nnnn.InnerText);
-                                                            }
-                                                            catch (FormatException)
-                                                            {
-                                                                c.size = (float)0.0;
-                                                            }
+                                                            c.size = Settings.parseFloat(configNode.InnerText, 0.0f);
                                                             break;
                                                         case "configtype":
-                                                            c.type = nnnn.InnerText;
+                                                            c.type = configNode.InnerText;
                                                             break;
                                                         case "pictures":
                                                             //parse every picture
-                                                            foreach (XmlNode nnnnnnnn in nnnn.ChildNodes)
+                                                            foreach (XmlNode pictureHolder in configNode.ChildNodes)
                                                             {
-                                                                foreach (XmlNode nnnnnnnnnn in nnnnnnnn.ChildNodes)
+                                                                foreach (XmlNode pictureNode in pictureHolder.ChildNodes)
                                                                 {
-                                                                    switch (nnnnnnnnnn.Name)
+                                                                    switch (pictureNode.Name)
                                                                     {
                                                                         case "URL":
-                                                                            string innerText = nnnnnnnn.InnerText;
+                                                                            string innerText = pictureNode.InnerText;
                                                                             if (innerText == null)
                                                                                 continue;
                                                                             if (innerText.Equals(""))
                                                                                 continue;
-                                                                            m.picList.Add(new Picture("Config: " + c.name, nnnnnnnn.InnerText));
+                                                                            m.picList.Add(new Picture("Config: " + c.name, pictureNode.InnerText));
                                                                             break;
                                                                     }
                                                                 }
                                                             }
                                                             break;
-                                                        case "dependencies":
-                                                            //parse all dependencies
-                                                            foreach (XmlNode nnnnnnn in nnnn.ChildNodes)
+                                                        case "subConfigs":
+                                                            //parse every subConfig
+                                                            foreach (XmlNode subConfigHolder in configNode.ChildNodes)
                                                             {
-                                                                Dependency d = new Dependency();
-                                                                foreach (XmlNode nnnnnnnn in nnnnnnn.ChildNodes)
+                                                                SubConfig subC = new SubConfig();
+                                                                foreach (XmlNode subConfigNode in subConfigHolder.ChildNodes)
                                                                 {
-                                                                    switch (nnnnnnnn.Name)
+                                                                    switch (subConfigNode.Name)
                                                                     {
-                                                                        case "dependencyZipFile":
-                                                                            d.dependencyZipFile = nnnnnnnn.InnerText;
+                                                                        case "name":
+                                                                            subC.name = subConfigNode.InnerText;
                                                                             break;
-                                                                        case "dependencyZipCRC":
-                                                                            d.dependencyZipCRC = nnnnnnnn.InnerText;
+                                                                        case "zipFile":
+                                                                            subC.zipFile = subConfigNode.InnerText;
+                                                                            break;
+                                                                        case "crc":
+                                                                            subC.crc = subConfigNode.InnerText;
+                                                                            break;
+                                                                        case "enabled":
+                                                                            subC.enabled = Settings.parseBool(subConfigNode.InnerText, false);
+                                                                            break;
+                                                                        case "Checked":
+                                                                            subC.Checked = Settings.parseBool(subConfigNode.InnerText, false);
+                                                                            break;
+                                                                        case "type":
+                                                                            subC.type = subConfigNode.InnerText;
+                                                                            break;
+                                                                        case "pictures":
+                                                                            //parse every picture
+                                                                            foreach (XmlNode pictureHolder in subConfigNode.ChildNodes)
+                                                                            {
+                                                                                foreach (XmlNode pictureNode in pictureHolder.ChildNodes)
+                                                                                {
+                                                                                    switch (pictureNode.Name)
+                                                                                    {
+                                                                                        case "URL":
+                                                                                            string innerText = pictureNode.InnerText;
+                                                                                            if (innerText == null)
+                                                                                                continue;
+                                                                                            if (innerText.Equals(""))
+                                                                                                continue;
+                                                                                            m.picList.Add(new Picture("Config: " + c.name, pictureNode.InnerText));
+                                                                                            break;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            break;
+                                                                        case "dependencies":
+                                                                            //parse every dependency
+                                                                            foreach (XmlNode dependencyHolder in subConfigNode.ChildNodes)
+                                                                            {
+                                                                                Dependency d = new Dependency();
+                                                                                foreach (XmlNode dependencyNode in dependencyHolder.ChildNodes)
+                                                                                {
+                                                                                    switch (dependencyNode.Name)
+                                                                                    {
+                                                                                        case "dependencyZipFile":
+                                                                                            d.dependencyZipFile = dependencyNode.InnerText;
+                                                                                            break;
+                                                                                        case "dependencyZipCRC":
+                                                                                            d.dependencyZipCRC = dependencyNode.InnerText;
+                                                                                            break;
+                                                                                        case "startAddress":
+                                                                                            d.startAddress = dependencyNode.InnerText;
+                                                                                            break;
+                                                                                        case "endAddress":
+                                                                                            d.endAddress = dependencyNode.InnerText;
+                                                                                            break;
+                                                                                        case "dependencyEnabled":
+                                                                                            d.enabled = Settings.parseBool(dependencyNode.InnerText, false);
+                                                                                            break;
+                                                                                    }
+                                                                                }
+                                                                                subC.dependencies.Add(d);
+                                                                            }
+                                                                            break;
+                                                                        case "size":
+                                                                            subC.size = Settings.parseFloat(subConfigNode.InnerText, 0.0f);
                                                                             break;
                                                                         case "startAddress":
-                                                                            d.startAddress = nnnnnnnn.InnerText;
+                                                                            subC.startAddress = subConfigNode.InnerText;
                                                                             break;
                                                                         case "endAddress":
-                                                                            d.endAddress = nnnnnnnn.InnerText;
+                                                                            subC.endAddress = subConfigNode.InnerText;
+                                                                            break;
+                                                                    }
+                                                                }
+                                                                c.subConfigs.Add(subC);
+                                                            }
+                                                            break;
+                                                        case "dependencies":
+                                                            //parse all dependencies
+                                                            foreach (XmlNode dependencyHolder in configNode.ChildNodes)
+                                                            {
+                                                                Dependency d = new Dependency();
+                                                                foreach (XmlNode dependencyNode in dependencyHolder.ChildNodes)
+                                                                {
+                                                                    switch (dependencyNode.Name)
+                                                                    {
+                                                                        case "dependencyZipFile":
+                                                                            d.dependencyZipFile = dependencyNode.InnerText;
+                                                                            break;
+                                                                        case "dependencyZipCRC":
+                                                                            d.dependencyZipCRC = dependencyNode.InnerText;
+                                                                            break;
+                                                                        case "startAddress":
+                                                                            d.startAddress = dependencyNode.InnerText;
+                                                                            break;
+                                                                        case "endAddress":
+                                                                            d.endAddress = dependencyNode.InnerText;
                                                                             break;
                                                                         case "dependencyenabled":
-                                                                            try
-                                                                            {
-                                                                                d.enabled = bool.Parse(nnnnnnnn.InnerText);
-                                                                            }
-                                                                            catch (FormatException)
-                                                                            {
-                                                                                d.enabled = false;
-                                                                            }
+                                                                            d.enabled = Settings.parseBool(dependencyNode.InnerText, false);
                                                                             break;
                                                                     }
                                                                 }
@@ -2072,34 +2113,27 @@ namespace RelhaxModpack
                             break;
                         case "dependencies":
                             //parse every config for that mod
-                            foreach (XmlNode nnn in nnnnnn.ChildNodes)
+                            foreach (XmlNode dependencyHolder in catagoryNode.ChildNodes)
                             {
                                 Dependency d = new Dependency();
-                                foreach (XmlNode nnnn in nnn.ChildNodes)
+                                foreach (XmlNode dependencyNode in dependencyHolder.ChildNodes)
                                 {
-                                    switch (nnnn.Name)
+                                    switch (dependencyNode.Name)
                                     {
                                         case "dependencyZipFile":
-                                            d.dependencyZipFile = nnnn.InnerText;
+                                            d.dependencyZipFile = dependencyNode.InnerText;
                                             break;
                                         case "dependencyZipCRC":
-                                            d.dependencyZipCRC = nnnn.InnerText;
+                                            d.dependencyZipCRC = dependencyNode.InnerText;
                                             break;
                                         case "startAddress":
-                                            d.startAddress = nnnn.InnerText;
+                                            d.startAddress = dependencyNode.InnerText;
                                             break;
                                         case "endAddress":
-                                            d.endAddress = nnnn.InnerText;
+                                            d.endAddress = dependencyNode.InnerText;
                                             break;
                                         case "dependencyenabled":
-                                            try
-                                            {
-                                                d.enabled = bool.Parse(nnnn.InnerText);
-                                            }
-                                            catch (FormatException)
-                                            {
-                                                d.enabled = false;
-                                            }
+                                            d.enabled = Settings.parseBool(dependencyNode.InnerText, false);
                                             break;
                                     }
                                 }

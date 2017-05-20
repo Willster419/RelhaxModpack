@@ -453,5 +453,44 @@ namespace RelhaxModpack
             else
                 return SystemColors.Control;
         }
+        public static bool parseBool(string input, bool defaultValue)
+        {
+            bool returnVal;
+            try
+            {
+                returnVal = bool.Parse(input);
+            }
+            catch (System.FormatException)
+            {
+                returnVal = defaultValue;
+            }
+            return returnVal;
+        }
+        public static int parseInt(string input, int defaultValue)
+        {
+            int returnVal;
+            try
+            {
+                returnVal = int.Parse(input);
+            }
+            catch (System.FormatException)
+            {
+                returnVal = defaultValue;
+            }
+            return returnVal;
+        }
+        public static float parseFloat(string input, float defaultValue)
+        {
+            float returnVal;
+            try
+            {
+                returnVal = float.Parse(input);
+            }
+            catch (System.FormatException)
+            {
+                returnVal = defaultValue;
+            }
+            return returnVal;
+        }
     }
 }
