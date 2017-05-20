@@ -365,6 +365,81 @@
           </devURL>
         </mod>
         <mod>
+          <name>Battle Interface modifications - Information Label for Missions</name>
+          <version>
+          </version>
+          <modzipfile></modzipfile>
+          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>f</modzipcrc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures>
+            <picture>
+              <URL>http://fs5.directupload.net/images/170301/iepa9zdy.png</URL>
+            </picture>
+            <picture>
+              <URL>http://fs5.directupload.net/images/170301/32rpylxt.png</URL>
+            </picture>
+            <picture>
+              <URL>http://fs5.directupload.net/images/170301/ax9qxb7t.png</URL>
+            </picture>
+            <picture>
+              <URL>http://fs5.directupload.net/images/170301/reiaain2.png</URL>
+            </picture>
+            <picture>
+              <URL>http://fs5.directupload.net/images/170301/nftgewby.png</URL>
+            </picture>
+            <picture>
+              <URL>http://fs5.directupload.net/images/170301/avvxrq8b.png</URL>
+            </picture>
+            <picture>
+              <URL>http://fs5.directupload.net/images/170301/7e2xelc7.png</URL>
+            </picture>
+            <picture>
+              <URL>http://fs5.directupload.net/images/170301/9bahnmgt.png</URL>
+            </picture>
+            <picture>
+              <URL>http://fs5.directupload.net/images/170301/3ty5gpoa.png</URL>
+            </picture>
+            <picture>
+              <URL>http://fs5.directupload.net/images/170301/wmqvtr3e.png</URL>
+            </picture>
+            <picture>
+              <URL>http://fs5.directupload.net/images/170301/k5alp63d.png</URL>
+            </picture>
+            <picture>
+              <URL>http://fs5.directupload.net/images/170301/juo3kcsb.png</URL>
+            </picture>
+            <picture>
+              <URL>http://fs5.directupload.net/images/170301/zbukbbfp.png</URL>
+            </picture>
+          </pictures>
+          <configs>
+            <config>
+              <name>by MarsOne</name>
+              <configzipfile>XVM_config_builder_damage_mod_by_Marsone_patch.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures />
+              <dependencies />
+            </config>
+          </configs>
+          <dependencies />
+          <description>This label positioned under the left PlayersPanel shows you many informations you need for missions or for your daily games too. @Examples for that are your damage, damage of your platoon members, damage of you and your platoon members together, number of enemys you spotted, number of critical hits you made, number of enemys your complete platoon killed, damage through reconnaissance and chain destruction, damage through spotting only, damage through chain destruction only, damage you got, hits you got and damage you blocked. @@Information Label for Missions by MarsOne: http://forum.worldoftanks.eu/index.php?/topic/340002-09151-omc-modpack-installer-mit-bild-video-vorschau-letztes-update-siehe-wwwodemmortiscom/page__st__4980__pid__13912513#entry13912513</description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
+        </mod>
+        <mod>
           <name>Battle Interface modifications - 6th sense (xvm)</name>
           <version>
           </version>
