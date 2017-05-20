@@ -693,7 +693,7 @@ namespace RelhaxModpack
             string[] temp = node.InnerText.Split('#');
             string version = temp[0].Trim();
             version = version.Substring(2);
-            version = version.Split(' ')[0];
+            //version = version.Split(' ')[0];
             return version;
         }
         //check to see if the supplied version of tanks is on the list of supported client versions
