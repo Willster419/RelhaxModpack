@@ -5145,13 +5145,13 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>dc3845154994e650d3c0b1ad8765bd89</configzipcrc>
-              <size>0.1</size>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
-                  <URL>http://i.imgur.com/L7o8Ls4.jpg</URL>
+                  <URL>http://wotmods.relhaxmodpack.com/WoT/ModPictures/Ingame_Info_InBattle_Rating_WN8.jpg</URL>
                 </picture>
               </pictures>
               <dependencies />
@@ -5162,13 +5162,13 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>4333e444f5f6ed3cc5b9367c0cfa1e35</configzipcrc>
-              <size>0.1</size>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
-                  <URL>http://i.imgur.com/eQdm4MK.jpg</URL>
+                  <URL>http://wotmods.relhaxmodpack.com/WoT/ModPictures/Ingame_Info_InBattle_Rating_WN8_Damage_LastHit.jpg</URL>
                 </picture>
               </pictures>
               <dependencies />
@@ -5179,26 +5179,13 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>47e6865b4e246b806aafedbe79e1109d</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>damage</name>
-              <configzipfile>Ingame_Info_InBattle_Rating_Damage_2017_04_16.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>1ece2765cad0218fb9feed6ff51b4b7a</configzipcrc>
-              <size>0.1</size>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
-                  <URL>http://i.imgur.com/qL7SHsM.jpg</URL>
+                  <URL>http://wotmods.relhaxmodpack.com/WoT/ModPictures/Ingame_Info_InBattle_Rating_WN8_Damage.jpg</URL>
                 </picture>
               </pictures>
               <dependencies />
@@ -5215,7 +5202,58 @@
               <configtype>single</configtype>
               <pictures>
                 <picture>
-                  <URL>http://i.imgur.com/TQJdpI8.jpg</URL>
+                  <URL>http://wotmods.relhaxmodpack.com/WoT/ModPictures/Ingame_Info_InBattle_Rating_WN8_EFF.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>wn8 and diff</name>
+              <configzipfile>Ingame_Info_InBattle_Rating_WN8_DIFF_2017_05_20.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://wotmods.relhaxmodpack.com/WoT/ModPictures/Ingame_Info_InBattle_Rating_WN8_DIFF.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>wn8,eff and diff</name>
+              <configzipfile>Ingame_Info_InBattle_Rating_WN8_EFF_DIFF_2017_05_20.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://wotmods.relhaxmodpack.com/WoT/ModPictures/Ingame_Info_InBattle_Rating_WN8_EFF_DIFF.jpg</URL>
+                </picture>
+              </pictures>
+              <dependencies />
+            </config>
+            <config>
+              <name>damage</name>
+              <configzipfile>Ingame_Info_InBattle_Rating_Damage_2017_04_16.zip</configzipfile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>single</configtype>
+              <pictures>
+                <picture>
+                  <URL>http://wotmods.relhaxmodpack.com/WoT/ModPictures/Ingame_Info_InBattle_Rating_Damage_LastHit.jpg</URL>
                 </picture>
               </pictures>
               <dependencies />
@@ -5232,7 +5270,7 @@
               <configtype>single</configtype>
               <pictures>
                 <picture>
-                  <URL>http://i.imgur.com/K4rGugH.jpg</URL>
+                  <URL>http://wotmods.relhaxmodpack.com/WoT/ModPictures/Ingame_Info_InBattle_Rating_WN8_EFF_Damage_LastHit.jpg</URL>
                 </picture>
               </pictures>
               <dependencies />
@@ -5249,7 +5287,7 @@
               <configtype>single</configtype>
               <pictures>
                 <picture>
-                  <URL>http://i.imgur.com/zbj6f7p.jpg</URL>
+                  <URL>http://wotmods.relhaxmodpack.com/WoT/ModPictures/Ingame_Info_InBattle_Rating_EFF.jpg</URL>
                 </picture>
               </pictures>
               <dependencies />
@@ -5260,13 +5298,13 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>c07c1088c17c459c418f74d975c56d64</configzipcrc>
-              <size>0.1</size>
+              <configzipcrc>f</configzipcrc>
+              <size>0</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
                 <picture>
-                  <URL>http://i.imgur.com/5YesK36.jpg</URL>
+                  <URL>http://wotmods.relhaxmodpack.com/WoT/ModPictures/Ingame_Info_InBattle_Rating_EFF_Damage_LastHit.jpg</URL>
                 </picture>
               </pictures>
               <dependencies />
@@ -5283,7 +5321,7 @@
               <configtype>single</configtype>
               <pictures>
                 <picture>
-                  <URL>http://i.imgur.com/qHpk234.jpg</URL>
+                  <URL>http://wotmods.relhaxmodpack.com/WoT/ModPictures/Ingame_Info_InBattle_Rating_ProTANKI.jpg</URL>
                 </picture>
               </pictures>
               <dependencies />
