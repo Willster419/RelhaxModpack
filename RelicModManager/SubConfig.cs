@@ -2,10 +2,10 @@
 
 namespace RelhaxModpack
 {
-    //a config is a configuration for a mod to make the mod function if a certain way
-    //in some scenarios, the config is the mod itself
-    public class Config
+    class SubConfig
     {
+        //a Subconfig is a type of config that is a level below the config class. It can be used for choosing options within a config option,
+        //or can be usefull to actually be a config option when the mod is at the config level. Like contour icons, for example
         public string name { get; set; }
         public string zipConfigFile { get; set; }
         public string crc { get; set; }
@@ -24,10 +24,8 @@ namespace RelhaxModpack
         public string startAddress { get; set; }
         //the end address of the zip file location. enables us to use dropbox (?dl=1)
         public string endAddress { get; set; }
-        //the array of sub config options available
-        public List<SubConfig> subConfigs = new List<SubConfig>();
         //basic config constructor
-        public Config()
+        public SubConfig()
         {
             //by default make these false
             enabled = false;
