@@ -183,6 +183,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RelhaxCheckbox.cs" />
+    <Compile Include="RelhaxComboBox.cs" />
+    <Compile Include="RelhaxRadioButton.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="StringSave.cs" />
     <Compile Include="SubConfig.cs" />
