@@ -594,7 +594,43 @@ namespace RelhaxModpack
         //when a radiobutton of the legacy view mode is clicked
         void configControlRB_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            
+            if (loadingConfig)
+                return;
+            //get all required cool stuff
+            RelhaxRadioButton cb = (RelhaxRadioButton)sender;
+            string modName = cb.realName.Split('_')[1];
+            string catagoryName = cb.realName.Split('_')[0];
+            string configName = cb.realName.Split('_')[2];
+            Mod m = this.linkMod(modName, catagoryName);
+            Config cfg = m.getConfig(configName);
+            //the config treeview
+            System.Windows.Controls.TreeViewItem item0 = (System.Windows.Controls.TreeViewItem)cb.Parent;
+            //the mod treeview
+            System.Windows.Controls.TreeViewItem item1 = (System.Windows.Controls.TreeViewItem)item0.Parent;
+            if (!(bool)cb.IsEnabled)
+            {
+                cfg.configChecked = false;
+                return;
+            }
+            //uncheck all single and single1 mods in memory
+            foreach (Config configs in m.configs)
+            {
+                if (configs.type.Equals("single") || configs.type.Equals("single1"))
+                {
+                    configs.configChecked = false;
+                }
+            }
+            //uincheck all single and single1 mods in UI
+            foreach (System.Windows.Controls.TreeViewItem item in item1.Items)
+            {
+                if (item.Header is RelhaxRadioButton)
+                {
+                    RelhaxRadioButton rb = (RelhaxRadioButton)item.Header;
+                    if(!rb.Equals(cb))
+                        rb.IsChecked = false;
+                }
+            }
+            cfg.configChecked = (bool)cb.IsChecked;
         }
 
         void modCheckBoxL_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -672,6 +708,15 @@ namespace RelhaxModpack
             //this section deals with enabling the configs, if there are any
             if (m.configs.Count == 0)
                 return;
+            //get the string name of the last radiobutton for refrence later
+            string lastConfigName = "null";
+            foreach (Config configs in m.configs)
+            {
+                if (configs.type.Equals("single") || configs.type.Equals("single1"))
+                {
+                    lastConfigName = configs.name;
+                }
+            }
             //there is at least one config, so at least one UI element
             foreach (System.Windows.Controls.TreeViewItem item in TVI.Items)
             {
@@ -709,7 +754,35 @@ namespace RelhaxModpack
                 }
                 else if (c is RelhaxRadioButton)
                 {
-
+                    RelhaxRadioButton cbox = (RelhaxRadioButton)c;
+                    cfg = m.getConfig(cbox.realName.Split('_')[2]);
+                    if (m.modChecked && cfg.enabled)
+                        cbox.IsEnabled = true;
+                    else
+                        cbox.IsEnabled = false;
+                    configControlRB_Click(cbox, null);
+                    //create a section of code to run for only the last radioButton
+                    if (cfg.name.Equals(lastConfigName))
+                    {
+                        //last radioButton in the section, try to check at least one radioButton in the configs
+                        foreach (System.Windows.Controls.TreeViewItem item2 in TVI.Items)
+                        {
+                            System.Windows.Controls.Control c2 = (System.Windows.Controls.Control)item2.Header;
+                            if (c2 is RelhaxRadioButton)
+                            {
+                                RelhaxRadioButton c2r = (RelhaxRadioButton)c2;
+                                cfg = m.getConfig(c2r.realName.Split('_')[2]);
+                                if ((bool)c2r.IsEnabled)
+                                {
+                                    c2r.Click -= configControlRB_Click;
+                                    c2r.IsChecked = true;
+                                    c2r.Click += configControlRB_Click;
+                                    cfg.configChecked = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
