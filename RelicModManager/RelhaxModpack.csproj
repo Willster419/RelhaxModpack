@@ -185,6 +185,7 @@
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="StringSave.cs" />
+    <Compile Include="SubConfig.cs" />
     <Compile Include="Translations.cs" />
     <Compile Include="VersionInfo.cs">
       <SubType>Form</SubType>
