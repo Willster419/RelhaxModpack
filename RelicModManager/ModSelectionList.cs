@@ -338,23 +338,13 @@ namespace RelhaxModpack
             modCheckBox.realName = t.Name + "_" + m.name;
             //modCheckBox.FontSize = (double)Settings.fontSize;
             modCheckBox.Content = m.name;
-            //if file exists, get md5 on it, otherwise just say it's updated.
-            if (File.Exists(modDownloadFilePath))
+            //get the local md5 hash. a -1 indicates the file is not on the disk
+            string oldCRC2 = Settings.GetMd5Hash(modDownloadFilePath);
+            //if the CRC's don't match and the mod actually has a zip file
+            if (!(m.crc.Equals(oldCRC2)) && (!m.modZipFile.Equals("")))
             {
-                string oldCRC = Settings.GetMd5Hash(modDownloadFilePath);
-                if (!oldCRC.Equals(m.crc))
-                {
-                    //crcs do not match, needs to redownloaded
-                    modCheckBox.Content = modCheckBox.Content + " ( Updated)";
-                    if (m.size > 0.0f)
-                        modCheckBox.Content = modCheckBox.Content + " (" + m.size + " MB)";
-                }
-            }
-            else
-            {
-                //files does not exist, needs to re-download
-                modCheckBox.Content = modCheckBox.Content + " ( Updated)";
-                if (m.size > 0.0f)
+                modCheckBox.Content = modCheckBox.Content + " (Updated)";
+                if ((m.size > 0.0f) )
                     modCheckBox.Content = modCheckBox.Content + " (" + m.size + " MB)";
             }
             //set mod's enabled status
@@ -370,12 +360,14 @@ namespace RelhaxModpack
             configControlDD.Items.Clear();
             configControlDD.IsEditable = false;
             //configControlDD.FontSize = Settings.fontSize;
-            configControlDD.realName = "notAddedYet";
+            configControlDD.Name = "notAddedYet";
+            configControlDD.IsEnabled = false;
             RelhaxComboBox configControlDD2 = new RelhaxComboBox();
             configControlDD2.Items.Clear();
             configControlDD2.IsEditable = false;
             //configControlDD2.FontSize = Settings.fontSize;
-            configControlDD2.realName = "notAddedYet";
+            configControlDD2.Name = "notAddedYet";
+            configControlDD2.IsEnabled = false;
             //process the configs
             for (int i = 0; i < m.configs.Count; i++)
             {
@@ -391,7 +383,7 @@ namespace RelhaxModpack
                     //set them to false first
                     configControlRB.IsEnabled = false;
                     configControlRB.IsChecked = false;
-                    if (m.enabled && m.configs[i].enabled)
+                    if (m.enabled && m.configs[i].enabled && m.modChecked)
                     {
                         configControlRB.IsEnabled = true;
                         //the logic for checking it
@@ -401,14 +393,14 @@ namespace RelhaxModpack
                     //run the checksum logix
                     configControlRB.Content = m.configs[i].name;
                     string oldCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
-                    if (!oldCRC.Equals(m.configs[i].crc))
+                    if (!oldCRC.Equals(m.configs[i].crc) && (!m.configs[i].crc.Equals("")))
                     {
                         configControlRB.Content = configControlRB.Content + " (Updated)";
                         if (m.configs[i].size > 0.0f)
                             configControlRB.Content = configControlRB.Content + " (" + m.configs[i].size + " MB)";
                     }
                     //add the handlers at the end
-
+                    configControlRB.Click += new System.Windows.RoutedEventHandler(configControlRB_Click);
                     //add it to the mod config list
                     System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
                     configControlTVI.Header = configControlRB;
@@ -425,7 +417,7 @@ namespace RelhaxModpack
                     //set them to false first
                     configControlRB.IsEnabled = false;
                     configControlRB.IsChecked = false;
-                    if (m.enabled && m.configs[i].enabled)
+                    if (m.enabled && m.configs[i].enabled && m.modChecked)
                     {
                         configControlRB.IsEnabled = true;
                         //the logic for checking it
@@ -435,14 +427,14 @@ namespace RelhaxModpack
                     //run the checksum logix
                     configControlRB.Content = m.configs[i].name;
                     string oldCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
-                    if (!oldCRC.Equals(m.configs[i].crc))
+                    if (!oldCRC.Equals(m.configs[i].crc) && (!m.configs[i].crc.Equals("")))
                     {
                         configControlRB.Content = configControlRB.Content + " (Updated)";
                         if (m.configs[i].size > 0.0f)
                             configControlRB.Content = configControlRB.Content + " (" + m.configs[i].size + " MB)";
                     }
                     //add the handlers at the end
-
+                    configControlRB.Click += new System.Windows.RoutedEventHandler(configControlRB_Click);
                     //clobber the tree view for it
                     //first set it to null
                     System.Windows.Controls.TreeViewItem configControlOCBTVI = null;
@@ -457,6 +449,8 @@ namespace RelhaxModpack
                     {
                         configControlOCBTVI = new System.Windows.Controls.TreeViewItem();
                         RelhaxCheckbox configControlOCB = new RelhaxCheckbox();
+                        configControlOCB.Click += new System.Windows.RoutedEventHandler(configControlOCB_Click);
+                        configControlOCB.realName = "ENABLER";
                         configControlOCBTVI.Header = configControlOCB;
                         configControlOCBTVI.Name = enableCBName;
                         tvi.Items.Add(configControlOCBTVI);
@@ -482,11 +476,14 @@ namespace RelhaxModpack
                     configControlDDALL.MinWidth = 100;
                     //run the crc logics
                     string oldCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
-                    if (!oldCRC.Equals(m.configs[i].crc))
+                    if (!oldCRC.Equals(m.configs[i].crc) && (!m.configs[i].crc.Equals("")))
                     {
+                        string toAdd = m.configs[i].name + "_Updated";
+                        if (m.configs[i].size > 0.0f)
+                            toAdd = toAdd + " (" + m.configs[i].size + " MB)";
                         //add it with _updated
-                        if (m.configs[i].enabled) configControlDDALL.Items.Add(m.configs[i].name + "_updated");
-                        if (m.configs[i].configChecked) configControlDDALL.SelectedItem = m.configs[i].name + "_updated";
+                        if (m.configs[i].enabled) configControlDDALL.Items.Add(toAdd);
+                        if (m.configs[i].configChecked) configControlDDALL.SelectedItem = toAdd;
                     }
                     else
                     {
@@ -498,6 +495,10 @@ namespace RelhaxModpack
                     if(configControlDDALL.Name.Equals("notAddedYet"))
                     {
                         configControlDDALL.Name = "added";
+                        configControlDDALL.realName = t.Name + "_" + m.name;
+                        if (m.enabled && m.modChecked)
+                            configControlDDALL.IsEnabled = true;
+                        configControlDDALL.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(configControlDDALL_SelectionChanged);
                         System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
                         configControlTVI.Header = configControlDDALL;
                         tvi.Items.Add(configControlTVI);
@@ -513,7 +514,7 @@ namespace RelhaxModpack
                     //set them to false first
                     configControlCB.IsEnabled = false;
                     configControlCB.IsChecked = false;
-                    if (m.enabled && m.configs[i].enabled)
+                    if (m.enabled && m.configs[i].enabled && m.modChecked)
                     {
                         configControlCB.IsEnabled = true;
                         //the logic for checking it
@@ -530,7 +531,7 @@ namespace RelhaxModpack
                             configControlCB.Content = configControlCB.Content + " (" + m.configs[i].size + " MB)";
                     }
                     //add the handlers at the end
-
+                    configControlCB.Click += new System.Windows.RoutedEventHandler(configControlCB_Click);
                     //add it to the mod config list
                     System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
                     configControlTVI.Header = configControlCB;
@@ -541,14 +542,177 @@ namespace RelhaxModpack
             lsl.legacyTreeView.Items.Add(tvi);
         }
 
-        void modCheckBoxL_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        //when a legacy checkbox of OMC view is clicked
+        void configControlCB_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            //checkboxes still don't need to be be unselected
+            RelhaxCheckbox cb = (RelhaxCheckbox)sender;
+            string modName = cb.realName.Split('_')[1];
+            string catagoryName = cb.realName.Split('_')[0];
+            string configName = cb.realName.Split('_')[2];
+            Mod m = this.linkMod(modName, catagoryName);
+            Config cfg = m.getConfig(configName);
+            cfg.configChecked = (bool)cb.IsChecked;
+        }
+        //when a dropdown legacy combobox is index changed
+        void configControlDDALL_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            RelhaxComboBox cb = (RelhaxComboBox)sender;
+            //first check if this is init, meaning first time enabled
+            if (cb.SelectedIndex == -1)
+            {
+                //it will run recurse with this method again with a selected index of 0
+                cb.SelectedIndex = 0;
+                return;
+            }
+            //get all cool info
+            string catagory = cb.realName.Split('_')[0];
+            string mod = cb.realName.Split('_')[1];
+            Mod m = this.getCatagory(catagory).getMod(mod);
+            //getting here means that an item is confirmed to be selected
+            string configName = (string)cb.SelectedItem;
+            //in case "_updated" was appended, split the string
+            configName = configName.Split('_')[0];
+            //itterate through the items, get each config, disable it
+            //unless it's the same name as the selectedItem
+            foreach (string s in cb.Items)
+            {
+                Config cfg = m.getConfig(s.Split('_')[0]);
+                cfg.configChecked = false;
+                if (s.Split('_')[0].Equals(configName))
+                {
+                    cfg.configChecked = true;
+                }
+            }
+        }
+        //when a checkbox of optional radioButtons legacy view is clicked
+        void configControlOCB_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (loadingConfig)
+                return;
+        }
+        //when a radiobutton of the legacy view mode is clicked
+        void configControlRB_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             
         }
 
+        void modCheckBoxL_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            //we only care about the right mouse click tho
+            if (e.RightButton != System.Windows.Input.MouseButtonState.Pressed)
+            {
+                return;
+            }
+            if (sender is RelhaxCheckbox)
+            {
+                RelhaxCheckbox cb = (RelhaxCheckbox)sender;
+                Mod m = this.linkMod(cb.realName.Split('_')[1]);
+                string name = m.name;
+                //get the mod and/or config
+                List<Picture> picturesList = this.sortPictureList(m.picList);
+                string desc = m.description;
+                string updateNotes = m.updateComment;
+                string devurl = m.devURL;
+                if (devurl == null)
+                    devurl = "";
+                p.Close();
+                p = new Preview(name, picturesList, desc, updateNotes, devurl);
+                p.Show();
+            }
+        }
+        //when a legacy mod checkbox is clicked
         void modCheckBoxL_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            
+            if (loadingConfig)
+                return;
+            RelhaxCheckbox cb = (RelhaxCheckbox)sender;
+            string modName = cb.realName.Split('_')[1];
+            string catagoryName = cb.realName.Split('_')[0];
+            Mod m = this.linkMod(modName, catagoryName);
+            Catagory cat = this.getCatagory(catagoryName);
+            System.Windows.Controls.TreeViewItem TVI = (System.Windows.Controls.TreeViewItem)cb.Parent;
+            System.Windows.Controls.TreeView TV = (System.Windows.Controls.TreeView)TVI.Parent;
+            //check to see if this is a single selection categtory
+            //if it is, then uncheck the other mod, then check this one
+            if ((bool)cb.IsChecked && cat.selectionType.Equals("single"))
+            {
+                //check if any other mods in this catagory are already checked
+                bool anyModsChecked = false;
+                foreach (Mod mm in cat.mods)
+                {
+                    if (mm.modChecked)
+                    {
+                        anyModsChecked = true;
+                        mm.modChecked = false;
+                    }
+                }
+                if (anyModsChecked)
+                {
+                    cb.IsChecked = false;
+                    //all other mods in this category need to be unchecked
+                    foreach (System.Windows.Controls.TreeViewItem tvi in TV.Items)
+                    {
+                        RelhaxCheckbox modCB = (RelhaxCheckbox)tvi.Header;
+                        //remove the handler before we make changes
+                        //modCB.Click -= modCheckBoxL_Click;
+                        if((bool)modCB.IsChecked)
+                        modCB.IsChecked = false;
+                        modCheckBoxL_Click(modCB, null);
+                        //modCB.Click += modCheckBoxL_Click;
+                    }
+                }
+                //now it is safe to check the mod we want
+                cb.Click -= modCheckBoxL_Click;
+                cb.IsChecked = true;
+                cb.Click += modCheckBoxL_Click;
+            }
+            m.modChecked = (bool)cb.IsChecked;
+
+            //this section deals with enabling the configs, if there are any
+            if (m.configs.Count == 0)
+                return;
+            //there is at least one config, so at least one UI element
+            foreach (System.Windows.Controls.TreeViewItem item in TVI.Items)
+            {
+                System.Windows.Controls.Control c = (System.Windows.Controls.Control)item.Header;
+                Config cfg = null;
+                if (c is RelhaxComboBox)
+                {
+                    RelhaxComboBox cbox = (RelhaxComboBox)c;
+                    //if the mod is checked and it has more than 0 item enable, else disable, then trigger
+                    if (m.modChecked && cbox.Items.Count > 0)
+                        cbox.IsEnabled = true;
+                    else
+                        cbox.IsEnabled = false;
+                    configControlDDALL_SelectionChanged(cbox, null);
+                }
+                else if (c is RelhaxCheckbox)
+                {
+                    RelhaxCheckbox cbox = (RelhaxCheckbox)c;
+                    if(cbox.realName.Equals("ENABLER"))
+                    {
+                        //optional radio button code
+
+                    }
+                    else
+                    {
+                        //multi CB code
+                        //CB is enabled if the mod checked and the config is enabled
+                        cfg = m.getConfig(cbox.realName.Split('_')[2]);
+                        if (m.modChecked && cfg.enabled)
+                            cbox.IsEnabled = true;
+                        else
+                            cbox.IsEnabled = false;
+                        configControlCB_Click(cbox,null);
+                    }
+                }
+                else if (c is RelhaxRadioButton)
+                {
+
+                }
+            }
+
         }
 
 
