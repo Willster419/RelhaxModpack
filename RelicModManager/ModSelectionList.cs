@@ -332,9 +332,10 @@ namespace RelhaxModpack
             //helpfull stuff
             string modDownloadFilePath = Application.StartupPath + "\\RelHaxDownloads\\" + m.modZipFile;
             //create base mod checkbox
-            System.Windows.Controls.CheckBox modCheckBox = new System.Windows.Controls.CheckBox();
+            //RelhaxCheckbox modCheckBox = new RelhaxCheckbox();
+            RelhaxCheckbox modCheckBox = new RelhaxCheckbox();
             //apparnetly spaces arn't cool, so let's ger rid of them
-            //modCheckBox.Name = t.Name + "_" + m.name;
+            modCheckBox.realName = t.Name + "_" + m.name;
             //modCheckBox.FontSize = (double)Settings.fontSize;
             modCheckBox.Content = m.name;
             //if file exists, get md5 on it, otherwise just say it's updated.
@@ -365,27 +366,27 @@ namespace RelhaxModpack
             modCheckBox.MouseDown += new System.Windows.Input.MouseButtonEventHandler(modCheckBoxL_MouseDown);
             modCheckBox.Click += new System.Windows.RoutedEventHandler(modCheckBoxL_Click);
             //create the twp possible drop down options, and the mod optional config check box i guess
-            System.Windows.Controls.ComboBox configControlDD = new System.Windows.Controls.ComboBox();
+            RelhaxComboBox configControlDD = new RelhaxComboBox();
             configControlDD.Items.Clear();
             configControlDD.IsEditable = false;
             //configControlDD.FontSize = Settings.fontSize;
-            configControlDD.Name = "notAddedYet";
-            System.Windows.Controls.ComboBox configControlDD2 = new System.Windows.Controls.ComboBox();
+            configControlDD.realName = "notAddedYet";
+            RelhaxComboBox configControlDD2 = new RelhaxComboBox();
             configControlDD2.Items.Clear();
             configControlDD2.IsEditable = false;
             //configControlDD2.FontSize = Settings.fontSize;
-            configControlDD2.Name = "notAddedYet";
+            configControlDD2.realName = "notAddedYet";
             //process the configs
             for (int i = 0; i < m.configs.Count; i++)
             {
                 //create the init stuff for each config
-                System.Windows.Controls.ComboBox configControlDDALL = null;
+                RelhaxComboBox configControlDDALL = null;
                 if (m.configs[i].type.Equals("single") || m.configs[i].type.Equals("single1"))
                 {
                     //make the radio button
-                    System.Windows.Controls.RadioButton configControlRB = new System.Windows.Controls.RadioButton();
+                    RelhaxRadioButton configControlRB = new RelhaxRadioButton();
                     //configControlRB.FontSize = Settings.fontSize;
-                    //configControlRB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    configControlRB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name;
                     //the logic for enabling it
                     //set them to false first
                     configControlRB.IsEnabled = false;
@@ -417,9 +418,9 @@ namespace RelhaxModpack
                 {
                     string enableCBName = m.configs[i].type + "_enableCB";
                     //make the radio button
-                    System.Windows.Controls.RadioButton configControlRB = new System.Windows.Controls.RadioButton();
+                    RelhaxRadioButton configControlRB = new RelhaxRadioButton();
                     //configControlRB.FontSize = Settings.fontSize;
-                    //configControlRB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    configControlRB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name;
                     //the logic for enabling it
                     //set them to false first
                     configControlRB.IsEnabled = false;
@@ -455,7 +456,7 @@ namespace RelhaxModpack
                     if (configControlOCBTVI == null)
                     {
                         configControlOCBTVI = new System.Windows.Controls.TreeViewItem();
-                        System.Windows.Controls.CheckBox configControlOCB = new System.Windows.Controls.CheckBox();
+                        RelhaxCheckbox configControlOCB = new RelhaxCheckbox();
                         configControlOCBTVI.Header = configControlOCB;
                         configControlOCBTVI.Name = enableCBName;
                         tvi.Items.Add(configControlOCBTVI);
@@ -505,9 +506,9 @@ namespace RelhaxModpack
                 else if (m.configs[i].type.Equals("multi"))
                 {
                     //make the checkbox
-                    System.Windows.Controls.CheckBox configControlCB = new System.Windows.Controls.CheckBox();
+                    RelhaxCheckbox configControlCB = new RelhaxCheckbox();
                     //configControlCB.FontSize = Settings.fontSize;
-                    //configControlCB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    configControlCB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name;
                     //the logic for enabling it
                     //set them to false first
                     configControlCB.IsEnabled = false;

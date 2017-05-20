@@ -2,7 +2,7 @@
 
 namespace RelhaxModpack
 {
-    class SubConfig
+    public class SubConfig
     {
         //a Subconfig is a type of config that is a level below the config class. It can be used for choosing options within a config option,
         //or can be usefull to actually be a config option when the mod is at the config level. Like contour icons, for example
