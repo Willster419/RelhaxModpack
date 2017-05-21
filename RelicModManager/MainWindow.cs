@@ -49,6 +49,7 @@ namespace RelhaxModpack
         private List<Config> configsToInstall;
         private List<Patch> patchList;
         private List<Dependency> dependencies;
+        private List<SubConfig> subConfigsToInstall;
         //installing the RelhaxModpack of the Relhax Sound Mod
         bool modPack;
         string tempOldDownload;
@@ -1612,6 +1613,7 @@ namespace RelhaxModpack
             patchList = new List<Patch>();
             userMods = new List<Mod>();
             dependencies = new List<Dependency>();
+            subConfigsToInstall = new List<SubConfig>();
             parsedCatagoryLists = list.parsedCatagoryList;
             //add the global dependencies to the dependency list
             foreach (Dependency d in list.globalDependencies)
@@ -1658,6 +1660,13 @@ namespace RelhaxModpack
                                     //check dependency is enabled and has a zip file with it
                                     if (d.enabled && !d.dependencyZipFile.Equals(""))
                                         this.addUniqueDependency(d);
+                                }
+                                //also check to see if any subconfigs need to be installed
+                                foreach (SubConfig sc in cc.subConfigs)
+                                {
+                                    //verify that the subconfig should be added
+                                    if (sc.enabled && sc.Checked && !sc.zipFile.Equals(""))
+                                        subConfigsToInstall.Add(sc);
                                 }
                             }
                         }
@@ -1721,6 +1730,14 @@ namespace RelhaxModpack
                 {
                     //crc's don't match, need to re-download
                     downloadQueue.Add(new DownloadItem(new Uri(c.startAddress + c.zipConfigFile + c.endAddress), localFilesDir + c.zipConfigFile));
+                }
+            }
+            foreach (SubConfig sc in subConfigsToInstall)
+            {
+                if (!this.CRCsMatch(localFilesDir + sc.zipFile, sc.crc))
+                {
+                    //redownload
+                    downloadQueue.Add(new DownloadItem(new Uri(sc.startAddress + sc.zipFile + sc.endAddress), localFilesDir + sc.zipFile));
                 }
             }
             //reset the progress bars for download mods
