@@ -33,5 +33,16 @@ namespace RelhaxModpack
             enabled = false;
             configChecked = false;
         }
+        public SubConfig getSubConfig(string subConfigName)
+        {
+            if (subConfigs == null || subConfigs.Count == 0)
+                return null;
+            foreach (SubConfig sc in subConfigs)
+            {
+                if (sc.name.Equals(subConfigName))
+                    return sc;
+            }
+            return null;
+        }
     }
 }

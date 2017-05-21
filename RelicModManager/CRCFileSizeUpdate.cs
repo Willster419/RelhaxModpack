@@ -416,7 +416,7 @@ namespace RelhaxModpack
                                                                         case "enabled":
                                                                             subC.enabled = Settings.parseBool(subConfigNode.InnerText, false);
                                                                             break;
-                                                                        case "Checked":
+                                                                        case "checked":
                                                                             subC.Checked = Settings.parseBool(subConfigNode.InnerText, false);
                                                                             break;
                                                                         case "type":
@@ -815,7 +815,7 @@ namespace RelhaxModpack
                             XmlElement subConfigEnabled = doc.CreateElement("enabled");
                             subConfigEnabled.InnerText = "" + s.enabled;
                             subConfigRoot.AppendChild(subConfigEnabled);
-                            XmlElement subConfigChecked = doc.CreateElement("Checked");
+                            XmlElement subConfigChecked = doc.CreateElement("checked");
                             subConfigChecked.InnerText = "" + s.Checked;
                             subConfigRoot.AppendChild(subConfigChecked);
                             XmlElement subConfigType = doc.CreateElement("type");

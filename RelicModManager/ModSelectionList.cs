@@ -901,8 +901,60 @@ namespace RelhaxModpack
                         if (m.configs[i].size > 0.0f)
                             configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB)";
                     }
-                    //add component
+                    //add the config to the form
                     configPanel.Controls.Add(configControlRB);
+                    //process the subconfigs
+                    //code to declare refrences
+                    Panel subConfigPanel = null;
+
+                    //code to run once to init setup the panels and stuff
+                    if (m.configs[i].subConfigs.Count > 0)
+                    {
+                        subConfigPanel = new Panel();
+                        subConfigPanel.Enabled = true;
+                        subConfigPanel.BorderStyle = BorderStyle.FixedSingle;
+                        subConfigPanel.Location = new Point(3, getYLocation(configPanel.Controls));
+                        subConfigPanel.Size = new Size(t.Size.Width - 45, 30);
+                        subConfigPanel.AutoSize = true;
+                        subConfigPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
+                        subConfigPanel.BackColor = Settings.getBackColor();
+                        subConfigPanel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name + "_subConfigPanel";
+                    }
+                    //code th loop through the subconfigs
+                    for(int j = 0; j < m.configs[i].subConfigs.Count; j++)
+                    {
+                        SubConfig sc = m.configs[i].subConfigs[j];
+                        RadioButton subRB = new RadioButton();
+                        subRB.AutoSize = true;
+                        subRB.Location = new Point(6, (15 * j) + 3);
+                        subRB.Size = new Size(150, 15);
+                        subRB.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
+                        subRB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name + "_" + sc.name;
+                        //logic for the radioButtons
+                        subRB.Enabled = false;
+                        subRB.Checked = false;
+                        if (m.enabled && m.modChecked && m.configs[i].enabled && m.configs[i].configChecked && sc.enabled)
+                        {
+                            subRB.Enabled = true;
+                            if (sc.Checked)
+                                subRB.Checked = true;
+                        }
+                        //add handlers
+                        subRB.CheckedChanged += new EventHandler(subRB_CheckedChanged);
+                        //run checksum logic
+                        subRB.Text = sc.name;
+                        string oldSubCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + sc.zipFile);
+                        if (!oldSubCRC.Equals(sc.crc) && (!sc.zipFile.Equals("")))
+                        {
+                            subRB.Text = subRB.Text + " (Updated)";
+                            if (sc.size > 0.0f)
+                                subRB.Text = subRB.Text + " (" + sc.size + " MB)";
+                        }
+                        //add component
+                        subConfigPanel.Controls.Add(subRB);
+                    }
+                    //add subconfig to the form
+                    if (subConfigPanel != null) configPanel.Controls.Add(subConfigPanel);
                     continue;
                 }
                 else if (m.configs[i].type.Equals("single2") || m.configs[i].type.Equals("single3") || m.configs[i].type.Equals("single4"))
@@ -1094,8 +1146,60 @@ namespace RelhaxModpack
                         if (m.configs[i].size > 0.0f)
                             configControlCB.Text = configControlCB.Text + " (" + m.configs[i].size + " MB)";
                     }
-                    //add it to the form
+                    //add config to the form
                     configPanel.Controls.Add(configControlCB);
+                    //process the subconfigs
+                    //code to declare refrences
+                    Panel subConfigPanel = null;
+
+                    //code to run once to init setup the panels and stuff
+                    if (m.configs[i].subConfigs.Count > 0)
+                    {
+                        subConfigPanel = new Panel();
+                        subConfigPanel.Enabled = true;
+                        subConfigPanel.BorderStyle = BorderStyle.FixedSingle;
+                        subConfigPanel.Location = new Point(15, getYLocation(configPanel.Controls));
+                        subConfigPanel.Size = new Size(t.Size.Width - 45, 30);
+                        subConfigPanel.AutoSize = true;
+                        subConfigPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
+                        subConfigPanel.BackColor = Settings.getBackColor();
+                        subConfigPanel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name + "_subConfigPanel";
+                    }
+                    //code th loop through the subconfigs
+                    for (int j = 0; j < m.configs[i].subConfigs.Count; j++)
+                    {
+                        SubConfig sc = m.configs[i].subConfigs[j];
+                        RadioButton subRB = new RadioButton();
+                        subRB.AutoSize = true;
+                        subRB.Location = new Point(6, (15 * j) + 3);
+                        subRB.Size = new Size(150, 15);
+                        subRB.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
+                        subRB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name + "_" + sc.name;
+                        //logic for the radioButtons
+                        subRB.Enabled = false;
+                        subRB.Checked = false;
+                        if (m.enabled && m.modChecked && m.configs[i].enabled && m.configs[i].configChecked && sc.enabled)
+                        {
+                            subRB.Enabled = true;
+                            if (sc.Checked)
+                                subRB.Checked = true;
+                        }
+                        //add handlers
+                        subRB.CheckedChanged += new EventHandler(subRB_CheckedChanged);
+                        //run checksum logic
+                        subRB.Text = sc.name;
+                        string oldSubCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + sc.zipFile);
+                        if (!oldSubCRC.Equals(sc.crc) && (!sc.zipFile.Equals("")))
+                        {
+                            subRB.Text = subRB.Text + " (Updated)";
+                            if (sc.size > 0.0f)
+                                subRB.Text = subRB.Text + " (" + sc.size + " MB)";
+                        }
+                        //add component
+                        subConfigPanel.Controls.Add(subRB);
+                    }
+                    //add subconfig to the form
+                    if (subConfigPanel != null) configPanel.Controls.Add(subConfigPanel);
                     continue;
                 }
                 else
@@ -1350,16 +1454,89 @@ namespace RelhaxModpack
             string configName = cb.Name.Split('_')[2];
             Mod m = this.linkMod(modName, catagoryName);
             Config cfg = m.getConfig(configName);
-            if (!cb.Enabled)
+            Panel configPanel = (Panel)cb.Parent;
+            if (!cb.Enabled || !cb.Checked)
             {
-                //uncheck config in database and leave
+                //uncheck config in database
                 cfg.configChecked = false;
+                if (cfg.subConfigs.Count > 0)
+                {
+                    //modify the panel and trigger the subConfigs
+                    foreach (Control p in configPanel.Controls)
+                    {
+                        if ((p is Panel) && (p.Name.Equals(catagoryName + "_" + modName + "_" + configName + "_subConfigPanel")))
+                        {
+                            Panel pan = (Panel)p;
+                            pan.BackColor = Settings.getBackColor();
+                            foreach (Control cont in pan.Controls)
+                            {
+                                RadioButton r = (RadioButton)cont;
+                                r.Enabled = false;
+                                subRB_CheckedChanged(r, null);
+                            }
+                            break;
+                        }
+                    }
+                }
                 return;
             }
-            else
+            else if (cb.Enabled)
             {
                 //checkbox is enabled, toggle checked and checked
                 cfg.configChecked = cb.Checked;
+                //at this point it is enabled
+                if (cfg.subConfigs.Count > 0)
+                {
+                    bool configSelected = false;
+                    string lastConfig = "null";
+                    foreach (SubConfig sc in cfg.subConfigs)
+                    {
+                        lastConfig = sc.name;
+                    }
+                    //modify the panel and trigger the subConfigs
+                    foreach (Control p in configPanel.Controls)
+                    {
+                        if ((p is Panel) && (p.Name.Equals(catagoryName + "_" + modName + "_" + configName + "_subConfigPanel")))
+                        {
+                            Panel pan = (Panel)p;
+                            pan.BackColor = Color.BlanchedAlmond;
+                            foreach (Control cont in pan.Controls)
+                            {
+                                RadioButton r = (RadioButton)cont;
+                                SubConfig sc2 = cfg.getSubConfig(r.Name.Split('_')[3]);
+                                r.Enabled = true;
+                                subRB_CheckedChanged(r, null);
+                                if (sc2.Checked)
+                                    configSelected = true;
+                            }
+                            break;
+                        }
+                    }
+                    if (!configSelected)
+                    {
+                        foreach (Control p in configPanel.Controls)
+                        {
+                            if ((p is Panel) && (p.Name.Equals(catagoryName + "_" + modName + "_" + configName + "_subConfigPanel")))
+                            {
+                                Panel pan = (Panel)p;
+                                foreach (Control cont in pan.Controls)
+                                {
+                                    RadioButton r = (RadioButton)cont;
+                                    SubConfig sc2 = cfg.getSubConfig(r.Name.Split('_')[3]);
+                                    if (r.Enabled)
+                                    {
+                                        r.CheckedChanged -= subRB_CheckedChanged;
+                                        r.Checked = true;
+                                        r.CheckedChanged += subRB_CheckedChanged;
+                                        sc2.Checked = true;
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
             }
 
         }
@@ -1376,10 +1553,30 @@ namespace RelhaxModpack
             Panel configSelection = (Panel)rb.Parent;
             Mod m = this.linkMod(modName, catagoryName);
             Config c = m.getConfig(configName);
+            Panel configPanel = (Panel)rb.Parent;
             //verify mod is enabled
             if (!rb.Enabled)
             {
-                c.configChecked = false;
+                //c.configChecked = false;
+                if (c.subConfigs.Count > 0)
+                {
+                    //modify the panel and trigger the subConfigs
+                    foreach (Control p in configPanel.Controls)
+                    {
+                        if ((p is Panel) && (p.Name.Equals(catagoryName + "_" + modName + "_" + configName + "_subConfigPanel")))
+                        {
+                            Panel pan = (Panel)p;
+                            pan.BackColor = Color.BlanchedAlmond;
+                            foreach (Control cont in pan.Controls)
+                            {
+                                RadioButton r = (RadioButton)cont;
+                                r.Enabled = false;
+                                subRB_CheckedChanged(r, null);
+                            }
+                            break;
+                        }
+                    }
+                }
                 return;
             }
             //uncheck all single and single1 mods in memory
@@ -1405,6 +1602,103 @@ namespace RelhaxModpack
                 
             }
             c.configChecked = rb.Checked;
+            //at this point it is enabled
+            if (c.subConfigs.Count > 0)
+            {
+                bool configSelected = false;
+                string lastConfig = "null";
+                foreach (SubConfig sc in c.subConfigs)
+                {
+                    lastConfig = sc.name;
+                }
+                //modify the panel and trigger the subConfigs
+                foreach (Control p in configPanel.Controls)
+                {
+                    if ((p is Panel) && (p.Name.Equals(catagoryName + "_" + modName + "_" + configName + "_subConfigPanel")))
+                    {
+                        Panel pan = (Panel)p;
+                        pan.BackColor = Color.BlanchedAlmond;
+                        foreach (Control cont in pan.Controls)
+                        {
+                            RadioButton r = (RadioButton)cont;
+                            SubConfig sc2 = c.getSubConfig(r.Name.Split('_')[3]);
+                            r.Enabled = true;
+                            subRB_CheckedChanged(r, null);
+                            if (sc2.Checked)
+                                configSelected = true;
+                        }
+                        break;
+                    }
+                }
+                if (!configSelected)
+                {
+                    foreach (Control p in configPanel.Controls)
+                    {
+                        if ((p is Panel) && (p.Name.Equals(catagoryName + "_" + modName + "_" + configName + "_subConfigPanel")))
+                        {
+                            Panel pan = (Panel)p;
+                            foreach (Control cont in pan.Controls)
+                            {
+                                RadioButton r = (RadioButton)cont;
+                                SubConfig sc2 = c.getSubConfig(r.Name.Split('_')[3]);
+                                if (r.Enabled)
+                                {
+                                    r.CheckedChanged -= subRB_CheckedChanged;
+                                    r.Checked = true;
+                                    r.CheckedChanged += subRB_CheckedChanged;
+                                    sc2.Checked = true;
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        //handler for when a subconfig radiobutton is changed
+        void subRB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (loadingConfig)
+                return;
+            //get all required cool stuff
+            RadioButton rb = (RadioButton)sender;
+            string modName = rb.Name.Split('_')[1];
+            string catagoryName = rb.Name.Split('_')[0];
+            string configName = rb.Name.Split('_')[2];
+            string subConfig = rb.Name.Split('_')[3];
+            Panel configSelection = (Panel)rb.Parent;
+            Mod m = this.linkMod(modName, catagoryName);
+            Config c = m.getConfig(configName);
+            Panel configPanel = (Panel)rb.Parent;
+            SubConfig sfg = c.getSubConfig(subConfig);
+            //SubConfig sc = c.getSubConfig(subConfig);
+            //verify mod is enabled
+            if (!rb.Enabled)
+            {
+                c.configChecked = false;
+                return;
+            }
+            //uncheck all mods in memory
+            foreach (SubConfig sc in c.subConfigs)
+            {
+                sc.Checked = false;
+            }
+            //uncheck all mods in UI
+            if (rb.Enabled && rb.Checked)
+            {
+                foreach (Control ctrl in configSelection.Controls)
+                {
+                    if (ctrl is RadioButton)
+                    {
+                        RadioButton rbz = (RadioButton)ctrl;
+                        if (!rbz.Equals(rb))
+                            rbz.Checked = false;
+                    }
+                }
+
+            }
+            sfg.Checked = rb.Checked;
         }
         //handler for when a mod checkbox is changed
         void modCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -1492,6 +1786,7 @@ namespace RelhaxModpack
             if (m.configs.Count == 0)
                 return;
             string lastConfigName = "null";
+            bool configSelected = false;
             foreach (Config configs in m.configs)
             {
                 if (configs.type.Equals("single") || configs.type.Equals("single1"))
@@ -1552,9 +1847,12 @@ namespace RelhaxModpack
                         ccRB.Enabled = true;
                     else
                         ccRB.Enabled = false;
+                    
                     configControlRB_CheckedChanged(ccRB,null);
+                    if (cfg.configChecked)
+                        configSelected = true;
                     //create a section of code to run fo only the last radioButton
-                    if (cfg.name.Equals(lastConfigName))
+                    if (cfg.name.Equals(lastConfigName) && !configSelected)
                     {
                         //last radioButton in the section, try to check the first radioButton
                         foreach (Control cccc in configPanel.Controls)
@@ -1829,7 +2127,7 @@ namespace RelhaxModpack
                                                                         case "enabled":
                                                                             subC.enabled = Settings.parseBool(subConfigNode.InnerText, false);
                                                                             break;
-                                                                        case "Checked":
+                                                                        case "checked":
                                                                             subC.Checked = Settings.parseBool(subConfigNode.InnerText, false);
                                                                             break;
                                                                         case "type":
@@ -1990,20 +2288,23 @@ namespace RelhaxModpack
                 {
                     if (c is Panel)
                     {
+                        //mod panel
                         Panel p = (Panel)c;
                         p.Size = new Size(t.Size.Width - 25, p.Size.Height);
                         foreach (Control cc in p.Controls)
                         {
                             if (cc is Panel)
                             {
+                                //config panel
                                 Panel pp = (Panel)cc;
                                 pp.Size = new Size(t.Size.Width - 35, pp.Size.Height);
                                 foreach (Control ccc in pp.Controls)
                                 {
                                     if (ccc is Panel)
                                     {
+                                        //subconfig panel
                                         Panel ppp = (Panel)ccc;
-                                        ppp.Size = new Size(t.Size.Width - 45, ppp.Size.Height);
+                                        ppp.Size = new Size(t.Size.Width - 58, ppp.Size.Height);
                                     }
                                 }
                             }
