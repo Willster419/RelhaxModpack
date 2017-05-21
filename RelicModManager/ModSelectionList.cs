@@ -356,7 +356,6 @@ namespace RelhaxModpack
             tvi.Header = modCheckBox;
             //add it's handlers, right click and when checked
             modCheckBox.MouseDown += new System.Windows.Input.MouseButtonEventHandler(modCheckBoxL_MouseDown);
-            
             //create the twp possible drop down options, and the mod optional config check box i guess
             RelhaxComboBox configControlDD = new RelhaxComboBox();
             configControlDD.Items.Clear();
@@ -411,61 +410,38 @@ namespace RelhaxModpack
                     System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
                     configControlTVI.Header = configControlRB;
                     tvi.Items.Add(configControlTVI);
-                }
-                else if (m.configs[i].type.Equals("single2") || m.configs[i].type.Equals("single3") || m.configs[i].type.Equals("single4"))
-                {
-                    string enableCBName = m.configs[i].type + "_enableCB";
-                    //make the radio button
-                    RelhaxRadioButton configControlRB = new RelhaxRadioButton();
-                    //configControlRB.FontSize = Settings.fontSize;
-                    configControlRB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name;
-                    //the logic for enabling it
-                    //set them to false first
-                    configControlRB.IsEnabled = false;
-                    configControlRB.IsChecked = false;
-                    if (m.enabled && m.configs[i].enabled && m.modChecked)
+                    //process the subconfigs
+                    //code to loop through the subconfigs
+                    foreach (SubConfig sc in m.configs[i].subConfigs)
                     {
-                        configControlRB.IsEnabled = true;
-                        //the logic for checking it
-                        if (m.modChecked && m.configs[i].configChecked)
-                            configControlRB.IsChecked = true;
+                        //create the radioButton
+                        RelhaxRadioButton subRB = new RelhaxRadioButton();
+                        subRB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name + "_" + sc.name;
+                        //logic for the radioButton
+                        subRB.IsEnabled = false;
+                        subRB.IsChecked = false;
+                        if (m.enabled && m.modChecked && m.configs[i].enabled && m.configs[i].configChecked && sc.enabled)
+                        {
+                            subRB.IsEnabled = true;
+                            if (sc.Checked)
+                                subRB.IsChecked = true;
+                        }
+                        //add handlers
+                        subRB.Click += new System.Windows.RoutedEventHandler(subRB_Click);
+                        //run checksum logic
+                        subRB.Content = sc.name;
+                        string oldSubCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + sc.zipFile);
+                        if (!oldSubCRC.Equals(sc.crc) && (!sc.zipFile.Equals("")))
+                        {
+                            subRB.Content = subRB.Content + " (Updated)";
+                            if (sc.size > 0.0f)
+                                subRB.Content = subRB.Content + " (" + sc.size + " MB)";
+                        }
+                        //add component
+                        System.Windows.Controls.TreeViewItem subRBTVI = new System.Windows.Controls.TreeViewItem();
+                        subRBTVI.Header = subRB;
+                        configControlTVI.Items.Add(subRBTVI);
                     }
-                    //run the checksum logix
-                    configControlRB.Content = m.configs[i].name;
-                    string oldCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
-                    if (!oldCRC.Equals(m.configs[i].crc) && (!m.configs[i].crc.Equals("")))
-                    {
-                        configControlRB.Content = configControlRB.Content + " (Updated)";
-                        if (m.configs[i].size > 0.0f)
-                            configControlRB.Content = configControlRB.Content + " (" + m.configs[i].size + " MB)";
-                    }
-                    //add the handlers at the end
-                    configControlRB.Click += new System.Windows.RoutedEventHandler(configControlRB_Click);
-                    //clobber the tree view for it
-                    //first set it to null
-                    System.Windows.Controls.TreeViewItem configControlOCBTVI = null;
-                    foreach (System.Windows.Controls.Control cont in tvi.Items)
-                    {
-                        //if it has found it, link it
-                        if (cont.Name.Equals(enableCBName))
-                            configControlOCBTVI = (System.Windows.Controls.TreeViewItem)cont;
-                    }
-                    //if it still has not found it, it is new, make it and add it
-                    if (configControlOCBTVI == null)
-                    {
-                        configControlOCBTVI = new System.Windows.Controls.TreeViewItem();
-                        RelhaxCheckbox configControlOCB = new RelhaxCheckbox();
-                        configControlOCB.Click += new System.Windows.RoutedEventHandler(configControlOCB_Click);
-                        configControlOCB.realName = "ENABLER";
-                        configControlOCBTVI.Header = configControlOCB;
-                        configControlOCBTVI.Name = enableCBName;
-                        tvi.Items.Add(configControlOCBTVI);
-                    }
-                    //add it to the mod config list
-                    System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
-                    configControlTVI.Header = configControlRB;
-                    configControlOCBTVI.Items.Add(configControlTVI);
-                    
                 }
                 else if (m.configs[i].type.Equals("single_dropdown") || m.configs[i].type.Equals("single_dropdown1") || m.configs[i].type.Equals("single_dropdown2"))
                 {
@@ -542,6 +518,38 @@ namespace RelhaxModpack
                     System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
                     configControlTVI.Header = configControlCB;
                     tvi.Items.Add(configControlTVI);
+                    //process the subconfigs
+                    //code to loop through the subconfigs
+                    foreach (SubConfig sc in m.configs[i].subConfigs)
+                    {
+                        //create the radioButton
+                        RelhaxRadioButton subRB = new RelhaxRadioButton();
+                        subRB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name + "_" + sc.name;
+                        //logic for the radioButton
+                        subRB.IsEnabled = false;
+                        subRB.IsChecked = false;
+                        if (m.enabled && m.modChecked && m.configs[i].enabled && m.configs[i].configChecked && sc.enabled)
+                        {
+                            subRB.IsEnabled = true;
+                            if (sc.Checked)
+                                subRB.IsChecked = true;
+                        }
+                        //add handlers
+                        subRB.Click += new System.Windows.RoutedEventHandler(subRB_Click);
+                        //run checksum logic
+                        subRB.Content = sc.name;
+                        string oldSubCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + sc.zipFile);
+                        if (!oldSubCRC.Equals(sc.crc) && (!sc.zipFile.Equals("")))
+                        {
+                            subRB.Content = subRB.Content + " (Updated)";
+                            if (sc.size > 0.0f)
+                                subRB.Content = subRB.Content + " (" + sc.size + " MB)";
+                        }
+                        //add component
+                        System.Windows.Controls.TreeViewItem subRBTVI = new System.Windows.Controls.TreeViewItem();
+                        subRBTVI.Header = subRB;
+                        configControlTVI.Items.Add(subRBTVI);
+                    }
                 }
             }
             //add the mod check box to the legacy tree view
@@ -555,6 +563,48 @@ namespace RelhaxModpack
             modCheckBox.Click += new System.Windows.RoutedEventHandler(modCheckBoxL_Click);
         }
 
+        void subRB_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            RelhaxRadioButton rb = (RelhaxRadioButton)sender;
+            string modName = rb.realName.Split('_')[1];
+            string catagoryName = rb.realName.Split('_')[0];
+            string configName = rb.realName.Split('_')[2];
+            string subConfigName = rb.realName.Split('_')[3];
+            Mod m = this.linkMod(modName, catagoryName);
+            Config cfg = m.getConfig(configName);
+            SubConfig subc = cfg.getSubConfig(subConfigName);
+            //the subconfig treeviewitem
+            System.Windows.Controls.TreeViewItem subCFGTVI = (System.Windows.Controls.TreeViewItem)rb.Parent;
+            //the config treeviewitem
+            System.Windows.Controls.TreeViewItem cfgTVI = (System.Windows.Controls.TreeViewItem)subCFGTVI.Parent;
+            if (!(bool)rb.IsEnabled)
+            {
+                subc.Checked = false;
+                return;
+            }
+            if ((bool)rb.IsEnabled && (bool)rb.IsChecked)
+            {
+                //uncheck all subconfigs in memory
+                foreach (SubConfig sc in cfg.subConfigs)
+                {
+                    sc.Checked = false;
+                }
+                //uncheck all subconfigs in UI
+                foreach (System.Windows.Controls.TreeViewItem item in cfgTVI.Items)
+                {
+                    if (item.Header is RelhaxRadioButton)
+                    {
+                        RelhaxRadioButton rbb = (RelhaxRadioButton)item.Header;
+                        if (!rbb.Equals(rb))
+                        {
+                            rbb.IsChecked = false;
+                        }
+                    }
+                }
+            }
+            subc.Checked = (bool)rb.IsChecked;
+        }
+
         //when a legacy checkbox of OMC view is clicked
         void configControlCB_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -566,6 +616,47 @@ namespace RelhaxModpack
             Mod m = this.linkMod(modName, catagoryName);
             Config cfg = m.getConfig(configName);
             cfg.configChecked = (bool)cb.IsChecked;
+            //process the subconfigs
+            bool configSelected = false;
+            if (cfg.subConfigs.Count > 0)
+            {
+                System.Windows.Controls.TreeViewItem tvi = (System.Windows.Controls.TreeViewItem)cb.Parent;
+                foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
+                {
+                    RelhaxRadioButton subRB = (RelhaxRadioButton)subTVI.Header;
+                    SubConfig subc = cfg.getSubConfig(subRB.realName.Split('_')[3]);
+                    if (!(bool)cb.IsEnabled || !(bool)cb.IsChecked)
+                    {
+                        subRB.IsEnabled = false;
+                        
+                    }
+                    else if ((bool)cb.IsEnabled && (bool)cb.IsChecked)
+                    {
+                        //getting here means cb is enabled
+                        subRB.IsEnabled = true;
+                        subRB_Click(subRB, null);
+                        if (subc.Checked)
+                            configSelected = true;
+                    }
+                }
+                if (!configSelected && (bool)cb.IsChecked && (bool)cb.IsEnabled)
+                {
+                    //select the first possible one
+                    foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
+                    {
+                        RelhaxRadioButton subRB = (RelhaxRadioButton)subTVI.Header;
+                        SubConfig subc = cfg.getSubConfig(subRB.realName.Split('_')[3]);
+                        if (subc.enabled)
+                        {
+                            subc.Checked = true;
+                            subRB.Click -= subRB_Click;
+                            subRB.IsChecked = true;
+                            subRB.Click += subRB_Click;
+                            break;
+                        }
+                    }
+                }
+            }
         }
         //when a dropdown legacy combobox is index changed
         void configControlDDALL_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -605,12 +696,6 @@ namespace RelhaxModpack
                 }
             }
         }
-        //when a checkbox of optional radioButtons legacy view is clicked
-        void configControlOCB_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (loadingConfig)
-                return;
-        }
         //when a radiobutton of the legacy view mode is clicked
         void configControlRB_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -627,30 +712,73 @@ namespace RelhaxModpack
             System.Windows.Controls.TreeViewItem item0 = (System.Windows.Controls.TreeViewItem)cb.Parent;
             //the mod treeview
             System.Windows.Controls.TreeViewItem item1 = (System.Windows.Controls.TreeViewItem)item0.Parent;
-            if (!(bool)cb.IsEnabled)
+            if ((bool)cb.IsEnabled && (bool)cb.IsChecked)
             {
-                cfg.configChecked = false;
-                return;
-            }
-            //uncheck all single and single1 mods in memory
-            foreach (Config configs in m.configs)
-            {
-                if (configs.type.Equals("single") || configs.type.Equals("single1"))
+                //uncheck all single and single1 mods in memory
+                foreach (Config configs in m.configs)
                 {
-                    configs.configChecked = false;
+                    if (configs.type.Equals("single") || configs.type.Equals("single1"))
+                    {
+                        configs.configChecked = false;
+                    }
                 }
-            }
-            //uincheck all single and single1 mods in UI
-            foreach (System.Windows.Controls.TreeViewItem item in item1.Items)
-            {
-                if (item.Header is RelhaxRadioButton)
+                //uincheck all single and single1 mods in UI
+                foreach (System.Windows.Controls.TreeViewItem item in item1.Items)
                 {
-                    RelhaxRadioButton rb = (RelhaxRadioButton)item.Header;
-                    if(!rb.Equals(cb))
-                        rb.IsChecked = false;
+                    if (item.Header is RelhaxRadioButton)
+                    {
+                        RelhaxRadioButton rb = (RelhaxRadioButton)item.Header;
+                        if ((bool)rb.IsChecked && (bool)!rb.Equals(cb))
+                        {
+                            //this was the previous radiobutton checked
+                            rb.IsChecked = false;
+                            configControlRB_Click(rb, null);
+                        }
+                    }
                 }
             }
             cfg.configChecked = (bool)cb.IsChecked;
+            //process the subconfigs
+            bool configSelected = false;
+            if (cfg.subConfigs.Count > 0)
+            {
+                System.Windows.Controls.TreeViewItem tvi = (System.Windows.Controls.TreeViewItem)cb.Parent;
+                foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
+                {
+                    RelhaxRadioButton subRB = (RelhaxRadioButton)subTVI.Header;
+                    SubConfig subc = cfg.getSubConfig(subRB.realName.Split('_')[3]);
+                    if (!(bool)cb.IsEnabled || !(bool)cb.IsChecked)
+                    {
+                        subRB.IsEnabled = false;
+                        
+                    }
+                    else if ((bool)cb.IsEnabled && (bool)cb.IsChecked)
+                    {
+                        //getting here means cb is enabled
+                        subRB.IsEnabled = true;
+                        subRB_Click(subRB, null);
+                        if (subc.Checked)
+                            configSelected = true;
+                    }
+                }
+                if (!configSelected && (bool)cb.IsEnabled && (bool)cb.IsChecked)
+                {
+                    //select the first possible one
+                    foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
+                    {
+                        RelhaxRadioButton subRB = (RelhaxRadioButton)subTVI.Header;
+                        SubConfig subc = cfg.getSubConfig(subRB.realName.Split('_')[3]);
+                        if (subc.enabled)
+                        {
+                            subc.Checked = true;
+                            subRB.Click -= subRB_Click;
+                            subRB.IsChecked = true;
+                            subRB.Click += subRB_Click;
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         void modCheckBoxL_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -730,6 +858,7 @@ namespace RelhaxModpack
                 return;
             //get the string name of the last radiobutton for refrence later
             string lastConfigName = "null";
+            bool configSelected = false;
             foreach (Config configs in m.configs)
             {
                 if (configs.type.Equals("single") || configs.type.Equals("single1"))
@@ -755,22 +884,14 @@ namespace RelhaxModpack
                 else if (c is RelhaxCheckbox)
                 {
                     RelhaxCheckbox cbox = (RelhaxCheckbox)c;
-                    if(cbox.realName.Equals("ENABLER"))
-                    {
-                        //optional radio button code
-
-                    }
+                    //multi CB code
+                    //CB is enabled if the mod checked and the config is enabled
+                    cfg = m.getConfig(cbox.realName.Split('_')[2]);
+                    if (m.modChecked && cfg.enabled)
+                        cbox.IsEnabled = true;
                     else
-                    {
-                        //multi CB code
-                        //CB is enabled if the mod checked and the config is enabled
-                        cfg = m.getConfig(cbox.realName.Split('_')[2]);
-                        if (m.modChecked && cfg.enabled)
-                            cbox.IsEnabled = true;
-                        else
-                            cbox.IsEnabled = false;
-                        configControlCB_Click(cbox,null);
-                    }
+                        cbox.IsEnabled = false;
+                    configControlCB_Click(cbox,null);
                 }
                 else if (c is RelhaxRadioButton)
                 {
@@ -781,8 +902,10 @@ namespace RelhaxModpack
                     else
                         cbox.IsEnabled = false;
                     configControlRB_Click(cbox, null);
+                    if (cfg.configChecked)
+                        configSelected = true;
                     //create a section of code to run for only the last radioButton
-                    if (cfg.name.Equals(lastConfigName))
+                    if (cfg.name.Equals(lastConfigName) && !configSelected)
                     {
                         //last radioButton in the section, try to check at least one radioButton in the configs
                         foreach (System.Windows.Controls.TreeViewItem item2 in TVI.Items)
@@ -807,8 +930,6 @@ namespace RelhaxModpack
             }
 
         }
-
-
         //adds a mod m to a tabpage t
         private void addMod(Mod m, TabPage t, int panelCount)
         {
