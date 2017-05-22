@@ -33,10 +33,13 @@ Support Teamspeak Server: tna.dyndns.org
 - Automation:
   - The modpack and be set at command line with a "/auto-install config_file_name.xml" switch to automatically install the modpack, with your preference of mods selected. In this situation, you could install without any interaction, and update all your mods in seconds.
   
-### What does the mod look like?
-![MainWindow](https://github.com/Willster419/RelhaxModpack/raw/master/RelicModManager/PreviewPicture1.PNG "Main Window")
+### What does the modpack look like?
+![MainWindow](https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelicModManager/PreviewPicture3.png "Main Window")
 
-![ModSelection](https://github.com/Willster419/RelhaxModpack/raw/master/RelicModManager/PreviewPicture2.PNG "Mod Selection")
+![ModSelection](https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelicModManager/PreviewPicture4.png "Mod Selection")
+
+### Prefer the OMC style selection view?
+![ModSelectionOld](https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelicModManager/PreviewPicture5.png "Mod Selection Legacy")
 
 ### Additional Information
 The modpack is currently in alpha, proof of concept. I am still adding minor features and adding finishing touches to the application. This means that bugs may still exist. To prevent possible loss of your "perfect modpack configuration" it is recommended to back it up editor manually or using the "backup mods" checkbox option.
@@ -58,6 +61,9 @@ If you want to help develop the modpack, I would be glad for the help and will h
 
 Latest release notes can be found here:
 https://github.com/Willster419/RelicModManager/blob/master/RelicModManager/bin/Debug/releaseNotes.txt
+
+And Here:
+https://github.com/Willster419/RelhaxModpack/commits/master
 
 ## Download
 You can download the modpack from this link:
