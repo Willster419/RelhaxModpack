@@ -24,7 +24,6 @@ namespace RelhaxModpack
         //all instance variables required to be up here
         private FolderBrowserDialog selectWotFolder = new FolderBrowserDialog();
         private WebClient downloader = new WebClient();
-        private string modAudioFolder;//res_mods/versiondir/audioww
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
         private string managerVersion = "version 22.3.1";
@@ -37,9 +36,6 @@ namespace RelhaxModpack
         private string downloadPath = Application.StartupPath + "\\RelHaxDownloads";
         private string parsedModsFolder;//0.9.x.y.z
         //DEPRECATED: /res_mods/version/gui
-        private string modGuiFolder;
-        private string modGuiFolderBase;
-        private string customUserMods;
         //ZipFile zip;
         //timer to measure download speed
         Stopwatch sw = new Stopwatch();
@@ -675,10 +671,6 @@ namespace RelhaxModpack
             Settings.appendToLog("tanksLocation parsed as " + tanksLocation);
             parsedModsFolder = tanksLocation + "\\res_mods\\" + this.getFolderVersion(tanksLocation);
             Settings.appendToLog("tanks mods version parsed as " + parsedModsFolder);
-            modGuiFolder = parsedModsFolder + "\\gui\\soundModes";
-            modAudioFolder = parsedModsFolder + "\\audioww";
-            modGuiFolderBase = parsedModsFolder + "\\gui";
-            customUserMods = Application.StartupPath + "\\RelHaxUserMods";
             Settings.appendToLog("customUserMods parsed as " + Application.StartupPath + "\\RelHaxUserMods");
             return "1";
         }
@@ -843,7 +835,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 05/19/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 05/21/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -2117,6 +2109,12 @@ namespace RelhaxModpack
                 {
                     Settings.appendToLog("Extracting Config " + c.zipConfigFile);
                     if (!c.zipConfigFile.Equals("")) this.unzip(downloadedFilesDir + c.zipConfigFile, tanksLocation);
+                    extractworker.ReportProgress(1);
+                }
+                foreach (SubConfig sc in subConfigsToInstall)
+                {
+                    Settings.appendToLog("Extracting SubConfig " + sc.zipFile);
+                    if (!sc.zipFile.Equals("")) this.unzip(downloadedFilesDir + sc.zipFile, tanksLocation);
                     extractworker.ReportProgress(1);
                 }
                 Settings.appendToLog("Finished Relhax Modpack Extraction");

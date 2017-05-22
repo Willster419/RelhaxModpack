@@ -255,6 +255,7 @@ namespace RelhaxModpack
         //must be only one catagory
         private void addAllMods()
         {
+            Settings.appendToLog("Loading ModSelectionList with view " + Settings.sView);
             foreach (TabPage t in this.modTabGroups.TabPages)
             {
                 foreach (Catagory c in parsedCatagoryList)
@@ -351,6 +352,9 @@ namespace RelhaxModpack
             }
             //set mod's enabled status
             modCheckBox.IsEnabled = m.enabled;
+            //set the mods checked status
+            if (m.enabled && m.modChecked)
+                modCheckBox.IsChecked = true;
             //make the tree view item for the modCheckBox
             System.Windows.Controls.TreeViewItem tvi = new System.Windows.Controls.TreeViewItem();
             tvi.Header = modCheckBox;
@@ -550,6 +554,10 @@ namespace RelhaxModpack
                         subRBTVI.Header = subRB;
                         configControlTVI.Items.Add(subRBTVI);
                     }
+                }
+                else
+                {
+                    Settings.appendToLog("WARNING: Unknown config type for " + m.configs[i].name + ": " + m.configs[i].type);
                 }
             }
             //add the mod check box to the legacy tree view
@@ -1093,13 +1101,21 @@ namespace RelhaxModpack
                             toAdd = toAdd + " (" + m.configs[i].size + " MB)";
                         //add it with _updated
                         if (m.configs[i].enabled) configControlDDALL.Items.Add(toAdd);
-                        if (m.configs[i].configChecked) configControlDDALL.SelectedItem = toAdd;
+                        if (m.configs[i].configChecked)
+                        {
+                            configControlDDALL.SelectedItem = toAdd;
+                            configControlDDALL.Enabled = true;
+                        }
                     }
                     else
                     {
                         //add it
                         if (m.configs[i].enabled) configControlDDALL.Items.Add(m.configs[i].name);
-                        if (m.configs[i].configChecked) configControlDDALL.SelectedItem = m.configs[i].name;
+                        if (m.configs[i].configChecked)
+                        {
+                            configControlDDALL.SelectedItem = m.configs[i].name;
+                            configControlDDALL.Enabled = true;
+                        }
                     }
                     continue;
                 }
@@ -1193,7 +1209,7 @@ namespace RelhaxModpack
                 }
                 else
                 {
-                    Settings.appendToLog("WANRING: Unknown config type for " + m.configs[i].name + ": " + m.configs[i].type);
+                    Settings.appendToLog("WARNING: Unknown config type for " + m.configs[i].name + ": " + m.configs[i].type);
                 }
             }
             //make the mod check box
@@ -2488,6 +2504,7 @@ namespace RelhaxModpack
                                 if (File.Exists(Application.StartupPath + "\\RelHaxUserMods\\" + filename))
                                 {
                                     m.modChecked = true;
+                                    Settings.appendToLog("checking user mod " + m.modZipFile);
                                 }
                             }
                             break;
@@ -2500,12 +2517,15 @@ namespace RelhaxModpack
                 if (loadMode == loadConfigMode.fromButton) MessageBox.Show(Translations.getTranslatedString("prefrencesSet"));
                 //reload the UI
                 this.UseWaitCursor = true;
+                modTabGroups.Enabled = false;
                 this.makeTabs();
                 Settings.setUIColor(this);
                 this.addAllMods();
                 this.addUserMods();
                 Settings.setUIColor(this);
                 this.UseWaitCursor = false;
+                modTabGroups.Enabled = true;
+                ModSelectionList_SizeChanged(null, null);
             }
         }
         //checks for duplicates
@@ -2642,12 +2662,15 @@ namespace RelhaxModpack
             MessageBox.Show(Translations.getTranslatedString("selectionsCleared"));
             //reload the UI
             this.UseWaitCursor = true;
+            modTabGroups.Enabled = false;
             this.makeTabs();
             Settings.setUIColor(this);
             this.addAllMods();
             this.addUserMods();
             Settings.setUIColor(this);
             this.UseWaitCursor = false;
+            modTabGroups.Enabled = true;
+            ModSelectionList_SizeChanged(null, null);
         }
     }
 }
