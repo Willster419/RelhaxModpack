@@ -172,6 +172,7 @@
               <configtype>single_dropdown</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>players panel 2</name>
@@ -185,6 +186,7 @@
               <configtype>single_dropdown</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>players panel 3</name>
@@ -198,6 +200,7 @@
               <configtype>single_dropdown</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>1 line tank carousel</name>
@@ -211,6 +214,7 @@
               <configtype>single_dropdown2</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>2 line tank carousel</name>
@@ -224,6 +228,7 @@
               <configtype>single_dropdown2</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>3 line tank carousel</name>
@@ -237,6 +242,7 @@
               <configtype>single_dropdown2</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>hp on minimap</name>
@@ -250,6 +256,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -282,8 +289,8 @@
           <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc>f</modzipcrc>
-          <size>0</size>
+          <modzipcrc>e216e967ac0a5cbb6d1db59fb94af738</modzipcrc>
+          <size>0.1</size>
           <enabled>True</enabled>
           <userDatas />
           <pictures />
@@ -303,6 +310,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Full NA</name>
@@ -316,6 +324,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Full EU</name>
@@ -329,6 +338,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Full RU</name>
@@ -342,6 +352,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Full ASIA</name>
@@ -355,6 +366,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -368,11 +380,14 @@
           <name>Battle Interface modifications - Information Label for Missions</name>
           <version>
           </version>
-          <modzipfile></modzipfile>
-          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+          <modzipfile>
+          </modzipfile>
+          <startAddress>
+          </startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc>f</modzipcrc>
+          <modzipcrc>
+          </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
           <userDatas />
@@ -424,12 +439,13 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>39bd3a47d2b90cd0f5c8b77a66527b02</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -468,6 +484,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>5 sec 6th sense icon</name>
@@ -481,6 +498,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>10 sec 6th sense icon</name>
@@ -494,6 +512,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -526,16 +545,13 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>bf52ef542d996dcbc5f09a3a9b9a7071</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL></URL>
-                </picture>
-              </pictures>
+              <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Show Kills</name>
@@ -543,16 +559,13 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>59690f672df60c512e4bc1ba092e10da</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
-              <pictures>
-                <picture>
-                  <URL></URL>
-                </picture>
-              </pictures>
+              <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -591,6 +604,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable</name>
@@ -604,6 +618,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -643,6 +658,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable total HP</name>
@@ -656,6 +672,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -694,6 +711,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable</name>
@@ -707,6 +725,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -746,6 +765,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable</name>
@@ -759,6 +779,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -798,6 +819,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable</name>
@@ -811,6 +833,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -850,6 +873,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable</name>
@@ -863,6 +887,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -902,6 +927,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable</name>
@@ -915,6 +941,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -954,6 +981,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable</name>
@@ -967,6 +995,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -1006,6 +1035,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable</name>
@@ -1019,6 +1049,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -1058,6 +1089,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable</name>
@@ -1071,6 +1103,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -1109,6 +1142,7 @@
               <configtype>single_dropdown</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Hide Battle Tier</name>
@@ -1122,6 +1156,7 @@
               <configtype>single_dropdown</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Init Battle Results page 1</name>
@@ -1135,6 +1170,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Init Battle Results page 2</name>
@@ -1148,6 +1184,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Init Battle Results page 3</name>
@@ -1161,6 +1198,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -1200,6 +1238,7 @@
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disabled</name>
@@ -1213,6 +1252,7 @@
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Rows - 1</name>
@@ -1226,6 +1266,7 @@
               <configtype>single_dropdown1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Rows - 2</name>
@@ -1239,6 +1280,7 @@
               <configtype>single_dropdown1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Rows - 3</name>
@@ -1252,6 +1294,7 @@
               <configtype>single_dropdown1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Rows - 4</name>
@@ -1265,6 +1308,7 @@
               <configtype>single_dropdown1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Rows - 5</name>
@@ -1278,6 +1322,7 @@
               <configtype>single_dropdown1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Rows - Ingame setting</name>
@@ -1291,74 +1336,98 @@
               <configtype>single_dropdown1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
-              <name>Cell Type normal</name>
-              <configzipfile>XVM_config_builder_carousel_normal_cell.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <name>Cell Type</name>
+              <configzipfile>
+              </configzipfile>
+              <startAddress>
+              </startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>e59c009cafa7dea617bc27f40c94998c</configzipcrc>
-              <size>0.1</size>
+              <configzipcrc>
+              </configzipcrc>
+              <size>0</size>
               <configenabled>True</configenabled>
-              <configtype>single2</configtype>
+              <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs>
+                <subConfig>
+                  <name>Cell Type normal</name>
+                  <zipFile>XVM_config_builder_carousel_normal_cell.zip</zipFile>
+                  <crc>e59c009cafa7dea617bc27f40c94998c</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>Cell Type normal - 0.8 scale</name>
+                  <zipFile>XVM_config_builder_carousel_normal_cell_scale_0.8.zip</zipFile>
+                  <crc>ef418f604ab8537dc474b585c3af48c1</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>Cell Type normal - 0.6 scale</name>
+                  <zipFile>XVM_config_builder_carousel_normal_cell_scale_0.6.zip</zipFile>
+                  <crc>e08086c87715e05e7943d115af4c3526</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>Cell Type small</name>
+                  <zipFile>XVM_config_builder_carousel_small_cell.zip</zipFile>
+                  <crc>e1c8d14be77837db3d52c9709e9585ab</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>Cell Type ingame setting</name>
+                  <zipFile>XVM_config_builder_carousel_ingame_cell.zip</zipFile>
+                  <crc>41276ad2ffdee66646ef08d161bdafff</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+              </subConfigs>
             </config>
             <config>
-              <name>Cell Type normal - 0.8 scale</name>
-              <configzipfile>XVM_config_builder_carousel_normal_cell_scale_0.8.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>ef418f604ab8537dc474b585c3af48c1</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single2</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Cell Type normal - 0.6 scale</name>
-              <configzipfile>XVM_config_builder_carousel_normal_cell_scale_0.6.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>e08086c87715e05e7943d115af4c3526</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single2</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Cell Type small</name>
-              <configzipfile>XVM_config_builder_carousel_small_cell.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>e1c8d14be77837db3d52c9709e9585ab</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single2</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Cell Type ingame setting</name>
-              <configzipfile>XVM_config_builder_carousel_ingame_cell.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>41276ad2ffdee66646ef08d161bdafff</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single2</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Hide "Buy Tank" cell</name>
+              <name>"Buy Tank" cell</name>
               <configzipfile>XVM_config_builder_carousel_hide_buy_tank_hide_total_slots.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
@@ -1366,38 +1435,56 @@
               <configzipcrc>313a612d874c04bd8cdff08ff2230785</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>single3</configtype>
+              <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs>
+                <subConfig>
+                  <name>Hide cell</name>
+                  <zipFile>XVM__builder_carousel_hide_buy_tank_hide_total_slots.zip</zipFile>
+                  <crc>313a612d874c04bd8cdff08ff2230785</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>Show cell, hide total slots</name>
+                  <zipFile>XVM__builder_carousel_show_buy_tank_hide_total_slots.zip</zipFile>
+                  <crc>c97cedf8849650a6f16b206c367a7a0d</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>Show cell, show total slots</name>
+                  <zipFile>XVM__builder_carousel_show_buy_tank_show_total_slots.zip</zipFile>
+                  <crc>0b9cc6a60661ba5254bd5bef29fd5cba</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+              </subConfigs>
             </config>
             <config>
-              <name>Show "Buy Tank" cell, hide total slots</name>
-              <configzipfile>XVM_config_builder_carousel_show_buy_tank_hide_total_slots.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>c97cedf8849650a6f16b206c367a7a0d</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single3</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Show "Buy Tank" cell, show total slots</name>
-              <configzipfile>XVM_config_builder_carousel_show_buy_tank_show_total_slots.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>0b9cc6a60661ba5254bd5bef29fd5cba</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single3</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Hide "Buy Slot" cell</name>
+              <name>"Buy Slot" cell</name>
               <configzipfile>XVM_config_builder_carousel_hide_buy_slot_hide_used_slots.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
@@ -1405,143 +1492,195 @@
               <configzipcrc>b869305de1835e6966b59b7e4eb7feba</configzipcrc>
               <size>0.1</size>
               <configenabled>True</configenabled>
-              <configtype>single4</configtype>
+              <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs>
+                <subConfig>
+                  <name>Hide cell</name>
+                  <zipFile>XVM__builder_carousel_hide_buy_slot_hide_used_slots.zip</zipFile>
+                  <crc>b869305de1835e6966b59b7e4eb7feba</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>Show cell, hide total used slots</name>
+                  <zipFile>XVM__builder_carousel_show_buy_slot_hide_used_slots.zip</zipFile>
+                  <crc>4b223b2e71f813107033952e7297d4d1</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>Show cell, show total used slots</name>
+                  <zipFile>XVM__builder_carousel_show_buy_slot_show_used_slots.zip</zipFile>
+                  <crc>0238565d59b83d1f10dbf857693a74c1</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+              </subConfigs>
             </config>
             <config>
-              <name>Show "Buy Slot" cell, hide total used slots</name>
-              <configzipfile>XVM_config_builder_carousel_show_buy_slot_hide_used_slots.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <name>Average Damage (normal cell only)</name>
+              <configzipfile>
+              </configzipfile>
+              <startAddress>
+              </startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>4b223b2e71f813107033952e7297d4d1</configzipcrc>
-              <size>0.1</size>
+              <configzipcrc>
+              </configzipcrc>
+              <size>0</size>
               <configenabled>True</configenabled>
-              <configtype>single4</configtype>
+              <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs>
+                <subConfig>
+                  <name>Enable</name>
+                  <zipFile>XVM_config_builder_carousel_cell_average_damage_enable.zip</zipFile>
+                  <crc>87891e073b1ce433cec5705dc44540ff</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>Disable</name>
+                  <zipFile>XVM_config_builder_carousel_cell_average_damage_disable.zip</zipFile>
+                  <crc>d3cdce95e5aa90473632c1438209b294</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+              </subConfigs>
             </config>
             <config>
-              <name>Show "Buy Slot" cell, show total used slots</name>
-              <configzipfile>XVM_config_builder_carousel_show_buy_slot_show_used_slots.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <name>Battles Count (normal cell only)</name>
+              <configzipfile>
+              </configzipfile>
+              <startAddress>
+              </startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>0238565d59b83d1f10dbf857693a74c1</configzipcrc>
-              <size>0.1</size>
+              <configzipcrc>
+              </configzipcrc>
+              <size>0</size>
               <configenabled>True</configenabled>
-              <configtype>single4</configtype>
+              <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs>
+                <subConfig>
+                  <name>Enable</name>
+                  <zipFile>XVM_config_builder_carousel_cell_battle_count_enable.zip</zipFile>
+                  <crc>940ccb4c90e86ff530bbfb0ac4983928</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>Disable</name>
+                  <zipFile>XVM_config_builder_carousel_cell_battle_count_disable.zip</zipFile>
+                  <crc>4ec932387b8c400cca923aa0d93d1000</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+              </subConfigs>
+            </config>
+            <config>
+              <name>Win Rate</name>
+              <configzipfile>
+              </configzipfile>
+              <startAddress>
+              </startAddress>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>
+              </configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
+              <pictures />
+              <dependencies />
+              <subConfigs>
+                <subConfig>
+                  <name>Enable</name>
+                  <zipFile>XVM_config_builder_carousel_cell_win_rate_enable.zip</zipFile>
+                  <crc>95d81a679bf6b699e34533af6803e1a7</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>Disable</name>
+                  <zipFile>XVM_config_builder_carousel_cell_win_rate_disable.zip</zipFile>
+                  <crc>a0041100b10ac098aa730f85270865e2</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+              </subConfigs>
             </config>
           </configs>
           <dependencies />
           <description>Choose how many tank rows are displayed in your garage.@also enable or disable the xvm garage
-          </description>
-          <updateComment>
-          </updateComment>
-          <devURL>
-          </devURL>
-        </mod>
-        <mod>
-          <name>Tank Carousel cell modifications [requires carousel base mod enabled] (xvm)</name>
-          <version>
-          </version>
-          <modzipfile>
-          </modzipfile>
-          <startAddress>
-          </startAddress>
-          <endAddress>
-          </endAddress>
-          <modzipcrc>
-          </modzipcrc>
-          <size>0</size>
-          <enabled>True</enabled>
-          <userDatas />
-          <pictures />
-          <configs>
-            <config>
-              <name>Average Damage Enable (normal cell only)</name>
-              <configzipfile>XVM_config_builder_carousel_cell_average_damage_enable.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>87891e073b1ce433cec5705dc44540ff</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single2</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Average Damage Disable (normal cell only)</name>
-              <configzipfile>XVM_config_builder_carousel_cell_average_damage_disable.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>d3cdce95e5aa90473632c1438209b294</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single2</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Battles Count Enable (normal cell only)</name>
-              <configzipfile>XVM_config_builder_carousel_cell_battle_count_enable.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>940ccb4c90e86ff530bbfb0ac4983928</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single3</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Battles Count Disable (normal cell only)</name>
-              <configzipfile>XVM_config_builder_carousel_cell_battle_count_disable.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>4ec932387b8c400cca923aa0d93d1000</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single3</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Win Rate Enable</name>
-              <configzipfile>XVM_config_builder_carousel_cell_win_rate_enable.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>95d81a679bf6b699e34533af6803e1a7</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single4</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Win Rate Disable</name>
-              <configzipfile>XVM_config_builder_carousel_cell_win_rate_disable.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>a0041100b10ac098aa730f85270865e2</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single4</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-          </configs>
-          <dependencies />
-          <description>
           </description>
           <updateComment>
           </updateComment>
@@ -1577,6 +1716,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>medium (standard)</name>
@@ -1590,6 +1730,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>medium 2</name>
@@ -1603,6 +1744,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>large</name>
@@ -1616,6 +1758,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -1656,6 +1799,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>6 step xvm colorscale</name>
@@ -1669,6 +1813,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>10 step wotlabs</name>
@@ -1682,6 +1827,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -1721,6 +1867,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable</name>
@@ -1734,37 +1881,57 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
-              <name>12 hour</name>
-              <configzipfile>XVM_config_builder_clock_12_hour.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <name>Time Format</name>
+              <configzipfile>
+              </configzipfile>
+              <startAddress>
+              </startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>b8265d2b59955bbeb9217567e5bc0b8d</configzipcrc>
-              <size>0.1</size>
-              <configenabled>False</configenabled>
-              <configtype>single2</configtype>
+              <configzipcrc>
+              </configzipcrc>
+              <size>0</size>
+              <configenabled>True</configenabled>
+              <configtype>multi</configtype>
               <pictures />
               <dependencies />
-            </config>
-            <config>
-              <name>24 hour</name>
-              <configzipfile>XVM_config_builder_clock_24_hour.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>b22d91157f332ee829218eed9f2ed114</configzipcrc>
-              <size>0.1</size>
-              <configenabled>False</configenabled>
-              <configtype>single2</configtype>
-              <pictures />
-              <dependencies />
+              <subConfigs>
+                <subConfig>
+                  <name>12 hour</name>
+                  <zipFile>XVM__builder_clock_12_hour.zip</zipFile>
+                  <crc>b8265d2b59955bbeb9217567e5bc0b8d</crc>
+                  <enabled>False</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>24 hour</name>
+                  <zipFile>XVM__builder_clock_24_hour.zip</zipFile>
+                  <crc>b22d91157f332ee829218eed9f2ed114</crc>
+                  <enabled>False</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+              </subConfigs>
             </config>
           </configs>
           <dependencies />
-          <description>Enable or disable the clock in the garage. Also select 12 or 24 hour clock
-          </description>
+          <description>Enable or disable the clock in the garage. Also select 12 or 24 hour clock</description>
           <updateComment>
           </updateComment>
           <devURL>
@@ -1799,6 +1966,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disabled</name>
@@ -1812,6 +1980,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -1851,6 +2020,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disabled</name>
@@ -1864,6 +2034,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -1903,6 +2074,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Gold</name>
@@ -1916,6 +2088,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -1955,6 +2128,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disabled</name>
@@ -1968,6 +2142,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2007,6 +2182,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disabled</name>
@@ -2020,6 +2196,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2059,6 +2236,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disabled</name>
@@ -2072,6 +2250,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2111,6 +2290,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>20%</name>
@@ -2124,6 +2304,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>50%</name>
@@ -2137,6 +2318,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2176,6 +2358,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disabled</name>
@@ -2189,6 +2372,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2225,6 +2409,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disabled</name>
@@ -2238,6 +2423,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2277,6 +2463,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disabled</name>
@@ -2290,6 +2477,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2329,6 +2517,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disabled</name>
@@ -2342,6 +2531,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2381,6 +2571,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disabled</name>
@@ -2394,6 +2585,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2433,6 +2625,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disabled</name>
@@ -2446,6 +2639,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2485,6 +2679,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disabled</name>
@@ -2498,6 +2693,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2536,6 +2732,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disabled</name>
@@ -2549,6 +2746,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2588,6 +2786,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disabled</name>
@@ -2601,6 +2800,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2637,6 +2837,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Hotkey Left ALT</name>
@@ -2650,6 +2851,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Minimap zoom - bottom right</name>
@@ -2663,6 +2865,7 @@
               <configtype>single_dropdown</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Minimap zoom - centered</name>
@@ -2676,6 +2879,7 @@
               <configtype>single_dropdown</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2715,6 +2919,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disabled</name>
@@ -2728,6 +2933,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2779,6 +2985,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Session Statistics by WorstUnicumEU</name>
@@ -2805,6 +3012,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2840,6 +3048,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>green</name>
@@ -2853,6 +3062,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>black and white</name>
@@ -2866,6 +3076,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>meltymaps mathmod</name>
@@ -2879,6 +3090,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2915,6 +3127,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>font size medium (24)</name>
@@ -2928,6 +3141,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>font size large (30)</name>
@@ -2941,6 +3155,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -2979,6 +3194,7 @@
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>2, 4, 8, 12, 16, 20, 26, 32</name>
@@ -2992,6 +3208,7 @@
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>2, 4, 8, 12, 16, 20, 26, 32, 40, 48</name>
@@ -3005,6 +3222,7 @@
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>td brake on</name>
@@ -3018,6 +3236,7 @@
               <configtype>single_dropdown1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>td brake off</name>
@@ -3031,6 +3250,7 @@
               <configtype>single_dropdown1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>starting zoom 2x (client default)</name>
@@ -3044,6 +3264,7 @@
               <configtype>single_dropdown2</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>starting zoom 4x</name>
@@ -3057,6 +3278,7 @@
               <configtype>single_dropdown2</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>starting zoom 8x</name>
@@ -3070,6 +3292,7 @@
               <configtype>single_dropdown2</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>starting zoom 16x</name>
@@ -3083,6 +3306,7 @@
               <configtype>single_dropdown2</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>enable pmod zoom indicator</name>
@@ -3096,6 +3320,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -3148,6 +3373,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Harpoon</name>
@@ -3168,6 +3394,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -3213,6 +3440,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>J1mBOs Corsshair mod</name>
@@ -3233,6 +3461,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>MeltyMapsMathMod</name>
@@ -3250,6 +3479,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Harpoon</name>
@@ -3282,6 +3512,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Sight Taipan</name>
@@ -3299,6 +3530,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -3360,6 +3592,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>XFT config with integrated hitlog (xvm needed for hitlog)</name>
@@ -3377,6 +3610,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>XFT config with hitlog on top (xvm needed for hitlog)</name>
@@ -3390,6 +3624,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>move damage messages to center</name>
@@ -3403,6 +3638,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -3481,6 +3717,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>J</name>
@@ -3494,6 +3731,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Middle Mouse</name>
@@ -3507,6 +3745,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Increased Zoom Speed</name>
@@ -3520,6 +3759,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -3560,6 +3800,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>arty only config</name>
@@ -3573,6 +3814,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>old style config</name>
@@ -3593,6 +3835,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -3631,6 +3874,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>5 sec autoaim search</name>
@@ -3644,6 +3888,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>infinite autoaim search</name>
@@ -3657,6 +3902,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>auto-announce reload add-on</name>
@@ -3670,6 +3916,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>repair with T add-on</name>
@@ -3683,6 +3930,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>dead shot blocker add-on</name>
@@ -3696,6 +3944,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>ally shot blocker add-on</name>
@@ -3709,6 +3958,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>help message when spotted add-on</name>
@@ -3722,6 +3972,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>lock shell travel distance when enemy dissapeared add-on</name>
@@ -3735,6 +3986,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -3796,6 +4048,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>2 sec no corpse shot</name>
@@ -3809,6 +4062,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>5 sec no corpse shot</name>
@@ -3822,6 +4076,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>block team damage shot</name>
@@ -3835,6 +4090,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>block wasted shots (shots fired into the air, ground, etc.)</name>
@@ -3848,6 +4104,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>block teamkiller damage shot</name>
@@ -3861,6 +4118,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>send team damage message in chat</name>
@@ -3874,6 +4132,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -3911,6 +4170,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Q</name>
@@ -3924,6 +4184,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -3993,6 +4254,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>EXTRAGRID Full</name>
@@ -4025,6 +4287,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>COMMAND Full</name>
@@ -4072,6 +4335,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>GRID Full</name>
@@ -4107,6 +4371,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>INTENSIVE Full</name>
@@ -4136,6 +4401,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>SPG Full</name>
@@ -4165,6 +4431,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>WIDE light</name>
@@ -4178,6 +4445,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>EXTRAGRID light</name>
@@ -4191,6 +4459,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>COMMAND light</name>
@@ -4204,6 +4473,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>GRID light</name>
@@ -4217,6 +4487,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>INTENSIVE light</name>
@@ -4230,6 +4501,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>SPG light</name>
@@ -4243,6 +4515,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -4276,6 +4549,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Enabled by Default</name>
@@ -4289,6 +4563,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>green</name>
@@ -4306,6 +4581,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>light violet</name>
@@ -4323,6 +4599,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>light &amp; dark violet</name>
@@ -4340,6 +4617,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>light turquoise &amp; green</name>
@@ -4357,6 +4635,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>turquoise &amp; pink</name>
@@ -4374,6 +4653,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>turquoise &amp; violet &amp; red </name>
@@ -4391,6 +4671,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>turquoise</name>
@@ -4408,6 +4689,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>violet</name>
@@ -4425,6 +4707,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>light green</name>
@@ -4442,6 +4725,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -4478,6 +4762,7 @@
               <configtype>single_dropdown</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>200</name>
@@ -4491,6 +4776,7 @@
               <configtype>single_dropdown</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>500</name>
@@ -4504,6 +4790,7 @@
               <configtype>single_dropdown</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Increase Scroll Speed</name>
@@ -4517,6 +4804,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable gun shake</name>
@@ -4530,6 +4818,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -4626,6 +4915,7 @@
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Red APCR, Gold HEAT</name>
@@ -4639,6 +4929,7 @@
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Silver APCR, Gold HEAT</name>
@@ -4652,6 +4943,7 @@
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Silver APCR, Blue HEAT</name>
@@ -4665,6 +4957,7 @@
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -4731,6 +5024,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Aslains</name>
@@ -4748,6 +5042,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Blackspys</name>
@@ -4761,6 +5056,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Blackspys Yasha Edition</name>
@@ -4774,6 +5070,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Druids</name>
@@ -4787,6 +5084,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>HARDicons</name>
@@ -4800,6 +5098,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>HARDicons colored</name>
@@ -4817,6 +5116,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Man1aq basic</name>
@@ -4834,6 +5134,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Man1aq Premium Alternative</name>
@@ -4851,6 +5152,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Pogs Contour Icons</name>
@@ -4868,6 +5170,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Wizards</name>
@@ -4885,6 +5188,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>J1mB0</name>
@@ -4902,6 +5206,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -4966,6 +5271,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>inactive at start, activate with F11</name>
@@ -4979,6 +5285,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -5019,6 +5326,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>zx80</name>
@@ -5036,6 +5344,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>marsoff</name>
@@ -5053,6 +5362,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>lenya69</name>
@@ -5070,6 +5380,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>dikey93</name>
@@ -5087,6 +5398,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>RazNaRok and GreenWarriors</name>
@@ -5104,6 +5416,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>14 second display</name>
@@ -5117,6 +5430,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -5145,8 +5459,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>dc3845154994e650d3c0b1ad8765bd89</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -5155,6 +5469,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>wn8 and damage with Last Hit Damage</name>
@@ -5162,8 +5477,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>4333e444f5f6ed3cc5b9367c0cfa1e35</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -5172,6 +5487,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>wn8 and damage without Last Hit Damage</name>
@@ -5179,8 +5495,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>47e6865b4e246b806aafedbe79e1109d</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -5189,6 +5505,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>wn8 and eff</name>
@@ -5196,8 +5513,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>177eb8e409f5ba6de49a428425e418bb</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -5206,6 +5523,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>wn8 and diff</name>
@@ -5213,8 +5531,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>9a2f34dedd61cb86d9c979db47e63c95</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -5223,6 +5541,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>wn8,eff and diff</name>
@@ -5230,8 +5549,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>60451d17d9695047b2a4b5132fa76347</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -5240,6 +5559,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>damage</name>
@@ -5247,8 +5567,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>1ece2765cad0218fb9feed6ff51b4b7a</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -5257,6 +5577,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>wn8, eff, damage</name>
@@ -5264,8 +5585,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>564174c40fbe8784b9c56f06bdfcf2df</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -5274,6 +5595,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>eff</name>
@@ -5281,8 +5603,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>cba0460ff90db6a5054c550765998eb5</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -5291,6 +5613,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>eff and damage</name>
@@ -5298,8 +5621,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>c07c1088c17c459c418f74d975c56d64</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -5308,6 +5631,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>ProTANKI config</name>
@@ -5315,8 +5639,8 @@
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <configzipcrc>772333731eb4eff04d5ac913086b20e2</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures>
@@ -5325,6 +5649,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -5365,6 +5690,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Leecher</name>
@@ -5382,6 +5708,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>New Version</name>
@@ -5399,6 +5726,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Protanki</name>
@@ -5416,6 +5744,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Refaol</name>
@@ -5433,6 +5762,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>VoPV</name>
@@ -5450,6 +5780,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -5517,6 +5848,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Ace Tanker by Aimdrol</name>
@@ -5534,6 +5866,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>V1 by VoPV</name>
@@ -5551,6 +5884,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>V2 by VoPV</name>
@@ -5568,6 +5902,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>QuickeyBaby by Aimdrol</name>
@@ -5581,6 +5916,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Illuminati by Aimdrol</name>
@@ -5598,6 +5934,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>xXx-MVP-xXx by Aimdrol</name>
@@ -5615,6 +5952,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -5653,6 +5991,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Enable High Caliber Display (possible xvm conflict)</name>
@@ -5666,6 +6005,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Show player spotted status in panels (possible xvm conflict)</name>
@@ -5679,6 +6019,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Enable Players info panel (when you press left alt)</name>
@@ -5692,6 +6033,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -5743,6 +6085,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Car Pack</name>
@@ -5766,6 +6109,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Neon Track Lights</name>
@@ -5783,6 +6127,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Spotlight on tank in sight</name>
@@ -5800,6 +6145,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>evening lighting</name>
@@ -5817,6 +6163,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies>
@@ -5866,6 +6213,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable fog</name>
@@ -5879,6 +6227,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable clouds</name>
@@ -5892,6 +6241,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable tank exhaust smoke</name>
@@ -5905,6 +6255,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable effects from shooting</name>
@@ -5918,6 +6269,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable misc object effects</name>
@@ -5931,6 +6283,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable shell impact effects</name>
@@ -5944,6 +6297,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable tank death effects</name>
@@ -5957,6 +6311,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable tank death smoke</name>
@@ -5970,6 +6325,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable tank hit effects</name>
@@ -5983,6 +6339,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable tree effects? this is an option?</name>
@@ -5996,6 +6353,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable shadows under tanks</name>
@@ -6009,6 +6367,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable weather</name>
@@ -6022,6 +6381,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Disable noobs on allied team</name>
@@ -6038,6 +6398,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -6075,6 +6436,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Damage, Ramming, Kamakazie</name>
@@ -6088,6 +6450,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -6126,6 +6489,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -6160,6 +6524,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -6239,6 +6604,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>by Aimdrol with text modifications (english only)</name>
@@ -6256,6 +6622,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>by Grandpa</name>
@@ -6279,6 +6646,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>by LakeOphilD</name>
@@ -6296,6 +6664,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>by vito74</name>
@@ -6316,6 +6685,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>by vvooj</name>
@@ -6333,6 +6703,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>by YHKEP</name>
@@ -6353,6 +6724,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -6397,6 +6769,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>GuP</name>
@@ -6410,6 +6783,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -6449,6 +6823,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -6491,6 +6866,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Minions</name>
@@ -6508,6 +6884,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -6520,10 +6897,14 @@
         <mod>
           <name>ModPack Button Support Tool by Budyx69</name>
           <version>v8.9</version>
-          <modzipfile></modzipfile>
-          <startAddress></startAddress>
-          <endAddress></endAddress>
-          <modzipcrc>f</modzipcrc>
+          <modzipfile>
+          </modzipfile>
+          <startAddress>
+          </startAddress>
+          <endAddress>
+          </endAddress>
+          <modzipcrc>
+          </modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
           <userDatas />
@@ -6537,41 +6918,47 @@
               <name>English NA-Server</name>
               <configzipfile>Garage_mods_Modpack_Button_Relhax_English_NA_by_Budyx69_2017-05-19.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress></endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>39e86ba1e783d884b4e8e2d34f8a06cc</configzipcrc>
+              <size>0.1</size>
               <configenabled>False</configenabled>
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>English EU-Server</name>
               <configzipfile>Garage_mods_Modpack_Button_Relhax_English_EU_by_Budyx69_2017-05-19.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress></endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>cd230290ef121a0fa1d449609e4452e6</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>German EU-Server</name>
               <configzipfile>Garage_mods_Modpack_Button_Relhax_German_EU_by_Budyx69_2017-05-19.zip</configzipfile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress></endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
+              <endAddress>
+              </endAddress>
+              <configzipcrc>8c0c5f7e09d5cdf093a63b3588ae8930</configzipcrc>
+              <size>0.1</size>
               <configenabled>True</configenabled>
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
-          <description>ModpackButton by Budyx69: With this Button you can jump to the Relhax Modpack World ot Tank Forum and can visit us on our Teamspeak, where we can support you if you have problems with the Modpack or single Mods of the Modpack</description>
+          <description>ModpackButton by Budyx69: With this Button you can jump to the Relhax Modpack World of Tank Forum and can visit us on our Teamspeak, where we can support you if you have problems with the Modpack or single Mods of the Modpack</description>
           <updateComment>
           </updateComment>
           <devURL>http://forum.worldoftanks.eu/index.php?/topic/507925-09180-modpack-button-v89-lobbybutton-fuer-chatchannel-und-url-aufruf-27022017/page__hl__%2Bmodpackbutton__fromsearch__1</devURL>
@@ -6621,6 +7008,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>English EU-Server</name>
@@ -6634,6 +7022,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>English NA-Server</name>
@@ -6647,6 +7036,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies>
@@ -6698,6 +7088,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>OMC by Technowolf (RIP OMC)</name>
@@ -6715,6 +7106,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -6756,6 +7148,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -6804,7 +7197,7 @@
           </startAddress>
           <endAddress>
           </endAddress>
-          <modzipcrc>f</modzipcrc>
+          <modzipcrc></modzipcrc>
           <size>0</size>
           <enabled>True</enabled>
           <userDatas />
@@ -6829,6 +7222,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Cave - Flag Germany</name>
@@ -6842,6 +7236,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Cave - Flag GB</name>
@@ -6855,6 +7250,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Concrete Floor</name>
@@ -6872,6 +7268,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Turquoise</name>
@@ -6889,6 +7286,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>WoTSpeak</name>
@@ -6912,6 +7310,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -6959,6 +7358,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -7005,6 +7405,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -7093,6 +7494,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -7129,40 +7531,46 @@
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
-            </config>
-            <config>
-              <name>English</name>
-              <configzipfile>
-              </configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>
-              </configzipcrc>
-              <size>0</size>
-              <configenabled>True</configenabled>
-              <configtype>single2</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Russian</name>
-              <configzipfile>Garage_mods_veritcal_techTree_2017-04-26_russian.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>25ce0ff5e237ec3b472970deb3af2c41</configzipcrc>
-              <size>0.1</size>
-              <configenabled>True</configenabled>
-              <configtype>single2</configtype>
-              <pictures />
-              <dependencies />
+              <subConfigs>
+                <subConfig>
+                  <name>English</name>
+                  <zipFile>
+                  </zipFile>
+                  <crc>
+                  </crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0</size>
+                  <startAddress>
+                  </startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>Russian</name>
+                  <zipFile>Garage_mods_veritcal_techTree_2017-04-26_russian.zip</zipFile>
+                  <crc>25ce0ff5e237ec3b472970deb3af2c41</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+              </subConfigs>
             </config>
             <config>
               <name>Techtree Mod (German/English Settings)</name>
               <configzipfile>
               </configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <startAddress>
+              </startAddress>
               <endAddress>
               </endAddress>
               <configzipcrc>
@@ -7182,32 +7590,36 @@
                 </picture>
               </pictures>
               <dependencies />
-            </config>
-            <config>
-              <name>with English Settings</name>
-              <configzipfile>Garage_mods_Interface_by_P_H_A_R_A_O_N_Techtree_horizontal_vertical_English_0.9.18.0_2017-05-14.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>dea85a5f9b81ab58e8b1040ca82852e6</configzipcrc>
-              <size>2.4</size>
-              <configenabled>True</configenabled>
-              <configtype>single3</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>with German Settings</name>
-              <configzipfile>Garage_mods_Techtree_Mod_German_0.9.18.0_2017-05-16.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>f</configzipcrc>
-              <size>0</size>
-              <configenabled>True</configenabled>
-              <configtype>single3</configtype>
-              <pictures />
-              <dependencies />
+              <subConfigs>
+                <subConfig>
+                  <name>with English Settings</name>
+                  <zipFile>Garage_mods_Interface_by_P_H_A_R_A_O_N_Techtree_horizontal_vertical_English_0.9.18.0_2017-05-14.zip</zipFile>
+                  <crc>dea85a5f9b81ab58e8b1040ca82852e6</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>2.4</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>with German Settings</name>
+                  <zipFile>Garage_mods_Techtree_Mod_German_0.9.18.0_2017-05-16.zip</zipFile>
+                  <crc>63e1f61ec37e4259675865d121f1d7a5</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>2.4</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+              </subConfigs>
             </config>
           </configs>
           <dependencies />
@@ -7258,6 +7670,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>German modified Version</name>
@@ -7287,6 +7700,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Daily Reset</name>
@@ -7300,6 +7714,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -7342,6 +7757,7 @@
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Core</name>
@@ -7355,71 +7771,95 @@
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
-              <name>Background V1</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_Backgrounds_V1_0.9.18.0c_2017-05-02.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <name>Background</name>
+              <configzipfile>
+              </configzipfile>
+              <startAddress>
+              </startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>f46fd6480689ebb9fcef579db01bae0c</configzipcrc>
-              <size>0.4</size>
+              <configzipcrc>
+              </configzipcrc>
+              <size>0</size>
               <configenabled>True</configenabled>
-              <configtype>single2</configtype>
+              <configtype>multi</configtype>
               <pictures />
               <dependencies />
-            </config>
-            <config>
-              <name>Background V2</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_Backgrounds_V2_0.9.18.0c_2017-05-02.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>88dd2a211bdf3cf80f589a4957d53e10</configzipcrc>
-              <size>0.5</size>
-              <configenabled>True</configenabled>
-              <configtype>single2</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Background V3</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_Backgrounds_V3_0.9.18.0c_2017-05-02.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>378e21bac8c03632d3fabe0f5565665d</configzipcrc>
-              <size>0.4</size>
-              <configenabled>True</configenabled>
-              <configtype>single2</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Background V4</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_Backgrounds_V4_0.9.18.0c_2017-05-02.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>79a4cb94948f9901c4fcf4f6e9aeb330</configzipcrc>
-              <size>1.2</size>
-              <configenabled>True</configenabled>
-              <configtype>single2</configtype>
-              <pictures />
-              <dependencies />
-            </config>
-            <config>
-              <name>Background V5</name>
-              <configzipfile>Garage_Session_Stats_YasenKrasen_Backgrounds_V5_0.9.18.0c_2017-05-02.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <configzipcrc>249671d191f20dfc300b2959fa434997</configzipcrc>
-              <size>1.7</size>
-              <configenabled>True</configenabled>
-              <configtype>single2</configtype>
-              <pictures />
-              <dependencies />
+              <subConfigs>
+                <subConfig>
+                  <name>V1</name>
+                  <zipFile>Garage_Session_Stats_YasenKrasen_Backgrounds_V1_0.9.18.0c_2017-05-02.zip</zipFile>
+                  <crc>f46fd6480689ebb9fcef579db01bae0c</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.4</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>V2</name>
+                  <zipFile>Garage_Session_Stats_YasenKrasen_Backgrounds_V2_0.9.18.0c_2017-05-02.zip</zipFile>
+                  <crc>88dd2a211bdf3cf80f589a4957d53e10</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.5</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>V3</name>
+                  <zipFile>Garage_Session_Stats_YasenKrasen_Backgrounds_V3_0.9.18.0c_2017-05-02.zip</zipFile>
+                  <crc>378e21bac8c03632d3fabe0f5565665d</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>0.4</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>V4</name>
+                  <zipFile>Garage_Session_Stats_YasenKrasen_Backgrounds_V4_0.9.18.0c_2017-05-02.zip</zipFile>
+                  <crc>79a4cb94948f9901c4fcf4f6e9aeb330</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>1.2</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>V5</name>
+                  <zipFile>Garage_Session_Stats_YasenKrasen_Backgrounds_V5_0.9.18.0c_2017-05-02.zip</zipFile>
+                  <crc>249671d191f20dfc300b2959fa434997</crc>
+                  <enabled>True</enabled>
+                  <checked>False</checked>
+                  <type>single</type>
+                  <size>1.7</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+              </subConfigs>
             </config>
             <config>
               <name>English</name>
@@ -7433,6 +7873,7 @@
               <configtype>single_dropdown1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>German</name>
@@ -7446,6 +7887,7 @@
               <configtype>single_dropdown1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Daily Reset</name>
@@ -7459,6 +7901,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -7534,6 +7977,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>censored</name>
@@ -7547,6 +7991,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -7581,6 +8026,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -7654,6 +8100,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Kid Safe</name>
@@ -7667,6 +8114,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -7719,6 +8167,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Only 3 min warning config</name>
@@ -7732,6 +8181,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Webium config</name>
@@ -7745,6 +8195,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -7795,6 +8246,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Admiral Ackbar</name>
@@ -7808,6 +8260,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>OMC signal (8 sec)</name>
@@ -7821,6 +8274,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>OMC signal (8 sec) 10db softer</name>
@@ -7834,6 +8288,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Standard signal (10 sec)</name>
@@ -7847,6 +8302,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Cyborg by APCR-NOOB</name>
@@ -7860,6 +8316,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>German Soldier</name>
@@ -7873,6 +8330,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Metal Gear Solid</name>
@@ -7886,6 +8344,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Minions</name>
@@ -7899,6 +8358,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Sauron signal</name>
@@ -7912,6 +8372,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Illuminati by Aimdrol</name>
@@ -7925,6 +8386,7 @@
               <configtype>single</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -7964,6 +8426,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>OMNI Logo</name>
@@ -7981,6 +8444,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Aslain</name>
@@ -7998,6 +8462,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>blue LED</name>
@@ -8015,6 +8480,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>blue Lightning</name>
@@ -8032,6 +8498,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Boobs</name>
@@ -8049,6 +8516,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>EiKarrRamba</name>
@@ -8066,6 +8534,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>F4CE</name>
@@ -8083,6 +8552,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Freaky Icecubes</name>
@@ -8100,6 +8570,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Fry</name>
@@ -8117,6 +8588,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>FS</name>
@@ -8134,6 +8606,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>General Ackbar</name>
@@ -8151,6 +8624,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Granate</name>
@@ -8168,6 +8642,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>gRuMM3l</name>
@@ -8185,6 +8660,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>gRuMM3lin3</name>
@@ -8202,6 +8678,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Jeff</name>
@@ -8219,6 +8696,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>J1mB0</name>
@@ -8236,6 +8714,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>JUMBO</name>
@@ -8253,6 +8732,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>JUST</name>
@@ -8270,6 +8750,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Kriegstreiber</name>
@@ -8287,6 +8768,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>LEOTM</name>
@@ -8304,6 +8786,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Light-bulb</name>
@@ -8321,6 +8804,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Minions</name>
@@ -8338,6 +8822,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Mootality</name>
@@ -8355,6 +8840,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>PZK</name>
@@ -8372,6 +8858,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Rage face</name>
@@ -8389,6 +8876,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Ratz Fatz</name>
@@ -8406,6 +8894,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Red Bulb</name>
@@ -8423,6 +8912,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Red warning Sign</name>
@@ -8440,6 +8930,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Riokat</name>
@@ -8457,6 +8948,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Sauron</name>
@@ -8474,6 +8966,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Shark</name>
@@ -8491,6 +8984,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Spiderman</name>
@@ -8508,6 +9002,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>SWF-A</name>
@@ -8525,6 +9020,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Yellow Warning Sign</name>
@@ -8542,6 +9038,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Animated Illuminati pyramid by Aimdrol</name>
@@ -8559,6 +9056,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Animated light bulb by Aimdrol</name>
@@ -8576,6 +9074,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -8640,6 +9139,7 @@
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>with trunk marks</name>
@@ -8653,6 +9153,7 @@
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -8709,6 +9210,7 @@
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>HD</name>
@@ -8722,6 +9224,7 @@
               <configtype>single1</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -8801,6 +9304,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Czech Primer Grey</name>
@@ -8818,6 +9322,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Czech Ultra Dark</name>
@@ -8835,6 +9340,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>French Artillery Green</name>
@@ -8852,6 +9358,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>French Dark Green</name>
@@ -8869,6 +9376,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>German Bundeswehr Green</name>
@@ -8886,6 +9394,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>German Neue Dunkelgelb</name>
@@ -8903,6 +9412,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>German Primer Red</name>
@@ -8920,6 +9430,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Japanese Reddish Brown</name>
@@ -8937,6 +9448,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Japanese Warship Grey</name>
@@ -8954,6 +9466,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>UK Olive Green</name>
@@ -8971,6 +9484,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>US Dark Olive</name>
@@ -8988,6 +9502,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>USSR 4BO-1 Green</name>
@@ -9005,6 +9520,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -9047,6 +9563,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Zephyr Multicolor Camo Pack</name>
@@ -9064,6 +9581,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -9169,6 +9687,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Dukes of Hazard</name>
@@ -9189,6 +9708,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>MONSTER Energy</name>
@@ -9215,6 +9735,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Hello Kitty</name>
@@ -9232,6 +9753,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -9311,6 +9833,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Police (remodel)</name>
@@ -9331,6 +9854,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -9386,6 +9910,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>EXPLOSIV</name>
@@ -9403,6 +9928,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -9438,6 +9964,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>...and dead white wagons</name>
@@ -9451,6 +9978,7 @@
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -9633,6 +10161,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Blue</name>
@@ -9656,6 +10185,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Red</name>
@@ -9673,6 +10203,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Green</name>
@@ -9690,6 +10221,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>White</name>
@@ -9719,6 +10251,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
@@ -9864,6 +10397,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>OMNI Edition (RIP OMC Modpack)</name>
@@ -9890,6 +10424,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
             <config>
               <name>Milkym4n Remodel</name>
@@ -9907,6 +10442,7 @@
                 </picture>
               </pictures>
               <dependencies />
+              <subConfigs />
             </config>
           </configs>
           <dependencies />
