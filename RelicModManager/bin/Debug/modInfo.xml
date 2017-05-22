@@ -7927,6 +7927,28 @@
       </dependencies>
       <mods>
         <mod>
+          <name>GnomeFather’s HRMOD Gun Sounds (reworked by Zorgane)</name>
+            <version>1.13</version>
+            <modzipfile>Sounds_HRMOD_Gun_Sounds_by_Zorgane_v1.13_with_editorMemoryManager.zip</modzipfile>
+            <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+            <endAddress>
+            </endAddress>
+            <modzipcrc>f</modzipcrc>
+            <size>0</size>
+            <enabled>True</enabled>
+            <userDatas />
+            <pictures>
+              <picture>
+                <URL>http://image.noelshack.com/fichiers/2016/43/1477323738-zorgane-s-modshop.png</URL>
+              </picture>
+            </pictures>
+            <configs />
+            <dependencies />
+            <description>https://www.youtube.com/embed/V7G2JDB07Lw?rel=0&amp;autoplay=1&amp;controls=1&amp;modestbranding=1&amp;showinfo=0&amp;iv_load_policy=3 @Audio mod with various gun sounds for all weapons and nations. Sound depends on caliber and range from shot.</description>
+            <updateComment>v1.13 - updated to 0.9.18.0</updateComment>
+            <devURL>http://forum.worldoftanks.eu/index.php?/topic/596268-</devURL>
+        </mod>
+        <mod>
           <name>Grandpas Favorite Voices and Sounds Mod</name>
           <version>4.19.17</version>
           <modzipfile>Sounds_Grandpas_Crew_Voices_and_Sounds.zip</modzipfile>
