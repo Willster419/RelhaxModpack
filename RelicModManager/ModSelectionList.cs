@@ -1080,7 +1080,11 @@ namespace RelhaxModpack
                         {
                             subRB.Enabled = true;
                             if (sc.Checked)
+                            {
                                 subRB.Checked = true;
+                                //also set the panel to blanched almond
+                                subConfigPanel.BackColor = Color.BlanchedAlmond;
+                            }
                         }
                         //add handlers
                         subRB.CheckedChanged += new EventHandler(subRB_CheckedChanged);
@@ -1213,7 +1217,11 @@ namespace RelhaxModpack
                         {
                             subRB.Enabled = true;
                             if (sc.Checked)
+                            {
                                 subRB.Checked = true;
+                                //also set the panel to blanched almond
+                                subConfigPanel.BackColor = Color.BlanchedAlmond;
+                            }
                         }
                         //add handlers
                         subRB.CheckedChanged += new EventHandler(subRB_CheckedChanged);
@@ -1352,6 +1360,8 @@ namespace RelhaxModpack
         //handler for when a config selection is made from the drop down list
         void configControlDD_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (loadingConfig)
+                return;
             //uncheck all other dorp down configs
             ComboBox cb = (ComboBox)sender;
             //get the mod this config is associated with
@@ -2376,14 +2386,32 @@ namespace RelhaxModpack
                             mod.AppendChild(configsHolder);
                             foreach (Config cc in m.configs)
                             {
+                                XmlElement config = null;
                                 if (cc.configChecked)
                                 {
                                     //add the config to the list
-                                    XmlElement config = doc.CreateElement("config");
+                                    config = doc.CreateElement("config");
                                     configsHolder.AppendChild(config);
                                     XmlElement configName = doc.CreateElement("name");
                                     configName.InnerText = cc.name;
                                     config.AppendChild(configName);
+
+                                    if (cc.subConfigs.Count > 0)
+                                    {
+                                        XmlElement subConfigsHolder = doc.CreateElement("subConfigs");
+                                        config.AppendChild(subConfigsHolder);
+                                        foreach (SubConfig sc in cc.subConfigs)
+                                        {
+                                            if (sc.Checked)
+                                            {
+                                                XmlElement subConfig = doc.CreateElement("subConfig");
+                                                subConfigsHolder.AppendChild(subConfig);
+                                                XmlElement subConfigName = doc.CreateElement("name");
+                                                subConfigName.InnerText = sc.name;
+                                                subConfig.AppendChild(subConfigName);
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -2503,6 +2531,34 @@ namespace RelhaxModpack
                                             {
                                                 Settings.appendToLog("Checking config " + c.name);
                                                 c.configChecked = true;
+                                            }
+                                            break;
+                                        case "subConfigs":
+                                            foreach (XmlNode subConfigHolder in nnnn.ChildNodes)
+                                            {
+                                                if (c == null)
+                                                    continue;
+                                                SubConfig sc = new SubConfig();
+                                                foreach (XmlNode subConfigNode in subConfigHolder.ChildNodes)
+                                                {
+                                                    switch (subConfigNode.Name)
+                                                    {
+                                                        case "name":
+                                                            sc = c.getSubConfig(subConfigNode.InnerText);
+                                                            if (sc == null)
+                                                            {
+                                                                Settings.appendToLog("WARNING: subConfig \"" + subConfigNode.InnerText + "\" not found for config \"" + nnnn.InnerText + "\"");
+                                                                MessageBox.Show(Translations.getTranslatedString("configNotFound_1") + subConfigNode.InnerText + Translations.getTranslatedString("configNotFound_2") + nnnn.InnerText + Translations.getTranslatedString("configNotFound_3"));
+                                                                continue;
+                                                            }
+                                                            if (sc.enabled)
+                                                            {
+                                                                Settings.appendToLog("Checking subConfig " + sc.name);
+                                                                sc.Checked = true;
+                                                            }
+                                                            break;
+                                                    }
+                                                }
                                             }
                                             break;
                                     }

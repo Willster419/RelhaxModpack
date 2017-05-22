@@ -1,7 +1,11 @@
+Version 22.4.1:
+-Fixed bugs with loading and saving configs with subconfigs
+-Fixed bugs with default selection view UI
+
 Version 22.4.0:
 -Fixed bugs with getting and applying the tanks version (0.9.xx.y)
 -Added new mod selection view: Legacy (Similar to OMC list view)
--Added another level to the database, configs and have subconfigs
+-Added another level to the database, configs can now have subconfigs
 
 Version 22.3.1:
 -Added a feature to detect if the user WoT client version is supported or not. If it's not, you can still install, but the mods are not guaranteed to work.
