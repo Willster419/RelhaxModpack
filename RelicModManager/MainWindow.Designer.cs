@@ -138,6 +138,7 @@
             // 
             // installRelhaxMod
             // 
+            this.installRelhaxMod.AutoSize = true;
             this.installRelhaxMod.Location = new System.Drawing.Point(12, 12);
             this.installRelhaxMod.Name = "installRelhaxMod";
             this.installRelhaxMod.Size = new System.Drawing.Size(294, 34);

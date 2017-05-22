@@ -26,7 +26,7 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 22.3.1";
+        private string managerVersion = "version 22.4.0";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -835,7 +835,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 05/21/2017, running at " + DateTime.Now);
+            Settings.appendToLog("|Built on 05/22/2017, running at " + DateTime.Now);
             Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1659,6 +1659,16 @@ namespace RelhaxModpack
                                     //verify that the subconfig should be added
                                     if (sc.enabled && sc.Checked && !sc.zipFile.Equals(""))
                                         subConfigsToInstall.Add(sc);
+                                    //and verify if any new dependencies need to be downloaded
+                                    if (sc.enabled && sc.Checked)
+                                    {
+                                        foreach (Dependency d in sc.dependencies)
+                                        {
+                                            //check dependency is enabled and has a zip file with it
+                                            if (d.enabled && !d.dependencyZipFile.Equals(""))
+                                                this.addUniqueDependency(d);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -1683,7 +1693,7 @@ namespace RelhaxModpack
                 }
             }
             //if the user did not select any relhax modpack mods to install
-            if (modsToInstall.Count == 0 && configsToInstall.Count == 0)
+            if (modsToInstall.Count == 0 && configsToInstall.Count == 0 && subConfigsToInstall.Count == 0)
             {
                 //clear any dependencies since this is a user mod only installation
                 dependencies.Clear();

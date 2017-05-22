@@ -330,6 +330,8 @@ namespace RelhaxModpack
         //adds a mod m to a tabpage t, OMC treeview style
         private void addModTreeview(Mod m, TabPage t, int panelCount, LegacySelectionList lsl, Catagory c)
         {
+            if (Settings.darkUI)
+                lsl.legacyTreeView.Background = System.Windows.Media.Brushes.Gray;
             //helpfull stuff
             string modDownloadFilePath = Application.StartupPath + "\\RelHaxDownloads\\" + m.modZipFile;
             bool hasRadioButtonConfigSelected = false;
@@ -339,7 +341,11 @@ namespace RelhaxModpack
             RelhaxCheckbox modCheckBox = new RelhaxCheckbox();
             //apparnetly spaces arn't cool, so let's ger rid of them
             modCheckBox.realName = t.Name + "_" + m.name;
-            //modCheckBox.FontSize = (double)Settings.fontSize;
+            if (Settings.largeFont)
+                modCheckBox.FontSize = modCheckBox.FontSize + 4;
+            modCheckBox.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
+            if (Settings.darkUI)
+                modCheckBox.FontWeight = System.Windows.FontWeights.Bold;
             modCheckBox.Content = m.name;
             //get the local md5 hash. a -1 indicates the file is not on the disk
             string oldCRC2 = Settings.GetMd5Hash(modDownloadFilePath);
@@ -383,7 +389,11 @@ namespace RelhaxModpack
                     modHasRadioButtons = true;
                     //make the radio button
                     RelhaxRadioButton configControlRB = new RelhaxRadioButton();
-                    //configControlRB.FontSize = Settings.fontSize;
+                    if (Settings.largeFont)
+                        configControlRB.FontSize = modCheckBox.FontSize + 4;
+                    configControlRB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
+                    if (Settings.darkUI)
+                        configControlRB.FontWeight = System.Windows.FontWeights.Bold;
                     configControlRB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name;
                     //the logic for enabling it
                     //set them to false first
@@ -420,6 +430,11 @@ namespace RelhaxModpack
                     {
                         //create the radioButton
                         RelhaxRadioButton subRB = new RelhaxRadioButton();
+                        if (Settings.largeFont)
+                            subRB.FontSize = modCheckBox.FontSize + 4;
+                        subRB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
+                        if (Settings.darkUI)
+                            subRB.FontWeight = System.Windows.FontWeights.Bold;
                         subRB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name + "_" + sc.name;
                         //logic for the radioButton
                         subRB.IsEnabled = false;
@@ -494,6 +509,11 @@ namespace RelhaxModpack
                 {
                     //make the checkbox
                     RelhaxCheckbox configControlCB = new RelhaxCheckbox();
+                    if (Settings.largeFont)
+                        configControlCB.FontSize = modCheckBox.FontSize + 4;
+                    configControlCB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
+                    if (Settings.darkUI)
+                        configControlCB.FontWeight = System.Windows.FontWeights.Bold;
                     //configControlCB.FontSize = Settings.fontSize;
                     configControlCB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name;
                     //the logic for enabling it
@@ -528,6 +548,11 @@ namespace RelhaxModpack
                     {
                         //create the radioButton
                         RelhaxRadioButton subRB = new RelhaxRadioButton();
+                        if (Settings.largeFont)
+                            subRB.FontSize = modCheckBox.FontSize + 4;
+                        subRB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
+                        if (Settings.darkUI)
+                            subRB.FontWeight = System.Windows.FontWeights.Bold;
                         subRB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name + "_" + sc.name;
                         //logic for the radioButton
                         subRB.IsEnabled = false;
@@ -927,6 +952,7 @@ namespace RelhaxModpack
                                 {
                                     c2r.Click -= configControlRB_Click;
                                     c2r.IsChecked = true;
+                                    configControlRB_Click(c2r, null);
                                     c2r.Click += configControlRB_Click;
                                     cfg.configChecked = true;
                                     break;
@@ -1752,7 +1778,6 @@ namespace RelhaxModpack
                         ccRB.Enabled = true;
                     else
                         ccRB.Enabled = false;
-                    
                     configControlRB_CheckedChanged(ccRB,null);
                     if (cfg.configChecked)
                         configSelected = true;
@@ -1770,6 +1795,7 @@ namespace RelhaxModpack
                                 {
                                     ccccc.CheckedChanged -= configControlRB_CheckedChanged;
                                     ccccc.Checked = true;
+                                    configControlRB_CheckedChanged(ccccc, null);
                                     ccccc.CheckedChanged += configControlRB_CheckedChanged;
                                     cfg.configChecked = true;
                                     break;

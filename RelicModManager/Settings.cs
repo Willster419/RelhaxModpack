@@ -309,7 +309,7 @@ namespace RelhaxModpack
         //returns a new font for the window
         public static Font getFont(string fontName, float fontSize)
         {
-            return new System.Drawing.Font(fontName, fontSize, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            return new System.Drawing.Font(fontName, fontSize);
         }
         /*
          * DEACTIVATED to determine where the antivirus issue is

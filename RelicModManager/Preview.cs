@@ -51,7 +51,7 @@ namespace RelhaxModpack
             label.Name = "" + i;
             label.Text = "" + i;
             label.LinkClicked += new LinkLabelLinkClickedEventHandler(label_LinkClicked);
-            label.Size = new Size(10, 10);
+            label.Size = new Size(15, 10);
             label.AutoSize = true;
             int xLocation = 14 * i;
             label.Location = new Point(xLocation, 5);
