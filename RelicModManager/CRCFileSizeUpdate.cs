@@ -52,6 +52,8 @@ namespace RelhaxModpack
             modsSB.Append("Mods updated:\n");
             StringBuilder configsSB = new StringBuilder();
             configsSB.Append("Configs updated:\n");
+            StringBuilder subConfigsSB = new StringBuilder();
+            subConfigsSB.Append("SubConfigs updated:\n");
             //foreach zip file name
             foreach (Dependency d in globalDependencies)
             {
@@ -107,32 +109,52 @@ namespace RelhaxModpack
                                 configsSB.Append(cat.zipConfigFile + "\n");
                             }
                         }
+                        foreach (Dependency d in cat.catDependencies)
+                        {
+                            int cindex2 = this.getZipIndex(d.dependencyZipFile);
+                            if (cindex2 != -1)
+                            {
+                                if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
+                                {
+                                    d.dependencyZipCRC = Settings.GetMd5Hash(addZipsDialog.FileNames[cindex2]);
+                                    dependenciesSB.Append(d.dependencyZipFile + "\n");
+                                }
+                            }
+                        }
+                        foreach (SubConfig sc in cat.subConfigs)
+                        {
+                            int scindex = this.getZipIndex(sc.zipFile);
+                            if (scindex != -1)
+                            {
+                                sc.size = this.getFileSize(addZipsDialog.FileNames[scindex]);
+                                if (sc.crc == null || sc.crc.Equals("") || sc.crc.Equals("f"))
+                                {
+                                    sc.crc = Settings.GetMd5Hash(addZipsDialog.FileNames[scindex]);
+                                    dependenciesSB.Append(sc.zipFile + "\n");
+                                }
+                            }
+                            foreach (Dependency d in sc.dependencies)
+                            {
+                                int cindex2 = this.getZipIndex(d.dependencyZipFile);
+                                if (cindex2 != -1)
+                                {
+                                    if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
+                                    {
+                                        d.dependencyZipCRC = Settings.GetMd5Hash(addZipsDialog.FileNames[cindex2]);
+                                        dependenciesSB.Append(d.dependencyZipFile + "\n");
+                                    }
+                                }
+                            }
+                        }
                     }
                     foreach (Dependency d in m.modDependencies)
                     {
                         int mindex = this.getZipIndex(d.dependencyZipFile);
-                        if (mindex == -1)
+                        if (mindex != -1)
                         {
-                            continue;
-                        }
-                        if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
-                        {
-                            d.dependencyZipCRC = Settings.GetMd5Hash(addZipsDialog.FileNames[mindex]);
-                            dependenciesSB.Append(d.dependencyZipFile + "\n");
-                        }
-                    }
-                    foreach (Config cc in m.configs)
-                    {
-                        foreach (Dependency d in cc.catDependencies)
-                        {
-                            int cindex = this.getZipIndex(d.dependencyZipFile);
-                            if (cindex == -1)
-                            {
-                                continue;
-                            }
                             if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
                             {
-                                d.dependencyZipCRC = Settings.GetMd5Hash(addZipsDialog.FileNames[cindex]);
+                                d.dependencyZipCRC = Settings.GetMd5Hash(addZipsDialog.FileNames[mindex]);
                                 dependenciesSB.Append(d.dependencyZipFile + "\n");
                             }
                         }
@@ -144,11 +166,9 @@ namespace RelhaxModpack
             //update the file size
 
             //save config file
-            string newModInfo = databaseLocationTextBox.Text.Substring(0, databaseLocationTextBox.Text.Length - 4);
-            newModInfo = newModInfo + "Updated.xml";
-            newModInfo = databaseLocationTextBox.Text;
+            string newModInfo = databaseLocationTextBox.Text;
             this.saveDatabase(newModInfo);
-            MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
+            MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString() + subConfigsSB.ToString());
             updatingLabel.Text = "Idle";
         }
         private float getFileSize(string file)
