@@ -73,8 +73,8 @@ namespace RelhaxModpack
             
             //Componet: formPageLink
             //
-            english.Add("formPageLink", "View Modpack Form Page");
-            german.Add("formPageLink", "Zeige Modpack Formularseite");
+            english.Add("formPageLink", "View Modpack Form Page (NA)");
+            german.Add("formPageLink", "Zeige Modpack Formularseite (NA)");
             polish.Add("formPageLink", "Forum Paczki (NA)");
             
             //Componet: saveUserDataCB
@@ -162,6 +162,11 @@ namespace RelhaxModpack
             german.Add("helperText", "Willkommen im RelHax Modpack! Ich habe versucht, das Modpack so einfach wie möglich zu gestalten, aber Fragen können dennoch entstehen. Rechtsklick auf eine Einstellung erklaert diese dann. Du siehst diese Dialogbox nicht mehr, ausser du loescht die xml Datei.");
             polish.Add("helperText", "Witamy w paczce RelHax! Próbowałem stworzyć jak najprostszą w użytku paczkę modyfikacji, ale wciąż możesz mieć pytania. Kliknik PPM na opcji, by wyświetlić opis. Nie zobaczysz tej wiadomości ponownie, dopóki nie usuniesz pliku ustawień xml.");
             
+            //Component: donateLabel
+            english.Add("donateLabel", "Donation for further development");
+            german.Add("donateLabel", "Spende für die Weiterentwicklung");
+            polish.Add("donateLabel", "Dotacja na dalszy rozwój");
+
             //Section: ModSelectionList
             
             //Componet: continueButton
@@ -770,7 +775,7 @@ namespace RelhaxModpack
             //
             english.Add("selectionLegacy", "Legacy");
             german.Add("selectionLegacy", "Erbe");
-            polish.Add("selectionLegacy", "Spuścizna");
+            polish.Add("selectionLegacy", "Rozwijana lista");
             
             //Componet:Mod selection explanation
             //

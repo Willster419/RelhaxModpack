@@ -26,7 +26,7 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 22.4.1";
+        private string managerVersion = "version 22.4.2";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -1697,6 +1697,12 @@ namespace RelhaxModpack
             {
                 //clear any dependencies since this is a user mod only installation
                 dependencies.Clear();
+                //but readd the blobal dependencies
+                foreach (Dependency d in list.globalDependencies)
+                {
+                    if (d.enabled)
+                        dependencies.Add(d);
+                }
                 //check for userMods
                 if (userMods.Count > 0)
                 {
@@ -2442,6 +2448,7 @@ namespace RelhaxModpack
             this.viewTypeGB.Text = Translations.getTranslatedString("ModSelectionListViewSelection");
             this.selectionDefault.Text = Translations.getTranslatedString(selectionDefault.Name);
             this.selectionLegacy.Text = Translations.getTranslatedString(selectionLegacy.Name);
+            this.donateLabel.Text = Translations.getTranslatedString(donateLabel.Name);
             if (helper != null)
             {
                 helper.helperText.Text = Translations.getTranslatedString("helperText");
