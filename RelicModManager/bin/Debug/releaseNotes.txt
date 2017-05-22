@@ -1,3 +1,7 @@
+Version 22.4.2:
+-Fixed bug with when only installing user mods
+-Updated translations
+
 Version 22.4.1:
 -Fixed bugs with loading and saving configs with subconfigs
 -Fixed bugs with default selection view UI
