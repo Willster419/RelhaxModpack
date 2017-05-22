@@ -62,6 +62,7 @@
             this.viewTypeGB = new System.Windows.Forms.GroupBox();
             this.selectionLegacy = new System.Windows.Forms.RadioButton();
             this.selectionDefault = new System.Windows.Forms.RadioButton();
+            this.donateLabel = new System.Windows.Forms.LinkLabel();
             this.settingsGroupBox.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
@@ -111,7 +112,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(9, 529);
+            this.formPageLink.Location = new System.Drawing.Point(9, 530);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -333,7 +334,7 @@
             // findBugAddModLabel
             // 
             this.findBugAddModLabel.AutoSize = true;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 509);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 510);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
             this.findBugAddModLabel.TabIndex = 27;
@@ -451,11 +452,23 @@
             this.selectionDefault.CheckedChanged += new System.EventHandler(this.selectionDefault_CheckedChanged);
             this.selectionDefault.MouseDown += new System.Windows.Forms.MouseEventHandler(this.selectionDefault_MouseDown);
             // 
+            // donateLabel
+            // 
+            this.donateLabel.AutoSize = true;
+            this.donateLabel.Location = new System.Drawing.Point(9, 550);
+            this.donateLabel.Name = "donateLabel";
+            this.donateLabel.Size = new System.Drawing.Size(48, 13);
+            this.donateLabel.TabIndex = 32;
+            this.donateLabel.TabStop = true;
+            this.donateLabel.Text = "Donate?";
+            this.donateLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.donateLabel_LinkClicked);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(318, 549);
+            this.ClientSize = new System.Drawing.Size(318, 568);
+            this.Controls.Add(this.donateLabel);
             this.Controls.Add(this.viewTypeGB);
             this.Controls.Add(this.languageSelectionGB);
             this.Controls.Add(this.downloadProgress);
@@ -524,6 +537,7 @@
         private System.Windows.Forms.RadioButton selectionLegacy;
         private System.Windows.Forms.RadioButton selectionDefault;
         private System.Windows.Forms.RadioButton languagePL;
+        private System.Windows.Forms.LinkLabel donateLabel;
     }
 }
 

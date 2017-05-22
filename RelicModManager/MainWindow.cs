@@ -2942,6 +2942,11 @@ namespace RelhaxModpack
             Translations.language = Translations.Languages.Polish;
             this.applySettings();
         }
+
+        private void donateLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2");
+        }
     }
     //a class for the downloadQueue list, to make a queue of downloads
     class DownloadItem
