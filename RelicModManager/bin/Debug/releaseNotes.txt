@@ -1,3 +1,6 @@
+Version 22.4.3:
+-Fixed bugs with database back-end tools
+
 Version 22.4.2:
 -Fixed bug with when only installing user mods
 -Updated translations
