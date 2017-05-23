@@ -130,7 +130,7 @@ namespace RelhaxModpack
                                 if (sc.crc == null || sc.crc.Equals("") || sc.crc.Equals("f"))
                                 {
                                     sc.crc = Settings.GetMd5Hash(addZipsDialog.FileNames[scindex]);
-                                    dependenciesSB.Append(sc.zipFile + "\n");
+                                    subConfigsSB.Append(sc.zipFile + "\n");
                                 }
                             }
                             foreach (Dependency d in sc.dependencies)
@@ -435,9 +435,6 @@ namespace RelhaxModpack
                                                                             break;
                                                                         case "enabled":
                                                                             subC.enabled = Settings.parseBool(subConfigNode.InnerText, false);
-                                                                            break;
-                                                                        case "checked":
-                                                                            subC.Checked = Settings.parseBool(subConfigNode.InnerText, false);
                                                                             break;
                                                                         case "type":
                                                                             subC.type = subConfigNode.InnerText;
@@ -835,9 +832,6 @@ namespace RelhaxModpack
                             XmlElement subConfigEnabled = doc.CreateElement("enabled");
                             subConfigEnabled.InnerText = "" + s.enabled;
                             subConfigRoot.AppendChild(subConfigEnabled);
-                            XmlElement subConfigChecked = doc.CreateElement("checked");
-                            subConfigChecked.InnerText = "" + s.Checked;
-                            subConfigRoot.AppendChild(subConfigChecked);
                             XmlElement subConfigType = doc.CreateElement("type");
                             subConfigType.InnerText = s.type;
                             subConfigRoot.AppendChild(subConfigType);

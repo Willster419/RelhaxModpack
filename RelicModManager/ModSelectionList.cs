@@ -2068,9 +2068,6 @@ namespace RelhaxModpack
                                                                         case "enabled":
                                                                             subC.enabled = Settings.parseBool(subConfigNode.InnerText, false);
                                                                             break;
-                                                                        case "checked":
-                                                                            subC.Checked = Settings.parseBool(subConfigNode.InnerText, false);
-                                                                            break;
                                                                         case "type":
                                                                             subC.type = subConfigNode.InnerText;
                                                                             break;
