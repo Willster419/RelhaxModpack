@@ -1359,7 +1359,6 @@
                   <zipFile>XVM_config_builder_carousel_normal_cell.zip</zipFile>
                   <crc>e59c009cafa7dea617bc27f40c94998c</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1373,7 +1372,6 @@
                   <zipFile>XVM_config_builder_carousel_normal_cell_scale_0.8.zip</zipFile>
                   <crc>ef418f604ab8537dc474b585c3af48c1</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1387,7 +1385,6 @@
                   <zipFile>XVM_config_builder_carousel_normal_cell_scale_0.6.zip</zipFile>
                   <crc>e08086c87715e05e7943d115af4c3526</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1401,7 +1398,6 @@
                   <zipFile>XVM_config_builder_carousel_small_cell.zip</zipFile>
                   <crc>e1c8d14be77837db3d52c9709e9585ab</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1415,7 +1411,6 @@
                   <zipFile>XVM_config_builder_carousel_ingame_cell.zip</zipFile>
                   <crc>41276ad2ffdee66646ef08d161bdafff</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1444,7 +1439,6 @@
                   <zipFile>XVM__builder_carousel_hide_buy_tank_hide_total_slots.zip</zipFile>
                   <crc>313a612d874c04bd8cdff08ff2230785</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1458,7 +1452,6 @@
                   <zipFile>XVM__builder_carousel_show_buy_tank_hide_total_slots.zip</zipFile>
                   <crc>c97cedf8849650a6f16b206c367a7a0d</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1472,7 +1465,6 @@
                   <zipFile>XVM__builder_carousel_show_buy_tank_show_total_slots.zip</zipFile>
                   <crc>0b9cc6a60661ba5254bd5bef29fd5cba</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1501,7 +1493,6 @@
                   <zipFile>XVM__builder_carousel_hide_buy_slot_hide_used_slots.zip</zipFile>
                   <crc>b869305de1835e6966b59b7e4eb7feba</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1515,7 +1506,6 @@
                   <zipFile>XVM__builder_carousel_show_buy_slot_hide_used_slots.zip</zipFile>
                   <crc>4b223b2e71f813107033952e7297d4d1</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1529,7 +1519,6 @@
                   <zipFile>XVM__builder_carousel_show_buy_slot_show_used_slots.zip</zipFile>
                   <crc>0238565d59b83d1f10dbf857693a74c1</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1561,7 +1550,6 @@
                   <zipFile>XVM_config_builder_carousel_cell_average_damage_enable.zip</zipFile>
                   <crc>87891e073b1ce433cec5705dc44540ff</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1575,7 +1563,6 @@
                   <zipFile>XVM_config_builder_carousel_cell_average_damage_disable.zip</zipFile>
                   <crc>d3cdce95e5aa90473632c1438209b294</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1607,7 +1594,6 @@
                   <zipFile>XVM_config_builder_carousel_cell_battle_count_enable.zip</zipFile>
                   <crc>940ccb4c90e86ff530bbfb0ac4983928</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1621,7 +1607,6 @@
                   <zipFile>XVM_config_builder_carousel_cell_battle_count_disable.zip</zipFile>
                   <crc>4ec932387b8c400cca923aa0d93d1000</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1653,7 +1638,6 @@
                   <zipFile>XVM_config_builder_carousel_cell_win_rate_enable.zip</zipFile>
                   <crc>95d81a679bf6b699e34533af6803e1a7</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1667,7 +1651,6 @@
                   <zipFile>XVM_config_builder_carousel_cell_win_rate_disable.zip</zipFile>
                   <crc>a0041100b10ac098aa730f85270865e2</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1904,7 +1887,6 @@
                   <zipFile>XVM__builder_clock_12_hour.zip</zipFile>
                   <crc>b8265d2b59955bbeb9217567e5bc0b8d</crc>
                   <enabled>False</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -1918,7 +1900,6 @@
                   <zipFile>XVM__builder_clock_24_hour.zip</zipFile>
                   <crc>b22d91157f332ee829218eed9f2ed114</crc>
                   <enabled>False</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -3627,18 +3608,48 @@
               <subConfigs />
             </config>
             <config>
-              <name>move damage messages to center</name>
-              <configzipfile>Damage_Logs_GambitER_Damage_Log_Message_Patch.zip</configzipfile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <name>damage messages</name>
+              <configzipfile>
+              </configzipfile>
+              <startAddress>
+              </startAddress>
               <endAddress>
               </endAddress>
-              <configzipcrc>a26f075a6739cc60bb1b75c0da354c93</configzipcrc>
-              <size>0.1</size>
+              <configzipcrc>
+              </configzipcrc>
+              <size>0</size>
               <configenabled>True</configenabled>
               <configtype>multi</configtype>
               <pictures />
               <dependencies />
-              <subConfigs />
+              <subConfigs>
+                <subConfig>
+                  <name>move damage messages to center</name>
+                  <zipFile>Damage_Logs_GambitER_Damage_Log_Message_Patch.zip</zipFile>
+                  <crc>a26f075a6739cc60bb1b75c0da354c93</crc>
+                  <enabled>True</enabled>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+                <subConfig>
+                  <name>disable damage messages</name>
+                  <zipFile>Damage_Logs_GambitER_Damage_Log_Message_Disable.zip</zipFile>
+                  <crc>c066c70278f9ec60ad8982d47425a57d</crc>
+                  <enabled>True</enabled>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </subConfig>
+              </subConfigs>
             </config>
           </configs>
           <dependencies />
@@ -7540,7 +7551,6 @@
                   <crc>
                   </crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0</size>
                   <startAddress>
@@ -7555,7 +7565,6 @@
                   <zipFile>Garage_mods_veritcal_techTree_2017-04-26_russian.zip</zipFile>
                   <crc>25ce0ff5e237ec3b472970deb3af2c41</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.1</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -7597,7 +7606,6 @@
                   <zipFile>Garage_mods_Interface_by_P_H_A_R_A_O_N_Techtree_horizontal_vertical_English_0.9.18.0_2017-05-14.zip</zipFile>
                   <crc>dea85a5f9b81ab58e8b1040ca82852e6</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>2.4</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -7611,7 +7619,6 @@
                   <zipFile>Garage_mods_Techtree_Mod_German_0.9.18.0_2017-05-16.zip</zipFile>
                   <crc>63e1f61ec37e4259675865d121f1d7a5</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>2.4</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -7795,7 +7802,6 @@
                   <zipFile>Garage_Session_Stats_YasenKrasen_Backgrounds_V1_0.9.18.0c_2017-05-02.zip</zipFile>
                   <crc>f46fd6480689ebb9fcef579db01bae0c</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.4</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -7809,7 +7815,6 @@
                   <zipFile>Garage_Session_Stats_YasenKrasen_Backgrounds_V2_0.9.18.0c_2017-05-02.zip</zipFile>
                   <crc>88dd2a211bdf3cf80f589a4957d53e10</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.5</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -7823,7 +7828,6 @@
                   <zipFile>Garage_Session_Stats_YasenKrasen_Backgrounds_V3_0.9.18.0c_2017-05-02.zip</zipFile>
                   <crc>378e21bac8c03632d3fabe0f5565665d</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>0.4</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -7837,7 +7841,6 @@
                   <zipFile>Garage_Session_Stats_YasenKrasen_Backgrounds_V4_0.9.18.0c_2017-05-02.zip</zipFile>
                   <crc>79a4cb94948f9901c4fcf4f6e9aeb330</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>1.2</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
@@ -7851,7 +7854,6 @@
                   <zipFile>Garage_Session_Stats_YasenKrasen_Backgrounds_V5_0.9.18.0c_2017-05-02.zip</zipFile>
                   <crc>249671d191f20dfc300b2959fa434997</crc>
                   <enabled>True</enabled>
-                  <checked>False</checked>
                   <type>single</type>
                   <size>1.7</size>
                   <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
