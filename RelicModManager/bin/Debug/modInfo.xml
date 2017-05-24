@@ -1436,7 +1436,7 @@
               <subConfigs>
                 <subConfig>
                   <name>Hide cell</name>
-                  <zipFile>XVM__builder_carousel_hide_buy_tank_hide_total_slots.zip</zipFile>
+                  <zipFile>XVM_config_builder_carousel_hide_buy_tank_hide_total_slots.zip</zipFile>
                   <crc>313a612d874c04bd8cdff08ff2230785</crc>
                   <enabled>True</enabled>
                   <type>single</type>
@@ -1449,7 +1449,7 @@
                 </subConfig>
                 <subConfig>
                   <name>Show cell, hide total slots</name>
-                  <zipFile>XVM__builder_carousel_show_buy_tank_hide_total_slots.zip</zipFile>
+                  <zipFile>XVM_config_builder_carousel_show_buy_tank_hide_total_slots.zip</zipFile>
                   <crc>c97cedf8849650a6f16b206c367a7a0d</crc>
                   <enabled>True</enabled>
                   <type>single</type>
@@ -1462,7 +1462,7 @@
                 </subConfig>
                 <subConfig>
                   <name>Show cell, show total slots</name>
-                  <zipFile>XVM__builder_carousel_show_buy_tank_show_total_slots.zip</zipFile>
+                  <zipFile>XVM_config_builder_carousel_show_buy_tank_show_total_slots.zip</zipFile>
                   <crc>0b9cc6a60661ba5254bd5bef29fd5cba</crc>
                   <enabled>True</enabled>
                   <type>single</type>
@@ -1490,7 +1490,7 @@
               <subConfigs>
                 <subConfig>
                   <name>Hide cell</name>
-                  <zipFile>XVM__builder_carousel_hide_buy_slot_hide_used_slots.zip</zipFile>
+                  <zipFile>XVM_config_builder_carousel_hide_buy_slot_hide_used_slots.zip</zipFile>
                   <crc>b869305de1835e6966b59b7e4eb7feba</crc>
                   <enabled>True</enabled>
                   <type>single</type>
@@ -1503,7 +1503,7 @@
                 </subConfig>
                 <subConfig>
                   <name>Show cell, hide total used slots</name>
-                  <zipFile>XVM__builder_carousel_show_buy_slot_hide_used_slots.zip</zipFile>
+                  <zipFile>XVM_config_builder_carousel_show_buy_slot_hide_used_slots.zip</zipFile>
                   <crc>4b223b2e71f813107033952e7297d4d1</crc>
                   <enabled>True</enabled>
                   <type>single</type>
@@ -1516,7 +1516,7 @@
                 </subConfig>
                 <subConfig>
                   <name>Show cell, show total used slots</name>
-                  <zipFile>XVM__builder_carousel_show_buy_slot_show_used_slots.zip</zipFile>
+                  <zipFile>XVM_config_builder_carousel_show_buy_slot_show_used_slots.zip</zipFile>
                   <crc>0238565d59b83d1f10dbf857693a74c1</crc>
                   <enabled>True</enabled>
                   <type>single</type>
@@ -1884,7 +1884,7 @@
               <subConfigs>
                 <subConfig>
                   <name>12 hour</name>
-                  <zipFile>XVM__builder_clock_12_hour.zip</zipFile>
+                  <zipFile>XVM_config_builder_clock_12_hour.zip</zipFile>
                   <crc>b8265d2b59955bbeb9217567e5bc0b8d</crc>
                   <enabled>False</enabled>
                   <type>single</type>
@@ -1897,7 +1897,7 @@
                 </subConfig>
                 <subConfig>
                   <name>24 hour</name>
-                  <zipFile>XVM__builder_clock_24_hour.zip</zipFile>
+                  <zipFile>XVM_config_builder_clock_24_hour.zip</zipFile>
                   <crc>b22d91157f332ee829218eed9f2ed114</crc>
                   <enabled>False</enabled>
                   <type>single</type>
