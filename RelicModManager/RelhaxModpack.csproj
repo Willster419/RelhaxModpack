@@ -190,6 +190,7 @@
     <Compile Include="StringSave.cs" />
     <Compile Include="SubConfig.cs" />
     <Compile Include="Translations.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="VersionInfo.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -16,7 +16,7 @@ namespace RelhaxModpack
         //use load to move the location of the form
         private void GifPreview_Load(object sender, EventArgs e)
         {
-            Settings.appendToLog("GifPreview: opening at x: " + x + ", y: " + y);
+            Utils.appendToLog("GifPreview: opening at x: " + x + ", y: " + y);
             this.Location = new Point(x, y);
             Settings.setUIColor(this);
             gifPreviewBox.Image = Settings.getLoadingImage();

@@ -37,7 +37,7 @@ namespace RelhaxModpack
                     }
                     break;
             }
-            Settings.appendToLog("ERROR: no value in language hash for key: " + componetName + ": Language: " + language);
+            Utils.appendToLog("ERROR: no value in language hash for key: " + componetName + ": Language: " + language);
             return componetName;
         }
         //method to load each translated string based on which language is selected
@@ -773,9 +773,9 @@ namespace RelhaxModpack
             
             //Componet:Mod selection view legacy (OMC)
             //
-            english.Add("selectionLegacy", "Legacy");
-            german.Add("selectionLegacy", "Erbe");
-            polish.Add("selectionLegacy", "Rozwijana lista");
+            english.Add("selectionLegacy", "OMC Legacy");
+            german.Add("selectionLegacy", "OMC Erbe");
+            polish.Add("selectionLegacy", "OMC Rozwijana lista");
             
             //Componet:Mod selection explanation
             //

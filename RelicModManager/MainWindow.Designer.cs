@@ -421,7 +421,7 @@
             this.viewTypeGB.Controls.Add(this.selectionDefault);
             this.viewTypeGB.Location = new System.Drawing.Point(11, 311);
             this.viewTypeGB.Name = "viewTypeGB";
-            this.viewTypeGB.Size = new System.Drawing.Size(95, 49);
+            this.viewTypeGB.Size = new System.Drawing.Size(114, 49);
             this.viewTypeGB.TabIndex = 31;
             this.viewTypeGB.TabStop = false;
             this.viewTypeGB.Text = "Selection View";

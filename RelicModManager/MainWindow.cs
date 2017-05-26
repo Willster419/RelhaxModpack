@@ -109,7 +109,7 @@ namespace RelhaxModpack
         //The constructur for the application
         public MainWindow()
         {
-            Settings.appendToLog("MainWindow Constructed");
+            Utils.appendToLog("MainWindow Constructed");
             InitializeComponent();
         }
         //handler for the mod download file progress
@@ -181,7 +181,7 @@ namespace RelhaxModpack
             if (e != null && e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
             {
                 //404
-                Settings.appendToLog("ERROR: " + tempOldDownload + " failed to download");
+                Utils.appendToLog("ERROR: " + tempOldDownload + " failed to download");
                 MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + tempOldDownload + Translations.getTranslatedString("failedToDownload_2"));
                 Application.Exit();
             }
@@ -202,7 +202,7 @@ namespace RelhaxModpack
                 sw.Start();
                 downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
                 tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
-                Settings.appendToLog("downloading " + tempOldDownload);
+                Utils.appendToLog("downloading " + tempOldDownload);
                 currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile);
                 if (currentModDownloading.Length >= 200)
                 {
@@ -219,7 +219,7 @@ namespace RelhaxModpack
                 //check if backing up user cache files
                 if (Settings.saveUserData)
                 {
-                    Settings.appendToLog("saveUserData checked, saving user cache data");
+                    Utils.appendToLog("saveUserData checked, saving user cache data");
                     int tempState = (int)state;
                     state = InstallState.backupUserData;
                     //backup user data on UI thread. it won't be long
@@ -228,12 +228,12 @@ namespace RelhaxModpack
                 }
                 if (state == InstallState.downloading)
                 {
-                    Settings.appendToLog("Downloading finished");
+                    Utils.appendToLog("Downloading finished");
                     //just finished downloading, needs to start extracting
                     if (Settings.cleanInstallation)
                     {
                         state = InstallState.deleteResMods;
-                        Settings.appendToLog("CleanInstallCB checked, running backgroundDelete(" + tanksLocation + "\\res_mods)");
+                        Utils.appendToLog("CleanInstallCB checked, running backgroundDelete(" + tanksLocation + "\\res_mods)");
                         //delete everything in res_mods
                         if (!Directory.Exists(tanksLocation + "\\res_mods"))
                             Directory.CreateDirectory(tanksLocation + "\\res_mods");
@@ -242,7 +242,7 @@ namespace RelhaxModpack
                         this.backgroundDelete(tanksLocation + "\\res_mods");
                         return;
                     }
-                    Settings.appendToLog("CleanInstallCB not checked, moving to extraction");
+                    Utils.appendToLog("CleanInstallCB not checked, moving to extraction");
                     state = InstallState.extractRelhaxMods;
                     this.backgroundExtract(false);
                     return;
@@ -252,13 +252,13 @@ namespace RelhaxModpack
                     if (Settings.cleanInstallation)
                     {
                         state = InstallState.deleteResMods;
-                        Settings.appendToLog("CleanInstallCB checked, running backgroundDelete(" + tanksLocation + "\\res_mods)");
+                        Utils.appendToLog("CleanInstallCB checked, running backgroundDelete(" + tanksLocation + "\\res_mods)");
                         //delete everything in res_mods
                         if (Directory.Exists(tanksLocation + "\\res_mods")) this.backgroundDelete(tanksLocation + "\\res_mods");
                         return;
                     }
                     state = InstallState.extractRelhaxMods;
-                    Settings.appendToLog("CleanInstallCB not checked, moving to extraction");
+                    Utils.appendToLog("CleanInstallCB not checked, moving to extraction");
                     this.backgroundExtract(false);
                     return;
                 }
@@ -268,12 +268,12 @@ namespace RelhaxModpack
                     if (Settings.cleanInstallation)
                     {
                         state = InstallState.deleteResMods;
-                        Settings.appendToLog("CleanInstallCB checked, running backgroundDelete(" + tanksLocation + "\\res_mods)");
+                        Utils.appendToLog("CleanInstallCB checked, running backgroundDelete(" + tanksLocation + "\\res_mods)");
                         //delete everything in res_mods
                         if (Directory.Exists(tanksLocation + "\\res_mods")) this.backgroundDelete(tanksLocation + "\\res_mods");
                         return;
                     }
-                    Settings.appendToLog("CleanInstallCB not checked, moving to extraction");
+                    Utils.appendToLog("CleanInstallCB not checked, moving to extraction");
                     this.backgroundExtract(true);
                     return;
                 }
@@ -289,17 +289,17 @@ namespace RelhaxModpack
         {
             speedLabel.Text = Translations.getTranslatedString("patching") + "...";
             Application.DoEvents();
-            //Settings.appendToLog("Starting to patch Relhax Mod Pack");
+            //Utils.appendToLog("Starting to patch Relhax Mod Pack");
             //don't do anything if the file does not exist
             if (!Directory.Exists(tanksLocation + @"\_patch"))
             {
                 if (state == InstallState.patchRelhaxMods)
                 {
-                    Settings.appendToLog("Patching done for Relhax Mod Pack Mods");
+                    Utils.appendToLog("Patching done for Relhax Mod Pack Mods");
                 }
                 else if (state == InstallState.patchUserMods)
                 {
-                    Settings.appendToLog("Patching done for Relhax User Mods");
+                    Utils.appendToLog("Patching done for Relhax User Mods");
                 } 
                 return;
             }
@@ -323,11 +323,11 @@ namespace RelhaxModpack
                 }
                 catch (UnauthorizedAccessException e)
                 {
-                    Settings.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
-                    Settings.appendToLog(e.StackTrace);
-                    Settings.appendToLog("inner message: " + e.Message);
-                    Settings.appendToLog("source: " + e.Source);
-                    Settings.appendToLog("target: " + e.TargetSite);
+                    Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
+                    Utils.appendToLog(e.StackTrace);
+                    Utils.appendToLog("inner message: " + e.Message);
+                    Utils.appendToLog("source: " + e.Source);
+                    Utils.appendToLog("target: " + e.TargetSite);
                     DialogResult res = MessageBox.Show(Translations.getTranslatedString("patchingSystemDeneidAccessMessage"), Translations.getTranslatedString("patchingSystemDeneidAccessHeader"), MessageBoxButtons.RetryCancel);
                     if (res == DialogResult.Cancel)
                     {
@@ -365,14 +365,14 @@ namespace RelhaxModpack
                     if (p.lines == null)
                     {
                         //perform regex patch on entire file, line by line
-                        Settings.appendToLog("Regex patch, all lines, line by line, " + p.file + ", " + p.search + ", " + p.replace);
-                        this.RegxPatch(p.file, p.search, p.replace);
+                        Utils.appendToLog("Regex patch, all lines, line by line, " + p.file + ", " + p.search + ", " + p.replace);
+                        Utils.RegxPatch(p.file, p.search, p.replace,tanksLocation,tanksVersion);
                     }
                     else if (p.lines.Count() == 1 && tempp == -1)
                     {
                         //perform regex patch on entire file, as one whole string
-                        Settings.appendToLog("Regex patch, all lines, whole file, " + p.file + ", " + p.search + ", " + p.replace);
-                        this.RegxPatch(p.file, p.search, p.replace, -1);
+                        Utils.appendToLog("Regex patch, all lines, whole file, " + p.file + ", " + p.search + ", " + p.replace);
+                        Utils.RegxPatch(p.file, p.search, p.replace, tanksLocation,tanksVersion,-1);
                     }
                     else
                     {
@@ -380,22 +380,22 @@ namespace RelhaxModpack
                         {
                             //perform regex patch on specific file lines
                             //will need to be a standard for loop BTW
-                            Settings.appendToLog("Regex patch, line " + s + ", " + p.file + ", " + p.search + ", " + p.replace);
-                            this.RegxPatch(p.file, p.search, p.replace, int.Parse(s));
+                            Utils.appendToLog("Regex patch, line " + s + ", " + p.file + ", " + p.search + ", " + p.replace);
+                            Utils.RegxPatch(p.file, p.search, p.replace,tanksLocation,tanksVersion, int.Parse(s));
                         }
                     }
                 }
                 else if (p.type.Equals("xml"))
                 {
                     //perform xml patch
-                    Settings.appendToLog("Xml patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
-                    this.xmlPatch(p.file, p.path, p.mode, p.search, p.replace);
+                    Utils.appendToLog("Xml patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
+                    Utils.xmlPatch(p.file, p.path, p.mode, p.search, p.replace,tanksLocation,tanksVersion);
                 }
                 else if (p.type.Equals("json"))
                 {
                     //perform json patch
-                    Settings.appendToLog("Json patch, " + p.file + ", " + p.path + ", " + p.replace);
-                    this.jsonPatch(p.file, p.path, p.replace, p.mode);
+                    Utils.appendToLog("Json patch, " + p.file + ", " + p.path + ", " + p.replace);
+                    Utils.jsonPatch(p.file, p.path, p.replace, p.mode,tanksLocation, tanksVersion);
                 }
             }
             //all done, delete the patch folder
@@ -403,21 +403,21 @@ namespace RelhaxModpack
                 Directory.Delete(tanksLocation + "\\_patch", true);
             if (state == InstallState.patchRelhaxMods)
             {
-                Settings.appendToLog("Patching done for Relhax Mod Pack Mods");
+                Utils.appendToLog("Patching done for Relhax Mod Pack Mods");
             }
             else if (state == InstallState.patchUserMods)
             {
-                Settings.appendToLog("Patching done for Relhax User Mods");
+                Utils.appendToLog("Patching done for Relhax User Mods");
             } 
         }
         //installs all fonts in the fonts folder, user and custom
         private void installFonts()
         {
-            Settings.appendToLog("Checking for fonts to install");
+            Utils.appendToLog("Checking for fonts to install");
             speedLabel.Text = Translations.getTranslatedString("installingFonts") + "...";
             if (!Directory.Exists(tanksLocation + "\\_fonts"))
             {
-                Settings.appendToLog("No fonts to install");
+                Utils.appendToLog("No fonts to install");
                 //no fonts to install, done display
                 speedLabel.Text = "";
                 downloadProgress.Text = Translations.getTranslatedString("done");
@@ -426,14 +426,14 @@ namespace RelhaxModpack
                 childProgressBar.Value = childProgressBar.Maximum;
                 state = InstallState.idle;
                 toggleUIButtons(true);
-                Settings.appendToLog("Installation done");
+                Utils.appendToLog("Installation done");
                 return;
             }
             string[] fonts = Directory.GetFiles(tanksLocation + "\\_fonts");
             if (fonts.Count() == 0)
             {
                 //done display
-                Settings.appendToLog("No fonts to install");
+                Utils.appendToLog("No fonts to install");
                 speedLabel.Text = "";
                 downloadProgress.Text = Translations.getTranslatedString("done");
                 parrentProgressBar.Maximum = 1;
@@ -441,7 +441,7 @@ namespace RelhaxModpack
                 childProgressBar.Value = childProgressBar.Maximum;
                 state = InstallState.idle;
                 toggleUIButtons(true);
-                Settings.appendToLog("Installation done");
+                Utils.appendToLog("Installation done");
                 return;
             }
             //convert the array to a list
@@ -470,7 +470,7 @@ namespace RelhaxModpack
             //re-check the fonts to install list
             if (fontsList.Count == 0)
             {
-                Settings.appendToLog("No fonts to install");
+                Utils.appendToLog("No fonts to install");
                 //done display
                 speedLabel.Text = "";
                 downloadProgress.Text = Translations.getTranslatedString("done");
@@ -479,10 +479,10 @@ namespace RelhaxModpack
                 childProgressBar.Value = childProgressBar.Maximum;
                 state = InstallState.idle;
                 toggleUIButtons(true);
-                Settings.appendToLog("Installation done");
+                Utils.appendToLog("Installation done");
                 return;
             }
-            Settings.appendToLog("Installing fonts");
+            Utils.appendToLog("Installing fonts");
             DialogResult dr = DialogResult.No;
             if (Program.autoInstall)
             {
@@ -505,7 +505,7 @@ namespace RelhaxModpack
                     }
                     catch (WebException)
                     {
-                        Settings.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " FontReg.exe");
+                        Utils.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " FontReg.exe");
                         MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " FontReg.exe");
                     }
                 }
@@ -517,7 +517,7 @@ namespace RelhaxModpack
                 info.WorkingDirectory = tanksLocation + "\\_fonts";
                 Process installFontss = new Process();
                 installFontss.StartInfo = info;
-                bool isAdmin = this.isAdministrator();
+                bool isAdmin = Utils.isAdministrator();
                 try
                 {
                     installFontss.Start();
@@ -525,12 +525,12 @@ namespace RelhaxModpack
                 }
                 catch (Win32Exception e)
                 {
-                    Settings.appendToLog("EXCEPTION: Win32Exception (call stack traceback)");
-                    Settings.appendToLog(e.StackTrace);
-                    Settings.appendToLog("inner message: " + e.Message);
-                    Settings.appendToLog("source: " + e.Source);
-                    Settings.appendToLog("target: " + e.TargetSite);
-                    Settings.appendToLog("ERROR: could not start font installer");
+                    Utils.appendToLog("EXCEPTION: Win32Exception (call stack traceback)");
+                    Utils.appendToLog(e.StackTrace);
+                    Utils.appendToLog("inner message: " + e.Message);
+                    Utils.appendToLog("source: " + e.Source);
+                    Utils.appendToLog("target: " + e.TargetSite);
+                    Utils.appendToLog("ERROR: could not start font installer");
                     MessageBox.Show(Translations.getTranslatedString("fontsPromptError_1") + tanksLocation + Translations.getTranslatedString("fontsPromptError_2"));
                     speedLabel.Text = "";
                     downloadProgress.Text = Translations.getTranslatedString("done");
@@ -539,7 +539,7 @@ namespace RelhaxModpack
                     childProgressBar.Value = childProgressBar.Maximum;
                     state = InstallState.idle;
                     toggleUIButtons(true);
-                    Settings.appendToLog("Installation done, but fonts install failed");
+                    Utils.appendToLog("Installation done, but fonts install failed");
                     return;
                 }
                 if (Directory.Exists(tanksLocation + "\\_fonts"))
@@ -551,8 +551,8 @@ namespace RelhaxModpack
                 childProgressBar.Value = childProgressBar.Maximum;
                 state = InstallState.idle;
                 toggleUIButtons(true);
-                Settings.appendToLog("Fonts Installed Successfully");
-                Settings.appendToLog("Installation done");
+                Utils.appendToLog("Fonts Installed Successfully");
+                Utils.appendToLog("Installation done");
             }
             else
             {
@@ -563,27 +563,13 @@ namespace RelhaxModpack
                 childProgressBar.Value = childProgressBar.Maximum;
                 state = InstallState.idle;
                 toggleUIButtons(true);
-                Settings.appendToLog("Installation done, but fonts install failed");
+                Utils.appendToLog("Installation done, but fonts install failed");
             }
-        }
-        //checks to see if the application is indeed in admin mode
-        public bool isAdministrator()
-        {
-            WindowsIdentity identity = WindowsIdentity.GetCurrent();
-            if (identity != null)
-            {
-                WindowsPrincipal principal = new WindowsPrincipal(identity);
-                bool isPowerUser = principal.IsInRole(WindowsBuiltInRole.PowerUser);
-                bool isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
-                return (isPowerUser || isAdmin);
-            }
-            Settings.appendToLog("WARNING: user is not admin or power user");
-            return false;
         }
         //method to check for updates to the application on startup
         private void checkmanagerUpdates()
         {
-            Settings.appendToLog("Starting check for application updates");
+            Utils.appendToLog("Starting check for application updates");
             WebClient updater = new WebClient();
             updater.Proxy = null;
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
@@ -592,14 +578,14 @@ namespace RelhaxModpack
             versionSave = version;
             if (!version.Equals(managerVersion))
             {
-                Settings.appendToLog("exe is out of date. displaying user update window");
+                Utils.appendToLog("exe is out of date. displaying user update window");
                 //out of date
                 VersionInfo vi = new VersionInfo();
                 vi.ShowDialog();
                 DialogResult result = vi.result;
                 if (result.Equals(DialogResult.Yes))
                 {
-                    Settings.appendToLog("User accepted downloading new version");
+                    Utils.appendToLog("User accepted downloading new version");
                     //download new version
                     sw.Reset();
                     sw.Start();
@@ -608,12 +594,12 @@ namespace RelhaxModpack
                     updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
                     if (File.Exists(newExeName)) File.Delete(newExeName);
                     updater.DownloadFileAsync(new Uri("http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe"), newExeName);
-                    Settings.appendToLog("New application download started");
+                    Utils.appendToLog("New application download started");
                     currentModDownloading = "update ";
                 }
                 else
                 {
-                    Settings.appendToLog("User declined downlading new version");
+                    Utils.appendToLog("User declined downlading new version");
                     //close the application
                     this.Close();
                 }
@@ -626,7 +612,7 @@ namespace RelhaxModpack
             if (e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
             {
                 //404
-                Settings.appendToLog("ERROR: unable to download new application version");
+                Utils.appendToLog("ERROR: unable to download new application version");
                 MessageBox.Show(Translations.getTranslatedString("cantDownloadNewVersion"));
                 this.Close();
             }
@@ -642,7 +628,7 @@ namespace RelhaxModpack
                 }
                 catch (WebException)
                 {
-                    Settings.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " RelicCopyUpdate.bat");
+                    Utils.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " RelicCopyUpdate.bat");
                     MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " RelicCopyUpdate.bat");
                     Application.Exit();
                 }
@@ -659,7 +645,7 @@ namespace RelhaxModpack
             }
             catch (Win32Exception)
             {
-                Settings.appendToLog("WARNING: could not start new application version");
+                Utils.appendToLog("WARNING: could not start new application version");
                 MessageBox.Show(Translations.getTranslatedString("cantStartNewApp") + newExeName);
             }
             Application.Exit();
@@ -668,10 +654,10 @@ namespace RelhaxModpack
         private String parseStrings()
         {
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
-            Settings.appendToLog("tanksLocation parsed as " + tanksLocation);
+            Utils.appendToLog("tanksLocation parsed as " + tanksLocation);
             parsedModsFolder = tanksLocation + "\\res_mods\\" + this.getFolderVersion(tanksLocation);
-            Settings.appendToLog("tanks mods version parsed as " + parsedModsFolder);
-            Settings.appendToLog("customUserMods parsed as " + Application.StartupPath + "\\RelHaxUserMods");
+            Utils.appendToLog("tanks mods version parsed as " + parsedModsFolder);
+            Utils.appendToLog("customUserMods parsed as " + Application.StartupPath + "\\RelHaxUserMods");
             return "1";
         }
         //gets the version of tanks that this is, in the format
@@ -686,7 +672,6 @@ namespace RelhaxModpack
             string[] temp = node.InnerText.Split('#');
             string version = temp[0].Trim();
             version = version.Substring(2);
-            //version = version.Split(' ')[0];
             return version;
         }
         //check to see if the supplied version of tanks is on the list of supported client versions
@@ -699,12 +684,12 @@ namespace RelhaxModpack
             }
             catch (WebException e)
             {
-                Settings.appendToLog("EXCEPTION: WebException (call stack traceback)");
-                Settings.appendToLog(e.StackTrace);
-                Settings.appendToLog("inner message: " + e.Message);
-                Settings.appendToLog("source: " + e.Source);
-                Settings.appendToLog("target: " + e.TargetSite);
-                Settings.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/supported_clients.txt");
+                Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
+                Utils.appendToLog(e.StackTrace);
+                Utils.appendToLog("inner message: " + e.Message);
+                Utils.appendToLog("source: " + e.Source);
+                Utils.appendToLog("target: " + e.TargetSite);
+                Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/supported_clients.txt");
                 MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " supported_clients.txt");
                 Application.Exit();
             }
@@ -719,12 +704,7 @@ namespace RelhaxModpack
         //main unzip worker method
         private void unzip(string zipFile, string extractFolder)
         {
-            //modpack
             string thisVersion = this.getFolderVersion(null);
-            //OLD
-            //if (File.Exists(zipFile))
-            //zip = ZipFile.Read(zipFile);
-            //New
             //create a filestream to append installed files log data
             using (FileStream fs = new FileStream(tanksLocation + "\\installedRelhaxFiles.log", FileMode.Append, FileAccess.Write))
             {
@@ -755,17 +735,15 @@ namespace RelhaxModpack
                 catch (ZipException e)
                 {
                     //append the exception to the log
-                    Settings.appendToLog("EXCEPTION: ZipException (call stack traceback)");
-                    Settings.appendToLog(e.StackTrace);
-                    Settings.appendToLog("inner message: " + e.Message);
-                    Settings.appendToLog("source: " + e.Source);
-                    Settings.appendToLog("target: " + e.TargetSite);
+                    Utils.appendToLog("EXCEPTION: ZipException (call stack traceback)");
+                    Utils.appendToLog(e.StackTrace);
+                    Utils.appendToLog("inner message: " + e.Message);
+                    Utils.appendToLog("source: " + e.Source);
+                    Utils.appendToLog("target: " + e.TargetSite);
                     //show the error message
                     MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + Path.GetFileName(zipFile) + Translations.getTranslatedString("zipReadingErrorMessage2"), Translations.getTranslatedString("zipReadingErrorHeader"));
                     //exit the application
-                    //Application.Exit();
                 }
-                //fs.Dispose();
             }
         }
         //handler for when progress is made in extracting a zip file
@@ -833,23 +811,23 @@ namespace RelhaxModpack
             WebRequest.DefaultWebProxy = null;
             wait.loadingDescBox.Text = "Verifying single instance...";
             Application.DoEvents();
-            //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
-            Settings.appendToLog("|RelHax Modpack " + managerVersion);
-            Settings.appendToLog("|Built on 05/23/2017, running at " + DateTime.Now);
-            Settings.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
-            //Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
+            //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
+            Utils.appendToLog("|RelHax Modpack " + managerVersion);
+            Utils.appendToLog("|Built on 05/23/2017, running at " + DateTime.Now);
+            Utils.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
+            //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
             try
             {
                 File.WriteAllText(tempPath + "\\RelHaxOneInstance.txt", "this file is open and cannot be deleted");
                 File.OpenWrite(tempPath + "\\RelHaxOneInstance.txt");
-                Settings.appendToLog("Successfully made single instance text file");
+                Utils.appendToLog("Successfully made single instance text file");
             }
             //catching an EXCEPTION means that this is not the only instance open
             catch (IOException)
             {
                 wait.Close();
-                Settings.appendToLog("CRITICAL: Another Instance of the relic mod manager is already running");
+                Utils.appendToLog("CRITICAL: Another Instance of the relic mod manager is already running");
                 MessageBox.Show("CRITICAL: Another Instance of the relic mod manager is already running");
                 this.Close();
             }
@@ -858,7 +836,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             if (Program.skipUpdate)
             {
-                Settings.appendToLog("/skip-update switch detected, skipping application update");
+                Utils.appendToLog("/skip-update switch detected, skipping application update");
                 if (!Program.testMode) MessageBox.Show(Translations.getTranslatedString("skipUpdateWarning"));
             }
             else
@@ -871,7 +849,7 @@ namespace RelhaxModpack
             //to enable for patch day (prevent users to use it), set it to true.
             if (false && !Program.patchDayTest)
             {
-                Settings.appendToLog("Patch day disable detected. Remember To override use /patchday");
+                Utils.appendToLog("Patch day disable detected. Remember To override use /patchday");
                 MessageBox.Show(Translations.getTranslatedString("patchDayMessage"));
                 this.Close();
             }
@@ -894,7 +872,7 @@ namespace RelhaxModpack
                 }
                 catch (WebException)
                 {
-                    Settings.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " DotNetZip.dll");
+                    Utils.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " DotNetZip.dll");
                     MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " DotNetZip.dll");
                     Application.Exit();
                 }
@@ -908,7 +886,7 @@ namespace RelhaxModpack
                 }
                 catch (WebException)
                 {
-                    Settings.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " Newtonsoft.Json.dll");
+                    Utils.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " Newtonsoft.Json.dll");
                     MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " Newtonsoft.Json.dll");
                     Application.Exit();
                 }
@@ -916,31 +894,31 @@ namespace RelhaxModpack
 
             //load settings
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
-            Settings.appendToLog("Loading settings");
+            Utils.appendToLog("Loading settings");
             Settings.loadSettings();
             this.applySettings();
             if (Program.testMode)
             {
-                Settings.appendToLog("Test Mode is ON, loading local modInfo.xml");
+                Utils.appendToLog("Test Mode is ON, loading local modInfo.xml");
             }
             if (Program.autoInstall)
             {
-                Settings.appendToLog("Auto Install is ON, checking for config pref xml at " + Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName);
+                Utils.appendToLog("Auto Install is ON, checking for config pref xml at " + Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName);
                 if (!File.Exists(Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName))
                 {
-                    Settings.appendToLog(Translations.getTranslatedString("extractionErrorHeader") + ": " + Program.configName + " does NOT exist, loading in regular mode");
+                    Utils.appendToLog(Translations.getTranslatedString("extractionErrorHeader") + ": " + Program.configName + " does NOT exist, loading in regular mode");
                     MessageBox.Show("ERROR: " + Program.configName + " does NOT exist, loading in regular mode");
                     Program.autoInstall = false;
                 }
                 if (!Settings.cleanInstallation)
                 {
-                    Settings.appendToLog("ERROR: clean installation is set to false. This must be set to true for auto install to work. Loading in regular mode.");
+                    Utils.appendToLog("ERROR: clean installation is set to false. This must be set to true for auto install to work. Loading in regular mode.");
                     MessageBox.Show(Translations.getTranslatedString("autoAndClean"));
                     Program.autoInstall = false;
                 }
                 if (Settings.firstLoad)
                 {
-                    Settings.appendToLog("ERROR: First time loading cannot be an auto install mode, loading in regular mode");
+                    Utils.appendToLog("ERROR: First time loading cannot be an auto install mode, loading in regular mode");
                     MessageBox.Show(Translations.getTranslatedString("autoAndFirst"));
                     Program.autoInstall = false;
                 }
@@ -948,7 +926,7 @@ namespace RelhaxModpack
             //check if it can still load in autoInstall config mode
             if (Program.autoInstall)
             {
-                Settings.appendToLog("Program.autoInstall still true, loading in auto install mode");
+                Utils.appendToLog("Program.autoInstall still true, loading in auto install mode");
                 wait.Close();
                 state = InstallState.idle;
                 this.installRelhaxMod_Click(null, null);
@@ -971,493 +949,6 @@ namespace RelhaxModpack
         private void formPageLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-09171-the-relhax-modpack/");
-        }
-        //method to patch a part of an xml file
-        //fileLocation is relative to res_mods folder
-        public void xmlPatch(string filePath, string xpath, string mode, string search, string replace, bool testMods = false)
-        {
-            if (Regex.IsMatch(filePath, "^\\\\\\\\res_mods"))
-            {
-                //new style patch, res_mods folder
-                filePath = tanksLocation + filePath;
-            }
-            else if (Regex.IsMatch(filePath, "^\\\\\\\\mods"))
-            {
-                //new style patch, mods folder
-                filePath = tanksLocation + filePath;
-            }
-            else if (testMods)
-            {
-
-            }
-            else
-            {
-                //old style patch
-                filePath = tanksLocation + "\\res_mods" + filePath;
-            }
-
-            if (testMods)
-            {
-
-            }
-            else
-            {
-                //patch versiondir out of filePath
-                filePath = Regex.Replace(filePath, "versiondir", tanksVersion);
-            }
-
-            //verify the file exists...
-            if (!File.Exists(filePath))
-                return;
-            XmlDocument doc = new XmlDocument();
-            doc.Load(filePath);
-            //check to see if it has the header info at the top to see if we need to remove it later
-            bool hadHeader = false;
-            XmlDocument doc3 = new XmlDocument();
-            doc3.Load(filePath);
-            foreach (XmlNode node in doc3)
-            {
-                if (node.NodeType == XmlNodeType.XmlDeclaration)
-                {
-                    hadHeader = true;
-                }
-            }
-            //determines which version of pathing will be done
-            switch (mode)
-            {
-                case "add":
-                    //check to see if it's already there
-                    string[] tempp = replace.Split('/');
-                    string tempPath = xpath;
-                    //make the full node path
-                    for (int i = 0; i < tempp.Count() - 1; i++)
-                    {
-                        tempPath = tempPath + "/" + tempp[i];
-                    }
-                    XmlNodeList currentSoundBanksAdd = doc.SelectNodes(tempPath);
-                    //in each node check if the element exist with the replace innerText
-                    foreach (XmlElement e in currentSoundBanksAdd)
-                    {
-                        string innerText = tempp[tempp.Count() - 1];
-                        //remove any tabs and whitespaces first
-                        innerText = Regex.Replace(innerText, @"\t", "");
-                        innerText = innerText.Trim();
-                        if (e.InnerText.Equals(innerText))
-                            return;
-                    }
-                    //get to the node where to add the element
-                    XmlNode reff = doc.SelectSingleNode(xpath);
-                    //create node(s) to add to the element
-                    string[] temp = replace.Split('/');
-                    List<XmlElement> nodes = new List<XmlElement>();
-                    for (int i = 0; i < temp.Count() - 1; i++)
-                    {
-                        XmlElement ele = doc.CreateElement(temp[i]);
-                        if (i == temp.Count() - 2)
-                        {
-                            //last node with actual data to add
-                            ele.InnerText = temp[temp.Count() - 1];
-                        }
-                        nodes.Add(ele);
-                    }
-                    //add nodes to the element in reverse for hierarchy order
-                    for (int i = nodes.Count - 1; i > -1; i--)
-                    {
-                        if (i == 0)
-                        {
-                            //getting here means this is the highmost node
-                            //that needto be modified
-                            reff.InsertAfter(nodes[i], reff.FirstChild);
-                            break;
-                        }
-                        XmlElement parrent = nodes[i - 1];
-                        XmlElement child = nodes[i];
-                        parrent.InsertAfter(child, parrent.FirstChild);
-                    }
-                    //save it
-                    if (File.Exists(filePath)) File.Delete(filePath);
-                    doc.Save(filePath);
-                    break;
-
-                case "edit":
-                    //check to see if it's already there
-                    XmlNodeList currentSoundBanksEdit = doc.SelectNodes(xpath);
-                    foreach (XmlElement e in currentSoundBanksEdit)
-                    {
-                        string innerText = e.InnerText;
-                        innerText = Regex.Replace(innerText, "\t", "");
-                        innerText = innerText.Trim();
-                        if (e.InnerText.Equals(replace))
-                            return;
-                    }
-                    //find and replace
-                    XmlNodeList rel1Edit = doc.SelectNodes(xpath);
-                    foreach (XmlElement eee in rel1Edit)
-                    {
-                        if (Regex.IsMatch(eee.InnerText, search))
-                        {
-                            eee.InnerText = replace;
-                        }
-                    }
-                    //save it
-                    if (File.Exists(filePath)) File.Delete(filePath);
-                    doc.Save(filePath);
-                    break;
-
-                case "remove":
-                    //check to see if it's there
-                    XmlNodeList currentSoundBanksRemove = doc.SelectNodes(xpath);
-                    foreach (XmlElement e in currentSoundBanksRemove)
-                    {
-                        if (Regex.IsMatch(e.InnerText, search))
-                        {
-                            e.RemoveAll();
-                        }
-                    }
-                    //save it
-                    if (File.Exists(filePath)) File.Delete(filePath);
-                    doc.Save(filePath);
-                    //remove empty elements
-                    XDocument doc2 = XDocument.Load(filePath);
-                    doc2.Descendants().Where(e => string.IsNullOrEmpty(e.Value)).Remove();
-                    if (File.Exists(filePath)) File.Delete(filePath);
-                    doc2.Save(filePath);
-                    break;
-            }
-            //check to see if we need to remove the header
-            bool hasHeader = false;
-            XmlDocument doc5 = new XmlDocument();
-            doc5.Load(filePath);
-            foreach (XmlNode node in doc5)
-            {
-                if (node.NodeType == XmlNodeType.XmlDeclaration)
-                {
-                    hasHeader = true;
-                }
-            }
-            //if not had header and has header, remove header
-            //if had header and has header, no change
-            //if not had header and not has header, no change
-            //if had header and not has header, no change
-            if (!hadHeader && hasHeader)
-            {
-                XmlDocument doc4 = new XmlDocument();
-                doc4.Load(filePath);
-                foreach (XmlNode node in doc4)
-                {
-                    if (node.NodeType == XmlNodeType.XmlDeclaration)
-                    {
-                        doc4.RemoveChild(node);
-                    }
-                }
-                doc4.Save(filePath);
-            }
-        }
-        //method to patch a standard text or json file
-        //fileLocation is relative to res_mods folder
-        public void RegxPatch(string fileLocation, string search, string replace, int lineNumber = 0, bool testMods = false)
-        {
-            if (Regex.IsMatch(fileLocation, "^\\\\\\\\res_mods"))
-            {
-                //new style patch, res_mods folder
-                fileLocation = tanksLocation + fileLocation;
-            }
-            else if (Regex.IsMatch(fileLocation, "^\\\\\\\\mods"))
-            {
-                //new style patch, mods folder
-                fileLocation = tanksLocation + fileLocation;
-            }
-            else if (testMods)
-            {
-
-            }
-            else
-            {
-                //old style patch
-                fileLocation = tanksLocation + "\\res_mods" + fileLocation;
-            }
-
-            if (testMods)
-            {
-
-            }
-            else
-            {
-                //patch versiondir out of fileLocation
-                fileLocation = Regex.Replace(fileLocation, "versiondir", tanksVersion);
-            }
-
-            //check that the file exists
-            if (!File.Exists(fileLocation))
-                return;
-
-            //load file from disk...
-            string file = File.ReadAllText(fileLocation);
-            //parse each line into an index array
-            string[] fileParsed = file.Split('\n');
-            StringBuilder sb = new StringBuilder();
-            if (lineNumber == 0)
-            //search entire file and replace each instance
-            {
-                for (int i = 0; i < fileParsed.Count(); i++)
-                {
-                    if (Regex.IsMatch(fileParsed[i], search))
-                    {
-                        fileParsed[i] = Regex.Replace(fileParsed[i], search, replace);
-                    }
-                    sb.Append(fileParsed[i] + "\n");
-                }
-            }
-            else if (lineNumber == -1)
-            //search entire file and string and make one giant regex replacement
-            {
-                //but remove newlines first
-                file = Regex.Replace(file, "\n", "newline");
-                try
-                {
-                    if (Regex.IsMatch(file, search))
-                    {
-                        file = Regex.Replace(file, search, replace);
-                    }
-                    file = Regex.Replace(file, "newline", "\n");
-                    sb.Append(file);
-                }
-                catch (ArgumentException)
-                {
-                    if (testMods) MessageBox.Show("invalid regex command");
-                }
-            }
-            else
-            {
-                for (int i = 0; i < fileParsed.Count(); i++)
-                {
-                    if (i == lineNumber - 1)
-                    {
-                        string value = fileParsed[i];
-                        if (Regex.IsMatch(value, search))
-                        {
-                            fileParsed[i] = Regex.Replace(fileParsed[i], search, replace);
-                        }
-                    }
-                    sb.Append(fileParsed[i] + "\n");
-                }
-            }
-            //save the file back into the string and then the file
-            file = sb.ToString();
-            File.WriteAllText(fileLocation, file);
-        }
-        //method to parse json files
-        public void jsonPatch(string jsonFile, string jsonPath, string newValue, string mode, bool testMods = false)
-        {
-            //try to convert the new value to a bool or an int or double first
-            bool newValueBool = false;
-            int newValueInt = -69420;
-            double newValueDouble = -69420.0d;
-            bool useBool = false;
-            bool useInt = false;
-            bool useDouble = false;
-            //try a bool first, only works with "true" and "false"
-            try
-            {
-                newValueBool = bool.Parse(newValue);
-                useBool = true;
-                useInt = false;
-                useDouble = false;
-            }
-            catch (FormatException)
-            {
-
-            }
-            //try a double nixt. it will parse a double and int. at this point it could be eithor
-            try
-            {
-                newValueDouble = double.Parse(newValue);
-                useDouble = true;
-            }
-            catch (FormatException)
-            {
-
-            }
-            //try an int next. if it works than turn double to false and int to true
-            try
-            {
-                newValueInt = int.Parse(newValue);
-                useInt = true;
-                useDouble = false;
-            }
-            catch (FormatException)
-            {
-
-            }
-            //check if it's the new structure
-            if (Regex.IsMatch(jsonFile, "^\\\\\\\\res_mods"))
-            {
-                //new style patch, res_mods folder
-                jsonFile = tanksLocation + jsonFile;
-            }
-            else if (Regex.IsMatch(jsonFile, "^\\\\\\\\mods"))
-            {
-                //new style patch, mods folder
-                jsonFile = tanksLocation + jsonFile;
-            }
-            else if (testMods)
-            {
-
-            }
-            else
-            {
-                //old style patch
-                jsonFile = tanksLocation + "\\res_mods" + jsonFile;
-            }
-
-            //patch versiondir out of fileLocation
-            if (testMods)
-            {
-
-            }
-            else
-            {
-                jsonFile = Regex.Replace(jsonFile, "versiondir", tanksVersion);
-            }
-
-            //check that the file exists
-            if (!File.Exists(jsonFile))
-                return;
-
-            //load file from disk...
-            string file = File.ReadAllText(jsonFile);
-            //save the "$" lines
-            List<StringSave> ssList = new List<StringSave>();
-            StringBuilder backTogether = new StringBuilder();
-            string[] removeComments = file.Split('\n');
-            for (int i = 0; i < removeComments.Count(); i++)
-            {
-                string temp = removeComments[i];
-                //determine if it has (had) a comma at the end of the string
-                bool hadComma = false;
-                bool modified = false;
-                if (Regex.IsMatch(temp, @",[ \t\r]*$"))
-                    hadComma = true;
-                
-                //determine if it is a illegal refrence in jarray or jobject
-                StringSave ss = new StringSave();
-                if (Regex.IsMatch(temp, @"^[ \t]*\"".*\"" *: *\$\{ *\"".*\""\ *}"))
-                {
-                    modified = true;
-                    //jobject
-                    ss.name = temp.Split('"')[1];
-                    ss.value = temp.Split('$')[1];
-                    ssList.Add(ss);
-                    temp = "\"" + ss.name + "\"" + ": -69420";
-                }
-                else if (Regex.IsMatch(temp, @"^[ \t]*\$ *\{ *\"".*\"" *\}"))
-                {
-                    modified = true;
-                    //jarray
-                    string comment = "//\"comment_Willster419\"";
-                    temp = comment + temp;
-                    ss.name = temp.Split('"')[1];
-                    ss.value = temp.Split('$')[1];
-                    ssList.Add(ss);
-                    temp = "-42069";
-                }
-                if (hadComma && modified)
-                    temp = temp + ",";
-                backTogether.Append(temp + "\n");
-            }
-            file = backTogether.ToString();
-            JsonLoadSettings settings = new JsonLoadSettings();
-            settings.CommentHandling = CommentHandling.Ignore;
-            JObject root = null;
-            //load json for editing
-            try
-            {
-                root = JObject.Parse(file, settings);
-            }
-            catch (JsonReaderException j)
-            {
-                Settings.appendToLog("ERROR: Failed to patch " + jsonFile);
-                //MessageBox.Show("ERROR: Failed to patch " + jsonFile);
-                if (Program.testMode)
-                {
-                    //in test mode this is worthy of an EXCEPTION
-                    throw new JsonReaderException(j.Message);
-                }
-            }
-            //if it failed to parse show the message (above) and pull out
-            if (root == null)
-                return;
-            if (mode == null || mode.Equals("") || mode.Equals("edit") || mode.Equals("arrayEdit"))
-            {
-                //the actual patch method
-                JValue newObject = (JValue)root.SelectToken(jsonPath);
-                //JValue newObject = null;
-                //pull out if it failed to get the selection
-                if (newObject == null)
-                {
-                    Settings.appendToLog("ERROR: path " + jsonPath + " not found for " + Path.GetFileName(jsonFile));
-                }
-                else if (useBool)
-                {
-                    newObject.Value = newValueBool;
-                }
-                else if (useInt)
-                {
-                    newObject.Value = newValueInt;
-                }
-                else if (useDouble)
-                {
-                    newObject.Value = newValueDouble;
-                }
-                else //string
-                {
-                    newObject.Value = newValue;
-                }
-            }
-            else if (mode.Equals("remove"))
-            {
-                //TODO
-            }
-            else if (mode.Equals("arrayRemove"))
-            {
-                //TODO
-            }
-            else if (mode.Equals("add"))
-            {
-                //TODO
-            }
-            else if (mode.Equals("arrayAdd"))
-            {
-                //TODO
-            }
-            else
-            {
-                Settings.appendToLog("ERROR: Unknown json patch mode, " + mode);
-            }
-            StringBuilder rebuilder = new StringBuilder();
-            string[] putBackDollas = root.ToString().Split('\n');
-            for (int i = 0; i < putBackDollas.Count(); i++)
-            {
-                string temp = putBackDollas[i];
-                if (Regex.IsMatch(temp, "-69420"))//look for the temp value
-                {
-                    //array of string save and text file are in sync, so when one is found,
-                    //take it from index 0 and remove from the list at index 0
-                    temp = "\"" + ssList[0].name + "\"" + ": $" + ssList[0].value;
-                    putBackDollas[i] = temp;
-                    ssList.RemoveAt(0);
-                }
-                else if (Regex.IsMatch(temp, "-42069"))
-                {
-                    temp = "$" + ssList[0].value;
-                    putBackDollas[i] = temp;
-                    ssList.RemoveAt(0);
-                }
-                rebuilder.Append(putBackDollas[i] + "\n");
-            }
-            if (ssList.Count != 0)
-                Settings.appendToLog("There was an error with patching the file " + jsonFile + ", with extra refrences");
-            File.WriteAllText(jsonFile, rebuilder.ToString());
         }
         //parses a patch xml file into an xml patch instance in memory to be enqueued
         private void createPatchList(string xmlFile)
@@ -1543,8 +1034,8 @@ namespace RelhaxModpack
             if (!isClientVersionSupported(tanksVersion))
             {
                 //log and inform the user
-                Settings.appendToLog("WARNING: Detected client version is " + tanksVersion + ", not supported");
-                Settings.appendToLog("Supported versions are: " + suportedVersions);
+                Utils.appendToLog("WARNING: Detected client version is " + tanksVersion + ", not supported");
+                Utils.appendToLog("Supported versions are: " + suportedVersions);
                 MessageBox.Show(Translations.getTranslatedString("detectedClientVersion") + ": " + tanksVersion + "\n" + Translations.getTranslatedString("supportedClientVersions") + ": " + suportedVersions + "\n" + Translations.getTranslatedString("supportNotGuarnteed"));
                 selectionListTanksVersion = supportedVersions[supportedVersions.Count() - 1];
             }
@@ -1771,7 +1262,7 @@ namespace RelhaxModpack
                 sw.Start();
                 downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
                 tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
-                Settings.appendToLog("downloading " + tempOldDownload);
+                Utils.appendToLog("downloading " + tempOldDownload);
                 currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile);
                 if (currentModDownloading.Length >= 200)
                 {
@@ -1794,7 +1285,7 @@ namespace RelhaxModpack
         {
             if (!File.Exists(localFile))
                 return false;
-            string crc = Settings.GetMd5Hash(localFile);
+            string crc = Utils.getMd5Hash(localFile);
             if (crc.Equals(remoteCRC))
                 return true;
             return false;
@@ -1927,7 +1418,7 @@ namespace RelhaxModpack
             numFilesToCopyDeleteExtract = 0;
             parrentProgressBar.Value = parrentProgressBar.Maximum;
             downloadProgress.Text = Translations.getTranslatedString("startingSmartUninstall");
-            Settings.appendToLog("Starting smart uninstall");
+            Utils.appendToLog("Starting smart uninstall");
             smartDeleteworker = new BackgroundWorker();
             smartDeleteworker.WorkerReportsProgress = true;
             smartDeleteworker.DoWork += new DoWorkEventHandler(smartDeleteworker_DoWork);
@@ -2104,52 +1595,52 @@ namespace RelhaxModpack
             if (!userExtract)
             {
                 //extract RelHax Mods
-                Settings.appendToLog("Starting Relhax Modpack Extraction");
+                Utils.appendToLog("Starting Relhax Modpack Extraction");
                 string downloadedFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
                 //extract dependencies
                 foreach (Dependency d in dependencies)
                 {
-                    Settings.appendToLog("Extracting Dependency " + d.dependencyZipFile);
+                    Utils.appendToLog("Extracting Dependency " + d.dependencyZipFile);
                     if (!d.dependencyZipFile.Equals("")) this.unzip(downloadedFilesDir + d.dependencyZipFile, tanksLocation);
                     extractworker.ReportProgress(1);
                 }
                 //extract mods
                 foreach (Mod m in modsToInstall)
                 {
-                    Settings.appendToLog("Extracting Mod " + m.modZipFile);
+                    Utils.appendToLog("Extracting Mod " + m.modZipFile);
                     if (!m.modZipFile.Equals("")) this.unzip(downloadedFilesDir + m.modZipFile, tanksLocation);
                     extractworker.ReportProgress(1);
                 }
                 //extract configs
                 foreach (Config c in configsToInstall)
                 {
-                    Settings.appendToLog("Extracting Config " + c.zipConfigFile);
+                    Utils.appendToLog("Extracting Config " + c.zipConfigFile);
                     if (!c.zipConfigFile.Equals("")) this.unzip(downloadedFilesDir + c.zipConfigFile, tanksLocation);
                     extractworker.ReportProgress(1);
                 }
                 foreach (SubConfig sc in subConfigsToInstall)
                 {
-                    Settings.appendToLog("Extracting SubConfig " + sc.zipFile);
+                    Utils.appendToLog("Extracting SubConfig " + sc.zipFile);
                     if (!sc.zipFile.Equals("")) this.unzip(downloadedFilesDir + sc.zipFile, tanksLocation);
                     extractworker.ReportProgress(1);
                 }
-                Settings.appendToLog("Finished Relhax Modpack Extraction");
+                Utils.appendToLog("Finished Relhax Modpack Extraction");
             }
             else
             {
                 //extract user mods
-                Settings.appendToLog("Starting Relhax Modpack User Mod Extraction");
+                Utils.appendToLog("Starting Relhax Modpack User Mod Extraction");
                 string downloadedFilesDir = Application.StartupPath + "\\RelHaxUserMods\\";
                 foreach (Mod m in userMods)
                 {
                     if (m.modChecked)
                     {
-                        Settings.appendToLog("Exracting " + Path.GetFileName(m.modZipFile));
+                        Utils.appendToLog("Exracting " + Path.GetFileName(m.modZipFile));
                         this.unzip(downloadedFilesDir + Path.GetFileName(m.modZipFile), tanksLocation);
                         extractworker.ReportProgress(1);
                     }
                 }
-                Settings.appendToLog("Finished Relhax Modpack User Mod Extraction");
+                Utils.appendToLog("Finished Relhax Modpack User Mod Extraction");
             }
 
         }
@@ -2174,10 +1665,10 @@ namespace RelhaxModpack
             }
             catch (NullReferenceException ne)
             {
-                Settings.appendToLog("EXCEPTION: traceback from instance: " + ne.InnerException);
-                Settings.appendToLog("Message: " + ne.Message);
-                Settings.appendToLog("From source: " + ne.Source);
-                Settings.appendToLog("Callstack: " + ne.StackTrace);
+                Utils.appendToLog("EXCEPTION: traceback from instance: " + ne.InnerException);
+                Utils.appendToLog("Message: " + ne.Message);
+                Utils.appendToLog("From source: " + ne.Source);
+                Utils.appendToLog("Callstack: " + ne.StackTrace);
                 MessageBox.Show(Translations.getTranslatedString("specialMessage1"));
             }
         }
@@ -2187,7 +1678,7 @@ namespace RelhaxModpack
             if (state == InstallState.extractRelhaxMods)
             {
                 state = InstallState.patchRelhaxMods;
-                Settings.appendToLog("Starting to patch Relhax Modpack Mods");
+                Utils.appendToLog("Starting to patch Relhax Modpack Mods");
                 this.patchFiles();
                 state = InstallState.extractUserMods;
                 this.backgroundExtract(true);
@@ -2196,7 +1687,7 @@ namespace RelhaxModpack
             else if (state == InstallState.extractUserMods)
             {
                 state = InstallState.patchUserMods;
-                Settings.appendToLog("Starting to patch Relhax User Mods");
+                Utils.appendToLog("Starting to patch Relhax User Mods");
                 this.patchFiles();
                 state = InstallState.restoreUserData;
                 this.restoreUserData();
@@ -2246,17 +1737,17 @@ namespace RelhaxModpack
                 string filePath = tanksLocation + "\\" + s;
                 if (File.Exists(filePath))
                 {
-                    //Settings.appendToLog("Deleting file " + filePath);
+                    //Utils.appendToLog("Deleting file " + filePath);
                     File.Delete(filePath);
                     smartDeleteworker.ReportProgress(numFilesToCopyDeleteExtract++);
                 }
             }
             //delete all the folders if nothing else is in them
-            Settings.appendToLog("Finished deleting, processing mods folder");
+            Utils.appendToLog("Finished deleting, processing mods folder");
             this.processDirectory(tanksLocation + "\\mods");
-            Settings.appendToLog("processing res_mods folder");
+            Utils.appendToLog("processing res_mods folder");
             this.processDirectory(tanksLocation + "\\res_mods");
-            Settings.appendToLog("creating directories if they arn't already there");
+            Utils.appendToLog("creating directories if they arn't already there");
             if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
             if (!Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\mods\\" + this.getFolderVersion(null));
         }
@@ -2274,7 +1765,7 @@ namespace RelhaxModpack
             downloadProgress.Text = Translations.getTranslatedString("done");
             childProgressBar.Value = 0;
             parrentProgressBar.Value = 0;
-            Settings.appendToLog("Uninstall complete");
+            Utils.appendToLog("Uninstall complete");
             state = InstallState.idle;
             toggleUIButtons(true);
         }
@@ -2329,11 +1820,11 @@ namespace RelhaxModpack
                     }
                     catch (UnauthorizedAccessException e)
                     {
-                        Settings.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
-                        Settings.appendToLog(e.StackTrace);
-                        Settings.appendToLog("inner message: " + e.Message);
-                        Settings.appendToLog("source: " + e.Source);
-                        Settings.appendToLog("target: " + e.TargetSite);
+                        Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
+                        Utils.appendToLog(e.StackTrace);
+                        Utils.appendToLog("inner message: " + e.Message);
+                        Utils.appendToLog("source: " + e.Source);
+                        Utils.appendToLog("target: " + e.TargetSite);
                         DialogResult res = MessageBox.Show(Translations.getTranslatedString("extractionErrorMessage"), Translations.getTranslatedString("extractionErrorHeader"), MessageBoxButtons.RetryCancel);
                         if (res == DialogResult.Retry)
                         {
@@ -2365,22 +1856,22 @@ namespace RelhaxModpack
                         }
                         catch (IOException e)
                         {
-                            Settings.appendToLog("EXCEPTION: IOException (call stack traceback)");
-                            Settings.appendToLog(e.StackTrace);
-                            Settings.appendToLog("inner message: " + e.Message);
-                            Settings.appendToLog("source: " + e.Source);
-                            Settings.appendToLog("target: " + e.TargetSite);
+                            Utils.appendToLog("EXCEPTION: IOException (call stack traceback)");
+                            Utils.appendToLog(e.StackTrace);
+                            Utils.appendToLog("inner message: " + e.Message);
+                            Utils.appendToLog("source: " + e.Source);
+                            Utils.appendToLog("target: " + e.TargetSite);
                             DialogResult result = MessageBox.Show(Translations.getTranslatedString("deleteErrorMessage"), Translations.getTranslatedString("deleteErrorHeader"), MessageBoxButtons.RetryCancel);
                             if (result == DialogResult.Cancel)
                                 Application.Exit();
                         }
                         catch (UnauthorizedAccessException e)
                         {
-                            Settings.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
-                            Settings.appendToLog(e.StackTrace);
-                            Settings.appendToLog("inner message: " + e.Message);
-                            Settings.appendToLog("source: " + e.Source);
-                            Settings.appendToLog("target: " + e.TargetSite);
+                            Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
+                            Utils.appendToLog(e.StackTrace);
+                            Utils.appendToLog("inner message: " + e.Message);
+                            Utils.appendToLog("source: " + e.Source);
+                            Utils.appendToLog("target: " + e.TargetSite);
                             DialogResult result = MessageBox.Show(Translations.getTranslatedString("deleteErrorMessage"), Translations.getTranslatedString("deleteErrorHeader"), MessageBoxButtons.RetryCancel);
                             if (result == DialogResult.Cancel)
                                 Application.Exit();
@@ -2405,8 +1896,8 @@ namespace RelhaxModpack
         {
             //save settings
             if (Program.saveSettings) Settings.saveSettings();
-            Settings.appendToLog("Application Closing");
-            Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
+            Utils.appendToLog("Application Closing");
+            Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
         }
         //hander for when the "large font" button is checked
         private void largerFontButton_CheckedChanged(object sender, EventArgs e)
@@ -2749,19 +2240,19 @@ namespace RelhaxModpack
         //new unistall method
         private void newUninstallMethod()
         {
-            Settings.appendToLog("Started Uninstallation process");
+            Utils.appendToLog("Started Uninstallation process");
             if (!File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
             {
-                Settings.appendToLog("ERROR: installedRelhaxFiles.log does not exist, prompt user to delete everything instead");
+                Utils.appendToLog("ERROR: installedRelhaxFiles.log does not exist, prompt user to delete everything instead");
                 DialogResult result = MessageBox.Show(Translations.getTranslatedString("noUninstallLogMessage"), Translations.getTranslatedString("noUninstallLogHeader"), MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
                 {
                     state = InstallState.uninstallResMods;
-                    Settings.appendToLog("User said yes to delete");
+                    Utils.appendToLog("User said yes to delete");
                     this.backgroundDelete(tanksLocation + "\\res_mods");
                     return;
                 }
-                Settings.appendToLog("User said no, aborting");
+                Utils.appendToLog("User said no, aborting");
                 return;
             }
             state = InstallState.smartUninstall;
@@ -2777,7 +2268,7 @@ namespace RelhaxModpack
                 if (Directory.GetFiles(directory).Length == 0 &&
                     Directory.GetDirectories(directory).Length == 0)
                 {
-                    Settings.appendToLog("Deleting empty directory " + directory);
+                    Utils.appendToLog("Deleting empty directory " + directory);
                     Directory.Delete(directory, false);
                 }
             }

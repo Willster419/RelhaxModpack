@@ -36,68 +36,7 @@ namespace RelhaxModpack
             fromAutoInstall = 2//this is for when the user started the application in auto install mode. this takes precedence over the above 2
         };
         private loadConfigMode loadMode = loadConfigMode.fromButton;
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        public static extern IntPtr FindWindow(string strClassName, string strWindowName);
-
-        [DllImport("shell32.dll")]
-        public static extern UInt32 SHAppBarMessage(UInt32 dwMessage, ref APPBARDATA pData);
-
-        public enum AppBarMessages
-        {
-            New = 0x00,
-            Remove = 0x01,
-            QueryPos = 0x02,
-            SetPos = 0x03,
-            GetState = 0x04,
-            GetTaskBarPos = 0x05,
-            Activate = 0x06,
-            GetAutoHideBar = 0x07,
-            SetAutoHideBar = 0x08,
-            WindowPosChanged = 0x09,
-            SetState = 0x0a
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct APPBARDATA
-        {
-            public UInt32 cbSize;
-            public IntPtr hWnd;
-            public UInt32 uCallbackMessage;
-            public UInt32 uEdge;
-            public Rectangle rc;
-            public Int32 lParam;
-        }
-
-        public enum AppBarStates
-        {
-            AutoHide = 0x01,
-            AlwaysOnTop = 0x02
-        }
-
-        /// <summary>
-        /// Set the Taskbar State option
-        /// </summary>
-        /// <param name="option">AppBarState to activate</param>
-        public void SetTaskbarState(AppBarStates option)
-        {
-            APPBARDATA msgData = new APPBARDATA();
-            msgData.cbSize = (UInt32)Marshal.SizeOf(msgData);
-            msgData.hWnd = FindWindow("System_TrayWnd", null);
-            msgData.lParam = (Int32)(option);
-            SHAppBarMessage((UInt32)AppBarMessages.SetState, ref msgData);
-        }
-
-        /// <summary>
-        /// Gets the current Taskbar state
-        /// </summary>
-        /// <returns>current Taskbar state</returns>
-        public AppBarStates GetTaskbarState()
-        {
-            APPBARDATA msgData = new APPBARDATA();
-            msgData.cbSize = (UInt32)Marshal.SizeOf(msgData);
-            msgData.hWnd = FindWindow("System_TrayWnd", null);
-            return (AppBarStates)SHAppBarMessage((UInt32)AppBarMessages.GetState, ref msgData);
-        }
+        
         public ModSelectionList(string version, string theTanksVersion, int mainWindowX, int mainWindowY)
         {
             InitializeComponent();
@@ -133,11 +72,14 @@ namespace RelhaxModpack
             string databaseURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/modInfo_" + tanksVersion + ".xml";
             if (Program.testMode)
                 databaseURL = "modInfo.xml";
-            this.createModStructure2(databaseURL);
-            bool duplicates = this.duplicates();
+            //create new lists for memory database and serialize from xml->lists
+            globalDependencies = new List<Dependency>();
+            parsedCatagoryList = new List<Catagory>();
+            Utils.createModStructure2(databaseURL,false,globalDependencies,parsedCatagoryList);
+            bool duplicates = Utils.duplicates(parsedCatagoryList);
             if (duplicates)
             {
-                Settings.appendToLog("CRITICAL: Duplicate mod name detected!!");
+                Utils.appendToLog("CRITICAL: Duplicate mod name detected!!");
                 MessageBox.Show("CRITICAL: Duplicate mod name detected!!");
                 Application.Exit();
             }
@@ -183,11 +125,11 @@ namespace RelhaxModpack
             TanksPath.Text = Translations.getTranslatedString("InstallingTo") + " " + tanksLocation;
             //if the task bar was set to auto hide, set it to always on top
             //it will be set back to auto hide when this window closes
-            AppBarStates currentState = GetTaskbarState();
-            if (currentState == AppBarStates.AutoHide)
+            Settings.AppBarStates currentState = Settings.GetTaskbarState();
+            if (currentState == Settings.AppBarStates.AutoHide)
             {
                 taskBarHidden = true;
-                SetTaskbarState(AppBarStates.AlwaysOnTop);
+                Settings.SetTaskbarState(Settings.AppBarStates.AlwaysOnTop);
             }
             //get the maximum height of the screen
             this.MaximumSize = Screen.FromControl(this).WorkingArea.Size;
@@ -255,7 +197,7 @@ namespace RelhaxModpack
         //must be only one catagory
         private void addAllMods()
         {
-            Settings.appendToLog("Loading ModSelectionList with view " + Settings.sView);
+            Utils.appendToLog("Loading ModSelectionList with view " + Settings.sView);
             foreach (TabPage t in this.modTabGroups.TabPages)
             {
                 foreach (Catagory c in parsedCatagoryList)
@@ -264,7 +206,7 @@ namespace RelhaxModpack
                     {
                         //matched the catagory to tab
                         //add to the ui every mod of that catagory
-                        this.sortModsList(c.mods);
+                        Utils.sortModsList(c.mods);
                         int i = 1;
                         LegacySelectionList lsl = null;
                         if (Settings.sView == Settings.SelectionView.legacy)
@@ -348,7 +290,7 @@ namespace RelhaxModpack
                 modCheckBox.FontWeight = System.Windows.FontWeights.Bold;
             modCheckBox.Content = m.name;
             //get the local md5 hash. a -1 indicates the file is not on the disk
-            string oldCRC2 = Settings.GetMd5Hash(modDownloadFilePath);
+            string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
             //if the CRC's don't match and the mod actually has a zip file
             if (!(m.crc.Equals(oldCRC2)) && (!m.modZipFile.Equals("")))
             {
@@ -411,7 +353,7 @@ namespace RelhaxModpack
                     }
                     //run the checksum logix
                     configControlRB.Content = m.configs[i].name;
-                    string oldCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
+                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
                     if (!oldCRC.Equals(m.configs[i].crc) && (!m.configs[i].crc.Equals("")))
                     {
                         configControlRB.Content = configControlRB.Content + " (Updated)";
@@ -449,7 +391,7 @@ namespace RelhaxModpack
                         subRB.Click += new System.Windows.RoutedEventHandler(subRB_Click);
                         //run checksum logic
                         subRB.Content = sc.name;
-                        string oldSubCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + sc.zipFile);
+                        string oldSubCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + sc.zipFile);
                         if (!oldSubCRC.Equals(sc.crc) && (!sc.zipFile.Equals("")))
                         {
                             subRB.Content = subRB.Content + " (Updated)";
@@ -476,7 +418,7 @@ namespace RelhaxModpack
                     //make the dropdown selection list
                     configControlDDALL.MinWidth = 100;
                     //run the crc logics
-                    string oldCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
+                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
                     if (!oldCRC.Equals(m.configs[i].crc) && (!m.configs[i].crc.Equals("")))
                     {
                         string toAdd = m.configs[i].name + "_Updated";
@@ -529,7 +471,7 @@ namespace RelhaxModpack
                     }
                     //run the checksum logix
                     configControlCB.Content = m.configs[i].name;
-                    string oldCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
+                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
                     if (!oldCRC.Equals(m.configs[i].crc) && (!m.configs[i].crc.Equals("")))
                     {
                         configControlCB.Content = configControlCB.Content + " (Updated)";
@@ -567,7 +509,7 @@ namespace RelhaxModpack
                         subRB.Click += new System.Windows.RoutedEventHandler(subRB_Click);
                         //run checksum logic
                         subRB.Content = sc.name;
-                        string oldSubCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + sc.zipFile);
+                        string oldSubCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + sc.zipFile);
                         if (!oldSubCRC.Equals(sc.crc) && (!sc.zipFile.Equals("")))
                         {
                             subRB.Content = subRB.Content + " (Updated)";
@@ -582,7 +524,7 @@ namespace RelhaxModpack
                 }
                 else
                 {
-                    Settings.appendToLog("WARNING: Unknown config type for " + m.configs[i].name + ": " + m.configs[i].type);
+                    Utils.appendToLog("WARNING: Unknown config type for " + m.configs[i].name + ": " + m.configs[i].type);
                 }
             }
             //add the mod check box to the legacy tree view
@@ -603,7 +545,7 @@ namespace RelhaxModpack
             string catagoryName = rb.realName.Split('_')[0];
             string configName = rb.realName.Split('_')[2];
             string subConfigName = rb.realName.Split('_')[3];
-            Mod m = this.linkMod(modName, catagoryName);
+            Mod m = Utils.linkMod(modName, catagoryName,parsedCatagoryList);
             Config cfg = m.getConfig(configName);
             SubConfig subc = cfg.getSubConfig(subConfigName);
             //the subconfig treeviewitem
@@ -646,7 +588,7 @@ namespace RelhaxModpack
             string modName = cb.realName.Split('_')[1];
             string catagoryName = cb.realName.Split('_')[0];
             string configName = cb.realName.Split('_')[2];
-            Mod m = this.linkMod(modName, catagoryName);
+            Mod m = Utils.linkMod(modName, catagoryName, parsedCatagoryList);
             Config cfg = m.getConfig(configName);
             cfg.configChecked = (bool)cb.IsChecked;
             //process the subconfigs
@@ -705,7 +647,7 @@ namespace RelhaxModpack
             //get all cool info
             string catagory = cb.realName.Split('_')[0];
             string mod = cb.realName.Split('_')[1];
-            Mod m = this.getCatagory(catagory).getMod(mod);
+            Mod m = Utils.getCatagory(catagory,parsedCatagoryList).getMod(mod);
             //getting here means that an item is confirmed to be selected
             string configName = (string)cb.SelectedItem;
             //in case "_updated" was appended, split the string
@@ -739,7 +681,7 @@ namespace RelhaxModpack
             string modName = cb.realName.Split('_')[1];
             string catagoryName = cb.realName.Split('_')[0];
             string configName = cb.realName.Split('_')[2];
-            Mod m = this.linkMod(modName, catagoryName);
+            Mod m = Utils.linkMod(modName, catagoryName, parsedCatagoryList);
             Config cfg = m.getConfig(configName);
             //the config treeview
             System.Windows.Controls.TreeViewItem item0 = (System.Windows.Controls.TreeViewItem)cb.Parent;
@@ -824,10 +766,10 @@ namespace RelhaxModpack
             if (sender is RelhaxCheckbox)
             {
                 RelhaxCheckbox cb = (RelhaxCheckbox)sender;
-                Mod m = this.linkMod(cb.realName.Split('_')[1]);
+                Mod m = Utils.linkMod(cb.realName.Split('_')[1], parsedCatagoryList);
                 string name = m.name;
                 //get the mod and/or config
-                List<Picture> picturesList = this.sortPictureList(m.picList);
+                List<Picture> picturesList = Utils.sortPictureList(m.picList);
                 string desc = m.description;
                 string updateNotes = m.updateComment;
                 string devurl = m.devURL;
@@ -846,8 +788,8 @@ namespace RelhaxModpack
             RelhaxCheckbox cb = (RelhaxCheckbox)sender;
             string modName = cb.realName.Split('_')[1];
             string catagoryName = cb.realName.Split('_')[0];
-            Mod m = this.linkMod(modName, catagoryName);
-            Catagory cat = this.getCatagory(catagoryName);
+            Mod m = Utils.linkMod(modName, catagoryName, parsedCatagoryList);
+            Catagory cat = Utils.getCatagory(catagoryName,parsedCatagoryList);
             System.Windows.Controls.TreeViewItem TVI = (System.Windows.Controls.TreeViewItem)cb.Parent;
             System.Windows.Controls.TreeView TV = (System.Windows.Controls.TreeView)TVI.Parent;
             //check to see if this is a single selection categtory
@@ -1037,7 +979,7 @@ namespace RelhaxModpack
                     configControlRB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
                     //run checksum logic
                     configControlRB.Text = m.configs[i].name;
-                    string oldCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
+                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
                     if (!oldCRC.Equals(m.configs[i].crc) && (!m.configs[i].crc.Equals("")))
                     {
                         configControlRB.Text = configControlRB.Text + " (Updated)";
@@ -1090,7 +1032,7 @@ namespace RelhaxModpack
                         subRB.CheckedChanged += new EventHandler(subRB_CheckedChanged);
                         //run checksum logic
                         subRB.Text = sc.name;
-                        string oldSubCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + sc.zipFile);
+                        string oldSubCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + sc.zipFile);
                         if (!oldSubCRC.Equals(sc.crc) && (!sc.zipFile.Equals("")))
                         {
                             subRB.Text = subRB.Text + " (Updated)";
@@ -1123,7 +1065,7 @@ namespace RelhaxModpack
                         configPanel.Controls.Add(configControlDDALL);
                     }
                     //run the checksum locics
-                    string oldCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
+                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
                     if (!oldCRC.Equals(m.configs[i].crc) && (!m.configs[i].crc.Equals("")))
                     {
                         string toAdd = m.configs[i].name + "_Updated";
@@ -1174,7 +1116,7 @@ namespace RelhaxModpack
                     configControlCB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
                     //checksum logic
                     configControlCB.Text = m.configs[i].name;
-                    string oldCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
+                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipConfigFile);
                     if (!oldCRC.Equals(m.configs[i].crc) && (!m.configs[i].crc.Equals("")))
                     {
                         configControlCB.Text = configControlCB.Text + " (Updated)";
@@ -1227,7 +1169,7 @@ namespace RelhaxModpack
                         subRB.CheckedChanged += new EventHandler(subRB_CheckedChanged);
                         //run checksum logic
                         subRB.Text = sc.name;
-                        string oldSubCRC = Settings.GetMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + sc.zipFile);
+                        string oldSubCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + sc.zipFile);
                         if (!oldSubCRC.Equals(sc.crc) && (!sc.zipFile.Equals("")))
                         {
                             subRB.Text = subRB.Text + " (Updated)";
@@ -1243,7 +1185,7 @@ namespace RelhaxModpack
                 }
                 else
                 {
-                    Settings.appendToLog("WARNING: Unknown config type for " + m.configs[i].name + ": " + m.configs[i].type);
+                    Utils.appendToLog("WARNING: Unknown config type for " + m.configs[i].name + ": " + m.configs[i].type);
                 }
             }
             //make the mod check box
@@ -1257,7 +1199,7 @@ namespace RelhaxModpack
             modCheckBox.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
             //the mod checksum logic
             string modDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.modZipFile;
-            string oldCRC2 = Settings.GetMd5Hash(modDownloadPath);
+            string oldCRC2 = Utils.getMd5Hash(modDownloadPath);
             //if the CRC's don't match and the mod actually has a zip file
             if (!(m.crc.Equals(oldCRC2)) && (!m.modZipFile.Equals("")))
             {
@@ -1343,10 +1285,10 @@ namespace RelhaxModpack
             if (sender is CheckBox)
             {
                 CheckBox cb = (CheckBox)sender;
-                Mod m = this.linkMod(cb.Name.Split('_')[1]);
+                Mod m = Utils.linkMod(cb.Name.Split('_')[1], parsedCatagoryList);
                 string name = m.name;
                 //get the mod and/or config
-                List<Picture> picturesList = this.sortPictureList(m.picList);
+                List<Picture> picturesList = Utils.sortPictureList(m.picList);
                 string desc = m.description;
                 string updateNotes = m.updateComment;
                 string devurl = m.devURL;
@@ -1368,7 +1310,7 @@ namespace RelhaxModpack
             //this is safe because it will never be a user mod
             string catagory = cb.Name.Split('_')[0];
             string mod = cb.Name.Split('_')[1];
-            Mod m = this.getCatagory(catagory).getMod(mod);
+            Mod m = Utils.getCatagory(catagory,parsedCatagoryList).getMod(mod);
             //if no index selected, select one
             if (cb.SelectedIndex == -1)
             {
@@ -1408,7 +1350,7 @@ namespace RelhaxModpack
             string modName = cb.Name.Split('_')[1];
             string catagoryName = cb.Name.Split('_')[0];
             string configName = cb.Name.Split('_')[2];
-            Mod m = this.linkMod(modName, catagoryName);
+            Mod m = Utils.linkMod(modName, catagoryName, parsedCatagoryList);
             Config cfg = m.getConfig(configName);
             Panel configPanel = (Panel)cb.Parent;
             if (!cb.Enabled || !cb.Checked)
@@ -1506,7 +1448,7 @@ namespace RelhaxModpack
             string catagoryName = rb.Name.Split('_')[0];
             string configName = rb.Name.Split('_')[2];
             Panel configPanel = (Panel)rb.Parent;
-            Mod m = this.linkMod(modName, catagoryName);
+            Mod m = Utils.linkMod(modName, catagoryName, parsedCatagoryList);
             Config c = m.getConfig(configName);
             //verify mod is enabled
             if (!rb.Enabled || !rb.Checked)
@@ -1622,7 +1564,7 @@ namespace RelhaxModpack
             string configName = rb.Name.Split('_')[2];
             string subConfig = rb.Name.Split('_')[3];
             Panel configSelection = (Panel)rb.Parent;
-            Mod m = this.linkMod(modName, catagoryName);
+            Mod m = Utils.linkMod(modName, catagoryName, parsedCatagoryList);
             Config c = m.getConfig(configName);
             Panel configPanel = (Panel)rb.Parent;
             SubConfig sfg = c.getSubConfig(subConfig);
@@ -1667,7 +1609,7 @@ namespace RelhaxModpack
                 if (t.Text.Equals("User Mods"))
                 {
                     //this is a check from the user checkboxes
-                    Mod m2 = this.getUserMod(cbUser.Text);
+                    Mod m2 = Utils.getUserMod(cbUser.Text,userMods);
                     if (m2 != null)
                         m2.modChecked = cbUser.Checked;
                     return;
@@ -1682,8 +1624,8 @@ namespace RelhaxModpack
             TabPage modTab = (TabPage)modPanel.Parent;
             string modName = cb.Name.Split('_')[1];
             string catagoryName = cb.Name.Split('_')[0];
-            Mod m = this.linkMod(modName, catagoryName);
-            Catagory cat = this.getCatagory(catagoryName);
+            Mod m = Utils.linkMod(modName, catagoryName, parsedCatagoryList);
+            Catagory cat = Utils.getCatagory(catagoryName,parsedCatagoryList);
 
             //check to see if the mod is part of a single selection only catagory
             //if it is uncheck the other mods first, then deal with mod loop selection
@@ -1817,397 +1759,6 @@ namespace RelhaxModpack
             }
             
         }
-        //parses the xml mod info into the memory database
-        private void createModStructure2(string databaseURL)
-        {
-            XmlDocument doc = new XmlDocument();
-            try
-            {
-                doc.Load(databaseURL);
-            }
-            catch (XmlException)
-            {
-                Settings.appendToLog("CRITICAL: Failed to read database!");
-                MessageBox.Show(Translations.getTranslatedString("databaseReadFailed"));
-                Application.Exit();
-            }
-            catch (System.Net.WebException e)
-            {
-                Settings.appendToLog("EXCEPTION: WebException (call stack traceback)");
-                Settings.appendToLog(e.StackTrace);
-                Settings.appendToLog("inner message: " + e.Message);
-                Settings.appendToLog("source: " + e.Source);
-                Settings.appendToLog("target: " + e.TargetSite);
-                Settings.appendToLog("Additional Info: Tried to access " + databaseURL);
-                MessageBox.Show(Translations.getTranslatedString("databaseNotFound"));
-                Application.Exit();
-            }
-            //add the global dependencies
-            globalDependencies = new List<Dependency>();
-            XmlNodeList globalDependenciesList = doc.SelectNodes("//modInfoAlpha.xml/globaldependencies/globaldependency");
-            foreach (XmlNode dependencyNode in globalDependenciesList)
-            {
-                Dependency d = new Dependency();
-                foreach (XmlNode globs in dependencyNode.ChildNodes)
-                {
-                    switch (globs.Name)
-                    {
-                        case "dependencyZipFile":
-                            d.dependencyZipFile = globs.InnerText;
-                            break;
-                        case "dependencyZipCRC":
-                            d.dependencyZipCRC = globs.InnerText;
-                            break;
-                        case "startAddress":
-                            d.startAddress = globs.InnerText;
-                            break;
-                        case "endAddress":
-                            d.endAddress = globs.InnerText;
-                            break;
-                        case "dependencyenabled":
-                            d.enabled = Settings.parseBool(globs.InnerText, false);
-                            break;
-                    }
-                }
-                globalDependencies.Add(d);
-            }
-            XmlNodeList catagoryList = doc.SelectNodes("//modInfoAlpha.xml/catagories/catagory");
-            parsedCatagoryList = new List<Catagory>();
-            foreach (XmlNode catagoryHolder in catagoryList)
-            {
-                Catagory cat = new Catagory();
-                foreach (XmlNode catagoryNode in catagoryHolder.ChildNodes)
-                {
-                    switch (catagoryNode.Name)
-                    {
-                        case "name":
-                            cat.name = catagoryNode.InnerText;
-                            break;
-                        case "selectionType":
-                            cat.selectionType = catagoryNode.InnerText;
-                            break;
-                        case "mods":
-                            foreach (XmlNode modHolder in catagoryNode.ChildNodes)
-                            {
-                                Mod m = new Mod();
-                                foreach (XmlNode modNode in modHolder.ChildNodes)
-                                {
-                                    switch (modNode.Name)
-                                    {
-                                        case "name":
-                                            m.name = modNode.InnerText;
-                                            break;
-                                        case "version":
-                                            m.version = modNode.InnerText;
-                                            break;
-                                        case "size":
-                                            m.size = Settings.parseFloat(modNode.InnerText, 0.0f);
-                                            break;
-                                        case "modzipfile":
-                                            m.modZipFile = modNode.InnerText;
-                                            break;
-                                        case "startAddress":
-                                            m.startAddress = modNode.InnerText;
-                                            break;
-                                        case "endAddress":
-                                            m.endAddress = modNode.InnerText;
-                                            break;
-                                        case "modzipcrc":
-                                            m.crc = modNode.InnerText;
-                                            break;
-                                        case "enabled":
-                                            m.enabled = Settings.parseBool(modNode.InnerText, false);
-                                            break;
-                                        case "description":
-                                            m.description = modNode.InnerText;
-                                            break;
-                                        case "updateComment":
-                                            m.updateComment = modNode.InnerText;
-                                            break;
-                                        case "devURL":
-                                            m.devURL = modNode.InnerText;
-                                            break;
-                                        case "userDatas":
-                                            foreach (XmlNode userDataNode in modNode.ChildNodes)
-                                            {
-
-                                                switch (userDataNode.Name)
-                                                {
-                                                    case "userData":
-                                                        string innerText = userDataNode.InnerText;
-                                                        if (innerText == null)
-                                                            continue;
-                                                        if (innerText.Equals(""))
-                                                            continue;
-                                                        m.userFiles.Add(innerText);
-                                                        break;
-                                                }
-
-                                            }
-                                            break;
-                                        case "pictures":
-                                            //parse every picture
-                                            foreach (XmlNode pictureHolder in modNode.ChildNodes)
-                                            {
-                                                foreach (XmlNode pictureNode in pictureHolder.ChildNodes)
-                                                {
-                                                    switch (pictureNode.Name)
-                                                    {
-                                                        case "URL":
-                                                            string innerText = pictureNode.InnerText;
-                                                            if (innerText == null)
-                                                                continue;
-                                                            if (innerText.Equals(""))
-                                                                continue;
-                                                            m.picList.Add(new Picture("Mod: " + m.name, pictureNode.InnerText));
-                                                            break;
-                                                    }
-                                                }
-                                            }
-                                            break;
-                                        case "dependencies":
-                                            //parse all dependencies
-                                            foreach (XmlNode dependencyHolder in modNode.ChildNodes)
-                                            {
-                                                Dependency d = new Dependency();
-                                                foreach (XmlNode dependencyNode in dependencyHolder.ChildNodes)
-                                                {
-                                                    switch (dependencyNode.Name)
-                                                    {
-                                                        case "dependencyZipFile":
-                                                            d.dependencyZipFile = dependencyNode.InnerText;
-                                                            break;
-                                                        case "dependencyZipCRC":
-                                                            d.dependencyZipCRC = dependencyNode.InnerText;
-                                                            break;
-                                                        case "startAddress":
-                                                            d.startAddress = dependencyNode.InnerText;
-                                                            break;
-                                                        case "endAddress":
-                                                            d.endAddress = dependencyNode.InnerText;
-                                                            break;
-                                                        case "dependencyenabled":
-                                                            d.enabled = Settings.parseBool(dependencyNode.InnerText, false);
-                                                            break;
-                                                    }
-                                                }
-                                                m.modDependencies.Add(d);
-                                            }
-                                            break;
-                                        case "configs":
-                                            //parse every config for that mod
-                                            foreach (XmlNode configHolder in modNode.ChildNodes)
-                                            {
-                                                Config c = new Config();
-                                                foreach (XmlNode configNode in configHolder.ChildNodes)
-                                                {
-                                                    switch (configNode.Name)
-                                                    {
-                                                        case "name":
-                                                            c.name = configNode.InnerText;
-                                                            break;
-                                                        case "configzipfile":
-                                                            c.zipConfigFile = configNode.InnerText;
-                                                            break;
-                                                        case "startAddress":
-                                                            c.startAddress = configNode.InnerText;
-                                                            break;
-                                                        case "endAddress":
-                                                            c.endAddress = configNode.InnerText;
-                                                            break;
-                                                        case "configzipcrc":
-                                                            c.crc = configNode.InnerText;
-                                                            break;
-                                                        case "configenabled":
-                                                            c.enabled = Settings.parseBool(configNode.InnerText, false);
-                                                            break;
-                                                        case "size":
-                                                            c.size = Settings.parseFloat(configNode.InnerText, 0.0f);
-                                                            break;
-                                                        case "configtype":
-                                                            c.type = configNode.InnerText;
-                                                            break;
-                                                        case "pictures":
-                                                            //parse every picture
-                                                            foreach (XmlNode pictureHolder in configNode.ChildNodes)
-                                                            {
-                                                                foreach (XmlNode pictureNode in pictureHolder.ChildNodes)
-                                                                {
-                                                                    switch (pictureNode.Name)
-                                                                    {
-                                                                        case "URL":
-                                                                            string innerText = pictureNode.InnerText;
-                                                                            if (innerText == null)
-                                                                                continue;
-                                                                            if (innerText.Equals(""))
-                                                                                continue;
-                                                                            m.picList.Add(new Picture("Config: " + c.name, pictureNode.InnerText));
-                                                                            break;
-                                                                    }
-                                                                }
-                                                            }
-                                                            break;
-                                                        case "subConfigs":
-                                                            //parse every subConfig
-                                                            foreach (XmlNode subConfigHolder in configNode.ChildNodes)
-                                                            {
-                                                                SubConfig subC = new SubConfig();
-                                                                foreach (XmlNode subConfigNode in subConfigHolder.ChildNodes)
-                                                                {
-                                                                    switch (subConfigNode.Name)
-                                                                    {
-                                                                        case "name":
-                                                                            subC.name = subConfigNode.InnerText;
-                                                                            break;
-                                                                        case "zipFile":
-                                                                            subC.zipFile = subConfigNode.InnerText;
-                                                                            break;
-                                                                        case "crc":
-                                                                            subC.crc = subConfigNode.InnerText;
-                                                                            break;
-                                                                        case "enabled":
-                                                                            subC.enabled = Settings.parseBool(subConfigNode.InnerText, false);
-                                                                            break;
-                                                                        case "type":
-                                                                            subC.type = subConfigNode.InnerText;
-                                                                            break;
-                                                                        case "pictures":
-                                                                            //parse every picture
-                                                                            foreach (XmlNode pictureHolder in subConfigNode.ChildNodes)
-                                                                            {
-                                                                                foreach (XmlNode pictureNode in pictureHolder.ChildNodes)
-                                                                                {
-                                                                                    switch (pictureNode.Name)
-                                                                                    {
-                                                                                        case "URL":
-                                                                                            string innerText = pictureNode.InnerText;
-                                                                                            if (innerText == null)
-                                                                                                continue;
-                                                                                            if (innerText.Equals(""))
-                                                                                                continue;
-                                                                                            m.picList.Add(new Picture("Config: " + c.name, pictureNode.InnerText));
-                                                                                            break;
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            break;
-                                                                        case "dependencies":
-                                                                            //parse every dependency
-                                                                            foreach (XmlNode dependencyHolder in subConfigNode.ChildNodes)
-                                                                            {
-                                                                                Dependency d = new Dependency();
-                                                                                foreach (XmlNode dependencyNode in dependencyHolder.ChildNodes)
-                                                                                {
-                                                                                    switch (dependencyNode.Name)
-                                                                                    {
-                                                                                        case "dependencyZipFile":
-                                                                                            d.dependencyZipFile = dependencyNode.InnerText;
-                                                                                            break;
-                                                                                        case "dependencyZipCRC":
-                                                                                            d.dependencyZipCRC = dependencyNode.InnerText;
-                                                                                            break;
-                                                                                        case "startAddress":
-                                                                                            d.startAddress = dependencyNode.InnerText;
-                                                                                            break;
-                                                                                        case "endAddress":
-                                                                                            d.endAddress = dependencyNode.InnerText;
-                                                                                            break;
-                                                                                        case "dependencyEnabled":
-                                                                                            d.enabled = Settings.parseBool(dependencyNode.InnerText, false);
-                                                                                            break;
-                                                                                    }
-                                                                                }
-                                                                                subC.dependencies.Add(d);
-                                                                            }
-                                                                            break;
-                                                                        case "size":
-                                                                            subC.size = Settings.parseFloat(subConfigNode.InnerText, 0.0f);
-                                                                            break;
-                                                                        case "startAddress":
-                                                                            subC.startAddress = subConfigNode.InnerText;
-                                                                            break;
-                                                                        case "endAddress":
-                                                                            subC.endAddress = subConfigNode.InnerText;
-                                                                            break;
-                                                                    }
-                                                                }
-                                                                c.subConfigs.Add(subC);
-                                                            }
-                                                            break;
-                                                        case "dependencies":
-                                                            //parse all dependencies
-                                                            foreach (XmlNode dependencyHolder in configNode.ChildNodes)
-                                                            {
-                                                                Dependency d = new Dependency();
-                                                                foreach (XmlNode dependencyNode in dependencyHolder.ChildNodes)
-                                                                {
-                                                                    switch (dependencyNode.Name)
-                                                                    {
-                                                                        case "dependencyZipFile":
-                                                                            d.dependencyZipFile = dependencyNode.InnerText;
-                                                                            break;
-                                                                        case "dependencyZipCRC":
-                                                                            d.dependencyZipCRC = dependencyNode.InnerText;
-                                                                            break;
-                                                                        case "startAddress":
-                                                                            d.startAddress = dependencyNode.InnerText;
-                                                                            break;
-                                                                        case "endAddress":
-                                                                            d.endAddress = dependencyNode.InnerText;
-                                                                            break;
-                                                                        case "dependencyenabled":
-                                                                            d.enabled = Settings.parseBool(dependencyNode.InnerText, false);
-                                                                            break;
-                                                                    }
-                                                                }
-                                                                m.modDependencies.Add(d);
-                                                            }
-                                                            break;
-                                                    }
-                                                }
-                                                m.configs.Add(c);
-                                            }
-                                            break;
-                                    }
-                                }
-                                cat.mods.Add(m);
-                            }
-                            break;
-                        case "dependencies":
-                            //parse every config for that mod
-                            foreach (XmlNode dependencyHolder in catagoryNode.ChildNodes)
-                            {
-                                Dependency d = new Dependency();
-                                foreach (XmlNode dependencyNode in dependencyHolder.ChildNodes)
-                                {
-                                    switch (dependencyNode.Name)
-                                    {
-                                        case "dependencyZipFile":
-                                            d.dependencyZipFile = dependencyNode.InnerText;
-                                            break;
-                                        case "dependencyZipCRC":
-                                            d.dependencyZipCRC = dependencyNode.InnerText;
-                                            break;
-                                        case "startAddress":
-                                            d.startAddress = dependencyNode.InnerText;
-                                            break;
-                                        case "endAddress":
-                                            d.endAddress = dependencyNode.InnerText;
-                                            break;
-                                        case "dependencyenabled":
-                                            d.enabled = Settings.parseBool(dependencyNode.InnerText, false);
-                                            break;
-                                    }
-                                }
-                                cat.dependencies.Add(d);
-                            }
-                            break;
-                    }
-                }
-                parsedCatagoryList.Add(cat);
-            }
-
-        }
         //resizing handler for the window
         private void ModSelectionList_SizeChanged(object sender, EventArgs e)
         {
@@ -2276,59 +1827,6 @@ namespace RelhaxModpack
         {
             this.Close();
         }
-        //returns the mod based on catagory and mod name
-        private Mod linkMod(string modName, string catagoryName)
-        {
-            foreach (Catagory c in parsedCatagoryList)
-            {
-                foreach (Mod m in c.mods)
-                {
-                    if (c.name.Equals(catagoryName) && m.name.Equals(modName))
-                    {
-                        //found it
-                        return m;
-                    }
-                }
-            }
-            return null;
-        }
-        //returns the mod based and mod name
-        private Mod linkMod(string modName)
-        {
-            foreach (Catagory c in parsedCatagoryList)
-            {
-                foreach (Mod m in c.mods)
-                {
-                    if (m.name.Equals(modName))
-                    {
-                        //found it
-                        return m;
-                    }
-                }
-            }
-            return null;
-        }
-        //returns the catagory based on the catagory name
-        private Catagory getCatagory(string catName)
-        {
-            foreach (Catagory c in parsedCatagoryList)
-            {
-                if (c.name.Equals(catName)) return c;
-            }
-            return null;
-        }
-        //gets the user mod based on it's name
-        private Mod getUserMod(string modName)
-        {
-            foreach (Mod m in userMods)
-            {
-                if (m.name.Equals(modName))
-                {
-                    return m;
-                }
-            }
-            return null;
-        }
         //saves the currently checked configs and mods
         private void saveConfig(bool fromButton)
         {
@@ -2351,7 +1849,7 @@ namespace RelhaxModpack
             if (Settings.saveLastConfig && !fromButton)
             {
                 savePath = Application.StartupPath + "\\RelHaxUserConfigs\\lastInstalledConfig.xml";
-                Settings.appendToLog("Save last config checked, saving to " + savePath);
+                Utils.appendToLog("Save last config checked, saving to " + savePath);
             }
             //XmlDocument save time!
             XmlDocument doc = new XmlDocument();
@@ -2446,7 +1944,7 @@ namespace RelhaxModpack
                 filePath = Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName;
                 if (!File.Exists(filePath))
                 {
-                    Settings.appendToLog("ERROR: " + filePath + " not found, not loading configs");
+                    Utils.appendToLog("ERROR: " + filePath + " not found, not loading configs");
                     MessageBox.Show(Translations.getTranslatedString("configLoadFailed"));
                     return;
                 }
@@ -2456,7 +1954,7 @@ namespace RelhaxModpack
                 filePath = Application.StartupPath + "\\RelHaxUserConfigs\\lastInstalledConfig.xml";
                 if (!File.Exists(filePath))
                 {
-                    Settings.appendToLog("ERROR: " + filePath + " not found, not loading configs");
+                    Utils.appendToLog("ERROR: " + filePath + " not found, not loading configs");
                     //MessageBox.Show(Translations.getTranslatedString("configLoadFailed"));
                     return;
                 }
@@ -2476,7 +1974,7 @@ namespace RelhaxModpack
                 filePath = loadLocation.FileName;
             }
             this.clearSelectionMemory();
-            Settings.appendToLog("Loading mod selections from " + filePath);
+            Utils.appendToLog("Loading mod selections from " + filePath);
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
             //get a list of mods
@@ -2491,16 +1989,16 @@ namespace RelhaxModpack
                     switch (nn.Name)
                     {
                         case "name":
-                            m = this.linkMod(nn.InnerText);
+                            m = Utils.linkMod(nn.InnerText, parsedCatagoryList);
                             if (m == null)
                             {
-                                Settings.appendToLog("WARNING: mod \"" + nn.InnerText + "\" not found");
+                                Utils.appendToLog("WARNING: mod \"" + nn.InnerText + "\" not found");
                                 MessageBox.Show(Translations.getTranslatedString("modNotFound_1") + nn.InnerText + Translations.getTranslatedString("modNotFound_2"));
                                 continue;
                             }
                             if (m.enabled)
                             {
-                                Settings.appendToLog("Checking mod " + m.name);
+                                Utils.appendToLog("Checking mod " + m.name);
                                 m.modChecked = true;
                             }
                             break;
@@ -2520,13 +2018,13 @@ namespace RelhaxModpack
                                             c = m.getConfig(nnnn.InnerText);
                                             if (c == null)
                                             {
-                                                Settings.appendToLog("WARNING: config \"" + nnnn.InnerText + "\" not found for mod \"" + nn.InnerText + "\"");
+                                                Utils.appendToLog("WARNING: config \"" + nnnn.InnerText + "\" not found for mod \"" + nn.InnerText + "\"");
                                                 MessageBox.Show(Translations.getTranslatedString("configNotFound_1") + nnnn.InnerText + Translations.getTranslatedString("configNotFound_2") + nn.InnerText + Translations.getTranslatedString("configNotFound_3"));
                                                 continue;
                                             }
                                             if (c.enabled)
                                             {
-                                                Settings.appendToLog("Checking config " + c.name);
+                                                Utils.appendToLog("Checking config " + c.name);
                                                 c.configChecked = true;
                                             }
                                             break;
@@ -2544,13 +2042,13 @@ namespace RelhaxModpack
                                                             sc = c.getSubConfig(subConfigNode.InnerText);
                                                             if (sc == null)
                                                             {
-                                                                Settings.appendToLog("WARNING: subConfig \"" + subConfigNode.InnerText + "\" not found for config \"" + nnnn.InnerText + "\"");
+                                                                Utils.appendToLog("WARNING: subConfig \"" + subConfigNode.InnerText + "\" not found for config \"" + nnnn.InnerText + "\"");
                                                                 MessageBox.Show(Translations.getTranslatedString("configNotFound_1") + subConfigNode.InnerText + Translations.getTranslatedString("configNotFound_2") + nnnn.InnerText + Translations.getTranslatedString("configNotFound_3"));
                                                                 continue;
                                                             }
                                                             if (sc.enabled)
                                                             {
-                                                                Settings.appendToLog("Checking subConfig " + sc.name);
+                                                                Utils.appendToLog("Checking subConfig " + sc.name);
                                                                 sc.Checked = true;
                                                             }
                                                             break;
@@ -2576,21 +2074,21 @@ namespace RelhaxModpack
                     switch (nn.Name)
                     {
                         case "name":
-                            m = this.getUserMod(nn.InnerText);
+                            m = Utils.getUserMod(nn.InnerText,userMods);
                             if (m != null)
                             {
                                 string filename = m.name + ".zip";
                                 if (File.Exists(Application.StartupPath + "\\RelHaxUserMods\\" + filename))
                                 {
                                     m.modChecked = true;
-                                    Settings.appendToLog("checking user mod " + m.modZipFile);
+                                    Utils.appendToLog("checking user mod " + m.modZipFile);
                                 }
                             }
                             break;
                     }
                 }
             }
-            Settings.appendToLog("Finished loading mod selections");
+            Utils.appendToLog("Finished loading mod selections");
             if (loadMode == loadConfigMode.fromButton || loadMode == loadConfigMode.fromAutoInstall)
             {
                 if (loadMode == loadConfigMode.fromButton) MessageBox.Show(Translations.getTranslatedString("prefrencesSet"));
@@ -2606,55 +2104,6 @@ namespace RelhaxModpack
                 modTabGroups.Enabled = true;
                 ModSelectionList_SizeChanged(null, null);
             }
-        }
-        //checks for duplicates
-        private bool duplicates()
-        {
-            //add every mod name to a new list
-            List<string> modNameList = new List<string>();
-            foreach (Catagory c in parsedCatagoryList)
-            {
-                foreach (Mod m in c.mods)
-                {
-                    modNameList.Add(m.name);
-                }
-            }
-            //itterate through every mod name again
-            foreach (Catagory c in parsedCatagoryList)
-            {
-                foreach (Mod m in c.mods)
-                {
-                    //in theory, there should only be one mathcing mod name
-                    //between the two lists. more indicates a duplicates
-                    int i = 0;
-                    foreach (string s in modNameList)
-                    {
-                        if (s.Equals(m.name))
-                            i++;
-                    }
-                    if (i > 1)//if there are 2 or more matching mods
-                        return true;//duplicate detected
-                }
-            }
-            //making it here means there are no duplicates
-            return false;
-        }
-        //sorts a list of mods alphabetaicaly
-        private void sortModsList(List<Mod> modList)
-        {
-            //sortModsList
-            modList.Sort(Mod.CompareMods);
-        }
-        //sorte a list of catagoris alphabetaicaly
-        private void sortCatagoryList(List<Catagory> catagoryList)
-        {
-            catagoryList.Sort(Catagory.CompareCatagories);
-        }
-        //sorts a list of pictures by mod or config, then name
-        private List<Picture> sortPictureList(List<Picture> pictureList)
-        {
-            pictureList.Sort(Picture.ComparePictures);
-            return pictureList;
         }
         //handler for when the "load config" button is pressed
         private void loadConfigButton_Click(object sender, EventArgs e)
@@ -2684,7 +2133,7 @@ namespace RelhaxModpack
             Settings.modSelectionHeight = this.Size.Height;
             Settings.modSelectionWidth = this.Size.Width;
             if (taskBarHidden)
-                SetTaskbarState(AppBarStates.AutoHide);
+                Settings.SetTaskbarState(Settings.AppBarStates.AutoHide);
             //save wether the window was in fullscreen mods before closing
             if (this.WindowState == FormWindowState.Maximized)
                 Settings.ModSelectionFullscreen = true;
@@ -2694,27 +2143,10 @@ namespace RelhaxModpack
             if (p != null)
                 p.Close();
         }
-        //gets the file size of a download
-        private float netFileSize(string address)
-        {
-            System.Net.WebRequest req = System.Net.HttpWebRequest.Create(address);
-            req.Method = "HEAD";
-            using (System.Net.WebResponse resp = req.GetResponse())
-            {
-                int ContentLength;
-                if (int.TryParse(resp.Headers.Get("Content-Length"), out ContentLength))
-                {
-                    float result = (float)ContentLength;
-                    result = result / (1024 * 1024);//mbytes
-                    return result;
-                }
-            }
-            return -1;
-        }
         //unchecks all mods from memory
         private void clearSelectionMemory()
         {
-            Settings.appendToLog("Unchecking all mods");
+            Utils.appendToLog("Unchecking all mods");
             foreach (Catagory c in parsedCatagoryList)
             {
                 foreach (Mod m in c.mods)
@@ -2727,6 +2159,11 @@ namespace RelhaxModpack
                             if (cc.enabled)
                             {
                                 cc.configChecked = false;
+                                foreach (SubConfig subc in cc.subConfigs)
+                                {
+                                    if (subc.enabled)
+                                        subc.Checked = false;
+                                }
                             }
                         }
                     }
@@ -2737,7 +2174,7 @@ namespace RelhaxModpack
         private void clearSelectionsButton_Click(object sender, EventArgs e)
         {
             this.clearSelectionMemory();
-            Settings.appendToLog("clearSelectionsButton pressed, clearing selections");
+            Utils.appendToLog("clearSelectionsButton pressed, clearing selections");
             MessageBox.Show(Translations.getTranslatedString("selectionsCleared"));
             //reload the UI
             this.UseWaitCursor = true;

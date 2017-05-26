@@ -21,8 +21,8 @@ namespace RelhaxModpack
         [STAThread]
         static void Main()
         {
-            Settings.appendToLog("|------------------------------------------------------------------------------------------------|");
-            Settings.appendToLog("Main Entry point launched");
+            Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
+            Utils.appendToLog("Main Entry point launched");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //get the command line args for testing of auto install
@@ -70,17 +70,17 @@ namespace RelhaxModpack
                 }
             }
             //load the translations
-            Settings.appendToLog("Loading translation hashes");
+            Utils.appendToLog("Loading translation hashes");
             Translations.loadHashes();
-            Settings.appendToLog("Attempting to load MainWindow");
+            Utils.appendToLog("Attempting to load MainWindow");
             try
             {
                 Application.Run(new MainWindow());
             }
             catch (Exception ex)
             {
-                Settings.appendToLog("EXCEPTION: Application load");
-                Settings.appendToLog(ex.ToString());
+                Utils.appendToLog("EXCEPTION: Application load");
+                Utils.appendToLog(ex.ToString());
             }
         }
     }

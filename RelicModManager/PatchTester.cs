@@ -69,7 +69,7 @@ namespace RelhaxModpack
             }
             //convert actual newlines to "newlines"
             string newReg = Regex.Replace(regexReplaceBox.Text, @"\n", "newline");
-            mw.RegxPatch(regexFilePathBox.Text, regexSearchBox.Text, regexReplaceBox.Text, i, true);
+            Utils.RegxPatch(regexFilePathBox.Text, regexSearchBox.Text, regexReplaceBox.Text, "", "", i, true);
         }
 
         private void xmlPatchButton_Click(object sender, EventArgs e)
@@ -87,7 +87,7 @@ namespace RelhaxModpack
             {
                 temp = "remove";
             }
-            mw.xmlPatch(xmlFilePathBox.Text, xmlPathBox.Text, temp, xmlSearchBox.Text, xmlReplaceBox.Text, true);
+            Utils.xmlPatch(xmlFilePathBox.Text, xmlPathBox.Text, temp, xmlSearchBox.Text, xmlReplaceBox.Text, "","",true);
         }
 
         private void jsonLoadFileButton_Click(object sender, EventArgs e)
@@ -100,7 +100,7 @@ namespace RelhaxModpack
 
         private void jsonPatchButton_Click(object sender, EventArgs e)
         {
-            mw.jsonPatch(jsonFilePathBox.Text, jsonPathBox.Text, jsonReplaceBox.Text, "edit", true);
+            Utils.jsonPatch(jsonFilePathBox.Text, jsonPathBox.Text, jsonReplaceBox.Text, "edit","","", true);
         }
 
         private void regexMakePatchButton_Click(object sender, EventArgs e)

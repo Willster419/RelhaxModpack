@@ -5,6 +5,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using System.Runtime.InteropServices;
+using System;
 
 namespace RelhaxModpack
 {
@@ -46,10 +48,10 @@ namespace RelhaxModpack
         public static void loadSettings()
         {
             Settings.firstLoad = false;
-            Settings.appendToLog("Loading application settings");
+            Utils.appendToLog("Loading application settings");
             if (!File.Exists(settingsXmlFile))
             {
-                Settings.appendToLog("WARNING:Settings xml not found, loading defaults");
+                Utils.appendToLog("WARNING:Settings xml not found, loading defaults");
                 //could also use this to determine if first load or not
                 Settings.comicSans = false;
                 Settings.largeFont = false;
@@ -73,7 +75,7 @@ namespace RelhaxModpack
             }
             else
             {
-                Settings.appendToLog("Loading xml file");
+                Utils.appendToLog("Loading xml file");
                 XmlDocument doc = new XmlDocument();
                 doc.Load(settingsXmlFile);
                 XmlNodeList settingsList = doc.ChildNodes[0].ChildNodes;
@@ -136,7 +138,7 @@ namespace RelhaxModpack
                 }
             }
             Settings.applyInternalSettings();
-            Settings.appendToLog("Settings loaded sucessfully");
+            Utils.appendToLog("Settings loaded sucessfully");
         }
         //apply internal settings (font name, size, loading gif)
         //based on the boolean settings from above
@@ -194,7 +196,7 @@ namespace RelhaxModpack
         //saves settings to xml file
         public static void saveSettings()
         {
-            Settings.appendToLog("Saving application settings");
+            Utils.appendToLog("Saving application settings");
             if (File.Exists(settingsXmlFile)) File.Delete(settingsXmlFile);
             XmlDocument doc = new XmlDocument();
             XmlElement settingsHolder = doc.CreateElement("settings");
@@ -265,15 +267,8 @@ namespace RelhaxModpack
             settingsHolder.AppendChild(xpreviewY);
 
             doc.Save(settingsXmlFile);
-            Settings.appendToLog("Settings saved sucessfully");
+            Utils.appendToLog("Settings saved sucessfully");
         }
-        //logs string info to the log output
-        public static void appendToLog(string info)
-        {
-            //the method should automaticly make the file if it's not there
-            File.AppendAllText(Application.StartupPath + "\\RelHaxLog.txt", info + "\n");
-        }
-
         public static Image getLoadingImage(LoadingGifs gif)
         {
             switch (gif)
@@ -310,49 +305,6 @@ namespace RelhaxModpack
         public static Font getFont(string fontName, float fontSize)
         {
             return new System.Drawing.Font(fontName, fontSize);
-        }
-        /*
-         * DEACTIVATED to determine where the antivirus issue is
-        //extracts embeded rescource onto disk
-        public static void extractEmbeddedResource(string outputDir, string resourceLocation, List<string> files)
-        {
-            foreach (string file in files)
-            {
-                using (System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceLocation + @"." + file))
-                {
-                    using (System.IO.FileStream fileStream = new System.IO.FileStream(System.IO.Path.Combine(outputDir, file), System.IO.FileMode.Create))
-                    {
-                        for (int i = 0; i < stream.Length; i++)
-                        {
-                            fileStream.WriteByte((byte)stream.ReadByte());
-                        }
-                        fileStream.Close();
-                    }
-                }
-            }
-        }*/
-        //returns the md5 hash of the file based on the input file string location
-        public static string GetMd5Hash(string inputFile)
-        {
-            //first, return if the file does not exist
-            if (!File.Exists(inputFile))
-                return "-1";
-            MD5 md5Hash = MD5.Create();
-            // Convert the input string to a byte array and compute the hash.
-            var stream = File.OpenRead(inputFile);
-            byte[] data = md5Hash.ComputeHash(stream);
-            stream.Close();
-            // Create a new Stringbuilder to collect the bytes
-            // and create a string.
-            StringBuilder sBuilder = new StringBuilder();
-            // Loop through each byte of the hashed data 
-            // and format each one as a hexadecimal string.
-            for (int i = 0; i < data.Length; i++)
-            {
-                sBuilder.Append(data[i].ToString("x2"));
-            }
-            // Return the hexadecimal string.
-            return sBuilder.ToString();
         }
         //sets a form to have a dark UI
         public static void setUIColor(System.Windows.Forms.Form window)
@@ -453,44 +405,67 @@ namespace RelhaxModpack
             else
                 return SystemColors.Control;
         }
-        public static bool parseBool(string input, bool defaultValue)
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern IntPtr FindWindow(string strClassName, string strWindowName);
+
+        [DllImport("shell32.dll")]
+        public static extern UInt32 SHAppBarMessage(UInt32 dwMessage, ref APPBARDATA pData);
+
+        public enum AppBarMessages
         {
-            bool returnVal;
-            try
-            {
-                returnVal = bool.Parse(input);
-            }
-            catch (System.FormatException)
-            {
-                returnVal = defaultValue;
-            }
-            return returnVal;
+            New = 0x00,
+            Remove = 0x01,
+            QueryPos = 0x02,
+            SetPos = 0x03,
+            GetState = 0x04,
+            GetTaskBarPos = 0x05,
+            Activate = 0x06,
+            GetAutoHideBar = 0x07,
+            SetAutoHideBar = 0x08,
+            WindowPosChanged = 0x09,
+            SetState = 0x0a
         }
-        public static int parseInt(string input, int defaultValue)
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct APPBARDATA
         {
-            int returnVal;
-            try
-            {
-                returnVal = int.Parse(input);
-            }
-            catch (System.FormatException)
-            {
-                returnVal = defaultValue;
-            }
-            return returnVal;
+            public UInt32 cbSize;
+            public IntPtr hWnd;
+            public UInt32 uCallbackMessage;
+            public UInt32 uEdge;
+            public Rectangle rc;
+            public Int32 lParam;
         }
-        public static float parseFloat(string input, float defaultValue)
+
+        public enum AppBarStates
         {
-            float returnVal;
-            try
-            {
-                returnVal = float.Parse(input);
-            }
-            catch (System.FormatException)
-            {
-                returnVal = defaultValue;
-            }
-            return returnVal;
+            AutoHide = 0x01,
+            AlwaysOnTop = 0x02
+        }
+
+        /// <summary>
+        /// Set the Taskbar State option
+        /// </summary>
+        /// <param name="option">AppBarState to activate</param>
+        public static void SetTaskbarState(AppBarStates option)
+        {
+            APPBARDATA msgData = new APPBARDATA();
+            msgData.cbSize = (UInt32)Marshal.SizeOf(msgData);
+            msgData.hWnd = FindWindow("System_TrayWnd", null);
+            msgData.lParam = (Int32)(option);
+            SHAppBarMessage((UInt32)AppBarMessages.SetState, ref msgData);
+        }
+
+        /// <summary>
+        /// Gets the current Taskbar state
+        /// </summary>
+        /// <returns>current Taskbar state</returns>
+        public static AppBarStates GetTaskbarState()
+        {
+            APPBARDATA msgData = new APPBARDATA();
+            msgData.cbSize = (UInt32)Marshal.SizeOf(msgData);
+            msgData.hWnd = FindWindow("System_TrayWnd", null);
+            return (AppBarStates)SHAppBarMessage((UInt32)AppBarMessages.GetState, ref msgData);
         }
     }
 }
