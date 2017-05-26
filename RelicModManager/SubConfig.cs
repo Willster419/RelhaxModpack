@@ -35,5 +35,10 @@ namespace RelhaxModpack
             enabled = false;
             Checked = false;
         }
+        //for the tostring thing
+        public override string ToString()
+        {
+            return name;
+        }
     }
 }

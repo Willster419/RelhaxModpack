@@ -27,6 +27,11 @@ namespace RelhaxModpack
             updateComments = update;
             description = desc;
             devURL = dev;
+            if (devURL == null || devURL.Equals(""))
+            {
+                devLinkLabel.Enabled = false;
+                devLinkLabel.Visible = false;
+            }
             loadingImage = RelhaxModpack.Properties.Resources.loading;
         }
         //sets the window title to reflect the new picture, and
