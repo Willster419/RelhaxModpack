@@ -278,11 +278,13 @@ namespace RelhaxModpack
             string modDownloadFilePath = Application.StartupPath + "\\RelHaxDownloads\\" + m.modZipFile;
             bool hasRadioButtonConfigSelected = false;
             bool modHasRadioButtons = false;
+            //link the catagory and mod in memory
+            m.parent = c;
             //create base mod checkbox
-            //RelhaxCheckbox modCheckBox = new RelhaxCheckbox();
-            RelhaxCheckbox modCheckBox = new RelhaxCheckbox();
-            //apparnetly spaces arn't cool, so let's ger rid of them
-            modCheckBox.realName = t.Name + "_" + m.name;
+            ModWPFCheckBox modCheckBox = new ModWPFCheckBox();
+            //use a custom datatype for the name
+            modCheckBox.mod = m;
+            modCheckBox.catagory = c;
             if (Settings.largeFont)
                 modCheckBox.FontSize = modCheckBox.FontSize + 4;
             modCheckBox.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
@@ -309,13 +311,15 @@ namespace RelhaxModpack
             //add it's handlers, right click and when checked
             modCheckBox.MouseDown += new System.Windows.Input.MouseButtonEventHandler(modCheckBoxL_MouseDown);
             //create the twp possible drop down options, and the mod optional config check box i guess
-            RelhaxComboBox configControlDD = new RelhaxComboBox();
+            //RelhaxComboBox configControlDD = new RelhaxComboBox();
+            ConfigWPFComboBox configControlDD = new ConfigWPFComboBox();
             configControlDD.Items.Clear();
             configControlDD.IsEditable = false;
             //configControlDD.FontSize = Settings.fontSize;
             configControlDD.Name = "notAddedYet";
             configControlDD.IsEnabled = false;
-            RelhaxComboBox configControlDD2 = new RelhaxComboBox();
+            //RelhaxComboBox configControlDD2 = new RelhaxComboBox();
+            ConfigWPFComboBox configControlDD2 = new ConfigWPFComboBox();
             configControlDD2.Items.Clear();
             configControlDD2.IsEditable = false;
             //configControlDD2.FontSize = Settings.fontSize;
@@ -324,19 +328,24 @@ namespace RelhaxModpack
             //process the configs
             for (int i = 0; i < m.configs.Count; i++)
             {
+                //link the config and mod in memory
+                m.configs[i].parent = m;
                 //create the init stuff for each config
-                RelhaxComboBox configControlDDALL = null;
+                ConfigWPFComboBox configControlDDALL = null;
                 if (m.configs[i].type.Equals("single") || m.configs[i].type.Equals("single1"))
                 {
                     modHasRadioButtons = true;
                     //make the radio button
-                    RelhaxRadioButton configControlRB = new RelhaxRadioButton();
+                    ConfigWPFRadioButton configControlRB = new ConfigWPFRadioButton();
                     if (Settings.largeFont)
                         configControlRB.FontSize = modCheckBox.FontSize + 4;
                     configControlRB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
                     if (Settings.darkUI)
                         configControlRB.FontWeight = System.Windows.FontWeights.Bold;
-                    configControlRB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    //configControlRB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    configControlRB.catagory = c;
+                    configControlRB.mod = m;
+                    configControlRB.config = m.configs[i];
                     //the logic for enabling it
                     //set them to false first
                     configControlRB.IsEnabled = false;
@@ -370,14 +379,20 @@ namespace RelhaxModpack
                     //code to loop through the subconfigs
                     foreach (SubConfig sc in m.configs[i].subConfigs)
                     {
+                        //link the subconfig in memory
+                        sc.parent = m.configs[i];
                         //create the radioButton
-                        RelhaxRadioButton subRB = new RelhaxRadioButton();
+                        ConfigWPFRadioButton subRB = new ConfigWPFRadioButton();
                         if (Settings.largeFont)
                             subRB.FontSize = modCheckBox.FontSize + 4;
                         subRB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
                         if (Settings.darkUI)
                             subRB.FontWeight = System.Windows.FontWeights.Bold;
-                        subRB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name + "_" + sc.name;
+                        //subRB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name + "_" + sc.name;
+                        subRB.catagory = c;
+                        subRB.mod = m;
+                        subRB.config = m.configs[i];
+                        subRB.subconfig = sc;
                         //logic for the radioButton
                         subRB.IsEnabled = false;
                         subRB.IsChecked = false;
@@ -438,7 +453,10 @@ namespace RelhaxModpack
                     if(configControlDDALL.Name.Equals("notAddedYet"))
                     {
                         configControlDDALL.Name = "added";
-                        configControlDDALL.realName = t.Name + "_" + m.name;
+                        //configControlDDALL.realName = t.Name + "_" + m.name;
+                        configControlDDALL.catagory = c;
+                        configControlDDALL.mod = m;
+                        configControlDDALL.config = m.configs[i];
                         if (m.enabled && m.modChecked)
                             configControlDDALL.IsEnabled = true;
                         configControlDDALL.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(configControlDDALL_SelectionChanged);
@@ -450,14 +468,17 @@ namespace RelhaxModpack
                 else if (m.configs[i].type.Equals("multi"))
                 {
                     //make the checkbox
-                    RelhaxCheckbox configControlCB = new RelhaxCheckbox();
+                    ConfigWPFCheckBox configControlCB = new ConfigWPFCheckBox();
                     if (Settings.largeFont)
                         configControlCB.FontSize = modCheckBox.FontSize + 4;
                     configControlCB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
                     if (Settings.darkUI)
                         configControlCB.FontWeight = System.Windows.FontWeights.Bold;
                     //configControlCB.FontSize = Settings.fontSize;
-                    configControlCB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    //configControlCB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name;
+                    configControlCB.catagory = c;
+                    configControlCB.mod = m;
+                    configControlCB.config = m.configs[i];
                     //the logic for enabling it
                     //set them to false first
                     configControlCB.IsEnabled = false;
@@ -489,13 +510,17 @@ namespace RelhaxModpack
                     foreach (SubConfig sc in m.configs[i].subConfigs)
                     {
                         //create the radioButton
-                        RelhaxRadioButton subRB = new RelhaxRadioButton();
+                        ConfigWPFRadioButton subRB = new ConfigWPFRadioButton();
                         if (Settings.largeFont)
                             subRB.FontSize = modCheckBox.FontSize + 4;
                         subRB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
                         if (Settings.darkUI)
                             subRB.FontWeight = System.Windows.FontWeights.Bold;
-                        subRB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name + "_" + sc.name;
+                        //subRB.realName = t.Name + "_" + m.name + "_" + m.configs[i].name + "_" + sc.name;
+                        subRB.catagory = c;
+                        subRB.mod = m;
+                        subRB.config = m.configs[i];
+                        subRB.subconfig = sc;
                         //logic for the radioButton
                         subRB.IsEnabled = false;
                         subRB.IsChecked = false;
@@ -540,14 +565,14 @@ namespace RelhaxModpack
 
         void subRB_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            RelhaxRadioButton rb = (RelhaxRadioButton)sender;
-            string modName = rb.realName.Split('_')[1];
-            string catagoryName = rb.realName.Split('_')[0];
-            string configName = rb.realName.Split('_')[2];
-            string subConfigName = rb.realName.Split('_')[3];
-            Mod m = Utils.linkMod(modName, catagoryName,parsedCatagoryList);
-            Config cfg = m.getConfig(configName);
-            SubConfig subc = cfg.getSubConfig(subConfigName);
+            ConfigWPFRadioButton rb = (ConfigWPFRadioButton)sender;
+            //string modName = rb.realName.Split('_')[1];
+            //string catagoryName = rb.realName.Split('_')[0];
+            //string configName = rb.realName.Split('_')[2];
+            //string subConfigName = rb.realName.Split('_')[3];
+            Mod m = rb.mod;
+            Config cfg = rb.config;
+            SubConfig subc = rb.subconfig;
             //the subconfig treeviewitem
             System.Windows.Controls.TreeViewItem subCFGTVI = (System.Windows.Controls.TreeViewItem)rb.Parent;
             //the config treeviewitem
@@ -567,9 +592,9 @@ namespace RelhaxModpack
                 //uncheck all subconfigs in UI
                 foreach (System.Windows.Controls.TreeViewItem item in cfgTVI.Items)
                 {
-                    if (item.Header is RelhaxRadioButton)
+                    if (item.Header is ConfigWPFRadioButton)
                     {
-                        RelhaxRadioButton rbb = (RelhaxRadioButton)item.Header;
+                        ConfigWPFRadioButton rbb = (ConfigWPFRadioButton)item.Header;
                         if (!rbb.Equals(rb))
                         {
                             rbb.IsChecked = false;
@@ -584,12 +609,12 @@ namespace RelhaxModpack
         void configControlCB_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             //checkboxes still don't need to be be unselected
-            RelhaxCheckbox cb = (RelhaxCheckbox)sender;
-            string modName = cb.realName.Split('_')[1];
-            string catagoryName = cb.realName.Split('_')[0];
-            string configName = cb.realName.Split('_')[2];
-            Mod m = Utils.linkMod(modName, catagoryName, parsedCatagoryList);
-            Config cfg = m.getConfig(configName);
+            ConfigWPFCheckBox cb = (ConfigWPFCheckBox)sender;
+            //string modName = cb.realName.Split('_')[1];
+            //string catagoryName = cb.realName.Split('_')[0];
+            //string configName = cb.realName.Split('_')[2];
+            Mod m = cb.mod;
+            Config cfg = cb.config;
             cfg.configChecked = (bool)cb.IsChecked;
             //process the subconfigs
             bool configSelected = false;
@@ -598,8 +623,8 @@ namespace RelhaxModpack
                 System.Windows.Controls.TreeViewItem tvi = (System.Windows.Controls.TreeViewItem)cb.Parent;
                 foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
                 {
-                    RelhaxRadioButton subRB = (RelhaxRadioButton)subTVI.Header;
-                    SubConfig subc = cfg.getSubConfig(subRB.realName.Split('_')[3]);
+                    ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
+                    SubConfig subc = subRB.subconfig;
                     if (!(bool)cb.IsEnabled || !(bool)cb.IsChecked)
                     {
                         subRB.IsEnabled = false;
@@ -619,8 +644,8 @@ namespace RelhaxModpack
                     //select the first possible one
                     foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
                     {
-                        RelhaxRadioButton subRB = (RelhaxRadioButton)subTVI.Header;
-                        SubConfig subc = cfg.getSubConfig(subRB.realName.Split('_')[3]);
+                        ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
+                        SubConfig subc = subRB.subconfig;
                         if (subc.enabled)
                         {
                             subc.Checked = true;
@@ -636,7 +661,7 @@ namespace RelhaxModpack
         //when a dropdown legacy combobox is index changed
         void configControlDDALL_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            RelhaxComboBox cb = (RelhaxComboBox)sender;
+            ConfigWPFComboBox cb = (ConfigWPFComboBox)sender;
             //first check if this is init, meaning first time enabled
             if (cb.SelectedIndex == -1)
             {
@@ -645,20 +670,20 @@ namespace RelhaxModpack
                 return;
             }
             //get all cool info
-            string catagory = cb.realName.Split('_')[0];
-            string mod = cb.realName.Split('_')[1];
-            Mod m = Utils.getCatagory(catagory,parsedCatagoryList).getMod(mod);
+            //string catagory = cb.realName.Split('_')[0];
+            //string mod = cb.realName.Split('_')[1];
+            Mod m = cb.mod;
             //getting here means that an item is confirmed to be selected
-            string configName = (string)cb.SelectedItem;
+            string configName = cb.config.name;
             //in case "_updated" was appended, split the string
-            configName = configName.Split('_')[0];
+            /*configName = configName.Split('_')[0];
             if ((bool)!cb.IsEnabled)
             {
                 //disable the mod and return
                 Config save = m.getConfig(configName);
                 save.configChecked = false;
                 return;
-            }
+            }*/
             //itterate through the items, get each config, disable it
             //unless it's the same name as the selectedItem
             foreach (string s in cb.Items)
@@ -677,12 +702,12 @@ namespace RelhaxModpack
             if (loadingConfig)
                 return;
             //get all required cool stuff
-            RelhaxRadioButton cb = (RelhaxRadioButton)sender;
-            string modName = cb.realName.Split('_')[1];
-            string catagoryName = cb.realName.Split('_')[0];
-            string configName = cb.realName.Split('_')[2];
-            Mod m = Utils.linkMod(modName, catagoryName, parsedCatagoryList);
-            Config cfg = m.getConfig(configName);
+            ConfigWPFRadioButton cb = (ConfigWPFRadioButton)sender;
+            //string modName = cb.realName.Split('_')[1];
+            //string catagoryName = cb.realName.Split('_')[0];
+            //string configName = cb.realName.Split('_')[2];
+            Mod m = cb.mod;
+            Config cfg = cb.config;
             //the config treeview
             System.Windows.Controls.TreeViewItem item0 = (System.Windows.Controls.TreeViewItem)cb.Parent;
             //the mod treeview
@@ -700,9 +725,9 @@ namespace RelhaxModpack
                 //uincheck all single and single1 mods in UI
                 foreach (System.Windows.Controls.TreeViewItem item in item1.Items)
                 {
-                    if (item.Header is RelhaxRadioButton)
+                    if (item.Header is ConfigWPFRadioButton)
                     {
-                        RelhaxRadioButton rb = (RelhaxRadioButton)item.Header;
+                        ConfigWPFRadioButton rb = (ConfigWPFRadioButton)item.Header;
                         if ((bool)rb.IsChecked && (bool)!rb.Equals(cb))
                         {
                             //this was the previous radiobutton checked
@@ -720,8 +745,8 @@ namespace RelhaxModpack
                 System.Windows.Controls.TreeViewItem tvi = (System.Windows.Controls.TreeViewItem)cb.Parent;
                 foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
                 {
-                    RelhaxRadioButton subRB = (RelhaxRadioButton)subTVI.Header;
-                    SubConfig subc = cfg.getSubConfig(subRB.realName.Split('_')[3]);
+                    ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
+                    SubConfig subc = subRB.subconfig;
                     if (!(bool)cb.IsEnabled || !(bool)cb.IsChecked)
                     {
                         subRB.IsEnabled = false;
@@ -741,8 +766,8 @@ namespace RelhaxModpack
                     //select the first possible one
                     foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
                     {
-                        RelhaxRadioButton subRB = (RelhaxRadioButton)subTVI.Header;
-                        SubConfig subc = cfg.getSubConfig(subRB.realName.Split('_')[3]);
+                        ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
+                        SubConfig subc = subRB.subconfig;
                         if (subc.enabled)
                         {
                             subc.Checked = true;
@@ -763,20 +788,14 @@ namespace RelhaxModpack
             {
                 return;
             }
-            if (sender is RelhaxCheckbox)
+            if (sender is ModWPFCheckBox)
             {
-                RelhaxCheckbox cb = (RelhaxCheckbox)sender;
-                Mod m = Utils.linkMod(cb.realName.Split('_')[1], parsedCatagoryList);
-                string name = m.name;
-                //get the mod and/or config
-                List<Picture> picturesList = Utils.sortPictureList(m.picList);
-                string desc = m.description;
-                string updateNotes = m.updateComment;
-                string devurl = m.devURL;
-                if (devurl == null)
-                    devurl = "";
+                ModWPFCheckBox cb = (ModWPFCheckBox)sender;
+                Mod m = cb.mod;
+                if (m.devURL == null)
+                    m.devURL = "";
                 p.Close();
-                p = new Preview(name, picturesList, desc, updateNotes, devurl);
+                p = new Preview(m.name, m.picList, m.description, m.updateComment, m.devURL);
                 p.Show();
             }
         }
@@ -785,11 +804,14 @@ namespace RelhaxModpack
         {
             if (loadingConfig)
                 return;
-            RelhaxCheckbox cb = (RelhaxCheckbox)sender;
-            string modName = cb.realName.Split('_')[1];
-            string catagoryName = cb.realName.Split('_')[0];
-            Mod m = Utils.linkMod(modName, catagoryName, parsedCatagoryList);
-            Catagory cat = Utils.getCatagory(catagoryName,parsedCatagoryList);
+            //RelhaxCheckbox cb = (RelhaxCheckbox)sender;
+            ModWPFCheckBox cb = (ModWPFCheckBox)sender;
+            //string modName = cb.realName.Split('_')[1];
+            //string catagoryName = cb.realName.Split('_')[0];
+            //Mod m = Utils.linkMod(modName, catagoryName, parsedCatagoryList);
+            //Catagory cat = Utils.getCatagory(catagoryName,parsedCatagoryList);
+            Mod m = cb.mod;
+            Catagory cat = m.parent;
             System.Windows.Controls.TreeViewItem TVI = (System.Windows.Controls.TreeViewItem)cb.Parent;
             System.Windows.Controls.TreeView TV = (System.Windows.Controls.TreeView)TVI.Parent;
             //check to see if this is a single selection categtory
@@ -812,7 +834,7 @@ namespace RelhaxModpack
                     //all other mods in this category need to be unchecked
                     foreach (System.Windows.Controls.TreeViewItem tvi in TV.Items)
                     {
-                        RelhaxCheckbox modCB = (RelhaxCheckbox)tvi.Header;
+                        ModWPFCheckBox modCB = (ModWPFCheckBox)tvi.Header;
                         //remove the handler before we make changes
                         //modCB.Click -= modCheckBoxL_Click;
                         if((bool)modCB.IsChecked)
@@ -846,9 +868,9 @@ namespace RelhaxModpack
             {
                 System.Windows.Controls.Control c = (System.Windows.Controls.Control)item.Header;
                 Config cfg = null;
-                if (c is RelhaxComboBox)
+                if (c is ConfigWPFComboBox)
                 {
-                    RelhaxComboBox cbox = (RelhaxComboBox)c;
+                    ConfigWPFComboBox cbox = (ConfigWPFComboBox)c;
                     //if the mod is checked and it has more than 0 item enable, else disable, then trigger
                     if (m.modChecked && cbox.Items.Count > 0)
                         cbox.IsEnabled = true;
@@ -856,22 +878,22 @@ namespace RelhaxModpack
                         cbox.IsEnabled = false;
                     configControlDDALL_SelectionChanged(cbox, null);
                 }
-                else if (c is RelhaxCheckbox)
+                else if (c is ConfigWPFCheckBox)
                 {
-                    RelhaxCheckbox cbox = (RelhaxCheckbox)c;
+                    ConfigWPFCheckBox cbox = (ConfigWPFCheckBox)c;
                     //multi CB code
                     //CB is enabled if the mod checked and the config is enabled
-                    cfg = m.getConfig(cbox.realName.Split('_')[2]);
+                    cfg = cbox.config;
                     if (m.modChecked && cfg.enabled)
                         cbox.IsEnabled = true;
                     else
                         cbox.IsEnabled = false;
                     configControlCB_Click(cbox,null);
                 }
-                else if (c is RelhaxRadioButton)
+                else if (c is ConfigWPFRadioButton)
                 {
-                    RelhaxRadioButton cbox = (RelhaxRadioButton)c;
-                    cfg = m.getConfig(cbox.realName.Split('_')[2]);
+                    ConfigWPFRadioButton cbox = (ConfigWPFRadioButton)c;
+                    cfg = cbox.config;
                     if (m.modChecked && cfg.enabled)
                         cbox.IsEnabled = true;
                     else
@@ -886,10 +908,10 @@ namespace RelhaxModpack
                         foreach (System.Windows.Controls.TreeViewItem item2 in TVI.Items)
                         {
                             System.Windows.Controls.Control c2 = (System.Windows.Controls.Control)item2.Header;
-                            if (c2 is RelhaxRadioButton)
+                            if (c2 is ConfigWPFRadioButton)
                             {
-                                RelhaxRadioButton c2r = (RelhaxRadioButton)c2;
-                                cfg = m.getConfig(c2r.realName.Split('_')[2]);
+                                ConfigWPFRadioButton c2r = (ConfigWPFRadioButton)c2;
+                                cfg = c2r.config;
                                 if ((bool)c2r.IsEnabled)
                                 {
                                     c2r.Click -= configControlRB_Click;

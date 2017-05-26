@@ -19,6 +19,10 @@ namespace RelhaxModpack
         public List<Picture> picList = new List<Picture>();
         public List<string> userFiles = new List<string>();
         public List<Dependency> modDependencies = new List<Dependency>();
+        //the parent of a mod is a config
+        public Catagory parent { get; set; }
+        //the index of where the mod is in the entire list ever
+        public int index { get; set; }
         //size of the mod zip file
         public float size { get; set; }
         //the start address of the zip file location. enabled us to use sites that

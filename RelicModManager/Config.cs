@@ -26,6 +26,10 @@ namespace RelhaxModpack
         public string endAddress { get; set; }
         //the array of sub config options available
         public List<SubConfig> subConfigs = new List<SubConfig>();
+        //the index where this config is in the entire list of configs ever
+        public int index { get; set; }
+        //the parent of a config is a mod
+        public Mod parent { get; set; }
         //basic config constructor
         public Config()
         {

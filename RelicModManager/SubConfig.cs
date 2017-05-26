@@ -24,6 +24,10 @@ namespace RelhaxModpack
         public string startAddress { get; set; }
         //the end address of the zip file location. enables us to use dropbox (?dl=1)
         public string endAddress { get; set; }
+        //the index thing
+        public int index { get; set; }
+        //a parent of a subconfig is a config
+        public Config parent { get; set; }
         //basic config constructor
         public SubConfig()
         {
