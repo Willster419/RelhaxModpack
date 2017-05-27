@@ -1030,5 +1030,221 @@ namespace RelhaxModpack
                 Utils.uncheckProcessConfigs(cc.configs);
             }
         }
+        //saves the currently checked configs and mods
+        public static void saveConfig(bool fromButton, List<Category> parsedCatagoryList, List<Mod> userMods)
+        {
+            //dialog box to ask where to save the config to
+            SaveFileDialog saveLocation = new SaveFileDialog();
+            saveLocation.AddExtension = true;
+            saveLocation.DefaultExt = ".xml";
+            saveLocation.Filter = "*.xml|*.xml";
+            saveLocation.InitialDirectory = Application.StartupPath + "\\RelHaxUserConfigs";
+            saveLocation.Title = "Select where to save user prefs";
+            if (fromButton)
+            {
+                if (saveLocation.ShowDialog().Equals(DialogResult.Cancel))
+                {
+                    //cancel
+                    return;
+                }
+            }
+            string savePath = saveLocation.FileName;
+            if (Settings.saveLastConfig && !fromButton)
+            {
+                savePath = Application.StartupPath + "\\RelHaxUserConfigs\\lastInstalledConfig.xml";
+                Utils.appendToLog("Save last config checked, saving to " + savePath);
+            }
+            //XmlDocument save time!
+            XmlDocument doc = new XmlDocument();
+            //mods root
+            XmlElement modsHolderBase = doc.CreateElement("mods");
+            doc.AppendChild(modsHolderBase);
+            //relhax mods root
+            XmlElement modsHolder = doc.CreateElement("relhaxMods");
+            modsHolderBase.AppendChild(modsHolder);
+            //user mods root
+            XmlElement userModsHolder = doc.CreateElement("userMods");
+            modsHolderBase.AppendChild(userModsHolder);
+            //check every mod
+            foreach (Category c in parsedCatagoryList)
+            {
+                foreach (Mod m in c.mods)
+                {
+                    if (m.Checked)
+                    {
+                        //add it to the list
+                        XmlElement mod = doc.CreateElement("mod");
+                        modsHolder.AppendChild(mod);
+                        XmlElement modName = doc.CreateElement("name");
+                        modName.InnerText = m.name;
+                        mod.AppendChild(modName);
+                        if (m.configs.Count > 0)
+                        {
+                            XmlElement configsHolder = doc.CreateElement("configs");
+                            Utils.saveProcessConfigs(doc, m.configs, configsHolder);
+                            mod.AppendChild(configsHolder);
+                        }
+                    }
+                }
+            }
+            //check user mods
+            foreach (Mod m in userMods)
+            {
+                if (m.Checked)
+                {
+                    //add it to the list
+                    XmlElement mod = doc.CreateElement("mod");
+                    modsHolder.AppendChild(mod);
+                    XmlElement modName = doc.CreateElement("name");
+                    modName.InnerText = m.name;
+                    mod.AppendChild(modName);
+                    userModsHolder.AppendChild(mod);
+                }
+            }
+            doc.Save(savePath);
+            if (fromButton)
+            {
+                MessageBox.Show(Translations.getTranslatedString("configSaveSucess"));
+            }
+        }
+        private static void saveProcessConfigs(XmlDocument doc, List<Config> configList, XmlElement configsHolder)
+        {
+            foreach (Config cc in configList)
+            {
+                XmlElement config = null;
+                if (cc.Checked)
+                {
+                    //add the config to the list
+                    config = doc.CreateElement("config");
+                    configsHolder.AppendChild(config);
+                    XmlElement configName = doc.CreateElement("name");
+                    configName.InnerText = cc.name;
+                    config.AppendChild(configName);
+
+                    if (cc.configs.Count > 0)
+                    {
+                        XmlElement configsHolderSub = doc.CreateElement("configs");
+                        Utils.saveProcessConfigs(doc, cc.configs, configsHolderSub);
+                        config.AppendChild(configsHolderSub);
+                    }
+                }
+            }
+        }
+        //loads a saved config from xml and parses it into the memory database
+        public static void loadConfig(string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
+        {
+            Utils.clearSelectionMemory(parsedCatagoryList);
+            Utils.appendToLog("Loading mod selections from " + filePath);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(filePath);
+            //get a list of mods
+            XmlNodeList xmlModList = doc.SelectNodes("//mods/relhaxMods/mod");
+            foreach (XmlNode n in xmlModList)
+            {
+                //gets the inside of each mod
+                //also store each config that needsto be enabled
+                Mod m = new Mod();
+                foreach (XmlNode nn in n.ChildNodes)
+                {
+                    switch (nn.Name)
+                    {
+                        case "name":
+                            m = Utils.linkMod(nn.InnerText, parsedCatagoryList);
+                            if (m == null)
+                            {
+                                Utils.appendToLog("WARNING: mod \"" + nn.InnerText + "\" not found");
+                                MessageBox.Show(Translations.getTranslatedString("modNotFound_1") + nn.InnerText + Translations.getTranslatedString("modNotFound_2"));
+                                continue;
+                            }
+                            if (m.enabled)
+                            {
+                                Utils.appendToLog("Checking mod " + m.name);
+                                m.Checked = true;
+                            }
+                            break;
+                        case "configs":
+                            Utils.loadProcessConfigs(nn, m, true);
+                            break;
+                    }
+                }
+            }
+            //user mods
+            XmlNodeList xmlUserModList = doc.SelectNodes("//mods/userMods/mod");
+            foreach (XmlNode n in xmlUserModList)
+            {
+                //gets the inside of each user mod
+                Mod m = new Mod();
+                foreach (XmlNode nn in n.ChildNodes)
+                {
+                    switch (nn.Name)
+                    {
+                        case "name":
+                            m = Utils.getUserMod(nn.InnerText, userMods);
+                            if (m != null)
+                            {
+                                string filename = m.name + ".zip";
+                                if (File.Exists(Application.StartupPath + "\\RelHaxUserMods\\" + filename))
+                                {
+                                    m.Checked = true;
+                                    Utils.appendToLog("checking user mod " + m.zipFile);
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            Utils.appendToLog("Finished loading mod selections");
+        }
+        private static void loadProcessConfigs(XmlNode holder, Mod m, bool parentIsMod, Config con = null)
+        {
+            foreach (XmlNode nnn in holder.ChildNodes)
+            {
+                if (parentIsMod)
+                {
+                    if (m == null)
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    if (con == null)
+                    {
+                        continue;
+                    }
+                }
+                Config c = new Config();
+                foreach (XmlNode nnnn in nnn.ChildNodes)
+                {
+                    switch (nnnn.Name)
+                    {
+                        case "name":
+                            if (parentIsMod)
+                            {
+                                c = m.getConfig(nnnn.InnerText);
+                            }
+                            else
+                            {
+                                c = con.getSubConfig(nnnn.InnerText);
+                            }
+                            if (c == null)
+                            {
+                                Utils.appendToLog("WARNING: config \"" + nnnn.InnerText + "\" not found for mod/config \"" + holder.InnerText + "\"");
+                                MessageBox.Show(Translations.getTranslatedString("configNotFound_1") + nnnn.InnerText + Translations.getTranslatedString("configNotFound_2") + holder.InnerText + Translations.getTranslatedString("configNotFound_3"));
+                                continue;
+                            }
+                            if (c.enabled)
+                            {
+                                Utils.appendToLog("Checking config " + c.name);
+                                c.Checked = true;
+                            }
+                            break;
+                        case "configs":
+                            Utils.loadProcessConfigs(nnnn, m, false, c);
+                            break;
+                    }
+                }
+            }
+        }
     }
 }
