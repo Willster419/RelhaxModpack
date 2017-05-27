@@ -8,19 +8,19 @@ namespace RelhaxModpack
         public string name { get; set; }
         //the developer's version of the mod
         public string version { get; set; }
-        public string modZipFile { get; set; }
+        public string zipFile { get; set; }
         public string crc { get; set; }
         public bool enabled { get; set; }
-        public bool modChecked { get; set; }
+        public bool Checked { get; set; }
         public List<Config> configs = new List<Config>();
         public string updateComment { get; set; }
         public string description { get; set; }
         public string devURL { get; set; }
-        public List<Picture> picList = new List<Picture>();
+        public List<Picture> pictureList = new List<Picture>();
         public List<string> userFiles = new List<string>();
-        public List<Dependency> modDependencies = new List<Dependency>();
+        public List<Dependency> dependencies = new List<Dependency>();
         //the parent of a mod is a config
-        public Catagory parent { get; set; }
+        public Category parent { get; set; }
         //the index of where the mod is in the entire list ever
         public int index { get; set; }
         //size of the mod zip file
@@ -35,7 +35,7 @@ namespace RelhaxModpack
         {
             //by default make these false
             enabled = false;
-            modChecked = false;
+            Checked = false;
         }
         //returns the config of the specified name
         //if it does not exist, it returns null

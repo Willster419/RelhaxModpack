@@ -11,7 +11,7 @@ namespace RelhaxModpack
     public partial class CRCFileSizeUpdate : Form
     {
         private List<Dependency> globalDependencies;
-        private List<Catagory> parsedCatagoryList;
+        private List<Category> parsedCatagoryList;
         public CRCFileSizeUpdate()
         {
             InitializeComponent();
@@ -34,7 +34,7 @@ namespace RelhaxModpack
                 return;
             //load database
             globalDependencies = new List<Dependency>();
-            parsedCatagoryList = new List<Catagory>();
+            parsedCatagoryList = new List<Category>();
             Utils.createModStructure2(databaseLocationTextBox.Text, true, globalDependencies, parsedCatagoryList);
             //check for duplicates
             if (Utils.duplicates(parsedCatagoryList))
@@ -68,7 +68,7 @@ namespace RelhaxModpack
                     globalDepsSB.Append(d.dependencyZipFile + "\n");
                 }
             }
-            foreach (Catagory c in parsedCatagoryList)
+            foreach (Category c in parsedCatagoryList)
             {
                 foreach (Dependency d in c.dependencies)
                 {
@@ -85,7 +85,7 @@ namespace RelhaxModpack
                 }
                 foreach (Mod m in c.mods)
                 {
-                    int index = this.getZipIndex(m.modZipFile);
+                    int index = this.getZipIndex(m.zipFile);
                     if (index != -1)
                     {
                         m.size = this.getFileSize(addZipsDialog.FileNames[index]);
@@ -93,12 +93,12 @@ namespace RelhaxModpack
                         {
                             m.crc = Utils.getMd5Hash(addZipsDialog.FileNames[index]);
 
-                            modsSB.Append(m.modZipFile + "\n");
+                            modsSB.Append(m.zipFile + "\n");
                         }
                     }
                     foreach (Config cat in m.configs)
                     {
-                        int cindex = this.getZipIndex(cat.zipConfigFile);
+                        int cindex = this.getZipIndex(cat.zipFile);
                         if (cindex != -1)
                         {
                             cat.size = this.getFileSize(addZipsDialog.FileNames[cindex]);
@@ -106,10 +106,10 @@ namespace RelhaxModpack
                             {
                                 cat.crc = Utils.getMd5Hash(addZipsDialog.FileNames[cindex]);
 
-                                configsSB.Append(cat.zipConfigFile + "\n");
+                                configsSB.Append(cat.zipFile + "\n");
                             }
                         }
-                        foreach (Dependency d in cat.catDependencies)
+                        foreach (Dependency d in cat.dependencies)
                         {
                             int cindex2 = this.getZipIndex(d.dependencyZipFile);
                             if (cindex2 != -1)
@@ -147,7 +147,7 @@ namespace RelhaxModpack
                             }
                         }
                     }
-                    foreach (Dependency d in m.modDependencies)
+                    foreach (Dependency d in m.dependencies)
                     {
                         int mindex = this.getZipIndex(d.dependencyZipFile);
                         if (mindex != -1)
@@ -231,7 +231,7 @@ namespace RelhaxModpack
             root.AppendChild(globalDependenciesXml);
             //catagories
             XmlElement catagoriesHolder = doc.CreateElement("catagories");
-            foreach (Catagory c in parsedCatagoryList)
+            foreach (Category c in parsedCatagoryList)
             {
                 //catagory root
                 XmlElement catagoryRoot = doc.CreateElement("catagory");
@@ -281,7 +281,7 @@ namespace RelhaxModpack
                     modVersion.InnerText = m.version;
                     modRoot.AppendChild(modVersion);
                     XmlElement modZipFile = doc.CreateElement("modzipfile");
-                    modZipFile.InnerText = m.modZipFile;
+                    modZipFile.InnerText = m.zipFile;
                     modRoot.AppendChild(modZipFile);
                     XmlElement modStartAddress = doc.CreateElement("startAddress");
                     modStartAddress.InnerText = m.startAddress;
@@ -309,7 +309,7 @@ namespace RelhaxModpack
                     modRoot.AppendChild(modDatas);
                     //pictures for the mods
                     XmlElement modPictures = doc.CreateElement("pictures");
-                    foreach (Picture p in m.picList)
+                    foreach (Picture p in m.pictureList)
                     {
                         XmlElement pictureRoot = doc.CreateElement("picture");
                         XmlElement pictureURL = doc.CreateElement("URL");
@@ -329,7 +329,7 @@ namespace RelhaxModpack
                         configName.InnerText = cc.name;
                         configRoot.AppendChild(configName);
                         XmlElement configZipFile = doc.CreateElement("configzipfile");
-                        configZipFile.InnerText = cc.zipConfigFile;
+                        configZipFile.InnerText = cc.zipFile;
                         configRoot.AppendChild(configZipFile);
                         XmlElement configStartAddress = doc.CreateElement("startAddress");
                         configStartAddress.InnerText = cc.startAddress;
@@ -362,7 +362,7 @@ namespace RelhaxModpack
                         configRoot.AppendChild(configPictures);
                         //dependencies for the configs
                         XmlElement catDependencies = doc.CreateElement("dependencies");
-                        foreach (Dependency d in cc.catDependencies)
+                        foreach (Dependency d in cc.dependencies)
                         {
                             //declare dependency root
                             XmlElement DependencyRoot = doc.CreateElement("dependency");
@@ -462,7 +462,7 @@ namespace RelhaxModpack
                     }
                     modRoot.AppendChild(configsHolder);
                     XmlElement modDependencies = doc.CreateElement("dependencies");
-                    foreach (Dependency d in m.modDependencies)
+                    foreach (Dependency d in m.dependencies)
                     {
                         //declare dependency root
                         XmlElement DependencyRoot = doc.CreateElement("dependency");

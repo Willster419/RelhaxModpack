@@ -40,7 +40,7 @@ namespace RelhaxModpack
         //timer to measure download speed
         Stopwatch sw = new Stopwatch();
         //private string downloadURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/mods/";
-        private List<Catagory> parsedCatagoryLists;
+        private List<Category> parsedCatagoryLists;
         private List<Mod> modsToInstall;
         private List<Config> configsToInstall;
         private List<Patch> patchList;
@@ -1106,18 +1106,18 @@ namespace RelhaxModpack
             }
             //if mod is enabled and checked, add it to list of mods to extract/install
             //same for configs
-            foreach (Catagory c in parsedCatagoryLists)
+            foreach (Category c in parsedCatagoryLists)
             {
                 //will itterate through every catagory once
                 foreach (Mod m in c.mods)
                 {
                     //will itterate through every mod of every catagory once
-                    if (m.enabled && m.modChecked)
+                    if (m.enabled && m.Checked)
                     {
                         //move each mod that is enalbed and checked to a new
                         //list of mods to install
                         //also check that it actually has a zip file
-                        if (!m.modZipFile.Equals(""))
+                        if (!m.zipFile.Equals(""))
                             modsToInstall.Add(m);
                         //at least one mod of this catagory is checked, add any dependencies required
                         //add dependencies
@@ -1130,15 +1130,15 @@ namespace RelhaxModpack
                         foreach (Config cc in m.configs)
                         {
                             //check to make sureit's enabled and checked and has a valid zip file with it
-                            if (cc.enabled && cc.configChecked && !cc.zipConfigFile.Equals(""))
+                            if (cc.enabled && cc.Checked && !cc.zipFile.Equals(""))
                             {
                                 //same for configs
                                 configsToInstall.Add(cc);
                             }
                             //check to see if any catagory dependencies need to be added
-                            if (cc.enabled && cc.configChecked)
+                            if (cc.enabled && cc.Checked)
                             {
-                                foreach (Dependency d in cc.catDependencies)
+                                foreach (Dependency d in cc.dependencies)
                                 {
                                     //check dependency is enabled and has a zip file with it
                                     if (d.enabled && !d.dependencyZipFile.Equals(""))
@@ -1163,7 +1163,7 @@ namespace RelhaxModpack
                                 }
                             }
                         }
-                        foreach (Dependency d in m.modDependencies)
+                        foreach (Dependency d in m.dependencies)
                         {
                             //check dependency is enabled and has a zip file with it
                             if (d.enabled && !d.dependencyZipFile.Equals(""))
@@ -1178,7 +1178,7 @@ namespace RelhaxModpack
             //check for any user mods to install
             for (int i = 0; i < list.userMods.Count; i++)
             {
-                if (list.userMods[i].enabled && list.userMods[i].modChecked)
+                if (list.userMods[i].enabled && list.userMods[i].Checked)
                 {
                     this.userMods.Add(list.userMods[i]);
                 }
@@ -1217,18 +1217,18 @@ namespace RelhaxModpack
             }
             foreach (Mod m in modsToInstall)
             {
-                if (!this.CRCsMatch(localFilesDir + m.modZipFile, m.crc))
+                if (!this.CRCsMatch(localFilesDir + m.zipFile, m.crc))
                 {
                     //crc's don't match, need to re-download
-                    downloadQueue.Add(new DownloadItem(new Uri(m.startAddress + m.modZipFile + m.endAddress), localFilesDir + m.modZipFile));
+                    downloadQueue.Add(new DownloadItem(new Uri(m.startAddress + m.zipFile + m.endAddress), localFilesDir + m.zipFile));
                 }
             }
             foreach (Config c in configsToInstall)
             {
-                if (!this.CRCsMatch(localFilesDir + c.zipConfigFile, c.crc))
+                if (!this.CRCsMatch(localFilesDir + c.zipFile, c.crc))
                 {
                     //crc's don't match, need to re-download
-                    downloadQueue.Add(new DownloadItem(new Uri(c.startAddress + c.zipConfigFile + c.endAddress), localFilesDir + c.zipConfigFile));
+                    downloadQueue.Add(new DownloadItem(new Uri(c.startAddress + c.zipFile + c.endAddress), localFilesDir + c.zipFile));
                 }
             }
             foreach (SubConfig sc in subConfigsToInstall)
@@ -1607,15 +1607,15 @@ namespace RelhaxModpack
                 //extract mods
                 foreach (Mod m in modsToInstall)
                 {
-                    Utils.appendToLog("Extracting Mod " + m.modZipFile);
-                    if (!m.modZipFile.Equals("")) this.unzip(downloadedFilesDir + m.modZipFile, tanksLocation);
+                    Utils.appendToLog("Extracting Mod " + m.zipFile);
+                    if (!m.zipFile.Equals("")) this.unzip(downloadedFilesDir + m.zipFile, tanksLocation);
                     extractworker.ReportProgress(1);
                 }
                 //extract configs
                 foreach (Config c in configsToInstall)
                 {
-                    Utils.appendToLog("Extracting Config " + c.zipConfigFile);
-                    if (!c.zipConfigFile.Equals("")) this.unzip(downloadedFilesDir + c.zipConfigFile, tanksLocation);
+                    Utils.appendToLog("Extracting Config " + c.zipFile);
+                    if (!c.zipFile.Equals("")) this.unzip(downloadedFilesDir + c.zipFile, tanksLocation);
                     extractworker.ReportProgress(1);
                 }
                 foreach (SubConfig sc in subConfigsToInstall)
@@ -1633,10 +1633,10 @@ namespace RelhaxModpack
                 string downloadedFilesDir = Application.StartupPath + "\\RelHaxUserMods\\";
                 foreach (Mod m in userMods)
                 {
-                    if (m.modChecked)
+                    if (m.Checked)
                     {
-                        Utils.appendToLog("Exracting " + Path.GetFileName(m.modZipFile));
-                        this.unzip(downloadedFilesDir + Path.GetFileName(m.modZipFile), tanksLocation);
+                        Utils.appendToLog("Exracting " + Path.GetFileName(m.zipFile));
+                        this.unzip(downloadedFilesDir + Path.GetFileName(m.zipFile), tanksLocation);
                         extractworker.ReportProgress(1);
                     }
                 }

@@ -107,7 +107,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Catagory.cs" />
+    <Compile Include="Category.cs" />
     <Compile Include="ComboBoxItem.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ConfigFormCheckBox.cs">

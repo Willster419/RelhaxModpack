@@ -86,7 +86,7 @@ namespace RelhaxModpack
             return returnVal;
         }
         //parses the xml mod info into the memory database
-        public static void createModStructure2(string databaseURL, bool backendFlag, List<Dependency> globalDependencies, List<Catagory> parsedCatagoryList)
+        public static void createModStructure2(string databaseURL, bool backendFlag, List<Dependency> globalDependencies, List<Category> parsedCatagoryList)
         {
             XmlDocument doc = new XmlDocument();
             try
@@ -140,10 +140,10 @@ namespace RelhaxModpack
                 globalDependencies.Add(d);
             }
             XmlNodeList catagoryList = doc.SelectNodes("//modInfoAlpha.xml/catagories/catagory");
-            //parsedCatagoryList = new List<Catagory>();
+            //parsedCatagoryList = new List<Category>();
             foreach (XmlNode catagoryHolder in catagoryList)
             {
-                Catagory cat = new Catagory();
+                Category cat = new Category();
                 foreach (XmlNode catagoryNode in catagoryHolder.ChildNodes)
                 {
                     switch (catagoryNode.Name)
@@ -172,7 +172,7 @@ namespace RelhaxModpack
                                             m.size = Utils.parseFloat(modNode.InnerText, 0.0f);
                                             break;
                                         case "modzipfile":
-                                            m.modZipFile = modNode.InnerText;
+                                            m.zipFile = modNode.InnerText;
                                             break;
                                         case "startAddress":
                                             m.startAddress = modNode.InnerText;
@@ -227,7 +227,7 @@ namespace RelhaxModpack
                                                                 continue;
                                                             if (innerText.Equals(""))
                                                                 continue;
-                                                            m.picList.Add(new Picture(m.name, pictureNode.InnerText));
+                                                            m.pictureList.Add(new Picture(m.name, pictureNode.InnerText));
                                                             break;
                                                     }
                                                 }
@@ -259,7 +259,7 @@ namespace RelhaxModpack
                                                             break;
                                                     }
                                                 }
-                                                m.modDependencies.Add(d);
+                                                m.dependencies.Add(d);
                                             }
                                             break;
                                         case "configs":
@@ -275,7 +275,7 @@ namespace RelhaxModpack
                                                             c.name = configNode.InnerText;
                                                             break;
                                                         case "configzipfile":
-                                                            c.zipConfigFile = configNode.InnerText;
+                                                            c.zipFile = configNode.InnerText;
                                                             break;
                                                         case "startAddress":
                                                             c.startAddress = configNode.InnerText;
@@ -312,7 +312,7 @@ namespace RelhaxModpack
                                                                             if (backendFlag)
                                                                                 c.pictureList.Add(innerText);
                                                                             else
-                                                                                m.picList.Add(new Picture(c.name, pictureNode.InnerText));
+                                                                                m.pictureList.Add(new Picture(c.name, pictureNode.InnerText));
                                                                             break;
                                                                     }
                                                                 }
@@ -359,7 +359,7 @@ namespace RelhaxModpack
                                                                                             if (backendFlag)
                                                                                                 subC.pictureList.Add(innerText);
                                                                                             else
-                                                                                                m.picList.Add(new Picture(c.name, pictureNode.InnerText));
+                                                                                                m.pictureList.Add(new Picture(c.name, pictureNode.InnerText));
                                                                                             break;
                                                                                     }
                                                                                 }
@@ -434,7 +434,7 @@ namespace RelhaxModpack
                                                                             break;
                                                                     }
                                                                 }
-                                                                m.modDependencies.Add(d);
+                                                                m.dependencies.Add(d);
                                                             }
                                                             break;
                                                     }
@@ -482,11 +482,11 @@ namespace RelhaxModpack
             }
         }
         //checks for duplicates
-        public static bool duplicates(List<Catagory> parsedCatagoryList)
+        public static bool duplicates(List<Category> parsedCatagoryList)
         {
             //add every mod name to a new list
             List<string> modNameList = new List<string>();
-            foreach (Catagory c in parsedCatagoryList)
+            foreach (Category c in parsedCatagoryList)
             {
                 foreach (Mod m in c.mods)
                 {
@@ -494,7 +494,7 @@ namespace RelhaxModpack
                 }
             }
             //itterate through every mod name again
-            foreach (Catagory c in parsedCatagoryList)
+            foreach (Category c in parsedCatagoryList)
             {
                 foreach (Mod m in c.mods)
                 {
@@ -514,9 +514,9 @@ namespace RelhaxModpack
             return false;
         }
         //returns the mod based on catagory and mod name
-        public static Mod linkMod(string modName, string catagoryName, List<Catagory> parsedCatagoryList)
+        public static Mod linkMod(string modName, string catagoryName, List<Category> parsedCatagoryList)
         {
-            foreach (Catagory c in parsedCatagoryList)
+            foreach (Category c in parsedCatagoryList)
             {
                 foreach (Mod m in c.mods)
                 {
@@ -530,9 +530,9 @@ namespace RelhaxModpack
             return null;
         }
         //returns the mod based and mod name
-        public static Mod linkMod(string modName, List<Catagory> parsedCatagoryList)
+        public static Mod linkMod(string modName, List<Category> parsedCatagoryList)
         {
-            foreach (Catagory c in parsedCatagoryList)
+            foreach (Category c in parsedCatagoryList)
             {
                 foreach (Mod m in c.mods)
                 {
@@ -546,9 +546,9 @@ namespace RelhaxModpack
             return null;
         }
         //returns the catagory based on the catagory name
-        public static Catagory getCatagory(string catName, List<Catagory> parsedCatagoryList)
+        public static Category getCatagory(string catName, List<Category> parsedCatagoryList)
         {
-            foreach (Catagory c in parsedCatagoryList)
+            foreach (Category c in parsedCatagoryList)
             {
                 if (c.name.Equals(catName)) return c;
             }
@@ -573,9 +573,9 @@ namespace RelhaxModpack
             modList.Sort(Mod.CompareMods);
         }
         //sorte a list of catagoris alphabetaicaly
-        public static void sortCatagoryList(List<Catagory> catagoryList)
+        public static void sortCatagoryList(List<Category> catagoryList)
         {
-            catagoryList.Sort(Catagory.CompareCatagories);
+            catagoryList.Sort(Category.CompareCatagories);
         }
         //sorts a list of pictures by mod or config, then name
         public static List<Picture> sortPictureList(List<Picture> pictureList)

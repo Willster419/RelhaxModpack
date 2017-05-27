@@ -4,7 +4,7 @@ namespace RelhaxModpack
 {
     //the catagory class. a catagory is what makes up each tab in
     //the mod selection dislpay window
-    public class Catagory
+    public class Category
     {
         public string name { get; set; }
         //the selection type of the catagory. can a user select
@@ -14,7 +14,7 @@ namespace RelhaxModpack
         //list of dependencies required if anything is
         //selected from this catagory
         public List<Dependency> dependencies = new List<Dependency>();
-        public Catagory() { }
+        public Category() { }
         //returns the mod with the specified name
         //if it does not exist, it returns null
         public Mod getMod(string modName)
@@ -29,7 +29,7 @@ namespace RelhaxModpack
             return null;
         }
         //sorts the catagories
-        public static int CompareCatagories(Catagory x, Catagory y)
+        public static int CompareCatagories(Category x, Category y)
         {
             return x.name.CompareTo(y.name);
         }
