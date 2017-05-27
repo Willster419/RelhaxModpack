@@ -10,6 +10,5 @@ namespace RelhaxModpack
         public Category catagory { get; set; }
         public Mod mod { get; set; }
         public Config config { get; set; }
-        public SubConfig subconfig { get; set; }
     }
 }

@@ -3,7 +3,7 @@
 namespace RelhaxModpack
 {
     //a mod is the core of the modpack. A modification for WoT.
-    public class Mod
+    public class Mod : DatabaseObject
     {
         public string name { get; set; }
         //the developer's version of the mod
@@ -19,7 +19,7 @@ namespace RelhaxModpack
         public List<Picture> pictureList = new List<Picture>();
         public List<string> userFiles = new List<string>();
         public List<Dependency> dependencies = new List<Dependency>();
-        //the parent of a mod is a config
+        //the parent of a mod is a category
         public Category parent { get; set; }
         //the index of where the mod is in the entire list ever
         public int index { get; set; }

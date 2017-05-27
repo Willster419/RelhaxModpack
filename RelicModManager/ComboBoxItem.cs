@@ -9,12 +9,10 @@ namespace RelhaxModpack
     class ComboBoxItem
     {
         public Config config { get; set; }
-        public SubConfig subconfig { get; set; }
         public string displayName { get; set; }
-        public ComboBoxItem(Config cfg, SubConfig subcfg, string display)
+        public ComboBoxItem(Config cfg, string display)
         {
             config = cfg;
-            subconfig = subcfg;
             displayName = display;
         }
         public override string ToString()

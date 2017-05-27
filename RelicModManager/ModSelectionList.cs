@@ -294,6 +294,11 @@ namespace RelhaxModpack
             modCheckBox.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
             if (Settings.darkUI)
                 modCheckBox.FontWeight = System.Windows.FontWeights.Bold;
+            //make the tree view item for the modCheckBox
+            System.Windows.Controls.TreeViewItem tvi = new System.Windows.Controls.TreeViewItem();
+            //process configs
+            if (m.configs.Count > 0)
+                processConfigs(c, m, m.configs, tvi, true);
             modCheckBox.Content = m.name;
             //get the local md5 hash. a -1 indicates the file is not on the disk
             string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
@@ -309,11 +314,24 @@ namespace RelhaxModpack
             //set the mods checked status
             if (m.enabled && m.Checked)
                 modCheckBox.IsChecked = true;
-            //make the tree view item for the modCheckBox
-            System.Windows.Controls.TreeViewItem tvi = new System.Windows.Controls.TreeViewItem();
+            
             tvi.Header = modCheckBox;
             //add it's handlers, right click and when checked
             modCheckBox.MouseDown += new System.Windows.Input.MouseButtonEventHandler(modCheckBoxL_MouseDown);
+            
+            //add the mod check box to the legacy tree view
+            lsl.legacyTreeView.Items.Add(tvi);
+            if ((bool)modCheckBox.IsChecked && modHasRadioButtons && !hasRadioButtonConfigSelected)
+            {
+                //getting here means that the user has saved the prefrence for a selected mandatory radiobutton config that has been disabled, so his selection of that mod needs to be disabled
+                m.Checked = false;
+                modCheckBox.IsChecked = false;
+            }
+            modCheckBox.Click += new System.Windows.RoutedEventHandler(modCheckBoxL_Click);
+        }
+
+        void processConfigs(Category c, Mod m, List<Config> configs, System.Windows.Controls.TreeViewItem tvi, bool parentIsMod = false, Config parentConfig = null)
+        {
             //create the twp possible drop down options, and the mod optional config check box i guess
             ConfigWPFComboBox configControlDD = new ConfigWPFComboBox();
             configControlDD.Items.Clear();
@@ -328,47 +346,51 @@ namespace RelhaxModpack
             configControlDD2.Name = "notAddedYet";
             configControlDD2.IsEnabled = false;
             //process the configs
-            for (int i = 0; i < m.configs.Count; i++)
+            foreach (Config con in configs)
             {
-                //link the config and mod in memory
-                m.configs[i].parent = m;
+                //link stuff in memory
+                con.parentMod = m;
+                if (parentIsMod)
+                    con.parent = m;
+                else
+                    con.parent = parentConfig;
                 //create the init stuff for each config
                 ConfigWPFComboBox configControlDDALL = null;
-                if (m.configs[i].type.Equals("single") || m.configs[i].type.Equals("single1"))
+                if (con.type.Equals("single") || con.type.Equals("single1"))
                 {
                     modHasRadioButtons = true;
                     //make the radio button
                     ConfigWPFRadioButton configControlRB = new ConfigWPFRadioButton();
                     if (Settings.largeFont)
-                        configControlRB.FontSize = modCheckBox.FontSize + 4;
+                        configControlRB.FontSize = configControlRB.FontSize + 4;
                     configControlRB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
                     if (Settings.darkUI)
                         configControlRB.FontWeight = System.Windows.FontWeights.Bold;
                     configControlRB.catagory = c;
                     configControlRB.mod = m;
-                    configControlRB.config = m.configs[i];
+                    configControlRB.config = con;
                     //the logic for enabling it
                     //set them to false first
                     configControlRB.IsEnabled = false;
                     configControlRB.IsChecked = false;
-                    if (m.enabled && m.Checked && m.configs[i].enabled)
+                    if (m.enabled && m.Checked && con.enabled)
                     {
                         configControlRB.IsEnabled = true;
                         //the logic for checking it
-                        if (m.configs[i].Checked)
+                        if (con.Checked)
                         {
                             configControlRB.IsChecked = true;
                             hasRadioButtonConfigSelected = true;
                         }
                     }
                     //run the checksum logix
-                    configControlRB.Content = m.configs[i].name;
-                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipFile);
-                    if (!oldCRC.Equals(m.configs[i].crc) && (!m.configs[i].crc.Equals("")))
+                    configControlRB.Content = con.name;
+                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                    if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
                     {
                         configControlRB.Content = configControlRB.Content + " (Updated)";
-                        if (m.configs[i].size > 0.0f)
-                            configControlRB.Content = configControlRB.Content + " (" + m.configs[i].size + " MB)";
+                        if (con.size > 0.0f)
+                            configControlRB.Content = configControlRB.Content + " (" + con.size + " MB)";
                     }
                     //add the handlers at the end
                     configControlRB.Click += new System.Windows.RoutedEventHandler(configControlRB_Click);
@@ -377,85 +399,46 @@ namespace RelhaxModpack
                     configControlTVI.Header = configControlRB;
                     tvi.Items.Add(configControlTVI);
                     //process the subconfigs
-                    //code to loop through the subconfigs
-                    foreach (SubConfig sc in m.configs[i].subConfigs)
-                    {
-                        //link the subconfig in memory
-                        sc.parent = m.configs[i];
-                        //create the radioButton
-                        ConfigWPFRadioButton subRB = new ConfigWPFRadioButton();
-                        if (Settings.largeFont)
-                            subRB.FontSize = modCheckBox.FontSize + 4;
-                        subRB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
-                        if (Settings.darkUI)
-                            subRB.FontWeight = System.Windows.FontWeights.Bold;
-                        subRB.catagory = c;
-                        subRB.mod = m;
-                        subRB.config = m.configs[i];
-                        subRB.subconfig = sc;
-                        //logic for the radioButton
-                        subRB.IsEnabled = false;
-                        subRB.IsChecked = false;
-                        if (m.enabled && m.Checked && m.configs[i].enabled && m.configs[i].Checked && sc.enabled)
-                        {
-                            subRB.IsEnabled = true;
-                            if (sc.Checked)
-                                subRB.IsChecked = true;
-                        }
-                        //add handlers
-                        subRB.Click += new System.Windows.RoutedEventHandler(subRB_Click);
-                        //run checksum logic
-                        subRB.Content = sc.name;
-                        string oldSubCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + sc.zipFile);
-                        if (!oldSubCRC.Equals(sc.crc) && (!sc.zipFile.Equals("")))
-                        {
-                            subRB.Content = subRB.Content + " (Updated)";
-                            if (sc.size > 0.0f)
-                                subRB.Content = subRB.Content + " (" + sc.size + " MB)";
-                        }
-                        //add component
-                        System.Windows.Controls.TreeViewItem subRBTVI = new System.Windows.Controls.TreeViewItem();
-                        subRBTVI.Header = subRB;
-                        configControlTVI.Items.Add(subRBTVI);
-                    }
+                    if (con.configs.Count > 0)
+                        processConfigs(c, m, con.configs, configControlTVI, false, con);
                 }
-                else if (m.configs[i].type.Equals("single_dropdown") || m.configs[i].type.Equals("single_dropdown1") || m.configs[i].type.Equals("single_dropdown2"))
+                else if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1") || con.type.Equals("single_dropdown2"))
                 {
                     //set the all to whichever one it actually is
-                    if (m.configs[i].type.Equals("single_dropdown") || m.configs[i].type.Equals("single_dropdown1"))
+                    if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1"))
                     {
                         configControlDDALL = configControlDD;
                     }
-                    else if (m.configs[i].type.Equals("single_dropdown2"))
+                    else if (con.type.Equals("single_dropdown2"))
                     {
                         configControlDDALL = configControlDD2;
                     }
                     //make the dropdown selection list
                     configControlDDALL.MinWidth = 100;
                     //run the crc logics
-                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipFile);
-                    if (!oldCRC.Equals(m.configs[i].crc) && (!m.configs[i].crc.Equals("")))
+                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                    if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
                     {
-                        string toAdd = m.configs[i].name + "_Updated";
-                        if (m.configs[i].size > 0.0f)
-                            toAdd = toAdd + " (" + m.configs[i].size + " MB)";
+                        string toAdd = con.name + "_Updated";
+                        if (con.size > 0.0f)
+                            toAdd = toAdd + " (" + con.size + " MB)";
                         //add it with _updated
-                        if (m.configs[i].enabled) configControlDDALL.Items.Add(new ComboBoxItem(m.configs[i],null,toAdd));
-                        if (m.configs[i].Checked) configControlDDALL.SelectedItem = toAdd;
+                        if (con.enabled) configControlDDALL.Items.Add(new ComboBoxItem(con, toAdd));
+                        if (con.Checked) configControlDDALL.SelectedItem = toAdd;
                     }
                     else
                     {
                         //add it
-                        if (m.configs[i].enabled) configControlDDALL.Items.Add(new ComboBoxItem(m.configs[i], null, m.configs[i].name));
-                        if (m.configs[i].Checked) configControlDDALL.SelectedItem = m.configs[i].name;
+                        if (con.enabled) configControlDDALL.Items.Add(new ComboBoxItem(con, con.name));
+                        if (con.Checked) configControlDDALL.SelectedItem = con.name;
                     }
                     //add the dropdown to the thing. it will only run this once
-                    if(configControlDDALL.Name.Equals("notAddedYet"))
+                    if (configControlDDALL.Name.Equals("notAddedYet"))
                     {
                         configControlDDALL.Name = "added";
                         configControlDDALL.catagory = c;
                         configControlDDALL.mod = m;
-                        //configControlDDALL.config = m.configs[i];
+                        //configControlDDALL.config = con;
                         if (m.enabled && m.Checked)
                             configControlDDALL.IsEnabled = true;
                         configControlDDALL.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(configControlDDALL_SelectionChanged);
@@ -464,37 +447,37 @@ namespace RelhaxModpack
                         tvi.Items.Add(configControlTVI);
                     }
                 }
-                else if (m.configs[i].type.Equals("multi"))
+                else if (con.type.Equals("multi"))
                 {
                     //make the checkbox
                     ConfigWPFCheckBox configControlCB = new ConfigWPFCheckBox();
                     if (Settings.largeFont)
-                        configControlCB.FontSize = modCheckBox.FontSize + 4;
+                        configControlCB.FontSize = configControlCB.FontSize + 4;
                     configControlCB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
                     if (Settings.darkUI)
                         configControlCB.FontWeight = System.Windows.FontWeights.Bold;
                     configControlCB.catagory = c;
                     configControlCB.mod = m;
-                    configControlCB.config = m.configs[i];
+                    configControlCB.config = con;
                     //the logic for enabling it
                     //set them to false first
                     configControlCB.IsEnabled = false;
                     configControlCB.IsChecked = false;
-                    if (m.enabled && m.configs[i].enabled && m.Checked)
+                    if (m.enabled && con.enabled && m.Checked)
                     {
                         configControlCB.IsEnabled = true;
                         //the logic for checking it
-                        if (m.Checked && m.configs[i].Checked)
+                        if (m.Checked && con.Checked)
                             configControlCB.IsChecked = true;
                     }
                     //run the checksum logix
-                    configControlCB.Content = m.configs[i].name;
-                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipFile);
-                    if (!oldCRC.Equals(m.configs[i].crc) && (!m.configs[i].crc.Equals("")))
+                    configControlCB.Content = con.name;
+                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                    if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
                     {
                         configControlCB.Content = configControlCB.Content + " (Updated)";
-                        if (m.configs[i].size > 0.0f)
-                            configControlCB.Content = configControlCB.Content + " (" + m.configs[i].size + " MB)";
+                        if (con.size > 0.0f)
+                            configControlCB.Content = configControlCB.Content + " (" + con.size + " MB)";
                     }
                     //add the handlers at the end
                     configControlCB.Click += new System.Windows.RoutedEventHandler(configControlCB_Click);
@@ -503,98 +486,14 @@ namespace RelhaxModpack
                     configControlTVI.Header = configControlCB;
                     tvi.Items.Add(configControlTVI);
                     //process the subconfigs
-                    //code to loop through the subconfigs
-                    foreach (SubConfig sc in m.configs[i].subConfigs)
-                    {
-                        //create the radioButton
-                        ConfigWPFRadioButton subRB = new ConfigWPFRadioButton();
-                        if (Settings.largeFont)
-                            subRB.FontSize = modCheckBox.FontSize + 4;
-                        subRB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
-                        if (Settings.darkUI)
-                            subRB.FontWeight = System.Windows.FontWeights.Bold;
-                        subRB.catagory = c;
-                        subRB.mod = m;
-                        subRB.config = m.configs[i];
-                        subRB.subconfig = sc;
-                        //logic for the radioButton
-                        subRB.IsEnabled = false;
-                        subRB.IsChecked = false;
-                        if (m.enabled && m.Checked && m.configs[i].enabled && m.configs[i].Checked && sc.enabled)
-                        {
-                            subRB.IsEnabled = true;
-                            if (sc.Checked)
-                                subRB.IsChecked = true;
-                        }
-                        //add handlers
-                        subRB.Click += new System.Windows.RoutedEventHandler(subRB_Click);
-                        //run checksum logic
-                        subRB.Content = sc.name;
-                        string oldSubCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + sc.zipFile);
-                        if (!oldSubCRC.Equals(sc.crc) && (!sc.zipFile.Equals("")))
-                        {
-                            subRB.Content = subRB.Content + " (Updated)";
-                            if (sc.size > 0.0f)
-                                subRB.Content = subRB.Content + " (" + sc.size + " MB)";
-                        }
-                        //add component
-                        System.Windows.Controls.TreeViewItem subRBTVI = new System.Windows.Controls.TreeViewItem();
-                        subRBTVI.Header = subRB;
-                        configControlTVI.Items.Add(subRBTVI);
-                    }
+                    if (con.configs.Count > 0)
+                        processConfigs(c, m, con.configs, configControlTVI, false, con);
                 }
                 else
                 {
-                    Utils.appendToLog("WARNING: Unknown config type for " + m.configs[i].name + ": " + m.configs[i].type);
+                    Utils.appendToLog("WARNING: Unknown config type for " + con.name + ": " + con.type);
                 }
             }
-            //add the mod check box to the legacy tree view
-            lsl.legacyTreeView.Items.Add(tvi);
-            if ((bool)modCheckBox.IsChecked && modHasRadioButtons && !hasRadioButtonConfigSelected)
-            {
-                //getting here means that the user has saved the prefrence for a selected mandatory radiobutton config that has been disabled, so his selection of that mod needs to be disabled
-                m.Checked = false;
-                modCheckBox.IsChecked = false;
-            }
-            modCheckBox.Click += new System.Windows.RoutedEventHandler(modCheckBoxL_Click);
-        }
-
-        void subRB_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            ConfigWPFRadioButton rb = (ConfigWPFRadioButton)sender;
-            Mod m = rb.mod;
-            Config cfg = rb.config;
-            SubConfig subc = rb.subconfig;
-            //the subconfig treeviewitem
-            System.Windows.Controls.TreeViewItem subCFGTVI = (System.Windows.Controls.TreeViewItem)rb.Parent;
-            //the config treeviewitem
-            System.Windows.Controls.TreeViewItem cfgTVI = (System.Windows.Controls.TreeViewItem)subCFGTVI.Parent;
-            if (!(bool)rb.IsEnabled)
-            {
-                subc.Checked = false;
-                return;
-            }
-            if ((bool)rb.IsEnabled && (bool)rb.IsChecked)
-            {
-                //uncheck all subconfigs in memory
-                foreach (SubConfig sc in cfg.subConfigs)
-                {
-                    sc.Checked = false;
-                }
-                //uncheck all subconfigs in UI
-                foreach (System.Windows.Controls.TreeViewItem item in cfgTVI.Items)
-                {
-                    if (item.Header is ConfigWPFRadioButton)
-                    {
-                        ConfigWPFRadioButton rbb = (ConfigWPFRadioButton)item.Header;
-                        if (!rbb.Equals(rb))
-                        {
-                            rbb.IsChecked = false;
-                        }
-                    }
-                }
-            }
-            subc.Checked = (bool)rb.IsChecked;
         }
 
         //when a legacy checkbox of OMC view is clicked
@@ -607,13 +506,13 @@ namespace RelhaxModpack
             cfg.Checked = (bool)cb.IsChecked;
             //process the subconfigs
             bool configSelected = false;
-            if (cfg.subConfigs.Count > 0)
+            if (cfg.configs.Count > 0)
             {
                 System.Windows.Controls.TreeViewItem tvi = (System.Windows.Controls.TreeViewItem)cb.Parent;
                 foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
                 {
                     ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
-                    SubConfig subc = subRB.subconfig;
+                    Config subc = subRB.config;
                     if (!(bool)cb.IsEnabled || !(bool)cb.IsChecked)
                     {
                         subRB.IsEnabled = false;
@@ -623,7 +522,8 @@ namespace RelhaxModpack
                     {
                         //getting here means cb is enabled
                         subRB.IsEnabled = true;
-                        subRB_Click(subRB, null);
+                        //this needs to be changed
+                        //subRB_Click(subRB, null);
                         if (subc.Checked)
                             configSelected = true;
                     }
@@ -634,13 +534,13 @@ namespace RelhaxModpack
                     foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
                     {
                         ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
-                        SubConfig subc = subRB.subconfig;
+                        Config subc = subRB.config;
                         if (subc.enabled)
                         {
                             subc.Checked = true;
-                            subRB.Click -= subRB_Click;
-                            subRB.IsChecked = true;
-                            subRB.Click += subRB_Click;
+                            //subRB.Click -= subRB_Click;
+                            //subRB.IsChecked = true;
+                            //subRB.Click += subRB_Click;
                             break;
                         }
                     }
@@ -709,13 +609,13 @@ namespace RelhaxModpack
             cfg.Checked = (bool)cb.IsChecked;
             //process the subconfigs
             bool configSelected = false;
-            if (cfg.subConfigs.Count > 0)
+            if (cfg.configs.Count > 0)
             {
                 System.Windows.Controls.TreeViewItem tvi = (System.Windows.Controls.TreeViewItem)cb.Parent;
                 foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
                 {
                     ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
-                    SubConfig subc = subRB.subconfig;
+                    Config subc = subRB.config;
                     if (!(bool)cb.IsEnabled || !(bool)cb.IsChecked)
                     {
                         subRB.IsEnabled = false;
@@ -725,7 +625,7 @@ namespace RelhaxModpack
                     {
                         //getting here means cb is enabled
                         subRB.IsEnabled = true;
-                        subRB_Click(subRB, null);
+                        //subRB_Click(subRB, null);
                         if (subc.Checked)
                             configSelected = true;
                     }
@@ -736,13 +636,13 @@ namespace RelhaxModpack
                     foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
                     {
                         ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
-                        SubConfig subc = subRB.subconfig;
+                        Config subc = subRB.config;
                         if (subc.enabled)
                         {
                             subc.Checked = true;
-                            subRB.Click -= subRB_Click;
-                            subRB.IsChecked = true;
-                            subRB.Click += subRB_Click;
+                            //subRB.Click -= subRB_Click;
+                            //subRB.IsChecked = true;
+                            //subRB.Click += subRB_Click;
                             break;
                         }
                     }
@@ -982,7 +882,7 @@ namespace RelhaxModpack
                     Panel subConfigPanel = null;
 
                     //code to run once to init setup the panels and stuff
-                    if (m.configs[i].subConfigs.Count > 0)
+                    if (m.configs[i].configs.Count > 0)
                     {
                         subConfigPanel = new Panel();
                         subConfigPanel.Enabled = true;
@@ -995,9 +895,9 @@ namespace RelhaxModpack
                         subConfigPanel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name + "_subConfigPanel";
                     }
                     //code th loop through the subconfigs
-                    for(int j = 0; j < m.configs[i].subConfigs.Count; j++)
+                    for(int j = 0; j < m.configs[i].configs.Count; j++)
                     {
-                        SubConfig sc = m.configs[i].subConfigs[j];
+                        Config sc = m.configs[i].configs[j];
                         ConfigFormRadioButton subRB = new ConfigFormRadioButton();
                         subRB.AutoSize = true;
                         subRB.Location = new Point(6, (15 * j) + 3);
@@ -1007,7 +907,7 @@ namespace RelhaxModpack
                         subRB.catagory = catagory;
                         subRB.mod = m;
                         subRB.config = m.configs[i];
-                        subRB.subconfig = sc;
+                        subRB.config = sc;
                         //logic for the radioButtons
                         subRB.Enabled = false;
                         subRB.Checked = false;
@@ -1065,7 +965,7 @@ namespace RelhaxModpack
                         if (m.configs[i].size > 0.0f)
                             toAdd = toAdd + " (" + m.configs[i].size + " MB)";
                         //add it with _updated
-                        if (m.configs[i].enabled) configControlDDALL.Items.Add(new ComboBoxItem(m.configs[i],null,toAdd));
+                        if (m.configs[i].enabled) configControlDDALL.Items.Add(new ComboBoxItem(m.configs[i],toAdd));
                         if (m.configs[i].Checked)
                         {
                             configControlDDALL.SelectedItem = toAdd;
@@ -1075,7 +975,7 @@ namespace RelhaxModpack
                     else
                     {
                         //add it
-                        if (m.configs[i].enabled) configControlDDALL.Items.Add(new ComboBoxItem(m.configs[i],null,m.configs[i].name));
+                        if (m.configs[i].enabled) configControlDDALL.Items.Add(new ComboBoxItem(m.configs[i],m.configs[i].name));
                         if (m.configs[i].Checked)
                         {
                             configControlDDALL.SelectedItem = m.configs[i].name;
@@ -1126,7 +1026,7 @@ namespace RelhaxModpack
                     Panel subConfigPanel = null;
 
                     //code to run once to init setup the panels and stuff
-                    if (m.configs[i].subConfigs.Count > 0)
+                    if (m.configs[i].configs.Count > 0)
                     {
                         subConfigPanel = new Panel();
                         subConfigPanel.Enabled = true;
@@ -1139,9 +1039,9 @@ namespace RelhaxModpack
                         subConfigPanel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name + "_subConfigPanel";
                     }
                     //code th loop through the subconfigs
-                    for (int j = 0; j < m.configs[i].subConfigs.Count; j++)
+                    for (int j = 0; j < m.configs[i].configs.Count; j++)
                     {
-                        SubConfig sc = m.configs[i].subConfigs[j];
+                        Config sc = m.configs[i].configs[j];
                         ConfigFormRadioButton subRB = new ConfigFormRadioButton();
                         subRB.AutoSize = true;
                         subRB.Location = new Point(6, (13 * j) + 3);
@@ -1151,7 +1051,7 @@ namespace RelhaxModpack
                         subRB.catagory = catagory;
                         subRB.mod = m;
                         subRB.config= m.configs[i];
-                        subRB.subconfig = sc;
+                        subRB.config = sc;
                         //logic for the radioButtons
                         subRB.Enabled = false;
                         subRB.Checked = false;
@@ -1340,9 +1240,9 @@ namespace RelhaxModpack
             {
                 //uncheck config in database
                 cfg.Checked = false;
-                if (cfg.subConfigs.Count > 0)
+                if (cfg.configs.Count > 0)
                 {
-                    //modify the panel and trigger the subConfigs
+                    //modify the panel and trigger the configs
                     foreach (Control p in configPanel.Controls)
                     {
                         if ((p is Panel) && (p.Name.Equals(cat.name + "_" + m.name + "_" + cfg.name + "_subConfigPanel")))
@@ -1365,15 +1265,15 @@ namespace RelhaxModpack
                 //checkbox is enabled, toggle checked and checked
                 cfg.Checked = cb.Checked;
                 //at this point it is enabled
-                if (cfg.subConfigs.Count > 0)
+                if (cfg.configs.Count > 0)
                 {
                     bool configSelected = false;
                     string lastConfig = "null";
-                    foreach (SubConfig sc in cfg.subConfigs)
+                    foreach (Config sc in cfg.configs)
                     {
                         lastConfig = sc.name;
                     }
-                    //modify the panel and trigger the subConfigs
+                    //modify the panel and trigger the configs
                     foreach (Control p in configPanel.Controls)
                     {
                         if ((p is Panel) && (p.Name.Equals(cat.name + "_" + m.name + "_" + cfg.name + "_subConfigPanel")))
@@ -1383,7 +1283,7 @@ namespace RelhaxModpack
                             foreach (Control cont in pan.Controls)
                             {
                                 ConfigFormRadioButton r = (ConfigFormRadioButton)cont;
-                                SubConfig sc2 = r.subconfig;
+                                Config sc2 = r.config;
                                 r.Enabled = true;
                                 subRB_CheckedChanged(r, null);
                                 if (sc2.Checked)
@@ -1402,7 +1302,7 @@ namespace RelhaxModpack
                                 foreach (Control cont in pan.Controls)
                                 {
                                     ConfigFormRadioButton r = (ConfigFormRadioButton)cont;
-                                    SubConfig sc2 = r.subconfig;
+                                    Config sc2 = r.config;
                                     if (r.Enabled)
                                     {
                                         r.CheckedChanged -= subRB_CheckedChanged;
@@ -1435,9 +1335,9 @@ namespace RelhaxModpack
             if (!rb.Enabled || !rb.Checked)
             {
                 c.Checked = false;
-                if (c.subConfigs.Count > 0)
+                if (c.configs.Count > 0)
                 {
-                    //modify the panel and trigger the subConfigs
+                    //modify the panel and trigger the configs
                     foreach (Control p in configPanel.Controls)
                     {
                         if ((p is Panel) && (p.Name.Equals(cat.name + "_" + m.name + "_" + c.name + "_subConfigPanel")))
@@ -1480,15 +1380,15 @@ namespace RelhaxModpack
             }
             c.Checked = rb.Checked;
             //at this point it is enabled
-            if (c.subConfigs.Count > 0)
+            if (c.configs.Count > 0)
             {
                 bool configSelected = false;
                 string lastConfig = "null";
-                foreach (SubConfig sc in c.subConfigs)
+                foreach (Config sc in c.configs)
                 {
                     lastConfig = sc.name;
                 }
-                //modify the panel and trigger the subConfigs
+                //modify the panel and trigger the configs
                 foreach (Control p in configPanel.Controls)
                 {
                     if ((p is Panel) && (p.Name.Equals(cat.name + "_" + m.name + "_" + c.name + "_subConfigPanel")))
@@ -1498,7 +1398,7 @@ namespace RelhaxModpack
                         foreach (Control cont in pan.Controls)
                         {
                             ConfigFormRadioButton r = (ConfigFormRadioButton)cont;
-                            SubConfig sc2 = r.subconfig;
+                            Config sc2 = r.config;
                             r.Enabled = true;
                             subRB_CheckedChanged(r, null);
                             if (sc2.Checked)
@@ -1517,7 +1417,7 @@ namespace RelhaxModpack
                             foreach (Control cont in pan.Controls)
                             {
                                 ConfigFormRadioButton r = (ConfigFormRadioButton)cont;
-                                SubConfig sc2 = r.subconfig;
+                                Config sc2 = r.config;
                                 if (r.Enabled)
                                 {
                                     r.CheckedChanged -= subRB_CheckedChanged;
@@ -1544,7 +1444,7 @@ namespace RelhaxModpack
             Mod m = rb.mod;
             Config c = rb.config;
             Panel configPanel = (Panel)rb.Parent;
-            SubConfig sfg = rb.subconfig;
+            Config sfg = rb.config;
             //verify mod is enabled
             if (!rb.Enabled)
             {
@@ -1552,7 +1452,7 @@ namespace RelhaxModpack
                 return;
             }
             //uncheck all mods in memory
-            foreach (SubConfig sc in c.subConfigs)
+            foreach (Config sc in c.configs)
             {
                 sc.Checked = false;
             }
@@ -1790,6 +1690,11 @@ namespace RelhaxModpack
                 }
             }
         }
+        //recursive resize of the control panals
+        private void resizePanel()
+        {
+
+        }
         //handler to set the cancel bool to false
         private void continueButton_Click(object sender, EventArgs e)
         {
@@ -1870,11 +1775,11 @@ namespace RelhaxModpack
                                     configName.InnerText = cc.name;
                                     config.AppendChild(configName);
 
-                                    if (cc.subConfigs.Count > 0)
+                                    if (cc.configs.Count > 0)
                                     {
-                                        XmlElement subConfigsHolder = doc.CreateElement("subConfigs");
+                                        XmlElement subConfigsHolder = doc.CreateElement("configs");
                                         config.AppendChild(subConfigsHolder);
-                                        foreach (SubConfig sc in cc.subConfigs)
+                                        foreach (Config sc in cc.configs)
                                         {
                                             if (sc.Checked)
                                             {
@@ -1952,7 +1857,7 @@ namespace RelhaxModpack
                 }
                 filePath = loadLocation.FileName;
             }
-            this.clearSelectionMemory();
+            Utils.clearSelectionMemory(parsedCatagoryList);
             Utils.appendToLog("Loading mod selections from " + filePath);
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
@@ -2007,12 +1912,12 @@ namespace RelhaxModpack
                                                 c.Checked = true;
                                             }
                                             break;
-                                        case "subConfigs":
+                                        case "configs":
                                             foreach (XmlNode subConfigHolder in nnnn.ChildNodes)
                                             {
                                                 if (c == null)
                                                     continue;
-                                                SubConfig sc = new SubConfig();
+                                                Config sc = new Config();
                                                 foreach (XmlNode subConfigNode in subConfigHolder.ChildNodes)
                                                 {
                                                     switch (subConfigNode.Name)
@@ -2122,37 +2027,10 @@ namespace RelhaxModpack
             if (p != null)
                 p.Close();
         }
-        //unchecks all mods from memory
-        private void clearSelectionMemory()
-        {
-            Utils.appendToLog("Unchecking all mods");
-            foreach (Category c in parsedCatagoryList)
-            {
-                foreach (Mod m in c.mods)
-                {
-                    if (m.enabled)
-                    {
-                        m.Checked = false;
-                        foreach (Config cc in m.configs)
-                        {
-                            if (cc.enabled)
-                            {
-                                cc.Checked = false;
-                                foreach (SubConfig subc in cc.subConfigs)
-                                {
-                                    if (subc.enabled)
-                                        subc.Checked = false;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         private void clearSelectionsButton_Click(object sender, EventArgs e)
         {
-            this.clearSelectionMemory();
+            Utils.clearSelectionMemory(parsedCatagoryList);
             Utils.appendToLog("clearSelectionsButton pressed, clearing selections");
             MessageBox.Show(Translations.getTranslatedString("selectionsCleared"));
             //reload the UI

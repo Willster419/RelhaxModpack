@@ -121,7 +121,7 @@ namespace RelhaxModpack
                                 }
                             }
                         }
-                        foreach (SubConfig sc in cat.subConfigs)
+                        foreach (Config sc in cat.configs)
                         {
                             int scindex = this.getZipIndex(sc.zipFile);
                             if (scindex != -1)
@@ -387,8 +387,8 @@ namespace RelhaxModpack
                         }
                         configRoot.AppendChild(catDependencies);
                         //subconfigs for the configs
-                        XmlElement subconfigHolder = doc.CreateElement("subConfigs");
-                        foreach (SubConfig s in cc.subConfigs)
+                        XmlElement subconfigHolder = doc.CreateElement("configs");
+                        foreach (Config s in cc.configs)
                         {
                             //decalre subConfig root
                             XmlElement subConfigRoot = doc.CreateElement("subConfig");

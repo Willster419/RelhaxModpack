@@ -45,7 +45,7 @@ namespace RelhaxModpack
         private List<Config> configsToInstall;
         private List<Patch> patchList;
         private List<Dependency> dependencies;
-        private List<SubConfig> subConfigsToInstall;
+        private List<Config> subConfigsToInstall;
         //installing the RelhaxModpack of the Relhax Sound Mod
         bool modPack;
         string tempOldDownload;
@@ -1096,7 +1096,7 @@ namespace RelhaxModpack
             patchList = new List<Patch>();
             userMods = new List<Mod>();
             dependencies = new List<Dependency>();
-            subConfigsToInstall = new List<SubConfig>();
+            subConfigsToInstall = new List<Config>();
             parsedCatagoryLists = list.parsedCatagoryList;
             //add the global dependencies to the dependency list
             foreach (Dependency d in list.globalDependencies)
@@ -1145,7 +1145,7 @@ namespace RelhaxModpack
                                         this.addUniqueDependency(d);
                                 }
                                 //also check to see if any subconfigs need to be installed
-                                foreach (SubConfig sc in cc.subConfigs)
+                                foreach (Config sc in cc.configs)
                                 {
                                     //verify that the subconfig should be added
                                     if (sc.enabled && sc.Checked && !sc.zipFile.Equals(""))
@@ -1231,7 +1231,7 @@ namespace RelhaxModpack
                     downloadQueue.Add(new DownloadItem(new Uri(c.startAddress + c.zipFile + c.endAddress), localFilesDir + c.zipFile));
                 }
             }
-            foreach (SubConfig sc in subConfigsToInstall)
+            foreach (Config sc in subConfigsToInstall)
             {
                 if (!this.CRCsMatch(localFilesDir + sc.zipFile, sc.crc))
                 {
@@ -1618,7 +1618,7 @@ namespace RelhaxModpack
                     if (!c.zipFile.Equals("")) this.unzip(downloadedFilesDir + c.zipFile, tanksLocation);
                     extractworker.ReportProgress(1);
                 }
-                foreach (SubConfig sc in subConfigsToInstall)
+                foreach (Config sc in subConfigsToInstall)
                 {
                     Utils.appendToLog("Extracting SubConfig " + sc.zipFile);
                     if (!sc.zipFile.Equals("")) this.unzip(downloadedFilesDir + sc.zipFile, tanksLocation);

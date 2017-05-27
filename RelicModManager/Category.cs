@@ -4,7 +4,7 @@ namespace RelhaxModpack
 {
     //the catagory class. a catagory is what makes up each tab in
     //the mod selection dislpay window
-    public class Category
+    public class Category : DatabaseObject
     {
         public string name { get; set; }
         //the selection type of the catagory. can a user select
