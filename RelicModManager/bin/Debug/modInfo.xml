@@ -11402,7 +11402,7 @@
     </catagory>
     <catagory>
       <name>Sound Mods</name>
-      <selectionType>single</selectionType>
+      <selectionType>multi</selectionType>
       <dependencies>
         <dependency>
           <dependencyZipFile>Dependency_Sounds_Increase_Sound_Memory_2017_03_15.zip</dependencyZipFile>
@@ -11415,212 +11415,9 @@
       </dependencies>
       <mods>
         <mod>
-          <name>GnomeFather’s HRMOD Gun Sounds (reworked by Zorgane)</name>
-          <version>1.13</version>
-          <zipFile>Sounds_HRMOD_Gun_Sounds_by_Zorgane_v1.13_with_editorMemoryManager.zip</zipFile>
-          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-          <endAddress>
-          </endAddress>
-          <crc>5883ced3bdea8f4f29c9d36edafdc543</crc>
-          <enabled>True</enabled>
-          <index>0</index>
-          <size>51.4</size>
-          <updateComment>v1.13 - updated to 0.9.18.0</updateComment>
-          <description>https://www.youtube.com/embed/V7G2JDB07Lw?rel=0&amp;autoplay=1&amp;controls=1&amp;modestbranding=1&amp;showinfo=0&amp;iv_load_policy=3 @Audio mod with various gun sounds for all weapons and nations. Sound depends on caliber and range from shot.</description>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/596268-</devURL>
-          <userDatas />
-          <pictures>
-            <picture>
-              <URL>http://image.noelshack.com/fichiers/2016/43/1477323738-zorgane-s-modshop.png</URL>
-            </picture>
-          </pictures>
-          <configs />
-          <dependencies />
-        </mod>
-        <mod>
-          <name>Grandpas Favorite Voices and Sounds Mod</name>
-          <version>4.19.17</version>
-          <zipFile>Sounds_Grandpas_Crew_Voices_and_Sounds.zip</zipFile>
-          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-          <endAddress>
-          </endAddress>
-          <crc>5d69d517150744f6d9ab6bb1bd16ccdc</crc>
-          <enabled>True</enabled>
-          <index>0</index>
-          <size>6.7</size>
-          <updateComment>v4.19.17 - updated to 0.9.18.0</updateComment>
-          <description>Audio mod with various voices from@Duke Nukem, Team Fortress, Left 4 Dead, Minnions@and some female voices, gun reloaded notification and sixth sense sound.</description>
-          <devURL>https://mods.curse.com/wot-mods/worldoftanks/grandpas-favorite-voices-mod</devURL>
-          <userDatas />
-          <pictures>
-            <picture>
-              <URL>https://media-curse.cursecdn.com/attachments/88/867/b52eea772c5f121931775c098c68a4b6.jpg</URL>
-            </picture>
-          </pictures>
-          <configs />
-          <dependencies />
-        </mod>
-        <mod>
-          <name>Relhax</name>
-          <version>18</version>
-          <zipFile>Sounds_Relhax_Base_2017-03-11.zip</zipFile>
-          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-          <endAddress>
-          </endAddress>
-          <crc>9fb70cff47f69c52a0a2a332223f5a26</crc>
-          <enabled>True</enabled>
-          <index>0</index>
-          <size>52.8</size>
-          <updateComment>
-          </updateComment>
-          <description>Replaces all crew sounds with hilarious out-of-context sound bytes from people of the RELIC gaming community</description>
-          <devURL>http://relicgaming.com/index.php?topic=697.0</devURL>
-          <userDatas />
-          <pictures>
-            <picture>
-              <URL>http://i.imgur.com/uWih1kD.jpg</URL>
-            </picture>
-          </pictures>
-          <configs>
-            <config>
-              <name>standard</name>
-              <version>
-              </version>
-              <zipFile>Sounds_Relhax_Config_Regular_2017-03-09.zip</zipFile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <crc>ba68bc2012a0aa93cc19f0efd5637f2d</crc>
-              <enabled>True</enabled>
-              <index>0</index>
-              <size>34.6</size>
-              <updateComment>
-              </updateComment>
-              <description>
-              </description>
-              <devURL>
-              </devURL>
-              <type>single</type>
-              <userDatas />
-              <pictures />
-              <configs />
-              <dependencies />
-            </config>
-            <config>
-              <name>censored</name>
-              <version>
-              </version>
-              <zipFile>Sounds_Relhax_Config_Censored_2017-03-09.zip</zipFile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <crc>0748980e254c5f0482fc0ac7589ec39b</crc>
-              <enabled>True</enabled>
-              <index>0</index>
-              <size>34.2</size>
-              <updateComment>
-              </updateComment>
-              <description>
-              </description>
-              <devURL>
-              </devURL>
-              <type>single</type>
-              <userDatas />
-              <pictures />
-              <configs />
-              <dependencies />
-            </config>
-          </configs>
-          <dependencies />
-        </mod>
-        <mod>
-          <name>MLG Mod by Aimdrol</name>
+          <name>Gun sounds</name>
           <version>
           </version>
-          <zipFile>Sounds_mlg_mod_voice_2017_03_16.zip</zipFile>
-          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-          <endAddress>
-          </endAddress>
-          <crc>240a3e5046fa1a67fec9170e6efc7046</crc>
-          <enabled>False</enabled>
-          <index>0</index>
-          <size>14.8</size>
-          <updateComment>
-          </updateComment>
-          <description>Must have sound crew language set to "standard"@MLG EVERYWHERE@Also includes awesome visuals.</description>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/</devURL>
-          <userDatas />
-          <pictures />
-          <configs>
-            <config>
-              <name>audio only, no visuals</name>
-              <version>
-              </version>
-              <zipFile>Sounds_mlg_mod_voice_sound_only_patch.zip</zipFile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <crc>c46a3d2c3701290363a0c7115ab63e37</crc>
-              <enabled>True</enabled>
-              <index>0</index>
-              <size>0.1</size>
-              <updateComment>
-              </updateComment>
-              <description>
-              </description>
-              <devURL>
-              </devURL>
-              <type>multi</type>
-              <userDatas />
-              <pictures />
-              <configs />
-              <dependencies />
-            </config>
-          </configs>
-          <dependencies />
-        </mod>
-        <mod>
-          <name>Sounds instead of crew voices by vvooj</name>
-          <version>6.1</version>
-          <zipFile>Sounds_Simple_Crew_Sounds_2017-03-11.zip</zipFile>
-          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-          <endAddress>
-          </endAddress>
-          <crc>1dca974f0626222178bbf6020f146099</crc>
-          <enabled>True</enabled>
-          <index>0</index>
-          <size>0.1</size>
-          <updateComment>
-          </updateComment>
-          <description>Mutes all crew sounds and replaces them with sounds</description>
-          <devURL>http://www.curse.com/wot-mods/worldoftanks/simple-sounds</devURL>
-          <userDatas />
-          <pictures />
-          <configs />
-          <dependencies />
-        </mod>
-        <mod>
-          <name>Julie Voice Pack</name>
-          <version>0.9.18_2017-05-02</version>
-          <zipFile>Sounds_Julie_Voice_Pack.zip</zipFile>
-          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-          <endAddress>
-          </endAddress>
-          <crc>f2c274197493002ddededf8d00ef29f5</crc>
-          <enabled>True</enabled>
-          <index>0</index>
-          <size>4.6</size>
-          <updateComment>updated by niserius</updateComment>
-          <description>Must have sound crew language set to "standard"</description>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/559722-julie-voice-others/</devURL>
-          <userDatas />
-          <pictures />
-          <configs />
-          <dependencies />
-        </mod>
-        <mod>
-          <name>Monty Python Voice Mod</name>
-          <version>1.3</version>
           <zipFile>
           </zipFile>
           <startAddress>
@@ -11629,179 +11426,331 @@
           </endAddress>
           <crc>
           </crc>
-          <enabled>True</enabled>
-          <index>0</index>
           <size>0</size>
-          <updateComment>
-          </updateComment>
-          <description>Replaces crew sounds with Monty Python Sound bites. Must have sound crew language set to "standard"</description>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/617986-09171-monty-python-crew-sounds/</devURL>
+          <enabled>True</enabled>
           <userDatas />
           <pictures />
           <configs>
             <config>
-              <name>standard</name>
-              <version>
-              </version>
-              <zipFile>Sounds_Monty_Python_2017_05_10.zip</zipFile>
+              <name>GnomeFather’s HRMOD Gun Sounds (reworked by Zorgane)</name>
+              <zipFile>Sounds_HRMOD_Gun_Sounds_by_Zorgane_v1.13_with_editorMemoryManager.zip</zipFile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <crc>02fdc70dab677ad69a58014c5a809aed</crc>
+              <crc>5883ced3bdea8f4f29c9d36edafdc543</crc>
+              <size>51.4</size>
               <enabled>True</enabled>
-              <index>0</index>
-              <size>9.6</size>
-              <updateComment>
-              </updateComment>
-              <description>
-              </description>
-              <devURL>
-              </devURL>
               <type>single</type>
-              <userDatas />
-              <pictures />
-              <configs />
+              <pictures>
+                <picture>
+                  <URL>http://image.noelshack.com/fichiers/2016/43/1477323738-zorgane-s-modshop.png</URL>
+                </picture>
+              </pictures>
               <dependencies />
-            </config>
-            <config>
-              <name>Kid Safe</name>
-              <version>
-              </version>
-              <zipFile>Sounds_Monty_Python_Kid_Safe_2017_05_10.zip</zipFile>
-              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-              <endAddress>
-              </endAddress>
-              <crc>ea77b0bc3f6cfa2663259d71513c8556</crc>
-              <enabled>True</enabled>
-              <index>0</index>
-              <size>7</size>
-              <updateComment>
-              </updateComment>
-              <description>
-              </description>
-              <devURL>
-              </devURL>
-              <type>single</type>
-              <userDatas />
-              <pictures />
               <configs />
-              <dependencies />
             </config>
           </configs>
           <dependencies />
+          <description>
+          </description>
+          <updateComment>
+          </updateComment>
+          <devURL>
+          </devURL>
         </mod>
         <mod>
-          <name>Romanian crew voices</name>
-          <version>0.9.18_2017-05-02</version>
-          <zipFile>Sounds_Romainian_2017-05-02.zip</zipFile>
-          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
-          <endAddress>
-          </endAddress>
-          <crc>28572ffbdd8d672d0117b22d334a5a7e</crc>
-          <enabled>True</enabled>
-          <index>0</index>
-          <size>8.8</size>
-          <updateComment>updated by niserius</updateComment>
-          <description>Must have sound crew language set to "standard"</description>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/559722-julie-voice-others/</devURL>
-          <userDatas />
-          <pictures />
-          <configs />
-          <dependencies />
-        </mod>
-        <mod>
-          <name>UT Countdown</name>
+          <name>Crew sounds</name>
           <version>
           </version>
-          <zipFile>Sounds_UT_Announcer_updated_by_budyx69_base_2017-05-11.zip</zipFile>
-          <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+          <zipFile>
+          </zipFile>
+          <startAddress>
+          </startAddress>
           <endAddress>
           </endAddress>
-          <crc>c0e3f01e116a0c6d2743fa706b5d8aaa</crc>
+          <crc>
+          </crc>
+          <size>0</size>
           <enabled>True</enabled>
-          <index>0</index>
-          <size>0.1</size>
-          <updateComment>
-          </updateComment>
-          <description>Plays certain sounds for when you get a certain number of kills in the game.</description>
-          <devURL>http://forum.worldoftanks.eu/index.php?/topic/557716-</devURL>
           <userDatas />
           <pictures />
           <configs>
             <config>
-              <name>Locastan origanal config</name>
-              <version>
-              </version>
-              <zipFile>Sounds_UT_Announcer_updated_by_budyx69_config_0.9.17.1_2017-05-11.zip</zipFile>
+              <name>Grandpas Favorite Voices and Sounds Mod</name>
+              <zipFile>Sounds_Grandpas_Crew_Voices_and_Sounds.zip</zipFile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <crc>6152fa534dcd9893ed9f282eda5d8655</crc>
+              <crc>5d69d517150744f6d9ab6bb1bd16ccdc</crc>
+              <size>6.7</size>
               <enabled>True</enabled>
-              <index>0</index>
-              <size>0.3</size>
-              <updateComment>
-              </updateComment>
-              <description>
-              </description>
-              <devURL>
-              </devURL>
               <type>single</type>
-              <userDatas />
-              <pictures />
-              <configs />
+              <pictures>
+                <picture>
+                  <URL>https://media-curse.cursecdn.com/attachments/88/867/b52eea772c5f121931775c098c68a4b6.jpg</URL>
+                </picture>
+              </pictures>
               <dependencies />
+              <configs />
             </config>
             <config>
-              <name>Only 3 min warning config</name>
-              <version>
-              </version>
-              <zipFile>Sounds_UT_Announcer_updated_by_budyx69_only_3min_counter_2017-05-11.zip</zipFile>
+              <name>Relhax</name>
+              <zipFile>Sounds_Relhax_Base_2017-03-11.zip</zipFile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <crc>bb23fd9cd06c2b97185a233abde958c3</crc>
+              <crc>9fb70cff47f69c52a0a2a332223f5a26</crc>
+              <size>52.8</size>
               <enabled>True</enabled>
-              <index>0</index>
-              <size>0.3</size>
-              <updateComment>
-              </updateComment>
-              <description>
-              </description>
-              <devURL>
-              </devURL>
               <type>single</type>
-              <userDatas />
-              <pictures />
-              <configs />
+              <pictures>
+                <picture>
+                  <URL>http://i.imgur.com/uWih1kD.jpg</URL>
+                </picture>
+              </pictures>
               <dependencies />
+              <configs>
+                <config>
+                  <name>standard</name>
+                  <zipFile>Sounds_Relhax_Config_Regular_2017-03-09.zip</zipFile>
+                  <crc>ba68bc2012a0aa93cc19f0efd5637f2d</crc>
+                  <enabled>True</enabled>
+                  <type>single</type>
+                  <size>34.6</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </config>
+                <config>
+                  <name>censored</name>
+                  <zipFile>Sounds_Relhax_Config_Censored_2017-03-09.zip</zipFile>
+                  <crc>0748980e254c5f0482fc0ac7589ec39b</crc>
+                  <enabled>True</enabled>
+                  <type>single</type>
+                  <size>34.2</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </config>
+              </configs>
             </config>
             <config>
-              <name>Webium config</name>
-              <version>
-              </version>
-              <zipFile>Sounds_UT_Announcer_updated_by_budyx69_webium_config_2017-05-11.zip</zipFile>
+              <name>MLG Mod by Aimdrol</name>
+              <zipFile>Sounds_mlg_mod_voice_2017_03_16.zip</zipFile>
               <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
               <endAddress>
               </endAddress>
-              <crc>40f01f8378440a9403a9776cfb3e3613</crc>
+              <crc>240a3e5046fa1a67fec9170e6efc7046</crc>
+              <size>14.8</size>
               <enabled>False</enabled>
-              <index>0</index>
-              <size>1.6</size>
-              <updateComment>
-              </updateComment>
-              <description>
-              </description>
-              <devURL>
-              </devURL>
               <type>single</type>
-              <userDatas />
               <pictures />
-              <configs />
               <dependencies />
+              <configs>
+                <config>
+                  <name>audio only, no visuals</name>
+                  <zipFile>Sounds_mlg_mod_voice_sound_only_patch.zip</zipFile>
+                  <crc>c46a3d2c3701290363a0c7115ab63e37</crc>
+                  <enabled>True</enabled>
+                  <type>single</type>
+                  <size>0.1</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </config>
+                <config>
+                  <name>audio and visuals</name>
+                  <zipFile>
+                  </zipFile>
+                  <crc>
+                  </crc>
+                  <enabled>True</enabled>
+                  <type>single</type>
+                  <size>0</size>
+                  <startAddress>
+                  </startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </config>
+              </configs>
+            </config>
+            <config>
+              <name>Sounds instead of crew voices by vvooj</name>
+              <zipFile>Sounds_Simple_Crew_Sounds_2017-03-11.zip</zipFile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <crc>1dca974f0626222178bbf6020f146099</crc>
+              <size>0.1</size>
+              <enabled>True</enabled>
+              <type>single</type>
+              <pictures />
+              <dependencies />
+              <configs />
+            </config>
+            <config>
+              <name>Julie Voice Pack</name>
+              <zipFile>Sounds_Julie_Voice_Pack.zip</zipFile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <crc>f2c274197493002ddededf8d00ef29f5</crc>
+              <size>4.6</size>
+              <enabled>True</enabled>
+              <type>single</type>
+              <pictures />
+              <dependencies />
+              <configs />
+            </config>
+            <config>
+              <name>Monty Python Voice Mod</name>
+              <zipFile>
+              </zipFile>
+              <startAddress>
+              </startAddress>
+              <endAddress>
+              </endAddress>
+              <crc>
+              </crc>
+              <size>0</size>
+              <enabled>True</enabled>
+              <type>single</type>
+              <pictures />
+              <dependencies />
+              <configs>
+                <config>
+                  <name>standard</name>
+                  <zipFile>Sounds_Monty_Python_2017_05_10.zip</zipFile>
+                  <crc>02fdc70dab677ad69a58014c5a809aed</crc>
+                  <enabled>True</enabled>
+                  <type>single</type>
+                  <size>9.6</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </config>
+                <config>
+                  <name>Kid Safe</name>
+                  <zipFile>Sounds_Monty_Python_Kid_Safe_2017_05_10.zip</zipFile>
+                  <crc>ea77b0bc3f6cfa2663259d71513c8556</crc>
+                  <enabled>True</enabled>
+                  <type>single</type>
+                  <size>7</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </config>
+              </configs>
+            </config>
+            <config>
+              <name>Romanian crew voices</name>
+              <zipFile>Sounds_Romainian_2017-05-02.zip</zipFile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <crc>28572ffbdd8d672d0117b22d334a5a7e</crc>
+              <size>8.8</size>
+              <enabled>True</enabled>
+              <type>single</type>
+              <pictures />
+              <dependencies />
+              <configs />
             </config>
           </configs>
           <dependencies />
+          <description>Grandpas:@Audio mod with various voices from@Duke Nukem, Team Fortress, Left 4 Dead, Minnions@and some female voices, gun reloaded notification and sixth sense sound.@Relhax:@Replaces all crew sounds with hilarious out-of-context sound bytes from people of the RELIC gaming community@MLG Mod:@Must have sound crew language set to "standard"@MLG EVERYWHERE@Also includes awesome visuals.@Sounds for Crew voices:@Mutes all crew sounds and replaces them with sounds@Julie:@Must have sound crew language set to "standard"@Monty Python:@Must have sound crew language set to "standard"@Romanian:@Must have sound crew language set to "standard"</description>
+          <updateComment>Grandpas:@v4.19.17 - updated to 0.9.18.0@Relhax:@Version 18@MLG Mod:@@Sounds for Crew voices:@@Julie:@updated by niserius@Monty Python:@@Romanian:@updated by niserius</updateComment>
+          <devURL>Grandpas:@https://mods.curse.com/wot-mods/worldoftanks/grandpas-favorite-voices-mod@Relhax:@http://relicgaming.com/index.php?topic=697.0@MLG Mod:@http://forum.worldoftanks.eu/index.php?/topic/476721-097-gtos-mlg-mod-continued-by-aimdrol-s3al-dog-in-tenks-especially-rudy/@Sounds for Crew voices:@http://www.curse.com/wot-mods/worldoftanks/simple-sounds@Julie:@http://forum.worldoftanks.eu/index.php?/topic/559722-julie-voice-others/@Monty Python:@http://forum.worldoftanks.eu/index.php?/topic/617986-09171-monty-python-crew-sounds/@Romanian:@http://forum.worldoftanks.eu/index.php?/topic/559722-julie-voice-others/</devURL>
+        </mod>
+        <mod>
+          <name>Kill sounds</name>
+          <version>
+          </version>
+          <zipFile>
+          </zipFile>
+          <startAddress>
+          </startAddress>
+          <endAddress>
+          </endAddress>
+          <crc>
+          </crc>
+          <size>0</size>
+          <enabled>True</enabled>
+          <userDatas />
+          <pictures />
+          <configs>
+            <config>
+              <name>UT Countdown</name>
+              <zipFile>Sounds_UT_Announcer_updated_by_budyx69_base_2017-05-11.zip</zipFile>
+              <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+              <endAddress>
+              </endAddress>
+              <crc>c0e3f01e116a0c6d2743fa706b5d8aaa</crc>
+              <size>0.1</size>
+              <enabled>True</enabled>
+              <type>single</type>
+              <pictures />
+              <dependencies />
+              <configs>
+                <config>
+                  <name>Locastan origanal config</name>
+                  <zipFile>Sounds_UT_Announcer_updated_by_budyx69_config_0.9.17.1_2017-05-11.zip</zipFile>
+                  <crc>6152fa534dcd9893ed9f282eda5d8655</crc>
+                  <enabled>True</enabled>
+                  <type>single</type>
+                  <size>0.3</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </config>
+                <config>
+                  <name>Only 3 min warning config</name>
+                  <zipFile>Sounds_UT_Announcer_updated_by_budyx69_only_3min_counter_2017-05-11.zip</zipFile>
+                  <crc>bb23fd9cd06c2b97185a233abde958c3</crc>
+                  <enabled>True</enabled>
+                  <type>single</type>
+                  <size>0.3</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </config>
+                <config>
+                  <name>Webium config</name>
+                  <zipFile>Sounds_UT_Announcer_updated_by_budyx69_webium_config_2017-05-11.zip</zipFile>
+                  <crc>40f01f8378440a9403a9776cfb3e3613</crc>
+                  <enabled>False</enabled>
+                  <type>single</type>
+                  <size>1.6</size>
+                  <startAddress>http://wotmods.relhaxmodpack.com/WoT/0.9.18.0/</startAddress>
+                  <endAddress>
+                  </endAddress>
+                  <dependencies />
+                  <pictures />
+                </config>
+              </configs>
+            </config>
+          </configs>
+          <dependencies />
+          <description>UT Countdown:@Plays certain sounds for when you get a certain number of kills in the game.</description>
+          <updateComment>
+          </updateComment>
+          <devURL>UT Countdown:@http://forum.worldoftanks.eu/index.php?/topic/557716-</devURL>
         </mod>
       </mods>
     </catagory>
