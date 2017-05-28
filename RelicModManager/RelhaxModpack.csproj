@@ -36,7 +36,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -201,9 +201,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="RelhaxCheckbox.cs" />
-    <Compile Include="RelhaxComboBox.cs" />
-    <Compile Include="RelhaxRadioButton.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="StringSave.cs" />
     <Compile Include="Translations.cs" />
