@@ -457,12 +457,15 @@ namespace RelhaxModpack
                         configControlDDALL.catagory = c;
                         configControlDDALL.mod = m;
                         //configControlDDALL.config = con;
-                        if (m.enabled)
+                        if (configControlDDALL.Items.Count > 0)
                             configControlDDALL.IsEnabled = true;
                         if (configControlDDALL.SelectedIndex == -1)
                             configControlDDALL.SelectedIndex = 0;
                         configControlDDALL.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(configControlDDALL_SelectionChanged);
-                        configControlDDALL.MouseDown += new System.Windows.Input.MouseButtonEventHandler(configControlDDALL_MouseDown);
+                        //configControlDDALL.MouseDown += new System.Windows.Input.MouseButtonEventHandler(configControlDDALL_MouseDown);
+                        //configControlDDALL.MouseRightButtonDown += configControlDDALL_MouseDown;
+                        //configControlDDALL.PreviewMouseRightButtonDown += configControlDDALL_MouseDown;
+                        configControlDDALL.PreviewMouseRightButtonDown +=new System.Windows.Input.MouseButtonEventHandler(configControlDDALL_MouseDown);
                         System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
                         configControlTVI.Header = configControlDDALL;
                         tvi.Items.Add(configControlTVI);
@@ -871,7 +874,8 @@ namespace RelhaxModpack
                 return;
             }
             ConfigWPFComboBox cb = (ConfigWPFComboBox)sender;
-            Config m = cb.config;
+            ComboBoxItem cbi = (ComboBoxItem)cb.SelectedItem;
+            Config m = cbi.config;
             if (m.devURL == null)
                 m.devURL = "";
             p.Close();
@@ -975,7 +979,8 @@ namespace RelhaxModpack
             //add the event handler before changing the checked state so the event
             //event handler is #triggered
             modCheckBox.Checked = m.Checked;
-            if (modHasRadioButtons && modCheckBox.Checked && !hasRadioButtonConfigSelected)
+            //disable the logic for now
+            if (false && modHasRadioButtons && modCheckBox.Checked && !hasRadioButtonConfigSelected)
             {
                 //getting here means that the user has saved the prefrence for a selected mandatory radiobutton config that has been disabled, so his selection of that mod needs to be disabled
                 modCheckBox.Checked = false;
@@ -1063,13 +1068,28 @@ namespace RelhaxModpack
                     //logic for radiobutton
                     configControlRB.Enabled = false;
                     configControlRB.Checked = false;
-                    if (m.enabled && m.Checked && con.enabled)
+                    if (parentIsMod)
                     {
-                        configControlRB.Enabled = true;
-                        if (con.Checked)
+                        if (m.enabled && con.enabled)
                         {
-                            configControlRB.Checked = true;
-                            hasRadioButtonConfigSelected = true;
+                            configControlRB.Enabled = true;
+                            if (m.Checked && con.Checked)
+                            {
+                                configControlRB.Checked = true;
+                                hasRadioButtonConfigSelected = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (parentConfig.enabled && con.enabled)
+                        {
+                            configControlRB.Enabled = true;
+                            if (parentConfig.Checked && con.Checked)
+                            {
+                                configControlRB.Checked = true;
+                                hasRadioButtonConfigSelected = true;
+                            }
                         }
                     }
                     //add handlers
@@ -1134,6 +1154,10 @@ namespace RelhaxModpack
                             configControlDDALL.Enabled = true;
                         }
                     }
+                    if(configControlDDALL.Items.Count > 0)
+                        configControlDDALL.Enabled = true;
+                    if(configControlDDALL.SelectedIndex == -1)
+                        configControlDDALL.SelectedIndex = 0;
                 }
                 else if (con.type.Equals("multi"))
                 {
@@ -1151,12 +1175,29 @@ namespace RelhaxModpack
                     //the logic for enabling it
                     configControlCB.Enabled = false;
                     configControlCB.Checked = false;
-                    if (m.enabled && m.Checked && con.enabled)
+                    if (parentIsMod)
                     {
-                        configControlCB.Enabled = true;
-                        //the logic for checking it
-                        if (con.Checked)
-                            configControlCB.Checked = true;
+                        if (m.enabled && con.enabled)
+                        {
+                            configControlCB.Enabled = true;
+                            if (m.Checked && con.Checked)
+                            {
+                                configControlCB.Checked = true;
+                                hasRadioButtonConfigSelected = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (parentConfig.enabled && con.enabled)
+                        {
+                            configControlCB.Enabled = true;
+                            if (parentConfig.Checked && con.Checked)
+                            {
+                                configControlCB.Checked = true;
+                                hasRadioButtonConfigSelected = true;
+                            }
+                        }
                     }
                     //add handlers
                     configControlCB.CheckedChanged += new EventHandler(configControlCB_CheckedChanged);
@@ -1200,339 +1241,6 @@ namespace RelhaxModpack
                 }
             }
             return y;
-        }
-        //hander for when any mouse button is clicked on a specific control
-        void modCheckBox_MouseDown(object sender, MouseEventArgs e)
-        {
-            //we only care about the right mouse click tho
-            if (e.Button != MouseButtons.Right)
-                return;
-            if (sender is ModFormCheckBox)
-            {
-                ModFormCheckBox cb = (ModFormCheckBox)sender;
-                Mod m = cb.mod;
-                if (m.devURL == null)
-                    m.devURL = "";
-                p.Close();
-                p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
-                p.Show();
-            }
-        }
-
-        void configControlCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            ConfigFormCheckBox cb = (ConfigFormCheckBox)sender;
-            Config m = cb.config;
-            if (m.devURL == null)
-                m.devURL = "";
-            p.Close();
-            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
-            p.Show();
-        }
-
-        void configControlDD_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            ConfigFormComboBox cb = (ConfigFormComboBox)sender;
-            Config m = cb.config;
-            if (m.devURL == null)
-                m.devURL = "";
-            p.Close();
-            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
-            p.Show();
-        }
-
-        void configControlRB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            ConfigFormRadioButton cb = (ConfigFormRadioButton)sender;
-            Config m = cb.config;
-            if (m.devURL == null)
-                m.devURL = "";
-            p.Close();
-            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
-            p.Show();
-        }
-        //handler for when a config selection is made from the drop down list
-        void configControlDD_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (loadingConfig)
-                return;
-            //uncheck all other dorp down configs
-            ConfigFormComboBox cb = (ConfigFormComboBox)sender;
-            Mod m = cb.mod;
-            //if no index selected, select one
-            if (cb.SelectedIndex == -1)
-            {
-                cb.SelectedIndex = 0;
-                return;
-            }
-            //getting here means that an item is confirmed to be selected
-            ComboBoxItem cbi = (ComboBoxItem)cb.SelectedItem;
-            if (!cb.Enabled)
-            {
-                //disable the mod and return
-                cbi.config.Checked = false;
-                return;
-            }
-            //itterate through the items, get each config, disable it
-            //unless it's the same name as the selectedItem
-            foreach (ComboBoxItem s in cb.Items)
-            {
-                s.config.Checked = false;
-            }
-            cbi.config.Checked = true;
-        }
-        //handler for when the config checkbox is checked or unchecked
-        void configControlCB_CheckedChanged(object sender, EventArgs e)
-        {
-            if (loadingConfig)
-                return;
-            //checkboxes don't need to be unselected
-            ConfigFormCheckBox cb = (ConfigFormCheckBox)sender;
-            Mod m = cb.mod;
-            Config cfg = cb.config;
-            Category cat = cb.catagory;
-            Panel configPanel = (Panel)cb.Parent;
-            if (!cb.Enabled || !cb.Checked)
-            {
-                //uncheck config in database
-                cfg.Checked = false;
-                if (cfg.configs.Count > 0)
-                {
-                    //modify the panel and trigger the configs
-                    foreach (Control p in configPanel.Controls)
-                    {
-                        if ((p is Panel) && (p.Name.Equals(cat.name + "_" + m.name + "_" + cfg.name + "_subConfigPanel")))
-                        {
-                            Panel pan = (Panel)p;
-                            pan.BackColor = Settings.getBackColor();
-                            foreach (Control cont in pan.Controls)
-                            {
-                                ConfigFormRadioButton r = (ConfigFormRadioButton)cont;
-                                r.Enabled = false;
-                                subRB_CheckedChanged(r, null);
-                            }
-                            break;
-                        }
-                    }
-                }
-                return;
-            }
-            
-                //checkbox is enabled, toggle checked and checked
-                cfg.Checked = cb.Checked;
-                //at this point it is enabled
-                if (cfg.configs.Count > 0)
-                {
-                    bool configSelected = false;
-                    string lastConfig = "null";
-                    foreach (Config sc in cfg.configs)
-                    {
-                        lastConfig = sc.name;
-                    }
-                    //modify the panel and trigger the configs
-                    foreach (Control p in configPanel.Controls)
-                    {
-                        if ((p is Panel) && (p.Name.Equals(cat.name + "_" + m.name + "_" + cfg.name + "_subConfigPanel")))
-                        {
-                            Panel pan = (Panel)p;
-                            pan.BackColor = Color.BlanchedAlmond;
-                            foreach (Control cont in pan.Controls)
-                            {
-                                ConfigFormRadioButton r = (ConfigFormRadioButton)cont;
-                                Config sc2 = r.config;
-                                r.Enabled = true;
-                                subRB_CheckedChanged(r, null);
-                                if (sc2.Checked)
-                                    configSelected = true;
-                            }
-                            break;
-                        }
-                    }
-                    if (!configSelected)
-                    {
-                        foreach (Control p in configPanel.Controls)
-                        {
-                            if ((p is Panel) && (p.Name.Equals(cat.name + "_" + m.name + "_" + cfg.name + "_subConfigPanel")))
-                            {
-                                Panel pan = (Panel)p;
-                                foreach (Control cont in pan.Controls)
-                                {
-                                    ConfigFormRadioButton r = (ConfigFormRadioButton)cont;
-                                    Config sc2 = r.config;
-                                    if (r.Enabled)
-                                    {
-                                        r.CheckedChanged -= subRB_CheckedChanged;
-                                        r.Checked = true;
-                                        r.CheckedChanged += subRB_CheckedChanged;
-                                        sc2.Checked = true;
-                                        break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-            
-
-        }
-        //handler for when a config radioButton is pressed
-        void configControlRB_CheckedChanged(object sender, EventArgs e)
-        {
-            if (loadingConfig)
-                return;
-            //get all required cool stuff
-            ConfigFormRadioButton rb = (ConfigFormRadioButton)sender;
-            Panel configPanel = (Panel)rb.Parent;
-            Mod m = rb.mod;
-            Config c = rb.config;
-            Category cat = rb.catagory;
-            //verify mod is enabled
-            if (!rb.Enabled || !rb.Checked)
-            {
-                c.Checked = false;
-                if (c.configs.Count > 0)
-                {
-                    //modify the panel and trigger the configs
-                    foreach (Control p in configPanel.Controls)
-                    {
-                        if ((p is Panel) && (p.Name.Equals(cat.name + "_" + m.name + "_" + c.name + "_subConfigPanel")))
-                        {
-                            Panel pan = (Panel)p;
-                            pan.BackColor = Settings.getBackColor();
-                            foreach (Control cont in pan.Controls)
-                            {
-                                ConfigFormRadioButton r = (ConfigFormRadioButton)cont;
-                                r.Enabled = false;
-                                subRB_CheckedChanged(r, null);
-                            }
-                            break;
-                        }
-                    }
-                }
-                return;
-            }
-            //uncheck all single and single1 mods in memory
-            foreach (Config configs in m.configs)
-            {
-                if (configs.type.Equals("single") || configs.type.Equals("single1"))
-                {
-                    configs.Checked = false;
-                }
-            }
-            //uncheck all single and single1 configs in UI
-            if (rb.Enabled && rb.Checked)
-            {
-                foreach (Control ctrl in configPanel.Controls)
-                {
-                    if (ctrl is ConfigFormRadioButton)
-                    {
-                        ConfigFormRadioButton rbz = (ConfigFormRadioButton)ctrl;
-                        if (!rbz.Equals(rb))
-                            rbz.Checked = false;
-                    }
-                }
-                
-            }
-            c.Checked = rb.Checked;
-            //at this point it is enabled
-            if (c.configs.Count > 0)
-            {
-                bool configSelected = false;
-                string lastConfig = "null";
-                foreach (Config sc in c.configs)
-                {
-                    lastConfig = sc.name;
-                }
-                //modify the panel and trigger the configs
-                foreach (Control p in configPanel.Controls)
-                {
-                    if ((p is Panel) && (p.Name.Equals(cat.name + "_" + m.name + "_" + c.name + "_subConfigPanel")))
-                    {
-                        Panel pan = (Panel)p;
-                        pan.BackColor = Color.BlanchedAlmond;
-                        foreach (Control cont in pan.Controls)
-                        {
-                            ConfigFormRadioButton r = (ConfigFormRadioButton)cont;
-                            Config sc2 = r.config;
-                            r.Enabled = true;
-                            subRB_CheckedChanged(r, null);
-                            if (sc2.Checked)
-                                configSelected = true;
-                        }
-                        break;
-                    }
-                }
-                if (!configSelected)
-                {
-                    foreach (Control p in configPanel.Controls)
-                    {
-                        if ((p is Panel) && (p.Name.Equals(cat.name + "_" + m.name + "_" + c.name + "_subConfigPanel")))
-                        {
-                            Panel pan = (Panel)p;
-                            foreach (Control cont in pan.Controls)
-                            {
-                                ConfigFormRadioButton r = (ConfigFormRadioButton)cont;
-                                Config sc2 = r.config;
-                                if (r.Enabled)
-                                {
-                                    r.CheckedChanged -= subRB_CheckedChanged;
-                                    r.Checked = true;
-                                    r.CheckedChanged += subRB_CheckedChanged;
-                                    sc2.Checked = true;
-                                    break;
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        //handler for when a subconfig radiobutton is changed
-        void subRB_CheckedChanged(object sender, EventArgs e)
-        {
-            if (loadingConfig)
-                return;
-            //get all required cool stuff
-            ConfigFormRadioButton rb = (ConfigFormRadioButton)sender;
-            Panel configSelection = (Panel)rb.Parent;
-            Mod m = rb.mod;
-            Config c = rb.config;
-            Panel configPanel = (Panel)rb.Parent;
-            Config sfg = rb.config;
-            //verify mod is enabled
-            if (!rb.Enabled)
-            {
-                c.Checked = false;
-                return;
-            }
-            //uncheck all mods in memory
-            foreach (Config sc in c.configs)
-            {
-                sc.Checked = false;
-            }
-            //uncheck all mods in UI
-            if (rb.Enabled && rb.Checked)
-            {
-                foreach (Control ctrl in configSelection.Controls)
-                {
-                    if (ctrl is ConfigFormRadioButton)
-                    {
-                        ConfigFormRadioButton rbz = (ConfigFormRadioButton)ctrl;
-                        if (!rbz.Equals(rb))
-                            rbz.Checked = false;
-                    }
-                }
-
-            }
-            sfg.Checked = rb.Checked;
         }
         //handler for when a mod checkbox is changed
         void modCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -1599,7 +1307,8 @@ namespace RelhaxModpack
                                     //disable the other mods
                                     //cbb.CheckedChanged -= modCheckBox_CheckedChanged;
                                     cbb.Checked = false;
-                                    modCheckBox_CheckedChanged(cbb, null);
+                                    cbb.mod.Checked = false;
+                                    //modCheckBox_CheckedChanged(cbb, null);
                                     //cbb.mod.Checked = false;
                                     //cbb.CheckedChanged += modCheckBox_CheckedChanged;
                                 }
@@ -1610,12 +1319,12 @@ namespace RelhaxModpack
                     //remove the handler for a sec to prevent stack overflow
                     cb.CheckedChanged -= modCheckBox_CheckedChanged;
                     cb.Checked = true;
+                    cb.mod.Checked = true;
                     cb.CheckedChanged += modCheckBox_CheckedChanged;
                     //modCheckBox.Checked = false;
                 }
 
             }
-
             //toggle the mod in memory, enabled or disabled
             m.Checked = cb.Checked;
             //this deals with enabling the componets and triggering the handlers
@@ -1639,39 +1348,10 @@ namespace RelhaxModpack
             foreach (Control cc in configPanel.Controls)
             {
                 Config cfg = null;
-                if (cc is ConfigFormComboBox)
-                {
-                    //comboBox could be recieved as enabled(configs of this type exist), but with 0 enabled configs which means count would be 0
-                    //toggle the comboBox and trigger selected index
-                    ConfigFormComboBox ccB = (ConfigFormComboBox)cc;
-                    if (cb.Checked && (ccB.Items.Count > 0))
-                        ccB.Enabled = true;
-                    else
-                        ccB.Enabled = false;
-                    configControlDD_SelectedIndexChanged(ccB, null);
-                }
-                else if (cc is ConfigFormCheckBox)
-                {
-                    ConfigFormCheckBox configCTRL = (ConfigFormCheckBox)cc;
-                    cfg = configCTRL.config;
-                    //checkbox is enabled if mod is checked AND config is enabled
-                    //toggle enabledness of checkbox based on modCheckBox checked
-                    //and trigger the checkbox handler
-                    if (cb.Checked && cfg.enabled)
-                        cc.Enabled = true;
-                    else
-                        cc.Enabled = false;
-                    configControlCB_CheckedChanged(cc, null);
-                }
-                else if (cc is ConfigFormRadioButton)
+                if (cc is ConfigFormRadioButton)
                 {
                     ConfigFormRadioButton ccRB = (ConfigFormRadioButton)cc;
                     cfg = ccRB.config;
-                    if (m.Checked && cfg.enabled)
-                        ccRB.Enabled = true;
-                    else
-                        ccRB.Enabled = false;
-                    configControlRB_CheckedChanged(ccRB,null);
                     if (cfg.Checked)
                         configSelected = true;
                     //create a section of code to run fo only the last radioButton
@@ -1684,13 +1364,13 @@ namespace RelhaxModpack
                             {
                                 ConfigFormRadioButton ccccc = (ConfigFormRadioButton)cccc;
                                 cfg = ccccc.config;
-                                if (ccccc.Enabled)
+                                if (cfg.enabled)
                                 {
                                     ccccc.CheckedChanged -= configControlRB_CheckedChanged;
                                     ccccc.Checked = true;
+                                    cfg.Checked = true;
                                     configControlRB_CheckedChanged(ccccc, null);
                                     ccccc.CheckedChanged += configControlRB_CheckedChanged;
-                                    cfg.Checked = true;
                                     break;
                                 }
                             }
@@ -1698,7 +1378,194 @@ namespace RelhaxModpack
                     }
                 }
             }
-            
+
+        }
+        //handler for when the config checkbox is checked or unchecked
+        void configControlCB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (loadingConfig)
+                return;
+            //checkboxes don't need to be unselected
+            ConfigFormCheckBox cb = (ConfigFormCheckBox)sender;
+            Mod m = cb.mod;
+            Config cfg = cb.config;
+            Category cat = cb.catagory;
+            Panel configPanel = (Panel)cb.Parent;
+            //checkbox is enabled, toggle checked and checked
+            cfg.Checked = cb.Checked;
+            //propagate the check back up if required
+            if (configPanel.Parent is Panel && cfg.Checked)
+            {
+                //TODO
+            }
+            //process any subconfigs
+            bool configSelected = false;
+            int radioButtonCount = 0;
+            foreach (Control cont in configPanel.Controls)
+            {
+                if (cont is ConfigFormRadioButton)
+                {
+                    radioButtonCount++;
+                    ConfigFormRadioButton subRB = (ConfigFormRadioButton)cont;
+                    Config subc = subRB.config;
+                    if (subRB.Enabled && subRB.Checked)
+                    {
+                        if (subc.Checked)
+                            configSelected = true;
+                    }
+                }
+            }
+            if (!configSelected && cb.Enabled && cb.Checked && radioButtonCount > 0)
+            {
+                foreach (Control cont in configPanel.Controls)
+                {
+                    if (cont is ConfigFormRadioButton)
+                    {
+                        ConfigFormRadioButton subRB = (ConfigFormRadioButton)cont;
+                        Config subc = subRB.config;
+                        if (subRB.Enabled && subc.enabled)
+                        {
+                            subRB.CheckedChanged -= configControlRB_CheckedChanged;
+                            subRB.Checked = true;
+                            subc.Checked = true;
+                            subRB.CheckedChanged += configControlRB_CheckedChanged;
+                        }
+                    }
+                }
+            }
+        }
+        //handler for when a config selection is made from the drop down list
+        void configControlDD_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (loadingConfig)
+                return;
+            //uncheck all other dorp down configs
+            ConfigFormComboBox cb = (ConfigFormComboBox)sender;
+            //if no index selected, select one
+            //does not need to run this anymore tho
+            /*if (cb.SelectedIndex == -1)
+            {
+                cb.SelectedIndex = 0;
+                return;
+            }*/
+            //itterate through the items, get each config, disable it
+            //unless it's the same name as the selectedItem
+            foreach (ComboBoxItem cbi in cb.Items)
+            {
+                cbi.config.Checked = false;
+            }
+            ComboBoxItem cbi2 = (ComboBoxItem)cb.SelectedItem;
+            cbi2.config.Checked = true;
+        }
+        //handler for when a config radioButton is pressed
+        void configControlRB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (loadingConfig)
+                return;
+            //get all required cool stuff
+            ConfigFormRadioButton rb = (ConfigFormRadioButton)sender;
+            Panel configPanel = (Panel)rb.Parent;
+            Mod m = rb.mod;
+            Config cfg = rb.config;
+            Category cat = rb.catagory;
+            cfg.Checked = rb.Checked;
+            //propagate the check back up if required
+            if (configPanel.Parent is Panel && cfg.Checked)
+            {
+                //TODO
+            }
+            //process any subconfigs
+            bool configSelected = false;
+            int radioButtonCount = 0;
+            foreach (Control cont in configPanel.Controls)
+            {
+                if (cont is ConfigFormRadioButton)
+                {
+                    radioButtonCount++;
+                    ConfigFormRadioButton subRB = (ConfigFormRadioButton)cont;
+                    Config subc = subRB.config;
+                    if (subRB.Enabled && subRB.Checked)
+                    {
+                        if (subc.Checked)
+                            configSelected = true;
+                    }
+                }
+            }
+            if (!configSelected && rb.Enabled && rb.Checked && radioButtonCount > 0)
+            {
+                foreach (Control cont in configPanel.Controls)
+                {
+                    if (cont is ConfigFormRadioButton)
+                    {
+                        ConfigFormRadioButton subRB = (ConfigFormRadioButton)cont;
+                        Config subc = subRB.config;
+                        if (subRB.Enabled && subc.enabled)
+                        {
+                            subRB.CheckedChanged -= configControlRB_CheckedChanged;
+                            subRB.Checked = true;
+                            subc.Checked = true;
+                            subRB.CheckedChanged += configControlRB_CheckedChanged;
+                        }
+                    }
+                }
+            }
+        }
+        //hander for when any mouse button is clicked on a specific control
+        void modCheckBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            //we only care about the right mouse click tho
+            if (e.Button != MouseButtons.Right)
+                return;
+            if (sender is ModFormCheckBox)
+            {
+                ModFormCheckBox cb = (ModFormCheckBox)sender;
+                Mod m = cb.mod;
+                if (m.devURL == null)
+                    m.devURL = "";
+                p.Close();
+                p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
+                p.Show();
+            }
+        }
+
+        void configControlCB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            ConfigFormCheckBox cb = (ConfigFormCheckBox)sender;
+            Config m = cb.config;
+            if (m.devURL == null)
+                m.devURL = "";
+            p.Close();
+            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
+            p.Show();
+        }
+
+        void configControlDD_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            ConfigFormComboBox cb = (ConfigFormComboBox)sender;
+            ComboBoxItem cbi = (ComboBoxItem)cb.SelectedItem;
+            Config m = cbi.config;
+            if (m.devURL == null)
+                m.devURL = "";
+            p.Close();
+            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
+            p.Show();
+        }
+
+        void configControlRB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            ConfigFormRadioButton cb = (ConfigFormRadioButton)sender;
+            Config m = cb.config;
+            if (m.devURL == null)
+                m.devURL = "";
+            p.Close();
+            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
+            p.Show();
         }
         //resizing handler for the window
         private void ModSelectionList_SizeChanged(object sender, EventArgs e)
@@ -1719,6 +1586,7 @@ namespace RelhaxModpack
                     if (c is Panel)
                     {
                         //mod panel
+                        //TODO RECURSIVLY
                         Panel p = (Panel)c;
                         p.Size = new Size(t.Size.Width - 25, p.Size.Height);
                         foreach (Control cc in p.Controls)
