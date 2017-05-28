@@ -3,33 +3,34 @@
 namespace RelhaxModpack
 {
     //a mod is the core of the modpack. A modification for WoT.
+    //spacer
     public class Mod : DatabaseObject
     {
         public string name { get; set; }
         //the developer's version of the mod
         public string version { get; set; }
         public string zipFile { get; set; }
-        public string crc { get; set; }
-        public bool enabled { get; set; }
-        public bool Checked { get; set; }
-        public List<Config> configs = new List<Config>();
-        public string updateComment { get; set; }
-        public string description { get; set; }
-        public string devURL { get; set; }
-        public List<Picture> pictureList = new List<Picture>();
-        public List<string> userFiles = new List<string>();
-        public List<Dependency> dependencies = new List<Dependency>();
-        //the parent of a mod is a category
-        public Category parent { get; set; }
-        //the index of where the mod is in the entire list ever
-        public int index { get; set; }
-        //size of the mod zip file
-        public float size { get; set; }
         //the start address of the zip file location. enabled us to use sites that
         //generate random filenames for publicly shared files.
         public string startAddress { get; set; }
         //the end address of the zip file location. enables us to use dropbox (?dl=1)
         public string endAddress { get; set; }
+        public string crc { get; set; }
+        public bool enabled { get; set; }
+        //the index of where the mod is in the entire list ever
+        public int index { get; set; }
+        //size of the mod zip file
+        public float size { get; set; }
+        public string updateComment { get; set; }
+        public string description { get; set; }
+        public string devURL { get; set; }
+        public List<string> userFiles = new List<string>();
+        public List<Picture> pictureList = new List<Picture>();
+        public List<Config> configs = new List<Config>();
+        public List<Dependency> dependencies = new List<Dependency>();
+        //the parent of a mod is a category
+        public Category parent { get; set; }
+        public bool Checked { get; set; }
         //default constructor
         public Mod()
         {

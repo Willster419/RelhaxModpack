@@ -280,7 +280,7 @@ namespace RelhaxModpack
                     XmlElement modVersion = doc.CreateElement("version");
                     modVersion.InnerText = m.version;
                     modRoot.AppendChild(modVersion);
-                    XmlElement modZipFile = doc.CreateElement("modzipfile");
+                    XmlElement modZipFile = doc.CreateElement("zipFile");
                     modZipFile.InnerText = m.zipFile;
                     modRoot.AppendChild(modZipFile);
                     XmlElement modStartAddress = doc.CreateElement("startAddress");
@@ -289,15 +289,27 @@ namespace RelhaxModpack
                     XmlElement modEndAddress = doc.CreateElement("endAddress");
                     modEndAddress.InnerText = m.endAddress;
                     modRoot.AppendChild(modEndAddress);
-                    XmlElement modZipCRC = doc.CreateElement("modzipcrc");
+                    XmlElement modZipCRC = doc.CreateElement("crc");
                     modZipCRC.InnerText = m.crc;
                     modRoot.AppendChild(modZipCRC);
-                    XmlElement modZipSize = doc.CreateElement("size");
-                    modZipSize.InnerText = "" + m.size;
-                    modRoot.AppendChild(modZipSize);
                     XmlElement modEnabled = doc.CreateElement("enabled");
                     modEnabled.InnerText = "" + m.enabled;
                     modRoot.AppendChild(modEnabled);
+                    XmlElement modZipIndex = doc.CreateElement("index");
+                    modZipIndex.InnerText = "" + m.index;
+                    modRoot.AppendChild(modZipIndex);
+                    XmlElement modZipSize = doc.CreateElement("size");
+                    modZipSize.InnerText = "" + m.size;
+                    modRoot.AppendChild(modZipSize);
+                    XmlElement modUpdateComment = doc.CreateElement("updateComment");
+                    modUpdateComment.InnerText = m.updateComment;
+                    modRoot.AppendChild(modUpdateComment);
+                    XmlElement modDescription = doc.CreateElement("description");
+                    modDescription.InnerText = m.description;
+                    modRoot.AppendChild(modDescription);
+                    XmlElement modDevURL = doc.CreateElement("devURL");
+                    modDevURL.InnerText = m.devURL;
+                    modRoot.AppendChild(modDevURL);
                     //datas for the mods
                     XmlElement modDatas = doc.CreateElement("userDatas");
                     foreach (string s in m.userFiles)
@@ -320,146 +332,9 @@ namespace RelhaxModpack
                     modRoot.AppendChild(modPictures);
                     //configs for the mods
                     XmlElement configsHolder = doc.CreateElement("configs");
-                    foreach (Config cc in m.configs)
-                    {
-                        //add the config to the list
-                        XmlElement configRoot = doc.CreateElement("config");
-                        configsHolder.AppendChild(configRoot);
-                        XmlElement configName = doc.CreateElement("name");
-                        configName.InnerText = cc.name;
-                        configRoot.AppendChild(configName);
-                        XmlElement configZipFile = doc.CreateElement("configzipfile");
-                        configZipFile.InnerText = cc.zipFile;
-                        configRoot.AppendChild(configZipFile);
-                        XmlElement configStartAddress = doc.CreateElement("startAddress");
-                        configStartAddress.InnerText = cc.startAddress;
-                        configRoot.AppendChild(configStartAddress);
-                        XmlElement configEndAddress = doc.CreateElement("endAddress");
-                        configEndAddress.InnerText = cc.endAddress;
-                        configRoot.AppendChild(configEndAddress);
-                        XmlElement configZipCRC = doc.CreateElement("configzipcrc");
-                        configZipCRC.InnerText = cc.crc;
-                        configRoot.AppendChild(configZipCRC);
-                        XmlElement configZipSize = doc.CreateElement("size");
-                        configZipSize.InnerText = "" + cc.size;
-                        configRoot.AppendChild(configZipSize);
-                        XmlElement configEnabled = doc.CreateElement("configenabled");
-                        configEnabled.InnerText = "" + cc.enabled;
-                        configRoot.AppendChild(configEnabled);
-                        XmlElement configType = doc.CreateElement("configtype");
-                        configType.InnerText = cc.type;
-                        configRoot.AppendChild(configType);
-                        //pictures for the configs
-                        XmlElement configPictures = doc.CreateElement("pictures");
-                        foreach (string p in cc.pictureList)
-                        {
-                            XmlElement configpictureRoot = doc.CreateElement("picture");
-                            XmlElement configpictureURL = doc.CreateElement("URL");
-                            configpictureURL.InnerText = p;
-                            configpictureRoot.AppendChild(configpictureURL);
-                            configPictures.AppendChild(configpictureRoot);
-                        }
-                        configRoot.AppendChild(configPictures);
-                        //dependencies for the configs
-                        XmlElement catDependencies = doc.CreateElement("dependencies");
-                        foreach (Dependency d in cc.dependencies)
-                        {
-                            //declare dependency root
-                            XmlElement DependencyRoot = doc.CreateElement("dependency");
-                            //make dependency
-                            XmlElement DepZipFile = doc.CreateElement("dependencyZipFile");
-                            DepZipFile.InnerText = d.dependencyZipFile;
-                            DependencyRoot.AppendChild(DepZipFile);
-                            XmlElement DepStartAddress = doc.CreateElement("startAddress");
-                            DepStartAddress.InnerText = d.startAddress;
-                            DependencyRoot.AppendChild(DepStartAddress);
-                            XmlElement DepEndAddress = doc.CreateElement("endAddress");
-                            DepEndAddress.InnerText = d.endAddress;
-                            DependencyRoot.AppendChild(DepEndAddress);
-                            XmlElement DepCRC = doc.CreateElement("dependencyZipCRC");
-                            DepCRC.InnerText = d.dependencyZipCRC;
-                            DependencyRoot.AppendChild(DepCRC);
-                            XmlElement DepEnabled = doc.CreateElement("dependencyenabled");
-                            DepEnabled.InnerText = "" + d.enabled;
-                            DependencyRoot.AppendChild(DepEnabled);
-                            //attach dependency root
-                            catDependencies.AppendChild(DependencyRoot);
-                        }
-                        configRoot.AppendChild(catDependencies);
-                        //subconfigs for the configs
-                        XmlElement subconfigHolder = doc.CreateElement("configs");
-                        foreach (Config s in cc.configs)
-                        {
-                            //decalre subConfig root
-                            XmlElement subConfigRoot = doc.CreateElement("subConfig");
-                            //make subConfig
-                            XmlElement subConfigName = doc.CreateElement("name");
-                            subConfigName.InnerText = s.name;
-                            subConfigRoot.AppendChild(subConfigName);
-                            XmlElement subConfigZipFile = doc.CreateElement("zipFile");
-                            subConfigZipFile.InnerText = s.zipFile;
-                            subConfigRoot.AppendChild(subConfigZipFile);
-                            XmlElement subConfigCRC = doc.CreateElement("crc");
-                            subConfigCRC.InnerText = s.crc;
-                            subConfigRoot.AppendChild(subConfigCRC);
-                            XmlElement subConfigEnabled = doc.CreateElement("enabled");
-                            subConfigEnabled.InnerText = "" + s.enabled;
-                            subConfigRoot.AppendChild(subConfigEnabled);
-                            XmlElement subConfigType = doc.CreateElement("type");
-                            subConfigType.InnerText = s.type;
-                            subConfigRoot.AppendChild(subConfigType);
-                            XmlElement subConfigSize = doc.CreateElement("size");
-                            subConfigSize.InnerText = "" + s.size;
-                            subConfigRoot.AppendChild(subConfigSize);
-                            XmlElement subConfigStartAddress = doc.CreateElement("startAddress");
-                            subConfigStartAddress.InnerText = s.startAddress;
-                            subConfigRoot.AppendChild(subConfigStartAddress);
-                            XmlElement subConfigEndAddress = doc.CreateElement("endAddress");
-                            subConfigEndAddress.InnerText = s.endAddress;
-                            subConfigRoot.AppendChild(subConfigEndAddress);
-                            //dependencies for the subconfigs
-                            XmlElement catSubDependencies = doc.CreateElement("dependencies");
-                            foreach (Dependency d in s.dependencies)
-                            {
-                                //declare dependency root
-                                XmlElement DependencyRoot = doc.CreateElement("dependency");
-                                //make dependency
-                                XmlElement DepZipFile = doc.CreateElement("dependencyZipFile");
-                                DepZipFile.InnerText = d.dependencyZipFile;
-                                DependencyRoot.AppendChild(DepZipFile);
-                                XmlElement DepStartAddress = doc.CreateElement("startAddress");
-                                DepStartAddress.InnerText = d.startAddress;
-                                DependencyRoot.AppendChild(DepStartAddress);
-                                XmlElement DepEndAddress = doc.CreateElement("endAddress");
-                                DepEndAddress.InnerText = d.endAddress;
-                                DependencyRoot.AppendChild(DepEndAddress);
-                                XmlElement DepCRC = doc.CreateElement("dependencyZipCRC");
-                                DepCRC.InnerText = d.dependencyZipCRC;
-                                DependencyRoot.AppendChild(DepCRC);
-                                XmlElement DepEnabled = doc.CreateElement("dependencyenabled");
-                                DepEnabled.InnerText = "" + d.enabled;
-                                DependencyRoot.AppendChild(DepEnabled);
-                                //attach dependency root
-                                catDependencies.AppendChild(DependencyRoot);
-                            }
-                            subConfigRoot.AppendChild(catSubDependencies);
-                            //dependencies for the pictures
-                            XmlElement subConfigPictures = doc.CreateElement("pictures");
-                            foreach (string p in s.pictureList)
-                            {
-                                XmlElement configpictureRoot = doc.CreateElement("picture");
-                                XmlElement configpictureURL = doc.CreateElement("URL");
-                                configpictureURL.InnerText = p;
-                                configpictureRoot.AppendChild(configpictureURL);
-                                configPictures.AppendChild(configpictureRoot);
-                            }
-                            subConfigRoot.AppendChild(subConfigPictures);
-                            //attach subconfig root
-                            subconfigHolder.AppendChild(subConfigRoot);
-                        }
-                        configRoot.AppendChild(subconfigHolder);
-                        configsHolder.AppendChild(configRoot);
-                    }
+                    //if statement here
+                    if (m.configs.Count > 0)
+                        saveDatabaseConfigLevel(doc,configsHolder,m.configs);
                     modRoot.AppendChild(configsHolder);
                     XmlElement modDependencies = doc.CreateElement("dependencies");
                     foreach (Dependency d in m.dependencies)
@@ -486,15 +361,6 @@ namespace RelhaxModpack
                         modDependencies.AppendChild(DependencyRoot);
                     }
                     modRoot.AppendChild(modDependencies);
-                    XmlElement modDescription = doc.CreateElement("description");
-                    modDescription.InnerText = m.description;
-                    modRoot.AppendChild(modDescription);
-                    XmlElement modUpdateComment = doc.CreateElement("updateComment");
-                    modUpdateComment.InnerText = m.updateComment;
-                    modRoot.AppendChild(modUpdateComment);
-                    XmlElement modDevURL = doc.CreateElement("devURL");
-                    modDevURL.InnerText = m.devURL;
-                    modRoot.AppendChild(modDevURL);
                     modsHolder.AppendChild(modRoot);
                 }
                 catagoryRoot.AppendChild(modsHolder);
@@ -503,6 +369,107 @@ namespace RelhaxModpack
             }
             root.AppendChild(catagoriesHolder);
             doc.Save(saveLocation);
+        }
+        private void saveDatabaseConfigLevel(XmlDocument doc, XmlElement configsHolder, List<Config> configsList)
+        {
+            foreach (Config cc in configsList)
+            {
+                //add the config to the list
+                XmlElement configRoot = doc.CreateElement("config");
+                configsHolder.AppendChild(configRoot);
+                XmlElement configName = doc.CreateElement("name");
+                configName.InnerText = cc.name;
+                configRoot.AppendChild(configName);
+                XmlElement configVersion = doc.CreateElement("version");
+                configVersion.InnerText = cc.version;
+                configRoot.AppendChild(configVersion);
+                XmlElement configZipFile = doc.CreateElement("zipFile");
+                configZipFile.InnerText = cc.zipFile;
+                configRoot.AppendChild(configZipFile);
+                XmlElement configStartAddress = doc.CreateElement("startAddress");
+                configStartAddress.InnerText = cc.startAddress;
+                configRoot.AppendChild(configStartAddress);
+                XmlElement configEndAddress = doc.CreateElement("endAddress");
+                configEndAddress.InnerText = cc.endAddress;
+                configRoot.AppendChild(configEndAddress);
+                XmlElement configZipCRC = doc.CreateElement("crc");
+                configZipCRC.InnerText = cc.crc;
+                configRoot.AppendChild(configZipCRC);
+                XmlElement configEnabled = doc.CreateElement("enabled");
+                configEnabled.InnerText = "" + cc.enabled;
+                configRoot.AppendChild(configEnabled);
+                XmlElement configIndex = doc.CreateElement("index");
+                configIndex.InnerText = "" + cc.index;
+                configRoot.AppendChild(configIndex);
+                XmlElement configSize = doc.CreateElement("size");
+                configSize.InnerText = "" + cc.size;
+                configRoot.AppendChild(configSize);
+                XmlElement configComment = doc.CreateElement("updateComment");
+                configComment.InnerText = cc.updateComment;
+                configRoot.AppendChild(configComment);
+                XmlElement configDescription = doc.CreateElement("description");
+                configDescription.InnerText = cc.description;
+                configRoot.AppendChild(configDescription);
+                XmlElement configDevURL = doc.CreateElement("devURL");
+                configDevURL.InnerText = cc.devURL;
+                configRoot.AppendChild(configDevURL);
+                XmlElement configType = doc.CreateElement("type");
+                configType.InnerText = cc.type;
+                configRoot.AppendChild(configType);
+                //datas for the mods
+                XmlElement configDatas = doc.CreateElement("userDatas");
+                foreach (string s in cc.userFiles)
+                {
+                    XmlElement userData = doc.CreateElement("userData");
+                    userData.InnerText = s;
+                    configDatas.AppendChild(userData);
+                }
+                configRoot.AppendChild(configDatas);
+                //pictures for the configs
+                XmlElement configPictures = doc.CreateElement("pictures");
+                foreach (string p in cc.pictureList)
+                {
+                    XmlElement configpictureRoot = doc.CreateElement("picture");
+                    XmlElement configpictureURL = doc.CreateElement("URL");
+                    configpictureURL.InnerText = p;
+                    configpictureRoot.AppendChild(configpictureURL);
+                    configPictures.AppendChild(configpictureRoot);
+                }
+                configRoot.AppendChild(configPictures);
+                //configs for the configs (meta)
+                XmlElement configsHolderSub = doc.CreateElement("configs");
+                //if statement here
+                if (cc.configs.Count > 0)
+                    saveDatabaseConfigLevel(doc, configsHolderSub, cc.configs);
+                configRoot.AppendChild(configsHolderSub);
+                //dependencies for the configs
+                XmlElement catDependencies = doc.CreateElement("dependencies");
+                foreach (Dependency d in cc.dependencies)
+                {
+                    //declare dependency root
+                    XmlElement DependencyRoot = doc.CreateElement("dependency");
+                    //make dependency
+                    XmlElement DepZipFile = doc.CreateElement("dependencyZipFile");
+                    DepZipFile.InnerText = d.dependencyZipFile;
+                    DependencyRoot.AppendChild(DepZipFile);
+                    XmlElement DepStartAddress = doc.CreateElement("startAddress");
+                    DepStartAddress.InnerText = d.startAddress;
+                    DependencyRoot.AppendChild(DepStartAddress);
+                    XmlElement DepEndAddress = doc.CreateElement("endAddress");
+                    DepEndAddress.InnerText = d.endAddress;
+                    DependencyRoot.AppendChild(DepEndAddress);
+                    XmlElement DepCRC = doc.CreateElement("dependencyZipCRC");
+                    DepCRC.InnerText = d.dependencyZipCRC;
+                    DependencyRoot.AppendChild(DepCRC);
+                    XmlElement DepEnabled = doc.CreateElement("dependencyenabled");
+                    DepEnabled.InnerText = "" + d.enabled;
+                    DependencyRoot.AppendChild(DepEnabled);
+                    //attach dependency root
+                    catDependencies.AppendChild(DependencyRoot);
+                }
+                configRoot.AppendChild(catDependencies);
+                configsHolder.AppendChild(configRoot);
+            }
         }
     }
 }

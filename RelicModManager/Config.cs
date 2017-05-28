@@ -9,35 +9,33 @@ namespace RelhaxModpack
         public string name { get; set; }
         public string version { get; set; }
         public string zipFile { get; set; }
-        public string crc { get; set; }
-        //is the config currently broken?
-        public bool enabled { get; set; }
-        public bool Checked { get; set; }
-        //the array of sub config options available
-        public List<Config> configs = new List<Config>();
-        public string updateComment { get; set; }
-        public string description { get; set; }
-        public string devURL { get; set; }
-        public List<string> pictureList = new List<string>();
-        //the list of dependencies for this catagory
-        public List<string> userFiles = new List<string>();
-        public List<Dependency> dependencies = new List<Dependency>();
-        //the parent of a config is a mod OR another config
-        public DatabaseObject parent { get; set; }
-        //public DatabaseObject parent2 { get; set; }
-        //the index where this config is in the entire list of configs ever
-        public int index { get; set; }
-        //size of the config zip file
-        public float size { get; set; }
         //the start address of the zip file location. enabled us to use sites that
         //generate random filenames for publicly shared files.
         public string startAddress { get; set; }
         //the end address of the zip file location. enables us to use dropbox (?dl=1)
         public string endAddress { get; set; }
+        public string crc { get; set; }
+        //is the config currently broken?
+        public bool enabled { get; set; }
+        //the index where this config is in the entire list of configs ever
+        public int index { get; set; }
+        //size of the config zip file
+        public float size { get; set; }
+        public string updateComment { get; set; }
+        public string description { get; set; }
+        public string devURL { get; set; }
         //can the user select multiple configs or one only?
         public string type { get; set; }
+        public List<string> userFiles = new List<string>();
+        public List<string> pictureList = new List<string>();
+        public List<Config> configs = new List<Config>();
+        //the list of dependencies for this catagory
+        public List<Dependency> dependencies = new List<Dependency>();
+        //the parent of a config is a mod OR another config
+        public DatabaseObject parent { get; set; }
         //the absolute top of the config levels, the parent mod
         public Mod parentMod { get; set; }
+        public bool Checked { get; set; }
         //basic config constructor
         public Config()
         {
