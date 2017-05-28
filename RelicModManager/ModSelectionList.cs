@@ -798,296 +798,6 @@ namespace RelhaxModpack
             //bool for keeping track if a radioButton config has been selected
             hasRadioButtonConfigSelected = false;
             modHasRadioButtons = false;
-            //make config panel
-            Panel configPanel = new Panel();
-            configPanel.Enabled = true;
-            configPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            configPanel.Location = new System.Drawing.Point(3, 10);
-            configPanel.TabIndex = 2;
-            configPanel.AutoSize = true;
-            configPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
-            configPanel.Size = new System.Drawing.Size(t.Size.Width - 35, 30);
-            if (m.enabled && m.Checked)
-                configPanel.BackColor = Color.BlanchedAlmond;
-            else
-                configPanel.BackColor = Settings.getBackColor();
-            //add configs to the panel
-            //create the comboBox outside of the loop
-            //later add it if the items count is above 0
-            ConfigFormComboBox configControlDD = new ConfigFormComboBox();
-            configControlDD.AutoSize = true;
-            configControlDD.Location = new System.Drawing.Point(0, 0);
-            configControlDD.Size = new System.Drawing.Size(225, 15);
-            configControlDD.TabIndex = 1;
-            configControlDD.TabStop = true;
-            configControlDD.Enabled = false;
-            configControlDD.SelectedIndexChanged += new EventHandler(configControlDD_SelectedIndexChanged);
-            configControlDD.Name = t.Name + "_" + m.name + "_DropDown";
-            configControlDD.DropDownStyle = ComboBoxStyle.DropDownList;
-            ConfigFormComboBox configControlDD2 = new ConfigFormComboBox();
-            configControlDD2.AutoSize = true;
-            configControlDD2.Location = new System.Drawing.Point(0, 0);
-            configControlDD2.Size = new System.Drawing.Size(225, 15);
-            configControlDD2.TabIndex = 1;
-            configControlDD2.TabStop = true;
-            configControlDD2.Enabled = false;
-            configControlDD2.SelectedIndexChanged += new EventHandler(configControlDD_SelectedIndexChanged);
-            configControlDD2.Name = t.Name + "_" + m.name + "_DropDown2";
-            configControlDD2.DropDownStyle = ComboBoxStyle.DropDownList;
-            for (int i = 0; i < m.configs.Count; i++)
-            {
-                ConfigFormComboBox configControlDDALL = null;
-                if (m.configs[i].type.Equals("single") || m.configs[i].type.Equals("single1"))
-                {
-                    modHasRadioButtons = true;
-                    //make default radioButton
-                    ConfigFormRadioButton configControlRB = new ConfigFormRadioButton();
-                    configControlRB.AutoSize = true;
-                    configControlRB.Location = new Point(6, getYLocation(configPanel.Controls));
-                    configControlRB.Size = new System.Drawing.Size(150, 15);
-                    configControlRB.TabIndex = 1;
-                    configControlRB.TabStop = true;
-                    configControlRB.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
-                    configControlRB.catagory = catagory;
-                    configControlRB.mod = m;
-                    configControlRB.config = m.configs[i];
-                    //logic for radiobutton
-                    configControlRB.Enabled = false;
-                    configControlRB.Checked = false;
-                    if (m.enabled && m.Checked && m.configs[i].enabled)
-                    {
-                        configControlRB.Enabled = true;
-                        if (m.configs[i].Checked)
-                        {
-                            configControlRB.Checked = true;
-                            hasRadioButtonConfigSelected = true;
-                        }
-                    }
-                    //add handlers
-                    configControlRB.CheckedChanged += new EventHandler(configControlRB_CheckedChanged);
-                    configControlRB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
-                    //run checksum logic
-                    configControlRB.Text = m.configs[i].name;
-                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipFile);
-                    if (!oldCRC.Equals(m.configs[i].crc) && (!m.configs[i].crc.Equals("")))
-                    {
-                        configControlRB.Text = configControlRB.Text + " (Updated)";
-                        if (m.configs[i].size > 0.0f)
-                            configControlRB.Text = configControlRB.Text + " (" + m.configs[i].size + " MB)";
-                    }
-                    //add the config to the form
-                    configPanel.Controls.Add(configControlRB);
-                    //process the subconfigs
-                    //code to declare refrences
-                    Panel subConfigPanel = null;
-
-                    //code to run once to init setup the panels and stuff
-                    if (m.configs[i].configs.Count > 0)
-                    {
-                        subConfigPanel = new Panel();
-                        subConfigPanel.Enabled = true;
-                        subConfigPanel.BorderStyle = BorderStyle.FixedSingle;
-                        subConfigPanel.Location = new Point(3, getYLocation(configPanel.Controls));
-                        subConfigPanel.Size = new Size(t.Size.Width - 45, 30);
-                        subConfigPanel.AutoSize = true;
-                        subConfigPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
-                        subConfigPanel.BackColor = Settings.getBackColor();
-                        subConfigPanel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name + "_subConfigPanel";
-                    }
-                    //code th loop through the subconfigs
-                    for(int j = 0; j < m.configs[i].configs.Count; j++)
-                    {
-                        Config sc = m.configs[i].configs[j];
-                        ConfigFormRadioButton subRB = new ConfigFormRadioButton();
-                        subRB.AutoSize = true;
-                        subRB.Location = new Point(6, (15 * j) + 3);
-                        subRB.Size = new Size(150, 15);
-                        subRB.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
-                        subRB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name + "_" + sc.name;
-                        subRB.catagory = catagory;
-                        subRB.mod = m;
-                        subRB.config = m.configs[i];
-                        subRB.config = sc;
-                        //logic for the radioButtons
-                        subRB.Enabled = false;
-                        subRB.Checked = false;
-                        if (m.enabled && m.Checked && m.configs[i].enabled && m.configs[i].Checked && sc.enabled)
-                        {
-                            subRB.Enabled = true;
-                            if (sc.Checked)
-                            {
-                                subRB.Checked = true;
-                                //also set the panel to blanched almond
-                                subConfigPanel.BackColor = Color.BlanchedAlmond;
-                            }
-                        }
-                        //add handlers
-                        subRB.CheckedChanged += new EventHandler(subRB_CheckedChanged);
-                        //run checksum logic
-                        subRB.Text = sc.name;
-                        string oldSubCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + sc.zipFile);
-                        if (!oldSubCRC.Equals(sc.crc) && (!sc.zipFile.Equals("")))
-                        {
-                            subRB.Text = subRB.Text + " (Updated)";
-                            if (sc.size > 0.0f)
-                                subRB.Text = subRB.Text + " (" + sc.size + " MB)";
-                        }
-                        //add component
-                        subConfigPanel.Controls.Add(subRB);
-                    }
-                    //add subconfig to the form
-                    if (subConfigPanel != null) configPanel.Controls.Add(subConfigPanel);
-                    continue;
-                }
-                else if (m.configs[i].type.Equals("single_dropdown") || m.configs[i].type.Equals("single_dropdown1") || m.configs[i].type.Equals("single_dropdown2"))
-                {
-                    //set the all one to the version is actually is
-                    if (m.configs[i].type.Equals("single_dropdown") || m.configs[i].type.Equals("single_dropdown1"))
-                    {
-                        configControlDDALL = configControlDD;
-                    }
-                    else if (m.configs[i].type.Equals("single_dropdown2"))
-                    {
-                        configControlDDALL = configControlDD2;
-                    }
-                    //make a dropDown selection box
-                    if (configControlDDALL.Location.X == 0 && configControlDDALL.Location.Y == 0)
-                    {
-                        //init the box, including adding the label
-                        configControlDDALL.Location = new System.Drawing.Point(6, getYLocation(configPanel.Controls));
-                        configPanel.Controls.Add(configControlDDALL);
-                    }
-                    //run the checksum locics
-                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipFile);
-                    if (!oldCRC.Equals(m.configs[i].crc) && (!m.configs[i].crc.Equals("")))
-                    {
-                        string toAdd = m.configs[i].name + "_Updated";
-                        if (m.configs[i].size > 0.0f)
-                            toAdd = toAdd + " (" + m.configs[i].size + " MB)";
-                        //add it with _updated
-                        if (m.configs[i].enabled) configControlDDALL.Items.Add(new ComboBoxItem(m.configs[i],toAdd));
-                        if (m.configs[i].Checked)
-                        {
-                            configControlDDALL.SelectedItem = toAdd;
-                            configControlDDALL.Enabled = true;
-                        }
-                    }
-                    else
-                    {
-                        //add it
-                        if (m.configs[i].enabled) configControlDDALL.Items.Add(new ComboBoxItem(m.configs[i],m.configs[i].name));
-                        if (m.configs[i].Checked)
-                        {
-                            configControlDDALL.SelectedItem = m.configs[i].name;
-                            configControlDDALL.Enabled = true;
-                        }
-                    }
-                    continue;
-                }
-                else if (m.configs[i].type.Equals("multi"))
-                {
-                    //make a checkBox
-                    ConfigFormCheckBox configControlCB = new ConfigFormCheckBox();
-                    configControlCB.AutoSize = true;
-                    configControlCB.Location = new Point(6, getYLocation(configPanel.Controls));
-                    configControlCB.Size = new System.Drawing.Size(150, 15);
-                    configControlCB.TabIndex = 1;
-                    configControlCB.TabStop = true;
-                    configControlCB.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
-                    configControlCB.catagory = catagory;
-                    configControlCB.mod = m;
-                    configControlCB.config = m.configs[i];
-                    //the logic for enabling it
-                    configControlCB.Enabled = false;
-                    configControlCB.Checked = false;
-                    if (m.enabled && m.Checked && m.configs[i].enabled)
-                    {
-                        configControlCB.Enabled = true;
-                        //the logic for checking it
-                        if (m.configs[i].Checked)
-                            configControlCB.Checked = true;
-                    }
-                    //add handlers
-                    configControlCB.CheckedChanged += new EventHandler(configControlCB_CheckedChanged);
-                    configControlCB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name;
-                    //checksum logic
-                    configControlCB.Text = m.configs[i].name;
-                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + m.configs[i].zipFile);
-                    if (!oldCRC.Equals(m.configs[i].crc) && (!m.configs[i].crc.Equals("")))
-                    {
-                        configControlCB.Text = configControlCB.Text + " (Updated)";
-                        if (m.configs[i].size > 0.0f)
-                            configControlCB.Text = configControlCB.Text + " (" + m.configs[i].size + " MB)";
-                    }
-                    //add config to the form
-                    configPanel.Controls.Add(configControlCB);
-                    //process the subconfigs
-                    //code to declare refrences
-                    Panel subConfigPanel = null;
-
-                    //code to run once to init setup the panels and stuff
-                    if (m.configs[i].configs.Count > 0)
-                    {
-                        subConfigPanel = new Panel();
-                        subConfigPanel.Enabled = true;
-                        subConfigPanel.BorderStyle = BorderStyle.FixedSingle;
-                        subConfigPanel.Location = new Point(15, getYLocation(configPanel.Controls));
-                        subConfigPanel.Size = new Size(t.Size.Width - 45, 30);
-                        subConfigPanel.AutoSize = true;
-                        subConfigPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
-                        subConfigPanel.BackColor = Settings.getBackColor();
-                        subConfigPanel.Name = t.Name + "_" + m.name + "_" + m.configs[i].name + "_subConfigPanel";
-                    }
-                    //code th loop through the subconfigs
-                    for (int j = 0; j < m.configs[i].configs.Count; j++)
-                    {
-                        Config sc = m.configs[i].configs[j];
-                        ConfigFormRadioButton subRB = new ConfigFormRadioButton();
-                        subRB.AutoSize = true;
-                        subRB.Location = new Point(6, (13 * j) + 3);
-                        subRB.Size = new Size(150, 15);
-                        subRB.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
-                        subRB.Name = t.Name + "_" + m.name + "_" + m.configs[i].name + "_" + sc.name;
-                        subRB.catagory = catagory;
-                        subRB.mod = m;
-                        subRB.config= m.configs[i];
-                        subRB.config = sc;
-                        //logic for the radioButtons
-                        subRB.Enabled = false;
-                        subRB.Checked = false;
-                        if (m.enabled && m.Checked && m.configs[i].enabled && m.configs[i].Checked && sc.enabled)
-                        {
-                            subRB.Enabled = true;
-                            if (sc.Checked)
-                            {
-                                subRB.Checked = true;
-                                //also set the panel to blanched almond
-                                subConfigPanel.BackColor = Color.BlanchedAlmond;
-                            }
-                        }
-                        //add handlers
-                        subRB.CheckedChanged += new EventHandler(subRB_CheckedChanged);
-                        //run checksum logic
-                        subRB.Text = sc.name;
-                        string oldSubCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + sc.zipFile);
-                        if (!oldSubCRC.Equals(sc.crc) && (!sc.zipFile.Equals("")))
-                        {
-                            subRB.Text = subRB.Text + " (Updated)";
-                            if (sc.size > 0.0f)
-                                subRB.Text = subRB.Text + " (" + sc.size + " MB)";
-                        }
-                        //add component
-                        subConfigPanel.Controls.Add(subRB);
-                    }
-                    //add subconfig to the form
-                    if (subConfigPanel != null) configPanel.Controls.Add(subConfigPanel);
-                    continue;
-                }
-                else
-                {
-                    Utils.appendToLog("WARNING: Unknown config type for " + m.configs[i].name + ": " + m.configs[i].type);
-                }
-            }
             //make the mod check box
             ModFormCheckBox modCheckBox = new ModFormCheckBox();
             modCheckBox.AutoSize = true;
@@ -1115,14 +825,13 @@ namespace RelhaxModpack
             //in theory it should trigger the handler for checked
             //when initially made it should be false, if enabled from
             //from user configs
-            int spacer = modCheckBox.Location.Y + modCheckBox.Size.Height + 5;
-            if (Settings.largeFont) spacer += 3;
-            configPanel.Location = new Point(configPanel.Location.X, spacer);
             //make the main panel
             Panel mainPanel = new Panel();
             mainPanel.BorderStyle = BorderStyle.FixedSingle;
-            mainPanel.Controls.Add(configPanel);
-            mainPanel.Controls.Add(modCheckBox);
+            mainPanel.TabIndex = 0;
+            mainPanel.AutoSize = true;
+            mainPanel.AutoSizeMode = AutoSizeMode.GrowOnly;
+            mainPanel.Size = new System.Drawing.Size(t.Size.Width - 25, 20);
             int panelCountYLocation = 70 * (panelCount - 1);
             //if this is not the first mod being added to the panel
             int panelYLocation = 6; //tab plus delimiter
@@ -1138,15 +847,12 @@ namespace RelhaxModpack
                 panelCountYLocation = panelCountYLocation + 5;
             }
             mainPanel.Location = new System.Drawing.Point(5, panelYLocation);
-            mainPanel.TabIndex = 0;
-            mainPanel.AutoSize = true;
-            mainPanel.AutoSizeMode = AutoSizeMode.GrowOnly;
-            mainPanel.Size = new System.Drawing.Size(t.Size.Width - 25, 20);
-            //add to main panel
+            //processes the subconfigs here
             mainPanel.Controls.Clear();
+            //add to main panel
             mainPanel.Controls.Add(modCheckBox);
             if (m.configs.Count > 0)
-                mainPanel.Controls.Add(configPanel);
+                processConfigsDefault(t, m, catagory, modCheckBox, mainPanel, true,m.configs, mainPanel);
             //add to tab
             t.Controls.Add(mainPanel);
             //add the event handler before changing the checked state so the event
@@ -1159,6 +865,202 @@ namespace RelhaxModpack
                 m.Checked = false;
             }
             modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
+        }
+        private void processConfigsDefault(TabPage t, Mod m, Category catagory, ModFormCheckBox modCheckBox, Panel mainPanel, bool parentIsMod, List<Config> configs, Panel topPanal, Config parentConfig = null)
+        {
+            //make config panel
+            Panel configPanel = new Panel();
+            configPanel.Enabled = true;
+            configPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            configPanel.Location = new System.Drawing.Point(3, 10);
+            configPanel.TabIndex = 2;
+            configPanel.Size = new System.Drawing.Size(t.Size.Width - 35, 30);
+            configPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
+            configPanel.AutoSize = true;
+            if (parentIsMod)
+            {
+                if (m.enabled && m.Checked)
+                    configPanel.BackColor = Color.BlanchedAlmond;
+                else
+                    configPanel.BackColor = Settings.getBackColor();
+            }
+            else
+            {
+                if (parentConfig.enabled && parentConfig.Checked)
+                    configPanel.BackColor = Color.BlanchedAlmond;
+                else
+                    configPanel.BackColor = Settings.getBackColor();
+            }
+            int spacer = modCheckBox.Location.Y + modCheckBox.Size.Height + 5;
+            if (Settings.largeFont) spacer += 3;
+            if (parentIsMod)
+            {
+                configPanel.Location = new Point(configPanel.Location.X, spacer);
+            }
+            else
+            {
+                configPanel.Location = new Point(configPanel.Location.X + 10, getYLocation(mainPanel.Controls));
+            }
+            mainPanel.Controls.Add(configPanel);
+            //create the comboBox outside of the loop
+            //later add it if the items count is above 0
+            ConfigFormComboBox configControlDD = new ConfigFormComboBox();
+            configControlDD.AutoSize = true;
+            configControlDD.Location = new System.Drawing.Point(0, 0);
+            configControlDD.Size = new System.Drawing.Size(225, 15);
+            configControlDD.TabIndex = 1;
+            configControlDD.TabStop = true;
+            configControlDD.Enabled = false;
+            configControlDD.SelectedIndexChanged += new EventHandler(configControlDD_SelectedIndexChanged);
+            configControlDD.Name = t.Name + "_" + m.name + "_DropDown";
+            configControlDD.DropDownStyle = ComboBoxStyle.DropDownList;
+            ConfigFormComboBox configControlDD2 = new ConfigFormComboBox();
+            configControlDD2.AutoSize = true;
+            configControlDD2.Location = new System.Drawing.Point(0, 0);
+            configControlDD2.Size = new System.Drawing.Size(225, 15);
+            configControlDD2.TabIndex = 1;
+            configControlDD2.TabStop = true;
+            configControlDD2.Enabled = false;
+            configControlDD2.SelectedIndexChanged += new EventHandler(configControlDD_SelectedIndexChanged);
+            configControlDD2.Name = t.Name + "_" + m.name + "_DropDown2";
+            configControlDD2.DropDownStyle = ComboBoxStyle.DropDownList;
+            foreach (Config con in configs)
+            {
+                ConfigFormComboBox configControlDDALL = null;
+                if (con.type.Equals("single") || con.type.Equals("single1"))
+                {
+                    modHasRadioButtons = true;
+                    //make default radioButton
+                    ConfigFormRadioButton configControlRB = new ConfigFormRadioButton();
+                    configControlRB.AutoSize = true;
+                    configControlRB.Location = new Point(6, getYLocation(configPanel.Controls));
+                    configControlRB.Size = new System.Drawing.Size(150, 15);
+                    configControlRB.TabIndex = 1;
+                    configControlRB.TabStop = true;
+                    configControlRB.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
+                    configControlRB.catagory = catagory;
+                    configControlRB.mod = m;
+                    configControlRB.config = con;
+                    //logic for radiobutton
+                    configControlRB.Enabled = false;
+                    configControlRB.Checked = false;
+                    if (m.enabled && m.Checked && con.enabled)
+                    {
+                        configControlRB.Enabled = true;
+                        if (con.Checked)
+                        {
+                            configControlRB.Checked = true;
+                            hasRadioButtonConfigSelected = true;
+                        }
+                    }
+                    //add handlers
+                    configControlRB.CheckedChanged += new EventHandler(configControlRB_CheckedChanged);
+                    configControlRB.Name = t.Name + "_" + m.name + "_" + con.name;
+                    //run checksum logic
+                    configControlRB.Text = con.name;
+                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                    if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                    {
+                        configControlRB.Text = configControlRB.Text + " (Updated)";
+                        if (con.size > 0.0f)
+                            configControlRB.Text = configControlRB.Text + " (" + con.size + " MB)";
+                    }
+                    //add the config to the form
+                    configPanel.Controls.Add(configControlRB);
+                    //process the subconfigs
+                    if(con.configs.Count > 0)
+                    processConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
+                }
+                else if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1") || con.type.Equals("single_dropdown2"))
+                {
+                    //set the all one to the version is actually is
+                    if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1"))
+                    {
+                        configControlDDALL = configControlDD;
+                    }
+                    else if (con.type.Equals("single_dropdown2"))
+                    {
+                        configControlDDALL = configControlDD2;
+                    }
+                    //make a dropDown selection box
+                    if (configControlDDALL.Location.X == 0 && configControlDDALL.Location.Y == 0)
+                    {
+                        //init the box, including adding the label
+                        configControlDDALL.Location = new System.Drawing.Point(6, getYLocation(configPanel.Controls));
+                        configPanel.Controls.Add(configControlDDALL);
+                    }
+                    //run the checksum locics
+                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                    if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                    {
+                        string toAdd = con.name + "_Updated";
+                        if (con.size > 0.0f)
+                            toAdd = toAdd + " (" + con.size + " MB)";
+                        //add it with _updated
+                        if (con.enabled) configControlDDALL.Items.Add(new ComboBoxItem(con, toAdd));
+                        if (con.Checked)
+                        {
+                            configControlDDALL.SelectedItem = toAdd;
+                            configControlDDALL.Enabled = true;
+                        }
+                    }
+                    else
+                    {
+                        //add it
+                        if (con.enabled) configControlDDALL.Items.Add(new ComboBoxItem(con, con.name));
+                        if (con.Checked)
+                        {
+                            configControlDDALL.SelectedItem = con.name;
+                            configControlDDALL.Enabled = true;
+                        }
+                    }
+                }
+                else if (con.type.Equals("multi"))
+                {
+                    //make a checkBox
+                    ConfigFormCheckBox configControlCB = new ConfigFormCheckBox();
+                    configControlCB.AutoSize = true;
+                    configControlCB.Location = new Point(6, getYLocation(configPanel.Controls));
+                    configControlCB.Size = new System.Drawing.Size(150, 15);
+                    configControlCB.TabIndex = 1;
+                    configControlCB.TabStop = true;
+                    configControlCB.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
+                    configControlCB.catagory = catagory;
+                    configControlCB.mod = m;
+                    configControlCB.config = con;
+                    //the logic for enabling it
+                    configControlCB.Enabled = false;
+                    configControlCB.Checked = false;
+                    if (m.enabled && m.Checked && con.enabled)
+                    {
+                        configControlCB.Enabled = true;
+                        //the logic for checking it
+                        if (con.Checked)
+                            configControlCB.Checked = true;
+                    }
+                    //add handlers
+                    configControlCB.CheckedChanged += new EventHandler(configControlCB_CheckedChanged);
+                    configControlCB.Name = t.Name + "_" + m.name + "_" + con.name;
+                    //checksum logic
+                    configControlCB.Text = con.name;
+                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                    if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                    {
+                        configControlCB.Text = configControlCB.Text + " (Updated)";
+                        if (con.size > 0.0f)
+                            configControlCB.Text = configControlCB.Text + " (" + con.size + " MB)";
+                    }
+                    //add config to the form
+                    configPanel.Controls.Add(configControlCB);
+                    //process subconfigs
+                    if (con.configs.Count > 0)
+                        processConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal ,con);
+                }
+                else
+                {
+                    Utils.appendToLog("WARNING: Unknown config type for " + con.name + ": " + con.type);
+                }
+            }
         }
         //method for finding the location of which to put a control
         private int getYLocation(System.Windows.Forms.Control.ControlCollection ctrl)

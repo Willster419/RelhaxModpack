@@ -691,6 +691,7 @@ namespace RelhaxModpack
                 Utils.appendToLog("target: " + e.TargetSite);
                 Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/supported_clients.txt");
                 MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " supported_clients.txt");
+                //suportedVersions = "0.9.18.0";
                 Application.Exit();
             }
             supportedVersions = suportedVersions.Split(',');
