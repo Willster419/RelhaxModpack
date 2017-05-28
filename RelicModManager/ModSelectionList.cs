@@ -1018,7 +1018,7 @@ namespace RelhaxModpack
             if (Settings.largeFont) spacer += 3;
             if (parentIsMod)
             {
-                configPanel.Location = new Point(configPanel.Location.X, spacer);
+                configPanel.Location = new Point(configPanel.Location.X + 10, spacer);
             }
             else
             {
@@ -1457,6 +1457,42 @@ namespace RelhaxModpack
                     }
                 }
             }
+            //trigger the panel color change
+            if (cfg.configs.Count > 0)
+            {
+                if (cb.Checked)
+                {
+                    UIComponent comp = cfg.configs[0].configUIComponent;
+                    if (comp is ConfigFormCheckBox)
+                    {
+                        ConfigFormCheckBox fcb = (ConfigFormCheckBox)comp;
+                        Panel pan = (Panel)fcb.Parent;
+                        pan.BackColor = Color.BlanchedAlmond;
+                    }
+                    else if (comp is ConfigFormRadioButton)
+                    {
+                        ConfigFormRadioButton fcb = (ConfigFormRadioButton)comp;
+                        Panel pan = (Panel)fcb.Parent;
+                        pan.BackColor = Color.BlanchedAlmond;
+                    }
+                }
+                else
+                {
+                    UIComponent comp = cfg.configs[0].configUIComponent;
+                    if (comp is ConfigFormCheckBox)
+                    {
+                        ConfigFormCheckBox fcb = (ConfigFormCheckBox)comp;
+                        Panel pan = (Panel)fcb.Parent;
+                        pan.BackColor = Settings.getBackColor();
+                    }
+                    else if (comp is ConfigFormRadioButton)
+                    {
+                        ConfigFormRadioButton fcb = (ConfigFormRadioButton)comp;
+                        Panel pan = (Panel)fcb.Parent;
+                        pan.BackColor = Settings.getBackColor();
+                    }
+                }
+            }
         }
         //handler for when a config selection is made from the drop down list
         void configControlDD_SelectedIndexChanged(object sender, EventArgs e)
@@ -1546,6 +1582,42 @@ namespace RelhaxModpack
                     }
                 }
             }
+            //trigger the panel color change
+            if (cfg.configs.Count > 0)
+            {
+                if (rb.Checked)
+                {
+                    UIComponent comp = cfg.configs[0].configUIComponent;
+                    if (comp is ConfigFormCheckBox)
+                    {
+                        ConfigFormCheckBox fcb = (ConfigFormCheckBox)comp;
+                        Panel pan = (Panel)fcb.Parent;
+                        pan.BackColor = Color.BlanchedAlmond;
+                    }
+                    else if (comp is ConfigFormRadioButton)
+                    {
+                        ConfigFormRadioButton fcb = (ConfigFormRadioButton)comp;
+                        Panel pan = (Panel)fcb.Parent;
+                        pan.BackColor = Color.BlanchedAlmond;
+                    }
+                }
+                else
+                {
+                    UIComponent comp = cfg.configs[0].configUIComponent;
+                    if (comp is ConfigFormCheckBox)
+                    {
+                        ConfigFormCheckBox fcb = (ConfigFormCheckBox)comp;
+                        Panel pan = (Panel)fcb.Parent;
+                        pan.BackColor = Settings.getBackColor();
+                    }
+                    else if (comp is ConfigFormRadioButton)
+                    {
+                        ConfigFormRadioButton fcb = (ConfigFormRadioButton)comp;
+                        Panel pan = (Panel)fcb.Parent;
+                        pan.BackColor = Settings.getBackColor();
+                    }
+                }
+            }
         }
         //hander for when any mouse button is clicked on a specific control
         void modCheckBox_MouseDown(object sender, MouseEventArgs e)
@@ -1625,25 +1697,7 @@ namespace RelhaxModpack
                         //mod panel
                         //TODO RECURSIVLY
                         Panel p = (Panel)c;
-                        p.Size = new Size(t.Size.Width - 25, p.Size.Height);
-                        foreach (Control cc in p.Controls)
-                        {
-                            if (cc is Panel)
-                            {
-                                //config panel
-                                Panel pp = (Panel)cc;
-                                pp.Size = new Size(t.Size.Width - 35, pp.Size.Height);
-                                foreach (Control ccc in pp.Controls)
-                                {
-                                    if (ccc is Panel)
-                                    {
-                                        //subconfig panel
-                                        Panel ppp = (Panel)ccc;
-                                        ppp.Size = new Size(t.Size.Width - 58, ppp.Size.Height);
-                                    }
-                                }
-                            }
-                        }
+                        resizePanel(p, t, 25);
                     }
                     else if (c is ElementHost)
                     {
@@ -1658,9 +1712,17 @@ namespace RelhaxModpack
             }
         }
         //recursive resize of the control panals
-        private void resizePanel()
+        private void resizePanel(Panel current, TabPage tp ,int shrinkFactor)
         {
-
+            current.Size = new Size(tp.Size.Width - shrinkFactor, current.Size.Height);
+            foreach (Control controfds in current.Controls)
+            {
+                if (controfds is Panel)
+                {
+                    Panel subpp = (Panel)controfds;
+                    resizePanel(subpp, tp, shrinkFactor+25);
+                }
+            }
         }
         //handler to set the cancel bool to false
         private void continueButton_Click(object sender, EventArgs e)
