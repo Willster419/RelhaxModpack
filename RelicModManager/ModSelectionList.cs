@@ -930,6 +930,7 @@ namespace RelhaxModpack
             modCheckBox.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
             modCheckBox.catagory = catagory;
             modCheckBox.mod = m;
+            m.modFormCheckBox = modCheckBox;
             //the mod checksum logic
             string modDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.zipFile;
             string oldCRC2 = Utils.getMd5Hash(modDownloadPath);
@@ -1051,6 +1052,15 @@ namespace RelhaxModpack
             foreach (Config con in configs)
             {
                 ConfigFormComboBox configControlDDALL = null;
+                con.parentMod = m;
+                if (parentIsMod)
+                {
+                    con.parent = m;
+                }
+                else
+                {
+                    con.parent = parentConfig;
+                }
                 if (con.type.Equals("single") || con.type.Equals("single1"))
                 {
                     modHasRadioButtons = true;
@@ -1065,6 +1075,7 @@ namespace RelhaxModpack
                     configControlRB.catagory = catagory;
                     configControlRB.mod = m;
                     configControlRB.config = con;
+                    con.configUIComponent = configControlRB;
                     //logic for radiobutton
                     configControlRB.Enabled = false;
                     configControlRB.Checked = false;
@@ -1394,41 +1405,54 @@ namespace RelhaxModpack
             //checkbox is enabled, toggle checked and checked
             cfg.Checked = cb.Checked;
             //propagate the check back up if required
-            if (configPanel.Parent is Panel && cfg.Checked)
+            DatabaseObject obj = cfg.parent;
+            if (obj is Mod)
             {
-                //TODO
+                Mod parentM = (Mod)obj;
+                //parentM.modFormCheckBox.CheckedChanged -= modCheckBox_CheckedChanged;
+                parentM.modFormCheckBox.Checked = true;
+                //parentM.modFormCheckBox.CheckedChanged += modCheckBox_CheckedChanged;
+            }
+            else if (obj is Config)
+            {
+                Config parentC = (Config)obj;
+                parentC.Checked = true;
+                if (parentC.configUIComponent is ConfigFormCheckBox)
+                {
+                    ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.configUIComponent;
+                    parentCB.Checked = true;
+                }
+                else if (parentC.configUIComponent is ConfigFormRadioButton)
+                {
+                    ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.configUIComponent;
+                    parentRB.Checked = true;
+                }
             }
             //process any subconfigs
             bool configSelected = false;
             int radioButtonCount = 0;
-            foreach (Control cont in configPanel.Controls)
+            if (cfg.configs.Count > 0 && cb.Checked)
             {
-                if (cont is ConfigFormRadioButton)
+                foreach (Config c in cfg.configs)
                 {
-                    radioButtonCount++;
-                    ConfigFormRadioButton subRB = (ConfigFormRadioButton)cont;
-                    Config subc = subRB.config;
-                    if (subRB.Enabled && subRB.Checked)
+                    if (c.type.Equals("single") || c.type.Equals("single1"))
                     {
-                        if (subc.Checked)
+                        radioButtonCount++;
+                        if (c.Checked)
                             configSelected = true;
                     }
                 }
-            }
-            if (!configSelected && cb.Enabled && cb.Checked && radioButtonCount > 0)
-            {
-                foreach (Control cont in configPanel.Controls)
+                if (!configSelected && radioButtonCount > 0)
                 {
-                    if (cont is ConfigFormRadioButton)
+                    //select the first one and leave
+                    foreach (Config c in cfg.configs)
                     {
-                        ConfigFormRadioButton subRB = (ConfigFormRadioButton)cont;
-                        Config subc = subRB.config;
-                        if (subRB.Enabled && subc.enabled)
+                        if ((c.type.Equals("single") || c.type.Equals("single1")) && c.enabled)
                         {
-                            subRB.CheckedChanged -= configControlRB_CheckedChanged;
+                            c.Checked = true;
+                            ConfigFormRadioButton subRB = (ConfigFormRadioButton)c.configUIComponent;
                             subRB.Checked = true;
-                            subc.Checked = true;
-                            subRB.CheckedChanged += configControlRB_CheckedChanged;
+                            break;
                         }
                     }
                 }
@@ -1470,41 +1494,54 @@ namespace RelhaxModpack
             Category cat = rb.catagory;
             cfg.Checked = rb.Checked;
             //propagate the check back up if required
-            if (configPanel.Parent is Panel && cfg.Checked)
+            DatabaseObject obj = cfg.parent;
+            if (obj is Mod)
             {
-                //TODO
+                Mod parentM = (Mod)obj;
+                //parentM.modFormCheckBox.CheckedChanged -= modCheckBox_CheckedChanged;
+                parentM.modFormCheckBox.Checked = true;
+                //parentM.modFormCheckBox.CheckedChanged += modCheckBox_CheckedChanged;
+            }
+            else if (obj is Config)
+            {
+                Config parentC = (Config)obj;
+                parentC.Checked = true;
+                if (parentC.configUIComponent is ConfigFormCheckBox)
+                {
+                    ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.configUIComponent;
+                    parentCB.Checked = true;
+                }
+                else if (parentC.configUIComponent is ConfigFormRadioButton)
+                {
+                    ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.configUIComponent;
+                    parentRB.Checked = true;
+                }
             }
             //process any subconfigs
             bool configSelected = false;
             int radioButtonCount = 0;
-            foreach (Control cont in configPanel.Controls)
+            if (cfg.configs.Count > 0 && rb.Checked)
             {
-                if (cont is ConfigFormRadioButton)
+                foreach (Config c in cfg.configs)
                 {
-                    radioButtonCount++;
-                    ConfigFormRadioButton subRB = (ConfigFormRadioButton)cont;
-                    Config subc = subRB.config;
-                    if (subRB.Enabled && subRB.Checked)
+                    if (c.type.Equals("single") || c.type.Equals("single1"))
                     {
-                        if (subc.Checked)
+                        radioButtonCount++;
+                        if (c.Checked)
                             configSelected = true;
                     }
                 }
-            }
-            if (!configSelected && rb.Enabled && rb.Checked && radioButtonCount > 0)
-            {
-                foreach (Control cont in configPanel.Controls)
+                if (!configSelected && radioButtonCount > 0)
                 {
-                    if (cont is ConfigFormRadioButton)
+                    //select the first one and leave
+                    foreach (Config c in cfg.configs)
                     {
-                        ConfigFormRadioButton subRB = (ConfigFormRadioButton)cont;
-                        Config subc = subRB.config;
-                        if (subRB.Enabled && subc.enabled)
+                        if ((c.type.Equals("single") || c.type.Equals("single1")) && c.enabled)
                         {
-                            subRB.CheckedChanged -= configControlRB_CheckedChanged;
+                            c.Checked = true;
+                            ConfigFormRadioButton subRB = (ConfigFormRadioButton)c.configUIComponent;
                             subRB.Checked = true;
-                            subc.Checked = true;
-                            subRB.CheckedChanged += configControlRB_CheckedChanged;
+                            break;
                         }
                     }
                 }

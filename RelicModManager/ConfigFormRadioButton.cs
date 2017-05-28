@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RelhaxModpack
 {
-    class ConfigFormRadioButton : System.Windows.Forms.RadioButton
+    public class ConfigFormRadioButton : System.Windows.Forms.RadioButton, UIComponent
     {
         public Category catagory { get; set; }
         public Mod mod { get; set; }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RelhaxModpack
 {
-    class ConfigFormComboBox : System.Windows.Forms.ComboBox
+    public class ConfigFormComboBox : System.Windows.Forms.ComboBox, UIComponent
     {
         public Category catagory { get; set; }
         public Mod mod { get; set; }

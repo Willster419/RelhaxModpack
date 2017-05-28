@@ -36,6 +36,8 @@ namespace RelhaxModpack
         //the absolute top of the config levels, the parent mod
         public Mod parentMod { get; set; }
         public bool Checked { get; set; }
+        public ModFormCheckBox modFormCheckBox { get; set; }
+        public UIComponent configUIComponent { get; set; }
         //basic config constructor
         public Config()
         {

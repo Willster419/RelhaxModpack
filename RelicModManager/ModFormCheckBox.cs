@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RelhaxModpack
 {
-    class ModFormCheckBox : System.Windows.Forms.CheckBox
+    public class ModFormCheckBox : System.Windows.Forms.CheckBox, UIComponent
     {
         public Category catagory { get; set; }
         public Mod mod { get; set; }

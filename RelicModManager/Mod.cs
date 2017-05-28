@@ -31,6 +31,7 @@ namespace RelhaxModpack
         //the parent of a mod is a category
         public Category parent { get; set; }
         public bool Checked { get; set; }
+        public ModFormCheckBox modFormCheckBox { get; set; }
         //default constructor
         public Mod()
         {
