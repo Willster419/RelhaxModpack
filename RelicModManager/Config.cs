@@ -27,7 +27,7 @@ namespace RelhaxModpack
         //can the user select multiple configs or one only?
         public string type { get; set; }
         public List<string> userFiles = new List<string>();
-        public List<string> pictureList = new List<string>();
+        public List<Picture> pictureList = new List<Picture>();
         public List<Config> configs = new List<Config>();
         //the list of dependencies for this catagory
         public List<Dependency> dependencies = new List<Dependency>();

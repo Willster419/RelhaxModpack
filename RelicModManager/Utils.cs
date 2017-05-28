@@ -357,10 +357,7 @@ namespace RelhaxModpack
                                                 continue;
                                             if (innerText.Equals(""))
                                                 continue;
-                                            if (backendFlag)
-                                                c.pictureList.Add(innerText);
-                                            else
-                                                m.pictureList.Add(new Picture(c.name, pictureNode.InnerText));
+                                                c.pictureList.Add(new Picture(c.name, pictureNode.InnerText));
                                             break;
                                     }
                                 }

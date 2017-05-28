@@ -427,11 +427,11 @@ namespace RelhaxModpack
                 configRoot.AppendChild(configDatas);
                 //pictures for the configs
                 XmlElement configPictures = doc.CreateElement("pictures");
-                foreach (string p in cc.pictureList)
+                foreach (Picture p in cc.pictureList)
                 {
                     XmlElement configpictureRoot = doc.CreateElement("picture");
                     XmlElement configpictureURL = doc.CreateElement("URL");
-                    configpictureURL.InnerText = p;
+                    configpictureURL.InnerText = p.URL;
                     configpictureRoot.AppendChild(configpictureURL);
                     configPictures.AppendChild(configpictureRoot);
                 }

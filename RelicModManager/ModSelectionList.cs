@@ -394,6 +394,7 @@ namespace RelhaxModpack
                     }
                     //add the handlers at the end
                     configControlRB.Click += new System.Windows.RoutedEventHandler(configControlRB_Click);
+                    configControlRB.MouseDown += new System.Windows.Input.MouseButtonEventHandler(configControlRB_MouseDown);
                     //add it to the mod config list
                     System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
                     configControlTVI.Header = configControlRB;
@@ -442,6 +443,7 @@ namespace RelhaxModpack
                         if (m.enabled && m.Checked)
                             configControlDDALL.IsEnabled = true;
                         configControlDDALL.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(configControlDDALL_SelectionChanged);
+                        configControlDDALL.MouseDown += new System.Windows.Input.MouseButtonEventHandler(configControlDDALL_MouseDown);
                         System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
                         configControlTVI.Header = configControlDDALL;
                         tvi.Items.Add(configControlTVI);
@@ -481,6 +483,7 @@ namespace RelhaxModpack
                     }
                     //add the handlers at the end
                     configControlCB.Click += new System.Windows.RoutedEventHandler(configControlCB_Click);
+                    configControlCB.MouseDown += new System.Windows.Input.MouseButtonEventHandler(configControlCB_MouseDown);
                     //add it to the mod config list
                     System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
                     configControlTVI.Header = configControlCB;
@@ -495,7 +498,6 @@ namespace RelhaxModpack
                 }
             }
         }
-
         //when a legacy checkbox of OMC view is clicked
         void configControlCB_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -667,6 +669,51 @@ namespace RelhaxModpack
                 p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
                 p.Show();
             }
+        }
+
+        void configControlDDALL_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.RightButton != System.Windows.Input.MouseButtonState.Pressed)
+            {
+                return;
+            }
+            ConfigWPFComboBox cb = (ConfigWPFComboBox)sender;
+            Config m = cb.config;
+            if (m.devURL == null)
+                m.devURL = "";
+            p.Close();
+            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
+            p.Show();
+        }
+
+        void configControlCB_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.RightButton != System.Windows.Input.MouseButtonState.Pressed)
+            {
+                return;
+            }
+            ConfigWPFCheckBox cb = (ConfigWPFCheckBox)sender;
+            Config m = cb.config;
+            if (m.devURL == null)
+                m.devURL = "";
+            p.Close();
+            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
+            p.Show();
+        }
+
+        void configControlRB_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.RightButton != System.Windows.Input.MouseButtonState.Pressed)
+            {
+                return;
+            }
+            ConfigWPFRadioButton cb = (ConfigWPFRadioButton)sender;
+            Config m = cb.config;
+            if (m.devURL == null)
+                m.devURL = "";
+            p.Close();
+            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
+            p.Show();
         }
         //when a legacy mod checkbox is clicked
         void modCheckBoxL_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -912,6 +959,7 @@ namespace RelhaxModpack
             configControlDD.TabStop = true;
             configControlDD.Enabled = false;
             configControlDD.SelectedIndexChanged += new EventHandler(configControlDD_SelectedIndexChanged);
+            configControlDD.MouseDown += new MouseEventHandler(configControlDD_MouseDown);
             configControlDD.Name = t.Name + "_" + m.name + "_DropDown";
             configControlDD.DropDownStyle = ComboBoxStyle.DropDownList;
             ConfigFormComboBox configControlDD2 = new ConfigFormComboBox();
@@ -922,6 +970,7 @@ namespace RelhaxModpack
             configControlDD2.TabStop = true;
             configControlDD2.Enabled = false;
             configControlDD2.SelectedIndexChanged += new EventHandler(configControlDD_SelectedIndexChanged);
+            configControlDD2.MouseDown += new MouseEventHandler(configControlDD_MouseDown);
             configControlDD2.Name = t.Name + "_" + m.name + "_DropDown2";
             configControlDD2.DropDownStyle = ComboBoxStyle.DropDownList;
             foreach (Config con in configs)
@@ -955,6 +1004,7 @@ namespace RelhaxModpack
                     }
                     //add handlers
                     configControlRB.CheckedChanged += new EventHandler(configControlRB_CheckedChanged);
+                    configControlRB.MouseDown += new MouseEventHandler(configControlRB_MouseDown);
                     configControlRB.Name = t.Name + "_" + m.name + "_" + con.name;
                     //run checksum logic
                     configControlRB.Text = con.name;
@@ -1040,6 +1090,7 @@ namespace RelhaxModpack
                     }
                     //add handlers
                     configControlCB.CheckedChanged += new EventHandler(configControlCB_CheckedChanged);
+                    configControlCB.MouseDown += new MouseEventHandler(configControlCB_MouseDown);
                     configControlCB.Name = t.Name + "_" + m.name + "_" + con.name;
                     //checksum logic
                     configControlCB.Text = con.name;
@@ -1096,6 +1147,45 @@ namespace RelhaxModpack
                 p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
                 p.Show();
             }
+        }
+
+        void configControlCB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            ConfigFormCheckBox cb = (ConfigFormCheckBox)sender;
+            Config m = cb.config;
+            if (m.devURL == null)
+                m.devURL = "";
+            p.Close();
+            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
+            p.Show();
+        }
+
+        void configControlDD_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            ConfigFormComboBox cb = (ConfigFormComboBox)sender;
+            Config m = cb.config;
+            if (m.devURL == null)
+                m.devURL = "";
+            p.Close();
+            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
+            p.Show();
+        }
+
+        void configControlRB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            ConfigFormRadioButton cb = (ConfigFormRadioButton)sender;
+            Config m = cb.config;
+            if (m.devURL == null)
+                m.devURL = "";
+            p.Close();
+            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
+            p.Show();
         }
         //handler for when a config selection is made from the drop down list
         void configControlDD_SelectedIndexChanged(object sender, EventArgs e)
