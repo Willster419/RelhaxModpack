@@ -321,7 +321,8 @@ namespace RelhaxModpack
             
             //add the mod check box to the legacy tree view
             lsl.legacyTreeView.Items.Add(tvi);
-            if ((bool)modCheckBox.IsChecked && modHasRadioButtons && !hasRadioButtonConfigSelected)
+            //disable the logic for now
+            if (false && (bool)modCheckBox.IsChecked && modHasRadioButtons && !hasRadioButtonConfigSelected)
             {
                 //getting here means that the user has saved the prefrence for a selected mandatory radiobutton config that has been disabled, so his selection of that mod needs to be disabled
                 m.Checked = false;
@@ -373,14 +374,30 @@ namespace RelhaxModpack
                     //set them to false first
                     configControlRB.IsEnabled = false;
                     configControlRB.IsChecked = false;
-                    if (m.enabled && m.Checked && con.enabled)
+                    if (parentIsMod)
                     {
-                        configControlRB.IsEnabled = true;
-                        //the logic for checking it
-                        if (con.Checked)
+                        if (m.enabled && con.enabled)
                         {
-                            configControlRB.IsChecked = true;
-                            hasRadioButtonConfigSelected = true;
+                            configControlRB.IsEnabled = true;
+                            //the logic for checking it
+                            if (m.Checked && con.Checked)
+                            {
+                                configControlRB.IsChecked = true;
+                                hasRadioButtonConfigSelected = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (parentConfig.enabled && con.enabled)
+                        {
+                            configControlRB.IsEnabled = true;
+                            //the logic for checking it
+                            if (parentConfig.Checked && con.Checked)
+                            {
+                                configControlRB.IsChecked = true;
+                                hasRadioButtonConfigSelected = true;
+                            }
                         }
                     }
                     //run the checksum logix
@@ -440,8 +457,10 @@ namespace RelhaxModpack
                         configControlDDALL.catagory = c;
                         configControlDDALL.mod = m;
                         //configControlDDALL.config = con;
-                        if (m.enabled && m.Checked)
+                        if (m.enabled)
                             configControlDDALL.IsEnabled = true;
+                        if (configControlDDALL.SelectedIndex == -1)
+                            configControlDDALL.SelectedIndex = 0;
                         configControlDDALL.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(configControlDDALL_SelectionChanged);
                         configControlDDALL.MouseDown += new System.Windows.Input.MouseButtonEventHandler(configControlDDALL_MouseDown);
                         System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
@@ -465,12 +484,31 @@ namespace RelhaxModpack
                     //set them to false first
                     configControlCB.IsEnabled = false;
                     configControlCB.IsChecked = false;
-                    if (m.enabled && con.enabled && m.Checked)
+                    if (parentIsMod)
                     {
-                        configControlCB.IsEnabled = true;
-                        //the logic for checking it
-                        if (m.Checked && con.Checked)
-                            configControlCB.IsChecked = true;
+                        if (m.enabled && con.enabled)
+                        {
+                            configControlCB.IsEnabled = true;
+                            //the logic for checking it
+                            if (m.Checked && con.Checked)
+                            {
+                                configControlCB.IsChecked = true;
+                                hasRadioButtonConfigSelected = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (parentConfig.enabled && con.enabled)
+                        {
+                            configControlCB.IsEnabled = true;
+                            //the logic for checking it
+                            if (parentConfig.Checked && con.Checked)
+                            {
+                                configControlCB.IsChecked = true;
+                                hasRadioButtonConfigSelected = true;
+                            }
+                        }
                     }
                     //run the checksum logix
                     configControlCB.Content = con.name;
@@ -498,52 +536,181 @@ namespace RelhaxModpack
                 }
             }
         }
+        //when a legacy mod checkbox is clicked
+        void modCheckBoxL_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (loadingConfig)
+                return;
+            ModWPFCheckBox cb = (ModWPFCheckBox)sender;
+            Mod m = cb.mod;
+            Category cat = m.parent;
+            System.Windows.Controls.TreeViewItem TVI = (System.Windows.Controls.TreeViewItem)cb.Parent;
+            System.Windows.Controls.TreeView TV = (System.Windows.Controls.TreeView)TVI.Parent;
+            //check to see if this is a single selection categtory
+            //if it is, then uncheck the other mod, then check this one
+            if ((bool)cb.IsChecked && cat.selectionType.Equals("single"))
+            {
+                //check if any other mods in this catagory are already checked
+                bool anyModsChecked = false;
+                foreach (Mod mm in cat.mods)
+                {
+                    if (mm.Checked)
+                    {
+                        anyModsChecked = true;
+                        mm.Checked = false;
+                    }
+                }
+                if (anyModsChecked)
+                {
+                    cb.IsChecked = false;
+                    //all other mods in this category need to be unchecked
+                    foreach (System.Windows.Controls.TreeViewItem tvi in TV.Items)
+                    {
+                        ModWPFCheckBox modCB = (ModWPFCheckBox)tvi.Header;
+                        //remove the handler before we make changes
+                        //modCB.Click -= modCheckBoxL_Click;
+                        if ((bool)modCB.IsChecked)
+                        {
+                            modCB.IsChecked = false;
+                            modCB.mod.Checked = false;
+                        }
+                        //modCheckBoxL_Click(modCB, null);
+                        //modCB.Click += modCheckBoxL_Click;
+                    }
+                }
+                //now it is safe to check the mod we want
+                cb.Click -= modCheckBoxL_Click;
+                cb.IsChecked = true;
+                cb.mod.Checked = true;
+                cb.Click += modCheckBoxL_Click;
+            }
+            m.Checked = (bool)cb.IsChecked;
+
+            //this section deals with enabling the configs, if there are any
+            if (m.configs.Count == 0)
+                return;
+            //get the string name of the last radiobutton for refrence later
+            string lastConfigName = "null";
+            bool configSelected = false;
+            foreach (Config configs in m.configs)
+            {
+                if (configs.type.Equals("single") || configs.type.Equals("single1"))
+                {
+                    lastConfigName = configs.name;
+                }
+            }
+            //there is at least one config, so at least one UI element
+            foreach (System.Windows.Controls.TreeViewItem item in TVI.Items)
+            {
+                System.Windows.Controls.Control c = (System.Windows.Controls.Control)item.Header;
+                Config cfg = null;
+                if (c is ConfigWPFRadioButton)
+                {
+                    ConfigWPFRadioButton cbox = (ConfigWPFRadioButton)c;
+                    cfg = cbox.config;
+                    if (cfg.Checked)
+                        configSelected = true;
+                    //create a section of code to run for only the last radioButton
+                    if (cfg.name.Equals(lastConfigName) && !configSelected)
+                    {
+                        //last radioButton in the section, try to check at least one radioButton in the configs
+                        foreach (System.Windows.Controls.TreeViewItem item2 in TVI.Items)
+                        {
+                            System.Windows.Controls.Control c2 = (System.Windows.Controls.Control)item2.Header;
+                            if (c2 is ConfigWPFRadioButton)
+                            {
+                                ConfigWPFRadioButton c2r = (ConfigWPFRadioButton)c2;
+                                cfg = c2r.config;
+                                if (cfg.enabled)
+                                {
+                                    c2r.Click -= configControlRB_Click;
+                                    c2r.IsChecked = true;
+                                    cfg.Checked = true;
+                                    configControlRB_Click(c2r, null);
+                                    c2r.Click += configControlRB_Click;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         //when a legacy checkbox of OMC view is clicked
         void configControlCB_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            if (loadingConfig)
+                return;
             //checkboxes still don't need to be be unselected
             ConfigWPFCheckBox cb = (ConfigWPFCheckBox)sender;
             Mod m = cb.mod;
             Config cfg = cb.config;
+            System.Windows.Controls.TreeViewItem tvi = (System.Windows.Controls.TreeViewItem)cb.Parent;
             cfg.Checked = (bool)cb.IsChecked;
+            //propagate the check if required
+            if (tvi.Parent is System.Windows.Controls.TreeViewItem && cfg.Checked)
+            {
+                System.Windows.Controls.TreeViewItem parenttvi = (System.Windows.Controls.TreeViewItem)tvi.Parent;
+                if (parenttvi.Header is ModWPFCheckBox)
+                {
+                    ModWPFCheckBox c = (ModWPFCheckBox)parenttvi.Header;
+                    c.IsChecked = true;
+                    c.mod.Checked = true;
+                    modCheckBoxL_Click(c, null);
+                }
+                else if (parenttvi.Header is ConfigWPFCheckBox)
+                {
+                    ConfigWPFCheckBox c = (ConfigWPFCheckBox)parenttvi.Header;
+                    c.IsChecked = true;
+                    c.mod.Checked = true;
+                    configControlCB_Click(c, null);
+                }
+                else if (parenttvi.Header is ConfigWPFRadioButton)
+                {
+                    ConfigWPFRadioButton c = (ConfigWPFRadioButton)parenttvi.Header;
+                    c.IsChecked = true;
+                    c.mod.Checked = true;
+                    configControlRB_Click(c, null);
+                }
+            }
             //process the subconfigs
             bool configSelected = false;
-            if (cfg.configs.Count > 0)
+            int radioButtonCount = 0;
+            if (cfg.configs.Count > 0 && cfg.Checked)
             {
-                System.Windows.Controls.TreeViewItem tvi = (System.Windows.Controls.TreeViewItem)cb.Parent;
+                //determine if at least one radioButton is checked
                 foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
                 {
-                    ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
-                    Config subc = subRB.config;
-                    if (!(bool)cb.IsEnabled || !(bool)cb.IsChecked)
+                    if (subTVI.Header is ConfigWPFRadioButton)
                     {
-                        subRB.IsEnabled = false;
-                        
-                    }
-                    else if ((bool)cb.IsEnabled && (bool)cb.IsChecked)
-                    {
-                        //getting here means cb is enabled
-                        subRB.IsEnabled = true;
-                        //this needs to be changed
-                        //subRB_Click(subRB, null);
-                        if (subc.Checked)
-                            configSelected = true;
-                    }
-                }
-                if (!configSelected && (bool)cb.IsChecked && (bool)cb.IsEnabled)
-                {
-                    //select the first possible one
-                    foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
-                    {
+                        radioButtonCount++;
                         ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
                         Config subc = subRB.config;
-                        if (subc.enabled)
+                        if ((bool)subRB.IsEnabled && (bool)subRB.IsChecked)
                         {
-                            subc.Checked = true;
-                            //subRB.Click -= subRB_Click;
-                            //subRB.IsChecked = true;
-                            //subRB.Click += subRB_Click;
-                            break;
+                            //getting here means cb is enabled
+                            subRB.IsEnabled = true;
+                            //this needs to be changed
+                            //subRB_Click(subRB, null);
+                            if (subc.Checked)
+                                configSelected = true;
+                        }
+                    }
+                }
+                if (!configSelected && (bool)cb.IsChecked && (bool)cb.IsEnabled && radioButtonCount>0)
+                {
+                    foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
+                    {
+                        if (subTVI.Header is ConfigWPFRadioButton)
+                        {
+                            ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
+                            Config subc = subRB.config;
+                            if ((bool)subRB.IsEnabled && subc.enabled)
+                            {
+                                subRB.IsChecked = true;
+                                subc.Checked = true;
+                                break;
+                            }
                         }
                     }
                 }
@@ -552,17 +719,20 @@ namespace RelhaxModpack
         //when a dropdown legacy combobox is index changed
         void configControlDDALL_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
+            if (loadingConfig)
+                return;
             ConfigWPFComboBox cb = (ConfigWPFComboBox)sender;
             //first check if this is init, meaning first time enabled
-            if (cb.SelectedIndex == -1)
+            //but now this should never have to run
+            /*if (cb.SelectedIndex == -1)
             {
                 //it will run recurse with this method again with a selected index of 0
                 cb.SelectedIndex = 0;
                 return;
-            }
+            }*/
             //getting here means that an item is confirmed to be selected
             //itterate through the items, get each config, disable it
-            //unless it's the same name as the selectedItem
+            //enable the selected one at the end
             foreach (ComboBoxItem cbi in cb.Items)
             {
                 cbi.config.Checked = false;
@@ -580,72 +750,95 @@ namespace RelhaxModpack
             Mod m = cb.mod;
             Config cfg = cb.config;
             //the config treeview
-            System.Windows.Controls.TreeViewItem item0 = (System.Windows.Controls.TreeViewItem)cb.Parent;
+            System.Windows.Controls.TreeViewItem tvi = (System.Windows.Controls.TreeViewItem)cb.Parent;
             //the mod treeview
-            System.Windows.Controls.TreeViewItem item1 = (System.Windows.Controls.TreeViewItem)item0.Parent;
+            System.Windows.Controls.TreeViewItem item1 = (System.Windows.Controls.TreeViewItem)tvi.Parent;
             if ((bool)cb.IsEnabled && (bool)cb.IsChecked)
             {
-                //uncheck all single and single1 mods in memory
-                foreach (Config configs in m.configs)
-                {
-                    if (configs.type.Equals("single") || configs.type.Equals("single1"))
-                    {
-                        configs.Checked = false;
-                    }
-                }
-                //uincheck all single and single1 mods in UI
+                //uincheck all single and single1 mods
                 foreach (System.Windows.Controls.TreeViewItem item in item1.Items)
                 {
                     if (item.Header is ConfigWPFRadioButton)
                     {
                         ConfigWPFRadioButton rb = (ConfigWPFRadioButton)item.Header;
-                        if ((bool)rb.IsChecked && (bool)!rb.Equals(cb))
+                        if ((bool)rb.IsEnabled && (bool)rb.IsChecked)
                         {
-                            //this was the previous radiobutton checked
+                            rb.Click -= configControlRB_Click;
                             rb.IsChecked = false;
-                            configControlRB_Click(rb, null);
+                            rb.Click += configControlRB_Click;
+                            rb.config.Checked = false;
                         }
                     }
                 }
+                cb.IsChecked = true;
+                cb.config.Checked = true;
             }
             cfg.Checked = (bool)cb.IsChecked;
+            //propagate the check if required
+            if (tvi.Parent is System.Windows.Controls.TreeViewItem && cfg.Checked)
+            {
+                System.Windows.Controls.TreeViewItem parenttvi = (System.Windows.Controls.TreeViewItem)tvi.Parent;
+                if (parenttvi.Header is ModWPFCheckBox)
+                {
+                    ModWPFCheckBox c = (ModWPFCheckBox)parenttvi.Header;
+                    c.IsChecked = true;
+                    c.mod.Checked = true;
+                    modCheckBoxL_Click(c, null);
+                }
+                else if (parenttvi.Header is ConfigWPFCheckBox)
+                {
+                    ConfigWPFCheckBox c = (ConfigWPFCheckBox)parenttvi.Header;
+                    c.IsChecked = true;
+                    c.mod.Checked = true;
+                    configControlCB_Click(c, null);
+                }
+                else if (parenttvi.Header is ConfigWPFRadioButton)
+                {
+                    ConfigWPFRadioButton c = (ConfigWPFRadioButton)parenttvi.Header;
+                    c.IsChecked = true;
+                    c.mod.Checked = true;
+                    configControlRB_Click(c, null);
+                }
+            }
             //process the subconfigs
             bool configSelected = false;
-            if (cfg.configs.Count > 0)
+            int radioButtonCount = 0;
+            if (cfg.configs.Count > 0 && cfg.Checked)
             {
-                System.Windows.Controls.TreeViewItem tvi = (System.Windows.Controls.TreeViewItem)cb.Parent;
+                //determine if at least one radioButton is checked
                 foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
                 {
-                    ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
-                    Config subc = subRB.config;
-                    if (!(bool)cb.IsEnabled || !(bool)cb.IsChecked)
+                    if (subTVI.Header is ConfigWPFRadioButton)
                     {
-                        subRB.IsEnabled = false;
-                        
-                    }
-                    else if ((bool)cb.IsEnabled && (bool)cb.IsChecked)
-                    {
-                        //getting here means cb is enabled
-                        subRB.IsEnabled = true;
-                        //subRB_Click(subRB, null);
-                        if (subc.Checked)
-                            configSelected = true;
-                    }
-                }
-                if (!configSelected && (bool)cb.IsEnabled && (bool)cb.IsChecked)
-                {
-                    //select the first possible one
-                    foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
-                    {
+                        radioButtonCount++;
                         ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
                         Config subc = subRB.config;
-                        if (subc.enabled)
+                        if ((bool)subRB.IsEnabled && (bool)subRB.IsChecked)
                         {
-                            subc.Checked = true;
-                            //subRB.Click -= subRB_Click;
-                            //subRB.IsChecked = true;
-                            //subRB.Click += subRB_Click;
-                            break;
+                            //getting here means cb is enabled
+                            subRB.IsEnabled = true;
+                            //this needs to be changed
+                            //subRB_Click(subRB, null);
+                            if (subc.Checked)
+                                configSelected = true;
+                        }
+                    }
+                }
+                if (!configSelected && (bool)cb.IsChecked && (bool)cb.IsEnabled && radioButtonCount > 0)
+                {
+                    foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
+                    {
+                        if (subTVI.Header is ConfigWPFRadioButton)
+                        {
+                            ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
+                            Config subc = subRB.config;
+                            if ((bool)subRB.IsEnabled && subc.enabled)
+                            {
+                                subRB.IsChecked = true;
+                                subc.Checked = true;
+                                configControlRB_Click(subRB, null);
+                                break;
+                            }
                         }
                     }
                 }
@@ -715,130 +908,7 @@ namespace RelhaxModpack
             p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
             p.Show();
         }
-        //when a legacy mod checkbox is clicked
-        void modCheckBoxL_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (loadingConfig)
-                return;
-            ModWPFCheckBox cb = (ModWPFCheckBox)sender;
-            Mod m = cb.mod;
-            Category cat = m.parent;
-            System.Windows.Controls.TreeViewItem TVI = (System.Windows.Controls.TreeViewItem)cb.Parent;
-            System.Windows.Controls.TreeView TV = (System.Windows.Controls.TreeView)TVI.Parent;
-            //check to see if this is a single selection categtory
-            //if it is, then uncheck the other mod, then check this one
-            if ((bool)cb.IsChecked && cat.selectionType.Equals("single"))
-            {
-                //check if any other mods in this catagory are already checked
-                bool anyModsChecked = false;
-                foreach (Mod mm in cat.mods)
-                {
-                    if (mm.Checked)
-                    {
-                        anyModsChecked = true;
-                        mm.Checked = false;
-                    }
-                }
-                if (anyModsChecked)
-                {
-                    cb.IsChecked = false;
-                    //all other mods in this category need to be unchecked
-                    foreach (System.Windows.Controls.TreeViewItem tvi in TV.Items)
-                    {
-                        ModWPFCheckBox modCB = (ModWPFCheckBox)tvi.Header;
-                        //remove the handler before we make changes
-                        //modCB.Click -= modCheckBoxL_Click;
-                        if((bool)modCB.IsChecked)
-                        modCB.IsChecked = false;
-                        modCheckBoxL_Click(modCB, null);
-                        //modCB.Click += modCheckBoxL_Click;
-                    }
-                }
-                //now it is safe to check the mod we want
-                cb.Click -= modCheckBoxL_Click;
-                cb.IsChecked = true;
-                cb.Click += modCheckBoxL_Click;
-            }
-            m.Checked = (bool)cb.IsChecked;
-
-            //this section deals with enabling the configs, if there are any
-            if (m.configs.Count == 0)
-                return;
-            //get the string name of the last radiobutton for refrence later
-            string lastConfigName = "null";
-            bool configSelected = false;
-            foreach (Config configs in m.configs)
-            {
-                if (configs.type.Equals("single") || configs.type.Equals("single1"))
-                {
-                    lastConfigName = configs.name;
-                }
-            }
-            //there is at least one config, so at least one UI element
-            foreach (System.Windows.Controls.TreeViewItem item in TVI.Items)
-            {
-                System.Windows.Controls.Control c = (System.Windows.Controls.Control)item.Header;
-                Config cfg = null;
-                if (c is ConfigWPFComboBox)
-                {
-                    ConfigWPFComboBox cbox = (ConfigWPFComboBox)c;
-                    //if the mod is checked and it has more than 0 item enable, else disable, then trigger
-                    if (m.Checked && cbox.Items.Count > 0)
-                        cbox.IsEnabled = true;
-                    else
-                        cbox.IsEnabled = false;
-                    configControlDDALL_SelectionChanged(cbox, null);
-                }
-                else if (c is ConfigWPFCheckBox)
-                {
-                    ConfigWPFCheckBox cbox = (ConfigWPFCheckBox)c;
-                    //multi CB code
-                    //CB is enabled if the mod checked and the config is enabled
-                    cfg = cbox.config;
-                    if (m.Checked && cfg.enabled)
-                        cbox.IsEnabled = true;
-                    else
-                        cbox.IsEnabled = false;
-                    configControlCB_Click(cbox,null);
-                }
-                else if (c is ConfigWPFRadioButton)
-                {
-                    ConfigWPFRadioButton cbox = (ConfigWPFRadioButton)c;
-                    cfg = cbox.config;
-                    if (m.Checked && cfg.enabled)
-                        cbox.IsEnabled = true;
-                    else
-                        cbox.IsEnabled = false;
-                    configControlRB_Click(cbox, null);
-                    if (cfg.Checked)
-                        configSelected = true;
-                    //create a section of code to run for only the last radioButton
-                    if (cfg.name.Equals(lastConfigName) && !configSelected)
-                    {
-                        //last radioButton in the section, try to check at least one radioButton in the configs
-                        foreach (System.Windows.Controls.TreeViewItem item2 in TVI.Items)
-                        {
-                            System.Windows.Controls.Control c2 = (System.Windows.Controls.Control)item2.Header;
-                            if (c2 is ConfigWPFRadioButton)
-                            {
-                                ConfigWPFRadioButton c2r = (ConfigWPFRadioButton)c2;
-                                cfg = c2r.config;
-                                if ((bool)c2r.IsEnabled)
-                                {
-                                    c2r.Click -= configControlRB_Click;
-                                    c2r.IsChecked = true;
-                                    configControlRB_Click(c2r, null);
-                                    c2r.Click += configControlRB_Click;
-                                    cfg.Checked = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-        }
+        
         //adds a mod m to a tabpage t
         private void addMod(Mod m, TabPage t, int panelCount, Category catagory)
         {
