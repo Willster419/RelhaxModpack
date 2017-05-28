@@ -1162,6 +1162,9 @@ namespace RelhaxModpack
                         case "configs":
                             Utils.loadProcessConfigs(nn, m, true);
                             break;
+                        case "subConfigs":
+                            Utils.loadProcessConfigs(nn, m, true);
+                            break;
                     }
                 }
             }
@@ -1237,6 +1240,9 @@ namespace RelhaxModpack
                             }
                             break;
                         case "configs":
+                            Utils.loadProcessConfigs(nnnn, m, false, c);
+                            break;
+                        case "subConfigs":
                             Utils.loadProcessConfigs(nnnn, m, false, c);
                             break;
                     }
