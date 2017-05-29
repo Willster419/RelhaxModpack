@@ -58,6 +58,7 @@ namespace RelhaxModpack
         private bool isParrentDone;
         //current file being processed in the zip archive
         private string currentZipEntry;
+        private float currentZipEntrySize;
         //seperate thread for the extraction
         BackgroundWorker extractworker;
         private string versionSave;
@@ -756,6 +757,7 @@ namespace RelhaxModpack
             if (e.CurrentEntry != null)
             {
                 currentZipEntry = e.CurrentEntry.FileName;
+                currentZipEntrySize = e.BytesTransferred;
             }
             if (e.EventType == ZipProgressEventType.Extracting_AfterExtractAll)
             {
@@ -1128,6 +1130,7 @@ namespace RelhaxModpack
                             if (d.enabled && !d.dependencyZipFile.Equals(""))
                                 this.addUniqueDependency(d);
                         }
+                        if(m.configs.Count > 0)
                         processConfigsToInstall(m.configs,0);
                         foreach (Dependency d in m.dependencies)
                         {
@@ -1253,28 +1256,43 @@ namespace RelhaxModpack
         private void processConfigsToInstall(List<Config> configList, int level)
         {
             //checks for each config to add of config level 'level'
-            //first make sure if the config level exists
-            if (configListsToInstall[level] == null)
-                configListsToInstall.Insert(level, new List<Config>());
             foreach (Config cc in configList)
             {
+                //check to make sure mem has been declared for it
                 //check to make sureit's enabled and checked and has a valid zip file with it
-                if (cc.enabled && cc.Checked && !cc.zipFile.Equals(""))
-                {
-                    //same for configs
-                    configListsToInstall[level].Add(cc);
-                }
-                //check to see if any catagory dependencies need to be added
                 if (cc.enabled && cc.Checked)
                 {
-                    foreach (Dependency d in cc.dependencies)
+                    if( !cc.zipFile.Equals(""))
                     {
-                        //check dependency is enabled and has a zip file with it
-                        if (d.enabled && !d.dependencyZipFile.Equals(""))
-                            this.addUniqueDependency(d);
+                        try
+                        {
+                            if (configListsToInstall[level] == null)
+                                configListsToInstall.Insert(level, new List<Config>());
+                        }
+                        catch (IndexOutOfRangeException)
+                        {
+                            configListsToInstall.Insert(level, new List<Config>());
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            configListsToInstall.Insert(level, new List<Config>());
+                        }
+                        //same for configs
+                        configListsToInstall[level].Add(cc);
+                    }
+                    if (cc.configs.Count >0)
+                    processConfigsToInstall(cc.configs, level+1);
+                    //check to see if any catagory dependencies need to be added
+                    if (cc.dependencies.Count > 0)
+                    {
+                        foreach (Dependency d in cc.dependencies)
+                        {
+                            //check dependency is enabled and has a zip file with it
+                            if (d.enabled && !d.dependencyZipFile.Equals(""))
+                                this.addUniqueDependency(d);
+                        }
                     }
                 }
-                processConfigsToInstall(cc.configs,level++);
             }
         }
         //returns true if the CRC's of each file match, false otherwise
@@ -1614,10 +1632,11 @@ namespace RelhaxModpack
                 {
                     foreach (Config c in cfgList)
                     {
-                        Utils.appendToLog("Extracting Config " + c.zipFile + " of level " + configLevel++);
+                        Utils.appendToLog("Extracting Config " + c.zipFile + " of level " + configLevel);
                         if (!c.zipFile.Equals("")) this.unzip(downloadedFilesDir + c.zipFile, tanksLocation);
                         extractworker.ReportProgress(1);
                     }
+                    configLevel++;
                 }
                 //OLD
                 /*
@@ -1658,8 +1677,8 @@ namespace RelhaxModpack
                 if (childCurrentProgres != 0 && childMaxProgres > childCurrentProgres)
                     childProgressBar.Value = childCurrentProgres;
                 if (true)
-                {
-                    downloadProgress.Text = currentZipEntry + "...";
+                {//(float)Math.Round(sessionDownloadSpeed, 2);
+                    downloadProgress.Text = currentZipEntry + " " + (float)Math.Round(currentZipEntrySize/MBDivisor,2) +" MB...";
                 }
                 if (isParrentDone)
                 {
@@ -1758,7 +1777,7 @@ namespace RelhaxModpack
         //the method to update the UI on the uninstall process
         private void smartDeleteworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            downloadProgress.Text = Translations.getTranslatedString("deletingFile") + numFilesToCopyDeleteExtract + Translations.getTranslatedString("of") + numFilesToProcessInt;
+            downloadProgress.Text = Translations.getTranslatedString("deletingFile") + numFilesToCopyDeleteExtract + Translations.getTranslatedString(" of ") + numFilesToProcessInt;
             childProgressBar.Maximum = numFilesToProcessInt;
             if (numFilesToCopyDeleteExtract < numFilesToProcessInt)
                 childProgressBar.Value = numFilesToCopyDeleteExtract;
