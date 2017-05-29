@@ -1188,6 +1188,7 @@ namespace RelhaxModpack
                     //the logic for enabling it
                     configControlCB.Enabled = false;
                     configControlCB.Checked = false;
+                    con.configUIComponent = configControlCB;
                     if (parentIsMod)
                     {
                         if (m.enabled && con.enabled)
@@ -1408,27 +1409,30 @@ namespace RelhaxModpack
             //checkbox is enabled, toggle checked and checked
             cfg.Checked = cb.Checked;
             //propagate the check back up if required
-            DatabaseObject obj = cfg.parent;
-            if (obj is Mod)
+            if (cfg.Checked)
             {
-                Mod parentM = (Mod)obj;
-                //parentM.modFormCheckBox.CheckedChanged -= modCheckBox_CheckedChanged;
-                parentM.modFormCheckBox.Checked = true;
-                //parentM.modFormCheckBox.CheckedChanged += modCheckBox_CheckedChanged;
-            }
-            else if (obj is Config)
-            {
-                Config parentC = (Config)obj;
-                parentC.Checked = true;
-                if (parentC.configUIComponent is ConfigFormCheckBox)
+                DatabaseObject obj = cfg.parent;
+                if (obj is Mod)
                 {
-                    ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.configUIComponent;
-                    parentCB.Checked = true;
+                    Mod parentM = (Mod)obj;
+                    //parentM.modFormCheckBox.CheckedChanged -= modCheckBox_CheckedChanged;
+                    parentM.modFormCheckBox.Checked = true;
+                    //parentM.modFormCheckBox.CheckedChanged += modCheckBox_CheckedChanged;
                 }
-                else if (parentC.configUIComponent is ConfigFormRadioButton)
+                else if (obj is Config)
                 {
-                    ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.configUIComponent;
-                    parentRB.Checked = true;
+                    Config parentC = (Config)obj;
+                    parentC.Checked = true;
+                    if (parentC.configUIComponent is ConfigFormCheckBox)
+                    {
+                        ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.configUIComponent;
+                        parentCB.Checked = true;
+                    }
+                    else if (parentC.configUIComponent is ConfigFormRadioButton)
+                    {
+                        ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.configUIComponent;
+                        parentRB.Checked = true;
+                    }
                 }
             }
             //process any subconfigs
@@ -1532,27 +1536,30 @@ namespace RelhaxModpack
             Category cat = rb.catagory;
             cfg.Checked = rb.Checked;
             //propagate the check back up if required
-            DatabaseObject obj = cfg.parent;
-            if (obj is Mod)
+            if (cfg.Checked)
             {
-                Mod parentM = (Mod)obj;
-                //parentM.modFormCheckBox.CheckedChanged -= modCheckBox_CheckedChanged;
-                parentM.modFormCheckBox.Checked = true;
-                //parentM.modFormCheckBox.CheckedChanged += modCheckBox_CheckedChanged;
-            }
-            else if (obj is Config)
-            {
-                Config parentC = (Config)obj;
-                parentC.Checked = true;
-                if (parentC.configUIComponent is ConfigFormCheckBox)
+                DatabaseObject obj = cfg.parent;
+                if (obj is Mod)
                 {
-                    ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.configUIComponent;
-                    parentCB.Checked = true;
+                    Mod parentM = (Mod)obj;
+                    //parentM.modFormCheckBox.CheckedChanged -= modCheckBox_CheckedChanged;
+                    parentM.modFormCheckBox.Checked = true;
+                    //parentM.modFormCheckBox.CheckedChanged += modCheckBox_CheckedChanged;
                 }
-                else if (parentC.configUIComponent is ConfigFormRadioButton)
+                else if (obj is Config)
                 {
-                    ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.configUIComponent;
-                    parentRB.Checked = true;
+                    Config parentC = (Config)obj;
+                    parentC.Checked = true;
+                    if (parentC.configUIComponent is ConfigFormCheckBox)
+                    {
+                        ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.configUIComponent;
+                        parentCB.Checked = true;
+                    }
+                    else if (parentC.configUIComponent is ConfigFormRadioButton)
+                    {
+                        ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.configUIComponent;
+                        parentRB.Checked = true;
+                    }
                 }
             }
             //process any subconfigs
@@ -1668,6 +1675,13 @@ namespace RelhaxModpack
 
         void configControlRB_MouseDown(object sender, MouseEventArgs e)
         {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                ConfigFormRadioButton rb = (ConfigFormRadioButton)sender;
+                if (rb.Checked)
+                    configControlRB_CheckedChanged(rb, null);
+                return;
+            }
             if (e.Button != MouseButtons.Right)
                 return;
             ConfigFormRadioButton cb = (ConfigFormRadioButton)sender;
