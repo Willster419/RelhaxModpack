@@ -306,6 +306,7 @@ namespace RelhaxModpack
             if (!(m.crc.Equals(oldCRC2)) && (!m.zipFile.Equals("")))
             {
                 modCheckBox.Content = modCheckBox.Content + " (Updated)";
+                m.downloadFlag = true;
                 if ((m.size > 0.0f) )
                     modCheckBox.Content = modCheckBox.Content + " (" + m.size + " MB)";
             }
@@ -406,6 +407,7 @@ namespace RelhaxModpack
                     if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
                     {
                         configControlRB.Content = configControlRB.Content + " (Updated)";
+                        con.downloadFlag = true;
                         if (con.size > 0.0f)
                             configControlRB.Content = configControlRB.Content + " (" + con.size + " MB)";
                     }
@@ -438,6 +440,7 @@ namespace RelhaxModpack
                     if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
                     {
                         string toAdd = con.name + "_Updated";
+                        con.downloadFlag = true;
                         if (con.size > 0.0f)
                             toAdd = toAdd + " (" + con.size + " MB)";
                         //add it with _updated
@@ -456,16 +459,12 @@ namespace RelhaxModpack
                         configControlDDALL.Name = "added";
                         configControlDDALL.catagory = c;
                         configControlDDALL.mod = m;
-                        //configControlDDALL.config = con;
+                        configControlDDALL.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(configControlDDALL_SelectionChanged);
+                        configControlDDALL.PreviewMouseRightButtonDown += new System.Windows.Input.MouseButtonEventHandler(configControlDDALL_MouseDown);
                         if (configControlDDALL.Items.Count > 0)
                             configControlDDALL.IsEnabled = true;
                         if (configControlDDALL.SelectedIndex == -1)
                             configControlDDALL.SelectedIndex = 0;
-                        configControlDDALL.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(configControlDDALL_SelectionChanged);
-                        //configControlDDALL.MouseDown += new System.Windows.Input.MouseButtonEventHandler(configControlDDALL_MouseDown);
-                        //configControlDDALL.MouseRightButtonDown += configControlDDALL_MouseDown;
-                        //configControlDDALL.PreviewMouseRightButtonDown += configControlDDALL_MouseDown;
-                        configControlDDALL.PreviewMouseRightButtonDown +=new System.Windows.Input.MouseButtonEventHandler(configControlDDALL_MouseDown);
                         System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
                         configControlTVI.Header = configControlDDALL;
                         tvi.Items.Add(configControlTVI);
@@ -519,6 +518,7 @@ namespace RelhaxModpack
                     if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
                     {
                         configControlCB.Content = configControlCB.Content + " (Updated)";
+                        con.downloadFlag = true;
                         if (con.size > 0.0f)
                             configControlCB.Content = configControlCB.Content + " (" + con.size + " MB)";
                     }
@@ -722,8 +722,7 @@ namespace RelhaxModpack
         //when a dropdown legacy combobox is index changed
         void configControlDDALL_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (loadingConfig)
-                return;
+            
             ConfigWPFComboBox cb = (ConfigWPFComboBox)sender;
             //first check if this is init, meaning first time enabled
             //but now this should never have to run
@@ -1501,8 +1500,7 @@ namespace RelhaxModpack
         //handler for when a config selection is made from the drop down list
         void configControlDD_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (loadingConfig)
-                return;
+            
             //uncheck all other dorp down configs
             ConfigFormComboBox cb = (ConfigFormComboBox)sender;
             //if no index selected, select one
