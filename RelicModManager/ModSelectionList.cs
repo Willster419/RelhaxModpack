@@ -201,6 +201,7 @@ namespace RelhaxModpack
         //must be only one catagory
         private void addAllMods()
         {
+            loadingConfig = true;
             Utils.appendToLog("Loading ModSelectionList with view " + Settings.sView);
             foreach (TabPage t in this.modTabGroups.TabPages)
             {
@@ -724,6 +725,37 @@ namespace RelhaxModpack
         {
             
             ConfigWPFComboBox cb = (ConfigWPFComboBox)sender;
+            if (!loadingConfig)
+            {
+                //propagate the check if required
+                System.Windows.Controls.TreeViewItem tvi = (System.Windows.Controls.TreeViewItem)cb.Parent;
+                ComboBoxItem cbi22 = (ComboBoxItem)cb.SelectedItem;
+                if (tvi.Parent is System.Windows.Controls.TreeViewItem && cb.SelectedIndex != -1)
+                {
+                    System.Windows.Controls.TreeViewItem parenttvi = (System.Windows.Controls.TreeViewItem)tvi.Parent;
+                    if (parenttvi.Header is ModWPFCheckBox)
+                    {
+                        ModWPFCheckBox c = (ModWPFCheckBox)parenttvi.Header;
+                        c.IsChecked = true;
+                        c.mod.Checked = true;
+                        modCheckBoxL_Click(c, null);
+                    }
+                    else if (parenttvi.Header is ConfigWPFCheckBox)
+                    {
+                        ConfigWPFCheckBox c = (ConfigWPFCheckBox)parenttvi.Header;
+                        c.IsChecked = true;
+                        c.mod.Checked = true;
+                        configControlCB_Click(c, null);
+                    }
+                    else if (parenttvi.Header is ConfigWPFRadioButton)
+                    {
+                        ConfigWPFRadioButton c = (ConfigWPFRadioButton)parenttvi.Header;
+                        c.IsChecked = true;
+                        c.mod.Checked = true;
+                        configControlRB_Click(c, null);
+                    }
+                }
+            }
             //first check if this is init, meaning first time enabled
             //but now this should never have to run
             /*if (cb.SelectedIndex == -1)
@@ -1507,6 +1539,37 @@ namespace RelhaxModpack
             
             //uncheck all other dorp down configs
             ConfigFormComboBox cb = (ConfigFormComboBox)sender;
+            if (!loadingConfig)
+            {
+                //propagate the check back up if required
+                if (cb.SelectedIndex != -1)
+                {
+                    ComboBoxItem cbi22 = (ComboBoxItem)cb.SelectedItem;
+                    DatabaseObject obj = cbi22.config.parent;
+                    if (obj is Mod)
+                    {
+                        Mod parentM = (Mod)obj;
+                        //parentM.modFormCheckBox.CheckedChanged -= modCheckBox_CheckedChanged;
+                        parentM.modFormCheckBox.Checked = true;
+                        //parentM.modFormCheckBox.CheckedChanged += modCheckBox_CheckedChanged;
+                    }
+                    else if (obj is Config)
+                    {
+                        Config parentC = (Config)obj;
+                        parentC.Checked = true;
+                        if (parentC.configUIComponent is ConfigFormCheckBox)
+                        {
+                            ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.configUIComponent;
+                            parentCB.Checked = true;
+                        }
+                        else if (parentC.configUIComponent is ConfigFormRadioButton)
+                        {
+                            ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.configUIComponent;
+                            parentRB.Checked = true;
+                        }
+                    }
+                }
+            }
             //if no index selected, select one
             //does not need to run this anymore tho
             /*if (cb.SelectedIndex == -1)

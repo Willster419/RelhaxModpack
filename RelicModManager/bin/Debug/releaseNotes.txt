@@ -1,66 +1,12 @@
-Version 22.4.3:
--Fixed bugs with database back-end tools
+Version 23.0.1:
+-Fixed bugs with database serializer
+-Fixed bugs with ComboBox selection propagation
 
-Version 22.4.2:
--Fixed bug with when only installing user mods
+Version 23.0.0:
+-Large update inbound! The modpack has gone through several changes and has a few new and exciting features!
+-The biggest and perhaps most significant is that with the programming concept of recursion, we now can have about 400,000 config sublevels, rather than the 3 we had before!
+-The default and omc legacy ui have been redesigned so that it is more like OMC and straightforward. The only time a mod will be greyed out is if it is actully disabled/broken.
+-The preview system has been changed. You can now right click on a mod OR a config to view it's specific description.
+-The "Loading" time between mod selection and extraction (where nothing seems to happen) had been reduced by up to 83%. This depends on mod selection.
+-Other minor bug fixes and enhancements. And of course,
 -Updated translations
-
-Version 22.4.1:
--Fixed bugs with loading and saving configs with subconfigs
--Fixed bugs with default selection view UI
-
-Version 22.4.0:
--Fixed bugs with getting and applying the tanks version (0.9.xx.y)
--Added new mod selection view: Legacy (Similar to OMC list view)
--Added another level to the database, configs can now have subconfigs
-
-Version 22.3.1:
--Added a feature to detect if the user WoT client version is supported or not. If it's not, you can still install, but the mods are not guaranteed to work.
--Updated translations
-
-Version 22.3.0:
--Fixed a bug to now allow the modpack to work in sandbox and common test versions. That does not, however, mean that the mods work in those versions.
--Added polish translations, big thanks to Neoros of the EU server!
-
-Version 22.2.0:
--Added more exception handling to the patching system for file and folder permissions
--Fixed many bugs in the font installation system
--Moved the loading window to a visable location, so it's not shown behind the main window
--The ModSelectionList window now remembers if the application was fullscreen
--The preview window now remembers where you last closed it
--Improved debug log output
--Fixed bugs when only "user mods" are being installed
--Updated translations
-
-Version 22.1.0:
--We have moved to a new permanent web hoster, with 30x faster download speeds, a forms site, and an official website!
--Fixed a bug with the mod preview window dev link being cut off
--Moved the resolution text display in modSelectionList
--Updated translations
-
-Version 22.0.4:
--moved location of "WoT" version in ModSelectionList
--changed "Install Modpack" button to "Select Mods" button. The "Continue" button is not the "Install" button.
--Database Updates:
- -Added Wide Border Maps
- -Added monty python sound mod
-
-Version 22.0.3:
--Fixed spreadsheet bug "updater fails"
--Attemped fix for incompatibility bug
--PreviewWindow will now close when ModSelectionList is closed
--Updated translations
-
-Version 22.0.2:
--Added WoT version display and install location on the ModSelectionList
-
-Version 22.0.1:
--Increased accuracy of download timer estimation
--Application will now only backup mods after an installation has been started, rather than just when you press the "install modpack" button
--Added a check to verify that WoT is not running
--updated translations
-
-Version 22.0.0:
--Hello everyone, please welcome version 22.0.0!
--This update enables us to store our mod zip files into different locations. This means that we can store our larger files on a new hosting service, where the download speed is 6-10x faster!
--Removed download estimations since they are no longer accurate.

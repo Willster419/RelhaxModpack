@@ -26,7 +26,7 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 22.4.3";
+        private string managerVersion = "version 23.0.1";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -816,7 +816,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             Utils.appendToLog("|RelHax Modpack " + managerVersion);
-            Utils.appendToLog("|Built on 05/23/2017, running at " + DateTime.Now);
+            Utils.appendToLog("|Built on 05/29/2017, running at " + DateTime.Now);
             Utils.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program

@@ -319,6 +319,9 @@ namespace RelhaxModpack
                         case "name":
                             c.name = configNode.InnerText;
                             break;
+                        case "version":
+                            c.version = configNode.InnerText;
+                            break;
                         case "zipFile":
                             c.zipFile = configNode.InnerText;
                             break;
@@ -334,14 +337,44 @@ namespace RelhaxModpack
                         case "enabled":
                             c.enabled = Utils.parseBool(configNode.InnerText, false);
                             break;
+                        case "index":
+                            c.index = Utils.parseInt(configNode.InnerText, 0);
+                            break;
                         case "size":
                             c.size = Utils.parseFloat(configNode.InnerText, 0.0f);
+                            break;
+                        case "updateComment":
+                            c.updateComment = configNode.InnerText;
+                            break;
+                        case "description":
+                            c.description = configNode.InnerText;
+                            break;
+                        case "devURL":
+                            c.devURL = configNode.InnerText;
                             break;
                         case "type":
                             c.type = configNode.InnerText;
                             break;
                         case "configs":
                             Utils.processConfigs(configNode, backendFlag, m, false, c);
+                            break;
+                        case "userDatas":
+                            foreach (XmlNode userDataNode in configNode.ChildNodes)
+                            {
+
+                                switch (userDataNode.Name)
+                                {
+                                    case "userData":
+                                        string innerText = userDataNode.InnerText;
+                                        if (innerText == null)
+                                            continue;
+                                        if (innerText.Equals(""))
+                                            continue;
+                                        c.userFiles.Add(innerText);
+                                        break;
+                                }
+
+                            }
                             break;
                         case "pictures":
                             //parse every picture
