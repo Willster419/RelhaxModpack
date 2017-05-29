@@ -38,12 +38,14 @@ namespace RelhaxModpack
         public bool Checked { get; set; }
         public ModFormCheckBox modFormCheckBox { get; set; }
         public UIComponent configUIComponent { get; set; }
+        public bool downloadFlag { get; set; }
         //basic config constructor
         public Config()
         {
             //by default make these false
             enabled = false;
             Checked = false;
+            downloadFlag = false;
         }
         public Config getSubConfig(string subConfigName)
         {

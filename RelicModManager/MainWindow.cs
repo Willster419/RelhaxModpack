@@ -42,10 +42,10 @@ namespace RelhaxModpack
         //private string downloadURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/mods/";
         private List<Category> parsedCatagoryLists;
         private List<Mod> modsToInstall;
-        private List<Config> configsToInstall;
+        //private List<Config> configsToInstall;
         private List<Patch> patchList;
         private List<Dependency> dependencies;
-        private List<Config> subConfigsToInstall;
+        private List<List<Config>> configListsToInstall;
         //installing the RelhaxModpack of the Relhax Sound Mod
         bool modPack;
         string tempOldDownload;
@@ -1093,11 +1093,11 @@ namespace RelhaxModpack
             downloadProgress.Text = Translations.getTranslatedString("loading");
             Application.DoEvents();
             modsToInstall = new List<Mod>();
-            configsToInstall = new List<Config>();
+            //configsToInstall = new List<Config>();
             patchList = new List<Patch>();
             userMods = new List<Mod>();
             dependencies = new List<Dependency>();
-            subConfigsToInstall = new List<Config>();
+            configListsToInstall = new List<List<Config>>();
             parsedCatagoryLists = list.parsedCatagoryList;
             //add the global dependencies to the dependency list
             foreach (Dependency d in list.globalDependencies)
@@ -1128,42 +1128,7 @@ namespace RelhaxModpack
                             if (d.enabled && !d.dependencyZipFile.Equals(""))
                                 this.addUniqueDependency(d);
                         }
-                        foreach (Config cc in m.configs)
-                        {
-                            //check to make sureit's enabled and checked and has a valid zip file with it
-                            if (cc.enabled && cc.Checked && !cc.zipFile.Equals(""))
-                            {
-                                //same for configs
-                                configsToInstall.Add(cc);
-                            }
-                            //check to see if any catagory dependencies need to be added
-                            if (cc.enabled && cc.Checked)
-                            {
-                                foreach (Dependency d in cc.dependencies)
-                                {
-                                    //check dependency is enabled and has a zip file with it
-                                    if (d.enabled && !d.dependencyZipFile.Equals(""))
-                                        this.addUniqueDependency(d);
-                                }
-                                //also check to see if any subconfigs need to be installed
-                                foreach (Config sc in cc.configs)
-                                {
-                                    //verify that the subconfig should be added
-                                    if (sc.enabled && sc.Checked && !sc.zipFile.Equals(""))
-                                        subConfigsToInstall.Add(sc);
-                                    //and verify if any new dependencies need to be downloaded
-                                    if (sc.enabled && sc.Checked)
-                                    {
-                                        foreach (Dependency d in sc.dependencies)
-                                        {
-                                            //check dependency is enabled and has a zip file with it
-                                            if (d.enabled && !d.dependencyZipFile.Equals(""))
-                                                this.addUniqueDependency(d);
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        processConfigsToInstall(m.configs,0);
                         foreach (Dependency d in m.dependencies)
                         {
                             //check dependency is enabled and has a zip file with it
@@ -1184,8 +1149,16 @@ namespace RelhaxModpack
                     this.userMods.Add(list.userMods[i]);
                 }
             }
+            //check that we will actually install something
+            if (modsToInstall.Count == 0 && configListsToInstall.Count == 0 && userMods.Count == 0)
+            {
+                //pull out because there are no mods to install
+                downloadProgress.Text = Translations.getTranslatedString("idle");
+                toggleUIButtons(true);
+                return;
+            }
             //if the user did not select any relhax modpack mods to install
-            if (modsToInstall.Count == 0 && configsToInstall.Count == 0 && subConfigsToInstall.Count == 0)
+            if (modsToInstall.Count == 0 && configListsToInstall.Count == 0)
             {
                 //clear any dependencies since this is a user mod only installation
                 dependencies.Clear();
@@ -1195,17 +1168,6 @@ namespace RelhaxModpack
                     if (d.enabled)
                         dependencies.Add(d);
                 }
-                //check for userMods
-                if (userMods.Count > 0)
-                {
-                    //skip to the extraction process
-                    state = InstallState.extractUserMods;
-                    this.downloader_DownloadFileCompleted(null, null);
-                }
-                //pull out because there are no mods to install
-                downloadProgress.Text = Translations.getTranslatedString("idle");
-                toggleUIButtons(true);
-                return;
             }
             //foreach mod and config, if the crc's don't match, add it to the downloadQueue
             string localFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
@@ -1218,12 +1180,25 @@ namespace RelhaxModpack
             }
             foreach (Mod m in modsToInstall)
             {
-                if (!this.CRCsMatch(localFilesDir + m.zipFile, m.crc))
+                if (m.downloadFlag)
                 {
                     //crc's don't match, need to re-download
                     downloadQueue.Add(new DownloadItem(new Uri(m.startAddress + m.zipFile + m.endAddress), localFilesDir + m.zipFile));
                 }
             }
+            foreach (List<Config> configLevel in configListsToInstall)
+            {
+                foreach (Config c in configLevel)
+                {
+                    if (c.downloadFlag)
+                    {
+                        //crc's don't match, need to re-download
+                        downloadQueue.Add(new DownloadItem(new Uri(c.startAddress + c.zipFile + c.endAddress), localFilesDir + c.zipFile));
+                    }
+                }
+            }
+            //OLD
+            /* *
             foreach (Config c in configsToInstall)
             {
                 if (!this.CRCsMatch(localFilesDir + c.zipFile, c.crc))
@@ -1232,14 +1207,7 @@ namespace RelhaxModpack
                     downloadQueue.Add(new DownloadItem(new Uri(c.startAddress + c.zipFile + c.endAddress), localFilesDir + c.zipFile));
                 }
             }
-            foreach (Config sc in subConfigsToInstall)
-            {
-                if (!this.CRCsMatch(localFilesDir + sc.zipFile, sc.crc))
-                {
-                    //redownload
-                    downloadQueue.Add(new DownloadItem(new Uri(sc.startAddress + sc.zipFile + sc.endAddress), localFilesDir + sc.zipFile));
-                }
-            }
+             * */
             //reset the progress bars for download mods
             parrentProgressBar.Maximum = downloadQueue.Count;
             childProgressBar.Maximum = 100;
@@ -1280,6 +1248,34 @@ namespace RelhaxModpack
             }
             //end the installation process
             return;
+        }
+        //recursivly process the configs
+        private void processConfigsToInstall(List<Config> configList, int level)
+        {
+            //checks for each config to add of config level 'level'
+            //first make sure if the config level exists
+            if (configListsToInstall[level] == null)
+                configListsToInstall.Insert(level, new List<Config>());
+            foreach (Config cc in configList)
+            {
+                //check to make sureit's enabled and checked and has a valid zip file with it
+                if (cc.enabled && cc.Checked && !cc.zipFile.Equals(""))
+                {
+                    //same for configs
+                    configListsToInstall[level].Add(cc);
+                }
+                //check to see if any catagory dependencies need to be added
+                if (cc.enabled && cc.Checked)
+                {
+                    foreach (Dependency d in cc.dependencies)
+                    {
+                        //check dependency is enabled and has a zip file with it
+                        if (d.enabled && !d.dependencyZipFile.Equals(""))
+                            this.addUniqueDependency(d);
+                    }
+                }
+                processConfigsToInstall(cc.configs,level++);
+            }
         }
         //returns true if the CRC's of each file match, false otherwise
         private bool CRCsMatch(string localFile, string remoteCRC)
@@ -1398,7 +1394,7 @@ namespace RelhaxModpack
             if (!userExtract)
             {
                 speedLabel.Text = Translations.getTranslatedString("extractingRelhaxMods") + "...";
-                parrentProgressBar.Maximum = modsToInstall.Count + configsToInstall.Count + dependencies.Count;
+                parrentProgressBar.Maximum = getTotalExtractions();
                 parrentProgressBar.Value = 0;
                 childProgressBar.Value = 0;
             }
@@ -1613,18 +1609,25 @@ namespace RelhaxModpack
                     extractworker.ReportProgress(1);
                 }
                 //extract configs
+                int configLevel = 0;
+                foreach (List<Config> cfgList in configListsToInstall)
+                {
+                    foreach (Config c in cfgList)
+                    {
+                        Utils.appendToLog("Extracting Config " + c.zipFile + " of level " + configLevel++);
+                        if (!c.zipFile.Equals("")) this.unzip(downloadedFilesDir + c.zipFile, tanksLocation);
+                        extractworker.ReportProgress(1);
+                    }
+                }
+                //OLD
+                /*
                 foreach (Config c in configsToInstall)
                 {
                     Utils.appendToLog("Extracting Config " + c.zipFile);
                     if (!c.zipFile.Equals("")) this.unzip(downloadedFilesDir + c.zipFile, tanksLocation);
                     extractworker.ReportProgress(1);
                 }
-                foreach (Config sc in subConfigsToInstall)
-                {
-                    Utils.appendToLog("Extracting SubConfig " + sc.zipFile);
-                    if (!sc.zipFile.Equals("")) this.unzip(downloadedFilesDir + sc.zipFile, tanksLocation);
-                    extractworker.ReportProgress(1);
-                }
+                */
                 Utils.appendToLog("Finished Relhax Modpack Extraction");
             }
             else
@@ -2445,6 +2448,31 @@ namespace RelhaxModpack
         private void donateLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2");
+        }
+        //gets the total number of installs to do
+        private int getTotalExtractions()
+        {
+            //dependencies, mods, configlists, all toInstall
+            int totalExtractions = 0;
+            foreach (Dependency d in dependencies)
+            {
+                if(!d.dependencyZipFile.Equals(""))
+                totalExtractions++;
+            }
+            foreach (Mod m in modsToInstall)
+            {
+                if (!m.zipFile.Equals(""))
+                    totalExtractions++;
+            }
+            foreach (List<Config> cList in configListsToInstall)
+            {
+                foreach (Config c in cList)
+                {
+                    if (!c.zipFile.Equals(""))
+                        totalExtractions++;
+                }
+            }
+            return totalExtractions;
         }
     }
     //a class for the downloadQueue list, to make a queue of downloads

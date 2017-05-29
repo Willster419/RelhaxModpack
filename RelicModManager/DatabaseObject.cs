@@ -26,5 +26,6 @@ namespace RelhaxModpack
         string description { get; set; }
         string devURL { get; set; }
         bool Checked { get; set; }
+        bool downloadFlag { get; set; }
     }
 }

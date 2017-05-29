@@ -32,12 +32,14 @@ namespace RelhaxModpack
         public Category parent { get; set; }
         public bool Checked { get; set; }
         public ModFormCheckBox modFormCheckBox { get; set; }
+        public bool downloadFlag { get; set; }
         //default constructor
         public Mod()
         {
             //by default make these false
             enabled = false;
             Checked = false;
+            downloadFlag = false;
         }
         //returns the config of the specified name
         //if it does not exist, it returns null

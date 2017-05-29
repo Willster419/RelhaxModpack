@@ -938,6 +938,7 @@ namespace RelhaxModpack
             if (!(m.crc.Equals(oldCRC2)) && (!m.zipFile.Equals("")))
             {
                 modCheckBox.Text = modCheckBox.Text + " (Updated)";
+                m.downloadFlag = true;
                 if ((m.size > 0.0f))
                     modCheckBox.Text = modCheckBox.Text + " (" + m.size + " MB)";
             }
@@ -1113,6 +1114,7 @@ namespace RelhaxModpack
                     if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
                     {
                         configControlRB.Text = configControlRB.Text + " (Updated)";
+                        con.downloadFlag = true;
                         if (con.size > 0.0f)
                             configControlRB.Text = configControlRB.Text + " (" + con.size + " MB)";
                     }
@@ -1144,6 +1146,7 @@ namespace RelhaxModpack
                     string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                     if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
                     {
+                        con.downloadFlag = true;
                         string toAdd = con.name + "_Updated";
                         if (con.size > 0.0f)
                             toAdd = toAdd + " (" + con.size + " MB)";
@@ -1219,6 +1222,7 @@ namespace RelhaxModpack
                     string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                     if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
                     {
+                        con.downloadFlag = true;
                         configControlCB.Text = configControlCB.Text + " (Updated)";
                         if (con.size > 0.0f)
                             configControlCB.Text = configControlCB.Text + " (" + con.size + " MB)";
