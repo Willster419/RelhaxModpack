@@ -1,3 +1,6 @@
+Version 23.0.2:
+-Fixed a bug with the recursive processing of configs
+
 Version 23.0.1:
 -Fixed bugs with database serializer
 -Fixed bugs with ComboBox selection propagation
