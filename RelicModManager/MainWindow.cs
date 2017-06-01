@@ -26,7 +26,7 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 23.0.2";
+        private string managerVersion = "version 23.0.3";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -816,7 +816,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             Utils.appendToLog("|RelHax Modpack " + managerVersion);
-            Utils.appendToLog("|Built on 05/31/2017, running at " + DateTime.Now);
+            Utils.appendToLog("|Built on 06/01/2017, running at " + DateTime.Now);
             Utils.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1109,6 +1109,11 @@ namespace RelhaxModpack
             }
             //if mod is enabled and checked, add it to list of mods to extract/install
             //same for configs
+            //init a few of the array places to prevent bugs i guess
+            for (int i = 0; i < 10; i++)
+            {
+                configListsToInstall.Insert(i, new List<Config>());
+            }
             foreach (Category c in parsedCatagoryLists)
             {
                 //will itterate through every catagory once
@@ -1132,11 +1137,7 @@ namespace RelhaxModpack
                         }
                         if (m.configs.Count > 0)
                         {
-                            //init a few of the array places to prevent bugs i guess
-                            for (int i = 0; i < 10; i++)
-                            {
-                                configListsToInstall.Insert(i, new List<Config>());
-                            }
+                            
                             processConfigsToInstall(m.configs, 0);
                         }
                         foreach (Dependency d in m.dependencies)
@@ -1160,7 +1161,7 @@ namespace RelhaxModpack
                 }
             }
             //check that we will actually install something
-            if (modsToInstall.Count == 0 && configListsToInstall.Count == 0 && userMods.Count == 0)
+            if (modsToInstall.Count == 0 && !installingConfigs() && userMods.Count == 0)
             {
                 //pull out because there are no mods to install
                 downloadProgress.Text = Translations.getTranslatedString("idle");
@@ -1168,7 +1169,7 @@ namespace RelhaxModpack
                 return;
             }
             //if the user did not select any relhax modpack mods to install
-            if (modsToInstall.Count == 0 && configListsToInstall.Count == 0)
+            if (modsToInstall.Count == 0 && !installingConfigs())
             {
                 //clear any dependencies since this is a user mod only installation
                 dependencies.Clear();
@@ -1258,6 +1259,19 @@ namespace RelhaxModpack
             }
             //end the installation process
             return;
+        }
+        //check to see if we are actually installing a config
+        private bool installingConfigs()
+        {
+            foreach (List<Config> cfgList in configListsToInstall)
+            {
+                foreach (Config c in cfgList)
+                {
+                    if (!c.zipFile.Equals(""))
+                        return true;
+                }
+            }
+            return false;
         }
         //recursivly process the configs
         private void processConfigsToInstall(List<Config> configList, int level)
