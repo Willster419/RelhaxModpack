@@ -300,7 +300,10 @@ namespace RelhaxModpack
             //process configs
             if (m.configs.Count > 0)
                 processConfigs(c, m, m.configs, tvi, true);
-            modCheckBox.Content = m.name;
+            string nameForModCB = m.name;
+            //if there are underscores you need to actually display them #thanksWPF
+            nameForModCB = Regex.Replace(nameForModCB, "_", "__");
+            modCheckBox.Content = nameForModCB;
             //get the local md5 hash. a -1 indicates the file is not on the disk
             string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
             //if the CRC's don't match and the mod actually has a zip file
@@ -403,7 +406,10 @@ namespace RelhaxModpack
                         }
                     }
                     //run the checksum logix
-                    configControlRB.Content = con.name;
+                    string nameForModCB = con.name;
+                    //if there are underscores you need to actually display them #thanksWPF
+                    nameForModCB = Regex.Replace(nameForModCB, "_", "__");
+                    configControlRB.Content = nameForModCB;
                     string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                     if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
                     {
@@ -514,7 +520,10 @@ namespace RelhaxModpack
                         }
                     }
                     //run the checksum logix
-                    configControlCB.Content = con.name;
+                    string nameForModCB = con.name;
+                    //if there are underscores you need to actually display them #thanksWPF
+                    nameForModCB = Regex.Replace(nameForModCB, "_", "__");
+                    configControlCB.Content = nameForModCB;
                     string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                     if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
                     {

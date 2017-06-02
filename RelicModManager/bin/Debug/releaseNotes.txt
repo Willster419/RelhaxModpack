@@ -1,3 +1,7 @@
+Version 23.0.5:
+-Fixed bugs with legacy OMC display
+-Fixed more bugs with database back-end tools
+
 Version 23.0.4:
 -Fixed bugs with database back-end tools
 

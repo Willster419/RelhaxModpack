@@ -16,7 +16,6 @@ namespace RelhaxModpack
         StringBuilder dependenciesSB = new StringBuilder();
         StringBuilder modsSB = new StringBuilder();
         StringBuilder configsSB = new StringBuilder();
-        StringBuilder subConfigsSB = new StringBuilder();
         public CRCFileSizeUpdate()
         {
             InitializeComponent();
@@ -37,6 +36,10 @@ namespace RelhaxModpack
             //show file dialog
             if (addZipsDialog.ShowDialog() == DialogResult.Cancel)
                 return;
+            globalDepsSB.Clear();
+            dependenciesSB.Clear();
+            modsSB.Clear();
+            configsSB.Clear();
             //load database
             globalDependencies = new List<Dependency>();
             parsedCatagoryList = new List<Category>();
@@ -53,7 +56,6 @@ namespace RelhaxModpack
             dependenciesSB.Append("Dependencies updated:\n");
             modsSB.Append("Mods updated:\n");
             configsSB.Append("Configs updated:\n");
-            subConfigsSB.Append("SubConfigs updated:\n");
             //foreach zip file name
             foreach (Dependency d in globalDependencies)
             {
@@ -121,7 +123,7 @@ namespace RelhaxModpack
             //save config file
             string newModInfo = databaseLocationTextBox.Text;
             this.saveDatabase(newModInfo);
-            MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString() + subConfigsSB.ToString());
+            MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
             updatingLabel.Text = "Idle";
         }
         private void processConfigsCRCUpdate(List<Config> cfgList)

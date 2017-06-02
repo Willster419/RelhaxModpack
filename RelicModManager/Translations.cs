@@ -786,19 +786,19 @@ namespace RelhaxModpack
             //Componet:Detected client version
             //
             english.Add("detectedClientVersion", "Detected Client version");
-            german.Add("detectedClientVersion", "Erkannte Client-Version");
+            german.Add("detectedClientVersion", "Erkannte Client Version");
             polish.Add("detectedClientVersion", "Wykryta wersja klienta gry");
             
             //Componet:Supported client versions
             //
             english.Add("supportedClientVersions", "Supported Clients");
-            german.Add("supportedClientVersions", "Unterstuetzte Clients bemerkt");
+            german.Add("supportedClientVersions", "Unterstuetzte Clients");
             polish.Add("supportedClientVersions", "Wspomagane wersje klienta gry");
             
             //Componet:Supported clients notice
             //
             english.Add("supportNotGuarnteed", "This client version is not offically supported. Mods may not work.");
-            german.Add("supportNotGuarnteed", "Diese Client-Version wird nicht offiziel. Die Mods funktionieren nicht.");
+            german.Add("supportNotGuarnteed", "Diese Client-Version wird nicht offiziell unterstützt. Die Mods koennten nicht funktionieren.");
             polish.Add("supportNotGuarnteed", "Ta wersja klienta gry nie jest oficjalnie wspomagana. Modyfikacje mogą nie działać prawidłowo.");
         }
     }
