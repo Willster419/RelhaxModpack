@@ -12,6 +12,11 @@ namespace RelhaxModpack
     {
         private List<Dependency> globalDependencies;
         private List<Category> parsedCatagoryList;
+        StringBuilder globalDepsSB = new StringBuilder();
+        StringBuilder dependenciesSB = new StringBuilder();
+        StringBuilder modsSB = new StringBuilder();
+        StringBuilder configsSB = new StringBuilder();
+        StringBuilder subConfigsSB = new StringBuilder();
         public CRCFileSizeUpdate()
         {
             InitializeComponent();
@@ -44,15 +49,10 @@ namespace RelhaxModpack
             }
             updatingLabel.Text = "Updating database...";
             Application.DoEvents();
-            StringBuilder globalDepsSB = new StringBuilder();
             globalDepsSB.Append("Global Dependencies updated:\n");
-            StringBuilder dependenciesSB = new StringBuilder();
             dependenciesSB.Append("Dependencies updated:\n");
-            StringBuilder modsSB = new StringBuilder();
             modsSB.Append("Mods updated:\n");
-            StringBuilder configsSB = new StringBuilder();
             configsSB.Append("Configs updated:\n");
-            StringBuilder subConfigsSB = new StringBuilder();
             subConfigsSB.Append("SubConfigs updated:\n");
             //foreach zip file name
             foreach (Dependency d in globalDependencies)
@@ -96,56 +96,9 @@ namespace RelhaxModpack
                             modsSB.Append(m.zipFile + "\n");
                         }
                     }
-                    foreach (Config cat in m.configs)
+                    if(m.configs.Count > 0)
                     {
-                        int cindex = this.getZipIndex(cat.zipFile);
-                        if (cindex != -1)
-                        {
-                            cat.size = this.getFileSize(addZipsDialog.FileNames[cindex]);
-                            if (cat.crc == null || cat.crc.Equals("") || cat.crc.Equals("f"))
-                            {
-                                cat.crc = Utils.getMd5Hash(addZipsDialog.FileNames[cindex]);
-
-                                configsSB.Append(cat.zipFile + "\n");
-                            }
-                        }
-                        foreach (Dependency d in cat.dependencies)
-                        {
-                            int cindex2 = this.getZipIndex(d.dependencyZipFile);
-                            if (cindex2 != -1)
-                            {
-                                if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
-                                {
-                                    d.dependencyZipCRC = Utils.getMd5Hash(addZipsDialog.FileNames[cindex2]);
-                                    dependenciesSB.Append(d.dependencyZipFile + "\n");
-                                }
-                            }
-                        }
-                        foreach (Config sc in cat.configs)
-                        {
-                            int scindex = this.getZipIndex(sc.zipFile);
-                            if (scindex != -1)
-                            {
-                                sc.size = this.getFileSize(addZipsDialog.FileNames[scindex]);
-                                if (sc.crc == null || sc.crc.Equals("") || sc.crc.Equals("f"))
-                                {
-                                    sc.crc = Utils.getMd5Hash(addZipsDialog.FileNames[scindex]);
-                                    subConfigsSB.Append(sc.zipFile + "\n");
-                                }
-                            }
-                            foreach (Dependency d in sc.dependencies)
-                            {
-                                int cindex2 = this.getZipIndex(d.dependencyZipFile);
-                                if (cindex2 != -1)
-                                {
-                                    if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
-                                    {
-                                        d.dependencyZipCRC = Utils.getMd5Hash(addZipsDialog.FileNames[cindex2]);
-                                        dependenciesSB.Append(d.dependencyZipFile + "\n");
-                                    }
-                                }
-                            }
-                        }
+                        this.processConfigsCRCUpdate(m.configs);
                     }
                     foreach (Dependency d in m.dependencies)
                     {
@@ -170,6 +123,39 @@ namespace RelhaxModpack
             this.saveDatabase(newModInfo);
             MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString() + subConfigsSB.ToString());
             updatingLabel.Text = "Idle";
+        }
+        private void processConfigsCRCUpdate(List<Config> cfgList)
+        {
+            foreach (Config cat in cfgList)
+            {
+                int cindex = this.getZipIndex(cat.zipFile);
+                if (cindex != -1)
+                {
+                    cat.size = this.getFileSize(addZipsDialog.FileNames[cindex]);
+                    if (cat.crc == null || cat.crc.Equals("") || cat.crc.Equals("f"))
+                    {
+                        cat.crc = Utils.getMd5Hash(addZipsDialog.FileNames[cindex]);
+
+                        configsSB.Append(cat.zipFile + "\n");
+                    }
+                }
+                foreach (Dependency d in cat.dependencies)
+                {
+                    int cindex2 = this.getZipIndex(d.dependencyZipFile);
+                    if (cindex2 != -1)
+                    {
+                        if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
+                        {
+                            d.dependencyZipCRC = Utils.getMd5Hash(addZipsDialog.FileNames[cindex2]);
+                            dependenciesSB.Append(d.dependencyZipFile + "\n");
+                        }
+                    }
+                }
+                if (cat.configs.Count > 0)
+                {
+                    this.processConfigsCRCUpdate(cat.configs);
+                }
+            }
         }
         private float getFileSize(string file)
         {

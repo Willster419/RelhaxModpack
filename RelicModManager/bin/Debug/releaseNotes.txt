@@ -1,3 +1,6 @@
+Version 23.0.4:
+-Fixed bugs with database back-end tools
+
 Version 23.0.3:
 -Fixed another bug with the recursive processing of configs
 
