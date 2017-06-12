@@ -146,7 +146,7 @@ namespace RelhaxModpack
             //Componet: findBugAddModLabel
             //
             english.Add("findBugAddModLabel", "Find a bug? Want a mod added?");
-            german.Add("findBugAddModLabel", "Fehler gefunden? Willst Du einen Mod hinzufuegen");
+            german.Add("findBugAddModLabel", "Fehler gefunden? Willst Du einen Mod hinzufuegen?");
             polish.Add("findBugAddModLabel", "Znalazłeś błąd? Chcesz dodać mod?");
             
             //Componet: cancelDownloadButton
@@ -800,6 +800,12 @@ namespace RelhaxModpack
             english.Add("supportNotGuarnteed", "This client version is not offically supported. Mods may not work.");
             german.Add("supportNotGuarnteed", "Diese Client-Version wird nicht offiziell unterstützt. Die Mods koennten nicht funktionieren.");
             polish.Add("supportNotGuarnteed", "Ta wersja klienta gry nie jest oficjalnie wspomagana. Modyfikacje mogą nie działać prawidłowo.");
+
+            //Componet:Cancel Download
+            //
+            english.Add("cancelDownload", "Cancel download");
+            german.Add("cancelDownload", "Abbrechen download");
+            polish.Add("cancelDownload", "anuluj pobieranie");
         }
     }
 }

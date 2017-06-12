@@ -811,6 +811,7 @@ namespace RelhaxModpack
         //handelr for before the window is displayed
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            cancelDownloadButton.Text = Translations.getTranslatedString("cancelDownload");
             //set window header text to current version so user knows
             this.Text = this.Text + managerVersion.Substring(8);
             if (Program.testMode) this.Text = this.Text + " TEST MODE";

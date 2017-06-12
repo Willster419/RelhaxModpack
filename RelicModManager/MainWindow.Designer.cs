@@ -345,9 +345,9 @@
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(207, 509);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(198, 509);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
-            this.cancelDownloadButton.Size = new System.Drawing.Size(99, 23);
+            this.cancelDownloadButton.Size = new System.Drawing.Size(108, 47);
             this.cancelDownloadButton.TabIndex = 28;
             this.cancelDownloadButton.Text = "Cancel Download";
             this.cancelDownloadButton.UseVisualStyleBackColor = true;

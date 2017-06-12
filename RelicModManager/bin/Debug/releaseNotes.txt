@@ -1,6 +1,7 @@
 Version 23.1.0:
 -Added a new xvm patcher. you guys won't notice a difference.
 -Increased the font size for the large font setting from 10 to 12
+-Updated Translations
 
 Version 23.0.5:
 -Fixed bugs with legacy OMC display
