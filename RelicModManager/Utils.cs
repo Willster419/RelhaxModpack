@@ -1851,13 +1851,34 @@ namespace RelhaxModpack
                 }
             }
         }
-        public static List<string> createDownloadedOldZipsList(List<string> currentZipFiles, List<Category> parsedCatagoryList)
+        public static List<string> createDownloadedOldZipsList(List<string> currentZipFiles, List<Category> parsedCatagoryList, List<Dependency> globalDependencies)
         {
             parsedZips = new List<string>();
+            foreach (Dependency d in globalDependencies)
+            {
+                if (!d.dependencyZipFile.Equals(""))
+                {
+                    parsedZips.Add(d.dependencyZipFile);
+                }
+            }
             foreach (Category cat in parsedCatagoryList)
             {
+                foreach (Dependency d in cat.dependencies)
+                {
+                    if (!d.dependencyZipFile.Equals(""))
+                    {
+                        parsedZips.Add(d.dependencyZipFile);
+                    }
+                }
                 foreach (Mod m in cat.mods)
                 {
+                    foreach (Dependency d in m.dependencies)
+                    {
+                        if (!d.dependencyZipFile.Equals(""))
+                        {
+                            parsedZips.Add(d.dependencyZipFile);
+                        }
+                    }
                     if (!m.zipFile.Equals(""))
                     {
                         parsedZips.Add(m.zipFile);
@@ -1878,6 +1899,13 @@ namespace RelhaxModpack
         {
             foreach (Config c in configList)
             {
+                foreach (Dependency d in c.dependencies)
+                {
+                    if (!d.dependencyZipFile.Equals(""))
+                    {
+                        parsedZips.Add(d.dependencyZipFile);
+                    }
+                }
                 if (!c.zipFile.Equals(""))
                 {
                     parsedZips.Add(c.zipFile);

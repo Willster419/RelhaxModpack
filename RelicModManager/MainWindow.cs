@@ -26,7 +26,7 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 23.1.3";
+        private string managerVersion = "version 23.1.4";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -238,7 +238,8 @@ namespace RelhaxModpack
                         Utils.appendToLog("Deleting files in _readme...");
                         try
                         {
-                            Directory.Delete(tanksLocation + "\\_readme",true);
+                            if (Directory.Exists(tanksLocation + "\\_readme"))
+                                Directory.Delete(tanksLocation + "\\_readme",true);
                         }
                         catch (UnauthorizedAccessException ex)
                         {
@@ -1338,7 +1339,11 @@ namespace RelhaxModpack
             //attempt to locate the tanks directory
             if (this.autoFindTanks() == null || Settings.forceManuel)
             {
-                if (this.manuallyFindTanks() == null) return;
+                if (this.manuallyFindTanks() == null)
+                {
+                    toggleUIButtons(true);
+                    return;
+                }
             }
             //parse all strings
             if (this.parseStrings() == null)
@@ -2556,12 +2561,14 @@ namespace RelhaxModpack
                 {
                     zipFilesList.Add(f.Name);
                 }
-                List<string> filesToDelete = Utils.createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists);
+                List<string> filesToDelete = Utils.createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists,dependencies);
                 string listOfFiles = "";
                 foreach (string s in filesToDelete)
                     listOfFiles = listOfFiles + s + "\n";
                 OldFilesToDelete oftd = new OldFilesToDelete();
                 oftd.filesList.Text = listOfFiles;
+                if (listOfFiles.Count() == 0)
+                    return;
                 oftd.ShowDialog();
                 if (oftd.result)
                 {
