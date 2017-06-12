@@ -222,20 +222,40 @@ namespace RelhaxModpack
             //Utils.jsonPatch(jsonFilePathBox.Text, jsonPathBox.Text, jsonReplaceBox.Text, "edit","","", true);
             //[[ \\t]*\"src\"[ \\t]*:[ \\t]*\".*\"]endIndex
             //[4]endIndex
-            //edit example
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.saveLastServer", ".*", "false", "edit", "", "", true);
-            //add example
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.pingServers.fontStyle", "", "    \"isAwesome\": true", "add", "", "", true);
+
+            //edit example (works for all)
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.saveLastServer", ".*", "nope", "edit", "", "", true);
+            //advanced edit example
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.fields.flag.enabled", ".*", "nope", "edit", "", "", true);
+            //very advnaced edit example
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.extraFields[2]endIndex.enabled", ".*", "nope", "edit", "", "", true);
+            //very very advnaced edit example
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.extraFields[img://gui/maps/icons/library/proficiency/class_icons_{{v.mastery}}.png]endIndex.enabled", ".*", "false", "edit", "", "", true);
+            
+            //add example (works for all)
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.saveLastServer", "", "    \"isAwesome\": true", "add", "", "", true);
+            //advanced add example
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.pingServers", "", "      \"isAwesome\": true", "add", "", "", true);
+            //very advanced add example
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.pingServers.fontStyle.serverColor", "", "        \"isAwesome\": true", "add", "", "", true);
+
             //array clear example
             //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "battleLabels.formats", "", "", "array_clear", "", "", true);
+
             //array add example
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[4]endIndex", "", "\"SCUMBAG\"", "array_add", "", "", true);
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[4]endIndex", "", " \"SCUMBAG\"", "array_add", "", "", true);
+
             //array edit example
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[4]endIndex", "SCUMBAG", "DICKWAD", "array_edit", "", "", true);
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[2]endIndex", "SPG", "SCUMBAG", "array_edit", "", "", true);
+            //advanced array edit example
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[4]endIndex", ".*", "\"DICKWAD\"", "array_edit", "", "", true);
+
             //array remove example
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[4]endIndex", "\"DICKWAD\",", "", "array_remove", "", "", true);
-            //array remove example 2
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[\"FAGGOT\"]endIndex", ".*", "", "array_remove", "", "", true);
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[4]endIndex", ".*", "", "array_remove", "", "", true);
+            //advanced array remove example 2
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[mediumTank]endIndex", ".*", "", "array_remove", "", "", true);
+            //very advanced array remove example 2
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[3]endIndex", ".*", "", "array_remove", "", "", true);
         }
 
         private void xvm_modeToggle(object sender, EventArgs e)

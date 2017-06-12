@@ -1061,6 +1061,9 @@ namespace RelhaxModpack
 
         public static void xvmPatch(string bootFile, string xvmPath, string search, string newValue, string mode, string tanksLocation, string tanksVersion, bool testMods = false)
         {
+            numByteReads = 0;
+            patchDone = false;
+            genericTraverse = 0;
             //check if it's the new structure
             if (Regex.IsMatch(bootFile, "^\\\\\\\\res_mods"))
             {
@@ -1132,14 +1135,14 @@ namespace RelhaxModpack
                 string regex = "";
                 bool isArrayIndex = false;
                 //check if the patharray has array index in it
-                if (Regex.IsMatch(pathArray[0], @"\[.*\]"))
+                if (Regex.IsMatch(pathArray[0], @"\["))
                 {
-                    regex = @"^[ \t]*""" + pathArray[0].Split('[')[0] + "\"";
+                    regex = @"[ \t]*""" + pathArray[0].Split('[')[0] + "\":";
                     isArrayIndex = true;
                 }
                 else
                 {
-                    regex = @"^[ \t]*""" + pathArray[0] + "\"";
+                    regex = @"[ \t]*""" + pathArray[0] + "\":";
                 }
                 //read untill the value we want
                 readUntill(fileContents, sb, regex);
@@ -1297,7 +1300,7 @@ namespace RelhaxModpack
             bool modified = false;
             //this is the actual value we want to change
             //get past all the boring stuff
-            readUntill(fileContents, sb, @":[ \t]*");
+            //readUntill(fileContents, sb, @":[ \t]*");
             string toReplace = readUntill(fileContents, sb, @"[,}\]]", false);
             //actually replace the value
             //check if it's a comma type (not last) or curley bracket (last)
@@ -1336,21 +1339,28 @@ namespace RelhaxModpack
             bool modified = false;
             string replaced = "";
             //read to the end of that line
-            readUntill(fileContents,  sb,  @"[,{}]$");
+            //read for (white space) (anything but white space)
+            string temp = readUntill(fileContents,  sb,  @"\s*\S+\s");
+            //back up one
+            numByteReads--;
+            sb.Remove(sb.Length - 1, 1);
+            //check if the last one was a comma
+            //if not then add it
             //determine if it stopped in groups of eithor ([ , {) or
             char c = fileContents[numByteReads - 1];
-            if (c.Equals('}'))
+            if (c.Equals(','))
             {
-                //back the truck up
-                numByteReads--;
-                sb.Remove(sb.Length - 1, 1);
+                replaced = "\n" + replaceValue + ",";
+            }
+            else if (c.Equals('{'))
+            {
+                replaced = "\n" + replaceValue + ",";
+            }
+            else
+            {
+                replaced = ",\n" + replaceValue;
             }
             //append it in the sb
-            replaced = "\n" + replaceValue;
-            if (!c.Equals('}'))
-                replaced = replaced + ",";
-            else
-                replaced = "," + replaced;
             sb.Append(replaced);
             readUntillEnd(fileContents, sb);
             modified = true;
@@ -1422,11 +1432,22 @@ namespace RelhaxModpack
         private static void xvmArrayRemove(string fileContents, StringBuilder sb, string newFilePath, string replaceValue, string search)
         {
             bool modified = false;
+            bool lastItem = false;
             //move past it and save int input
             string editCheck = readUntill(fileContents, sb, @"[,\]]",false);
+            if(Regex.IsMatch(editCheck,@"\]$"))
+            {
+                lastItem = true;
+                //remove last comma from sb index
+                sb.Remove(sb.Length - 1, 1);
+            }
             if (Regex.IsMatch(editCheck, search))
             {
                 editCheck = Regex.Replace(editCheck, search, "");
+                if(lastItem)
+                {
+                    editCheck = editCheck + "]";
+                }
                 //append it in the sb
                 sb.Append(editCheck);
                 readUntillEnd(fileContents, sb);
@@ -1443,7 +1464,7 @@ namespace RelhaxModpack
         private static string readUntill(string fileContents, StringBuilder sb, string stopAt, bool save = true)
         {
             string readValues = "";
-            while (!Regex.IsMatch(readValues, stopAt, RegexOptions.Multiline))
+            while (!Regex.IsMatch(readValues.Length > 1000? readValues.Substring(readValues.Length-1000,1000):readValues, stopAt, RegexOptions.Multiline))
             {
                 char c = fileContents[numByteReads];
                 numByteReads++;
@@ -1542,19 +1563,23 @@ namespace RelhaxModpack
                 int startBracketCount = 0;
                 while (true)
                 {
-                    if (Regex.IsMatch(readValues, regexSplitCommand))
+                    /*if (Regex.IsMatch(readValues, regexSplitCommand))
                     {
                         //if it was a bracket, try to see if there's a comma next
-                        char c2 = stringToSplit[saveNumReadBytes + 1];
-                        if (c2.Equals(','))
+                        if (Regex.IsMatch(readValues, @"}$"))
                         {
-                            readValues = readValues + c2;
-                            saveNumReadBytes++;
+                            char c2 = stringToSplit[saveNumReadBytes + 1];
+                            if (c2.Equals(','))
+                            {
+                                readValues = readValues + c2;
+                                saveNumReadBytes++;
+                            }
+                            startBracketCount--;
                         }
-                        if (startBracketCount <= 1)
+                        if (startBracketCount == 0)
                             break;
-                        startBracketCount--;
-                    }
+                        
+                    }*/
                     if (saveNumReadBytes >= stringToSplit.Count())
                     {
                         readValues = readValues.Substring(0, readValues.Length - 1);
@@ -1564,6 +1589,17 @@ namespace RelhaxModpack
                     char c = stringToSplit[saveNumReadBytes];
                     if (c.Equals('{'))
                         startBracketCount++;
+                    else if (c.Equals('}'))
+                        startBracketCount--;
+                    else if (c.Equals(','))
+                    {
+                        if (startBracketCount == 0)
+                        {
+                            saveNumReadBytes++;
+                            readValues = readValues + c;
+                            break;
+                        }
+                    }
                     saveNumReadBytes++;
                     readValues = readValues + c;
                 }
