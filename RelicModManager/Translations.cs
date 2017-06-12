@@ -153,7 +153,7 @@ namespace RelhaxModpack
             //
             english.Add("cancelDownloadButton", "Cancel Download");
             german.Add("cancelDownloadButton", "Download abbrechen");
-            polish.Add("cancelDownloadButton", "Anuluj ściąganie");
+            polish.Add("cancelDownloadButton", "Anuluj pobieranie");
             //Section: FirstLoadHelper
             
             //Componet: helperText
@@ -771,41 +771,59 @@ namespace RelhaxModpack
             german.Add("selectionDefault", "Default");
             polish.Add("selectionDefault", "Domyślne");
             
-            //Componet:Mod selection view legacy (OMC)
+            //Componet: Mod selection view legacy (OMC)
             //
             english.Add("selectionLegacy", "OMC Legacy");
             german.Add("selectionLegacy", "OMC Erbe");
             polish.Add("selectionLegacy", "OMC Rozwijana lista");
             
-            //Componet:Mod selection explanation
+            //Componet: Mod selection explanation
             //
             english.Add("selectionViewMode", "Select a mod selection list view mode\nDefault: Relhax list view mode\nLegacy: OMC tree list view mode");
             german.Add("selectionViewMode", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nAlternativ: OMC Baumstruktur");
             polish.Add("selectionViewMode", "Wybierz tryb widoku wyborów modyfikacji\nDomyślnie: Tryb widoku listy RelHax\nSpuścizna: Tryb widoku listy OMC");
             
-            //Componet:Detected client version
+            //Componet: Detected client version
             //
             english.Add("detectedClientVersion", "Detected Client version");
             german.Add("detectedClientVersion", "Erkannte Client Version");
             polish.Add("detectedClientVersion", "Wykryta wersja klienta gry");
             
-            //Componet:Supported client versions
+            //Componet: Supported client versions
             //
             english.Add("supportedClientVersions", "Supported Clients");
             german.Add("supportedClientVersions", "Unterstuetzte Clients");
             polish.Add("supportedClientVersions", "Wspomagane wersje klienta gry");
             
-            //Componet:Supported clients notice
+            //Componet: Supported clients notice
             //
             english.Add("supportNotGuarnteed", "This client version is not offically supported. Mods may not work.");
             german.Add("supportNotGuarnteed", "Diese Client-Version wird nicht offiziell unterstützt. Die Mods koennten nicht funktionieren.");
             polish.Add("supportNotGuarnteed", "Ta wersja klienta gry nie jest oficjalnie wspomagana. Modyfikacje mogą nie działać prawidłowo.");
 
-            //Componet:Cancel Download
+            //Componet: Failed To Delete folder
             //
-            english.Add("cancelDownload", "Cancel download");
-            german.Add("cancelDownload", "Abbrechen download");
-            polish.Add("cancelDownload", "anuluj pobieranie");
+            english.Add("folderDeleteFailed", "Failed to delete the folder");
+            german.Add("folderDeleteFailed", "Der Ordner konnte nicht gelöscht werden");
+            polish.Add("folderDeleteFailed", "Nie udało się usunąć folderu");
+
+            //Componet: Failed To Delete file
+            //
+            english.Add("fileDeleteFailed", "Failed to delete the file");
+            german.Add("fileDeleteFailed", "Fehler beim Löschen der Datei");
+            polish.Add("fileDeleteFailed", "Nie udało się usunąć pliku");
+
+            //Componet: Found zip fiels to delete 1
+            //
+            english.Add("foundOldFilesDelete1", "The installer has found the following files that are old and can be deleted");
+            german.Add("foundOldFilesDelete1", "Der Installateur hat die folgenden Dateien gefunden, die alt sind und gelöscht werden können");
+            polish.Add("foundOldFilesDelete1", "Instalator znalazł następujące pliki, które są stare i można je usunąć");
+
+            //Componet: Found zip files to delete 2
+            //
+            english.Add("foundOldFilesDelete2", "Would you like to delete them?");
+            german.Add("foundOldFilesDelete2", "Möchten Sie sie löschen?");
+            polish.Add("foundOldFilesDelete2", "Czy chcesz je usunąć?");
         }
     }
 }

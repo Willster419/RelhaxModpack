@@ -1,3 +1,8 @@
+Version 23.1.1:
+-Added feature where it will allow you to delete old files
+-Added "_readme" folder to cleanup list
+-Updated Translations
+
 Version 23.1.0:
 -Added a new xvm patcher. you guys won't notice a difference.
 -Increased the font size for the large font setting from 10 to 12

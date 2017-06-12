@@ -20,6 +20,7 @@ namespace RelhaxModpack
         private static int numByteReads = 0;
         private static bool patchDone = false;
         private static int genericTraverse = 0;
+        private static List<string> parsedZips;
         //logs string info to the log output
         public static void appendToLog(string info)
         {
@@ -1812,6 +1813,41 @@ namespace RelhaxModpack
                             break;
                     }
                 }
+            }
+        }
+        public static List<string> createDownloadedOldZipsList(List<string> currentZipFiles, List<Category> parsedCatagoryList)
+        {
+            parsedZips = new List<string>();
+            foreach (Category cat in parsedCatagoryList)
+            {
+                foreach (Mod m in cat.mods)
+                {
+                    if (!m.zipFile.Equals(""))
+                    {
+                        parsedZips.Add(m.zipFile);
+                    }
+                    if (m.configs.Count > 0)
+                        parseZipFileConfigs(m.configs);
+                }
+            }
+            //now parsedZips has every single possible zipFile in the database
+            //for each zipfile in it, remove it in currentZipFiles if it exists
+            foreach (string s in parsedZips)
+            {
+                currentZipFiles.Remove(s);
+            }
+            return currentZipFiles;
+        }
+        public static void parseZipFileConfigs(List<Config> configList)
+        {
+            foreach (Config c in configList)
+            {
+                if (!c.zipFile.Equals(""))
+                {
+                    parsedZips.Add(c.zipFile);
+                }
+                if (c.configs.Count > 0)
+                    parseZipFileConfigs(c.configs);
             }
         }
     }

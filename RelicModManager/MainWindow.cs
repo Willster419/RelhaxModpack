@@ -26,7 +26,7 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 23.1.0";
+        private string managerVersion = "version 23.1.1";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -234,6 +234,21 @@ namespace RelhaxModpack
                     if (Settings.cleanInstallation)
                     {
                         state = InstallState.deleteResMods;
+                        //delete everything in _readme
+                        Utils.appendToLog("Deleting files in _readme...");
+                        try
+                        {
+                            Directory.Delete(tanksLocation + "\\_readme",true);
+                        }
+                        catch (UnauthorizedAccessException ex)
+                        {
+                            Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
+                            Utils.appendToLog(ex.StackTrace);
+                            Utils.appendToLog("inner message: " + ex.Message);
+                            Utils.appendToLog("source: " + ex.Source);
+                            Utils.appendToLog("target: " + ex.TargetSite);
+                            MessageBox.Show(Translations.getTranslatedString("folderDeleteFailed") + "_readme");
+                        }
                         Utils.appendToLog("CleanInstallCB checked, running backgroundDelete(" + tanksLocation + "\\res_mods)");
                         //delete everything in res_mods
                         if (!Directory.Exists(tanksLocation + "\\res_mods"))
@@ -426,14 +441,9 @@ namespace RelhaxModpack
             {
                 Utils.appendToLog("No fonts to install");
                 //no fonts to install, done display
-                speedLabel.Text = "";
-                downloadProgress.Text = Translations.getTranslatedString("done");
-                parrentProgressBar.Maximum = 1;
-                parrentProgressBar.Value = parrentProgressBar.Maximum;
-                childProgressBar.Value = childProgressBar.Maximum;
-                state = InstallState.idle;
-                toggleUIButtons(true);
-                Utils.appendToLog("Installation done");
+                if(!Program.autoInstall)
+                this.checkForOldZipFiles();
+                this.doneDisplay();
                 return;
             }
             string[] fonts = Directory.GetFiles(tanksLocation + "\\_fonts");
@@ -441,14 +451,9 @@ namespace RelhaxModpack
             {
                 //done display
                 Utils.appendToLog("No fonts to install");
-                speedLabel.Text = "";
-                downloadProgress.Text = Translations.getTranslatedString("done");
-                parrentProgressBar.Maximum = 1;
-                parrentProgressBar.Value = parrentProgressBar.Maximum;
-                childProgressBar.Value = childProgressBar.Maximum;
-                state = InstallState.idle;
-                toggleUIButtons(true);
-                Utils.appendToLog("Installation done");
+                if (!Program.autoInstall)
+                this.checkForOldZipFiles();
+                this.doneDisplay();
                 return;
             }
             //convert the array to a list
@@ -479,14 +484,9 @@ namespace RelhaxModpack
             {
                 Utils.appendToLog("No fonts to install");
                 //done display
-                speedLabel.Text = "";
-                downloadProgress.Text = Translations.getTranslatedString("done");
-                parrentProgressBar.Maximum = 1;
-                parrentProgressBar.Value = parrentProgressBar.Maximum;
-                childProgressBar.Value = childProgressBar.Maximum;
-                state = InstallState.idle;
-                toggleUIButtons(true);
-                Utils.appendToLog("Installation done");
+                if (!Program.autoInstall)
+                this.checkForOldZipFiles();
+                this.doneDisplay();
                 return;
             }
             Utils.appendToLog("Installing fonts");
@@ -563,14 +563,10 @@ namespace RelhaxModpack
             }
             else
             {
-                speedLabel.Text = "";
-                downloadProgress.Text = Translations.getTranslatedString("done");
-                parrentProgressBar.Maximum = 1;
-                parrentProgressBar.Value = parrentProgressBar.Maximum;
-                childProgressBar.Value = childProgressBar.Maximum;
-                state = InstallState.idle;
-                toggleUIButtons(true);
                 Utils.appendToLog("Installation done, but fonts install failed");
+                if (!Program.autoInstall)
+                this.checkForOldZipFiles();
+                this.doneDisplay();
             }
         }
         //method to check for updates to the application on startup
@@ -811,7 +807,6 @@ namespace RelhaxModpack
         //handelr for before the window is displayed
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            cancelDownloadButton.Text = Translations.getTranslatedString("cancelDownload");
             //set window header text to current version so user knows
             this.Text = this.Text + managerVersion.Substring(8);
             if (Program.testMode) this.Text = this.Text + " TEST MODE";
@@ -823,7 +818,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             Utils.appendToLog("|RelHax Modpack " + managerVersion);
-            Utils.appendToLog("|Built on 06/11/2017, running at " + DateTime.Now);
+            Utils.appendToLog("|Built on 06/12/2017, running at " + DateTime.Now);
             Utils.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -2520,6 +2515,95 @@ namespace RelhaxModpack
                 }
             }
             return totalExtractions;
+        }
+        //create the done display
+        private void doneDisplay()
+        {
+            speedLabel.Text = "";
+            downloadProgress.Text = Translations.getTranslatedString("done");
+            parrentProgressBar.Maximum = 1;
+            parrentProgressBar.Value = parrentProgressBar.Maximum;
+            childProgressBar.Value = childProgressBar.Maximum;
+            state = InstallState.idle;
+            toggleUIButtons(true);
+            Utils.appendToLog("Installation done");
+        }
+        //check for old zip files
+        private void checkForOldZipFiles()
+        {
+            List<string> zipFilesList = new List<string>();
+            FileInfo[] fi = null;
+            try
+            {
+                File.SetAttributes(Application.StartupPath + "\\RelHaxDownloads", FileAttributes.Normal);
+                DirectoryInfo di = new DirectoryInfo(Application.StartupPath + "\\RelHaxDownloads");
+                //get every patch file in the folder
+                //patchFilesList = Directory.GetFiles(tanksLocation + @"\_patch", @"*.xml");
+                fi = di.GetFiles(@"*.zip", SearchOption.TopDirectoryOnly);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
+                Utils.appendToLog(e.StackTrace);
+                Utils.appendToLog("inner message: " + e.Message);
+                Utils.appendToLog("source: " + e.Source);
+                Utils.appendToLog("target: " + e.TargetSite);
+                MessageBox.Show(Translations.getTranslatedString("folderDeleteFailed") + " _readme");
+            }
+            if (fi != null)
+            {
+                foreach (FileInfo f in fi)
+                {
+                    zipFilesList.Add(f.Name);
+                }
+                List<string> filesToDelete = Utils.createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists);
+                string listOfFiles = "";
+                foreach (string s in filesToDelete)
+                    listOfFiles = listOfFiles + s + "\n";
+                OldFilesToDelete oftd = new OldFilesToDelete();
+                oftd.filesList.Text = listOfFiles;
+                oftd.ShowDialog();
+                if (oftd.result)
+                {
+                    childProgressBar.Minimum = 0;
+                    childProgressBar.Value = childProgressBar.Minimum;
+                    childProgressBar.Maximum = filesToDelete.Count;
+                    foreach(string s in filesToDelete)
+                    {
+                        bool retry = true;
+                        bool breakOut = false;
+                        while (retry)
+                        {
+                            //for each zip file, verify it exists, set properties to normal, delete it
+                            try
+                            {
+                                string file = Application.StartupPath + "\\RelHaxDownloads\\" + s;
+                                File.SetAttributes(file, FileAttributes.Normal);
+                                File.Delete(file);
+                                childProgressBar.Value++;
+                                retry = false;
+                            }
+                            catch (UnauthorizedAccessException e)
+                            {
+                                retry = true;
+                                Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
+                                Utils.appendToLog(e.StackTrace);
+                                Utils.appendToLog("inner message: " + e.Message);
+                                Utils.appendToLog("source: " + e.Source);
+                                Utils.appendToLog("target: " + e.TargetSite);
+                                DialogResult res = MessageBox.Show(Translations.getTranslatedString("fileDeleteFailed") + " " + s, "", MessageBoxButtons.RetryCancel);
+                                if (res == System.Windows.Forms.DialogResult.Cancel)
+                                {
+                                    breakOut = true;
+                                    retry = false;
+                                }
+                            }
+                        }
+                        if (breakOut)
+                            break;
+                    }
+                }
+            }
         }
     }
     //a class for the downloadQueue list, to make a queue of downloads

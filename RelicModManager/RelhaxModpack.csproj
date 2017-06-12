@@ -28,8 +28,8 @@
     <TargetCulture>en-US</TargetCulture>
     <ProductName>Relhax Modpack</ProductName>
     <PublisherName>Willard Wider</PublisherName>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>0.23.1.0</ApplicationVersion>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>0.23.1.1</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -97,6 +97,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
@@ -174,6 +175,12 @@
       <DependentUpon>ModSelectionList.cs</DependentUpon>
     </Compile>
     <Compile Include="ModWPFCheckBox.cs" />
+    <Compile Include="OldFilesToDelete.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OldFilesToDelete.Designer.cs">
+      <DependentUpon>OldFilesToDelete.cs</DependentUpon>
+    </Compile>
     <Compile Include="Patch.cs" />
     <Compile Include="PatchTester.cs">
       <SubType>Form</SubType>
@@ -232,6 +239,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ModSelectionList.resx">
       <DependentUpon>ModSelectionList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OldFilesToDelete.resx">
+      <DependentUpon>OldFilesToDelete.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PatchTester.resx">
       <DependentUpon>PatchTester.cs</DependentUpon>
