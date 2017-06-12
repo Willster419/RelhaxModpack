@@ -36,10 +36,10 @@ Support Teamspeak Server: tna.dyndns.org
 ### What does the modpack look like?
 ![MainWindow](https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelicModManager/PreviewPicture3.png "Main Window")
 
-![ModSelection](https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelicModManager/PreviewPicture4.png "Mod Selection")
+![ModSelection](http://wotmods.relhaxmodpack.com/WoT/ModPictures/Relhax_Modpack_2.png "Mod Selection")
 
 ### Prefer the OMC style selection view?
-![ModSelectionOld](https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelicModManager/PreviewPicture5.png "Mod Selection Legacy")
+![ModSelectionOld](http://wotmods.relhaxmodpack.com/WoT/ModPictures/Relhax_Modpack_3.png "Mod Selection Legacy")
 
 ### Additional Information
 The modpack is currently in alpha, proof of concept. I am still adding minor features and adding finishing touches to the application. This means that bugs may still exist. To prevent possible loss of your "perfect modpack configuration" it is recommended to back it up editor manually or using the "backup mods" checkbox option.
