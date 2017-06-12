@@ -804,25 +804,25 @@ namespace RelhaxModpack
             //Componet: Failed To Delete folder
             //
             english.Add("folderDeleteFailed", "Failed to delete the folder");
-            german.Add("folderDeleteFailed", "Der Ordner konnte nicht gelöscht werden");
+            german.Add("folderDeleteFailed", "Löschen des Verzeichnis fehlgeschlagen");
             polish.Add("folderDeleteFailed", "Nie udało się usunąć folderu");
 
             //Componet: Failed To Delete file
             //
             english.Add("fileDeleteFailed", "Failed to delete the file");
-            german.Add("fileDeleteFailed", "Fehler beim Löschen der Datei");
+            german.Add("fileDeleteFailed", "Löschen der Datei fehlgeschlagen");
             polish.Add("fileDeleteFailed", "Nie udało się usunąć pliku");
 
             //Componet: Found zip fiels to delete 1
             //
             english.Add("foundOldFilesDelete1", "The installer has found the following files that are old and can be deleted");
-            german.Add("foundOldFilesDelete1", "Der Installateur hat die folgenden Dateien gefunden, die alt sind und gelöscht werden können");
+            german.Add("foundOldFilesDelete1", "Wir haben folgende veralteten Dateien gefunden die gelöscht werden können");
             polish.Add("foundOldFilesDelete1", "Instalator znalazł następujące pliki, które są stare i można je usunąć");
 
             //Componet: Found zip files to delete 2
             //
             english.Add("foundOldFilesDelete2", "Would you like to delete them?");
-            german.Add("foundOldFilesDelete2", "Möchten Sie sie löschen?");
+            german.Add("foundOldFilesDelete2", "Möchtest du das sie gelöscht werden?");
             polish.Add("foundOldFilesDelete2", "Czy chcesz je usunąć?");
         }
     }

@@ -444,6 +444,7 @@ namespace RelhaxModpack
                     configControlDDALL.MinWidth = 100;
                     //run the crc logics
                     string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                    ComboBoxItem cbi = null;
                     if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
                     {
                         string toAdd = con.name + "_Updated";
@@ -451,14 +452,22 @@ namespace RelhaxModpack
                         if (con.size > 0.0f)
                             toAdd = toAdd + " (" + con.size + " MB)";
                         //add it with _updated
-                        if (con.enabled) configControlDDALL.Items.Add(new ComboBoxItem(con, toAdd));
-                        if (con.Checked) configControlDDALL.SelectedItem = toAdd;
+                        if (con.enabled)
+                        {
+                            cbi = new ComboBoxItem(con, toAdd);
+                            configControlDDALL.Items.Add(cbi);
+                        }
+                        if (con.Checked) configControlDDALL.SelectedItem = cbi;
                     }
                     else
                     {
                         //add it
-                        if (con.enabled) configControlDDALL.Items.Add(new ComboBoxItem(con, con.name));
-                        if (con.Checked) configControlDDALL.SelectedItem = con.name;
+                        if (con.enabled)
+                        {
+                            cbi = new ComboBoxItem(con, con.name);
+                            configControlDDALL.Items.Add(cbi);
+                        }
+                        if (con.Checked) configControlDDALL.SelectedItem = cbi;
                     }
                     //add the dropdown to the thing. it will only run this once
                     if (configControlDDALL.Name.Equals("notAddedYet"))
@@ -1184,6 +1193,7 @@ namespace RelhaxModpack
                     }
                     //run the checksum locics
                     string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                    ComboBoxItem cbi = null;
                     if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
                     {
                         con.downloadFlag = true;
@@ -1191,20 +1201,28 @@ namespace RelhaxModpack
                         if (con.size > 0.0f)
                             toAdd = toAdd + " (" + con.size + " MB)";
                         //add it with _updated
-                        if (con.enabled) configControlDDALL.Items.Add(new ComboBoxItem(con, toAdd));
+                        if (con.enabled)
+                        {
+                            cbi = new ComboBoxItem(con, toAdd);
+                            configControlDDALL.Items.Add(cbi);
+                        }
                         if (con.Checked)
                         {
-                            configControlDDALL.SelectedItem = toAdd;
+                            configControlDDALL.SelectedItem = cbi;
                             configControlDDALL.Enabled = true;
                         }
                     }
                     else
                     {
                         //add it
-                        if (con.enabled) configControlDDALL.Items.Add(new ComboBoxItem(con, con.name));
+                        if (con.enabled)
+                        {
+                            cbi = new ComboBoxItem(con, con.name);
+                            configControlDDALL.Items.Add(cbi);
+                        }
                         if (con.Checked)
                         {
-                            configControlDDALL.SelectedItem = con.name;
+                            configControlDDALL.SelectedItem = cbi;
                             configControlDDALL.Enabled = true;
                         }
                     }

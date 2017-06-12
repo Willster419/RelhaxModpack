@@ -1,3 +1,6 @@
+Version 23.1.2:
+-Fixed bug with drop down configs not saving selections properly
+
 Version 23.1.1:
 -Added feature where it will allow you to delete old files
 -Added "_readme" folder to cleanup list
