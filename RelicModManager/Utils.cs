@@ -17,6 +17,9 @@ namespace RelhaxModpack
     //a static utility class with usefull methods that all other forms can use if they need it
     public static class Utils
     {
+        private static int numByteReads = 0;
+        private static bool patchDone = false;
+        private static int genericTraverse = 0;
         //logs string info to the log output
         public static void appendToLog(string info)
         {
@@ -93,7 +96,7 @@ namespace RelhaxModpack
             {
                 doc.Load(databaseURL);
             }
-            catch (XmlException)
+            catch (XmlException e)
             {
                 Utils.appendToLog("CRITICAL: Failed to read database!");
                 MessageBox.Show(Translations.getTranslatedString("databaseReadFailed"));
@@ -941,6 +944,15 @@ namespace RelhaxModpack
                     ssList.Add(ss);
                     temp = "-42069";
                 }
+                else if (Regex.IsMatch(temp, @"^[ \t]*""\$ref"" *: *{.*}"))
+                {
+                    modified = true;
+                    //jobject
+                    ss.name = temp.Split('"')[1];
+                    ss.value = temp.Split('{')[1];
+                    ssList.Add(ss);
+                    temp = "\"" + "willster419_refReplace" + "\"" + ": -6969";
+                }
                 if (hadComma && modified)
                     temp = temp + ",";
                 backTogether.Append(temp + "\n");
@@ -1024,12 +1036,18 @@ namespace RelhaxModpack
                     //array of string save and text file are in sync, so when one is found,
                     //take it from index 0 and remove from the list at index 0
                     temp = "\"" + ssList[0].name + "\"" + ": $" + ssList[0].value;
-                    putBackDollas[i] = temp;
-                    ssList.RemoveAt(0);
+                    putBackDollas[i] = temp;//update the text file file
+                    ssList.RemoveAt(0);//remove the entry from the list of entries to fix/replace
                 }
                 else if (Regex.IsMatch(temp, "-42069"))
                 {
                     temp = "$" + ssList[0].value;
+                    putBackDollas[i] = temp;
+                    ssList.RemoveAt(0);
+                }
+                else if (Regex.IsMatch(temp, "willster419_refReplace"))
+                {
+                    temp = "\"" + ssList[0].name + "\"" + ": {" + ssList[0].value;
                     putBackDollas[i] = temp;
                     ssList.RemoveAt(0);
                 }
@@ -1038,6 +1056,520 @@ namespace RelhaxModpack
             if (ssList.Count != 0)
                 Utils.appendToLog("There was an error with patching the file " + jsonFile + ", with extra refrences");
             File.WriteAllText(jsonFile, rebuilder.ToString());
+        }
+
+        public static void xvmPatch(string bootFile, string xvmPath, string search, string newValue, string mode, string tanksLocation, string tanksVersion, bool testMods = false)
+        {
+            //check if it's the new structure
+            if (Regex.IsMatch(bootFile, "^\\\\\\\\res_mods"))
+            {
+                //new style patch, res_mods folder
+                bootFile = tanksLocation + bootFile;
+            }
+            else if (Regex.IsMatch(bootFile, "^\\\\\\\\mods"))
+            {
+                //new style patch, mods folder
+                bootFile = tanksLocation + bootFile;
+            }
+            else if (testMods)
+            {
+
+            }
+            else
+            {
+                //old style patch
+                bootFile = tanksLocation + "\\res_mods" + bootFile;
+            }
+
+            //patch versiondir out of fileLocation
+            if (testMods)
+            {
+
+            }
+            else
+            {
+                bootFile = Regex.Replace(bootFile, "versiondir", tanksVersion);
+            }
+
+            //check that the file exists
+            if (!File.Exists(bootFile))
+                return;
+            //break down the path into an array
+            string[] pathArrayy = xvmPath.Split('.');
+            List<string> pathArray = new List<string>();
+            //convert it to a List cause it has more features
+            foreach (string s in pathArrayy)
+                pathArray.Add(s);
+            //create the stringBuilder to rewrite the file
+            StringBuilder sb = new StringBuilder();
+            //load the file from disk
+            
+            //read untill *start of string*${
+            numByteReads = 0;
+            string fileContents = File.ReadAllText(bootFile);
+            readUntill(fileContents,  sb, @"^[ \t]*\$[ \t]*{[ \t]*""");
+            //now read untill the next quote for the temp path
+            string filePath = readUntill(fileContents,  sb, "\"");
+            //flip the folder path things
+            filePath = Regex.Replace(filePath, "/", "\\");
+            //remove the last one
+            filePath = filePath.Substring(0, filePath.Length - 1);
+            filePath = filePath.Trim();
+            readInside(pathArray, Path.GetDirectoryName(bootFile) + "\\" + filePath,newValue,search, mode, xvmPath);
+        }
+        
+        //getting into this means that we've started reading a new config file, maybe patch this one?
+        private static void readInside(List<string> pathArray, string newFilePath, string replaceValue, string search, string mode, string origXvmPath)
+        {
+            numByteReads = 0;
+            //create the (new) stringBuilder to rewrite the file
+            StringBuilder sb = new StringBuilder();
+            //load the file from disk
+            string fileContents = File.ReadAllText(newFilePath);
+            while(pathArray.Count != 0)
+            {
+                string regex = "";
+                bool isArrayIndex = false;
+                //check if the patharray has array index in it
+                if (Regex.IsMatch(pathArray[0], @"\[.*\]"))
+                {
+                    regex = @"^[ \t]*""" + pathArray[0].Split('[')[0] + "\"";
+                    isArrayIndex = true;
+                }
+                else
+                {
+                    regex = @"^[ \t]*""" + pathArray[0] + "\"";
+                }
+                //read untill the value we want
+                readUntill(fileContents, sb, regex);
+                //determine if the this value is actually a file refrence
+                string refrenceTest = peekUntill(fileContents, sb, @"[,}\]]$");
+                if(Regex.IsMatch(refrenceTest,@"\${"""))
+                {
+                    //it's a refrence, move it to the next file and readInsideEdit (yes recursion)
+                    readUntill(fileContents,  sb, @"\${""");
+                    //now read untill the next quote for the temp path
+                    string filePath = readUntill(fileContents,  sb, "\"");
+                    //read untill the next quote
+                    readUntill(fileContents, sb, "\"");
+                    pathArray[0] = readUntill(fileContents, sb, "\"");
+                    pathArray[0] = pathArray[0].Substring(0, pathArray[0].Length - 1);
+                    //flip the folder path things
+                    filePath = Regex.Replace(filePath, "/", "\\");
+                    //remove the last one
+                    filePath = filePath.Substring(0, filePath.Length - 1);
+                    filePath = filePath.Trim();
+                    readInside(pathArray, Path.GetDirectoryName(newFilePath) + "\\" + filePath, replaceValue, search, mode, origXvmPath);
+                }
+                //determine if it is the other type of refrence
+                string refrenceTest2 = peekUntill(fileContents, sb, @"[,}\]]$");
+                if(Regex.IsMatch(refrenceTest2,@"""\$ref"":"))
+                {
+                    //ref style refrence
+                    readUntill(fileContents, sb, @"""\$ref"":");
+                    readUntill(fileContents, sb, ":");
+                    readUntill(fileContents, sb, "\"");
+                    string filePath = readUntill(fileContents, sb, "\"");
+                    filePath = Regex.Replace(filePath, "/", "\\");
+                    filePath = filePath.Substring(0, filePath.Length - 1);
+                    filePath = filePath.Trim();
+                    readInside(pathArray, Path.GetDirectoryName(newFilePath) + "\\" + filePath, replaceValue, search, mode, origXvmPath);
+                    //readUntill(fileContents, sb, ":");
+                }
+                //determine if it is an array
+                if (isArrayIndex)
+                {
+                    int indexToReadTo = 0;
+                    //split the array into an array lol
+                    readUntill(fileContents,  sb, @"\[");
+                    string arrayContents = peekUntill(fileContents, sb,  @"\]");
+                    //split the array based on "},"
+                    //string[] carray = arrayContents.Split("},");
+                    List<string> carray = split(arrayContents, @"[,}]$");
+                    //if it is an index, just use it
+                    if (Regex.IsMatch(pathArray[0], @"\[\d\]+"))
+                    {
+                        string splitter = pathArray[0].Split('[')[1];
+                        splitter = splitter.Split(']')[0];
+                        //also repair the path
+                        pathArray[0] = Regex.Replace(pathArray[0], "endIndex", "");
+                        indexToReadTo = int.Parse(splitter);
+                        if (indexToReadTo < 0 || indexToReadTo >= carray.Count())
+                        {
+                            //error and abort
+                            Utils.appendToLog("invalid index: " + pathArray[0]);
+                            return;
+                        }
+                    }
+                    //if it is a search, 
+                    else
+                    {
+                        //grab the regex search out of it an repair the array
+                        //figure out how broken (how many "." are part of regex
+                        string borken1 = "";
+                        foreach (string s in pathArray)
+                            borken1 = borken1 + s + ".";
+                        genericTraverse = 0;
+                        readUntillGeneric(borken1, @"\[");
+                        string anotherString2 = readUntillGeneric(borken1, @"\]endIndex");
+                        genericTraverse = 0;
+                        pathArray[0] = anotherString2;
+                        //figure out how many indexes got rekt
+                        string[] anotherTemp = pathArray[0].Split('.');
+                        int numIndexesLost = anotherTemp.Count() - 1;
+                        for (int i = 1; i != numIndexesLost + 1; i++)
+                        {
+                            pathArray.RemoveAt(1);
+                        }
+                        string[] vals = pathArray[0].Split('[');
+                        int origLength = vals[0].Length;
+                        origLength++;
+                        string splitter = pathArray[0];
+                        splitter = splitter.Substring(origLength);
+                        splitter = splitter.Substring(0, splitter.Length - 9);
+                        //search each index for the regex match
+                        //for loop it and check at the end if it went all the way through
+                        for (indexToReadTo = 0; indexToReadTo < carray.Count(); indexToReadTo++)
+                        {
+                            string carrayVal = carray[indexToReadTo];
+                            if (Regex.IsMatch(carrayVal, splitter))
+                            {
+                                break;
+                            }
+                        }
+                        if (indexToReadTo < 0 || indexToReadTo >= carray.Count())
+                        {
+                            //error and abort
+                            Utils.appendToLog("invalid index: " + pathArray[0]);
+                            return;
+                        }
+                    }
+                    //ok now we have a valid index to actually make the change in the requested index
+                    string advanceTo = "";
+                    for (int i = 0; i < indexToReadTo; i++)
+                    {
+                        advanceTo = advanceTo + carray[i];
+                    }
+                    readUntill(fileContents, sb, advanceTo.Count());
+                    //get it to the root of the array
+                    //readUntill(fileContents, sb, @"[{\$]");
+                }
+                //we found it so remove it from the path
+                if(pathArray.Count != 0)
+                pathArray.RemoveAt(0);
+            }
+            //split off into the cases for different xvm modification types
+            if (!patchDone)
+            {
+                switch (mode)
+                {
+                    default:
+                        //do nothing
+                        Utils.appendToLog("Invalid mode: " + mode + " for xvm patch " + origXvmPath);
+                        break;
+                    case "edit":
+                        xvmEdit(fileContents, sb, newFilePath, replaceValue, search);
+                        break;
+                    case "add":
+                        xvmAdd(fileContents, sb, newFilePath, replaceValue, search);
+                        break;
+                    case "remove":
+                        //TODO
+                        break;
+                    case "array_clear":
+                        xvmArrayClear(fileContents, sb, newFilePath, replaceValue, search);
+                        break;
+                    case "array_add":
+                        xvmArrayAdd(fileContents, sb, newFilePath, replaceValue, search);
+                        break;
+                    case "array_edit":
+                        xvmArrayEdit(fileContents, sb, newFilePath, replaceValue, search);
+                        break;
+                    case "array_remove":
+                        xvmArrayRemove(fileContents, sb, newFilePath, replaceValue, search);
+                        break;
+                }
+            }
+        }
+        private static void xvmEdit(string fileContents, StringBuilder sb, string newFilePath, string replaceValue, string search)
+        {
+            bool modified = false;
+            //this is the actual value we want to change
+            //get past all the boring stuff
+            readUntill(fileContents, sb, @":[ \t]*");
+            string toReplace = readUntill(fileContents, sb, @"[,}\]]", false);
+            //actually replace the value
+            //check if it's a comma type (not last) or curley bracket (last)
+            string replaced = "";
+            if (Regex.IsMatch(toReplace, @",$"))
+            {
+                if (Regex.IsMatch(toReplace, search + ",$"))
+                {
+                    replaced = " " + replaceValue + ",";
+                    modified = true;
+                    patchDone = true;
+                }
+            }
+            else
+            {
+                if (Regex.IsMatch(toReplace, search))
+                {
+                    replaced = replaceValue + "\n";
+                    modified = true;
+                    patchDone = true;
+                }
+            }
+            sb.Append(replaced);
+            readUntillEnd(fileContents, sb);
+
+            if (modified)
+            {
+                File.Delete(newFilePath);
+                File.WriteAllText(newFilePath, sb.ToString());
+            }
+            
+        }
+        //adding a new entry. adds to the top of the parent entry
+        private static void xvmAdd(string fileContents, StringBuilder sb, string newFilePath, string replaceValue, string search)
+        {
+            bool modified = false;
+            string replaced = "";
+            //read to the end of that line
+            readUntill(fileContents,  sb,  @"[,{}]$");
+            //determine if it stopped in groups of eithor ([ , {) or
+            char c = fileContents[numByteReads - 1];
+            if (c.Equals('}'))
+            {
+                //back the truck up
+                numByteReads--;
+                sb.Remove(sb.Length - 1, 1);
+            }
+            //append it in the sb
+            replaced = "\n" + replaceValue;
+            if (!c.Equals('}'))
+                replaced = replaced + ",";
+            else
+                replaced = "," + replaced;
+            sb.Append(replaced);
+            readUntillEnd(fileContents, sb);
+            modified = true;
+            patchDone = true;
+            if (modified)
+            {
+                File.Delete(newFilePath);
+                File.WriteAllText(newFilePath, sb.ToString());
+            }
+        }
+        //clearing out an array
+        private static void xvmArrayClear(string fileContents, StringBuilder sb, string newFilePath, string replaceValue, string search)
+        {
+            //advance reader to start of the array
+            readUntill(fileContents, sb, @"\[");
+            //advance reader to end of array, not saving sb
+            readUntill(fileContents, sb, @"\]",false);
+            sb.Append("]");
+            bool modified = false;
+            readUntillEnd(fileContents, sb);
+            modified = true;
+            patchDone = true;
+            if (modified)
+            {
+                File.Delete(newFilePath);
+                File.WriteAllText(newFilePath, sb.ToString());
+            }
+        }
+        //adding a new entry
+        private static void xvmArrayAdd(string fileContents, StringBuilder sb, string newFilePath, string replaceValue, string search)
+        {
+            bool modified = false;
+            string replaced = "";
+            //all it needs to do is add it
+            replaced = replaced + replaceValue + ",";
+            //append it in the sb
+            sb.Append(replaced);
+            readUntillEnd(fileContents, sb);
+            modified = true;
+            patchDone = true;
+            if (modified)
+            {
+                File.Delete(newFilePath);
+                File.WriteAllText(newFilePath, sb.ToString());
+            }
+        }
+        //editing an existing entry
+        private static void xvmArrayEdit(string fileContents, StringBuilder sb, string newFilePath, string replaceValue, string search)
+        {
+            bool modified = false;
+            //move past it and save int input
+            string editCheck = readUntill(fileContents, sb, @"[,\]]",false);
+            if (Regex.IsMatch(editCheck, search))
+            {
+                editCheck = Regex.Replace(editCheck, search, replaceValue);
+                //append it in the sb
+                sb.Append(editCheck);
+                readUntillEnd(fileContents, sb);
+                modified = true;
+                patchDone = true;
+            }
+            if (modified)
+            {
+                File.Delete(newFilePath);
+                File.WriteAllText(newFilePath, sb.ToString());
+            }
+        }
+        //removing an existing entry
+        private static void xvmArrayRemove(string fileContents, StringBuilder sb, string newFilePath, string replaceValue, string search)
+        {
+            bool modified = false;
+            //move past it and save int input
+            string editCheck = readUntill(fileContents, sb, @"[,\]]",false);
+            if (Regex.IsMatch(editCheck, search))
+            {
+                editCheck = Regex.Replace(editCheck, search, "");
+                //append it in the sb
+                sb.Append(editCheck);
+                readUntillEnd(fileContents, sb);
+                modified = true;
+                patchDone = true;
+            }
+            if (modified)
+            {
+                File.Delete(newFilePath);
+                File.WriteAllText(newFilePath, sb.ToString());
+            }
+        }
+        //advances the reader untill a certain set of characters are found
+        private static string readUntill(string fileContents, StringBuilder sb, string stopAt, bool save = true)
+        {
+            string readValues = "";
+            while (!Regex.IsMatch(readValues, stopAt, RegexOptions.Multiline))
+            {
+                char c = fileContents[numByteReads];
+                numByteReads++;
+                readValues = readValues + c;
+                if (save)
+                    sb.Append(c);
+            }
+            return readValues;
+        }
+        //generic readAhead method of above
+        private static string readUntillGeneric(string s, string stopAt)
+        {
+            genericTraverse = 0;
+            string readValues = "";
+            while (!Regex.IsMatch(readValues, stopAt, RegexOptions.Multiline))
+            {
+                if (genericTraverse >= s.Count())
+                    return readValues;
+                char c = s[genericTraverse];
+                genericTraverse++;
+                readValues = readValues + c;
+            }
+            return readValues;
+        }
+        //advances the reader x ammout of characters
+        private static string readUntill(string fileContents, StringBuilder sb, int stopAt, bool save = true)
+        {
+            string readValues = "";
+            int session = 0;
+            while (session != stopAt)
+            {
+                char c = fileContents[numByteReads];
+                numByteReads++;
+                session++;
+                readValues = readValues + c;
+                if (save)
+                    sb.Append(c);
+            }
+            return readValues;
+        }
+        //advances the reader untill the end
+        private static string readUntillEnd(string fileContents, StringBuilder sb)
+        {
+            string readValues = "";
+            while (numByteReads < fileContents.Length)
+            {
+                char c = fileContents[numByteReads];
+                numByteReads++;
+                readValues = readValues + c;
+                sb.Append(c);
+            }
+            return readValues;
+        }
+        //looks ahead untill a certain set of characters are found
+        private static string peekUntill(string fileContents, StringBuilder sb, string stopAt)
+        {
+            string readValues = "";
+            int numPeeks = 0;
+            while (!Regex.IsMatch(readValues, stopAt, RegexOptions.Multiline))
+            {
+                if (numByteReads > fileContents.Count())
+                    return readValues;
+                char c = fileContents[numByteReads];
+                numByteReads++;
+                readValues = readValues + c;
+                numPeeks++;
+            }
+            numByteReads = numByteReads - numPeeks;
+            return readValues;
+        }
+        //looks ahead untill a certain amount of characters are found
+        private static string peekUntill(string fileContents, StringBuilder sb, int stopAt)
+        {
+            string readValues = "";
+            int numPeeks = 0;
+            while (numPeeks != stopAt)
+            {
+                if (numByteReads > fileContents.Count())
+                    return readValues;
+                char c = fileContents[numByteReads];
+                numByteReads++;
+                readValues = readValues + c;
+                numPeeks++;
+            }
+            numByteReads = numByteReads - numPeeks;
+            return readValues;
+        }
+        //splits text into an array based on a regex match
+        private static List<string> split(string stringToSplit, string regexSplitCommand)
+        {
+            List<string> temp = new List<string>();
+            int saveNumReadBytes = 0;
+            string readValues = "";
+            while (saveNumReadBytes <= stringToSplit.Count())
+            {
+                int startBracketCount = 0;
+                while (true)
+                {
+                    if (Regex.IsMatch(readValues, regexSplitCommand))
+                    {
+                        //if it was a bracket, try to see if there's a comma next
+                        char c2 = stringToSplit[saveNumReadBytes + 1];
+                        if (c2.Equals(','))
+                        {
+                            readValues = readValues + c2;
+                            saveNumReadBytes++;
+                        }
+                        if (startBracketCount <= 1)
+                            break;
+                        startBracketCount--;
+                    }
+                    if (saveNumReadBytes >= stringToSplit.Count())
+                    {
+                        readValues = readValues.Substring(0, readValues.Length - 1);
+                        temp.Add(readValues);
+                        return temp;
+                    }
+                    char c = stringToSplit[saveNumReadBytes];
+                    if (c.Equals('{'))
+                        startBracketCount++;
+                    saveNumReadBytes++;
+                    readValues = readValues + c;
+                }
+                temp.Add(readValues);
+                readValues = "";
+            }
+            return temp;
         }
         //unchecks all mods from memory
         public static void clearSelectionMemory(List<Category> parsedCatagoryList)

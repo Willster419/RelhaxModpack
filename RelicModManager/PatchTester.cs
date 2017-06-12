@@ -8,11 +8,10 @@ namespace RelhaxModpack
 {
     public partial class PatchTester : Form
     {
-        private MainWindow mw;
+        private string xvmMode = "";
         public PatchTester()
         {
             InitializeComponent();
-            mw = new MainWindow();
         }
 
         private void xmlAddModeButton_CheckedChanged(object sender, EventArgs e)
@@ -213,6 +212,83 @@ namespace RelhaxModpack
 
             XmlElement replace = doc.CreateElement("replace");
             replace.InnerText = jsonReplaceBox.Text;
+            patch.AppendChild(replace);
+
+            doc.Save(fileName);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //Utils.jsonPatch(jsonFilePathBox.Text, jsonPathBox.Text, jsonReplaceBox.Text, "edit","","", true);
+            //[[ \\t]*\"src\"[ \\t]*:[ \\t]*\".*\"]endIndex
+            //[4]endIndex
+            //edit example
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.saveLastServer", ".*", "false", "edit", "", "", true);
+            //add example
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.pingServers.fontStyle", "", "    \"isAwesome\": true", "add", "", "", true);
+            //array clear example
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "battleLabels.formats", "", "", "array_clear", "", "", true);
+            //array add example
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[4]endIndex", "", "\"SCUMBAG\"", "array_add", "", "", true);
+            //array edit example
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[4]endIndex", "SCUMBAG", "DICKWAD", "array_edit", "", "", true);
+            //array remove example
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[4]endIndex", "\"DICKWAD\",", "", "array_remove", "", "", true);
+            //array remove example 2
+            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[\"FAGGOT\"]endIndex", ".*", "", "array_remove", "", "", true);
+        }
+
+        private void xvm_modeToggle(object sender, EventArgs e)
+        {
+            RadioButton rb = (RadioButton)sender;
+            xvmMode = rb.Text;
+        }
+
+        private void xvmLoadFileButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = xvmFileDialog.ShowDialog();
+            if (result == DialogResult.Cancel)
+                return;
+            xvmFilePathBox.Text = xvmFileDialog.FileName;
+        }
+
+        private void xvmPathButton_Click(object sender, EventArgs e)
+        {
+            //Utils.jsonPatch(jsonFilePathBox.Text, jsonPathBox.Text, jsonReplaceBox.Text, "edit", "", "", true);
+            Utils.xvmPatch(xvmFilePathBox.Text, xvmPathBox.Text, xvmSearchBox.Text, xvmReplaceBox.Text, xvmMode, "", "", true);
+        }
+
+        private void xvmMakePatchButton_Click(object sender, EventArgs e)
+        {
+            string fileName = Path.GetFileName(xvmFilePathBox.Text) + "_patch.xml";
+            XmlDocument doc = new XmlDocument();
+            XmlElement patchHolder = doc.CreateElement("patchs");
+            doc.AppendChild(patchHolder);
+            XmlElement patch = doc.CreateElement("patch");
+            patchHolder.AppendChild(patch);
+
+            XmlElement type = doc.CreateElement("type");
+            type.InnerText = "xvm";
+            patch.AppendChild(type);
+
+            XmlElement mode = doc.CreateElement("mode");
+            mode.InnerText = xvmMode;
+            patch.AppendChild(mode);
+
+            XmlElement file = doc.CreateElement("file");
+            file.InnerText = xvmFilePathBox.Text;
+            patch.AppendChild(file);
+
+            XmlElement line = doc.CreateElement("path");
+            line.InnerText = xvmPathBox.Text;
+            patch.AppendChild(line);
+
+            XmlElement search = doc.CreateElement("search");
+            search.InnerText = xvmSearchBox.Text;
+            patch.AppendChild(search);
+
+            XmlElement replace = doc.CreateElement("replace");
+            replace.InnerText = xvmReplaceBox.Text;
             patch.AppendChild(replace);
 
             doc.Save(fileName);

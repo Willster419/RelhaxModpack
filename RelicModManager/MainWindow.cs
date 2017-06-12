@@ -26,7 +26,7 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 23.0.5";
+        private string managerVersion = "version 23.1.0";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -397,6 +397,12 @@ namespace RelhaxModpack
                     //perform json patch
                     Utils.appendToLog("Json patch, " + p.file + ", " + p.path + ", " + p.replace);
                     Utils.jsonPatch(p.file, p.path, p.replace, p.mode,tanksLocation, tanksVersion);
+                }
+                else if (p.type.Equals("xvm"))
+                {
+                    //perform xvm style json patch
+                    Utils.appendToLog("XVM patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
+                    Utils.xvmPatch(p.file, p.path, p.search, p.replace, p.mode, tanksLocation, tanksVersion);
                 }
             }
             //all done, delete the patch folder
@@ -816,7 +822,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             Utils.appendToLog("|RelHax Modpack " + managerVersion);
-            Utils.appendToLog("|Built on 06/02/2017, running at " + DateTime.Now);
+            Utils.appendToLog("|Built on 06/11/2017, running at " + DateTime.Now);
             Utils.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program

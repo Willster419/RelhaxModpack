@@ -33,7 +33,7 @@ namespace RelhaxModpack
         public enum LoadingGifs { standard = 0, thirdGuards = 1 };
         public static LoadingGifs gif;
         public const float normalSizeFont = 8.25F;
-        public const float largeSizeFont = 10.0F;
+        public const float largeSizeFont = 12.0F;
         public const string defaultFontType = "Microsoft Sance Serif";
         public const string comicSansFontType = "Comic Sans MS";
         private static int tempLoadedLanguage = -1;
