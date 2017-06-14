@@ -582,17 +582,13 @@ namespace RelhaxModpack
                 filePath = tanksLocation + "\\res_mods" + filePath;
             }
 
-            if (testMods)
-            {
-
-            }
-            else
+            if (!testMods && Regex.IsMatch(filePath,"versiondir"))
             {
                 //patch versiondir out of filePath
                 filePath = Regex.Replace(filePath, "versiondir", tanksVersion);
             }
             //patch xvmConfigFolderName out of fileLocation
-            if (!testMods)
+            if (!testMods && Regex.IsMatch(filePath, "xvmConfigFolderName"))
             {
                 string s = getXVMBootLoc(tanksLocation);
                 if (s != null)
@@ -779,17 +775,13 @@ namespace RelhaxModpack
                 fileLocation = tanksLocation + "\\res_mods" + fileLocation;
             }
 
-            if (testMods)
-            {
-
-            }
-            else
+            if (!testMods && Regex.IsMatch(fileLocation,"versiondir"))
             {
                 //patch versiondir out of fileLocation
                 fileLocation = Regex.Replace(fileLocation, "versiondir", tanksVersion);
             }
             //patch xvmConfigFolderName out of fileLocation
-            if (!testMods)
+            if (!testMods && Regex.IsMatch(fileLocation, "xvmConfigFolderName"))
             {
                 string s = getXVMBootLoc(tanksLocation);
                 if (s != null)
@@ -883,9 +875,7 @@ namespace RelhaxModpack
                 useDouble = false;
             }
             catch (FormatException)
-            {
-
-            }
+            {}
             //try a double nixt. it will parse a double and int. at this point it could be eithor
             try
             {
@@ -893,9 +883,7 @@ namespace RelhaxModpack
                 useDouble = true;
             }
             catch (FormatException)
-            {
-
-            }
+            {}
             //try an int next. if it works than turn double to false and int to true
             try
             {
@@ -904,9 +892,7 @@ namespace RelhaxModpack
                 useDouble = false;
             }
             catch (FormatException)
-            {
-
-            }
+            {}
             //check if it's the new structure
             if (Regex.IsMatch(jsonFile, "^\\\\\\\\res_mods"))
             {
@@ -929,16 +915,12 @@ namespace RelhaxModpack
             }
 
             //patch versiondir out of fileLocation
-            if (testMods)
-            {
-
-            }
-            else
+            if (!testMods && Regex.IsMatch(jsonFile, "versiondir"))
             {
                 jsonFile = Regex.Replace(jsonFile, "versiondir", tanksVersion);
             }
             //patch xvmConfigFolderName out of fileLocation
-            if (!testMods)
+            if (!testMods && Regex.IsMatch(jsonFile, "xvmConfigFolderName"))
             {
                 string s = getXVMBootLoc(tanksLocation);
                 if (s!=null)
@@ -1136,12 +1118,12 @@ namespace RelhaxModpack
             }
 
             //patch versiondir out of fileLocation
-            if (!testMods)
+            if (!testMods && Regex.IsMatch(bootFile, "versiondir"))
             {
                 bootFile = Regex.Replace(bootFile, "versiondir", tanksVersion);
             }
             //patch xvmConfigFolderName out of fileLocation
-            if (!testMods)
+            if (!testMods && Regex.IsMatch(bootFile, "xvmConfigFolderName"))
             {
                 string s = getXVMBootLoc(tanksLocation);
                 if (s != null)

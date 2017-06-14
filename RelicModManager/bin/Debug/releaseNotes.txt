@@ -1,3 +1,7 @@
+Version 23.1.7:
+-Fixed bugs with saving of user data files (like session stats)
+-Improved efficiency with logic of the patching system
+
 Version 23.1.6:
 -Fixed bugs with keywords for all patching systems
 

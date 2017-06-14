@@ -26,7 +26,7 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 23.1.6";
+        private string managerVersion = "version 23.1.7";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -106,6 +106,8 @@ namespace RelhaxModpack
         private string fodlerDateName;
         private string suportedVersions = null;
         string[] supportedVersions = null;
+        List<Mod> modsWithData = new List<Mod>();
+        List<Config> configsWithData = new List<Config>();
 
         //The constructur for the application
         public MainWindow()
@@ -811,7 +813,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             Utils.appendToLog("|RelHax Modpack " + managerVersion);
-            Utils.appendToLog("|Built on 06/13/2017, running at " + DateTime.Now);
+            Utils.appendToLog("|Built on 06/14/2017, running at " + DateTime.Now);
             Utils.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -1096,6 +1098,8 @@ namespace RelhaxModpack
             dependencies = new List<Dependency>();
             configListsToInstall = new List<List<Config>>();
             parsedCatagoryLists = list.parsedCatagoryList;
+            modsWithData = new List<Mod>();
+            configsWithData = new List<Config>();
             //add the global dependencies to the dependency list
             foreach (Dependency d in list.globalDependencies)
             {
@@ -1122,6 +1126,9 @@ namespace RelhaxModpack
                         //also check that it actually has a zip file
                         if (!m.zipFile.Equals(""))
                             modsToInstall.Add(m);
+                        //since it is checked, regardless if it has a zipfile, check if it has userdata
+                        if (m.userFiles.Count > 0)
+                            modsWithData.Add(m);
                         //at least one mod of this catagory is checked, add any dependencies required
                         //add dependencies
                         foreach (Dependency d in c.dependencies)
@@ -1132,7 +1139,6 @@ namespace RelhaxModpack
                         }
                         if (m.configs.Count > 0)
                         {
-                            
                             processConfigsToInstall(m.configs, 0);
                         }
                         foreach (Dependency d in m.dependencies)
@@ -1296,8 +1302,11 @@ namespace RelhaxModpack
                         //same for configs
                         configListsToInstall[level].Add(cc);
                     }
+                    //since it is checked, regardless if it has a zipfile, check if it has userdata
+                    if (cc.userFiles.Count > 0)
+                        configsWithData.Add(cc);
                     if (cc.configs.Count >0)
-                    processConfigsToInstall(cc.configs, level+1);
+                        processConfigsToInstall(cc.configs, level+1);
                     //check to see if any catagory dependencies need to be added
                     if (cc.dependencies.Count > 0)
                     {
@@ -1732,8 +1741,11 @@ namespace RelhaxModpack
                 state = InstallState.patchUserMods;
                 Utils.appendToLog("Starting to patch Relhax User Mods");
                 this.patchFiles();
-                state = InstallState.restoreUserData;
-                this.restoreUserData();
+                if (Settings.saveUserData)
+                {
+                    state = InstallState.restoreUserData;
+                    this.restoreUserData();
+                }
                 state = InstallState.installFonts;
                 this.installFonts();
                 return;
@@ -2205,12 +2217,6 @@ namespace RelhaxModpack
 
         private void backupUserData()
         {
-            List<Mod> modsWithData = new List<Mod>();
-            foreach (Mod m in modsToInstall)
-            {
-                if (m.userFiles.Count > 0)
-                    modsWithData.Add(m);
-            }
             foreach (Mod m in modsWithData)
             {
                 foreach (string s in m.userFiles)
@@ -2221,16 +2227,20 @@ namespace RelhaxModpack
                         File.Move(startLoc, destLoc);
                 }
             }
+            foreach (Config cfg in configsWithData)
+            {
+                foreach (string s in cfg.userFiles)
+                {
+                    string startLoc = tanksLocation + s;
+                    string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + cfg.name + "_" + Path.GetFileName(s);
+                    if (File.Exists(startLoc))
+                        File.Move(startLoc, destLoc);
+                }
+            }
         }
 
         private void restoreUserData()
         {
-            List<Mod> modsWithData = new List<Mod>();
-            foreach (Mod m in modsToInstall)
-            {
-                if (m.userFiles.Count > 0)
-                    modsWithData.Add(m);
-            }
             string[] fileList = Directory.GetFiles(Application.StartupPath + "\\RelHaxTemp");
             foreach (Mod m in modsWithData)
             {
@@ -2238,6 +2248,27 @@ namespace RelhaxModpack
                 {
                     //find the file
                     string parsedFileName = m.name + "_" + Path.GetFileName(s);
+                    foreach (string ss in fileList)
+                    {
+                        string thePath = Path.GetFileName(ss);
+                        if (thePath.Equals(parsedFileName))
+                        {
+                            //the file has been found in the temp directory
+                            if (!Directory.Exists(tanksLocation + "\\" + Path.GetFullPath(s)))
+                                Directory.CreateDirectory(tanksLocation + "\\" + Path.GetDirectoryName(s));
+                            if (File.Exists(tanksLocation + "\\" + s))
+                                File.Delete(tanksLocation + "\\" + s);
+                            File.Move(ss, tanksLocation + "\\" + s);
+                        }
+                    }
+                }
+            }
+            foreach (Config cfg in configsWithData)
+            {
+                foreach (string s in cfg.userFiles)
+                {
+                    //find the file
+                    string parsedFileName = cfg.name + "_" + Path.GetFileName(s);
                     foreach (string ss in fileList)
                     {
                         string thePath = Path.GetFileName(ss);
