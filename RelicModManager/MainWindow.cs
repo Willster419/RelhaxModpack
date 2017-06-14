@@ -26,7 +26,7 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 23.1.4";
+        private string managerVersion = "version 23.1.5";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -442,7 +442,7 @@ namespace RelhaxModpack
             {
                 Utils.appendToLog("No fonts to install");
                 //no fonts to install, done display
-                if(!Program.autoInstall)
+                if(!Program.autoInstall && !Program.testMode)
                 this.checkForOldZipFiles();
                 this.doneDisplay();
                 return;
@@ -452,7 +452,7 @@ namespace RelhaxModpack
             {
                 //done display
                 Utils.appendToLog("No fonts to install");
-                if (!Program.autoInstall)
+                if (!Program.autoInstall && !Program.testMode)
                 this.checkForOldZipFiles();
                 this.doneDisplay();
                 return;
@@ -485,7 +485,7 @@ namespace RelhaxModpack
             {
                 Utils.appendToLog("No fonts to install");
                 //done display
-                if (!Program.autoInstall)
+                if (!Program.autoInstall && !Program.testMode)
                 this.checkForOldZipFiles();
                 this.doneDisplay();
                 return;
@@ -540,32 +540,24 @@ namespace RelhaxModpack
                     Utils.appendToLog("target: " + e.TargetSite);
                     Utils.appendToLog("ERROR: could not start font installer");
                     MessageBox.Show(Translations.getTranslatedString("fontsPromptError_1") + tanksLocation + Translations.getTranslatedString("fontsPromptError_2"));
-                    speedLabel.Text = "";
-                    downloadProgress.Text = Translations.getTranslatedString("done");
-                    parrentProgressBar.Maximum = 1;
-                    parrentProgressBar.Value = parrentProgressBar.Maximum;
-                    childProgressBar.Value = childProgressBar.Maximum;
-                    state = InstallState.idle;
-                    toggleUIButtons(true);
+                    if (!Program.autoInstall && !Program.testMode)
+                        this.checkForOldZipFiles();
+                    this.doneDisplay();
                     Utils.appendToLog("Installation done, but fonts install failed");
                     return;
                 }
                 if (Directory.Exists(tanksLocation + "\\_fonts"))
                     Directory.Delete(tanksLocation + "\\_fonts", true);
-                speedLabel.Text = "";
-                downloadProgress.Text = Translations.getTranslatedString("done");
-                parrentProgressBar.Maximum = 1;
-                parrentProgressBar.Value = parrentProgressBar.Maximum;
-                childProgressBar.Value = childProgressBar.Maximum;
-                state = InstallState.idle;
-                toggleUIButtons(true);
+                if (!Program.autoInstall && !Program.testMode)
+                    this.checkForOldZipFiles();
+                this.doneDisplay();
                 Utils.appendToLog("Fonts Installed Successfully");
                 Utils.appendToLog("Installation done");
             }
             else
             {
                 Utils.appendToLog("Installation done, but fonts install failed");
-                if (!Program.autoInstall)
+                if (!Program.autoInstall && !Program.testMode)
                 this.checkForOldZipFiles();
                 this.doneDisplay();
             }
@@ -819,7 +811,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             Utils.appendToLog("|RelHax Modpack " + managerVersion);
-            Utils.appendToLog("|Built on 06/12/2017, running at " + DateTime.Now);
+            Utils.appendToLog("|Built on 06/13/2017, running at " + DateTime.Now);
             Utils.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program

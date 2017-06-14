@@ -1,3 +1,9 @@
+Version 23.1.5:
+-Fixed bugs with test installation mode
+-Fixed bugs with the XVM patcher
+-Updated Translations
+-Other back-end fixes
+
 Version 23.1.4:
 -Fixed bugs with the deleting of old downloaded zip files
 

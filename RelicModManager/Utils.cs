@@ -21,6 +21,8 @@ namespace RelhaxModpack
         private static bool patchDone = false;
         private static int genericTraverse = 0;
         private static List<string> parsedZips;
+        private static string xvmBootFileLoc1 = "\\res_mods\\configs\\xvm\\xvm.xc";
+        private static string xvmBootFileLoc2 = "\\mods\\configs\\xvm\\xvm.xc";
         //logs string info to the log output
         public static void appendToLog(string info)
         {
@@ -558,7 +560,7 @@ namespace RelhaxModpack
         }
         //method to patch a part of an xml file
         //fileLocation is relative to res_mods folder
-        public static void xmlPatch(string filePath, string xpath, string mode, string search, string replace, string tanksLocation, string tanksVersion, bool testMods = false)
+        public static void xmlPatch(string filePath, string xpath, string mode, string search, string replace, string tanksLocation, string tanksVersion, bool testMods = false, string testXVMBootLoc = "")
         {
             if (Regex.IsMatch(filePath, "^\\\\\\\\res_mods"))
             {
@@ -588,6 +590,20 @@ namespace RelhaxModpack
             {
                 //patch versiondir out of filePath
                 filePath = Regex.Replace(filePath, "versiondir", tanksVersion);
+            }
+            //patch xvmConfigFolderName out of fileLocation
+            if (!testMods)
+            {
+                filePath = Regex.Replace(filePath, "xvmConfigFolderName", getXVMBootLoc(tanksLocation));
+            }
+            else
+            {
+                //patch check mode, try to get boot xvm file from the xvm boot textbox
+                if (testXVMBootLoc.Equals("") && Regex.IsMatch(filePath, "xvmConfigFolderName"))
+                {
+                    MessageBox.Show("Attempted to use variable \"xvmConfigFolderName\", but nothing in the xvm boot file location text box");
+                    return;
+                }
             }
 
             //verify the file exists...
@@ -739,7 +755,7 @@ namespace RelhaxModpack
         }
         //method to patch a standard text or json file
         //fileLocation is relative to res_mods folder
-        public static void RegxPatch(string fileLocation, string search, string replace, string tanksLocation, string tanksVersion, int lineNumber = 0, bool testMods = false)
+        public static void RegxPatch(string fileLocation, string search, string replace, string tanksLocation, string tanksVersion, int lineNumber = 0, bool testMods = false, string testXVMBootLoc = "")
         {
             if (Regex.IsMatch(fileLocation, "^\\\\\\\\res_mods"))
             {
@@ -769,6 +785,20 @@ namespace RelhaxModpack
             {
                 //patch versiondir out of fileLocation
                 fileLocation = Regex.Replace(fileLocation, "versiondir", tanksVersion);
+            }
+            //patch xvmConfigFolderName out of fileLocation
+            if (!testMods)
+            {
+                fileLocation = Regex.Replace(fileLocation, "xvmConfigFolderName", getXVMBootLoc(tanksLocation));
+            }
+            else
+            {
+                //patch check mode, try to get boot xvm file from the xvm boot textbox
+                if (testXVMBootLoc.Equals("") && Regex.IsMatch(fileLocation, "xvmConfigFolderName"))
+                {
+                    MessageBox.Show("Attempted to use variable \"xvmConfigFolderName\", but nothing in the xvm boot file location text box");
+                    return;
+                }
             }
 
             //check that the file exists
@@ -831,7 +861,7 @@ namespace RelhaxModpack
             File.WriteAllText(fileLocation, file);
         }
         //method to parse json files
-        public static void jsonPatch(string jsonFile, string jsonPath, string newValue, string mode, string tanksLocation, string tanksVersion, bool testMods = false)
+        public static void jsonPatch(string jsonFile, string jsonPath, string newValue, string mode, string tanksLocation, string tanksVersion, bool testMods = false, string testXVMBootLoc = "")
         {
             //try to convert the new value to a bool or an int or double first
             bool newValueBool = false;
@@ -902,6 +932,20 @@ namespace RelhaxModpack
             else
             {
                 jsonFile = Regex.Replace(jsonFile, "versiondir", tanksVersion);
+            }
+            //patch xvmConfigFolderName out of fileLocation
+            if (!testMods)
+            {
+                jsonFile = Regex.Replace(jsonFile, "xvmConfigFolderName", getXVMBootLoc(tanksLocation));
+            }
+            else
+            {
+                //patch check mode, try to get boot xvm file from the xvm boot textbox
+                if (testXVMBootLoc.Equals("") && Regex.IsMatch(jsonFile, "xvmConfigFolderName"))
+                {
+                    MessageBox.Show("Attempted to use variable \"xvmConfigFolderName\", but nothing in the xvm boot file location text box");
+                    return;
+                }
             }
 
             //check that the file exists
@@ -1059,7 +1103,7 @@ namespace RelhaxModpack
             File.WriteAllText(jsonFile, rebuilder.ToString());
         }
 
-        public static void xvmPatch(string bootFile, string xvmPath, string search, string newValue, string mode, string tanksLocation, string tanksVersion, bool testMods = false)
+        public static void xvmPatch(string bootFile, string xvmPath, string search, string newValue, string mode, string tanksLocation, string tanksVersion, bool testMods = false, string testXVMBootLoc = "")
         {
             numByteReads = 0;
             patchDone = false;
@@ -1086,13 +1130,23 @@ namespace RelhaxModpack
             }
 
             //patch versiondir out of fileLocation
-            if (testMods)
+            if (!testMods)
             {
-
+                bootFile = Regex.Replace(bootFile, "versiondir", tanksVersion);
+            }
+            //patch xvmConfigFolderName out of fileLocation
+            if (!testMods)
+            {
+                bootFile = Regex.Replace(bootFile, "xvmConfigFolderName", getXVMBootLoc(tanksLocation));
             }
             else
             {
-                bootFile = Regex.Replace(bootFile, "versiondir", tanksVersion);
+                //patch check mode, try to get boot xvm file from the xvm boot textbox
+                if (testXVMBootLoc.Equals("") && Regex.IsMatch(bootFile,"xvmConfigFolderName"))
+                {
+                    MessageBox.Show("Attempted to use variable \"xvmConfigFolderName\", but nothing in the xvm boot file location text box");
+                    return;
+                }
             }
 
             //check that the file exists
@@ -1111,6 +1165,16 @@ namespace RelhaxModpack
             //read untill *start of string*${
             numByteReads = 0;
             string fileContents = File.ReadAllText(bootFile);
+            fileContents = Regex.Replace(fileContents, @"\/\*.*\*\/", "",RegexOptions.Singleline);
+            string[] removeComments = fileContents.Split('\n');
+            StringBuilder bootBuilder = new StringBuilder();
+            foreach (string s in removeComments)
+            {
+                if(Regex.IsMatch(s,@"\/\/.*$"))
+                    continue;
+                bootBuilder.Append(s + "\n");
+            }
+            fileContents = bootBuilder.ToString();
             readUntill(fileContents,  sb, @"^[ \t]*\$[ \t]*{[ \t]*""");
             //now read untill the next quote for the temp path
             string filePath = readUntill(fileContents,  sb, "\"");
@@ -1147,38 +1211,16 @@ namespace RelhaxModpack
                 //read untill the value we want
                 readUntill(fileContents, sb, regex);
                 //determine if the this value is actually a file refrence
-                string refrenceTest = peekUntill(fileContents, sb, @"[,}\]]$");
-                if(Regex.IsMatch(refrenceTest,@"\${"""))
+                string refrenceTest = peekUntill(fileContents, @"[\[,}\]]$");
+                if(Regex.IsMatch(refrenceTest,@"\${[ \t]*""") && !isArrayIndex)
                 {
-                    //it's a refrence, move it to the next file and readInsideEdit (yes recursion)
-                    readUntill(fileContents,  sb, @"\${""");
-                    //now read untill the next quote for the temp path
-                    string filePath = readUntill(fileContents,  sb, "\"");
-                    //read untill the next quote
-                    readUntill(fileContents, sb, "\"");
-                    pathArray[0] = readUntill(fileContents, sb, "\"");
-                    pathArray[0] = pathArray[0].Substring(0, pathArray[0].Length - 1);
-                    //flip the folder path things
-                    filePath = Regex.Replace(filePath, "/", "\\");
-                    //remove the last one
-                    filePath = filePath.Substring(0, filePath.Length - 1);
-                    filePath = filePath.Trim();
-                    readInside(pathArray, Path.GetDirectoryName(newFilePath) + "\\" + filePath, replaceValue, search, mode, origXvmPath);
+                    parseRefrence1(pathArray,newFilePath,replaceValue,search,mode,origXvmPath,fileContents,sb);
                 }
                 //determine if it is the other type of refrence
-                string refrenceTest2 = peekUntill(fileContents, sb, @"[,}\]]$");
-                if(Regex.IsMatch(refrenceTest2,@"""\$ref"":"))
+                string refrenceTest2 = peekUntill(fileContents, @"[\[,}\]]$");
+                if(Regex.IsMatch(refrenceTest2,@"""\$ref"":") && !isArrayIndex)
                 {
-                    //ref style refrence
-                    readUntill(fileContents, sb, @"""\$ref"":");
-                    readUntill(fileContents, sb, ":");
-                    readUntill(fileContents, sb, "\"");
-                    string filePath = readUntill(fileContents, sb, "\"");
-                    filePath = Regex.Replace(filePath, "/", "\\");
-                    filePath = filePath.Substring(0, filePath.Length - 1);
-                    filePath = filePath.Trim();
-                    readInside(pathArray, Path.GetDirectoryName(newFilePath) + "\\" + filePath, replaceValue, search, mode, origXvmPath);
-                    //readUntill(fileContents, sb, ":");
+                    parseRefrence2(pathArray, newFilePath, replaceValue, search, mode, origXvmPath, fileContents, sb);
                 }
                 //determine if it is an array
                 if (isArrayIndex)
@@ -1186,7 +1228,7 @@ namespace RelhaxModpack
                     int indexToReadTo = 0;
                     //split the array into an array lol
                     readUntill(fileContents,  sb, @"\[");
-                    string arrayContents = peekUntill(fileContents, sb,  @"\]");
+                    string arrayContents = peekUntill(fileContents,  @"\]");
                     //split the array based on "},"
                     //string[] carray = arrayContents.Split("},");
                     List<string> carray = split(arrayContents, @"[,}]$");
@@ -1215,6 +1257,7 @@ namespace RelhaxModpack
                             borken1 = borken1 + s + ".";
                         genericTraverse = 0;
                         readUntillGeneric(borken1, @"\[");
+                        genericTraverse = 0;
                         string anotherString2 = readUntillGeneric(borken1, @"\]endIndex");
                         genericTraverse = 0;
                         pathArray[0] = anotherString2;
@@ -1254,9 +1297,15 @@ namespace RelhaxModpack
                     {
                         advanceTo = advanceTo + carray[i];
                     }
+                    //get it to right before the desired index starts
                     readUntill(fileContents, sb, advanceTo.Count());
-                    //get it to the root of the array
-                    //readUntill(fileContents, sb, @"[{\$]");
+                    //determine if the this value is actually a file refrence
+                    string refrenceTest5 = peekUntill(fileContents, @"[,}\]]$");
+                    if (Regex.IsMatch(refrenceTest5, @"\${[ \t]*"""))
+                    {
+                        if(mode.Equals("add") || mode.Equals("edit"))
+                            parseRefrence1(pathArray, newFilePath, replaceValue, search, mode, origXvmPath, fileContents, sb);
+                    }
                 }
                 //we found it so remove it from the path
                 if(pathArray.Count != 0)
@@ -1294,6 +1343,59 @@ namespace RelhaxModpack
                         break;
                 }
             }
+        }
+        //parse the xvm style refrence
+        private static void parseRefrence1(List<string> pathArray, string newFilePath, string replaceValue, string search, string mode, string origXvmPath, string fileContents, StringBuilder sb)
+        {
+            //it's a refrence, move it to the next file and readInsideEdit (yes recursion)
+            readUntill(fileContents, sb, @"\${[ \t]*""");
+            //now read untill the next quote for the temp path
+            string filePath = readUntill(fileContents, sb, "\"");
+            //check to see if it is only a refrence withen the same file
+            string test = peekUntill(fileContents, "}");
+            if (Regex.IsMatch(test, ":"))
+            {
+                //new file refrence
+                //read untill the next quote
+                readUntill(fileContents, sb, "\"");
+                string tempPath = readUntill(fileContents, sb, "\"");
+                tempPath = tempPath.Substring(0, tempPath.Length - 1);
+                string[] newPathSplit = tempPath.Split('.');
+                pathArray[0] = newPathSplit[0];
+                for (int i = 1; i < newPathSplit.Count(); i++)
+                    pathArray.Insert(1, newPathSplit[i]);
+
+                //flip the folder path things
+                filePath = Regex.Replace(filePath, "/", "\\");
+                //remove the last one
+                filePath = filePath.Substring(0, filePath.Length - 1);
+                filePath = filePath.Trim();
+                readInside(pathArray, Path.GetDirectoryName(newFilePath) + "\\" + filePath, replaceValue, search, mode, origXvmPath);
+            }
+            else
+            {
+                //same file refrence
+                string[] newPathSplit = filePath.Split('.');
+                pathArray[0] = newPathSplit[0];
+                for (int i = 1; i < newPathSplit.Count(); i++)
+                    pathArray.Insert(1, newPathSplit[i]);
+                readInside(pathArray, newFilePath, replaceValue, search, mode, origXvmPath);
+            }
+            
+        }
+        //parse the ref style refrence
+        private static void parseRefrence2(List<string> pathArray, string newFilePath, string replaceValue, string search, string mode, string origXvmPath, string fileContents, StringBuilder sb)
+        {
+            //ref style refrence
+            readUntill(fileContents, sb, @"""\$ref"":");
+            readUntill(fileContents, sb, ":");
+            readUntill(fileContents, sb, "\"");
+            string filePath = readUntill(fileContents, sb, "\"");
+            filePath = Regex.Replace(filePath, "/", "\\");
+            filePath = filePath.Substring(0, filePath.Length - 1);
+            filePath = filePath.Trim();
+            readInside(pathArray, Path.GetDirectoryName(newFilePath) + "\\" + filePath, replaceValue, search, mode, origXvmPath);
+            //readUntill(fileContents, sb, ":");
         }
         private static void xvmEdit(string fileContents, StringBuilder sb, string newFilePath, string replaceValue, string search)
         {
@@ -1411,11 +1513,17 @@ namespace RelhaxModpack
         private static void xvmArrayEdit(string fileContents, StringBuilder sb, string newFilePath, string replaceValue, string search)
         {
             bool modified = false;
+            bool hadComma = false;
             //move past it and save int input
             string editCheck = readUntill(fileContents, sb, @"[,\]]",false);
             if (Regex.IsMatch(editCheck, search))
             {
-                editCheck = Regex.Replace(editCheck, search, replaceValue);
+                if(Regex.IsMatch(editCheck, @",$"))
+                    hadComma = true;
+                //editCheck = Regex.Replace(editCheck, search, replaceValue);
+                editCheck =  " " + replaceValue;
+                if (hadComma)
+                    editCheck = editCheck + ",";
                 //append it in the sb
                 sb.Append(editCheck);
                 readUntillEnd(fileContents, sb);
@@ -1464,20 +1572,30 @@ namespace RelhaxModpack
         private static string readUntill(string fileContents, StringBuilder sb, string stopAt, bool save = true)
         {
             string readValues = "";
-            while (!Regex.IsMatch(readValues.Length > 1000? readValues.Substring(readValues.Length-1000,1000):readValues, stopAt, RegexOptions.Multiline))
+            string temp = readValues;
+            while (!Regex.IsMatch(temp, stopAt, RegexOptions.Multiline))
             {
                 char c = fileContents[numByteReads];
                 numByteReads++;
                 readValues = readValues + c;
                 if (save)
                     sb.Append(c);
+                if (readValues.Length > stopAt.Length)
+                {
+                    temp = readValues.Substring(readValues.Length - stopAt.Length, stopAt.Length);
+                }
+                else
+                {
+                    temp = readValues;
+                }
+                //temp = readValues.Length > 250 ? readValues.Substring(readValues.Length - 250, 250) : readValues;
             }
             return readValues;
         }
         //generic readAhead method of above
         private static string readUntillGeneric(string s, string stopAt)
         {
-            genericTraverse = 0;
+            //genericTraverse = 0;
             string readValues = "";
             while (!Regex.IsMatch(readValues, stopAt, RegexOptions.Multiline))
             {
@@ -1519,14 +1637,17 @@ namespace RelhaxModpack
             return readValues;
         }
         //looks ahead untill a certain set of characters are found
-        private static string peekUntill(string fileContents, StringBuilder sb, string stopAt)
+        private static string peekUntill(string fileContents, string stopAt)
         {
             string readValues = "";
             int numPeeks = 0;
             while (!Regex.IsMatch(readValues, stopAt, RegexOptions.Multiline))
             {
                 if (numByteReads > fileContents.Count())
+                {
+                    numByteReads = numByteReads + numPeeks;
                     return readValues;
+                }
                 char c = fileContents[numByteReads];
                 numByteReads++;
                 readValues = readValues + c;
@@ -1535,15 +1656,38 @@ namespace RelhaxModpack
             numByteReads = numByteReads - numPeeks;
             return readValues;
         }
+        //looks behind untill a certain set of characters are found
+        private static string peekBehindUntill(string fileContents, string stopAt)
+        {
+            string readValues = "";
+            int numPeeks = 0;
+            while (!Regex.IsMatch(readValues, stopAt, RegexOptions.Multiline))
+            {
+                if (numByteReads == 0)
+                {
+                    numByteReads = numByteReads + numPeeks;
+                    return readValues;
+                }
+                char c = fileContents[numByteReads];
+                numByteReads--;
+                readValues = c + readValues;
+                numPeeks++;
+            }
+            numByteReads = numByteReads + numPeeks;
+            return readValues;
+        }
         //looks ahead untill a certain amount of characters are found
-        private static string peekUntill(string fileContents, StringBuilder sb, int stopAt)
+        private static string peekUntill(string fileContents, int stopAt)
         {
             string readValues = "";
             int numPeeks = 0;
             while (numPeeks != stopAt)
             {
                 if (numByteReads > fileContents.Count())
+                {
+                    numByteReads = numByteReads - numPeeks;
                     return readValues;
+                }
                 char c = fileContents[numByteReads];
                 numByteReads++;
                 readValues = readValues + c;
@@ -1607,6 +1751,50 @@ namespace RelhaxModpack
                 readValues = "";
             }
             return temp;
+        }
+        //returns the folder(s) to get to the xvm config folder directory
+        public static string getXVMBootLoc(string tanksLocation, string customBootFileLoc = null)
+        {
+            string bootFile = tanksLocation + xvmBootFileLoc1;
+            if (customBootFileLoc != null)
+                bootFile = customBootFileLoc;
+            if (!File.Exists(bootFile))
+            {
+                appendToLog("ERROR: xvm config boot file does not exist at " + xvmBootFileLoc1 + ", checking " + xvmBootFileLoc2);
+                bootFile = xvmBootFileLoc2;
+                if (!File.Exists(bootFile))
+                {
+                    appendToLog("ERROR: xvm config boot file doe snot exist at " + xvmBootFileLoc2 + ", aborting patch");
+                    return null;
+                }
+            }
+            appendToLog("xvm boot file located to parse");
+            string fileContents = File.ReadAllText(bootFile);
+            //patch block comments out
+            fileContents = Regex.Replace(fileContents, @"\/\*.*\*\/", "", RegexOptions.Singleline);
+            //patch single line comments out
+            string[] removeComments = fileContents.Split('\n');
+            StringBuilder bootBuilder = new StringBuilder();
+            foreach (string s in removeComments)
+            {
+                if (Regex.IsMatch(s, @"\/\/.*$"))
+                    continue;
+                bootBuilder.Append(s + "\n");
+            }
+            fileContents = bootBuilder.ToString();
+            //read to the actual file path
+            genericTraverse = 0;
+            readUntillGeneric(fileContents, @"^[ \t]*\$[ \t]*{[ \t]*""");
+            //now read untill the next quote for the temp path
+            string filePath = readUntillGeneric(fileContents, "\"");
+            //flip the folder path things
+            filePath = Regex.Replace(filePath, "/", "\\");
+            //remove the last one
+            filePath = filePath.Substring(0, filePath.Length - 1);
+            filePath = filePath.Trim();
+            genericTraverse = 0;
+            string theNewPath = Path.GetDirectoryName(filePath);
+            return theNewPath;
         }
         //unchecks all mods from memory
         public static void clearSelectionMemory(List<Category> parsedCatagoryList)

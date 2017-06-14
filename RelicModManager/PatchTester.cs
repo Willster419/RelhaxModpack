@@ -68,7 +68,7 @@ namespace RelhaxModpack
             }
             //convert actual newlines to "newlines"
             string newReg = Regex.Replace(regexReplaceBox.Text, @"\n", "newline");
-            Utils.RegxPatch(regexFilePathBox.Text, regexSearchBox.Text, regexReplaceBox.Text, "", "", i, true);
+            Utils.RegxPatch(regexFilePathBox.Text, regexSearchBox.Text, regexReplaceBox.Text, "", "", i, true,xvmFilePathBox.Text);
         }
 
         private void xmlPatchButton_Click(object sender, EventArgs e)
@@ -86,7 +86,7 @@ namespace RelhaxModpack
             {
                 temp = "remove";
             }
-            Utils.xmlPatch(xmlFilePathBox.Text, xmlPathBox.Text, temp, xmlSearchBox.Text, xmlReplaceBox.Text, "","",true);
+            Utils.xmlPatch(xmlFilePathBox.Text, xmlPathBox.Text, temp, xmlSearchBox.Text, xmlReplaceBox.Text, "","",true,xvmFilePathBox.Text);
         }
 
         private void jsonLoadFileButton_Click(object sender, EventArgs e)
@@ -99,7 +99,7 @@ namespace RelhaxModpack
 
         private void jsonPatchButton_Click(object sender, EventArgs e)
         {
-            Utils.jsonPatch(jsonFilePathBox.Text, jsonPathBox.Text, jsonReplaceBox.Text, "edit","","", true);
+            Utils.jsonPatch(jsonFilePathBox.Text, jsonPathBox.Text, jsonReplaceBox.Text, "edit", "", "", true, xvmFilePathBox.Text);
         }
 
         private void regexMakePatchButton_Click(object sender, EventArgs e)
@@ -218,44 +218,44 @@ namespace RelhaxModpack
         }
 
         private void button1_Click(object sender, EventArgs e)
-        {
-            //Utils.jsonPatch(jsonFilePathBox.Text, jsonPathBox.Text, jsonReplaceBox.Text, "edit","","", true);
-            //[[ \\t]*\"src\"[ \\t]*:[ \\t]*\".*\"]endIndex
-            //[4]endIndex
-
-            //edit example (works for all)
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.saveLastServer", ".*", "nope", "edit", "", "", true);
+        {            
+            //edit example
+            Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.saveLastServer", ".*", "nope", "edit", "", "", true);
             //advanced edit example
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.fields.flag.enabled", ".*", "nope", "edit", "", "", true);
+            Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.fields.flag.enabled", ".*", "nope", "edit", "", "", true);
             //very advnaced edit example
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.extraFields[2]endIndex.enabled", ".*", "nope", "edit", "", "", true);
+            Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.extraFields[2]endIndex.enabled", ".*", "nope", "edit", "", "", true);
             //very very advnaced edit example
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.extraFields[img://gui/maps/icons/library/proficiency/class_icons_{{v.mastery}}.png]endIndex.enabled", ".*", "false", "edit", "", "", true);
+            Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.extraFields[img://gui/maps/icons/library/proficiency/class_icons_{{v.mastery}}.png]endIndex.enabled", ".*", "nope", "edit", "", "", true);
+            //very very very advanced edit example
+            Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "battleLabels.formats[totalHP]endIndex.enabled", ".*", "false", "edit", "", "", true);
             
-            //add example (works for all)
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.saveLastServer", "", "    \"isAwesome\": true", "add", "", "", true);
+            //add example
+            Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.saveLastServer", "", "    \"isAwesome\": true", "add", "", "", true);
             //advanced add example
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.pingServers", "", "      \"isAwesome\": true", "add", "", "", true);
+            Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.pingServers", "", "      \"isAwesome\": true", "add", "", "", true);
             //very advanced add example
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.pingServers.fontStyle.serverColor", "", "        \"isAwesome\": true", "add", "", "", true);
-
+            Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.pingServers.fontStyle.serverColor", "", "        \"isAwesome\": true", "add", "", "", true);
+            
             //array clear example
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "battleLabels.formats", "", "", "array_clear", "", "", true);
-
+            Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.sorting_criteria", "", "", "array_clear", "", "", true);
+            
             //array add example
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[4]endIndex", "", " \"SCUMBAG\"", "array_add", "", "", true);
+            Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[4]endIndex", "", " \"SCUMBAG\"", "array_add", "", "", true);
+
+            //advanced array add example
+            Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "battleLabels.formats[0]endIndex", "", "\n      ${ \"battleLabelsTemplates.xc\":\"def.teamRating\"}", "array_add", "", "", true);
 
             //array edit example
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[2]endIndex", "SPG", "SCUMBAG", "array_edit", "", "", true);
-            //advanced array edit example
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[4]endIndex", ".*", "\"DICKWAD\"", "array_edit", "", "", true);
+            Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[2]endIndex", ".*", "\"MEMER\"", "array_edit", "", "", true);
 
             //array remove example
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[4]endIndex", ".*", "", "array_remove", "", "", true);
+            Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[0]endIndex", ".*", "", "array_remove", "", "", true);
             //advanced array remove example 2
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[mediumTank]endIndex", ".*", "", "array_remove", "", "", true);
-            //very advanced array remove example 2
-            //Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[3]endIndex", ".*", "", "array_remove", "", "", true);
+            Utils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[mediumTank]endIndex", ".*", "", "array_remove", "", "", true);
+            
+            //test xvm folder provider
+            string testXvmBootLoc = Utils.getXVMBootLoc(null, Application.StartupPath + "\\TempPatchWork\\xvm.xc");
         }
 
         private void xvm_modeToggle(object sender, EventArgs e)
@@ -275,7 +275,7 @@ namespace RelhaxModpack
         private void xvmPathButton_Click(object sender, EventArgs e)
         {
             //Utils.jsonPatch(jsonFilePathBox.Text, jsonPathBox.Text, jsonReplaceBox.Text, "edit", "", "", true);
-            Utils.xvmPatch(xvmFilePathBox.Text, xvmPathBox.Text, xvmSearchBox.Text, xvmReplaceBox.Text, xvmMode, "", "", true);
+            Utils.xvmPatch(xvmFilePathBox.Text, xvmPathBox.Text, xvmSearchBox.Text, xvmReplaceBox.Text, xvmMode, "", "", true, xvmFilePathBox.Text);
         }
 
         private void xvmMakePatchButton_Click(object sender, EventArgs e)
