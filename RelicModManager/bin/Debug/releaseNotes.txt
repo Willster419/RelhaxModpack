@@ -1,3 +1,6 @@
+Version 23.1.6:
+-Fixed bugs with keywords for all patching systems
+
 Version 23.1.5:
 -Fixed bugs with test installation mode
 -Fixed bugs with the XVM patcher

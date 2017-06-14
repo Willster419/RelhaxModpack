@@ -594,7 +594,9 @@ namespace RelhaxModpack
             //patch xvmConfigFolderName out of fileLocation
             if (!testMods)
             {
-                filePath = Regex.Replace(filePath, "xvmConfigFolderName", getXVMBootLoc(tanksLocation));
+                string s = getXVMBootLoc(tanksLocation);
+                if (s != null)
+                    filePath = Regex.Replace(filePath, "xvmConfigFolderName", s);
             }
             else
             {
@@ -789,7 +791,9 @@ namespace RelhaxModpack
             //patch xvmConfigFolderName out of fileLocation
             if (!testMods)
             {
-                fileLocation = Regex.Replace(fileLocation, "xvmConfigFolderName", getXVMBootLoc(tanksLocation));
+                string s = getXVMBootLoc(tanksLocation);
+                if (s != null)
+                    fileLocation = Regex.Replace(fileLocation, "xvmConfigFolderName", s);
             }
             else
             {
@@ -936,7 +940,9 @@ namespace RelhaxModpack
             //patch xvmConfigFolderName out of fileLocation
             if (!testMods)
             {
-                jsonFile = Regex.Replace(jsonFile, "xvmConfigFolderName", getXVMBootLoc(tanksLocation));
+                string s = getXVMBootLoc(tanksLocation);
+                if (s!=null)
+                    jsonFile = Regex.Replace(jsonFile, "xvmConfigFolderName", s);
             }
             else
             {
@@ -1137,7 +1143,9 @@ namespace RelhaxModpack
             //patch xvmConfigFolderName out of fileLocation
             if (!testMods)
             {
-                bootFile = Regex.Replace(bootFile, "xvmConfigFolderName", getXVMBootLoc(tanksLocation));
+                string s = getXVMBootLoc(tanksLocation);
+                if (s != null)
+                    bootFile = Regex.Replace(bootFile, "xvmConfigFolderName", s);
             }
             else
             {
@@ -1764,7 +1772,7 @@ namespace RelhaxModpack
                 bootFile = xvmBootFileLoc2;
                 if (!File.Exists(bootFile))
                 {
-                    appendToLog("ERROR: xvm config boot file doe snot exist at " + xvmBootFileLoc2 + ", aborting patch");
+                    appendToLog("ERROR: xvm config boot file does not exist at " + xvmBootFileLoc2 + ", aborting patch");
                     return null;
                 }
             }
