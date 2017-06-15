@@ -40,7 +40,7 @@ namespace RelhaxModpack
             fromAutoInstall = 2//this is for when the user started the application in auto install mode. this takes precedence over the above 2
         };
         private loadConfigMode loadMode = loadConfigMode.fromButton;
-        
+
         public ModSelectionList(string version, string theTanksVersion, int mainWindowX, int mainWindowY)
         {
             InitializeComponent();
@@ -65,7 +65,7 @@ namespace RelhaxModpack
         private void ModSelectionList_Load(object sender, EventArgs e)
         {
             //create the loading window
-            pw = new PleaseWait(mainWindowStartX,mainWindowStartY);
+            pw = new PleaseWait(mainWindowStartX, mainWindowStartY);
             pw.Show();
             //set the font from settings
             this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
@@ -79,7 +79,7 @@ namespace RelhaxModpack
             //create new lists for memory database and serialize from xml->lists
             globalDependencies = new List<Dependency>();
             parsedCatagoryList = new List<Category>();
-            Utils.createModStructure2(databaseURL,false,globalDependencies,parsedCatagoryList);
+            Utils.createModStructure2(databaseURL, false, globalDependencies, parsedCatagoryList);
             bool duplicates = Utils.duplicates(parsedCatagoryList);
             if (duplicates)
             {
@@ -310,7 +310,7 @@ namespace RelhaxModpack
             {
                 modCheckBox.Content = modCheckBox.Content + " (Updated)";
                 m.downloadFlag = true;
-                if ((m.size > 0.0f) )
+                if ((m.size > 0.0f))
                     modCheckBox.Content = modCheckBox.Content + " (" + m.size + " MB)";
             }
             //set mod's enabled status
@@ -318,11 +318,11 @@ namespace RelhaxModpack
             //set the mods checked status
             if (m.enabled && m.Checked)
                 modCheckBox.IsChecked = true;
-            
+
             tvi.Header = modCheckBox;
             //add it's handlers, right click and when checked
             modCheckBox.MouseDown += new System.Windows.Input.MouseButtonEventHandler(modCheckBoxL_MouseDown);
-            
+
             //add the mod check box to the legacy tree view
             lsl.legacyTreeView.Items.Add(tvi);
             //disable the logic for now
@@ -713,7 +713,7 @@ namespace RelhaxModpack
                         }
                     }
                 }
-                if (!configSelected && (bool)cb.IsChecked && (bool)cb.IsEnabled && radioButtonCount>0)
+                if (!configSelected && (bool)cb.IsChecked && (bool)cb.IsEnabled && radioButtonCount > 0)
                 {
                     foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
                     {
@@ -735,7 +735,7 @@ namespace RelhaxModpack
         //when a dropdown legacy combobox is index changed
         void configControlDDALL_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            
+
             ConfigWPFComboBox cb = (ConfigWPFComboBox)sender;
             if (!loadingConfig)
             {
@@ -948,7 +948,7 @@ namespace RelhaxModpack
             p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
             p.Show();
         }
-        
+
         //adds a mod m to a tabpage t
         private void addMod(Mod m, TabPage t, int panelCount, Category catagory)
         {
@@ -1011,7 +1011,7 @@ namespace RelhaxModpack
             //add to main panel
             mainPanel.Controls.Add(modCheckBox);
             if (m.configs.Count > 0)
-                processConfigsDefault(t, m, catagory, modCheckBox, mainPanel, true,m.configs, mainPanel);
+                processConfigsDefault(t, m, catagory, modCheckBox, mainPanel, true, m.configs, mainPanel);
             //add to tab
             t.Controls.Add(mainPanel);
             //add the event handler before changing the checked state so the event
@@ -1157,8 +1157,8 @@ namespace RelhaxModpack
                     //add the config to the form
                     configPanel.Controls.Add(configControlRB);
                     //process the subconfigs
-                    if(con.configs.Count > 0)
-                    processConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
+                    if (con.configs.Count > 0)
+                        processConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
                 }
                 else if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1") || con.type.Equals("single_dropdown2"))
                 {
@@ -1213,9 +1213,9 @@ namespace RelhaxModpack
                             configControlDDALL.Enabled = true;
                         }
                     }
-                    if(configControlDDALL.Items.Count > 0)
+                    if (configControlDDALL.Items.Count > 0)
                         configControlDDALL.Enabled = true;
-                    if(configControlDDALL.SelectedIndex == -1)
+                    if (configControlDDALL.SelectedIndex == -1)
                         configControlDDALL.SelectedIndex = 0;
                 }
                 else if (con.type.Equals("multi"))
@@ -1277,7 +1277,7 @@ namespace RelhaxModpack
                     configPanel.Controls.Add(configControlCB);
                     //process subconfigs
                     if (con.configs.Count > 0)
-                        processConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal ,con);
+                        processConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
                 }
                 else
                 {
@@ -1787,7 +1787,7 @@ namespace RelhaxModpack
             }
         }
         //recursive resize of the control panals
-        private void resizePanel(Panel current, TabPage tp ,int shrinkFactor)
+        private void resizePanel(Panel current, TabPage tp, int shrinkFactor)
         {
             current.Size = new Size(tp.Size.Width - shrinkFactor, current.Size.Height);
             foreach (Control controfds in current.Controls)
@@ -1795,7 +1795,7 @@ namespace RelhaxModpack
                 if (controfds is Panel)
                 {
                     Panel subpp = (Panel)controfds;
-                    resizePanel(subpp, tp, shrinkFactor+25);
+                    resizePanel(subpp, tp, shrinkFactor + 25);
                 }
             }
         }
@@ -1806,7 +1806,7 @@ namespace RelhaxModpack
             //save the last config if told to do so
             if (Settings.saveLastConfig)
             {
-                Utils.saveConfig(false,parsedCatagoryList,userMods);
+                Utils.saveConfig(false, parsedCatagoryList, userMods);
             }
             this.Close();
         }
@@ -1824,7 +1824,7 @@ namespace RelhaxModpack
         //handler for when the "save config" button is pressed
         private void saveConfigButton_Click(object sender, EventArgs e)
         {
-            Utils.saveConfig(true,parsedCatagoryList,userMods);
+            Utils.saveConfig(true, parsedCatagoryList, userMods);
         }
         //handler for when a new tab page is selected
         private void modTabGroups_Selected(object sender, TabControlEventArgs e)

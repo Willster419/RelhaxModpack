@@ -116,7 +116,7 @@ namespace RelhaxModpack
             previousPicButton.Location = new Point(12, 12 + previewPicture.Size.Height + 6);
             pictureCountPanel.Location = new Point(12 + previousPicButton.Size.Width + 12, 12 + previewPicture.Size.Height + 6);
             pictureCountPanel.Size = new Size(width - pictureCountPanel.Location.X - nextPicButton.Size.Width - 4, pictureCountPanel.Size.Height);
-            devLinkLabel.Location = new Point(this.Size.Width - 12 - devLinkLabel.Size.Width -4, applicationHeight - 49 - difference);
+            devLinkLabel.Location = new Point(this.Size.Width - 12 - devLinkLabel.Size.Width - 4, applicationHeight - 49 - difference);
         }
         //applies translations
         private void applyTranslations()

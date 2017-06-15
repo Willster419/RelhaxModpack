@@ -11,6 +11,6 @@ namespace RelhaxModpack
         //the value of the property (the refrence)
         public string value { get; set; }
         public StringSave()
-        {}
+        { }
     }
 }

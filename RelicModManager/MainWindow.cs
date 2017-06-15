@@ -238,7 +238,7 @@ namespace RelhaxModpack
                         try
                         {
                             if (Directory.Exists(tanksLocation + "\\_readme"))
-                                Directory.Delete(tanksLocation + "\\_readme",true);
+                                Directory.Delete(tanksLocation + "\\_readme", true);
                         }
                         catch (UnauthorizedAccessException ex)
                         {
@@ -315,7 +315,7 @@ namespace RelhaxModpack
                 else if (state == InstallState.patchUserMods)
                 {
                     Utils.appendToLog("Patching done for Relhax User Mods");
-                } 
+                }
                 return;
             }
             //Give the OS time to process the folder change...
@@ -379,13 +379,13 @@ namespace RelhaxModpack
                     {
                         //perform regex patch on entire file, line by line
                         Utils.appendToLog("Regex patch, all lines, line by line, " + p.file + ", " + p.search + ", " + p.replace);
-                        Utils.RegxPatch(p.file, p.search, p.replace,tanksLocation,tanksVersion);
+                        Utils.RegxPatch(p.file, p.search, p.replace, tanksLocation, tanksVersion);
                     }
                     else if (p.lines.Count() == 1 && tempp == -1)
                     {
                         //perform regex patch on entire file, as one whole string
                         Utils.appendToLog("Regex patch, all lines, whole file, " + p.file + ", " + p.search + ", " + p.replace);
-                        Utils.RegxPatch(p.file, p.search, p.replace, tanksLocation,tanksVersion,-1);
+                        Utils.RegxPatch(p.file, p.search, p.replace, tanksLocation, tanksVersion, -1);
                     }
                     else
                     {
@@ -394,7 +394,7 @@ namespace RelhaxModpack
                             //perform regex patch on specific file lines
                             //will need to be a standard for loop BTW
                             Utils.appendToLog("Regex patch, line " + s + ", " + p.file + ", " + p.search + ", " + p.replace);
-                            Utils.RegxPatch(p.file, p.search, p.replace,tanksLocation,tanksVersion, int.Parse(s));
+                            Utils.RegxPatch(p.file, p.search, p.replace, tanksLocation, tanksVersion, int.Parse(s));
                         }
                     }
                 }
@@ -402,13 +402,13 @@ namespace RelhaxModpack
                 {
                     //perform xml patch
                     Utils.appendToLog("Xml patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
-                    Utils.xmlPatch(p.file, p.path, p.mode, p.search, p.replace,tanksLocation,tanksVersion);
+                    Utils.xmlPatch(p.file, p.path, p.mode, p.search, p.replace, tanksLocation, tanksVersion);
                 }
                 else if (p.type.Equals("json"))
                 {
                     //perform json patch
                     Utils.appendToLog("Json patch, " + p.file + ", " + p.path + ", " + p.replace);
-                    Utils.jsonPatch(p.file, p.path, p.replace, p.mode,tanksLocation, tanksVersion);
+                    Utils.jsonPatch(p.file, p.path, p.replace, p.mode, tanksLocation, tanksVersion);
                 }
                 else if (p.type.Equals("xvm"))
                 {
@@ -427,7 +427,7 @@ namespace RelhaxModpack
             else if (state == InstallState.patchUserMods)
             {
                 Utils.appendToLog("Patching done for Relhax User Mods");
-            } 
+            }
         }
         //installs all fonts in the fonts folder, user and custom
         private void installFonts()
@@ -438,8 +438,8 @@ namespace RelhaxModpack
             {
                 Utils.appendToLog("No fonts to install");
                 //no fonts to install, done display
-                if(!Program.autoInstall && !Program.testMode)
-                this.checkForOldZipFiles();
+                if (!Program.autoInstall && !Program.testMode)
+                    this.checkForOldZipFiles();
                 this.doneDisplay();
                 return;
             }
@@ -449,7 +449,7 @@ namespace RelhaxModpack
                 //done display
                 Utils.appendToLog("No fonts to install");
                 if (!Program.autoInstall && !Program.testMode)
-                this.checkForOldZipFiles();
+                    this.checkForOldZipFiles();
                 this.doneDisplay();
                 return;
             }
@@ -482,7 +482,7 @@ namespace RelhaxModpack
                 Utils.appendToLog("No fonts to install");
                 //done display
                 if (!Program.autoInstall && !Program.testMode)
-                this.checkForOldZipFiles();
+                    this.checkForOldZipFiles();
                 this.doneDisplay();
                 return;
             }
@@ -552,7 +552,7 @@ namespace RelhaxModpack
             {
                 Utils.appendToLog("Installation done, but fonts install failed");
                 if (!Program.autoInstall && !Program.testMode)
-                this.checkForOldZipFiles();
+                    this.checkForOldZipFiles();
                 this.doneDisplay();
             }
         }
@@ -608,7 +608,7 @@ namespace RelhaxModpack
             }
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
             string version = versionSave;
-            
+
             if (!File.Exists(Application.StartupPath + "\\RelicCopyUpdate.bat"))
             {
                 try
@@ -1052,7 +1052,7 @@ namespace RelhaxModpack
                 DateTime now = DateTime.Now;
                 fodlerDateName = String.Format("{0:yyyy-MM-dd-HH-mm-ss}", now);
                 Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\" + fodlerDateName + "\\res_mods");
-                this.backgroundCopy(tanksLocation + "\\res_mods", Application.StartupPath + "\\RelHaxModBackup\\"+ fodlerDateName + "\\res_mods");
+                this.backgroundCopy(tanksLocation + "\\res_mods", Application.StartupPath + "\\RelHaxModBackup\\" + fodlerDateName + "\\res_mods");
                 return;
             }
             //actual new code
@@ -1261,7 +1261,7 @@ namespace RelhaxModpack
                 //check to make sureit's enabled and checked and has a valid zip file with it
                 if (cc.enabled && cc.Checked)
                 {
-                    if( !cc.zipFile.Equals(""))
+                    if (!cc.zipFile.Equals(""))
                     {
                         try
                         {
@@ -1282,8 +1282,8 @@ namespace RelhaxModpack
                     //since it is checked, regardless if it has a zipfile, check if it has userdata
                     if (cc.userFiles.Count > 0)
                         configsWithData.Add(cc);
-                    if (cc.configs.Count >0)
-                        processConfigsToInstall(cc.configs, level+1);
+                    if (cc.configs.Count > 0)
+                        processConfigsToInstall(cc.configs, level + 1);
                     //check to see if any catagory dependencies need to be added
                     if (cc.dependencies.Count > 0)
                     {
@@ -1672,7 +1672,7 @@ namespace RelhaxModpack
                     childProgressBar.Value = childCurrentProgres;
                 if (true)
                 {//(float)Math.Round(sessionDownloadSpeed, 2);
-                    downloadProgress.Text = currentZipEntry + " " + (float)Math.Round(currentZipEntrySize/MBDivisor,2) +" MB...";
+                    downloadProgress.Text = currentZipEntry + " " + (float)Math.Round(currentZipEntrySize / MBDivisor, 2) + " MB...";
                 }
                 if (isParrentDone)
                 {
@@ -2489,8 +2489,8 @@ namespace RelhaxModpack
             int totalExtractions = 0;
             foreach (Dependency d in dependencies)
             {
-                if(!d.dependencyZipFile.Equals(""))
-                totalExtractions++;
+                if (!d.dependencyZipFile.Equals(""))
+                    totalExtractions++;
             }
             foreach (Mod m in modsToInstall)
             {
@@ -2546,7 +2546,7 @@ namespace RelhaxModpack
                 {
                     zipFilesList.Add(f.Name);
                 }
-                List<string> filesToDelete = Utils.createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists,dependencies);
+                List<string> filesToDelete = Utils.createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists, dependencies);
                 string listOfFiles = "";
                 foreach (string s in filesToDelete)
                     listOfFiles = listOfFiles + s + "\n";
@@ -2560,7 +2560,7 @@ namespace RelhaxModpack
                     childProgressBar.Minimum = 0;
                     childProgressBar.Value = childProgressBar.Minimum;
                     childProgressBar.Maximum = filesToDelete.Count;
-                    foreach(string s in filesToDelete)
+                    foreach (string s in filesToDelete)
                     {
                         bool retry = true;
                         bool breakOut = false;

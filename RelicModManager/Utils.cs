@@ -396,7 +396,7 @@ namespace RelhaxModpack
                                                 continue;
                                             if (innerText.Equals(""))
                                                 continue;
-                                                c.pictureList.Add(new Picture(c.name, pictureNode.InnerText));
+                                            c.pictureList.Add(new Picture(c.name, pictureNode.InnerText));
                                             break;
                                     }
                                 }
@@ -514,7 +514,7 @@ namespace RelhaxModpack
             return null;
         }
         //gets the user mod based on it's name
-        public static Mod getUserMod(string modName,List<Mod> userMods)
+        public static Mod getUserMod(string modName, List<Mod> userMods)
         {
             foreach (Mod m in userMods)
             {
@@ -567,7 +567,7 @@ namespace RelhaxModpack
                 filePath = tanksLocation + "\\res_mods" + filePath;
             }
 
-            if (!testMods && Regex.IsMatch(filePath,"versiondir"))
+            if (!testMods && Regex.IsMatch(filePath, "versiondir"))
             {
                 //patch versiondir out of filePath
                 filePath = Regex.Replace(filePath, "versiondir", tanksVersion);
@@ -760,7 +760,7 @@ namespace RelhaxModpack
                 fileLocation = tanksLocation + "\\res_mods" + fileLocation;
             }
 
-            if (!testMods && Regex.IsMatch(fileLocation,"versiondir"))
+            if (!testMods && Regex.IsMatch(fileLocation, "versiondir"))
             {
                 //patch versiondir out of fileLocation
                 fileLocation = Regex.Replace(fileLocation, "versiondir", tanksVersion);
@@ -860,7 +860,7 @@ namespace RelhaxModpack
                 useDouble = false;
             }
             catch (FormatException)
-            {}
+            { }
             //try a double nixt. it will parse a double and int. at this point it could be eithor
             try
             {
@@ -868,7 +868,7 @@ namespace RelhaxModpack
                 useDouble = true;
             }
             catch (FormatException)
-            {}
+            { }
             //try an int next. if it works than turn double to false and int to true
             try
             {
@@ -877,7 +877,7 @@ namespace RelhaxModpack
                 useDouble = false;
             }
             catch (FormatException)
-            {}
+            { }
             //check if it's the new structure
             if (Regex.IsMatch(jsonFile, "^\\\\\\\\res_mods"))
             {
@@ -908,7 +908,7 @@ namespace RelhaxModpack
             if (!testMods && Regex.IsMatch(jsonFile, "xvmConfigFolderName"))
             {
                 string s = getXVMBootLoc(tanksLocation);
-                if (s!=null)
+                if (s != null)
                     jsonFile = Regex.Replace(jsonFile, "xvmConfigFolderName", s);
             }
             else
@@ -1116,7 +1116,7 @@ namespace RelhaxModpack
             else
             {
                 //patch check mode, try to get boot xvm file from the xvm boot textbox
-                if (testXVMBootLoc.Equals("") && Regex.IsMatch(bootFile,"xvmConfigFolderName"))
+                if (testXVMBootLoc.Equals("") && Regex.IsMatch(bootFile, "xvmConfigFolderName"))
                 {
                     MessageBox.Show("Attempted to use variable \"xvmConfigFolderName\", but nothing in the xvm boot file location text box");
                     return;
@@ -1135,31 +1135,31 @@ namespace RelhaxModpack
             //create the stringBuilder to rewrite the file
             StringBuilder sb = new StringBuilder();
             //load the file from disk
-            
+
             //read untill *start of string*${
             numByteReads = 0;
             string fileContents = File.ReadAllText(bootFile);
-            fileContents = Regex.Replace(fileContents, @"\/\*.*\*\/", "",RegexOptions.Singleline);
+            fileContents = Regex.Replace(fileContents, @"\/\*.*\*\/", "", RegexOptions.Singleline);
             string[] removeComments = fileContents.Split('\n');
             StringBuilder bootBuilder = new StringBuilder();
             foreach (string s in removeComments)
             {
-                if(Regex.IsMatch(s,@"\/\/.*$"))
+                if (Regex.IsMatch(s, @"\/\/.*$"))
                     continue;
                 bootBuilder.Append(s + "\n");
             }
             fileContents = bootBuilder.ToString();
-            readUntill(fileContents,  sb, @"^[ \t]*\$[ \t]*{[ \t]*""");
+            readUntill(fileContents, sb, @"^[ \t]*\$[ \t]*{[ \t]*""");
             //now read untill the next quote for the temp path
-            string filePath = readUntill(fileContents,  sb, "\"");
+            string filePath = readUntill(fileContents, sb, "\"");
             //flip the folder path things
             filePath = Regex.Replace(filePath, "/", "\\");
             //remove the last one
             filePath = filePath.Substring(0, filePath.Length - 1);
             filePath = filePath.Trim();
-            readInside(pathArray, Path.GetDirectoryName(bootFile) + "\\" + filePath,newValue,search, mode, xvmPath);
+            readInside(pathArray, Path.GetDirectoryName(bootFile) + "\\" + filePath, newValue, search, mode, xvmPath);
         }
-        
+
         //getting into this means that we've started reading a new config file, maybe patch this one?
         private static void readInside(List<string> pathArray, string newFilePath, string replaceValue, string search, string mode, string origXvmPath)
         {
@@ -1168,7 +1168,7 @@ namespace RelhaxModpack
             StringBuilder sb = new StringBuilder();
             //load the file from disk
             string fileContents = File.ReadAllText(newFilePath);
-            while(pathArray.Count != 0)
+            while (pathArray.Count != 0)
             {
                 string regex = "";
                 bool isArrayIndex = false;
@@ -1186,13 +1186,13 @@ namespace RelhaxModpack
                 readUntill(fileContents, sb, regex);
                 //determine if the this value is actually a file refrence
                 string refrenceTest = peekUntill(fileContents, @"[\[,}\]]$");
-                if(Regex.IsMatch(refrenceTest,@"\${[ \t]*""") && !isArrayIndex)
+                if (Regex.IsMatch(refrenceTest, @"\${[ \t]*""") && !isArrayIndex)
                 {
-                    parseRefrence1(pathArray,newFilePath,replaceValue,search,mode,origXvmPath,fileContents,sb);
+                    parseRefrence1(pathArray, newFilePath, replaceValue, search, mode, origXvmPath, fileContents, sb);
                 }
                 //determine if it is the other type of refrence
                 string refrenceTest2 = peekUntill(fileContents, @"[\[,}\]]$");
-                if(Regex.IsMatch(refrenceTest2,@"""\$ref"":") && !isArrayIndex)
+                if (Regex.IsMatch(refrenceTest2, @"""\$ref"":") && !isArrayIndex)
                 {
                     parseRefrence2(pathArray, newFilePath, replaceValue, search, mode, origXvmPath, fileContents, sb);
                 }
@@ -1201,8 +1201,8 @@ namespace RelhaxModpack
                 {
                     int indexToReadTo = 0;
                     //split the array into an array lol
-                    readUntill(fileContents,  sb, @"\[");
-                    string arrayContents = peekUntill(fileContents,  @"\]");
+                    readUntill(fileContents, sb, @"\[");
+                    string arrayContents = peekUntill(fileContents, @"\]");
                     //split the array based on "},"
                     List<string> carray = split(arrayContents, @"[,}]$");
                     //if it is an index, just use it
@@ -1276,13 +1276,13 @@ namespace RelhaxModpack
                     string refrenceTest5 = peekUntill(fileContents, @"[,}\]]$");
                     if (Regex.IsMatch(refrenceTest5, @"\${[ \t]*"""))
                     {
-                        if(mode.Equals("add") || mode.Equals("edit"))
+                        if (mode.Equals("add") || mode.Equals("edit"))
                             parseRefrence1(pathArray, newFilePath, replaceValue, search, mode, origXvmPath, fileContents, sb);
                     }
                 }
                 //we found it so remove it from the path
-                if(pathArray.Count != 0)
-                pathArray.RemoveAt(0);
+                if (pathArray.Count != 0)
+                    pathArray.RemoveAt(0);
             }
             //split off into the cases for different xvm modification types
             if (!patchDone)
@@ -1354,7 +1354,7 @@ namespace RelhaxModpack
                     pathArray.Insert(1, newPathSplit[i]);
                 readInside(pathArray, newFilePath, replaceValue, search, mode, origXvmPath);
             }
-            
+
         }
         //parse the ref style refrence
         private static void parseRefrence2(List<string> pathArray, string newFilePath, string replaceValue, string search, string mode, string origXvmPath, string fileContents, StringBuilder sb)
@@ -1405,7 +1405,7 @@ namespace RelhaxModpack
                 File.Delete(newFilePath);
                 File.WriteAllText(newFilePath, sb.ToString());
             }
-            
+
         }
         //adding a new entry. adds to the top of the parent entry
         private static void xvmAdd(string fileContents, StringBuilder sb, string newFilePath, string replaceValue, string search)
@@ -1414,7 +1414,7 @@ namespace RelhaxModpack
             string replaced = "";
             //read to the end of that line
             //read for (white space) (anything but white space)
-            string temp = readUntill(fileContents,  sb,  @"\s*\S+\s");
+            string temp = readUntill(fileContents, sb, @"\s*\S+\s");
             //back up one
             numByteReads--;
             sb.Remove(sb.Length - 1, 1);
@@ -1451,7 +1451,7 @@ namespace RelhaxModpack
             //advance reader to start of the array
             readUntill(fileContents, sb, @"\[");
             //advance reader to end of array, not saving sb
-            readUntill(fileContents, sb, @"\]",false);
+            readUntill(fileContents, sb, @"\]", false);
             sb.Append("]");
             bool modified = false;
             readUntillEnd(fileContents, sb);
@@ -1487,12 +1487,12 @@ namespace RelhaxModpack
             bool modified = false;
             bool hadComma = false;
             //move past it and save int input
-            string editCheck = readUntill(fileContents, sb, @"[,\]]",false);
+            string editCheck = readUntill(fileContents, sb, @"[,\]]", false);
             if (Regex.IsMatch(editCheck, search))
             {
-                if(Regex.IsMatch(editCheck, @",$"))
+                if (Regex.IsMatch(editCheck, @",$"))
                     hadComma = true;
-                editCheck =  " " + replaceValue;
+                editCheck = " " + replaceValue;
                 if (hadComma)
                     editCheck = editCheck + ",";
                 //append it in the sb
@@ -1513,8 +1513,8 @@ namespace RelhaxModpack
             bool modified = false;
             bool lastItem = false;
             //move past it and save int input
-            string editCheck = readUntill(fileContents, sb, @"[,\]]",false);
-            if(Regex.IsMatch(editCheck,@"\]$"))
+            string editCheck = readUntill(fileContents, sb, @"[,\]]", false);
+            if (Regex.IsMatch(editCheck, @"\]$"))
             {
                 lastItem = true;
                 //remove last comma from sb index
@@ -1523,7 +1523,7 @@ namespace RelhaxModpack
             if (Regex.IsMatch(editCheck, search))
             {
                 editCheck = Regex.Replace(editCheck, search, "");
-                if(lastItem)
+                if (lastItem)
                 {
                     editCheck = editCheck + "]";
                 }

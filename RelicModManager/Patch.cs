@@ -1,5 +1,4 @@
-﻿
-namespace RelhaxModpack
+﻿namespace RelhaxModpack
 {
     //a patch is an instruction of how to modify a text file
     //generally a mod config file

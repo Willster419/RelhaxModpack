@@ -21,7 +21,7 @@ namespace RelhaxModpack
         private void PleaseWait_Load(object sender, EventArgs e)
         {
             if (startY != -1 && startX != -1)
-            this.Location = new System.Drawing.Point(startX + 10, startY);
+                this.Location = new System.Drawing.Point(startX + 10, startY);
             label1.Text = Translations.getTranslatedString(label1.Name);
             Settings.setUIColor(this);
         }

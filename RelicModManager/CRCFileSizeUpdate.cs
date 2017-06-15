@@ -98,7 +98,7 @@ namespace RelhaxModpack
                             modsSB.Append(m.zipFile + "\n");
                         }
                     }
-                    if(m.configs.Count > 0)
+                    if (m.configs.Count > 0)
                     {
                         this.processConfigsCRCUpdate(m.configs);
                     }
@@ -320,7 +320,7 @@ namespace RelhaxModpack
                     XmlElement configsHolder = doc.CreateElement("configs");
                     //if statement here
                     if (m.configs.Count > 0)
-                        saveDatabaseConfigLevel(doc,configsHolder,m.configs);
+                        saveDatabaseConfigLevel(doc, configsHolder, m.configs);
                     modRoot.AppendChild(configsHolder);
                     XmlElement modDependencies = doc.CreateElement("dependencies");
                     foreach (Dependency d in m.dependencies)
