@@ -36,13 +36,10 @@ namespace RelhaxModpack
         private string downloadPath = Application.StartupPath + "\\RelHaxDownloads";
         private string parsedModsFolder;//0.9.x.y.z
         //DEPRECATED: /res_mods/version/gui
-        //ZipFile zip;
         //timer to measure download speed
         Stopwatch sw = new Stopwatch();
-        //private string downloadURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/mods/";
         private List<Category> parsedCatagoryLists;
         private List<Mod> modsToInstall;
-        //private List<Config> configsToInstall;
         private List<Patch> patchList;
         private List<Dependency> dependencies;
         private List<List<Config>> configListsToInstall;
@@ -308,7 +305,6 @@ namespace RelhaxModpack
         {
             speedLabel.Text = Translations.getTranslatedString("patching") + "...";
             Application.DoEvents();
-            //Utils.appendToLog("Starting to patch Relhax Mod Pack");
             //don't do anything if the file does not exist
             if (!Directory.Exists(tanksLocation + @"\_patch"))
             {
@@ -327,7 +323,6 @@ namespace RelhaxModpack
             //set the folder properties to read write
             DirectoryInfo di = null;
             FileInfo[] diArr = null;
-            //string[] patchFilesList = null;
             bool kontinue = false;
             while (!kontinue)
             {
@@ -336,7 +331,6 @@ namespace RelhaxModpack
                     File.SetAttributes(tanksLocation + @"\_patch", FileAttributes.Normal);
                     di = new DirectoryInfo(tanksLocation + @"\_patch");
                     //get every patch file in the folder
-                    //patchFilesList = Directory.GetFiles(tanksLocation + @"\_patch", @"*.xml");
                     diArr = di.GetFiles(@"*.xml", SearchOption.TopDirectoryOnly);
                     kontinue = true;
                 }
@@ -508,7 +502,6 @@ namespace RelhaxModpack
 
                 if (!File.Exists(tanksLocation + "\\_fonts\\FontReg.exe"))
                 {
-                    //Settings.extractEmbeddedResource(tanksLocation + "\\_fonts", "RelhaxModpack", new List<string>() { "FontReg.exe" });
                     try
                     {
                         downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/FontReg.exe", tanksLocation + "\\_fonts\\FontReg.exe");
@@ -527,7 +520,6 @@ namespace RelhaxModpack
                 info.WorkingDirectory = tanksLocation + "\\_fonts";
                 Process installFontss = new Process();
                 installFontss.StartInfo = info;
-                bool isAdmin = Utils.isAdministrator();
                 try
                 {
                     installFontss.Start();
@@ -619,7 +611,6 @@ namespace RelhaxModpack
             
             if (!File.Exists(Application.StartupPath + "\\RelicCopyUpdate.bat"))
             {
-                //Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "RelicCopyUpdate.bat" });
                 try
                 {
                     downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/RelicCopyUpdate.txt", Application.StartupPath + "\\RelicCopyUpdate.bat");
@@ -634,7 +625,6 @@ namespace RelhaxModpack
             string newExeName = Application.StartupPath + "\\RelicCopyUpdate.bat";
             try
             {
-                //System.Diagnostics.Process.Start(newExeName + " /updateExeReplace");
                 ProcessStartInfo info = new ProcessStartInfo();
                 info.FileName = newExeName;
                 Process installUpdate = new Process();
@@ -865,7 +855,6 @@ namespace RelhaxModpack
             //check for required external application libraries (dlls only)
             if (!File.Exists(Application.StartupPath + "\\DotNetZip.dll"))
             {
-                //Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "DotNetZip.dll" });
                 try
                 {
                     downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll", Application.StartupPath + "\\DotNetZip.dll");
@@ -879,7 +868,6 @@ namespace RelhaxModpack
             }
             if (!File.Exists(Application.StartupPath + "\\Newtonsoft.Json.dll"))
             {
-                //Settings.extractEmbeddedResource(Application.StartupPath, "RelhaxModpack", new List<string>() { "Newtonsoft.Json.dll" });
                 try
                 {
                     downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll", Application.StartupPath + "\\Newtonsoft.Json.dll");
@@ -1209,17 +1197,6 @@ namespace RelhaxModpack
                     }
                 }
             }
-            //OLD
-            /* *
-            foreach (Config c in configsToInstall)
-            {
-                if (!this.CRCsMatch(localFilesDir + c.zipFile, c.crc))
-                {
-                    //crc's don't match, need to re-download
-                    downloadQueue.Add(new DownloadItem(new Uri(c.startAddress + c.zipFile + c.endAddress), localFilesDir + c.zipFile));
-                }
-            }
-             * */
             //reset the progress bars for download mods
             parrentProgressBar.Maximum = downloadQueue.Count;
             childProgressBar.Maximum = 100;
@@ -1433,9 +1410,6 @@ namespace RelhaxModpack
             extractworker.DoWork += new DoWorkEventHandler(extractworker_DoWork);
             extractworker.ProgressChanged += new ProgressChangedEventHandler(extractworker_ProgressChanged);
             extractworker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(extractworker_RunWorkerCompleted);
-            //zip = new ZipFile();
-            //zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
-
             object[] parameters = new object[] { };
             userExtract = user;
             if (!userExtract)
@@ -1667,15 +1641,6 @@ namespace RelhaxModpack
                     }
                     configLevel++;
                 }
-                //OLD
-                /*
-                foreach (Config c in configsToInstall)
-                {
-                    Utils.appendToLog("Extracting Config " + c.zipFile);
-                    if (!c.zipFile.Equals("")) this.unzip(downloadedFilesDir + c.zipFile, tanksLocation);
-                    extractworker.ReportProgress(1);
-                }
-                */
                 Utils.appendToLog("Finished Relhax Modpack Extraction");
             }
             else
@@ -1792,7 +1757,6 @@ namespace RelhaxModpack
                 string filePath = tanksLocation + "\\" + s;
                 if (File.Exists(filePath))
                 {
-                    //Utils.appendToLog("Deleting file " + filePath);
                     File.Delete(filePath);
                     smartDeleteworker.ReportProgress(numFilesToCopyDeleteExtract++);
                 }
@@ -2354,7 +2318,6 @@ namespace RelhaxModpack
             float intervalInSeconds = (float)downloadTimer.Interval / 1000;
             float sessionMBytesDownloaded = differenceTotalBytesDownloaded / MBDivisor;
             sessionDownloadSpeed = sessionMBytesDownloaded / intervalInSeconds;
-
             //set the previous for the last amount of bytes downloaded
             previousTotalBytesDownloaded = currentTotalBytesDownloaded;
         }
@@ -2566,7 +2529,6 @@ namespace RelhaxModpack
                 File.SetAttributes(Application.StartupPath + "\\RelHaxDownloads", FileAttributes.Normal);
                 DirectoryInfo di = new DirectoryInfo(Application.StartupPath + "\\RelHaxDownloads");
                 //get every patch file in the folder
-                //patchFilesList = Directory.GetFiles(tanksLocation + @"\_patch", @"*.xml");
                 fi = di.GetFiles(@"*.zip", SearchOption.TopDirectoryOnly);
             }
             catch (UnauthorizedAccessException e)

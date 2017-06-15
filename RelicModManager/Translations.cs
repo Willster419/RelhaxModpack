@@ -12,7 +12,6 @@ namespace RelhaxModpack
         public static Hashtable german = new Hashtable();
         public static Hashtable polish = new Hashtable();
         //load hashes on application startup
-        //Translations.loadHashes();
 
         public static string getTranslatedString(string componetName)
         {

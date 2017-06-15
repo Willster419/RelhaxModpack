@@ -370,7 +370,6 @@ namespace RelhaxModpack
                 }
                 else if (c is TabControl)
                 {
-                    //c.ForeColor = textColor;
                     c.BackColor = backColor;
                     foreach (TabPage t in c.Controls)
                     {

@@ -274,7 +274,6 @@ namespace RelhaxModpack
 
         private void xvmPathButton_Click(object sender, EventArgs e)
         {
-            //Utils.jsonPatch(jsonFilePathBox.Text, jsonPathBox.Text, jsonReplaceBox.Text, "edit", "", "", true);
             Utils.xvmPatch(xvmFilePathBox.Text, xvmPathBox.Text, xvmSearchBox.Text, xvmReplaceBox.Text, xvmMode, "", "", true, xvmFilePathBox.Text);
         }
 

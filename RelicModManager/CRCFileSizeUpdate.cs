@@ -117,9 +117,7 @@ namespace RelhaxModpack
                 }
             }
             //update the crc value
-
             //update the file size
-
             //save config file
             string newModInfo = databaseLocationTextBox.Text;
             this.saveDatabase(newModInfo);

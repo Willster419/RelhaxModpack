@@ -541,22 +541,7 @@ namespace RelhaxModpack
         {
             //don't actually sort them anymore
             //they will not apprea in the order of which they were loaded from the xml file
-            //pictureList.Sort(Picture.ComparePictures);
             return pictureList;
-        }
-        //checks to see if the application is indeed in admin mode
-        public static bool isAdministrator()
-        {
-            WindowsIdentity identity = WindowsIdentity.GetCurrent();
-            if (identity != null)
-            {
-                WindowsPrincipal principal = new WindowsPrincipal(identity);
-                bool isPowerUser = principal.IsInRole(WindowsBuiltInRole.PowerUser);
-                bool isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
-                return (isPowerUser || isAdmin);
-            }
-            Utils.appendToLog("WARNING: user is not admin or power user");
-            return false;
         }
         //method to patch a part of an xml file
         //fileLocation is relative to res_mods folder
@@ -1002,7 +987,6 @@ namespace RelhaxModpack
             catch (JsonReaderException j)
             {
                 Utils.appendToLog("ERROR: Failed to patch " + jsonFile);
-                //MessageBox.Show("ERROR: Failed to patch " + jsonFile);
                 if (Program.testMode)
                 {
                     //in test mode this is worthy of an EXCEPTION
@@ -1220,7 +1204,6 @@ namespace RelhaxModpack
                     readUntill(fileContents,  sb, @"\[");
                     string arrayContents = peekUntill(fileContents,  @"\]");
                     //split the array based on "},"
-                    //string[] carray = arrayContents.Split("},");
                     List<string> carray = split(arrayContents, @"[,}]$");
                     //if it is an index, just use it
                     if (Regex.IsMatch(pathArray[0], @"\[\d\]+"))
@@ -1392,7 +1375,6 @@ namespace RelhaxModpack
             bool modified = false;
             //this is the actual value we want to change
             //get past all the boring stuff
-            //readUntill(fileContents, sb, @":[ \t]*");
             string toReplace = readUntill(fileContents, sb, @"[,}\]]", false);
             //actually replace the value
             //check if it's a comma type (not last) or curley bracket (last)
@@ -1510,7 +1492,6 @@ namespace RelhaxModpack
             {
                 if(Regex.IsMatch(editCheck, @",$"))
                     hadComma = true;
-                //editCheck = Regex.Replace(editCheck, search, replaceValue);
                 editCheck =  " " + replaceValue;
                 if (hadComma)
                     editCheck = editCheck + ",";
@@ -1578,7 +1559,6 @@ namespace RelhaxModpack
                 {
                     temp = readValues;
                 }
-                //temp = readValues.Length > 250 ? readValues.Substring(readValues.Length - 250, 250) : readValues;
             }
             return readValues;
         }
@@ -1697,23 +1677,6 @@ namespace RelhaxModpack
                 int startBracketCount = 0;
                 while (true)
                 {
-                    /*if (Regex.IsMatch(readValues, regexSplitCommand))
-                    {
-                        //if it was a bracket, try to see if there's a comma next
-                        if (Regex.IsMatch(readValues, @"}$"))
-                        {
-                            char c2 = stringToSplit[saveNumReadBytes + 1];
-                            if (c2.Equals(','))
-                            {
-                                readValues = readValues + c2;
-                                saveNumReadBytes++;
-                            }
-                            startBracketCount--;
-                        }
-                        if (startBracketCount == 0)
-                            break;
-                        
-                    }*/
                     if (saveNumReadBytes >= stringToSplit.Count())
                     {
                         readValues = readValues.Substring(0, readValues.Length - 1);

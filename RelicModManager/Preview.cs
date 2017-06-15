@@ -60,7 +60,6 @@ namespace RelhaxModpack
             label.AutoSize = true;
             int xLocation = 14 * i;
             label.Location = new Point(xLocation, 5);
-            //fullSizeLabel.Size = new System.Drawing.Size(82, 13);
             label.TabStop = true;
             pictureCountPanel.Controls.Add(label);
         }

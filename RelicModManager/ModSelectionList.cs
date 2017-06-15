@@ -258,7 +258,6 @@ namespace RelhaxModpack
         {
             modTabGroups.TabPages.Clear();
             modTabGroups.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
-            //this.sortCatagoryList(parsedCatagoryList);
             foreach (Category c in parsedCatagoryList)
             {
                 TabPage t = new TabPage(c.name);
@@ -589,15 +588,11 @@ namespace RelhaxModpack
                     foreach (System.Windows.Controls.TreeViewItem tvi in TV.Items)
                     {
                         ModWPFCheckBox modCB = (ModWPFCheckBox)tvi.Header;
-                        //remove the handler before we make changes
-                        //modCB.Click -= modCheckBoxL_Click;
                         if ((bool)modCB.IsChecked)
                         {
                             modCB.IsChecked = false;
                             modCB.mod.Checked = false;
                         }
-                        //modCheckBoxL_Click(modCB, null);
-                        //modCB.Click += modCheckBoxL_Click;
                     }
                 }
                 //now it is safe to check the mod we want
@@ -713,7 +708,6 @@ namespace RelhaxModpack
                             //getting here means cb is enabled
                             subRB.IsEnabled = true;
                             //this needs to be changed
-                            //subRB_Click(subRB, null);
                             if (subc.Checked)
                                 configSelected = true;
                         }
@@ -776,12 +770,6 @@ namespace RelhaxModpack
             }
             //first check if this is init, meaning first time enabled
             //but now this should never have to run
-            /*if (cb.SelectedIndex == -1)
-            {
-                //it will run recurse with this method again with a selected index of 0
-                cb.SelectedIndex = 0;
-                return;
-            }*/
             //getting here means that an item is confirmed to be selected
             //itterate through the items, get each config, disable it
             //enable the selected one at the end
@@ -870,7 +858,6 @@ namespace RelhaxModpack
                             //getting here means cb is enabled
                             subRB.IsEnabled = true;
                             //this needs to be changed
-                            //subRB_Click(subRB, null);
                             if (subc.Checked)
                                 configSelected = true;
                         }
@@ -1379,12 +1366,8 @@ namespace RelhaxModpack
                                 {
                                     ModFormCheckBox cbb = (ModFormCheckBox)ccc;
                                     //disable the other mods
-                                    //cbb.CheckedChanged -= modCheckBox_CheckedChanged;
                                     cbb.Checked = false;
                                     cbb.mod.Checked = false;
-                                    //modCheckBox_CheckedChanged(cbb, null);
-                                    //cbb.mod.Checked = false;
-                                    //cbb.CheckedChanged += modCheckBox_CheckedChanged;
                                 }
                             }
                         }
@@ -1395,7 +1378,6 @@ namespace RelhaxModpack
                     cb.Checked = true;
                     cb.mod.Checked = true;
                     cb.CheckedChanged += modCheckBox_CheckedChanged;
-                    //modCheckBox.Checked = false;
                 }
 
             }
@@ -1474,9 +1456,7 @@ namespace RelhaxModpack
                 if (obj is Mod)
                 {
                     Mod parentM = (Mod)obj;
-                    //parentM.modFormCheckBox.CheckedChanged -= modCheckBox_CheckedChanged;
                     parentM.modFormCheckBox.Checked = true;
-                    //parentM.modFormCheckBox.CheckedChanged += modCheckBox_CheckedChanged;
                 }
                 else if (obj is Config)
                 {
@@ -1563,7 +1543,6 @@ namespace RelhaxModpack
         //handler for when a config selection is made from the drop down list
         void configControlDD_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
             //uncheck all other dorp down configs
             ConfigFormComboBox cb = (ConfigFormComboBox)sender;
             if (!loadingConfig)
@@ -1576,9 +1555,7 @@ namespace RelhaxModpack
                     if (obj is Mod)
                     {
                         Mod parentM = (Mod)obj;
-                        //parentM.modFormCheckBox.CheckedChanged -= modCheckBox_CheckedChanged;
                         parentM.modFormCheckBox.Checked = true;
-                        //parentM.modFormCheckBox.CheckedChanged += modCheckBox_CheckedChanged;
                     }
                     else if (obj is Config)
                     {
@@ -1599,11 +1576,6 @@ namespace RelhaxModpack
             }
             //if no index selected, select one
             //does not need to run this anymore tho
-            /*if (cb.SelectedIndex == -1)
-            {
-                cb.SelectedIndex = 0;
-                return;
-            }*/
             //itterate through the items, get each config, disable it
             //unless it's the same name as the selectedItem
             foreach (ComboBoxItem cbi in cb.Items)
@@ -1632,9 +1604,7 @@ namespace RelhaxModpack
                 if (obj is Mod)
                 {
                     Mod parentM = (Mod)obj;
-                    //parentM.modFormCheckBox.CheckedChanged -= modCheckBox_CheckedChanged;
                     parentM.modFormCheckBox.Checked = true;
-                    //parentM.modFormCheckBox.CheckedChanged += modCheckBox_CheckedChanged;
                 }
                 else if (obj is Config)
                 {
@@ -1801,7 +1771,6 @@ namespace RelhaxModpack
                     if (c is Panel)
                     {
                         //mod panel
-                        //TODO RECURSIVLY
                         Panel p = (Panel)c;
                         resizePanel(p, t, 25);
                     }
@@ -1923,7 +1892,6 @@ namespace RelhaxModpack
                 if (!File.Exists(filePath))
                 {
                     Utils.appendToLog("ERROR: " + filePath + " not found, not loading configs");
-                    //MessageBox.Show(Translations.getTranslatedString("configLoadFailed"));
                     return;
                 }
             }
