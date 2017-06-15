@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace RelhaxModpack
+﻿namespace RelhaxModpack
 {
     //an item to add ot a ComboBox
     class ComboBoxItem

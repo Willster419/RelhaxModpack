@@ -99,7 +99,7 @@ namespace RelhaxModpack
             {
                 doc.Load(databaseURL);
             }
-            catch (XmlException e)
+            catch (XmlException)
             {
                 Utils.appendToLog("CRITICAL: Failed to read database!");
                 MessageBox.Show(Translations.getTranslatedString("databaseReadFailed"));
