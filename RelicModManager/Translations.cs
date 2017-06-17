@@ -860,11 +860,11 @@ namespace RelhaxModpack
             german.Add("fontSizeGB", "Skalierungsmodus");
             polish.Add("fontSizeGB", "Tryb skalowania");
 
-            //Componet: viewTypeGB
+            //Componet: expandNodesDefault
             //
-            english.Add("viewTypeGB", "Selection View");
-            german.Add("viewTypeGB", "Auswahlansicht");
-            polish.Add("viewTypeGB", "Widok wyboru");
+            english.Add("expandNodesDefault", "Expand all");
+            german.Add("expandNodesDefault", "Alle erweitern");
+            polish.Add("expandNodesDefault", "Rozwiń wszystkie");
 
             //Component: expandAllDesc
             //

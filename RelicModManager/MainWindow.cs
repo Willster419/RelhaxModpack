@@ -1955,7 +1955,6 @@ namespace RelhaxModpack
         //applies all settings from static settings class to this form
         private void applySettings(bool init = false)
         {
-            
             this.forceManuel.Text = Translations.getTranslatedString(forceManuel.Name);
             this.cleanInstallCB.Text = Translations.getTranslatedString(cleanInstallCB.Name);
             this.backupModsCheckBox.Text = Translations.getTranslatedString(backupModsCheckBox.Name);
@@ -1977,6 +1976,8 @@ namespace RelhaxModpack
             this.selectionLegacy.Text = Translations.getTranslatedString(selectionLegacy.Name);
             this.donateLabel.Text = Translations.getTranslatedString(donateLabel.Name);
             this.cancelDownloadButton.Text = Translations.getTranslatedString(cancelDownloadButton.Name);
+            this.fontSizeGB.Text = Translations.getTranslatedString(fontSizeGB.Name);
+            this.expandNodesDefault.Text = Translations.getTranslatedString(expandNodesDefault.Name);
             if (helper != null)
             {
                 helper.helperText.Text = Translations.getTranslatedString("helperText");
