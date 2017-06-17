@@ -2578,38 +2578,91 @@ namespace RelhaxModpack
 
         private void fontSizeDefault_CheckedChanged(object sender, EventArgs e)
         {
+            bool wasComicSans = Settings.comicSans;
+            if (Settings.comicSans && Settings.scalingMode == Settings.ScaleMode.dpi)
+            {
+                Settings.comicSans = false;
+                this.Font = Settings.getFont();
+            }
             Settings.scalingMode = Settings.ScaleMode.font;
             Settings.fontSizeforum = Settings.FontSize.regular;
             this.AutoScaleMode = Settings.getAutoScaleMode();
             this.Font = Settings.getFont();
+            if (wasComicSans)
+            {
+                Settings.comicSans = true;
+                this.Font = Settings.getFont();
+            }
         }
 
         private void fontSizeLarge_CheckedChanged(object sender, EventArgs e)
         {
+            bool wasComicSans = Settings.comicSans;
+            if (Settings.comicSans && Settings.scalingMode == Settings.ScaleMode.dpi)
+            {
+                Settings.comicSans = false;
+                this.Font = Settings.getFont();
+            }
             Settings.scalingMode = Settings.ScaleMode.font;
             Settings.fontSizeforum = Settings.FontSize.large;
             this.AutoScaleMode = Settings.getAutoScaleMode();
             this.Font = Settings.getFont();
+            if (wasComicSans)
+            {
+                Settings.comicSans = true;
+                this.Font = Settings.getFont();
+            }
         }
 
         private void fontSizeHUD_CheckedChanged(object sender, EventArgs e)
         {
             //DPI->font means scale mode then font
             //font->font means scale mode then font
+
+            //if comic sans font and dpi scale
+            //turn off comic sans
+
+            bool wasComicSans = Settings.comicSans;
+            if (Settings.comicSans && Settings.scalingMode == Settings.ScaleMode.dpi)
+            {
+                Settings.comicSans = false;
+                this.Font = Settings.getFont();
+            }
             Settings.scalingMode = Settings.ScaleMode.font;
             Settings.fontSizeforum = Settings.FontSize.UHD;
             this.AutoScaleMode = Settings.getAutoScaleMode();
             this.Font = Settings.getFont();
+            if (wasComicSans)
+            {
+                Settings.comicSans = true;
+                this.Font = Settings.getFont();
+            }
         }
 
         private void DPI_CheckedChanged(object sender, EventArgs e)
         {
             //default for all windows is font which means they all go from font->DPI or font->font
             //font->DPI means font then scale mode
+
+            //if comic sans font and font scale
+            //turn off comic sans and set font scale to normal
+
+            bool wasComicSans = Settings.comicSans;
+            if (Settings.comicSans && Settings.scalingMode == Settings.ScaleMode.font)
+            {
+                Settings.comicSans = false;
+                Settings.fontSizeforum = Settings.FontSize.regular;
+                this.Font = Settings.getFont();
+            }
             Settings.fontSizeforum = Settings.FontSize.regular;
             Settings.scalingMode = Settings.ScaleMode.dpi;
             this.Font = Settings.getFont();
             this.AutoScaleMode = Settings.getAutoScaleMode();
+            if (wasComicSans)
+            {
+                Settings.comicSans = true;
+                this.Font = Settings.getFont();
+            }
         }
     }
     //a class for the downloadQueue list, to make a queue of downloads
