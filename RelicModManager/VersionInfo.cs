@@ -31,6 +31,8 @@ namespace RelhaxModpack
         //handler for before the window is displayed
         private void VersionInfo_Load(object sender, EventArgs e)
         {
+            this.Font = Settings.getFont();
+            this.AutoScaleMode = Settings.getAutoScaleMode();
             updateAcceptButton.Text = Translations.getTranslatedString(updateAcceptButton.Name);
             updateDeclineButton.Text = Translations.getTranslatedString(updateDeclineButton.Name);
             newVersionAvailableLabel.Text = Translations.getTranslatedString(newVersionAvailableLabel.Name);

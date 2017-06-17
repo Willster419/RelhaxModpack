@@ -17,7 +17,7 @@ namespace RelhaxModpack
         public static bool backupModFolder { get; set; }
         public static bool cleanInstallation { get; set; }
         public static bool forceManuel { get; set; }
-        public static bool largeFont { get; set; }
+        public static bool expandAllLegacy { get; set; }
         public static bool comicSans { get; set; }
         public static bool firstLoad { get; set; }
         public static bool saveLastConfig { get; set; }
@@ -33,17 +33,24 @@ namespace RelhaxModpack
         public enum LoadingGifs { standard = 0, thirdGuards = 1 };
         public static LoadingGifs gif;
         public const float normalSizeFont = 8.25F;
-        public const float largeSizeFont = 12.0F;
+        public const float largeSizeFont = 10.5F;
+        public const float UHDSizeFont = 13.5F;
         public const string defaultFontType = "Microsoft Sance Serif";
         public const string comicSansFontType = "Comic Sans MS";
         private static int tempLoadedLanguage = -1;
+        private static int tempFontSize = -1;
         public static bool ModSelectionFullscreen = false;
         public static int previewX = 0;
         public static int previewY = 0;
         //enumeration for the type of mod selection list view
         public enum SelectionView { defaultt = 0, legacy = 1 };
         public static SelectionView sView = SelectionView.defaultt;
+        public enum FontSize { regular = 0, large = 1, UHD = 2 };
+        public static FontSize fontSizeforum = FontSize.regular;
         public static int tempLoadedView = 0;
+        public enum ScaleMode { font = 0, dpi = 1 };
+        public static ScaleMode scalingMode = ScaleMode.font;
+        private static int tempLoadedScaleMode = 0;
         //loads settings from xml file
         public static void loadSettings()
         {
@@ -54,7 +61,6 @@ namespace RelhaxModpack
                 Utils.appendToLog("WARNING:Settings xml not found, loading defaults");
                 //could also use this to determine if first load or not
                 Settings.comicSans = false;
-                Settings.largeFont = false;
                 Settings.backupModFolder = false;
                 Settings.cleanInstallation = true;
                 Settings.loadingGif = (int)LoadingGifs.standard;
@@ -67,10 +73,15 @@ namespace RelhaxModpack
                 Settings.tempLoadedLanguage = 0;
                 Settings.modSelectionHeight = 250;
                 Settings.modSelectionWidth = 520;
+                Settings.fontSizeforum = Settings.FontSize.regular;
+                Settings.tempFontSize = (int)FontSize.regular;
+                Settings.expandAllLegacy = false;
                 ModSelectionFullscreen = false;
                 previewX = 0;
                 previewY = 0;
                 Settings.sView = SelectionView.defaultt;
+                Settings.tempLoadedScaleMode = 0;
+                Settings.scalingMode = ScaleMode.font;
                 Settings.applyInternalSettings();
             }
             else
@@ -86,8 +97,8 @@ namespace RelhaxModpack
                         case "comicSans":
                             Settings.comicSans = bool.Parse(n.InnerText);
                             break;
-                        case "largeFont":
-                            Settings.largeFont = bool.Parse(n.InnerText);
+                        case "fontSize":
+                            Settings.tempFontSize = int.Parse(n.InnerText);
                             break;
                         case "backupModFolder":
                             Settings.backupModFolder = bool.Parse(n.InnerText);
@@ -119,6 +130,9 @@ namespace RelhaxModpack
                         case "darkUI":
                             Settings.darkUI = bool.Parse(n.InnerText);
                             break;
+                        case "expandAllLegacy":
+                            Settings.expandAllLegacy = bool.Parse(n.InnerText);
+                            break;
                         case "language":
                             Settings.tempLoadedLanguage = int.Parse(n.InnerText);
                             break;
@@ -134,6 +148,9 @@ namespace RelhaxModpack
                         case "SelectionView":
                             Settings.tempLoadedView = int.Parse(n.InnerText);
                             break;
+                        case "scalingMode":
+                            Settings.tempLoadedScaleMode = int.Parse(n.InnerText);
+                            break;
                     }
                 }
             }
@@ -144,13 +161,20 @@ namespace RelhaxModpack
         //based on the boolean settings from above
         public static void applyInternalSettings()
         {
-            if (Settings.largeFont)
+            switch (Settings.tempFontSize)
             {
-                Settings.fontSize = Settings.largeSizeFont;
-            }
-            else
-            {
-                Settings.fontSize = Settings.normalSizeFont;
+                case 0:
+                    Settings.fontSizeforum = FontSize.regular;
+                    Settings.fontSize = Settings.normalSizeFont;
+                    break;
+                case 1:
+                    Settings.fontSizeforum = FontSize.large;
+                    Settings.fontSize = Settings.largeSizeFont;
+                    break;
+                case 2:
+                    Settings.fontSizeforum = FontSize.UHD;
+                    Settings.fontSize = Settings.UHDSizeFont;
+                    break;
             }
             if (Settings.comicSans)
             {
@@ -192,6 +216,15 @@ namespace RelhaxModpack
                     Settings.sView = SelectionView.legacy;
                     break;
             }
+            switch (Settings.tempLoadedScaleMode)
+            {
+                case (int)ScaleMode.dpi:
+                    Settings.scalingMode = ScaleMode.dpi;
+                    break;
+                case (int)ScaleMode.font:
+                    Settings.scalingMode = ScaleMode.font;
+                    break;
+            }
         }
         //saves settings to xml file
         public static void saveSettings()
@@ -204,9 +237,12 @@ namespace RelhaxModpack
             XmlElement xcomicSans = doc.CreateElement("comicSans");
             xcomicSans.InnerText = "" + comicSans;
             settingsHolder.AppendChild(xcomicSans);
-            XmlElement xlargeFont = doc.CreateElement("largeFont");
-            xlargeFont.InnerText = "" + largeFont;
+            XmlElement xlargeFont = doc.CreateElement("fontSize");
+            xlargeFont.InnerText = "" + (int)fontSizeforum;
             settingsHolder.AppendChild(xlargeFont);
+            XmlElement xscalingMode = doc.CreateElement("scalingMode");
+            xscalingMode.InnerText = "" + (int)scalingMode;
+            settingsHolder.AppendChild(xscalingMode);
             XmlElement xbackupModFolder = doc.CreateElement("backupModFolder");
             xbackupModFolder.InnerText = "" + backupModFolder;
             settingsHolder.AppendChild(xbackupModFolder);
@@ -225,6 +261,9 @@ namespace RelhaxModpack
             XmlElement xdarkUI = doc.CreateElement("darkUI");
             xdarkUI.InnerText = "" + Settings.darkUI;
             settingsHolder.AppendChild(xdarkUI);
+            XmlElement xexpandAllLegacy = doc.CreateElement("expandAllLegacy");
+            xexpandAllLegacy.InnerText = "" + Settings.expandAllLegacy;
+            settingsHolder.AppendChild(xexpandAllLegacy);
             XmlElement xlanguage = doc.CreateElement("language");
             xlanguage.InnerText = "" + (int)Translations.language;
             settingsHolder.AppendChild(xlanguage);
@@ -302,9 +341,42 @@ namespace RelhaxModpack
             return null;
         }
         //returns a new font for the window
-        public static Font getFont(string fontName, float fontSize)
+        public static Font getFont()
         {
+            if (Settings.comicSans)
+            {
+                Settings.fontName = Settings.comicSansFontType;
+            }
+            else
+            {
+                Settings.fontName = Settings.defaultFontType;
+            }
+            switch (Settings.fontSizeforum)
+            {
+                case FontSize.regular:
+                    Settings.fontSize = Settings.normalSizeFont;
+                    break;
+                case FontSize.large:
+                    Settings.fontSize = Settings.largeSizeFont;
+                    break;
+                case FontSize.UHD:
+                    Settings.fontSize = Settings.UHDSizeFont;
+                    break;
+            }
             return new System.Drawing.Font(fontName, fontSize);
+        }
+        public static AutoScaleMode getAutoScaleMode()
+        {
+            switch (Settings.scalingMode)
+            {
+                case Settings.ScaleMode.font:
+                    return AutoScaleMode.Font;
+                    
+                case Settings.ScaleMode.dpi:
+                    return AutoScaleMode.Dpi;
+                    
+            }
+            return AutoScaleMode.Font;
         }
         //sets a form to have a dark UI
         public static void setUIColor(System.Windows.Forms.Form window)

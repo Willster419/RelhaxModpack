@@ -823,6 +823,18 @@ namespace RelhaxModpack
             english.Add("foundOldFilesDelete2", "Would you like to delete them?");
             german.Add("foundOldFilesDelete2", "Möchtest du das sie gelöscht werden?");
             polish.Add("foundOldFilesDelete2", "Czy chcesz je usunąć?");
+
+            //Componet: Expand All option
+            //
+            english.Add("expandAllButton", "Expand Current Tab");
+            german.Add("expandAllButton", "Expand All");
+            polish.Add("expandAllButton", "Expand All");
+
+            //Componet: Colapse all option
+            //
+            english.Add("colapseAllButton", "Collapse Current Tab");
+            german.Add("colapseAllButton", "Collapse All");
+            polish.Add("colapseAllButton", "Collapse All");
         }
     }
 }

@@ -109,14 +109,24 @@ namespace RelhaxModpack
             //do this from bottom to top
             updateBox.Size = new Size(width, updateBox.Size.Height);
             descriptionBox.Size = new Size(width, descriptionBox.Size.Height);
-            previewPicture.Size = new Size(width, applicationHeight - 265 - difference);
+            int scale = 0;
+            switch (Settings.fontSizeforum)
+            {
+                case Settings.FontSize.large:
+                    scale = 30;
+                    break;
+                case Settings.FontSize.UHD:
+                    scale = 75;
+                    break;
+            }
+            previewPicture.Size = new Size(width, applicationHeight - 265 - difference - scale);
             updateBox.Location = new Point(12, 12 + previewPicture.Size.Height + 6 + nextPicButton.Size.Height + 6 + descriptionBox.Size.Height + 6);
             descriptionBox.Location = new Point(12, 12 + previewPicture.Size.Height + 6 + nextPicButton.Size.Height + 6);
             nextPicButton.Location = new Point(this.Size.Width - 21 - nextPicButton.Size.Width, 12 + previewPicture.Size.Height + 6);
             previousPicButton.Location = new Point(12, 12 + previewPicture.Size.Height + 6);
             pictureCountPanel.Location = new Point(12 + previousPicButton.Size.Width + 12, 12 + previewPicture.Size.Height + 6);
             pictureCountPanel.Size = new Size(width - pictureCountPanel.Location.X - nextPicButton.Size.Width - 4, pictureCountPanel.Size.Height);
-            devLinkLabel.Location = new Point(this.Size.Width - 12 - devLinkLabel.Size.Width - 4, applicationHeight - 49 - difference);
+            devLinkLabel.Location = new Point(this.Size.Width - 12 - devLinkLabel.Size.Width - 4, applicationHeight - 49 - difference -5 );
         }
         //applies translations
         private void applyTranslations()
@@ -130,7 +140,8 @@ namespace RelhaxModpack
         {
             //update for translations
             this.applyTranslations();
-            this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
+            this.Font = Settings.getFont();
+            this.AutoScaleMode = Settings.getAutoScaleMode();
             this.Text = modOrConfigName;
             for (int i = 0; i < pictures.Count; i++)
             {

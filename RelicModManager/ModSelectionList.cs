@@ -59,6 +59,8 @@ namespace RelhaxModpack
             saveConfigButton.Text = Translations.getTranslatedString(saveConfigButton.Name);
             label2.Text = Translations.getTranslatedString(label2.Name);
             clearSelectionsButton.Text = Translations.getTranslatedString(clearSelectionsButton.Name);
+            colapseAllButton.Text = Translations.getTranslatedString(colapseAllButton.Name);
+            expandAllButton.Text = Translations.getTranslatedString(expandAllButton.Name);
         }
 
         //called on application startup
@@ -68,7 +70,9 @@ namespace RelhaxModpack
             pw = new PleaseWait(mainWindowStartX, mainWindowStartY);
             pw.Show();
             //set the font from settings
-            this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
+            this.Font = Settings.getFont();
+            this.AutoScaleMode = Settings.getAutoScaleMode();
+            
             //apply the translations
             this.applyTranslations();
             pw.loadingDescBox.Text = Translations.getTranslatedString("readingDatabase");
@@ -136,7 +140,7 @@ namespace RelhaxModpack
                 Settings.SetTaskbarState(Settings.AppBarStates.AlwaysOnTop);
             }
             //get the maximum height of the screen
-            this.MaximumSize = Screen.FromControl(this).WorkingArea.Size;
+            //this.MaximumSize = Screen.FromControl(this).WorkingArea.Size;
             //get the size of the title bar window
             Rectangle screenRektangle = RectangleToScreen(this.ClientRectangle);
             int titleHeight = screenRektangle.Top - this.Top;
@@ -151,6 +155,20 @@ namespace RelhaxModpack
             if (Settings.ModSelectionFullscreen)
             {
                 this.WindowState = FormWindowState.Maximized;
+            }
+            if (Settings.sView == Settings.SelectionView.defaultt)
+            {
+                colapseAllButton.Enabled = false;
+                colapseAllButton.Visible = false;
+                expandAllButton.Enabled = false;
+                expandAllButton.Visible = false;
+            }
+            else
+            {
+                colapseAllButton.Enabled = true;
+                colapseAllButton.Visible = true;
+                expandAllButton.Enabled = true;
+                expandAllButton.Visible = true;
             }
         }
         //initializes the userMods list. This should only be run once
@@ -201,6 +219,9 @@ namespace RelhaxModpack
         //must be only one catagory
         private void addAllMods()
         {
+            pw.progressBar1.Minimum = 0;
+            pw.progressBar1.Maximum = Utils.totalModConfigComponents;
+            pw.progressBar1.Value = 0;
             loadingConfig = true;
             Utils.appendToLog("Loading ModSelectionList with view " + Settings.sView);
             foreach (TabPage t in this.modTabGroups.TabPages)
@@ -230,6 +251,7 @@ namespace RelhaxModpack
                         foreach (Mod m in c.mods)
                         {
                             pw.loadingDescBox.Text = Translations.getTranslatedString("loading") + " " + m.name;
+                            pw.progressBar1.Value++;
                             Application.DoEvents();
                             if (Settings.sView == Settings.SelectionView.defaultt)
                             {
@@ -257,7 +279,7 @@ namespace RelhaxModpack
         private void makeTabs()
         {
             modTabGroups.TabPages.Clear();
-            modTabGroups.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
+            modTabGroups.Font = Settings.getFont();
             foreach (Category c in parsedCatagoryList)
             {
                 TabPage t = new TabPage(c.name);
@@ -289,13 +311,25 @@ namespace RelhaxModpack
             //use a custom datatype for the name
             modCheckBox.mod = m;
             modCheckBox.catagory = c;
-            if (Settings.largeFont)
-                modCheckBox.FontSize = modCheckBox.FontSize + 4;
+            switch (Settings.fontSizeforum)
+            {
+                case Settings.FontSize.regular:
+                    //modCheckBox.FontSize = modCheckBox.FontSize + 4;
+                    break;
+                case Settings.FontSize.large:
+                    modCheckBox.FontSize = modCheckBox.FontSize + 4;
+                    break;
+                case Settings.FontSize.UHD:
+                    modCheckBox.FontSize = modCheckBox.FontSize + 8;
+                    break;
+            }
             modCheckBox.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
             if (Settings.darkUI)
                 modCheckBox.FontWeight = System.Windows.FontWeights.Bold;
             //make the tree view item for the modCheckBox
             System.Windows.Controls.TreeViewItem tvi = new System.Windows.Controls.TreeViewItem();
+            if(Settings.expandAllLegacy)
+                tvi.IsExpanded = true;
             //process configs
             if (m.configs.Count > 0)
                 processConfigs(c, m, m.configs, tvi, true);
@@ -366,8 +400,18 @@ namespace RelhaxModpack
                     modHasRadioButtons = true;
                     //make the radio button
                     ConfigWPFRadioButton configControlRB = new ConfigWPFRadioButton();
-                    if (Settings.largeFont)
-                        configControlRB.FontSize = configControlRB.FontSize + 4;
+                    switch (Settings.fontSizeforum)
+                    {
+                        case Settings.FontSize.regular:
+                            //modCheckBox.FontSize = modCheckBox.FontSize + 4;
+                            break;
+                        case Settings.FontSize.large:
+                            configControlRB.FontSize = configControlRB.FontSize + 4;
+                            break;
+                        case Settings.FontSize.UHD:
+                            configControlRB.FontSize = configControlRB.FontSize + 8;
+                            break;
+                    }
                     configControlRB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
                     if (Settings.darkUI)
                         configControlRB.FontWeight = System.Windows.FontWeights.Bold;
@@ -422,6 +466,8 @@ namespace RelhaxModpack
                     configControlRB.MouseDown += new System.Windows.Input.MouseButtonEventHandler(configControlRB_MouseDown);
                     //add it to the mod config list
                     System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
+                    if (Settings.expandAllLegacy)
+                        configControlTVI.IsExpanded = true;
                     configControlTVI.Header = configControlRB;
                     tvi.Items.Add(configControlTVI);
                     //process the subconfigs
@@ -489,8 +535,18 @@ namespace RelhaxModpack
                 {
                     //make the checkbox
                     ConfigWPFCheckBox configControlCB = new ConfigWPFCheckBox();
-                    if (Settings.largeFont)
-                        configControlCB.FontSize = configControlCB.FontSize + 4;
+                    switch (Settings.fontSizeforum)
+                    {
+                        case Settings.FontSize.regular:
+                            //modCheckBox.FontSize = modCheckBox.FontSize + 4;
+                            break;
+                        case Settings.FontSize.large:
+                            configControlCB.FontSize = configControlCB.FontSize + 4;
+                            break;
+                        case Settings.FontSize.UHD:
+                            configControlCB.FontSize = configControlCB.FontSize + 8;
+                            break;
+                    }
                     configControlCB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
                     if (Settings.darkUI)
                         configControlCB.FontWeight = System.Windows.FontWeights.Bold;
@@ -545,6 +601,8 @@ namespace RelhaxModpack
                     configControlCB.MouseDown += new System.Windows.Input.MouseButtonEventHandler(configControlCB_MouseDown);
                     //add it to the mod config list
                     System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
+                    if (Settings.expandAllLegacy)
+                        configControlTVI.IsExpanded = true;
                     configControlTVI.Header = configControlCB;
                     tvi.Items.Add(configControlTVI);
                     //process the subconfigs
@@ -963,7 +1021,7 @@ namespace RelhaxModpack
             modCheckBox.TabIndex = 1;
             modCheckBox.Text = m.name;
             modCheckBox.Name = t.Name + "_" + m.name;
-            modCheckBox.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
+            modCheckBox.Font = Settings.getFont();
             modCheckBox.catagory = catagory;
             modCheckBox.mod = m;
             m.modFormCheckBox = modCheckBox;
@@ -1052,7 +1110,18 @@ namespace RelhaxModpack
                     configPanel.BackColor = Settings.getBackColor();
             }
             int spacer = modCheckBox.Location.Y + modCheckBox.Size.Height + 5;
-            if (Settings.largeFont) spacer += 3;
+            switch (Settings.fontSizeforum)
+            {
+                case Settings.FontSize.regular:
+                    //spacer += 3;
+                    break;
+                case Settings.FontSize.large:
+                    spacer += 3;
+                    break;
+                case Settings.FontSize.UHD:
+                    spacer += 6;
+                    break;
+            }
             if (parentIsMod)
             {
                 configPanel.Location = new Point(configPanel.Location.X + 10, spacer);
@@ -1108,7 +1177,7 @@ namespace RelhaxModpack
                     configControlRB.Size = new System.Drawing.Size(150, 15);
                     configControlRB.TabIndex = 1;
                     configControlRB.TabStop = true;
-                    configControlRB.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
+                    configControlRB.Font = Settings.getFont();
                     configControlRB.catagory = catagory;
                     configControlRB.mod = m;
                     configControlRB.config = con;
@@ -1227,7 +1296,7 @@ namespace RelhaxModpack
                     configControlCB.Size = new System.Drawing.Size(150, 15);
                     configControlCB.TabIndex = 1;
                     configControlCB.TabStop = true;
-                    configControlCB.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
+                    configControlCB.Font = Settings.getFont();
                     configControlCB.catagory = catagory;
                     configControlCB.mod = m;
                     configControlCB.config = con;
@@ -1755,6 +1824,8 @@ namespace RelhaxModpack
         //resizing handler for the window
         private void ModSelectionList_SizeChanged(object sender, EventArgs e)
         {
+            colapseAllButton.Location = new Point(this.Size.Width - 20 - colapseAllButton.Size.Width, colapseAllButton.Location.Y);
+            expandAllButton.Location = new Point(this.Size.Width - 20 - expandAllButton.Size.Width, expandAllButton.Location.Y);
             continueButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
             cancelButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
             modTabGroups.Size = new Size(this.Size.Width - 20 - modTabGroups.Location.X, this.Size.Height - modTabGroups.Location.Y - 39 - continueButton.Size.Height - 6 - difference);
@@ -1762,8 +1833,14 @@ namespace RelhaxModpack
             loadConfigButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width - 6 - loadConfigButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
             saveConfigButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
             clearSelectionsButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width - 6 - loadConfigButton.Size.Width - 6 - clearSelectionsButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
-            if (this.Size.Height < 250) this.Size = new Size(this.Size.Width, 250);
-            if (this.Size.Width < 550) this.Size = new Size(550, this.Size.Height);
+            if (this.Size.Height < 250)
+            {
+                this.Size = new Size(this.Size.Width, 250);
+            }
+            if (this.Size.Width < 550)
+            {
+                this.Size = new Size(550, this.Size.Height);
+            }
             foreach (TabPage t in modTabGroups.TabPages)
             {
                 foreach (Control c in t.Controls)
@@ -1924,6 +2001,61 @@ namespace RelhaxModpack
                 this.UseWaitCursor = false;
                 modTabGroups.Enabled = true;
                 ModSelectionList_SizeChanged(null, null);
+            }
+        }
+
+        private void ColapseAllButton_Click(object sender, EventArgs e)
+        {
+            foreach (Control c in modTabGroups.SelectedTab.Controls)
+            {
+                if (c is ElementHost)
+                {
+                    ElementHost eh = (ElementHost)c;
+                    LegacySelectionList lsl = (LegacySelectionList)eh.Child;
+                    foreach (System.Windows.Controls.TreeViewItem tvi in lsl.legacyTreeView.Items)
+                    {
+                        tvi.IsExpanded = false;
+                        if (tvi.Items.Count > 0)
+                        {
+                            processTreeViewItems(tvi.Items,false);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void expandAllButton_Click(object sender, EventArgs e)
+        {
+            foreach (Control c in modTabGroups.SelectedTab.Controls)
+            {
+                if (c is ElementHost)
+                {
+                    ElementHost eh = (ElementHost)c;
+                    LegacySelectionList lsl = (LegacySelectionList)eh.Child;
+                    foreach (System.Windows.Controls.TreeViewItem tvi in lsl.legacyTreeView.Items)
+                    {
+                        tvi.IsExpanded = true;
+                        if (tvi.Items.Count > 0)
+                        {
+                            processTreeViewItems(tvi.Items, true);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void processTreeViewItems(System.Windows.Controls.ItemCollection ic, bool expand)
+        {
+            foreach (System.Windows.Controls.TreeViewItem tvi in ic)
+            {
+                if (expand)
+                    tvi.IsExpanded = true;
+                else
+                    tvi.IsExpanded = false;
+                if (tvi.Items.Count > 0)
+                {
+                    processTreeViewItems(tvi.Items,expand);
+                }
             }
         }
     }

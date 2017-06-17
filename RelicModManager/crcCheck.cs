@@ -20,5 +20,11 @@ namespace RelhaxModpack
             string crc = Utils.getMd5Hash(openFileDialog1.FileName);
             crcTB.Text = crc;
         }
+
+        private void CRCCheck_Load(object sender, EventArgs e)
+        {
+            this.Font = Settings.getFont();
+            this.AutoScaleMode = Settings.getAutoScaleMode();
+        }
     }
 }

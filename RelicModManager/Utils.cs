@@ -23,6 +23,7 @@ namespace RelhaxModpack
         private static List<string> parsedZips;
         private static string xvmBootFileLoc1 = "\\res_mods\\configs\\xvm\\xvm.xc";
         private static string xvmBootFileLoc2 = "\\mods\\configs\\xvm\\xvm.xc";
+        public static int totalModConfigComponents = 0;
         //logs string info to the log output
         public static void appendToLog(string info)
         {
@@ -94,6 +95,7 @@ namespace RelhaxModpack
         //parses the xml mod info into the memory database
         public static void createModStructure2(string databaseURL, bool backendFlag, List<Dependency> globalDependencies, List<Category> parsedCatagoryList)
         {
+            totalModConfigComponents = 0;
             XmlDocument doc = new XmlDocument();
             try
             {
@@ -170,6 +172,7 @@ namespace RelhaxModpack
                                     {
                                         case "name":
                                             m.name = modNode.InnerText;
+                                            totalModConfigComponents++;
                                             break;
                                         case "version":
                                             m.version = modNode.InnerText;
@@ -324,6 +327,7 @@ namespace RelhaxModpack
                     {
                         case "name":
                             c.name = configNode.InnerText;
+                            //totalModConfigComponents++;
                             break;
                         case "version":
                             c.version = configNode.InnerText;
@@ -799,6 +803,7 @@ namespace RelhaxModpack
                     if (Regex.IsMatch(fileParsed[i], search))
                     {
                         fileParsed[i] = Regex.Replace(fileParsed[i], search, replace);
+                        fileParsed[i] = Regex.Replace(fileParsed[i], "newline", "\n");
                     }
                     sb.Append(fileParsed[i] + "\n");
                 }

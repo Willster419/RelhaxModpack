@@ -36,5 +36,11 @@ namespace RelhaxModpack
             richTextBox2.Location = new Point(this.Size.Width - 267, richTextBox2.Location.Y);
             richTextBox2.Size = new Size(richTextBox2.Size.Width, this.Size.Height - 40 - richTextBox1.Location.Y);
         }
+
+        private void CRCCHECK2_Load(object sender, EventArgs e)
+        {
+            this.Font = Settings.getFont();
+            this.AutoScaleMode = Settings.getAutoScaleMode();
+        }
     }
 }

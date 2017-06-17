@@ -41,6 +41,8 @@
             this.TanksVersionLabel = new System.Windows.Forms.Label();
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.modTabGroups = new System.Windows.Forms.TabControl();
+            this.expandAllButton = new System.Windows.Forms.Button();
+            this.colapseAllButton = new System.Windows.Forms.Button();
             this.modTabGroups.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -160,11 +162,33 @@
             this.modTabGroups.Selected += new System.Windows.Forms.TabControlEventHandler(this.modTabGroups_Selected);
             this.modTabGroups.Click += new System.EventHandler(this.modTabGroups_Click);
             // 
+            // expandAllButton
+            // 
+            this.expandAllButton.Location = new System.Drawing.Point(831, 38);
+            this.expandAllButton.Name = "expandAllButton";
+            this.expandAllButton.Size = new System.Drawing.Size(149, 30);
+            this.expandAllButton.TabIndex = 16;
+            this.expandAllButton.Text = "Expand Current Tab";
+            this.expandAllButton.UseVisualStyleBackColor = true;
+            this.expandAllButton.Click += new System.EventHandler(this.expandAllButton_Click);
+            // 
+            // colapseAllButton
+            // 
+            this.colapseAllButton.Location = new System.Drawing.Point(831, 5);
+            this.colapseAllButton.Name = "colapseAllButton";
+            this.colapseAllButton.Size = new System.Drawing.Size(149, 30);
+            this.colapseAllButton.TabIndex = 17;
+            this.colapseAllButton.Text = "Collapse Current Tab";
+            this.colapseAllButton.UseVisualStyleBackColor = true;
+            this.colapseAllButton.Click += new System.EventHandler(this.ColapseAllButton_Click);
+            // 
             // ModSelectionList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(992, 473);
+            this.Controls.Add(this.colapseAllButton);
+            this.Controls.Add(this.expandAllButton);
             this.Controls.Add(this.TanksVersionLabel);
             this.Controls.Add(this.TanksPath);
             this.Controls.Add(this.clearSelectionsButton);
@@ -176,6 +200,7 @@
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.continueButton);
             this.Controls.Add(this.modTabGroups);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(550, 250);
             this.Name = "ModSelectionList";
@@ -203,5 +228,7 @@
         private System.Windows.Forms.Label TanksVersionLabel;
         private System.Windows.Forms.TabPage tabPage11;
         private System.Windows.Forms.TabControl modTabGroups;
+        private System.Windows.Forms.Button expandAllButton;
+        private System.Windows.Forms.Button colapseAllButton;
     }
 }

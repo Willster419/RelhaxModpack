@@ -64,7 +64,7 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>6C1A2AC8329C3EBD05DA1C691A83FCFC5CAE312C</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>59E55800D8E94587F6360DFDA0A2213627214852</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>RelhaxModpack_TemporaryKey.pfx</ManifestKeyFile>

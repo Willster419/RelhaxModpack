@@ -123,6 +123,7 @@
             this.Controls.Add(this.nextPicButton);
             this.Controls.Add(this.previewPicture);
             this.Controls.Add(this.descriptionBox);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(450, 700);
             this.Name = "Preview";

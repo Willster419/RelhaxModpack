@@ -170,6 +170,8 @@ namespace RelhaxModpack
         }
         private void CRCFileSizeUpdate_Load(object sender, EventArgs e)
         {
+            this.Font = Settings.getFont();
+            this.AutoScaleMode = Settings.getAutoScaleMode();
             addZipsDialog.InitialDirectory = Application.StartupPath;
         }
         private int getZipIndex(string zipFile)

@@ -803,7 +803,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             Utils.appendToLog("|RelHax Modpack " + managerVersion);
-            Utils.appendToLog("|Built on 06/14/2017, running at " + DateTime.Now);
+            Utils.appendToLog("|Built on 06/17/2017, running at " + DateTime.Now);
             Utils.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             //enforces a single instance of the program
@@ -851,40 +851,11 @@ namespace RelhaxModpack
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup");
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxUserConfigs")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxUserConfigs");
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxTemp")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxTemp");
-
-            //check for required external application libraries (dlls only)
-            if (!File.Exists(Application.StartupPath + "\\DotNetZip.dll"))
-            {
-                try
-                {
-                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll", Application.StartupPath + "\\DotNetZip.dll");
-                }
-                catch (WebException)
-                {
-                    Utils.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " DotNetZip.dll");
-                    MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " DotNetZip.dll");
-                    Application.Exit();
-                }
-            }
-            if (!File.Exists(Application.StartupPath + "\\Newtonsoft.Json.dll"))
-            {
-                try
-                {
-                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll", Application.StartupPath + "\\Newtonsoft.Json.dll");
-                }
-                catch (WebException)
-                {
-                    Utils.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " Newtonsoft.Json.dll");
-                    MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " Newtonsoft.Json.dll");
-                    Application.Exit();
-                }
-            }
-
             //load settings
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
             Utils.appendToLog("Loading settings");
             Settings.loadSettings();
-            this.applySettings();
+            this.applySettings(true);
             if (Program.testMode)
             {
                 Utils.appendToLog("Test Mode is ON, loading local modInfo.xml");
@@ -1364,8 +1335,7 @@ namespace RelhaxModpack
         private void cancerFontCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.comicSans = cancerFontCB.Checked;
-            Settings.applyInternalSettings();
-            this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
+            this.Font = Settings.getFont();
         }
         //uses backgroundWorker to copy files
         private void backgroundCopy(string source, string dest)
@@ -1918,34 +1888,17 @@ namespace RelhaxModpack
             Utils.appendToLog("Application Closing");
             Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
         }
-        //hander for when the "large font" button is checked
-        private void largerFontButton_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.largeFont = largerFontButton.Checked;
-            Settings.applyInternalSettings();
-            this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
-        }
         //applies all settings from static settings class to this form
-        private void applySettings()
+        private void applySettings(bool init = false)
         {
-            //apply all checkmarks
-            this.forceManuel.Checked = Settings.forceManuel;
+            
             this.forceManuel.Text = Translations.getTranslatedString(forceManuel.Name);
-            this.cleanInstallCB.Checked = Settings.cleanInstallation;
             this.cleanInstallCB.Text = Translations.getTranslatedString(cleanInstallCB.Name);
-            this.backupModsCheckBox.Checked = Settings.backupModFolder;
             this.backupModsCheckBox.Text = Translations.getTranslatedString(backupModsCheckBox.Name);
-            this.cancerFontCB.Checked = Settings.comicSans;
             this.cancerFontCB.Text = Translations.getTranslatedString(cancerFontCB.Name);
-            this.largerFontButton.Checked = Settings.largeFont;
-            this.largerFontButton.Text = Translations.getTranslatedString(largerFontButton.Name);
-            this.saveLastInstallCB.Checked = Settings.saveLastConfig;
             this.saveLastInstallCB.Text = Translations.getTranslatedString(saveLastInstallCB.Name);
-            this.saveUserDataCB.Checked = Settings.saveUserData;
             this.saveUserDataCB.Text = Translations.getTranslatedString(saveUserDataCB.Name);
-            this.cleanUninstallCB.Checked = Settings.cleanUninstall;
             this.cleanUninstallCB.Text = Translations.getTranslatedString(cleanUninstallCB.Name);
-            this.darkUICB.Checked = Settings.darkUI;
             this.darkUICB.Text = Translations.getTranslatedString(darkUICB.Name);
             this.installRelhaxMod.Text = Translations.getTranslatedString(installRelhaxMod.Name);
             this.uninstallRelhaxMod.Text = Translations.getTranslatedString(uninstallRelhaxMod.Name);
@@ -1959,58 +1912,81 @@ namespace RelhaxModpack
             this.selectionDefault.Text = Translations.getTranslatedString(selectionDefault.Name);
             this.selectionLegacy.Text = Translations.getTranslatedString(selectionLegacy.Name);
             this.donateLabel.Text = Translations.getTranslatedString(donateLabel.Name);
+            this.cancelDownloadButton.Text = Translations.getTranslatedString(cancelDownloadButton.Name);
             if (helper != null)
             {
                 helper.helperText.Text = Translations.getTranslatedString("helperText");
             }
-            this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
-            switch (Settings.gif)
+            if (init)
             {
-                case (Settings.LoadingGifs.standard):
-                    {
-                        standardImageRB.Checked = true;
+                //apply all checkmarks
+                this.forceManuel.Checked = Settings.forceManuel;
+                this.cleanInstallCB.Checked = Settings.cleanInstallation;
+                this.backupModsCheckBox.Checked = Settings.backupModFolder;
+                this.cancerFontCB.Checked = Settings.comicSans;
+                this.saveLastInstallCB.Checked = Settings.saveLastConfig;
+                this.saveUserDataCB.Checked = Settings.saveUserData;
+                this.cleanUninstallCB.Checked = Settings.cleanUninstall;
+                this.darkUICB.Checked = Settings.darkUI;
+                this.expandNodesDefault.Checked = Settings.expandAllLegacy;
+                this.Font = Settings.getFont();
+                switch (Settings.gif)
+                {
+                    case (Settings.LoadingGifs.standard):
+                        {
+                            standardImageRB.Checked = true;
+                            break;
+                        }
+                    case (Settings.LoadingGifs.thirdGuards):
+                        {
+                            thirdGuardsLoadingImageRB.Checked = true;
+                            break;
+                        }
+                }
+                switch (Translations.language)
+                {
+                    case (Translations.Languages.English):
+                        //set english button
+                        languageENG.Checked = true;
                         break;
-                    }
-                case (Settings.LoadingGifs.thirdGuards):
-                    {
-                        thirdGuardsLoadingImageRB.Checked = true;
+                    case (Translations.Languages.German):
+                        //set english button
+                        languageGER.Checked = true;
                         break;
+                    case (Translations.Languages.Polish):
+                        //set polish translation
+                        languagePL.Checked = true;
+                        break;
+                }
+                switch (Settings.sView)
+                {
+                    case (Settings.SelectionView.defaultt):
+                        //set default button, but disable checkedChanged handler to prevent stack overflow
+                        selectionDefault.Checked = true;
+                        expandNodesDefault.Enabled = false;
+                        break;
+                    case (Settings.SelectionView.legacy):
+                        selectionLegacy.Checked = true;
+                        expandNodesDefault.Enabled = true;
+                        break;
+                }
+                if (Settings.scalingMode == Settings.ScaleMode.dpi)
+                    DPI.Checked = true;
+                if (!DPI.Checked)
+                {
+                    switch (Settings.fontSizeforum)
+                    {
+                        case (Settings.FontSize.regular):
+                            fontSizeDefault.Checked = true;
+                            break;
+                        case (Settings.FontSize.large):
+                            fontSizeLarge.Checked = true;
+                            break;
+                        case (Settings.FontSize.UHD):
+                            fontSizeHUD.Checked = true;
+                            break;
                     }
-            }
-            switch (Translations.language)
-            {
-                case (Translations.Languages.English):
-                    //set english button
-                    languageENG.CheckedChanged -= languageENG_CheckedChanged;
-                    languageENG.Checked = true;
-                    languageENG.CheckedChanged += languageENG_CheckedChanged;
-                    break;
-                case (Translations.Languages.German):
-                    //set english button
-                    languageGER.CheckedChanged -= languageGER_CheckedChanged;
-                    languageGER.Checked = true;
-                    languageGER.CheckedChanged += languageGER_CheckedChanged;
-                    break;
-                case (Translations.Languages.Polish):
-                    //set polish translation
-                    languagePL.CheckedChanged -= languagePL_CheckedChanged;
-                    languagePL.Checked = true;
-                    languagePL.CheckedChanged += languagePL_CheckedChanged;
-                    break;
-            }
-            switch (Settings.sView)
-            {
-                case (Settings.SelectionView.defaultt):
-                    //set default button, but disable checkedChanged handler to prevent stack overflow
-                    selectionDefault.CheckedChanged -= selectionDefault_CheckedChanged;
-                    selectionDefault.Checked = true;
-                    selectionDefault.CheckedChanged += selectionDefault_CheckedChanged;
-                    break;
-                case (Settings.SelectionView.legacy):
-                    selectionLegacy.CheckedChanged -= selectionLegacy_CheckedChanged;
-                    selectionLegacy.Checked = true;
-                    selectionLegacy.CheckedChanged += selectionLegacy_CheckedChanged;
-                    break;
+                }
             }
         }
         //handler for when the "standard" loading animation is cleicked
@@ -2415,7 +2391,10 @@ namespace RelhaxModpack
             cleanUninstallCB.Enabled = enableToggle;
             saveUserDataCB.Enabled = enableToggle;
             saveLastInstallCB.Enabled = enableToggle;
-            largerFontButton.Enabled = enableToggle;
+            fontSizeDefault.Enabled = enableToggle;
+            fontSizeLarge.Enabled = enableToggle;
+            fontSizeHUD.Enabled = enableToggle;
+            DPI.Enabled = enableToggle;
         }
 
         private void languageENG_CheckedChanged(object sender, EventArgs e)
@@ -2463,12 +2442,14 @@ namespace RelhaxModpack
         private void selectionDefault_CheckedChanged(object sender, EventArgs e)
         {
             Settings.sView = Settings.SelectionView.defaultt;
+            expandNodesDefault.Enabled = false;
             this.applySettings();
         }
 
         private void selectionLegacy_CheckedChanged(object sender, EventArgs e)
         {
             Settings.sView = Settings.SelectionView.legacy;
+            expandNodesDefault.Enabled = true;
             this.applySettings();
         }
 
@@ -2596,6 +2577,47 @@ namespace RelhaxModpack
                     }
                 }
             }
+        }
+
+        private void expandNodesDefault_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.expandAllLegacy = expandNodesDefault.Checked;
+        }
+
+        private void fontSizeDefault_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.scalingMode = Settings.ScaleMode.font;
+            Settings.fontSizeforum = Settings.FontSize.regular;
+            this.AutoScaleMode = Settings.getAutoScaleMode();
+            this.Font = Settings.getFont();
+        }
+
+        private void fontSizeLarge_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.scalingMode = Settings.ScaleMode.font;
+            Settings.fontSizeforum = Settings.FontSize.large;
+            this.AutoScaleMode = Settings.getAutoScaleMode();
+            this.Font = Settings.getFont();
+        }
+
+        private void fontSizeHUD_CheckedChanged(object sender, EventArgs e)
+        {
+            //DPI->font means scale mode then font
+            //font->font means scale mode then font
+            Settings.scalingMode = Settings.ScaleMode.font;
+            Settings.fontSizeforum = Settings.FontSize.UHD;
+            this.AutoScaleMode = Settings.getAutoScaleMode();
+            this.Font = Settings.getFont();
+        }
+
+        private void DPI_CheckedChanged(object sender, EventArgs e)
+        {
+            //default for all windows is font which means they all go from font->DPI or font->font
+            //font->DPI means font then scale mode
+            Settings.fontSizeforum = Settings.FontSize.regular;
+            Settings.scalingMode = Settings.ScaleMode.dpi;
+            this.Font = Settings.getFont();
+            this.AutoScaleMode = Settings.getAutoScaleMode();
         }
     }
     //a class for the downloadQueue list, to make a queue of downloads

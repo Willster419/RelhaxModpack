@@ -32,6 +32,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.loadingDescLabel = new System.Windows.Forms.Label();
             this.loadingDescBox = new System.Windows.Forms.RichTextBox();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
             // label1
@@ -67,12 +68,20 @@
             this.loadingDescBox.Text = "";
             this.loadingDescBox.UseWaitCursor = true;
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(12, 87);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(262, 23);
+            this.progressBar1.TabIndex = 3;
+            // 
             // PleaseWait
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(286, 91);
+            this.ClientSize = new System.Drawing.Size(286, 117);
             this.ControlBox = false;
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.loadingDescBox);
             this.Controls.Add(this.loadingDescLabel);
             this.Controls.Add(this.label1);
@@ -94,5 +103,6 @@
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.Label loadingDescLabel;
         public System.Windows.Forms.RichTextBox loadingDescBox;
+        public System.Windows.Forms.ProgressBar progressBar1;
     }
 }

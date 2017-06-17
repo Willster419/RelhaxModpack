@@ -34,8 +34,12 @@ namespace RelhaxModpack
 
         private void PatchTester_Load(object sender, EventArgs e)
         {
+            this.Font = Settings.getFont();
+            this.AutoScaleMode = Settings.getAutoScaleMode();
             regexFileDialog.InitialDirectory = Application.StartupPath;
             xmlFileDialog.InitialDirectory = Application.StartupPath;
+            jsonFileDialog.InitialDirectory = Application.StartupPath;
+            xvmFileDialog.InitialDirectory = Application.StartupPath;
             xmlAddModeButton.Checked = true;
         }
 

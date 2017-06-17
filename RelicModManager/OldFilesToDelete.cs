@@ -14,11 +14,13 @@ namespace RelhaxModpack
 
         private void OldFilesToDelete_Load(object sender, EventArgs e)
         {
+            this.Font = Settings.getFont();
+            this.AutoScaleMode = Settings.getAutoScaleMode();
             deleteFilesHeader.Text = Translations.getTranslatedString("foundOldFilesDelete1");
             deleteFilesQuestion.Text = Translations.getTranslatedString("foundOldFilesDelete2");
             noDeleteButton.Text = "no";
             yesDeleteButton.Text = "yes";
-            this.Font = Settings.getFont(Settings.fontName, Settings.fontSize);
+            this.Font = Settings.getFont();
         }
 
         private void OldFilesToDelete_FormClosing(object sender, FormClosingEventArgs e)

@@ -20,9 +20,12 @@ namespace RelhaxModpack
         //use the ints to set a new start location
         private void FirstLoadHelper_Load(object sender, EventArgs e)
         {
+            this.Font = Settings.getFont();
+            this.AutoScaleMode = Settings.getAutoScaleMode();
             Utils.appendToLog("FirstLoadHelper: startup location is x: " + x + ", y: " + y);
             this.Location = new Point(x, y);
             Settings.setUIColor(this);
+            helperText.Font = Settings.getFont();
         }
     }
 }

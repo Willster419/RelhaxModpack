@@ -74,6 +74,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "CRCCHECK2";
             this.Text = "CRCCHECK2";
+            this.Load += new System.EventHandler(this.CRCCHECK2_Load);
             this.Resize += new System.EventHandler(this.CRCCHECK2_Resize);
             this.ResumeLayout(false);
 
