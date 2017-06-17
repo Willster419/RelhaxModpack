@@ -1144,7 +1144,7 @@ namespace RelhaxModpack
             string localFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
             foreach (Dependency d in dependencies)
             {
-                if (!this.CRCsMatch(localFilesDir + d.dependencyZipFile, d.dependencyZipCRC))
+                if (!Utils.CRCsMatch(localFilesDir + d.dependencyZipFile, d.dependencyZipCRC))
                 {
                     downloadQueue.Add(new DownloadItem(new Uri(d.startAddress + d.dependencyZipFile + d.endAddress), localFilesDir + d.dependencyZipFile));
                 }
@@ -1268,16 +1268,7 @@ namespace RelhaxModpack
                 }
             }
         }
-        //returns true if the CRC's of each file match, false otherwise
-        private bool CRCsMatch(string localFile, string remoteCRC)
-        {
-            if (!File.Exists(localFile))
-                return false;
-            string crc = Utils.getMd5Hash(localFile);
-            if (crc.Equals(remoteCRC))
-                return true;
-            return false;
-        }
+        
         //Main method to uninstall the modpack
         private void uninstallRelhaxMod_Click(object sender, EventArgs e)
         {
@@ -1478,7 +1469,6 @@ namespace RelhaxModpack
         //handler for the deleteworker when it is called
         private void deleteworker_DoWork(object sender, DoWorkEventArgs e)
         {
-
             object[] parameters = e.Argument as object[];
             string folderToDelete = (string)parameters[0];
             numFilesToProcessInt = 0;
@@ -1733,9 +1723,9 @@ namespace RelhaxModpack
             }
             //delete all the folders if nothing else is in them
             Utils.appendToLog("Finished deleting, processing mods folder");
-            this.processDirectory(tanksLocation + "\\mods");
+            Utils.processDirectory(tanksLocation + "\\mods");
             Utils.appendToLog("processing res_mods folder");
-            this.processDirectory(tanksLocation + "\\res_mods");
+            Utils.processDirectory(tanksLocation + "\\res_mods");
             Utils.appendToLog("creating directories if they arn't already there");
             if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
             if (!Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\mods\\" + this.getFolderVersion(null));
@@ -1870,23 +1860,97 @@ namespace RelhaxModpack
                 }
             }
         }
-        //handler for when the "force manuel" checkbox is checked
-        private void forceManuel_CheckedChanged(object sender, EventArgs e)
+        private void backupUserData()
         {
-            Settings.forceManuel = forceManuel.Checked;
+            foreach (Mod m in modsWithData)
+            {
+                foreach (string s in m.userFiles)
+                {
+                    string startLoc = tanksLocation + s;
+                    string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + m.name + "_" + Path.GetFileName(s);
+                    if (File.Exists(startLoc))
+                        File.Move(startLoc, destLoc);
+                }
+            }
+            foreach (Config cfg in configsWithData)
+            {
+                foreach (string s in cfg.userFiles)
+                {
+                    string startLoc = tanksLocation + s;
+                    string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + cfg.name + "_" + Path.GetFileName(s);
+                    if (File.Exists(startLoc))
+                        File.Move(startLoc, destLoc);
+                }
+            }
         }
-        //handler for when the "backupResMods mods" checkbox is changed
-        private void backupModsCheckBox_CheckedChanged(object sender, EventArgs e)
+
+        private void restoreUserData()
         {
-            Settings.backupModFolder = backupModsCheckBox.Checked;
+            string[] fileList = Directory.GetFiles(Application.StartupPath + "\\RelHaxTemp");
+            foreach (Mod m in modsWithData)
+            {
+                foreach (string s in m.userFiles)
+                {
+                    //find the file
+                    string parsedFileName = m.name + "_" + Path.GetFileName(s);
+                    foreach (string ss in fileList)
+                    {
+                        string thePath = Path.GetFileName(ss);
+                        if (thePath.Equals(parsedFileName))
+                        {
+                            //the file has been found in the temp directory
+                            if (!Directory.Exists(tanksLocation + "\\" + Path.GetFullPath(s)))
+                                Directory.CreateDirectory(tanksLocation + "\\" + Path.GetDirectoryName(s));
+                            if (File.Exists(tanksLocation + "\\" + s))
+                                File.Delete(tanksLocation + "\\" + s);
+                            File.Move(ss, tanksLocation + "\\" + s);
+                        }
+                    }
+                }
+            }
+            foreach (Config cfg in configsWithData)
+            {
+                foreach (string s in cfg.userFiles)
+                {
+                    //find the file
+                    string parsedFileName = cfg.name + "_" + Path.GetFileName(s);
+                    foreach (string ss in fileList)
+                    {
+                        string thePath = Path.GetFileName(ss);
+                        if (thePath.Equals(parsedFileName))
+                        {
+                            //the file has been found in the temp directory
+                            if (!Directory.Exists(tanksLocation + "\\" + Path.GetFullPath(s)))
+                                Directory.CreateDirectory(tanksLocation + "\\" + Path.GetDirectoryName(s));
+                            if (File.Exists(tanksLocation + "\\" + s))
+                                File.Delete(tanksLocation + "\\" + s);
+                            File.Move(ss, tanksLocation + "\\" + s);
+                        }
+                    }
+                }
+            }
         }
-        //handler for when the window is goingto be closed
-        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        //new unistall method
+        private void newUninstallMethod()
         {
-            //save settings
-            if (Program.saveSettings) Settings.saveSettings();
-            Utils.appendToLog("Application Closing");
-            Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
+            Utils.appendToLog("Started Uninstallation process");
+            if (!File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
+            {
+                Utils.appendToLog("ERROR: installedRelhaxFiles.log does not exist, prompt user to delete everything instead");
+                DialogResult result = MessageBox.Show(Translations.getTranslatedString("noUninstallLogMessage"), Translations.getTranslatedString("noUninstallLogHeader"), MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    state = InstallState.uninstallResMods;
+                    Utils.appendToLog("User said yes to delete");
+                    this.backgroundDelete(tanksLocation + "\\res_mods");
+                    return;
+                }
+                Utils.appendToLog("User said no, aborting");
+                return;
+            }
+            state = InstallState.smartUninstall;
+            this.backgroundSmartUninstall();
+            return;
         }
         //applies all settings from static settings class to this form
         private void applySettings(bool init = false)
@@ -1989,480 +2053,6 @@ namespace RelhaxModpack
                 }
             }
         }
-        //handler for when the "standard" loading animation is cleicked
-        private void standardImageRB_CheckedChanged(object sender, EventArgs e)
-        {
-            if (standardImageRB.Checked)
-            {
-                Settings.gif = Settings.LoadingGifs.standard;
-            }
-            else if (thirdGuardsLoadingImageRB.Checked)
-            {
-                Settings.gif = Settings.LoadingGifs.thirdGuards;
-            }
-        }
-
-        private void forceManuel_MouseEnter(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("forceManuelDescription");
-        }
-
-        private void forceManuel_MouseLeave(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("helperText");
-        }
-
-        private void cleanInstallCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("cleanInstallDescription");
-        }
-
-        private void cleanInstallCB_MouseLeave(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("helperText");
-        }
-
-        private void backupModsCheckBox_MouseEnter(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("backupModsDescription");
-        }
-
-        private void backupModsCheckBox_MouseLeave(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("helperText");
-        }
-
-        private void cancerFontCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("comicSansDescription");
-        }
-
-        private void cancerFontCB_MouseLeave(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("helperText");
-        }
-
-        private void largerFontButton_MouseEnter(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("enlargeFontDescription");
-        }
-
-        private void largerFontButton_MouseLeave(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("helperText");
-        }
-
-        private void standardImageRB_MouseEnter(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("selectGifDesc");
-        }
-
-        private void standardImageRB_MouseLeave(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("helperText");
-        }
-
-        private void findBugAddModLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://docs.google.com/spreadsheets/d/1LmPCMAx0RajW4lVYAnguHjjd8jArtWuZIGciFN76AI4/edit?usp=sharing");
-        }
-
-        private void saveLastInstallCB_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.saveLastConfig = saveLastInstallCB.Checked;
-        }
-
-        private void saveLastInstallCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("saveLastConfigInstall");
-        }
-
-        private void saveLastInstallCB_MouseLeave(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("helperText");
-        }
-
-        private void cancelDownloadButton_Click(object sender, EventArgs e)
-        {
-            downloader.CancelAsync();
-        }
-
-        private void forceManuel_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = Translations.getTranslatedString("forceManuelDescription");
-            newHelper.ShowDialog();
-        }
-
-        private void cleanInstallCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = Translations.getTranslatedString("cleanInstallDescription");
-            newHelper.ShowDialog();
-        }
-
-        private void backupModsCheckBox_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = Translations.getTranslatedString("backupModsDescription");
-            newHelper.ShowDialog();
-        }
-
-        private void cancerFontCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = Translations.getTranslatedString("comicSansDescription");
-            newHelper.ShowDialog();
-        }
-
-        private void largerFontButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = Translations.getTranslatedString("enlargeFontDescription");
-            newHelper.ShowDialog();
-        }
-
-        private void saveLastInstallCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = Translations.getTranslatedString("saveLastConfigInstall");
-            newHelper.ShowDialog();
-        }
-
-        private void backupUserData()
-        {
-            foreach (Mod m in modsWithData)
-            {
-                foreach (string s in m.userFiles)
-                {
-                    string startLoc = tanksLocation + s;
-                    string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + m.name + "_" + Path.GetFileName(s);
-                    if (File.Exists(startLoc))
-                        File.Move(startLoc, destLoc);
-                }
-            }
-            foreach (Config cfg in configsWithData)
-            {
-                foreach (string s in cfg.userFiles)
-                {
-                    string startLoc = tanksLocation + s;
-                    string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + cfg.name + "_" + Path.GetFileName(s);
-                    if (File.Exists(startLoc))
-                        File.Move(startLoc, destLoc);
-                }
-            }
-        }
-
-        private void restoreUserData()
-        {
-            string[] fileList = Directory.GetFiles(Application.StartupPath + "\\RelHaxTemp");
-            foreach (Mod m in modsWithData)
-            {
-                foreach (string s in m.userFiles)
-                {
-                    //find the file
-                    string parsedFileName = m.name + "_" + Path.GetFileName(s);
-                    foreach (string ss in fileList)
-                    {
-                        string thePath = Path.GetFileName(ss);
-                        if (thePath.Equals(parsedFileName))
-                        {
-                            //the file has been found in the temp directory
-                            if (!Directory.Exists(tanksLocation + "\\" + Path.GetFullPath(s)))
-                                Directory.CreateDirectory(tanksLocation + "\\" + Path.GetDirectoryName(s));
-                            if (File.Exists(tanksLocation + "\\" + s))
-                                File.Delete(tanksLocation + "\\" + s);
-                            File.Move(ss, tanksLocation + "\\" + s);
-                        }
-                    }
-                }
-            }
-            foreach (Config cfg in configsWithData)
-            {
-                foreach (string s in cfg.userFiles)
-                {
-                    //find the file
-                    string parsedFileName = cfg.name + "_" + Path.GetFileName(s);
-                    foreach (string ss in fileList)
-                    {
-                        string thePath = Path.GetFileName(ss);
-                        if (thePath.Equals(parsedFileName))
-                        {
-                            //the file has been found in the temp directory
-                            if (!Directory.Exists(tanksLocation + "\\" + Path.GetFullPath(s)))
-                                Directory.CreateDirectory(tanksLocation + "\\" + Path.GetDirectoryName(s));
-                            if (File.Exists(tanksLocation + "\\" + s))
-                                File.Delete(tanksLocation + "\\" + s);
-                            File.Move(ss, tanksLocation + "\\" + s);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void saveUserDataCB_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.saveUserData = saveUserDataCB.Checked;
-        }
-
-        private void saveUserDataCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = Translations.getTranslatedString("saveUserDataDesc");
-            newHelper.ShowDialog();
-        }
-
-        private void saveUserDataCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("saveUserDataDesc");
-        }
-
-        private void saveUserDataCB_MouseLeave(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("helperText");
-        }
-        //new unistall method
-        private void newUninstallMethod()
-        {
-            Utils.appendToLog("Started Uninstallation process");
-            if (!File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
-            {
-                Utils.appendToLog("ERROR: installedRelhaxFiles.log does not exist, prompt user to delete everything instead");
-                DialogResult result = MessageBox.Show(Translations.getTranslatedString("noUninstallLogMessage"), Translations.getTranslatedString("noUninstallLogHeader"), MessageBoxButtons.YesNo);
-                if (result == DialogResult.Yes)
-                {
-                    state = InstallState.uninstallResMods;
-                    Utils.appendToLog("User said yes to delete");
-                    this.backgroundDelete(tanksLocation + "\\res_mods");
-                    return;
-                }
-                Utils.appendToLog("User said no, aborting");
-                return;
-            }
-            state = InstallState.smartUninstall;
-            this.backgroundSmartUninstall();
-            return;
-        }
-        //deletes all empty directories from a given start location
-        private void processDirectory(string startLocation)
-        {
-            foreach (var directory in Directory.GetDirectories(startLocation))
-            {
-                processDirectory(directory);
-                if (Directory.GetFiles(directory).Length == 0 &&
-                    Directory.GetDirectories(directory).Length == 0)
-                {
-                    Utils.appendToLog("Deleting empty directory " + directory);
-                    Directory.Delete(directory, false);
-                }
-            }
-        }
-
-        private void downloadTimer_Tick(object sender, EventArgs e)
-        {
-            differenceTotalBytesDownloaded = currentTotalBytesDownloaded - previousTotalBytesDownloaded;
-            float intervalInSeconds = (float)downloadTimer.Interval / 1000;
-            float sessionMBytesDownloaded = differenceTotalBytesDownloaded / MBDivisor;
-            sessionDownloadSpeed = sessionMBytesDownloaded / intervalInSeconds;
-            //set the previous for the last amount of bytes downloaded
-            previousTotalBytesDownloaded = currentTotalBytesDownloaded;
-        }
-
-        private void cleanUninstallCB_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.cleanUninstall = cleanUninstallCB.Checked;
-        }
-
-        private void cleanUninstallCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("cleanUninstallDescription");
-        }
-
-        private void cleanUninstallCB_MouseLeave(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("helperText");
-        }
-
-        private void cleanUninstallCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = Translations.getTranslatedString("cleanUninstallDescription");
-            newHelper.ShowDialog();
-        }
-
-        private void darkUICB_CheckedChanged(object sender, EventArgs e)
-        {
-            //set the thing
-            Settings.darkUI = darkUICB.Checked;
-            Settings.setUIColor(this);
-        }
-
-        private void darkUICB_MouseEnter(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("darkUIDesc");
-        }
-
-        private void darkUICB_MouseLeave(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("helperText");
-        }
-
-        private void darkUICB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = Translations.getTranslatedString("darkUIDesc");
-            newHelper.ShowDialog();
-        }
-
-        private void standardImageRB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != System.Windows.Forms.MouseButtons.Right)
-                return;
-            RadioButton rb = (RadioButton)sender;
-            Settings.LoadingGifs backup = Settings.gif;
-            if (rb.Name.Equals("standardImageRB"))
-            {
-                Settings.gif = Settings.LoadingGifs.standard;
-            }
-            else if (rb.Name.Equals("thirdGuardsLoadingImageRB"))
-            {
-                Settings.gif = Settings.LoadingGifs.thirdGuards;
-            }
-            else
-                return;
-            //create the preview
-            if (gp != null)
-            {
-                gp.Close();
-                gp = null;
-            }
-            gp = new loadingGifPreview(this.Location.X + this.Size.Width + 5, this.Location.Y);
-            gp.Show();
-            Settings.gif = backup;
-        }
-        //toggle UI buttons to be enalbed or disabled
-        private void toggleUIButtons(bool enableToggle)
-        {
-            forceManuel.Enabled = enableToggle;
-            installRelhaxMod.Enabled = enableToggle;
-            uninstallRelhaxMod.Enabled = enableToggle;
-            cleanInstallCB.Enabled = enableToggle;
-            cancerFontCB.Enabled = enableToggle;
-            backupModsCheckBox.Enabled = enableToggle;
-            darkUICB.Enabled = enableToggle;
-            cleanUninstallCB.Enabled = enableToggle;
-            saveUserDataCB.Enabled = enableToggle;
-            saveLastInstallCB.Enabled = enableToggle;
-            fontSizeDefault.Enabled = enableToggle;
-            fontSizeLarge.Enabled = enableToggle;
-            fontSizeHUD.Enabled = enableToggle;
-            DPI.Enabled = enableToggle;
-        }
-
-        private void languageENG_CheckedChanged(object sender, EventArgs e)
-        {
-            Translations.language = Translations.Languages.English;
-            this.applySettings();
-        }
-
-        private void languageGER_CheckedChanged(object sender, EventArgs e)
-        {
-            Translations.language = Translations.Languages.German;
-            this.applySettings();
-        }
-        //adds a dependency to the dependency list only if it is not already added
-        private void addUniqueDependency(Dependency toAdd)
-        {
-            foreach (Dependency existing in dependencies)
-            {
-                //check if the mod zip name is the same
-                if (existing.dependencyZipFile.Equals(toAdd.dependencyZipFile))
-                    return;
-            }
-            //getting here means that the dependency to add is unique
-            dependencies.Add(toAdd);
-        }
-
-        private void selectionDefault_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = Translations.getTranslatedString("selectionViewMode");
-            newHelper.ShowDialog();
-        }
-
-        private void selectionLegacy_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-            newHelper.helperText.Text = Translations.getTranslatedString("selectionViewMode");
-            newHelper.ShowDialog();
-        }
-
-        private void selectionDefault_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.sView = Settings.SelectionView.defaultt;
-            expandNodesDefault.Enabled = false;
-            this.applySettings();
-        }
-
-        private void selectionLegacy_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.sView = Settings.SelectionView.legacy;
-            expandNodesDefault.Enabled = true;
-            this.applySettings();
-        }
-
-        private void languagePL_CheckedChanged(object sender, EventArgs e)
-        {
-            Translations.language = Translations.Languages.Polish;
-            this.applySettings();
-        }
-
-        private void donateLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2");
-        }
         //gets the total number of installs to do
         private int getTotalExtractions()
         {
@@ -2487,18 +2077,6 @@ namespace RelhaxModpack
                 }
             }
             return totalExtractions;
-        }
-        //create the done display
-        private void doneDisplay()
-        {
-            speedLabel.Text = "";
-            downloadProgress.Text = Translations.getTranslatedString("done");
-            parrentProgressBar.Maximum = 1;
-            parrentProgressBar.Value = parrentProgressBar.Maximum;
-            childProgressBar.Value = childProgressBar.Maximum;
-            state = InstallState.idle;
-            toggleUIButtons(true);
-            Utils.appendToLog("Installation done");
         }
         //check for old zip files
         private void checkForOldZipFiles()
@@ -2577,6 +2155,419 @@ namespace RelhaxModpack
                     }
                 }
             }
+        }
+        //adds a dependency to the dependency list only if it is not already added
+        private void addUniqueDependency(Dependency toAdd)
+        {
+            foreach (Dependency existing in dependencies)
+            {
+                //check if the mod zip name is the same
+                if (existing.dependencyZipFile.Equals(toAdd.dependencyZipFile))
+                    return;
+            }
+            //getting here means that the dependency to add is unique
+            dependencies.Add(toAdd);
+        }
+
+        private void cancelDownloadButton_Click(object sender, EventArgs e)
+        {
+            downloader.CancelAsync();
+        }
+
+        //create the done display
+        private void doneDisplay()
+        {
+            speedLabel.Text = "";
+            downloadProgress.Text = Translations.getTranslatedString("done");
+            parrentProgressBar.Maximum = 1;
+            parrentProgressBar.Value = parrentProgressBar.Maximum;
+            childProgressBar.Value = childProgressBar.Maximum;
+            state = InstallState.idle;
+            toggleUIButtons(true);
+            Utils.appendToLog("Installation done");
+        }
+        private void downloadTimer_Tick(object sender, EventArgs e)
+        {
+            differenceTotalBytesDownloaded = currentTotalBytesDownloaded - previousTotalBytesDownloaded;
+            float intervalInSeconds = (float)downloadTimer.Interval / 1000;
+            float sessionMBytesDownloaded = differenceTotalBytesDownloaded / MBDivisor;
+            sessionDownloadSpeed = sessionMBytesDownloaded / intervalInSeconds;
+            //set the previous for the last amount of bytes downloaded
+            previousTotalBytesDownloaded = currentTotalBytesDownloaded;
+        }
+        //toggle UI buttons to be enalbed or disabled
+        private void toggleUIButtons(bool enableToggle)
+        {
+            forceManuel.Enabled = enableToggle;
+            installRelhaxMod.Enabled = enableToggle;
+            uninstallRelhaxMod.Enabled = enableToggle;
+            cleanInstallCB.Enabled = enableToggle;
+            cancerFontCB.Enabled = enableToggle;
+            backupModsCheckBox.Enabled = enableToggle;
+            darkUICB.Enabled = enableToggle;
+            cleanUninstallCB.Enabled = enableToggle;
+            saveUserDataCB.Enabled = enableToggle;
+            saveLastInstallCB.Enabled = enableToggle;
+            fontSizeDefault.Enabled = enableToggle;
+            fontSizeLarge.Enabled = enableToggle;
+            fontSizeHUD.Enabled = enableToggle;
+            DPI.Enabled = enableToggle;
+        }
+        //handler for when the window is goingto be closed
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //save settings
+            if (Program.saveSettings) Settings.saveSettings();
+            Utils.appendToLog("Application Closing");
+            Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
+        }
+
+        private void donateLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2");
+        }
+
+        private void findBugAddModLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://docs.google.com/spreadsheets/d/1LmPCMAx0RajW4lVYAnguHjjd8jArtWuZIGciFN76AI4/edit?usp=sharing");
+        }
+
+        //handler for when the "standard" loading animation is cleicked
+        private void standardImageRB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (standardImageRB.Checked)
+            {
+                Settings.gif = Settings.LoadingGifs.standard;
+            }
+            else if (thirdGuardsLoadingImageRB.Checked)
+            {
+                Settings.gif = Settings.LoadingGifs.thirdGuards;
+            }
+        }
+
+        private void standardImageRB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != System.Windows.Forms.MouseButtons.Right)
+                return;
+            RadioButton rb = (RadioButton)sender;
+            Settings.LoadingGifs backup = Settings.gif;
+            if (rb.Name.Equals("standardImageRB"))
+            {
+                Settings.gif = Settings.LoadingGifs.standard;
+            }
+            else if (rb.Name.Equals("thirdGuardsLoadingImageRB"))
+            {
+                Settings.gif = Settings.LoadingGifs.thirdGuards;
+            }
+            else
+                return;
+            //create the preview
+            if (gp != null)
+            {
+                gp.Close();
+                gp = null;
+            }
+            gp = new loadingGifPreview(this.Location.X + this.Size.Width + 5, this.Location.Y);
+            gp.Show();
+            Settings.gif = backup;
+        }
+
+        private void generic_MouseLeave(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("helperText");
+        }
+
+        private void forceManuel_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("forceManuelDescription");
+        }
+
+        private void cleanInstallCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("cleanInstallDescription");
+        }
+
+        private void backupModsCheckBox_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("backupModsDescription");
+        }
+
+        private void cancerFontCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("comicSansDescription");
+        }
+
+        private void largerFontButton_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("enlargeFontDescription");
+        }
+
+        private void standardImageRB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("selectGifDesc");
+        }
+
+        private void saveLastInstallCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("saveLastConfigInstall");
+        }
+
+        private void font_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("font_MouseEnter");
+        }
+
+        private void selectionView_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("selectionView_MouseEnter");
+        }
+
+        private void expandNodesDefault_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("expandAllDesc");
+        }
+
+        private void language_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("language_MouseEnter");
+        }
+
+        private void font_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("font_MouseEnter");
+            newHelper.ShowDialog();
+        }
+
+        private void language_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("language_MouseEnter");
+            newHelper.ShowDialog();
+        }
+
+        private void forceManuel_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("forceManuelDescription");
+            newHelper.ShowDialog();
+        }
+
+        private void cleanInstallCB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("cleanInstallDescription");
+            newHelper.ShowDialog();
+        }
+
+        private void backupModsCheckBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("backupModsDescription");
+            newHelper.ShowDialog();
+        }
+
+        private void cancerFontCB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("comicSansDescription");
+            newHelper.ShowDialog();
+        }
+
+        private void largerFontButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("enlargeFontDescription");
+            newHelper.ShowDialog();
+        }
+
+        private void saveLastInstallCB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("saveLastConfigInstall");
+            newHelper.ShowDialog();
+        }
+
+        private void saveUserDataCB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("saveUserDataDesc");
+            newHelper.ShowDialog();
+        }
+
+        private void expandNodesDefault_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("expandAllDesc");
+            newHelper.ShowDialog();
+        }
+
+        private void saveUserDataCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("saveUserDataDesc");
+        }
+
+        private void saveUserDataCB_MouseLeave(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("helperText");
+        }
+
+        private void cleanUninstallCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("cleanUninstallDescription");
+        }
+
+        private void cleanUninstallCB_MouseLeave(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("helperText");
+        }
+
+        private void cleanUninstallCB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("cleanUninstallDescription");
+            newHelper.ShowDialog();
+        }
+
+        private void darkUICB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("darkUIDesc");
+        }
+
+        private void darkUICB_MouseLeave(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("helperText");
+        }
+
+        private void darkUICB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("darkUIDesc");
+            newHelper.ShowDialog();
+        }
+
+        private void selectionDefault_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("selectionViewMode");
+            newHelper.ShowDialog();
+        }
+
+        private void selectionLegacy_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("selectionViewMode");
+            newHelper.ShowDialog();
+        }
+        //handler for when the "force manuel" checkbox is checked
+        private void forceManuel_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.forceManuel = forceManuel.Checked;
+        }
+        //handler for when the "backupResMods mods" checkbox is changed
+        private void backupModsCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.backupModFolder = backupModsCheckBox.Checked;
+        }
+
+        private void saveLastInstallCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.saveLastConfig = saveLastInstallCB.Checked;
+        }
+
+        private void saveUserDataCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.saveUserData = saveUserDataCB.Checked;
+        }
+
+        private void darkUICB_CheckedChanged(object sender, EventArgs e)
+        {
+            //set the thing
+            Settings.darkUI = darkUICB.Checked;
+            Settings.setUIColor(this);
+        }
+
+        private void cleanUninstallCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.cleanUninstall = cleanUninstallCB.Checked;
+        }
+
+        private void languageENG_CheckedChanged(object sender, EventArgs e)
+        {
+            Translations.language = Translations.Languages.English;
+            this.applySettings();
+        }
+
+        private void languageGER_CheckedChanged(object sender, EventArgs e)
+        {
+            Translations.language = Translations.Languages.German;
+            this.applySettings();
+        }
+
+        private void selectionDefault_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.sView = Settings.SelectionView.defaultt;
+            expandNodesDefault.Enabled = false;
+            this.applySettings();
+        }
+
+        private void selectionLegacy_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.sView = Settings.SelectionView.legacy;
+            expandNodesDefault.Enabled = true;
+            this.applySettings();
+        }
+
+        private void languagePL_CheckedChanged(object sender, EventArgs e)
+        {
+            Translations.language = Translations.Languages.Polish;
+            this.applySettings();
         }
 
         private void expandNodesDefault_CheckedChanged(object sender, EventArgs e)

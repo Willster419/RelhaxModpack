@@ -2060,5 +2060,29 @@ namespace RelhaxModpack
                     parseZipFileConfigs(c.configs);
             }
         }
+        //deletes all empty directories from a given start location
+        public static void processDirectory(string startLocation)
+        {
+            foreach (var directory in Directory.GetDirectories(startLocation))
+            {
+                processDirectory(directory);
+                if (Directory.GetFiles(directory).Length == 0 &&
+                    Directory.GetDirectories(directory).Length == 0)
+                {
+                    Utils.appendToLog("Deleting empty directory " + directory);
+                    Directory.Delete(directory, false);
+                }
+            }
+        }
+        //returns true if the CRC's of each file match, false otherwise
+        public static bool CRCsMatch(string localFile, string remoteCRC)
+        {
+            if (!File.Exists(localFile))
+                return false;
+            string crc = Utils.getMd5Hash(localFile);
+            if (crc.Equals(remoteCRC))
+                return true;
+            return false;
+        }
     }
 }

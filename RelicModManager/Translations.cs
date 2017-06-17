@@ -294,33 +294,33 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("patching", "patching");
-            german.Add("patching", "patching");
-            polish.Add("patching", "patchowanie");
+            english.Add("patching", "Patching");
+            german.Add("patching", "Patching");
+            polish.Add("patching", "Patchowanie");
 
             //Componet: 
             //
-            english.Add("done", "done");
-            german.Add("done", "fertig");
-            polish.Add("done", "zrobione");
+            english.Add("done", "Done");
+            german.Add("done", "Fertig");
+            polish.Add("done", "Zrobione");
 
             //Componet: 
             //
-            english.Add("idle", "idle");
+            english.Add("idle", "Idle");
             german.Add("idle", "Leerlauf");
-            polish.Add("idle", "bezczynny");
+            polish.Add("idle", "Bezczynny");
 
             //Componet: 
             //
             english.Add("status", "Status:");
             german.Add("status", "Status:");
-            polish.Add("status", "Stan");
+            polish.Add("status", "Stan:");
 
             //Componet: 
             //
-            english.Add("canceled", "canceled");
-            german.Add("canceled", "abgebrochen");
-            polish.Add("canceled", "anulowano");
+            english.Add("canceled", "Canceled");
+            german.Add("canceled", "Abgebrochen");
+            polish.Add("canceled", "Anulowano");
 
             //Componet: 
             //
@@ -824,17 +824,53 @@ namespace RelhaxModpack
             german.Add("foundOldFilesDelete2", "Möchtest du das sie gelöscht werden?");
             polish.Add("foundOldFilesDelete2", "Czy chcesz je usunąć?");
 
-            //Componet: Expand All option
+            //Componet: Expand current tab option
             //
             english.Add("expandAllButton", "Expand Current Tab");
-            german.Add("expandAllButton", "Expand All");
-            polish.Add("expandAllButton", "Expand All");
+            german.Add("expandAllButton", "Expand Current Tab");
+            polish.Add("expandAllButton", "Rozwiń bieżącą kartę");
 
-            //Componet: Colapse all option
+            //Componet: Colapse current tab option
             //
             english.Add("colapseAllButton", "Collapse Current Tab");
-            german.Add("colapseAllButton", "Collapse All");
-            polish.Add("colapseAllButton", "Collapse All");
+            german.Add("colapseAllButton", "Collapse Current Tab");
+            polish.Add("colapseAllButton", "Zwiń bieżącą kartę");
+
+            //Componet: font_MouseEnter
+            //
+            english.Add("font_MouseEnter", "Select a scale mode to use.\nFont is manual scaling, DPI is auto scaling.");
+            german.Add("font_MouseEnter", "Wählen Sie einen Skaliermodus aus.\nSchriftart ist manuelle Skalierung, DPI autoscaling.");
+            polish.Add("font_MouseEnter", "Wybierz tryb skali, który ma zostać użyty.\nCzcionka jest ręcznym skalowaniem, DPI jest autoskalowanie.");
+
+            //Componet: selectionView_MouseEnter
+            //
+            english.Add("selectionView_MouseEnter", "Select a mod selection list view.");
+            german.Add("selectionView_MouseEnter", "Wählen Sie eine Änderungsauswahlliste aus.");
+            polish.Add("selectionView_MouseEnter", "Wybierz listę wyboru modyfikacji.");
+
+            //Componet: language_MouseEnter
+            //
+            english.Add("language_MouseEnter", "Select your preferred language.");
+            german.Add("language_MouseEnter", "Wählen Sie Ihre bevorzugte Sprache aus.");
+            polish.Add("language_MouseEnter", "Wybierz preferowany język.");
+
+            //Componet: fontSizeGB
+            //
+            english.Add("fontSizeGB", "Scaling Mode");
+            german.Add("fontSizeGB", "Skalierungsmodus");
+            polish.Add("fontSizeGB", "Tryb skalowania");
+
+            //Componet: viewTypeGB
+            //
+            english.Add("viewTypeGB", "Selection View");
+            german.Add("viewTypeGB", "Auswahlansicht");
+            polish.Add("viewTypeGB", "Widok wyboru");
+
+            //Component: expandAllDesc
+            //
+            english.Add("expandAllDesc", "Select this to have all options automatically expand. It applies for the Legacy Selection only.");
+            german.Add("expandAllDesc", "Wählen Sie diese Option, um alle Optionen automatisch zu erweitern. Es gilt nur für die Legacy Selection.");
+            polish.Add("expandAllDesc", "Zaznacz to, aby wszystkie opcje zostały automatycznie rozwinięte. Dotyczy tylko opcji Legacy Selection.");
         }
     }
 }

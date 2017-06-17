@@ -46,11 +46,11 @@
             this.darkUICB = new System.Windows.Forms.CheckBox();
             this.cleanUninstallCB = new System.Windows.Forms.CheckBox();
             this.saveUserDataCB = new System.Windows.Forms.CheckBox();
+            this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
             this.languageSelectionGB = new System.Windows.Forms.GroupBox();
             this.languagePL = new System.Windows.Forms.RadioButton();
             this.languageGER = new System.Windows.Forms.RadioButton();
             this.languageENG = new System.Windows.Forms.RadioButton();
-            this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
             this.loadingImageGroupBox = new System.Windows.Forms.GroupBox();
             this.thirdGuardsLoadingImageRB = new System.Windows.Forms.RadioButton();
             this.standardImageRB = new System.Windows.Forms.RadioButton();
@@ -113,7 +113,7 @@
             this.forceManuel.CheckedChanged += new System.EventHandler(this.forceManuel_CheckedChanged);
             this.forceManuel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.forceManuel_MouseDown);
             this.forceManuel.MouseEnter += new System.EventHandler(this.forceManuel_MouseEnter);
-            this.forceManuel.MouseLeave += new System.EventHandler(this.forceManuel_MouseLeave);
+            this.forceManuel.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // formPageLink
             // 
@@ -178,7 +178,7 @@
             this.cleanInstallCB.CheckedChanged += new System.EventHandler(this.cleanInstallCB_CheckedChanged);
             this.cleanInstallCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cleanInstallCB_MouseDown);
             this.cleanInstallCB.MouseEnter += new System.EventHandler(this.cleanInstallCB_MouseEnter);
-            this.cleanInstallCB.MouseLeave += new System.EventHandler(this.cleanInstallCB_MouseLeave);
+            this.cleanInstallCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // cancerFontCB
             // 
@@ -192,7 +192,7 @@
             this.cancerFontCB.CheckedChanged += new System.EventHandler(this.cancerFontCB_CheckedChanged);
             this.cancerFontCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cancerFontCB_MouseDown);
             this.cancerFontCB.MouseEnter += new System.EventHandler(this.cancerFontCB_MouseEnter);
-            this.cancerFontCB.MouseLeave += new System.EventHandler(this.cancerFontCB_MouseLeave);
+            this.cancerFontCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // backupModsCheckBox
             // 
@@ -206,7 +206,7 @@
             this.backupModsCheckBox.CheckedChanged += new System.EventHandler(this.backupModsCheckBox_CheckedChanged);
             this.backupModsCheckBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.backupModsCheckBox_MouseDown);
             this.backupModsCheckBox.MouseEnter += new System.EventHandler(this.backupModsCheckBox_MouseEnter);
-            this.backupModsCheckBox.MouseLeave += new System.EventHandler(this.backupModsCheckBox_MouseLeave);
+            this.backupModsCheckBox.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // settingsGroupBox
             // 
@@ -237,7 +237,7 @@
             this.darkUICB.CheckedChanged += new System.EventHandler(this.darkUICB_CheckedChanged);
             this.darkUICB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.darkUICB_MouseDown);
             this.darkUICB.MouseEnter += new System.EventHandler(this.darkUICB_MouseEnter);
-            this.darkUICB.MouseLeave += new System.EventHandler(this.darkUICB_MouseLeave);
+            this.darkUICB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // cleanUninstallCB
             // 
@@ -251,7 +251,7 @@
             this.cleanUninstallCB.CheckedChanged += new System.EventHandler(this.cleanUninstallCB_CheckedChanged);
             this.cleanUninstallCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cleanUninstallCB_MouseDown);
             this.cleanUninstallCB.MouseEnter += new System.EventHandler(this.cleanUninstallCB_MouseEnter);
-            this.cleanUninstallCB.MouseLeave += new System.EventHandler(this.cleanUninstallCB_MouseLeave);
+            this.cleanUninstallCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // saveUserDataCB
             // 
@@ -265,7 +265,21 @@
             this.saveUserDataCB.CheckedChanged += new System.EventHandler(this.saveUserDataCB_CheckedChanged);
             this.saveUserDataCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.saveUserDataCB_MouseDown);
             this.saveUserDataCB.MouseEnter += new System.EventHandler(this.saveUserDataCB_MouseEnter);
-            this.saveUserDataCB.MouseLeave += new System.EventHandler(this.saveUserDataCB_MouseLeave);
+            this.saveUserDataCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
+            // saveLastInstallCB
+            // 
+            this.saveLastInstallCB.AutoSize = true;
+            this.saveLastInstallCB.Location = new System.Drawing.Point(6, 81);
+            this.saveLastInstallCB.Name = "saveLastInstallCB";
+            this.saveLastInstallCB.Size = new System.Drawing.Size(138, 17);
+            this.saveLastInstallCB.TabIndex = 26;
+            this.saveLastInstallCB.Text = "Save last install\'s config";
+            this.saveLastInstallCB.UseVisualStyleBackColor = true;
+            this.saveLastInstallCB.CheckedChanged += new System.EventHandler(this.saveLastInstallCB_CheckedChanged);
+            this.saveLastInstallCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.saveLastInstallCB_MouseDown);
+            this.saveLastInstallCB.MouseEnter += new System.EventHandler(this.saveLastInstallCB_MouseEnter);
+            this.saveLastInstallCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // languageSelectionGB
             // 
@@ -290,6 +304,9 @@
             this.languagePL.Text = "PL";
             this.languagePL.UseVisualStyleBackColor = true;
             this.languagePL.CheckedChanged += new System.EventHandler(this.languagePL_CheckedChanged);
+            this.languagePL.MouseDown += new System.Windows.Forms.MouseEventHandler(this.language_MouseDown);
+            this.languagePL.MouseEnter += new System.EventHandler(this.language_MouseEnter);
+            this.languagePL.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // languageGER
             // 
@@ -301,6 +318,9 @@
             this.languageGER.Text = "GER";
             this.languageGER.UseVisualStyleBackColor = true;
             this.languageGER.CheckedChanged += new System.EventHandler(this.languageGER_CheckedChanged);
+            this.languageGER.MouseDown += new System.Windows.Forms.MouseEventHandler(this.language_MouseDown);
+            this.languageGER.MouseEnter += new System.EventHandler(this.language_MouseEnter);
+            this.languageGER.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // languageENG
             // 
@@ -312,20 +332,9 @@
             this.languageENG.Text = "ENG";
             this.languageENG.UseVisualStyleBackColor = true;
             this.languageENG.CheckedChanged += new System.EventHandler(this.languageENG_CheckedChanged);
-            // 
-            // saveLastInstallCB
-            // 
-            this.saveLastInstallCB.AutoSize = true;
-            this.saveLastInstallCB.Location = new System.Drawing.Point(6, 81);
-            this.saveLastInstallCB.Name = "saveLastInstallCB";
-            this.saveLastInstallCB.Size = new System.Drawing.Size(138, 17);
-            this.saveLastInstallCB.TabIndex = 26;
-            this.saveLastInstallCB.Text = "Save last install\'s config";
-            this.saveLastInstallCB.UseVisualStyleBackColor = true;
-            this.saveLastInstallCB.CheckedChanged += new System.EventHandler(this.saveLastInstallCB_CheckedChanged);
-            this.saveLastInstallCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.saveLastInstallCB_MouseDown);
-            this.saveLastInstallCB.MouseEnter += new System.EventHandler(this.saveLastInstallCB_MouseEnter);
-            this.saveLastInstallCB.MouseLeave += new System.EventHandler(this.saveLastInstallCB_MouseLeave);
+            this.languageENG.MouseDown += new System.Windows.Forms.MouseEventHandler(this.language_MouseDown);
+            this.languageENG.MouseEnter += new System.EventHandler(this.language_MouseEnter);
+            this.languageENG.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // loadingImageGroupBox
             // 
@@ -351,7 +360,7 @@
             this.thirdGuardsLoadingImageRB.CheckedChanged += new System.EventHandler(this.standardImageRB_CheckedChanged);
             this.thirdGuardsLoadingImageRB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.standardImageRB_MouseDown);
             this.thirdGuardsLoadingImageRB.MouseEnter += new System.EventHandler(this.standardImageRB_MouseEnter);
-            this.thirdGuardsLoadingImageRB.MouseLeave += new System.EventHandler(this.standardImageRB_MouseLeave);
+            this.thirdGuardsLoadingImageRB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // standardImageRB
             // 
@@ -366,7 +375,7 @@
             this.standardImageRB.CheckedChanged += new System.EventHandler(this.standardImageRB_CheckedChanged);
             this.standardImageRB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.standardImageRB_MouseDown);
             this.standardImageRB.MouseEnter += new System.EventHandler(this.standardImageRB_MouseEnter);
-            this.standardImageRB.MouseLeave += new System.EventHandler(this.standardImageRB_MouseLeave);
+            this.standardImageRB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // findBugAddModLabel
             // 
@@ -429,6 +438,9 @@
             this.expandNodesDefault.Text = "Expand all";
             this.expandNodesDefault.UseVisualStyleBackColor = true;
             this.expandNodesDefault.CheckedChanged += new System.EventHandler(this.expandNodesDefault_CheckedChanged);
+            this.expandNodesDefault.MouseDown += new System.Windows.Forms.MouseEventHandler(this.expandNodesDefault_MouseDown);
+            this.expandNodesDefault.MouseEnter += new System.EventHandler(this.expandNodesDefault_MouseEnter);
+            this.expandNodesDefault.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // selectionLegacy
             // 
@@ -442,6 +454,8 @@
             this.selectionLegacy.UseVisualStyleBackColor = true;
             this.selectionLegacy.CheckedChanged += new System.EventHandler(this.selectionLegacy_CheckedChanged);
             this.selectionLegacy.MouseDown += new System.Windows.Forms.MouseEventHandler(this.selectionLegacy_MouseDown);
+            this.selectionLegacy.MouseEnter += new System.EventHandler(this.selectionView_MouseEnter);
+            this.selectionLegacy.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // selectionDefault
             // 
@@ -455,6 +469,8 @@
             this.selectionDefault.UseVisualStyleBackColor = true;
             this.selectionDefault.CheckedChanged += new System.EventHandler(this.selectionDefault_CheckedChanged);
             this.selectionDefault.MouseDown += new System.Windows.Forms.MouseEventHandler(this.selectionDefault_MouseDown);
+            this.selectionDefault.MouseEnter += new System.EventHandler(this.selectionView_MouseEnter);
+            this.selectionDefault.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // donateLabel
             // 
@@ -491,6 +507,9 @@
             this.DPI.Text = "DPI";
             this.DPI.UseVisualStyleBackColor = true;
             this.DPI.CheckedChanged += new System.EventHandler(this.DPI_CheckedChanged);
+            this.DPI.MouseDown += new System.Windows.Forms.MouseEventHandler(this.font_MouseDown);
+            this.DPI.MouseEnter += new System.EventHandler(this.font_MouseEnter);
+            this.DPI.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // fontSizeHUD
             // 
@@ -503,6 +522,9 @@
             this.fontSizeHUD.Text = "Font 1.75x";
             this.fontSizeHUD.UseVisualStyleBackColor = true;
             this.fontSizeHUD.CheckedChanged += new System.EventHandler(this.fontSizeHUD_CheckedChanged);
+            this.fontSizeHUD.MouseDown += new System.Windows.Forms.MouseEventHandler(this.font_MouseDown);
+            this.fontSizeHUD.MouseEnter += new System.EventHandler(this.font_MouseEnter);
+            this.fontSizeHUD.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // fontSizeLarge
             // 
@@ -515,6 +537,9 @@
             this.fontSizeLarge.Text = "Font 1.25x";
             this.fontSizeLarge.UseVisualStyleBackColor = true;
             this.fontSizeLarge.CheckedChanged += new System.EventHandler(this.fontSizeLarge_CheckedChanged);
+            this.fontSizeLarge.MouseDown += new System.Windows.Forms.MouseEventHandler(this.font_MouseDown);
+            this.fontSizeLarge.MouseEnter += new System.EventHandler(this.font_MouseEnter);
+            this.fontSizeLarge.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // fontSizeDefault
             // 
@@ -527,6 +552,9 @@
             this.fontSizeDefault.Text = "Font 1x";
             this.fontSizeDefault.UseVisualStyleBackColor = true;
             this.fontSizeDefault.CheckedChanged += new System.EventHandler(this.fontSizeDefault_CheckedChanged);
+            this.fontSizeDefault.MouseDown += new System.Windows.Forms.MouseEventHandler(this.font_MouseDown);
+            this.fontSizeDefault.MouseEnter += new System.EventHandler(this.font_MouseEnter);
+            this.fontSizeDefault.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // MainWindow
             // 
