@@ -1,3 +1,16 @@
+Version 23.2.0:
+-Added new scaling option, "DPI"
+-Updated "Font" to now be a form of scaling as well. It is now split into three options: Font scaling 1x, font scaling 1.25x, font scaling 1.75x
+-Updated all forum windows to accept, apply, and resize appropriately for the new scaling options
+-Improved back-end tools
+-Fixed bugs with the regex patcher
+-Added progress bar for when loading the ModSelectionList
+-Added option in the main window to auto expand all items in each category for the OMC style selection
+-Added option to expand an entire selected tab page from the OMC mod selection
+-Fixed overlapping checkboxes in the MainWindow for certain windows display themes
+-Removed limit of size of resizing the ModSelectionList
+-Updated Translations
+
 Version 23.1.7:
 -Fixed bugs with saving of user data files (like session stats)
 -Improved efficiency with logic of the patching system

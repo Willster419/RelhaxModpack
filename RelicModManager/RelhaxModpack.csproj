@@ -299,10 +299,7 @@
     <Content Include="loading_3rdguards.gif" />
     <Content Include="relicbanner_for_ico.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\audio\" />
-    <Folder Include="Resources\pictures\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="LegacySelectionList.xaml">
       <SubType>Designer</SubType>
