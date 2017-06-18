@@ -164,9 +164,9 @@
             // 
             // expandAllButton
             // 
-            this.expandAllButton.Location = new System.Drawing.Point(831, 38);
+            this.expandAllButton.Location = new System.Drawing.Point(831, 12);
             this.expandAllButton.Name = "expandAllButton";
-            this.expandAllButton.Size = new System.Drawing.Size(149, 30);
+            this.expandAllButton.Size = new System.Drawing.Size(149, 40);
             this.expandAllButton.TabIndex = 16;
             this.expandAllButton.Text = "Expand Current Tab";
             this.expandAllButton.UseVisualStyleBackColor = true;
@@ -174,9 +174,9 @@
             // 
             // colapseAllButton
             // 
-            this.colapseAllButton.Location = new System.Drawing.Point(831, 5);
+            this.colapseAllButton.Location = new System.Drawing.Point(676, 12);
             this.colapseAllButton.Name = "colapseAllButton";
-            this.colapseAllButton.Size = new System.Drawing.Size(149, 30);
+            this.colapseAllButton.Size = new System.Drawing.Size(149, 40);
             this.colapseAllButton.TabIndex = 17;
             this.colapseAllButton.Text = "Collapse Current Tab";
             this.colapseAllButton.UseVisualStyleBackColor = true;
@@ -202,9 +202,9 @@
             this.Controls.Add(this.modTabGroups);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(550, 250);
+            this.MinimumSize = new System.Drawing.Size(800, 480);
             this.Name = "ModSelectionList";
-            this.Text = "ModSelectionList";
+            this.Text = "Relhax Mod Selection";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ModSelectionList_FormClosing);
             this.Load += new System.EventHandler(this.ModSelectionList_Load);
             this.SizeChanged += new System.EventHandler(this.ModSelectionList_SizeChanged);

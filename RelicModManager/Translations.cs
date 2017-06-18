@@ -761,7 +761,7 @@ namespace RelhaxModpack
             //Componet: Mod Selection view Group Box
             //
             english.Add("ModSelectionListViewSelection", "Selection View");
-            german.Add("ModSelectionListViewSelection", "Auswahlansicht");
+            german.Add("ModSelectionListViewSelection", "Auswahl anzeigen");
             polish.Add("ModSelectionListViewSelection", "Widok wyborów");
 
             //Componet: Mod selection view default (relhax)
@@ -773,7 +773,7 @@ namespace RelhaxModpack
             //Componet: Mod selection view legacy (OMC)
             //
             english.Add("selectionLegacy", "OMC Legacy");
-            german.Add("selectionLegacy", "OMC Erbe");
+            german.Add("selectionLegacy", "OMC (Baumstruktur)");
             polish.Add("selectionLegacy", "OMC Rozwijana lista");
 
             //Componet: Mod selection explanation
@@ -827,31 +827,31 @@ namespace RelhaxModpack
             //Componet: Expand current tab option
             //
             english.Add("expandAllButton", "Expand Current Tab");
-            german.Add("expandAllButton", "Expand Current Tab");
+            german.Add("expandAllButton", "Erweitere alle Einträge der aktuellen Registerkarte");
             polish.Add("expandAllButton", "Rozwiń bieżącą kartę");
 
             //Componet: Colapse current tab option
             //
             english.Add("colapseAllButton", "Collapse Current Tab");
-            german.Add("colapseAllButton", "Collapse Current Tab");
+            german.Add("colapseAllButton", "Reduziere alle Einträge der Aktuellen Registerkarte");
             polish.Add("colapseAllButton", "Zwiń bieżącą kartę");
 
             //Componet: font_MouseEnter
             //
             english.Add("font_MouseEnter", "Select a scale mode to use.\nFont is manual scaling, DPI is auto scaling.");
-            german.Add("font_MouseEnter", "Wählen Sie einen Skaliermodus aus.\nSchriftart ist manuelle Skalierung, DPI autoscaling.");
+            german.Add("font_MouseEnter", "Wähle einen Skalierungsgrad.\nFont manuell skalieren, DPI ist automatiche Skalierung.");
             polish.Add("font_MouseEnter", "Wybierz tryb skali, który ma zostać użyty.\nCzcionka jest ręcznym skalowaniem, DPI jest autoskalowanie.");
 
             //Componet: selectionView_MouseEnter
             //
             english.Add("selectionView_MouseEnter", "Select a mod selection list view.");
-            german.Add("selectionView_MouseEnter", "Wählen Sie eine Änderungsauswahlliste aus.");
+            german.Add("selectionView_MouseEnter", "wähle eine der Listenansichten.");
             polish.Add("selectionView_MouseEnter", "Wybierz listę wyboru modyfikacji.");
 
             //Componet: language_MouseEnter
             //
             english.Add("language_MouseEnter", "Select your preferred language.");
-            german.Add("language_MouseEnter", "Wählen Sie Ihre bevorzugte Sprache aus.");
+            german.Add("language_MouseEnter", "Wähle Deine bevorzugte Sprache");
             polish.Add("language_MouseEnter", "Wybierz preferowany język.");
 
             //Componet: fontSizeGB
@@ -869,7 +869,7 @@ namespace RelhaxModpack
             //Component: expandAllDesc
             //
             english.Add("expandAllDesc", "Select this to have all options automatically expand. It applies for the Legacy Selection only.");
-            german.Add("expandAllDesc", "Wählen Sie diese Option, um alle Optionen automatisch zu erweitern. Es gilt nur für die Legacy Selection.");
+            german.Add("expandAllDesc", "Erweitere alle Einträge auf allen Registerkarten automatisch. Nur bei Ansicht als Baumstruktur.");
             polish.Add("expandAllDesc", "Zaznacz to, aby wszystkie opcje zostały automatycznie rozwinięte. Dotyczy tylko opcji Legacy Selection.");
         }
     }

@@ -71,8 +71,8 @@ namespace RelhaxModpack
                 Settings.saveUserData = false;
                 Settings.cleanUninstall = false;
                 Settings.tempLoadedLanguage = 0;
-                Settings.modSelectionHeight = 250;
-                Settings.modSelectionWidth = 520;
+                Settings.modSelectionHeight = 480;
+                Settings.modSelectionWidth = 800;
                 Settings.fontSizeforum = Settings.FontSize.regular;
                 Settings.tempFontSize = (int)FontSize.regular;
                 Settings.expandAllLegacy = false;
