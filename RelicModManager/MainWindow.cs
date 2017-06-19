@@ -1655,6 +1655,11 @@ namespace RelhaxModpack
         {
             if (state == InstallState.extractRelhaxMods)
             {
+                if (Settings.saveUserData)
+                {
+                    state = InstallState.restoreUserData;
+                    this.restoreUserData();
+                }
                 state = InstallState.patchRelhaxMods;
                 Utils.appendToLog("Starting to patch Relhax Modpack Mods");
                 this.patchFiles();
@@ -1667,11 +1672,6 @@ namespace RelhaxModpack
                 state = InstallState.patchUserMods;
                 Utils.appendToLog("Starting to patch Relhax User Mods");
                 this.patchFiles();
-                if (Settings.saveUserData)
-                {
-                    state = InstallState.restoreUserData;
-                    this.restoreUserData();
-                }
                 state = InstallState.installFonts;
                 this.installFonts();
                 return;
