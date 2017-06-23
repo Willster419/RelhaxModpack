@@ -26,8 +26,8 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 23.2.1";
-        private string today = "06/19/2017";
+        private string managerVersion = "version 23.2.2";
+        private string today = "06/22/2017";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -852,6 +852,33 @@ namespace RelhaxModpack
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup");
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxUserConfigs")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxUserConfigs");
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxTemp")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxTemp");
+            //check for required external application libraries (dlls only)
+            if (!File.Exists(Application.StartupPath + "\\DotNetZip.dll"))
+            {
+                try
+                {
+                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll", Application.StartupPath + "\\DotNetZip.dll");
+                }
+                catch (WebException)
+                {
+                    Utils.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " DotNetZip.dll");
+                    MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " DotNetZip.dll");
+                    Application.Exit();
+                }
+            }
+            if (!File.Exists(Application.StartupPath + "\\Newtonsoft.Json.dll"))
+            {
+                try
+                {
+                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll", Application.StartupPath + "\\Newtonsoft.Json.dll");
+                }
+                catch (WebException)
+                {
+                    Utils.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " Newtonsoft.Json.dll");
+                    MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " Newtonsoft.Json.dll");
+                    Application.Exit();
+                }
+            }
             //load settings
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
             Utils.appendToLog("Loading settings");

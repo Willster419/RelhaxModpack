@@ -1,3 +1,6 @@
+Version 23.2.2:
+-Hotfix for bug of installer not downloading external application libraries
+
 Version 23.2.1:
 -Updated autosize parameters in the main window
 -Moved restoring of user files to right after extraction, before patching, for user data files that are also the config files for mods.
