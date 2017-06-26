@@ -871,6 +871,24 @@ namespace RelhaxModpack
             english.Add("expandAllDesc", "Select this to have all options automatically expand. It applies for the Legacy Selection only.");
             german.Add("expandAllDesc", "Erweitere alle Einträge auf allen Registerkarten automatisch. Nur bei Ansicht als Baumstruktur.");
             polish.Add("expandAllDesc", "Zaznacz to, aby wszystkie opcje zostały automatycznie rozwinięte. Dotyczy tylko opcji Legacy Selection.");
+
+            //Component: disableBordersCB
+            //
+            english.Add("disableBordersCB", "Disable borders");
+            german.Add("disableBordersCB", "Grenzen deaktivieren");
+            polish.Add("disableBordersCB", "Wyłącz obramowanie");
+
+            //Component: disableBordersDesc
+            //
+            english.Add("disableBordersDesc", "Disable the black borders around each mod and config sublevel.");
+            german.Add("disableBordersDesc", "Deaktiviere die schwarzen Ränder um jeden Mod und config sublevel.");
+            polish.Add("disableBordersDesc", "Wyłącz czarne obwiednie wokół każdego mod i config podpoziomu.");
+
+            //Component: moveOutOfTanksLocation
+            //
+            english.Add("moveOutOfTanksLocation", "The modpack can not be run from the World_of_Tanks directory. Please move the application and try again.");
+            german.Add("moveOutOfTanksLocation", "Das modpack kann nicht aus dem World_of_Tanks Verzeichnis laufen. Bitte verschieben Sie die Anwendung und versuchen Sie es erneut.");
+            polish.Add("moveOutOfTanksLocation", "Modpack nie może być uruchomiony z katalogu World_of_Tanks. Przenieś aplikację i spróbuj ponownie.");
         }
     }
 }

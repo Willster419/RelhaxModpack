@@ -1,3 +1,10 @@
+Version 23.2.3:
+-Added detection if the application is in the World_of_Tanks folder. It's not supposed to be placed there.
+-Added option to default selection view: Disable borders option. Disable the thin black borders around all mods and config levels.
+-Removed not needed logic for disabling and enabling the selection view options check boxes.
+-Fixed bug in both selection views where it would allow you to enable configs that should be disabled.
+-Fixed bug where polish language would not be saved and reloaded on new application launch.
+
 Version 23.2.2:
 -Hotfix for bug of installer not downloading external application libraries
 

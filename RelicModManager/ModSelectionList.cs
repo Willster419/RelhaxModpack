@@ -422,32 +422,27 @@ namespace RelhaxModpack
                     //set them to false first
                     configControlRB.IsEnabled = false;
                     configControlRB.IsChecked = false;
-                    if (parentIsMod)
+                    //get all levels up to the mod, then deal with the mod
+                    bool canBeEnabled = true;
+                    if (con.parent is Config)
                     {
-                        if (m.enabled && con.enabled)
+                        Config parentConfig2 = (Config)con.parent;
+                        while (parentConfig2 is Config)
                         {
-                            configControlRB.IsEnabled = true;
-                            //the logic for checking it
-                            if (m.Checked && con.Checked)
-                            {
-                                configControlRB.IsChecked = true;
-                                hasRadioButtonConfigSelected = true;
-                            }
+                            if (!parentConfig2.enabled)
+                                canBeEnabled = false;
+                            if (parentConfig2.parent is Mod)
+                                break;
+                            parentConfig2 = (Config)parentConfig2.parent;
                         }
                     }
-                    else
-                    {
-                        if (parentConfig.enabled && con.enabled)
-                        {
-                            configControlRB.IsEnabled = true;
-                            //the logic for checking it
-                            if (parentConfig.Checked && con.Checked)
-                            {
-                                configControlRB.IsChecked = true;
-                                hasRadioButtonConfigSelected = true;
-                            }
-                        }
-                    }
+                    if (!con.parentMod.enabled)
+                        canBeEnabled = false;
+                    if (canBeEnabled)
+                        configControlRB.IsEnabled = true;
+                    if (configControlRB.IsEnabled)
+                        if (con.Checked)
+                            configControlRB.IsChecked = true;
                     //run the checksum logix
                     string nameForModCB = con.name;
                     //if there are underscores you need to actually display them #thanksWPF
@@ -1044,7 +1039,7 @@ namespace RelhaxModpack
             //from user configs
             //make the main panel
             Panel mainPanel = new Panel();
-            mainPanel.BorderStyle = BorderStyle.FixedSingle;
+            mainPanel.BorderStyle = Settings.disableBorders ? BorderStyle.None : BorderStyle.FixedSingle;
             mainPanel.TabIndex = 0;
             mainPanel.AutoSize = true;
             mainPanel.AutoSizeMode = AutoSizeMode.GrowOnly;
@@ -1089,7 +1084,7 @@ namespace RelhaxModpack
             //make config panel
             Panel configPanel = new Panel();
             configPanel.Enabled = true;
-            configPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            configPanel.BorderStyle = Settings.disableBorders ? BorderStyle.None : BorderStyle.FixedSingle;
             configPanel.Location = new System.Drawing.Point(3, 10);
             configPanel.TabIndex = 2;
             configPanel.Size = new System.Drawing.Size(t.Size.Width - 35, 30);
@@ -1185,30 +1180,27 @@ namespace RelhaxModpack
                     //logic for radiobutton
                     configControlRB.Enabled = false;
                     configControlRB.Checked = false;
-                    if (parentIsMod)
+                    //get all levels up to the mod, then deal with the mod
+                    bool canBeEnabled = true;
+                    if (con.parent is Config)
                     {
-                        if (m.enabled && con.enabled)
+                        Config parentConfig2 = (Config)con.parent;
+                        while (parentConfig2 is Config)
                         {
-                            configControlRB.Enabled = true;
-                            if (m.Checked && con.Checked)
-                            {
-                                configControlRB.Checked = true;
-                                hasRadioButtonConfigSelected = true;
-                            }
+                            if (!parentConfig2.enabled)
+                                canBeEnabled = false;
+                            if (parentConfig2.parent is Mod)
+                                break;
+                            parentConfig2 = (Config)parentConfig2.parent;
                         }
                     }
-                    else
-                    {
-                        if (parentConfig.enabled && con.enabled)
-                        {
-                            configControlRB.Enabled = true;
-                            if (parentConfig.Checked && con.Checked)
-                            {
-                                configControlRB.Checked = true;
-                                hasRadioButtonConfigSelected = true;
-                            }
-                        }
-                    }
+                    if (!con.parentMod.enabled)
+                        canBeEnabled = false;
+                    if (canBeEnabled)
+                        configControlRB.Enabled = true;
+                    if (configControlRB.Enabled)
+                        if (con.Checked)
+                            configControlRB.Checked = true;
                     //add handlers
                     configControlRB.CheckedChanged += new EventHandler(configControlRB_CheckedChanged);
                     configControlRB.MouseDown += new MouseEventHandler(configControlRB_MouseDown);

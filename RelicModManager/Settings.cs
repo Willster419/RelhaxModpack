@@ -24,6 +24,7 @@ namespace RelhaxModpack
         public static bool saveUserData { get; set; }
         public static bool darkUI { get; set; }
         public static bool cleanUninstall { get; set; }
+        public static bool disableBorders { get; set; }
         public static int modSelectionHeight { get; set; }
         public static int modSelectionWidth { get; set; }
         public static int loadingGif { get; set; }
@@ -70,6 +71,7 @@ namespace RelhaxModpack
                 Settings.saveLastConfig = false;
                 Settings.saveUserData = false;
                 Settings.cleanUninstall = false;
+                Settings.disableBorders = false;
                 Settings.tempLoadedLanguage = 0;
                 Settings.modSelectionHeight = 480;
                 Settings.modSelectionWidth = 800;
@@ -132,6 +134,9 @@ namespace RelhaxModpack
                             break;
                         case "expandAllLegacy":
                             Settings.expandAllLegacy = bool.Parse(n.InnerText);
+                            break;
+                        case "disableBorders":
+                            Settings.disableBorders = bool.Parse(n.InnerText);
                             break;
                         case "language":
                             Settings.tempLoadedLanguage = int.Parse(n.InnerText);
@@ -203,6 +208,10 @@ namespace RelhaxModpack
                     //german
                     Translations.language = Translations.Languages.German;
                     break;
+                case 2:
+                    //polish
+                    Translations.language = Translations.Languages.Polish;
+                    break;
             }
             //apply the internal setting of the view selection
             switch (Settings.tempLoadedView)
@@ -264,6 +273,9 @@ namespace RelhaxModpack
             XmlElement xexpandAllLegacy = doc.CreateElement("expandAllLegacy");
             xexpandAllLegacy.InnerText = "" + Settings.expandAllLegacy;
             settingsHolder.AppendChild(xexpandAllLegacy);
+            XmlElement xdisableBorders = doc.CreateElement("disableBorders");
+            xdisableBorders.InnerText = "" + Settings.disableBorders;
+            settingsHolder.AppendChild(xdisableBorders);
             XmlElement xlanguage = doc.CreateElement("language");
             xlanguage.InnerText = "" + (int)Translations.language;
             settingsHolder.AppendChild(xlanguage);

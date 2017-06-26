@@ -26,8 +26,8 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 23.2.2";
-        private string today = "06/22/2017";
+        private string managerVersion = "version 23.2.3";
+        private string today = "06/26/2017";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -1011,6 +1011,14 @@ namespace RelhaxModpack
             if (this.parseStrings() == null)
             {
                 MessageBox.Show(Translations.getTranslatedString("autoDetectFailed"));
+                state = InstallState.error;
+                toggleUIButtons(true);
+                return;
+            }
+            if (tanksLocation.Equals(Application.StartupPath))
+            {
+                //display error and abort
+                MessageBox.Show(Translations.getTranslatedString("moveOutOfTanksLocation"));
                 state = InstallState.error;
                 toggleUIButtons(true);
                 return;
@@ -2006,6 +2014,7 @@ namespace RelhaxModpack
             this.cancelDownloadButton.Text = Translations.getTranslatedString(cancelDownloadButton.Name);
             this.fontSizeGB.Text = Translations.getTranslatedString(fontSizeGB.Name);
             this.expandNodesDefault.Text = Translations.getTranslatedString(expandNodesDefault.Name);
+            this.disableBordersCB.Text = Translations.getTranslatedString(disableBordersCB.Name);
             if (helper != null)
             {
                 helper.helperText.Text = Translations.getTranslatedString("helperText");
@@ -2022,6 +2031,7 @@ namespace RelhaxModpack
                 this.cleanUninstallCB.Checked = Settings.cleanUninstall;
                 this.darkUICB.Checked = Settings.darkUI;
                 this.expandNodesDefault.Checked = Settings.expandAllLegacy;
+                this.disableBordersCB.Checked = Settings.disableBorders;
                 this.Font = Settings.getFont();
                 switch (Settings.gif)
                 {
@@ -2056,11 +2066,9 @@ namespace RelhaxModpack
                     case (Settings.SelectionView.defaultt):
                         //set default button, but disable checkedChanged handler to prevent stack overflow
                         selectionDefault.Checked = true;
-                        expandNodesDefault.Enabled = false;
                         break;
                     case (Settings.SelectionView.legacy):
                         selectionLegacy.Checked = true;
-                        expandNodesDefault.Enabled = true;
                         break;
                 }
                 if (Settings.scalingMode == Settings.ScaleMode.dpi)
@@ -2373,6 +2381,12 @@ namespace RelhaxModpack
                 helper.helperText.Text = Translations.getTranslatedString("language_MouseEnter");
         }
 
+        private void disableBordersCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("disableBordersDesc");
+        }
+
         private void font_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Right)
@@ -2469,22 +2483,10 @@ namespace RelhaxModpack
                 helper.helperText.Text = Translations.getTranslatedString("saveUserDataDesc");
         }
 
-        private void saveUserDataCB_MouseLeave(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("helperText");
-        }
-
         private void cleanUninstallCB_MouseEnter(object sender, EventArgs e)
         {
             if (helper != null)
                 helper.helperText.Text = Translations.getTranslatedString("cleanUninstallDescription");
-        }
-
-        private void cleanUninstallCB_MouseLeave(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("helperText");
         }
 
         private void cleanUninstallCB_MouseDown(object sender, MouseEventArgs e)
@@ -2500,12 +2502,6 @@ namespace RelhaxModpack
         {
             if (helper != null)
                 helper.helperText.Text = Translations.getTranslatedString("darkUIDesc");
-        }
-
-        private void darkUICB_MouseLeave(object sender, EventArgs e)
-        {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("helperText");
         }
 
         private void darkUICB_MouseDown(object sender, MouseEventArgs e)
@@ -2534,6 +2530,16 @@ namespace RelhaxModpack
             newHelper.helperText.Text = Translations.getTranslatedString("selectionViewMode");
             newHelper.ShowDialog();
         }
+
+        private void disableBordersCB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("disableBordersDesc");
+            newHelper.ShowDialog();
+        }
+
         //handler for when the "force manuel" checkbox is checked
         private void forceManuel_CheckedChanged(object sender, EventArgs e)
         {
@@ -2582,14 +2588,12 @@ namespace RelhaxModpack
         private void selectionDefault_CheckedChanged(object sender, EventArgs e)
         {
             Settings.sView = Settings.SelectionView.defaultt;
-            expandNodesDefault.Enabled = false;
             this.applySettings();
         }
 
         private void selectionLegacy_CheckedChanged(object sender, EventArgs e)
         {
             Settings.sView = Settings.SelectionView.legacy;
-            expandNodesDefault.Enabled = true;
             this.applySettings();
         }
 
@@ -2602,6 +2606,11 @@ namespace RelhaxModpack
         private void expandNodesDefault_CheckedChanged(object sender, EventArgs e)
         {
             Settings.expandAllLegacy = expandNodesDefault.Checked;
+        }
+
+        private void disableBordersCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.disableBorders = disableBordersCB.Checked;
         }
 
         private void fontSizeDefault_CheckedChanged(object sender, EventArgs e)

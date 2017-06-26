@@ -59,6 +59,7 @@
             this.downloadTimer = new System.Windows.Forms.Timer(this.components);
             this.downloadProgress = new System.Windows.Forms.RichTextBox();
             this.viewTypeGB = new System.Windows.Forms.GroupBox();
+            this.disableBordersCB = new System.Windows.Forms.CheckBox();
             this.expandNodesDefault = new System.Windows.Forms.CheckBox();
             this.selectionLegacy = new System.Windows.Forms.RadioButton();
             this.selectionDefault = new System.Windows.Forms.RadioButton();
@@ -81,7 +82,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(9, 376);
+            this.statusLabel.Location = new System.Drawing.Point(9, 389);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(53, 13);
             this.statusLabel.TabIndex = 10;
@@ -90,7 +91,7 @@
             // 
             // childProgressBar
             // 
-            this.childProgressBar.Location = new System.Drawing.Point(12, 477);
+            this.childProgressBar.Location = new System.Drawing.Point(12, 490);
             this.childProgressBar.Name = "childProgressBar";
             this.childProgressBar.Size = new System.Drawing.Size(302, 22);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -118,7 +119,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(9, 539);
+            this.formPageLink.Location = new System.Drawing.Point(9, 552);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -128,7 +129,7 @@
             // 
             // parrentProgressBar
             // 
-            this.parrentProgressBar.Location = new System.Drawing.Point(12, 448);
+            this.parrentProgressBar.Location = new System.Drawing.Point(12, 461);
             this.parrentProgressBar.Name = "parrentProgressBar";
             this.parrentProgressBar.Size = new System.Drawing.Size(302, 22);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -137,7 +138,7 @@
             // speedLabel
             // 
             this.speedLabel.AutoSize = true;
-            this.speedLabel.Location = new System.Drawing.Point(12, 502);
+            this.speedLabel.Location = new System.Drawing.Point(12, 515);
             this.speedLabel.Name = "speedLabel";
             this.speedLabel.Size = new System.Drawing.Size(24, 13);
             this.speedLabel.TabIndex = 18;
@@ -286,9 +287,9 @@
             this.languageSelectionGB.Controls.Add(this.languagePL);
             this.languageSelectionGB.Controls.Add(this.languageGER);
             this.languageSelectionGB.Controls.Add(this.languageENG);
-            this.languageSelectionGB.Location = new System.Drawing.Point(12, 332);
+            this.languageSelectionGB.Location = new System.Drawing.Point(141, 350);
             this.languageSelectionGB.Name = "languageSelectionGB";
-            this.languageSelectionGB.Size = new System.Drawing.Size(162, 38);
+            this.languageSelectionGB.Size = new System.Drawing.Size(173, 36);
             this.languageSelectionGB.TabIndex = 30;
             this.languageSelectionGB.TabStop = false;
             this.languageSelectionGB.Text = "Language";
@@ -340,9 +341,9 @@
             // 
             this.loadingImageGroupBox.Controls.Add(this.thirdGuardsLoadingImageRB);
             this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(180, 324);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(12, 337);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
-            this.loadingImageGroupBox.Size = new System.Drawing.Size(134, 49);
+            this.loadingImageGroupBox.Size = new System.Drawing.Size(123, 49);
             this.loadingImageGroupBox.TabIndex = 26;
             this.loadingImageGroupBox.TabStop = false;
             this.loadingImageGroupBox.Text = "Loading Image";
@@ -380,7 +381,7 @@
             // findBugAddModLabel
             // 
             this.findBugAddModLabel.AutoSize = true;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 520);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 533);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
             this.findBugAddModLabel.TabIndex = 27;
@@ -391,7 +392,7 @@
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(221, 505);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(221, 518);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
             this.cancelDownloadButton.Size = new System.Drawing.Size(93, 60);
             this.cancelDownloadButton.TabIndex = 28;
@@ -407,7 +408,7 @@
             // 
             // downloadProgress
             // 
-            this.downloadProgress.Location = new System.Drawing.Point(12, 392);
+            this.downloadProgress.Location = new System.Drawing.Point(12, 405);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
             this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
@@ -417,21 +418,35 @@
             // 
             // viewTypeGB
             // 
+            this.viewTypeGB.Controls.Add(this.disableBordersCB);
             this.viewTypeGB.Controls.Add(this.expandNodesDefault);
             this.viewTypeGB.Controls.Add(this.selectionLegacy);
             this.viewTypeGB.Controls.Add(this.selectionDefault);
-            this.viewTypeGB.Location = new System.Drawing.Point(180, 248);
+            this.viewTypeGB.Location = new System.Drawing.Point(141, 248);
             this.viewTypeGB.Name = "viewTypeGB";
-            this.viewTypeGB.Size = new System.Drawing.Size(134, 70);
+            this.viewTypeGB.Size = new System.Drawing.Size(173, 96);
             this.viewTypeGB.TabIndex = 31;
             this.viewTypeGB.TabStop = false;
             this.viewTypeGB.Text = "Selection View";
             // 
+            // disableBordersCB
+            // 
+            this.disableBordersCB.AutoSize = true;
+            this.disableBordersCB.Location = new System.Drawing.Point(18, 30);
+            this.disableBordersCB.Name = "disableBordersCB";
+            this.disableBordersCB.Size = new System.Drawing.Size(99, 17);
+            this.disableBordersCB.TabIndex = 3;
+            this.disableBordersCB.Text = "Disable borders";
+            this.disableBordersCB.UseVisualStyleBackColor = true;
+            this.disableBordersCB.CheckedChanged += new System.EventHandler(this.disableBordersCB_CheckedChanged);
+            this.disableBordersCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.disableBordersCB_MouseDown);
+            this.disableBordersCB.MouseEnter += new System.EventHandler(this.disableBordersCB_MouseEnter);
+            this.disableBordersCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
             // expandNodesDefault
             // 
             this.expandNodesDefault.AutoSize = true;
-            this.expandNodesDefault.Enabled = false;
-            this.expandNodesDefault.Location = new System.Drawing.Point(18, 45);
+            this.expandNodesDefault.Location = new System.Drawing.Point(18, 70);
             this.expandNodesDefault.Name = "expandNodesDefault";
             this.expandNodesDefault.Size = new System.Drawing.Size(75, 17);
             this.expandNodesDefault.TabIndex = 2;
@@ -445,7 +460,7 @@
             // selectionLegacy
             // 
             this.selectionLegacy.AutoSize = true;
-            this.selectionLegacy.Location = new System.Drawing.Point(6, 29);
+            this.selectionLegacy.Location = new System.Drawing.Point(6, 55);
             this.selectionLegacy.Name = "selectionLegacy";
             this.selectionLegacy.Size = new System.Drawing.Size(60, 17);
             this.selectionLegacy.TabIndex = 1;
@@ -475,7 +490,7 @@
             // donateLabel
             // 
             this.donateLabel.AutoSize = true;
-            this.donateLabel.Location = new System.Drawing.Point(9, 559);
+            this.donateLabel.Location = new System.Drawing.Point(9, 572);
             this.donateLabel.Name = "donateLabel";
             this.donateLabel.Size = new System.Drawing.Size(48, 13);
             this.donateLabel.TabIndex = 32;
@@ -491,7 +506,7 @@
             this.fontSizeGB.Controls.Add(this.fontSizeDefault);
             this.fontSizeGB.Location = new System.Drawing.Point(12, 248);
             this.fontSizeGB.Name = "fontSizeGB";
-            this.fontSizeGB.Size = new System.Drawing.Size(162, 83);
+            this.fontSizeGB.Size = new System.Drawing.Size(123, 83);
             this.fontSizeGB.TabIndex = 33;
             this.fontSizeGB.TabStop = false;
             this.fontSizeGB.Text = "Scaling Mode";
@@ -560,7 +575,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(326, 579);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(326, 594);
             this.Controls.Add(this.fontSizeGB);
             this.Controls.Add(this.donateLabel);
             this.Controls.Add(this.viewTypeGB);
@@ -640,6 +656,7 @@
         private System.Windows.Forms.RadioButton fontSizeLarge;
         private System.Windows.Forms.RadioButton fontSizeDefault;
         private System.Windows.Forms.RadioButton DPI;
+        private System.Windows.Forms.CheckBox disableBordersCB;
     }
 }
 
