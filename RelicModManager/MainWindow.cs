@@ -26,7 +26,7 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 23.2.3";
+        private string managerVersion = "version 23.2.4";
         private string today = "06/26/2017";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
@@ -104,6 +104,7 @@ namespace RelhaxModpack
         private string fodlerDateName;
         private string suportedVersions = null;
         string[] supportedVersions = null;
+        private string xvmConfigDir = "";
         List<Mod> modsWithData = new List<Mod>();
         List<Config> configsWithData = new List<Config>();
 
@@ -715,6 +716,10 @@ namespace RelhaxModpack
                             {
                                 zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", thisVersion);
                             }
+                            if (Regex.IsMatch(zip[i].FileName, "configs/xvm/xvmConfigFolderName") && !xvmConfigDir.Equals(""))
+                            {
+                                zip[i].FileName = Regex.Replace(zip[i].FileName, "configs/xvm/xvmConfigFolderName", "configs/xvm/" + xvmConfigDir);
+                            }
                             //put the entries on disk
                             fs.Write(Encoding.UTF8.GetBytes(zip[i].FileName + "\n"), 0, Encoding.UTF8.GetByteCount(zip[i].FileName + "\n"));
                         }
@@ -859,10 +864,16 @@ namespace RelhaxModpack
                 {
                     downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll", Application.StartupPath + "\\DotNetZip.dll");
                 }
-                catch (WebException)
+                catch (WebException ex1)
                 {
-                    Utils.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " DotNetZip.dll");
+                    Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
+                    Utils.appendToLog(ex1.StackTrace);
+                    Utils.appendToLog("inner message: " + ex1.Message);
+                    Utils.appendToLog("source: " + ex1.Source);
+                    Utils.appendToLog("target: " + ex1.TargetSite);
+                    Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll");
                     MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " DotNetZip.dll");
+                    //suportedVersions = "0.9.18.0";
                     Application.Exit();
                 }
             }
@@ -872,10 +883,16 @@ namespace RelhaxModpack
                 {
                     downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll", Application.StartupPath + "\\Newtonsoft.Json.dll");
                 }
-                catch (WebException)
+                catch (WebException ex2)
                 {
-                    Utils.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " Newtonsoft.Json.dll");
+                    Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
+                    Utils.appendToLog(ex2.StackTrace);
+                    Utils.appendToLog("inner message: " + ex2.Message);
+                    Utils.appendToLog("source: " + ex2.Source);
+                    Utils.appendToLog("target: " + ex2.TargetSite);
+                    Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll");
                     MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " Newtonsoft.Json.dll");
+                    //suportedVersions = "0.9.18.0";
                     Application.Exit();
                 }
             }
@@ -995,6 +1012,7 @@ namespace RelhaxModpack
             toggleUIButtons(false);
             state = InstallState.idle;
             downloadPath = Application.StartupPath + "\\RelHaxDownloads";
+            xvmConfigDir = "";
             //reset the interface
             this.reset();
             //attempt to locate the tanks directory automatically
@@ -1615,9 +1633,30 @@ namespace RelhaxModpack
                 foreach (Dependency d in dependencies)
                 {
                     Utils.appendToLog("Extracting Dependency " + d.dependencyZipFile);
-                    if (!d.dependencyZipFile.Equals("")) this.unzip(downloadedFilesDir + d.dependencyZipFile, tanksLocation);
+                    if (!d.dependencyZipFile.Equals(""))
+                    {
+                        try
+                        {
+                            this.unzip(downloadedFilesDir + d.dependencyZipFile, tanksLocation);
+                        }
+                        catch (Exception ex)
+                        {
+                            //append the exception to the log
+                            Utils.appendToLog("EXCEPTION: Exception (call stack traceback)");
+                            Utils.appendToLog(ex.StackTrace);
+                            Utils.appendToLog("inner message: " + ex.Message);
+                            Utils.appendToLog("source: " + ex.Source);
+                            Utils.appendToLog("target: " + ex.TargetSite);
+                            //show the error message
+                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                            //exit the application
+                            Application.Exit();
+                        }
+                    }
                     extractworker.ReportProgress(1);
                 }
+                //set xvmConfigDir here because xvm is always a dependency
+                xvmConfigDir = Utils.getXVMBootLoc(tanksLocation);
                 //extract mods
                 foreach (Mod m in modsToInstall)
                 {
@@ -1641,6 +1680,9 @@ namespace RelhaxModpack
             }
             else
             {
+                //set xvm dir location again in case it's just a user mod install
+                if(xvmConfigDir.Equals(""))
+                    xvmConfigDir = Utils.getXVMBootLoc(tanksLocation);
                 //extract user mods
                 Utils.appendToLog("Starting Relhax Modpack User Mod Extraction");
                 string downloadedFilesDir = Application.StartupPath + "\\RelHaxUserMods\\";

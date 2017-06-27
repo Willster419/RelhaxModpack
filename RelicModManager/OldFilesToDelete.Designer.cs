@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OldFilesToDelete));
             this.deleteFilesHeader = new System.Windows.Forms.Label();
             this.filesList = new System.Windows.Forms.RichTextBox();
             this.deleteFilesQuestion = new System.Windows.Forms.Label();
@@ -50,7 +51,7 @@
             this.filesList.Name = "filesList";
             this.filesList.ReadOnly = true;
             this.filesList.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.filesList.Size = new System.Drawing.Size(514, 266);
+            this.filesList.Size = new System.Drawing.Size(515, 266);
             this.filesList.TabIndex = 1;
             this.filesList.Text = "";
             // 
@@ -65,7 +66,7 @@
             // 
             // yesDeleteButton
             // 
-            this.yesDeleteButton.Location = new System.Drawing.Point(420, 307);
+            this.yesDeleteButton.Location = new System.Drawing.Point(421, 307);
             this.yesDeleteButton.Name = "yesDeleteButton";
             this.yesDeleteButton.Size = new System.Drawing.Size(106, 23);
             this.yesDeleteButton.TabIndex = 3;
@@ -87,18 +88,19 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(538, 342);
+            this.ClientSize = new System.Drawing.Size(539, 341);
             this.Controls.Add(this.noDeleteButton);
             this.Controls.Add(this.yesDeleteButton);
             this.Controls.Add(this.deleteFilesQuestion);
             this.Controls.Add(this.filesList);
             this.Controls.Add(this.deleteFilesHeader);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(545, 370);
             this.Name = "OldFilesToDelete";
-            this.Text = "OldFilesToDelete";
+            this.Text = "Old Files Question";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OldFilesToDelete_FormClosing);
             this.Load += new System.EventHandler(this.OldFilesToDelete_Load);
+            this.SizeChanged += new System.EventHandler(this.OldFilesToDelete_SizeChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 

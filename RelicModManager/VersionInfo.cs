@@ -42,8 +42,24 @@ namespace RelhaxModpack
             //download the latest release notes
             Application.DoEvents();
             WebClient wc = new WebClient();
-            downloadedVersionInfo.Text = wc.DownloadString("http://wotmods.relhaxmodpack.com/RelhaxModpack/releaseNotes.txt");
+            try
+            {
+                downloadedVersionInfo.Text = wc.DownloadString("http://wotmods.relhaxmodpack.com/RelhaxModpack/releaseNotes.txt");
+            }
+            catch (WebException ex2)
+            {
+                Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
+                Utils.appendToLog(ex2.StackTrace);
+                Utils.appendToLog("inner message: " + ex2.Message);
+                Utils.appendToLog("source: " + ex2.Source);
+                Utils.appendToLog("target: " + ex2.TargetSite);
+                Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/releaseNotes.txt");
+                MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " releaseNotes.txt");
+                //suportedVersions = "0.9.18.0";
+                Application.Exit();
+            }
             Settings.setUIColor(this);
+            VersionInfo_SizeChanged(null, null);
             Application.DoEvents();
         }
 
@@ -55,6 +71,17 @@ namespace RelhaxModpack
         private void downloadedVersionInfo_LinkClicked(object sender, LinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start(e.LinkText);
+        }
+
+        private void VersionInfo_SizeChanged(object sender, EventArgs e)
+        {
+            downloadedVersionInfo.Size = new System.Drawing.Size(this.Size.Width - 36, this.Size.Height - updateDeclineButton.Size.Height - downloadedVersionInfo.Location.Y - 59 - 3);
+            updateDeclineButton.Location = new System.Drawing.Point(newVersionAvailableLabel.Location.X, this.Size.Height - updateDeclineButton.Size.Height - 59);
+            updateAcceptButton.Location = new System.Drawing.Point(this.Size.Width - updateAcceptButton.Size.Width - 24, updateDeclineButton.Location.Y);
+            problemsUpdatingLabel.Location = new System.Drawing.Point(problemsUpdatingLabel.Location.X, this.Size.Height - 56);
+            clickHereUpdateLabel.Location = new System.Drawing.Point(clickHereUpdateLabel.Location.X, this.Size.Height - 56);
+            int middle = (this.Size.Width / 2) - (updateQuestionLabel.Size.Width / 2);
+            updateQuestionLabel.Location = new System.Drawing.Point(middle, updateDeclineButton.Location.Y + 3);
         }
     }
 }

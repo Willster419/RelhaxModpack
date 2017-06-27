@@ -755,8 +755,14 @@ namespace RelhaxModpack
             //Componet:
             //
             english.Add("zipReadingErrorMessage2", "Could not be read, most likely due to an incomplete download. Please try again.");
-            german.Add("zipReadingErrorMessage2", "konnte nicht gelesen werden, da es hoechstwahrscheinlich ein unvollständiger Download ist. Dies wird uebersprungen. Bitte versuche es spaeter erneut herungerzuladen.");
+            german.Add("zipReadingErrorMessage2", "Konnte nicht gelesen werden, da es hoechstwahrscheinlich ein unvollständiger Download ist. Dies wird uebersprungen. Bitte versuche es spaeter erneut herungerzuladen.");
             polish.Add("zipReadingErrorMessage2", "Nie można odczytać, prawdopodobnie niekompletność pobranych plików. Proszę spróbować ponownie");
+
+            //Componet:
+            //
+            english.Add("zipReadingErrorMessage3", "Could not be read.");
+            german.Add("zipReadingErrorMessage3", "Konnte nicht gelesen werden.");
+            polish.Add("zipReadingErrorMessage3", "Nie można odczytać.");
 
             //Componet: Mod Selection view Group Box
             //

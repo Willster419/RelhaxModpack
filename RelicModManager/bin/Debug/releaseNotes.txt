@@ -1,3 +1,8 @@
+Version 23.2.4:
+-Added support for the extractor to extract xvm configs to folders other than "default"
+-Improved exception handling and logging
+-Added ability of the update window and files to delete window to resize
+
 Version 23.2.3:
 -Added detection if the application is in the World_of_Tanks folder. It's not supposed to be placed there.
 -Added option to default selection view: Disable borders option. Disable the thin black borders around all mods and config levels.

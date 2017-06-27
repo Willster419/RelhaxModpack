@@ -44,14 +44,14 @@
             this.downloadedVersionInfo.Name = "downloadedVersionInfo";
             this.downloadedVersionInfo.ReadOnly = true;
             this.downloadedVersionInfo.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.downloadedVersionInfo.Size = new System.Drawing.Size(443, 144);
+            this.downloadedVersionInfo.Size = new System.Drawing.Size(446, 144);
             this.downloadedVersionInfo.TabIndex = 0;
             this.downloadedVersionInfo.Text = "";
             this.downloadedVersionInfo.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.downloadedVersionInfo_LinkClicked);
             // 
             // updateAcceptButton
             // 
-            this.updateAcceptButton.Location = new System.Drawing.Point(380, 178);
+            this.updateAcceptButton.Location = new System.Drawing.Point(383, 178);
             this.updateAcceptButton.Name = "updateAcceptButton";
             this.updateAcceptButton.Size = new System.Drawing.Size(75, 23);
             this.updateAcceptButton.TabIndex = 1;
@@ -90,7 +90,7 @@
             // problemsUpdatingLabel
             // 
             this.problemsUpdatingLabel.AutoSize = true;
-            this.problemsUpdatingLabel.Location = new System.Drawing.Point(9, 214);
+            this.problemsUpdatingLabel.Location = new System.Drawing.Point(9, 204);
             this.problemsUpdatingLabel.Name = "problemsUpdatingLabel";
             this.problemsUpdatingLabel.Size = new System.Drawing.Size(212, 13);
             this.problemsUpdatingLabel.TabIndex = 5;
@@ -99,7 +99,7 @@
             // clickHereUpdateLabel
             // 
             this.clickHereUpdateLabel.AutoSize = true;
-            this.clickHereUpdateLabel.Location = new System.Drawing.Point(218, 214);
+            this.clickHereUpdateLabel.Location = new System.Drawing.Point(217, 204);
             this.clickHereUpdateLabel.Name = "clickHereUpdateLabel";
             this.clickHereUpdateLabel.Size = new System.Drawing.Size(56, 13);
             this.clickHereUpdateLabel.TabIndex = 6;
@@ -111,7 +111,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(467, 260);
+            this.ClientSize = new System.Drawing.Size(470, 227);
             this.Controls.Add(this.clickHereUpdateLabel);
             this.Controls.Add(this.problemsUpdatingLabel);
             this.Controls.Add(this.updateQuestionLabel);
@@ -119,13 +119,13 @@
             this.Controls.Add(this.updateDeclineButton);
             this.Controls.Add(this.updateAcceptButton);
             this.Controls.Add(this.downloadedVersionInfo);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(480, 260);
             this.Name = "VersionInfo";
             this.ShowInTaskbar = false;
-            this.Text = "VersionInfo";
+            this.Text = "Version Info";
             this.Load += new System.EventHandler(this.VersionInfo_Load);
+            this.SizeChanged += new System.EventHandler(this.VersionInfo_SizeChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 
