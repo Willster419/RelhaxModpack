@@ -65,7 +65,9 @@
             this.selectionDefault = new System.Windows.Forms.RadioButton();
             this.donateLabel = new System.Windows.Forms.LinkLabel();
             this.fontSizeGB = new System.Windows.Forms.GroupBox();
-            this.DPI = new System.Windows.Forms.RadioButton();
+            this.DPILarge = new System.Windows.Forms.RadioButton();
+            this.DPIUHD = new System.Windows.Forms.RadioButton();
+            this.DPIDefault = new System.Windows.Forms.RadioButton();
             this.fontSizeHUD = new System.Windows.Forms.RadioButton();
             this.fontSizeLarge = new System.Windows.Forms.RadioButton();
             this.fontSizeDefault = new System.Windows.Forms.RadioButton();
@@ -82,7 +84,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(9, 389);
+            this.statusLabel.Location = new System.Drawing.Point(9, 396);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(53, 13);
             this.statusLabel.TabIndex = 10;
@@ -91,7 +93,7 @@
             // 
             // childProgressBar
             // 
-            this.childProgressBar.Location = new System.Drawing.Point(12, 490);
+            this.childProgressBar.Location = new System.Drawing.Point(12, 497);
             this.childProgressBar.Name = "childProgressBar";
             this.childProgressBar.Size = new System.Drawing.Size(302, 22);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -119,7 +121,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(9, 552);
+            this.formPageLink.Location = new System.Drawing.Point(9, 559);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -129,7 +131,7 @@
             // 
             // parrentProgressBar
             // 
-            this.parrentProgressBar.Location = new System.Drawing.Point(12, 461);
+            this.parrentProgressBar.Location = new System.Drawing.Point(12, 468);
             this.parrentProgressBar.Name = "parrentProgressBar";
             this.parrentProgressBar.Size = new System.Drawing.Size(302, 22);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -138,7 +140,7 @@
             // speedLabel
             // 
             this.speedLabel.AutoSize = true;
-            this.speedLabel.Location = new System.Drawing.Point(12, 515);
+            this.speedLabel.Location = new System.Drawing.Point(12, 522);
             this.speedLabel.Name = "speedLabel";
             this.speedLabel.Size = new System.Drawing.Size(24, 13);
             this.speedLabel.TabIndex = 18;
@@ -287,9 +289,9 @@
             this.languageSelectionGB.Controls.Add(this.languagePL);
             this.languageSelectionGB.Controls.Add(this.languageGER);
             this.languageSelectionGB.Controls.Add(this.languageENG);
-            this.languageSelectionGB.Location = new System.Drawing.Point(141, 350);
+            this.languageSelectionGB.Location = new System.Drawing.Point(154, 366);
             this.languageSelectionGB.Name = "languageSelectionGB";
-            this.languageSelectionGB.Size = new System.Drawing.Size(173, 36);
+            this.languageSelectionGB.Size = new System.Drawing.Size(160, 37);
             this.languageSelectionGB.TabIndex = 30;
             this.languageSelectionGB.TabStop = false;
             this.languageSelectionGB.Text = "Language";
@@ -341,9 +343,9 @@
             // 
             this.loadingImageGroupBox.Controls.Add(this.thirdGuardsLoadingImageRB);
             this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(12, 337);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(11, 344);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
-            this.loadingImageGroupBox.Size = new System.Drawing.Size(123, 49);
+            this.loadingImageGroupBox.Size = new System.Drawing.Size(137, 49);
             this.loadingImageGroupBox.TabIndex = 26;
             this.loadingImageGroupBox.TabStop = false;
             this.loadingImageGroupBox.Text = "Loading Image";
@@ -381,7 +383,7 @@
             // findBugAddModLabel
             // 
             this.findBugAddModLabel.AutoSize = true;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 533);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 540);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
             this.findBugAddModLabel.TabIndex = 27;
@@ -392,7 +394,7 @@
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(221, 518);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(221, 525);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
             this.cancelDownloadButton.Size = new System.Drawing.Size(93, 60);
             this.cancelDownloadButton.TabIndex = 28;
@@ -408,7 +410,7 @@
             // 
             // downloadProgress
             // 
-            this.downloadProgress.Location = new System.Drawing.Point(12, 405);
+            this.downloadProgress.Location = new System.Drawing.Point(12, 412);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
             this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
@@ -422,9 +424,9 @@
             this.viewTypeGB.Controls.Add(this.expandNodesDefault);
             this.viewTypeGB.Controls.Add(this.selectionLegacy);
             this.viewTypeGB.Controls.Add(this.selectionDefault);
-            this.viewTypeGB.Location = new System.Drawing.Point(141, 248);
+            this.viewTypeGB.Location = new System.Drawing.Point(11, 248);
             this.viewTypeGB.Name = "viewTypeGB";
-            this.viewTypeGB.Size = new System.Drawing.Size(173, 96);
+            this.viewTypeGB.Size = new System.Drawing.Size(173, 93);
             this.viewTypeGB.TabIndex = 31;
             this.viewTypeGB.TabStop = false;
             this.viewTypeGB.Text = "Selection View";
@@ -446,7 +448,7 @@
             // expandNodesDefault
             // 
             this.expandNodesDefault.AutoSize = true;
-            this.expandNodesDefault.Location = new System.Drawing.Point(18, 70);
+            this.expandNodesDefault.Location = new System.Drawing.Point(18, 68);
             this.expandNodesDefault.Name = "expandNodesDefault";
             this.expandNodesDefault.Size = new System.Drawing.Size(75, 17);
             this.expandNodesDefault.TabIndex = 2;
@@ -460,7 +462,7 @@
             // selectionLegacy
             // 
             this.selectionLegacy.AutoSize = true;
-            this.selectionLegacy.Location = new System.Drawing.Point(6, 55);
+            this.selectionLegacy.Location = new System.Drawing.Point(6, 53);
             this.selectionLegacy.Name = "selectionLegacy";
             this.selectionLegacy.Size = new System.Drawing.Size(60, 17);
             this.selectionLegacy.TabIndex = 1;
@@ -490,7 +492,7 @@
             // donateLabel
             // 
             this.donateLabel.AutoSize = true;
-            this.donateLabel.Location = new System.Drawing.Point(9, 572);
+            this.donateLabel.Location = new System.Drawing.Point(9, 579);
             this.donateLabel.Name = "donateLabel";
             this.donateLabel.Size = new System.Drawing.Size(48, 13);
             this.donateLabel.TabIndex = 32;
@@ -500,31 +502,57 @@
             // 
             // fontSizeGB
             // 
-            this.fontSizeGB.Controls.Add(this.DPI);
+            this.fontSizeGB.Controls.Add(this.DPILarge);
+            this.fontSizeGB.Controls.Add(this.DPIUHD);
+            this.fontSizeGB.Controls.Add(this.DPIDefault);
             this.fontSizeGB.Controls.Add(this.fontSizeHUD);
             this.fontSizeGB.Controls.Add(this.fontSizeLarge);
             this.fontSizeGB.Controls.Add(this.fontSizeDefault);
-            this.fontSizeGB.Location = new System.Drawing.Point(12, 248);
+            this.fontSizeGB.Location = new System.Drawing.Point(193, 248);
             this.fontSizeGB.Name = "fontSizeGB";
-            this.fontSizeGB.Size = new System.Drawing.Size(123, 83);
+            this.fontSizeGB.Size = new System.Drawing.Size(121, 115);
             this.fontSizeGB.TabIndex = 33;
             this.fontSizeGB.TabStop = false;
             this.fontSizeGB.Text = "Scaling Mode";
             // 
-            // DPI
+            // DPILarge
             // 
-            this.DPI.AutoSize = true;
-            this.DPI.Location = new System.Drawing.Point(6, 61);
-            this.DPI.Name = "DPI";
-            this.DPI.Size = new System.Drawing.Size(43, 17);
-            this.DPI.TabIndex = 3;
-            this.DPI.TabStop = true;
-            this.DPI.Text = "DPI";
-            this.DPI.UseVisualStyleBackColor = true;
-            this.DPI.CheckedChanged += new System.EventHandler(this.DPI_CheckedChanged);
-            this.DPI.MouseDown += new System.Windows.Forms.MouseEventHandler(this.font_MouseDown);
-            this.DPI.MouseEnter += new System.EventHandler(this.font_MouseEnter);
-            this.DPI.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            this.DPILarge.AutoSize = true;
+            this.DPILarge.Location = new System.Drawing.Point(6, 77);
+            this.DPILarge.Name = "DPILarge";
+            this.DPILarge.Size = new System.Drawing.Size(72, 17);
+            this.DPILarge.TabIndex = 5;
+            this.DPILarge.TabStop = true;
+            this.DPILarge.Text = "DPI 1.25x";
+            this.DPILarge.UseVisualStyleBackColor = true;
+            this.DPILarge.CheckedChanged += new System.EventHandler(this.DPILarge_CheckedChanged);
+            // 
+            // DPIUHD
+            // 
+            this.DPIUHD.AutoSize = true;
+            this.DPIUHD.Location = new System.Drawing.Point(6, 93);
+            this.DPIUHD.Name = "DPIUHD";
+            this.DPIUHD.Size = new System.Drawing.Size(72, 17);
+            this.DPIUHD.TabIndex = 4;
+            this.DPIUHD.TabStop = true;
+            this.DPIUHD.Text = "DPI 1.75x";
+            this.DPIUHD.UseVisualStyleBackColor = true;
+            this.DPIUHD.CheckedChanged += new System.EventHandler(this.DPIUHD_CheckedChanged);
+            // 
+            // DPIDefault
+            // 
+            this.DPIDefault.AutoSize = true;
+            this.DPIDefault.Location = new System.Drawing.Point(6, 61);
+            this.DPIDefault.Name = "DPIDefault";
+            this.DPIDefault.Size = new System.Drawing.Size(57, 17);
+            this.DPIDefault.TabIndex = 3;
+            this.DPIDefault.TabStop = true;
+            this.DPIDefault.Text = "DPI 1x";
+            this.DPIDefault.UseVisualStyleBackColor = true;
+            this.DPIDefault.CheckedChanged += new System.EventHandler(this.DPI_CheckedChanged);
+            this.DPIDefault.MouseDown += new System.Windows.Forms.MouseEventHandler(this.font_MouseDown);
+            this.DPIDefault.MouseEnter += new System.EventHandler(this.font_MouseEnter);
+            this.DPIDefault.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // fontSizeHUD
             // 
@@ -576,7 +604,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(326, 594);
+            this.ClientSize = new System.Drawing.Size(326, 599);
             this.Controls.Add(this.fontSizeGB);
             this.Controls.Add(this.donateLabel);
             this.Controls.Add(this.viewTypeGB);
@@ -655,8 +683,10 @@
         private System.Windows.Forms.RadioButton fontSizeHUD;
         private System.Windows.Forms.RadioButton fontSizeLarge;
         private System.Windows.Forms.RadioButton fontSizeDefault;
-        private System.Windows.Forms.RadioButton DPI;
+        private System.Windows.Forms.RadioButton DPIDefault;
         private System.Windows.Forms.CheckBox disableBordersCB;
+        private System.Windows.Forms.RadioButton DPILarge;
+        private System.Windows.Forms.RadioButton DPIUHD;
     }
 }
 

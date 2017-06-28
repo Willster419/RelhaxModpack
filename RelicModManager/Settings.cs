@@ -30,12 +30,16 @@ namespace RelhaxModpack
         public static int loadingGif { get; set; }
         public static float fontSize { get; set; }
         public static string fontName { get; set; }
+        public static float scaleSize { get; set; }
         public static string settingsXmlFile = Application.StartupPath + "\\RelHaxSettings.xml";
         public enum LoadingGifs { standard = 0, thirdGuards = 1 };
         public static LoadingGifs gif;
         public const float normalSizeFont = 8.25F;
         public const float largeSizeFont = 10.5F;
         public const float UHDSizeFont = 13.5F;
+        public const float scaleNormal = 1.0f;
+        public const float scaleLarge = 1.25f;
+        public const float scaleUHD = 1.75f;
         public const string defaultFontType = "Microsoft Sance Serif";
         public const string comicSansFontType = "Comic Sans MS";
         private static int tempLoadedLanguage = -1;
@@ -46,12 +50,19 @@ namespace RelhaxModpack
         //enumeration for the type of mod selection list view
         public enum SelectionView { defaultt = 0, legacy = 1 };
         public static SelectionView sView = SelectionView.defaultt;
-        public enum FontSize { regular = 0, large = 1, UHD = 2 };
-        public static FontSize fontSizeforum = FontSize.regular;
+        public enum FontSize {  fontRegular = 0,
+                                fontLarge = 1,
+                                fontUHD = 2,
+                                DPIRegular = 3,
+                                DPILarge = 4,
+                                DPIUHD = 5 };
+        public static FontSize fontSizeforum = FontSize.fontRegular;
         public static int tempLoadedView = 0;
         public enum ScaleMode { font = 0, dpi = 1 };
         public static ScaleMode scalingMode = ScaleMode.font;
         private static int tempLoadedScaleMode = 0;
+        public static AutoScaleMode appScalingMode = AutoScaleMode.Font;
+        public static Font appFont = new System.Drawing.Font(defaultFontType, normalSizeFont);
         //loads settings from xml file
         public static void loadSettings()
         {
@@ -75,8 +86,8 @@ namespace RelhaxModpack
                 Settings.tempLoadedLanguage = 0;
                 Settings.modSelectionHeight = 480;
                 Settings.modSelectionWidth = 800;
-                Settings.fontSizeforum = Settings.FontSize.regular;
-                Settings.tempFontSize = (int)FontSize.regular;
+                Settings.fontSizeforum = Settings.FontSize.fontRegular;
+                Settings.tempFontSize = (int)FontSize.fontRegular;
                 Settings.expandAllLegacy = false;
                 ModSelectionFullscreen = false;
                 previewX = 0;
@@ -169,15 +180,15 @@ namespace RelhaxModpack
             switch (Settings.tempFontSize)
             {
                 case 0:
-                    Settings.fontSizeforum = FontSize.regular;
+                    Settings.fontSizeforum = FontSize.fontRegular;
                     Settings.fontSize = Settings.normalSizeFont;
                     break;
                 case 1:
-                    Settings.fontSizeforum = FontSize.large;
+                    Settings.fontSizeforum = FontSize.fontLarge;
                     Settings.fontSize = Settings.largeSizeFont;
                     break;
                 case 2:
-                    Settings.fontSizeforum = FontSize.UHD;
+                    Settings.fontSizeforum = FontSize.fontUHD;
                     Settings.fontSize = Settings.UHDSizeFont;
                     break;
             }
@@ -365,13 +376,13 @@ namespace RelhaxModpack
             }
             switch (Settings.fontSizeforum)
             {
-                case FontSize.regular:
+                case FontSize.fontRegular:
                     Settings.fontSize = Settings.normalSizeFont;
                     break;
-                case FontSize.large:
+                case FontSize.fontLarge:
                     Settings.fontSize = Settings.largeSizeFont;
                     break;
-                case FontSize.UHD:
+                case FontSize.fontUHD:
                     Settings.fontSize = Settings.UHDSizeFont;
                     break;
             }
@@ -389,6 +400,50 @@ namespace RelhaxModpack
                     
             }
             return AutoScaleMode.Font;
+        }
+        public static void ApplyScalingProperties()
+        {
+            switch (fontSizeforum)
+            {
+                default:
+                    //set the autoscale mode
+                    appScalingMode = AutoScaleMode.Font;
+                    //set the scale to default
+                    scaleSize = scaleNormal;
+                    //set the font type
+                    appFont = new Font(defaultFontType, normalSizeFont);
+                    break;
+                case FontSize.fontRegular:
+                    scaleSize = scaleNormal;
+                    appScalingMode = AutoScaleMode.Font;
+                    appFont = new Font(fontName, normalSizeFont);
+                    break;
+                case FontSize.fontLarge:
+                    scaleSize = scaleNormal;
+                    appScalingMode = AutoScaleMode.Font;
+                    appFont = new Font(fontName, largeSizeFont);
+                    break;
+                case FontSize.fontUHD:
+                    scaleSize = scaleNormal;
+                    appScalingMode = AutoScaleMode.Font;
+                    appFont = new Font(fontName, UHDSizeFont);
+                    break;
+                case FontSize.DPIRegular:
+                    scaleSize = scaleNormal;
+                    appScalingMode = AutoScaleMode.Dpi;
+                    appFont = new Font(fontName, normalSizeFont);
+                    break;
+                case FontSize.DPILarge:
+                    scaleSize = scaleLarge;
+                    appScalingMode = AutoScaleMode.Dpi;
+                    appFont = new Font(fontName, largeSizeFont);
+                    break;
+                case FontSize.DPIUHD:
+                    scaleSize = scaleUHD;
+                    appScalingMode = AutoScaleMode.Dpi;
+                    appFont = new Font(fontName, UHDSizeFont);
+                    break;
+            }
         }
         //sets a form to have a dark UI
         public static void setUIColor(System.Windows.Forms.Form window)

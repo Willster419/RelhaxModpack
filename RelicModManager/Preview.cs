@@ -112,10 +112,10 @@ namespace RelhaxModpack
             int scale = 0;
             switch (Settings.fontSizeforum)
             {
-                case Settings.FontSize.large:
+                case Settings.FontSize.fontLarge:
                     scale = 30;
                     break;
-                case Settings.FontSize.UHD:
+                case Settings.FontSize.fontUHD:
                     scale = 75;
                     break;
             }

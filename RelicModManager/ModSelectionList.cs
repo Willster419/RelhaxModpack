@@ -313,13 +313,13 @@ namespace RelhaxModpack
             modCheckBox.catagory = c;
             switch (Settings.fontSizeforum)
             {
-                case Settings.FontSize.regular:
+                case Settings.FontSize.fontRegular:
                     //modCheckBox.FontSize = modCheckBox.FontSize + 4;
                     break;
-                case Settings.FontSize.large:
+                case Settings.FontSize.fontLarge:
                     modCheckBox.FontSize = modCheckBox.FontSize + 4;
                     break;
-                case Settings.FontSize.UHD:
+                case Settings.FontSize.fontUHD:
                     modCheckBox.FontSize = modCheckBox.FontSize + 8;
                     break;
             }
@@ -402,13 +402,13 @@ namespace RelhaxModpack
                     ConfigWPFRadioButton configControlRB = new ConfigWPFRadioButton();
                     switch (Settings.fontSizeforum)
                     {
-                        case Settings.FontSize.regular:
+                        case Settings.FontSize.fontRegular:
                             //modCheckBox.FontSize = modCheckBox.FontSize + 4;
                             break;
-                        case Settings.FontSize.large:
+                        case Settings.FontSize.fontLarge:
                             configControlRB.FontSize = configControlRB.FontSize + 4;
                             break;
-                        case Settings.FontSize.UHD:
+                        case Settings.FontSize.fontUHD:
                             configControlRB.FontSize = configControlRB.FontSize + 8;
                             break;
                     }
@@ -532,13 +532,13 @@ namespace RelhaxModpack
                     ConfigWPFCheckBox configControlCB = new ConfigWPFCheckBox();
                     switch (Settings.fontSizeforum)
                     {
-                        case Settings.FontSize.regular:
+                        case Settings.FontSize.fontRegular:
                             //modCheckBox.FontSize = modCheckBox.FontSize + 4;
                             break;
-                        case Settings.FontSize.large:
+                        case Settings.FontSize.fontLarge:
                             configControlCB.FontSize = configControlCB.FontSize + 4;
                             break;
-                        case Settings.FontSize.UHD:
+                        case Settings.FontSize.fontUHD:
                             configControlCB.FontSize = configControlCB.FontSize + 8;
                             break;
                     }
@@ -1107,13 +1107,13 @@ namespace RelhaxModpack
             int spacer = modCheckBox.Location.Y + modCheckBox.Size.Height + 5;
             switch (Settings.fontSizeforum)
             {
-                case Settings.FontSize.regular:
+                case Settings.FontSize.fontRegular:
                     //spacer += 3;
                     break;
-                case Settings.FontSize.large:
+                case Settings.FontSize.fontLarge:
                     spacer += 3;
                     break;
-                case Settings.FontSize.UHD:
+                case Settings.FontSize.fontUHD:
                     spacer += 6;
                     break;
             }

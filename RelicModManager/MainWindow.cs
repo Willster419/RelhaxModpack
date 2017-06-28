@@ -16,6 +16,7 @@ using Ionic.Zip;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Drawing;
 
 namespace RelhaxModpack
 {
@@ -107,6 +108,9 @@ namespace RelhaxModpack
         private string xvmConfigDir = "";
         List<Mod> modsWithData = new List<Mod>();
         List<Config> configsWithData = new List<Config>();
+        private float windowHeight;
+        private float windowWidth;
+        private float scale = 1.0f;
 
         //The constructur for the application
         public MainWindow()
@@ -812,6 +816,9 @@ namespace RelhaxModpack
             Utils.appendToLog("|Built on " + today + ", running at " + DateTime.Now);
             Utils.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
+            //set the current window font size
+            windowHeight = this.Size.Height;
+            windowWidth = this.Size.Width;
             //enforces a single instance of the program
             try
             {
@@ -910,19 +917,19 @@ namespace RelhaxModpack
                 Utils.appendToLog("Auto Install is ON, checking for config pref xml at " + Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName);
                 if (!File.Exists(Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName))
                 {
-                    Utils.appendToLog(Translations.getTranslatedString("extractionErrorHeader") + ": " + Program.configName + " does NOT exist, loading in regular mode");
-                    MessageBox.Show("ERROR: " + Program.configName + " does NOT exist, loading in regular mode");
+                    Utils.appendToLog(Translations.getTranslatedString("extractionErrorHeader") + ": " + Program.configName + " does NOT exist, loading in fontRegular mode");
+                    MessageBox.Show("ERROR: " + Program.configName + " does NOT exist, loading in fontRegular mode");
                     Program.autoInstall = false;
                 }
                 if (!Settings.cleanInstallation)
                 {
-                    Utils.appendToLog("ERROR: clean installation is set to false. This must be set to true for auto install to work. Loading in regular mode.");
+                    Utils.appendToLog("ERROR: clean installation is set to false. This must be set to true for auto install to work. Loading in fontRegular mode.");
                     MessageBox.Show(Translations.getTranslatedString("autoAndClean"));
                     Program.autoInstall = false;
                 }
                 if (Settings.firstLoad)
                 {
-                    Utils.appendToLog("ERROR: First time loading cannot be an auto install mode, loading in regular mode");
+                    Utils.appendToLog("ERROR: First time loading cannot be an auto install mode, loading in fontRegular mode");
                     MessageBox.Show(Translations.getTranslatedString("autoAndFirst"));
                     Program.autoInstall = false;
                 }
@@ -2074,7 +2081,7 @@ namespace RelhaxModpack
                 this.darkUICB.Checked = Settings.darkUI;
                 this.expandNodesDefault.Checked = Settings.expandAllLegacy;
                 this.disableBordersCB.Checked = Settings.disableBorders;
-                this.Font = Settings.getFont();
+                this.Font = Settings.appFont;
                 switch (Settings.gif)
                 {
                     case (Settings.LoadingGifs.standard):
@@ -2114,18 +2121,18 @@ namespace RelhaxModpack
                         break;
                 }
                 if (Settings.scalingMode == Settings.ScaleMode.dpi)
-                    DPI.Checked = true;
-                if (!DPI.Checked)
+                    DPIDefault.Checked = true;
+                if (!DPIDefault.Checked)
                 {
                     switch (Settings.fontSizeforum)
                     {
-                        case (Settings.FontSize.regular):
+                        case (Settings.FontSize.fontRegular):
                             fontSizeDefault.Checked = true;
                             break;
-                        case (Settings.FontSize.large):
+                        case (Settings.FontSize.fontLarge):
                             fontSizeLarge.Checked = true;
                             break;
-                        case (Settings.FontSize.UHD):
+                        case (Settings.FontSize.fontUHD):
                             fontSizeHUD.Checked = true;
                             break;
                     }
@@ -2290,7 +2297,7 @@ namespace RelhaxModpack
             fontSizeDefault.Enabled = enableToggle;
             fontSizeLarge.Enabled = enableToggle;
             fontSizeHUD.Enabled = enableToggle;
-            DPI.Enabled = enableToggle;
+            DPIDefault.Enabled = enableToggle;
         }
         //handler for when the window is goingto be closed
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -2657,90 +2664,141 @@ namespace RelhaxModpack
 
         private void fontSizeDefault_CheckedChanged(object sender, EventArgs e)
         {
-            bool wasComicSans = Settings.comicSans;
-            if (Settings.comicSans && Settings.scalingMode == Settings.ScaleMode.dpi)
+            if (fontSizeDefault.Checked)
             {
-                Settings.comicSans = false;
-                this.Font = Settings.getFont();
-            }
-            Settings.scalingMode = Settings.ScaleMode.font;
-            Settings.fontSizeforum = Settings.FontSize.regular;
-            this.AutoScaleMode = Settings.getAutoScaleMode();
-            this.Font = Settings.getFont();
-            if (wasComicSans)
-            {
-                Settings.comicSans = true;
-                this.Font = Settings.getFont();
+                if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
+                {
+                    Settings.fontSizeforum = Settings.FontSize.DPIRegular;
+                    Settings.ApplyScalingProperties();
+                    this.AutoScaleMode = Settings.appScalingMode;
+                    //to go from 1.25 to 1.0, multiply by 0.8. how to get 0.8?
+                    float temp = 1.0f / scale;
+                    this.Scale(new SizeF(temp, temp));
+                    scale = 1.0f;
+                    this.Font = Settings.appFont;
+                }
+                Settings.fontSizeforum = Settings.FontSize.fontRegular;
+                Settings.ApplyScalingProperties();
+                this.AutoScaleMode = Settings.appScalingMode;
+                //to go from 1.25 to 1.0, multiply by 0.8. how to get 0.8?
+                //float temp = 1.0f / scale;
+                //this.Scale(new SizeF(temp, temp));
+                //scale = 1.0f;
+                this.Font = Settings.appFont;
             }
         }
 
         private void fontSizeLarge_CheckedChanged(object sender, EventArgs e)
         {
-            bool wasComicSans = Settings.comicSans;
-            if (Settings.comicSans && Settings.scalingMode == Settings.ScaleMode.dpi)
+            if (fontSizeLarge.Checked)
             {
-                Settings.comicSans = false;
-                this.Font = Settings.getFont();
-            }
-            Settings.scalingMode = Settings.ScaleMode.font;
-            Settings.fontSizeforum = Settings.FontSize.large;
-            this.AutoScaleMode = Settings.getAutoScaleMode();
-            this.Font = Settings.getFont();
-            if (wasComicSans)
-            {
-                Settings.comicSans = true;
-                this.Font = Settings.getFont();
+                if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
+                {
+                    Settings.fontSizeforum = Settings.FontSize.DPIRegular;
+                    Settings.ApplyScalingProperties();
+                    this.AutoScaleMode = Settings.appScalingMode;
+                    //to go from 1.25 to 1.0, multiply by 0.8. how to get 0.8?
+                    float temp = 1.0f / scale;
+                    this.Scale(new SizeF(temp, temp));
+                    scale = 1.0f;
+                    this.Font = Settings.appFont;
+                }
+                Settings.fontSizeforum = Settings.FontSize.fontLarge;
+                Settings.ApplyScalingProperties();
+                this.AutoScaleMode = Settings.appScalingMode;
+                //float temp = 1.25f / scale;
+                //this.Scale(new SizeF(temp, temp));
+                //scale = 1.25f;
+                this.Font = Settings.appFont;
             }
         }
 
         private void fontSizeHUD_CheckedChanged(object sender, EventArgs e)
         {
-            //DPI->font means scale mode then font
-            //font->font means scale mode then font
-
-            //if comic sans font and dpi scale
-            //turn off comic sans
-
-            bool wasComicSans = Settings.comicSans;
-            if (Settings.comicSans && Settings.scalingMode == Settings.ScaleMode.dpi)
+            if (fontSizeHUD.Checked)
             {
-                Settings.comicSans = false;
-                this.Font = Settings.getFont();
-            }
-            Settings.scalingMode = Settings.ScaleMode.font;
-            Settings.fontSizeforum = Settings.FontSize.UHD;
-            this.AutoScaleMode = Settings.getAutoScaleMode();
-            this.Font = Settings.getFont();
-            if (wasComicSans)
-            {
-                Settings.comicSans = true;
-                this.Font = Settings.getFont();
+                if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
+                {
+                    Settings.fontSizeforum = Settings.FontSize.DPIRegular;
+                    Settings.ApplyScalingProperties();
+                    this.AutoScaleMode = Settings.appScalingMode;
+                    //to go from 1.25 to 1.0, multiply by 0.8. how to get 0.8?
+                    float temp = 1.0f / scale;
+                    this.Scale(new SizeF(temp, temp));
+                    scale = 1.0f;
+                    this.Font = Settings.appFont;
+                }
+                Settings.fontSizeforum = Settings.FontSize.fontUHD;
+                Settings.ApplyScalingProperties();
+                this.AutoScaleMode = Settings.appScalingMode;
+                this.Font = Settings.appFont;
+                //float temp = 1.75f / scale;
+                //this.Scale(new SizeF(temp, temp));
+                //scale = 1.75f;
             }
         }
 
         private void DPI_CheckedChanged(object sender, EventArgs e)
         {
-            //default for all windows is font which means they all go from font->DPI or font->font
-            //font->DPI means font then scale mode
-
-            //if comic sans font and font scale
-            //turn off comic sans and set font scale to normal
-
-            bool wasComicSans = Settings.comicSans;
-            if (Settings.comicSans && Settings.scalingMode == Settings.ScaleMode.font)
+            if (DPIDefault.Checked)
             {
-                Settings.comicSans = false;
-                Settings.fontSizeforum = Settings.FontSize.regular;
-                this.Font = Settings.getFont();
+                if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
+                {
+                    Settings.fontSizeforum = Settings.FontSize.fontRegular;
+                    Settings.ApplyScalingProperties();
+                    this.AutoScaleMode = Settings.appScalingMode;
+                    this.Font = Settings.appFont;
+                }
+                Settings.fontSizeforum = Settings.FontSize.DPIRegular;
+                Settings.ApplyScalingProperties();
+                this.AutoScaleMode = Settings.appScalingMode;
+                //to go from 1.25 to 1.0, multiply by 0.8. how to get 0.8?
+                float temp = 1.0f / scale;
+                this.Scale(new SizeF(temp,temp));
+                scale = 1.0f;
+                this.Font = Settings.appFont;
             }
-            Settings.fontSizeforum = Settings.FontSize.regular;
-            Settings.scalingMode = Settings.ScaleMode.dpi;
-            this.Font = Settings.getFont();
-            this.AutoScaleMode = Settings.getAutoScaleMode();
-            if (wasComicSans)
+        }
+
+        private void DPILarge_CheckedChanged(object sender, EventArgs e)
+        {
+            if (DPILarge.Checked)
             {
-                Settings.comicSans = true;
-                this.Font = Settings.getFont();
+                if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
+                {
+                    Settings.fontSizeforum = Settings.FontSize.fontRegular;
+                    Settings.ApplyScalingProperties();
+                    this.AutoScaleMode = Settings.appScalingMode;
+                    this.Font = Settings.appFont;
+                }
+                Settings.fontSizeforum = Settings.FontSize.DPILarge;
+                Settings.ApplyScalingProperties();
+                this.AutoScaleMode = Settings.appScalingMode;
+                float temp = 1.25f / scale;
+                this.Scale(new SizeF(temp, temp));
+                scale = 1.25f;
+                this.Font = Settings.appFont;
+            }
+        }
+
+        private void DPIUHD_CheckedChanged(object sender, EventArgs e)
+        {
+            if (DPIUHD.Checked)
+            {
+                if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
+                {
+                    Settings.fontSizeforum = Settings.FontSize.fontRegular;
+                    Settings.ApplyScalingProperties();
+                    this.AutoScaleMode = Settings.appScalingMode;
+                    this.Font = Settings.appFont;
+                }
+                Settings.fontSizeforum = Settings.FontSize.DPIUHD;
+                Settings.ApplyScalingProperties();
+                this.AutoScaleMode = Settings.appScalingMode;
+                this.Font = Settings.appFont;
+                float temp = 1.75f / scale;
+                this.Scale(new SizeF(temp, temp));
+                scale = 1.75f;
             }
         }
     }
