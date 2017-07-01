@@ -34,8 +34,13 @@ namespace RelhaxModpack
 
         private void PatchTester_Load(object sender, EventArgs e)
         {
-            this.Font = Settings.getFont();
-            this.AutoScaleMode = Settings.getAutoScaleMode();
+            //font scaling
+            this.AutoScaleMode = Settings.appScalingMode;
+            this.Font = Settings.appFont;
+            if (Settings.appScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
+            {
+                this.Scale(new System.Drawing.SizeF(Settings.scaleSize, Settings.scaleSize));
+            }
             regexFileDialog.InitialDirectory = Application.StartupPath;
             xmlFileDialog.InitialDirectory = Application.StartupPath;
             jsonFileDialog.InitialDirectory = Application.StartupPath;

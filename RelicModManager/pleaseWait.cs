@@ -20,8 +20,13 @@ namespace RelhaxModpack
         }
         private void PleaseWait_Load(object sender, EventArgs e)
         {
-            this.Font = Settings.getFont();
-            this.AutoScaleMode = Settings.getAutoScaleMode();
+            //font scaling
+            this.AutoScaleMode = Settings.appScalingMode;
+            this.Font = Settings.appFont;
+            if (Settings.appScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
+            {
+                this.Scale(new System.Drawing.SizeF(Settings.scaleSize, Settings.scaleSize));
+            }
             if (startY != -1 && startX != -1)
                 this.Location = new System.Drawing.Point(startX + 10, startY);
             label1.Text = Translations.getTranslatedString(label1.Name);

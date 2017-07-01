@@ -69,9 +69,13 @@ namespace RelhaxModpack
             //create the loading window
             pw = new PleaseWait(mainWindowStartX, mainWindowStartY);
             pw.Show();
-            //set the font from settings
-            this.Font = Settings.getFont();
-            this.AutoScaleMode = Settings.getAutoScaleMode();
+            //font scaling
+            this.AutoScaleMode = Settings.appScalingMode;
+            this.Font = Settings.appFont;
+            if (Settings.appScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
+            {
+                this.Scale(new System.Drawing.SizeF(Settings.scaleSize, Settings.scaleSize));
+            }
             
             //apply the translations
             this.applyTranslations();
@@ -279,7 +283,7 @@ namespace RelhaxModpack
         private void makeTabs()
         {
             modTabGroups.TabPages.Clear();
-            modTabGroups.Font = Settings.getFont();
+            modTabGroups.Font = Settings.appFont;
             foreach (Category c in parsedCatagoryList)
             {
                 TabPage t = new TabPage(c.name);
@@ -1016,7 +1020,7 @@ namespace RelhaxModpack
             modCheckBox.TabIndex = 1;
             modCheckBox.Text = m.name;
             modCheckBox.Name = t.Name + "_" + m.name;
-            modCheckBox.Font = Settings.getFont();
+            modCheckBox.Font = Settings.appFont;
             modCheckBox.catagory = catagory;
             modCheckBox.mod = m;
             m.modFormCheckBox = modCheckBox;
@@ -1172,7 +1176,7 @@ namespace RelhaxModpack
                     configControlRB.Size = new System.Drawing.Size(150, 15);
                     configControlRB.TabIndex = 1;
                     configControlRB.TabStop = true;
-                    configControlRB.Font = Settings.getFont();
+                    configControlRB.Font = Settings.appFont;
                     configControlRB.catagory = catagory;
                     configControlRB.mod = m;
                     configControlRB.config = con;
@@ -1288,7 +1292,7 @@ namespace RelhaxModpack
                     configControlCB.Size = new System.Drawing.Size(150, 15);
                     configControlCB.TabIndex = 1;
                     configControlCB.TabStop = true;
-                    configControlCB.Font = Settings.getFont();
+                    configControlCB.Font = Settings.appFont;
                     configControlCB.catagory = catagory;
                     configControlCB.mod = m;
                     configControlCB.config = con;

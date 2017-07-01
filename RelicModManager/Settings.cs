@@ -28,39 +28,36 @@ namespace RelhaxModpack
         public static int modSelectionHeight { get; set; }
         public static int modSelectionWidth { get; set; }
         public static int loadingGif { get; set; }
-        public static float fontSize { get; set; }
         public static string fontName { get; set; }
         public static float scaleSize { get; set; }
         public static string settingsXmlFile = Application.StartupPath + "\\RelHaxSettings.xml";
         public enum LoadingGifs { standard = 0, thirdGuards = 1 };
         public static LoadingGifs gif;
-        public const float normalSizeFont = 8.25F;
-        public const float largeSizeFont = 10.5F;
-        public const float UHDSizeFont = 13.5F;
-        public const float scaleNormal = 1.0f;
-        public const float scaleLarge = 1.25f;
-        public const float scaleUHD = 1.75f;
+        public const float normalSizeFont = 8.25F;//1.0 font scaling
+        public const float largeSizeFont = 10.25F;//1.25 font scaling
+        public const float UHDSizeFont = 13.5F;//1.75 font scaling
+        public const float scaleNormal = 1.0f;//1.0 font scaling
+        public const float scaleLarge = 1.25f;//1.25 font scaing
+        public const float scaleUHD = 1.75f;//1.75 font scaling
         public const string defaultFontType = "Microsoft Sance Serif";
         public const string comicSansFontType = "Comic Sans MS";
         private static int tempLoadedLanguage = -1;
-        private static int tempFontSize = -1;
         public static bool ModSelectionFullscreen = false;
         public static int previewX = 0;
         public static int previewY = 0;
         //enumeration for the type of mod selection list view
         public enum SelectionView { defaultt = 0, legacy = 1 };
         public static SelectionView sView = SelectionView.defaultt;
+        public static int tempLoadedView = 0;
         public enum FontSize {  fontRegular = 0,
                                 fontLarge = 1,
                                 fontUHD = 2,
                                 DPIRegular = 3,
                                 DPILarge = 4,
-                                DPIUHD = 5 };
+                                DPIUHD = 5
+                             };
         public static FontSize fontSizeforum = FontSize.fontRegular;
-        public static int tempLoadedView = 0;
-        public enum ScaleMode { font = 0, dpi = 1 };
-        public static ScaleMode scalingMode = ScaleMode.font;
-        private static int tempLoadedScaleMode = 0;
+        public static int tempFontSizeForum = 0;//default to font scale, regular
         public static AutoScaleMode appScalingMode = AutoScaleMode.Font;
         public static Font appFont = new System.Drawing.Font(defaultFontType, normalSizeFont);
         //loads settings from xml file
@@ -87,14 +84,13 @@ namespace RelhaxModpack
                 Settings.modSelectionHeight = 480;
                 Settings.modSelectionWidth = 800;
                 Settings.fontSizeforum = Settings.FontSize.fontRegular;
-                Settings.tempFontSize = (int)FontSize.fontRegular;
                 Settings.expandAllLegacy = false;
-                ModSelectionFullscreen = false;
-                previewX = 0;
-                previewY = 0;
+                Settings.ModSelectionFullscreen = false;
+                Settings.previewX = 0;
+                Settings.previewY = 0;
+                Settings.tempFontSizeForum = 0;
+                Settings.fontSizeforum = FontSize.fontRegular;
                 Settings.sView = SelectionView.defaultt;
-                Settings.tempLoadedScaleMode = 0;
-                Settings.scalingMode = ScaleMode.font;
                 Settings.applyInternalSettings();
             }
             else
@@ -109,9 +105,6 @@ namespace RelhaxModpack
                     {
                         case "comicSans":
                             Settings.comicSans = bool.Parse(n.InnerText);
-                            break;
-                        case "fontSize":
-                            Settings.tempFontSize = int.Parse(n.InnerText);
                             break;
                         case "backupModFolder":
                             Settings.backupModFolder = bool.Parse(n.InnerText);
@@ -164,8 +157,8 @@ namespace RelhaxModpack
                         case "SelectionView":
                             Settings.tempLoadedView = int.Parse(n.InnerText);
                             break;
-                        case "scalingMode":
-                            Settings.tempLoadedScaleMode = int.Parse(n.InnerText);
+                        case "FontSizeForum":
+                            Settings.tempFontSizeForum = int.Parse(n.InnerText);
                             break;
                     }
                 }
@@ -177,19 +170,25 @@ namespace RelhaxModpack
         //based on the boolean settings from above
         public static void applyInternalSettings()
         {
-            switch (Settings.tempFontSize)
+            switch (Settings.tempFontSizeForum)
             {
                 case 0:
                     Settings.fontSizeforum = FontSize.fontRegular;
-                    Settings.fontSize = Settings.normalSizeFont;
                     break;
                 case 1:
                     Settings.fontSizeforum = FontSize.fontLarge;
-                    Settings.fontSize = Settings.largeSizeFont;
                     break;
                 case 2:
                     Settings.fontSizeforum = FontSize.fontUHD;
-                    Settings.fontSize = Settings.UHDSizeFont;
+                    break;
+                case 3:
+                    Settings.fontSizeforum = FontSize.DPIRegular;
+                    break;
+                case 4:
+                    Settings.fontSizeforum = FontSize.DPILarge;
+                    break;
+                case 5:
+                    Settings.fontSizeforum = FontSize.DPIUHD;
                     break;
             }
             if (Settings.comicSans)
@@ -236,15 +235,8 @@ namespace RelhaxModpack
                     Settings.sView = SelectionView.legacy;
                     break;
             }
-            switch (Settings.tempLoadedScaleMode)
-            {
-                case (int)ScaleMode.dpi:
-                    Settings.scalingMode = ScaleMode.dpi;
-                    break;
-                case (int)ScaleMode.font:
-                    Settings.scalingMode = ScaleMode.font;
-                    break;
-            }
+            //apply scaling settings
+            Settings.ApplyScalingProperties();
         }
         //saves settings to xml file
         public static void saveSettings()
@@ -257,12 +249,9 @@ namespace RelhaxModpack
             XmlElement xcomicSans = doc.CreateElement("comicSans");
             xcomicSans.InnerText = "" + comicSans;
             settingsHolder.AppendChild(xcomicSans);
-            XmlElement xlargeFont = doc.CreateElement("fontSize");
-            xlargeFont.InnerText = "" + (int)fontSizeforum;
-            settingsHolder.AppendChild(xlargeFont);
-            XmlElement xscalingMode = doc.CreateElement("scalingMode");
-            xscalingMode.InnerText = "" + (int)scalingMode;
-            settingsHolder.AppendChild(xscalingMode);
+            XmlElement xfontSizeForum = doc.CreateElement("FontSizeForum");
+            xfontSizeForum.InnerText = "" + (int)fontSizeforum;
+            settingsHolder.AppendChild(xfontSizeForum);
             XmlElement xbackupModFolder = doc.CreateElement("backupModFolder");
             xbackupModFolder.InnerText = "" + backupModFolder;
             settingsHolder.AppendChild(xbackupModFolder);
@@ -331,21 +320,6 @@ namespace RelhaxModpack
             doc.Save(settingsXmlFile);
             Utils.appendToLog("Settings saved sucessfully");
         }
-        public static Image getLoadingImage(LoadingGifs gif)
-        {
-            switch (gif)
-            {
-                case (LoadingGifs.standard):
-                    {
-                        return RelhaxModpack.Properties.Resources.loading;
-                    }
-                case (LoadingGifs.thirdGuards):
-                    {
-                        return RelhaxModpack.Properties.Resources.loading_3rdguards;
-                    }
-            }
-            return null;
-        }
         //returns the loading image for the picture viewer, based on
         //which loading image the user specified
         public static Image getLoadingImage()
@@ -363,8 +337,7 @@ namespace RelhaxModpack
             }
             return null;
         }
-        //returns a new font for the window
-        public static Font getFont()
+        public static void ApplyScalingProperties()
         {
             if (Settings.comicSans)
             {
@@ -374,35 +347,6 @@ namespace RelhaxModpack
             {
                 Settings.fontName = Settings.defaultFontType;
             }
-            switch (Settings.fontSizeforum)
-            {
-                case FontSize.fontRegular:
-                    Settings.fontSize = Settings.normalSizeFont;
-                    break;
-                case FontSize.fontLarge:
-                    Settings.fontSize = Settings.largeSizeFont;
-                    break;
-                case FontSize.fontUHD:
-                    Settings.fontSize = Settings.UHDSizeFont;
-                    break;
-            }
-            return new System.Drawing.Font(fontName, fontSize);
-        }
-        public static AutoScaleMode getAutoScaleMode()
-        {
-            switch (Settings.scalingMode)
-            {
-                case Settings.ScaleMode.font:
-                    return AutoScaleMode.Font;
-                    
-                case Settings.ScaleMode.dpi:
-                    return AutoScaleMode.Dpi;
-                    
-            }
-            return AutoScaleMode.Font;
-        }
-        public static void ApplyScalingProperties()
-        {
             switch (fontSizeforum)
             {
                 default:

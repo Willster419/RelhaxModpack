@@ -170,8 +170,13 @@ namespace RelhaxModpack
         }
         private void CRCFileSizeUpdate_Load(object sender, EventArgs e)
         {
-            this.Font = Settings.getFont();
-            this.AutoScaleMode = Settings.getAutoScaleMode();
+            //font scaling
+            this.AutoScaleMode = Settings.appScalingMode;
+            this.Font = Settings.appFont;
+            if (Settings.appScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
+            {
+                this.Scale(new System.Drawing.SizeF(Settings.scaleSize, Settings.scaleSize));
+            }
             addZipsDialog.InitialDirectory = Application.StartupPath;
         }
         private int getZipIndex(string zipFile)
