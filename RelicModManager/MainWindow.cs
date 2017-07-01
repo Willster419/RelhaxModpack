@@ -27,8 +27,8 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 23.2.4";
-        private string today = "06/26/2017";
+        private string managerVersion = "version 23.2.5";
+        private string today = "06/30/2017";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -1387,7 +1387,8 @@ namespace RelhaxModpack
         private void cancerFontCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.comicSans = cancerFontCB.Checked;
-            this.Font = Settings.getFont();
+            Settings.ApplyScalingProperties();
+            this.Font = Settings.appFont;
         }
         //uses backgroundWorker to copy files
         private void backgroundCopy(string source, string dest)
@@ -2120,10 +2121,7 @@ namespace RelhaxModpack
                         selectionLegacy.Checked = true;
                         break;
                 }
-                if (Settings.scalingMode == Settings.ScaleMode.dpi)
-                    DPIDefault.Checked = true;
-                if (!DPIDefault.Checked)
-                {
+                
                     switch (Settings.fontSizeforum)
                     {
                         case (Settings.FontSize.fontRegular):
@@ -2135,8 +2133,17 @@ namespace RelhaxModpack
                         case (Settings.FontSize.fontUHD):
                             fontSizeHUD.Checked = true;
                             break;
+                        case(Settings.FontSize.DPIRegular):
+                            DPIDefault.Checked = true;
+                            break;
+                        case(Settings.FontSize.DPILarge):
+                            DPILarge.Checked = true;
+                            break;
+                        case(Settings.FontSize.DPIUHD):
+                            DPIUHD.Checked = true;
+                            break;
                     }
-                }
+                
             }
         }
         //gets the total number of installs to do
@@ -2298,6 +2305,8 @@ namespace RelhaxModpack
             fontSizeLarge.Enabled = enableToggle;
             fontSizeHUD.Enabled = enableToggle;
             DPIDefault.Enabled = enableToggle;
+            DPILarge.Enabled = enableToggle;
+            DPIUHD.Enabled = enableToggle;
         }
         //handler for when the window is goingto be closed
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -2671,7 +2680,6 @@ namespace RelhaxModpack
                     Settings.fontSizeforum = Settings.FontSize.DPIRegular;
                     Settings.ApplyScalingProperties();
                     this.AutoScaleMode = Settings.appScalingMode;
-                    //to go from 1.25 to 1.0, multiply by 0.8. how to get 0.8?
                     float temp = 1.0f / scale;
                     this.Scale(new SizeF(temp, temp));
                     scale = 1.0f;
@@ -2680,10 +2688,6 @@ namespace RelhaxModpack
                 Settings.fontSizeforum = Settings.FontSize.fontRegular;
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
-                //to go from 1.25 to 1.0, multiply by 0.8. how to get 0.8?
-                //float temp = 1.0f / scale;
-                //this.Scale(new SizeF(temp, temp));
-                //scale = 1.0f;
                 this.Font = Settings.appFont;
             }
         }
@@ -2732,9 +2736,6 @@ namespace RelhaxModpack
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
                 this.Font = Settings.appFont;
-                //float temp = 1.75f / scale;
-                //this.Scale(new SizeF(temp, temp));
-                //scale = 1.75f;
             }
         }
 
@@ -2752,7 +2753,6 @@ namespace RelhaxModpack
                 Settings.fontSizeforum = Settings.FontSize.DPIRegular;
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
-                //to go from 1.25 to 1.0, multiply by 0.8. how to get 0.8?
                 float temp = 1.0f / scale;
                 this.Scale(new SizeF(temp,temp));
                 scale = 1.0f;
