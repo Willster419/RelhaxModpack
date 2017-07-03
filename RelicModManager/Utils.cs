@@ -1079,6 +1079,51 @@ namespace RelhaxModpack
                 Utils.appendToLog("There was an error with patching the file " + jsonFile + ", with extra refrences");
             File.WriteAllText(jsonFile, rebuilder.ToString());
         }
+        public static void pmodPatch(string bootFile, string xvmPath, string search, string newValue, string mode, string tanksLocation, string tanksVersion, bool testMods = false, string testXVMBootLoc = "")
+        {
+            numByteReads = 0;
+            patchDone = false;
+            genericTraverse = 0;
+            //check if it's the new structure
+            if (Regex.IsMatch(bootFile, "^\\\\\\\\res_mods"))
+            {
+                //new style patch, res_mods folder
+                bootFile = tanksLocation + bootFile;
+            }
+            else if (Regex.IsMatch(bootFile, "^\\\\\\\\mods"))
+            {
+                //new style patch, mods folder
+                bootFile = tanksLocation + bootFile;
+            }
+            else if (testMods)
+            {
+
+            }
+            else
+            {
+                //old style patch
+                bootFile = tanksLocation + "\\res_mods" + bootFile;
+            }
+
+            //patch versiondir out of fileLocation
+            if (!testMods && Regex.IsMatch(bootFile, "versiondir"))
+            {
+                bootFile = Regex.Replace(bootFile, "versiondir", tanksVersion);
+            }
+
+            //check that the file exists
+            if (!File.Exists(bootFile))
+                return;
+            //break down the path into an array
+            string[] pathArrayy = xvmPath.Split('.');
+            List<string> pathArray = new List<string>();
+            //convert it to a List cause it has more features
+            foreach (string s in pathArrayy)
+                pathArray.Add(s);
+            //load the file from disk
+            numByteReads = 0;
+            readInside(pathArray, bootFile, newValue, search, mode, xvmPath);
+        }
 
         public static void xvmPatch(string bootFile, string xvmPath, string search, string newValue, string mode, string tanksLocation, string tanksVersion, bool testMods = false, string testXVMBootLoc = "")
         {
@@ -1171,6 +1216,7 @@ namespace RelhaxModpack
             numByteReads = 0;
             //create the (new) stringBuilder to rewrite the file
             StringBuilder sb = new StringBuilder();
+            bool isToEnd = false;
             //load the file from disk
             string fileContents = File.ReadAllText(newFilePath);
             while (pathArray.Count != 0)
@@ -1180,12 +1226,12 @@ namespace RelhaxModpack
                 //check if the patharray has array index in it
                 if (Regex.IsMatch(pathArray[0], @"\["))
                 {
-                    regex = @"[ \t]*""" + pathArray[0].Split('[')[0] + "\":";
+                    regex = @"[ \t]*""" + pathArray[0].Split('[')[0] + "\"[ \t]*:";
                     isArrayIndex = true;
                 }
                 else
                 {
-                    regex = @"[ \t]*""" + pathArray[0] + "\":";
+                    regex = @"[ \t]*""" + pathArray[0] + "\"[ \t]*:";
                 }
                 //read untill the value we want
                 readUntill(fileContents, sb, regex);
@@ -1202,9 +1248,12 @@ namespace RelhaxModpack
                     parseRefrence2(pathArray, newFilePath, replaceValue, search, mode, origXvmPath, fileContents, sb);
                 }
                 //determine if it is an array
+                isToEnd = false;
                 if (isArrayIndex)
                 {
                     int indexToReadTo = 0;
+                    //boolean flag for it you want to get to the end of the jarray
+                    isToEnd = false;
                     //split the array into an array lol
                     readUntill(fileContents, sb, @"\[");
                     string arrayContents = peekUntill(fileContents, @"\]");
@@ -1224,6 +1273,18 @@ namespace RelhaxModpack
                             Utils.appendToLog("invalid index: " + pathArray[0]);
                             return;
                         }
+                    }
+                    else if (Regex.IsMatch(pathArray[0], @"\[-1\]+"))
+                    {
+                        //-1 keyword for the add array method
+                        if(!mode.Equals("array_add"))
+                        {
+                            Utils.appendToLog("To use -1 keyword, must be in array_add mode!!");
+                            return;
+                        }
+                        //set the flag and reset the values
+                        indexToReadTo = carray.Count - 1;
+                        isToEnd = true;
                     }
                     //if it is a search, 
                     else
@@ -1275,6 +1336,10 @@ namespace RelhaxModpack
                     {
                         advanceTo = advanceTo + carray[i];
                     }
+                    if (isToEnd)
+                    {
+                        advanceTo = advanceTo + carray[carray.Count - 1];
+                    }
                     //get it to right before the desired index starts
                     readUntill(fileContents, sb, advanceTo.Count());
                     //determine if the this value is actually a file refrence
@@ -1292,6 +1357,7 @@ namespace RelhaxModpack
             //split off into the cases for different xvm modification types
             if (!patchDone)
             {
+                patchDone = true;
                 switch (mode)
                 {
                     default:
@@ -1311,7 +1377,7 @@ namespace RelhaxModpack
                         xvmArrayClear(fileContents, sb, newFilePath, replaceValue, search);
                         break;
                     case "array_add":
-                        xvmArrayAdd(fileContents, sb, newFilePath, replaceValue, search);
+                        xvmArrayAdd(fileContents, sb, newFilePath, replaceValue, search, isToEnd);
                         break;
                     case "array_edit":
                         xvmArrayEdit(fileContents, sb, newFilePath, replaceValue, search);
@@ -1350,9 +1416,21 @@ namespace RelhaxModpack
                 filePath = filePath.Trim();
                 readInside(pathArray, Path.GetDirectoryName(newFilePath) + "\\" + filePath, replaceValue, search, mode, origXvmPath);
             }
+            else if (Regex.IsMatch(filePath, @"\.(json|xc)"))
+            {
+                //new file
+                string tempPath = filePath.Substring(0, filePath.Length - 1);
+                pathArray.RemoveAt(0);
+                readInside(pathArray, Path.GetDirectoryName(newFilePath) + "\\" + tempPath, replaceValue, search, mode, origXvmPath);
+            }
             else
             {
                 //same file refrence
+                //EXCEPT it could eithor be a new file refrence
+                //3 types of refrences
+                //"file.json"
+                //"path.within.file
+                //"file.json":"path.to.new.ting"
                 string[] newPathSplit = filePath.Split('.');
                 pathArray[0] = newPathSplit[0];
                 for (int i = 1; i < newPathSplit.Count(); i++)
@@ -1469,14 +1547,34 @@ namespace RelhaxModpack
             }
         }
         //adding a new entry
-        private static void xvmArrayAdd(string fileContents, StringBuilder sb, string newFilePath, string replaceValue, string search)
+        private static void xvmArrayAdd(string fileContents, StringBuilder sb, string newFilePath, string replaceValue, string search, bool isToEnd = false)
         {
             bool modified = false;
             string replaced = "";
             //all it needs to do is add it
-            replaced = replaced + replaceValue + ",";
+            //unless it's to end
+            if (!isToEnd)
+            {
+                replaced = replaced + replaceValue + ",";
+            }
+            else
+            {
+                //need to not add the comma
+                replaced = replaced + replaceValue;
+                //need to also go back to add the comma to the stringbuilder
+                string temp = peekBehindUntill(fileContents, @"[},]");
+                //temp = temp.Trim();
+                sb.Remove(sb.ToString().Count() - (temp.Count()-1), temp.Count()-1);
+                string toApeend = temp.Substring(0, 1);
+                sb.Append(toApeend);
+                //temp.Remove(0, 1);
+                sb.Append(",");
+                sb.Append(temp.Substring(1,temp.Length-2));
+            }
             //append it in the sb
             sb.Append(replaced);
+            if (isToEnd)
+                sb.Append("\n");
             readUntillEnd(fileContents, sb);
             modified = true;
             patchDone = true;

@@ -97,6 +97,8 @@
             this.xvmEditModeButton = new System.Windows.Forms.RadioButton();
             this.xvmAddModeButton = new System.Windows.Forms.RadioButton();
             this.xvmFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.xvmPatchRB = new System.Windows.Forms.RadioButton();
+            this.PMODPatchRB = new System.Windows.Forms.RadioButton();
             this.xmlModsGroupBox.SuspendLayout();
             this.xvmModsGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -519,9 +521,9 @@
             // 
             // xvmLoadFileButton
             // 
-            this.xvmLoadFileButton.Location = new System.Drawing.Point(872, 142);
+            this.xvmLoadFileButton.Location = new System.Drawing.Point(872, 181);
             this.xvmLoadFileButton.Name = "xvmLoadFileButton";
-            this.xvmLoadFileButton.Size = new System.Drawing.Size(60, 81);
+            this.xvmLoadFileButton.Size = new System.Drawing.Size(60, 42);
             this.xvmLoadFileButton.TabIndex = 15;
             this.xvmLoadFileButton.Text = "load file to patch";
             this.xvmLoadFileButton.UseVisualStyleBackColor = true;
@@ -729,11 +731,35 @@
             // 
             this.xvmFileDialog.FileName = "xvmFileDialog";
             // 
+            // xvmPatchRB
+            // 
+            this.xvmPatchRB.AutoSize = true;
+            this.xvmPatchRB.Checked = true;
+            this.xvmPatchRB.Location = new System.Drawing.Point(873, 143);
+            this.xvmPatchRB.Name = "xvmPatchRB";
+            this.xvmPatchRB.Size = new System.Drawing.Size(48, 17);
+            this.xvmPatchRB.TabIndex = 27;
+            this.xvmPatchRB.TabStop = true;
+            this.xvmPatchRB.Text = "XVM";
+            this.xvmPatchRB.UseVisualStyleBackColor = true;
+            // 
+            // PMODPatchRB
+            // 
+            this.PMODPatchRB.AutoSize = true;
+            this.PMODPatchRB.Location = new System.Drawing.Point(873, 161);
+            this.PMODPatchRB.Name = "PMODPatchRB";
+            this.PMODPatchRB.Size = new System.Drawing.Size(57, 17);
+            this.PMODPatchRB.TabIndex = 28;
+            this.PMODPatchRB.Text = "PMOD";
+            this.PMODPatchRB.UseVisualStyleBackColor = true;
+            // 
             // PatchTester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(939, 427);
+            this.Controls.Add(this.PMODPatchRB);
+            this.Controls.Add(this.xvmPatchRB);
             this.Controls.Add(this.xvmModsGroupBox);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.button1);
@@ -873,5 +899,7 @@
         private System.Windows.Forms.RadioButton xvmEditModeButton;
         private System.Windows.Forms.RadioButton xvmAddModeButton;
         private System.Windows.Forms.OpenFileDialog xvmFileDialog;
+        private System.Windows.Forms.RadioButton xvmPatchRB;
+        private System.Windows.Forms.RadioButton PMODPatchRB;
     }
 }

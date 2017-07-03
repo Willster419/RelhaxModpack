@@ -422,6 +422,12 @@ namespace RelhaxModpack
                     Utils.appendToLog("XVM patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
                     Utils.xvmPatch(p.file, p.path, p.search, p.replace, p.mode, tanksLocation, tanksVersion);
                 }
+                else if (p.type.Equals("pmod"))
+                {
+                    //perform pmod/generic style json patch
+                    Utils.appendToLog("PMOD/Generic patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
+                    Utils.pmodPatch(p.file, p.path, p.search, p.replace, p.mode, tanksLocation, tanksVersion);
+                }
             }
             //all done, delete the patch folder
             if (Directory.Exists(tanksLocation + "\\_patch"))
