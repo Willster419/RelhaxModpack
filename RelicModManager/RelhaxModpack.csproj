@@ -140,6 +140,12 @@
     <Compile Include="CRCFileSizeUpdate.Designer.cs">
       <DependentUpon>CRCFileSizeUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="DatabaseEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DatabaseEditor.Designer.cs">
+      <DependentUpon>DatabaseEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="DatabaseListGenerater.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -232,6 +238,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CRCFileSizeUpdate.resx">
       <DependentUpon>CRCFileSizeUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DatabaseEditor.resx">
+      <DependentUpon>DatabaseEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DatabaseListGenerater.resx">
       <DependentUpon>DatabaseListGenerater.cs</DependentUpon>
