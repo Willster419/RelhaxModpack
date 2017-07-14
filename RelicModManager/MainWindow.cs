@@ -714,7 +714,7 @@ namespace RelhaxModpack
             supportedVersions = suportedVersions.Split(',');
             foreach (string s in supportedVersions)
             {
-                if (s.Equals(detectedVersion))
+                if (s.Equals(detectedVersion) || s.Equals('T'+detectedVersion) && Program.testMode)
                     return true;
             }
             return false;
