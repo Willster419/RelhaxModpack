@@ -21,9 +21,10 @@ namespace RelhaxModpack
         private string configname = "N/A";
         private string zipfile = "";
         private bool enabled = false;
+        private string devURL = "";
         private List<Dependency> globalDependencies = new List<Dependency>();
         private List<Category> parsedCatagoryList = new List<Category>();
-        private string header = "Index\tCategory\tMod\tConfig\tLevel\tZip\tEnabled";
+        private string header = "Index\tCategory\tMod\tConfig\tLevel\tZip\tDevURL\tEnabled";
 
         public DatabaseListGenerater()
         {
@@ -67,6 +68,7 @@ namespace RelhaxModpack
             modName = "";
             configname = "N/A";
             zipfile = "";
+            devURL = "";
             enabled = false;
             //ask where to save the file
             if (SaveSpreadsheetFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
@@ -78,14 +80,17 @@ namespace RelhaxModpack
                 category = cat.name;
                 foreach (Mod m in cat.mods)
                 {
+                    //remove the old devURL value if there
+                    devURL = "";
                     index = m.index;
                     level = 1;
                     modName = m.name;
                     configname = "N/A";
                     zipfile = m.zipFile;
                     enabled = m.enabled;
+                    devURL = "=HYPERLINK(\"" + m.devURL + "\",\"link\")";
                     //header = "Index,Category,Mod,Config,Level,Zip,Enabled";
-                    sb.Append(index + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + enabled + "\n");
+                    sb.Append(index + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
                     if (m.configs.Count > 0)
                         processConfigsSpreadsheetGenerate(m.configs, level + 1);
                 }
@@ -106,12 +111,15 @@ namespace RelhaxModpack
             //level++;
             foreach (Config con in configList)
             {
+                //remove the old devURL value if there
+                devURL = "";
                 index = con.index;
                 configname = con.name;
                 zipfile = con.zipFile;
                 enabled = con.enabled;
+                devURL = "=HYPERLINK(\"" + con.devURL + "\",\"link\")";
                 //header = "Index,Category,Mod,Config,Level,Zip,Enabled";
-                sb.Append(index + "\t" + category + "\t" + modName + "\t" + configname + "\t" + newLevel + "\t" + zipfile + "\t" + enabled + "\n");
+                sb.Append(index + "\t" + category + "\t" + modName + "\t" + configname + "\t" + newLevel + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
                 if (con.configs.Count > 0)
                     processConfigsSpreadsheetGenerate(con.configs, newLevel + 1);
                 //else
