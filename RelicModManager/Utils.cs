@@ -24,14 +24,52 @@ namespace RelhaxModpack
         private static string xvmBootFileLoc1 = "\\res_mods\\configs\\xvm\\xvm.xc";
         private static string xvmBootFileLoc2 = "\\mods\\configs\\xvm\\xvm.xc";
         public static int totalModConfigComponents = 0;
+
         //logs string info to the log output
         public static void appendToLog(string info)
         {
             //the method should automaticly make the file if it's not there
             File.AppendAllText(Application.StartupPath + "\\RelHaxLog.txt", info + "\n");
         }
-        //returns the md5 hash of the file based on the input file string location
+
+        //returns the md5 hash of the file based on the input file string location. It is searching in the database first. If not found in database or the filetime is not the same, it will create a new Hash and update the database
         public static string getMd5Hash(string inputFile)
+        {
+            // check if databse exists and if not, create it
+            Utils.createMd5HashDatabase();
+            // get filetime from file, convert it to string with base 10
+            string tempFiletime = Convert.ToString(File.GetLastWriteTime(inputFile).ToFileTime(), 10);
+            // extract filename with path
+            string tempFilename = Path.GetFileName(inputFile);
+            // check database for filename with filetime
+            string tempHash = Utils.getMd5HashDatabase(tempFilename, tempFiletime);
+            if (tempHash == "-1")   // file not found in database
+            {
+                // create Md5Hash from file
+                tempHash = Utils.createMd5Hash(inputFile);
+
+                if (tempHash == "-1")
+                {
+                    // no file found, then delete from database
+                    Utils.deleteMd5HashDatabase(tempFilename);
+                }
+                else
+                {
+                    // file found. update the database with new values
+                    Utils.updateMd5HashDatabase(tempFilename, tempHash, tempFiletime);
+                }
+                // report back the created Hash
+                return tempHash;
+            }
+            else                    // Hash found in database
+            {
+                // report back the stored Hash
+                return tempHash;
+            }
+        }
+
+        //returns the md5 hash of the file based on the input file string location
+        public static string createMd5Hash(string inputFile)
         {
             //first, return if the file does not exist
             if (!File.Exists(inputFile))
@@ -53,6 +91,80 @@ namespace RelhaxModpack
             // Return the hexadecimal string.
             return sBuilder.ToString();
         }
+
+        public static void createMd5HashDatabase()
+        {
+            if (!File.Exists(MainWindow.md5HashDatabaseXmlFile))
+            {
+                XDocument doc = new XDocument(
+                new XDeclaration("1.0", "utf-8", "yes"),
+                new XElement("database")
+                );
+                doc.Save(MainWindow.md5HashDatabaseXmlFile);
+            }
+        }
+
+        // need filename and filetime to check the database
+        public static string getMd5HashDatabase(string inputFile, string inputFiletime)
+        {
+            XDocument doc = XDocument.Load(MainWindow.md5HashDatabaseXmlFile);
+            try
+            {
+                XElement element = doc.Descendants("file")
+                   .Where(arg => arg.Attribute("filename").Value == inputFile && arg.Attribute("filetime").Value == inputFiletime)
+                   .Single();
+                return element.Attribute("md5").Value;
+            }
+            // catch the Exception if no entry is found
+            catch (InvalidOperationException)
+            {
+                return "-1";
+            }
+        }
+
+        public static void updateMd5HashDatabase(string inputFile, string inputMd5Hash, string inputFiletime)
+        {
+            XDocument doc = XDocument.Load(MainWindow.md5HashDatabaseXmlFile);
+            try
+            {
+                XElement element = doc.Descendants("file")
+                   .Where(arg => arg.Attribute("filename").Value == inputFile)
+                   .Single();
+                element.Attribute("filetime").Value = inputFiletime;
+                element.Attribute("md5").Value = inputMd5Hash;
+            }
+            catch (InvalidOperationException)
+            {
+                doc.Element("database").Add(new XElement("file",
+                    new XAttribute("filename", inputFile),
+                    new XAttribute("filetime", inputFiletime),
+                    new XAttribute("md5", inputMd5Hash)));
+            }
+            doc.Save(MainWindow.md5HashDatabaseXmlFile);
+        }
+
+        public static void deleteMd5HashDatabase(string inputFile)
+        {
+            // only for caution
+            Utils.createMd5HashDatabase();
+
+            // extract filename from path (if call with full path)
+            string tempFilename = Path.GetFileName(inputFile);
+
+            XDocument doc = XDocument.Load(MainWindow.md5HashDatabaseXmlFile);
+            try
+            {
+                doc.Descendants("file")
+                   .Where(arg => arg.Attribute("filename").Value == tempFilename)
+                    .Remove();
+                doc.Save(MainWindow.md5HashDatabaseXmlFile);
+            }
+            catch (InvalidOperationException)
+            {
+                return;
+            }
+        }
+
         public static bool parseBool(string input, bool defaultValue)
         {
             bool returnVal;

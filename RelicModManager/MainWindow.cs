@@ -35,7 +35,8 @@ namespace RelhaxModpack
         //directory path of where the application was started form
         private string appPath = Application.StartupPath;
         //where all the downloaded mods are placed
-        private string downloadPath = Application.StartupPath + "\\RelHaxDownloads";
+        public static string downloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads");
+        public static string md5HashDatabaseXmlFile = Path.Combine(downloadPath, "MD5HashDatabase.xml");
         private string parsedModsFolder;//0.9.x.y.z
         //DEPRECATED: /res_mods/version/gui
         //timer to measure download speed
@@ -102,7 +103,7 @@ namespace RelhaxModpack
         float sessionDownloadSpeed = 0;
         private loadingGifPreview gp;
         private ModSelectionList list;
-        private string fodlerDateName;
+        private string folderDateName;
         private string suportedVersions = null;
         string[] supportedVersions = null;
         private string xvmConfigDir = "";
@@ -981,7 +982,7 @@ namespace RelhaxModpack
         //when the "visit form page" link is clicked. the link clicked handler
         private void formPageLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-09171-the-relhax-modpack/");
+            System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
         //parses a patch xml file into an xml patch instance in memory to be enqueued
         private void createPatchList(string xmlFile)
@@ -1078,7 +1079,8 @@ namespace RelhaxModpack
                 //log and inform the user
                 Utils.appendToLog("WARNING: Detected client version is " + tanksVersion + ", not supported");
                 Utils.appendToLog("Supported versions are: " + suportedVersions);
-                MessageBox.Show(Translations.getTranslatedString("detectedClientVersion") + ": " + tanksVersion + "\n" + Translations.getTranslatedString("supportedClientVersions") + ": " + suportedVersions + "\n" + Translations.getTranslatedString("supportNotGuarnteed"));
+                // MessageBox.Show(Translations.getTranslatedString("detectedClientVersion") + ": " + tanksVersion + "\n" + Translations.getTranslatedString("supportedClientVersions") + ": " + suportedVersions + "\n" + Translations.getTranslatedString("supportNotGuarnteed"));
+                MessageBox.Show(Translations.getTranslatedString("detectedClientVersion") + ": " + tanksVersion + "\n" + Translations.getTranslatedString("supportNotGuarnteed") + "\n\n" + Translations.getTranslatedString("supportedClientVersions") + ": " + suportedVersions);
                 selectionListTanksVersion = supportedVersions[supportedVersions.Count() - 1];
             }
             state = InstallState.modSelection;
@@ -1104,9 +1106,9 @@ namespace RelhaxModpack
                 //create a new mods folder based on date and time
                 //yyyy-MM-dd-HH-mm-ss
                 DateTime now = DateTime.Now;
-                fodlerDateName = String.Format("{0:yyyy-MM-dd-HH-mm-ss}", now);
-                Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\" + fodlerDateName + "\\res_mods");
-                this.backgroundCopy(tanksLocation + "\\res_mods", Application.StartupPath + "\\RelHaxModBackup\\" + fodlerDateName + "\\res_mods");
+                folderDateName = String.Format("{0:yyyy-MM-dd-HH-mm-ss}", now);
+                Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\res_mods");
+                this.backgroundCopy(tanksLocation + "\\res_mods", Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\res_mods");
                 return;
             }
             //actual new code
@@ -1532,11 +1534,11 @@ namespace RelhaxModpack
             if (state == InstallState.backupResMods)
             {
                 state = InstallState.backupMods;
-                if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\" + fodlerDateName + "\\mods"))
+                if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\mods"))
                 {
-                    Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\" + fodlerDateName + "\\mods");
+                    Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\mods");
                 }
-                this.backgroundCopy(tanksLocation + "\\mods", Application.StartupPath + "\\RelHaxModBackup\\" + fodlerDateName + "\\mods");
+                this.backgroundCopy(tanksLocation + "\\mods", Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\mods");
                 return;
             }
             else if (state == InstallState.backupMods)
@@ -2246,6 +2248,8 @@ namespace RelhaxModpack
                                 string file = Application.StartupPath + "\\RelHaxDownloads\\" + s;
                                 File.SetAttributes(file, FileAttributes.Normal);
                                 File.Delete(file);
+                                // remove file from database, too
+                                Utils.deleteMd5HashDatabase(file);
                                 childProgressBar.Value++;
                                 retry = false;
                             }
@@ -2349,7 +2353,7 @@ namespace RelhaxModpack
             System.Diagnostics.Process.Start("https://docs.google.com/spreadsheets/d/1LmPCMAx0RajW4lVYAnguHjjd8jArtWuZIGciFN76AI4/edit?usp=sharing");
         }
 
-        //handler for when the "standard" loading animation is cleicked
+        //handler for when the "standard" loading animation is clicked
         private void standardImageRB_CheckedChanged(object sender, EventArgs e)
         {
             if (standardImageRB.Checked)
