@@ -155,6 +155,7 @@
             this.modTabGroups.Controls.Add(this.tabPage11);
             this.modTabGroups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.modTabGroups.Location = new System.Drawing.Point(12, 76);
+            this.modTabGroups.Multiline = true;
             this.modTabGroups.Name = "modTabGroups";
             this.modTabGroups.SelectedIndex = 0;
             this.modTabGroups.Size = new System.Drawing.Size(968, 338);
