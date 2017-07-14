@@ -7,6 +7,8 @@
 *.userosscache
 *.sln.docstates
 
+RelhaxModpack_TemporaryKey.pfx
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

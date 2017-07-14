@@ -29,7 +29,7 @@ namespace RelhaxModpack
         public static void appendToLog(string info)
         {
             //the method should automaticly make the file if it's not there
-            File.AppendAllText(Application.StartupPath + "\\RelHaxLog.txt", info + "\n");
+            File.AppendAllText(Path.Combine(Application.StartupPath, "RelHaxLog.txt"), DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff   ") + info + "\n");
         }
 
         //returns the md5 hash of the file based on the input file string location. It is searching in the database first. If not found in database or the filetime is not the same, it will create a new Hash and update the database
