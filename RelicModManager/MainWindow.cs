@@ -576,7 +576,23 @@ namespace RelhaxModpack
             updater.Proxy = null;
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
             if (File.Exists(versionSaveLocation)) File.Delete(versionSaveLocation);
-            string version = updater.DownloadString("http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt");
+            string version = "";
+            try
+            {
+                version = updater.DownloadString("http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt");
+            }
+            catch (WebException e)
+            {
+                Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
+                Utils.appendToLog(e.StackTrace);
+                Utils.appendToLog("inner message: " + e.Message);
+                Utils.appendToLog("source: " + e.Source);
+                Utils.appendToLog("target: " + e.TargetSite);
+                Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt");
+                MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " supported_clients.txt");
+                //suportedVersions = "0.9.18.0";
+                Application.Exit();
+            }
             versionSave = version;
             if (!version.Equals(managerVersion))
             {
