@@ -59,6 +59,8 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
+            this.listBox2 = new System.Windows.Forms.ListBox();
+            this.label12 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -96,6 +98,8 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.listBox2);
+            this.panel2.Controls.Add(this.label12);
             this.panel2.Controls.Add(this.listBox1);
             this.panel2.Controls.Add(this.label11);
             this.panel2.Controls.Add(this.richTextBox3);
@@ -306,9 +310,9 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(261, 9);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(97, 13);
+            this.label11.Size = new System.Drawing.Size(74, 13);
             this.label11.TabIndex = 22;
-            this.label11.Text = "dependency - logic";
+            this.label11.Text = "dependencies";
             // 
             // listBox1
             // 
@@ -344,6 +348,23 @@
             this.button6.TabIndex = 9;
             this.button6.Text = "edit dependencies";
             this.button6.UseVisualStyleBackColor = true;
+            // 
+            // listBox2
+            // 
+            this.listBox2.FormattingEnabled = true;
+            this.listBox2.Location = new System.Drawing.Point(264, 155);
+            this.listBox2.Name = "listBox2";
+            this.listBox2.Size = new System.Drawing.Size(120, 95);
+            this.listBox2.TabIndex = 25;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(261, 136);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(107, 13);
+            this.label12.TabIndex = 24;
+            this.label12.Text = "logical dependencies";
             // 
             // DatabaseEditor
             // 
@@ -399,6 +420,8 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.ListBox listBox2;
+        private System.Windows.Forms.Label label12;
 
     }
 }
