@@ -1234,7 +1234,11 @@ namespace RelhaxModpack
                     regex = @"[ \t]*""" + pathArray[0] + "\"[ \t]*:";
                 }
                 //read untill the value we want
-                readUntill(fileContents, sb, regex);
+                if (readUntill(fileContents, sb, regex) == "null")
+                {
+                    Utils.appendToLog("ERROR: Path not found: " + origXvmPath);
+                    return;
+                }
                 //determine if the this value is actually a file refrence
                 string refrenceTest = peekUntill(fileContents, @"[\[,}\]]$");
                 if (Regex.IsMatch(refrenceTest, @"\${[ \t]*""") && !isArrayIndex)
@@ -1255,7 +1259,11 @@ namespace RelhaxModpack
                     //boolean flag for it you want to get to the end of the jarray
                     isToEnd = false;
                     //split the array into an array lol
-                    readUntill(fileContents, sb, @"\[");
+                    if (readUntill(fileContents, sb, @"\[") == "null")
+                    {
+                        Utils.appendToLog("ERROR: Path not found: " + origXvmPath);
+                        return;
+                    }
                     string arrayContents = peekUntill(fileContents, @"\]");
                     //split the array based on "},"
                     List<string> carray = split(arrayContents, @"[,}]$");
@@ -1279,7 +1287,7 @@ namespace RelhaxModpack
                         //-1 keyword for the add array method
                         if(!mode.Equals("array_add"))
                         {
-                            Utils.appendToLog("To use -1 keyword, must be in array_add mode!!");
+                            Utils.appendToLog("To use -1 keyword, must be in array_add mode!");
                             return;
                         }
                         //set the flag and reset the values
@@ -1392,7 +1400,11 @@ namespace RelhaxModpack
         private static void parseRefrence1(List<string> pathArray, string newFilePath, string replaceValue, string search, string mode, string origXvmPath, string fileContents, StringBuilder sb)
         {
             //it's a refrence, move it to the next file and readInsideEdit (yes recursion)
-            readUntill(fileContents, sb, @"\${[ \t]*""");
+            if (readUntill(fileContents, sb, @"\${[ \t]*""") == "null")
+            {
+                Utils.appendToLog("ERROR: Path not found: " + origXvmPath);
+                return;
+            }
             //now read untill the next quote for the temp path
             string filePath = readUntill(fileContents, sb, "\"");
             //check to see if it is only a refrence withen the same file
@@ -1443,7 +1455,11 @@ namespace RelhaxModpack
         private static void parseRefrence2(List<string> pathArray, string newFilePath, string replaceValue, string search, string mode, string origXvmPath, string fileContents, StringBuilder sb)
         {
             //ref style refrence
-            readUntill(fileContents, sb, @"""\$ref"":");
+            if (readUntill(fileContents, sb, @"""\$ref"":") == "null")
+            {
+                Utils.appendToLog("ERROR: Path not found: " + origXvmPath);
+                return;
+            }
             readUntill(fileContents, sb, ":");
             readUntill(fileContents, sb, "\"");
             string filePath = readUntill(fileContents, sb, "\"");
@@ -1649,6 +1665,11 @@ namespace RelhaxModpack
             string temp = readValues;
             while (!Regex.IsMatch(temp, stopAt, RegexOptions.Multiline))
             {
+                int numChars = fileContents.Count();
+                if (numByteReads >= numChars)
+                {
+                    return "null";
+                }
                 char c = fileContents[numByteReads];
                 numByteReads++;
                 readValues = readValues + c;
