@@ -1,3 +1,16 @@
+WAIT BEFORE YOU JUST CLICK YES READ THIS!!!
+
+In case you did not look on the forms yet, we have a discord server for you to join for rapid modpack support and mods discussion:
+https://discord.gg/58fdPvK
+
+Version 23.2.8:
+-Added pmod style patching ability to xvm patcher
+-Added new backend tool DatabaseListGenerater: you can use it to make a spreadsheet of all mods in the database
+-Other back-end tools fixed
+-Enabled multiple tab lines in the Mod Selection List Window
+-Added stability to version checking of the application
+-Improved stability of the xvm patcher
+
 Version 23.2.5:
 -Completed Implementation of DPI scaling. If you are having issues with the "Font" scaling, try the "DPI" scaling.
 
