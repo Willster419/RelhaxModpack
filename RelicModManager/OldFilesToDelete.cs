@@ -23,8 +23,8 @@ namespace RelhaxModpack
             }
             deleteFilesHeader.Text = Translations.getTranslatedString("foundOldFilesDelete1");
             deleteFilesQuestion.Text = Translations.getTranslatedString("foundOldFilesDelete2");
-            noDeleteButton.Text = "no";
-            yesDeleteButton.Text = "yes";
+            noDeleteButton.Text = Translations.getTranslatedString("no");
+            yesDeleteButton.Text = Translations.getTranslatedString("yes");
             OldFilesToDelete_SizeChanged(null, null);
         }
 

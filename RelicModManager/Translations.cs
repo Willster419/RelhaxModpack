@@ -44,6 +44,19 @@ namespace RelhaxModpack
         {
             //Syntax is as follows:
             //languageName.Add("componetName","TranslatedString");
+            //General expressions
+            english.Add("yes", "yes");
+            german.Add("yes", "ja");
+            polish.Add("yes", "Tak");
+
+            english.Add("no", "no");
+            german.Add("no", "nein");
+            polish.Add("no", "Nie");
+
+            english.Add("cancel", "Cancel");
+            german.Add("cancel", "Abbrechen");
+            polish.Add("cancel", "Anuluj");
+
             //Section: MainWindow
 
             //Componet: installRelhaxMod
