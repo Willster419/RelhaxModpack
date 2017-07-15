@@ -5,7 +5,7 @@
     class Patch
     {
         //a single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
-        public string processingNativeFile { get; set; }
+        public string nativeProcessingFile { get; set; }
         //the type of patch, xml or regex (direct text replacement)
         public string type { get; set; }
         //if xml, the mode that the xml patcher should use

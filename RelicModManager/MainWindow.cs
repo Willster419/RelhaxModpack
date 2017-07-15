@@ -367,6 +367,8 @@ namespace RelhaxModpack
             //the actual patch method
             foreach (Patch p in patchList)
             {
+                //if nativeProcessingFile is not empty, it is the first entry of a new nativ xml processing file. Add a comment at the loglist, to be able to traceback the native Processing File
+                if (p.nativeProcessingFile != "") { Utils.appendToLog(string.Format("nativeProcessingFile: {0}", p.nativeProcessingFile)); }
                 string patchFileOutput = p.file;
                 int maxLength = 200;
                 if (p.file.Length > maxLength)
@@ -998,11 +1000,15 @@ namespace RelhaxModpack
             doc.Load(xmlFile);
             //loaded the xml file into memory, create an xml list of patchs
             XmlNodeList patchesList = doc.SelectNodes("//patchs/patch");
+            // modify the xml filename for logging purpose
+            string tmpXmlFilename = Path.GetFileNameWithoutExtension(xmlFile);
             //foreach "patch" node in the "patchs" node of the xml file
             foreach (XmlNode n in patchesList)
             {
                 //create a patch instance to take the patch information
                 Patch p = new Patch();
+
+                p.nativeProcessingFile = tmpXmlFilename;
                 //foreach node in this specific "patch" node
                 foreach (XmlNode nn in n.ChildNodes)
                 {
@@ -1035,6 +1041,8 @@ namespace RelhaxModpack
                             break;
                     }
                 }
+                // filename only record once needed
+                tmpXmlFilename = "";
                 patchList.Add(p);
             }
         }
