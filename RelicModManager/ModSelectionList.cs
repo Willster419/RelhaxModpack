@@ -99,7 +99,7 @@ namespace RelhaxModpack
             if (duplicates)
             {
                 Utils.appendToLog("CRITICAL: Duplicate mod name detected!!");
-                MessageBox.Show("CRITICAL: Duplicate mod name detected!!");
+                MessageBox.Show(Translations.getTranslatedString("duplicateMods"));
                 Application.Exit();
             }
             this.initUserMods();
