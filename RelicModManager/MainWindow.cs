@@ -1439,7 +1439,7 @@ namespace RelhaxModpack
         {
             numFilesToProcessInt = 0;
             numFilesToCopyDeleteExtract = 0;
-            downloadProgress.Text = Translations.getTranslatedString("copyingFile") + numFilesToCopyDeleteExtract + Translations.getTranslatedString("of") + numFilesToProcessInt;
+            downloadProgress.Text = string.Format("{0} {1} {2} {3}",Translations.getTranslatedString("copyingFile"), numFilesToCopyDeleteExtract, Translations.getTranslatedString("of"), numFilesToProcessInt);
             copyworker = new BackgroundWorker();
             copyworker.WorkerReportsProgress = true;
             copyworker.DoWork += new DoWorkEventHandler(copyworker_DoWork);
@@ -1544,7 +1544,7 @@ namespace RelhaxModpack
         //handler for the copyworker when progress is made
         private void copyworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            downloadProgress.Text = Translations.getTranslatedString("copyingFile") + numFilesToCopyDeleteExtract + Translations.getTranslatedString("of") + numFilesToProcessInt;
+            downloadProgress.Text = string.Format("{0} {1} {2} {3}", Translations.getTranslatedString("copyingFile"), numFilesToCopyDeleteExtract, Translations.getTranslatedString("of"), numFilesToProcessInt);
             childProgressBar.Maximum = numFilesToProcessInt;
             childProgressBar.Value = numFilesToCopyDeleteExtract;
         }
@@ -1585,7 +1585,7 @@ namespace RelhaxModpack
         //handler for the deleteworker when progress is made
         private void deleteworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            downloadProgress.Text = Translations.getTranslatedString("deletingFile") + numFilesToCopyDeleteExtract + Translations.getTranslatedString("of") + numFilesToProcessInt;
+            downloadProgress.Text = string.Format("{0} {1} {2} {3}", Translations.getTranslatedString("deletingFile"), numFilesToCopyDeleteExtract, Translations.getTranslatedString("of"), numFilesToProcessInt);
             childProgressBar.Maximum = numFilesToProcessInt;
             childProgressBar.Value = numFilesToCopyDeleteExtract;
         }
