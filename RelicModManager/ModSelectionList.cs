@@ -83,6 +83,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             string databaseURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/modInfo_" + tanksVersion + ".xml";
             if (Program.testMode)
+            {
                 // if customModInfoPath is empty, this creates a full valid path to the current manager location folder
                 databaseURL = Path.Combine(string.IsNullOrEmpty(Settings.customModInfoPath) ? Application.StartupPath : Settings.customModInfoPath, "modInfo.xml");
                 if (!File.Exists(databaseURL))
@@ -91,6 +92,7 @@ namespace RelhaxModpack
                     MessageBox.Show(string.Format(Translations.getTranslatedString("testModeDatabaseNotFound"), databaseURL));
                     Application.Exit();
                 }
+            }
             //create new lists for memory database and serialize from xml->lists
             globalDependencies = new List<Dependency>();
             parsedCatagoryList = new List<Category>();
