@@ -726,6 +726,11 @@ namespace RelhaxModpack
             //create a filestream to append installed files log data
             using (FileStream fs = new FileStream(tanksLocation + "\\installedRelhaxFiles.log", FileMode.Append, FileAccess.Write))
             {
+                // create a comment with the name of the extracted and installed package, to better trace back the installation source
+                string commentLine = "/*  " + Path.GetFileNameWithoutExtension(zipFile) + "  */\n";
+                // write comment to logfile
+                fs.Write(Encoding.UTF8.GetBytes(commentLine), 0, Encoding.UTF8.GetByteCount(commentLine));
+
                 try
                 {
                     using (ZipFile zip = new ZipFile(zipFile))
@@ -1800,23 +1805,30 @@ namespace RelhaxModpack
             List<string> modsFolders = new List<string>();
             foreach (string s in createdFiles)
             {
-                if (Regex.IsMatch(s, @"\.[A-Za-z0-9_\-]*$"))
+                if (Regex.IsMatch(s, @"^\s*/\*(\s|\S)*?\*/\s*$"))
                 {
-                    //it's a files
-                    files.Add(s);
+                    // this entry is an commentblock, so should be passed
                 }
                 else
                 {
-                    //it's a folder
-                    if (Regex.IsMatch(s, "res_mods"))
+                    if (Regex.IsMatch(s, @"\.[A-Za-z0-9_\-]*$"))
                     {
-                        //it's a res_mods folder
-                        resModsFolders.Add(s);
+                        //it's a files
+                        files.Add(s);
                     }
                     else
                     {
-                        //it's a mods folder
-                        modsFolders.Add(s);
+                        //it's a folder
+                        if (Regex.IsMatch(s, "res_mods"))
+                        {
+                            //it's a res_mods folder
+                            resModsFolders.Add(s);
+                        }
+                        else
+                        {
+                            //it's a mods folder
+                            modsFolders.Add(s);
+                        }
                     }
                 }
             }
