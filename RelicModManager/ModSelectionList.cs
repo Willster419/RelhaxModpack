@@ -83,7 +83,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             string databaseURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/modInfo_" + tanksVersion + ".xml";
             if (Program.testMode)
-                databaseURL = "modInfo.xml";
+                databaseURL = Path.Combine(Settings.customModInfoPath, "modInfo.xml");
             //create new lists for memory database and serialize from xml->lists
             globalDependencies = new List<Dependency>();
             parsedCatagoryList = new List<Category>();

@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Runtime.InteropServices;
 using System;
+using System.ComponentModel;
 
 namespace RelhaxModpack
 {
@@ -45,6 +46,7 @@ namespace RelhaxModpack
         public static bool ModSelectionFullscreen = false;
         public static int previewX = 0;
         public static int previewY = 0;
+        public static string customModInfoPath = "";
         //enumeration for the type of mod selection list view
         public enum SelectionView { defaultt = 0, legacy = 1 };
         public static SelectionView sView = SelectionView.defaultt;
@@ -88,6 +90,7 @@ namespace RelhaxModpack
                 Settings.ModSelectionFullscreen = false;
                 Settings.previewX = 0;
                 Settings.previewY = 0;
+                Settings.customModInfoPath = "";
                 Settings.tempFontSizeForum = 0;
                 Settings.fontSizeforum = FontSize.fontRegular;
                 Settings.sView = SelectionView.defaultt;
@@ -154,6 +157,9 @@ namespace RelhaxModpack
                         case "previewY":
                             Settings.previewY = int.Parse(n.InnerText);
                             break;
+                        case "customModInfoPath":
+                            Settings.customModInfoPath = n.InnerText;
+                            break; 
                         case "SelectionView":
                             Settings.tempLoadedView = int.Parse(n.InnerText);
                             break;
@@ -316,6 +322,9 @@ namespace RelhaxModpack
             XmlElement xpreviewY = doc.CreateElement("previewY");
             xpreviewY.InnerText = "" + previewY;
             settingsHolder.AppendChild(xpreviewY);
+            XmlElement customModInfoPath = doc.CreateElement("customModInfoPath");
+            if (Settings.customModInfoPath != "") { customModInfoPath.InnerText = Settings.customModInfoPath; }
+            settingsHolder.AppendChild(customModInfoPath); 
 
             doc.Save(settingsXmlFile);
             Utils.appendToLog("Settings saved sucessfully");

@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System.Xml.Linq;
 using System;
 using System.Linq;
+using System.ComponentModel;
 
 namespace RelhaxModpack
 {
@@ -30,6 +31,30 @@ namespace RelhaxModpack
         {
             //the method should automaticly make the file if it's not there
             File.AppendAllText(Path.Combine(Application.StartupPath, "RelHaxLog.txt"), DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff   ") + info + "\n");
+        }
+
+        // print all information about the object to the logfile
+        public static void dumpObjectToLog(string objectName, object n)
+        {
+            Utils.appendToLog(String.Format("----- dump of object {0} ------", objectName));
+            foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(n))
+            {
+                string name = descriptor.Name;
+                object value = descriptor.GetValue(n);
+                switch (value)
+                {
+                    case null:
+                        value = "(null)";
+                        break;
+                    case "":
+                        value = "(string with lenght 0)";
+                        break;
+                    default:
+                        break;
+                }
+                Utils.appendToLog(String.Format("{0}={1}", name, value));
+            }
+            Utils.appendToLog("----- end of dump ------");
         }
 
         //returns the md5 hash of the file based on the input file string location. It is searching in the database first. If not found in database or the filetime is not the same, it will create a new Hash and update the database
