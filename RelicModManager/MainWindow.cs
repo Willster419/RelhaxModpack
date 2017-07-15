@@ -1136,8 +1136,15 @@ namespace RelhaxModpack
                     break;
                 MessageBox.Show(Translations.getTranslatedString("WoTRunningMessage"), Translations.getTranslatedString("WoTRunningHeader"));
             }
-            if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
-                File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
+
+            // if the delete will raise an exception, it will be ignored
+            try
+            {
+                if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
+                    File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
+            }
+            catch { }
+
             downloadProgress.Text = Translations.getTranslatedString("loading");
             Application.DoEvents();
             modsToInstall = new List<Mod>();
@@ -1640,8 +1647,15 @@ namespace RelhaxModpack
                 //finish uninstallResMods process
                 state = InstallState.idle;
                 toggleUIButtons(true);
-                if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
-                    File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
+                
+                // if the delete will raise an exception, it will be ignored
+                try
+                {
+                    if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
+                        File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
+                }
+                catch { }
+
                 if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
                 if (!Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\mods\\" + this.getFolderVersion(null));
                 downloadProgress.Text = Translations.getTranslatedString("done");
