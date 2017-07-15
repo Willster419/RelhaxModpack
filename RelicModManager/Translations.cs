@@ -632,6 +632,13 @@ namespace RelhaxModpack
             polish.Add("noUninstallLogHeader", "Usuń wszystkie modyfikacje");
 
             //Section: Messages from ModSelectionList
+
+            //Componet: testModeDatabaseNotFound
+            //
+            english.Add("testModeDatabaseNotFound", "CRITICAL: TestMode Database not found at:\n{0}");
+            german.Add("testModeDatabaseNotFound", "KRITISCH: Die Datanbank für den Testmodus wurde nicht gefunden:\n{0}");
+            polish.Add("testModeDatabaseNotFound", "BŁĄD KRYTYCZNY: Baza danych Trybu Testowego nie znaleziona w lokalizacji:\n{0}");
+
             //Componet: 
             //
             english.Add("duplicateMods", "CRITICAL: Duplicate mod name detected");
