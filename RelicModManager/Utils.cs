@@ -221,7 +221,7 @@ namespace RelhaxModpack
             float returnVal;
             try
             {
-                returnVal = float.Parse(input);
+                returnVal = float.Parse(input.Replace('.', ','));
             }
             catch (System.FormatException)
             {

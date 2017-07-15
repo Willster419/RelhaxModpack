@@ -1042,7 +1042,7 @@ namespace RelhaxModpack
                 modCheckBox.Text = modCheckBox.Text + " (Updated)";
                 m.downloadFlag = true;
                 if ((m.size > 0.0f))
-                    modCheckBox.Text = modCheckBox.Text + " (" + m.size + " MB)";
+                    modCheckBox.Text = modCheckBox.Text + " (" + String.Format("{0:0,0.00}", m.size) + " MB)";
             }
             modCheckBox.UseVisualStyleBackColor = true;
             modCheckBox.Enabled = m.enabled;
