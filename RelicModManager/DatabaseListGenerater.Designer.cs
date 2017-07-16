@@ -34,6 +34,7 @@
             this.SpreadsheetLocation = new System.Windows.Forms.RichTextBox();
             this.LoadDatabaseFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.SaveSpreadsheetFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.generateSpreadsheetUserButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // LoadDatabaseButton
@@ -48,11 +49,11 @@
             // 
             // GenretateSpreadsheetButton
             // 
-            this.GenretateSpreadsheetButton.Location = new System.Drawing.Point(79, 232);
+            this.GenretateSpreadsheetButton.Location = new System.Drawing.Point(69, 232);
             this.GenretateSpreadsheetButton.Name = "GenretateSpreadsheetButton";
-            this.GenretateSpreadsheetButton.Size = new System.Drawing.Size(124, 23);
+            this.GenretateSpreadsheetButton.Size = new System.Drawing.Size(156, 23);
             this.GenretateSpreadsheetButton.TabIndex = 1;
-            this.GenretateSpreadsheetButton.Text = "generate spreadsheet";
+            this.GenretateSpreadsheetButton.Text = "generate internal spreadsheet";
             this.GenretateSpreadsheetButton.UseVisualStyleBackColor = true;
             this.GenretateSpreadsheetButton.Click += new System.EventHandler(this.GenretateSpreadsheetButton_Click);
             // 
@@ -86,15 +87,27 @@
             this.SaveSpreadsheetFileDialog.Filter = "*.csv|*.csv";
             this.SaveSpreadsheetFileDialog.Title = "Save Database to CSV";
             // 
+            // generateSpreadsheetUserButton
+            // 
+            this.generateSpreadsheetUserButton.Location = new System.Drawing.Point(75, 261);
+            this.generateSpreadsheetUserButton.Name = "generateSpreadsheetUserButton";
+            this.generateSpreadsheetUserButton.Size = new System.Drawing.Size(143, 23);
+            this.generateSpreadsheetUserButton.TabIndex = 4;
+            this.generateSpreadsheetUserButton.Text = "generate user spreadsheet";
+            this.generateSpreadsheetUserButton.UseVisualStyleBackColor = true;
+            this.generateSpreadsheetUserButton.Click += new System.EventHandler(this.generateSpreadsheetUserButton_Click);
+            // 
             // DatabaseListGenerater
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(290, 267);
+            this.ClientSize = new System.Drawing.Size(291, 293);
+            this.Controls.Add(this.generateSpreadsheetUserButton);
             this.Controls.Add(this.SpreadsheetLocation);
             this.Controls.Add(this.DatabaseLocation);
             this.Controls.Add(this.GenretateSpreadsheetButton);
             this.Controls.Add(this.LoadDatabaseButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "DatabaseListGenerater";
             this.Text = "DatabaseListGenerater";
             this.Load += new System.EventHandler(this.DatabaseListGenerater_Load);
@@ -110,5 +123,6 @@
         private System.Windows.Forms.RichTextBox SpreadsheetLocation;
         private System.Windows.Forms.OpenFileDialog LoadDatabaseFileDialog;
         private System.Windows.Forms.SaveFileDialog SaveSpreadsheetFileDialog;
+        private System.Windows.Forms.Button generateSpreadsheetUserButton;
     }
 }

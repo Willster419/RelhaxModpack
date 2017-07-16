@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
@@ -61,6 +57,7 @@ namespace RelhaxModpack
         private void GenretateSpreadsheetButton_Click(object sender, EventArgs e)
         {
             //reset everything
+            header = "Index\tCategory\tMod\tConfig\tLevel\tZip\tDevURL\tEnabled";
             sb = new StringBuilder();
             index = 0;
             category = "";
@@ -100,11 +97,10 @@ namespace RelhaxModpack
                 File.WriteAllText(SaveSpreadsheetFileDialog.FileName, sb.ToString());
                 SpreadsheetLocation.Text = "Saved in " + SaveSpreadsheetFileDialog.FileName;
             }
-            catch (IOException ex)
+            catch (IOException)
             {
                 SpreadsheetLocation.Text = "Failed to save in " + SaveSpreadsheetFileDialog.FileName + " (IOException, probably file open in another window)";
             }
-            
         }
         private void processConfigsSpreadsheetGenerate(List<Config> configList, int newLevel)
         {
@@ -124,6 +120,78 @@ namespace RelhaxModpack
                     processConfigsSpreadsheetGenerate(con.configs, newLevel + 1);
                 //else
                     //level--;
+            }
+        }
+
+        private void generateSpreadsheetUserButton_Click(object sender, EventArgs e)
+        {
+            header = "Category\tMod\tDevURL";
+            //reset everything
+            sb = new StringBuilder();
+            index = 0;
+            category = "";
+            level = 0;
+            modName = "";
+            configname = "";
+            zipfile = "";
+            devURL = "";
+            enabled = false;
+            //ask where to save the file
+            if (SaveSpreadsheetFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
+                return;
+            //save it
+            sb.Append(header + "\n");
+            foreach (Category cat in parsedCatagoryList)
+            {
+                category = cat.name;
+                foreach (Mod m in cat.mods)
+                {
+                    //remove the old devURL value if there
+                    devURL = "";
+                    index = m.index;
+                    level = 1;
+                    modName = m.name;
+                    configname = "N/A";
+                    zipfile = m.zipFile;
+                    enabled = m.enabled;
+                    devURL = "=HYPERLINK(\"" + m.devURL + "\",\"link\")";
+                    //header = "Index,Category,Mod,Config,Level,Zip,Enabled";
+                    sb.Append(category + "\t" + modName + devURL + "\n");
+                    if (m.configs.Count > 0)
+                        processConfigsSpreadsheetGenerateUser(m.configs, level + 1);
+                }
+            }
+            try
+            {
+                File.WriteAllText(SaveSpreadsheetFileDialog.FileName, sb.ToString());
+                SpreadsheetLocation.Text = "Saved in " + SaveSpreadsheetFileDialog.FileName;
+            }
+            catch (IOException)
+            {
+                SpreadsheetLocation.Text = "Failed to save in " + SaveSpreadsheetFileDialog.FileName + " (IOException, probably file open in another window)";
+            }
+        }
+
+        private void processConfigsSpreadsheetGenerateUser(List<Config> configList, int newLevel)
+        {
+            foreach (Config con in configList)
+            {
+                //remove the old devURL value if there
+                devURL = "";
+                index = con.index;
+                configname = "";
+                for (int i = 0; i < newLevel; i++)
+                {
+                    configname = configname + "  ";
+                }
+                configname = configname + con.name;
+                zipfile = con.zipFile;
+                enabled = con.enabled;
+                devURL = "=HYPERLINK(\"" + con.devURL + "\",\"link\")";
+                //header = "Category\tMod\tConfig\tDevURL";
+                sb.Append(category + "\t" + configname + "\t" + devURL + "\n");
+                if (con.configs.Count > 0)
+                    processConfigsSpreadsheetGenerate(con.configs, newLevel + 1);
             }
         }
     }
