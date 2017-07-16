@@ -1,0 +1,485 @@
+<mods>
+  <relhaxMods>
+    <mod>
+      <name>OMC XVM Config</name>
+      <configs>
+        <config>
+          <name>Enable Quick Color Marker (Quickstat)</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>6th sense - Icon Duration</name>
+          <configs>
+            <config>
+              <name>10 sec 6th sense icon</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Damage Panel Repair Timers</name>
+          <configs>
+            <config>
+              <name>Enable</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Results modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Show Battle Tier</name>
+        </config>
+        <config>
+          <name>Init Battle Results page 2</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Clan Icons</name>
+      <configs>
+        <config>
+          <name>Top Clans only (default)</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage Interface Modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Gold Locker</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Free XP Locker</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Set Default Currency</name>
+          <configs>
+            <config>
+              <name>Credits</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Crew Auto-return</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Removable equipment auto-return</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Server Ping</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Login Modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Auto-login</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Show server ping</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Save last server</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Marker modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Minimap modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>XVM Minimap</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Zoom configuration</name>
+          <configs>
+            <config>
+              <name>Hotkey Left CTRL</name>
+            </config>
+            <config>
+              <name>Minimap zoom - centered</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Players Panel Modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Starting Position</name>
+          <configs>
+            <config>
+              <name>medium (standard)</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Sound modifications (Custom sounds) (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Statistics color step modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>10 step wotlabs colorscale</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Tank Carousel base modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+        <config>
+          <name>Rows - 2</name>
+        </config>
+        <config>
+          <name>Cell Content</name>
+          <configs>
+            <config>
+              <name>By CaronteShinigami</name>
+              <configs>
+                <config>
+                  <name>1.0 Scale</name>
+                </config>
+              </configs>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Arcade and Sniper</name>
+      <configs>
+        <config>
+          <name>Sight Taipan</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Arty</name>
+      <configs>
+        <config>
+          <name>Pro-Arty</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Damagelog by GambitER</name>
+      <configs>
+        <config>
+          <name>XFT config with hitlog on top (xvm needed for hitlog)</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Autoaim indication</name>
+      <configs>
+        <config>
+          <name>5 sec autoaim search</name>
+        </config>
+        <config>
+          <name>ally shot blocker add-on</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>BalCalcMod</name>
+      <configs>
+        <config>
+          <name>Q</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Assistant</name>
+      <configs>
+        <config>
+          <name>G</name>
+        </config>
+        <config>
+          <name>Increased Zoom Speed</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - Penetration ( ͡° ͜ʖ ͡°) Indicator (pmod)</name>
+      <configs>
+        <config>
+          <name>font size large (30)</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - Server Reticle (pmod)</name>
+      <configs>
+        <config>
+          <name>blue</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>SafeShot</name>
+      <configs>
+        <config>
+          <name>2 sec no corpse shot</name>
+        </config>
+        <config>
+          <name>block team damage shot</name>
+        </config>
+        <config>
+          <name>send team damage message in chat</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Zoom modifications - zoom in (pmod)</name>
+      <configs>
+        <config>
+          <name>2, 4, 8, 12, 16, 20, 26, 32, 40, 48</name>
+        </config>
+        <config>
+          <name>td brake on</name>
+        </config>
+        <config>
+          <name>starting zoom 8x</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Zoom Out Config (meters)</name>
+      <configs>
+        <config>
+          <name>500m arcade + postmortem</name>
+        </config>
+        <config>
+          <name>Increase Scroll Speed</name>
+        </config>
+        <config>
+          <name>Disable gun shake</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Bullet Damage Indicators</name>
+      <configs>
+        <config>
+          <name>qdly</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Contour Icons</name>
+      <configs>
+        <config>
+          <name>Disable Icon mirroring</name>
+          <configs>
+            <config>
+              <name>xvm</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Wizards</name>
+          <configs>
+            <config>
+              <name>Arabic Tier Numbers</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Dead White Tanks</name>
+      <configs />
+    </mod>
+    <mod>
+      <name>Fps Ping coloredBar by lenya69</name>
+    </mod>
+    <mod>
+      <name>Inbattle current rating calculation by Ekspoint</name>
+      <configs>
+        <config>
+          <name>wn8, eff, damage</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>WoT Tweaker</name>
+      <configs>
+        <config>
+          <name>Enable max visibility</name>
+        </config>
+        <config>
+          <name>Disable fog</name>
+        </config>
+        <config>
+          <name>Disable clouds</name>
+        </config>
+        <config>
+          <name>Disable tank exhaust smoke</name>
+        </config>
+        <config>
+          <name>Disable misc object effects</name>
+        </config>
+        <config>
+          <name>Disable shell impact effects</name>
+        </config>
+        <config>
+          <name>Disable tank death effects</name>
+        </config>
+        <config>
+          <name>Disable tank death smoke</name>
+        </config>
+        <config>
+          <name>Disable tank hit effects</name>
+        </config>
+        <config>
+          <name>Disable tree effects? this is an option?</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Aslains gold premium tanks</name>
+    </mod>
+    <mod>
+      <name>Auto-Equip Mod</name>
+      <configs>
+        <config>
+          <name>by Ekspoint</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Hangar Manager (HangMan)</name>
+      <configs>
+        <config>
+          <name>Use standard WoT camera script</name>
+        </config>
+        <config>
+          <name>Screensaver time 30 sec</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Medals</name>
+      <configs>
+        <config>
+          <name>with Effect of Glass</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Research Watchdog Without Free Experience</name>
+      <configs />
+    </mod>
+    <mod>
+      <name>Session Statistics by Tomonik</name>
+      <configs>
+        <config>
+          <name>English</name>
+        </config>
+        <config>
+          <name>Daily Reset</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Kill sounds</name>
+      <configs>
+        <config>
+          <name>UT Countdown</name>
+          <configs>
+            <config>
+              <name>Locastan origanal config</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Audio</name>
+      <configs>
+        <config>
+          <name>OMC signal (8 sec)</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Icon</name>
+      <configs>
+        <config>
+          <name>Sauron</name>
+        </config>
+      </configs>
+    </mod>
+  </relhaxMods>
+  <userMods />
+</mods>

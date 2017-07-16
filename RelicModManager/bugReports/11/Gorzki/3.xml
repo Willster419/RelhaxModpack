@@ -1,0 +1,437 @@
+<mods>
+  <relhaxMods>
+    <mod>
+      <name>Battle Interface modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>6th sense - Icon Duration</name>
+          <configs>
+            <config>
+              <name>10 sec 6th sense icon</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Information Label for Missions (Mission Tracker)</name>
+          <configs>
+            <config>
+              <name>by MarsOne</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Scoreboard</name>
+          <configs>
+            <config>
+              <name>Show Alive</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Hitlog</name>
+          <configs>
+            <config>
+              <name>Enable</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Total HP</name>
+          <configs>
+            <config>
+              <name>Enable total HP</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>WN8 Comparison</name>
+        </config>
+        <config>
+          <name>Average Damage</name>
+          <configs>
+            <config>
+              <name>Enable</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>High Caliber Tracker</name>
+          <configs>
+            <config>
+              <name>Enable</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Damage Log</name>
+          <configs>
+            <config>
+              <name>Enable</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage Interface Modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Gold Locker</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Set Default Currency</name>
+          <configs>
+            <config>
+              <name>Credits</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Crew Auto-return</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Removable equipment auto-return</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Block vehicle if ammo is lower than...</name>
+          <configs>
+            <config>
+              <name>20%</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Server Ping</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Server Populations</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Login Modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Show server ping</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Marker modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Minimap modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>XVM Minimap</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Players Panel Modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>HP Bars</name>
+          <configs>
+            <config>
+              <name>Default</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Statistics color step modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>6 step xvm colorscale</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Tank Carousel base modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+        <config>
+          <name>Rows - 3</name>
+        </config>
+        <config>
+          <name>"Buy Tank" cell</name>
+          <configs>
+            <config>
+              <name>Hide cell</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>"Buy Slot" cell</name>
+          <configs>
+            <config>
+              <name>Show cell, show total used slots</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Cell Content</name>
+          <configs>
+            <config>
+              <name>From Prebuilt Config Selection</name>
+              <configs>
+                <config>
+                  <name>Normal Style</name>
+                  <configs>
+                    <config>
+                      <name>1.0 Scale</name>
+                    </config>
+                    <config>
+                      <name>Average Damage</name>
+                      <configs>
+                        <config>
+                          <name>Enable</name>
+                        </config>
+                      </configs>
+                    </config>
+                    <config>
+                      <name>Battles Count</name>
+                      <configs>
+                        <config>
+                          <name>Enable</name>
+                        </config>
+                      </configs>
+                    </config>
+                    <config>
+                      <name>Win Rate</name>
+                      <configs>
+                        <config>
+                          <name>Enable</name>
+                        </config>
+                      </configs>
+                    </config>
+                  </configs>
+                </config>
+              </configs>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Autoaim indication</name>
+      <configs>
+        <config>
+          <name>infinite autoaim search</name>
+        </config>
+        <config>
+          <name>auto-announce reload add-on</name>
+        </config>
+        <config>
+          <name>lock shell travel distance when enemy dissapeared add-on</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>BalCalcMod</name>
+      <configs>
+        <config>
+          <name>Q</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Assistant</name>
+      <configs>
+        <config>
+          <name>G</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - Penetration ( ͡° ͜ʖ ͡°) Indicator (pmod)</name>
+      <configs>
+        <config>
+          <name>font size large (30)</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - Server Reticle (pmod)</name>
+      <configs>
+        <config>
+          <name>meltymaps mathmod</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>SafeShot</name>
+      <configs>
+        <config>
+          <name>5 sec no corpse shot</name>
+        </config>
+        <config>
+          <name>block team damage shot</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Zoom modifications - zoom in (pmod)</name>
+      <configs>
+        <config>
+          <name>2, 4, 8, 12, 16, 20, 26, 32, 40, 48</name>
+        </config>
+        <config>
+          <name>td brake off</name>
+        </config>
+        <config>
+          <name>starting zoom 2x (client default)</name>
+        </config>
+        <config>
+          <name>enable pmod zoom indicator</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Zoom Out Config (meters)</name>
+      <configs>
+        <config>
+          <name>500m only in arcade</name>
+        </config>
+        <config>
+          <name>Disable gun shake</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>15m Spot Circle</name>
+      <configs>
+        <config>
+          <name>Toggle ON-OFF with NUMPAD0</name>
+        </config>
+        <config>
+          <name>green</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Arty Log Extended by OldSkool</name>
+    </mod>
+    <mod>
+      <name>ATAC</name>
+    </mod>
+    <mod>
+      <name>Bullet Damage Indicators</name>
+      <configs>
+        <config>
+          <name>lenya69</name>
+        </config>
+        <config>
+          <name>14 second display</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Colored penetration and ricochets on tanks</name>
+      <configs>
+        <config>
+          <name>Artasan</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Dead White Tanks</name>
+      <configs>
+        <config>
+          <name>...and dead white tracks</name>
+        </config>
+        <config>
+          <name>...and dead white wagons</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Gold Visibility Mod by lgfrbcsgo</name>
+      <configs>
+        <config>
+          <name>Red APCR, Blue HEAT</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Inbattle current rating calculation by Ekspoint</name>
+      <configs>
+        <config>
+          <name>wn8 and damage without Last Hit Damage</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Aslains gold premium tanks</name>
+    </mod>
+    <mod>
+      <name>Session Statistics by Tomonik</name>
+      <configs>
+        <config>
+          <name>English</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Session statistics modifications (pmod)</name>
+      <configs>
+        <config>
+          <name>Session Statistics by WorstUnicumEU</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Contour skins black and white with areas of penetration ( ͡° ͜ʖ ͡°) by Mr.13</name>
+      <configs>
+        <config>
+          <name>with trunk marks</name>
+        </config>
+      </configs>
+    </mod>
+  </relhaxMods>
+  <userMods />
+</mods>

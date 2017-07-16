@@ -1,0 +1,207 @@
+<mods>
+  <relhaxMods>
+    <mod>
+      <name>Battle Interface modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>6th sense - Icon Duration</name>
+          <configs>
+            <config>
+              <name>10 sec 6th sense icon</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Total HP</name>
+          <configs>
+            <config>
+              <name>Enable total HP</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>WN8 Comparison</name>
+        </config>
+        <config>
+          <name>Average Damage</name>
+          <configs>
+            <config>
+              <name>Enable</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>High Caliber Tracker</name>
+          <configs>
+            <config>
+              <name>Enable</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Minimap modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>XVM Minimap</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Zoom configuration</name>
+          <configs>
+            <config>
+              <name>Hotkey Left CTRL</name>
+            </config>
+            <config>
+              <name>Minimap zoom - bottom right</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Statistics color step modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>6 step xvm colorscale</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Tank Carousel base modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+        <config>
+          <name>Rows - 1</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Damagelog by GambitER</name>
+      <configs>
+        <config>
+          <name>config from OMC</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Autoaim indication</name>
+      <configs>
+        <config>
+          <name>5 sec autoaim search</name>
+        </config>
+        <config>
+          <name>lock shell travel distance when enemy dissapeared add-on</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>BalCalcMod</name>
+      <configs>
+        <config>
+          <name>Q</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - Penetration ( ͡° ͜ʖ ͡°) Indicator (pmod)</name>
+      <configs>
+        <config>
+          <name>font size medium (24)</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Zoom modifications - zoom in (pmod)</name>
+      <configs>
+        <config>
+          <name>2, 4, 8, 12, 16, 20, 26, 32, 40, 48</name>
+        </config>
+        <config>
+          <name>td brake on</name>
+        </config>
+        <config>
+          <name>starting zoom 2x (client default)</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Zoom Out Config (meters)</name>
+      <configs>
+        <config>
+          <name>200m arcade + postmortem</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Colored penetration and ricochets on tanks</name>
+      <configs>
+        <config>
+          <name>Artasan</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Inbattle current rating calculation by Ekspoint</name>
+      <configs>
+        <config>
+          <name>wn8</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>WoT Tweaker</name>
+      <configs>
+        <config>
+          <name>Enable max visibility</name>
+        </config>
+        <config>
+          <name>Disable fog</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Session Statistics by Tomonik</name>
+      <configs>
+        <config>
+          <name>English</name>
+        </config>
+        <config>
+          <name>Daily Reset</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Audio</name>
+      <configs>
+        <config>
+          <name>RelHax by Willster419</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Icon</name>
+      <configs>
+        <config>
+          <name>Animated Illuminati pyramid by Aimdrol</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Contour skins black and white with areas of penetration ( ͡° ͜ʖ ͡°) by Mr.13</name>
+      <configs>
+        <config>
+          <name>no trunk marks</name>
+        </config>
+      </configs>
+    </mod>
+  </relhaxMods>
+  <userMods />
+</mods>
