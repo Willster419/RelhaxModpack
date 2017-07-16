@@ -2047,7 +2047,7 @@ namespace RelhaxModpack
             saveLocation.DefaultExt = ".xml";
             saveLocation.Filter = "*.xml|*.xml";
             saveLocation.InitialDirectory = Application.StartupPath + "\\RelHaxUserConfigs";
-            saveLocation.Title = "Select where to save user prefs";
+            saveLocation.Title = Translations.getTranslatedString("selectWhereToSave"); 
             if (fromButton)
             {
                 if (saveLocation.ShowDialog().Equals(DialogResult.Cancel))
@@ -2067,6 +2067,9 @@ namespace RelhaxModpack
             //mods root
             XmlElement modsHolderBase = doc.CreateElement("mods");
             doc.AppendChild(modsHolderBase);
+            //add configfile version as an attribute (changes to this save format are very likely)
+            modsHolderBase.SetAttribute("ver", Settings.configFileVersion);
+            modsHolderBase.SetAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             //relhax mods root
             XmlElement modsHolder = doc.CreateElement("relhaxMods");
             modsHolderBase.AppendChild(modsHolder);
