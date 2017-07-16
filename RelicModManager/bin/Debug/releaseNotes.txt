@@ -1,7 +1,22 @@
-WAIT BEFORE YOU JUST CLICK YES READ THIS!!!
-
 In case you did not look on the forms yet, we have a discord server for you to join for rapid modpack support and mods discussion:
 https://discord.gg/58fdPvK
+
+Version 23.3.0: (Big feature update!!)
+-Added new database for downloaded files cache. Improves first time loading for each day by at least 43%
+-Converted the project from Visual Studio 2010 to Visual Studio 2017
+-Added timestamp to RelHaxLog.txt entries
+-Added features to improve test mode of the modpack
+-Added comments in the installedRelHaxFiles.txt that say the zip file in installed, so it's easier to determine which zip file the files are from
+-Added more stability (exception handling)
+-Added localization to some windows
+-Fixed the display of mod file sizes
+-Improved debug log info from the patching system
+-Added the "Please Wait" window to the taskbar so it can be brought up again if minimized
+-Added ability to print external (user) spreadsheets
+-Added dev URL links to the internal spreadsheet
+-Improved patch designer for xvm style patches
+-Fixed bug with 1.75x scaling would make user mods not display properly
+-Fixed bug where the first config level of a mod would not behave the "disable" field of the database
 
 Version 23.2.8:
 -Added pmod style patching ability to xvm patcher
