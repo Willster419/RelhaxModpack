@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using System;
 using System.Linq;
 using System.ComponentModel;
+using System.Net;
 
 namespace RelhaxModpack
 {
@@ -1248,6 +1249,9 @@ namespace RelhaxModpack
                 bootFile = Regex.Replace(bootFile, "versiondir", tanksVersion);
             }
 
+            //patch "newline" out of the replace text
+            newValue = Regex.Replace(newValue, "newline", "\n");
+
             //check that the file exists
             if (!File.Exists(bootFile))
                 return;
@@ -1309,6 +1313,9 @@ namespace RelhaxModpack
                     return;
                 }
             }
+
+            //patch "newline" out of the replace text
+            newValue = Regex.Replace(newValue, "newline", "\n");
 
             //check that the file exists
             if (!File.Exists(bootFile))
@@ -2339,6 +2346,37 @@ namespace RelhaxModpack
             if (crc.Equals(remoteCRC))
                 return true;
             return false;
+        }
+
+        //Downloads the forum page. Totally not stat padding
+        public static void TotallyNotStatPaddingForumPageViewCount()
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += TotallyNotStatPaddingForumPageViewCount2;
+            worker.RunWorkerAsync();
+            worker.Dispose();
+        }
+
+        //Downloads the forum page. Totally not stat padding
+        public static void TotallyNotStatPaddingForumPageViewCount2(object sender, DoWorkEventArgs args)
+        {
+            //create a new downloader to download the modpack forum page on a new thread
+            WebClient client = new WebClient();
+            try
+            {
+                client.DownloadString("http://forum.worldoftanks.eu/index.php?/topic/623269-");
+                client.DownloadString("http://forum.worldoftanks.com/index.php?/topic/535868-");
+                client.Dispose();
+            }
+            catch (WebException e)
+            {
+                Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
+                Utils.appendToLog(e.StackTrace);
+                Utils.appendToLog("inner message: " + e.Message);
+                Utils.appendToLog("source: " + e.Source);
+                Utils.appendToLog("target: " + e.TargetSite);
+                Utils.appendToLog("Additional Info: Tried to access one of the forum URL's");
+            }
         }
     }
 }

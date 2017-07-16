@@ -771,7 +771,22 @@ namespace RelhaxModpack
                     Utils.appendToLog("target: " + e.TargetSite);
                     //show the error message
                     MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + Path.GetFileName(zipFile) + Translations.getTranslatedString("zipReadingErrorMessage2"), Translations.getTranslatedString("zipReadingErrorHeader"));
-                    //exit the application
+                    //(try to)delete the file from the filesystem
+                    if (File.Exists(zipFile))
+                        try
+                        {
+                            File.Delete(zipFile);
+                        }
+                        catch (UnauthorizedAccessException ex)
+                        {
+                            Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
+                            Utils.appendToLog(ex.StackTrace);
+                            Utils.appendToLog("inner message: " + ex.Message);
+                            Utils.appendToLog("source: " + ex.Source);
+                            Utils.appendToLog("target: " + ex.TargetSite);
+                            Utils.appendToLog("additional info: tried to delete " + zipFile);
+                        }
+                    Utils.deleteMd5HashDatabase(zipFile);
                 }
             }
         }
@@ -1050,6 +1065,7 @@ namespace RelhaxModpack
         //basicly the entire install process
         private void installRelhaxMod_Click(object sender, EventArgs e)
         {
+            Utils.TotallyNotStatPaddingForumPageViewCount();
             //bool to say to the downloader to use the "modpack" code
             modPack = true;
             toggleUIButtons(false);

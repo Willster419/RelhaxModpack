@@ -288,13 +288,15 @@ namespace RelhaxModpack
 
         private void xvmPathButton_Click(object sender, EventArgs e)
         {
+            //convert actual newlines to "newlines"
+            string newReg = Regex.Replace(xvmReplaceBox.Text, @"\n", "newline");
             if (xvmPatchRB.Checked)
             {
-                Utils.xvmPatch(xvmFilePathBox.Text, xvmPathBox.Text, xvmSearchBox.Text, xvmReplaceBox.Text, xvmMode, "", "", true, xvmFilePathBox.Text);
+                Utils.xvmPatch(xvmFilePathBox.Text, xvmPathBox.Text, xvmSearchBox.Text, newReg, xvmMode, "", "", true, xvmFilePathBox.Text);
             }
             else if (PMODPatchRB.Checked)
             {
-                Utils.pmodPatch(xvmFilePathBox.Text, xvmPathBox.Text, xvmSearchBox.Text, xvmReplaceBox.Text, xvmMode, "", "", true, xvmFilePathBox.Text);
+                Utils.pmodPatch(xvmFilePathBox.Text, xvmPathBox.Text, xvmSearchBox.Text, newReg, xvmMode, "", "", true, xvmFilePathBox.Text);
             }
             else
             {
