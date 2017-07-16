@@ -74,6 +74,7 @@
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(262, 23);
             this.progressBar1.TabIndex = 3;
+            this.progressBar1.UseWaitCursor = true;
             // 
             // PleaseWait
             // 
@@ -89,7 +90,6 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "PleaseWait";
-            this.ShowInTaskbar = false;
             this.Text = "pleaseWait";
             this.UseWaitCursor = true;
             this.Load += new System.EventHandler(this.PleaseWait_Load);
