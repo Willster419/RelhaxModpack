@@ -177,7 +177,8 @@ namespace RelhaxModpack
             {
                 this.Scale(new System.Drawing.SizeF(Settings.scaleSize, Settings.scaleSize));
             }
-            addZipsDialog.InitialDirectory = Application.StartupPath;
+            //addZipsDialog.InitialDirectory = Application.StartupPath;
+            loadDatabaseDialog.InitialDirectory = Application.StartupPath;
         }
         private int getZipIndex(string zipFile)
         {
