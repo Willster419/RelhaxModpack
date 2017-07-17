@@ -1,6 +1,14 @@
 In case you did not look on the forms yet, we have a discord server for you to join for rapid modpack support and mods discussion:
 https://discord.gg/58fdPvK
 
+Version 23.3.1:
+-Fixed bug with the json patcher system causing patches to fail (like 6th sense time, mirror vehicle icons, etc)
+-Updated some backend tools
+-Updated Utilities
+-Added translations to the save config selection dialog window
+-Added file versioning to config selection prefrence files
+-Updated translations (shocker)
+
 Version 23.3.0: (Big feature update!!)
 -Added new database for downloaded files cache. Improves first time loading for each day by at least 43%
 -Converted the project from Visual Studio 2010 to Visual Studio 2017
