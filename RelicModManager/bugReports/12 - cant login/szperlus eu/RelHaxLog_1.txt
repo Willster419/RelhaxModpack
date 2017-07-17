@@ -1,0 +1,523 @@
+|------------------------------------------------------------------------------------------------|
+Main Entry point launched
+Loading translation hashes
+Attempting to load MainWindow
+MainWindow Constructed
+|RelHax Modpack version 23.2.5
+|Built on 06/30/2017, running at 2017-07-14 16:43:31
+|Running on Microsoft Windows NT 6.1.7601 Service Pack 1
+Successfully made single instance text file
+Starting check for application updates
+Loading settings
+Loading application settings
+WARNING:Settings xml not found, loading defaults
+Settings loaded sucessfully
+FirstLoadHelper: startup location is x: 442, y: 100
+Saving application settings
+Settings saved sucessfully
+Application Closing
+|------------------------------------------------------------------------------------------------|
+|------------------------------------------------------------------------------------------------|
+Main Entry point launched
+Loading translation hashes
+Attempting to load MainWindow
+MainWindow Constructed
+|RelHax Modpack version 23.2.5
+|Built on 06/30/2017, running at 2017-07-14 19:03:58
+|Running on Microsoft Windows NT 6.1.7601 Service Pack 1
+Successfully made single instance text file
+Starting check for application updates
+exe is out of date. displaying user update window
+User accepted downloading new version
+New application download started
+Loading settings
+Loading application settings
+Loading xml file
+Settings loaded sucessfully
+Saving application settings
+Settings saved sucessfully
+Application Closing
+|------------------------------------------------------------------------------------------------|
+|------------------------------------------------------------------------------------------------|
+Main Entry point launched
+Loading translation hashes
+Attempting to load MainWindow
+MainWindow Constructed
+|RelHax Modpack version 23.2.8
+|Built on 07/14/2017, running at 2017-07-14 19:04:25
+|Running on Microsoft Windows NT 6.1.7601 Service Pack 1
+Successfully made single instance text file
+Starting check for application updates
+Loading settings
+Loading application settings
+Loading xml file
+Settings loaded sucessfully
+Saving application settings
+Settings saved sucessfully
+Application Closing
+|------------------------------------------------------------------------------------------------|
+|------------------------------------------------------------------------------------------------|
+Main Entry point launched
+Loading translation hashes
+Attempting to load MainWindow
+MainWindow Constructed
+|RelHax Modpack version 23.2.8
+|Built on 07/14/2017, running at 2017-07-14 19:05:06
+|Running on Microsoft Windows NT 6.1.7601 Service Pack 1
+Successfully made single instance text file
+Starting check for application updates
+Loading settings
+Loading application settings
+Loading xml file
+Settings loaded sucessfully
+tanksLocation parsed as D:\Games\World_of_Tanks
+tanks mods version parsed as D:\Games\World_of_Tanks\res_mods\0.9.19.1
+customUserMods parsed as D:\Games\dodatki do WOT\RelHax\RelHaxUserMods
+Loading ModSelectionList with view defaultt
+Preview: started loading of picture 'Enable Quick Color Marker (Quickstat)' at URL 'http://s14.directupload.net/images/131220/9rucwgjc.jpg'
+Preview: started loading of picture 'Disabled' at URL 'https://puu.sh/wm5xq/8db4ccf893.png'
+Preview: started loading of picture 'OMC style' at URL 'https://puu.sh/wm5zf/62d892e87b.png'
+Preview: started loading of picture 'Default' at URL 'https://puu.sh/wm5Aw/4a3b4e6b35.png'
+Preview: started loading of picture 'By CaronteShinigami' at URL 'http://wotmods.relhaxmodpack.com/WoT/ModPictures/XVM_config_builder_carousel_CaronteShinigami.png'
+Preview: started loading of picture 'Sight Taipan' at URL 'http://cdn.modsworldoftanks.com/wp-content/uploads/2016/02/5.jpg'
+Preview: started loading of picture 'Pro-Arty' at URL 'http://s23.postimg.org/ixh0brz8b/Pro_Arty_News11112vx.jpg'
+Preview: started loading of picture 'Harpoon' at URL 'http://s23.postimg.org/ixh0brz8b/Pro_Arty_News11112vx.jpg'
+Preview: started loading of picture 'Harpoon' at URL 'http://s23.postimg.org/birojedcr/Pro_A09_tutvx.jpg'
+Preview: started loading of picture 'Pro-Arty' at URL 'http://s23.postimg.org/ixh0brz8b/Pro_Arty_News11112vx.jpg'
+Preview: started loading of picture 'Pro-Arty' at URL 'http://s23.postimg.org/birojedcr/Pro_A09_tutvx.jpg'
+Preview: started loading of picture 'wn8, eff, damage' at URL 'http://wotmods.relhaxmodpack.com/WoT/ModPictures/Ingame_Info_InBattle_Rating_WN8_EFF_Damage_LastHit.jpg'
+Preview: started loading of picture 'Auto-Equip Mod' at URL 'http://wotsite.net/images/2014/1/30/1.jpg'
+Preview: started loading of picture 'Hangar Manager (HangMan)' at URL 'http://www.goofy67-wot.de/media/files/2.0_preview.jpg'
+Preview: started loading of picture 'Hangar Manager (HangMan)' at URL 'http://www.goofy67-wot.de/media/files/preview_window.jpg'
+Preview: started loading of picture 'Hangar Manager (HangMan)' at URL 'https://puu.sh/vPfc2/7a0f9e5cad.jpg'
+downloading Dependency_global_basic_folders.zip
+downloading Dependency_global_fonts_2017-05-31.zip
+downloading Dependency_global_orig_xmls_0.9.19.1_2017-07-12.zip
+downloading Dependency_XVM_Base_6.8.0.zip
+downloading Dependency_Crosshair_Sight_0.9.19.1_2017-07-13.zip
+downloading Dependency_poleroid_mods_list_api_v1.04_2017-07-08.zip
+downloading XVM_config_builder_damage_log_disable.zip
+downloading Dependency_PMOD_27-2_2017-07-12.zip
+downloading Dependency_BattleFlash_1.4_2017-07-12.zip
+downloading Dependency_Sounds_Increase_Sound_Memory_2017_07_12.zip
+downloading Dependency_Sixth_Sense_Standalone_by_Aimdrol_0.9.17.1_2017-02-23.zip
+downloading XVM_Prebuilt_Configs_OMC_Base_2017-07-05.zip
+downloading XVM_config_builder_clanicons_2_patch.zip
+downloading Damage_Logs_Damage_Log_by_GambitER_base_2017-04-16.zip
+downloading Ingame_Aim_AutoAim_base_2017-07-13.zip
+downloading Ingame_Aim_BalCalcMod_Base_0.9.19.1_2017-07-12.zip
+downloading Ingame_Aim_Battle_Assistant_Base_2017-05-02.zip
+downloading pmod_reduced_armor_enable_patch.zip
+downloading pmod_server_reticle_enable_patch.zip
+downloading Ingame_Aim_Safeshot_0.9.18.0_2017-05-06.zip
+downloading Ingame_Info_Contour_Icon_Mod_mirror_patch_training_room_2017-07-12.zip
+downloading Custom_Tank_Skins_dead_white_tanks_2017-06-03.zip
+downloading Ingame_Info_Fps_Ping_coloredBar_upper_left_corner_by_lenya69_2017-07-06.zip
+downloading Ingame_Info_InBattle_Rating_Base_2017_07-12.zip
+downloading Garage_mods_Aslains_Gold_Premium_Tanks_0.9.19.0.1.zip
+downloading XVM_config_builder_garage_removable_equipment_auto_return_disable.zip
+downloading Garage_mods_HangMan_0.9.19.1_2017-07-12.zip
+downloading Garage_mods_research_watchdog_2017_06_02.zip
+downloading Garage_Session_Stats_Tomonik_2017-05-31.zip
+downloading Sixth_Sense_Audio_Disable_Stock_Sound_2017-03-09.zip
+downloading Sixth_Sense_Icon_Disable_Default_Icon.zip
+downloading XVM_Prebuilt_Configs_OMC_Enable_Quikstat_2017-07-05.zip
+downloading XVM_config_builder_battle_results_show_tier_enable.zip
+downloading XVM_config_builder_battle_results_start_page_2.zip
+downloading XVM_config_builder_markers_enabled.zip
+downloading XVM_config_builder_minimap_zoom_enable.zip
+downloading XVM_config_builder_sounds_enabled.zip
+downloading XVM_config_builder_color_scale_10_step_wotlabs.zip
+downloading XVM_config_builder_carousel_enable.zip
+downloading XVM_config_builder_carousel_2_row.zip
+downloading Crosshairs_sight_taipan_V2_0.9.19.1_2017_07_13.zip
+downloading Crosshairs_ProArty_9.18.0_2017-06-13.zip
+downloading Damage_Logs_GambitER_Damage_Log_XFT_Split_configs_2017-04-16.zip
+downloading Ingame_Aim_AutoAim_config_5_sec.zip
+downloading Ingame_Aim_AutoAim_config_ally_shot_block_enable.zip
+downloading Ingame_Aim_BalCalcMod_Config_Q_0.9.18_2017-05-02.zip
+downloading Ingame_Aim_Battle_Assistant_Config_G_2017-05-02.zip
+downloading Ingame_Aim_Battle_Assistant_Config_Increased_Zoom_Speed_2017-05-02.zip
+downloading pmod_reduced_armor_font_large_patch.zip
+downloading pmod_server_reticle_blue_patch.zip
+downloading Ingame_Aim_SafeShot_2sec_no_deadshot_patch_0.9.18.0.zip
+downloading Ingame_Aim_SafeShot_no_Team_friendly_fire_patch_0.9.15.1.zip
+downloading Ingame_Aim_SafeShot_send_Msg_to_Team_patch_0.9.15.1.zip
+downloading pmod_zoomin_config_3_2017-05-01.zip
+downloading pmod_td_brake_on_2017-05-01.zip
+downloading pmod_default_zoom_8x_2017-05-01.zip
+downloading Ingame_Info_Zoom_out_500.zip
+downloading Ingame_Info_Zoom_out_Increase_Scroll_Speed.zip
+downloading Ingame_Aim_zoom_disable_gun_shake_2017-05-01.zip
+downloading Ingame_Info_DamageIndicator_by_qdly_0.9.16.zip
+downloading Ingame_Info_InBattle_Rating_WN8_EFF_Damage_2017_04_16.zip
+downloading Ingame_Misc_WOT_Tweaker_by_atotik_enable_max_visibility_2017-04-24.zip
+downloading Ingame_Misc_WOT_Tweaker_by_atotik_disable_fog_2017-04-24.zip
+downloading Ingame_Misc_WOT_Tweaker_by_atotik_disable_clouds_2017-04-24.zip
+downloading Ingame_Misc_WOT_Tweaker_by_atotik_disable_exhaust_smoke_2017-04-24.zip
+downloading Ingame_Misc_WOT_Tweaker_by_atotik_disable_misc_effects_2017-04-24.zip
+downloading Ingame_Misc_WOT_Tweaker_by_atotik_disable_shell_impact_effects_2017-04-24.zip
+downloading Ingame_Misc_WOT_Tweaker_by_atotik_disable_tank_dead_effects_2017-04-24.zip
+downloading Ingame_Misc_WOT_Tweaker_by_atotik_disable_tank_dead_smoke_2017-04-24.zip
+downloading Ingame_Misc_WOT_Tweaker_by_atotik_disable_tank_hit_effects_2017-04-24.zip
+downloading Ingame_Misc_WOT_Tweaker_by_atotik_disable_tree_effects_2017-04-24.zip
+downloading Garage_mods_auto-equip_2017-06-01.zip
+downloading Garage_Mods_HangMan_standard_camera_2017-05-23.zip
+downloading Garage_Mods_HangMan_screensaver_30sec_2017-05-23.zip
+downloading Garage_mods_Medals_with_Effect_of_Glass.zip
+downloading Garage_Session_Stats_Tomonik_Polish_Editon_Igorek_2017-06_12.zip
+downloading Garage_Session_Stats_Tomonik_Daily_Reset_2017_05_11.zip
+downloading Sounds_UT_Announcer_updated_by_budyx69_base_2017-05-11.zip
+downloading Sixth_Sense_Audio_Timer_1_2017-03-09.zip
+downloading Sixth_Sense_Icon_Sauron_2016-03-26.zip
+downloading XVM_config_builder_sixth_sense_duration_10_sec_patch.zip
+downloading XVM_config_builder_repair_timers_enable.zip
+downloading XVM_config_builder_garage_gold_lock_enable.zip
+downloading XVM_config_builder_garage_free_xp_lock_enable.zip
+downloading XVM_config_builder_garage_default_currency_credits.zip
+downloading XVM_config_builder_garage_crew_auto_return_enable.zip
+downloading XVM_config_builder_garage_removable_equipment_auto_return_enable.zip
+downloading XVM_config_builder_garage_server_ping_enable.zip
+downloading XVM_config_builder_login_auto_enable.zip
+downloading XVM_config_builder_login_server_ping_enable.zip
+downloading XVM_config_builder_login_save_last_server_enable.zip
+downloading XVM_config_builder_minimap_enable.zip
+downloading XVM_config_builder_minimap_zoom_left_ctrl.zip
+downloading XVM_config_builder_minimap_zoom_center.zip
+downloading XVM_config_builder_playerspanel_start_medium_patch.zip
+downloading XVM_config_builder_carousel_CaronteShinigami_force_normal_2017-06-26.zip
+downloading XVM_config_builder_contour_icon_mod_mirror_patch_xvm_disable_2017-06-01.zip
+downloading Ingame_Info_Wizards_Contour_Icon_Arabic_Tier_Numbers_Mod_0.9.19.0.1-06-03-2017.zip
+downloading Sounds_UT_Announcer_updated_by_budyx69_config_0.9.17.1_2017-05-11.zip
+downloading XVM_config_builder_carousel_CaronteShinigami_1.0_Scale_2017-06-26.zip
+Downloading finished
+Deleting files in _readme...
+CleanInstallCB checked, running backgroundDelete(D:\Games\World_of_Tanks\res_mods)
+Starting Relhax Modpack Extraction
+Extracting Dependency Dependency_global_basic_folders.zip
+Extracting Dependency Dependency_global_fonts_2017-05-31.zip
+Extracting Dependency Dependency_global_orig_xmls_0.9.19.1_2017-07-12.zip
+Extracting Dependency Dependency_XVM_Base_6.8.0.zip
+Extracting Dependency Dependency_Crosshair_Sight_0.9.19.1_2017-07-13.zip
+Extracting Dependency Dependency_poleroid_mods_list_api_v1.04_2017-07-08.zip
+Extracting Dependency XVM_config_builder_damage_log_disable.zip
+Extracting Dependency Dependency_PMOD_27-2_2017-07-12.zip
+Extracting Dependency Dependency_BattleFlash_1.4_2017-07-12.zip
+Extracting Dependency Dependency_Sounds_Increase_Sound_Memory_2017_07_12.zip
+Extracting Dependency Dependency_Sixth_Sense_Standalone_by_Aimdrol_0.9.17.1_2017-02-23.zip
+xvm boot file located to parse
+Extracting Mod XVM_Prebuilt_Configs_OMC_Base_2017-07-05.zip
+Extracting Mod XVM_config_builder_clanicons_2_patch.zip
+Extracting Mod Damage_Logs_Damage_Log_by_GambitER_base_2017-04-16.zip
+Extracting Mod Ingame_Aim_AutoAim_base_2017-07-13.zip
+Extracting Mod Ingame_Aim_BalCalcMod_Base_0.9.19.1_2017-07-12.zip
+Extracting Mod Ingame_Aim_Battle_Assistant_Base_2017-05-02.zip
+Extracting Mod pmod_reduced_armor_enable_patch.zip
+Extracting Mod pmod_server_reticle_enable_patch.zip
+Extracting Mod Ingame_Aim_Safeshot_0.9.18.0_2017-05-06.zip
+Extracting Mod Ingame_Info_Contour_Icon_Mod_mirror_patch_training_room_2017-07-12.zip
+Extracting Mod Custom_Tank_Skins_dead_white_tanks_2017-06-03.zip
+Extracting Mod Ingame_Info_Fps_Ping_coloredBar_upper_left_corner_by_lenya69_2017-07-06.zip
+Extracting Mod Ingame_Info_InBattle_Rating_Base_2017_07-12.zip
+Extracting Mod Garage_mods_Aslains_Gold_Premium_Tanks_0.9.19.0.1.zip
+Extracting Mod XVM_config_builder_garage_removable_equipment_auto_return_disable.zip
+Extracting Mod Garage_mods_HangMan_0.9.19.1_2017-07-12.zip
+Extracting Mod Garage_mods_research_watchdog_2017_06_02.zip
+Extracting Mod Garage_Session_Stats_Tomonik_2017-05-31.zip
+Extracting Mod Sixth_Sense_Audio_Disable_Stock_Sound_2017-03-09.zip
+Extracting Mod Sixth_Sense_Icon_Disable_Default_Icon.zip
+Extracting Config XVM_Prebuilt_Configs_OMC_Enable_Quikstat_2017-07-05.zip of level 0
+Extracting Config XVM_config_builder_battle_results_show_tier_enable.zip of level 0
+Extracting Config XVM_config_builder_battle_results_start_page_2.zip of level 0
+Extracting Config XVM_config_builder_markers_enabled.zip of level 0
+Extracting Config XVM_config_builder_minimap_zoom_enable.zip of level 0
+Extracting Config XVM_config_builder_sounds_enabled.zip of level 0
+Extracting Config XVM_config_builder_color_scale_10_step_wotlabs.zip of level 0
+Extracting Config XVM_config_builder_carousel_enable.zip of level 0
+Extracting Config XVM_config_builder_carousel_2_row.zip of level 0
+Extracting Config Crosshairs_sight_taipan_V2_0.9.19.1_2017_07_13.zip of level 0
+Extracting Config Crosshairs_ProArty_9.18.0_2017-06-13.zip of level 0
+Extracting Config Damage_Logs_GambitER_Damage_Log_XFT_Split_configs_2017-04-16.zip of level 0
+Extracting Config Ingame_Aim_AutoAim_config_5_sec.zip of level 0
+Extracting Config Ingame_Aim_AutoAim_config_ally_shot_block_enable.zip of level 0
+Extracting Config Ingame_Aim_BalCalcMod_Config_Q_0.9.18_2017-05-02.zip of level 0
+Extracting Config Ingame_Aim_Battle_Assistant_Config_G_2017-05-02.zip of level 0
+Extracting Config Ingame_Aim_Battle_Assistant_Config_Increased_Zoom_Speed_2017-05-02.zip of level 0
+Extracting Config pmod_reduced_armor_font_large_patch.zip of level 0
+Extracting Config pmod_server_reticle_blue_patch.zip of level 0
+Extracting Config Ingame_Aim_SafeShot_2sec_no_deadshot_patch_0.9.18.0.zip of level 0
+Extracting Config Ingame_Aim_SafeShot_no_Team_friendly_fire_patch_0.9.15.1.zip of level 0
+Extracting Config Ingame_Aim_SafeShot_send_Msg_to_Team_patch_0.9.15.1.zip of level 0
+Extracting Config pmod_zoomin_config_3_2017-05-01.zip of level 0
+Extracting Config pmod_td_brake_on_2017-05-01.zip of level 0
+Extracting Config pmod_default_zoom_8x_2017-05-01.zip of level 0
+Extracting Config Ingame_Info_Zoom_out_500.zip of level 0
+Extracting Config Ingame_Info_Zoom_out_Increase_Scroll_Speed.zip of level 0
+Extracting Config Ingame_Aim_zoom_disable_gun_shake_2017-05-01.zip of level 0
+Extracting Config Ingame_Info_DamageIndicator_by_qdly_0.9.16.zip of level 0
+Extracting Config Ingame_Info_InBattle_Rating_WN8_EFF_Damage_2017_04_16.zip of level 0
+Extracting Config Ingame_Misc_WOT_Tweaker_by_atotik_enable_max_visibility_2017-04-24.zip of level 0
+Extracting Config Ingame_Misc_WOT_Tweaker_by_atotik_disable_fog_2017-04-24.zip of level 0
+Extracting Config Ingame_Misc_WOT_Tweaker_by_atotik_disable_clouds_2017-04-24.zip of level 0
+Extracting Config Ingame_Misc_WOT_Tweaker_by_atotik_disable_exhaust_smoke_2017-04-24.zip of level 0
+Extracting Config Ingame_Misc_WOT_Tweaker_by_atotik_disable_misc_effects_2017-04-24.zip of level 0
+Extracting Config Ingame_Misc_WOT_Tweaker_by_atotik_disable_shell_impact_effects_2017-04-24.zip of level 0
+Extracting Config Ingame_Misc_WOT_Tweaker_by_atotik_disable_tank_dead_effects_2017-04-24.zip of level 0
+Extracting Config Ingame_Misc_WOT_Tweaker_by_atotik_disable_tank_dead_smoke_2017-04-24.zip of level 0
+Extracting Config Ingame_Misc_WOT_Tweaker_by_atotik_disable_tank_hit_effects_2017-04-24.zip of level 0
+Extracting Config Ingame_Misc_WOT_Tweaker_by_atotik_disable_tree_effects_2017-04-24.zip of level 0
+Extracting Config Garage_mods_auto-equip_2017-06-01.zip of level 0
+Extracting Config Garage_Mods_HangMan_standard_camera_2017-05-23.zip of level 0
+Extracting Config Garage_Mods_HangMan_screensaver_30sec_2017-05-23.zip of level 0
+Extracting Config Garage_mods_Medals_with_Effect_of_Glass.zip of level 0
+Extracting Config Garage_Session_Stats_Tomonik_Polish_Editon_Igorek_2017-06_12.zip of level 0
+EXCEPTION: ZipException (call stack traceback)
+   w Ionic.Zip.ZipFile..ctor(String fileName)
+   w RelhaxModpack.MainWindow.unzip(String zipFile, String extractFolder)
+inner message: Could not read D:\Games\dodatki do WOT\RelHax\RelHaxDownloads\Garage_Session_Stats_Tomonik_Polish_Editon_Igorek_2017-06_12.zip as a zip file
+source: DotNetZip
+target: Void .ctor(System.String)
+Extracting Config Garage_Session_Stats_Tomonik_Daily_Reset_2017_05_11.zip of level 0
+Extracting Config Sounds_UT_Announcer_updated_by_budyx69_base_2017-05-11.zip of level 0
+Extracting Config Sixth_Sense_Audio_Timer_1_2017-03-09.zip of level 0
+Extracting Config Sixth_Sense_Icon_Sauron_2016-03-26.zip of level 0
+Extracting Config XVM_config_builder_sixth_sense_duration_10_sec_patch.zip of level 1
+Extracting Config XVM_config_builder_repair_timers_enable.zip of level 1
+Extracting Config XVM_config_builder_garage_gold_lock_enable.zip of level 1
+Extracting Config XVM_config_builder_garage_free_xp_lock_enable.zip of level 1
+Extracting Config XVM_config_builder_garage_default_currency_credits.zip of level 1
+Extracting Config XVM_config_builder_garage_crew_auto_return_enable.zip of level 1
+Extracting Config XVM_config_builder_garage_removable_equipment_auto_return_enable.zip of level 1
+Extracting Config XVM_config_builder_garage_server_ping_enable.zip of level 1
+Extracting Config XVM_config_builder_login_auto_enable.zip of level 1
+Extracting Config XVM_config_builder_login_server_ping_enable.zip of level 1
+Extracting Config XVM_config_builder_login_save_last_server_enable.zip of level 1
+Extracting Config XVM_config_builder_minimap_enable.zip of level 1
+Extracting Config XVM_config_builder_minimap_zoom_left_ctrl.zip of level 1
+Extracting Config XVM_config_builder_minimap_zoom_center.zip of level 1
+Extracting Config XVM_config_builder_playerspanel_start_medium_patch.zip of level 1
+Extracting Config XVM_config_builder_carousel_CaronteShinigami_force_normal_2017-06-26.zip of level 1
+Extracting Config XVM_config_builder_contour_icon_mod_mirror_patch_xvm_disable_2017-06-01.zip of level 1
+Extracting Config Ingame_Info_Wizards_Contour_Icon_Arabic_Tier_Numbers_Mod_0.9.19.0.1-06-03-2017.zip of level 1
+Extracting Config Sounds_UT_Announcer_updated_by_budyx69_config_0.9.17.1_2017-05-11.zip of level 1
+Extracting Config XVM_config_builder_carousel_CaronteShinigami_1.0_Scale_2017-06-26.zip of level 2
+Finished Relhax Modpack Extraction
+Starting to patch Relhax Modpack Mods
+Json patch, \\res_mods\\versiondir\\scripts\\client\\gui\\mods\\mod_autoaim_indicator.json, $.time_snapping.seconds, 5
+Json patch, \\res_mods\\versiondir\\scripts\\client\\gui\\mods\\mod_autoaim_indicator.json, $.addon-ally_shot_blocker, true
+Json patch, \\res_mods\\versiondir\\scripts\\client\\gui\\mods\\mod_safeShot_extended.json, $.safeShot.deadShot.blockShot, true
+Json patch, \\res_mods\\versiondir\\scripts\\client\\gui\\mods\\mod_safeShot_extended.json, $.safeShot.deadShot.blockTimeOut, 2.0
+Json patch, \\res_mods\\versiondir\\scripts\\client\\gui\\mods\\mod_safeShot_extended.json, $.safeShot.teamShot.blockShot, true
+Json patch, \\res_mods\\versiondir\\scripts\\client\\gui\\mods\\mod_safeShot_extended.json, $.safeShot.teamShot.sendChatMessage, true
+Xml patch, \\res_mods\\versiondir\\scripts\\client\\gui\\mods\\BalCalc.xml, //BalCalc.xml/BalCalcKey, edit, .*, 16
+Regex patch, all lines, line by line, \\res_mods\\versiondir\\scripts\\client\\gui\\mods\\mod_battle_assistant.txt, zoomSpeed: 3.0, zoomSpeed: 9.0
+Xml patch, \\res_mods\\versiondir\\audioww\\audio_mods.xml, //audio_mods.xml/events, add, , event/name/lightbulb
+Xml patch, \\res_mods\\versiondir\\audioww\\audio_mods.xml, /audio_mods.xml/events/event[name = "lightbulb"], add, , mod/not_a_sound_event
+Json patch, \\res_mods\\configs\\wotstat\\config.json, $.dailyAutoReset, true
+Json patch, \\res_mods\\configs\\HangMan\\HangMan.json, $.screensaver.starttime, 30
+Json patch, \\res_mods\\configs\\HangMan\\HangMan.json, $.use_standard_zoom, true
+Xml patch, \\res_mods\\versiondir\\engine_config.xml, //engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/defaultPool, edit, 12, 256
+Xml patch, \\res_mods\\versiondir\\engine_config.xml, //engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/lowEnginePool, edit, 10, 48
+Xml patch, \\res_mods\\versiondir\\engine_config.xml, //engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/preparedPool, edit, 106, 768
+Xml patch, \\res_mods\\versiondir\\engine_config.xml, //engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/streamingPool, edit, 2, 12
+Xml patch, \\res_mods\\versiondir\\engine_config.xml, //engine_config.xml/soundMgr/WWISE_adv_profile/memoryManager/IOPoolSize, edit, 4, 32
+Regex patch, all lines, line by line, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml,  +\d+\.*\d+<\/range>,  0.0</range>
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/dynamicCameraCommon/collisionSpeedToImpulseRatio, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/dynamicCameraCommon/minCollisionSpeed, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/dynamicCameraCommon/zeroDamageHitSensitivity, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/dynamicCameraCommon/ownShotImpulseDelay, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/impulseOscillator/mass, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/impulseOscillator/stiffness, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/impulseOscillator/drag, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/impulseOscillator/constraints, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/movementOscillator/mass, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/movementOscillator/stiffness, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/movementOscillator/drag, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/movementOscillator/constraints, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/randomNoiseOscillatorSpherical/mass, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/randomNoiseOscillatorSpherical/stiffness, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/randomNoiseOscillatorSpherical/drag, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/randomNoiseOscillatorSpherical/scaleCoeff, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/impulseSensitivities/shot, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/impulseSensitivities/hit, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/impulseSensitivities/otherShot, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/impulseSensitivities/splash, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/impulseSensitivities/vehicleExplosion, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/noiseSensitivities/shot, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/noiseSensitivities/hit, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/noiseSensitivities/otherShot, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/noiseSensitivities/splash, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/noiseSensitivities/vehicleExplosion, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/accelerationSensitivity, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/frontImpulseToPitchRatio, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/sideImpulseToRollRatio, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/sideImpulseToYawRatio, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/accelerationThreshold, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/accelerationMax, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/maxShotImpulseDistance, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/zoomExposure, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/maxExplosionImpulseDistance, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/dynamics/zoomExposure, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/impulseOscillator/mass, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/impulseOscillator/stiffness, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/impulseOscillator/drag, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/impulseOscillator/constraints, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/movementOscillator/mass, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/movementOscillator/stiffness, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/movementOscillator/drag, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/movementOscillator/constraints, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/randomNoiseOscillatorSpherical/mass, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/randomNoiseOscillatorSpherical/stiffness, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/randomNoiseOscillatorSpherical/drag, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/randomNoiseOscillatorSpherical/scaleCoeff, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/impulseSensitivities/shot, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/impulseSensitivities/hit, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/impulseSensitivities/otherShot, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/impulseSensitivities/splash, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/impulseSensitivities/vehicleExplosion, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/noiseSensitivities/shot, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/noiseSensitivities/hit, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/noiseSensitivities/otherShot, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/noiseSensitivities/splash, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/noiseSensitivities/vehicleExplosion, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/accelerationSensitivity, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/frontImpulseToPitchRatio, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/sideImpulseToRollRatio, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/sideImpulseToYawRatio, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/accelerationThreshold, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/accelerationMax, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/maxShotImpulseDistance, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/maxExplosionImpulseDistance, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/dynamics/zoomExposure, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/strategicMode/camera/dynamics/oscillator/mass, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/strategicMode/camera/dynamics/oscillator/stiffness, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/strategicMode/camera/dynamics/oscillator/drag, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/strategicMode/camera/dynamics/oscillator/constraints, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/strategicMode/camera/dynamics/randomNoiseOscillatorFlat/mass, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/strategicMode/camera/dynamics/randomNoiseOscillatorFlat/stiffness, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/strategicMode/camera/dynamics/impulseSensitivities/hit, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/strategicMode/camera/dynamics/randomNoiseOscillatorFlat/drag, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/strategicMode/camera/dynamics/impulseSensitivities/splash, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/strategicMode/camera/dynamics/noiseSensitivities/hit, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/strategicMode/camera/dynamics/noiseSensitivities/shot, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/strategicMode/camera/dynamics/noiseSensitivities/splash, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/strategicMode/camera/dynamics/noiseSensitivities/projectileHit, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/strategicMode/camera/dynamics/noiseLimits/shot, edit, .*, 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/strategicMode/camera/dynamics/noiseLimits/projectileHit, edit, .*, 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/impulseOscillator/mass, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/impulseOscillator/stiffness, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/impulseOscillator/drag, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/impulseOscillator/constraints, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/movementOscillator/mass, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/movementOscillator/stiffness, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/movementOscillator/drag, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/movementOscillator/constraints, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/randomNoiseOscillatorSpherical/mass, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/randomNoiseOscillatorSpherical/stiffness, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/randomNoiseOscillatorSpherical/drag, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/randomNoiseOscillatorSpherical/scaleCoeff, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/impulseSensitivities/shot, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/impulseSensitivities/hit, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/impulseSensitivities/otherShot, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/impulseSensitivities/splash, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/impulseSensitivities/vehicleExplosion, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/noiseSensitivities/shot, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/noiseSensitivities/hit, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/noiseSensitivities/otherShot, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/noiseSensitivities/splash, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/noiseSensitivities/collision, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/noiseSensitivities/vehicleExplosion, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/impulseLimits/shot, edit, .*, 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/impulseLimits/hit, edit, .*, 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/noiseLimits/shot, edit, .*, 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/noiseLimits/hit, edit, .*, 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/accelerationSensitivity, edit, .*, 0.0 0.0 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/accelerationThreshold, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/accelerationMax, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/maxShotImpulseDistance, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/maxExplosionImpulseDistance, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/impulsePartToRoll, edit, .*, 0.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/aimMarkerDistance, edit, .*, 10.0
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/sniperMode/camera/dynamics/zoomExposure, edit, .*, 0.0 0.0 0.0
+Json patch, \\res_mods\\configs\\xvm\\default\\battle.xc, $.battle.mirroredVehicleIcons, false
+ERROR: Failed to patch D:\Games\World_of_Tanks\\res_mods\\configs\\xvm\\default\\battle.xc
+Json patch, \\res_mods\\configs\\xvm\\xvmConfigFolderName\\markersTemplates.xc, $.def.enableQuickColorMarker, true
+xvm boot file located to parse
+Json patch, \\mods\\configs\\pmod\\defaultZoom.json, $.enable, true
+Json patch, \\mods\\configs\\pmod\\defaultZoom.json, $.defaultZoomValue, 8
+Json patch, \\mods\\configs\\pmod\\reducedArmor.json, $.enable, true
+Json patch, \\mods\\configs\\pmod\\reducedArmor.json, $.enable_flash, true
+ERROR: path $.enable_flash not found for reducedArmor.json
+Json patch, \\mods\\configs\\pmod\\reducedArmor.json, $.textFormat.size, 30
+Json patch, \\mods\\configs\\pmod\\serverDispersionCircle.json, $.arcade.textureSettings.path, {{config}}gunMarkers/standart.dds
+Json patch, \\mods\\configs\\pmod\\serverDispersionCircle.json, $.sniper.textureSettings.path, {{config}}gunMarkers/standart.dds
+Json patch, \\mods\\configs\\pmod\\serverDispersionCircle.json, $.enable, true
+Json patch, \\mods\\configs\\pmod\\tdBrakeRemover.json, $.enable, true
+Json patch, \\mods\\configs\\pmod\\tdBrakeRemover.json, $.TDSniperMovementMode, custom
+Regex patch, all lines, line by line, \\mods\\configs\\pmod\\zoomX.json, \"zoomXSteps\":.*\[.*\], "zoomXSteps": [2, 4, 8, 12, 16, 20, 26, 32, 40, 48]
+Json patch, \\mods\\configs\\pmod\\zoomX.json, $.enable, true
+Xml patch, \\res_mods\\versiondir\\audioww\\audio_mods.xml, //audio_mods.xml/loadBanks, add, , bank/sixthsense_timer_8_sec_loud.bnk
+Xml patch, \\res_mods\\sixthSense.xml, //sixthSense.xml/soundPath, edit, .*, lightbulb_timer_8_sec_loud
+Xml patch, \\res_mods\\sixthSense.xml, //sixthSense.xml/showDefaultIcon, edit, True, False
+Xml patch, \\res_mods\\sixthSense.xml, //sixthSense.xml/sizeX, edit, 170, 194
+Xml patch, \\res_mods\\sixthSense.xml, //sixthSense.xml/sizeY, edit, 170, 210
+Xml patch, \\res_mods\\versiondir\\audioww\\audio_mods.xml, //audio_mods.xml/events, add, , event/name/vo_enemy_killed_by_player
+Xml patch, \\res_mods\\versiondir\\audioww\\audio_mods.xml, /audio_mods.xml/events/event[name = "vo_enemy_killed_by_player"], add, , mod/not_a_sound_event
+Xml patch, \\res_mods\\versiondir\\engine_config.xml, //engine_config.xml/soundMgr/WWISE_adv_profile/voice_soundbanks, add, , project/name/UTAnnouncer.bnk
+Json patch, \\res_mods\\configs\\xvm\\default\\battleLabelsTemplates.xc, $.def.damageLog.enabled, false
+Json patch, \\res_mods\\configs\\xvm\\default\\battleLabelsTemplates.xc, $.def.lastHit.enabled, false
+Json patch, \\res_mods\\configs\\xvm\\default\\battleResults.xc, $.battleResults.showBattleTier, true
+Json patch, \\res_mods\\configs\\xvm\\default\\battleResults.xc, $.battleResults.startPage, 2
+Json patch, \\res_mods\\configs\\xvm\\default\\carousel.xc, $.carousel.rows, 2
+Json patch, \\res_mods\\configs\\xvm\\default\\carousel.xc, $.carousel.enabled, true
+Json patch, \\res_mods\\configs\\xvm\\default\\carousel.xc, $.carousel.cellType, normal
+Json patch, \\res_mods\\configs\\xvm\\default\\playersPanel.xc, $.def.clanIcon.x, 112
+ERROR: Failed to patch D:\Games\World_of_Tanks\\res_mods\\configs\\xvm\\default\\playersPanel.xc
+Json patch, \\res_mods\\configs\\xvm\\default\\statisticForm.xc, $.templates.clanIcon.x, 92
+Json patch, \\res_mods\\configs\\xvm\\default\\battleLoadingTips.xc, $.templates.clanIcon.x, 92
+Json patch, \\res_mods\\configs\\xvm\\default\\battleLabelsTemplates.xc, $.def.hitlogHeader.x, {{pp.mode=0?5|{{py:math.sum({{pp.widthLeft}},80)}}}}
+Json patch, \\res_mods\\configs\\xvm\\default\\battleLabelsTemplates.xc, $.def.hitlogBody.x, {{pp.mode=0?5|{{py:math.sum({{pp.widthLeft}},80)}}}}
+Regex patch, all lines, whole file, \\res_mods\\configs\\xvm\\default\\playersPanel.xc, \"clanIcon\" *: *\{, "clanIcon": {newline      "hotKeyCode": 56,newline      "onHold": "true",newline      "visibleOnHotKey": false,
+Json patch, \\res_mods\\configs\\xvm\\default\\battleLabelsTemplates.xc, $.def.damageLog.enabled, false
+Json patch, \\res_mods\\configs\\xvm\\default\\hangar.xc, $.hangar.enableCrewAutoReturn, true
+Json patch, \\res_mods\\configs\\xvm\\default\\hangar.xc, $.hangar.crewReturnByDefault, true
+Json patch, \\res_mods\\configs\\xvm\\default\\hangar.xc, $.hangar.defaultBoughtForCredits, true
+Json patch, \\res_mods\\configs\\xvm\\default\\hangar.xc, $.hangar.enableFreeXpLocker, true
+Json patch, \\res_mods\\configs\\xvm\\default\\hangar.xc, $.hangar.enableEquipAutoReturn, false
+Json patch, \\res_mods\\configs\\xvm\\default\\hangar.xc, $.hangar.enableEquipAutoReturn, true
+Json patch, \\res_mods\\configs\\xvm\\default\\hangar.xc, $.hangar.pingServers.enabled, true
+Json patch, \\res_mods\\configs\\xvm\\default\\hangar.xc, $.hangar.enableGoldLocker, true
+Json patch, \\res_mods\\configs\\xvm\\default\\login.xc, $.login.autologin, true
+Json patch, \\res_mods\\configs\\xvm\\default\\login.xc, $.login.saveLastServer, true
+Json patch, \\res_mods\\configs\\xvm\\default\\login.xc, $.login.pingServers.enabled, true
+Json patch, \\res_mods\\configs\\xvm\\default\\markers.xc, $.markers.enabled, true
+Json patch, \\res_mods\\configs\\xvm\\default\\minimap.xc, $.minimap.enabled, true
+Json patch, \\res_mods\\configs\\xvm\\default\\minimap.xc, $.minimap.zoom.centered, true
+Json patch, \\res_mods\\configs\\xvm\\default\\hotkeys.xc, $.hotkeys.minimapZoom.enabled, true
+Json patch, \\res_mods\\configs\\xvm\\default\\hotkeys.xc, $.hotkeys.minimapZoom.keyCode, 29
+Json patch, \\res_mods\\configs\\xvm\\default\\playersPanel.xc, $.playersPanel.startMode, medium
+ERROR: Failed to patch D:\Games\World_of_Tanks\\res_mods\\configs\\xvm\\default\\playersPanel.xc
+Json patch, \\res_mods\\configs\\xvm\\default\\battleLabelsTemplates.xc, $.def.repairTimeEngine.enabled, true
+Json patch, \\res_mods\\configs\\xvm\\default\\battleLabelsTemplates.xc, $.def.repairTimeGun.enabled, true
+Json patch, \\res_mods\\configs\\xvm\\default\\battleLabelsTemplates.xc, $.def.repairTimeTurret.enabled, true
+Json patch, \\res_mods\\configs\\xvm\\default\\battleLabelsTemplates.xc, $.def.repairTimeTracks.enabled, true
+Json patch, \\res_mods\\configs\\xvm\\default\\battleLabelsTemplates.xc, $.def.repairTimeSurveying.enabled, true
+Json patch, \\res_mods\\configs\\xvm\\default\\battleLabelsTemplates.xc, $.def.repairTimeRadio.enabled, true
+Json patch, \\res_mods\\configs\\xvm\\default\\sounds.xc, $.sounds.enabled, true
+Json patch, \\res_mods\\configs\\xvm\\default\\battle.xc, $.battle.sixthSenseDuration, 10000
+ERROR: Failed to patch D:\Games\World_of_Tanks\\res_mods\\configs\\xvm\\default\\battle.xc
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/scrollSensitivity, edit, .*, 8
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/postMortemMode/camera/distRange, edit, .*, 2 500
+Xml patch, \\res_mods\\versiondir\\gui\\avatar_input_handler.xml, //avatar_input_handler.xml/arcadeMode/camera/distRange, edit, .*, 2 500
+Patching done for Relhax Mod Pack Mods
+Starting Relhax Modpack User Mod Extraction
+Finished Relhax Modpack User Mod Extraction
+Starting to patch Relhax User Mods
+Patching done for Relhax User Mods
+Checking for fonts to install
+No fonts to install
+Installation done
+Saving application settings
+Settings saved sucessfully
+Application Closing
+|------------------------------------------------------------------------------------------------|
