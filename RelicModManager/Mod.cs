@@ -19,8 +19,6 @@ namespace RelhaxModpack
         public bool enabled { get; set; }
         //the index of where the mod is in the entire list ever
         public int index { get; set; }
-        //later a unique name of the config entry
-        public string packageName { get; set; }
         //size of the mod zip file
         public float size { get; set; }
         public string updateComment { get; set; }

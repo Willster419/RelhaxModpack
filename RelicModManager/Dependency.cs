@@ -12,10 +12,6 @@
         public string startAddress { get; set; }
         //the end address of the zip file location. enables us to use dropbox (?dl=1)
         public string endAddress { get; set; }
-        //the index of where the mod is in the entire list ever
-        public int index { get; set; }
-        //later a unique name of the config entry
-        public string packageName { get; set; }
         public Dependency() { }
     }
 }
