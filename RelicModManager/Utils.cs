@@ -1080,7 +1080,7 @@ namespace RelhaxModpack
                 //determine if it has (had) a comma at the end of the string
                 bool hadComma = false;
                 bool modified = false;
-                if (Regex.IsMatch(temp, @",[ \t\r]*$"))
+                if (Regex.IsMatch(temp, @",[ \/\w\t\r\n()]*$"))
                     hadComma = true;
 
                 //determine if it is a illegal refrence in jarray or jobject
