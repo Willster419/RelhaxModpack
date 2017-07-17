@@ -27,7 +27,7 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 23.3.1";
+        private string managerVersion = "version 23.3.2";
         private string today = "07/17/2017";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
@@ -748,7 +748,18 @@ namespace RelhaxModpack
                         {
                             if (Regex.IsMatch(zip[i].FileName, "versiondir"))
                             {
-                                zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", thisVersion);
+                                try
+                                {
+                                    zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", thisVersion);
+                                }
+                                catch (ArgumentException e)
+                                {
+                                    Utils.appendToLog("EXCEPTION: ArguementException");
+                                    Utils.appendToLog(e.StackTrace);
+                                    Utils.appendToLog("inner message: " + e.Message);
+                                    Utils.appendToLog("source: " + e.Source);
+                                    Utils.appendToLog("target: " + e.TargetSite);
+                                }
                             }
                             if (Regex.IsMatch(zip[i].FileName, "configs/xvm/xvmConfigFolderName") && !xvmConfigDir.Equals(""))
                             {
