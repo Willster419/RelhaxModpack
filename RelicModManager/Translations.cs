@@ -220,7 +220,7 @@ namespace RelhaxModpack
             //Componet: clearSelectionsButton
             //
             english.Add("clearSelectionsButton", "Clear selections");
-            german.Add("clearSelectionsButton", "Auswahl loeschen");
+            german.Add("clearSelectionsButton", "Auswahl löschen");
             polish.Add("clearSelectionsButton", "Wyczyść wybór");
 
             //Componet: readingDatabase
@@ -239,7 +239,7 @@ namespace RelhaxModpack
             //Componet: nextPicButton
             //
             english.Add("nextPicButton", "next");
-            german.Add("nextPicButton", "naechstes");
+            german.Add("nextPicButton", "nächstes");
             polish.Add("nextPicButton", "Dalej");
 
             //Componet: previousPicButton
@@ -270,7 +270,7 @@ namespace RelhaxModpack
             //Componet: newVersionAvailableLabel
             //
             english.Add("newVersionAvailableLabel", "New Version Available");
-            german.Add("newVersionAvailableLabel", "Neue Version verfuegbar");
+            german.Add("newVersionAvailableLabel", "Neue Version verfügbar");
             polish.Add("newVersionAvailableLabel", "Dostępna Nowa Wersja");
 
             //Componet: updateQuestionLabel
@@ -295,7 +295,7 @@ namespace RelhaxModpack
             //Componet: label1
             //
             english.Add("label1", "Loading...please wait...");
-            german.Add("label1", "Laedt...bitte warten...");
+            german.Add("label1", "Lädt...bitte warten...");
             polish.Add("label1", "Ładowanie... proszę czekać...");
             //Section: Messages of MainWindow
 
@@ -362,7 +362,7 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("loadingTranslations", "Loading Translations");
-            german.Add("loadingTranslations", "Laden der Uebersetzungen");
+            german.Add("loadingTranslations", "Laden der Übersetzungen");
             polish.Add("loadingTranslations", "ładowanie tłumaczenia");
 
             //Componet: 
@@ -416,7 +416,7 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("deletingFile", "Deleting file");
-            german.Add("deletingFile", "Loeschen von Dateien");
+            german.Add("deletingFile", "Löschen von Dateien");
             polish.Add("deletingFile", "Usuwanie plików");
 
             //Componet: 
@@ -429,8 +429,8 @@ namespace RelhaxModpack
             //
             english.Add("forceManuelDescription", "This option is for forcing a manual World of Tanks game" +
                     "location detection. Check this if you are having problems with automatically locating the game.");
-            german.Add("forceManuelDescription", "Diese Option ist für die Erzwingung einer manuellen World of Tanks Spiel-" +
-                    "Speicherort-Erkennung. Überpruefe dies, wenn Du Probleme mit der automatischen Suche des Spiels hast.");
+            german.Add("forceManuelDescription", "Diese Option ist für die manuelle selektion des World of Tanks Spiel-" +
+                    "speicherortes. Nutze dies wenn Du Probleme mit der automatischen Suche des Spiels hast.");
             polish.Add("forceManuelDescription", "Ta opcja wymusza ręczne znalezienie lokacji gry World of Tanks." +
                     "Zaznacz, jeśli masz problem z automatycznym znalezieniem ścieżki dostępu do gry.");
 
@@ -447,7 +447,7 @@ namespace RelhaxModpack
             //
             english.Add("backupModsDescription", "Select this to make a backup of your current res_mods folder." +
                     "They are stored in the 'RelHaxModBackup' folder, saved in a folder inside by a time stamp.");
-            german.Add("backupModsDescription", "Waehle diese Option, um eine Sicherungskopie Deines aktuellen res_mods-Ordners zu erstellen." +
+            german.Add("backupModsDescription", "Wähle diese Option, um eine Sicherungskopie Deines aktuellen res_mods-Ordners zu erstellen." +
                     "Sie werden im Ordner 'RelHaxModBackup' gespeichert und in einem Ordner nach innen durch einen Zeitstempel gespeichert.");
             polish.Add("backupModsDescription", "Zaznacz, aby zrobić kopię zapasową folderu res_mods." +
                      "Pliki będą przechowane w folderze RelHaxModBackup, zapisane w folderze oznaczonym datą.");
@@ -461,13 +461,13 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("enlargeFontDescription", "Enlarge font");
-            german.Add("enlargeFontDescription", "Schriftart vergroessern");
+            german.Add("enlargeFontDescription", "Schriftart vergrössern");
             polish.Add("enlargeFontDescription", "Powiększ czcionkę");
 
             //Componet: 
             //
             english.Add("selectGifDesc", "Select a loading gif for the mod preview window.");
-            german.Add("selectGifDesc", "Waehle ein Lade-Gif fuer das Vorschaufenster des Mods.");
+            german.Add("selectGifDesc", "Wähle ein Lade-Gif fuer das Vorschaufenster des Mods.");
             polish.Add("selectGifDesc", "Załaduj gif w oknie podglądu.");
 
             //Componet: 
@@ -503,7 +503,7 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("failedToDownload_2", ". If you know which mod this is, uncheck it and you should be fine. It will be fixed soon. Restart this when it exits");
-            german.Add("failedToDownload_2", ". Wenn du weisst, welcher Mod das ist, deaktiviere ihn und alles sollte funktionieren. Es wird bald behoben. Starte neu, wenn es besteht");
+            german.Add("failedToDownload_2", ". Wenn du weisst, welcher Mod das ist, deaktiviere ihn und alles sollte funktionieren. Es wird bald behoben. Starte das Programm neu nach dem beenden.");
             polish.Add("failedToDownload_2", ". Jeśli wiesz który to mod, odznacz go i wszystko powinno byćw porządku. Wkrótce naprawimy błąd. Zrestartuj, jeśli problem pojawia się ponownie.");
 
             //Componet: 
@@ -721,7 +721,7 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("selectionsCleared", "selections cleared");
-            german.Add("selectionsCleared", "Auswahlen geloescht");
+            german.Add("selectionsCleared", "Auswahlen gelöscht");
             polish.Add("selectionsCleared", "usunięto zaznaczenia");
 
             //Componet: 
@@ -739,7 +739,7 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("databaseNotFound", "Database not found at supplied URL");
-            german.Add("databaseNotFound", "Datenbank nicht bei der angegebenen URL gefunden");
+            german.Add("databaseNotFound", "Datenbank nicht an der angegebenen URL gefunden");
             polish.Add("databaseNotFound", "Nie znaleziono bazy danych pod wskazanym URL");
 
             //Componet:
@@ -763,7 +763,7 @@ namespace RelhaxModpack
             //Componet:
             //
             english.Add("zipReadingErrorHeader", "Incomplete Download");
-            german.Add("zipReadingErrorHeader", "Unvollstaendiger Download");
+            german.Add("zipReadingErrorHeader", "Unvollständiger Download");
             polish.Add("zipReadingErrorHeader", "Ściąganie niekompletne");
 
             //Componet:
@@ -775,7 +775,7 @@ namespace RelhaxModpack
             //Componet:
             //
             english.Add("zipReadingErrorMessage2", "Could not be read, most likely due to an incomplete download. Please try again.");
-            german.Add("zipReadingErrorMessage2", "Konnte nicht gelesen werden, da es hoechstwahrscheinlich ein unvollständiger Download ist. Dies wird uebersprungen. Bitte versuche es spaeter erneut herungerzuladen.");
+            german.Add("zipReadingErrorMessage2", "Konnte nicht gelesen werden, da es höchstwahrscheinlich ein unvollständiger Download ist. Bitte versuche es später nochmal.");
             polish.Add("zipReadingErrorMessage2", "Nie można odczytać, prawdopodobnie niekompletność pobranych plików. Proszę spróbować ponownie");
 
             //Componet:
@@ -793,7 +793,7 @@ namespace RelhaxModpack
             //Componet: Mod selection view default (relhax)
             //
             english.Add("selectionDefault", "Default");
-            german.Add("selectionDefault", "Default");
+            german.Add("selectionDefault", "Standard");
             polish.Add("selectionDefault", "Domyślne");
 
             //Componet: Mod selection view legacy (OMC)
@@ -805,7 +805,7 @@ namespace RelhaxModpack
             //Componet: Mod selection explanation
             //
             english.Add("selectionViewMode", "Select a mod selection list view mode\nDefault: Relhax list view mode\nLegacy: OMC tree list view mode");
-            german.Add("selectionViewMode", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nAlternativ: OMC Baumstruktur");
+            german.Add("selectionViewMode", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
             polish.Add("selectionViewMode", "Wybierz tryb widoku wyborów modyfikacji\nDomyślnie: Tryb widoku listy RelHax\nSpuścizna: Tryb widoku listy OMC");
 
             //Componet: Detected client version
@@ -817,13 +817,13 @@ namespace RelhaxModpack
             //Componet: Supported client versions
             //
             english.Add("supportedClientVersions", "Supported Clients");
-            german.Add("supportedClientVersions", "Unterstuetzte Clients");
+            german.Add("supportedClientVersions", "Unterstützte Clients");
             polish.Add("supportedClientVersions", "Wspomagane wersje klienta gry");
 
             //Componet: Supported clients notice
             //
             english.Add("supportNotGuarnteed", "This client version is not offically supported. Mods may not work.");
-            german.Add("supportNotGuarnteed", "Diese Client-Version wird nicht offiziell unterstützt. Die Mods koennten nicht funktionieren.");
+            german.Add("supportNotGuarnteed", "Diese Client-Version wird nicht offiziell unterstützt. Die Mods könnten nicht funktionieren oder sogar Dein World of Tanks beschädigen.");
             polish.Add("supportNotGuarnteed", "Ta wersja klienta gry nie jest oficjalnie wspomagana. Modyfikacje mogą nie działać prawidłowo.");
 
             //Componet: Failed To Delete folder
@@ -859,7 +859,7 @@ namespace RelhaxModpack
             //Componet: Colapse current tab option
             //
             english.Add("colapseAllButton", "Collapse Current Tab");
-            german.Add("colapseAllButton", "Reduziere alle Einträge der Aktuellen Registerkarte");
+            german.Add("colapseAllButton", "Reduziere alle Einträge der aktuellen Registerkarte");
             polish.Add("colapseAllButton", "Zwiń bieżącą kartę");
 
             //Componet: font_MouseEnter
@@ -877,7 +877,7 @@ namespace RelhaxModpack
             //Componet: language_MouseEnter
             //
             english.Add("language_MouseEnter", "Select your preferred language.");
-            german.Add("language_MouseEnter", "Wähle Deine bevorzugte Sprache");
+            german.Add("language_MouseEnter", "wähle Deine bevorzugte Sprache");
             polish.Add("language_MouseEnter", "Wybierz preferowany język.");
 
             //Componet: fontSizeGB
@@ -901,20 +901,25 @@ namespace RelhaxModpack
             //Component: disableBordersCB
             //
             english.Add("disableBordersCB", "Disable borders");
-            german.Add("disableBordersCB", "Grenzen deaktivieren");
+            german.Add("disableBordersCB", "Begrenzungen deaktivieren");
             polish.Add("disableBordersCB", "Wyłącz obramowanie");
 
             //Component: disableBordersDesc
             //
             english.Add("disableBordersDesc", "Disable the black borders around each mod and config sublevel.");
-            german.Add("disableBordersDesc", "Deaktiviere die schwarzen Ränder um jeden Mod und config sublevel.");
+            german.Add("disableBordersDesc", "Deaktiviere die schwarzen Ränder um jeden Mod und Config sublevel.");
             polish.Add("disableBordersDesc", "Wyłącz czarne obwiednie wokół każdego mod i config podpoziomu.");
 
             //Component: moveOutOfTanksLocation
             //
             english.Add("moveOutOfTanksLocation", "The modpack can not be run from the World_of_Tanks directory. Please move the application and try again.");
-            german.Add("moveOutOfTanksLocation", "Das modpack kann nicht aus dem World_of_Tanks Verzeichnis laufen. Bitte verschieben Sie die Anwendung und versuchen Sie es erneut.");
+            german.Add("moveOutOfTanksLocation", "Das Modpack kann nicht aus dem World_of_Tanks Verzeichnis laufen. Bitte verschiebe die Anwendung in ein anderes Verzeichnis und versuchen Sie es erneut.");
             polish.Add("moveOutOfTanksLocation", "Modpack nie może być uruchomiony z katalogu World_of_Tanks. Przenieś aplikację i spróbuj ponownie.");
+
+            //Section saveConfig
+            english.Add("selectWhereToSave", "Select where to save user prefs");
+            german.Add("selectWhereToSave", "Das Modpack kann nicht aus dem World_of_Tanks Verzeichnis laufen. Bitte verschiebe die Anwendung in ein anderes Verzeichnis und versuchen Sie es erneut.");
+            polish.Add("selectWhereToSave", "Select where to save user prefs");
         }
     }
 }
