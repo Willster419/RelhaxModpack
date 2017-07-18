@@ -836,7 +836,14 @@ namespace RelhaxModpack
             const string keyName = "HKEY_CURRENT_USER\\Software\\Classes\\.wotreplay\\shell\\open\\command";
             theObject = Registry.GetValue(keyName, "", -1);
             if (theObject == null) return null;
-            tanksLocation = (string)theObject;
+            try
+            {
+                tanksLocation = (string)theObject;
+            }
+            catch (InvalidCastException)
+            {
+                return null;
+            }
             tanksLocation = tanksLocation.Substring(1);
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
             if (!File.Exists(tanksLocation)) return null;
@@ -1087,7 +1094,7 @@ namespace RelhaxModpack
             this.reset();
             //attempt to locate the tanks directory automatically
             //if it fails, it will prompt the user to return the world of tanks exe
-            if (this.autoFindTanks() == null || Settings.forceManuel)
+            if (Settings.forceManuel || this.autoFindTanks() == null)
             {
                 if (this.manuallyFindTanks() == null)
                 {
