@@ -842,6 +842,12 @@ namespace RelhaxModpack
             if (!File.Exists(tanksLocation)) return null;
             return (string)theObject;
         }
+        //grumpelumpfs try to create an alternative way
+        //http://forensicartifacts.com/2010/08/registry-muicache/
+        private string autoFindTanksAlt()
+        {
+            return null;
+        }
         //prompts the user to specify where the "WorldOfTanks.exe" file is
         //return the file path and name of "WorldOfTanks.exe"
         private string manuallyFindTanks()
