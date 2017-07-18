@@ -219,6 +219,9 @@ namespace RelhaxModpack
                 XmlElement globalDepEnabled = doc.CreateElement("dependencyenabled");
                 globalDepEnabled.InnerText = "" + d.enabled;
                 globalDependencyRoot.AppendChild(globalDepEnabled);
+                XmlElement globalDepPackageName = doc.CreateElement("packageName");
+                globalDepPackageName.InnerText = d.packageName;
+                globalDependencyRoot.AppendChild(globalDepPackageName);
                 //attach dependency root
                 globalDependenciesXml.AppendChild(globalDependencyRoot);
             }
@@ -258,6 +261,9 @@ namespace RelhaxModpack
                     XmlElement DepEnabled = doc.CreateElement("dependencyenabled");
                     DepEnabled.InnerText = "" + d.enabled;
                     DependencyRoot.AppendChild(DepEnabled);
+                    XmlElement DepPackageName = doc.CreateElement("packageName");
+                    DepPackageName.InnerText = d.packageName;
+                    DependencyRoot.AppendChild(DepPackageName);
                     //attach dependency root
                     catagoryDependencies.AppendChild(DependencyRoot);
                 }
@@ -292,6 +298,9 @@ namespace RelhaxModpack
                     XmlElement modZipIndex = doc.CreateElement("index");
                     modZipIndex.InnerText = "" + m.index;
                     modRoot.AppendChild(modZipIndex);
+                    XmlElement modPackageName = doc.CreateElement("packageName");
+                    modPackageName.InnerText = m.packageName;
+                    modRoot.AppendChild(modPackageName);
                     XmlElement modZipSize = doc.CreateElement("size");
                     modZipSize.InnerText = "" + m.size;
                     modRoot.AppendChild(modZipSize);
@@ -351,6 +360,9 @@ namespace RelhaxModpack
                         XmlElement DepEnabled = doc.CreateElement("dependencyenabled");
                         DepEnabled.InnerText = "" + d.enabled;
                         DependencyRoot.AppendChild(DepEnabled);
+                        XmlElement DepPackageName = doc.CreateElement("packageName");
+                        DepPackageName.InnerText = d.packageName;
+                        DependencyRoot.AppendChild(DepPackageName);
                         //attach dependency root
                         modDependencies.AppendChild(DependencyRoot);
                     }
@@ -395,6 +407,9 @@ namespace RelhaxModpack
                 XmlElement configIndex = doc.CreateElement("index");
                 configIndex.InnerText = "" + cc.index;
                 configRoot.AppendChild(configIndex);
+                XmlElement configPackageName = doc.CreateElement("packageName");
+                configPackageName.InnerText = cc.packageName;
+                configRoot.AppendChild(configPackageName);
                 XmlElement configSize = doc.CreateElement("size");
                 configSize.InnerText = "" + cc.size;
                 configRoot.AppendChild(configSize);
@@ -458,6 +473,9 @@ namespace RelhaxModpack
                     XmlElement DepEnabled = doc.CreateElement("dependencyenabled");
                     DepEnabled.InnerText = "" + d.enabled;
                     DependencyRoot.AppendChild(DepEnabled);
+                    XmlElement DepPackageName = doc.CreateElement("packageName");
+                    DepPackageName.InnerText = d.packageName;
+                    DependencyRoot.AppendChild(DepPackageName);
                     //attach dependency root
                     catDependencies.AppendChild(DependencyRoot);
                 }

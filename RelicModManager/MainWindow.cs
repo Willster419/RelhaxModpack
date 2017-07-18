@@ -27,7 +27,7 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 23.3.2";
+        private string managerVersion = "version 23.3.3";
         private string today = "07/17/2017";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
@@ -836,7 +836,14 @@ namespace RelhaxModpack
             const string keyName = "HKEY_CURRENT_USER\\Software\\Classes\\.wotreplay\\shell\\open\\command";
             theObject = Registry.GetValue(keyName, "", -1);
             if (theObject == null) return null;
-            tanksLocation = (string)theObject;
+            try
+            {
+                tanksLocation = (string)theObject;
+            }
+            catch (InvalidCastException)
+            {
+                return null;
+            }
             tanksLocation = tanksLocation.Substring(1);
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
             if (!File.Exists(tanksLocation)) return null;
@@ -1093,7 +1100,7 @@ namespace RelhaxModpack
             this.reset();
             //attempt to locate the tanks directory automatically
             //if it fails, it will prompt the user to return the world of tanks exe
-            if (this.autoFindTanks() == null || Settings.forceManuel)
+            if (Settings.forceManuel || this.autoFindTanks() == null)
             {
                 if (this.manuallyFindTanks() == null)
                 {

@@ -919,7 +919,7 @@ namespace RelhaxModpack
             //Section saveConfig
             english.Add("selectWhereToSave", "Select where to save user prefs");
             german.Add("selectWhereToSave", "Bitte wähle wo die Speicherung erfolgen soll");
-            polish.Add("selectWhereToSave", "Wybierz miejsce zapisywania prefiksów użytkownika");
+            polish.Add("selectWhereToSave", "Wybór lokalizacji zapisu preferencji użytkownika");
         }
     }
 }
