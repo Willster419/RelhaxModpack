@@ -919,7 +919,7 @@ namespace RelhaxModpack
             //Section saveConfig
             english.Add("selectWhereToSave", "Select where to save user prefs");
             german.Add("selectWhereToSave", "Das Modpack kann nicht aus dem World_of_Tanks Verzeichnis laufen. Bitte verschiebe die Anwendung in ein anderes Verzeichnis und versuchen Sie es erneut.");
-            polish.Add("selectWhereToSave", "Wybierz miejsce zapisywania prefiksów użytkownika");
+            polish.Add("selectWhereToSave", "Wybór lokalizacji zapisu preferencji użytkownika");
         }
     }
 }
