@@ -648,7 +648,7 @@ namespace RelhaxModpack
                 }
                 catch (WebException)
                 {
-                    Utils.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " RelicCopyUpdate.bat");
+                    Utils.appendToLog("Error: failed to download => RelicCopyUpdate.bat");
                     MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " RelicCopyUpdate.bat");
                     Application.Exit();
                 }
