@@ -1,6 +1,10 @@
 In case you did not look on the forms yet, we have a discord server for you to join for rapid modpack support and mods discussion:
 https://discord.gg/58fdPvK
 
+Version 23.3.3:
+-Started work on database unique key modification
+-Updated Translations
+
 Version 23.3.2:
 -Added more exception handling for corrupted zip files
 
