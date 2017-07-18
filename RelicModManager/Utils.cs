@@ -13,6 +13,7 @@ using System;
 using System.Linq;
 using System.ComponentModel;
 using System.Net;
+using System.Globalization;
 
 namespace RelhaxModpack
 {
@@ -222,7 +223,7 @@ namespace RelhaxModpack
             float returnVal;
             try
             {
-                returnVal = float.Parse(input);
+                returnVal = float.Parse(input, CultureInfo.InvariantCulture);
             }
             catch (System.FormatException)
             {
