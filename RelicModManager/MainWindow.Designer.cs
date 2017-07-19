@@ -299,12 +299,12 @@
             // languagePL
             // 
             this.languagePL.AutoSize = true;
-            this.languagePL.Location = new System.Drawing.Point(65, 13);
+            this.languagePL.Location = new System.Drawing.Point(61, 13);
             this.languagePL.Name = "languagePL";
-            this.languagePL.Size = new System.Drawing.Size(38, 17);
+            this.languagePL.Size = new System.Drawing.Size(46, 17);
             this.languagePL.TabIndex = 2;
             this.languagePL.TabStop = true;
-            this.languagePL.Text = "PL";
+            this.languagePL.Text = "POL";
             this.languagePL.UseVisualStyleBackColor = true;
             this.languagePL.CheckedChanged += new System.EventHandler(this.languagePL_CheckedChanged);
             this.languagePL.MouseDown += new System.Windows.Forms.MouseEventHandler(this.language_MouseDown);
