@@ -34,8 +34,12 @@ namespace RelhaxModpack
         public static void appendToLog(string info)
         {
             //the method should automaticly make the file if it's not there
-            // File.AppendAllText(Path.Combine(Application.StartupPath, "RelHaxLog.txt"), DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff   ") + info + "\n");
-            writeToFile(Path.Combine(Application.StartupPath, "RelHaxLog.txt"), string.Format("{0}   {1}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),info));
+            string filePath = Path.Combine(Application.StartupPath, "RelHaxLog.txt");
+            if (!File.Exists(filePath))
+            {
+                File.AppendAllText(filePath, "");
+            }
+            writeToFile(filePath, string.Format("{0}   {1}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),info));
         }
 
         static public void writeToFile(string strFile, string strNewLogMessage)
