@@ -648,7 +648,7 @@ namespace RelhaxModpack
                                                     break;
                                             }
                                         }
-                                        if (d != null) { m.dependencies.Add(d); };
+                                        if (d != null) { c.dependencies.Add(d); };
                                     }
                                     break;
                                 default:
