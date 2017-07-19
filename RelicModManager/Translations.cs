@@ -496,9 +496,9 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("failedToDownload_1", "Failed to download ");
-            german.Add("failedToDownload_1", "Fehler beim Herunterladen ");
-            polish.Add("failedToDownload_1", "Ściąganie zakończone niepowodzeniem, plik ");
+            english.Add("failedToDownload_1", "Failed to download");
+            german.Add("failedToDownload_1", "Fehler beim Herunterladen");
+            polish.Add("failedToDownload_1", "Ściąganie zakończone niepowodzeniem, plik");
 
             //Componet: 
             //

@@ -648,7 +648,7 @@ namespace RelhaxModpack
                 }
                 catch (WebException)
                 {
-                    Utils.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " RelicCopyUpdate.bat");
+                    Utils.appendToLog("Error: failed to download => RelicCopyUpdate.bat");
                     MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " RelicCopyUpdate.bat");
                     Application.Exit();
                 }
@@ -848,6 +848,12 @@ namespace RelhaxModpack
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
             if (!File.Exists(tanksLocation)) return null;
             return (string)theObject;
+        }
+        //grumpelumpfs try to create an alternative way
+        //http://forensicartifacts.com/2010/08/registry-muicache/
+        private string autoFindTanksAlt()
+        {
+            return null;
         }
         //prompts the user to specify where the "WorldOfTanks.exe" file is
         //return the file path and name of "WorldOfTanks.exe"
