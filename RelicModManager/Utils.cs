@@ -27,12 +27,70 @@ namespace RelhaxModpack
         private static string xvmBootFileLoc1 = "\\res_mods\\configs\\xvm\\xvm.xc";
         private static string xvmBootFileLoc2 = "\\mods\\configs\\xvm\\xvm.xc";
         public static int totalModConfigComponents = 0;
+        private static int iMaxLogLength = 1500000; // Probably should be bigger, say 200,000
+        private static int iTrimmedLogLength = -300000; // minimum of how much of the old log to leave
 
         //logs string info to the log output
         public static void appendToLog(string info)
         {
             //the method should automaticly make the file if it's not there
-            File.AppendAllText(Path.Combine(Application.StartupPath, "RelHaxLog.txt"), DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff   ") + info + "\n");
+            // File.AppendAllText(Path.Combine(Application.StartupPath, "RelHaxLog.txt"), DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff   ") + info + "\n");
+            writeToFile(Path.Combine(Application.StartupPath, "RelHaxLog.txt"), string.Format("{0}   {1}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),info));
+        }
+
+        static public void writeToFile(string strFile, string strNewLogMessage)
+        {
+            try
+            {
+                FileInfo fi = new FileInfo(strFile);
+
+                Byte[] bytesSavedFromEndOfOldLog = null;
+
+                if (fi.Length > iMaxLogLength) // if the log file length is already too long
+                {
+                    using (BinaryReader br = new BinaryReader(File.Open(strFile, FileMode.Open)))
+                    {
+                        // Seek to our required position of what you want saved.
+                        br.BaseStream.Seek(iTrimmedLogLength, SeekOrigin.End);
+
+                        // Read what you want to save and hang onto it.
+                        bytesSavedFromEndOfOldLog = br.ReadBytes((-1 * iTrimmedLogLength));
+                    }
+                }
+
+                byte[] newLine = System.Text.ASCIIEncoding.ASCII.GetBytes(Environment.NewLine);
+
+                FileStream fs = null;
+                // If the log file is less than the max length, just open it at the end to write there
+                if (fi.Length < iMaxLogLength)
+                    fs = new FileStream(strFile, FileMode.Append, FileAccess.Write, FileShare.Read);
+                else // If the log file is more than the max length, just open it empty
+                    fs = new FileStream(strFile, FileMode.Create, FileAccess.Write, FileShare.Read);
+
+                using (fs)
+                {
+                    // If you are trimming the file length, write what you saved. 
+                    if (bytesSavedFromEndOfOldLog != null)
+                    {
+                        Byte[] lineBreak = Encoding.ASCII.GetBytes("### " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " *** *** *** Old Log Start Position *** *** *** *** ###");
+                        fs.Write(newLine, 0, newLine.Length);
+                        fs.Write(newLine, 0, newLine.Length);
+                        fs.Write(lineBreak, 0, lineBreak.Length);
+                        fs.Write(newLine, 0, newLine.Length);
+                        fs.Write(bytesSavedFromEndOfOldLog, 0, bytesSavedFromEndOfOldLog.Length);
+                        fs.Write(newLine, 0, newLine.Length);
+                    }
+                    Byte[] sendBytes = Encoding.ASCII.GetBytes(strNewLogMessage);
+                    // Append your last log message. 
+                    fs.Write(sendBytes, 0, sendBytes.Length);
+                    fs.Write(newLine, 0, newLine.Length);
+                }
+            }
+            catch (Exception ex)
+            {
+                ; // Nothing to do...
+                  //writeEvent("writeToFile() Failed to write to logfile : " + ex.Message + "...", 5);
+            }
         }
 
         // print all information about the object to the logfile
