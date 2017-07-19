@@ -684,33 +684,15 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("modNotFound_1", "The mod, \"");
-            german.Add("modNotFound_1", "Der Mod, \"");
-            polish.Add("modNotFound_1", "Modyfikacja \"");
+            english.Add("modNotFound", "The mod, \"{0}\" was not found in the modpack. It could have been renamed or removed.");
+            german.Add("modNotFound", "Der Mod, \"{0}\" wurde im Modpack nicht gefunden. Er könnte umbenannt oder entfernt worden sein.");
+            polish.Add("modNotFound", "Modyfikacja \"{0}\" nie została znaleziona w paczce. Sprawdź, czy nie została usunięta lub zmieniona nazwa.");
 
             //Componet: 
             //
-            english.Add("modNotFound_2", "\" was not found in the modpack. It could have been renamed or removed.");
-            german.Add("modNotFound_2", "\" wurde im Modpack nicht gefunden. Er könnte umbenannt oder entfernt worden sein.");
-            polish.Add("modNotFound_2", "\" nie została znaleziona w paczce. Sprawdź, czy nie została usunięta lub zmieniona nazwa.");
-
-            //Componet: 
-            //
-            english.Add("configNotFound_1", "The config \"");
-            german.Add("configNotFound_1", "Die Config \"");
-            polish.Add("configNotFound_1", "Konfiguracja \"");
-
-            //Componet: 
-            //
-            english.Add("configNotFound_2", "\" was not found for mod \"");
-            german.Add("configNotFound_2", "\" wurde nicht für den Mod gefunden \"");
-            polish.Add("configNotFound_2", "\" nie została znaleziona dla modyfikacji \"");
-
-            //Componet: 
-            //
-            english.Add("configNotFound_3", "\". It could have been renamed or removed.");
-            german.Add("configNotFound_3", "\". Er könnte umbenannt oder entfernt worden sein.");
-            polish.Add("configNotFound_3", "\". Sprawdź, czy nie została usunięta lub zmieniona nazwa.");
+            english.Add("configNotFound", "The config \"{0}\" was not found for mod \"{1}\". It could have been renamed or removed.");
+            german.Add("configNotFound", "Die Config \"{0}\" wurde nicht für den Mod gefunden \"{1}\". Er könnte umbenannt oder entfernt worden sein.");
+            polish.Add("configNotFound", "Konfiguracja \"{0}\" nie została znaleziona dla modyfikacji \"{1}\". Sprawdź, czy nie została usunięta lub zmieniona nazwa.");
 
             //Componet: 
             //
@@ -774,7 +756,7 @@ namespace RelhaxModpack
 
             //Componet:
             //
-            english.Add("zipReadingErrorMessage2", "Could not be read, most likely due to an incomplete download. Please try again.");
+            english.Add("zipReadingErrorMessage2", "could not be read, most likely due to an incomplete download. Please try again.");
             german.Add("zipReadingErrorMessage2", "Konnte nicht gelesen werden, da es höchstwahrscheinlich ein unvollständiger Download ist. Bitte versuche es später nochmal.");
             polish.Add("zipReadingErrorMessage2", "Nie można odczytać, prawdopodobnie niekompletność pobranych plików. Proszę spróbować ponownie");
 

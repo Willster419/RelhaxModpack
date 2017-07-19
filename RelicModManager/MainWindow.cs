@@ -781,7 +781,7 @@ namespace RelhaxModpack
                     Utils.appendToLog("source: " + e.Source);
                     Utils.appendToLog("target: " + e.TargetSite);
                     //show the error message
-                    MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + Path.GetFileName(zipFile) + Translations.getTranslatedString("zipReadingErrorMessage2"), Translations.getTranslatedString("zipReadingErrorHeader"));
+                    MessageBox.Show(string.Format("{0}, {1} {2} {3}",Translations.getTranslatedString("zipReadingErrorMessage1"), Path.GetFileName(zipFile), Translations.getTranslatedString("zipReadingErrorMessage2"), Translations.getTranslatedString("zipReadingErrorHeader")));
                     //(try to)delete the file from the filesystem
                     if (File.Exists(zipFile))
                         try
@@ -851,6 +851,9 @@ namespace RelhaxModpack
         }
         //grumpelumpfs try to create an alternative way
         //http://forensicartifacts.com/2010/08/registry-muicache/
+        // HKEY_CURRENT_USER\Software\Microsoft\Windows\ShellNoRoam\MUICache
+        // HKEY_CURRENT_USER\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache
+        // HKEY_CURRENT_USER\Software\Wargaming.net\Launcher\Apps\wot
         private string autoFindTanksAlt()
         {
             return null;

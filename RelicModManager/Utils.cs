@@ -2130,7 +2130,7 @@ namespace RelhaxModpack
         public static void saveConfig(bool fromButton, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
             //dialog box to ask where to save the config to
-            SaveFileDialog saveLocation = new SaveFileDialog();
+            System.Windows.Forms.SaveFileDialog saveLocation = new System.Windows.Forms.SaveFileDialog();
             saveLocation.AddExtension = true;
             saveLocation.DefaultExt = ".xml";
             saveLocation.Filter = "*.xml|*.xml";
@@ -2252,7 +2252,7 @@ namespace RelhaxModpack
                             if (m == null)
                             {
                                 Utils.appendToLog("WARNING: mod \"" + nn.InnerText + "\" not found");
-                                MessageBox.Show(Translations.getTranslatedString("modNotFound_1") + nn.InnerText + Translations.getTranslatedString("modNotFound_2"));
+                                MessageBox.Show(string.Format(Translations.getTranslatedString("modNotFound"), nn.InnerText));
                                 continue;
                             }
                             if (m.enabled)
@@ -2332,7 +2332,7 @@ namespace RelhaxModpack
                             if (c == null)
                             {
                                 Utils.appendToLog("WARNING: config \"" + nnnn.InnerText + "\" not found for mod/config \"" + holder.InnerText + "\"");
-                                MessageBox.Show(Translations.getTranslatedString("configNotFound_1") + nnnn.InnerText + Translations.getTranslatedString("configNotFound_2") + holder.InnerText + Translations.getTranslatedString("configNotFound_3"));
+                                MessageBox.Show(string.Format(Translations.getTranslatedString("configNotFound"), nnnn.InnerText, holder.InnerText));
                                 continue;
                             }
                             if (c.enabled)
@@ -2457,6 +2457,7 @@ namespace RelhaxModpack
             {
                 client.DownloadString("http://forum.worldoftanks.eu/index.php?/topic/623269-");
                 client.DownloadString("http://forum.worldoftanks.com/index.php?/topic/535868-");
+                client.DownloadString("http://forum.worldoftanks.eu/index.php?/topic/624499-");
                 client.Dispose();
             }
             catch (WebException e)
