@@ -13,8 +13,6 @@
         string endAddress { get; set; }
         string crc { get; set; }
         bool enabled { get; set; }
-        //the index of where the mod is in the entire list ever
-        int index { get; set; }
         //later a unique name of the config entry
         string packageName { get; set; }
         //size of the mod zip file

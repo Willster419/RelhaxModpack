@@ -282,14 +282,11 @@ namespace RelhaxModpack
                         case "dependencyenabled":
                             d.enabled = Utils.parseBool(globs.InnerText, false);
                             break;
-                        case "index":
-                            d.index = Utils.parseInt(globs.InnerText, 0);
-                            break;
                         case "packageName":
                             d.packageName = globs.InnerText;
                             break;
                         default:
-                            Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node {0} => globsPend {1}", globs.Name, d.dependencyZipFile));
+                            Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => globsPend {1}", globs.Name, d.dependencyZipFile));
                             if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}", globs.Name)); };
                             break;
                     }
@@ -344,9 +341,6 @@ namespace RelhaxModpack
                                                 case "enabled":
                                                     m.enabled = Utils.parseBool(modNode.InnerText, false);
                                                     break;
-                                                case "index":
-                                                    m.index = Utils.parseInt(modNode.InnerText, 0);
-                                                    break;
                                                 case "packageName":
                                                     m.packageName = modNode.InnerText;
                                                     break;
@@ -377,7 +371,7 @@ namespace RelhaxModpack
                                                                 m.userFiles.Add(innerText);
                                                                 break;
                                                             default:
-                                                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node {0} => mod {1} ({2}) => userDatas", userDataNode.Name, m.name, m.zipFile));
+                                                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => userDatas", userDataNode.Name, m.name, m.zipFile));
                                                                 if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: userData\n\nNode found: {0}", userDataNode.Name)); };
                                                                 break;
                                                         }
@@ -401,7 +395,7 @@ namespace RelhaxModpack
                                                                     m.pictureList.Add(new Picture(m.name, pictureNode.InnerText));
                                                                     break;
                                                                 default:
-                                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node {0} => mod {1} ({2}) => pictures", pictureNode.Name, m.name, m.zipFile));
+                                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures", pictureNode.Name, m.name, m.zipFile));
                                                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: URL\n\nNode found: {0}", pictureNode.Name)); };
                                                                     break;
                                                             }
@@ -436,7 +430,7 @@ namespace RelhaxModpack
                                                                     d.packageName = dependencyNode.InnerText;
                                                                     break;
                                                                 default:
-                                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node {0} => mod {1} ({2}) => dep {3}", dependencyNode.Name, m.name, m.zipFile, d.dependencyZipFile));
+                                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => dep {3}", dependencyNode.Name, m.name, m.zipFile, d.dependencyZipFile));
                                                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}", dependencyNode.Name)); };
                                                                     break;
                                                             }
@@ -449,8 +443,8 @@ namespace RelhaxModpack
                                                     Utils.processConfigs(modNode, backendFlag, m, true);
                                                     break;
                                                 default:
-                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node {0} => mod {1} ({2})", modNode.Name, m.name, m.zipFile));
-                                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: name, version, zipFile, startAddress, endAddress, crc, enabled, index, packageName, size, description, updateComment, devURL, userDatas, pictures, dependencies, configs\n\nNode found: {0}", modNode.Name)); };
+                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2})", modNode.Name, m.name, m.zipFile));
+                                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: name, version, zipFile, startAddress, endAddress, crc, enabled, packageName, size, description, updateComment, devURL, userDatas, pictures, dependencies, configs\n\nNode found: {0}", modNode.Name)); };
                                                     break;
                                             }
                                         }
@@ -458,7 +452,7 @@ namespace RelhaxModpack
                                         if (m != null) { cat.mods.Add(m); };
                                         break;
                                     default:
-                                        Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node {0} => cat {1}", modHolder.Name, cat.name));
+                                        Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1}", modHolder.Name, cat.name));
                                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: mod\n\nNode found: {0}", modHolder.Name)); };
                                         break;
                                 }
@@ -492,7 +486,7 @@ namespace RelhaxModpack
                                             d.packageName = dependencyNode.InnerText;
                                             break;
                                         default:
-                                            Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node {0} => cat {1} => dep {2}", dependencyNode.Name, cat.name, d.dependencyZipFile));
+                                            Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1} => dep {2}", dependencyNode.Name, cat.name, d.dependencyZipFile));
                                             if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}", dependencyNode.Name)); };
                                             break;
                                     }
@@ -501,7 +495,7 @@ namespace RelhaxModpack
                             }
                             break;
                         default:
-                            Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node {0} => cat {1}", catagoryNode.Name, cat.name));
+                            Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1}", catagoryNode.Name, cat.name));
                             if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: name, selectionType, mods, dependencies\n\nNode found: {0}", catagoryNode.Name)); };
                             break;
                     }
@@ -545,9 +539,6 @@ namespace RelhaxModpack
                                 case "enabled":
                                     c.enabled = Utils.parseBool(configNode.InnerText, false);
                                     break;
-                                case "index":
-                                    c.index = Utils.parseInt(configNode.InnerText, 0);
-                                    break;
                                 case "packageName":
                                     c.packageName = configNode.InnerText;
                                     break;
@@ -584,7 +575,7 @@ namespace RelhaxModpack
                                                 c.userFiles.Add(innerText);
                                                 break;
                                             default:
-                                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node {0} => config {1} ({2}) => userDatas", userDataNode.Name, c.name, c.zipFile));
+                                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => userDatas", userDataNode.Name, c.name, c.zipFile));
                                                 if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: userData\n\nNode found: {0}", userDataNode.Name)); };
                                                 break;
                                         }
@@ -608,7 +599,7 @@ namespace RelhaxModpack
                                                     c.pictureList.Add(new Picture(c.name, pictureNode.InnerText));
                                                     break;
                                                 default:
-                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node {0} => configs {1} ({2}) => pictures", pictureNode.Name, c.name, c.zipFile));
+                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => configs {1} ({2}) => pictures", pictureNode.Name, c.name, c.zipFile));
                                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: URL\n\nNode found: {0}", pictureNode.Name)); };
                                                     break;
                                             }
@@ -643,7 +634,7 @@ namespace RelhaxModpack
                                                     d.packageName = dependencyNode.InnerText;
                                                     break;
                                                 default:
-                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node {0} => config {1} ({2}) => dep {3}", dependencyNode.Name, c.name, c.zipFile, d.dependencyZipFile));
+                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => dep {3}", dependencyNode.Name, c.name, c.zipFile, d.dependencyZipFile));
                                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}", dependencyNode.Name)); };
                                                     break;
                                             }
@@ -652,8 +643,8 @@ namespace RelhaxModpack
                                     }
                                     break;
                                 default:
-                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node {0} => config {1} ({2})", configNode.Name, c.name, c.zipFile));
-                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: name, version, zipFile, startAddress, endAddress, crc, enabled, index, packageName, size, updateComment, description, devURL, type, configs, userDatas, pictures, dependencies\n\nNode found: {0}", configNode.Name)); };
+                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2})", configNode.Name, c.name, c.zipFile));
+                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: name, version, zipFile, startAddress, endAddress, crc, enabled, packageName, size, updateComment, description, devURL, type, configs, userDatas, pictures, dependencies\n\nNode found: {0}", configNode.Name)); };
                                     break;
                             }
                         }
@@ -664,7 +655,7 @@ namespace RelhaxModpack
                             con.configs.Add(c);
                         break;
                     default:
-                        Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node {0} => mod {1} ({2})", configHolder.Name, m.name, m.zipFile));
+                        Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2})", configHolder.Name, m.name, m.zipFile));
                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: config\n\nNode found: {0}", configHolder.Name)); };
                         break;
                 }

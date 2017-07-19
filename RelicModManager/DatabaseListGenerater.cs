@@ -10,7 +10,7 @@ namespace RelhaxModpack
     {
         //required class variables
         private StringBuilder sb = new StringBuilder();
-        private int index = 0;
+        private string packageName = "";
         private string category = "";
         private int level = 0;
         private string modName = "";
@@ -57,9 +57,9 @@ namespace RelhaxModpack
         private void GenretateSpreadsheetButton_Click(object sender, EventArgs e)
         {
             //reset everything
-            header = "Index\tCategory\tMod\tConfig\tLevel\tZip\tDevURL\tEnabled";
+            header = "packageName\tCategory\tMod\tConfig\tLevel\tZip\tDevURL\tEnabled";
             sb = new StringBuilder();
-            index = 0;
+            packageName = "";
             category = "";
             level = 0;
             modName = "";
@@ -79,7 +79,7 @@ namespace RelhaxModpack
                 {
                     //remove the old devURL value if there
                     devURL = "";
-                    index = m.index;
+                    packageName = m.packageName;
                     level = 1;
                     modName = m.name;
                     configname = "N/A";
@@ -87,7 +87,7 @@ namespace RelhaxModpack
                     enabled = m.enabled;
                     devURL = "=HYPERLINK(\"" + m.devURL + "\",\"link\")";
                     //header = "Index,Category,Mod,Config,Level,Zip,Enabled";
-                    sb.Append(index + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
+                    sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
                     if (m.configs.Count > 0)
                         processConfigsSpreadsheetGenerate(m.configs, level + 1);
                 }
@@ -109,13 +109,13 @@ namespace RelhaxModpack
             {
                 //remove the old devURL value if there
                 devURL = "";
-                index = con.index;
+                packageName = con.packageName;
                 configname = con.name;
                 zipfile = con.zipFile;
                 enabled = con.enabled;
                 devURL = "=HYPERLINK(\"" + con.devURL + "\",\"link\")";
                 //header = "Index,Category,Mod,Config,Level,Zip,Enabled";
-                sb.Append(index + "\t" + category + "\t" + modName + "\t" + configname + "\t" + newLevel + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
+                sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + newLevel + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
                 if (con.configs.Count > 0)
                     processConfigsSpreadsheetGenerate(con.configs, newLevel + 1);
                 //else
@@ -128,7 +128,7 @@ namespace RelhaxModpack
             header = "Category\tMod\tDevURL";
             //reset everything
             sb = new StringBuilder();
-            index = 0;
+            packageName = "";
             category = "";
             level = 0;
             modName = "";
@@ -148,7 +148,7 @@ namespace RelhaxModpack
                 {
                     //remove the old devURL value if there
                     devURL = "";
-                    index = m.index;
+                    packageName = m.packageName;
                     level = 1;
                     modName = m.name;
                     configname = "N/A";
@@ -178,7 +178,7 @@ namespace RelhaxModpack
             {
                 //remove the old devURL value if there
                 devURL = "";
-                index = con.index;
+                packageName = con.packageName;
                 configname = "";
                 for (int i = 0; i < newLevel; i++)
                 {

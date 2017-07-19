@@ -17,8 +17,6 @@ namespace RelhaxModpack
         public string crc { get; set; }
         //is the config currently broken?
         public bool enabled { get; set; }
-        //the index where this config is in the entire list of configs ever
-        public int index { get; set; }
         //later a unique name of the config entry
         public string packageName { get; set; }
         //size of the config zip file
