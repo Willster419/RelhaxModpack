@@ -1,6 +1,11 @@
 In case you did not look on the forms yet, we have a discord server for you to join for rapid modpack support and mods discussion:
 https://discord.gg/58fdPvK
 
+Version 23.3.4:
+-Fixed bug with the auto detection of World of Tanks folder.
+-Fixed bug so that if the auto detection is causing issues, using "force manuel game detection" will not run the auto detection code
+-Fixed issues with back-end tools
+
 Version 23.3.3:
 -Started work on database unique key modification
 -Updated Translations
