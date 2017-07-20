@@ -1839,41 +1839,52 @@ namespace RelhaxModpack
         //resizing handler for the window
         private void ModSelectionList_SizeChanged(object sender, EventArgs e)
         {
-            colapseAllButton.Location = new Point(this.Size.Width - 20 - colapseAllButton.Size.Width - 6 - expandAllButton.Size.Width, colapseAllButton.Location.Y);
-            expandAllButton.Location = new Point(this.Size.Width - 20 - expandAllButton.Size.Width, expandAllButton.Location.Y);
-            continueButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
-            cancelButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
-            modTabGroups.Size = new Size(this.Size.Width - 20 - modTabGroups.Location.X, this.Size.Height - modTabGroups.Location.Y - 39 - continueButton.Size.Height - 6 - difference);
-            label1.Text = "" + this.Size.Width + " x " + this.Size.Height;
-            loadConfigButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width - 6 - loadConfigButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
-            saveConfigButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
-            clearSelectionsButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width - 6 - loadConfigButton.Size.Width - 6 - clearSelectionsButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
-            if (this.Size.Height < 250)
+            if (this.Visible)
             {
-                this.Size = new Size(this.Size.Width, 250);
-            }
-            if (this.Size.Width < 550)
-            {
-                this.Size = new Size(550, this.Size.Height);
-            }
-            foreach (TabPage t in modTabGroups.TabPages)
-            {
-                foreach (Control c in t.Controls)
+                colapseAllButton.Location = new Point(this.Size.Width - 20 - colapseAllButton.Size.Width - 6 - expandAllButton.Size.Width, colapseAllButton.Location.Y);
+                expandAllButton.Location = new Point(this.Size.Width - 20 - expandAllButton.Size.Width, expandAllButton.Location.Y);
+                continueButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
+                cancelButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
+                modTabGroups.Size = new Size(this.Size.Width - 20 - modTabGroups.Location.X, this.Size.Height - modTabGroups.Location.Y - 39 - continueButton.Size.Height - 6 - difference);
+                label1.Text = "" + this.Size.Width + " x " + this.Size.Height;
+                loadConfigButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width - 6 - loadConfigButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
+                saveConfigButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
+                clearSelectionsButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width - 6 - loadConfigButton.Size.Width - 6 - clearSelectionsButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
+                if (this.Size.Height < 250)
                 {
-                    if (c is Panel)
+                    this.Size = new Size(this.Size.Width, 250);
+                }
+                if (this.Size.Width < 550)
+                {
+                    this.Size = new Size(550, this.Size.Height);
+                }
+                foreach (TabPage t in modTabGroups.TabPages)
+                {
+                    foreach (Control c in t.Controls)
                     {
-                        //mod panel
-                        Panel p = (Panel)c;
-                        resizePanel(p, t, 25);
-                    }
-                    else if (c is ElementHost)
-                    {
-                        ElementHost eh = (ElementHost)c;
-                        eh.Size = new Size(t.Size.Width - 12, t.Size.Height - 10);
-                        LegacySelectionList lsl = (LegacySelectionList)eh.Child;
-                        lsl.RenderSize = new System.Windows.Size(eh.Size.Width - 2, eh.Size.Height - 2);
-                        lsl.legacyTreeView.Width = eh.Size.Width - 4;
-                        lsl.legacyTreeView.Height = eh.Size.Height - 4;
+                        if (c is Panel)
+                        {
+                            //mod panel
+                            Panel p = (Panel)c;
+                            resizePanel(p, t, 25);
+                        }
+                        else if (c is ElementHost)
+                        {
+                            ElementHost eh = (ElementHost)c;
+                            eh.Size = new Size(t.Size.Width - 12, t.Size.Height - 10);
+                            LegacySelectionList lsl = (LegacySelectionList)eh.Child;
+                            try
+                            {
+                                lsl.RenderSize = new System.Windows.Size(eh.Size.Width - 2, eh.Size.Height - 2);
+                                lsl.legacyTreeView.Width = eh.Size.Width - 4;
+                                lsl.legacyTreeView.Height = eh.Size.Height - 4;
+                            }
+                            catch
+                            {
+                                // values are nativ !
+                                // this is catching the exception if the ModSelectionWindow is going to minimize
+                            }
+                        }
                     }
                 }
             }
