@@ -2053,16 +2053,18 @@ namespace RelhaxModpack
             {
                 foreach (string s in m.userFiles)
                 {
+                    
+                    string startLoc = tanksLocation + s;
+                    string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + Utils.getValidFilename(m.name + "_" + Path.GetFileName(s));
                     try
                     {
-                        string startLoc = tanksLocation + s;
-                        string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + m.name + "_" + Path.GetFileName(s);
                         if (File.Exists(startLoc))
                             File.Move(startLoc, destLoc);
                     }
                     catch
                     {
-
+                        if (Program.testMode) { MessageBox.Show(string.Format("Error: can not move file.\nstartLoc: \"{0}\"\ndestLoc: \"{1}\"", startLoc, destLoc)); };
+                        Utils.appendToLog(string.Format("Error: can not move file. startLoc: \"{0}\" destLoc: \"{1}\"", startLoc, destLoc));
                     }
                 }
             }
@@ -2070,16 +2072,17 @@ namespace RelhaxModpack
             {
                 foreach (string s in cfg.userFiles)
                 {
+                    string startLoc = tanksLocation + s;
+                    string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + Utils.getValidFilename(cfg.name + "_" + Path.GetFileName(s));
                     try
                     { 
-                        string startLoc = tanksLocation + s;
-                        string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + cfg.name + "_" + Path.GetFileName(s);
                         if (File.Exists(startLoc))
                             File.Move(startLoc, destLoc);
                     }
                     catch
                     {
-                        
+                        if (Program.testMode) { MessageBox.Show(string.Format("Error: can not move file.\nstartLoc: \"{0}\"\ndestLoc: \"{1}\"", startLoc, destLoc)); };
+                        Utils.appendToLog(string.Format("Error: can not move file. startLoc: \"{0}\" destLoc: \"{1}\"", startLoc, destLoc));
                     }
                 }
             }
@@ -2093,7 +2096,7 @@ namespace RelhaxModpack
                 foreach (string s in m.userFiles)
                 {
                     //find the file
-                    string parsedFileName = m.name + "_" + Path.GetFileName(s);
+                    string parsedFileName = Utils.getValidFilename(m.name + "_" + Path.GetFileName(s));
                     foreach (string ss in fileList)
                     {
                         string thePath = Path.GetFileName(ss);
@@ -2114,7 +2117,7 @@ namespace RelhaxModpack
                 foreach (string s in cfg.userFiles)
                 {
                     //find the file
-                    string parsedFileName = cfg.name + "_" + Path.GetFileName(s);
+                    string parsedFileName = Utils.getValidFilename(cfg.name + "_" + Path.GetFileName(s));
                     foreach (string ss in fileList)
                     {
                         string thePath = Path.GetFileName(ss);

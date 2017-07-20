@@ -39,9 +39,9 @@ namespace RelhaxModpack
             {
                 File.AppendAllText(filePath, "");
             }
-            writeToFile(filePath, string.Format("{0}   {1}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),info));
+            writeToFile(filePath, string.Format("{0}   {1}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), info));
         }
-        
+
         // https://stackoverflow.com/questions/4741037/keeping-log-files-under-a-certain-size
         static public void writeToFile(string strFile, string strNewLogMessage)
         {
@@ -1571,7 +1571,7 @@ namespace RelhaxModpack
                     else if (Regex.IsMatch(pathArray[0], @"\[-1\]+"))
                     {
                         //-1 keyword for the add array method
-                        if(!mode.Equals("array_add"))
+                        if (!mode.Equals("array_add"))
                         {
                             Utils.appendToLog("To use -1 keyword, must be in array_add mode!");
                             return;
@@ -1866,12 +1866,12 @@ namespace RelhaxModpack
                 //need to also go back to add the comma to the stringbuilder
                 string temp = peekBehindUntill(fileContents, @"[},]");
                 //temp = temp.Trim();
-                sb.Remove(sb.ToString().Count() - (temp.Count()-1), temp.Count()-1);
+                sb.Remove(sb.ToString().Count() - (temp.Count() - 1), temp.Count() - 1);
                 string toApeend = temp.Substring(0, 1);
                 sb.Append(toApeend);
                 //temp.Remove(0, 1);
                 sb.Append(",");
-                sb.Append(temp.Substring(1,temp.Length-2));
+                sb.Append(temp.Substring(1, temp.Length - 2));
             }
             //append it in the sb
             sb.Append(replaced);
@@ -2189,7 +2189,7 @@ namespace RelhaxModpack
             saveLocation.DefaultExt = ".xml";
             saveLocation.Filter = "*.xml|*.xml";
             saveLocation.InitialDirectory = Application.StartupPath + "\\RelHaxUserConfigs";
-            saveLocation.Title = Translations.getTranslatedString("selectWhereToSave"); 
+            saveLocation.Title = Translations.getTranslatedString("selectWhereToSave");
             if (fromButton)
             {
                 if (saveLocation.ShowDialog().Equals(DialogResult.Cancel))
@@ -2524,7 +2524,7 @@ namespace RelhaxModpack
                 Utils.appendToLog("Additional Info: Tried to access one of the forum URL's");
             }
         }
-        
+
         // https://stackoverflow.com/questions/14488796/does-net-provide-an-easy-way-convert-bytes-to-kb-mb-gb-etc
         static readonly string[] SizeSuffixes =
                    { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
@@ -2552,6 +2552,15 @@ namespace RelhaxModpack
             return string.Format("{0:n" + decimalPlaces + "} {1}",
                 adjustedSize,
                 SizeSuffixes[mag]);
+        }
+
+        public static string getValidFilename(String fileName)
+        {
+            foreach (char c in System.IO.Path.GetInvalidFileNameChars())
+            {
+               fileName = fileName.Replace(c, '_');
+            }
+            return fileName;
         }
     }
 }
