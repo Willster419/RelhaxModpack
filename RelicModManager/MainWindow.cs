@@ -2053,20 +2053,34 @@ namespace RelhaxModpack
             {
                 foreach (string s in m.userFiles)
                 {
-                    string startLoc = tanksLocation + s;
-                    string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + m.name + "_" + Path.GetFileName(s);
-                    if (File.Exists(startLoc))
-                        File.Move(startLoc, destLoc);
+                    try
+                    {
+                        string startLoc = tanksLocation + s;
+                        string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + m.name + "_" + Path.GetFileName(s);
+                        if (File.Exists(startLoc))
+                            File.Move(startLoc, destLoc);
+                    }
+                    catch
+                    {
+
+                    }
                 }
             }
             foreach (Config cfg in configsWithData)
             {
                 foreach (string s in cfg.userFiles)
                 {
-                    string startLoc = tanksLocation + s;
-                    string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + cfg.name + "_" + Path.GetFileName(s);
-                    if (File.Exists(startLoc))
-                        File.Move(startLoc, destLoc);
+                    try
+                    { 
+                        string startLoc = tanksLocation + s;
+                        string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + cfg.name + "_" + Path.GetFileName(s);
+                        if (File.Exists(startLoc))
+                            File.Move(startLoc, destLoc);
+                    }
+                    catch
+                    {
+                        
+                    }
                 }
             }
         }
