@@ -57,6 +57,14 @@ namespace RelhaxModpack
             german.Add("cancel", "Abbrechen");
             polish.Add("cancel", "Anuluj");
 
+            english.Add("warning", "WARNING");
+            german.Add("warning", "WARNUNG");
+            polish.Add("warning", "OSTRZEŻENIE");
+
+            english.Add("critical", "CRITICAL");
+            german.Add("critical", "KRITISCH");
+            polish.Add("critical", "BŁĄD KRYTYCZNY");
+
             //Section: MainWindow
 
             //Componet: installRelhaxMod
