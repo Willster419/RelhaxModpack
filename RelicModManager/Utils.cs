@@ -27,7 +27,7 @@ namespace RelhaxModpack
         private static string xvmBootFileLoc1 = "\\res_mods\\configs\\xvm\\xvm.xc";
         private static string xvmBootFileLoc2 = "\\mods\\configs\\xvm\\xvm.xc";
         public static int totalModConfigComponents = 0;
-        private static int iMaxLogLength = 1500000; // Probably should be bigger, say 200,000
+        private static int iMaxLogLength = 1500000; // Probably should be bigger, say 2,000,000
         private static int iTrimmedLogLength = -300000; // minimum of how much of the old log to leave
 
         //logs string info to the log output
@@ -41,7 +41,8 @@ namespace RelhaxModpack
             }
             writeToFile(filePath, string.Format("{0}   {1}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),info));
         }
-
+        
+        // https://stackoverflow.com/questions/4741037/keeping-log-files-under-a-certain-size
         static public void writeToFile(string strFile, string strNewLogMessage)
         {
             try
@@ -90,7 +91,7 @@ namespace RelhaxModpack
                     fs.Write(newLine, 0, newLine.Length);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ; // Nothing to do...
                   //writeEvent("writeToFile() Failed to write to logfile : " + ex.Message + "...", 5);
@@ -116,7 +117,7 @@ namespace RelhaxModpack
                     default:
                         break;
                 }
-                Utils.appendToLog(String.Format("{0}={1}", name, value));
+                Utils.appendToLog(string.Format("{0}={1}", name, value));
             }
             Utils.appendToLog("----- end of dump ------");
         }
