@@ -903,7 +903,7 @@ namespace RelhaxModpack
             {
                 wait.Close();
                 Utils.appendToLog("CRITICAL: Another Instance of the relic mod manager is already running");
-                MessageBox.Show("CRITICAL: Another Instance of the relic mod manager is already running");
+                MessageBox.Show(Translations.getTranslatedString("anotherInstanceRunning"));
                 this.Close();
             }
             //check for updates
@@ -989,8 +989,8 @@ namespace RelhaxModpack
                 Utils.appendToLog("Auto Install is ON, checking for config pref xml at " + Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName);
                 if (!File.Exists(Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName))
                 {
-                    Utils.appendToLog(Translations.getTranslatedString("extractionErrorHeader") + ": " + Program.configName + " does NOT exist, loading in fontRegular mode");
-                    MessageBox.Show("ERROR: " + Program.configName + " does NOT exist, loading in fontRegular mode");
+                    Utils.appendToLog(string.Format("ERROR: {0} does NOT exist, loading in fontRegular mode", Program.configName));
+                    MessageBox.Show(string.Format(Translations.getTranslatedString("configNotExist"), Program.configName));
                     Program.autoInstall = false;
                 }
                 if (!Settings.cleanInstallation)

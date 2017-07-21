@@ -556,7 +556,7 @@ namespace RelhaxModpack
             german.Add("autoDetectFailed", "Die automatische Erkennung ist fehlgeschlagen. Bitte benutzen Sie die 'erzwinge manuelle' Option");
             polish.Add("autoDetectFailed", "Niepowodzenie automatycznego wykrywania. Proszę wybrać opcję ręcznego znajdowania ścieżki gry.");
 
-            //Componet: 
+            //Componet: MainWindow_Load
             //
             english.Add("anotherInstanceRunning", "CRITICAL: Another Instance of the relic mod manager is already running");
             german.Add("anotherInstanceRunning", "KRITISCH: Eine weitere Instanz des Relic Mod Managers läuft bereits");
@@ -576,9 +576,9 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("configNotExist", " does NOT exist, loading in regular mode");
-            german.Add("configNotExist", " existiert nicht, laedt im regulaeren Modus");
-            polish.Add("configNotExist", " nie istnieje, ładowanie podstawowego trybu");
+            english.Add("configNotExist", "ERROR: {0} does NOT exist, loading in regular mode");
+            german.Add("configNotExist", "FEHLER: {0} existiert nicht, laedt im regulaeren Modus");
+            polish.Add("configNotExist", "BŁĄD: {0} nie istnieje, ładowanie podstawowego trybu");
 
             //Componet: 
             //
