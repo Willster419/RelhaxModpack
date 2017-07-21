@@ -207,8 +207,12 @@ namespace RelhaxModpack
 
         private void Preview_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Settings.previewX = this.Location.X;
-            Settings.previewY = this.Location.Y;
+            // if preview window is minimized and will be closed directly via the taskbar, windows send -32000 coordinate X and Y, so not storing it
+            if (this.Location.X > 0 && this.Location.Y > 0)             
+            {
+                Settings.previewX = this.Location.X;
+                Settings.previewY = this.Location.Y;
+            }
         }
     }
 }
