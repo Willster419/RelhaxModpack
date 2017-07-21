@@ -1,5 +1,12 @@
-In case you did not look on the forms yet, we have a discord server for you to join for rapid modpack support and mods discussion:
+In case you did not look on the forms, we have a discord server for you to join for rapid modpack support and mods discussion:
 https://discord.gg/58fdPvK
+
+Version 23.3.8:
+-Added limit to the log file size
+-Added more exception handling when backing up user data
+-Added handling for invalid characters when backing up user data
+-Fixed bug where application would crash if resized when minimized
+-Updated the "client not supported" window
 
 Version 23.3.5:
 -Fixed bug with parsing config dependencies
