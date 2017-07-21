@@ -2550,13 +2550,13 @@ namespace RelhaxModpack
         public static void TotallyNotStatPaddingForumPageViewCount()
         {
             BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += TotallyNotStatPaddingForumPageViewCount2;
+            worker.DoWork += worker_TotallyNotStatPaddingForumPageViewCount;
             worker.RunWorkerAsync();
             worker.Dispose();
         }
 
         //Downloads the forum page. Totally not stat padding
-        public static void TotallyNotStatPaddingForumPageViewCount2(object sender, DoWorkEventArgs args)
+        public static void worker_TotallyNotStatPaddingForumPageViewCount(object sender, DoWorkEventArgs args)
         {
             //create a new downloader to download the modpack forum page on a new thread
             WebClient client = new WebClient();

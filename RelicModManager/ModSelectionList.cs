@@ -1518,8 +1518,8 @@ namespace RelhaxModpack
                     }
                 }
             }
-
         }
+
         //handler for when the config checkbox is checked or unchecked
         void configControlCB_CheckedChanged(object sender, EventArgs e)
         {
