@@ -1135,8 +1135,11 @@ namespace RelhaxModpack
                 //log and inform the user
                 Utils.appendToLog("WARNING: Detected client version is " + tanksVersion + ", not supported");
                 Utils.appendToLog("Supported versions are: " + suportedVersions);
-                MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}: {4}", Translations.getTranslatedString("detectedClientVersion"), tanksVersion, Translations.getTranslatedString("supportNotGuarnteed"), Translations.getTranslatedString("supportedClientVersions"), suportedVersions), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                selectionListTanksVersion = supportedVersions[supportedVersions.Count() - 1];
+                // parse the string that we get from the server and delete all "Testserver" entries (Testserver entries are the version number with prefix "T")
+                string publicVersions = string.Join(",", suportedVersions.Split(',').Select(sValue => sValue.Trim()).ToArray().Where(s => !(s.Substring(0, 1) == "T")).ToArray());
+                MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}: {4}", Translations.getTranslatedString("detectedClientVersion"), tanksVersion, Translations.getTranslatedString("supportNotGuarnteed"), Translations.getTranslatedString("supportedClientVersions"), publicVersions), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                // select the last public modpack version
+                selectionListTanksVersion = publicVersions.Split(',')[publicVersions.Split(',').Count() - 1];
             }
             state = InstallState.modSelection;
             //reset the childProgressBar value
