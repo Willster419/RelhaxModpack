@@ -356,7 +356,7 @@ namespace RelhaxModpack
             //if the CRC's don't match and the mod actually has a zip file
             if (!(m.crc.Equals(oldCRC2)) && (!m.zipFile.Equals("")))
             {
-                modCheckBox.Content = modCheckBox.Content + " (Updated)";
+                modCheckBox.Content = string.Format("{0} ({1})",modCheckBox.Content, Translations.getTranslatedString("updated"));
                 m.downloadFlag = true;
                 if ((m.size > 0.0f))
                     modCheckBox.Content = string.Format("{0} ({1} MB)", modCheckBox.Content, m.size);

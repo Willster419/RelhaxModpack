@@ -247,13 +247,13 @@ namespace RelhaxModpack
             //Componet: nextPicButton
             //
             english.Add("nextPicButton", "next");
-            german.Add("nextPicButton", "nächstes");
+            german.Add("nextPicButton", "weiter");
             polish.Add("nextPicButton", "Dalej");
 
             //Componet: previousPicButton
             //
             english.Add("previousPicButton", "previous");
-            german.Add("previousPicButton", "vorheriges");
+            german.Add("previousPicButton", "zurück");
             polish.Add("previousPicButton", "Wstecz");
 
             //Componet: devLinkLabel
@@ -910,6 +910,12 @@ namespace RelhaxModpack
             english.Add("selectWhereToSave", "Select where to save user prefs");
             german.Add("selectWhereToSave", "Bitte wähle wo die Speicherung erfolgen soll");
             polish.Add("selectWhereToSave", "Wybór lokalizacji zapisu preferencji użytkownika");
+
+            //Section addModTreeview
+            english.Add("updated", "updated");
+            german.Add("updated", "aktualisiert");
+            polish.Add("updated", "zaktualizowane");
+
         }
     }
 }
