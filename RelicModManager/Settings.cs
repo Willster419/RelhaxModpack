@@ -318,9 +318,11 @@ namespace RelhaxModpack
             xModSelectionFullscreen.InnerText = "" + ModSelectionFullscreen;
             settingsHolder.AppendChild(xModSelectionFullscreen);
             XmlElement xpreviewX = doc.CreateElement("previewX");
+            if (previewX < 0) { previewX = 0; };
             xpreviewX.InnerText = "" + previewX;
             settingsHolder.AppendChild(xpreviewX);
             XmlElement xpreviewY = doc.CreateElement("previewY");
+            if (previewY < 0) { previewY = 0; };
             xpreviewY.InnerText = "" + previewY;
             settingsHolder.AppendChild(xpreviewY);
             XmlElement customModInfoPath = doc.CreateElement("customModInfoPath");

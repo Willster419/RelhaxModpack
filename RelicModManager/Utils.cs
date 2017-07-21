@@ -453,23 +453,33 @@ namespace RelhaxModpack
                                                     //parse every picture
                                                     foreach (XmlNode pictureHolder in modNode.ChildNodes)
                                                     {
-                                                        foreach (XmlNode pictureNode in pictureHolder.ChildNodes)
+                                                        switch (pictureHolder.Name)
                                                         {
-                                                            switch (pictureNode.Name)
-                                                            {
-                                                                case "URL":
-                                                                    string innerText = pictureNode.InnerText;
-                                                                    if (innerText == null)
-                                                                        continue;
-                                                                    if (innerText.Equals(""))
-                                                                        continue;
-                                                                    m.pictureList.Add(new Picture(m.name, pictureNode.InnerText));
-                                                                    break;
-                                                                default:
-                                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => expected node: URL", pictureNode.Name, m.name, m.zipFile));
-                                                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: URL\n\nNode found: {0}\n\nmore informations, see logfile", pictureNode.Name), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
-                                                                    break;
-                                                            }
+                                                            case "picture":
+                                                                foreach (XmlNode pictureNode in pictureHolder.ChildNodes)
+                                                                {
+                                                                    switch (pictureNode.Name)
+                                                                    {
+                                                                        case "URL":
+                                                                            string innerText = pictureNode.InnerText;
+                                                                            if (innerText == null)
+                                                                                continue;
+                                                                            if (innerText.Equals(""))
+                                                                                continue;
+                                                                            m.pictureList.Add(new Picture(m.name, pictureNode.InnerText));
+                                                                            break;
+                                                                        default:
+                                                                            Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => picture =>expected nodes: URL", pictureHolder.Name, m.name, m.zipFile));
+                                                                            Utils.dumpObjectToLog("pictureHolder", pictureHolder);
+                                                                            if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: URL\n\nNode found: {0}\n\nmore informations, see logfile", pictureHolder.Name), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                                            break;
+                                                                    }
+                                                                }
+                                                                break;
+                                                            default:
+                                                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => expected node: picture", pictureHolder.Name, m.name, m.zipFile));
+                                                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected node: picture\n\nNode found: {0}\n\nmore informations, see logfile", pictureHolder.Name), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                                break;
                                                         }
                                                     }
                                                     break;
@@ -676,23 +686,32 @@ namespace RelhaxModpack
                                     //parse every picture
                                     foreach (XmlNode pictureHolder in configNode.ChildNodes)
                                     {
-                                        foreach (XmlNode pictureNode in pictureHolder.ChildNodes)
+                                        switch (pictureHolder.Name)
                                         {
-                                            switch (pictureNode.Name)
-                                            {
-                                                case "URL":
-                                                    string innerText = pictureNode.InnerText;
-                                                    if (innerText == null)
-                                                        continue;
-                                                    if (innerText.Equals(""))
-                                                        continue;
-                                                    c.pictureList.Add(new Picture(c.name, pictureNode.InnerText));
-                                                    break;
-                                                default:
-                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => configs {1} ({2}) => pictures => expected nodes: URL", pictureNode.Name, c.name, c.zipFile));
-                                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: URL\n\nNode found: {0}\n\nmore informations, see logfile", pictureNode.Name)); };
-                                                    break;
-                                            }
+                                            case "picture":
+                                                foreach (XmlNode pictureNode in pictureHolder.ChildNodes)
+                                                {
+                                                    switch (pictureNode.Name)
+                                                    {
+                                                        case "URL":
+                                                            string innerText = pictureNode.InnerText;
+                                                            if (innerText == null)
+                                                                continue;
+                                                            if (innerText.Equals(""))
+                                                                continue;
+                                                            c.pictureList.Add(new Picture(c.name, pictureNode.InnerText));
+                                                            break;
+                                                        default:
+                                                            Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => configs {1} ({2}) => pictures => expected nodes: URL", pictureNode.Name, c.name, c.zipFile));
+                                                            if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: URL\n\nNode found: {0}\n\nmore informations, see logfile", pictureNode.Name)); };
+                                                            break;
+                                                    }
+                                                }
+                                                break;
+                                            default:
+                                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => expected node: picture", pictureHolder.Name, c.name, c.zipFile));
+                                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected node: picture\n\nNode found: {0}\n\nmore informations, see logfile", pictureHolder.Name), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                break;
                                         }
                                     }
                                     break;
