@@ -1,6 +1,11 @@
 In case you did not look on the forms, we have a discord server for you to join for rapid modpack support and mods discussion:
 https://discord.gg/58fdPvK
 
+Version 23.4.0:
+-Improvements to the database parser
+-Added more localization text to the mod selection list
+-Improved the message of the supported clients message
+
 Version 23.3.8:
 -Added limit to the log file size
 -Added more exception handling when backing up user data
