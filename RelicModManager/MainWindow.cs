@@ -577,8 +577,6 @@ namespace RelhaxModpack
             Utils.appendToLog("Starting check for application updates");
             WebClient updater = new WebClient();
             updater.Proxy = null;
-            string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
-            if (File.Exists(versionSaveLocation)) File.Delete(versionSaveLocation);
             string version = "";
             try
             {
@@ -597,6 +595,7 @@ namespace RelhaxModpack
                 Application.Exit();
             }
             versionSave = version;
+            Utils.appendToLog("Current application version is " + managerVersion + ", new version is " + version);
             if (!version.Equals(managerVersion))
             {
                 Utils.appendToLog("exe is out of date. displaying user update window");
@@ -1093,6 +1092,9 @@ namespace RelhaxModpack
         private void installRelhaxMod_Click(object sender, EventArgs e)
         {
             Utils.TotallyNotStatPaddingForumPageViewCount();
+            //Installer i = new Installer();
+            //i.InstallProgressChanged += I_InstallProgressChanged;
+            //i.StartInstallation();
             //bool to say to the downloader to use the "modpack" code
             modPack = true;
             toggleUIButtons(false);
@@ -1172,6 +1174,12 @@ namespace RelhaxModpack
             //actual new code
             this.parseInstallationPart1();
         }
+
+        private void I_InstallProgressChanged(object sender, InstallerEventArgs e)
+        {
+            
+        }
+
         //next part of the install process
         private void parseInstallationPart1()
         {

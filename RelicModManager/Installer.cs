@@ -84,7 +84,8 @@ namespace RelhaxModpack
         //Start installation on the UI thread
         public void StartInstallation()
         {
-            
+            args.InstalProgress = InstallerEventArgs.InstallProgress.PatchMods;
+            OnInstallProgressChanged();
         }
 
         //Start the installation on the Wokrer thread
