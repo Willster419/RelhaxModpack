@@ -1209,7 +1209,6 @@ namespace RelhaxModpack
             downloadProgress.Text = Translations.getTranslatedString("loading");
             Application.DoEvents();
             modsToInstall = new List<Mod>();
-            //configsToInstall = new List<Config>();
             patchList = new List<Patch>();
             userMods = new List<Mod>();
             dependencies = new List<Dependency>();

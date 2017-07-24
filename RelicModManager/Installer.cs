@@ -99,7 +99,9 @@ namespace RelhaxModpack
         public void ActuallyStartInstallation(object sender, DoWorkEventArgs e)
         {
             args.InstalProgress = InstallerEventArgs.InstallProgress.BackupMods;
-
+            //do a backup if requested
+            if (Settings.backupModFolder)
+                BackupMods();
         }
 
         public void WorkerReportProgress(object sender, ProgressChangedEventArgs e)
@@ -112,40 +114,161 @@ namespace RelhaxModpack
 
         }
 
+        //reset the args
+        public void ResetArgs()
+        {
+            args.InstalProgress = InstallerEventArgs.InstallProgress.Idle;
+            args.ChildProcessed = 0;
+            args.ChildProgressPercent = 0;
+            args.ChildTotalToProcess = 0;
+            args.currentFile = "";
+            args.currentFileSizeProcessed = 0;
+            args.ParrentProgressPercent = 0;
+        }
+
         //Step 1: Backup Mods
         public void BackupMods()
         {
-
+            ResetArgs();
+            args.InstalProgress = InstallerEventArgs.InstallProgress.BackupMods;
+            InstallWorker.ReportProgress(0);
+            //backupResMods the mods folder
+            if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup"))
+                Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup");
+            //create a new mods folder based on date and time
+            //yyyy-MM-dd-HH-mm-ss
+            DateTime now = DateTime.Now;
+            string folderDateName = String.Format("{0:yyyy-MM-dd-HH-mm-ss}", now);
+            if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\res_mods"))
+                Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\res_mods");
+            if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\mods"))
+                Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\mods");
+            NumFilesToProcess(Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\mods");
+            NumFilesToProcess(Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\res_mods");
+            InstallWorker.ReportProgress(0);
+            DirectoryCopy(TanksLocation + "\\res_mods", Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\res_mods", true);
+            DirectoryCopy(TanksLocation + "\\mods", Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\mods", true);
         }
 
         //Step 2: Backup User Data
         public void BackupUserData()
         {
+            ResetArgs();
+            args.InstalProgress = InstallerEventArgs.InstallProgress.BackupUserData;
+            InstallWorker.ReportProgress(0);
+            foreach (Mod m in ModsWithData)
+            {
+                foreach (string s in m.userFiles)
+                {
 
+                    string startLoc = TanksLocation + s;
+                    string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + Utils.getValidFilename(m.name + "_" + Path.GetFileName(s));
+                    try
+                    {
+                        if (File.Exists(startLoc))
+                            File.Move(startLoc, destLoc);
+                    }
+                    catch
+                    {
+                        if (Program.testMode) { MessageBox.Show(string.Format("Error: can not move file.\nstartLoc: \"{0}\"\ndestLoc: \"{1}\"", startLoc, destLoc)); };
+                        Utils.appendToLog(string.Format("Error: can not move file. startLoc: \"{0}\" destLoc: \"{1}\"", startLoc, destLoc));
+                    }
+                }
+            }
+            foreach (Config cfg in ConfigsWithData)
+            {
+                foreach (string s in cfg.userFiles)
+                {
+                    string startLoc = TanksLocation + s;
+                    string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + Utils.getValidFilename(cfg.name + "_" + Path.GetFileName(s));
+                    try
+                    {
+                        if (File.Exists(startLoc))
+                            File.Move(startLoc, destLoc);
+                    }
+                    catch
+                    {
+                        if (Program.testMode) { MessageBox.Show(string.Format("Error: can not move file.\nstartLoc: \"{0}\"\ndestLoc: \"{1}\"", startLoc, destLoc)); };
+                        Utils.appendToLog(string.Format("Error: can not move file. startLoc: \"{0}\" destLoc: \"{1}\"", startLoc, destLoc));
+                    }
+                }
+            }
         }
 
         //Step 3: Ddelete all mods
         public void DeleteMods()
         {
+            ResetArgs();
+            args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreUserData;
+            InstallWorker.ReportProgress(0);
 
         }
 
         //Step 4-8: Extract All DatabaseObjects
         public void ExtractDatabaseObjects()
         {
-
+            ResetArgs();
+            args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreUserData;
+            InstallWorker.ReportProgress(0);
         }
 
         //Step 9: Restore User Data
         public void RestoreUserData()
         {
-
+            ResetArgs();
+            args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreUserData;
+            InstallWorker.ReportProgress(0);
+            string[] fileList = Directory.GetFiles(Application.StartupPath + "\\RelHaxTemp");
+            foreach (Mod m in ModsWithData)
+            {
+                foreach (string s in m.userFiles)
+                {
+                    //find the file
+                    string parsedFileName = Utils.getValidFilename(m.name + "_" + Path.GetFileName(s));
+                    foreach (string ss in fileList)
+                    {
+                        string thePath = Path.GetFileName(ss);
+                        if (thePath.Equals(parsedFileName))
+                        {
+                            //the file has been found in the temp directory
+                            if (!Directory.Exists(TanksLocation + "\\" + Path.GetFullPath(s)))
+                                Directory.CreateDirectory(TanksLocation + "\\" + Path.GetDirectoryName(s));
+                            if (File.Exists(TanksLocation + "\\" + s))
+                                File.Delete(TanksLocation + "\\" + s);
+                            File.Move(ss, TanksLocation + "\\" + s);
+                        }
+                    }
+                }
+            }
+            foreach (Config cfg in ConfigsWithData)
+            {
+                foreach (string s in cfg.userFiles)
+                {
+                    //find the file
+                    string parsedFileName = Utils.getValidFilename(cfg.name + "_" + Path.GetFileName(s));
+                    foreach (string ss in fileList)
+                    {
+                        string thePath = Path.GetFileName(ss);
+                        if (thePath.Equals(parsedFileName))
+                        {
+                            //the file has been found in the temp directory
+                            if (!Directory.Exists(TanksLocation + "\\" + Path.GetFullPath(s)))
+                                Directory.CreateDirectory(TanksLocation + "\\" + Path.GetDirectoryName(s));
+                            if (File.Exists(TanksLocation + "\\" + s))
+                                File.Delete(TanksLocation + "\\" + s);
+                            File.Move(ss, TanksLocation + "\\" + s);
+                        }
+                    }
+                }
+            }
         }
 
         //Step 10: Patch All files
         public void PatchFiles()
         {
-
+            ResetArgs();
+            args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreUserData;
+            InstallWorker.ReportProgress(0);
         }
 
         //gets the total number of files to process to eithor delete or copy
@@ -154,7 +277,7 @@ namespace RelhaxModpack
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(folder);
             DirectoryInfo[] dirs = dir.GetDirectories();
-            // Get the files in the directory and copy them to the new location.
+            // Get the files in the directory
             FileInfo[] files = dir.GetFiles();
             foreach (FileInfo file in files)
             {
@@ -164,8 +287,7 @@ namespace RelhaxModpack
             foreach (DirectoryInfo subdir in dirs)
             {
                 args.ChildTotalToProcess++;
-                //numFilesToProcessInt++;
-                //numFilesToProcess(subdir.FullName);
+                NumFilesToProcess(subdir.FullName);
             }
             return;
         }
@@ -248,7 +370,7 @@ namespace RelhaxModpack
                                 Application.Exit();
                         }
                     }
-                    InstallWorker.ReportProgress(args.ChildProcessed);
+                    InstallWorker.ReportProgress(args.ChildProcessed++);
                 }
             }
         }
@@ -262,7 +384,7 @@ namespace RelhaxModpack
             if (!Directory.Exists(destDirName))
             {
                 Directory.CreateDirectory(destDirName);
-                args.ChildProcessed++;
+                InstallWorker.ReportProgress(args.ChildProcessed++);
             }
             // Get the files in the directory and copy them to the new location.
             FileInfo[] files = dir.GetFiles();
