@@ -44,10 +44,11 @@ namespace RelhaxModpack
             globalDependencies = new List<Dependency>();
             parsedCatagoryList = new List<Category>();
             Utils.createModStructure2(databaseLocationTextBox.Text, true, globalDependencies, parsedCatagoryList);
+            int duplicatesCounter = 0;
             //check for duplicates
-            if (Utils.duplicates(parsedCatagoryList))
+            if (Utils.duplicates(parsedCatagoryList) && Utils.duplicatesPackageName(parsedCatagoryList, ref duplicatesCounter ))
             {
-                MessageBox.Show("Duplicates!!!");
+                MessageBox.Show(string.Format("{0} duplicates found !!!",duplicatesCounter));
                 return;
             }
             updatingLabel.Text = "Updating database...";

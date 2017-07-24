@@ -47,19 +47,23 @@ namespace RelhaxModpack
         {
             try
             {
+                // bigger logfile size at testing and developing
+                int multi = 1;
+                if (Program.testMode) multi = 100;
+
                 FileInfo fi = new FileInfo(strFile);
 
                 Byte[] bytesSavedFromEndOfOldLog = null;
 
-                if (fi.Length > iMaxLogLength) // if the log file length is already too long
+                if (fi.Length > iMaxLogLength * multi) // if the log file length is already too long
                 {
                     using (BinaryReader br = new BinaryReader(File.Open(strFile, FileMode.Open)))
                     {
                         // Seek to our required position of what you want saved.
-                        br.BaseStream.Seek(iTrimmedLogLength, SeekOrigin.End);
+                        br.BaseStream.Seek(iTrimmedLogLength * multi, SeekOrigin.End);
 
                         // Read what you want to save and hang onto it.
-                        bytesSavedFromEndOfOldLog = br.ReadBytes((-1 * iTrimmedLogLength));
+                        bytesSavedFromEndOfOldLog = br.ReadBytes((-1 * iTrimmedLogLength * multi));
                     }
                 }
 
@@ -67,7 +71,7 @@ namespace RelhaxModpack
 
                 FileStream fs = null;
                 // If the log file is less than the max length, just open it at the end to write there
-                if (fi.Length < iMaxLogLength)
+                if (fi.Length < iMaxLogLength * multi)
                     fs = new FileStream(strFile, FileMode.Append, FileAccess.Write, FileShare.Read);
                 else // If the log file is more than the max length, just open it empty
                     fs = new FileStream(strFile, FileMode.Create, FileAccess.Write, FileShare.Read);
@@ -807,6 +811,95 @@ namespace RelhaxModpack
                 }
             }
         }
+
+        public static void duplicatesPackageName_RecursiveSubConfigCheck(List<Config> subConfigList, List<string> modNameList, ref int duplicatesCounter)
+        {
+            // result = storage;
+            foreach (Config c in subConfigList)
+            {
+                //in theory, there should only be one matching packageName name (at the mod and config section), except currently the dependencies
+                int i = 0;
+                foreach (var s in modNameList)
+                {
+                    if (s.Equals(c.packageName))
+                    {
+                        i++;
+                        // if there are 2 or more matching entries, duplicate detected and log entry to file
+                        if (i > 1)
+                        {
+                            Utils.appendToLog(string.Format("Error: duplicate packageName \"{0}\" found. Name: \"{1}\". zipFile: \"{2}\"", s, c.name, c.zipFile));
+                            duplicatesCounter++;
+                        }
+                    }
+                }
+                if (c.configs.Count > 0)
+                {
+                    duplicatesPackageName_RecursiveSubConfigCheck(c.configs, modNameList, ref duplicatesCounter);
+                }
+            }
+        }
+
+        public static void duplicatesPackageName_RecursiveSubConfigRead(List<Config> subConfigList, List<string> modNameList)
+        {
+            // result = storage;
+            foreach (Config c in subConfigList)
+            {
+                modNameList.Add(c.packageName);
+                if (c.configs.Count > 0)
+                {
+                    duplicatesPackageName_RecursiveSubConfigRead(c.configs, modNameList);
+                }
+            }
+        }
+
+        //checks for duplicates
+        public static bool duplicatesPackageName(List<Category> parsedCatagoryList, ref int duplicatesCounter)
+        {
+            //add every mod name to a new list
+            List<string> modNameList = new List<string>();
+            foreach (Category c in parsedCatagoryList)
+            {
+                foreach (Mod m in c.mods)
+                {
+                    modNameList.Add(m.packageName);
+                    if (m.configs.Count > 0)
+                    {
+                        duplicatesPackageName_RecursiveSubConfigRead(m.configs, modNameList);
+                    }
+                }
+            }
+            //itterate through every mod name again
+            foreach (Category c in parsedCatagoryList)
+            {
+                foreach (Mod m in c.mods)
+                {
+                    //in theory, there should only be one matching packageName name (at the mod and config section), except currently the dependencies
+                    int i = 0;
+                    foreach (var s in modNameList)
+                    {
+                        if (s.Equals(m.packageName))
+                        { 
+                            i++;
+                            // if there are 2 or more matching entries, duplicate detected and log entry to file
+                            if (i > 1)
+                            {
+                                Utils.appendToLog(string.Format("Error: duplicate packageName \"{0}\" found. Name: \"{1}\". zipFile: \"{2}\"", s, m.name, m.zipFile));
+                                duplicatesCounter++;
+                            }
+                        }
+                    }
+                    if (m.configs.Count > 0)
+                    {
+                        duplicatesPackageName_RecursiveSubConfigCheck(m.configs, modNameList, ref duplicatesCounter);
+                    }
+                }
+            }
+            if (duplicatesCounter > 0)
+                return true;        //duplicate detected
+            else
+                return false;
+        }
+
         //checks for duplicates
         public static bool duplicates(List<Category> parsedCatagoryList)
         {

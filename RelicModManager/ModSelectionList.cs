@@ -97,12 +97,21 @@ namespace RelhaxModpack
             globalDependencies = new List<Dependency>();
             parsedCatagoryList = new List<Category>();
             Utils.createModStructure2(databaseURL, false, globalDependencies, parsedCatagoryList);
-            bool duplicates = Utils.duplicates(parsedCatagoryList);
-            if (duplicates)
+            if (Program.testMode)
             {
-                Utils.appendToLog("CRITICAL: Duplicate mod name detected!!");
-                MessageBox.Show(Translations.getTranslatedString("duplicateMods"));
-                Application.Exit();
+                if (Utils.duplicates(parsedCatagoryList))
+                {
+                    Utils.appendToLog("CRITICAL: Duplicate mod name detected!!");
+                    MessageBox.Show(Translations.getTranslatedString("duplicateMods"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Application.Exit();
+                }
+                int duplicatesCounter = 0;
+                if (Utils.duplicatesPackageName(parsedCatagoryList, ref duplicatesCounter))
+                {
+                    Utils.appendToLog(string.Format("ERROR: {0} duplicate packageName's detected", duplicatesCounter));
+                    MessageBox.Show(string.Format("ERROR: {0} duplicate packageName's detected!\n\nmore information, see Logfile ...", duplicatesCounter), "Warning", MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                    Application.Exit();
+                }
             }
             this.initUserMods();
             pw.loadingDescBox.Text = Translations.getTranslatedString("buildingUI");

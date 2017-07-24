@@ -510,7 +510,7 @@ namespace RelhaxModpack
             }
             else
             {
-                dr = MessageBox.Show("Do you have admin rights?", "Admin to install fonts?", MessageBoxButtons.YesNo);
+                dr = MessageBox.Show(Translations.getTranslatedString("fontsPromptInstallText"), Translations.getTranslatedString("fontsPromptInstallHeader"), MessageBoxButtons.YesNo);
             }
             if (dr == DialogResult.Yes)
             {
