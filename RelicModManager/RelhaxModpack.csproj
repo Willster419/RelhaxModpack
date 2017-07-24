@@ -169,6 +169,7 @@
       <DependentUpon>GifPreview.cs</DependentUpon>
     </Compile>
     <Compile Include="Installer.cs" />
+    <Compile Include="InstallerEventArgs.cs" />
     <Compile Include="LegacySelectionList.xaml.cs">
       <DependentUpon>LegacySelectionList.xaml</DependentUpon>
     </Compile>

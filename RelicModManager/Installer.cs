@@ -7,7 +7,10 @@ using System.ComponentModel;
 
 namespace RelhaxModpack
 {
-    public static class Installer
+    //Delegate to hook up them events
+    public delegate void InstallChangedEventHandler(object sender, InstallerEventArgs e);
+
+    public class Installer
     {
         /*
          * This new installer class will handle all of the installation process, effectivly black-boxing the installation, in a single seperate backgroundworker.
@@ -36,38 +39,67 @@ namespace RelhaxModpack
          *10. Patch files
         */
         //everything that it needs to install
-        private static string TanksLocation { get; set; }
-        private static string AppPath { get; set; }
-        private static List<Dependency> GlobalDependencies { get; set; }
-        private static List<Dependency> Dependencies { get; set; }
-        private static List<Dependency> LogicalDependencies { get; set; }
-        private static List<Mod> ModsToInstall { get; set; }
-        private static List<List<Config>> ConfigListsToInstall { get; set; }
-        private static List<Mod> ModsWithData { get; set; }
-        private static List<Config> ConfigsWithData { get; set; }
+        private string TanksLocation { get; set; }
+        private string AppPath { get; set; }
+        private List<Dependency> GlobalDependencies { get; set; }
+        private List<Dependency> Dependencies { get; set; }
+        private List<Dependency> LogicalDependencies { get; set; }
+        private List<Mod> ModsToInstall { get; set; }
+        private List<List<Config>> ConfigListsToInstall { get; set; }
+        private List<Mod> ModsWithData { get; set; }
+        private List<Config> ConfigsWithData { get; set; }
 
         //properties relevent to the handler and install
-        public static BackgroundWorker InstallWorker = new BackgroundWorker();
-        public enum InstallerState
+        private BackgroundWorker InstallWorker;
+        private InstallerEventArgs args;
+
+        //the event that it can hook into
+        public event InstallChangedEventHandler InstallProgressChanged;
+
+        //the changed event
+        protected virtual void OnInstallProgressChanged()
         {
-            Error = -1,
-            Idle = 0
+            if (InstallProgressChanged != null)
+                InstallProgressChanged(this, args);
+        }
+        
+        //constructer
+        public Installer()
+        {
+            InstallWorker = new BackgroundWorker();
+            InstallWorker.WorkerReportsProgress = true;
+            InstallWorker.DoWork += ActuallyStartInstallation;
+            InstallWorker.ProgressChanged += WorkerReportProgress;
+            InstallWorker.RunWorkerCompleted += WorkerReportComplete;
+            args = new InstallerEventArgs();
+            args.InstalProgress = InstallerEventArgs.InstallProgress.Idle;
+            args.ChildProcessed = 0;
+            args.ChildProgressPercent = 0;
+            args.ChildTotalToProcess = 0;
+            args.currentFile = "";
+            args.currentFileSizeProcessed = 0;
+            args.ParrentProgressPercent = 0;
+        }
+
+        //Start installation on the UI thread
+        public void StartInstallation()
+        {
+            
+        }
+
+        //Start the installation on the Wokrer thread
+        public void ActuallyStartInstallation(object sender, DoWorkEventArgs e)
+        {
 
         }
-        public static InstallerState State = InstallerState.Idle;
-        public static int ParentCurrentProgress;
-        public static int ParentMaxProgress;
-        public static int ChildCurrentProgress;
-        public static int ChildMaxProgress;
 
-        public static void StartInstallation()
+        public void WorkerReportProgress(object sender, ProgressChangedEventArgs e)
         {
-            //reset everything (todo: actually figure out what to reset)
+
         }
 
-        public static void ResetInstaller()
+        public void WorkerReportComplete(object sender, AsyncCompletedEventArgs e)
         {
-            //reset everything (todo: actually figure out what to reset)
 
         }
     }
