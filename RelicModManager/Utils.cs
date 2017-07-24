@@ -814,7 +814,6 @@ namespace RelhaxModpack
 
         public static void duplicatesPackageName_RecursiveSubConfigCheck(List<Config> subConfigList, List<string> modNameList, ref int duplicatesCounter)
         {
-            // List<string> result = new List<string>();
             // result = storage;
             foreach (Config c in subConfigList)
             {
@@ -842,7 +841,6 @@ namespace RelhaxModpack
 
         public static void duplicatesPackageName_RecursiveSubConfigRead(List<Config> subConfigList, List<string> modNameList)
         {
-            // List<string> result = new List<string>();
             // result = storage;
             foreach (Config c in subConfigList)
             {
@@ -896,7 +894,6 @@ namespace RelhaxModpack
                     }
                 }
             }
-            //making it here means there are no duplicates
             if (duplicatesCounter > 0)
                 return true;        //duplicate detected
             else
