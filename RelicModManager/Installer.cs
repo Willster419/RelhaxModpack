@@ -4,10 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
+using System.IO;
+using System.Windows.Forms;
+using Ionic.Zip;
 
 namespace RelhaxModpack
 {
-    public static class Installer
+    //Delegate to hook up them events
+    public delegate void InstallChangedEventHandler(object sender, InstallerEventArgs e);
+
+    public class Installer
     {
         /*
          * This new installer class will handle all of the installation process, effectivly black-boxing the installation, in a single seperate backgroundworker.
@@ -36,39 +42,342 @@ namespace RelhaxModpack
          *10. Patch files
         */
         //everything that it needs to install
-        private static string TanksLocation { get; set; }
-        private static string AppPath { get; set; }
-        private static List<Dependency> GlobalDependencies { get; set; }
-        private static List<Dependency> Dependencies { get; set; }
-        private static List<Dependency> LogicalDependencies { get; set; }
-        private static List<Mod> ModsToInstall { get; set; }
-        private static List<List<Config>> ConfigListsToInstall { get; set; }
-        private static List<Mod> ModsWithData { get; set; }
-        private static List<Config> ConfigsWithData { get; set; }
+        private string TanksLocation { get; set; }
+        private string AppPath { get; set; }
+        private List<Dependency> GlobalDependencies { get; set; }
+        private List<Dependency> Dependencies { get; set; }
+        private List<Dependency> LogicalDependencies { get; set; }
+        private List<Mod> ModsToInstall { get; set; }
+        private List<List<Config>> ConfigListsToInstall { get; set; }
+        private List<Mod> ModsWithData { get; set; }
+        private List<Config> ConfigsWithData { get; set; }
+        private string TanksVersion { get; set; }
 
         //properties relevent to the handler and install
-        public static BackgroundWorker InstallWorker = new BackgroundWorker();
-        public enum InstallerState
+        private BackgroundWorker InstallWorker;
+        private InstallerEventArgs args;
+        private bool isParrentDone;
+        private string xvmConfigDir = "";
+
+        //the event that it can hook into
+        public event InstallChangedEventHandler InstallProgressChanged;
+
+        //the changed event
+        protected virtual void OnInstallProgressChanged()
         {
-            Error = -1,
-            Idle = 0
+            if (InstallProgressChanged != null)
+                InstallProgressChanged(this, args);
+        }
+        
+        //constructer
+        public Installer()
+        {
+            InstallWorker = new BackgroundWorker();
+            InstallWorker.WorkerReportsProgress = true;
+            InstallWorker.DoWork += ActuallyStartInstallation;
+            InstallWorker.ProgressChanged += WorkerReportProgress;
+            InstallWorker.RunWorkerCompleted += WorkerReportComplete;
+            args = new InstallerEventArgs();
+            args.InstalProgress = InstallerEventArgs.InstallProgress.Idle;
+            args.ChildProcessed = 0;
+            args.ChildProgressPercent = 0;
+            args.ChildTotalToProcess = 0;
+            args.currentFile = "";
+            args.currentFileSizeProcessed = 0;
+            args.ParrentProgressPercent = 0;
+        }
+
+        //Start installation on the UI thread
+        public void StartInstallation()
+        {
+            args.InstalProgress = InstallerEventArgs.InstallProgress.PatchMods;
+            //this needs to be done AFTER dependency install
+            //xvmConfigDir = Utils.getXVMBootLoc(TanksLocation);
+        }
+
+        //Start the installation on the Wokrer thread
+        public void ActuallyStartInstallation(object sender, DoWorkEventArgs e)
+        {
+            args.InstalProgress = InstallerEventArgs.InstallProgress.BackupMods;
 
         }
-        public static InstallerState State = InstallerState.Idle;
-        public static int ParentCurrentProgress;
-        public static int ParentMaxProgress;
-        public static int ChildCurrentProgress;
-        public static int ChildMaxProgress;
 
-        public static void StartInstallation()
+        public void WorkerReportProgress(object sender, ProgressChangedEventArgs e)
         {
-            //reset everything (todo: actually figure out what to reset)
+            OnInstallProgressChanged();
         }
 
-        public static void ResetInstaller()
+        public void WorkerReportComplete(object sender, AsyncCompletedEventArgs e)
         {
-            //reset everything (todo: actually figure out what to reset)
 
+        }
+
+        //Step 1: Backup Mods
+        public void BackupMods()
+        {
+
+        }
+
+        //Step 2: Backup User Data
+        public void BackupUserData()
+        {
+
+        }
+
+        //Step 3: Ddelete all mods
+        public void DeleteMods()
+        {
+
+        }
+
+        //Step 4-8: Extract All DatabaseObjects
+        public void ExtractDatabaseObjects()
+        {
+
+        }
+
+        //Step 9: Restore User Data
+        public void RestoreUserData()
+        {
+
+        }
+
+        //Step 10: Patch All files
+        public void PatchFiles()
+        {
+
+        }
+
+        //gets the total number of files to process to eithor delete or copy
+        private void NumFilesToProcess(string folder)
+        {
+            // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(folder);
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                //numFilesToProcessInt++;
+                args.ChildTotalToProcess++;
+            }
+            foreach (DirectoryInfo subdir in dirs)
+            {
+                args.ChildTotalToProcess++;
+                //numFilesToProcessInt++;
+                //numFilesToProcess(subdir.FullName);
+            }
+            return;
+        }
+        //recursivly deletes every file from one place to another
+        private void DirectoryDelete(string sourceDirName, bool deleteSubDirs)
+        {
+            // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string temppath = Path.Combine(sourceDirName, file.Name);
+                bool tryAgain = true;
+                while (tryAgain)
+                {
+                    try
+                    {
+                        File.SetAttributes(file.FullName, FileAttributes.Normal);
+                        file.Delete();
+                        tryAgain = false;
+                    }
+                    catch (UnauthorizedAccessException e)
+                    {
+                        Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
+                        Utils.appendToLog(e.StackTrace);
+                        Utils.appendToLog("inner message: " + e.Message);
+                        Utils.appendToLog("source: " + e.Source);
+                        Utils.appendToLog("target: " + e.TargetSite);
+                        DialogResult res = MessageBox.Show(Translations.getTranslatedString("extractionErrorMessage"), Translations.getTranslatedString("extractionErrorHeader"), MessageBoxButtons.RetryCancel);
+                        if (res == DialogResult.Retry)
+                        {
+                            tryAgain = true;
+                        }
+                        else
+                        {
+                            Application.Exit();
+                        }
+                    }
+                }
+                InstallWorker.ReportProgress(args.ChildProcessed++);
+            }
+            // If copying subdirectories, copy them and their contents to new location.
+            if (deleteSubDirs)
+            {
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    string temppath = Path.Combine(sourceDirName, subdir.Name);
+                    DirectoryDelete(subdir.FullName, deleteSubDirs);
+                    bool tryAgain = true;
+                    while (tryAgain)
+                    {
+                        try
+                        {
+                            File.SetAttributes(subdir.FullName, FileAttributes.Normal);
+                            subdir.Delete();
+                            tryAgain = false;
+                        }
+                        catch (IOException e)
+                        {
+                            Utils.appendToLog("EXCEPTION: IOException (call stack traceback)");
+                            Utils.appendToLog(e.StackTrace);
+                            Utils.appendToLog("inner message: " + e.Message);
+                            Utils.appendToLog("source: " + e.Source);
+                            Utils.appendToLog("target: " + e.TargetSite);
+                            DialogResult result = MessageBox.Show(Translations.getTranslatedString("deleteErrorMessage"), Translations.getTranslatedString("deleteErrorHeader"), MessageBoxButtons.RetryCancel);
+                            if (result == DialogResult.Cancel)
+                                Application.Exit();
+                        }
+                        catch (UnauthorizedAccessException e)
+                        {
+                            Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
+                            Utils.appendToLog(e.StackTrace);
+                            Utils.appendToLog("inner message: " + e.Message);
+                            Utils.appendToLog("source: " + e.Source);
+                            Utils.appendToLog("target: " + e.TargetSite);
+                            DialogResult result = MessageBox.Show(Translations.getTranslatedString("deleteErrorMessage"), Translations.getTranslatedString("deleteErrorHeader"), MessageBoxButtons.RetryCancel);
+                            if (result == DialogResult.Cancel)
+                                Application.Exit();
+                        }
+                    }
+                    InstallWorker.ReportProgress(args.ChildProcessed);
+                }
+            }
+        }
+        //recursivly copies every file from one place to another
+        private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        {
+            // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            // If the destination directory doesn't exist, create it.
+            if (!Directory.Exists(destDirName))
+            {
+                Directory.CreateDirectory(destDirName);
+                args.ChildProcessed++;
+            }
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string temppath = Path.Combine(destDirName, file.Name);
+                file.CopyTo(temppath, false);
+                InstallWorker.ReportProgress(args.ChildProcessed++);
+            }
+            // If copying subdirectories, copy them and their contents to new location.
+            if (copySubDirs)
+            {
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    string temppath = Path.Combine(destDirName, subdir.Name);
+                    DirectoryCopy(subdir.FullName, temppath, copySubDirs);
+                }
+            }
+        }
+        //main unzip worker method
+        private void Unzip(string zipFile, string extractFolder)
+        {
+            string thisVersion = TanksVersion;
+            //create a filestream to append installed files log data
+            using (FileStream fs = new FileStream(TanksLocation + "\\installedRelhaxFiles.log", FileMode.Append, FileAccess.Write))
+            {
+                // create a comment with the name of the extracted and installed package, to better trace back the installation source
+                string commentLine = "/*  " + Path.GetFileNameWithoutExtension(zipFile) + "  */\n";
+                // write comment to logfile
+                fs.Write(Encoding.UTF8.GetBytes(commentLine), 0, Encoding.UTF8.GetByteCount(commentLine));
+
+                try
+                {
+                    using (ZipFile zip = new ZipFile(zipFile))
+                    {
+                        //hacks to get it to lag less possibly
+                        //zip.BufferSize = 65536*16; //1MB buffer
+                        //zip.CodecBufferSize = 65536*16; //1MB buffer
+                        //zip.ParallelDeflateThreshold = -1; //single threaded
+                        //for this zip file instance, for each entry in the zip file,
+                        //change the "versiondir" path to this version of tanks
+                        args.ChildTotalToProcess = zip.Entries.Count;
+                        for (int i = 0; i < zip.Entries.Count; i++)
+                        {
+                            if (Regex.IsMatch(zip[i].FileName, "versiondir"))
+                            {
+                                try
+                                {
+                                    zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", thisVersion);
+                                }
+                                catch (ArgumentException e)
+                                {
+                                    Utils.appendToLog("EXCEPTION: ArguementException");
+                                    Utils.appendToLog(e.StackTrace);
+                                    Utils.appendToLog("inner message: " + e.Message);
+                                    Utils.appendToLog("source: " + e.Source);
+                                    Utils.appendToLog("target: " + e.TargetSite);
+                                }
+                            }
+                            if (Regex.IsMatch(zip[i].FileName, "configs/xvm/xvmConfigFolderName") && !xvmConfigDir.Equals(""))
+                            {
+                                zip[i].FileName = Regex.Replace(zip[i].FileName, "configs/xvm/xvmConfigFolderName", "configs/xvm/" + xvmConfigDir);
+                            }
+                            //put the entries on disk
+                            fs.Write(Encoding.UTF8.GetBytes(zip[i].FileName + "\n"), 0, Encoding.UTF8.GetByteCount(zip[i].FileName + "\n"));
+                        }
+                        zip.ExtractProgress += Zip_ExtractProgress;
+                        zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
+                    }
+                }
+                catch (ZipException e)
+                {
+                    //append the exception to the log
+                    Utils.appendToLog("EXCEPTION: ZipException (call stack traceback)");
+                    Utils.appendToLog(e.StackTrace);
+                    Utils.appendToLog("inner message: " + e.Message);
+                    Utils.appendToLog("source: " + e.Source);
+                    Utils.appendToLog("target: " + e.TargetSite);
+                    //show the error message
+                    MessageBox.Show(string.Format("{0}, {1} {2} {3}", Translations.getTranslatedString("zipReadingErrorMessage1"), Path.GetFileName(zipFile), Translations.getTranslatedString("zipReadingErrorMessage2"), Translations.getTranslatedString("zipReadingErrorHeader")));
+                    //(try to)delete the file from the filesystem
+                    if (File.Exists(zipFile))
+                        try
+                        {
+                            File.Delete(zipFile);
+                        }
+                        catch (UnauthorizedAccessException ex)
+                        {
+                            Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
+                            Utils.appendToLog(ex.StackTrace);
+                            Utils.appendToLog("inner message: " + ex.Message);
+                            Utils.appendToLog("source: " + ex.Source);
+                            Utils.appendToLog("target: " + ex.TargetSite);
+                            Utils.appendToLog("additional info: tried to delete " + zipFile);
+                        }
+                    Utils.deleteMd5HashDatabase(zipFile);
+                }
+            }
+        }
+        //handler for when progress is made in extracting a zip file
+        void Zip_ExtractProgress(object sender, ExtractProgressEventArgs e)
+        {
+            args.ChildProcessed = e.EntriesExtracted;
+            //childMaxProgres = e.EntriesTotal;
+            isParrentDone = false;
+            if (e.CurrentEntry != null)
+            {
+                args.currentFile = e.CurrentEntry.FileName;
+                args.currentFileSizeProcessed = e.BytesTransferred;
+            }
+            if (e.EventType == ZipProgressEventType.Extracting_AfterExtractAll)
+            {
+                isParrentDone = true;
+            }
+            InstallWorker.ReportProgress(0);
         }
     }
 }

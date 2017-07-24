@@ -353,7 +353,7 @@ namespace RelhaxModpack
                             break;
                         case "packageName":
                             d.packageName = globs.InnerText;
-                            if (d.packageName == "")
+                            if (d.packageName.Equals(""))
                             {
                                 Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => globsPend {1}", globs.Name, d.dependencyZipFile));
                                 if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => globsPend {1}\n\nmore informations, see logfile", globs.Name, d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
@@ -425,7 +425,7 @@ namespace RelhaxModpack
                                                     break;
                                                 case "packageName":
                                                     m.packageName = modNode.InnerText;
-                                                    if (m.packageName.Trim() == "")
+                                                    if (m.packageName.Trim().Equals(""))
                                                     {
                                                         Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => mod {1} ({2})", modNode.Name, m.name, m.zipFile));
                                                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => mod {1} ({2})", modNode.Name, m.name, m.zipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
@@ -525,7 +525,7 @@ namespace RelhaxModpack
                                                                     break;
                                                                 case "packageName":
                                                                     d.packageName = dependencyNode.InnerText;
-                                                                    if (d.packageName.Trim() == "")
+                                                                    if (d.packageName.Trim().Equals(""))
                                                                     {
                                                                         Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => mod {1} ({2}) => dep {3}", dependencyNode.Name, m.name, m.zipFile, d.dependencyZipFile));
                                                                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => mod {1} ({2}) => dep {3}", dependencyNode.Name, m.name, m.zipFile, d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
@@ -595,7 +595,7 @@ namespace RelhaxModpack
                                             break;
                                         case "packageName":
                                             d.packageName = dependencyNode.InnerText;
-                                            if (d.packageName.Trim() == "")
+                                            if (d.packageName.Trim().Equals(""))
                                             {
                                                 Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => cat {1} => dep {2}", dependencyNode.Name, cat.name, d.dependencyZipFile));
                                                 if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => cat {1} => dep {2}", dependencyNode.Name, cat.name, d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
@@ -667,7 +667,7 @@ namespace RelhaxModpack
                                     break;
                                 case "packageName":
                                     c.packageName = configNode.InnerText;
-                                    if (c.packageName.Trim() == "")
+                                    if (c.packageName.Trim().Equals(""))
                                     {
                                         Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => config {1} ({2})", configNode.Name, c.name, c.zipFile));
                                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => config {1} ({2})", configNode.Name, c.name, c.zipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
@@ -772,7 +772,7 @@ namespace RelhaxModpack
                                                     break;
                                                 case "packageName":
                                                     d.packageName = dependencyNode.InnerText;
-                                                    if (d.packageName.Trim() == "")
+                                                    if (d.packageName.Trim().Equals(""))
                                                     {
                                                         Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => config {1} ({2}) => dep {3}", dependencyNode.Name, c.name, c.zipFile, d.dependencyZipFile));
                                                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => config {1} ({2}) => dep {3}", dependencyNode.Name, c.name, c.zipFile, d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
