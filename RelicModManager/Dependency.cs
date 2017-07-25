@@ -14,6 +14,8 @@
         public string endAddress { get; set; }
         //later a unique name of the config entry
         public string packageName { get; set; }
+        //needed to excatly identify double packageNames and its position
+        public int CheckDatabaseListIndex { get; set; }
         public Dependency() { }
     }
 }

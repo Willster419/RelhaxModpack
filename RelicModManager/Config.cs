@@ -35,6 +35,8 @@ namespace RelhaxModpack
         public DatabaseObject parent { get; set; }
         //the absolute top of the config levels, the parent mod
         public Mod parentMod { get; set; }
+        //needed to excatly identify double packageNames and its position
+        public int CheckDatabaseListIndex { get; set; }
         public bool Checked { get; set; }
         public ModFormCheckBox modFormCheckBox { get; set; }
         public UIComponent configUIComponent { get; set; }

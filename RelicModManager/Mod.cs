@@ -30,6 +30,8 @@ namespace RelhaxModpack
         public List<Dependency> dependencies = new List<Dependency>();
         //the parent of a mod is a category
         public Category parent { get; set; }
+        //needed to excatly identify double packageNames and its position
+        public int CheckDatabaseListIndex { get; set; }
         public bool Checked { get; set; }
         public ModFormCheckBox modFormCheckBox { get; set; }
         public bool downloadFlag { get; set; }

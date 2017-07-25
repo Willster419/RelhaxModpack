@@ -39,6 +39,8 @@ namespace RelhaxModpack
             {
                 File.AppendAllText(filePath, "");
             }
+            //if the info text is containing any linefeed/carrieage return, intend the next line with 26 space char
+            info = info.Replace("\n", "\n" + string.Concat(Enumerable.Repeat(" ", 26)));
             writeToFile(filePath, string.Format("{0}   {1}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), info));
         }
 
@@ -352,7 +354,7 @@ namespace RelhaxModpack
                             d.enabled = Utils.parseBool(globs.InnerText, false);
                             break;
                         case "packageName":
-                            d.packageName = globs.InnerText;
+                            d.packageName = globs.InnerText.Trim();
                             if (d.packageName.Equals(""))
                             {
                                 Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => globsPend {1}", globs.Name, d.dependencyZipFile));
@@ -424,8 +426,8 @@ namespace RelhaxModpack
                                                     m.enabled = Utils.parseBool(modNode.InnerText, false);
                                                     break;
                                                 case "packageName":
-                                                    m.packageName = modNode.InnerText;
-                                                    if (m.packageName.Trim().Equals(""))
+                                                    m.packageName = modNode.InnerText.Trim();
+                                                    if (m.packageName.Equals(""))
                                                     {
                                                         Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => mod {1} ({2})", modNode.Name, m.name, m.zipFile));
                                                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => mod {1} ({2})", modNode.Name, m.name, m.zipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
@@ -524,8 +526,8 @@ namespace RelhaxModpack
                                                                     d.enabled = Utils.parseBool(dependencyNode.InnerText, false);
                                                                     break;
                                                                 case "packageName":
-                                                                    d.packageName = dependencyNode.InnerText;
-                                                                    if (d.packageName.Trim().Equals(""))
+                                                                    d.packageName = dependencyNode.InnerText.Trim();
+                                                                    if (d.packageName.Equals(""))
                                                                     {
                                                                         Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => mod {1} ({2}) => dep {3}", dependencyNode.Name, m.name, m.zipFile, d.dependencyZipFile));
                                                                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => mod {1} ({2}) => dep {3}", dependencyNode.Name, m.name, m.zipFile, d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
@@ -594,8 +596,8 @@ namespace RelhaxModpack
                                             d.enabled = Utils.parseBool(dependencyNode.InnerText, false);
                                             break;
                                         case "packageName":
-                                            d.packageName = dependencyNode.InnerText;
-                                            if (d.packageName.Trim().Equals(""))
+                                            d.packageName = dependencyNode.InnerText.Trim();
+                                            if (d.packageName.Equals(""))
                                             {
                                                 Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => cat {1} => dep {2}", dependencyNode.Name, cat.name, d.dependencyZipFile));
                                                 if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => cat {1} => dep {2}", dependencyNode.Name, cat.name, d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
@@ -666,8 +668,8 @@ namespace RelhaxModpack
                                     c.enabled = Utils.parseBool(configNode.InnerText, false);
                                     break;
                                 case "packageName":
-                                    c.packageName = configNode.InnerText;
-                                    if (c.packageName.Trim().Equals(""))
+                                    c.packageName = configNode.InnerText.Trim();
+                                    if (c.packageName.Equals(""))
                                     {
                                         Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => config {1} ({2})", configNode.Name, c.name, c.zipFile));
                                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => config {1} ({2})", configNode.Name, c.name, c.zipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
@@ -771,8 +773,8 @@ namespace RelhaxModpack
                                                     d.enabled = Utils.parseBool(dependencyNode.InnerText, false);
                                                     break;
                                                 case "packageName":
-                                                    d.packageName = dependencyNode.InnerText;
-                                                    if (d.packageName.Trim().Equals(""))
+                                                    d.packageName = dependencyNode.InnerText.Trim();
+                                                    if (d.packageName.Equals(""))
                                                     {
                                                         Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => config {1} ({2}) => dep {3}", dependencyNode.Name, c.name, c.zipFile, d.dependencyZipFile));
                                                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => config {1} ({2}) => dep {3}", dependencyNode.Name, c.name, c.zipFile, d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
@@ -812,59 +814,118 @@ namespace RelhaxModpack
             }
         }
 
-        public static void duplicatesPackageName_RecursiveSubConfigCheck(List<Config> subConfigList, List<string> modNameList, ref int duplicatesCounter)
+        public class CheckStorage
         {
-            // result = storage;
+            public string packageName { get; set; }
+            public string zipFile { get; set; }
+            public bool dependency { get; set; }
+            public int CheckDatabaseListIndex { get; set; }
+            public CheckStorage() { }
+        }
+
+        public static void DuplicatesPackageName_dependencyCheck(List<Dependency> dependencyList, List<CheckStorage> checkStorageList, ref int duplicatesCounter)
+        {
+            foreach (Dependency d in dependencyList)
+            {
+                foreach (CheckStorage s in checkStorageList)
+                {
+                    // if both s.CheckDatabaseListIndex AND m.CheckDatabaseListIndex are equal, it is checking his own entry, so SKIP EVERY check/test
+                    // if the s.dependency is FALSE, it is a single mod/config and should only exists once, if not => error/duplicate message
+                    // if the s.dependency is TRUE, it is a dependecy entry and packageName AND zipFile must be checken if equal, if not => error/duplicate message
+                    if (s.CheckDatabaseListIndex != d.CheckDatabaseListIndex && ((s.packageName.Equals(d.packageName) && !(s.dependency)) || (s.dependency && s.packageName.Equals(d.packageName) && !s.zipFile.Equals(d.dependencyZipFile))))
+                    {
+                        Utils.appendToLog(string.Format("Error: duplicate packageName \"{0}\" found. zipFile: \"{1}\"", s.packageName, s.zipFile));
+                        duplicatesCounter++;
+                    }
+                }
+            }
+        }
+
+        public static void DuplicatesPackageName_RecursiveSubConfigCheck(List<Config> subConfigList, List<CheckStorage> checkStorageList, ref int duplicatesCounter)
+        {
             foreach (Config c in subConfigList)
             {
-                //in theory, there should only be one matching packageName name (at the mod and config section), except currently the dependencies
-                int i = 0;
-                foreach (var s in modNameList)
+                foreach (CheckStorage s in checkStorageList)
                 {
-                    if (s.Equals(c.packageName))
+                    // if both s.CheckDatabaseListIndex AND m.CheckDatabaseListIndex are equal, it is checking his own entry, so SKIP EVERY check/test
+                    // if the s.dependency is FALSE, it is a single mod/config and should only exists once, if not => error/duplicate message
+                    // if the s.dependency is TRUE, it is a dependecy entry and packageName AND zipFile must be checken if equal, if not => error/duplicate message
+                    if (s.CheckDatabaseListIndex != c.CheckDatabaseListIndex && ((s.packageName.Equals(c.packageName) && !(s.dependency)) || (s.dependency && s.packageName.Equals(c.packageName) && !s.zipFile.Equals(c.zipFile))))
                     {
-                        i++;
-                        // if there are 2 or more matching entries, duplicate detected and log entry to file
-                        if (i > 1)
-                        {
-                            Utils.appendToLog(string.Format("Error: duplicate packageName \"{0}\" found. Name: \"{1}\". zipFile: \"{2}\"", s, c.name, c.zipFile));
-                            duplicatesCounter++;
-                        }
+                        Utils.appendToLog(string.Format("Error: duplicate packageName \"{0}\" found. Name: \"{1}\". zipFile: \"{2}\"", s.packageName, s.dependency.ToString(), s.zipFile));
+                        duplicatesCounter++;
                     }
                 }
                 if (c.configs.Count > 0)
                 {
-                    duplicatesPackageName_RecursiveSubConfigCheck(c.configs, modNameList, ref duplicatesCounter);
+                    DuplicatesPackageName_RecursiveSubConfigCheck(c.configs, checkStorageList, ref duplicatesCounter);
                 }
             }
         }
 
-        public static void duplicatesPackageName_RecursiveSubConfigRead(List<Config> subConfigList, List<string> modNameList)
+        public static void DuplicatesPackageName_dependencyRead(ref List<Dependency> dependencyList, ref List<CheckStorage> checkStorageList)
         {
-            // result = storage;
+            foreach (Dependency d in dependencyList)
+            {
+                CheckStorage cs = new CheckStorage();
+                cs.packageName = d.packageName;
+                cs.zipFile = d.dependencyZipFile;
+                cs.dependency = true;
+                cs.CheckDatabaseListIndex = checkStorageList.Count;
+                d.CheckDatabaseListIndex = cs.CheckDatabaseListIndex;
+                checkStorageList.Add(cs);
+            }
+        }
+
+        public static void DuplicatesPackageName_RecursiveSubConfigRead(ref List<Config> subConfigList, ref List<CheckStorage> checkStorageList)
+        {
             foreach (Config c in subConfigList)
             {
-                modNameList.Add(c.packageName);
+                CheckStorage cs = new CheckStorage();
+                cs.packageName = c.packageName;
+                cs.zipFile = c.zipFile;
+                cs.dependency = false;
+                cs.CheckDatabaseListIndex = checkStorageList.Count;
+                c.CheckDatabaseListIndex = cs.CheckDatabaseListIndex;
+                checkStorageList.Add(cs);
                 if (c.configs.Count > 0)
                 {
-                    duplicatesPackageName_RecursiveSubConfigRead(c.configs, modNameList);
+                    DuplicatesPackageName_RecursiveSubConfigRead(ref c.configs, ref checkStorageList);
+                }
+                if (c.dependencies.Count > 0)
+                {
+                    DuplicatesPackageName_dependencyRead(ref c.dependencies, ref checkStorageList);
                 }
             }
         }
 
-        //checks for duplicates
+         //checks for duplicate packageName
         public static bool duplicatesPackageName(List<Category> parsedCatagoryList, ref int duplicatesCounter)
         {
-            //add every mod name to a new list
-            List<string> modNameList = new List<string>();
+            //add every mod and config name to a new list
+            var checkStorageList = new List<CheckStorage>();
             foreach (Category c in parsedCatagoryList)
             {
+                if (c.dependencies.Count > 0)
+                {
+                    DuplicatesPackageName_dependencyRead(ref c.dependencies, ref checkStorageList);
+                }
                 foreach (Mod m in c.mods)
                 {
-                    modNameList.Add(m.packageName);
-                    if (m.configs.Count > 0)
+                    CheckStorage cs = new CheckStorage();
+                    cs.packageName = m.packageName;
+                    cs.zipFile = m.zipFile;
+                    cs.dependency = false;
+                    cs.CheckDatabaseListIndex = checkStorageList.Count;
+                    m.CheckDatabaseListIndex = cs.CheckDatabaseListIndex;
+                    checkStorageList.Add(cs);
+                     if (m.configs.Count > 0)
                     {
-                        duplicatesPackageName_RecursiveSubConfigRead(m.configs, modNameList);
+                        DuplicatesPackageName_RecursiveSubConfigRead(ref m.configs, ref checkStorageList);
+                    }
+                    if (m.dependencies.Count > 0)
+                    {
+                        DuplicatesPackageName_dependencyRead(ref m.dependencies, ref checkStorageList);
                     }
                 }
             }
@@ -873,25 +934,29 @@ namespace RelhaxModpack
             {
                 foreach (Mod m in c.mods)
                 {
-                    //in theory, there should only be one matching packageName name (at the mod and config section), except currently the dependencies
-                    int i = 0;
-                    foreach (var s in modNameList)
+                    foreach (var s in checkStorageList)
                     {
-                        if (s.Equals(m.packageName))
+                        // if both s.CheckDatabaseListIndex AND m.CheckDatabaseListIndex are equal, it is checking his own entry, so SKIP EVERY check/test
+                        // if the s.dependency is FALSE, it is a single mod/config and should only exists once, if not => error/duplicate message
+                        // if the s.dependency is TRUE, it is a dependecy entry and packageName AND zipFile must be checken if equal, if not => error/duplicate message
+                        if (s.CheckDatabaseListIndex != m.CheckDatabaseListIndex && ((s.packageName.Equals(m.packageName) && !(s.dependency)) || (s.dependency && s.packageName.Equals(m.packageName) && !(s.zipFile.Equals(m.zipFile)))))
                         { 
-                            i++;
-                            // if there are 2 or more matching entries, duplicate detected and log entry to file
-                            if (i > 1)
-                            {
-                                Utils.appendToLog(string.Format("Error: duplicate packageName \"{0}\" found. Name: \"{1}\". zipFile: \"{2}\"", s, m.name, m.zipFile));
-                                duplicatesCounter++;
-                            }
+                            Utils.appendToLog(string.Format("Error: duplicate packageName \"{0}\" found. Name: \"{1}\". zipFile: \"{2}\".", s.packageName, s.dependency.ToString(), s.zipFile));
+                            duplicatesCounter++;
                         }
                     }
                     if (m.configs.Count > 0)
                     {
-                        duplicatesPackageName_RecursiveSubConfigCheck(m.configs, modNameList, ref duplicatesCounter);
+                        DuplicatesPackageName_RecursiveSubConfigCheck(m.configs, checkStorageList, ref duplicatesCounter);
                     }
+                    if (m.dependencies.Count > 0)
+                    {
+                        DuplicatesPackageName_dependencyCheck(m.dependencies, checkStorageList, ref duplicatesCounter);
+                    }
+                }
+                if (c.dependencies.Count > 0)
+                {
+                    DuplicatesPackageName_dependencyCheck(c.dependencies, checkStorageList, ref duplicatesCounter);
                 }
             }
             if (duplicatesCounter > 0)
