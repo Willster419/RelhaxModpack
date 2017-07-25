@@ -852,7 +852,7 @@ namespace RelhaxModpack
                     // if the s.dependency is TRUE, it is a dependecy entry and packageName AND zipFile must be checken if equal, if not => error/duplicate message
                     if (s.CheckDatabaseListIndex != c.CheckDatabaseListIndex && ((s.packageName.Equals(c.packageName) && !(s.dependency)) || (s.dependency && s.packageName.Equals(c.packageName) && !s.zipFile.Equals(c.zipFile))))
                     {
-                        Utils.appendToLog(string.Format("Error: duplicate packageName \"{0}\" found. Name: \"{1}\". zipFile: \"{2}\"", s.packageName, s.dependency.ToString(), s.zipFile));
+                        Utils.appendToLog(string.Format("Error: duplicate packageName \"{0}\" found. zipFile: \"{1}\"", s.packageName, s.zipFile));
                         duplicatesCounter++;
                     }
                 }
@@ -941,7 +941,7 @@ namespace RelhaxModpack
                         // if the s.dependency is TRUE, it is a dependecy entry and packageName AND zipFile must be checken if equal, if not => error/duplicate message
                         if (s.CheckDatabaseListIndex != m.CheckDatabaseListIndex && ((s.packageName.Equals(m.packageName) && !(s.dependency)) || (s.dependency && s.packageName.Equals(m.packageName) && !(s.zipFile.Equals(m.zipFile)))))
                         { 
-                            Utils.appendToLog(string.Format("Error: duplicate packageName \"{0}\" found. Name: \"{1}\". zipFile: \"{2}\".", s.packageName, s.dependency.ToString(), s.zipFile));
+                            Utils.appendToLog(string.Format("Error: duplicate packageName \"{0}\" found. zipFile: \"{1}\".", s.packageName, s.zipFile));
                             duplicatesCounter++;
                         }
                     }
