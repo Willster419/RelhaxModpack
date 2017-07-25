@@ -14,6 +14,7 @@ using System.Linq;
 using System.ComponentModel;
 using System.Net;
 using System.Globalization;
+using System.Xml.XPath;
 
 namespace RelhaxModpack
 {
@@ -69,7 +70,7 @@ namespace RelhaxModpack
                     }
                 }
 
-                byte[] newLine = System.Text.ASCIIEncoding.ASCII.GetBytes(Environment.NewLine);
+                byte[] newLine = System.Text.UTF8Encoding.UTF8.GetBytes(Environment.NewLine);
 
                 FileStream fs = null;
                 // If the log file is less than the max length, just open it at the end to write there
@@ -83,7 +84,7 @@ namespace RelhaxModpack
                     // If you are trimming the file length, write what you saved. 
                     if (bytesSavedFromEndOfOldLog != null)
                     {
-                        Byte[] lineBreak = Encoding.ASCII.GetBytes("### " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " *** *** *** Old Log Start Position *** *** *** *** ###");
+                        Byte[] lineBreak = Encoding.UTF8.GetBytes("### " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " *** *** *** Old Log Start Position *** *** *** *** ###");
                         fs.Write(newLine, 0, newLine.Length);
                         fs.Write(newLine, 0, newLine.Length);
                         fs.Write(lineBreak, 0, lineBreak.Length);
@@ -91,7 +92,7 @@ namespace RelhaxModpack
                         fs.Write(bytesSavedFromEndOfOldLog, 0, bytesSavedFromEndOfOldLog.Length);
                         fs.Write(newLine, 0, newLine.Length);
                     }
-                    Byte[] sendBytes = Encoding.ASCII.GetBytes(strNewLogMessage);
+                    Byte[] sendBytes = Encoding.UTF8.GetBytes(strNewLogMessage);
                     // Append your last log message. 
                     fs.Write(sendBytes, 0, sendBytes.Length);
                     fs.Write(newLine, 0, newLine.Length);
@@ -823,7 +824,7 @@ namespace RelhaxModpack
             public CheckStorage() { }
         }
 
-        public static void DuplicatesPackageName_dependencyCheck(List<Dependency> dependencyList, List<CheckStorage> checkStorageList, ref int duplicatesCounter)
+        public static void duplicatesPackageName_dependencyCheck(List<Dependency> dependencyList, List<CheckStorage> checkStorageList, ref int duplicatesCounter)
         {
             foreach (Dependency d in dependencyList)
             {
@@ -841,7 +842,7 @@ namespace RelhaxModpack
             }
         }
 
-        public static void DuplicatesPackageName_RecursiveSubConfigCheck(List<Config> subConfigList, List<CheckStorage> checkStorageList, ref int duplicatesCounter)
+        public static void duplicatesPackageName_RecursiveSubConfigCheck(List<Config> subConfigList, List<CheckStorage> checkStorageList, ref int duplicatesCounter)
         {
             foreach (Config c in subConfigList)
             {
@@ -858,12 +859,12 @@ namespace RelhaxModpack
                 }
                 if (c.configs.Count > 0)
                 {
-                    DuplicatesPackageName_RecursiveSubConfigCheck(c.configs, checkStorageList, ref duplicatesCounter);
+                    duplicatesPackageName_RecursiveSubConfigCheck(c.configs, checkStorageList, ref duplicatesCounter);
                 }
             }
         }
 
-        public static void DuplicatesPackageName_dependencyRead(ref List<Dependency> dependencyList, ref List<CheckStorage> checkStorageList)
+        public static void duplicatesPackageName_dependencyRead(ref List<Dependency> dependencyList, ref List<CheckStorage> checkStorageList)
         {
             foreach (Dependency d in dependencyList)
             {
@@ -877,7 +878,7 @@ namespace RelhaxModpack
             }
         }
 
-        public static void DuplicatesPackageName_RecursiveSubConfigRead(ref List<Config> subConfigList, ref List<CheckStorage> checkStorageList)
+        public static void duplicatesPackageName_RecursiveSubConfigRead(ref List<Config> subConfigList, ref List<CheckStorage> checkStorageList)
         {
             foreach (Config c in subConfigList)
             {
@@ -890,11 +891,11 @@ namespace RelhaxModpack
                 checkStorageList.Add(cs);
                 if (c.configs.Count > 0)
                 {
-                    DuplicatesPackageName_RecursiveSubConfigRead(ref c.configs, ref checkStorageList);
+                    duplicatesPackageName_RecursiveSubConfigRead(ref c.configs, ref checkStorageList);
                 }
                 if (c.dependencies.Count > 0)
                 {
-                    DuplicatesPackageName_dependencyRead(ref c.dependencies, ref checkStorageList);
+                    duplicatesPackageName_dependencyRead(ref c.dependencies, ref checkStorageList);
                 }
             }
         }
@@ -908,7 +909,7 @@ namespace RelhaxModpack
             {
                 if (c.dependencies.Count > 0)
                 {
-                    DuplicatesPackageName_dependencyRead(ref c.dependencies, ref checkStorageList);
+                    duplicatesPackageName_dependencyRead(ref c.dependencies, ref checkStorageList);
                 }
                 foreach (Mod m in c.mods)
                 {
@@ -921,11 +922,11 @@ namespace RelhaxModpack
                     checkStorageList.Add(cs);
                      if (m.configs.Count > 0)
                     {
-                        DuplicatesPackageName_RecursiveSubConfigRead(ref m.configs, ref checkStorageList);
+                        duplicatesPackageName_RecursiveSubConfigRead(ref m.configs, ref checkStorageList);
                     }
                     if (m.dependencies.Count > 0)
                     {
-                        DuplicatesPackageName_dependencyRead(ref m.dependencies, ref checkStorageList);
+                        duplicatesPackageName_dependencyRead(ref m.dependencies, ref checkStorageList);
                     }
                 }
             }
@@ -947,16 +948,16 @@ namespace RelhaxModpack
                     }
                     if (m.configs.Count > 0)
                     {
-                        DuplicatesPackageName_RecursiveSubConfigCheck(m.configs, checkStorageList, ref duplicatesCounter);
+                        duplicatesPackageName_RecursiveSubConfigCheck(m.configs, checkStorageList, ref duplicatesCounter);
                     }
                     if (m.dependencies.Count > 0)
                     {
-                        DuplicatesPackageName_dependencyCheck(m.dependencies, checkStorageList, ref duplicatesCounter);
+                        duplicatesPackageName_dependencyCheck(m.dependencies, checkStorageList, ref duplicatesCounter);
                     }
                 }
                 if (c.dependencies.Count > 0)
                 {
-                    DuplicatesPackageName_dependencyCheck(c.dependencies, checkStorageList, ref duplicatesCounter);
+                    duplicatesPackageName_dependencyCheck(c.dependencies, checkStorageList, ref duplicatesCounter);
                 }
             }
             if (duplicatesCounter > 0)
@@ -1029,7 +1030,8 @@ namespace RelhaxModpack
             }
             return null;
         }
-        //returns the catagory based on the catagory name
+        
+         //returns the catagory based on the catagory name
         public static Category getCatagory(string catName, List<Category> parsedCatagoryList)
         {
             foreach (Category c in parsedCatagoryList)
@@ -2422,7 +2424,7 @@ namespace RelhaxModpack
             }
         }
         //saves the currently checked configs and mods
-        public static void saveConfig(bool fromButton, List<Category> parsedCatagoryList, List<Mod> userMods)
+        public static void saveConfig_old(bool fromButton, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
             //dialog box to ask where to save the config to
             System.Windows.Forms.SaveFileDialog saveLocation = new System.Windows.Forms.SaveFileDialog();
@@ -2475,7 +2477,7 @@ namespace RelhaxModpack
                         if (m.configs.Count > 0)
                         {
                             XmlElement configsHolder = doc.CreateElement("configs");
-                            Utils.saveProcessConfigs(doc, m.configs, configsHolder);
+                            Utils.saveProcessConfigs_old(doc, m.configs, configsHolder);
                             mod.AppendChild(configsHolder);
                         }
                     }
@@ -2501,7 +2503,7 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.getTranslatedString("configSaveSucess"));
             }
         }
-        private static void saveProcessConfigs(XmlDocument doc, List<Config> configList, XmlElement configsHolder)
+        private static void saveProcessConfigs_old(XmlDocument doc, List<Config> configList, XmlElement configsHolder)
         {
             foreach (Config cc in configList)
             {
@@ -2518,19 +2520,129 @@ namespace RelhaxModpack
                     if (cc.configs.Count > 0)
                     {
                         XmlElement configsHolderSub = doc.CreateElement("configs");
-                        Utils.saveProcessConfigs(doc, cc.configs, configsHolderSub);
+                        Utils.saveProcessConfigs_old(doc, cc.configs, configsHolderSub);
                         config.AppendChild(configsHolderSub);
                     }
                 }
             }
         }
-        //loads a saved config from xml and parses it into the memory database
+
+        //saves the currently checked configs and mods
+        public static void saveConfig(bool fromButton, List<Category> parsedCatagoryList, List<Mod> userMods)
+        {
+            //dialog box to ask where to save the config to
+            System.Windows.Forms.SaveFileDialog saveLocation = new System.Windows.Forms.SaveFileDialog();
+            saveLocation.AddExtension = true;
+            saveLocation.DefaultExt = ".xml";
+            saveLocation.Filter = "*.xml|*.xml";
+            saveLocation.InitialDirectory = Application.StartupPath + "\\RelHaxUserConfigs";
+            saveLocation.Title = Translations.getTranslatedString("selectWhereToSave");
+            if (fromButton)
+            {
+                if (saveLocation.ShowDialog().Equals(DialogResult.Cancel))
+                {
+                    //cancel
+                    return;
+                }
+            }
+            string savePath = saveLocation.FileName;
+            if (Settings.saveLastConfig && !fromButton)
+            {
+                savePath = Application.StartupPath + "\\RelHaxUserConfigs\\lastInstalledConfig.xml";
+                Utils.appendToLog("Save last config checked, saving to " + savePath);
+            }
+
+            //create saved config xml layout
+            XDocument doc = new XDocument(
+                new XDeclaration("1.0", "utf-8", "yes"),
+                new XElement("mods", new XAttribute("ver", "2.0"), new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))));
+
+            //relhax mods root
+            doc.Element("mods").Add(new XElement("relhaxMods"));
+            //user mods root
+            doc.Element("mods").Add(new XElement("userMods"));
+
+            var nodeRelhax = doc.Descendants("relhaxMods").FirstOrDefault();
+            //check every mod
+            foreach (Category c in parsedCatagoryList)
+            {
+                foreach (Mod m in c.mods)
+                {
+                    if (m.Checked)
+                    {
+                        //add it to the list
+                        nodeRelhax.Add(new XElement("mod", m.packageName));
+                        if (m.configs.Count > 0)
+                        {
+                            Utils.saveProcessConfigs(ref doc, m.configs);
+                        }
+                    }
+                }
+            }
+
+            var nodeUserMods = doc.Descendants("userMods").FirstOrDefault();
+            //check user mods
+            foreach (Mod m in userMods)
+            {
+                if (m.Checked)
+                {
+                    //add it to the list
+                    nodeUserMods.Add(new XElement("mod", m.name));
+                }
+            }
+            doc.Save(savePath);
+            if (fromButton)
+            {
+                MessageBox.Show(Translations.getTranslatedString("configSaveSucess"));
+            }
+        }
+
+        private static void saveProcessConfigs(ref XDocument doc, List<Config> configList)
+        {
+            var node = doc.Descendants("relhaxMods").FirstOrDefault();
+            foreach (Config cc in configList)
+            {
+                if (cc.Checked)
+                {
+                    //add the config to the list
+                    node.Add(new XElement("mod", cc.packageName));
+                    if (cc.configs.Count > 0)
+                    {
+                        Utils.saveProcessConfigs(ref doc, cc.configs);
+                    }
+                }
+            }
+        }
+
         public static void loadConfig(string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
             Utils.clearSelectionMemory(parsedCatagoryList);
-            Utils.appendToLog("Loading mod selections from " + filePath);
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
+            //check config file version
+            XmlNode xmlNode = doc.SelectSingleNode("//mods");
+            string ver = "";
+            // check if attribut exists and if TRUE, get the value
+            if (xmlNode.Attributes != null && xmlNode.Attributes["ver"] != null)
+            {
+                ver = xmlNode.Attributes["ver"].Value;
+            }
+            if (ver.Equals("2.0"))      //the file is version v2.0, so go "loadConfigV2" (packageName depended)
+            {
+                loadConfigV2(filePath, parsedCatagoryList, userMods);
+            }
+            else // file is still version v1.0 (name dependend)
+            {
+                loadConfigV1(filePath, parsedCatagoryList, userMods);
+            }
+        }
+        
+        //loads a saved config from xml and parses it into the memory database
+        public static void loadConfigV1(string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(filePath);
+            Utils.appendToLog("Loading mod selections v1.0 from " + filePath);
             //get a list of mods
             XmlNodeList xmlModList = doc.SelectNodes("//mods/relhaxMods/mod");
             foreach (XmlNode n in xmlModList)
@@ -2557,10 +2669,10 @@ namespace RelhaxModpack
                             }
                             break;
                         case "configs":
-                            Utils.loadProcessConfigs(nn, m, true);
+                            Utils.loadProcessConfigsV1(nn, m, true);
                             break;
                         case "subConfigs":
-                            Utils.loadProcessConfigs(nn, m, true);
+                            Utils.loadProcessConfigsV1(nn, m, true);
                             break;
                     }
                 }
@@ -2590,9 +2702,71 @@ namespace RelhaxModpack
                     }
                 }
             }
-            Utils.appendToLog("Finished loading mod selections");
+            Utils.appendToLog("Finished loading mod selections v1.0");
         }
-        private static void loadProcessConfigs(XmlNode holder, Mod m, bool parentIsMod, Config con = null)
+
+        //loads a saved config from xml and parses it into the memory database
+        public static void loadConfigV2(string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
+        {
+            Utils.appendToLog("Loading mod selections v2.0 from " + filePath);
+            List<string> savedConfig = new List<string>();
+            var doc = new XPathDocument(filePath);
+            foreach (var mod in doc.CreateNavigator().Select("//relhaxMods/mod"))
+            {
+                savedConfig.Add(mod.ToString());
+            }
+            foreach (Category c in parsedCatagoryList)
+            {
+                foreach (Mod m in c.mods)
+                {
+                    if (savedConfig.Contains(m.packageName))
+                    {
+                        m.Checked = true;
+                        Utils.appendToLog("Checking mod " + m.name);
+                    }
+                    if (m.configs.Count > 0)
+                    {
+                        loadProcessConfigsV2(m.configs, savedConfig);
+                    }
+                }
+            }
+            List<string> savedUserConfig = new List<string>();
+            foreach (var userMod in doc.CreateNavigator().Select("//userMods/mod"))
+            {
+                savedUserConfig.Add(userMod.ToString());
+            }
+            foreach (Mod um in userMods)
+            {
+                if (savedUserConfig.Contains(um.name))
+                {
+                    string filename = um.name + ".zip";
+                    if (File.Exists(Application.StartupPath + "\\RelHaxUserMods\\" + filename))
+                    {
+                        um.Checked = true;
+                        Utils.appendToLog("Checking user mod " + um.zipFile);
+                    }
+                }
+            }
+            Utils.appendToLog("Finished loading mod selections v2.0");
+        }
+
+        private static void loadProcessConfigsV2(List<Config> configList, List<string> savedConfigList)
+        {
+            foreach (Config c in configList)
+            {
+                if (savedConfigList.Contains(c.packageName))
+                {
+                    c.Checked = true;
+                    Utils.appendToLog("Checking mod " + c.name);
+                }
+                if (c.configs.Count > 0)
+                {
+                    loadProcessConfigsV2(c.configs, savedConfigList);
+                }
+            }
+        }
+
+        private static void loadProcessConfigsV1(XmlNode holder, Mod m, bool parentIsMod, Config con = null)
         {
             foreach (XmlNode nnn in holder.ChildNodes)
             {
@@ -2637,10 +2811,10 @@ namespace RelhaxModpack
                             }
                             break;
                         case "configs":
-                            Utils.loadProcessConfigs(nnnn, m, false, c);
+                            Utils.loadProcessConfigsV1(nnnn, m, false, c);
                             break;
                         case "subConfigs":
-                            Utils.loadProcessConfigs(nnnn, m, false, c);
+                            Utils.loadProcessConfigsV1(nnnn, m, false, c);
                             break;
                     }
                 }
