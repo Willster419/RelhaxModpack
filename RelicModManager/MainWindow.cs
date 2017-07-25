@@ -2,20 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Security.Principal;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Linq;
-using Ionic.Zip;
 using Microsoft.Win32;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Drawing;
 
 namespace RelhaxModpack
@@ -32,13 +24,9 @@ namespace RelhaxModpack
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
-        //directory path of where the application was started form
-        private string appPath = Application.StartupPath;
         //where all the downloaded mods are placed
         public static string downloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads");
         public static string md5HashDatabaseXmlFile = Path.Combine(downloadPath, "MD5HashDatabase.xml");
-        private string parsedModsFolder;//0.9.x.y.z
-        //DEPRECATED: /res_mods/version/gui
         //timer to measure download speed
         Stopwatch sw = new Stopwatch();
         private List<Category> parsedCatagoryLists;
@@ -49,18 +37,6 @@ namespace RelhaxModpack
         //installing the RelhaxModpack of the Relhax Sound Mod
         string tempOldDownload;
         private List<Mod> userMods;
-        int numFilesToProcessInt = 0;
-        int numFilesToCopyDeleteExtract = 0;
-        bool userExtract = false;
-        private int childMaxProgres;
-        private int childCurrentProgres;
-        private bool isParrentDone;
-        //current file being processed in the zip archive
-        private string currentZipEntry;
-        private float currentZipEntrySize;
-        //seperate thread for the extraction
-        BackgroundWorker extractworker;
-        private string versionSave;
         private FirstLoadHelper helper;
         string helperText;
         string currentModDownloading;
@@ -88,11 +64,7 @@ namespace RelhaxModpack
             uninstallMods = 17,
             smartUninstall = 18
         };
-        private InstallState state = InstallState.idle;
         private string tanksVersion;//0.9.x.y
-        BackgroundWorker deleteworker;
-        BackgroundWorker copyworker;
-        BackgroundWorker smartDeleteworker;
         //list to maintain the refrence lines in a json patch
         List<double> timeRemainArray = new List<double>();
         //the ETA variable for downlading
@@ -103,10 +75,8 @@ namespace RelhaxModpack
         float sessionDownloadSpeed = 0;
         private loadingGifPreview gp;
         private ModSelectionList list;
-        private string folderDateName;
         private string suportedVersions = null;
         string[] supportedVersions = null;
-        private string xvmConfigDir = "";
         List<Mod> modsWithData = new List<Mod>();
         List<Config> configsWithData = new List<Config>();
         private float windowHeight;
@@ -173,7 +143,6 @@ namespace RelhaxModpack
             if (e != null && e.Cancelled)
             {
                 //update the UI and download state
-                state = InstallState.idle;
                 toggleUIButtons(true);
                 speedLabel.Text = "";
                 downloadProgress.Text = Translations.getTranslatedString("idle");
@@ -267,7 +236,6 @@ namespace RelhaxModpack
                 //suportedVersions = "0.9.18.0";
                 Application.Exit();
             }
-            versionSave = version;
             Utils.appendToLog("Current application version is " + managerVersion + ", new version is " + version);
             if (!version.Equals(managerVersion))
             {
@@ -310,7 +278,6 @@ namespace RelhaxModpack
                 this.Close();
             }
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
-            string version = versionSave;
 
             if (!File.Exists(Application.StartupPath + "\\RelicCopyUpdate.bat"))
             {
@@ -346,8 +313,7 @@ namespace RelhaxModpack
         {
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
             Utils.appendToLog("tanksLocation parsed as " + tanksLocation);
-            parsedModsFolder = tanksLocation + "\\res_mods\\" + this.getFolderVersion(tanksLocation);
-            Utils.appendToLog("tanks mods version parsed as " + parsedModsFolder);
+            Utils.appendToLog("tanksVersion parsed as " + tanksVersion);
             Utils.appendToLog("customUserMods parsed as " + Application.StartupPath + "\\RelHaxUserMods");
             return "1";
         }
@@ -584,7 +550,6 @@ namespace RelhaxModpack
             {
                 Utils.appendToLog("Program.autoInstall still true, loading in auto install mode");
                 wait.Close();
-                state = InstallState.idle;
                 this.installRelhaxMod_Click(null, null);
                 return;
             }
@@ -596,7 +561,6 @@ namespace RelhaxModpack
                 Settings.firstLoad = false;
             }
             wait.Close();
-            state = InstallState.idle;
             toggleUIButtons(true);
             Application.DoEvents();
             Program.saveSettings = true;
@@ -613,9 +577,7 @@ namespace RelhaxModpack
             Utils.TotallyNotStatPaddingForumPageViewCount();
             //bool to say to the downloader to use the "modpack" code
             toggleUIButtons(false);
-            state = InstallState.idle;
             downloadPath = Application.StartupPath + "\\RelHaxDownloads";
-            xvmConfigDir = "";
             //reset the interface
             this.reset();
             //attempt to locate the tanks directory automatically
@@ -632,7 +594,6 @@ namespace RelhaxModpack
             if (this.parseStrings() == null)
             {
                 MessageBox.Show(Translations.getTranslatedString("autoDetectFailed"));
-                state = InstallState.error;
                 toggleUIButtons(true);
                 return;
             }
@@ -640,7 +601,6 @@ namespace RelhaxModpack
             {
                 //display error and abort
                 MessageBox.Show(Translations.getTranslatedString("moveOutOfTanksLocation"));
-                state = InstallState.error;
                 toggleUIButtons(true);
                 return;
             }
@@ -658,7 +618,6 @@ namespace RelhaxModpack
                 // select the last public modpack version
                 selectionListTanksVersion = publicVersions.Split(',')[publicVersions.Split(',').Count() - 1];
             }
-            state = InstallState.modSelection;
             //reset the childProgressBar value
             childProgressBar.Maximum = 100;
             childProgressBar.Value = 0;
@@ -667,7 +626,6 @@ namespace RelhaxModpack
             list.ShowDialog();
             if (list.cancel)
             {
-                state = InstallState.idle;
                 toggleUIButtons(true);
                 return;
             }
@@ -1108,7 +1066,6 @@ namespace RelhaxModpack
                         }
                         return;
                     }
-                    state = InstallState.smartUninstall;
                     unI.StartUninstallation();
                     //OLD
                     //this.newUninstallMethod();
@@ -1351,7 +1308,6 @@ namespace RelhaxModpack
             parrentProgressBar.Maximum = 1;
             parrentProgressBar.Value = parrentProgressBar.Maximum;
             childProgressBar.Value = childProgressBar.Maximum;
-            state = InstallState.idle;
             toggleUIButtons(true);
             Utils.appendToLog("Installation done");
         }

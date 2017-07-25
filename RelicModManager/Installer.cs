@@ -62,7 +62,6 @@ namespace RelhaxModpack
         //properties relevent to the handler and install
         private BackgroundWorker InstallWorker;
         private InstallerEventArgs args;
-        private bool isParrentDone;
         private string xvmConfigDir = "";
 
         //the event that it can hook into
@@ -1008,16 +1007,10 @@ namespace RelhaxModpack
         void Zip_ExtractProgress(object sender, ExtractProgressEventArgs e)
         {
             args.ChildProcessed = e.EntriesExtracted;
-            //childMaxProgres = e.EntriesTotal;
-            isParrentDone = false;
             if (e.CurrentEntry != null)
             {
                 args.currentFile = e.CurrentEntry.FileName;
                 args.currentFileSizeProcessed = e.BytesTransferred;
-            }
-            if (e.EventType == ZipProgressEventType.Extracting_AfterExtractAll)
-            {
-                isParrentDone = true;
             }
             InstallWorker.ReportProgress(0);
         }
