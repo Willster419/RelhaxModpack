@@ -21,13 +21,18 @@ namespace RelhaxModpack
             ExtractMods = 7,
             ExtractConfigs = 8,
             RestoreUserData = 9,
-            PatchMods = 10
+            PatchMods = 10,
+            InstallFonts = 11,
+            ExtractUserMods = 12,
+            PatchUserMods = 13,
+            InstallUserFonts = 14,
+            Done = 15
         };
         public InstallProgress InstalProgress { get; set; }
-        //the status of the parrent overall progress
-        public int ParrentProgressPercent;
-        //the status of the child progress (the % complete of the current InstallProgress)
-        public int ChildProgressPercent;
+        //the total parrent processed items
+        public int ParrentProcessed;
+        //the total parrent items to process
+        public int ParrentTotalToProcess;
         //the current number of mods/configs/userDatas/etc. processed so far
         public int ChildProcessed;
         //the total number of mods/configs/userDatas to precess
