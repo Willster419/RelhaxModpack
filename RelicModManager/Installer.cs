@@ -97,7 +97,6 @@ namespace RelhaxModpack
         public void ActuallyStartInstallation(object sender, DoWorkEventArgs e)
         {
             ResetArgs();
-            args.InstalProgress = InstallerEventArgs.InstallProgress.BackupMods;
             //Step 1: do a backup if requested
             if (Settings.backupModFolder)
             {
@@ -142,7 +141,8 @@ namespace RelhaxModpack
             ResetArgs();
             //Step 12: Extract User Mods
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractUserMods;
-            ExtractUserMods();
+            if(UserMods.Count > 0)
+                ExtractUserMods();
             ResetArgs();
             //Step 13: Patch Mods
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchUserMods;
