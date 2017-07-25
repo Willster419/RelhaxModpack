@@ -151,9 +151,6 @@ namespace RelhaxModpack
                 return;
             }
             downloadTimer.Enabled = false;
-
-
-            //new relhax modpack code
             if (e != null && e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
             {
                 //404
@@ -212,7 +209,6 @@ namespace RelhaxModpack
                 ins.StartInstallation();
             }
         }
-        
         //method to check for updates to the application on startup
         private void checkmanagerUpdates()
         {
@@ -233,7 +229,6 @@ namespace RelhaxModpack
                 Utils.appendToLog("target: " + e.TargetSite);
                 Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt");
                 MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " supported_clients.txt");
-                //suportedVersions = "0.9.18.0";
                 Application.Exit();
             }
             Utils.appendToLog("Current application version is " + managerVersion + ", new version is " + version);
@@ -313,13 +308,12 @@ namespace RelhaxModpack
         {
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
             Utils.appendToLog("tanksLocation parsed as " + tanksLocation);
-            Utils.appendToLog("tanksVersion parsed as " + tanksVersion);
             Utils.appendToLog("customUserMods parsed as " + Application.StartupPath + "\\RelHaxUserMods");
             return "1";
         }
         //gets the version of tanks that this is, in the format
         //of the res_mods version folder i.e. 0.9.17.0.3
-        private string getFolderVersion(string gamePath)
+        private string getFolderVersion()
         {
             if (!File.Exists(tanksLocation + "\\version.xml"))
                 return null;
@@ -422,12 +416,9 @@ namespace RelhaxModpack
             WebRequest.DefaultWebProxy = null;
             wait.loadingDescBox.Text = "Verifying single instance...";
             Application.DoEvents();
-            //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             Utils.appendToLog("|RelHax Modpack " + managerVersion);
             Utils.appendToLog("|Built on " + today + ", running at " + DateTime.Now);
             Utils.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
-            //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
-            //set the current window font size
             windowHeight = this.Size.Height;
             windowWidth = this.Size.Width;
             //enforces a single instance of the program
@@ -575,7 +566,6 @@ namespace RelhaxModpack
         private void installRelhaxMod_Click(object sender, EventArgs e)
         {
             Utils.TotallyNotStatPaddingForumPageViewCount();
-            //bool to say to the downloader to use the "modpack" code
             toggleUIButtons(false);
             downloadPath = Application.StartupPath + "\\RelHaxDownloads";
             //reset the interface
@@ -604,7 +594,8 @@ namespace RelhaxModpack
                 toggleUIButtons(true);
                 return;
             }
-            tanksVersion = this.getFolderVersion(null);
+            tanksVersion = this.getFolderVersion();
+            Utils.appendToLog("tanksVersion parsed as " + tanksVersion);
             //determine if the tanks client version is supported
             string selectionListTanksVersion = tanksVersion;
             if (!isClientVersionSupported(tanksVersion))
@@ -629,7 +620,29 @@ namespace RelhaxModpack
                 toggleUIButtons(true);
                 return;
             }
-            //actual new code
+            //check to see if WoT is running
+            bool WoTRunning = true;
+            while (WoTRunning)
+            {
+                WoTRunning = false;
+                foreach (Process p in Process.GetProcesses())
+                {
+                    if (p.MainWindowTitle.Equals("WoT Client"))
+                        WoTRunning = true;
+                }
+                if (!WoTRunning)
+                    break;
+                MessageBox.Show(Translations.getTranslatedString("WoTRunningMessage"), Translations.getTranslatedString("WoTRunningHeader"));
+            }
+            // if the delete will raise an exception, it will be ignored
+            try
+            {
+                if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
+                    File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
+            }
+            catch { }
+            downloadProgress.Text = Translations.getTranslatedString("loading");
+            Application.DoEvents();
             this.parseInstallationPart1();
         }
 
@@ -791,34 +804,12 @@ namespace RelhaxModpack
             downloadProgress.Text = message;
         }
 
-        //next part of the install process
+        /*
+         * parses all the mods and configs into seperate lists for many types op options
+         * like mods/configs to install, mods/configs with data, and others
+        */
         private void parseInstallationPart1()
         {
-            //check to see if WoT is running
-            bool WoTRunning = true;
-            while (WoTRunning)
-            {
-                WoTRunning = false;
-                foreach (Process p in Process.GetProcesses())
-                {
-                    if (p.MainWindowTitle.Equals("WoT Client"))
-                        WoTRunning = true;
-                }
-                if (!WoTRunning)
-                    break;
-                MessageBox.Show(Translations.getTranslatedString("WoTRunningMessage"), Translations.getTranslatedString("WoTRunningHeader"));
-            }
-
-            // if the delete will raise an exception, it will be ignored
-            try
-            {
-                if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
-                    File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
-            }
-            catch { }
-
-            downloadProgress.Text = Translations.getTranslatedString("loading");
-            Application.DoEvents();
             modsToInstall = new List<Mod>();
             patchList = new List<Patch>();
             userMods = new List<Mod>();
@@ -936,12 +927,11 @@ namespace RelhaxModpack
                     }
                 }
             }
-            //reset the progress bars for download mods
+            //reset the progress bars
             parrentProgressBar.Maximum = downloadQueue.Count;
             childProgressBar.Maximum = 100;
             //at this point, there may be user mods selected,
             //and there is at least one mod to extract
-            //check for any mods to be install tha also need to be downloaded
             downloader_DownloadFileCompleted(null, null);
             //end the installation process
             return;
@@ -1041,12 +1031,6 @@ namespace RelhaxModpack
                 {
                     //run the recursive complete uninstaller
                     unI.StartCleanUninstallation();
-                    //OLD
-                    /*
-                    downloadProgress.Text = Translations.getTranslatedString("uninstalling") + "...";
-                    state = InstallState.uninstallResMods;
-                    this.backgroundDelete(tanksLocation + "\\res_mods");
-                    */
                 }
                 else
                 {
@@ -1067,8 +1051,6 @@ namespace RelhaxModpack
                         return;
                     }
                     unI.StartUninstallation();
-                    //OLD
-                    //this.newUninstallMethod();
                 }
             }
             else
@@ -1733,7 +1715,6 @@ namespace RelhaxModpack
                     Settings.fontSizeforum = Settings.FontSize.DPIRegular;
                     Settings.ApplyScalingProperties();
                     this.AutoScaleMode = Settings.appScalingMode;
-                    //to go from 1.25 to 1.0, multiply by 0.8. how to get 0.8?
                     float temp = 1.0f / scale;
                     this.Scale(new SizeF(temp, temp));
                     scale = 1.0f;
@@ -1742,9 +1723,6 @@ namespace RelhaxModpack
                 Settings.fontSizeforum = Settings.FontSize.fontLarge;
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
-                //float temp = 1.25f / scale;
-                //this.Scale(new SizeF(temp, temp));
-                //scale = 1.25f;
                 this.Font = Settings.appFont;
             }
         }
@@ -1758,7 +1736,6 @@ namespace RelhaxModpack
                     Settings.fontSizeforum = Settings.FontSize.DPIRegular;
                     Settings.ApplyScalingProperties();
                     this.AutoScaleMode = Settings.appScalingMode;
-                    //to go from 1.25 to 1.0, multiply by 0.8. how to get 0.8?
                     float temp = 1.0f / scale;
                     this.Scale(new SizeF(temp, temp));
                     scale = 1.0f;
