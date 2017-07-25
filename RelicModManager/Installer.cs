@@ -132,11 +132,13 @@ namespace RelhaxModpack
             ResetArgs();
             //Step 10: Patch Mods
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchMods;
-            PatchFiles();
+            if (Directory.Exists(TanksLocation + "\\_patch"))
+                PatchFiles();
             ResetArgs();
             //Step 11: Install Fonts
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallFonts;
-            InstallFonts();
+            if (Directory.Exists(TanksLocation + "\\_fonts"))
+                InstallFonts();
             ResetArgs();
             //Step 12: Extract User Mods
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractUserMods;
@@ -144,11 +146,13 @@ namespace RelhaxModpack
             ResetArgs();
             //Step 13: Patch Mods
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchUserMods;
-            PatchFiles();
+            if (Directory.Exists(TanksLocation + "\\_patch"))
+                PatchFiles();
             ResetArgs();
             //Step 14: Install Fonts
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallUserFonts;
-            InstallFonts();
+            if (Directory.Exists(TanksLocation + "\\_fonts"))
+                InstallFonts();
         }
 
         public void WorkerReportProgress(object sender, ProgressChangedEventArgs e)
@@ -243,6 +247,9 @@ namespace RelhaxModpack
             NumFilesToProcess(TanksLocation + "\\res_mods");
             NumFilesToProcess(TanksLocation + "\\mods");
             InstallWorker.ReportProgress(0);
+            //don't forget to delete the readme files
+            if (Directory.Exists(TanksLocation + "\\_readme"))
+                Directory.Delete(TanksLocation + "\\_readme", true);
             DirectoryDelete(TanksLocation + "\\res_mods", true);
             DirectoryDelete(TanksLocation + "\\mods", true);
         }
@@ -429,8 +436,9 @@ namespace RelhaxModpack
                     }
                 }
             }
+            
             //get any other old patches out of memory
-            patchList.Clear();
+            patchList = new List<Patch>();
             for (int i = 0; i < diArr.Count(); i++)
             {
                 //set the attributes to normall
@@ -439,6 +447,7 @@ namespace RelhaxModpack
                 this.createPatchList(diArr[i].FullName);
             }
             args.ParrentTotalToProcess = patchList.Count;
+            args.ParrentProcessed = 0;
             //the actual patch method
             foreach (Patch p in patchList)
             {
@@ -507,7 +516,7 @@ namespace RelhaxModpack
                     Utils.appendToLog("PMOD/Generic patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
                     Utils.pmodPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
                 }
-                args.ChildProcessed++;
+                args.ParrentProcessed++;
                 InstallWorker.ReportProgress(0);
             }
             //all done, delete the patch folder

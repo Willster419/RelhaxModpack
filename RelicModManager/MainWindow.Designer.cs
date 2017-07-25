@@ -71,7 +71,7 @@
             this.fontSizeHUD = new System.Windows.Forms.RadioButton();
             this.fontSizeLarge = new System.Windows.Forms.RadioButton();
             this.fontSizeDefault = new System.Windows.Forms.RadioButton();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.totalProgressBar = new System.Windows.Forms.ProgressBar();
             this.settingsGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
@@ -94,7 +94,7 @@
             // 
             // childProgressBar
             // 
-            this.childProgressBar.Location = new System.Drawing.Point(12, 489);
+            this.childProgressBar.Location = new System.Drawing.Point(12, 538);
             this.childProgressBar.Name = "childProgressBar";
             this.childProgressBar.Size = new System.Drawing.Size(302, 15);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -122,7 +122,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(9, 565);
+            this.formPageLink.Location = new System.Drawing.Point(9, 593);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -132,7 +132,7 @@
             // 
             // parrentProgressBar
             // 
-            this.parrentProgressBar.Location = new System.Drawing.Point(12, 468);
+            this.parrentProgressBar.Location = new System.Drawing.Point(12, 517);
             this.parrentProgressBar.Name = "parrentProgressBar";
             this.parrentProgressBar.Size = new System.Drawing.Size(302, 15);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -141,7 +141,7 @@
             // speedLabel
             // 
             this.speedLabel.AutoSize = true;
-            this.speedLabel.Location = new System.Drawing.Point(9, 528);
+            this.speedLabel.Location = new System.Drawing.Point(9, 556);
             this.speedLabel.Name = "speedLabel";
             this.speedLabel.Size = new System.Drawing.Size(24, 13);
             this.speedLabel.TabIndex = 18;
@@ -384,7 +384,7 @@
             // findBugAddModLabel
             // 
             this.findBugAddModLabel.AutoSize = true;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 546);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 574);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
             this.findBugAddModLabel.TabIndex = 27;
@@ -395,7 +395,7 @@
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(221, 531);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(221, 559);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
             this.cancelDownloadButton.Size = new System.Drawing.Size(93, 60);
             this.cancelDownloadButton.TabIndex = 28;
@@ -415,7 +415,7 @@
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
             this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.downloadProgress.Size = new System.Drawing.Size(302, 51);
+            this.downloadProgress.Size = new System.Drawing.Size(302, 82);
             this.downloadProgress.TabIndex = 29;
             this.downloadProgress.Text = "";
             // 
@@ -493,7 +493,7 @@
             // donateLabel
             // 
             this.donateLabel.AutoSize = true;
-            this.donateLabel.Location = new System.Drawing.Point(9, 585);
+            this.donateLabel.Location = new System.Drawing.Point(9, 613);
             this.donateLabel.Name = "donateLabel";
             this.donateLabel.Size = new System.Drawing.Size(48, 13);
             this.donateLabel.TabIndex = 32;
@@ -600,21 +600,21 @@
             this.fontSizeDefault.MouseEnter += new System.EventHandler(this.font_MouseEnter);
             this.fontSizeDefault.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
-            // progressBar1
+            // totalProgressBar
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 510);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(302, 15);
-            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.progressBar1.TabIndex = 34;
+            this.totalProgressBar.Location = new System.Drawing.Point(12, 496);
+            this.totalProgressBar.Name = "totalProgressBar";
+            this.totalProgressBar.Size = new System.Drawing.Size(302, 15);
+            this.totalProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.totalProgressBar.TabIndex = 34;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(326, 604);
-            this.Controls.Add(this.progressBar1);
+            this.ClientSize = new System.Drawing.Size(326, 641);
+            this.Controls.Add(this.totalProgressBar);
             this.Controls.Add(this.fontSizeGB);
             this.Controls.Add(this.donateLabel);
             this.Controls.Add(this.viewTypeGB);
@@ -697,7 +697,7 @@
         private System.Windows.Forms.CheckBox disableBordersCB;
         private System.Windows.Forms.RadioButton DPILarge;
         private System.Windows.Forms.RadioButton DPIUHD;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar totalProgressBar;
     }
 }
 
