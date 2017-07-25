@@ -80,7 +80,6 @@ namespace RelhaxModpack
         {
             InstallWorker = new BackgroundWorker();
             InstallWorker.WorkerReportsProgress = true;
-            InstallWorker.DoWork += ActuallyStartInstallation;
             InstallWorker.ProgressChanged += WorkerReportProgress;
             InstallWorker.RunWorkerCompleted += WorkerReportComplete;
             args = new InstallerEventArgs();
@@ -90,7 +89,41 @@ namespace RelhaxModpack
         //Start installation on the UI thread
         public void StartInstallation()
         {
+            InstallWorker.DoWork += ActuallyStartInstallation;
             InstallWorker.RunWorkerAsync();
+        }
+
+        public void StartUninstallation()
+        {
+            InstallWorker.DoWork += ActuallyStartUnInstallation;
+            InstallWorker.RunWorkerAsync();
+        }
+
+        public void ActuallyStartUnInstallation(object sender, DoWorkEventArgs e)
+        {
+            ResetArgs();
+            args.InstalProgress = InstallerEventArgs.InstallProgress.Uninstall;
+            SmartUninstall();
+            Utils.appendToLog("Re-creating directories if they arn't already there");
+            //put them back
+            if (!Directory.Exists(TanksLocation + "\\res_mods\\" + TanksVersion)) Directory.CreateDirectory(TanksLocation + "\\res_mods\\" + TanksVersion);
+            if (!Directory.Exists(TanksLocation + "\\mods\\" + TanksVersion)) Directory.CreateDirectory(TanksLocation + "\\mods\\" + TanksVersion);
+        }
+
+        public void StartCleanUninstallation()
+        {
+            InstallWorker.DoWork += ActuallyStartCleanUnInstallation;
+            InstallWorker.RunWorkerAsync();
+        }
+
+        public void ActuallyStartCleanUnInstallation(object sender, DoWorkEventArgs e)
+        {
+            ResetArgs();
+            args.InstalProgress = InstallerEventArgs.InstallProgress.Uninstall;
+            DeleteMods();
+            //put them back when done
+            if (!Directory.Exists(TanksLocation + "\\res_mods\\" + TanksVersion)) Directory.CreateDirectory(TanksLocation + "\\res_mods\\" + TanksVersion);
+            if (!Directory.Exists(TanksLocation + "\\mods\\" + TanksVersion)) Directory.CreateDirectory(TanksLocation + "\\mods\\" + TanksVersion);
         }
 
         //Start the installation on the Wokrer thread
@@ -712,7 +745,52 @@ namespace RelhaxModpack
                 patchList.Add(p);
             }
         }
-
+        //the Uninstall Method for regular uninstallations
+        private void SmartUninstall()
+        {
+            string[] createdFiles = File.ReadAllLines(TanksLocation + "\\installedRelhaxFiles.log");
+            //sort into directories and files
+            List<string> files = new List<string>();
+            foreach (string s in createdFiles)
+            {
+                if (Regex.IsMatch(s, @"^\s*/\*(\s|\S)*?\*/\s*$"))
+                {
+                    // this entry is an commentblock, so should be passed
+                }
+                else
+                {
+                    if (Regex.IsMatch(s, @"\.[A-Za-z0-9_\-]*$"))
+                    {
+                        //it's a files
+                        files.Add(s);
+                    }
+                    else
+                    {
+                        //it's a folder, ignore it
+                    }
+                }
+            }
+            args.ChildTotalToProcess = files.Count;
+            //delete all the files
+            foreach (string s in files)
+            {
+                string filePath = TanksLocation + "\\" + s;
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                    args.ChildProcessed++;
+                    InstallWorker.ReportProgress(0);
+                }
+            }
+            //delete all the folders if nothing else is in them
+            Utils.appendToLog("Finished deleting, processing mods folder");
+            Utils.processDirectory(TanksLocation + "\\mods");
+            Utils.appendToLog("processing res_mods folder");
+            Utils.processDirectory(TanksLocation + "\\res_mods");
+            //don't forget to delete the readme files
+            if (Directory.Exists(TanksLocation + "\\_readme"))
+                Directory.Delete(TanksLocation + "\\_readme", true);
+        }
         //gets the total number of files to process to eithor delete or copy
         private void NumFilesToProcess(string folder)
         {
