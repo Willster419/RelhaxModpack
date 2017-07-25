@@ -710,7 +710,8 @@ namespace RelhaxModpack
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 parrentProgressBar.Value = e.ParrentProcessed;
                 childProgressBar.Maximum = e.ChildTotalToProcess;
-                childProgressBar.Value = e.ChildProcessed;
+                if(e.ChildProcessed > 0)
+                    childProgressBar.Value = e.ChildProcessed;
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractGlobalDependencies;
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractDependencies)
@@ -720,7 +721,8 @@ namespace RelhaxModpack
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 parrentProgressBar.Value = e.ParrentProcessed;
                 childProgressBar.Maximum = e.ChildTotalToProcess;
-                childProgressBar.Value = e.ChildProcessed;
+                if (e.ChildProcessed > 0)
+                    childProgressBar.Value = e.ChildProcessed;
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractDependencies;
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractLogicalDependencies)
@@ -730,7 +732,8 @@ namespace RelhaxModpack
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 parrentProgressBar.Value = e.ParrentProcessed;
                 childProgressBar.Maximum = e.ChildTotalToProcess;
-                childProgressBar.Value = e.ChildProcessed;
+                if (e.ChildProcessed > 0)
+                    childProgressBar.Value = e.ChildProcessed;
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractLogicalDependencies;
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractMods)
@@ -740,7 +743,8 @@ namespace RelhaxModpack
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 parrentProgressBar.Value = e.ParrentProcessed;
                 childProgressBar.Maximum = e.ChildTotalToProcess;
-                childProgressBar.Value = e.ChildProcessed;
+                if (e.ChildProcessed > 0)
+                    childProgressBar.Value = e.ChildProcessed;
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractMods;
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractConfigs)
@@ -750,7 +754,8 @@ namespace RelhaxModpack
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 parrentProgressBar.Value = e.ParrentProcessed;
                 childProgressBar.Maximum = e.ChildTotalToProcess;
-                childProgressBar.Value = e.ChildProcessed;
+                if (e.ChildProcessed > 0)
+                    childProgressBar.Value = e.ChildProcessed;
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractConfigs;
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.RestoreUserData)
@@ -783,7 +788,8 @@ namespace RelhaxModpack
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 parrentProgressBar.Value = e.ParrentProcessed;
                 childProgressBar.Maximum = e.ChildTotalToProcess;
-                childProgressBar.Value = e.ChildProcessed;
+                if (e.ChildProcessed > 0)
+                    childProgressBar.Value = e.ChildProcessed;
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractUserMods;
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.PatchUserMods)
