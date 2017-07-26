@@ -2499,7 +2499,7 @@ namespace RelhaxModpack
             doc.Save(savePath);
             if (fromButton)
             {
-                MessageBox.Show(Translations.getTranslatedString("configSaveSucess"));
+                MessageBox.Show(Translations.getTranslatedString("configSaveSuccess"));
             }
         }
         private static void saveProcessConfigs_old(XmlDocument doc, List<Config> configList, XmlElement configsHolder)
@@ -2534,7 +2534,7 @@ namespace RelhaxModpack
             saveLocation.AddExtension = true;
             saveLocation.DefaultExt = ".xml";
             saveLocation.Filter = "*.xml|*.xml";
-            saveLocation.InitialDirectory = Application.StartupPath + "\\RelHaxUserConfigs";
+            saveLocation.InitialDirectory = Path.Combine(Application.StartupPath, "RelHaxUserConfigs");
             saveLocation.Title = Translations.getTranslatedString("selectWhereToSave");
             if (fromButton)
             {
@@ -2547,8 +2547,8 @@ namespace RelhaxModpack
             string savePath = saveLocation.FileName;
             if (Settings.saveLastConfig && !fromButton && fileToConvert == null)
             {
-                savePath = Application.StartupPath + "\\RelHaxUserConfigs\\lastInstalledConfig.xml";
-                Utils.appendToLog("Save last config checked, saving to " + savePath);
+                savePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml");
+                Utils.appendToLog(string.Format("Save last config checked, saving to {0}", savePath));
             }
             else if (!fromButton && !(fileToConvert == null))
             {
@@ -2597,7 +2597,7 @@ namespace RelhaxModpack
             doc.Save(savePath);
             if (fromButton)
             {
-                MessageBox.Show(Translations.getTranslatedString("configSaveSucess"));
+                MessageBox.Show(Translations.getTranslatedString("configSaveSuccess"));
             }
         }
 
@@ -2640,7 +2640,7 @@ namespace RelhaxModpack
                 loadConfigV1(fromButton, filePath, parsedCatagoryList, userMods);
             }
         }
-        
+
         //loads a saved config from xml and parses it into the memory database
         public static void loadConfigV1(bool fromButton, string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
@@ -2712,10 +2712,30 @@ namespace RelhaxModpack
                 DialogResult result = MessageBox.Show(Translations.getTranslatedString("oldSavedConfigFile"), Translations.getTranslatedString("information"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == DialogResult.Yes)
                 {
+                    // create Path to UserConfigs Backup
+                    string backupFolder = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "Backup");
+                    // create Backup folder at UserConfigs
+                    System.IO.Directory.CreateDirectory(backupFolder);
+                    // exctrat filename to create a new filename with backup date and time
+                    string filename = Path.GetFileNameWithoutExtension(filePath);
+                    string fileextention = Path.GetExtension(filePath);
+                    // create target path
+                    string targetFilePath = Path.Combine(backupFolder, string.Format("{0}_{1:yyyy-MM-dd-HH-mm-ss}{2}", filename, DateTime.Now, fileextention));
+                    // move file to new location now
+                    try
+                    {
+                        File.Move(filePath, targetFilePath);
+                    }
+                    catch (Exception e)
+                    {
+                        Utils.appendToLog(string.Format("sourceFile: {0}", filePath));
+                        Utils.appendToLog(string.Format("targetFile: {0}", targetFilePath));
+                        Utils.appendToLog(string.Format("Error: {0}", e.ToString()));
+                    }
+                    // create saved config file with new format
                     saveConfig(false, filePath, parsedCatagoryList, userMods);
                 }
             }
-
         }
 
         //loads a saved config from xml and parses it into the memory database
@@ -2761,7 +2781,7 @@ namespace RelhaxModpack
                 if (savedUserConfigList.Contains(um.name))
                 {
                     string filename = um.name + ".zip";
-                    if (File.Exists(Application.StartupPath + "\\RelHaxUserMods\\" + filename))
+                    if (File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename)))
                     {
                         um.Checked = true;
                         Utils.appendToLog("Checking user mod " + um.zipFile);

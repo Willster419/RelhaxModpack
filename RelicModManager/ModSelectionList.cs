@@ -1989,20 +1989,20 @@ namespace RelhaxModpack
             string filePath = "";
             if (loadMode == loadConfigMode.fromAutoInstall)
             {
-                filePath = Application.StartupPath + "\\RelHaxUserConfigs\\" + Program.configName;
+                filePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", Program.configName);
                 if (!File.Exists(filePath))
                 {
-                    Utils.appendToLog("ERROR: " + filePath + " not found, not loading configs");
+                    Utils.appendToLog(string.Format("ERROR: {0} not found, not loading configs", filePath));
                     MessageBox.Show(Translations.getTranslatedString("configLoadFailed"));
                     return;
                 }
             }
             else if (loadMode == loadConfigMode.fromSaveLastConfig)
             {
-                filePath = Application.StartupPath + "\\RelHaxUserConfigs\\lastInstalledConfig.xml";
+                filePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml");
                 if (!File.Exists(filePath))
                 {
-                    Utils.appendToLog("ERROR: " + filePath + " not found, not loading configs");
+                    Utils.appendToLog(string.Format("ERROR: {0} not found, not loading configs", filePath));
                     return;
                 }
             }
@@ -2011,7 +2011,7 @@ namespace RelhaxModpack
                 loadLocation.AddExtension = true;
                 loadLocation.DefaultExt = ".xml";
                 loadLocation.Filter = "*.xml|*.xml";
-                loadLocation.InitialDirectory = Application.StartupPath + "\\RelHaxUserConfigs";
+                loadLocation.InitialDirectory = Path.Combine(Application.StartupPath, "RelHaxUserConfigs");
                 loadLocation.Title = Translations.getTranslatedString("selectConfigFile");
                 if (loadLocation.ShowDialog().Equals(DialogResult.Cancel))
                 {
@@ -2023,7 +2023,7 @@ namespace RelhaxModpack
             Utils.loadConfig(loadMode == loadConfigMode.fromButton, filePath, parsedCatagoryList, userMods);
             if (loadMode == loadConfigMode.fromButton || loadMode == loadConfigMode.fromAutoInstall)
             {
-                if (loadMode == loadConfigMode.fromButton) MessageBox.Show(Translations.getTranslatedString("prefrencesSet"));
+                if (loadMode == loadConfigMode.fromButton) MessageBox.Show(Translations.getTranslatedString("prefrencesSet"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //reload the UI
                 this.UseWaitCursor = true;
                 modTabGroups.Enabled = false;

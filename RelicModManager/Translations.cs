@@ -678,9 +678,9 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("configSaveSucess", "Config Saved Sucessfully");
-            german.Add("configSaveSucess", "Config wurde erfolgreich gespeichert");
-            polish.Add("configSaveSucess", "Udało się zapisać konfigurację");
+            english.Add("configSaveSuccess", "Config Saved Successfully");
+            german.Add("configSaveSuccess", "Konfiguration wurde erfolgreich gespeichert");
+            polish.Add("configSaveSuccess", "Udało się zapisać konfigurację");
 
             //Componet: 
             //
@@ -690,7 +690,7 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("configLoadFailed", "The config file could not be loaded, loading in standard mode");
+            english.Add("configLoadFailed", "The preference file could not be loaded, loading in standard mode");
             german.Add("configLoadFailed", "Die Konfigurationsdatei konnte nicht geladen werden, lade im Standard Modus");
             polish.Add("configLoadFailed", "Nie można wczytać pliku knfiguracji, ładowanie trybu podstawowego");
 
@@ -720,13 +720,13 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("modsNotFoundTechnical", "The following mods could not be found and seams to be deleted. There are only techical names availible:\n{0}");
+            english.Add("modsNotFoundTechnical", "The following mods could not be found and seems to be deleted. There are only technical names available:\n{0}");
             german.Add("modsNotFoundTechnical", "Die folgenden Modifikationen können nicht gefundenw werden und scheinen gelöscht zu sein. Es sind leider nur technische Namen verfügbar:\n{0}");
-            polish.Add("modsNotFoundTechnical", "The following mods could not be found and seams to be deleted. There are only techical names availible:\n{0}");
+            polish.Add("modsNotFoundTechnical", "The following mods could not be found and seems to be deleted. There are only technical names available:\n{0}");
 
             //Componet: 
             //
-            english.Add("oldSavedConfigFile", "The saved config file your are using, is not the current used format and will be inaccurate in the future. Convert it to the new standard?");
+            english.Add("oldSavedConfigFile", "The saved preferences file your are using, is not the current used format and will be inaccurate in the future. Convert it to the new standard?");
             german.Add("oldSavedConfigFile", "Die Konfigurationsdatei die benutzt wurde, wird in Zukunft immer ungenauer werden. Soll auf das neue Standardformat umgestellt werden?");
             polish.Add("oldSavedConfigFile", "The config file your are using, is not the current used format and will be inaccurate in the future. Convert it to the new stadard?");
 
