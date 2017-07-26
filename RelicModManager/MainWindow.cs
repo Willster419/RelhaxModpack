@@ -448,7 +448,6 @@ namespace RelhaxModpack
                 }
             }
             return null;
-
         }
         
         //prompts the user to specify where the "WorldOfTanks.exe" file is
@@ -460,7 +459,7 @@ namespace RelhaxModpack
             {
                 findWotExe.InitialDirectory = Path.GetDirectoryName(tanksLocation);
             }
-            //unable to find it in the registry, so ask for it
+            //unable to find it in the registry (or user activated manually selection), so ask for it
             if (findWotExe.ShowDialog().Equals(DialogResult.Cancel))
             {
                 downloadProgress.Text = Translations.getTranslatedString("canceled");
