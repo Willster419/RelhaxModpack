@@ -2795,7 +2795,7 @@ namespace RelhaxModpack
                     }
                 }
             }
-            if (savedUserConfigList.Count > 0)
+            if (savedConfigList.Count > 0)
             {
                 string modsNotFoundList = "";
                 foreach (var s in savedConfigList)
