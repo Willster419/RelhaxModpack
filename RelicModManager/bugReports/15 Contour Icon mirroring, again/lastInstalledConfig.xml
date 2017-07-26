@@ -1,0 +1,425 @@
+<mods ver="1.0" date="2017-07-23 11:00:47">
+  <relhaxMods>
+    <mod>
+      <name>Willster419's Config</name>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>6th sense - Icon Duration</name>
+          <configs>
+            <config>
+              <name>10 sec 6th sense icon</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Information Label for Missions (Mission Tracker)</name>
+          <configs>
+            <config>
+              <name>by MarsOne</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Hitlog</name>
+          <configs>
+            <config>
+              <name>Enable</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Total HP</name>
+          <configs>
+            <config>
+              <name>Enable total HP</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>WN8 Comparison</name>
+        </config>
+        <config>
+          <name>High Caliber Tracker</name>
+          <configs>
+            <config>
+              <name>Enable</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Last Hit Announcer</name>
+          <configs>
+            <config>
+              <name>Enable</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Damage Panel Repair Timers</name>
+          <configs>
+            <config>
+              <name>Enable</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Results modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Show Battle Tier</name>
+        </config>
+        <config>
+          <name>Init Battle Results page 1</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage Interface Modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Gold Locker</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Free XP Locker</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Set Default Currency</name>
+          <configs>
+            <config>
+              <name>Credits</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Block vehicle if ammo is lower than...</name>
+          <configs>
+            <config>
+              <name>50%</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Server Ping</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Server Populations</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Login Modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Show server ping</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Show server populations</name>
+          <configs>
+            <config>
+              <name>Enabled</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Minimap modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Zoom configuration</name>
+          <configs>
+            <config>
+              <name>Hotkey Left CTRL</name>
+            </config>
+            <config>
+              <name>Minimap zoom - bottom right</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Players Panel Modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>HP Bars</name>
+          <configs>
+            <config>
+              <name>OMC style</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Statistics color step modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>default config's colorscale</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Tank Carousel base modifications (xvm)</name>
+      <configs>
+        <config>
+          <name>Enabled</name>
+        </config>
+        <config>
+          <name>Rows - 3</name>
+        </config>
+        <config>
+          <name>"Buy Tank" cell</name>
+          <configs>
+            <config>
+              <name>Show cell, show total slots</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>"Buy Slot" cell</name>
+          <configs>
+            <config>
+              <name>Show cell, show total used slots</name>
+            </config>
+          </configs>
+        </config>
+        <config>
+          <name>Cell Content</name>
+          <configs>
+            <config>
+              <name>From Prebuilt Config Selection</name>
+              <configs>
+                <config>
+                  <name>Normal Style</name>
+                  <configs>
+                    <config>
+                      <name>1.0 Scale</name>
+                    </config>
+                    <config>
+                      <name>Average Damage</name>
+                      <configs>
+                        <config>
+                          <name>Enable</name>
+                        </config>
+                      </configs>
+                    </config>
+                    <config>
+                      <name>Battles Count</name>
+                      <configs>
+                        <config>
+                          <name>Enable</name>
+                        </config>
+                      </configs>
+                    </config>
+                    <config>
+                      <name>Win Rate</name>
+                      <configs>
+                        <config>
+                          <name>Enable</name>
+                        </config>
+                      </configs>
+                    </config>
+                  </configs>
+                </config>
+              </configs>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Arcade and Sniper</name>
+      <configs>
+        <config>
+          <name>HARDscope by Andrey-Hard and KobkaG</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Contour Icons</name>
+      <configs>
+        <config>
+          <name>Pogs Contour Icons</name>
+          <configs>
+            <config>
+              <name>Clear</name>
+              <configs>
+                <config>
+                  <name>tier, name, avg penetration, armor numbers, view range, reload time</name>
+                </config>
+              </configs>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Damagelog by GambitER</name>
+      <configs>
+        <config>
+          <name>config from OMC</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Assistant</name>
+      <configs>
+        <config>
+          <name>G</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Battle Interface modifications - Penetration ( ͡° ͜ʖ ͡°) Indicator (pmod)</name>
+      <configs>
+        <config>
+          <name>font size medium (24)</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>SafeShot</name>
+      <configs>
+        <config>
+          <name>1 Sec no corpse Shot</name>
+        </config>
+        <config>
+          <name>send team damage message in chat</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Zoom modifications - zoom in (pmod)</name>
+      <configs>
+        <config>
+          <name>2, 4, 8, 12, 16, 20, 26, 32, 40, 48</name>
+        </config>
+        <config>
+          <name>td brake on</name>
+        </config>
+        <config>
+          <name>starting zoom 4x</name>
+        </config>
+        <config>
+          <name>enable pmod zoom indicator</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Zoom Out Config (meters)</name>
+      <configs>
+        <config>
+          <name>500m arcade + postmortem</name>
+        </config>
+        <config>
+          <name>Disable gun shake</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>ATAC</name>
+    </mod>
+    <mod>
+      <name>Bullet Damage Indicators</name>
+      <configs>
+        <config>
+          <name>qdly</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Crew Skill Informer</name>
+    </mod>
+    <mod>
+      <name>Gold Visibility Mod by lgfrbcsgo</name>
+      <configs>
+        <config>
+          <name>Red APCR, Gold HEAT</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Inbattle current rating calculation by Ekspoint</name>
+      <configs>
+        <config>
+          <name>wn8</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Hitmarker by Aimdrol</name>
+      <configs>
+        <config>
+          <name>Damage Only</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>WoT Tweaker</name>
+      <configs>
+        <config>
+          <name>Enable max visibility</name>
+        </config>
+        <config>
+          <name>Disable fog</name>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Garage Session Statistics</name>
+      <configs>
+        <config>
+          <name>Session Statistics by Tomonik</name>
+          <configs>
+            <config>
+              <name>German modified Version by dirty20067</name>
+            </config>
+            <config>
+              <name>Daily Reset</name>
+            </config>
+          </configs>
+        </config>
+      </configs>
+    </mod>
+    <mod>
+      <name>Icon</name>
+      <configs>
+        <config>
+          <name>Granate</name>
+        </config>
+      </configs>
+    </mod>
+  </relhaxMods>
+  <userMods />
+</mods>

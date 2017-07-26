@@ -678,9 +678,9 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("configSaveSuccess", "Config Saved Successfully");
-            german.Add("configSaveSuccess", "Konfiguration wurde erfolgreich gespeichert");
-            polish.Add("configSaveSuccess", "Udało się zapisać konfigurację");
+            english.Add("configSaveSucess", "Config Saved Sucessfully");
+            german.Add("configSaveSucess", "Config wurde erfolgreich gespeichert");
+            polish.Add("configSaveSucess", "Udało się zapisać konfigurację");
 
             //Componet: 
             //
@@ -690,7 +690,7 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("configLoadFailed", "The preference file could not be loaded, loading in standard mode");
+            english.Add("configLoadFailed", "The config file could not be loaded, loading in standard mode");
             german.Add("configLoadFailed", "Die Konfigurationsdatei konnte nicht geladen werden, lade im Standard Modus");
             polish.Add("configLoadFailed", "Nie można wczytać pliku knfiguracji, ładowanie trybu podstawowego");
 
@@ -710,37 +710,37 @@ namespace RelhaxModpack
             //
             english.Add("modDeactivated", "The mod \"{0}\" is currently deactivated in the modpack and could not to selected to install.");
             german.Add("modDeactivated", "Der Mod \"{0}\" ist derzeit im Modpack deaktiviert und kann für die Installation nicht markiert werden.");
-            polish.Add("modDeactivated", "The mod \"{0}\" is currently deactivated in the modpack and could not to selected to install.");
+            polish.Add("modDeactivated", "");
 
             //Componet: 
             //
             english.Add("configDeactivated", "The config \"{0}\" of \"{1}\" is currently deactivated in the modpack and could not to selected to install.");
             german.Add("configDeactivated", "Die Konfiguration \"{0}\" von \"{1}\" ist derzeit im Modpack deaktiviert und kann für die Installation nicht markiert werden.");
-            polish.Add("configDeactivated", "The config \"{0}\" of \"{1}\" is currently deactivated in the modpack and could not to selected to install.");
+            polish.Add("configDeactivated", "");
 
             //Componet: 
             //
-            english.Add("modsNotFoundTechnical", "The following mods could not be found and seems to be deleted. There are only technical names available:\n{0}");
+            english.Add("modsNotFoundTechnical", "The following mods could not be found and were most likely removed. There are only techical names availible:\n{0}");
             german.Add("modsNotFoundTechnical", "Die folgenden Modifikationen können nicht gefundenw werden und scheinen gelöscht zu sein. Es sind leider nur technische Namen verfügbar:\n{0}");
-            polish.Add("modsNotFoundTechnical", "The following mods could not be found and seems to be deleted. There are only technical names available:\n{0}");
+            polish.Add("modsNotFoundTechnical", "");
 
             //Componet: 
             //
-            english.Add("oldSavedConfigFile", "The saved preferences file your are using, is not the current used format and will be inaccurate in the future. Convert it to the new standard?");
-            german.Add("oldSavedConfigFile", "Die Konfigurationsdatei die benutzt wurde, wird in Zukunft immer ungenauer werden. Soll auf das neue Standardformat umgestellt werden?");
-            polish.Add("oldSavedConfigFile", "The config file your are using, is not the current used format and will be inaccurate in the future. Convert it to the new stadard?");
+            english.Add("oldSavedConfigFile", "The saved config file your are using is in an outdated format and will be inaccurate in the future. Convert it to the new format? (A backup of the old format will be made)");
+            german.Add("oldSavedConfigFile", "Die Konfigurationsdatei die benutzt wurde, wird in Zukunft immer ungenauer werden. Soll auf das neue Standardformat umgestellt werden? (Eine Sicherung des alten Formats erfolgt)");
+            polish.Add("oldSavedConfigFile", "");
 
             //Componet: 
             //
-            english.Add("prefrencesSet", "preferences Set");
-            german.Add("prefrencesSet", "bevorzugte Einstellungen");
-            polish.Add("prefrencesSet", "preferowane ustawienia");
+            english.Add("prefrencesSet", "Preferences Set");
+            german.Add("prefrencesSet", "Bevorzugte Einstellungen");
+            polish.Add("prefrencesSet", "Preferowane Ustawienia");
 
             //Componet: 
             //
-            english.Add("selectionsCleared", "selections cleared");
-            german.Add("selectionsCleared", "Auswahlen gelöscht");
-            polish.Add("selectionsCleared", "usunięto zaznaczenia");
+            english.Add("selectionsCleared", "Selections Cleared");
+            german.Add("selectionsCleared", "Auswahlen Gelöscht");
+            polish.Add("selectionsCleared", "Usunięto Zaznaczenia");
 
             //Componet: 
             //
