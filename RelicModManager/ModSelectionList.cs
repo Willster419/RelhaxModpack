@@ -270,7 +270,9 @@ namespace RelhaxModpack
                         foreach (Mod m in c.mods)
                         {
                             pw.loadingDescBox.Text = Translations.getTranslatedString("loading") + " " + m.name;
-                            pw.progressBar1.Value++;
+                            int prog = pw.progressBar1.Value + 1;
+                            if ((pw.progressBar1.Minimum < prog) && (prog <= pw.progressBar1.Maximum))
+                                pw.progressBar1.Value++;
                             Application.DoEvents();
                             if (Settings.sView == Settings.SelectionView.defaultt)
                             {
