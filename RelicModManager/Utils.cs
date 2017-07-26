@@ -76,16 +76,23 @@ namespace RelhaxModpack
                 if (fi.Length < iMaxLogLength * multi)
                     fs = new FileStream(strFile, FileMode.Append, FileAccess.Write, FileShare.Read);
                 else // If the log file is more than the max length, just open it empty
+                {
                     fs = new FileStream(strFile, FileMode.Create, FileAccess.Write, FileShare.Read);
+                    // https://stackoverflow.com/questions/5266069/streamwriter-and-utf-8-byte-order-marks
+                    // Creates the UTF-8 encoding with parameter "encoderShouldEmitUTF8Identifier" set to true
+                    Encoding vUTF8Encoding = new UTF8Encoding(true);
+                    // Gets the preamble in order to attach the BOM
+                    var vPreambleByte = vUTF8Encoding.GetPreamble();
+                    // Writes the preamble first
+                    fs.Write(vPreambleByte, 0, vPreambleByte.Length);
+                }
 
                 using (fs)
                 {
                     // If you are trimming the file length, write what you saved. 
                     if (bytesSavedFromEndOfOldLog != null)
                     {
-                        Byte[] lineBreak = Encoding.UTF8.GetBytes("### " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " *** *** *** Old Log Start Position *** *** *** *** ###");
-                        fs.Write(newLine, 0, newLine.Length);
-                        fs.Write(newLine, 0, newLine.Length);
+                        Byte[] lineBreak = Encoding.UTF8.GetBytes(string.Format("### {0:yyyy-MM-dd HH:mm:ss} *** *** *** Old Log Start Position *** *** *** *** ###", DateTime.Now));
                         fs.Write(lineBreak, 0, lineBreak.Length);
                         fs.Write(newLine, 0, newLine.Length);
                         fs.Write(bytesSavedFromEndOfOldLog, 0, bytesSavedFromEndOfOldLog.Length);
