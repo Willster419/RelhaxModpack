@@ -363,7 +363,7 @@ namespace RelhaxModpack
         }
         //checks the registry to get the location of where WoT is installed
         //idea: if the user can open replay files, this can get the WoT exe filepath
-        private string autoFindTanks()
+        private string autoFindTanks_old()
         {
             object theObject = new object();
             const string keyName = "HKEY_CURRENT_USER\\Software\\Classes\\.wotreplay\\shell\\open\\command";
@@ -382,19 +382,84 @@ namespace RelhaxModpack
             if (!File.Exists(tanksLocation)) return null;
             return (string)theObject;
         }
-        //grumpelumpfs try to create an alternative way
-        //http://forensicartifacts.com/2010/08/registry-muicache/
-        // HKEY_CURRENT_USER\Software\Microsoft\Windows\ShellNoRoam\MUICache
-        // HKEY_CURRENT_USER\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache
-        // HKEY_CURRENT_USER\Software\Wargaming.net\Launcher\Apps\wot
-        private string autoFindTanksAlt()
+
+        private string autoFindTanks()
         {
+            List<string> searchPathWoT = new List<string>();
+            string[] registryPathArray = new string[] { };
+
+            // check replay link
+            registryPathArray = new string[] { @"HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.wotreplay\shell\open\command", @"HKEY_CURRENT_USER\Software\Classes\.wotreplay\shell\open\command"};
+            foreach (string regEntry in registryPathArray)
+            {
+                object obj = Registry.GetValue(regEntry, "", -1);
+                if (obj != null)
+                {
+                    try
+                    {
+                        searchPathWoT.Add(((string)obj).Substring(1).Substring(0, ((string)obj).Length - 7));
+                    }
+                    catch (InvalidCastException)
+                    {  } // only exception catching
+                }
+            }
+
+            string regPath = @"HKEY_CURRENT_USER\Software\Wargaming.net\Launcher\Apps\wot";
+            RegistryKey subKeyHandle = Registry.CurrentUser.OpenSubKey(regPath.Replace(@"HKEY_CURRENT_USER\", ""));
+            foreach (string valueName in subKeyHandle.GetValueNames())
+            {
+                object obj = Registry.GetValue(regPath, valueName, -1);
+                if (obj != null)
+                {
+                    try
+                    {
+                        searchPathWoT.Add(Path.Combine((string)obj, "WorldOfTanks.exe"));
+                    }
+                    catch (InvalidCastException)
+                    { } // only exception catching
+                }
+            }
+
+            registryPathArray = new string[] { @"Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache", @"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Store" };
+            foreach (string p in registryPathArray)
+            {
+                subKeyHandle = Registry.CurrentUser.OpenSubKey(p);
+                foreach (string valueName in subKeyHandle.GetValueNames())
+                {
+                    try
+                    {
+                        if (valueName.ToLower().Contains("Worldoftanks.exe".ToLower()))
+                        {
+                            searchPathWoT.Add(valueName.Replace(".ApplicationCompany", "").Replace(".FriendlyAppName", ""));
+                        }
+                    }
+                    catch
+                    { } // only exception catching
+                }
+            }
+
+            foreach (string path in searchPathWoT)
+            {
+                if (File.Exists(path))
+                {
+                    Utils.appendToLog(string.Format("valid game path found: {0}", path));
+                    tanksLocation = path;
+                    return path;
+                }
+            }
             return null;
+
         }
+        
         //prompts the user to specify where the "WorldOfTanks.exe" file is
         //return the file path and name of "WorldOfTanks.exe"
         private string manuallyFindTanks()
         {
+            // try to give an untrained user a littlebit support
+            if (autoFindTanks() != null)
+            {
+                findWotExe.InitialDirectory = Path.GetDirectoryName(tanksLocation);
+            }
             //unable to find it in the registry, so ask for it
             if (findWotExe.ShowDialog().Equals(DialogResult.Cancel))
             {
