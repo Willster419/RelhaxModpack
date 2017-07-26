@@ -32,7 +32,7 @@ namespace RelhaxModpack
         public static string fontName { get; set; }
         public static float scaleSize { get; set; }
         public static string settingsXmlFile = Application.StartupPath + "\\RelHaxSettings.xml";
-        public static string configFileVersion = "1.0";     // for later imports of this files, we need a better identification
+        public static string configFileVersion = "2.0";     // for later imports of this files, we need a better identification
         public enum LoadingGifs { standard = 0, thirdGuards = 1 };
         public static LoadingGifs gif;
         public const float normalSizeFont = 8.25F;//1.0 font scaling

@@ -900,7 +900,7 @@ namespace RelhaxModpack
             }
         }
 
-         //checks for duplicate packageName
+        //checks for duplicate packageName
         public static bool duplicatesPackageName(List<Category> parsedCatagoryList, ref int duplicatesCounter)
         {
             //add every mod and config name to a new list
@@ -2453,7 +2453,7 @@ namespace RelhaxModpack
             XmlElement modsHolderBase = doc.CreateElement("mods");
             doc.AppendChild(modsHolderBase);
             //add configfile version as an attribute (changes to this save format are very likely)
-            modsHolderBase.SetAttribute("ver", Settings.configFileVersion);
+            modsHolderBase.SetAttribute("ver", "1.0");
             modsHolderBase.SetAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             //relhax mods root
             XmlElement modsHolder = doc.CreateElement("relhaxMods");
@@ -2528,7 +2528,7 @@ namespace RelhaxModpack
         }
 
         //saves the currently checked configs and mods
-        public static void saveConfig(bool fromButton, List<Category> parsedCatagoryList, List<Mod> userMods)
+        public static void saveConfig(bool fromButton, string fileToConvert, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
             //dialog box to ask where to save the config to
             System.Windows.Forms.SaveFileDialog saveLocation = new System.Windows.Forms.SaveFileDialog();
@@ -2546,16 +2546,21 @@ namespace RelhaxModpack
                 }
             }
             string savePath = saveLocation.FileName;
-            if (Settings.saveLastConfig && !fromButton)
+            if (Settings.saveLastConfig && !fromButton && fileToConvert == null)
             {
                 savePath = Application.StartupPath + "\\RelHaxUserConfigs\\lastInstalledConfig.xml";
                 Utils.appendToLog("Save last config checked, saving to " + savePath);
+            }
+            else if (!fromButton && !(fileToConvert == null))
+            {
+                savePath = fileToConvert;
+                Utils.appendToLog(string.Format("convert saved config file \"{0}\" to format {1}", savePath, Settings.configFileVersion));
             }
 
             //create saved config xml layout
             XDocument doc = new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
-                new XElement("mods", new XAttribute("ver", "2.0"), new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))));
+                new XElement("mods", new XAttribute("ver", Settings.configFileVersion), new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))));
 
             //relhax mods root
             doc.Element("mods").Add(new XElement("relhaxMods"));
@@ -2614,7 +2619,7 @@ namespace RelhaxModpack
             }
         }
 
-        public static void loadConfig(string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
+        public static void loadConfig(bool fromButton, string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
             Utils.clearSelectionMemory(parsedCatagoryList);
             XmlDocument doc = new XmlDocument();
@@ -2633,12 +2638,12 @@ namespace RelhaxModpack
             }
             else // file is still version v1.0 (name dependend)
             {
-                loadConfigV1(filePath, parsedCatagoryList, userMods);
+                loadConfigV1(fromButton, filePath, parsedCatagoryList, userMods);
             }
         }
         
         //loads a saved config from xml and parses it into the memory database
-        public static void loadConfigV1(string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
+        public static void loadConfigV1(bool fromButton, string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
@@ -2703,41 +2708,58 @@ namespace RelhaxModpack
                 }
             }
             Utils.appendToLog("Finished loading mod selections v1.0");
+            if (fromButton)
+            {
+                DialogResult result = MessageBox.Show(Translations.getTranslatedString("oldSavedConfigFile"), Translations.getTranslatedString("information"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    saveConfig(false, filePath, parsedCatagoryList, userMods);
+                }
+            }
+
         }
 
         //loads a saved config from xml and parses it into the memory database
         public static void loadConfigV2(string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
             Utils.appendToLog("Loading mod selections v2.0 from " + filePath);
-            List<string> savedConfig = new List<string>();
+            List<string> savedConfigList = new List<string>();
             var doc = new XPathDocument(filePath);
             foreach (var mod in doc.CreateNavigator().Select("//relhaxMods/mod"))
             {
-                savedConfig.Add(mod.ToString());
+                savedConfigList.Add(mod.ToString());
             }
             foreach (Category c in parsedCatagoryList)
             {
                 foreach (Mod m in c.mods)
                 {
-                    if (savedConfig.Contains(m.packageName))
+                    if (savedConfigList.Contains(m.packageName))
                     {
-                        m.Checked = true;
-                        Utils.appendToLog("Checking mod " + m.name);
+                        savedConfigList.Remove(m.packageName);
+                        if (!m.enabled)
+                        {
+                            MessageBox.Show(string.Format(Translations.getTranslatedString("modDeactivated"), m.name), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            m.Checked = true;
+                            Utils.appendToLog("Checking mod " + m.name);
+                        }
                     }
                     if (m.configs.Count > 0)
                     {
-                        loadProcessConfigsV2(m.configs, savedConfig);
+                        loadProcessConfigsV2(m.name, m.configs, ref savedConfigList);
                     }
                 }
             }
-            List<string> savedUserConfig = new List<string>();
+            List<string> savedUserConfigList = new List<string>();
             foreach (var userMod in doc.CreateNavigator().Select("//userMods/mod"))
             {
-                savedUserConfig.Add(userMod.ToString());
+                savedUserConfigList.Add(userMod.ToString());
             }
             foreach (Mod um in userMods)
             {
-                if (savedUserConfig.Contains(um.name))
+                if (savedUserConfigList.Contains(um.name))
                 {
                     string filename = um.name + ".zip";
                     if (File.Exists(Application.StartupPath + "\\RelHaxUserMods\\" + filename))
@@ -2747,23 +2769,16 @@ namespace RelhaxModpack
                     }
                 }
             }
-            Utils.appendToLog("Finished loading mod selections v2.0");
-        }
-
-        private static void loadProcessConfigsV2(List<Config> configList, List<string> savedConfigList)
-        {
-            foreach (Config c in configList)
+            if (savedUserConfigList.Count > 0)
             {
-                if (savedConfigList.Contains(c.packageName))
+                string modsNotFoundList = "";
+                foreach (var s in savedConfigList)
                 {
-                    c.Checked = true;
-                    Utils.appendToLog("Checking mod " + c.name);
+                    modsNotFoundList += "\n" + s;
                 }
-                if (c.configs.Count > 0)
-                {
-                    loadProcessConfigsV2(c.configs, savedConfigList);
-                }
+                MessageBox.Show(string.Format(Translations.getTranslatedString("modsNotFoundTechnical"), modsNotFoundList), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            Utils.appendToLog("Finished loading mod selections v2.0");
         }
 
         private static void loadProcessConfigsV1(XmlNode holder, Mod m, bool parentIsMod, Config con = null)
@@ -2820,6 +2835,32 @@ namespace RelhaxModpack
                 }
             }
         }
+
+        private static void loadProcessConfigsV2(string parentName, List<Config> configList, ref List<string> savedConfigList)
+        {
+
+            foreach (Config c in configList)
+            {
+                if (savedConfigList.Contains(c.packageName))
+                {
+                    savedConfigList.Remove(c.packageName);
+                    if (!c.enabled)
+                    {
+                        MessageBox.Show(string.Format(Translations.getTranslatedString("configDeactivated"), c.name, parentName), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        c.Checked = true;
+                        Utils.appendToLog("Checking mod " + c.name);
+                    }
+                }
+                if (c.configs.Count > 0)
+                {
+                    loadProcessConfigsV2(c.name, c.configs, ref savedConfigList);
+                }
+            }
+        }
+
         public static List<string> createDownloadedOldZipsList(List<string> currentZipFiles, List<Category> parsedCatagoryList, List<Dependency> globalDependencies)
         {
             parsedZips = new List<string>();

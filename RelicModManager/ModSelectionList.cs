@@ -1918,7 +1918,7 @@ namespace RelhaxModpack
             //save the last config if told to do so
             if (Settings.saveLastConfig)
             {
-                Utils.saveConfig(false, parsedCatagoryList, userMods);
+                Utils.saveConfig(false, null, parsedCatagoryList, userMods);
             }
             this.Close();
         }
@@ -1936,7 +1936,7 @@ namespace RelhaxModpack
         //handler for when the "save config" button is pressed
         private void saveConfigButton_Click(object sender, EventArgs e)
         {
-            Utils.saveConfig(true, parsedCatagoryList, userMods);
+            Utils.saveConfig(true, null, parsedCatagoryList, userMods);
         }
         //handler for when a new tab page is selected
         private void modTabGroups_Selected(object sender, TabControlEventArgs e)
@@ -2021,7 +2021,7 @@ namespace RelhaxModpack
                 }
                 filePath = loadLocation.FileName;
             }
-            Utils.loadConfig(filePath, parsedCatagoryList, userMods);
+            Utils.loadConfig(loadMode == loadConfigMode.fromButton, filePath, parsedCatagoryList, userMods);
             if (loadMode == loadConfigMode.fromButton || loadMode == loadConfigMode.fromAutoInstall)
             {
                 if (loadMode == loadConfigMode.fromButton) MessageBox.Show(Translations.getTranslatedString("prefrencesSet"));

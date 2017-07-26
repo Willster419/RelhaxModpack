@@ -65,6 +65,10 @@ namespace RelhaxModpack
             german.Add("critical", "KRITISCH");
             polish.Add("critical", "BŁĄD KRYTYCZNY");
 
+            english.Add("information", "Information");
+            german.Add("information", "Information");
+            polish.Add("information", "Informacja");
+
             //Section: MainWindow
 
             //Componet: installRelhaxMod
@@ -701,6 +705,30 @@ namespace RelhaxModpack
             english.Add("configNotFound", "The config \"{0}\" was not found for mod \"{1}\". It could have been renamed or removed.");
             german.Add("configNotFound", "Die Config \"{0}\" wurde nicht für den Mod gefunden \"{1}\". Er könnte umbenannt oder entfernt worden sein.");
             polish.Add("configNotFound", "Konfiguracja \"{0}\" nie została znaleziona dla modyfikacji \"{1}\". Sprawdź, czy nie została usunięta lub zmieniona nazwa.");
+
+            //Componet: 
+            //
+            english.Add("modDeactivated", "The mod \"{0}\" is currently deactivated in the modpack and could not to selected to install.");
+            german.Add("modDeactivated", "Der Mod \"{0}\" ist derzeit im Modpack deaktiviert und kann für die Installation nicht markiert werden.");
+            polish.Add("modDeactivated", "The mod \"{0}\" is currently deactivated in the modpack and could not to selected to install.");
+
+            //Componet: 
+            //
+            english.Add("configDeactivated", "The config \"{0}\" of \"{1}\" is currently deactivated in the modpack and could not to selected to install.");
+            german.Add("configDeactivated", "Die Konfiguration \"{0}\" von \"{1}\" ist derzeit im Modpack deaktiviert und kann für die Installation nicht markiert werden.");
+            polish.Add("configDeactivated", "The config \"{0}\" of \"{1}\" is currently deactivated in the modpack and could not to selected to install.");
+
+            //Componet: 
+            //
+            english.Add("modsNotFoundTechnical", "The following mods could not be found and seams to be deleted. There are only techical names availible:\n{0}");
+            german.Add("modsNotFoundTechnical", "Die folgenden Modifikationen können nicht gefundenw werden und scheinen gelöscht zu sein. Es sind leider nur technische Namen verfügbar:\n{0}");
+            polish.Add("modsNotFoundTechnical", "The following mods could not be found and seams to be deleted. There are only techical names availible:\n{0}");
+
+            //Componet: 
+            //
+            english.Add("oldSavedConfigFile", "The saved config file your are using, is not the current used format and will be inaccurate in the future. Convert it to the new standard?");
+            german.Add("oldSavedConfigFile", "Die Konfigurationsdatei die benutzt wurde, wird in Zukunft immer ungenauer werden. Soll auf das neue Standardformat umgestellt werden?");
+            polish.Add("oldSavedConfigFile", "The config file your are using, is not the current used format and will be inaccurate in the future. Convert it to the new stadard?");
 
             //Componet: 
             //
