@@ -587,13 +587,13 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("autoAndClean", "ERROR: clean installation is set to false. You must set this to true and restart the application for auto install to work. Loading in regular mode.");
-            german.Add("autoAndClean", "FEHLER: Die saubere Installation ist auf false eingestellt. Du musst dies auf true setzen und die Anwendung für die automatische Installation neu starten, damit sie funktioniert. Laedt im regulaeren Modus.");
+            german.Add("autoAndClean", "FEHLER: Die saubere Installation ist abgewählt/deaktiviert. Du musst diese Option auswählen und die Anwendung für die automatische Installation neu starten, damit sie funktioniert. Lädt im regulären Modus.");
             polish.Add("autoAndClean", "BŁĄD: wyłączono czystą instalację. Musisz ją włączyć i ponownie uruchomić aplikację, by automatyczna instalacja zadziałała. Ładowanie w trybie podstawowym.");
 
             //Componet: 
             //
             english.Add("autoAndFirst", "ERROR: First time loading cannot be an auto install mode, loading in regular mode");
-            german.Add("autoAndFirst", "FEHLER: Erstmaliges Laden kann kein automatischer Installationsmodus sein, lade im regulaeren Modus");
+            german.Add("autoAndFirst", "FEHLER: Erstmaliges Laden kann kein automatischer Installationsmodus sein, lade im regulären Modus");
             polish.Add("autoAndFirst", "BŁĄD: Pierwsze ładowanie nie może być automatyczną instalacją, ładowanie w trybie podstawowym");
 
             //Componet: 
