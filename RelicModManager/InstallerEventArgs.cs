@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace RelhaxModpack
 {
@@ -26,7 +23,8 @@ namespace RelhaxModpack
             ExtractUserMods = 12,
             PatchUserMods = 13,
             InstallUserFonts = 14,
-            Done = 15
+            Done = 15,
+            Uninstall = 16,
         };
         public InstallProgress InstalProgress { get; set; }
         //the total parrent processed items

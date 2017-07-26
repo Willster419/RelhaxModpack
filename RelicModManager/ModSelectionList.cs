@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Xml;
 using System.Windows.Forms.Integration;
-using System.Text;
 using System.Text.RegularExpressions;
 
 
@@ -1258,10 +1254,12 @@ namespace RelhaxModpack
                     if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1"))
                     {
                         configControlDDALL = configControlDD;
+                        con.configUIComponent = configControlDD;
                     }
                     else if (con.type.Equals("single_dropdown2"))
                     {
                         configControlDDALL = configControlDD2;
+                        con.configUIComponent = configControlDD2;
                     }
                     //make a dropDown selection box
                     if (configControlDDALL.Location.X == 0 && configControlDDALL.Location.Y == 0)
@@ -1323,6 +1321,7 @@ namespace RelhaxModpack
                     configControlCB.catagory = catagory;
                     configControlCB.mod = m;
                     configControlCB.config = con;
+                    con.configUIComponent = configControlCB;
                     //logic for determining if it can be enabled
                     configControlCB.Enabled = false;
                     configControlCB.Checked = false;

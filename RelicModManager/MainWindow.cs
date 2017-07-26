@@ -2,20 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Security.Principal;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Linq;
-using Ionic.Zip;
 using Microsoft.Win32;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Drawing;
 
 namespace RelhaxModpack
@@ -32,13 +24,9 @@ namespace RelhaxModpack
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
-        //directory path of where the application was started form
-        private string appPath = Application.StartupPath;
         //where all the downloaded mods are placed
         public static string downloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads");
         public static string md5HashDatabaseXmlFile = Path.Combine(downloadPath, "MD5HashDatabase.xml");
-        private string parsedModsFolder;//0.9.x.y.z
-        //DEPRECATED: /res_mods/version/gui
         //timer to measure download speed
         Stopwatch sw = new Stopwatch();
         private List<Category> parsedCatagoryLists;
@@ -47,21 +35,8 @@ namespace RelhaxModpack
         private List<Dependency> dependencies;
         private List<List<Config>> configListsToInstall;
         //installing the RelhaxModpack of the Relhax Sound Mod
-        bool modPack;
         string tempOldDownload;
         private List<Mod> userMods;
-        int numFilesToProcessInt = 0;
-        int numFilesToCopyDeleteExtract = 0;
-        bool userExtract = false;
-        private int childMaxProgres;
-        private int childCurrentProgres;
-        private bool isParrentDone;
-        //current file being processed in the zip archive
-        private string currentZipEntry;
-        private float currentZipEntrySize;
-        //seperate thread for the extraction
-        BackgroundWorker extractworker;
-        private string versionSave;
         private FirstLoadHelper helper;
         string helperText;
         string currentModDownloading;
@@ -89,11 +64,7 @@ namespace RelhaxModpack
             uninstallMods = 17,
             smartUninstall = 18
         };
-        private InstallState state = InstallState.idle;
         private string tanksVersion;//0.9.x.y
-        BackgroundWorker deleteworker;
-        BackgroundWorker copyworker;
-        BackgroundWorker smartDeleteworker;
         //list to maintain the refrence lines in a json patch
         List<double> timeRemainArray = new List<double>();
         //the ETA variable for downlading
@@ -104,10 +75,8 @@ namespace RelhaxModpack
         float sessionDownloadSpeed = 0;
         private loadingGifPreview gp;
         private ModSelectionList list;
-        private string folderDateName;
         private string suportedVersions = null;
         string[] supportedVersions = null;
-        private string xvmConfigDir = "";
         List<Mod> modsWithData = new List<Mod>();
         List<Config> configsWithData = new List<Config>();
         private float windowHeight;
@@ -174,7 +143,6 @@ namespace RelhaxModpack
             if (e != null && e.Cancelled)
             {
                 //update the UI and download state
-                state = InstallState.idle;
                 toggleUIButtons(true);
                 speedLabel.Text = "";
                 downloadProgress.Text = Translations.getTranslatedString("idle");
@@ -183,9 +151,6 @@ namespace RelhaxModpack
                 return;
             }
             downloadTimer.Enabled = false;
-
-
-            //new relhax modpack code
             if (e != null && e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
             {
                 //404
@@ -195,6 +160,8 @@ namespace RelhaxModpack
             }
             if (downloadQueue.Count != 0)
             {
+                totalProgressBar.Maximum = (int)InstallerEventArgs.InstallProgress.Done;
+                totalProgressBar.Value = 1;
                 cancelDownloadButton.Enabled = true;
                 cancelDownloadButton.Visible = true;
                 //for the next file in the queue, delete it.
@@ -242,7 +209,6 @@ namespace RelhaxModpack
                 ins.StartInstallation();
             }
         }
-        
         //method to check for updates to the application on startup
         private void checkmanagerUpdates()
         {
@@ -263,10 +229,8 @@ namespace RelhaxModpack
                 Utils.appendToLog("target: " + e.TargetSite);
                 Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt");
                 MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " supported_clients.txt");
-                //suportedVersions = "0.9.18.0";
                 Application.Exit();
             }
-            versionSave = version;
             Utils.appendToLog("Current application version is " + managerVersion + ", new version is " + version);
             if (!version.Equals(managerVersion))
             {
@@ -309,7 +273,6 @@ namespace RelhaxModpack
                 this.Close();
             }
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
-            string version = versionSave;
 
             if (!File.Exists(Application.StartupPath + "\\RelicCopyUpdate.bat"))
             {
@@ -345,14 +308,12 @@ namespace RelhaxModpack
         {
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
             Utils.appendToLog("tanksLocation parsed as " + tanksLocation);
-            parsedModsFolder = tanksLocation + "\\res_mods\\" + this.getFolderVersion(tanksLocation);
-            Utils.appendToLog("tanks mods version parsed as " + parsedModsFolder);
             Utils.appendToLog("customUserMods parsed as " + Application.StartupPath + "\\RelHaxUserMods");
             return "1";
         }
         //gets the version of tanks that this is, in the format
         //of the res_mods version folder i.e. 0.9.17.0.3
-        private string getFolderVersion(string gamePath)
+        private string getFolderVersion()
         {
             if (!File.Exists(tanksLocation + "\\version.xml"))
                 return null;
@@ -455,12 +416,9 @@ namespace RelhaxModpack
             WebRequest.DefaultWebProxy = null;
             wait.loadingDescBox.Text = "Verifying single instance...";
             Application.DoEvents();
-            //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
             Utils.appendToLog("|RelHax Modpack " + managerVersion);
             Utils.appendToLog("|Built on " + today + ", running at " + DateTime.Now);
             Utils.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
-            //Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
-            //set the current window font size
             windowHeight = this.Size.Height;
             windowWidth = this.Size.Width;
             //enforces a single instance of the program
@@ -583,7 +541,6 @@ namespace RelhaxModpack
             {
                 Utils.appendToLog("Program.autoInstall still true, loading in auto install mode");
                 wait.Close();
-                state = InstallState.idle;
                 this.installRelhaxMod_Click(null, null);
                 return;
             }
@@ -595,7 +552,6 @@ namespace RelhaxModpack
                 Settings.firstLoad = false;
             }
             wait.Close();
-            state = InstallState.idle;
             toggleUIButtons(true);
             Application.DoEvents();
             Program.saveSettings = true;
@@ -610,12 +566,8 @@ namespace RelhaxModpack
         private void installRelhaxMod_Click(object sender, EventArgs e)
         {
             Utils.TotallyNotStatPaddingForumPageViewCount();
-            //bool to say to the downloader to use the "modpack" code
-            modPack = true;
             toggleUIButtons(false);
-            state = InstallState.idle;
             downloadPath = Application.StartupPath + "\\RelHaxDownloads";
-            xvmConfigDir = "";
             //reset the interface
             this.reset();
             //attempt to locate the tanks directory automatically
@@ -632,7 +584,6 @@ namespace RelhaxModpack
             if (this.parseStrings() == null)
             {
                 MessageBox.Show(Translations.getTranslatedString("autoDetectFailed"));
-                state = InstallState.error;
                 toggleUIButtons(true);
                 return;
             }
@@ -640,11 +591,11 @@ namespace RelhaxModpack
             {
                 //display error and abort
                 MessageBox.Show(Translations.getTranslatedString("moveOutOfTanksLocation"));
-                state = InstallState.error;
                 toggleUIButtons(true);
                 return;
             }
-            tanksVersion = this.getFolderVersion(null);
+            tanksVersion = this.getFolderVersion();
+            Utils.appendToLog("tanksVersion parsed as " + tanksVersion);
             //determine if the tanks client version is supported
             string selectionListTanksVersion = tanksVersion;
             if (!isClientVersionSupported(tanksVersion))
@@ -658,7 +609,6 @@ namespace RelhaxModpack
                 // select the last public modpack version
                 selectionListTanksVersion = publicVersions.Split(',')[publicVersions.Split(',').Count() - 1];
             }
-            state = InstallState.modSelection;
             //reset the childProgressBar value
             childProgressBar.Maximum = 100;
             childProgressBar.Value = 0;
@@ -667,11 +617,32 @@ namespace RelhaxModpack
             list.ShowDialog();
             if (list.cancel)
             {
-                state = InstallState.idle;
                 toggleUIButtons(true);
                 return;
             }
-            //actual new code
+            //check to see if WoT is running
+            bool WoTRunning = true;
+            while (WoTRunning)
+            {
+                WoTRunning = false;
+                foreach (Process p in Process.GetProcesses())
+                {
+                    if (p.MainWindowTitle.Equals("WoT Client"))
+                        WoTRunning = true;
+                }
+                if (!WoTRunning)
+                    break;
+                MessageBox.Show(Translations.getTranslatedString("WoTRunningMessage"), Translations.getTranslatedString("WoTRunningHeader"));
+            }
+            // if the delete will raise an exception, it will be ignored
+            try
+            {
+                if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
+                    File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
+            }
+            catch { }
+            downloadProgress.Text = Translations.getTranslatedString("loading");
+            Application.DoEvents();
             this.parseInstallationPart1();
         }
 
@@ -818,6 +789,14 @@ namespace RelhaxModpack
                 childProgressBar.Value = childProgressBar.Maximum;
                 toggleUIButtons(true);
             }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Uninstall)
+            {
+                totalProgressBar.Value = 0;
+                parrentProgressBar.Value = 0;
+                message = "Uninstalling file " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
+                childProgressBar.Maximum = e.ChildTotalToProcess;
+                childProgressBar.Value = e.ChildProcessed;
+            }
             else
             {
                 Utils.appendToLog("Invalid state: " + e.InstalProgress);
@@ -825,34 +804,12 @@ namespace RelhaxModpack
             downloadProgress.Text = message;
         }
 
-        //next part of the install process
+        /*
+         * parses all the mods and configs into seperate lists for many types op options
+         * like mods/configs to install, mods/configs with data, and others
+        */
         private void parseInstallationPart1()
         {
-            //check to see if WoT is running
-            bool WoTRunning = true;
-            while (WoTRunning)
-            {
-                WoTRunning = false;
-                foreach (Process p in Process.GetProcesses())
-                {
-                    if (p.MainWindowTitle.Equals("WoT Client"))
-                        WoTRunning = true;
-                }
-                if (!WoTRunning)
-                    break;
-                MessageBox.Show(Translations.getTranslatedString("WoTRunningMessage"), Translations.getTranslatedString("WoTRunningHeader"));
-            }
-
-            // if the delete will raise an exception, it will be ignored
-            try
-            {
-                if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
-                    File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
-            }
-            catch { }
-
-            downloadProgress.Text = Translations.getTranslatedString("loading");
-            Application.DoEvents();
             modsToInstall = new List<Mod>();
             patchList = new List<Patch>();
             userMods = new List<Mod>();
@@ -970,12 +927,11 @@ namespace RelhaxModpack
                     }
                 }
             }
-            //reset the progress bars for download mods
+            //reset the progress bars
             parrentProgressBar.Maximum = downloadQueue.Count;
             childProgressBar.Maximum = 100;
             //at this point, there may be user mods selected,
             //and there is at least one mod to extract
-            //check for any mods to be install tha also need to be downloaded
             downloader_DownloadFileCompleted(null, null);
             //end the installation process
             return;
@@ -1043,7 +999,6 @@ namespace RelhaxModpack
         //Main method to uninstall the modpack
         private void uninstallRelhaxMod_Click(object sender, EventArgs e)
         {
-            modPack = true;
             toggleUIButtons(false);
             //reset the interface
             this.reset();
@@ -1064,17 +1019,38 @@ namespace RelhaxModpack
             }
             if (MessageBox.Show(Translations.getTranslatedString("confirmUninstallMessage"), Translations.getTranslatedString("confirmUninstallHeader"), MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
+                Installer unI = new Installer()
+                {
+                    AppPath = Application.StartupPath,
+                    TanksLocation = tanksLocation,
+                    TanksVersion = tanksVersion
+                };
+                unI.InstallProgressChanged += I_InstallProgressChanged;
+                Utils.appendToLog("Started Uninstallation process");
                 if (Settings.cleanUninstall)
                 {
                     //run the recursive complete uninstaller
-                    downloadProgress.Text = Translations.getTranslatedString("uninstalling") + "...";
-                    state = InstallState.uninstallResMods;
-                    this.backgroundDelete(tanksLocation + "\\res_mods");
+                    unI.StartCleanUninstallation();
                 }
                 else
                 {
                     //run the smart uninstaller
-                    this.newUninstallMethod();
+                    if (!File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
+                    {
+                        Utils.appendToLog("ERROR: installedRelhaxFiles.log does not exist, prompt user to delete everything instead");
+                        DialogResult result = MessageBox.Show(Translations.getTranslatedString("noUninstallLogMessage"), Translations.getTranslatedString("noUninstallLogHeader"), MessageBoxButtons.YesNo);
+                        if (result == DialogResult.Yes)
+                        {
+                            Utils.appendToLog("User said yes to delete");
+                            unI.StartCleanUninstallation();
+                        }
+                        else
+                        {
+                            Utils.appendToLog("User said no, aborting");
+                        }
+                        return;
+                    }
+                    unI.StartUninstallation();
                 }
             }
             else
@@ -1099,302 +1075,6 @@ namespace RelhaxModpack
             Settings.comicSans = cancerFontCB.Checked;
             Settings.ApplyScalingProperties();
             this.Font = Settings.appFont;
-        }
-        //uses backgroundWorker to delete folder and everything inside
-        //rather destructive if i do say so myself
-        private void backgroundDelete(string folder)
-        {
-            numFilesToProcessInt = 0;
-            numFilesToCopyDeleteExtract = 0;
-            downloadProgress.Text = Translations.getTranslatedString("deletingFile") + numFilesToCopyDeleteExtract + Translations.getTranslatedString("of") + numFilesToProcessInt;
-            deleteworker = new BackgroundWorker();
-            deleteworker.WorkerReportsProgress = true;
-            deleteworker.DoWork += new DoWorkEventHandler(deleteworker_DoWork);
-            deleteworker.ProgressChanged += new ProgressChangedEventHandler(deleteworker_ProgressChanged);
-            deleteworker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(deleteworker_RunWorkerCompleted);
-            object folderToDelete = folder;
-            object[] parameters = new object[] { folderToDelete };
-            deleteworker.RunWorkerAsync(parameters);
-        }
-        //uses a backgroundWorker to smart uninstall
-        private void backgroundSmartUninstall()
-        {
-            numFilesToProcessInt = 0;
-            numFilesToCopyDeleteExtract = 0;
-            parrentProgressBar.Value = parrentProgressBar.Maximum;
-            downloadProgress.Text = Translations.getTranslatedString("startingSmartUninstall");
-            Utils.appendToLog("Starting smart uninstall");
-            smartDeleteworker = new BackgroundWorker();
-            smartDeleteworker.WorkerReportsProgress = true;
-            smartDeleteworker.DoWork += new DoWorkEventHandler(smartDeleteworker_DoWork);
-            smartDeleteworker.ProgressChanged += new ProgressChangedEventHandler(smartDeleteworker_ProgressChanged);
-            smartDeleteworker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(smartDeleteworker_RunWorkerCompleted);
-            smartDeleteworker.RunWorkerAsync();
-        }
-        //gets the total number of files to process to eithor delete or copy
-        private int numFilesToProcess(string folder)
-        {
-            // Get the subdirectories for the specified directory.
-            DirectoryInfo dir = new DirectoryInfo(folder);
-            DirectoryInfo[] dirs = dir.GetDirectories();
-            // Get the files in the directory and copy them to the new location.
-            FileInfo[] files = dir.GetFiles();
-            foreach (FileInfo file in files)
-            {
-                numFilesToProcessInt++;
-            }
-            foreach (DirectoryInfo subdir in dirs)
-            {
-                numFilesToProcessInt++;
-                numFilesToProcess(subdir.FullName);
-            }
-            return numFilesToProcessInt;
-        }
-        //handler for the deleteworker when it is called
-        private void deleteworker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            object[] parameters = e.Argument as object[];
-            string folderToDelete = (string)parameters[0];
-            numFilesToProcessInt = 0;
-            numFilesToCopyDeleteExtract = 0;
-            this.numFilesToProcess(folderToDelete);
-            this.DirectoryDelete(folderToDelete, true);
-        }
-        //handler for the deleteworker when progress is made
-        private void deleteworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            downloadProgress.Text = string.Format("{0} {1} {2} {3}", Translations.getTranslatedString("deletingFile"), numFilesToCopyDeleteExtract, Translations.getTranslatedString("of"), numFilesToProcessInt);
-            childProgressBar.Maximum = numFilesToProcessInt;
-            childProgressBar.Value = numFilesToCopyDeleteExtract;
-        }
-        //handler for when the deleteworker is completed
-        private void deleteworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (state == InstallState.uninstallResMods)
-            {
-                //uninstall Mods folder
-                if (Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null)))
-                {
-                    state = InstallState.uninstallMods;
-                    this.backgroundDelete(tanksLocation + "\\mods");
-                    return;
-                }
-                else
-                {
-                    //finish uninstallResMods process
-                    state = InstallState.idle;
-                    toggleUIButtons(true);
-                    if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
-                    if (!Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\mods\\" + this.getFolderVersion(null));
-                    downloadProgress.Text = Translations.getTranslatedString("done");
-                    childProgressBar.Value = 0;
-                    return;
-                }
-            }
-            else if (state == InstallState.uninstallMods)
-            {
-                //finish uninstallResMods process
-                state = InstallState.idle;
-                toggleUIButtons(true);
-                
-                // if the delete will raise an exception, it will be ignored
-                try
-                {
-                    if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
-                        File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
-                }
-                catch { }
-
-                if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
-                if (!Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\mods\\" + this.getFolderVersion(null));
-                downloadProgress.Text = Translations.getTranslatedString("done");
-                childProgressBar.Value = 0;
-                return;
-            }
-            else
-            {
-                return;
-            }
-        }
-        //the main worker method for the smart uninstaller
-        private void smartDeleteworker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            string[] createdFiles = File.ReadAllLines(tanksLocation + "\\installedRelhaxFiles.log");
-            //sort into directories and files
-            List<string> files = new List<string>();
-            List<string> resModsFolders = new List<string>();
-            List<string> modsFolders = new List<string>();
-            foreach (string s in createdFiles)
-            {
-                if (Regex.IsMatch(s, @"^\s*/\*(\s|\S)*?\*/\s*$"))
-                {
-                    // this entry is an commentblock, so should be passed
-                }
-                else
-                {
-                    if (Regex.IsMatch(s, @"\.[A-Za-z0-9_\-]*$"))
-                    {
-                        //it's a files
-                        files.Add(s);
-                    }
-                    else
-                    {
-                        //it's a folder
-                        if (Regex.IsMatch(s, "res_mods"))
-                        {
-                            //it's a res_mods folder
-                            resModsFolders.Add(s);
-                        }
-                        else
-                        {
-                            //it's a mods folder
-                            modsFolders.Add(s);
-                        }
-                    }
-                }
-            }
-            numFilesToProcessInt = files.Count;
-            //delete all the files
-            foreach (string s in files)
-            {
-                string filePath = tanksLocation + "\\" + s;
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                    smartDeleteworker.ReportProgress(numFilesToCopyDeleteExtract++);
-                }
-            }
-            //delete all the folders if nothing else is in them
-            Utils.appendToLog("Finished deleting, processing mods folder");
-            Utils.processDirectory(tanksLocation + "\\mods");
-            Utils.appendToLog("processing res_mods folder");
-            Utils.processDirectory(tanksLocation + "\\res_mods");
-            Utils.appendToLog("creating directories if they arn't already there");
-            if (!Directory.Exists(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\res_mods\\" + this.getFolderVersion(null));
-            if (!Directory.Exists(tanksLocation + "\\mods\\" + this.getFolderVersion(null))) Directory.CreateDirectory(tanksLocation + "\\mods\\" + this.getFolderVersion(null));
-        }
-        //the method to update the UI on the uninstall process
-        private void smartDeleteworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            downloadProgress.Text = Translations.getTranslatedString("deletingFile") + numFilesToCopyDeleteExtract + Translations.getTranslatedString(" of ") + numFilesToProcessInt;
-            childProgressBar.Maximum = numFilesToProcessInt;
-            if (numFilesToCopyDeleteExtract < numFilesToProcessInt)
-                childProgressBar.Value = numFilesToCopyDeleteExtract;
-        }
-        //the method to run when the smart uninstall is compete
-        private void smartDeleteworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            downloadProgress.Text = Translations.getTranslatedString("done");
-            childProgressBar.Value = 0;
-            parrentProgressBar.Value = 0;
-            Utils.appendToLog("Uninstall complete");
-            state = InstallState.idle;
-            toggleUIButtons(true);
-        }
-        //recursivly deletes every file from one place to another
-        private void DirectoryDelete(string sourceDirName, bool deleteSubDirs)
-        {
-            // Get the subdirectories for the specified directory.
-            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
-            DirectoryInfo[] dirs = dir.GetDirectories();
-            // Get the files in the directory and copy them to the new location.
-            FileInfo[] files = dir.GetFiles();
-            foreach (FileInfo file in files)
-            {
-                string temppath = Path.Combine(sourceDirName, file.Name);
-                bool tryAgain = true;
-                while (tryAgain)
-                {
-                    try
-                    {
-                        File.SetAttributes(file.FullName, FileAttributes.Normal);
-                        file.Delete();
-                        tryAgain = false;
-                    }
-                    catch (UnauthorizedAccessException e)
-                    {
-                        Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
-                        Utils.appendToLog(e.StackTrace);
-                        Utils.appendToLog("inner message: " + e.Message);
-                        Utils.appendToLog("source: " + e.Source);
-                        Utils.appendToLog("target: " + e.TargetSite);
-                        DialogResult res = MessageBox.Show(Translations.getTranslatedString("extractionErrorMessage"), Translations.getTranslatedString("extractionErrorHeader"), MessageBoxButtons.RetryCancel);
-                        if (res == DialogResult.Retry)
-                        {
-                            tryAgain = true;
-                        }
-                        else
-                        {
-                            Application.Exit();
-                        }
-                    }
-                }
-                deleteworker.ReportProgress(numFilesToCopyDeleteExtract++);
-            }
-            // If copying subdirectories, copy them and their contents to new location.
-            if (deleteSubDirs)
-            {
-                foreach (DirectoryInfo subdir in dirs)
-                {
-                    string temppath = Path.Combine(sourceDirName, subdir.Name);
-                    DirectoryDelete(subdir.FullName, deleteSubDirs);
-                    bool tryAgain = true;
-                    while (tryAgain)
-                    {
-                        try
-                        {
-                            File.SetAttributes(subdir.FullName, FileAttributes.Normal);
-                            subdir.Delete();
-                            tryAgain = false;
-                        }
-                        catch (IOException e)
-                        {
-                            Utils.appendToLog("EXCEPTION: IOException (call stack traceback)");
-                            Utils.appendToLog(e.StackTrace);
-                            Utils.appendToLog("inner message: " + e.Message);
-                            Utils.appendToLog("source: " + e.Source);
-                            Utils.appendToLog("target: " + e.TargetSite);
-                            DialogResult result = MessageBox.Show(Translations.getTranslatedString("deleteErrorMessage"), Translations.getTranslatedString("deleteErrorHeader"), MessageBoxButtons.RetryCancel);
-                            if (result == DialogResult.Cancel)
-                                Application.Exit();
-                        }
-                        catch (UnauthorizedAccessException e)
-                        {
-                            Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
-                            Utils.appendToLog(e.StackTrace);
-                            Utils.appendToLog("inner message: " + e.Message);
-                            Utils.appendToLog("source: " + e.Source);
-                            Utils.appendToLog("target: " + e.TargetSite);
-                            DialogResult result = MessageBox.Show(Translations.getTranslatedString("deleteErrorMessage"), Translations.getTranslatedString("deleteErrorHeader"), MessageBoxButtons.RetryCancel);
-                            if (result == DialogResult.Cancel)
-                                Application.Exit();
-                        }
-                    }
-                    deleteworker.ReportProgress(numFilesToCopyDeleteExtract++);
-                }
-            }
-        }
-        //new unistall method
-        private void newUninstallMethod()
-        {
-            Utils.appendToLog("Started Uninstallation process");
-            if (!File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
-            {
-                Utils.appendToLog("ERROR: installedRelhaxFiles.log does not exist, prompt user to delete everything instead");
-                DialogResult result = MessageBox.Show(Translations.getTranslatedString("noUninstallLogMessage"), Translations.getTranslatedString("noUninstallLogHeader"), MessageBoxButtons.YesNo);
-                if (result == DialogResult.Yes)
-                {
-                    state = InstallState.uninstallResMods;
-                    Utils.appendToLog("User said yes to delete");
-                    this.backgroundDelete(tanksLocation + "\\res_mods");
-                    return;
-                }
-                Utils.appendToLog("User said no, aborting");
-                return;
-            }
-            state = InstallState.smartUninstall;
-            this.backgroundSmartUninstall();
-            return;
         }
         //applies all settings from static settings class to this form
         private void applySettings(bool init = false)
@@ -1610,7 +1290,6 @@ namespace RelhaxModpack
             parrentProgressBar.Maximum = 1;
             parrentProgressBar.Value = parrentProgressBar.Maximum;
             childProgressBar.Value = childProgressBar.Maximum;
-            state = InstallState.idle;
             toggleUIButtons(true);
             Utils.appendToLog("Installation done");
         }
@@ -2036,7 +1715,6 @@ namespace RelhaxModpack
                     Settings.fontSizeforum = Settings.FontSize.DPIRegular;
                     Settings.ApplyScalingProperties();
                     this.AutoScaleMode = Settings.appScalingMode;
-                    //to go from 1.25 to 1.0, multiply by 0.8. how to get 0.8?
                     float temp = 1.0f / scale;
                     this.Scale(new SizeF(temp, temp));
                     scale = 1.0f;
@@ -2045,9 +1723,6 @@ namespace RelhaxModpack
                 Settings.fontSizeforum = Settings.FontSize.fontLarge;
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
-                //float temp = 1.25f / scale;
-                //this.Scale(new SizeF(temp, temp));
-                //scale = 1.25f;
                 this.Font = Settings.appFont;
             }
         }
@@ -2061,7 +1736,6 @@ namespace RelhaxModpack
                     Settings.fontSizeforum = Settings.FontSize.DPIRegular;
                     Settings.ApplyScalingProperties();
                     this.AutoScaleMode = Settings.appScalingMode;
-                    //to go from 1.25 to 1.0, multiply by 0.8. how to get 0.8?
                     float temp = 1.0f / scale;
                     this.Scale(new SizeF(temp, temp));
                     scale = 1.0f;
