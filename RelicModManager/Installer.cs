@@ -276,14 +276,27 @@ namespace RelhaxModpack
         //Step 3: Ddelete all mods
         public void DeleteMods()
         {
-            NumFilesToProcess(TanksLocation + "\\res_mods");
-            NumFilesToProcess(TanksLocation + "\\mods");
-            InstallWorker.ReportProgress(0);
-            //don't forget to delete the readme files
-            if (Directory.Exists(TanksLocation + "\\_readme"))
-                Directory.Delete(TanksLocation + "\\_readme", true);
-            DirectoryDelete(TanksLocation + "\\res_mods", true);
-            DirectoryDelete(TanksLocation + "\\mods", true);
+            try
+            {
+                NumFilesToProcess(TanksLocation + "\\res_mods");
+                NumFilesToProcess(TanksLocation + "\\mods");
+                InstallWorker.ReportProgress(0);
+                //don't forget to delete the readme files
+                if (Directory.Exists(TanksLocation + "\\_readme"))
+                    Directory.Delete(TanksLocation + "\\_readme", true);
+                DirectoryDelete(TanksLocation + "\\res_mods", true);
+                DirectoryDelete(TanksLocation + "\\mods", true);
+            }
+            catch (Exception ex)
+            {
+                Utils.appendToLog("EXCEPTION: Unknown type Exception (call stack traceback)");
+                Utils.appendToLog(ex.StackTrace);
+                Utils.appendToLog("inner message: " + ex.Message);
+                Utils.appendToLog("source: " + ex.Source);
+                Utils.appendToLog("target: " + ex.TargetSite);
+                Utils.appendToLog("type: " + ex.GetType());
+                Utils.appendToLog("user info: " + ex.Data);
+            }
         }
 
         //Step 4-8: Extract All DatabaseObjects
