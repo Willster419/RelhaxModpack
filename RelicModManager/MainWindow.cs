@@ -388,15 +388,19 @@ namespace RelhaxModpack
             List<string> searchPathWoT = new List<string>();
             string[] registryPathArray = new string[] { };
 
+            // here we need the value for the searchlist
             // check replay link
             registryPathArray = new string[] { @"HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.wotreplay\shell\open\command", @"HKEY_CURRENT_USER\Software\Classes\.wotreplay\shell\open\command"};
             foreach (string regEntry in registryPathArray)
             {
+                // get values from from registry
                 object obj = Registry.GetValue(regEntry, "", -1);
+                // if it is not "null", it is conating possible a string
                 if (obj != null)
                 {
                     try
                     {
+                        // add the thing to the checklist, but remove the Quotation Marks in front of the string and the trailing -> " "%1"
                         searchPathWoT.Add(((string)obj).Substring(1).Substring(0, ((string)obj).Length - 7));
                     }
                     catch (InvalidCastException)
@@ -404,15 +408,19 @@ namespace RelhaxModpack
                 }
             }
 
+            // here we need the value for the searchlist
             string regPath = @"HKEY_CURRENT_USER\Software\Wargaming.net\Launcher\Apps\wot";
             RegistryKey subKeyHandle = Registry.CurrentUser.OpenSubKey(regPath.Replace(@"HKEY_CURRENT_USER\", ""));
+            // get the value names at the reg Key one by one
             foreach (string valueName in subKeyHandle.GetValueNames())
             {
+                // read the value from the regPath
                 object obj = Registry.GetValue(regPath, valueName, -1);
                 if (obj != null)
                 {
                     try
                     {
+                        // we did get only a path to used WoT folders, so add the game name to the path and add it to the checklist
                         searchPathWoT.Add(Path.Combine((string)obj, "WorldOfTanks.exe"));
                     }
                     catch (InvalidCastException)
@@ -420,16 +428,21 @@ namespace RelhaxModpack
                 }
             }
 
+            // here we need the value name for the searchlist
             registryPathArray = new string[] { @"Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache", @"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Store" };
             foreach (string p in registryPathArray)
             {
+                // set the handle to the registry key
                 subKeyHandle = Registry.CurrentUser.OpenSubKey(p);
+                // parse all value names of the registry key abouve
                 foreach (string valueName in subKeyHandle.GetValueNames())
                 {
                     try
                     {
+                        // if the lower string "worldoftanks.exe" is contained => match !!
                         if (valueName.ToLower().Contains("Worldoftanks.exe".ToLower()))
                         {
+                            // remove (replace it with "") the attachment ".ApplicationCompany" or ".FriendlyAppName" in the string and add the string to the searchlist
                             searchPathWoT.Add(valueName.Replace(".ApplicationCompany", "").Replace(".FriendlyAppName", ""));
                         }
                     }
@@ -438,15 +451,19 @@ namespace RelhaxModpack
                 }
             }
 
+            // this searchlist is long, maybe 30-40 entries (system depended), but the best possibility to find a currently installed WoT game.
             foreach (string path in searchPathWoT)
             {
                 if (File.Exists(path))
                 {
                     Utils.appendToLog(string.Format("valid game path found: {0}", path));
+                    // write the path to the central value holder
                     tanksLocation = path;
+                    // return the path
                     return path;
                 }
             }
+            // send "null" back if nothing found
             return null;
         }
         
