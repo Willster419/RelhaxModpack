@@ -687,7 +687,7 @@ namespace RelhaxModpack
             try
             {
                 //set xvm dir location again in case it's just a user mod install
-                if (xvmConfigDir.Equals(""))
+                if (xvmConfigDir == null || xvmConfigDir..Equals(""))
                     xvmConfigDir = Utils.getXVMBootLoc(TanksLocation);
                 //extract user mods
                 Utils.appendToLog("Starting Relhax Modpack User Mod Extraction");
