@@ -111,7 +111,11 @@ namespace RelhaxModpack
             }
         }
 
-        // print all information about the object to the logfile
+        /// <summary>
+        /// print all information about the object to the logfile
+        /// </summary>
+        /// <param objectName="option">only a Name of the object as an information at the logfile</param>
+        /// <param n=object>the object itself that should be printed</param>
         public static void dumpObjectToLog(string objectName, object n)
         {
             Utils.appendToLog(String.Format("----- dump of object {0} ------", objectName));
@@ -133,6 +137,21 @@ namespace RelhaxModpack
                 Utils.appendToLog(string.Format("{0}={1}", name, value));
             }
             Utils.appendToLog("----- end of dump ------");
+        }
+
+        /// <summary>
+        /// default logging function of exception informations
+        /// </summary>
+        /// <param e=Exception>the exception object that would be catched</param>
+        public static void exceptionLog(Exception e)
+        {
+            Utils.appendToLog("EXCEPTION (call stack traceback):");
+            try { Utils.appendToLog(e.StackTrace); } catch { };
+            try { Utils.appendToLog("message: " + e.Message); } catch { };
+            try { Utils.appendToLog("source: " + e.Source); } catch { };
+            try { Utils.appendToLog("target: " + e.TargetSite); } catch { };
+            try { Utils.appendToLog("InnerException: " + e.InnerException); } catch { };
+            try { Utils.appendToLog("Data: " + e.Data); } catch { };             /// https://msdn.microsoft.com/de-de/library/system.exception.data(v=vs.110).aspx
         }
 
         //returns the md5 hash of the file based on the input file string location. It is searching in the database first. If not found in database or the filetime is not the same, it will create a new Hash and update the database

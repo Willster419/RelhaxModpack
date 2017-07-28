@@ -609,7 +609,7 @@ namespace RelhaxModpack
                         fontsList.RemoveAt(i);
                     }
                 }
-            }
+            } 
             //re-check the fonts to install list
             if (fontsList.Count == 0)
             {
@@ -684,20 +684,27 @@ namespace RelhaxModpack
         //Step 12: Extract User Mods
         public void ExtractUserMods()
         {
-            //set xvm dir location again in case it's just a user mod install
-            if (xvmConfigDir == null || xvmConfigDir.Equals(""))
-                xvmConfigDir = Utils.getXVMBootLoc(TanksLocation);
-            //extract user mods
-            Utils.appendToLog("Starting Relhax Modpack User Mod Extraction");
-            string downloadedFilesDir = Application.StartupPath + "\\RelHaxUserMods\\";
-            foreach (Mod m in UserMods)
+            try
             {
-                if (m.Checked)
+                //set xvm dir location again in case it's just a user mod install
+                if (xvmConfigDir == null || xvmConfigDir.Equals(""))
+                    xvmConfigDir = Utils.getXVMBootLoc(TanksLocation);
+                //extract user mods
+                Utils.appendToLog("Starting Relhax Modpack User Mod Extraction");
+                string downloadedFilesDir = Application.StartupPath + "\\RelHaxUserMods\\";
+                foreach (Mod m in UserMods)
                 {
-                    Utils.appendToLog("Exracting " + Path.GetFileName(m.zipFile));
-                    this.Unzip(downloadedFilesDir + Path.GetFileName(m.zipFile), TanksLocation);
-                    InstallWorker.ReportProgress(0);
+                    if (m.Checked)
+                    {
+                        Utils.appendToLog("Exracting " + Path.GetFileName(m.zipFile));
+                        this.Unzip(downloadedFilesDir + Path.GetFileName(m.zipFile), TanksLocation);
+                        InstallWorker.ReportProgress(0);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Utils.exceptionLog(e);
             }
             Utils.appendToLog("Finished Relhax Modpack User Mod Extraction");
         }

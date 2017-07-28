@@ -721,7 +721,7 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("modsNotFoundTechnical", "The following mods could not be found and were most likely removed. There are only technical names available:\n{0}");
-            german.Add("modsNotFoundTechnical", "Die folgenden Modifikationen können nicht gefundenw werden und scheinen gelöscht zu sein. Es sind leider nur technische Namen verfügbar:\n{0}");
+            german.Add("modsNotFoundTechnical", "Die folgenden Modifikationen können nicht gefunden werden und wurden wahrscheinlich entfernt/gelöscht. Es sind leider nur technische Namen verfügbar:\n{0}");
             polish.Add("modsNotFoundTechnical", "Następujące modyfikacje nie zostały znalezione, najprawdopodobniej zostały usunięte:\n{ 0}");
 
             //Componet: 

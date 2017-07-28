@@ -373,7 +373,7 @@ namespace RelhaxModpack
             {
                 // get values from from registry
                 object obj = Registry.GetValue(regEntry, "", -1);
-                // if it is not "null", it is conating possible a string
+                // if it is not "null", it is containing possible a string
                 if (obj != null)
                 {
                     try
