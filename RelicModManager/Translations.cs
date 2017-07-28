@@ -710,25 +710,25 @@ namespace RelhaxModpack
             //
             english.Add("modDeactivated", "The mod \"{0}\" is currently deactivated in the modpack and could not to selected to install.");
             german.Add("modDeactivated", "Der Mod \"{0}\" ist derzeit im Modpack deaktiviert und kann für die Installation nicht markiert werden.");
-            polish.Add("modDeactivated", "");
+            polish.Add("modDeactivated", "Modyfikacja \"{ 0}\" jest obecnie zdezaktywowana w paczce i nie może zostać wybrana.");
 
             //Componet: 
             //
             english.Add("configDeactivated", "The config \"{0}\" of \"{1}\" is currently deactivated in the modpack and could not to selected to install.");
             german.Add("configDeactivated", "Die Konfiguration \"{0}\" von \"{1}\" ist derzeit im Modpack deaktiviert und kann für die Installation nicht markiert werden.");
-            polish.Add("configDeactivated", "");
+            polish.Add("configDeactivated", "Konfiguracja \"{ 0}\" z \"{ 1}\" jest obecnie zdezaktywowana w paczce i nie może zostać wybrana.");
 
             //Componet: 
             //
             english.Add("modsNotFoundTechnical", "The following mods could not be found and were most likely removed. There are only technical names available:\n{0}");
             german.Add("modsNotFoundTechnical", "Die folgenden Modifikationen können nicht gefundenw werden und scheinen gelöscht zu sein. Es sind leider nur technische Namen verfügbar:\n{0}");
-            polish.Add("modsNotFoundTechnical", "");
+            polish.Add("modsNotFoundTechnical", "Następujące modyfikacje nie zostały znalezione, najprawdopodobniej zostały usunięte:\n{ 0}");
 
             //Componet: 
             //
             english.Add("oldSavedConfigFile", "The saved preferences file your are using is in an outdated format and will be inaccurate in the future. Convert it to the new format? (A backup of the old format will be made)");
             german.Add("oldSavedConfigFile", "Die Konfigurationsdatei die benutzt wurde, wird in Zukunft immer ungenauer werden. Soll auf das neue Standardformat umgestellt werden? (Eine Sicherung des alten Formats erfolgt)");
-            polish.Add("oldSavedConfigFile", "");
+            polish.Add("oldSavedConfigFile", "Zapisana konfiguracja jest w przestarzałym formacie i może powodować nieścisłości. Czy chcesz przekonwertować ją na nowszy zapis?");
 
             //Componet: 
             //
