@@ -401,10 +401,8 @@ namespace RelhaxModpack
             {
                 // set the handle to the registry key
                 subKeyHandle = Registry.CurrentUser.OpenSubKey(p);
-                if (subKeyHandle == null) break;            // subKeyHandle == null not existsting
+                if (subKeyHandle == null) continue;            // subKeyHandle == null not existsting
                 // parse all value names of the registry key abouve
-                if (subKeyHandle == null)
-                    return null;
                 foreach (string valueName in subKeyHandle.GetValueNames())
                 {
                     try
