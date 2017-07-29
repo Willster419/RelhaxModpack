@@ -2,9 +2,7 @@
 
 namespace RelhaxModpack
 {
-    //a dependency is a zip file like mod that is required for any of the mods to work
-    //i.e. and sound mods require the sound memory to be increased
-    public class Dependency
+    public class LogicalDependnecy
     {
         public string dependencyZipFile { get; set; }
         public string dependencyZipCRC { get; set; }
@@ -19,6 +17,6 @@ namespace RelhaxModpack
         //needed to excatly identify double packageNames and its position
         public int CheckDatabaseListIndex { get; set; }
         public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
-        public Dependency() { }
+        public LogicalDependnecy() { }
     }
 }

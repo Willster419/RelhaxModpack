@@ -282,14 +282,6 @@ namespace RelhaxModpack
             }
             Application.Exit();
         }
-        //parses all instance strings to be used for (un)install processes
-        private String parseStrings()
-        {
-            tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
-            Utils.appendToLog("tanksLocation parsed as " + tanksLocation);
-            Utils.appendToLog("customUserMods parsed as " + Application.StartupPath + "\\RelHaxUserMods");
-            return "1";
-        }
         //gets the version of tanks that this is, in the format
         //of the res_mods version folder i.e. 0.9.17.0.3
         private string getFolderVersion()
@@ -331,14 +323,6 @@ namespace RelhaxModpack
                     return true;
             }
             return false;
-        }
-        //reset the UI and critical componets
-        private void reset()
-        {
-            downloadProgress.Text = Translations.getTranslatedString("idle");
-            childProgressBar.Value = 0;
-            parrentProgressBar.Value = 0;
-            statusLabel.Text = Translations.getTranslatedString("status");
         }
         //checks the registry to get the location of where WoT is installed
         //idea: if the user can open replay files, this can get the WoT exe filepath
@@ -629,7 +613,7 @@ namespace RelhaxModpack
             toggleUIButtons(false);
             downloadPath = Application.StartupPath + "\\RelHaxDownloads";
             //reset the interface
-            this.reset();
+            this.downloadProgress.Text = "";
             //attempt to locate the tanks directory automatically
             //if it fails, it will prompt the user to return the world of tanks exe
             if (Settings.forceManuel || this.autoFindTanks() == null)
@@ -641,12 +625,9 @@ namespace RelhaxModpack
                 }
             }
             //parse all strings for installation
-            if (this.parseStrings() == null)
-            {
-                MessageBox.Show(Translations.getTranslatedString("autoDetectFailed"));
-                toggleUIButtons(true);
-                return;
-            }
+            tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
+            Utils.appendToLog("tanksLocation parsed as " + tanksLocation);
+            Utils.appendToLog("customUserMods parsed as " + Application.StartupPath + "\\RelHaxUserMods");
             if (tanksLocation.Equals(Application.StartupPath))
             {
                 //display error and abort
@@ -1079,7 +1060,7 @@ namespace RelhaxModpack
         {
             toggleUIButtons(false);
             //reset the interface
-            this.reset();
+            this.downloadProgress.Text = "";
             //attempt to locate the tanks directory
             if (this.autoFindTanks() == null || Settings.forceManuel)
             {
@@ -1090,11 +1071,9 @@ namespace RelhaxModpack
                 }
             }
             //parse all strings
-            if (this.parseStrings() == null)
-            {
-                MessageBox.Show(Translations.getTranslatedString("autoDetectFailed"));
-                return;
-            }
+            tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
+            Utils.appendToLog("tanksLocation parsed as " + tanksLocation);
+            Utils.appendToLog("customUserMods parsed as " + Application.StartupPath + "\\RelHaxUserMods");
             if (MessageBox.Show(Translations.getTranslatedString("confirmUninstallMessage"), Translations.getTranslatedString("confirmUninstallHeader"), MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 Installer unI = new Installer()

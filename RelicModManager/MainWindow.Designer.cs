@@ -401,6 +401,7 @@
             // 
             // downloadProgress
             // 
+            this.downloadProgress.DetectUrls = false;
             this.downloadProgress.Location = new System.Drawing.Point(12, 412);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
