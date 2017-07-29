@@ -367,28 +367,31 @@ namespace RelhaxModpack
                         // add the thing to the checklist, but remove the Quotation Marks in front of the string and the trailing -> " "%1"
                         searchPathWoT.Add(((string)obj).Substring(1).Substring(0, ((string)obj).Length - 7));
                     }
-                    catch (InvalidCastException)
-                    {  } // only exception catching
+                    catch
+                    { } // only exception catching
                 }
             }
 
             // here we need the value for the searchlist
             string regPath = @"HKEY_CURRENT_USER\Software\Wargaming.net\Launcher\Apps\wot";
             RegistryKey subKeyHandle = Registry.CurrentUser.OpenSubKey(regPath.Replace(@"HKEY_CURRENT_USER\", ""));
-            // get the value names at the reg Key one by one
-            foreach (string valueName in subKeyHandle.GetValueNames())
+            if (subKeyHandle!= null)
             {
-                // read the value from the regPath
-                object obj = Registry.GetValue(regPath, valueName, -1);
-                if (obj != null)
+                // get the value names at the reg Key one by one
+                foreach (string valueName in subKeyHandle.GetValueNames())
                 {
-                    try
+                    // read the value from the regPath
+                    object obj = Registry.GetValue(regPath, valueName, -1);
+                    if (obj != null)
                     {
-                        // we did get only a path to used WoT folders, so add the game name to the path and add it to the checklist
-                        searchPathWoT.Add(Path.Combine((string)obj, "WorldOfTanks.exe"));
+                        try
+                        {
+                            // we did get only a path to used WoT folders, so add the game name to the path and add it to the checklist
+                            searchPathWoT.Add(Path.Combine((string)obj, "WorldOfTanks.exe"));
+                        }
+                        catch
+                        { } // only exception catching
                     }
-                    catch (InvalidCastException)
-                    { } // only exception catching
                 }
             }
 
@@ -398,6 +401,7 @@ namespace RelhaxModpack
             {
                 // set the handle to the registry key
                 subKeyHandle = Registry.CurrentUser.OpenSubKey(p);
+                if (subKeyHandle == null) break;            // subKeyHandle == null not existsting
                 // parse all value names of the registry key abouve
                 if (subKeyHandle == null)
                     return null;
