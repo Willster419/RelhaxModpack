@@ -36,7 +36,6 @@
             this.forceManuel = new System.Windows.Forms.CheckBox();
             this.formPageLink = new System.Windows.Forms.LinkLabel();
             this.parrentProgressBar = new System.Windows.Forms.ProgressBar();
-            this.speedLabel = new System.Windows.Forms.Label();
             this.installRelhaxMod = new System.Windows.Forms.Button();
             this.uninstallRelhaxMod = new System.Windows.Forms.Button();
             this.cleanInstallCB = new System.Windows.Forms.CheckBox();
@@ -122,7 +121,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(9, 593);
+            this.formPageLink.Location = new System.Drawing.Point(9, 578);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -137,15 +136,6 @@
             this.parrentProgressBar.Size = new System.Drawing.Size(302, 15);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.parrentProgressBar.TabIndex = 17;
-            // 
-            // speedLabel
-            // 
-            this.speedLabel.AutoSize = true;
-            this.speedLabel.Location = new System.Drawing.Point(9, 556);
-            this.speedLabel.Name = "speedLabel";
-            this.speedLabel.Size = new System.Drawing.Size(24, 13);
-            this.speedLabel.TabIndex = 18;
-            this.speedLabel.Text = "Idle";
             // 
             // installRelhaxMod
             // 
@@ -384,7 +374,7 @@
             // findBugAddModLabel
             // 
             this.findBugAddModLabel.AutoSize = true;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 574);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 559);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
             this.findBugAddModLabel.TabIndex = 27;
@@ -493,7 +483,7 @@
             // donateLabel
             // 
             this.donateLabel.AutoSize = true;
-            this.donateLabel.Location = new System.Drawing.Point(9, 613);
+            this.donateLabel.Location = new System.Drawing.Point(9, 598);
             this.donateLabel.Name = "donateLabel";
             this.donateLabel.Size = new System.Drawing.Size(48, 13);
             this.donateLabel.TabIndex = 32;
@@ -613,7 +603,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(326, 641);
+            this.ClientSize = new System.Drawing.Size(326, 624);
             this.Controls.Add(this.totalProgressBar);
             this.Controls.Add(this.fontSizeGB);
             this.Controls.Add(this.donateLabel);
@@ -626,7 +616,6 @@
             this.Controls.Add(this.settingsGroupBox);
             this.Controls.Add(this.uninstallRelhaxMod);
             this.Controls.Add(this.installRelhaxMod);
-            this.Controls.Add(this.speedLabel);
             this.Controls.Add(this.parrentProgressBar);
             this.Controls.Add(this.formPageLink);
             this.Controls.Add(this.childProgressBar);
@@ -662,7 +651,6 @@
         private System.Windows.Forms.CheckBox forceManuel;
         private System.Windows.Forms.LinkLabel formPageLink;
         private System.Windows.Forms.ProgressBar parrentProgressBar;
-        private System.Windows.Forms.Label speedLabel;
         private System.Windows.Forms.Button installRelhaxMod;
         private System.Windows.Forms.Button uninstallRelhaxMod;
         private System.Windows.Forms.CheckBox cleanInstallCB;

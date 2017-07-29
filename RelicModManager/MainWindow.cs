@@ -82,7 +82,6 @@ namespace RelhaxModpack
             string currentModDownloadingShort = currentModDownloading;
             if (currentModDownloading.Length > 200)
                 currentModDownloadingShort = currentModDownloading.Substring(0, 15) + "...";
-            downloadProgress.Text = Translations.getTranslatedString("Downloading") + " " + currentModDownloadingShort + " (" + Math.Round(MBytesIn, 1) + " MB" + " of " + Math.Round(MBytesTotal, 1) + " MB)";
             //set the progress bar
             childProgressBar.Value = e.ProgressPercentage;
             //set the download speed
@@ -110,8 +109,12 @@ namespace RelhaxModpack
             //convert the total seconds to mins and seconds
             int actualTimeMins = (int)actualTimeRemain / 60;
             int actualTimeSecs = (int)actualTimeRemain % 60;
-            totalSpeedLabel = totalSpeedLabel + " " + actualTimeMins + " mins " + actualTimeSecs + " secs ";
-            speedLabel.Text = totalSpeedLabel;
+            string downloadStatus = "";
+            downloadStatus = Translations.getTranslatedString("Downloading") + " " + currentModDownloadingShort + " (" + Math.Round(MBytesIn, 1) + " MB" + " of " + Math.Round(MBytesTotal, 1) + " MB)";
+            downloadStatus = downloadStatus + "\n" + totalSpeedLabel + " " + actualTimeMins + " mins " + actualTimeSecs + " secs ";
+            //totalSpeedLabel = 
+            downloadProgress.Text = downloadStatus;
+            //speedLabel.Text = totalSpeedLabel;
         }
         //handler for the mod download file complete event
         void downloader_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
@@ -121,7 +124,6 @@ namespace RelhaxModpack
             {
                 //update the UI and download state
                 toggleUIButtons(true);
-                speedLabel.Text = "";
                 downloadProgress.Text = Translations.getTranslatedString("idle");
                 parrentProgressBar.Value = 0;
                 childProgressBar.Value = 0;
@@ -184,7 +186,6 @@ namespace RelhaxModpack
                 };
                 ins.InstallProgressChanged += I_InstallProgressChanged;
                 ins.StartInstallation();
-                speedLabel.Text = "";
             }
         }
         //method to check for updates to the application on startup
@@ -1362,7 +1363,6 @@ namespace RelhaxModpack
         //create the done display
         private void doneDisplay()
         {
-            speedLabel.Text = "";
             downloadProgress.Text = Translations.getTranslatedString("done");
             parrentProgressBar.Maximum = 1;
             parrentProgressBar.Value = parrentProgressBar.Maximum;
