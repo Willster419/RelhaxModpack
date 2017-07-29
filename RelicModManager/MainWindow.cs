@@ -19,8 +19,8 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 23.4.0";
-        private string today = "07/22/2017";
+        private string managerVersion = "version 24.0.0";
+        private string today = "07/29/2017";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -621,7 +621,7 @@ namespace RelhaxModpack
             this.downloadProgress.Text = "";
             //attempt to locate the tanks directory automatically
             //if it fails, it will prompt the user to return the world of tanks exe
-            if (Settings.forceManuel || this.autoFindTanks() == null || this.autoFindTanks_old() == null)
+            if (Settings.forceManuel || this.autoFindTanks() == null)
             {
                 if (this.manuallyFindTanks() == null)
                 {
@@ -1067,7 +1067,7 @@ namespace RelhaxModpack
             //reset the interface
             this.downloadProgress.Text = "";
             //attempt to locate the tanks directory
-            if (Settings.forceManuel || this.autoFindTanks() == null || this.autoFindTanks_old() == null)
+            if (Settings.forceManuel || this.autoFindTanks() == null)
             {
                 if (this.manuallyFindTanks() == null)
                 {
@@ -1402,6 +1402,10 @@ namespace RelhaxModpack
             System.Diagnostics.Process.Start("https://docs.google.com/spreadsheets/d/1LmPCMAx0RajW4lVYAnguHjjd8jArtWuZIGciFN76AI4/edit?usp=sharing");
         }
 
+        private void DiscordServerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://discord.gg/58fdPvK");
+        }
         //handler for when the "standard" loading animation is clicked
         private void standardImageRB_CheckedChanged(object sender, EventArgs e)
         {

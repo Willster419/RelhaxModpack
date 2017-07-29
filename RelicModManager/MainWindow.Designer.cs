@@ -71,6 +71,7 @@
             this.fontSizeLarge = new System.Windows.Forms.RadioButton();
             this.fontSizeDefault = new System.Windows.Forms.RadioButton();
             this.totalProgressBar = new System.Windows.Forms.ProgressBar();
+            this.DiscordServerLink = new System.Windows.Forms.LinkLabel();
             this.settingsGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
@@ -599,12 +600,24 @@
             this.totalProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.totalProgressBar.TabIndex = 34;
             // 
+            // DiscordServerLink
+            // 
+            this.DiscordServerLink.AutoSize = true;
+            this.DiscordServerLink.Location = new System.Drawing.Point(9, 617);
+            this.DiscordServerLink.Name = "DiscordServerLink";
+            this.DiscordServerLink.Size = new System.Drawing.Size(77, 13);
+            this.DiscordServerLink.TabIndex = 35;
+            this.DiscordServerLink.TabStop = true;
+            this.DiscordServerLink.Text = "Discord Server";
+            this.DiscordServerLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.DiscordServerLink_LinkClicked);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(326, 624);
+            this.ClientSize = new System.Drawing.Size(326, 638);
+            this.Controls.Add(this.DiscordServerLink);
             this.Controls.Add(this.totalProgressBar);
             this.Controls.Add(this.fontSizeGB);
             this.Controls.Add(this.donateLabel);
@@ -687,6 +700,7 @@
         private System.Windows.Forms.RadioButton DPILarge;
         private System.Windows.Forms.RadioButton DPIUHD;
         private System.Windows.Forms.ProgressBar totalProgressBar;
+        private System.Windows.Forms.LinkLabel DiscordServerLink;
     }
 }
 
