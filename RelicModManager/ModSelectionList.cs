@@ -28,6 +28,7 @@ namespace RelhaxModpack
         private int mainWindowStartY = 0;
         bool hasRadioButtonConfigSelected = false;
         bool modHasRadioButtons = false;
+        bool firstLoad = true;
         private enum loadConfigMode
         {
             error = -1,
@@ -295,6 +296,7 @@ namespace RelhaxModpack
                 }
             }
             loadingConfig = false;
+            firstLoad = false;
         }
         //adds a tab view for each mod catagory
         private void makeTabs()
@@ -358,15 +360,27 @@ namespace RelhaxModpack
             //if there are underscores you need to actually display them #thanksWPF
             nameForModCB = Regex.Replace(nameForModCB, "_", "__");
             modCheckBox.Content = nameForModCB;
-            //get the local md5 hash. a -1 indicates the file is not on the disk
-            string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
             //if the CRC's don't match and the mod actually has a zip file
-            if (!(m.crc.Equals(oldCRC2)) && (!m.zipFile.Equals("")))
+            if (firstLoad)
             {
-                modCheckBox.Content = string.Format("{0} ({1})",modCheckBox.Content, Translations.getTranslatedString("updated"));
-                m.downloadFlag = true;
-                if ((m.size > 0.0f))
-                    modCheckBox.Content = string.Format("{0} ({1} MB)", modCheckBox.Content, m.size);
+                //get the local md5 hash. a -1 indicates the file is not on the disk
+                string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
+                if (!(m.crc.Equals(oldCRC2)) && (!m.zipFile.Equals("")))
+                {
+                    modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Translations.getTranslatedString("updated"));
+                    m.downloadFlag = true;
+                    if ((m.size > 0.0f))
+                        modCheckBox.Content = string.Format("{0} ({1} MB)", modCheckBox.Content, m.size);
+                }
+            }
+            else
+            {
+                if (m.downloadFlag)
+                {
+                    modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Translations.getTranslatedString("updated"));
+                    if ((m.size > 0.0f))
+                        modCheckBox.Content = string.Format("{0} ({1} MB)", modCheckBox.Content, m.size);
+                }
             }
             //set mod's enabled status
             modCheckBox.IsEnabled = m.enabled;
@@ -473,13 +487,25 @@ namespace RelhaxModpack
                     //if there are underscores you need to actually display them #thanksWPF
                     nameForModCB = Regex.Replace(nameForModCB, "_", "__");
                     configControlRB.Content = nameForModCB;
-                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
-                    if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                    if (firstLoad)
                     {
-                        configControlRB.Content = configControlRB.Content + " (Updated)";
-                        con.downloadFlag = true;
-                        if (con.size > 0.0f)
-                            configControlRB.Content = configControlRB.Content + " (" + con.size + " MB)";
+                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                        {
+                            configControlRB.Content = configControlRB.Content + " (Updated)";
+                            con.downloadFlag = true;
+                            if (con.size > 0.0f)
+                                configControlRB.Content = configControlRB.Content + " (" + con.size + " MB)";
+                        }
+                    }
+                    else
+                    {
+                        if (con.downloadFlag)
+                        {
+                            configControlRB.Content = configControlRB.Content + " (Updated)";
+                            if (con.size > 0.0f)
+                                configControlRB.Content = configControlRB.Content + " (" + con.size + " MB)";
+                        }
                     }
                     //add the handlers at the end
                     configControlRB.Click += new System.Windows.RoutedEventHandler(configControlRB_Click);
@@ -507,33 +533,37 @@ namespace RelhaxModpack
                     }
                     //make the dropdown selection list
                     configControlDDALL.MinWidth = 100;
-                    //run the crc logics
-                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                     ComboBoxItem cbi = null;
-                    if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                    string toAdd = con.name;
+                    //run the crc logics
+                    if (firstLoad)
                     {
-                        string toAdd = con.name + "_Updated";
-                        con.downloadFlag = true;
-                        if (con.size > 0.0f)
-                            toAdd = toAdd + " (" + con.size + " MB)";
-                        //add it with _updated
-                        if (con.enabled)
+                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
                         {
-                            cbi = new ComboBoxItem(con, toAdd);
-                            configControlDDALL.Items.Add(cbi);
+                            toAdd = toAdd + "_Updated";
+                            con.downloadFlag = true;
+                            if (con.size > 0.0f)
+                                toAdd = toAdd + " (" + con.size + " MB)";
                         }
-                        if (con.Checked) configControlDDALL.SelectedItem = cbi;
                     }
                     else
                     {
-                        //add it
-                        if (con.enabled)
+                        if(con.downloadFlag)
                         {
-                            cbi = new ComboBoxItem(con, con.name);
-                            configControlDDALL.Items.Add(cbi);
+                            toAdd = toAdd + "_Updated";
+                            con.downloadFlag = true;
+                            if (con.size > 0.0f)
+                                toAdd = toAdd + " (" + con.size + " MB)";
                         }
-                        if (con.Checked) configControlDDALL.SelectedItem = cbi;
                     }
+                    //add it with
+                    if (con.enabled)
+                    {
+                        cbi = new ComboBoxItem(con, toAdd);
+                        configControlDDALL.Items.Add(cbi);
+                    }
+                    if (con.Checked) configControlDDALL.SelectedItem = cbi;
                     //add the dropdown to the thing. it will only run this once
                     if (configControlDDALL.Name.Equals("notAddedYet"))
                     {
@@ -607,13 +637,26 @@ namespace RelhaxModpack
                     //if there are underscores you need to actually display them #thanksWPF
                     nameForModCB = Regex.Replace(nameForModCB, "_", "__");
                     configControlCB.Content = nameForModCB;
-                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
-                    if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                    if (firstLoad)
                     {
-                        configControlCB.Content = configControlCB.Content + " (Updated)";
-                        con.downloadFlag = true;
-                        if (con.size > 0.0f)
-                            configControlCB.Content = configControlCB.Content + " (" + con.size + " MB)";
+                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                        {
+                            configControlCB.Content = configControlCB.Content + " (Updated)";
+                            con.downloadFlag = true;
+                            if (con.size > 0.0f)
+                                configControlCB.Content = configControlCB.Content + " (" + con.size + " MB)";
+                        }
+                    }
+                    else
+                    {
+                        if(con.downloadFlag)
+                        {
+                            configControlCB.Content = configControlCB.Content + " (Updated)";
+                            con.downloadFlag = true;
+                            if (con.size > 0.0f)
+                                configControlCB.Content = configControlCB.Content + " (" + con.size + " MB)";
+                        }
                     }
                     //add the handlers at the end
                     configControlCB.Click += new System.Windows.RoutedEventHandler(configControlCB_Click);
@@ -1046,14 +1089,26 @@ namespace RelhaxModpack
             m.modFormCheckBox = modCheckBox;
             //the mod checksum logic
             string modDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.zipFile;
-            string oldCRC2 = Utils.getMd5Hash(modDownloadPath);
-            //if the CRC's don't match and the mod actually has a zip file
-            if (!(m.crc.Equals(oldCRC2)) && (!m.zipFile.Equals("")))
+            if (firstLoad)
             {
-                modCheckBox.Text = modCheckBox.Text + " (Updated)";
-                m.downloadFlag = true;
-                if ((m.size > 0.0f))
-                    modCheckBox.Text = string.Format("{0} ({1} MB)", modCheckBox.Text, m.size);
+                string oldCRC2 = Utils.getMd5Hash(modDownloadPath);
+                //if the CRC's don't match and the mod actually has a zip file
+                if (!(m.crc.Equals(oldCRC2)) && (!m.zipFile.Equals("")))
+                {
+                    modCheckBox.Text = modCheckBox.Text + " (Updated)";
+                    m.downloadFlag = true;
+                    if ((m.size > 0.0f))
+                        modCheckBox.Text = string.Format("{0} ({1} MB)", modCheckBox.Text, m.size);
+                }
+            }
+            else
+            {
+                if (m.downloadFlag)
+                {
+                    modCheckBox.Text = modCheckBox.Text + " (Updated)";
+                    if ((m.size > 0.0f))
+                        modCheckBox.Text = string.Format("{0} ({1} MB)", modCheckBox.Text, m.size);
+                }
             }
             modCheckBox.UseVisualStyleBackColor = true;
             modCheckBox.Enabled = m.enabled;
@@ -1236,13 +1291,25 @@ namespace RelhaxModpack
                     configControlRB.Name = t.Name + "_" + m.name + "_" + con.name;
                     //run checksum logic
                     configControlRB.Text = con.name;
-                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
-                    if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                    if (firstLoad)
                     {
-                        configControlRB.Text = configControlRB.Text + " (Updated)";
-                        con.downloadFlag = true;
-                        if (con.size > 0.0f)
-                            configControlRB.Text = configControlRB.Text + " (" + con.size + " MB)";
+                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                        {
+                            configControlRB.Text = configControlRB.Text + " (Updated)";
+                            con.downloadFlag = true;
+                            if (con.size > 0.0f)
+                                configControlRB.Text = configControlRB.Text + " (" + con.size + " MB)";
+                        }
+                    }
+                    else
+                    {
+                        if (con.downloadFlag)
+                        {
+                            configControlRB.Text = configControlRB.Text + " (Updated)";
+                            if (con.size > 0.0f)
+                                configControlRB.Text = configControlRB.Text + " (" + con.size + " MB)";
+                        }
                     }
                     //add the config to the form
                     configPanel.Controls.Add(configControlRB);
@@ -1270,40 +1337,39 @@ namespace RelhaxModpack
                         configControlDDALL.Location = new System.Drawing.Point(6, getYLocation(configPanel.Controls));
                         configPanel.Controls.Add(configControlDDALL);
                     }
-                    //run the checksum locics
-                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                     ComboBoxItem cbi = null;
-                    if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                    string toAdd = con.name;
+                    //run the checksum locics
+                    if (firstLoad)
                     {
-                        con.downloadFlag = true;
-                        string toAdd = con.name + "_Updated";
-                        if (con.size > 0.0f)
-                            toAdd = toAdd + " (" + con.size + " MB)";
-                        //add it with _updated
-                        if (con.enabled)
+                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
                         {
-                            cbi = new ComboBoxItem(con, toAdd);
-                            configControlDDALL.Items.Add(cbi);
-                        }
-                        if (con.Checked)
-                        {
-                            configControlDDALL.SelectedItem = cbi;
-                            configControlDDALL.Enabled = true;
+                            con.downloadFlag = true;
+                            toAdd = toAdd + "_Updated";
+                            if (con.size > 0.0f)
+                                toAdd = toAdd + " (" + con.size + " MB)";
                         }
                     }
                     else
                     {
-                        //add it
-                        if (con.enabled)
+                        if(con.downloadFlag)
                         {
-                            cbi = new ComboBoxItem(con, con.name);
-                            configControlDDALL.Items.Add(cbi);
+                            toAdd = toAdd + "_Updated";
+                            if (con.size > 0.0f)
+                                toAdd = toAdd + " (" + con.size + " MB)";
                         }
-                        if (con.Checked)
-                        {
-                            configControlDDALL.SelectedItem = cbi;
-                            configControlDDALL.Enabled = true;
-                        }
+                    }
+                    //add it
+                    if (con.enabled)
+                    {
+                        cbi = new ComboBoxItem(con, toAdd);
+                        configControlDDALL.Items.Add(cbi);
+                    }
+                    if (con.Checked)
+                    {
+                        configControlDDALL.SelectedItem = cbi;
+                        configControlDDALL.Enabled = true;
                     }
                     if (configControlDDALL.Items.Count > 0)
                         configControlDDALL.Enabled = true;
@@ -1359,13 +1425,25 @@ namespace RelhaxModpack
                     configControlCB.Name = t.Name + "_" + m.name + "_" + con.name;
                     //checksum logic
                     configControlCB.Text = con.name;
-                    string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
-                    if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                    if (firstLoad)
                     {
-                        con.downloadFlag = true;
-                        configControlCB.Text = configControlCB.Text + " (Updated)";
-                        if (con.size > 0.0f)
-                            configControlCB.Text = configControlCB.Text + " (" + con.size + " MB)";
+                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                        {
+                            con.downloadFlag = true;
+                            configControlCB.Text = configControlCB.Text + " (Updated)";
+                            if (con.size > 0.0f)
+                                configControlCB.Text = configControlCB.Text + " (" + con.size + " MB)";
+                        }
+                    }
+                    else
+                    {
+                        if(con.downloadFlag)
+                        {
+                            configControlCB.Text = configControlCB.Text + " (Updated)";
+                            if (con.size > 0.0f)
+                                configControlCB.Text = configControlCB.Text + " (" + con.size + " MB)";
+                        }
                     }
                     //add config to the form
                     configPanel.Controls.Add(configControlCB);
@@ -2030,7 +2108,7 @@ namespace RelhaxModpack
                 this.UseWaitCursor = true;
                 modTabGroups.Enabled = false;
                 this.makeTabs();
-                Settings.setUIColor(this);
+                //Settings.setUIColor(this);
                 this.addAllMods();
                 this.addUserMods();
                 Settings.setUIColor(this);
