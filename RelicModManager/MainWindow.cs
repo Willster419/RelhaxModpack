@@ -163,7 +163,8 @@ namespace RelhaxModpack
                     currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile).Substring(0, 23) + "...";
                 }
                 downloadQueue.RemoveAt(0);
-                parrentProgressBar.Value++;
+                if ((parrentProgressBar.Value + 1) <= parrentProgressBar.Maximum)
+                    parrentProgressBar.Value++;
                 return;
             }
             if (downloadQueue.Count == 0)
@@ -398,6 +399,8 @@ namespace RelhaxModpack
                 // set the handle to the registry key
                 subKeyHandle = Registry.CurrentUser.OpenSubKey(p);
                 // parse all value names of the registry key abouve
+                if (subKeyHandle == null)
+                    return null;
                 foreach (string valueName in subKeyHandle.GetValueNames())
                 {
                     try
@@ -616,7 +619,7 @@ namespace RelhaxModpack
             this.downloadProgress.Text = "";
             //attempt to locate the tanks directory automatically
             //if it fails, it will prompt the user to return the world of tanks exe
-            if (Settings.forceManuel || this.autoFindTanks() == null)
+            if (Settings.forceManuel || this.autoFindTanks() == null || this.autoFindTanks_old() == null)
             {
                 if (this.manuallyFindTanks() == null)
                 {
@@ -1062,7 +1065,7 @@ namespace RelhaxModpack
             //reset the interface
             this.downloadProgress.Text = "";
             //attempt to locate the tanks directory
-            if (this.autoFindTanks() == null || Settings.forceManuel)
+            if (Settings.forceManuel || this.autoFindTanks() == null || this.autoFindTanks_old() == null)
             {
                 if (this.manuallyFindTanks() == null)
                 {

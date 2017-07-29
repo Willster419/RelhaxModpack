@@ -11,6 +11,7 @@ using System.Xml;
 using System.Diagnostics;
 using System.Net;
 using System.Drawing.Text;
+using System.Drawing;
 
 namespace RelhaxModpack
 {
@@ -580,7 +581,7 @@ namespace RelhaxModpack
                 //no fonts to install, done display
                 return;
             }
-            string[] fonts = Directory.GetFiles(TanksLocation + "\\_fonts");
+            string[] fonts = Directory.GetFiles(TanksLocation + "\\_fonts",@"*.*",SearchOption.TopDirectoryOnly);
             if (fonts.Count() == 0)
             {
                 //done display
@@ -591,22 +592,36 @@ namespace RelhaxModpack
             List<String> fontsList = new List<string>();
             foreach (string s in fonts)
             {
-                fontsList.Add(s);
+                fontsList.Add(Path.GetFileName(s));
             }
             //removes any already installed fonts
             for (int i = 0; i < fontsList.Count; i++)
             {
-                //get just the name of the font, assumes the name of the font is the filename as well
-                string fName = Path.GetFileNameWithoutExtension(fontsList[i]);
+                //get the name of the font
+                var fontCol = new PrivateFontCollection();
+                try
+                {
+                    fontCol.AddFontFile(fontsList[i]);
+                }
+                catch
+                {
+                    Utils.appendToLog("Error in font file " + fontsList[i]);
+                    fontsList.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+                //use it's real name
+                string fName = fontCol.Families[0].Name;
                 //get a list of installed fonts
                 var fontsCollection = new InstalledFontCollection();
                 foreach (var fontFamiliy in fontsCollection.Families)
                 {
-                    //check if the font is installed
+                    //check if the font name is installed
                     if (fontFamiliy.Name == fName)
                     {
-                        //font in installed
                         fontsList.RemoveAt(i);
+                        i--;
+                        break;
                     }
                 }
             } 
