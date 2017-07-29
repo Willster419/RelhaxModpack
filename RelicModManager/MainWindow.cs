@@ -382,8 +382,8 @@ namespace RelhaxModpack
                         // add the thing to the checklist, but remove the Quotation Marks in front of the string and the trailing -> " "%1"
                         searchPathWoT.Add(((string)obj).Substring(1).Substring(0, ((string)obj).Length - 7));
                     }
-                    catch (InvalidCastException)
-                    {  } // only exception catching
+                    catch
+                    { } // only exception catching
                 }
             }
 
@@ -402,7 +402,7 @@ namespace RelhaxModpack
                         // we did get only a path to used WoT folders, so add the game name to the path and add it to the checklist
                         searchPathWoT.Add(Path.Combine((string)obj, "WorldOfTanks.exe"));
                     }
-                    catch (InvalidCastException)
+                    catch
                     { } // only exception catching
                 }
             }
