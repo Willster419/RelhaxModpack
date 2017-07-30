@@ -81,7 +81,8 @@ namespace RelhaxModpack
                 Settings.firstLoad = true;
                 Settings.saveLastConfig = false;
                 Settings.saveUserData = false;
-                Settings.cleanUninstall = false;
+                //need to set this to true for now
+                Settings.cleanUninstall = true;
                 Settings.disableBorders = false;
                 Settings.tempLoadedLanguage = 0;
                 Settings.modSelectionHeight = 480;
@@ -136,6 +137,8 @@ namespace RelhaxModpack
                             break;
                         case "cleanUninstall":
                             Settings.cleanUninstall = bool.Parse(n.InnerText);
+                            //need to force true for now
+                            Settings.cleanUninstall = true;
                             break;
                         case "darkUI":
                             Settings.darkUI = bool.Parse(n.InnerText);

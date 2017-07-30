@@ -167,11 +167,13 @@ namespace RelhaxModpack
             if (Directory.Exists(TanksLocation + "\\_patch"))
                 PatchFiles();
             ResetArgs();
+            /*
             //Step 11: Install Fonts
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallFonts;
             if (Directory.Exists(TanksLocation + "\\_fonts"))
                 InstallFonts();
             ResetArgs();
+            */
             //Step 12: Extract User Mods
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractUserMods;
             if(UserMods.Count > 0)
@@ -592,7 +594,7 @@ namespace RelhaxModpack
             List<String> fontsList = new List<string>();
             foreach (string s in fonts)
             {
-                fontsList.Add(Path.GetFileName(s));
+                fontsList.Add(s);
             }
             //removes any already installed fonts
             for (int i = 0; i < fontsList.Count; i++)

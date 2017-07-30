@@ -19,8 +19,8 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 24.0.0";
-        private string today = "07/29/2017";
+        private string managerVersion = "version 24.1.0";
+        private string today = "07/30/2017";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -1079,6 +1079,7 @@ namespace RelhaxModpack
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
             Utils.appendToLog("tanksLocation parsed as " + tanksLocation);
             Utils.appendToLog("customUserMods parsed as " + Application.StartupPath + "\\RelHaxUserMods");
+            tanksVersion = this.getFolderVersion();
             if (MessageBox.Show(Translations.getTranslatedString("confirmUninstallMessage"), Translations.getTranslatedString("confirmUninstallHeader"), MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 Installer unI = new Installer()
@@ -1374,6 +1375,8 @@ namespace RelhaxModpack
             backupModsCheckBox.Enabled = enableToggle;
             darkUICB.Enabled = enableToggle;
             cleanUninstallCB.Enabled = enableToggle;
+            //need to disable for now
+            cleanUninstallCB.Enabled = false;
             saveUserDataCB.Enabled = enableToggle;
             saveLastInstallCB.Enabled = enableToggle;
             fontSizeDefault.Enabled = enableToggle;
