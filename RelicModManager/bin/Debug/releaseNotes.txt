@@ -1,3 +1,9 @@
+Version 24.1.0:
+-Fixed Install procedure. Fonts are only installed at the end
+-Fixed bug with the actual font install process
+-Fixed bug with both uninstallers not putting back the WoT version folders
+-Found major bug with the smart uninstaller, have disabled it for now. Clean uninstaller still works
+
 Hello Everyone, please welcome the latest and greatest modpack installer version, Version 24!!
 A lot has changed in this update:
 -The installation process has been completely re-written. Now, the code is much cleaner and the installer is 100% off the UI thread. It is also more efficient
