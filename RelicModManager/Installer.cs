@@ -997,6 +997,11 @@ namespace RelhaxModpack
                             {
                                 zip[i].FileName = Regex.Replace(zip[i].FileName, "configs/xvm/xvmConfigFolderName", "configs/xvm/" + xvmConfigDir);
                             }
+                            if (Regex.IsMatch(zip[i].FileName, "WoTAppData"))
+                            {
+                                //TODO: TEST
+                                zip[i].FileName = Regex.Replace(zip[i].FileName, "WoTAppData", AppDataFolder);
+                            }
                             //put the entries on disk
                             fs.Write(Encoding.UTF8.GetBytes(zip[i].FileName + "\n"), 0, Encoding.UTF8.GetByteCount(zip[i].FileName + "\n"));
                         }
