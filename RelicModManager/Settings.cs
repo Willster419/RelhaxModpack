@@ -26,6 +26,8 @@ namespace RelhaxModpack
         public static bool darkUI { get; set; }
         public static bool cleanUninstall { get; set; }
         public static bool disableBorders { get; set; }
+        //toggle if the program will delete the WoT appdata cache
+        public static bool clearCache { get; set; }
         public static int modSelectionHeight { get; set; }
         public static int modSelectionWidth { get; set; }
         public static int loadingGif { get; set; }
@@ -81,6 +83,7 @@ namespace RelhaxModpack
                 Settings.firstLoad = true;
                 Settings.saveLastConfig = false;
                 Settings.saveUserData = false;
+                Settings.clearCache = false;
                 //need to set this to true for now
                 Settings.cleanUninstall = true;
                 Settings.disableBorders = false;
@@ -139,6 +142,9 @@ namespace RelhaxModpack
                             Settings.cleanUninstall = bool.Parse(n.InnerText);
                             //need to force true for now
                             Settings.cleanUninstall = true;
+                            break;
+                        case "clearCache":
+                            Settings.clearCache = bool.Parse(n.InnerText);
                             break;
                         case "darkUI":
                             Settings.darkUI = bool.Parse(n.InnerText);
@@ -277,6 +283,9 @@ namespace RelhaxModpack
             XmlElement xcleanUninstall = doc.CreateElement("cleanUninstall");
             xcleanUninstall.InnerText = "" + Settings.cleanUninstall;
             settingsHolder.AppendChild(xcleanUninstall);
+            XmlElement xclearCache = doc.CreateElement("clearCache");
+            xclearCache.InnerText = "" + Settings.clearCache;
+            settingsHolder.AppendChild(xclearCache);
             XmlElement xdarkUI = doc.CreateElement("darkUI");
             xdarkUI.InnerText = "" + Settings.darkUI;
             settingsHolder.AppendChild(xdarkUI);

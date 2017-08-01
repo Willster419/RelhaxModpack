@@ -22,6 +22,7 @@ namespace RelhaxModpack
         private string managerVersion = "version 24.1.0";
         private string today = "07/30/2017";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
+        private string appDataFolder;//the folder where the user's app data is stored (C:\Users\username\AppData)
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
         //where all the downloaded mods are placed
@@ -617,6 +618,19 @@ namespace RelhaxModpack
             Utils.TotallyNotStatPaddingForumPageViewCount();
             toggleUIButtons(false);
             downloadPath = Application.StartupPath + "\\RelHaxDownloads";
+            //get the user appData folder
+            appDataFolder = Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Wargaming.net\\WorldOfTanks");
+            Utils.appendToLog("appDataFolder parsed as " + appDataFolder);
+            if(!Directory.Exists(appDataFolder))
+            {
+                Utils.appendToLog("ERROR: appDataFolder does not exist");
+                if(Settings.clearCache)
+                {
+                    //cant clear cache if the folder doens't exist #rollSafe
+                    Utils.appendToLog("skipped clearing cache since folder does not exist");
+                    MessageBox.Show(Translations.getTranslatedString("appDataFolderError"));
+                }
+            }
             //reset the interface
             this.downloadProgress.Text = "";
             //attempt to locate the tanks directory automatically
@@ -1166,6 +1180,7 @@ namespace RelhaxModpack
             this.fontSizeGB.Text = Translations.getTranslatedString(fontSizeGB.Name);
             this.expandNodesDefault.Text = Translations.getTranslatedString(expandNodesDefault.Name);
             this.disableBordersCB.Text = Translations.getTranslatedString(disableBordersCB.Name);
+            this.clearCacheCB.Text = Translations.getTranslatedString(clearCacheCB.Name);
             if (helper != null)
             {
                 helper.helperText.Text = Translations.getTranslatedString("helperText");
@@ -1385,6 +1400,7 @@ namespace RelhaxModpack
             DPIDefault.Enabled = enableToggle;
             DPILarge.Enabled = enableToggle;
             DPIUHD.Enabled = enableToggle;
+            clearCacheCB.Enabled = enableToggle;
         }
         //handler for when the window is goingto be closed
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -1525,6 +1541,11 @@ namespace RelhaxModpack
         {
             if (helper != null)
                 helper.helperText.Text = Translations.getTranslatedString("disableBordersDesc");
+
+        }
+        private void clearCacheCB_MouseEnter(object sender, EventArgs e)
+        {
+            //TODO
         }
 
         private void font_MouseDown(object sender, MouseEventArgs e)
@@ -1680,6 +1701,11 @@ namespace RelhaxModpack
             newHelper.ShowDialog();
         }
 
+        private void clearCacheCB_MouseDown(object sender, MouseEventArgs e)
+        {
+            //TODO
+        }
+
         //handler for when the "force manuel" checkbox is checked
         private void forceManuel_CheckedChanged(object sender, EventArgs e)
         {
@@ -1751,6 +1777,11 @@ namespace RelhaxModpack
         private void disableBordersCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.disableBorders = disableBordersCB.Checked;
+        }
+
+        private void clearCacheCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.clearCache = clearCacheCB.Checked;
         }
 
         private void fontSizeDefault_CheckedChanged(object sender, EventArgs e)

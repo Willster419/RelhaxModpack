@@ -25,26 +25,6 @@ namespace RelhaxModpack
          * Then we can get out of using the MainWindow to install. It will handle all of the backing up, copying, extracting and patching of the modpack.
          * This way the code is easier to follow, and has one central place to take care of the entire install process.
          * This also enables us to use syncronous thinking when approaching the installation procedures of the modpack.
-         * The main window will create an install instance which will take the following parameters:
-         * 1. The path to World_of_Tanks
-         * 2. The path to the application (Startup Path)
-         * 3. The parsed list of global dependencies
-         * 4. The parsed list of Dependencies to extract
-         * 5. The parsed list of logical Dependnecies to extract
-         * 6. The parsed list of Mods to extract
-         * 7. The parsed list of Configs to extract
-         * 
-         * It will then do the following:
-         * 1. Backup mods
-         * 2. Backup user data
-         * 3. Delete mods
-         * 4. Extract global dependencies
-         * 5. Extract dependencies
-         * 6. Extract logical dependencies
-         * 7. Extract mods
-         * 8. Extract configs
-         * 9. Restore user data
-         *10. Patch files
         */
         //everything that it needs to install
         public string TanksLocation { get; set; }
@@ -59,6 +39,8 @@ namespace RelhaxModpack
         public List<Mod> UserMods { get; set; }
         private List<Patch> patchList { get; set; }
         public string TanksVersion { get; set; }
+        //the folder of the current user appdata
+        public string AppDataFolder { get; set; }
 
         //properties relevent to the handler and install
         private BackgroundWorker InstallWorker;
@@ -149,6 +131,13 @@ namespace RelhaxModpack
             {
                 args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteMods;
                 DeleteMods();
+            }
+            ResetArgs();
+            //Step 3a 4?: Delete user apadata cache
+            if (Settings.clearCache)
+            {
+                args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteWoTCache;
+                ClearWoTCache();
             }
             ResetArgs();
             //Step 4: Extracts Mods
@@ -301,7 +290,11 @@ namespace RelhaxModpack
                 Utils.appendToLog("user info: " + ex.Data);
             }
         }
-
+        //Step 4: Clear WoT program cache
+        public void ClearWoTCache()
+        {
+            //TODO
+        }
         //Step 4-8: Extract All DatabaseObjects
         public void ExtractDatabaseObjects()
         {
