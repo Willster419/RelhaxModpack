@@ -935,15 +935,34 @@ namespace RelhaxModpack
             polish.Add("moveOutOfTanksLocation", "Modpack nie może być uruchomiony z katalogu World_of_Tanks. Przenieś aplikację i spróbuj ponownie.");
 
             //Section saveConfig
+            //
             english.Add("selectWhereToSave", "Select where to save user prefs");
             german.Add("selectWhereToSave", "Bitte wähle wo die Speicherung erfolgen soll");
             polish.Add("selectWhereToSave", "Wybór lokalizacji zapisu preferencji użytkownika");
 
             //Section addModTreeview
+            //
             english.Add("updated", "updated");
             german.Add("updated", "aktualisiert");
             polish.Add("updated", "zaktualizowane");
 
+            //Component: MainWindow
+            //If the appDataFolder is not parsed properly
+            english.Add("appDataFolderError", "The app data folder for WoT was not found. Clearing WoT cache will be skipped. Please report this to the developer team.");
+            german.Add("appDataFolderError", "MISSING TRANSLATION: ID=appDataFolderError, LANGUAGE = GERMAN");
+            polish.Add("appDataFolderError", "MISSING TRANSLATION: ID=appDataFolderError, LANGUAGE = POLISH");
+
+            //Component: clearCacheCB
+            //
+            english.Add("clearCacheCB", "Clear WoT cache data");
+            german.Add("clearCacheCB", "MISSING TRANSLATION: clearCacheCB, GERMAN");
+            polish.Add("clearCacheCB", "MISSING TRANSLATION: clearCacheCB, POLISH");
+
+            //Component: clearCachCBExplanation
+            //
+            english.Add("clearCachCBExplanation", "TODO");
+            german.Add("clearCachCBExplanation", "MISSING TRANSLATION: ID=clearCachCBExplanation, LANGUAGE = GERMAN");
+            polish.Add("clearCachCBExplanation", "MISSING TRANSLATION: ID=clearCachCBExplanation, LANGUAGE = POLISH");
         }
     }
 }

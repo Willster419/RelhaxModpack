@@ -42,6 +42,7 @@
             this.cancerFontCB = new System.Windows.Forms.CheckBox();
             this.backupModsCheckBox = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
+            this.clearCacheCB = new System.Windows.Forms.CheckBox();
             this.darkUICB = new System.Windows.Forms.CheckBox();
             this.cleanUninstallCB = new System.Windows.Forms.CheckBox();
             this.saveUserDataCB = new System.Windows.Forms.CheckBox();
@@ -71,6 +72,7 @@
             this.fontSizeLarge = new System.Windows.Forms.RadioButton();
             this.fontSizeDefault = new System.Windows.Forms.RadioButton();
             this.totalProgressBar = new System.Windows.Forms.ProgressBar();
+            this.DiscordServerLink = new System.Windows.Forms.LinkLabel();
             this.settingsGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
@@ -84,7 +86,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(9, 396);
+            this.statusLabel.Location = new System.Drawing.Point(9, 416);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(53, 13);
             this.statusLabel.TabIndex = 10;
@@ -93,7 +95,7 @@
             // 
             // childProgressBar
             // 
-            this.childProgressBar.Location = new System.Drawing.Point(12, 538);
+            this.childProgressBar.Location = new System.Drawing.Point(12, 558);
             this.childProgressBar.Name = "childProgressBar";
             this.childProgressBar.Size = new System.Drawing.Size(302, 15);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -121,7 +123,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(9, 578);
+            this.formPageLink.Location = new System.Drawing.Point(9, 598);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -131,7 +133,7 @@
             // 
             // parrentProgressBar
             // 
-            this.parrentProgressBar.Location = new System.Drawing.Point(12, 517);
+            this.parrentProgressBar.Location = new System.Drawing.Point(12, 537);
             this.parrentProgressBar.Name = "parrentProgressBar";
             this.parrentProgressBar.Size = new System.Drawing.Size(302, 15);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -204,6 +206,7 @@
             // 
             // settingsGroupBox
             // 
+            this.settingsGroupBox.Controls.Add(this.clearCacheCB);
             this.settingsGroupBox.Controls.Add(this.darkUICB);
             this.settingsGroupBox.Controls.Add(this.cleanUninstallCB);
             this.settingsGroupBox.Controls.Add(this.saveUserDataCB);
@@ -214,10 +217,24 @@
             this.settingsGroupBox.Controls.Add(this.cleanInstallCB);
             this.settingsGroupBox.Location = new System.Drawing.Point(12, 90);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(302, 152);
+            this.settingsGroupBox.Size = new System.Drawing.Size(302, 172);
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "Modpack Settings";
+            // 
+            // clearCacheCB
+            // 
+            this.clearCacheCB.AutoSize = true;
+            this.clearCacheCB.Location = new System.Drawing.Point(6, 149);
+            this.clearCacheCB.Name = "clearCacheCB";
+            this.clearCacheCB.Size = new System.Drawing.Size(137, 17);
+            this.clearCacheCB.TabIndex = 31;
+            this.clearCacheCB.Text = "Clear WoT Cache Data";
+            this.clearCacheCB.UseVisualStyleBackColor = true;
+            this.clearCacheCB.CheckedChanged += new System.EventHandler(this.clearCacheCB_CheckedChanged);
+            this.clearCacheCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.clearCacheCB_MouseDown);
+            this.clearCacheCB.MouseEnter += new System.EventHandler(this.clearCacheCB_MouseEnter);
+            this.clearCacheCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // darkUICB
             // 
@@ -236,6 +253,7 @@
             // cleanUninstallCB
             // 
             this.cleanUninstallCB.AutoSize = true;
+            this.cleanUninstallCB.Enabled = false;
             this.cleanUninstallCB.Location = new System.Drawing.Point(6, 114);
             this.cleanUninstallCB.Name = "cleanUninstallCB";
             this.cleanUninstallCB.Size = new System.Drawing.Size(117, 17);
@@ -280,7 +298,7 @@
             this.languageSelectionGB.Controls.Add(this.languagePL);
             this.languageSelectionGB.Controls.Add(this.languageGER);
             this.languageSelectionGB.Controls.Add(this.languageENG);
-            this.languageSelectionGB.Location = new System.Drawing.Point(154, 366);
+            this.languageSelectionGB.Location = new System.Drawing.Point(154, 386);
             this.languageSelectionGB.Name = "languageSelectionGB";
             this.languageSelectionGB.Size = new System.Drawing.Size(160, 37);
             this.languageSelectionGB.TabIndex = 30;
@@ -334,7 +352,7 @@
             // 
             this.loadingImageGroupBox.Controls.Add(this.thirdGuardsLoadingImageRB);
             this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(11, 344);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(11, 364);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
             this.loadingImageGroupBox.Size = new System.Drawing.Size(137, 49);
             this.loadingImageGroupBox.TabIndex = 26;
@@ -374,7 +392,7 @@
             // findBugAddModLabel
             // 
             this.findBugAddModLabel.AutoSize = true;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 559);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 579);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
             this.findBugAddModLabel.TabIndex = 27;
@@ -385,7 +403,7 @@
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(221, 559);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(221, 579);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
             this.cancelDownloadButton.Size = new System.Drawing.Size(93, 60);
             this.cancelDownloadButton.TabIndex = 28;
@@ -402,7 +420,7 @@
             // downloadProgress
             // 
             this.downloadProgress.DetectUrls = false;
-            this.downloadProgress.Location = new System.Drawing.Point(12, 412);
+            this.downloadProgress.Location = new System.Drawing.Point(12, 432);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
             this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
@@ -416,7 +434,7 @@
             this.viewTypeGB.Controls.Add(this.expandNodesDefault);
             this.viewTypeGB.Controls.Add(this.selectionLegacy);
             this.viewTypeGB.Controls.Add(this.selectionDefault);
-            this.viewTypeGB.Location = new System.Drawing.Point(11, 248);
+            this.viewTypeGB.Location = new System.Drawing.Point(11, 268);
             this.viewTypeGB.Name = "viewTypeGB";
             this.viewTypeGB.Size = new System.Drawing.Size(173, 93);
             this.viewTypeGB.TabIndex = 31;
@@ -484,7 +502,7 @@
             // donateLabel
             // 
             this.donateLabel.AutoSize = true;
-            this.donateLabel.Location = new System.Drawing.Point(9, 598);
+            this.donateLabel.Location = new System.Drawing.Point(9, 618);
             this.donateLabel.Name = "donateLabel";
             this.donateLabel.Size = new System.Drawing.Size(48, 13);
             this.donateLabel.TabIndex = 32;
@@ -500,7 +518,7 @@
             this.fontSizeGB.Controls.Add(this.fontSizeHUD);
             this.fontSizeGB.Controls.Add(this.fontSizeLarge);
             this.fontSizeGB.Controls.Add(this.fontSizeDefault);
-            this.fontSizeGB.Location = new System.Drawing.Point(193, 248);
+            this.fontSizeGB.Location = new System.Drawing.Point(193, 268);
             this.fontSizeGB.Name = "fontSizeGB";
             this.fontSizeGB.Size = new System.Drawing.Size(121, 115);
             this.fontSizeGB.TabIndex = 33;
@@ -593,18 +611,30 @@
             // 
             // totalProgressBar
             // 
-            this.totalProgressBar.Location = new System.Drawing.Point(12, 496);
+            this.totalProgressBar.Location = new System.Drawing.Point(12, 516);
             this.totalProgressBar.Name = "totalProgressBar";
             this.totalProgressBar.Size = new System.Drawing.Size(302, 15);
             this.totalProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.totalProgressBar.TabIndex = 34;
+            // 
+            // DiscordServerLink
+            // 
+            this.DiscordServerLink.AutoSize = true;
+            this.DiscordServerLink.Location = new System.Drawing.Point(9, 637);
+            this.DiscordServerLink.Name = "DiscordServerLink";
+            this.DiscordServerLink.Size = new System.Drawing.Size(77, 13);
+            this.DiscordServerLink.TabIndex = 35;
+            this.DiscordServerLink.TabStop = true;
+            this.DiscordServerLink.Text = "Discord Server";
+            this.DiscordServerLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.DiscordServerLink_LinkClicked);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(326, 624);
+            this.ClientSize = new System.Drawing.Size(326, 654);
+            this.Controls.Add(this.DiscordServerLink);
             this.Controls.Add(this.totalProgressBar);
             this.Controls.Add(this.fontSizeGB);
             this.Controls.Add(this.donateLabel);
@@ -687,6 +717,8 @@
         private System.Windows.Forms.RadioButton DPILarge;
         private System.Windows.Forms.RadioButton DPIUHD;
         private System.Windows.Forms.ProgressBar totalProgressBar;
+        private System.Windows.Forms.LinkLabel DiscordServerLink;
+        private System.Windows.Forms.CheckBox clearCacheCB;
     }
 }
 

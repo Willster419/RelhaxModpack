@@ -1,158 +1,21 @@
-In case you did not look on the forms, we have a discord server for you to join for rapid modpack support and mods discussion:
-https://discord.gg/58fdPvK
+Version 24.1.0:
+-Fixed Install procedure. Fonts are only installed at the end
+-Fixed bug with the actual font install process
+-Fixed bug with both uninstallers not putting back the WoT version folders
+-Found major bug with the smart uninstaller, have disabled it for now. Clean uninstaller still works
 
-Version 23.4.0:
--Improvements to the database parser
--Added more localization text to the mod selection list
--Improved the message of the supported clients message
-
-Version 23.3.8:
--Added limit to the log file size
--Added more exception handling when backing up user data
--Added handling for invalid characters when backing up user data
--Fixed bug where application would crash if resized when minimized
--Updated the "client not supported" window
-
-Version 23.3.5:
--Fixed bug with parsing config dependencies
--Fixed bug with log localization
--Updated Translations
-
-Version 23.3.4:
--Fixed bug with the auto detection of World of Tanks folder.
--Fixed bug so that if the auto detection is causing issues, using "force manuel game detection" will not run the auto detection code
--Fixed issues with back-end tools
-
-Version 23.3.3:
--Started work on database unique key modification
--Updated Translations
-
-Version 23.3.2:
--Added more exception handling for corrupted zip files
-
-Version 23.3.1:
--Fixed bug with the json patcher system causing patches to fail (like 6th sense time, mirror vehicle icons, etc)
--Updated some backend tools
--Updated Utilities
--Added translations to the save config selection dialog window
--Added file versioning to config selection prefrence files
--Updated translations (shocker)
-
-Version 23.3.0: (Big feature update!!)
--Added new database for downloaded files cache. Improves first time loading for each day by at least 43%
--Converted the project from Visual Studio 2010 to Visual Studio 2017
--Added timestamp to RelHaxLog.txt entries
--Added features to improve test mode of the modpack
--Added comments in the installedRelHaxFiles.txt that say the zip file in installed, so it's easier to determine which zip file the files are from
--Added more stability (exception handling)
--Added localization to some windows
--Fixed the display of mod file sizes
--Improved debug log info from the patching system
--Added the "Please Wait" window to the taskbar so it can be brought up again if minimized
--Added ability to print external (user) spreadsheets
--Added dev URL links to the internal spreadsheet
--Improved patch designer for xvm style patches
--Fixed bug with 1.75x scaling would make user mods not display properly
--Fixed bug where the first config level of a mod would not behave the "disable" field of the database
-
-Version 23.2.8:
--Added pmod style patching ability to xvm patcher
--Added new backend tool DatabaseListGenerater: you can use it to make a spreadsheet of all mods in the database
--Other back-end tools fixed
--Enabled multiple tab lines in the Mod Selection List Window
--Added stability to version checking of the application
--Improved stability of the xvm patcher
-
-Version 23.2.5:
--Completed Implementation of DPI scaling. If you are having issues with the "Font" scaling, try the "DPI" scaling.
-
-Version 23.2.4:
--Added support for the extractor to extract xvm configs to folders other than "default"
--Improved exception handling and logging
--Added ability of the update window and files to delete window to resize
-
-Version 23.2.3:
--Added detection if the application is in the World_of_Tanks folder. It's not supposed to be placed there.
--Added option to default selection view: Disable borders option. Disable the thin black borders around all mods and config levels.
--Removed not needed logic for disabling and enabling the selection view options check boxes.
--Fixed bug in both selection views where it would allow you to enable configs that should be disabled.
--Fixed bug where polish language would not be saved and reloaded on new application launch.
-
-Version 23.2.2:
--Hotfix for bug of installer not downloading external application libraries
-
-Version 23.2.1:
--Updated autosize parameters in the main window
--Moved restoring of user files to right after extraction, before patching, for user data files that are also the config files for mods.
--Updated Translations
-
-Version 23.2.0:
--Added new scaling option, "DPI"
--Updated "Font" to now be a form of scaling as well. It is now split into three options: Font scaling 1x, font scaling 1.25x, font scaling 1.75x
--Updated all forum windows to accept, apply, and resize appropriately for the new scaling options
--Improved back-end tools
--Fixed bugs with the regex patcher
--Added progress bar for when loading the ModSelectionList
--Added option in the main window to auto expand all items in each category for the OMC style selection
--Added option to expand an entire selected tab page from the OMC mod selection
--Fixed overlapping checkboxes in the MainWindow for certain windows display themes
--Removed limit of size of resizing the ModSelectionList
--Updated Translations
-
-Version 23.1.7:
--Fixed bugs with saving of user data files (like session stats)
--Improved efficiency with logic of the patching system
-
-Version 23.1.6:
--Fixed bugs with keywords for all patching systems
-
-Version 23.1.5:
--Fixed bugs with test installation mode
--Fixed bugs with the XVM patcher
--Updated Translations
--Other back-end fixes
-
-Version 23.1.4:
--Fixed bugs with the deleting of old downloaded zip files
-
-Version 23.1.3:
--Fixed bugs with the xvm patcher
-
-Version 23.1.2:
--Fixed bug with drop down configs not saving selections properly
-
-Version 23.1.1:
--Added feature where it will allow you to delete old files
--Added "_readme" folder to cleanup list
--Updated Translations
-
-Version 23.1.0:
--Added a new xvm patcher. you guys won't notice a difference.
--Increased the font size for the large font setting from 10 to 12
--Updated Translations
-
-Version 23.0.5:
--Fixed bugs with legacy OMC display
--Fixed more bugs with database back-end tools
-
-Version 23.0.4:
--Fixed bugs with database back-end tools
-
-Version 23.0.3:
--Fixed another bug with the recursive processing of configs
-
-Version 23.0.2:
--Fixed a bug with the recursive processing of configs
-
-Version 23.0.1:
--Fixed bugs with database serializer
--Fixed bugs with ComboBox selection propagation
-
-Version 23.0.0:
--Large update inbound! The modpack has gone through several changes and has a few new and exciting features!
--The biggest and perhaps most significant is that with the programming concept of recursion, we now can have about 400,000 config sublevels, rather than the 3 we had before!
--The default and omc legacy ui have been redesigned so that it is more like OMC and straightforward. The only time a mod will be greyed out is if it is actully disabled/broken.
--The preview system has been changed. You can now right click on a mod OR a config to view it's specific description.
--The "Loading" time between mod selection and extraction (where nothing seems to happen) had been reduced by up to 83%. This depends on mod selection.
--Other minor bug fixes and enhancements. And of course,
+Hello Everyone, please welcome the latest and greatest modpack installer version, Version 24!!
+A lot has changed in this update:
+-The installation process has been completely re-written. Now, the code is much cleaner and the installer is 100% off the UI thread. It is also more efficient
+-The method for uniquely storing mod and config names has been re-written. Now, when we change the name of a component, you won't get that annoying "could not find the mod/config with the name ..." anymore
+-The feedback on the installer textbox window is now more complete and has more helpful information
+-There are now 3 progress bars that show: the total progress, the progress of a specific phase, and the process in that phase (if applicable)
+-Loading a preference selection, or clearing your selections, has had the time reduced by about 80%
+-Lots (about 500 lines) of dead and inefficient code cleanup
+-The uninstaller was built into the installer class, no more duplicate code between the two
+-Optimizations to the database parser
+-Changed encoding of the log from ASCII to UTF-8-BOM
+-Added more exception logging
+-Modified the auto-detection to greatly increase the chance it can quickly find your WoT installation
+-Modified the Manuel detection so that it can try to locate the WoT folder, but won't cause exceptions
 -Updated translations
