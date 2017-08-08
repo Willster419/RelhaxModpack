@@ -65,6 +65,10 @@ namespace RelhaxModpack
         {
             Utils.appendToLog("MainWindow Constructed");
             InitializeComponent();
+            this.SetStyle(                                      /// add double buffering and possibly reduce flicker https://stackoverflow.com/questions/1550293/stopping-textbox-flicker-during-update
+              ControlStyles.AllPaintingInWmPaint |
+              ControlStyles.UserPaint |
+              ControlStyles.DoubleBuffer,true);
         }
         //handler for the mod download file progress
         void downloader_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

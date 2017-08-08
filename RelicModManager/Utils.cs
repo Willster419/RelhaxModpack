@@ -41,7 +41,7 @@ namespace RelhaxModpack
             }
             //if the info text is containing any linefeed/carrieage return, intend the next line with 26 space char
             info = info.Replace("\n", "\n" + string.Concat(Enumerable.Repeat(" ", 26)));
-            writeToFile(filePath, string.Format("{0}   {1}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), info));
+            writeToFile(filePath, string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}   {1}", DateTime.Now, info));
         }
 
         // https://stackoverflow.com/questions/4741037/keeping-log-files-under-a-certain-size
