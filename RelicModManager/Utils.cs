@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Net;
 using System.Globalization;
 using System.Xml.XPath;
+using Ionic.Zip;
 
 namespace RelhaxModpack
 {
@@ -104,7 +105,7 @@ namespace RelhaxModpack
                     fs.Write(newLine, 0, newLine.Length);
                 }
             }
-            catch (Exception)
+            catch
             {
                 ; // Nothing to do...
                   //writeEvent("writeToFile() Failed to write to logfile : " + ex.Message + "...", 5);
@@ -140,18 +141,81 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// default logging function of exception informations
+        /// default logging function of exception informations, possible to expand the cxception Group with his own needed informations of the specific exception
         /// </summary>
         /// <param e=Exception>the exception object that would be catched</param>
         public static void exceptionLog(Exception e)
         {
-            Utils.appendToLog("EXCEPTION (call stack traceback):");
-            try { Utils.appendToLog(e.StackTrace); } catch { };
-            try { Utils.appendToLog("message: " + e.Message); } catch { };
-            try { Utils.appendToLog("source: " + e.Source); } catch { };
-            try { Utils.appendToLog("target: " + e.TargetSite); } catch { };
-            try { Utils.appendToLog("InnerException: " + e.InnerException); } catch { };
-            try { Utils.appendToLog("Data: " + e.Data); } catch { };             /// https://msdn.microsoft.com/de-de/library/system.exception.data(v=vs.110).aspx
+            Utils.exceptionLog("", "", e);
+        }
+
+        /// <summary>
+        /// default logging function of exception informations, possible to expand the cxception Group with his own needed informations of the specific exception
+        /// </summary>
+        /// <param msg=string>the name of the function or other unified informations to traceback the point of exception</param>
+        /// <param e=Exception>the exception object that would be catched</param>
+        public static void exceptionLog(string msg, Exception e)
+        {
+            Utils.exceptionLog(msg, "", e);
+        }
+
+        /// <summary>
+        /// default logging function of exception informations, possible to expand the cxception Group with his own needed informations of the specific exception              https://msdn.microsoft.com/de-de/library/system.exception.data(v=vs.110).aspx
+        /// </summary>
+        /// <param msg=string>the name of the function or other unified informations to traceback the point of exception</param>
+        /// <param info=string>more informations of the function that throw the exception</param>
+        /// <param e=Exception>the exception object that would be catched</param>
+        public static void exceptionLog(string msgString, string infoString, Exception e)
+        {
+            e = e.GetBaseException();
+            string errorType = "Exception";
+            string info = "";
+            try { info = string.Format("{0}", infoString.Equals("") || infoString == null ? "" : string.Format("Additional Info: {0}\n", infoString)); } catch { };
+            string type = "";
+            try { type = string.Format("Type: {0}\n", e.GetType()); } catch { };
+            string stackTrace = "";
+            try { stackTrace = string.Format("StackTrace: {0}\n", e.StackTrace.Equals("") ? "(empty)" : e.StackTrace == null ? "(null)" : e.StackTrace.ToString()); } catch { };
+            string message = "";
+            try { message = string.Format("Message: {0}\n", e.Message.Equals("") ? "(empty)" : e.Message == null ? "(null)" : e.Message.ToString()); } catch { };
+            string source = "";
+            try { source = string.Format("Source: {0}\n", e.Source.Equals("") ? "(empty)" : e.Source == null ? "(null)" : e.Source.ToString()); } catch { };
+            string targetSite = "";
+            try { targetSite = string.Format("TargetSite: {0}\n", e.TargetSite.Equals("") ? "(empty)" : e.TargetSite == null ? "(null)" : e.TargetSite.ToString()); } catch { };
+            string innerException = "";
+            try { innerException = string.Format("InnerException: {0}\n", e.InnerException.Equals("") ? "(empty)" : e.InnerException == null ? "(null)" : e.InnerException.ToString()); } catch { };
+            string data = "";
+            try { data = string.Format("Data: {0}\n", e.Data.Equals("") ? "(empty)": e.Data == null ? "(null)" : e.Data.ToString()); } catch { };
+
+            if (e is WebException)
+            {
+                errorType = "WebException";
+            }
+            else if (e is IOException)
+            {
+                errorType = "IOException";
+            }
+            else if (e is UnauthorizedAccessException)
+            {
+                errorType = "UnauthorizedAccessException";
+            }
+            else if (e is ArgumentException)
+            {
+                errorType = "ArgumentException";
+                innerException = "";
+                data = "";
+            }
+            else if (e is ZipException)
+            {
+                errorType = "ZipException";
+                innerException = "";
+                data = "";
+            }
+            string msgHeader = "";
+            try { msgHeader = string.Format("{0} {1}(call stack traceback)\n", errorType, msgString.Equals("") || msgString == null ? "" : string.Format(@"at ""{0}"" ", msgString)); } catch { };
+            string msg = "";
+            try { msg += string.Format(@"{0}{1}{2}{3}{4}{5}{6}{7}{8}", msgHeader, info, type, stackTrace, message, source, targetSite, innerException, data); } catch { };
+            try { msg += "----------------------------"; } catch { };
+            Utils.appendToLog(msg);
         }
 
         //returns the md5 hash of the file based on the input file string location. It is searching in the database first. If not found in database or the filetime is not the same, it will create a new Hash and update the database
@@ -341,14 +405,9 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.getTranslatedString("databaseReadFailed"));
                 Application.Exit();
             }
-            catch (System.Net.WebException e)
+            catch (Exception e)
             {
-                Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
-                Utils.appendToLog(e.StackTrace);
-                Utils.appendToLog("inner message: " + e.Message);
-                Utils.appendToLog("source: " + e.Source);
-                Utils.appendToLog("target: " + e.TargetSite);
-                Utils.appendToLog("Additional Info: Tried to access " + databaseURL);
+                Utils.exceptionLog("createModStructure2", "tried to access " + databaseURL, e);
                 MessageBox.Show(Translations.getTranslatedString("databaseNotFound"));
                 Application.Exit();
             }
@@ -2752,11 +2811,9 @@ namespace RelhaxModpack
                     {
                         File.Move(filePath, targetFilePath);
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
-                        Utils.appendToLog(string.Format("sourceFile: {0}", filePath));
-                        Utils.appendToLog(string.Format("targetFile: {0}", targetFilePath));
-                        Utils.appendToLog(string.Format("Error: {0}", e.ToString()));
+                        Utils.exceptionLog("loadConfigV1", string.Format("sourceFile: {0}\ntargetFile: {1}", filePath, targetFilePath), ex);
                     }
                     // create saved config file with new format
                     saveConfig(false, filePath, parsedCatagoryList, userMods);
@@ -3015,14 +3072,9 @@ namespace RelhaxModpack
                 client.DownloadString("http://forum.worldoftanks.eu/index.php?/topic/624499-");
                 client.Dispose();
             }
-            catch (WebException e)
+            catch (Exception e)
             {
-                Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
-                Utils.appendToLog(e.StackTrace);
-                Utils.appendToLog("inner message: " + e.Message);
-                Utils.appendToLog("source: " + e.Source);
-                Utils.appendToLog("target: " + e.TargetSite);
-                Utils.appendToLog("Additional Info: Tried to access one of the forum URL's");
+                Utils.exceptionLog("Tried to access one of the forum URL's", e);
             }
         }
 

@@ -91,8 +91,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.appendToLog("EXCEPTION: Application load");
-                Utils.appendToLog(ex.ToString());
+                Utils.exceptionLog("Main", "Application load", ex);
             }
         }
     }

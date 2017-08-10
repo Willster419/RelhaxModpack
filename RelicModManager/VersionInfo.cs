@@ -51,16 +51,10 @@ namespace RelhaxModpack
             {
                 downloadedVersionInfo.Text = wc.DownloadString("http://wotmods.relhaxmodpack.com/RelhaxModpack/releaseNotes.txt");
             }
-            catch (WebException ex2)
+            catch (Exception ex)
             {
-                Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
-                Utils.appendToLog(ex2.StackTrace);
-                Utils.appendToLog("inner message: " + ex2.Message);
-                Utils.appendToLog("source: " + ex2.Source);
-                Utils.appendToLog("target: " + ex2.TargetSite);
-                Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/releaseNotes.txt");
+                Utils.exceptionLog("VersionInfo_Load", "http://wotmods.relhaxmodpack.com/RelhaxModpack/releaseNotes.txt", ex);
                 MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " releaseNotes.txt");
-                //suportedVersions = "0.9.18.0";
                 Application.Exit();
             }
             Settings.setUIColor(this);

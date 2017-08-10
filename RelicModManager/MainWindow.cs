@@ -207,12 +207,14 @@ namespace RelhaxModpack
             }
             catch (WebException e)
             {
-                Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
-                Utils.appendToLog(e.StackTrace);
-                Utils.appendToLog("inner message: " + e.Message);
-                Utils.appendToLog("source: " + e.Source);
-                Utils.appendToLog("target: " + e.TargetSite);
-                Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt");
+                Utils.exceptionLog("checkmanagerUpdates", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt", e);
+
+                // Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
+                // Utils.appendToLog(e.StackTrace);
+                // Utils.appendToLog("inner message: " + e.Message);
+                // Utils.appendToLog("source: " + e.Source);
+                // Utils.appendToLog("target: " + e.TargetSite);
+                // Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt");
                 MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " supported_clients.txt");
                 Application.Exit();
             }
@@ -265,9 +267,10 @@ namespace RelhaxModpack
                 {
                     downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/RelicCopyUpdate.txt", Application.StartupPath + "\\RelicCopyUpdate.bat");
                 }
-                catch (WebException)
+                catch (Exception e2)
                 {
-                    Utils.appendToLog("Error: failed to download => RelicCopyUpdate.bat");
+                    Utils.exceptionLog("failed to download => RelicCopyUpdate.bat", e2);
+                    // Utils.appendToLog("Error: failed to download => RelicCopyUpdate.bat");
                     MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " RelicCopyUpdate.bat");
                     Application.Exit();
                 }
@@ -281,9 +284,10 @@ namespace RelhaxModpack
                 installUpdate.StartInfo = info;
                 installUpdate.Start();
             }
-            catch (Win32Exception)
+            catch (Win32Exception e3)
             {
-                Utils.appendToLog("WARNING: could not start new application version");
+                Utils.exceptionLog("WARNING: could not start new application version", e3);
+                // Utils.appendToLog("WARNING: could not start new application version");
                 MessageBox.Show(Translations.getTranslatedString("cantStartNewApp") + newExeName);
             }
             Application.Exit();
@@ -312,12 +316,13 @@ namespace RelhaxModpack
             }
             catch (WebException e)
             {
-                Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
-                Utils.appendToLog(e.StackTrace);
-                Utils.appendToLog("inner message: " + e.Message);
-                Utils.appendToLog("source: " + e.Source);
-                Utils.appendToLog("target: " + e.TargetSite);
-                Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/supported_clients.txt");
+                Utils.exceptionLog("Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/supported_clients.txt", e);
+                // Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
+                // Utils.appendToLog(e.StackTrace);
+                // Utils.appendToLog("inner message: " + e.Message);
+                // Utils.appendToLog("source: " + e.Source);
+                // Utils.appendToLog("target: " + e.TargetSite);
+                // Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/supported_clients.txt");
                 MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " supported_clients.txt");
                 //suportedVersions = "0.9.18.0";
                 Application.Exit();
@@ -527,16 +532,10 @@ namespace RelhaxModpack
                 {
                     downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll", Application.StartupPath + "\\DotNetZip.dll");
                 }
-                catch (WebException ex1)
+                catch (Exception ex)
                 {
-                    Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
-                    Utils.appendToLog(ex1.StackTrace);
-                    Utils.appendToLog("inner message: " + ex1.Message);
-                    Utils.appendToLog("source: " + ex1.Source);
-                    Utils.appendToLog("target: " + ex1.TargetSite);
-                    Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll");
+                    Utils.exceptionLog("MainWindow_Load", "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll", ex);
                     MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " DotNetZip.dll");
-                    //suportedVersions = "0.9.18.0";
                     Application.Exit();
                 }
             }
@@ -546,16 +545,10 @@ namespace RelhaxModpack
                 {
                     downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll", Application.StartupPath + "\\Newtonsoft.Json.dll");
                 }
-                catch (WebException ex2)
+                catch (Exception ex)
                 {
-                    Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
-                    Utils.appendToLog(ex2.StackTrace);
-                    Utils.appendToLog("inner message: " + ex2.Message);
-                    Utils.appendToLog("source: " + ex2.Source);
-                    Utils.appendToLog("target: " + ex2.TargetSite);
-                    Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll");
+                    Utils.exceptionLog("MainWindow_Load", "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll", ex);
                     MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " Newtonsoft.Json.dll");
-                    //suportedVersions = "0.9.18.0";
                     Application.Exit();
                 }
             }
@@ -1278,13 +1271,9 @@ namespace RelhaxModpack
                 //get every patch file in the folder
                 fi = di.GetFiles(@"*.zip", SearchOption.TopDirectoryOnly);
             }
-            catch (UnauthorizedAccessException e)
+            catch (Exception e)
             {
-                Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
-                Utils.appendToLog(e.StackTrace);
-                Utils.appendToLog("inner message: " + e.Message);
-                Utils.appendToLog("source: " + e.Source);
-                Utils.appendToLog("target: " + e.TargetSite);
+                Utils.exceptionLog("checkForOldZipFiles", e);
                 MessageBox.Show(Translations.getTranslatedString("folderDeleteFailed") + " _readme");
             }
             if (fi != null)
@@ -1324,14 +1313,10 @@ namespace RelhaxModpack
                                 childProgressBar.Value++;
                                 retry = false;
                             }
-                            catch (UnauthorizedAccessException e)
+                            catch (Exception e)
                             {
                                 retry = true;
-                                Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
-                                Utils.appendToLog(e.StackTrace);
-                                Utils.appendToLog("inner message: " + e.Message);
-                                Utils.appendToLog("source: " + e.Source);
-                                Utils.appendToLog("target: " + e.TargetSite);
+                                Utils.exceptionLog("checkForOldZipFiles","delete", e);
                                 DialogResult res = MessageBox.Show(Translations.getTranslatedString("fileDeleteFailed") + " " + s, "", MessageBoxButtons.RetryCancel);
                                 if (res == System.Windows.Forms.DialogResult.Cancel)
                                 {

@@ -281,13 +281,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.appendToLog("EXCEPTION: Unknown type Exception (call stack traceback)");
-                Utils.appendToLog(ex.StackTrace);
-                Utils.appendToLog("inner message: " + ex.Message);
-                Utils.appendToLog("source: " + ex.Source);
-                Utils.appendToLog("target: " + ex.TargetSite);
-                Utils.appendToLog("type: " + ex.GetType());
-                Utils.appendToLog("user info: " + ex.Data);
+                Utils.exceptionLog("DeleteMods", ex);
             }
         }
         //Step 4: Clear WoT program cache
@@ -335,11 +329,7 @@ namespace RelhaxModpack
                     catch (Exception ex)
                     {
                         //append the exception to the log
-                        Utils.appendToLog("EXCEPTION: Exception (call stack traceback)");
-                        Utils.appendToLog(ex.StackTrace);
-                        Utils.appendToLog("inner message: " + ex.Message);
-                        Utils.appendToLog("source: " + ex.Source);
-                        Utils.appendToLog("target: " + ex.TargetSite);
+                        Utils.exceptionLog("ExtractDatabaseObjects", ex);
                         //show the error message
                         MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
                         //exit the application
@@ -465,11 +455,7 @@ namespace RelhaxModpack
                 }
                 catch (UnauthorizedAccessException e)
                 {
-                    Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
-                    Utils.appendToLog(e.StackTrace);
-                    Utils.appendToLog("inner message: " + e.Message);
-                    Utils.appendToLog("source: " + e.Source);
-                    Utils.appendToLog("target: " + e.TargetSite);
+                    Utils.exceptionLog("PatchFiles", e);
                     DialogResult res = MessageBox.Show(Translations.getTranslatedString("patchingSystemDeneidAccessMessage"), Translations.getTranslatedString("patchingSystemDeneidAccessHeader"), MessageBoxButtons.RetryCancel);
                     if (res == DialogResult.Cancel)
                     {
@@ -647,9 +633,9 @@ namespace RelhaxModpack
                     {
                         downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/FontReg.exe", TanksLocation + "\\_fonts\\FontReg.exe");
                     }
-                    catch (WebException)
+                    catch (WebException ex)
                     {
-                        Utils.appendToLog(Translations.getTranslatedString("failedToDownload_1") + " FontReg.exe");
+                        Utils.exceptionLog("InstallFonts", "download FontReg.exe", ex);
                         MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " FontReg.exe");
                     }
                 }
@@ -666,14 +652,9 @@ namespace RelhaxModpack
                     installFontss.Start();
                     installFontss.WaitForExit();
                 }
-                catch (Win32Exception e)
+                catch (Exception e)
                 {
-                    Utils.appendToLog("EXCEPTION: Win32Exception (call stack traceback)");
-                    Utils.appendToLog(e.StackTrace);
-                    Utils.appendToLog("inner message: " + e.Message);
-                    Utils.appendToLog("source: " + e.Source);
-                    Utils.appendToLog("target: " + e.TargetSite);
-                    Utils.appendToLog("ERROR: could not start font installer");
+                    Utils.exceptionLog("InstallFonts", "could not start font installer", e);
                     MessageBox.Show(Translations.getTranslatedString("fontsPromptError_1") + TanksLocation + Translations.getTranslatedString("fontsPromptError_2"));
                     Utils.appendToLog("Installation done, but fonts install failed");
                     return;
@@ -714,7 +695,7 @@ namespace RelhaxModpack
             }
             catch (Exception e)
             {
-                Utils.exceptionLog(e);
+                Utils.exceptionLog("ExtractUserMods", e);
             }
             Utils.appendToLog("Finished Relhax Modpack User Mod Extraction");
         }
@@ -860,13 +841,9 @@ namespace RelhaxModpack
                         file.Delete();
                         tryAgain = false;
                     }
-                    catch (UnauthorizedAccessException e)
+                    catch (Exception e)
                     {
-                        Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
-                        Utils.appendToLog(e.StackTrace);
-                        Utils.appendToLog("inner message: " + e.Message);
-                        Utils.appendToLog("source: " + e.Source);
-                        Utils.appendToLog("target: " + e.TargetSite);
+                        Utils.exceptionLog("DirectoryDelete", e);
                         DialogResult res = MessageBox.Show(Translations.getTranslatedString("extractionErrorMessage"), Translations.getTranslatedString("extractionErrorHeader"), MessageBoxButtons.RetryCancel);
                         if (res == DialogResult.Retry)
                         {
@@ -896,24 +873,9 @@ namespace RelhaxModpack
                             subdir.Delete();
                             tryAgain = false;
                         }
-                        catch (IOException e)
+                        catch (Exception ex)
                         {
-                            Utils.appendToLog("EXCEPTION: IOException (call stack traceback)");
-                            Utils.appendToLog(e.StackTrace);
-                            Utils.appendToLog("inner message: " + e.Message);
-                            Utils.appendToLog("source: " + e.Source);
-                            Utils.appendToLog("target: " + e.TargetSite);
-                            DialogResult result = MessageBox.Show(Translations.getTranslatedString("deleteErrorMessage"), Translations.getTranslatedString("deleteErrorHeader"), MessageBoxButtons.RetryCancel);
-                            if (result == DialogResult.Cancel)
-                                Application.Exit();
-                        }
-                        catch (UnauthorizedAccessException e)
-                        {
-                            Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
-                            Utils.appendToLog(e.StackTrace);
-                            Utils.appendToLog("inner message: " + e.Message);
-                            Utils.appendToLog("source: " + e.Source);
-                            Utils.appendToLog("target: " + e.TargetSite);
+                            Utils.exceptionLog("DirectoryDelete","deleteSubDirs", ex);
                             DialogResult result = MessageBox.Show(Translations.getTranslatedString("deleteErrorMessage"), Translations.getTranslatedString("deleteErrorHeader"), MessageBoxButtons.RetryCancel);
                             if (result == DialogResult.Cancel)
                                 Application.Exit();
@@ -984,13 +946,9 @@ namespace RelhaxModpack
                                 {
                                     zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", thisVersion);
                                 }
-                                catch (ArgumentException e)
+                                catch (Exception ex)
                                 {
-                                    Utils.appendToLog("EXCEPTION: ArguementException");
-                                    Utils.appendToLog(e.StackTrace);
-                                    Utils.appendToLog("inner message: " + e.Message);
-                                    Utils.appendToLog("source: " + e.Source);
-                                    Utils.appendToLog("target: " + e.TargetSite);
+                                    Utils.exceptionLog("Unzip", ex);
                                 }
                             }
                             if (Regex.IsMatch(zip[i].FileName, "configs/xvm/xvmConfigFolderName") && !xvmConfigDir.Equals(""))
@@ -1012,11 +970,7 @@ namespace RelhaxModpack
                 catch (ZipException e)
                 {
                     //append the exception to the log
-                    Utils.appendToLog("EXCEPTION: ZipException (call stack traceback)");
-                    Utils.appendToLog(e.StackTrace);
-                    Utils.appendToLog("inner message: " + e.Message);
-                    Utils.appendToLog("source: " + e.Source);
-                    Utils.appendToLog("target: " + e.TargetSite);
+                    Utils.exceptionLog("Unzip", e);
                     //show the error message
                     MessageBox.Show(string.Format("{0}, {1} {2} {3}", Translations.getTranslatedString("zipReadingErrorMessage1"), Path.GetFileName(zipFile), Translations.getTranslatedString("zipReadingErrorMessage2"), Translations.getTranslatedString("zipReadingErrorHeader")));
                     //(try to)delete the file from the filesystem
@@ -1027,12 +981,7 @@ namespace RelhaxModpack
                         }
                         catch (UnauthorizedAccessException ex)
                         {
-                            Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
-                            Utils.appendToLog(ex.StackTrace);
-                            Utils.appendToLog("inner message: " + ex.Message);
-                            Utils.appendToLog("source: " + ex.Source);
-                            Utils.appendToLog("target: " + ex.TargetSite);
-                            Utils.appendToLog("additional info: tried to delete " + zipFile);
+                            Utils.exceptionLog("Unzip", "tried to delete " + zipFile, ex);
                         }
                     Utils.deleteMd5HashDatabase(zipFile);
                 }
