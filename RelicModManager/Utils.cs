@@ -189,26 +189,31 @@ namespace RelhaxModpack
             if (e is WebException)
             {
                 errorType = "WebException";
+                type = "";
             }
             else if (e is IOException)
             {
                 errorType = "IOException";
+                type = "";
             }
             else if (e is UnauthorizedAccessException)
             {
                 errorType = "UnauthorizedAccessException";
+                type = "";
             }
             else if (e is ArgumentException)
             {
                 errorType = "ArgumentException";
                 innerException = "";
                 data = "";
+                type = "";
             }
             else if (e is ZipException)
             {
                 errorType = "ZipException";
                 innerException = "";
                 data = "";
+                type = "";
             }
             string msgHeader = "";
             try { msgHeader = string.Format("{0} {1}(call stack traceback)\n", errorType, msgString.Equals("") || msgString == null ? "" : string.Format(@"at ""{0}"" ", msgString)); } catch { };
