@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Xml;
 using Microsoft.Win32;
 using System.Drawing;
+using System.Globalization;
 
 namespace RelhaxModpack
 {
@@ -19,8 +20,6 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 24.1.0";
-        private string today = "07/30/2017";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         private string appDataFolder;//the folder where the user's app data is stored (C:\Users\username\AppData)
         //queue for downloading mods
@@ -60,6 +59,36 @@ namespace RelhaxModpack
         private float windowHeight;
         private float windowWidth;
         private float scale = 1.0f;
+
+        //  interpret the created CiInfo buildTag as an "us-US" or a "de-DE" timeformat and return it as a local time- and dateformat string
+        public static string compileTime()
+        {
+            DateTime dateValue;
+            if (DateTime.TryParseExact(CiInfo.BuildTag, "dd.MM.yyyy  h:mm:ss,ff", System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite, out dateValue))
+            {
+                // german date format
+            }
+            else if (DateTime.TryParseExact(CiInfo.BuildTag, "YYYY-MM-DD h:mm:ss.ff", System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite, out dateValue))
+            {
+                // US date format
+            }
+            else
+            {
+                return "ERROR!";
+            }
+            return dateValue.ToString();
+        }
+
+        /// <summary>
+        /// gets now the "Release version" from RelhaxModpack-properties
+        /// https://stackoverflow.com/questions/2959330/remove-characters-before-character
+        /// https://www.mikrocontroller.net/topic/140764
+        /// </summary>
+        /// <returns></returns>
+        public static string managerVersion()
+        {
+            return "version " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().IndexOf('.') + 1);
+        }
 
         //The constructur for the application
         public MainWindow()
@@ -205,21 +234,14 @@ namespace RelhaxModpack
             {
                 version = updater.DownloadString("http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt");
             }
-            catch (WebException e)
+            catch (Exception ex)
             {
-                Utils.exceptionLog("checkmanagerUpdates", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt", e);
-
-                // Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
-                // Utils.appendToLog(e.StackTrace);
-                // Utils.appendToLog("inner message: " + e.Message);
-                // Utils.appendToLog("source: " + e.Source);
-                // Utils.appendToLog("target: " + e.TargetSite);
-                // Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt");
+                Utils.exceptionLog("checkmanagerUpdates", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt", ex);
                 MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " supported_clients.txt");
                 Application.Exit();
             }
-            Utils.appendToLog("Current application version is " + managerVersion + ", new version is " + version);
-            if (!version.Equals(managerVersion))
+            Utils.appendToLog("Local application is " + managerVersion() + ", current online is " + version);
+            if (!version.Equals(managerVersion()))
             {
                 Utils.appendToLog("exe is out of date. displaying user update window");
                 //out of date
@@ -467,7 +489,7 @@ namespace RelhaxModpack
         private void MainWindow_Load(object sender, EventArgs e)
         {
             //set window header text to current version so user knows
-            this.Text = this.Text + managerVersion.Substring(8);
+            this.Text = this.Text + managerVersion().Substring(8);
             if (Program.testMode) this.Text = this.Text + " TEST MODE";
             //show the wait screen
             PleaseWait wait = new PleaseWait();
@@ -475,8 +497,8 @@ namespace RelhaxModpack
             WebRequest.DefaultWebProxy = null;
             wait.loadingDescBox.Text = "Verifying single instance...";
             Application.DoEvents();
-            Utils.appendToLog("|RelHax Modpack " + managerVersion);
-            Utils.appendToLog("|Built on " + today + ", running at " + DateTime.Now);
+            Utils.appendToLog("|RelHax Modpack " + managerVersion());
+            Utils.appendToLog(string.Format("|Built on {0}", compileTime()));
             Utils.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             windowHeight = this.Size.Height;
             windowWidth = this.Size.Width;

@@ -337,18 +337,17 @@
     <PostBuildEvent>IF "%25COMPUTERNAME%25"=="IMOSDPC04" copy /Y $(TargetPath) "D:\RelHax Manager\"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>echo /// https://stackoverflow.com/questions/4450231/can-i-make-a-constant-from-a-compile-time-env-variable-in-csharp/4453285 &gt; "$(ProjectDir)\CiInfo.cs"
+    <PreBuildEvent>echo /// https://stackoverflow.com/questions/4450231/can-i-make-a-constant-from-a-compile-time-env-variable-in-csharp/4453285 &gt;&gt; "$(ProjectDir)\CiInfo.cs"
 echo namespace RelhaxModpack &gt; "$(ProjectDir)\CiInfo.cs"
 echo { &gt;&gt; "$(ProjectDir)\CiInfo.cs"
 echo     ///^&lt;summary^&gt;Info about the continuous integration server build that produced this binary.^&lt;/summary^&gt; &gt;&gt; "$(ProjectDir)\CiInfo.cs"
 echo     public static class CiInfo &gt;&gt; "$(ProjectDir)\CiInfo.cs"
 echo     { &gt;&gt; "$(ProjectDir)\CiInfo.cs"
-echo         ///^&lt;summary^&gt;The current build number, such as "153"^&lt;/summary^&gt; &gt;&gt; "$(ProjectDir)\CiInfo.cs"
-echo         public const string BuildNumber = ("%25BUILD_NUMBER%25" == "" ? @"Unknown" : "%25BUILD_NUMBER%25"); &gt;&gt; "$(ProjectDir)\CiInfo.cs"
 echo         ///^&lt;summary^&gt;String of the build number and build date/time, and other useful info.^&lt;/summary^&gt; &gt;&gt; "$(ProjectDir)\CiInfo.cs"
-echo         public const string BuildTag = "built: %25DATE%25 %25TIME%25"; &gt;&gt; "$(ProjectDir)\CiInfo.cs"
+echo         public const string BuildTag = "%25DATE%25 %25TIME%25"; &gt;&gt; "$(ProjectDir)\CiInfo.cs"
 echo     } &gt;&gt; "$(ProjectDir)\CiInfo.cs"
-echo } &gt;&gt; "$(ProjectDir)\CiInfo.cs"</PreBuildEvent>
+echo } &gt;&gt; "$(ProjectDir)\CiInfo.cs"
+</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
