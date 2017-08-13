@@ -61,7 +61,7 @@ namespace RelhaxModpack
         private float scale = 1.0f;
 
         //  interpret the created CiInfo buildTag as an "us-US" or a "de-DE" timeformat and return it as a local time- and dateformat string
-        public static string compileTime()
+        public static string compileTime()      // STILL NEED TO FIX IT => TODO Grumeplumpf
         {
             DateTime dateValue;
             if (DateTime.TryParseExact(CiInfo.BuildTag, "dd.MM.yyyy  h:mm:ss,ff", System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite, out dateValue))
