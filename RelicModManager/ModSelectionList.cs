@@ -93,7 +93,7 @@ namespace RelhaxModpack
             //create new lists for memory database and serialize from xml->lists
             globalDependencies = new List<Dependency>();
             parsedCatagoryList = new List<Category>();
-            Utils.createModStructure2(databaseURL, false, globalDependencies, parsedCatagoryList);
+            Utils.createModStructure(databaseURL, false, globalDependencies, parsedCatagoryList);
             if (Program.testMode)
             {
                 if (Utils.duplicates(parsedCatagoryList))
@@ -2083,6 +2083,7 @@ namespace RelhaxModpack
             modTabGroups.Enabled = true;
             ModSelectionList_SizeChanged(null, null);
         }
+
         private void parseLoadConfig()
         {
             loadingConfig = true;

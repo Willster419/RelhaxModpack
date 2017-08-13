@@ -31,18 +31,23 @@ namespace RelhaxModpack
         private static int iMaxLogLength = 1500000; // Probably should be bigger, say 2,000,000
         private static int iTrimmedLogLength = -300000; // minimum of how much of the old log to leave
 
+        private static object _locker = new object();
+
         //logs string info to the log output
         public static void appendToLog(string info)
         {
-            //the method should automaticly make the file if it's not there
-            string filePath = Path.Combine(Application.StartupPath, "RelHaxLog.txt");
-            if (!File.Exists(filePath))
+            lock (_locker)              // avoid that 2 or more threads calling the Log function and writing lines in a mess
             {
-                File.AppendAllText(filePath, "");
+                //the method should automaticly make the file if it's not there
+                string filePath = Path.Combine(Application.StartupPath, "RelHaxLog.txt");
+                if (!File.Exists(filePath))
+                {
+                    File.AppendAllText(filePath, "");
+                }
+                //if the info text is containing any linefeed/carrieage return, intend the next line with 26 space char
+                info = info.Replace("\n", "\n" + string.Concat(Enumerable.Repeat(" ", 26)));
+                writeToFile(filePath, string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}   {1}", DateTime.Now, info));
             }
-            //if the info text is containing any linefeed/carrieage return, intend the next line with 26 space char
-            info = info.Replace("\n", "\n" + string.Concat(Enumerable.Repeat(" ", 26)));
-            writeToFile(filePath, string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}   {1}", DateTime.Now, info));
         }
 
         // https://stackoverflow.com/questions/4741037/keeping-log-files-under-a-certain-size
@@ -173,6 +178,8 @@ namespace RelhaxModpack
             try { info = string.Format("{0}", infoString.Equals("") || infoString == null ? "" : string.Format("Additional Info: {0}\n", infoString)); } catch { };
             string type = "";
             try { type = string.Format("Type: {0}\n", e.GetType()); } catch { };
+            string exception = "";
+            try { exception = string.Format("Code: {0}\n", e.ToString()); } catch { };
             string stackTrace = "";
             try { stackTrace = string.Format("StackTrace: {0}\n", e.StackTrace.Equals("") ? "(empty)" : e.StackTrace == null ? "(null)" : e.StackTrace.ToString()); } catch { };
             string message = "";
@@ -218,7 +225,7 @@ namespace RelhaxModpack
             string msgHeader = "";
             try { msgHeader = string.Format("{0} {1}(call stack traceback)\n", errorType, msgString.Equals("") || msgString == null ? "" : string.Format(@"at ""{0}"" ", msgString)); } catch { };
             string msg = "";
-            try { msg += string.Format(@"{0}{1}{2}{3}{4}{5}{6}{7}{8}", msgHeader, info, type, stackTrace, message, source, targetSite, innerException, data); } catch { };
+            try { msg += string.Format(@"{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}", msgHeader, info, type, exception, stackTrace, message, source, targetSite, innerException, data); } catch { };
             try { msg += "----------------------------"; } catch { };
             Utils.appendToLog(msg);
         }
@@ -396,7 +403,7 @@ namespace RelhaxModpack
             return returnVal;
         }
         //parses the xml mod info into the memory database
-        public static void createModStructure2(string databaseURL, bool backendFlag, List<Dependency> globalDependencies, List<Category> parsedCatagoryList)
+        public static void createModStructure_old(string databaseURL, bool backendFlag, List<Dependency> globalDependencies, List<Category> parsedCatagoryList)
         {
             totalModConfigComponents = 0;
             XmlDocument doc = new XmlDocument();
@@ -412,7 +419,7 @@ namespace RelhaxModpack
             }
             catch (Exception e)
             {
-                Utils.exceptionLog("createModStructure2", "tried to access " + databaseURL, e);
+                Utils.exceptionLog("createModStructure", "tried to access " + databaseURL, e);
                 MessageBox.Show(Translations.getTranslatedString("databaseNotFound"));
                 Application.Exit();
             }
@@ -638,7 +645,7 @@ namespace RelhaxModpack
                                                     break;
                                                 case "configs":
                                                     //run the process configs method
-                                                    Utils.processConfigs(modNode, backendFlag, m, true);
+                                                    Utils.processConfigs_old(modNode, backendFlag, m, true);
                                                     break;
                                                 default:
                                                     Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2})", modNode.Name, m.name, m.zipFile));
@@ -719,8 +726,347 @@ namespace RelhaxModpack
                 };
             }
         }
+
+        //parses the xml mod info into the memory database (change XML reader to from XMLDocument to XDocument)
+        // https://www.google.de/search?q=c%23+xdocument+get+line+number&oq=c%23+xdocument+get+line+number&aqs=chrome..69i57j69i58.11773j0j7&sourceid=chrome&ie=UTF-8
+        public static void createModStructure(string databaseURL, bool backendFlag, List<Dependency> globalDependencies, List<Category> parsedCatagoryList)
+        {
+            try
+            {
+                totalModConfigComponents = 0;
+                XDocument doc = null;
+                try
+                {
+                    doc = XDocument.Load(databaseURL, LoadOptions.SetLineInfo);
+                }
+                catch (XmlException ex)
+                {
+                    Utils.appendToLog("CRITICAL: Failed to read database: " + databaseURL + "\nMessage: " + ex.Message);
+                    MessageBox.Show(Translations.getTranslatedString("databaseReadFailed") + "\n\nsee Logfile for detailed info");
+                    Application.Exit();
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    Utils.exceptionLog("createModStructure_new", "tried to access " + databaseURL, ex);
+                    MessageBox.Show(Translations.getTranslatedString("databaseNotFound"));
+                    Application.Exit();
+                    return;
+                }
+                //add the global dependencies
+                foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency"))
+                {
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                    Dependency d = new Dependency();
+                    d.packageName = "";
+                    foreach (XElement globs in dependencyNode.Elements())
+                    {
+                        depNodeList = depNodeList.Except(new string[] { globs.Name.ToString() }).ToArray();
+                        switch (globs.Name.ToString())
+                        {
+                            case "dependencyZipFile":
+                                d.dependencyZipFile = globs.Value;
+                                break;
+                            case "dependencyZipCRC":
+                                d.dependencyZipCRC = globs.Value;
+                                break;
+                            case "startAddress":
+                                d.startAddress = globs.Value;
+                                break;
+                            case "endAddress":
+                                d.endAddress = globs.Value;
+                                break;
+                            case "dependencyenabled":
+                                d.enabled = Utils.parseBool(globs.Value, false);
+                                break;
+                            case "packageName":
+                                d.packageName = globs.Value.Trim();
+                                if (d.packageName.Equals(""))
+                                {
+                                    Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => globsPend {1}\n\nmore informations, see logfile", globs.Name.ToString(), d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                }
+                                break;
+                            default:
+                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}\n\nmore informations, see logfile", globs.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                break;
+                        }
+                    }
+                    if (d != null)
+                    {
+                        if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.dependencyZipFile, ((IXmlLineInfo)d).LineNumber)); };
+                        if (d.packageName.Equals("")) { string rad = Utils.RandomString(30);  d.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
+                        globalDependencies.Add(d);
+                    };
+                }
+                foreach (XElement catagoryHolder in doc.XPathSelectElements("/modInfoAlpha.xml/catagories/catagory"))
+                {
+                    Category cat = new Category();
+                    string[] catNodeList = new string[] { "name", "selectionType", "mods", "dependencies" };
+                    foreach (XElement catagoryNode in catagoryHolder.Elements())
+                    {
+                        catNodeList = catNodeList.Except(new string[] { catagoryNode.Name.ToString() }).ToArray();
+                        switch (catagoryNode.Name.ToString())
+                        {
+                            case "name":
+                                cat.name = catagoryNode.Value;
+                                break;
+                            case "selectionType":
+                                cat.selectionType = catagoryNode.Value;
+                                break;
+                            case "mods":
+                                foreach (XElement modHolder in catagoryNode.Elements())
+                                {
+                                    switch (modHolder.Name.ToString())
+                                    {
+                                        case "mod":
+                                            string[] modNodeList = new string[] { "name", "version", "zipFile", "startAddress", "endAddress", "crc", "enabled", "packageName", "size", "description", "updateComment", "devURL", "userDatas", "pictures", "dependencies", "configs" };
+                                            Mod m = new Mod();
+                                            m.packageName = "";
+                                            foreach (XElement modNode in modHolder.Elements())
+                                            {
+                                                modNodeList = modNodeList.Except(new string[] { modNode.Name.ToString() }).ToArray();
+                                                switch (modNode.Name.ToString())
+                                                {
+                                                    case "name":
+                                                        m.name = modNode.Value;
+                                                        totalModConfigComponents++;
+                                                        break;
+                                                    case "version":
+                                                        m.version = modNode.Value;
+                                                        break;
+                                                    case "zipFile":
+                                                        m.zipFile = modNode.Value;
+                                                        break;
+                                                    case "startAddress":
+                                                        m.startAddress = modNode.Value;
+                                                        break;
+                                                    case "endAddress":
+                                                        m.endAddress = modNode.Value;
+                                                        break;
+                                                    case "crc":
+                                                        m.crc = modNode.Value;
+                                                        break;
+                                                    case "enabled":
+                                                        m.enabled = Utils.parseBool(modNode.Value, false);
+                                                        break;
+                                                    case "packageName":
+                                                        m.packageName = modNode.Value.Trim();
+                                                        if (m.packageName.Equals(""))
+                                                        {
+                                                            Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => mod {1} ({2}) (line {3})", modNode.Name.ToString(), m.name, m.zipFile, ((IXmlLineInfo)modNode).LineNumber));
+                                                            if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => mod {1} ({2})", modNode.Name.ToString(), m.name, m.zipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                        }
+                                                        break;
+                                                    case "size":
+                                                        m.size = Utils.parseFloat(modNode.Value, 0.0f);
+                                                        break;
+                                                    case "description":
+                                                        m.description = modNode.Value;
+                                                        break;
+                                                    case "updateComment":
+                                                        m.updateComment = modNode.Value;
+                                                        break;
+                                                    case "devURL":
+                                                        m.devURL = modNode.Value;
+                                                        break;
+                                                    case "userDatas":
+                                                        foreach (XElement userDataNode in modNode.Elements())
+                                                        {
+                                                            switch (userDataNode.Name.ToString())
+                                                            {
+                                                                case "userData":
+                                                                    string innerText = userDataNode.Value;
+                                                                    if (innerText == null)
+                                                                        continue;
+                                                                    if (innerText.Equals(""))
+                                                                        continue;
+                                                                    m.userFiles.Add(innerText);
+                                                                    break;
+                                                                default:
+                                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => userDatas => expected node: userData (line {3})", userDataNode.Name.ToString(), m.name, m.zipFile, ((IXmlLineInfo)userDataNode).LineNumber));
+                                                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected node: userData\n\nNode found: {0}\n\nmore informations, see logfile", userDataNode.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                                    break;
+                                                            }
+                                                        }
+                                                        break;
+                                                    case "pictures":
+                                                        //parse every picture
+                                                        foreach (XElement pictureHolder in modNode.Elements())
+                                                        {
+                                                            switch (pictureHolder.Name.ToString())
+                                                            {
+                                                                case "picture":
+                                                                    foreach (XElement pictureNode in pictureHolder.Elements())
+                                                                    {
+                                                                        switch (pictureNode.Name.ToString())
+                                                                        {
+                                                                            case "URL":
+                                                                                string innerText = pictureNode.Value;
+                                                                                if (innerText == null)
+                                                                                    continue;
+                                                                                if (innerText.Equals(""))
+                                                                                    continue;
+                                                                                m.pictureList.Add(new Picture(m.name, pictureNode.Value));
+                                                                                break;
+                                                                            default:
+                                                                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => picture =>expected nodes: URL (line {3})", pictureNode.Name.ToString(), m.name, m.zipFile, ((IXmlLineInfo)pictureNode).LineNumber));
+                                                                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: URL\n\nNode found: {0}\n\nmore informations, see logfile", pictureNode.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                                                break;
+                                                                        }
+                                                                    }
+                                                                    break;
+                                                                default:
+                                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => expected node: picture (line {3})", pictureHolder.Name, m.name, m.zipFile, ((IXmlLineInfo)pictureHolder).LineNumber));
+                                                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected node: picture\n\nNode found: {0}\n\nmore informations, see logfile", pictureHolder.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                                    break;
+                                                            }
+                                                        }
+                                                        break;
+                                                    case "dependencies":
+                                                        //parse all dependencies
+                                                        foreach (XElement dependencyHolder in modNode.Elements())
+                                                        {
+                                                            string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                                                            Dependency d = new Dependency();
+                                                            d.packageName = "";
+                                                            foreach (XElement dependencyNode in dependencyHolder.Elements())
+                                                            {
+                                                                depNodeList = depNodeList.Except(new string[] { dependencyNode.Name.ToString() }).ToArray();
+                                                                switch (dependencyNode.Name.ToString())
+                                                                {
+                                                                    case "dependencyZipFile":
+                                                                        d.dependencyZipFile = dependencyNode.Value;
+                                                                        break;
+                                                                    case "dependencyZipCRC":
+                                                                        d.dependencyZipCRC = dependencyNode.Value;
+                                                                        break;
+                                                                    case "startAddress":
+                                                                        d.startAddress = dependencyNode.Value;
+                                                                        break;
+                                                                    case "endAddress":
+                                                                        d.endAddress = dependencyNode.Value;
+                                                                        break;
+                                                                    case "dependencyenabled":
+                                                                        d.enabled = Utils.parseBool(dependencyNode.Value, false);
+                                                                        break;
+                                                                    case "packageName":
+                                                                        d.packageName = dependencyNode.Value.Trim();
+                                                                        if (d.packageName.Equals(""))
+                                                                        {
+                                                                            Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => mod {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), m.name, m.zipFile, d.dependencyZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
+                                                                            if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => mod {1} ({2}) => dep {3}", dependencyNode.Name.ToString(), m.name, m.zipFile, d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                                        }
+                                                                        break;
+                                                                    default:
+                                                                        Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), m.name, m.zipFile, d.dependencyZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
+                                                                        if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                                        break;
+                                                                }
+                                                            }
+                                                            if (d != null)
+                                                            {
+                                                                if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => mod {1} ({2}) => dep {3} (line {4})", string.Join(",", depNodeList), m.name, m.zipFile, d.dependencyZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber)); };
+                                                                if (d.packageName.Equals("")) { string rad = Utils.RandomString(30); d.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
+                                                                m.dependencies.Add(d);
+                                                            };
+                                                        }
+                                                        break;
+                                                    case "configs":
+                                                        //run the process configs method
+                                                        Utils.processConfigs(modNode, backendFlag, m, true);
+                                                        break;
+                                                    default:
+                                                        Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) (line {3})", modNode.Name.ToString(), m.name, m.zipFile, ((IXmlLineInfo)modNode).LineNumber));
+                                                        if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: name, version, zipFile, startAddress, endAddress, crc, enabled, packageName, size, description, updateComment, devURL, userDatas, pictures, dependencies, configs\n\nNode found: {0}\n\nmore informations, see logfile", modNode.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                        break;
+                                                }
+                                            }
+                                            if (m != null)
+                                            {
+                                                if (modNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => mod {1} ({2}) (line {3})", string.Join(",", modNodeList), m.name, m.zipFile, ((IXmlLineInfo)modHolder).LineNumber)); };
+                                                if (m.packageName.Equals("")) { string rad = Utils.RandomString(30); m.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
+                                                cat.mods.Add(m);
+                                            };
+                                            break;
+                                        default:
+                                            Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1} (line {2})", modHolder.Name.ToString(), cat.name, ((IXmlLineInfo)modHolder).LineNumber));
+                                            if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: mod\n\nNode found: {0}\n\nmore informations, see logfile", modHolder.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                            break;
+                                    }
+                                }
+                                break;
+                            case "dependencies":
+                                //parse every config for that mod
+                                foreach (XElement dependencyHolder in catagoryNode.Elements())
+                                {
+                                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                                    Dependency d = new Dependency();
+                                    d.packageName = "";
+                                    foreach (XElement dependencyNode in dependencyHolder.Elements())
+                                    {
+                                        depNodeList = depNodeList.Except(new string[] { dependencyNode.Name.ToString() }).ToArray();
+                                        switch (dependencyNode.Name.ToString())
+                                        {
+                                            case "dependencyZipFile":
+                                                d.dependencyZipFile = dependencyNode.Value;
+                                                break;
+                                            case "dependencyZipCRC":
+                                                d.dependencyZipCRC = dependencyNode.Value;
+                                                break;
+                                            case "startAddress":
+                                                d.startAddress = dependencyNode.Value;
+                                                break;
+                                            case "endAddress":
+                                                d.endAddress = dependencyNode.Value;
+                                                break;
+                                            case "dependencyenabled":
+                                                d.enabled = Utils.parseBool(dependencyNode.Value, false);
+                                                break;
+                                            case "packageName":
+                                                d.packageName = dependencyNode.Value.Trim();
+                                                if (d.packageName.Equals(""))
+                                                {
+                                                    Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => cat {1} => dep {2} (line {3})", dependencyNode.Name.ToString(), cat.name, d.dependencyZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
+                                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => cat {1} => dep {2}", dependencyNode.Name.ToString(), cat.name, d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                }
+                                                break;
+                                            default:
+                                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1} => dep {2} (line {3})", dependencyNode.Name, cat.name, d.dependencyZipFile,((IXmlLineInfo)dependencyNode).LineNumber));
+                                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                break;
+                                        }
+                                    }
+                                    if (d != null)
+                                    {
+                                        if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => cat {1} => dep {2} (line {3})", string.Join(",", depNodeList), cat.name, d.dependencyZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber)); };
+                                        if (d.packageName.Equals("")) { string rad = Utils.RandomString(30); d.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
+                                        cat.dependencies.Add(d);
+                                    };
+                                }
+                                break;
+                            default:
+                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1} (line {2})", catagoryNode.Name.ToString(), cat.name, ((IXmlLineInfo)catagoryNode).LineNumber));
+                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: name, selectionType, mods, dependencies\n\nNode found: {0}\n\nmore informations, see logfile", catagoryNode.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                break;
+                        }
+                    }
+                    if (cat != null)
+                    {
+                        if (catNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => cat {1} (line {2})", string.Join(",", catNodeList), cat.name, ((IXmlLineInfo)catagoryHolder).LineNumber)); };
+                        parsedCatagoryList.Add(cat);
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("createModStructure_new", ex);
+            }
+        }
+
         //recursivly processes the configs
-        public static void processConfigs(XmlNode holder, bool backendFlag, Mod m, bool parentIsMod, Config con = null)
+        public static void processConfigs_old(XmlNode holder, bool backendFlag, Mod m, bool parentIsMod, Config con = null)
         {
             //parse every config for that mod
             foreach (XmlNode configHolder in holder.ChildNodes)
@@ -781,7 +1127,7 @@ namespace RelhaxModpack
                                     c.type = configNode.InnerText;
                                     break;
                                 case "configs":
-                                    Utils.processConfigs(configNode, backendFlag, m, false, c);
+                                    Utils.processConfigs_old(configNode, backendFlag, m, false, c);
                                     break;
                                 case "userDatas":
                                     foreach (XmlNode userDataNode in configNode.ChildNodes)
@@ -901,6 +1247,201 @@ namespace RelhaxModpack
                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: config\n\nNode found: {0}\n\nmore informations, see logfile", configHolder.Name)); };
                         break;
                 }
+            }
+        }
+
+        //recursivly processes the configs
+        public static void processConfigs(XElement holder, bool backendFlag, Mod m, bool parentIsMod, Config con = null)
+        {
+            try
+            {
+                //parse every config for that mod
+                foreach (XElement configHolder in holder.Elements())
+                {
+                    switch (configHolder.Name.ToString())
+                    {
+                        case "config":
+                            string[] confNodeList = new string[] { "name", "version", "zipFile", "startAddress", "endAddress", "crc", "enabled", "packageName", "size", "updateComment", "description", "devURL", "type", "configs", "userDatas", "pictures", "dependencies" };
+                            Config c = new Config();
+                            c.packageName = "";
+                            foreach (XElement configNode in configHolder.Elements())
+                            {
+                                confNodeList = confNodeList.Except(new string[] { configNode.Name.ToString() }).ToArray();
+                                switch (configNode.Name.ToString())
+                                {
+                                    case "name":
+                                        c.name = configNode.Value;
+                                        break;
+                                    case "version":
+                                        c.version = configNode.Value;
+                                        break;
+                                    case "zipFile":
+                                        c.zipFile = configNode.Value;
+                                        break;
+                                    case "startAddress":
+                                        c.startAddress = configNode.Value;
+                                        break;
+                                    case "endAddress":
+                                        c.endAddress = configNode.Value;
+                                        break;
+                                    case "crc":
+                                        c.crc = configNode.Value;
+                                        break;
+                                    case "enabled":
+                                        c.enabled = Utils.parseBool(configNode.Value, false);
+                                        break;
+                                    case "packageName":
+                                        c.packageName = configNode.Value.Trim();
+                                        if (c.packageName.Equals(""))
+                                        {
+                                            Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => config {1} ({2}) (line {3})", configNode.Name.ToString(), c.name, c.zipFile, ((IXmlLineInfo)configNode).LineNumber));
+                                            if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => config {1} ({2})", configNode.Name.ToString(), c.name, c.zipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                        }
+                                        break;
+                                    case "size":
+                                        c.size = Utils.parseFloat(configNode.Value, 0.0f);
+                                        break;
+                                    case "updateComment":
+                                        c.updateComment = configNode.Value;
+                                        break;
+                                    case "description":
+                                        c.description = configNode.Value;
+                                        break;
+                                    case "devURL":
+                                        c.devURL = configNode.Value;
+                                        break;
+                                    case "type":
+                                        c.type = configNode.Value;
+                                        break;
+                                    case "configs":
+                                        Utils.processConfigs(configNode, backendFlag, m, false, c);
+                                        break;
+                                    case "userDatas":
+                                        foreach (XElement userDataNode in configNode.Elements())
+                                        {
+                                            switch (userDataNode.Name.ToString())
+                                            {
+                                                case "userData":
+                                                    string innerText = userDataNode.Value;
+                                                    if (innerText == null)
+                                                        continue;
+                                                    if (innerText.Equals(""))
+                                                        continue;
+                                                    c.userFiles.Add(innerText);
+                                                    break;
+                                                default:
+                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => userDatas => expected nodes: userData (line {3})", userDataNode.Name.ToString(), c.name, c.zipFile, ((IXmlLineInfo)configNode).LineNumber));
+                                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: userData\n\nNode found: {0}\n\nmore informations, see logfile", userDataNode.Name.ToString())); };
+                                                    break;
+                                            }
+                                        }
+                                        break;
+                                    case "pictures":
+                                        //parse every picture
+                                        foreach (XElement pictureHolder in configNode.Elements())
+                                        {
+                                            switch (pictureHolder.Name.ToString())
+                                            {
+                                                case "picture":
+                                                    foreach (XElement pictureNode in pictureHolder.Elements())
+                                                    {
+                                                        switch (pictureNode.Name.ToString())
+                                                        {
+                                                            case "URL":
+                                                                string innerText = pictureNode.Value;
+                                                                if (innerText == null)
+                                                                    continue;
+                                                                if (innerText.Equals(""))
+                                                                    continue;
+                                                                c.pictureList.Add(new Picture(c.name, pictureNode.Value));
+                                                                break;
+                                                            default:
+                                                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => configs {1} ({2}) => pictures => expected nodes: URL (line {3})", pictureNode.Name.ToString(), c.name, c.zipFile, ((IXmlLineInfo)pictureNode).LineNumber));
+                                                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: URL\n\nNode found: {0}\n\nmore informations, see logfile", pictureNode.Name.ToString())); };
+                                                                break;
+                                                        }
+                                                    }
+                                                    break;
+                                                default:
+                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => expected node: picture (line {3})", pictureHolder.Name.ToString(), c.name, c.zipFile, ((IXmlLineInfo)pictureHolder).LineNumber));
+                                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected node: picture\n\nNode found: {0}\n\nmore informations, see logfile", pictureHolder.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                    break;
+                                            }
+                                        }
+                                        break;
+                                    case "dependencies":
+                                        //parse all dependencies
+                                        foreach (XElement dependencyHolder in configNode.Elements())
+                                        {
+                                            string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                                            Dependency d = new Dependency();
+                                            d.packageName = "";
+                                            foreach (XElement dependencyNode in dependencyHolder.Elements())
+                                            {
+                                                depNodeList = confNodeList.Except(new string[] { dependencyNode.Name.ToString() }).ToArray();
+                                                switch (dependencyNode.Name.ToString())
+                                                {
+                                                    case "dependencyZipFile":
+                                                        d.dependencyZipFile = dependencyNode.Value;
+                                                        break;
+                                                    case "dependencyZipCRC":
+                                                        d.dependencyZipCRC = dependencyNode.Value;
+                                                        break;
+                                                    case "startAddress":
+                                                        d.startAddress = dependencyNode.Value;
+                                                        break;
+                                                    case "endAddress":
+                                                        d.endAddress = dependencyNode.Value;
+                                                        break;
+                                                    case "dependencyenabled":
+                                                        d.enabled = Utils.parseBool(dependencyNode.Value, false);
+                                                        break;
+                                                    case "packageName":
+                                                        d.packageName = dependencyNode.Value.Trim();
+                                                        if (d.packageName.Equals(""))
+                                                        {
+                                                            Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => config {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), c.name, c.zipFile, d.dependencyZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
+                                                            if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => config {1} ({2}) => dep {3}", dependencyNode.Name.ToString(), c.name, c.zipFile, d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                        }
+                                                        break;
+                                                    default:
+                                                        Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), c.name, c.zipFile, d.dependencyZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
+                                                        if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name.ToString())); };
+                                                        break;
+                                                }
+                                            }
+                                            if (d != null)
+                                            {
+                                                if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => config {1} ({2}) => dep {3} (line {4})", string.Join(",", depNodeList), c.name, c.zipFile, d.dependencyZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber)); };
+                                                if (d.packageName.Equals("")) { string rad = Utils.RandomString(30); d.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
+                                                c.dependencies.Add(d);
+                                            };
+                                        }
+                                        break;
+                                    default:
+                                        Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) (line {3})", configNode.Name.ToString(), c.name, c.zipFile, ((IXmlLineInfo)configNode).LineNumber));
+                                        if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: name, version, zipFile, startAddress, endAddress, crc, enabled, packageName, size, updateComment, description, devURL, type, configs, userDatas, pictures, dependencies\n\nNode found: {0}\n\nmore informations, see logfile", configNode.Name.ToString())); };
+                                        break;
+                                }
+                            }
+                            if (c != null && confNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => config {1} ({2}) (line {3})", string.Join(",", confNodeList), c.name, c.zipFile, ((IXmlLineInfo)configHolder).LineNumber)); };
+                            if (c.packageName.Equals("")) { string rad = Utils.RandomString(30); c.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
+                            //attach it to eithor the config of correct level or the mod
+                            if (parentIsMod)
+                                m.configs.Add(c);
+                            else
+                                con.configs.Add(c);
+                            break;
+                        default:
+                            Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => expected nodes: config (line {3})", configHolder.Name.ToString(), m.name, m.zipFile, ((IXmlLineInfo)configHolder).LineNumber));
+                            if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: config\n\nNode found: {0}\n\nmore informations, see logfile", configHolder.Name)); };
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("processConfigs_new", ex);
             }
         }
 
@@ -3119,6 +3660,19 @@ namespace RelhaxModpack
                fileName = fileName.Replace(c, '_');
             }
             return fileName;
+        }
+
+        private static Random random = new Random();
+        /// <summary>
+        /// https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }
