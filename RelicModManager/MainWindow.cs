@@ -63,7 +63,7 @@ namespace RelhaxModpack
         //  interpret the created CiInfo buildTag as an "us-US" or a "de-DE" timeformat and return it as a local time- and dateformat string
         public static string compileTime()      // STILL NEED TO FIX IT => TODO Grumeplumpf (need different en-US format strings from %DATE% %TIME% (CMD variable))         // is AM/PM used at this %TIME% string?  // need syntax string of days with ONE and TWO digits, month with ONE and TWO digits
         {
-            string[] mask = new string[] { "dd.MM.yyyy  h:mm:ss,ff", "dd.MM.yyyy HH:mm:ss,ff", "YYYY-MM-DD  h:mm:ss.ff", "YYYY-MM-DD HH:mm:ss.ff" };
+            string[] mask = new string[] { "dd.MM.yyyy  h:mm:ss,ff", "dd.MM.yyyy HH:mm:ss,ff", "YYYY-MM-DD  h:mm:ss.ff", "YYYY-MM-DD HH:mm:ss.ff", "MM/DD/YYYY  h:mm:ss.ff", "MM/DD/YYYY HH:mm:ss.ff" };
             foreach (var m in mask)
             {
                 if (DateTime.TryParseExact(CiInfo.BuildTag, m, System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite | DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite, out DateTime dateValue))
