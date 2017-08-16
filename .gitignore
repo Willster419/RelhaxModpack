@@ -6,6 +6,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+CiInfo.cs
 
 RelhaxModpack_TemporaryKey.pfx
 

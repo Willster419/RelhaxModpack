@@ -93,7 +93,7 @@ namespace RelhaxModpack
             //create new lists for memory database and serialize from xml->lists
             globalDependencies = new List<Dependency>();
             parsedCatagoryList = new List<Category>();
-            Utils.createModStructure2(databaseURL, false, globalDependencies, parsedCatagoryList);
+            Utils.createModStructure(databaseURL, false, globalDependencies, parsedCatagoryList);
             if (Program.testMode)
             {
                 if (Utils.duplicates(parsedCatagoryList))
@@ -1712,6 +1712,27 @@ namespace RelhaxModpack
                 }
             }
         }
+
+        // uncheck ALL subconfigs if "parent" is unchecked
+        void uncheckAllSubconfigs(Mod m)
+        {
+            foreach (Config sc in m.configs)
+            {
+                if (sc.Checked) { sc.Checked = false; }
+                if (sc.configs.Count > 0) { uncheckAllSubconfigs(sc); }
+            }
+        }
+
+        // uncheck ALL subconfigs if "parent" is unchecked
+        void uncheckAllSubconfigs(Config c)
+        {
+            foreach (Config sc in c.configs)
+            {
+                if (sc.Checked) { sc.Checked = false; }
+                if (sc.configs.Count > 0) { uncheckAllSubconfigs(sc); }
+            }
+        }
+
         //handler for when a config selection is made from the drop down list
         void configControlDD_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -2062,6 +2083,7 @@ namespace RelhaxModpack
             modTabGroups.Enabled = true;
             ModSelectionList_SizeChanged(null, null);
         }
+
         private void parseLoadConfig()
         {
             loadingConfig = true;

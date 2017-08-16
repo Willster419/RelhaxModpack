@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Xml;
 using Microsoft.Win32;
 using System.Drawing;
+using System.Globalization;
 
 namespace RelhaxModpack
 {
@@ -19,8 +20,6 @@ namespace RelhaxModpack
         private WebClient downloader = new WebClient();
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string managerVersion = "version 24.1.0";
-        private string today = "07/30/2017";
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
         private string appDataFolder;//the folder where the user's app data is stored (C:\Users\username\AppData)
         //queue for downloading mods
@@ -61,11 +60,40 @@ namespace RelhaxModpack
         private float windowWidth;
         private float scale = 1.0f;
 
+        //  interpret the created CiInfo buildTag as an "us-US" or a "de-DE" timeformat and return it as a local time- and dateformat string
+        public static string compileTime()      // STILL NEED TO FIX IT => TODO Grumeplumpf (need different en-US format strings from %DATE% %TIME% (CMD variable))         // is AM/PM used at this %TIME% string?  // need syntax string of days with ONE and TWO digits, month with ONE and TWO digits
+        {
+            string[] mask = new string[] { "dd.MM.yyyy  h:mm:ss,ff", "dd.MM.yyyy HH:mm:ss,ff", "YYYY-MM-DD  h:mm:ss.ff", "YYYY-MM-DD HH:mm:ss.ff", "MM/DD/YYYY  h:mm:ss.ff", "MM/DD/YYYY HH:mm:ss.ff" };
+            foreach (var m in mask)
+            {
+                if (DateTime.TryParseExact(CiInfo.BuildTag, m, System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite | DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite, out DateTime dateValue))
+                {
+                    return dateValue.ToString();
+                }
+            }
+            return "ERROR!"; 
+        }
+
+        /// <summary>
+        /// gets now the "Release version" from RelhaxModpack-properties
+        /// https://stackoverflow.com/questions/2959330/remove-characters-before-character
+        /// https://www.mikrocontroller.net/topic/140764
+        /// </summary>
+        /// <returns></returns>
+        public static string managerVersion()
+        {
+            return "version " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().IndexOf('.') + 1);
+        }
+
         //The constructur for the application
         public MainWindow()
         {
             Utils.appendToLog("MainWindow Constructed");
             InitializeComponent();
+            this.SetStyle(                                      /// add double buffering and possibly reduce flicker https://stackoverflow.com/questions/1550293/stopping-textbox-flicker-during-update
+              ControlStyles.AllPaintingInWmPaint |
+              ControlStyles.UserPaint |
+              ControlStyles.DoubleBuffer,true);
         }
         //handler for the mod download file progress
         void downloader_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -201,19 +229,14 @@ namespace RelhaxModpack
             {
                 version = updater.DownloadString("http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt");
             }
-            catch (WebException e)
+            catch (Exception ex)
             {
-                Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
-                Utils.appendToLog(e.StackTrace);
-                Utils.appendToLog("inner message: " + e.Message);
-                Utils.appendToLog("source: " + e.Source);
-                Utils.appendToLog("target: " + e.TargetSite);
-                Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt");
+                Utils.exceptionLog("checkmanagerUpdates", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt", ex);
                 MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " supported_clients.txt");
                 Application.Exit();
             }
-            Utils.appendToLog("Current application version is " + managerVersion + ", new version is " + version);
-            if (!version.Equals(managerVersion))
+            Utils.appendToLog("Local application is " + managerVersion() + ", current online is " + version);
+            if (!version.Equals(managerVersion()))
             {
                 Utils.appendToLog("exe is out of date. displaying user update window");
                 //out of date
@@ -261,9 +284,10 @@ namespace RelhaxModpack
                 {
                     downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/RelicCopyUpdate.txt", Application.StartupPath + "\\RelicCopyUpdate.bat");
                 }
-                catch (WebException)
+                catch (Exception e2)
                 {
-                    Utils.appendToLog("Error: failed to download => RelicCopyUpdate.bat");
+                    Utils.exceptionLog("failed to download => RelicCopyUpdate.bat", e2);
+                    // Utils.appendToLog("Error: failed to download => RelicCopyUpdate.bat");
                     MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " RelicCopyUpdate.bat");
                     Application.Exit();
                 }
@@ -277,9 +301,10 @@ namespace RelhaxModpack
                 installUpdate.StartInfo = info;
                 installUpdate.Start();
             }
-            catch (Win32Exception)
+            catch (Win32Exception e3)
             {
-                Utils.appendToLog("WARNING: could not start new application version");
+                Utils.exceptionLog("WARNING: could not start new application version", e3);
+                // Utils.appendToLog("WARNING: could not start new application version");
                 MessageBox.Show(Translations.getTranslatedString("cantStartNewApp") + newExeName);
             }
             Application.Exit();
@@ -308,12 +333,13 @@ namespace RelhaxModpack
             }
             catch (WebException e)
             {
-                Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
-                Utils.appendToLog(e.StackTrace);
-                Utils.appendToLog("inner message: " + e.Message);
-                Utils.appendToLog("source: " + e.Source);
-                Utils.appendToLog("target: " + e.TargetSite);
-                Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/supported_clients.txt");
+                Utils.exceptionLog("Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/supported_clients.txt", e);
+                // Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
+                // Utils.appendToLog(e.StackTrace);
+                // Utils.appendToLog("inner message: " + e.Message);
+                // Utils.appendToLog("source: " + e.Source);
+                // Utils.appendToLog("target: " + e.TargetSite);
+                // Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/supported_clients.txt");
                 MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " supported_clients.txt");
                 //suportedVersions = "0.9.18.0";
                 Application.Exit();
@@ -458,7 +484,7 @@ namespace RelhaxModpack
         private void MainWindow_Load(object sender, EventArgs e)
         {
             //set window header text to current version so user knows
-            this.Text = this.Text + managerVersion.Substring(8);
+            this.Text = this.Text + managerVersion().Substring(8);
             if (Program.testMode) this.Text = this.Text + " TEST MODE";
             //show the wait screen
             PleaseWait wait = new PleaseWait();
@@ -466,8 +492,8 @@ namespace RelhaxModpack
             WebRequest.DefaultWebProxy = null;
             wait.loadingDescBox.Text = "Verifying single instance...";
             Application.DoEvents();
-            Utils.appendToLog("|RelHax Modpack " + managerVersion);
-            Utils.appendToLog("|Built on " + today + ", running at " + DateTime.Now);
+            Utils.appendToLog("|RelHax Modpack " + managerVersion());
+            Utils.appendToLog(string.Format("|Built on {0}", compileTime()));
             Utils.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
             windowHeight = this.Size.Height;
             windowWidth = this.Size.Width;
@@ -523,16 +549,10 @@ namespace RelhaxModpack
                 {
                     downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll", Application.StartupPath + "\\DotNetZip.dll");
                 }
-                catch (WebException ex1)
+                catch (Exception ex)
                 {
-                    Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
-                    Utils.appendToLog(ex1.StackTrace);
-                    Utils.appendToLog("inner message: " + ex1.Message);
-                    Utils.appendToLog("source: " + ex1.Source);
-                    Utils.appendToLog("target: " + ex1.TargetSite);
-                    Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll");
+                    Utils.exceptionLog("MainWindow_Load", "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll", ex);
                     MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " DotNetZip.dll");
-                    //suportedVersions = "0.9.18.0";
                     Application.Exit();
                 }
             }
@@ -542,16 +562,10 @@ namespace RelhaxModpack
                 {
                     downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll", Application.StartupPath + "\\Newtonsoft.Json.dll");
                 }
-                catch (WebException ex2)
+                catch (Exception ex)
                 {
-                    Utils.appendToLog("EXCEPTION: WebException (call stack traceback)");
-                    Utils.appendToLog(ex2.StackTrace);
-                    Utils.appendToLog("inner message: " + ex2.Message);
-                    Utils.appendToLog("source: " + ex2.Source);
-                    Utils.appendToLog("target: " + ex2.TargetSite);
-                    Utils.appendToLog("Additional Info: Tried to access " + "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll");
+                    Utils.exceptionLog("MainWindow_Load", "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll", ex);
                     MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " Newtonsoft.Json.dll");
-                    //suportedVersions = "0.9.18.0";
                     Application.Exit();
                 }
             }
@@ -740,7 +754,7 @@ namespace RelhaxModpack
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractGlobalDependencies)
             {
                 message = "Extracting Global Dependency " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File:" + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor,2) + " MB";
+                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor,2) + " MB";
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -753,7 +767,7 @@ namespace RelhaxModpack
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractDependencies)
             {
                 message = "Extracting Dependency " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File:" + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -766,7 +780,7 @@ namespace RelhaxModpack
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractLogicalDependencies)
             {
                 message = "Extracting Logical Dependency " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File:" + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -779,7 +793,7 @@ namespace RelhaxModpack
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractMods)
             {
                 message = "Extracting Mod " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File:" + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -792,7 +806,7 @@ namespace RelhaxModpack
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractConfigs)
             {
                 message = "Extracting Config " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File:" + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -1274,13 +1288,9 @@ namespace RelhaxModpack
                 //get every patch file in the folder
                 fi = di.GetFiles(@"*.zip", SearchOption.TopDirectoryOnly);
             }
-            catch (UnauthorizedAccessException e)
+            catch (Exception e)
             {
-                Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
-                Utils.appendToLog(e.StackTrace);
-                Utils.appendToLog("inner message: " + e.Message);
-                Utils.appendToLog("source: " + e.Source);
-                Utils.appendToLog("target: " + e.TargetSite);
+                Utils.exceptionLog("checkForOldZipFiles", e);
                 MessageBox.Show(Translations.getTranslatedString("folderDeleteFailed") + " _readme");
             }
             if (fi != null)
@@ -1320,14 +1330,10 @@ namespace RelhaxModpack
                                 childProgressBar.Value++;
                                 retry = false;
                             }
-                            catch (UnauthorizedAccessException e)
+                            catch (Exception e)
                             {
                                 retry = true;
-                                Utils.appendToLog("EXCEPTION: UnauthorizedAccessException (call stack traceback)");
-                                Utils.appendToLog(e.StackTrace);
-                                Utils.appendToLog("inner message: " + e.Message);
-                                Utils.appendToLog("source: " + e.Source);
-                                Utils.appendToLog("target: " + e.TargetSite);
+                                Utils.exceptionLog("checkForOldZipFiles","delete", e);
                                 DialogResult res = MessageBox.Show(Translations.getTranslatedString("fileDeleteFailed") + " " + s, "", MessageBoxButtons.RetryCancel);
                                 if (res == System.Windows.Forms.DialogResult.Cancel)
                                 {
