@@ -2882,6 +2882,18 @@ namespace RelhaxModpack
                         else
                         {
                             m.Checked = true;
+                            if (m.modFormCheckBox != null)
+                            {
+                                if(m.modFormCheckBox is ModFormCheckBox)
+                                {
+                                    ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
+                                    mfcb.Checked = true;
+                                }
+                                else if (m.modFormCheckBox is ModWPFCheckBox)
+                                {
+
+                                }
+                            }
                             Utils.appendToLog("Checking mod " + m.name);
                         }
                     }
@@ -2990,6 +3002,30 @@ namespace RelhaxModpack
                     else
                     {
                         c.Checked = true;
+                        if(c.configUIComponent != null)
+                        {
+                            if(c.configUIComponent is ConfigFormCheckBox)
+                            {
+
+                            }
+                            else if (c.configUIComponent is ConfigFormComboBox)
+                            {
+
+                            }
+                            else if (c.configUIComponent is ConfigFormRadioButton)
+                            {
+
+                            }
+                            else if(c.configUIComponent is ConfigWPFCheckBox)
+                            {
+
+                            }
+                            else if (c.configUIComponent is ConfigWPFComboBox)
+                            {
+
+                            }
+                            else if (c.configUIComponent is ConfigWPFRadioButton)
+                        }
                         Utils.appendToLog("Checking mod " + c.name);
                     }
                 }
