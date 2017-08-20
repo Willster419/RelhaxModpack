@@ -3004,7 +3004,7 @@ namespace RelhaxModpack
                         c.Checked = true;
                         if(c.configUIComponent != null)
                         {
-                            if(c.configUIComponent is ConfigFormCheckBox)
+                            if (c.configUIComponent is ConfigFormCheckBox)
                             {
 
                             }
@@ -3016,7 +3016,7 @@ namespace RelhaxModpack
                             {
 
                             }
-                            else if(c.configUIComponent is ConfigWPFCheckBox)
+                            else if (c.configUIComponent is ConfigWPFCheckBox)
                             {
 
                             }
@@ -3025,6 +3025,9 @@ namespace RelhaxModpack
 
                             }
                             else if (c.configUIComponent is ConfigWPFRadioButton)
+                            {
+
+                            }
                         }
                         Utils.appendToLog("Checking mod " + c.name);
                     }
