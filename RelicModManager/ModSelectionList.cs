@@ -334,6 +334,8 @@ namespace RelhaxModpack
             //use a custom datatype for the name
             modCheckBox.mod = m;
             modCheckBox.catagory = c;
+            //add the root UI object to the memory database
+            m.modFormCheckBox = modCheckBox;
             switch (Settings.fontSizeforum)
             {
                 case Settings.FontSize.fontRegular:
@@ -453,6 +455,8 @@ namespace RelhaxModpack
                     configControlRB.catagory = c;
                     configControlRB.mod = m;
                     configControlRB.config = con;
+                    //add the UI component to the config item in memory database
+                    con.configUIComponent = configControlRB;
                     //logic for determining if it can be enabled
                     configControlRB.IsEnabled = false;
                     configControlRB.IsChecked = false;
@@ -526,10 +530,14 @@ namespace RelhaxModpack
                     if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1"))
                     {
                         configControlDDALL = configControlDD;
+                        //add the UI component to the config item in memory database
+                        con.configUIComponent = configControlDD;
                     }
                     else if (con.type.Equals("single_dropdown2"))
                     {
                         configControlDDALL = configControlDD2;
+                        //add the UI component to the config item in memory database
+                        con.configUIComponent = configControlDD2;
                     }
                     //make the dropdown selection list
                     configControlDDALL.MinWidth = 100;
@@ -603,6 +611,8 @@ namespace RelhaxModpack
                     configControlCB.catagory = c;
                     configControlCB.mod = m;
                     configControlCB.config = con;
+                    //add the UI component to the config item in memory database
+                    con.configUIComponent = configControlCB;
                     //logic for determining if it can be enabled
                     configControlCB.IsEnabled = false;
                     configControlCB.IsChecked = false;
@@ -1628,7 +1638,11 @@ namespace RelhaxModpack
                 if (obj is Mod)
                 {
                     Mod parentM = (Mod)obj;
-                    parentM.modFormCheckBox.Checked = true;
+                    if (parentM.modFormCheckBox is ModFormCheckBox)
+                    {
+                        ModFormCheckBox tempCB = (ModFormCheckBox)parentM.modFormCheckBox;
+                        tempCB.Checked = true;
+                    }
                 }
                 else if (obj is Config)
                 {
@@ -1748,7 +1762,11 @@ namespace RelhaxModpack
                     if (obj is Mod)
                     {
                         Mod parentM = (Mod)obj;
-                        parentM.modFormCheckBox.Checked = true;
+                        if(parentM.modFormCheckBox is ModFormCheckBox)
+                        {
+                            ModFormCheckBox tempCB = (ModFormCheckBox)parentM.modFormCheckBox;
+                            tempCB.Checked = true;
+                        }
                     }
                     else if (obj is Config)
                     {
@@ -1797,7 +1815,11 @@ namespace RelhaxModpack
                 if (obj is Mod)
                 {
                     Mod parentM = (Mod)obj;
-                    parentM.modFormCheckBox.Checked = true;
+                    if (parentM.modFormCheckBox is ModFormCheckBox)
+                    {
+                        ModFormCheckBox tempCB = (ModFormCheckBox)parentM.modFormCheckBox;
+                        tempCB.Checked = true;
+                    }
                 }
                 else if (obj is Config)
                 {
@@ -2127,15 +2149,19 @@ namespace RelhaxModpack
             {
                 if (loadMode == loadConfigMode.fromButton) MessageBox.Show(Translations.getTranslatedString("prefrencesSet"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //reload the UI
+                //Don't actually reload the UI anymore
+                /*
                 this.UseWaitCursor = true;
                 modTabGroups.Enabled = false;
                 this.makeTabs();
-                //Settings.setUIColor(this);
+                Settings.setUIColor(this);
                 this.addAllMods();
                 this.addUserMods();
                 Settings.setUIColor(this);
                 this.UseWaitCursor = false;
                 modTabGroups.Enabled = true;
+                */
+                //but still do a resize i guess
                 ModSelectionList_SizeChanged(null, null);
             }
         }

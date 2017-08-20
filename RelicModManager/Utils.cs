@@ -2742,6 +2742,7 @@ namespace RelhaxModpack
 
         public static void loadConfig(bool fromButton, string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
+            //uncheck everythihng in memory first
             Utils.clearSelectionMemory(parsedCatagoryList);
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
@@ -2790,13 +2791,27 @@ namespace RelhaxModpack
                             }
                             if (m.enabled)
                             {
-                                Utils.appendToLog("Checking mod " + m.name);
                                 m.Checked = true;
+                                if (m.modFormCheckBox != null)
+                                {
+                                    if (m.modFormCheckBox is ModFormCheckBox)
+                                    {
+                                        ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
+                                        mfcb.Checked = true;
+                                    }
+                                    else if (m.modFormCheckBox is ModWPFCheckBox)
+                                    {
+                                        ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.modFormCheckBox;
+                                        mfCB2.IsChecked = true;
+                                    }
+                                }
+                                Utils.appendToLog("Checking mod " + m.name);
                             }
                             break;
                         case "configs":
                             Utils.loadProcessConfigsV1(nn, m, true);
                             break;
+                        //compatibility in case it's a super legacy with subConfigs
                         case "subConfigs":
                             Utils.loadProcessConfigsV1(nn, m, true);
                             break;
@@ -2891,7 +2906,8 @@ namespace RelhaxModpack
                                 }
                                 else if (m.modFormCheckBox is ModWPFCheckBox)
                                 {
-
+                                    ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.modFormCheckBox;
+                                    mfCB2.IsChecked = true;
                                 }
                             }
                             Utils.appendToLog("Checking mod " + m.name);
@@ -2972,8 +2988,63 @@ namespace RelhaxModpack
                             }
                             if (c.enabled)
                             {
-                                Utils.appendToLog("Checking config " + c.name);
                                 c.Checked = true;
+                                if (c.configUIComponent != null)
+                                {
+                                    if (c.configUIComponent is ConfigFormCheckBox)
+                                    {
+                                        ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
+                                        CBTemp.Checked = true;
+                                    }
+                                    else if (c.configUIComponent is ConfigFormComboBox)
+                                    {
+                                        ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.configUIComponent;
+                                        foreach (Object o in CBTemp.Items)
+                                        {
+                                            if (o is ComboBoxItem)
+                                            {
+                                                ComboBoxItem tempCBI = (ComboBoxItem)o;
+                                                if (tempCBI.config.packageName.Equals(c.packageName))
+                                                {
+                                                    CBTemp.SelectedItem = o;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else if (c.configUIComponent is ConfigFormRadioButton)
+                                    {
+                                        ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
+                                        CBTemp.Checked = true;
+                                    }
+                                    else if (c.configUIComponent is ConfigWPFCheckBox)
+                                    {
+                                        ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.configUIComponent;
+                                        CBTemp.IsChecked = true;
+                                    }
+                                    else if (c.configUIComponent is ConfigWPFComboBox)
+                                    {
+                                        ConfigWPFComboBox CBTemp = (ConfigWPFComboBox)c.configUIComponent;
+                                        foreach (Object o in CBTemp.Items)
+                                        {
+                                            if (o is ComboBoxItem)
+                                            {
+                                                ComboBoxItem tempCBI = (ComboBoxItem)o;
+                                                if (tempCBI.config.packageName.Equals(c.packageName))
+                                                {
+                                                    CBTemp.SelectedItem = o;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else if (c.configUIComponent is ConfigWPFRadioButton)
+                                    {
+                                        ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.configUIComponent;
+                                        CBTemp.IsChecked = true;
+                                    }
+                                }
+                                Utils.appendToLog("Checking mod " + c.name);
                             }
                             break;
                         case "configs":
@@ -3006,27 +3077,55 @@ namespace RelhaxModpack
                         {
                             if (c.configUIComponent is ConfigFormCheckBox)
                             {
-
+                                ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
+                                CBTemp.Checked = true;
                             }
                             else if (c.configUIComponent is ConfigFormComboBox)
                             {
-
+                                ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.configUIComponent;
+                                foreach(Object o in CBTemp.Items)
+                                {
+                                    if(o is ComboBoxItem)
+                                    {
+                                        ComboBoxItem tempCBI = (ComboBoxItem)o;
+                                        if(tempCBI.config.packageName.Equals(c.packageName))
+                                        {
+                                            CBTemp.SelectedItem = o;
+                                            break;
+                                        }
+                                    }
+                                }
                             }
                             else if (c.configUIComponent is ConfigFormRadioButton)
                             {
-
+                                ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
+                                CBTemp.Checked = true;
                             }
                             else if (c.configUIComponent is ConfigWPFCheckBox)
                             {
-
+                                ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.configUIComponent;
+                                CBTemp.IsChecked = true;
                             }
                             else if (c.configUIComponent is ConfigWPFComboBox)
                             {
-
+                                ConfigWPFComboBox CBTemp = (ConfigWPFComboBox)c.configUIComponent;
+                                foreach (Object o in CBTemp.Items)
+                                {
+                                    if (o is ComboBoxItem)
+                                    {
+                                        ComboBoxItem tempCBI = (ComboBoxItem)o;
+                                        if (tempCBI.config.packageName.Equals(c.packageName))
+                                        {
+                                            CBTemp.SelectedItem = o;
+                                            break;
+                                        }
+                                    }
+                                }
                             }
                             else if (c.configUIComponent is ConfigWPFRadioButton)
                             {
-
+                                ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.configUIComponent;
+                                CBTemp.IsChecked = true;
                             }
                         }
                         Utils.appendToLog("Checking mod " + c.name);

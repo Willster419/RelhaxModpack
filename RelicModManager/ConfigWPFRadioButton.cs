@@ -1,6 +1,6 @@
 ﻿namespace RelhaxModpack
 {
-    class ConfigWPFRadioButton : System.Windows.Controls.RadioButton
+    class ConfigWPFRadioButton : System.Windows.Controls.RadioButton, UIComponent
     {
         public Category catagory { get; set; }
         public Mod mod { get; set; }

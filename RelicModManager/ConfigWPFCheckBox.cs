@@ -1,6 +1,6 @@
 ﻿namespace RelhaxModpack
 {
-    class ConfigWPFCheckBox : System.Windows.Controls.CheckBox
+    class ConfigWPFCheckBox : System.Windows.Controls.CheckBox, UIComponent
     {
         public Category catagory { get; set; }
         public Mod mod { get; set; }

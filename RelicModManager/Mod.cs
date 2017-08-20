@@ -33,7 +33,7 @@ namespace RelhaxModpack
         //needed to excatly identify double packageNames and its position
         public int CheckDatabaseListIndex { get; set; }
         public bool Checked { get; set; }
-        public ModFormCheckBox modFormCheckBox { get; set; }
+        public UIComponent modFormCheckBox { get; set; }
         public bool downloadFlag { get; set; }
         //default constructor
         public Mod()
