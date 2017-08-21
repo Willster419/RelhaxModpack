@@ -2798,6 +2798,7 @@ namespace RelhaxModpack
                                     {
                                         ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
                                         mfcb.Checked = true;
+                                        mfcb.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
                                     else if (m.modFormCheckBox is ModWPFCheckBox)
                                     {
@@ -2903,6 +2904,7 @@ namespace RelhaxModpack
                                 {
                                     ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
                                     mfcb.Checked = true;
+                                    mfcb.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                 }
                                 else if (m.modFormCheckBox is ModWPFCheckBox)
                                 {
@@ -2995,6 +2997,7 @@ namespace RelhaxModpack
                                     {
                                         ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
                                         CBTemp.Checked = true;
+                                        CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
                                     else if (c.configUIComponent is ConfigFormComboBox)
                                     {
@@ -3011,11 +3014,13 @@ namespace RelhaxModpack
                                                 }
                                             }
                                         }
+                                        CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
                                     else if (c.configUIComponent is ConfigFormRadioButton)
                                     {
                                         ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
                                         CBTemp.Checked = true;
+                                        CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
                                     else if (c.configUIComponent is ConfigWPFCheckBox)
                                     {
@@ -3079,6 +3084,7 @@ namespace RelhaxModpack
                             {
                                 ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
                                 CBTemp.Checked = true;
+                                CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                             }
                             else if (c.configUIComponent is ConfigFormComboBox)
                             {
@@ -3095,11 +3101,13 @@ namespace RelhaxModpack
                                         }
                                     }
                                 }
+                                CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                             }
                             else if (c.configUIComponent is ConfigFormRadioButton)
                             {
                                 ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
                                 CBTemp.Checked = true;
+                                CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                             }
                             else if (c.configUIComponent is ConfigWPFCheckBox)
                             {
