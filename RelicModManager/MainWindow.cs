@@ -17,7 +17,7 @@ namespace RelhaxModpack
     {
         //all instance variables required to be up here
         private FolderBrowserDialog selectWotFolder = new FolderBrowserDialog();
-        private WebClient downloader = new WebClient();
+        private WebClient downloader;
         private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
@@ -43,7 +43,7 @@ namespace RelhaxModpack
         private Installer ins;
         private string tanksVersion;//0.9.x.y
         //list to maintain the refrence lines in a json patch
-        List<double> timeRemainArray = new List<double>();
+        List<double> timeRemainArray;
         //the ETA variable for downlading
         double actualTimeRemain = 0;
         float previousTotalBytesDownloaded = 0;
@@ -51,11 +51,10 @@ namespace RelhaxModpack
         float differenceTotalBytesDownloaded = 0;
         float sessionDownloadSpeed = 0;
         private loadingGifPreview gp;
-        private ModSelectionList list;
         private string suportedVersions = null;
         string[] supportedVersions = null;
-        List<Mod> modsWithData = new List<Mod>();
-        List<Config> configsWithData = new List<Config>();
+        List<Mod> modsWithData;
+        List<Config> configsWithData;
         private float windowHeight;
         private float windowWidth;
         private float scale = 1.0f;
@@ -175,10 +174,14 @@ namespace RelhaxModpack
                 //for the next file in the queue, delete it.
                 if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
                 //download new zip file
+                if(downloader != null)
+                    downloader.Dispose();
                 downloader = new WebClient();
                 downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
                 downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
                 downloader.Proxy = null;
+                if (timeRemainArray == null)
+                    timeRemainArray = new List<double>();
                 timeRemainArray.Clear();
                 actualTimeRemain = 0;
                 sw.Reset();
@@ -329,7 +332,10 @@ namespace RelhaxModpack
             //download a string of supported versions
             try
             {
-                suportedVersions = downloader.DownloadString("http://wotmods.relhaxmodpack.com/RelhaxModpack/supported_clients.txt");
+                using (downloader = new WebClient())
+                {
+                    suportedVersions = downloader.DownloadString("http://wotmods.relhaxmodpack.com/RelhaxModpack/supported_clients.txt");
+                }
             }
             catch (WebException e)
             {
@@ -680,10 +686,13 @@ namespace RelhaxModpack
             childProgressBar.Maximum = 100;
             childProgressBar.Value = 0;
             //show the mod selection window
-            list = new ModSelectionList(selectionListTanksVersion, tanksLocation, this.Location.X + this.Size.Width, this.Location.Y);
+            ModSelectionList list = new ModSelectionList(selectionListTanksVersion, tanksLocation, this.Location.X + this.Size.Width, this.Location.Y);
             list.ShowDialog();
             if (list.cancel)
             {
+                list.Dispose();
+                list = null;
+                GC.Collect();
                 toggleUIButtons(true);
                 return;
             }
@@ -773,9 +782,6 @@ namespace RelhaxModpack
                     }
                 }
             }
-            //create a new download queue. even if not downloading any
-            //relhax modpack mods, still used in downloader code
-            downloadQueue = new List<DownloadItem>();
             //check for any user mods to install
             for (int i = 0; i < list.userMods.Count; i++)
             {
@@ -784,12 +790,19 @@ namespace RelhaxModpack
                     this.userMods.Add(list.userMods[i]);
                 }
             }
+
+            //create a new download queue. even if not downloading any
+            //relhax modpack mods, still used in downloader code
+            downloadQueue = new List<DownloadItem>();
             //check that we will actually install something
             if (modsToInstall.Count == 0 && !installingConfigs() && userMods.Count == 0)
             {
                 //pull out because there are no mods to install
                 downloadProgress.Text = Translations.getTranslatedString("idle");
                 toggleUIButtons(true);
+                list.Dispose();
+                list = null;
+                GC.Collect();
                 return;
             }
             //if the user did not select any relhax modpack mods to install
@@ -838,7 +851,10 @@ namespace RelhaxModpack
             //at this point, there may be user mods selected,
             //and there is at least one mod to extract
             downloader_DownloadFileCompleted(null, null);
-            //end the installation process
+            //release no longer needed rescources and end the installation process
+            list.Dispose();
+            list = null;
+            GC.Collect();
             return;
         }
 
@@ -876,7 +892,7 @@ namespace RelhaxModpack
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractGlobalDependencies)
             {
                 message = "Extracting Package " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor,2) + " MB";
+                message = message + "File:" + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor,2) + " MB";
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -889,7 +905,7 @@ namespace RelhaxModpack
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractDependencies)
             {
                 message = "Extracting Package " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                message = message + "File:" + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -902,7 +918,7 @@ namespace RelhaxModpack
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractLogicalDependencies)
             {
                 message = "Extracting Package " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                message = message + "File:" + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -915,7 +931,7 @@ namespace RelhaxModpack
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractMods)
             {
                 message = "Extracting Package " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                message = message + "File:" + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -928,7 +944,7 @@ namespace RelhaxModpack
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractConfigs)
             {
                 message = "Extracting Package " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                message = message + "File:" + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -949,7 +965,7 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.PatchMods)
             {
-                message = "Patching File " + e.currentFile + ", " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
+                message = "Patching File:" + e.currentFile + ", " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
                 parrentProgressBar.Maximum = e.ChildTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ChildProcessed;
@@ -1000,6 +1016,31 @@ namespace RelhaxModpack
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Maximum = 1;
                 childProgressBar.Value = childProgressBar.Maximum;
+                //dispose of a lot of stuff
+                if (ins != null)
+                {
+                    ins.Dispose();
+                    ins = null;
+                }
+                downloadQueue = null;
+                parsedCatagoryLists = null;
+                modsToInstall = null;
+                patchList = null;
+                dependencies = null;
+                configListsToInstall = null;
+                userMods = null;
+                if(helper != null)
+                {
+                    helper.Dispose();
+                    helper = null;
+                }
+                if(gp != null)
+                {
+                    gp.Dispose();
+                    gp = null;
+                }
+                modsWithData = null;
+                configsWithData = null;
                 toggleUIButtons(true);
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Uninstall)
@@ -1099,38 +1140,40 @@ namespace RelhaxModpack
             tanksVersion = this.getFolderVersion();
             if (MessageBox.Show(Translations.getTranslatedString("confirmUninstallMessage"), Translations.getTranslatedString("confirmUninstallHeader"), MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                Installer unI = new Installer()
+                using (Installer unI = new Installer()
                 {
                     AppPath = Application.StartupPath,
                     TanksLocation = tanksLocation,
                     TanksVersion = tanksVersion
-                };
-                unI.InstallProgressChanged += I_InstallProgressChanged;
-                Utils.appendToLog("Started Uninstallation process");
-                if (Settings.cleanUninstall)
+                })
                 {
-                    //run the recursive complete uninstaller
-                    unI.StartCleanUninstallation();
-                }
-                else
-                {
-                    //run the smart uninstaller
-                    if (!File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
+                    unI.InstallProgressChanged += I_InstallProgressChanged;
+                    Utils.appendToLog("Started Uninstallation process");
+                    if (Settings.cleanUninstall)
                     {
-                        Utils.appendToLog("ERROR: installedRelhaxFiles.log does not exist, prompt user to delete everything instead");
-                        DialogResult result = MessageBox.Show(Translations.getTranslatedString("noUninstallLogMessage"), Translations.getTranslatedString("noUninstallLogHeader"), MessageBoxButtons.YesNo);
-                        if (result == DialogResult.Yes)
-                        {
-                            Utils.appendToLog("User said yes to delete");
-                            unI.StartCleanUninstallation();
-                        }
-                        else
-                        {
-                            Utils.appendToLog("User said no, aborting");
-                        }
-                        return;
+                        //run the recursive complete uninstaller
+                        unI.StartCleanUninstallation();
                     }
-                    unI.StartUninstallation();
+                    else
+                    {
+                        //run the smart uninstaller
+                        if (!File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
+                        {
+                            Utils.appendToLog("ERROR: installedRelhaxFiles.log does not exist, prompt user to delete everything instead");
+                            DialogResult result = MessageBox.Show(Translations.getTranslatedString("noUninstallLogMessage"), Translations.getTranslatedString("noUninstallLogHeader"), MessageBoxButtons.YesNo);
+                            if (result == DialogResult.Yes)
+                            {
+                                Utils.appendToLog("User said yes to delete");
+                                unI.StartCleanUninstallation();
+                            }
+                            else
+                            {
+                                Utils.appendToLog("User said no, aborting");
+                            }
+                            return;
+                        }
+                        unI.StartUninstallation();
+                    }
                 }
             }
             else

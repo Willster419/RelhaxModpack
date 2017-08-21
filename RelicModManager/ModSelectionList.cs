@@ -135,6 +135,7 @@ namespace RelhaxModpack
                 this.parseLoadConfig();
                 this.cancel = false;
                 pw.Close();
+                pw.Dispose();
                 this.Close();
                 return;
             }
@@ -147,6 +148,7 @@ namespace RelhaxModpack
             //set the UI colors
             Settings.setUIColor(this);
             pw.Close();
+            pw.Dispose();
             //set label properties
             TanksVersionLabel.Text = TanksVersionLabel.Text + tanksVersion;
             TanksPath.Text = Translations.getTranslatedString("InstallingTo") + " " + tanksLocation;

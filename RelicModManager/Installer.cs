@@ -79,7 +79,7 @@ namespace RelhaxModpack
             InstallWorker.DoWork += ActuallyStartUnInstallation;
             InstallWorker.RunWorkerAsync();
         }
-
+        //regular uninstallation method. currently does nothing
         public void ActuallyStartUnInstallation(object sender, DoWorkEventArgs e)
         {
             ResetArgs();
@@ -553,7 +553,6 @@ namespace RelhaxModpack
         //Step 11/14: Install Fonts
         public void InstallFonts()
         {
-            WebClient downloader = new WebClient();
             Utils.appendToLog("Checking for fonts to install");
             if (!Directory.Exists(TanksLocation + "\\_fonts"))
             {
@@ -568,43 +567,37 @@ namespace RelhaxModpack
                 Utils.appendToLog("No fonts to install");
                 return;
             }
-            //convert the array to a list
+            //load fonts and move names to a list
             List<String> fontsList = new List<string>();
             foreach (string s in fonts)
             {
-                fontsList.Add(s);
+                //load the font into a temporoary not loaded font collection
+                /*var fam = System.Windows.Media.Fonts.GetFontFamilies(s);
+                foreach (var temp in fam)
+                {
+                    fontsList.Add(temp.Source.Split('#')[1]);
+                }*/
+                fontsList.Add(Path.GetFileNameWithoutExtension(s));
             }
             //removes any already installed fonts
             for (int i = 0; i < fontsList.Count; i++)
             {
                 //get the name of the font
-                var fontCol = new PrivateFontCollection();
-                try
+                using (var fontsCollection = new InstalledFontCollection())
                 {
-                    fontCol.AddFontFile(fontsList[i]);
-                }
-                catch
-                {
-                    Utils.appendToLog("Error in font file " + fontsList[i]);
-                    fontsList.RemoveAt(i);
-                    i--;
-                    continue;
-                }
-                //use it's real name
-                string fName = fontCol.Families[0].Name;
-                //get a list of installed fonts
-                var fontsCollection = new InstalledFontCollection();
-                foreach (var fontFamiliy in fontsCollection.Families)
-                {
-                    //check if the font name is installed
-                    if (fontFamiliy.Name == fName)
+                    //get a list of installed fonts
+                    foreach (var fontFamiliy in fontsCollection.Families)
                     {
-                        fontsList.RemoveAt(i);
-                        i--;
-                        break;
+                        //check if the font name is installed
+                        if (fontFamiliy.Name.Equals(fontsList[i]))
+                        {
+                            fontsList.RemoveAt(i);
+                            i--;
+                            break;
+                        }
                     }
                 }
-            } 
+            }
             //re-check the fonts to install list
             if (fontsList.Count == 0)
             {
@@ -630,7 +623,8 @@ namespace RelhaxModpack
                 {
                     try
                     {
-                        downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/FontReg.exe", TanksLocation + "\\_fonts\\FontReg.exe");
+                        using (WebClient downloader = new WebClient())
+                            downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/FontReg.exe", TanksLocation + "\\_fonts\\FontReg.exe");
                     }
                     catch (WebException ex)
                     {
@@ -970,6 +964,15 @@ namespace RelhaxModpack
                     // TODO: dispose managed state (managed objects).
                     if(InstallWorker != null)
                         InstallWorker.Dispose();
+                    GlobalDependencies = null;
+                    Dependencies = null;
+                    LogicalDependencies = null;
+                    ModsToInstall = null;
+                    ConfigListsToInstall = null;
+                    ModsWithData = null;
+                    UserMods = null;
+                    patchList = null;
+                    args = null;
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.

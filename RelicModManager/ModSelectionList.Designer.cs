@@ -13,9 +13,68 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+                // Dispose stuff here
+                if (modTabGroups != null)
+                {
+                    foreach (System.Windows.Forms.TabPage t in this.modTabGroups.TabPages)
+                    {
+                        foreach(System.Windows.Forms.Control host in t.Controls)
+                        {
+                            if(host is System.Windows.Forms.Integration.ElementHost)
+                            {
+                                System.Windows.Forms.Integration.ElementHost host2 = (System.Windows.Forms.Integration.ElementHost)host;
+                                host2.Child = null;
+                                host2.Dispose();
+                                host2 = null;
+                            }
+                        }
+                        if(t.Controls.Count > 0)
+                            t.Controls.Clear();
+                        if(t != null)
+                            t.Dispose();
+                    }
+                    if(modTabGroups.TabPages.Count > 0)
+                        modTabGroups.TabPages.Clear();
+                    if(modTabGroups.Controls.Count > 0)
+                        modTabGroups.Controls.Clear();
+                    if(tabPage11.Controls.Count > 0)
+                        tabPage11.Controls.Clear();
+                    if (tabPage11 != null)
+                    {
+                        tabPage11.Dispose();
+                        tabPage11 = null;
+                    }
+                    modTabGroups.Dispose();
+                    modTabGroups = null;
+                }
+                for (int i = 0; i < this.Controls.Count; i++)
+                {
+                    if (this.Controls[i] != null)
+                    {
+                        this.Controls[i].Dispose();
+                    }
+                }
+                if(this.Controls.Count > 0)
+                    this.Controls.Clear();
+                parsedCatagoryList = null;
+                userMods = null;
+                globalDependencies = null;
+                if (p != null)
+                {
+                    p.Dispose();
+                    p = null;
+                }
+                if (pw != null)
+                {
+                    pw.Dispose();
+                    pw = null;
+                }
             }
             base.Dispose(disposing);
         }

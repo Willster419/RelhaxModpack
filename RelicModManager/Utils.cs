@@ -3238,27 +3238,29 @@ namespace RelhaxModpack
         //Downloads the forum page. Totally not stat padding
         public static void TotallyNotStatPaddingForumPageViewCount()
         {
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += worker_TotallyNotStatPaddingForumPageViewCount;
-            worker.RunWorkerAsync();
-            worker.Dispose();
+            using (BackgroundWorker worker = new BackgroundWorker())
+            {
+                worker.DoWork += worker_TotallyNotStatPaddingForumPageViewCount;
+                worker.RunWorkerAsync();
+            }
         }
 
         //Downloads the forum page. Totally not stat padding
         public static void worker_TotallyNotStatPaddingForumPageViewCount(object sender, DoWorkEventArgs args)
         {
             //create a new downloader to download the modpack forum page on a new thread
-            WebClient client = new WebClient();
-            try
+            using (WebClient client = new WebClient())
             {
-                client.DownloadString("http://forum.worldoftanks.eu/index.php?/topic/623269-");
-                client.DownloadString("http://forum.worldoftanks.com/index.php?/topic/535868-");
-                client.DownloadString("http://forum.worldoftanks.eu/index.php?/topic/624499-");
-                client.Dispose();
-            }
-            catch (Exception e)
-            {
-                Utils.exceptionLog("Tried to access one of the forum URL's", e);
+                try
+                {
+                    client.DownloadString("http://forum.worldoftanks.eu/index.php?/topic/623269-");
+                    client.DownloadString("http://forum.worldoftanks.com/index.php?/topic/535868-");
+                    client.DownloadString("http://forum.worldoftanks.eu/index.php?/topic/624499-");
+                }
+                catch (Exception e)
+                {
+                    Utils.exceptionLog("Tried to access one of the forum URL's", e);
+                }
             }
         }
 
