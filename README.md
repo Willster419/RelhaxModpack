@@ -7,6 +7,8 @@ The fastest WoT modpack installer in the world. A refresh of OMC modpack
 
 [Visit our new Website!](http://relhaxmodpack.com/)
 
+[License Information](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)
+
 Support Teamspeak Server: tna.dyndns.org
 
 ### Description and reason for development
