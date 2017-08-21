@@ -253,7 +253,6 @@
             // cleanUninstallCB
             // 
             this.cleanUninstallCB.AutoSize = true;
-            this.cleanUninstallCB.Enabled = false;
             this.cleanUninstallCB.Location = new System.Drawing.Point(6, 114);
             this.cleanUninstallCB.Name = "cleanUninstallCB";
             this.cleanUninstallCB.Size = new System.Drawing.Size(117, 17);

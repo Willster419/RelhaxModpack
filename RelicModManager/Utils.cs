@@ -3209,6 +3209,7 @@ namespace RelhaxModpack
                     parseZipFileConfigs(c.configs);
             }
         }
+        /*no longer used
         //deletes all empty directories from a given start location
         public static void processDirectory(string startLocation)
         {
@@ -3222,7 +3223,7 @@ namespace RelhaxModpack
                     Directory.Delete(directory, false);
                 }
             }
-        }
+        }*/
         //returns true if the CRC's of each file match, false otherwise
         public static bool CRCsMatch(string localFile, string remoteCRC)
         {

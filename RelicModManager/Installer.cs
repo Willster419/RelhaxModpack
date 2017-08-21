@@ -11,14 +11,13 @@ using System.Xml;
 using System.Diagnostics;
 using System.Net;
 using System.Drawing.Text;
-using System.Drawing;
 
 namespace RelhaxModpack
 {
     //Delegate to hook up them events
     public delegate void InstallChangedEventHandler(object sender, InstallerEventArgs e);
 
-    public class Installer
+    public class Installer : IDisposable
     {
         /*
          * This new installer class will handle all of the installation process, effectivly black-boxing the installation, in a single seperate backgroundworker.
@@ -50,7 +49,7 @@ namespace RelhaxModpack
         //the event that it can hook into
         public event InstallChangedEventHandler InstallProgressChanged;
 
-        //the changed event
+        //the changed event (setups the hander)
         protected virtual void OnInstallProgressChanged()
         {
             if (InstallProgressChanged != null)
@@ -74,7 +73,7 @@ namespace RelhaxModpack
             InstallWorker.DoWork += ActuallyStartInstallation;
             InstallWorker.RunWorkerAsync();
         }
-
+        //Start uinstallation on UI thread
         public void StartUninstallation()
         {
             InstallWorker.DoWork += ActuallyStartUnInstallation;
@@ -450,7 +449,7 @@ namespace RelhaxModpack
                     File.SetAttributes(TanksLocation + @"\_patch", FileAttributes.Normal);
                     di = new DirectoryInfo(TanksLocation + @"\_patch");
                     //get every patch file in the folder
-                    diArr = di.GetFiles(@"*.xml", SearchOption.TopDirectoryOnly);
+                    diArr = di.GetFiles(@"*.xml", System.IO.SearchOption.TopDirectoryOnly);
                     kontinue = true;
                 }
                 catch (UnauthorizedAccessException e)
@@ -562,7 +561,7 @@ namespace RelhaxModpack
                 //no fonts to install, done display
                 return;
             }
-            string[] fonts = Directory.GetFiles(TanksLocation + "\\_fonts",@"*.*",SearchOption.TopDirectoryOnly);
+            string[] fonts = Directory.GetFiles(TanksLocation + "\\_fonts",@"*.*",System.IO.SearchOption.TopDirectoryOnly);
             if (fonts.Count() == 0)
             {
                 //done display
@@ -755,51 +754,11 @@ namespace RelhaxModpack
                 patchList.Add(p);
             }
         }
-        //the Uninstall Method for regular uninstallations
+        //do nothing at this point
         private void SmartUninstall()
         {
-            string[] createdFiles = File.ReadAllLines(TanksLocation + "\\installedRelhaxFiles.log");
-            //sort into directories and files
-            List<string> files = new List<string>();
-            foreach (string s in createdFiles)
-            {
-                if (Regex.IsMatch(s, @"^\s*/\*(\s|\S)*?\*/\s*$"))
-                {
-                    // this entry is an commentblock, so should be passed
-                }
-                else
-                {
-                    if (Regex.IsMatch(s, @"\.[A-Za-z0-9_\-]*$"))
-                    {
-                        //it's a files
-                        files.Add(s);
-                    }
-                    else
-                    {
-                        //it's a folder, ignore it
-                    }
-                }
-            }
-            args.ChildTotalToProcess = files.Count;
-            //delete all the files
-            foreach (string s in files)
-            {
-                string filePath = TanksLocation + "\\" + s;
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                    args.ChildProcessed++;
-                    InstallWorker.ReportProgress(0);
-                }
-            }
-            //delete all the folders if nothing else is in them
-            Utils.appendToLog("Finished deleting, processing mods folder");
-            Utils.processDirectory(TanksLocation + "\\mods");
-            Utils.appendToLog("processing res_mods folder");
-            Utils.processDirectory(TanksLocation + "\\res_mods");
-            //don't forget to delete the readme files
-            if (Directory.Exists(TanksLocation + "\\_readme"))
-                Directory.Delete(TanksLocation + "\\_readme", true);
+            
+            
         }
         //gets the total number of files to process to eithor delete or copy
         private void NumFilesToProcess(string folder)
@@ -998,5 +957,43 @@ namespace RelhaxModpack
             }
             InstallWorker.ReportProgress(0);
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                    if(InstallWorker != null)
+                        InstallWorker.Dispose();
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+                // NOTE: There are no unmanaged rescources in this project that *need* to be freed AFAIK
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~Installer() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

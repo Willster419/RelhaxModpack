@@ -708,193 +708,13 @@ namespace RelhaxModpack
                     File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
             }
             catch { }
+            //have the application display that it is loading. it is actually doing installation calculations
             downloadProgress.Text = Translations.getTranslatedString("loading");
             Application.DoEvents();
-            this.parseInstallationPart1();
-        }
-
-        private void I_InstallProgressChanged(object sender, InstallerEventArgs e)
-        {
-            string message = "";
-            totalProgressBar.Maximum = (int)InstallerEventArgs.InstallProgress.Done;
-            if(e.InstalProgress == InstallerEventArgs.InstallProgress.BackupMods)
-            {
-                message = "Backing up mod file " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                    childProgressBar.Value = e.ChildProcessed;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.BackupMods;
-                parrentProgressBar.Value = 0;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.BackupUserData)
-            {
-                message = "Backing up userdatas " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                    childProgressBar.Value = e.ChildProcessed;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.BackupUserData;
-                parrentProgressBar.Value = 0;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.DeleteMods)
-            {
-                message = "Deleting files " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                    childProgressBar.Value = e.ChildProcessed;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.DeleteMods;
-                parrentProgressBar.Value = 0;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractGlobalDependencies)
-            {
-                message = "Extracting Global Dependency " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor,2) + " MB";
-                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
-                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
-                    parrentProgressBar.Value = e.ParrentProcessed;
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if(e.ChildProcessed > 0)
-                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                        childProgressBar.Value = e.ChildProcessed;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractGlobalDependencies;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractDependencies)
-            {
-                message = "Extracting Dependency " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
-                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
-                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
-                    parrentProgressBar.Value = e.ParrentProcessed;
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if (e.ChildProcessed > 0)
-                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                        childProgressBar.Value = e.ChildProcessed;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractDependencies;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractLogicalDependencies)
-            {
-                message = "Extracting Logical Dependency " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
-                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
-                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
-                    parrentProgressBar.Value = e.ParrentProcessed;
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if (e.ChildProcessed > 0)
-                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                        childProgressBar.Value = e.ChildProcessed;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractLogicalDependencies;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractMods)
-            {
-                message = "Extracting Mod " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
-                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
-                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
-                    parrentProgressBar.Value = e.ParrentProcessed;
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if (e.ChildProcessed > 0)
-                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                        childProgressBar.Value = e.ChildProcessed;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractMods;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractConfigs)
-            {
-                message = "Extracting Config " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
-                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
-                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
-                    parrentProgressBar.Value = e.ParrentProcessed;
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if (e.ChildProcessed > 0)
-                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                        childProgressBar.Value = e.ChildProcessed;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractConfigs;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.RestoreUserData)
-            {
-                message = "Restoring User Data " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
-                parrentProgressBar.Value = 0;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.RestoreUserData;
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                    childProgressBar.Value = e.ChildProcessed;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.PatchMods)
-            {
-                message = "Patching File " + e.currentFile + ", " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
-                parrentProgressBar.Maximum = e.ChildTotalToProcess;
-                if ((parrentProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= parrentProgressBar.Maximum))
-                    parrentProgressBar.Value = e.ChildProcessed;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.PatchMods;
-                childProgressBar.Value = 0;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.InstallFonts)
-            {
-                message = "Installing Fonts";
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.InstallFonts;
-                parrentProgressBar.Value = 0;
-                childProgressBar.Value = 0;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractUserMods)
-            {
-                message = "Extracting User Mod " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
-                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
-                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
-                    parrentProgressBar.Value = e.ParrentProcessed;
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if (e.ChildProcessed > 0)
-                    childProgressBar.Value = e.ChildProcessed;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractUserMods;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.PatchUserMods)
-            {
-                message = "User Patching File " + e.currentFile + ", " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
-                parrentProgressBar.Maximum = e.ChildTotalToProcess;
-                if ((parrentProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= parrentProgressBar.Maximum))
-                    parrentProgressBar.Value = e.ChildProcessed;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.PatchMods;
-                childProgressBar.Value = 0;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.InstallUserFonts)
-            {
-                message = "Installing User Fonts";
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.InstallFonts;
-                parrentProgressBar.Value = 0;
-                childProgressBar.Value = 0;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Done)
-            {
-                Utils.appendToLog("Installation Done");
-                message = Translations.getTranslatedString("done");
-                totalProgressBar.Value = totalProgressBar.Maximum;
-                parrentProgressBar.Maximum = 1;
-                parrentProgressBar.Value = parrentProgressBar.Maximum;
-                childProgressBar.Maximum = 1;
-                childProgressBar.Value = childProgressBar.Maximum;
-                toggleUIButtons(true);
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Uninstall)
-            {
-                totalProgressBar.Value = 0;
-                parrentProgressBar.Value = 0;
-                message = "Uninstalling file " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                    childProgressBar.Value = e.ChildProcessed;
-            }
-            else
-            {
-                Utils.appendToLog("Invalid state: " + e.InstalProgress);
-            }
-            downloadProgress.Text = message;
-        }
-
-        /*
-         * parses all the mods and configs into seperate lists for many types op options
-         * like mods/configs to install, mods/configs with data, and others
-        */
-        private void parseInstallationPart1()
-        {
+            /*
+             * parses all the mods and configs into seperate lists for many types op options
+             * like mods/configs to install, mods/configs with data, and others
+            */
             modsToInstall = new List<Mod>();
             patchList = new List<Patch>();
             userMods = new List<Mod>();
@@ -1020,6 +840,182 @@ namespace RelhaxModpack
             downloader_DownloadFileCompleted(null, null);
             //end the installation process
             return;
+        }
+
+        private void I_InstallProgressChanged(object sender, InstallerEventArgs e)
+        {
+            string message = "";
+            totalProgressBar.Maximum = (int)InstallerEventArgs.InstallProgress.Done;
+            if(e.InstalProgress == InstallerEventArgs.InstallProgress.BackupMods)
+            {
+                message = "Backing up mod file " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
+                childProgressBar.Maximum = e.ChildTotalToProcess;
+                if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                    childProgressBar.Value = e.ChildProcessed;
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.BackupMods;
+                parrentProgressBar.Value = 0;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.BackupUserData)
+            {
+                message = "Backing up userdatas " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
+                childProgressBar.Maximum = e.ChildTotalToProcess;
+                if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                    childProgressBar.Value = e.ChildProcessed;
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.BackupUserData;
+                parrentProgressBar.Value = 0;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.DeleteMods)
+            {
+                message = "Deleting files " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
+                childProgressBar.Maximum = e.ChildTotalToProcess;
+                if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                    childProgressBar.Value = e.ChildProcessed;
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.DeleteMods;
+                parrentProgressBar.Value = 0;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractGlobalDependencies)
+            {
+                message = "Extracting Package " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
+                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor,2) + " MB";
+                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
+                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
+                    parrentProgressBar.Value = e.ParrentProcessed;
+                childProgressBar.Maximum = e.ChildTotalToProcess;
+                if(e.ChildProcessed > 0)
+                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                        childProgressBar.Value = e.ChildProcessed;
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractGlobalDependencies;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractDependencies)
+            {
+                message = "Extracting Package " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
+                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
+                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
+                    parrentProgressBar.Value = e.ParrentProcessed;
+                childProgressBar.Maximum = e.ChildTotalToProcess;
+                if (e.ChildProcessed > 0)
+                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                        childProgressBar.Value = e.ChildProcessed;
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractDependencies;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractLogicalDependencies)
+            {
+                message = "Extracting Package " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
+                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
+                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
+                    parrentProgressBar.Value = e.ParrentProcessed;
+                childProgressBar.Maximum = e.ChildTotalToProcess;
+                if (e.ChildProcessed > 0)
+                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                        childProgressBar.Value = e.ChildProcessed;
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractLogicalDependencies;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractMods)
+            {
+                message = "Extracting Package " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
+                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
+                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
+                    parrentProgressBar.Value = e.ParrentProcessed;
+                childProgressBar.Maximum = e.ChildTotalToProcess;
+                if (e.ChildProcessed > 0)
+                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                        childProgressBar.Value = e.ChildProcessed;
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractMods;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractConfigs)
+            {
+                message = "Extracting Package " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
+                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
+                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
+                    parrentProgressBar.Value = e.ParrentProcessed;
+                childProgressBar.Maximum = e.ChildTotalToProcess;
+                if (e.ChildProcessed > 0)
+                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                        childProgressBar.Value = e.ChildProcessed;
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractConfigs;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.RestoreUserData)
+            {
+                message = "Restoring User Data " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
+                parrentProgressBar.Value = 0;
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.RestoreUserData;
+                childProgressBar.Maximum = e.ChildTotalToProcess;
+                if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                    childProgressBar.Value = e.ChildProcessed;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.PatchMods)
+            {
+                message = "Patching File " + e.currentFile + ", " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
+                parrentProgressBar.Maximum = e.ChildTotalToProcess;
+                if ((parrentProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= parrentProgressBar.Maximum))
+                    parrentProgressBar.Value = e.ChildProcessed;
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.PatchMods;
+                childProgressBar.Value = 0;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.InstallFonts)
+            {
+                message = "Installing Fonts";
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.InstallFonts;
+                parrentProgressBar.Value = 0;
+                childProgressBar.Value = 0;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractUserMods)
+            {
+                message = "Extracting User Mod " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
+                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
+                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
+                    parrentProgressBar.Value = e.ParrentProcessed;
+                childProgressBar.Maximum = e.ChildTotalToProcess;
+                if (e.ChildProcessed > 0)
+                    childProgressBar.Value = e.ChildProcessed;
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractUserMods;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.PatchUserMods)
+            {
+                message = "User Patching File " + e.currentFile + ", " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
+                parrentProgressBar.Maximum = e.ChildTotalToProcess;
+                if ((parrentProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= parrentProgressBar.Maximum))
+                    parrentProgressBar.Value = e.ChildProcessed;
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.PatchMods;
+                childProgressBar.Value = 0;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.InstallUserFonts)
+            {
+                message = "Installing User Fonts";
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.InstallFonts;
+                parrentProgressBar.Value = 0;
+                childProgressBar.Value = 0;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Done)
+            {
+                Utils.appendToLog("Installation Done");
+                message = Translations.getTranslatedString("done");
+                totalProgressBar.Value = totalProgressBar.Maximum;
+                parrentProgressBar.Maximum = 1;
+                parrentProgressBar.Value = parrentProgressBar.Maximum;
+                childProgressBar.Maximum = 1;
+                childProgressBar.Value = childProgressBar.Maximum;
+                toggleUIButtons(true);
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Uninstall)
+            {
+                totalProgressBar.Value = 0;
+                parrentProgressBar.Value = 0;
+                message = "Uninstalling file " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
+                childProgressBar.Maximum = e.ChildTotalToProcess;
+                if((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                    childProgressBar.Value = e.ChildProcessed;
+            }
+            else
+            {
+                Utils.appendToLog("Invalid state: " + e.InstalProgress);
+            }
+            downloadProgress.Text = message;
         }
         //check to see if we are actually installing a config
         private bool installingConfigs()
