@@ -30,9 +30,11 @@ namespace RelhaxModpack
         public string AppPath { get; set; }
         public List<Dependency> GlobalDependencies { get; set; }
         public List<Dependency> Dependencies { get; set; }
-        public List<Dependency> LogicalDependencies { get; set; }
-        public List<Mod> ModsToInstall { get; set; }
-        public List<List<Config>> ConfigListsToInstall { get; set; }
+        public List<LogicalDependnecy> LogicalDependencies { get; set; }
+        //DEPRECATED
+        //public List<Mod> ModsToInstall { get; set; }
+        //public List<List<Config>> ConfigListsToInstall { get; set; }
+        public List<DatabaseObject> ModsConfigsToInstall { get; set; }
         public List<Mod> ModsWithData { get; set; }
         public List<Config> ConfigsWithData { get; set; }
         public List<Mod> UserMods { get; set; }
@@ -357,25 +359,54 @@ namespace RelhaxModpack
             if (Directory.Exists(TanksLocation + "\\_fonts")) Directory.Delete(TanksLocation + "\\_fonts", true);
             if (!Directory.Exists(TanksLocation + "\\res_mods")) Directory.CreateDirectory(TanksLocation + "\\res_mods");
             if (!Directory.Exists(TanksLocation + "\\mods")) Directory.CreateDirectory(TanksLocation + "\\mods");
-            args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractDependencies;
+            
             //extract RelHax Mods
             Utils.appendToLog("Starting Relhax Modpack Extraction");
             string downloadedFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
             //calculate the total number of zip files to install
+            foreach (Dependency d in GlobalDependencies)
+                if (!d.dependencyZipFile.Equals(""))
+                    args.ParrentTotalToProcess++;
+
             foreach (Dependency d in Dependencies)
                 if (!d.dependencyZipFile.Equals(""))
                     args.ParrentTotalToProcess++;
-            
-            foreach (Mod m in ModsToInstall)
-                if (!m.zipFile.Equals(""))
+
+            foreach (LogicalDependnecy d in LogicalDependencies)
+                if (!d.dependencyZipFile.Equals(""))
                     args.ParrentTotalToProcess++;
 
-            foreach (List<Config> cc in ConfigListsToInstall)
-                foreach (Config c in cc)
-                    if (!c.zipFile.Equals(""))
-                        args.ParrentTotalToProcess++;
+            foreach (DatabaseObject dbo in ModsConfigsToInstall)
+                if (!dbo.zipFile.Equals(""))
+                    args.ParrentTotalToProcess++;
+
             InstallWorker.ReportProgress(0);
+            //extract global dependencies
+            foreach (Dependency d in GlobalDependencies)
+            {
+                Utils.appendToLog("Extracting Global Dependency " + d.dependencyZipFile);
+                if (!d.dependencyZipFile.Equals(""))
+                {
+                    try
+                    {
+                        this.Unzip(downloadedFilesDir + d.dependencyZipFile, TanksLocation);
+                        args.ParrentProcessed++;
+                    }
+                    catch (Exception ex)
+                    {
+                        //append the exception to the log
+                        Utils.exceptionLog("ExtractDatabaseObjects", ex);
+                        //show the error message
+                        MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                        //exit the application
+                        Application.Exit();
+                    }
+                }
+                InstallWorker.ReportProgress(0);
+            }
             //extract dependencies
+            args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractDependencies;
+            InstallWorker.ReportProgress(0);
             foreach (Dependency d in Dependencies)
             {
                 Utils.appendToLog("Extracting Dependency " + d.dependencyZipFile);
@@ -398,34 +429,96 @@ namespace RelhaxModpack
                 }
                 InstallWorker.ReportProgress(0);
             }
-            //set xvmConfigDir here because xvm is always a dependency
-            xvmConfigDir = Utils.getXVMBootLoc(TanksLocation,null,false);
-            //extract mods
-            args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractMods;
+            //extract logical dependencies
+            args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractLogicalDependencies;
             InstallWorker.ReportProgress(0);
-            foreach (Mod m in ModsToInstall)
+            foreach (LogicalDependnecy d in LogicalDependencies)
             {
-                Utils.appendToLog("Extracting Mod " + m.zipFile);
-                if (!m.zipFile.Equals(""))
-                    this.Unzip(downloadedFilesDir + m.zipFile, TanksLocation);
-                args.ParrentProcessed++;
+                Utils.appendToLog("Extracting Logical Dependency " + d.dependencyZipFile);
+                if (!d.dependencyZipFile.Equals(""))
+                {
+                    try
+                    {
+                        this.Unzip(downloadedFilesDir + d.dependencyZipFile, TanksLocation);
+                        args.ParrentProcessed++;
+                    }
+                    catch (Exception ex)
+                    {
+                        //append the exception to the log
+                        Utils.exceptionLog("ExtractDatabaseObjects", ex);
+                        //show the error message
+                        MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                        //exit the application
+                        Application.Exit();
+                    }
+                }
                 InstallWorker.ReportProgress(0);
             }
-            //extract configs
+            //set xvmConfigDir here because xvm is always a dependency, but don't log it
+            xvmConfigDir = Utils.getXVMBootLoc(TanksLocation,null,false);
+            //extract mods and configs
+            args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractMods;
+            InstallWorker.ReportProgress(0);
+            foreach (DatabaseObject dbo in ModsConfigsToInstall)
+            {
+                Utils.appendToLog("Extracting Mod/Config " + dbo.zipFile);
+                if (!dbo.zipFile.Equals(""))
+                {
+                    try
+                    {
+                        this.Unzip(downloadedFilesDir + dbo.zipFile, TanksLocation);
+                        args.ParrentProcessed++;
+                    }
+                    catch (Exception ex)
+                    {
+                        //append the exception to the log
+                        Utils.exceptionLog("ExtractDatabaseObjects", ex);
+                        //show the error message
+                        MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + dbo.zipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                        //exit the application
+                        Application.Exit();
+                    }
+                }
+                InstallWorker.ReportProgress(0);
+            }
+            //finish by moving WoTAppData folder contents into application data folder
+            //folder name is "WoTAppData"
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractConfigs;
             InstallWorker.ReportProgress(0);
-            int configLevel = 0;
-            foreach (List<Config> cfgList in ConfigListsToInstall)
+            string folderToMove = Path.Combine(TanksLocation, "WoTAppData");
+            if(Directory.Exists(folderToMove))
             {
-                foreach (Config c in cfgList)
+                Utils.appendToLog("WoTAppData folder detected, moving files to WoT cache folder");
+                //get each file and folder and move them
+                // Get the subdirectories for the specified directory
+                DirectoryInfo dir = new DirectoryInfo(folderToMove);
+                DirectoryInfo[] dirs = dir.GetDirectories();
+                // Get the files in the directory
+                FileInfo[] files = dir.GetFiles();
+                foreach (FileInfo file in files)
                 {
-                    Utils.appendToLog("Extracting Config " + c.zipFile + " of level " + configLevel);
-                    if (!c.zipFile.Equals(""))
-                        this.Unzip(downloadedFilesDir + c.zipFile, TanksLocation);
-                    args.ParrentProcessed++;
+                    //move the file, overwrite if required
+                    string temppath = Path.Combine(AppDataFolder, file.Name);
+                    args.currentFile = temppath;
                     InstallWorker.ReportProgress(0);
+                    if (File.Exists(temppath))
+                        File.Delete(temppath);
+                    file.MoveTo(temppath);
                 }
-                configLevel++;
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    //call the recursive function to move
+                    //the sub dir is actaully the top dir for the function
+                    string temppath = Path.Combine(TanksLocation, "WoTAppData", subdir.Name);
+                    string temppath2 = Path.Combine(AppDataFolder, subdir.Name);
+                    args.currentFile = temppath;
+                    InstallWorker.ReportProgress(0);
+                    DirectoryMove(temppath,temppath2,true,true,false);
+                }
+                //call the process folders function to delete any leftover folders
+                Utils.processDirectory(folderToMove, false);
+                if (Directory.Exists(folderToMove))
+                    Directory.Delete(folderToMove);
             }
             Utils.appendToLog("Finished Relhax Modpack Extraction");
         }
@@ -1014,19 +1107,6 @@ namespace RelhaxModpack
                             {
                                 zip[i].FileName = Regex.Replace(zip[i].FileName, "configs/xvm/xvmConfigFolderName", "configs/xvm/" + xvmConfigDir);
                             }
-                            if (Regex.IsMatch(zip[i].FileName, "WoTAppData"))
-                            {
-                                //TODO: modify so that it extracts to the correct place
-                                if (AppDataFolder == null || AppDataFolder.Equals("") || AppDataFolder.Equals("-1"))
-                                {
-                                    Utils.appendToLog("application tried to extract to WoT cache data, but WoT cache data does not exist");
-                                    Utils.appendToLog("instead extracted to 'WoTAppData'");
-                                }
-                                else
-                                {
-                                    zip[i].FileName = Regex.Replace(zip[i].FileName, "WoTAppData", AppDataFolder);
-                                }
-                            }
                             //put the entries on disk
                             fs.Write(Encoding.UTF8.GetBytes(zip[i].FileName + "\n"), 0, Encoding.UTF8.GetByteCount(zip[i].FileName + "\n"));
                         }
@@ -1081,9 +1161,9 @@ namespace RelhaxModpack
                     GlobalDependencies = null;
                     Dependencies = null;
                     LogicalDependencies = null;
-                    ModsToInstall = null;
-                    ConfigListsToInstall = null;
+                    ModsConfigsToInstall = null;
                     ModsWithData = null;
+                    ConfigsWithData = null;
                     UserMods = null;
                     patchList = null;
                     args = null;

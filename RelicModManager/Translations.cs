@@ -182,14 +182,14 @@ namespace RelhaxModpack
             //Componet: cancelDownloadButton
             //
             english.Add("appDataFolderNotExistHeader", "Could not detect WoT cache folder");
-            german.Add("appDataFolderNotExistHeader", "TODO");
-            polish.Add("appDataFolderNotExistHeader", "TODO");
+            german.Add("appDataFolderNotExistHeader", "MISSING TRANSLATION: ID=appDataFolderNotExistHeader, LANGUAGE = GERMAN");
+            polish.Add("appDataFolderNotExistHeader", "MISSING TRANSLATION: ID=appDataFolderNotExistHeader, LANGUAGE = POLISH");
 
             //Componet: cancelDownloadButton
             //
             english.Add("appDataFolderNotExist", "The installer could not detect the WoT cache folder. Continue the installation witout clearing WoT cache?");
-            german.Add("appDataFolderNotExist", "TODO");
-            polish.Add("appDataFolderNotExist", "TODO");
+            german.Add("appDataFolderNotExist", "MISSING TRANSLATION: ID=appDataFolderNotExist, LANGUAGE = GERMAN");
+            polish.Add("appDataFolderNotExist", "MISSING TRANSLATION: ID=appDataFolderNotExist, LANGUAGE = POLISH");
 
             //Section: FirstLoadHelper
 
@@ -973,7 +973,7 @@ namespace RelhaxModpack
 
             //Component: clearCachCBExplanation
             //
-            english.Add("clearCachCBExplanation", "TODO");
+            english.Add("clearCachCBExplanation", "Clear the WoT cache app data directory. Performs the same task as the similar option that was in OMC");
             german.Add("clearCachCBExplanation", "MISSING TRANSLATION: ID=clearCachCBExplanation, LANGUAGE = GERMAN");
             polish.Add("clearCachCBExplanation", "MISSING TRANSLATION: ID=clearCachCBExplanation, LANGUAGE = POLISH");
         }
