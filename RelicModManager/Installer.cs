@@ -290,30 +290,33 @@ namespace RelhaxModpack
             Utils.appendToLog("Started clearing of WoT cache files");
 
             string[] fileFolderNames = { "preferences.xml", "preferences_ct.xml", "modsettings.dat", "xvm", "pmod" };
+            string AppPathTempFolder = Path.Combine(AppPath, "RelHaxTemp", "AppDataBackup");
 
             //1 - Move out prefrences.xml, prefrences_ct.xml, and xvm folder
-            foreach (var f in fileFolderNames)
+            try
             {
-                try
+                if (!Directory.Exists(AppPathTempFolder))
+                    Directory.CreateDirectory(AppPathTempFolder);
+                foreach (var f in fileFolderNames)
                 {
                     if (Directory.Exists(Path.Combine(AppDataFolder, f)))
                     {
-                        DirectoryCopy(Path.Combine(AppDataFolder, f), Path.Combine(AppPath, f), true, false);
+                        DirectoryMove(Path.Combine(AppDataFolder, f), Path.Combine(AppPathTempFolder, f), true, true, false);
                     }
                     else if (File.Exists(Path.Combine(AppDataFolder, f)))
                     {
-                        File.Move(Path.Combine(AppDataFolder, f), Path.Combine(AppPath, f));
+                        File.Move(Path.Combine(AppDataFolder, f), Path.Combine(AppPathTempFolder, f));
                     }
                 }
-                catch (Exception ex)
-                {
-                    Utils.exceptionLog("ClearWoTCache, step 1", ex);
-                }
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("ClearWoTCache, step 1", ex);
             }
 
+            //2 - recursivly delete entire WorldOfTanks folder
             try
             {
-                //2 - recursivly delete entire WorldOfTanks folder
                 NumFilesToProcess(AppDataFolder);
                 DirectoryDelete(AppDataFolder, true);
             }
@@ -322,24 +325,26 @@ namespace RelhaxModpack
                 Utils.exceptionLog("ClearWoTCache, step 2", ex);
             }
 
-            //3 - re-create WorldOfTanks folder and move back 3 above files
-            foreach (var f in fileFolderNames)
+            //3 - re-create WorldOfTanks folder and move back 3 above files and delete temp file
+            try
             {
-                try
+                foreach (var f in fileFolderNames)
                 {
-                    if (Directory.Exists(Path.Combine(AppPath, f)))
+                    if (Directory.Exists(Path.Combine(AppPathTempFolder, f)))
                     {
-                        DirectoryCopy(Path.Combine(AppPath, f), Path.Combine(AppDataFolder, f), true, false);
+                        DirectoryMove(Path.Combine(AppPathTempFolder, f), Path.Combine(AppDataFolder, f), true, true, false);
                     }
-                    else if (File.Exists(Path.Combine(AppPath, f)))
+                    else if (File.Exists(Path.Combine(AppPathTempFolder, f)))
                     {
-                        File.Move(Path.Combine(AppPath, f), Path.Combine(AppDataFolder, f));
+                        File.Move(Path.Combine(AppPathTempFolder, f), Path.Combine(AppDataFolder, f));
                     }
                 }
-                catch (Exception ex)
-                {
-                    Utils.exceptionLog("ClearWoTCache, step 3", ex);
-                }
+                if (Directory.Exists(AppPathTempFolder))
+                    Directory.Delete(AppPathTempFolder);
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("ClearWoTCache, step 3", ex);
             }
             Utils.appendToLog("Finished clearing of WoT cache files");
         }
@@ -922,6 +927,50 @@ namespace RelhaxModpack
                 {
                     string temppath = Path.Combine(destDirName, subdir.Name);
                     DirectoryCopy(subdir.FullName, temppath, copySubDirs);
+                }
+            }
+        }
+        //main method for moving every file from one place to another. solves the issue of Directory.move() does not support moving across volumes
+        private void DirectoryMove(string sourceDirName, string destDirName, bool copySubDirs, bool overwrite, bool reportProgress = true)
+        {
+            //call the recursive function to move
+            _DirectoryMove(sourceDirName, destDirName, copySubDirs, overwrite, reportProgress);
+            //call the process folders function to delete any leftover folders
+            Utils.processDirectory(sourceDirName, false);
+            if (Directory.Exists(sourceDirName))
+                Directory.Delete(sourceDirName);
+        }
+        //recursivly moves every file from one place to another
+        private void _DirectoryMove(string sourceDirName, string destDirName, bool copySubDirs, bool overwrite, bool reportProgress = true)
+        {
+            // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            // If the destination directory doesn't exist, create it.
+            if (!Directory.Exists(destDirName))
+            {
+                Directory.CreateDirectory(destDirName);
+                if (reportProgress)
+                    InstallWorker.ReportProgress(args.ChildProcessed++);
+            }
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string temppath = Path.Combine(destDirName, file.Name);
+                if (File.Exists(temppath) && overwrite)
+                    File.Delete(temppath);
+                file.MoveTo(temppath);
+                if (reportProgress)
+                    InstallWorker.ReportProgress(args.ChildProcessed++);
+            }
+            // If copying subdirectories, copy them and their contents to new location.
+            if (copySubDirs)
+            {
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    string temppath = Path.Combine(destDirName, subdir.Name);
+                    _DirectoryMove(subdir.FullName, temppath, copySubDirs,overwrite,reportProgress);
                 }
             }
         }
