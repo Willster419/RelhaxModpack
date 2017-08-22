@@ -748,6 +748,7 @@ namespace RelhaxModpack
             parsedCatagoryLists = list.parsedCatagoryList;
             modsWithData = new List<Mod>();
             configsWithData = new List<Config>();
+            //List<DatabaseObject> databaseObjectsToInstall = new List<DatabaseObject>();
             //add the global dependencies to the dependency list
             foreach (Dependency d in list.globalDependencies)
             {

@@ -962,6 +962,7 @@ namespace RelhaxModpack
                             }
                             if (Regex.IsMatch(zip[i].FileName, "WoTAppData"))
                             {
+                                //TODO: modify so that it extracts to the correct place
                                 if (AppDataFolder == null || AppDataFolder.Equals("") || AppDataFolder.Equals("-1"))
                                 {
                                     Utils.appendToLog("application tried to extract to WoT cache data, but WoT cache data does not exist");
