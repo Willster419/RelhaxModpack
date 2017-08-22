@@ -281,33 +281,36 @@ namespace RelhaxModpack
         {
             if (AppDataFolder == null || AppDataFolder.Equals("") || AppDataFolder.Equals("-1"))
             {
+                if (AppDataFolder == null) AppDataFolder = "(null)";
+                if (AppDataFolder.Equals("")) AppDataFolder = "(empty string)";
                 Utils.appendToLog("ERROR: AppDataFolder not correct, value: " + AppDataFolder);
                 Utils.appendToLog("Aborting ClearWoTCache()");
                 return;
             }
             Utils.appendToLog("Started clearing of WoT cache files");
-            string PrefPath = Path.Combine(AppDataFolder, "preferences.xml");
-            string PrefMovePath = Path.Combine(AppPath, "preferences.xml");
-            string PrefCTPath = Path.Combine(AppDataFolder, "preferences_ct.xml");
-            string PrefCTMovePath = Path.Combine(AppPath, "preferences_ct.xml");
-            string XVMFolderPath = Path.Combine(AppDataFolder, "xvm");
-            string XVMFolderMovePath = Path.Combine(AppPath, "xvm");
-            try
+
+            string[] fileFolderNames = { "preferences.xml", "preferences_ct.xml", "modsettings.dat", "xvm", "pmod" };
+
+            //1 - Move out prefrences.xml, prefrences_ct.xml, and xvm folder
+            foreach (var f in fileFolderNames)
             {
-                //1 - Move out prefrences.xml, prefrences_ct.xml, and xvm folder
-                if(File.Exists(PrefPath))
-                    File.Move(PrefPath, PrefMovePath);
-                if (File.Exists(PrefCTPath))
-                    File.Move(PrefCTPath, PrefCTMovePath);
-                if (Directory.Exists(XVMFolderPath))
+                try
                 {
-                    DirectoryCopy(XVMFolderPath, XVMFolderMovePath, true, false);
-                }   
+                    if (Directory.Exists(Path.Combine(AppDataFolder, f)))
+                    {
+                        DirectoryCopy(Path.Combine(AppDataFolder, f), Path.Combine(AppPath, f), true, false);
+                    }
+                    else if (File.Exists(Path.Combine(AppDataFolder, f)))
+                    {
+                        File.Move(Path.Combine(AppDataFolder, f), Path.Combine(AppPath, f));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Utils.exceptionLog("ClearWoTCache, step 1", ex);
+                }
             }
-            catch (Exception ex)
-            {
-                Utils.exceptionLog("ClearWoTCache, step 1", ex);
-            }
+
             try
             {
                 //2 - recursivly delete entire WorldOfTanks folder
@@ -318,27 +321,29 @@ namespace RelhaxModpack
             {
                 Utils.exceptionLog("ClearWoTCache, step 2", ex);
             }
-            try
+
+            //3 - re-create WorldOfTanks folder and move back 3 above files
+            foreach (var f in fileFolderNames)
             {
-                //3 - re-create WorldOfTanks folder and move back 3 above files
-                if (!Directory.Exists(AppDataFolder))
-                    Directory.CreateDirectory(AppDataFolder);
-                if (File.Exists(PrefMovePath))
-                    File.Move(PrefMovePath, PrefPath);
-                if (File.Exists(PrefCTMovePath))
-                    File.Move(PrefCTMovePath, PrefCTPath);
-                if (Directory.Exists(XVMFolderMovePath))
+                try
                 {
-                    DirectoryCopy(XVMFolderMovePath, XVMFolderPath, true, false);
-                    Directory.Delete(XVMFolderMovePath,true);
+                    if (Directory.Exists(Path.Combine(AppPath, f)))
+                    {
+                        DirectoryCopy(Path.Combine(AppPath, f), Path.Combine(AppDataFolder, f), true, false);
+                    }
+                    else if (File.Exists(Path.Combine(AppPath, f)))
+                    {
+                        File.Move(Path.Combine(AppPath, f), Path.Combine(AppDataFolder, f));
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                Utils.exceptionLog("ClearWoTCache, step 3", ex);
+                catch (Exception ex)
+                {
+                    Utils.exceptionLog("ClearWoTCache, step 3", ex);
+                }
             }
             Utils.appendToLog("Finished clearing of WoT cache files");
         }
+        
         //Step 5-9: Extract All DatabaseObjects
         public void ExtractDatabaseObjects()
         {
