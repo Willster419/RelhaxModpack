@@ -690,7 +690,14 @@ namespace RelhaxModpack
             list.ShowDialog();
             if (list.cancel)
             {
-                list.Dispose();
+                try
+                {
+                    list.Dispose();
+                }
+                catch
+                {
+                    Utils.appendToLog("INFO: Failed to dispose list");
+                }
                 list = null;
                 GC.Collect();
                 toggleUIButtons(true);

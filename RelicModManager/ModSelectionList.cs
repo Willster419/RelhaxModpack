@@ -241,9 +241,12 @@ namespace RelhaxModpack
         //must be only one catagory
         private void addAllMods()
         {
-            pw.progressBar1.Minimum = 0;
-            pw.progressBar1.Maximum = Utils.totalModConfigComponents;
-            pw.progressBar1.Value = 0;
+            if (pw != null)
+            {
+                pw.progressBar1.Minimum = 0;
+                pw.progressBar1.Maximum = Utils.totalModConfigComponents;
+                pw.progressBar1.Value = 0;
+            }
             loadingConfig = true;
             Utils.appendToLog("Loading ModSelectionList with view " + Settings.sView);
             foreach (TabPage t in this.modTabGroups.TabPages)
@@ -272,11 +275,14 @@ namespace RelhaxModpack
                         }
                         foreach (Mod m in c.mods)
                         {
-                            pw.loadingDescBox.Text = Translations.getTranslatedString("loading") + " " + m.name;
-                            int prog = pw.progressBar1.Value + 1;
-                            if ((pw.progressBar1.Minimum < prog) && (prog <= pw.progressBar1.Maximum))
-                                pw.progressBar1.Value++;
-                            Application.DoEvents();
+                            if (pw != null)
+                            {
+                                pw.loadingDescBox.Text = Translations.getTranslatedString("loading") + " " + m.name;
+                                int prog = pw.progressBar1.Value + 1;
+                                if ((pw.progressBar1.Minimum < prog) && (prog <= pw.progressBar1.Maximum))
+                                    pw.progressBar1.Value++;
+                                Application.DoEvents();
+                            }
                             if (Settings.sView == Settings.SelectionView.defaultt)
                             {
                                 //use default UI
@@ -303,7 +309,8 @@ namespace RelhaxModpack
         //adds a tab view for each mod catagory
         private void makeTabs()
         {
-            modTabGroups.TabPages.Clear();
+            if(modTabGroups.TabPages.Count > 0)
+                modTabGroups.TabPages.Clear();
             modTabGroups.Font = Settings.appFont;
             foreach (Category c in parsedCatagoryList)
             {
@@ -2194,10 +2201,43 @@ namespace RelhaxModpack
         {
             Utils.clearSelectionMemory(parsedCatagoryList);
             Utils.appendToLog("clearSelectionsButton pressed, clearing selections");
-            MessageBox.Show(Translations.getTranslatedString("selectionsCleared"));
-            //reload the UI
+            //dispose of not needed stuff and reload the UI
             this.UseWaitCursor = true;
             modTabGroups.Enabled = false;
+            if (modTabGroups != null)
+            {
+                foreach (System.Windows.Forms.TabPage t in this.modTabGroups.TabPages)
+                {
+                    foreach (System.Windows.Forms.Control host in t.Controls)
+                    {
+                        if (host is System.Windows.Forms.Integration.ElementHost)
+                        {
+                            System.Windows.Forms.Integration.ElementHost host2 = (System.Windows.Forms.Integration.ElementHost)host;
+                            host2.Child = null;
+                            host2.Dispose();
+                            host2 = null;
+                        }
+                    }
+                    if (t.Controls.Count > 0)
+                        t.Controls.Clear();
+                    if (t != null)
+                        t.Dispose();
+                }
+                if (modTabGroups.TabPages.Count > 0)
+                    modTabGroups.TabPages.Clear();
+                if (modTabGroups.Controls.Count > 0)
+                    modTabGroups.Controls.Clear();
+                if (p != null)
+                {
+                    p.Dispose();
+                    p = null;
+                }
+                if (pw != null)
+                {
+                    pw.Dispose();
+                    pw = null;
+                }
+            }
             this.makeTabs();
             Settings.setUIColor(this);
             this.addAllMods();
@@ -2205,6 +2245,7 @@ namespace RelhaxModpack
             Settings.setUIColor(this);
             this.UseWaitCursor = false;
             modTabGroups.Enabled = true;
+            MessageBox.Show(Translations.getTranslatedString("selectionsCleared"));
             ModSelectionList_SizeChanged(null, null);
         }
 

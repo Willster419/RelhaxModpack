@@ -43,13 +43,6 @@
                         modTabGroups.TabPages.Clear();
                     if(modTabGroups.Controls.Count > 0)
                         modTabGroups.Controls.Clear();
-                    if(tabPage11.Controls.Count > 0)
-                        tabPage11.Controls.Clear();
-                    if (tabPage11 != null)
-                    {
-                        tabPage11.Dispose();
-                        tabPage11 = null;
-                    }
                     modTabGroups.Dispose();
                     modTabGroups = null;
                 }
@@ -98,11 +91,9 @@
             this.clearSelectionsButton = new System.Windows.Forms.Button();
             this.TanksPath = new System.Windows.Forms.Label();
             this.TanksVersionLabel = new System.Windows.Forms.Label();
-            this.tabPage11 = new System.Windows.Forms.TabPage();
             this.modTabGroups = new System.Windows.Forms.TabControl();
             this.expandAllButton = new System.Windows.Forms.Button();
             this.colapseAllButton = new System.Windows.Forms.Button();
-            this.modTabGroups.SuspendLayout();
             this.SuspendLayout();
             // 
             // continueButton
@@ -200,18 +191,8 @@
             this.TanksVersionLabel.TabIndex = 15;
             this.TanksVersionLabel.Text = "WoT ";
             // 
-            // tabPage11
-            // 
-            this.tabPage11.Location = new System.Drawing.Point(4, 22);
-            this.tabPage11.Name = "tabPage11";
-            this.tabPage11.Size = new System.Drawing.Size(960, 312);
-            this.tabPage11.TabIndex = 10;
-            this.tabPage11.Text = "Custom UserPackages";
-            this.tabPage11.UseVisualStyleBackColor = true;
-            // 
             // modTabGroups
             // 
-            this.modTabGroups.Controls.Add(this.tabPage11);
             this.modTabGroups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.modTabGroups.Location = new System.Drawing.Point(12, 76);
             this.modTabGroups.Multiline = true;
@@ -268,7 +249,6 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ModSelectionList_FormClosing);
             this.Load += new System.EventHandler(this.ModSelectionList_Load);
             this.SizeChanged += new System.EventHandler(this.ModSelectionList_SizeChanged);
-            this.modTabGroups.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -286,7 +266,6 @@
         private System.Windows.Forms.Button clearSelectionsButton;
         private System.Windows.Forms.Label TanksPath;
         private System.Windows.Forms.Label TanksVersionLabel;
-        private System.Windows.Forms.TabPage tabPage11;
         private System.Windows.Forms.TabControl modTabGroups;
         private System.Windows.Forms.Button expandAllButton;
         private System.Windows.Forms.Button colapseAllButton;
