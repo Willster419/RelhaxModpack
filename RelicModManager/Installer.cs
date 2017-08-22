@@ -281,6 +281,8 @@ namespace RelhaxModpack
         {
             if (AppDataFolder == null || AppDataFolder.Equals("") || AppDataFolder.Equals("-1"))
             {
+                if (AppDataFolder == null) AppDataFolder = "(null)";
+                if (AppDataFolder.Equals("")) AppDataFolder = "(empty string)";
                 Utils.appendToLog("ERROR: AppDataFolder not correct, value: " + AppDataFolder);
                 Utils.appendToLog("Aborting ClearWoTCache()");
                 return;
