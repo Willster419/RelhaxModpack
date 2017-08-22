@@ -2480,18 +2480,20 @@ namespace RelhaxModpack
             return temp;
         }
         //returns the folder(s) to get to the xvm config folder directory
-        public static string getXVMBootLoc(string tanksLocation, string customBootFileLoc = null)
+        public static string getXVMBootLoc(string tanksLocation, string customBootFileLoc = null, bool writeToLog = true)
         {
             string bootFile = tanksLocation + xvmBootFileLoc1;
             if (customBootFileLoc != null)
                 bootFile = customBootFileLoc;
             if (!File.Exists(bootFile))
             {
-                appendToLog("ERROR: xvm config boot file does not exist at " + xvmBootFileLoc1 + ", checking " + xvmBootFileLoc2);
+                if(writeToLog)
+                    appendToLog("ERROR: xvm config boot file does not exist at " + xvmBootFileLoc1 + ", checking " + xvmBootFileLoc2);
                 bootFile = xvmBootFileLoc2;
                 if (!File.Exists(bootFile))
                 {
-                    appendToLog("ERROR: xvm config boot file does not exist at " + xvmBootFileLoc2 + ", aborting patch");
+                    if(writeToLog)
+                        appendToLog("ERROR: xvm config boot file does not exist at " + xvmBootFileLoc2 + ", aborting patch");
                     return null;
                 }
             }

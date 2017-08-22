@@ -178,6 +178,19 @@ namespace RelhaxModpack
             english.Add("cancelDownloadButton", "Cancel Download");
             german.Add("cancelDownloadButton", "Download abbrechen");
             polish.Add("cancelDownloadButton", "Anuluj pobieranie");
+
+            //Componet: cancelDownloadButton
+            //
+            english.Add("appDataFolderNotExistHeader", "Could not detect WoT cache folder");
+            german.Add("appDataFolderNotExistHeader", "TODO");
+            polish.Add("appDataFolderNotExistHeader", "TODO");
+
+            //Componet: cancelDownloadButton
+            //
+            english.Add("appDataFolderNotExist", "The installer could not detect the WoT cache folder. Continue the installation witout clearing WoT cache?");
+            german.Add("appDataFolderNotExist", "TODO");
+            polish.Add("appDataFolderNotExist", "TODO");
+
             //Section: FirstLoadHelper
 
             //Componet: helperText

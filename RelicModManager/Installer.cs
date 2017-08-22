@@ -132,42 +132,35 @@ namespace RelhaxModpack
                 DeleteMods();
             }
             ResetArgs();
-            //Step 3a 4?: Delete user apadata cache
+            //Step 4: Delete user apadata cache
             if (Settings.clearCache)
             {
                 args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteWoTCache;
                 ClearWoTCache();
             }
             ResetArgs();
-            //Step 4: Extracts Mods
+            //Step 5-9: Extracts Mods
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractGlobalDependencies;
             ExtractDatabaseObjects();
             ResetArgs();
-            //Step 9: Restore User Data
+            //Step 10: Restore User Data
             if (Settings.saveUserData)
             {
                 args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreUserData;
                 RestoreUserData();
             }
             ResetArgs();
-            //Step 10: Patch Mods
+            //Step 11: Patch Mods
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchMods;
             if (Directory.Exists(TanksLocation + "\\_patch"))
                 PatchFiles();
             ResetArgs();
-            /*
-            //Step 11: Install Fonts
-            args.InstalProgress = InstallerEventArgs.InstallProgress.InstallFonts;
-            if (Directory.Exists(TanksLocation + "\\_fonts"))
-                InstallFonts();
-            ResetArgs();
-            */
             //Step 12: Extract User Mods
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractUserMods;
             if(UserMods.Count > 0)
                 ExtractUserMods();
             ResetArgs();
-            //Step 13: Patch Mods
+            //Step 13: Patch Mods if User Mods extracted patch files
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchUserMods;
             if (Directory.Exists(TanksLocation + "\\_patch"))
                 PatchFiles();
@@ -286,9 +279,67 @@ namespace RelhaxModpack
         //Step 4: Clear WoT program cache
         public void ClearWoTCache()
         {
-            //TODO
+            if (AppDataFolder == null || AppDataFolder.Equals("") || AppDataFolder.Equals("-1"))
+            {
+                Utils.appendToLog("ERROR: AppDataFolder not correct, value: " + AppDataFolder);
+                Utils.appendToLog("Aborting ClearWoTCache()");
+                return;
+            }
+            Utils.appendToLog("Started clearing of WoT cache files");
+            string PrefPath = Path.Combine(AppDataFolder, "preferences.xml");
+            string PrefMovePath = Path.Combine(AppPath, "preferences.xml");
+            string PrefCTPath = Path.Combine(AppDataFolder, "preferences_ct.xml");
+            string PrefCTMovePath = Path.Combine(AppPath, "preferences_ct.xml");
+            string XVMFolderPath = Path.Combine(AppDataFolder, "xvm");
+            string XVMFolderMovePath = Path.Combine(AppPath, "xvm");
+            try
+            {
+                //1 - Move out prefrences.xml, prefrences_ct.xml, and xvm folder
+                if(File.Exists(PrefPath))
+                    File.Move(PrefPath, PrefMovePath);
+                if (File.Exists(PrefCTPath))
+                    File.Move(PrefCTPath, PrefCTMovePath);
+                if (Directory.Exists(XVMFolderPath))
+                {
+                    DirectoryCopy(XVMFolderPath, XVMFolderMovePath, true, false);
+                }   
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("ClearWoTCache, step 1", ex);
+            }
+            try
+            {
+                //2 - recursivly delete entire WorldOfTanks folder
+                NumFilesToProcess(AppDataFolder);
+                DirectoryDelete(AppDataFolder, true);
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("ClearWoTCache, step 2", ex);
+            }
+            try
+            {
+                //3 - re-create WorldOfTanks folder and move back 3 above files
+                if (!Directory.Exists(AppDataFolder))
+                    Directory.CreateDirectory(AppDataFolder);
+                if (File.Exists(PrefMovePath))
+                    File.Move(PrefMovePath, PrefPath);
+                if (File.Exists(PrefCTMovePath))
+                    File.Move(PrefCTMovePath, PrefCTPath);
+                if (Directory.Exists(XVMFolderMovePath))
+                {
+                    DirectoryCopy(XVMFolderMovePath, XVMFolderPath, true, false);
+                    Directory.Delete(XVMFolderMovePath,true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("ClearWoTCache, step 3", ex);
+            }
+            Utils.appendToLog("Finished clearing of WoT cache files");
         }
-        //Step 4-8: Extract All DatabaseObjects
+        //Step 5-9: Extract All DatabaseObjects
         public void ExtractDatabaseObjects()
         {
             //just a double-check to delete all patches
@@ -338,7 +389,7 @@ namespace RelhaxModpack
                 InstallWorker.ReportProgress(0);
             }
             //set xvmConfigDir here because xvm is always a dependency
-            xvmConfigDir = Utils.getXVMBootLoc(TanksLocation);
+            xvmConfigDir = Utils.getXVMBootLoc(TanksLocation,null,false);
             //extract mods
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractMods;
             InstallWorker.ReportProgress(0);
@@ -369,7 +420,7 @@ namespace RelhaxModpack
             Utils.appendToLog("Finished Relhax Modpack Extraction");
         }
 
-        //Step 9: Restore User Data
+        //Step 10: Restore User Data
         public void RestoreUserData()
         {
             args.ParrentTotalToProcess = ModsWithData.Count + ConfigsWithData.Count;
@@ -433,7 +484,7 @@ namespace RelhaxModpack
             }
         }
 
-        //Step 10/13: Patch All files
+        //Step 11/13: Patch All files
         public void PatchFiles()
         {
             //Give the OS time to process the folder change...
@@ -550,7 +601,7 @@ namespace RelhaxModpack
                 Directory.Delete(TanksLocation + "\\_patch", true);
         }
 
-        //Step 11/14: Install Fonts
+        //Step 14: Install Fonts
         public void InstallFonts()
         {
             Utils.appendToLog("Checking for fonts to install");
@@ -764,7 +815,6 @@ namespace RelhaxModpack
             FileInfo[] files = dir.GetFiles();
             foreach (FileInfo file in files)
             {
-                //numFilesToProcessInt++;
                 args.ChildTotalToProcess++;
             }
             foreach (DirectoryInfo subdir in dirs)
@@ -839,7 +889,7 @@ namespace RelhaxModpack
             }
         }
         //recursivly copies every file from one place to another
-        private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, bool reportProgress = true)
         {
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
@@ -848,7 +898,8 @@ namespace RelhaxModpack
             if (!Directory.Exists(destDirName))
             {
                 Directory.CreateDirectory(destDirName);
-                InstallWorker.ReportProgress(args.ChildProcessed++);
+                if(reportProgress)
+                    InstallWorker.ReportProgress(args.ChildProcessed++);
             }
             // Get the files in the directory and copy them to the new location.
             FileInfo[] files = dir.GetFiles();
@@ -856,7 +907,8 @@ namespace RelhaxModpack
             {
                 string temppath = Path.Combine(destDirName, file.Name);
                 file.CopyTo(temppath, false);
-                InstallWorker.ReportProgress(args.ChildProcessed++);
+                if(reportProgress)
+                    InstallWorker.ReportProgress(args.ChildProcessed++);
             }
             // If copying subdirectories, copy them and their contents to new location.
             if (copySubDirs)
@@ -910,8 +962,15 @@ namespace RelhaxModpack
                             }
                             if (Regex.IsMatch(zip[i].FileName, "WoTAppData"))
                             {
-                                //TODO: TEST
-                                zip[i].FileName = Regex.Replace(zip[i].FileName, "WoTAppData", AppDataFolder);
+                                if (AppDataFolder == null || AppDataFolder.Equals("") || AppDataFolder.Equals("-1"))
+                                {
+                                    Utils.appendToLog("application tried to extract to WoT cache data, but WoT cache data does not exist");
+                                    Utils.appendToLog("instead extracted to 'WoTAppData'");
+                                }
+                                else
+                                {
+                                    zip[i].FileName = Regex.Replace(zip[i].FileName, "WoTAppData", AppDataFolder);
+                                }
                             }
                             //put the entries on disk
                             fs.Write(Encoding.UTF8.GetBytes(zip[i].FileName + "\n"), 0, Encoding.UTF8.GetByteCount(zip[i].FileName + "\n"));

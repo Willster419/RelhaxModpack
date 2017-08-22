@@ -215,7 +215,8 @@ namespace RelhaxModpack
                     ModsWithData = this.modsWithData,
                     TanksLocation = this.tanksLocation,
                     TanksVersion = this.tanksVersion,
-                    UserMods = this.userMods
+                    UserMods = this.userMods,
+                    AppDataFolder = this.appDataFolder
                 };
                 ins.InstallProgressChanged += I_InstallProgressChanged;
                 ins.StartInstallation();
@@ -637,11 +638,18 @@ namespace RelhaxModpack
             if(!Directory.Exists(appDataFolder))
             {
                 Utils.appendToLog("ERROR: appDataFolder does not exist");
-                if(Settings.clearCache)
+                appDataFolder = "-1";
+                if (Settings.clearCache)
                 {
-                    //cant clear cache if the folder doens't exist #rollSafe
-                    Utils.appendToLog("skipped clearing cache since folder does not exist");
-                    MessageBox.Show(Translations.getTranslatedString("appDataFolderError"));
+                    //can't locate folder, continue installation anyway?
+                    DialogResult clearCacheFailResult = MessageBox.Show(Translations.getTranslatedString("appDataFolderNotExist"), Translations.getTranslatedString("appDataFolderNotExistHeader"),
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if(clearCacheFailResult == DialogResult.No)
+                    {
+                        Utils.appendToLog("user stopped installation");
+                        toggleUIButtons(true);
+                        return;
+                    }
                 }
             }
             //reset the interface
@@ -652,6 +660,7 @@ namespace RelhaxModpack
             {
                 if (this.manuallyFindTanks() == null)
                 {
+                    Utils.appendToLog("user stopped installation");
                     toggleUIButtons(true);
                     return;
                 }
@@ -895,6 +904,13 @@ namespace RelhaxModpack
                     childProgressBar.Value = e.ChildProcessed;
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.DeleteMods;
                 parrentProgressBar.Value = 0;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.DeleteWoTCache)
+            {
+                message = "Deleting WoT Cache...";
+                childProgressBar.Value = 0;
+                parrentProgressBar.Value = 0;
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.DeleteWoTCache;
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractGlobalDependencies)
             {
