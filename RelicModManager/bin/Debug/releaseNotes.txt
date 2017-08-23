@@ -1,3 +1,18 @@
+Version 24.5.0:
+-Fixed issue with SSL certificate. Temporary solution to antivirus problems. We are working on a permanent solution. You can see the new virustotal scan here: https://www.virustotal.com/#/file/ed81484aa5238523c8d40f767957baac4bc6242d375d2c6d9a96936979abbfed/detection
+-Fixed flickering in the display text box
+-Changed UI handling. If you unselect an item, all sub-items are unselected. Finally
+-Added support for clearing the WoT cache (appdata) folder, like in the old OMC
+-Added support for extracting files to the WoT cache (appdata) folder
+-Updated installer code. Installs by each tab top down, rather than each tab at each level
+-Updated exception handling code
+-Added universal build time
+-Changed mod database parser from XMLDocument to XDocument. It is faster and offers more debugging info
+-Fixed memory leak, should significantly reduce the "not enough memory" errors
+-Optimized the loading of a config, the UI is not redrawn. Reduces time from 1.5 seconds to 100milliseconds
+-Fixed display to file during installation. It will now stay on the same line
+
+
 Version 24.1.0:
 -Fixed Install procedure. Fonts are only installed at the end
 -Fixed bug with the actual font install process
