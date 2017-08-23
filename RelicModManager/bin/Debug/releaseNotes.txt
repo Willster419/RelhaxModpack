@@ -1,3 +1,6 @@
+Version 24.5.1:
+-Updated Translations
+
 Version 24.5.0:
 -Fixed issue with SSL certificate. Temporary solution to antivirus problems. We are working on a permanent solution. You can see the new virustotal scan here: https://www.virustotal.com/#/file/ed81484aa5238523c8d40f767957baac4bc6242d375d2c6d9a96936979abbfed/detection
 -Fixed flickering in the display text box

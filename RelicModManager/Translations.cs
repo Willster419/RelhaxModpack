@@ -182,14 +182,20 @@ namespace RelhaxModpack
             //Componet: cancelDownloadButton
             //
             english.Add("appDataFolderNotExistHeader", "Could not detect WoT cache folder");
-            german.Add("appDataFolderNotExistHeader", "MISSING TRANSLATION: ID=appDataFolderNotExistHeader, LANGUAGE = GERMAN");
-            polish.Add("appDataFolderNotExistHeader", "MISSING TRANSLATION: ID=appDataFolderNotExistHeader, LANGUAGE = POLISH");
+            german.Add("appDataFolderNotExistHeader", "Konnte den Cache-Ordner WoT nicht erkennen");
+            polish.Add("appDataFolderNotExistHeader", "Nie można wykryć folderu pamięci podręcznej WoT");
 
             //Componet: cancelDownloadButton
             //
             english.Add("appDataFolderNotExist", "The installer could not detect the WoT cache folder. Continue the installation witout clearing WoT cache?");
-            german.Add("appDataFolderNotExist", "MISSING TRANSLATION: ID=appDataFolderNotExist, LANGUAGE = GERMAN");
-            polish.Add("appDataFolderNotExist", "MISSING TRANSLATION: ID=appDataFolderNotExist, LANGUAGE = POLISH");
+            german.Add("appDataFolderNotExist", "Der Installer konnte den WoT-Cache-Ordner nicht erkennen. Setzen Sie die Installation fort, um den WoT-Cache zu löschen?");
+            polish.Add("appDataFolderNotExist", "Instalator nie mógł wykryć folderu pamięci podręcznej WoT. Kontynuuj instalację przy wyczyszczeniu pamięci podręcznej WoT?");
+
+            //Componet: cancelDownloadButton
+            //
+            english.Add("DiscordServerLink", "Discord Server");
+            german.Add("DiscordServerLink", "Discord Server");
+            polish.Add("DiscordServerLink", "Serwer Discorda");
 
             //Section: FirstLoadHelper
 
@@ -962,20 +968,20 @@ namespace RelhaxModpack
             //Component: MainWindow
             //If the appDataFolder is not parsed properly
             english.Add("appDataFolderError", "The app data folder for WoT was not found. Clearing WoT cache will be skipped. Please report this to the developer team.");
-            german.Add("appDataFolderError", "MISSING TRANSLATION: ID=appDataFolderError, LANGUAGE = GERMAN");
-            polish.Add("appDataFolderError", "MISSING TRANSLATION: ID=appDataFolderError, LANGUAGE = POLISH");
+            german.Add("appDataFolderError", "Der App-Datenordner für WoT wurde nicht gefunden. Das Löschen von WoT-Cache wird übersprungen. Bitte melden Sie dies dem Entwicklerteam.");
+            polish.Add("appDataFolderError", "Nie znaleziono folderu danych aplikacji dla WoT. Usunięcie pamięci podręcznej WoT zostanie pominięte. Zgłoś to do zespołu programistów.");
 
             //Component: clearCacheCB
             //
             english.Add("clearCacheCB", "Clear WoT cache data");
-            german.Add("clearCacheCB", "MISSING TRANSLATION: clearCacheCB, GERMAN");
-            polish.Add("clearCacheCB", "MISSING TRANSLATION: clearCacheCB, POLISH");
+            german.Add("clearCacheCB", "Cache-Daten für WoT löschen");
+            polish.Add("clearCacheCB", "Wyczyść dane z pamięci podręcznej WoT");
 
             //Component: clearCachCBExplanation
             //
-            english.Add("clearCachCBExplanation", "Clear the WoT cache app data directory. Performs the same task as the similar option that was in OMC");
-            german.Add("clearCachCBExplanation", "MISSING TRANSLATION: ID=clearCachCBExplanation, LANGUAGE = GERMAN");
-            polish.Add("clearCachCBExplanation", "MISSING TRANSLATION: ID=clearCachCBExplanation, LANGUAGE = POLISH");
+            english.Add("clearCachCBExplanation", "Clear the WoT cache app data directory. Performs the same task as the similar option that was in OMC.");
+            german.Add("clearCachCBExplanation", "Löschen Sie das WoT-Cache-App-Datenverzeichnis. Führt die gleiche Aufgabe wie die ähnliche Option aus, die in OMC war.");
+            polish.Add("clearCachCBExplanation", "Wyczyść katalog danych aplikacji podręcznej WoT. Wykonuje to samo zadanie co opcja podobna do OMC.");
         }
     }
 }

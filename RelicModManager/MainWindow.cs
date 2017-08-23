@@ -1196,6 +1196,7 @@ namespace RelhaxModpack
             this.expandNodesDefault.Text = Translations.getTranslatedString(expandNodesDefault.Name);
             this.disableBordersCB.Text = Translations.getTranslatedString(disableBordersCB.Name);
             this.clearCacheCB.Text = Translations.getTranslatedString(clearCacheCB.Name);
+            this.DiscordServerLink.Text = Translations.getTranslatedString(DiscordServerLink.Name);
             if (helper != null)
             {
                 helper.helperText.Text = Translations.getTranslatedString("helperText");
