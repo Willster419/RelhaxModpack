@@ -129,6 +129,8 @@ namespace RelhaxModpack
             //get the ETA for the download
             double totalTimeToDownload = MBytesTotal / (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds);
             double timeRemain = totalTimeToDownload - sw.Elapsed.TotalSeconds;
+            if (timeRemainArray == null)
+                timeRemainArray = new List<double>();
             timeRemainArray.Add(timeRemain);
             if (timeRemainArray.Count == 10)
             {

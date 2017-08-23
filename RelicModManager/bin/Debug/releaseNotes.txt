@@ -1,3 +1,7 @@
+Version 24.5.2:
+https://www.virustotal.com/#/file/ecf8d0a4437107946aa0857e47d8af0df490bc5d7d26d51721b638575ac8c27e/detection
+-Fixed bug with loading configs, if loading a second config, it would not clear the first one
+
 Version 24.5.1:
 -Updated Translations
 
