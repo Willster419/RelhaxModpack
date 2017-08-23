@@ -311,19 +311,28 @@ namespace RelhaxModpack
         // need filename and filetime to check the database
         public static string getMd5HashDatabase(string inputFile, string inputFiletime)
         {
-            XDocument doc = XDocument.Load(MainWindow.md5HashDatabaseXmlFile);
             try
             {
-                XElement element = doc.Descendants("file")
-                   .Where(arg => arg.Attribute("filename").Value == inputFile && arg.Attribute("filetime").Value == inputFiletime)
-                   .Single();
-                return element.Attribute("md5").Value;
+                XDocument doc = XDocument.Load(MainWindow.md5HashDatabaseXmlFile);
+                try
+                {
+                    XElement element = doc.Descendants("file")
+                       .Where(arg => arg.Attribute("filename").Value == inputFile && arg.Attribute("filetime").Value == inputFiletime)
+                       .Single();
+                    return element.Attribute("md5").Value;
+                }
+                catch (InvalidOperationException)
+                {
+                    // catch the Exception if no entry is found
+                }
             }
-            // catch the Exception if no entry is found
-            catch (InvalidOperationException)
+            catch (Exception e)
             {
-                return "-1";
+                Utils.exceptionLog("getMd5HashDatabase", e);
+                File.Delete(MainWindow.md5HashDatabaseXmlFile);     // delete damaged XML database
+                createMd5HashDatabase();                            // create new XML database
             }
+            return "-1";
         }
 
         public static void updateMd5HashDatabase(string inputFile, string inputMd5Hash, string inputFiletime)
