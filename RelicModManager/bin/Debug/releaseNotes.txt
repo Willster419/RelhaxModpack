@@ -1,3 +1,8 @@
+Version 24.5.3:
+https://www.virustotal.com/#/file/7d5c1c8fb9524107d41b794b37d56bdf698b7bba96c88da9f3c0cc279a6f148f/detection
+-Fixed bug with application not downloading the required dll extension files
+-Fixed bug with configs of level 3 and below not being installed
+
 Version 24.5.2:
 https://www.virustotal.com/#/file/ecf8d0a4437107946aa0857e47d8af0df490bc5d7d26d51721b638575ac8c27e/detection
 -Fixed bug with loading configs, if loading a second config, it would not clear the first one

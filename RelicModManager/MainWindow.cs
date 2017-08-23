@@ -557,7 +557,10 @@ namespace RelhaxModpack
             {
                 try
                 {
-                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll", Application.StartupPath + "\\DotNetZip.dll");
+                    using (downloader = new WebClient())
+                    {
+                        downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll", Application.StartupPath + "\\DotNetZip.dll");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -570,7 +573,10 @@ namespace RelhaxModpack
             {
                 try
                 {
-                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll", Application.StartupPath + "\\Newtonsoft.Json.dll");
+                    using (downloader = new WebClient())
+                    {
+                        downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll", Application.StartupPath + "\\Newtonsoft.Json.dll");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -780,26 +786,8 @@ namespace RelhaxModpack
                             modsWithData.Add(m);
 
                         //check for configs
-                        foreach (Config config in m.configs)
-                        {
-                            if (config.enabled && config.Checked)
-                            {
-                                if (!config.zipFile.Equals(""))
-                                    modsConfigsToInstall.Add(config);
-
-                                //check for userdata
-                                if (config.userFiles.Count > 0)
-                                    configsWithData.Add(config);
-
-                                //check for dependencies
-                                foreach (Dependency d in config.dependencies)
-                                {
-                                    //check dependency is enabled and has a zip file with it
-                                    if (d.enabled && !d.dependencyZipFile.Equals(""))
-                                        this.addUniqueDependency(d);
-                                }
-                            }
-                        }
+                        if (m.configs.Count > 0)
+                            ProcessConfigs(m.configs);
 
                         //at least one mod of this catagory is checked, add any dependenciesToInstall required
                         //add dependenciesToInstall
@@ -878,6 +866,34 @@ namespace RelhaxModpack
             list = null;
             GC.Collect();
             return;
+        }
+
+        private void ProcessConfigs(List<Config> configList)
+        {
+            foreach (Config config in configList)
+            {
+                if (config.enabled && config.Checked)
+                {
+                    if (!config.zipFile.Equals(""))
+                        modsConfigsToInstall.Add(config);
+
+                    //check for userdata
+                    if (config.userFiles.Count > 0)
+                        configsWithData.Add(config);
+
+                    //check for configs
+                    if (config.configs.Count > 0)
+                        ProcessConfigs(config.configs);
+
+                    //check for dependencies
+                    foreach (Dependency d in config.dependencies)
+                    {
+                        //check dependency is enabled and has a zip file with it
+                        if (d.enabled && !d.dependencyZipFile.Equals(""))
+                            this.addUniqueDependency(d);
+                    }
+                }
+            }
         }
 
         private void I_InstallProgressChanged(object sender, InstallerEventArgs e)
