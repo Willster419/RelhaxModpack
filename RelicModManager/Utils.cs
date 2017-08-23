@@ -124,25 +124,28 @@ namespace RelhaxModpack
         /// <param n=object>the object itself that should be printed</param>
         public static void dumpObjectToLog(string objectName, object n)
         {
-            Utils.appendToLog(String.Format("----- dump of object {0} ------", objectName));
-            foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(n))
+            lock (_locker)              // avoid that 2 or more threads calling the Log function and writing lines in a mess
             {
-                string name = descriptor.Name;
-                object value = descriptor.GetValue(n);
-                switch (value)
+                Utils.appendToLog(String.Format("----- dump of object {0} ------", objectName));
+                foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(n))
                 {
-                    case null:
-                        value = "(null)";
-                        break;
-                    case "":
-                        value = "(string with lenght 0)";
-                        break;
-                    default:
-                        break;
+                    string name = descriptor.Name;
+                    object value = descriptor.GetValue(n);
+                    switch (value)
+                    {
+                        case null:
+                            value = "(null)";
+                            break;
+                        case "":
+                            value = "(string with lenght 0)";
+                            break;
+                        default:
+                            break;
+                    }
+                    Utils.appendToLog(string.Format("{0}={1}", name, value));
                 }
-                Utils.appendToLog(string.Format("{0}={1}", name, value));
+                Utils.appendToLog("----- end of dump ------");
             }
-            Utils.appendToLog("----- end of dump ------");
         }
 
         /// <summary>
@@ -172,62 +175,65 @@ namespace RelhaxModpack
         /// <param e=Exception>the exception object that would be catched</param>
         public static void exceptionLog(string msgString, string infoString, Exception e)
         {
-            e = e.GetBaseException();
-            string errorType = "Exception";
-            string info = "";
-            try { info = string.Format("{0}", infoString.Equals("") || infoString == null ? "" : string.Format("Additional Info: {0}\n", infoString)); } catch { };
-            string type = "";
-            try { type = string.Format("Type: {0}\n", e.GetType()); } catch { };
-            string exception = "";
-            try { exception = string.Format("Code: {0}\n", e.ToString()); } catch { };
-            string stackTrace = "";
-            try { stackTrace = string.Format("StackTrace: {0}\n", e.StackTrace.Equals("") ? "(empty)" : e.StackTrace == null ? "(null)" : e.StackTrace.ToString()); } catch { };
-            string message = "";
-            try { message = string.Format("Message: {0}\n", e.Message.Equals("") ? "(empty)" : e.Message == null ? "(null)" : e.Message.ToString()); } catch { };
-            string source = "";
-            try { source = string.Format("Source: {0}\n", e.Source.Equals("") ? "(empty)" : e.Source == null ? "(null)" : e.Source.ToString()); } catch { };
-            string targetSite = "";
-            try { targetSite = string.Format("TargetSite: {0}\n", e.TargetSite.Equals("") ? "(empty)" : e.TargetSite == null ? "(null)" : e.TargetSite.ToString()); } catch { };
-            string innerException = "";
-            try { innerException = string.Format("InnerException: {0}\n", e.InnerException.Equals("") ? "(empty)" : e.InnerException == null ? "(null)" : e.InnerException.ToString()); } catch { };
-            string data = "";
-            try { data = string.Format("Data: {0}\n", e.Data.Equals("") ? "(empty)": e.Data == null ? "(null)" : e.Data.ToString()); } catch { };
+            lock (_locker)              // avoid that 2 or more threads calling the Log function and writing lines in a mess
+            {
+                e = e.GetBaseException();
+                string errorType = "Exception";
+                string info = "";
+                try { info = string.Format("{0}", infoString.Equals("") || infoString == null ? "" : string.Format("Additional Info: {0}\n", infoString)); } catch { };
+                string type = "";
+                try { type = string.Format("Type: {0}\n", e.GetType()); } catch { };
+                string exception = "";
+                try { exception = string.Format("Code: {0}\n", e.ToString()); } catch { };
+                string stackTrace = "";
+                try { stackTrace = string.Format("StackTrace: {0}\n", e.StackTrace.Equals("") ? "(empty)" : e.StackTrace == null ? "(null)" : e.StackTrace.ToString()); } catch { };
+                string message = "";
+                try { message = string.Format("Message: {0}\n", e.Message.Equals("") ? "(empty)" : e.Message == null ? "(null)" : e.Message.ToString()); } catch { };
+                string source = "";
+                try { source = string.Format("Source: {0}\n", e.Source.Equals("") ? "(empty)" : e.Source == null ? "(null)" : e.Source.ToString()); } catch { };
+                string targetSite = "";
+                try { targetSite = string.Format("TargetSite: {0}\n", e.TargetSite.Equals("") ? "(empty)" : e.TargetSite == null ? "(null)" : e.TargetSite.ToString()); } catch { };
+                string innerException = "";
+                try { innerException = string.Format("InnerException: {0}\n", e.InnerException.Equals("") ? "(empty)" : e.InnerException == null ? "(null)" : e.InnerException.ToString()); } catch { };
+                string data = "";
+                try { data = string.Format("Data: {0}\n", e.Data.Equals("") ? "(empty)" : e.Data == null ? "(null)" : e.Data.ToString()); } catch { };
 
-            if (e is WebException)
-            {
-                errorType = "WebException";
-                type = "";
+                if (e is WebException)
+                {
+                    errorType = "WebException";
+                    type = "";
+                }
+                else if (e is IOException)
+                {
+                    errorType = "IOException";
+                    type = "";
+                }
+                else if (e is UnauthorizedAccessException)
+                {
+                    errorType = "UnauthorizedAccessException";
+                    type = "";
+                }
+                else if (e is ArgumentException)
+                {
+                    errorType = "ArgumentException";
+                    innerException = "";
+                    data = "";
+                    type = "";
+                }
+                else if (e is ZipException)
+                {
+                    errorType = "ZipException";
+                    innerException = "";
+                    data = "";
+                    type = "";
+                }
+                string msgHeader = "";
+                try { msgHeader = string.Format("{0} {1}(call stack traceback)\n", errorType, msgString.Equals("") || msgString == null ? "" : string.Format(@"at ""{0}"" ", msgString)); } catch { };
+                string msg = "";
+                try { msg += string.Format(@"{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}", msgHeader, info, type, exception, stackTrace, message, source, targetSite, innerException, data); } catch { };
+                try { msg += "----------------------------"; } catch { };
+                Utils.appendToLog(msg);
             }
-            else if (e is IOException)
-            {
-                errorType = "IOException";
-                type = "";
-            }
-            else if (e is UnauthorizedAccessException)
-            {
-                errorType = "UnauthorizedAccessException";
-                type = "";
-            }
-            else if (e is ArgumentException)
-            {
-                errorType = "ArgumentException";
-                innerException = "";
-                data = "";
-                type = "";
-            }
-            else if (e is ZipException)
-            {
-                errorType = "ZipException";
-                innerException = "";
-                data = "";
-                type = "";
-            }
-            string msgHeader = "";
-            try { msgHeader = string.Format("{0} {1}(call stack traceback)\n", errorType, msgString.Equals("") || msgString == null ? "" : string.Format(@"at ""{0}"" ", msgString)); } catch { };
-            string msg = "";
-            try { msg += string.Format(@"{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}", msgHeader, info, type, exception, stackTrace, message, source, targetSite, innerException, data); } catch { };
-            try { msg += "----------------------------"; } catch { };
-            Utils.appendToLog(msg);
         }
 
         //returns the md5 hash of the file based on the input file string location. It is searching in the database first. If not found in database or the filetime is not the same, it will create a new Hash and update the database
