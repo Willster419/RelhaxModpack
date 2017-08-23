@@ -2825,6 +2825,24 @@ namespace RelhaxModpack
                                 }
                                 Utils.appendToLog("Checking mod " + m.name);
                             }
+                            else
+                            {
+                                //uncheck
+                                if (m.modFormCheckBox != null)
+                                {
+                                    if (m.modFormCheckBox is ModFormCheckBox)
+                                    {
+                                        ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
+                                        mfcb.Checked = false;
+                                        mfcb.Parent.BackColor = Settings.getBackColor();
+                                    }
+                                    else if (m.modFormCheckBox is ModWPFCheckBox)
+                                    {
+                                        ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.modFormCheckBox;
+                                        mfCB2.IsChecked = false;
+                                    }
+                                }
+                            }
                             break;
                         case "configs":
                             Utils.loadProcessConfigsV1(nn, m, true);
@@ -2930,6 +2948,24 @@ namespace RelhaxModpack
                                 }
                             }
                             Utils.appendToLog("Checking mod " + m.name);
+                        }
+                    }
+                    else
+                    {
+                        //uncheck
+                        if (m.modFormCheckBox != null)
+                        {
+                            if (m.modFormCheckBox is ModFormCheckBox)
+                            {
+                                ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
+                                mfcb.Checked = false;
+                                mfcb.Parent.BackColor = Settings.getBackColor();
+                            }
+                            else if (m.modFormCheckBox is ModWPFCheckBox)
+                            {
+                                ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.modFormCheckBox;
+                                mfCB2.IsChecked = false;
+                            }
                         }
                     }
                     if (m.configs.Count > 0)
@@ -3068,6 +3104,43 @@ namespace RelhaxModpack
                                 }
                                 Utils.appendToLog("Checking mod " + c.name);
                             }
+                            else
+                            {
+                                if (c.configUIComponent != null)
+                                {
+                                    if (c.configUIComponent is ConfigFormCheckBox)
+                                    {
+                                        ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
+                                        CBTemp.Checked = false;
+                                        CBTemp.Parent.BackColor = Settings.getBackColor();
+                                    }
+                                    else if (c.configUIComponent is ConfigFormComboBox)
+                                    {
+                                        ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.configUIComponent;
+                                        CBTemp.Parent.BackColor = Settings.getBackColor();
+                                    }
+                                    else if (c.configUIComponent is ConfigFormRadioButton)
+                                    {
+                                        ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
+                                        CBTemp.Checked = false;
+                                        CBTemp.Parent.BackColor = Settings.getBackColor();
+                                    }
+                                    else if (c.configUIComponent is ConfigWPFCheckBox)
+                                    {
+                                        ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.configUIComponent;
+                                        CBTemp.IsChecked = false;
+                                    }
+                                    else if (c.configUIComponent is ConfigWPFComboBox)
+                                    {
+                                        //do nothing...
+                                    }
+                                    else if (c.configUIComponent is ConfigWPFRadioButton)
+                                    {
+                                        ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.configUIComponent;
+                                        CBTemp.IsChecked = false;
+                                    }
+                                }
+                            }
                             break;
                         case "configs":
                             Utils.loadProcessConfigsV1(nnnn, m, false, c);
@@ -3154,6 +3227,43 @@ namespace RelhaxModpack
                             }
                         }
                         Utils.appendToLog("Checking mod " + c.name);
+                    }
+                }
+                else
+                {
+                    if (c.configUIComponent != null)
+                    {
+                        if (c.configUIComponent is ConfigFormCheckBox)
+                        {
+                            ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
+                            CBTemp.Checked = false;
+                            CBTemp.Parent.BackColor = Settings.getBackColor();
+                        }
+                        else if (c.configUIComponent is ConfigFormComboBox)
+                        {
+                            ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.configUIComponent;
+                            CBTemp.Parent.BackColor = Settings.getBackColor();
+                        }
+                        else if (c.configUIComponent is ConfigFormRadioButton)
+                        {
+                            ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
+                            CBTemp.Checked = false;
+                            CBTemp.Parent.BackColor = Settings.getBackColor();
+                        }
+                        else if (c.configUIComponent is ConfigWPFCheckBox)
+                        {
+                            ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.configUIComponent;
+                            CBTemp.IsChecked = false;
+                        }
+                        else if (c.configUIComponent is ConfigWPFComboBox)
+                        {
+                            //do nothing...
+                        }
+                        else if (c.configUIComponent is ConfigWPFRadioButton)
+                        {
+                            ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.configUIComponent;
+                            CBTemp.IsChecked = false;
+                        }
                     }
                 }
                 if (c.configs.Count > 0)

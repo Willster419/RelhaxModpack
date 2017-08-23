@@ -29,11 +29,18 @@ namespace RelhaxModpack
         public static string md5HashDatabaseXmlFile = Path.Combine(downloadPath, "MD5HashDatabase.xml");
         //timer to measure download speed
         Stopwatch sw = new Stopwatch();
+        //The list of all mods
         private List<Category> parsedCatagoryLists;
-        private List<Mod> modsToInstall;
+        //The ordered lists to install
+        private List<Dependency> globalDependenciesToInstall;
+        private List<Dependency> dependenciesToInstall;
+        private List<LogicalDependnecy> logicalDependenciesToInstall;
+        //DEPRECATED: list of mods and configs to install of each level
+        //private List<Mod> modsToInstall;
+        //private List<List<Config>> configListsToInstall;
+        private List<DatabaseObject> modsConfigsToInstall;
+        //list of patches
         private List<Patch> patchList;
-        private List<Dependency> dependencies;
-        private List<List<Config>> configListsToInstall;
         //installing the RelhaxModpack of the Relhax Sound Mod
         string tempOldDownload;
         private List<Mod> userMods;
@@ -122,6 +129,8 @@ namespace RelhaxModpack
             //get the ETA for the download
             double totalTimeToDownload = MBytesTotal / (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds);
             double timeRemain = totalTimeToDownload - sw.Elapsed.TotalSeconds;
+            if (timeRemainArray == null)
+                timeRemainArray = new List<double>();
             timeRemainArray.Add(timeRemain);
             if (timeRemainArray.Count == 10)
             {
@@ -208,12 +217,11 @@ namespace RelhaxModpack
                 ins = new Installer()
                 {
                     AppPath = Application.StartupPath,
-                    ConfigListsToInstall = this.configListsToInstall,
+                    GlobalDependencies = this.globalDependenciesToInstall,
+                    Dependencies = this.dependenciesToInstall,
+                    LogicalDependencies = this.logicalDependenciesToInstall,
+                    ModsConfigsToInstall = this.modsConfigsToInstall,
                     ConfigsWithData = this.configsWithData,
-                    Dependencies = this.dependencies,
-                    GlobalDependencies = null,
-                    LogicalDependencies = null,
-                    ModsToInstall = this.modsToInstall,
                     ModsWithData = this.modsWithData,
                     TanksLocation = this.tanksLocation,
                     TanksVersion = this.tanksVersion,
@@ -549,7 +557,10 @@ namespace RelhaxModpack
             {
                 try
                 {
-                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll", Application.StartupPath + "\\DotNetZip.dll");
+                    using (downloader = new WebClient())
+                    {
+                        downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll", Application.StartupPath + "\\DotNetZip.dll");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -562,7 +573,10 @@ namespace RelhaxModpack
             {
                 try
                 {
-                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll", Application.StartupPath + "\\Newtonsoft.Json.dll");
+                    using (downloader = new WebClient())
+                    {
+                        downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll", Application.StartupPath + "\\Newtonsoft.Json.dll");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -742,28 +756,18 @@ namespace RelhaxModpack
              * parses all the mods and configs into seperate lists for many types op options
              * like mods/configs to install, mods/configs with data, and others
             */
-            modsToInstall = new List<Mod>();
-            patchList = new List<Patch>();
-            userMods = new List<Mod>();
-            dependencies = new List<Dependency>();
-            configListsToInstall = new List<List<Config>>();
-            parsedCatagoryLists = list.parsedCatagoryList;
+            //copies it instead
+            parsedCatagoryLists = new List<Category>(list.parsedCatagoryList);
+            globalDependenciesToInstall = new List<Dependency>(list.globalDependencies);
+            dependenciesToInstall = new List<Dependency>();
+            logicalDependenciesToInstall = new List<LogicalDependnecy>();
+            modsConfigsToInstall = new List<DatabaseObject>();
             modsWithData = new List<Mod>();
             configsWithData = new List<Config>();
-            //List<DatabaseObject> databaseObjectsToInstall = new List<DatabaseObject>();
-            //add the global dependencies to the dependency list
-            foreach (Dependency d in list.globalDependencies)
-            {
-                if (d.enabled)
-                    dependencies.Add(d);
-            }
-            //if mod is enabled and checked, add it to list of mods to extract/install
-            //same for configs
-            //init a few of the array places to prevent bugs i guess
-            for (int i = 0; i < 10; i++)
-            {
-                configListsToInstall.Insert(i, new List<Config>());
-            }
+            patchList = new List<Patch>();
+            userMods = new List<Mod>();
+
+            //if mod/config is enabled and checked, add it to list of mods to extract/install
             foreach (Category c in parsedCatagoryLists)
             {
                 //will itterate through every catagory once
@@ -772,29 +776,31 @@ namespace RelhaxModpack
                     //will itterate through every mod of every catagory once
                     if (m.enabled && m.Checked)
                     {
-                        //move each mod that is enalbed and checked to a new
-                        //list of mods to install
+                        //move each mod that is enalbed and checked to a new list of mods to install
                         //also check that it actually has a zip file
                         if (!m.zipFile.Equals(""))
-                            modsToInstall.Add(m);
+                            modsConfigsToInstall.Add(m);
+
                         //since it is checked, regardless if it has a zipfile, check if it has userdata
                         if (m.userFiles.Count > 0)
                             modsWithData.Add(m);
-                        //at least one mod of this catagory is checked, add any dependencies required
-                        //add dependencies
+
+                        //check for configs
+                        if (m.configs.Count > 0)
+                            ProcessConfigs(m.configs);
+
+                        //at least one mod of this catagory is checked, add any dependenciesToInstall required
+                        //add dependenciesToInstall
                         foreach (Dependency d in c.dependencies)
                         {
                             //check dependency is enabled and has a zip file with it
                             if (d.enabled && !d.dependencyZipFile.Equals(""))
                                 this.addUniqueDependency(d);
                         }
-                        if (m.configs.Count > 0)
-                        {
-                            processConfigsToInstall(m.configs, 0);
-                        }
+                        
+                        //check dependency is enabled and has a zip file with it
                         foreach (Dependency d in m.dependencies)
                         {
-                            //check dependency is enabled and has a zip file with it
                             if (d.enabled && !d.dependencyZipFile.Equals(""))
                                 this.addUniqueDependency(d);
                         }
@@ -814,7 +820,7 @@ namespace RelhaxModpack
             //relhax modpack mods, still used in downloader code
             downloadQueue = new List<DownloadItem>();
             //check that we will actually install something
-            if (modsToInstall.Count == 0 && !installingConfigs() && userMods.Count == 0)
+            if (modsConfigsToInstall.Count == 0 && userMods.Count == 0)
             {
                 //pull out because there are no mods to install
                 downloadProgress.Text = Translations.getTranslatedString("idle");
@@ -825,45 +831,30 @@ namespace RelhaxModpack
                 return;
             }
             //if the user did not select any relhax modpack mods to install
-            if (modsToInstall.Count == 0 && !installingConfigs())
+            if (modsConfigsToInstall.Count == 0)
             {
-                //clear any dependencies since this is a user mod only installation
-                dependencies.Clear();
-                //but readd the blobal dependencies
-                foreach (Dependency d in list.globalDependencies)
-                {
-                    if (d.enabled)
-                        dependencies.Add(d);
-                }
+                //clear any dependenciesand logicalDependencies since this is a user mod only installation
+                dependenciesToInstall.Clear();
+                logicalDependenciesToInstall.Clear();
             }
             //foreach mod and config, if the crc's don't match, add it to the downloadQueue
             string localFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
-            foreach (Dependency d in dependencies)
+            foreach (Dependency d in dependenciesToInstall)
             {
                 if (!Utils.CRCsMatch(localFilesDir + d.dependencyZipFile, d.dependencyZipCRC))
                 {
                     downloadQueue.Add(new DownloadItem(new Uri(d.startAddress + d.dependencyZipFile + d.endAddress), localFilesDir + d.dependencyZipFile));
                 }
             }
-            foreach (Mod m in modsToInstall)
+            foreach (DatabaseObject dbo in modsConfigsToInstall)
             {
-                if (m.downloadFlag)
+                if (dbo.downloadFlag)
                 {
                     //crc's don't match, need to re-download
-                    downloadQueue.Add(new DownloadItem(new Uri(m.startAddress + m.zipFile + m.endAddress), localFilesDir + m.zipFile));
+                    downloadQueue.Add(new DownloadItem(new Uri(dbo.startAddress + dbo.zipFile + dbo.endAddress), localFilesDir + dbo.zipFile));
                 }
             }
-            foreach (List<Config> configLevel in configListsToInstall)
-            {
-                foreach (Config c in configLevel)
-                {
-                    if (c.downloadFlag)
-                    {
-                        //crc's don't match, need to re-download
-                        downloadQueue.Add(new DownloadItem(new Uri(c.startAddress + c.zipFile + c.endAddress), localFilesDir + c.zipFile));
-                    }
-                }
-            }
+            
             //reset the progress bars
             parrentProgressBar.Maximum = downloadQueue.Count;
             childProgressBar.Maximum = 100;
@@ -875,6 +866,34 @@ namespace RelhaxModpack
             list = null;
             GC.Collect();
             return;
+        }
+
+        private void ProcessConfigs(List<Config> configList)
+        {
+            foreach (Config config in configList)
+            {
+                if (config.enabled && config.Checked)
+                {
+                    if (!config.zipFile.Equals(""))
+                        modsConfigsToInstall.Add(config);
+
+                    //check for userdata
+                    if (config.userFiles.Count > 0)
+                        configsWithData.Add(config);
+
+                    //check for configs
+                    if (config.configs.Count > 0)
+                        ProcessConfigs(config.configs);
+
+                    //check for dependencies
+                    foreach (Dependency d in config.dependencies)
+                    {
+                        //check dependency is enabled and has a zip file with it
+                        if (d.enabled && !d.dependencyZipFile.Equals(""))
+                            this.addUniqueDependency(d);
+                    }
+                }
+            }
         }
 
         private void I_InstallProgressChanged(object sender, InstallerEventArgs e)
@@ -1048,12 +1067,13 @@ namespace RelhaxModpack
                     ins.Dispose();
                     ins = null;
                 }
+                globalDependenciesToInstall = null;
+                dependenciesToInstall = null;
+                logicalDependenciesToInstall = null;
+                modsConfigsToInstall = null;
                 downloadQueue = null;
                 parsedCatagoryLists = null;
-                modsToInstall = null;
                 patchList = null;
-                dependencies = null;
-                configListsToInstall = null;
                 userMods = null;
                 if(helper != null)
                 {
@@ -1083,65 +1103,6 @@ namespace RelhaxModpack
                 Utils.appendToLog("Invalid state: " + e.InstalProgress);
             }
             downloadProgress.Text = message;
-        }
-        //check to see if we are actually installing a config
-        private bool installingConfigs()
-        {
-            foreach (List<Config> cfgList in configListsToInstall)
-            {
-                foreach (Config c in cfgList)
-                {
-                    if (!c.zipFile.Equals(""))
-                        return true;
-                }
-            }
-            return false;
-        }
-        //recursivly process the configs
-        private void processConfigsToInstall(List<Config> configList, int level)
-        {
-            //checks for each config to add of config level 'level'
-            foreach (Config cc in configList)
-            {
-                //check to make sure mem has been declared for it
-                //check to make sureit's enabled and checked and has a valid zip file with it
-                if (cc.enabled && cc.Checked)
-                {
-                    if (!cc.zipFile.Equals(""))
-                    {
-                        try
-                        {
-                            if (configListsToInstall[level] == null)
-                                configListsToInstall.Insert(level, new List<Config>());
-                        }
-                        catch (IndexOutOfRangeException)
-                        {
-                            configListsToInstall.Insert(level, new List<Config>());
-                        }
-                        catch (ArgumentOutOfRangeException)
-                        {
-                            configListsToInstall.Insert(level, new List<Config>());
-                        }
-                        //same for configs
-                        configListsToInstall[level].Add(cc);
-                    }
-                    //since it is checked, regardless if it has a zipfile, check if it has userdata
-                    if (cc.userFiles.Count > 0)
-                        configsWithData.Add(cc);
-                    if (cc.configs.Count > 0)
-                        processConfigsToInstall(cc.configs, level + 1);
-                    //check to see if any catagory dependencies need to be added
-                    if (cc.dependencies.Count > 0)
-                    {
-                        foreach (Dependency d in cc.dependencies)
-                        {
-                            //check dependency is enabled and has a zip file with it
-                            if (d.enabled && !d.dependencyZipFile.Equals(""))
-                                this.addUniqueDependency(d);
-                        }
-                    }
-                }
-            }
         }
         
         //Main method to uninstall the modpack
@@ -1253,6 +1214,7 @@ namespace RelhaxModpack
             this.expandNodesDefault.Text = Translations.getTranslatedString(expandNodesDefault.Name);
             this.disableBordersCB.Text = Translations.getTranslatedString(disableBordersCB.Name);
             this.clearCacheCB.Text = Translations.getTranslatedString(clearCacheCB.Name);
+            this.DiscordServerLink.Text = Translations.getTranslatedString(DiscordServerLink.Name);
             if (helper != null)
             {
                 helper.helperText.Text = Translations.getTranslatedString("helperText");
@@ -1270,6 +1232,7 @@ namespace RelhaxModpack
                 this.darkUICB.Checked = Settings.darkUI;
                 this.expandNodesDefault.Checked = Settings.expandAllLegacy;
                 this.disableBordersCB.Checked = Settings.disableBorders;
+                this.clearCacheCB.Checked = Settings.clearCache;
                 this.Font = Settings.appFont;
                 switch (Settings.gif)
                 {
@@ -1357,7 +1320,7 @@ namespace RelhaxModpack
                 {
                     zipFilesList.Add(f.Name);
                 }
-                List<string> filesToDelete = Utils.createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists, dependencies);
+                List<string> filesToDelete = Utils.createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists, dependenciesToInstall);
                 string listOfFiles = "";
                 foreach (string s in filesToDelete)
                     listOfFiles = listOfFiles + s + "\n";
@@ -1409,14 +1372,14 @@ namespace RelhaxModpack
         //adds a dependency to the dependency list only if it is not already added
         private void addUniqueDependency(Dependency toAdd)
         {
-            foreach (Dependency existing in dependencies)
+            foreach (Dependency existing in dependenciesToInstall)
             {
                 //check if the mod zip name is the same
                 if (existing.dependencyZipFile.Equals(toAdd.dependencyZipFile))
                     return;
             }
             //getting here means that the dependency to add is unique
-            dependencies.Add(toAdd);
+            dependenciesToInstall.Add(toAdd);
         }
 
         private void cancelDownloadButton_Click(object sender, EventArgs e)
@@ -1609,7 +1572,8 @@ namespace RelhaxModpack
         }
         private void clearCacheCB_MouseEnter(object sender, EventArgs e)
         {
-            //TODO
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("clearCachCBExplanation");
         }
 
         private void font_MouseDown(object sender, MouseEventArgs e)
@@ -1767,7 +1731,11 @@ namespace RelhaxModpack
 
         private void clearCacheCB_MouseDown(object sender, MouseEventArgs e)
         {
-            //TODO
+            if (e.Button != MouseButtons.Right)
+                return;
+            FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+            newHelper.helperText.Text = Translations.getTranslatedString("clearCachCBExplanation");
+            newHelper.ShowDialog();
         }
 
         //handler for when the "force manuel" checkbox is checked
