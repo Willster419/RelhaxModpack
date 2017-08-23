@@ -183,13 +183,13 @@ namespace RelhaxModpack
             //
             english.Add("appDataFolderNotExistHeader", "Could not detect WoT cache folder");
             german.Add("appDataFolderNotExistHeader", "Konnte den Cache-Ordner WoT nicht erkennen");
-            polish.Add("appDataFolderNotExistHeader", "Nie można wykryć folderu pamięci podręcznej WoT");
+            polish.Add("appDataFolderNotExistHeader", "Nie wykryto foldera WoT cache");
 
             //Componet: cancelDownloadButton
             //
             english.Add("appDataFolderNotExist", "The installer could not detect the WoT cache folder. Continue the installation witout clearing WoT cache?");
             german.Add("appDataFolderNotExist", "Der Installer konnte den WoT-Cache-Ordner nicht erkennen. Setzen Sie die Installation fort, um den WoT-Cache zu löschen?");
-            polish.Add("appDataFolderNotExist", "Instalator nie mógł wykryć folderu pamięci podręcznej WoT. Kontynuuj instalację przy wyczyszczeniu pamięci podręcznej WoT?");
+            polish.Add("appDataFolderNotExist", "Instalato nie wykrył foldera cache. Czy kontynuować bez czyszczenia folderu cache?");
 
             //Componet: cancelDownloadButton
             //
@@ -969,19 +969,19 @@ namespace RelhaxModpack
             //If the appDataFolder is not parsed properly
             english.Add("appDataFolderError", "The app data folder for WoT was not found. Clearing WoT cache will be skipped. Please report this to the developer team.");
             german.Add("appDataFolderError", "Der App-Datenordner für WoT wurde nicht gefunden. Das Löschen von WoT-Cache wird übersprungen. Bitte melden Sie dies dem Entwicklerteam.");
-            polish.Add("appDataFolderError", "Nie znaleziono folderu danych aplikacji dla WoT. Usunięcie pamięci podręcznej WoT zostanie pominięte. Zgłoś to do zespołu programistów.");
+            polish.Add("appDataFolderError", "Nie znaleziono foderu app data dla WoT. Czyszczenie folderu cache zostanie pominięte. Prosimy zgłosić problem naszym deweloperom.");
 
             //Component: clearCacheCB
             //
             english.Add("clearCacheCB", "Clear WoT cache data");
             german.Add("clearCacheCB", "Cache-Daten für WoT löschen");
-            polish.Add("clearCacheCB", "Wyczyść dane z pamięci podręcznej WoT");
+            polish.Add("clearCacheCB", "Usuń dane WoT cache");
 
             //Component: clearCachCBExplanation
             //
             english.Add("clearCachCBExplanation", "Clear the WoT cache app data directory. Performs the same task as the similar option that was in OMC.");
             german.Add("clearCachCBExplanation", "Löschen Sie das WoT-Cache-App-Datenverzeichnis. Führt die gleiche Aufgabe wie die ähnliche Option aus, die in OMC war.");
-            polish.Add("clearCachCBExplanation", "Wyczyść katalog danych aplikacji podręcznej WoT. Wykonuje to samo zadanie co opcja podobna do OMC.");
+            polish.Add("clearCachCBExplanation", "Usuń dane aplikacji z lokacji WoT cache. Działa na podobnej zasadzie, jak kiedyś opcja z paczki OMC.");
         }
     }
 }
