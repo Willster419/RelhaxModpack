@@ -837,13 +837,27 @@ namespace RelhaxModpack
                 dependenciesToInstall.Clear();
                 logicalDependenciesToInstall.Clear();
             }
-            //foreach mod and config, if the crc's don't match, add it to the downloadQueue
+            //foreach mod and config and dependnecy, if the crc's don't match, add it to the downloadQueue
             string localFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
+            foreach (Dependency d in globalDependenciesToInstall)
+            {
+                if (!Utils.CRCsMatch(localFilesDir + d.dependencyZipFile, d.dependencyZipCRC))
+                {
+                    downloadQueue.Add(new DownloadItem(new Uri(d.startAddress + d.dependencyZipFile + d.endAddress), localFilesDir + d.dependencyZipFile));
+                }
+            }
             foreach (Dependency d in dependenciesToInstall)
             {
                 if (!Utils.CRCsMatch(localFilesDir + d.dependencyZipFile, d.dependencyZipCRC))
                 {
                     downloadQueue.Add(new DownloadItem(new Uri(d.startAddress + d.dependencyZipFile + d.endAddress), localFilesDir + d.dependencyZipFile));
+                }
+            }
+            foreach (LogicalDependnecy ld in logicalDependenciesToInstall)
+            {
+                if (!Utils.CRCsMatch(localFilesDir + ld.dependencyZipFile, ld.dependencyZipCRC))
+                {
+                    downloadQueue.Add(new DownloadItem(new Uri(ld.startAddress + ld.dependencyZipFile + ld.endAddress), localFilesDir + ld.dependencyZipFile));
                 }
             }
             foreach (DatabaseObject dbo in modsConfigsToInstall)
@@ -1061,6 +1075,10 @@ namespace RelhaxModpack
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Maximum = 1;
                 childProgressBar.Value = childProgressBar.Maximum;
+                if(!Program.testMode)
+                {
+                    this.checkForOldZipFiles();
+                }
                 //dispose of a lot of stuff
                 if (ins != null)
                 {
@@ -1320,7 +1338,7 @@ namespace RelhaxModpack
                 {
                     zipFilesList.Add(f.Name);
                 }
-                List<string> filesToDelete = Utils.createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists, dependenciesToInstall);
+                List<string> filesToDelete = Utils.createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists, globalDependenciesToInstall);
                 string listOfFiles = "";
                 foreach (string s in filesToDelete)
                     listOfFiles = listOfFiles + s + "\n";

@@ -3290,7 +3290,7 @@ namespace RelhaxModpack
             parsedZips = new List<string>();
             foreach (Dependency d in globalDependencies)
             {
-                if (!d.dependencyZipFile.Equals(""))
+                if (!d.dependencyZipFile.Equals("") && !parsedZips.Contains(d.dependencyZipFile))
                 {
                     parsedZips.Add(d.dependencyZipFile);
                 }
@@ -3299,7 +3299,7 @@ namespace RelhaxModpack
             {
                 foreach (Dependency d in cat.dependencies)
                 {
-                    if (!d.dependencyZipFile.Equals(""))
+                    if (!d.dependencyZipFile.Equals("") && !parsedZips.Contains(d.dependencyZipFile))
                     {
                         parsedZips.Add(d.dependencyZipFile);
                     }
@@ -3308,12 +3308,12 @@ namespace RelhaxModpack
                 {
                     foreach (Dependency d in m.dependencies)
                     {
-                        if (!d.dependencyZipFile.Equals(""))
+                        if (!d.dependencyZipFile.Equals("") && !parsedZips.Contains(d.dependencyZipFile))
                         {
                             parsedZips.Add(d.dependencyZipFile);
                         }
                     }
-                    if (!m.zipFile.Equals(""))
+                    if (!m.zipFile.Equals("") && !parsedZips.Contains(m.zipFile))
                     {
                         parsedZips.Add(m.zipFile);
                     }
@@ -3325,7 +3325,8 @@ namespace RelhaxModpack
             //for each zipfile in it, remove it in currentZipFiles if it exists
             foreach (string s in parsedZips)
             {
-                currentZipFiles.Remove(s);
+                if(currentZipFiles.Contains(s))
+                    currentZipFiles.Remove(s);
             }
             return currentZipFiles;
         }
@@ -3335,12 +3336,12 @@ namespace RelhaxModpack
             {
                 foreach (Dependency d in c.dependencies)
                 {
-                    if (!d.dependencyZipFile.Equals(""))
+                    if (!d.dependencyZipFile.Equals("") && !parsedZips.Contains(d.dependencyZipFile))
                     {
                         parsedZips.Add(d.dependencyZipFile);
                     }
                 }
-                if (!c.zipFile.Equals(""))
+                if (!c.zipFile.Equals("") && !parsedZips.Contains(c.zipFile))
                 {
                     parsedZips.Add(c.zipFile);
                 }
