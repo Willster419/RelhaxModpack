@@ -337,23 +337,30 @@ namespace RelhaxModpack
 
         public static void updateMd5HashDatabase(string inputFile, string inputMd5Hash, string inputFiletime)
         {
-            XDocument doc = XDocument.Load(MainWindow.md5HashDatabaseXmlFile);
             try
             {
-                XElement element = doc.Descendants("file")
-                   .Where(arg => arg.Attribute("filename").Value == inputFile)
-                   .Single();
-                element.Attribute("filetime").Value = inputFiletime;
-                element.Attribute("md5").Value = inputMd5Hash;
+                XDocument doc = XDocument.Load(MainWindow.md5HashDatabaseXmlFile);
+                try
+                {
+                    XElement element = doc.Descendants("file")
+                       .Where(arg => arg.Attribute("filename").Value == inputFile)
+                       .Single();
+                    element.Attribute("filetime").Value = inputFiletime;
+                    element.Attribute("md5").Value = inputMd5Hash;
+                }
+                catch (InvalidOperationException)
+                {
+                    doc.Element("database").Add(new XElement("file",
+                        new XAttribute("filename", inputFile),
+                        new XAttribute("filetime", inputFiletime),
+                        new XAttribute("md5", inputMd5Hash)));
+                }
+                doc.Save(MainWindow.md5HashDatabaseXmlFile);
             }
-            catch (InvalidOperationException)
+            catch (Exception ex)
             {
-                doc.Element("database").Add(new XElement("file",
-                    new XAttribute("filename", inputFile),
-                    new XAttribute("filetime", inputFiletime),
-                    new XAttribute("md5", inputMd5Hash)));
+                Utils.exceptionLog("updateMd5HashDatabase", ex);
             }
-            doc.Save(MainWindow.md5HashDatabaseXmlFile);
         }
 
         public static void deleteMd5HashDatabase(string inputFile)
