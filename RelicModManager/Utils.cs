@@ -1444,10 +1444,15 @@ namespace RelhaxModpack
                     return;
                 }
             }
-
+            
             //check that the file exists
             if (!File.Exists(fileLocation))
                 return;
+
+            //replace all "fake escape characters" with real escape characters
+            search = search.Replace(@"\n", "newline");
+            search = search.Replace(@"\r", "\r");
+            search = search.Replace(@"\t", "\t");
 
             //load file from disk...
             string file = File.ReadAllText(fileLocation);
