@@ -1,3 +1,9 @@
+Version 24.5.4:
+https://www.virustotal.com/#/file/beb24780236b4b25475aabd35a174c649005c3b9fab0cb9da00a7d07bc4091c9/detection
+-Added feature where if an error occurs with the xml database downloaded files, it will delete it and create a new one
+-Fixed some back-end tools
+-Updated Polish Translations
+
 Version 24.5.3:
 https://www.virustotal.com/#/file/7d5c1c8fb9524107d41b794b37d56bdf698b7bba96c88da9f3c0cc279a6f148f/detection
 -Fixed bug with application not downloading the required dll extension files

@@ -198,7 +198,7 @@ namespace RelhaxModpack
             //database root modInfo.xml
             XmlElement root = doc.CreateElement("modInfoAlpha.xml");
             doc.AppendChild(root);
-            //global dependenciesToInstall
+            //global dependencies
             XmlElement globalDependenciesXml = doc.CreateElement("globaldependencies");
             foreach (Dependency d in globalDependencies)
             {
@@ -240,8 +240,8 @@ namespace RelhaxModpack
                 XmlElement catagorySelectionType = doc.CreateElement("selectionType");
                 catagorySelectionType.InnerText = c.selectionType;
                 catagoryRoot.AppendChild(catagorySelectionType);
-                //dependenciesToInstall for catagory
-                XmlElement catagoryDependencies = doc.CreateElement("dependenciesToInstall");
+                //dependencies for catagory
+                XmlElement catagoryDependencies = doc.CreateElement("dependencies");
                 foreach (Dependency d in c.dependencies)
                 {
                     //declare dependency root
@@ -337,7 +337,7 @@ namespace RelhaxModpack
                     if (m.configs.Count > 0)
                         saveDatabaseConfigLevel(doc, configsHolder, m.configs);
                     modRoot.AppendChild(configsHolder);
-                    XmlElement modDependencies = doc.CreateElement("dependenciesToInstall");
+                    XmlElement modDependencies = doc.CreateElement("dependencies");
                     foreach (Dependency d in m.dependencies)
                     {
                         //declare dependency root
@@ -446,8 +446,8 @@ namespace RelhaxModpack
                 if (cc.configs.Count > 0)
                     saveDatabaseConfigLevel(doc, configsHolderSub, cc.configs);
                 configRoot.AppendChild(configsHolderSub);
-                //dependenciesToInstall for the configs
-                XmlElement catDependencies = doc.CreateElement("dependenciesToInstall");
+                //dependencies for the configs
+                XmlElement catDependencies = doc.CreateElement("dependencies");
                 foreach (Dependency d in cc.dependencies)
                 {
                     //declare dependency root
