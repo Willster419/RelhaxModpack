@@ -29,8 +29,8 @@
     <TargetCulture>en-US</TargetCulture>
     <ProductName>Relhax Modpack</ProductName>
     <PublisherName>Willard Wider</PublisherName>
-    <ApplicationRevision>4</ApplicationRevision>
-    <ApplicationVersion>0.24.5.4</ApplicationVersion>
+    <ApplicationRevision>6</ApplicationRevision>
+    <ApplicationVersion>0.24.5.6</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -67,7 +67,7 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>9F4B8AC2B191CFBED01EE42A36C15A237CC1562C</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>C33C99ECD3A873CD43D5FB5F76140C13EAF45F01</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>RelhaxModpack_1_TemporaryKey.pfx</ManifestKeyFile>

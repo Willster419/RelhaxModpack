@@ -1,3 +1,13 @@
+Version 24.5.6:
+https://www.virustotal.com/#/file/ab74424017b7b5a6acbfe1aee6ddc1a476fa20ff892ab33e387127d03f6f66ce/detection
+-Fixed bug where global dependencies were not being downloaded
+-Fixed bug where old zip files were not being deleted
+
+Version 24.5.5:
+https://www.virustotal.com/#/file/ca46d56738c168a065544ed2a3348200cec5931c705c181c5bf11fbe37e05cff/detection
+-Fixed bugs with Regex patcher (whitespace characters)
+-Added more exception handling to the md5 hash database
+
 Version 24.5.4:
 https://www.virustotal.com/#/file/beb24780236b4b25475aabd35a174c649005c3b9fab0cb9da00a7d07bc4091c9/detection
 -Added feature where if an error occurs with the xml database downloaded files, it will delete it and create a new one

@@ -345,6 +345,8 @@ namespace RelhaxModpack
             modCheckBox.catagory = c;
             //add the root UI object to the memory database
             m.modFormCheckBox = modCheckBox;
+            m.tabIndex = t;
+            searchCB.Items.Add(m);
             switch (Settings.fontSizeforum)
             {
                 case Settings.FontSize.fontRegular:
@@ -1134,7 +1136,9 @@ namespace RelhaxModpack
             modCheckBox.Font = Settings.appFont;
             modCheckBox.catagory = catagory;
             modCheckBox.mod = m;
+            m.tabIndex = t;
             m.modFormCheckBox = modCheckBox;
+            searchCB.Items.Add(m);
             //the mod checksum logic
             string modDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.zipFile;
             if (firstLoad)
@@ -2083,6 +2087,7 @@ namespace RelhaxModpack
             {
                 colapseAllButton.Location = new Point(this.Size.Width - 20 - colapseAllButton.Size.Width - 6 - expandAllButton.Size.Width, colapseAllButton.Location.Y);
                 expandAllButton.Location = new Point(this.Size.Width - 20 - expandAllButton.Size.Width, expandAllButton.Location.Y);
+                searchCB.Location = new Point(this.Size.Width - 20 - searchCB.Size.Width, searchCB.Location.Y);
                 continueButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
                 cancelButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - difference);
                 modTabGroups.Size = new Size(this.Size.Width - 20 - modTabGroups.Location.X, this.Size.Height - modTabGroups.Location.Y - 39 - continueButton.Size.Height - 6 - difference);
@@ -2363,6 +2368,29 @@ namespace RelhaxModpack
                     processTreeViewItems(tvi.Items,expand);
                 }
             }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox sendah = (ComboBox)sender;
+            Mod m = (Mod)sendah.SelectedItem;
+            if(modTabGroups.TabPages.Contains(m.tabIndex))
+            {
+                modTabGroups.SelectedTab = m.tabIndex;
+            }
+            TabPage tp = modTabGroups.SelectedTab;
+            if (Settings.sView == Settings.SelectionView.defaultt)
+            {
+                ModFormCheckBox c = (ModFormCheckBox)m.modFormCheckBox;
+                tp.ScrollControlIntoView(c);
+            }
+            else if (Settings.sView == Settings.SelectionView.legacy)
+            {
+                ModWPFCheckBox c = (ModWPFCheckBox)m.modFormCheckBox;
+                c.Focus();
+                this.ModSelectionList_SizeChanged(null, null);
+            }
+            
         }
     }
 }

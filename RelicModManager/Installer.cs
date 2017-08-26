@@ -47,6 +47,8 @@ namespace RelhaxModpack
         private BackgroundWorker InstallWorker;
         private InstallerEventArgs args;
         private string xvmConfigDir = "";
+        private int patchNum = 0;
+        private List<string> originalPatchNames;
 
         //the event that it can hook into
         public event InstallChangedEventHandler InstallProgressChanged;
@@ -67,6 +69,7 @@ namespace RelhaxModpack
             InstallWorker.RunWorkerCompleted += WorkerReportComplete;
             args = new InstallerEventArgs();
             ResetArgs();
+            originalPatchNames = new List<string>();
         }
 
         //Start installation on the UI thread
@@ -634,7 +637,7 @@ namespace RelhaxModpack
                 args.currentFile = p.file;
                 InstallWorker.ReportProgress(0);
                 //if nativeProcessingFile is not empty, it is the first entry of a new nativ xml processing file. Add a comment at the loglist, to be able to traceback the native Processing File
-                if (p.nativeProcessingFile != "") { Utils.appendToLog(string.Format("nativeProcessingFile: {0}", p.nativeProcessingFile)); }
+                if (p.nativeProcessingFile != "") { Utils.appendToLog(string.Format("nativeProcessingFile: {0}, originalName: {1}", p.nativeProcessingFile, p.actualPatchName)); }
                 string patchFileOutput = p.file;
                 int maxLength = 200;
                 if (p.file.Length > maxLength)
@@ -863,7 +866,8 @@ namespace RelhaxModpack
             {
                 //create a patch instance to take the patch information
                 Patch p = new Patch();
-
+                p.actualPatchName = originalPatchNames[0];
+                originalPatchNames.RemoveAt(0);
                 p.nativeProcessingFile = tmpXmlFilename;
                 //foreach node in this specific "patch" node
                 foreach (XmlNode nn in n.ChildNodes)
@@ -1107,6 +1111,14 @@ namespace RelhaxModpack
                             {
                                 zip[i].FileName = Regex.Replace(zip[i].FileName, "configs/xvm/xvmConfigFolderName", "configs/xvm/" + xvmConfigDir);
                             }
+                            if(Regex.IsMatch(zip[i].FileName, @"_patch.*\.xml"))
+                            {
+                                string patchName = zip[i].FileName;
+                                zip[i].FileName = Regex.Replace(zip[i].FileName, @"_patch.*\.xml", "_patch/" + patchNum.ToString("D3") + ".xml");
+                                patchNum++;
+                                patchName = patchName.Substring(7);
+                                originalPatchNames.Add(patchName);
+                            }
                             //put the entries on disk
                             fs.Write(Encoding.UTF8.GetBytes(zip[i].FileName + "\n"), 0, Encoding.UTF8.GetByteCount(zip[i].FileName + "\n"));
                         }
@@ -1167,6 +1179,7 @@ namespace RelhaxModpack
                     UserMods = null;
                     patchList = null;
                     args = null;
+                    originalPatchNames = null;
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.

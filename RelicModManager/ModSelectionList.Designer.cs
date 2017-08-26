@@ -94,6 +94,7 @@
             this.modTabGroups = new System.Windows.Forms.TabControl();
             this.expandAllButton = new System.Windows.Forms.Button();
             this.colapseAllButton = new System.Windows.Forms.Button();
+            this.searchCB = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // continueButton
@@ -223,11 +224,23 @@
             this.colapseAllButton.UseVisualStyleBackColor = true;
             this.colapseAllButton.Click += new System.EventHandler(this.ColapseAllButton_Click);
             // 
+            // searchCB
+            // 
+            this.searchCB.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.searchCB.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.searchCB.FormattingEnabled = true;
+            this.searchCB.Location = new System.Drawing.Point(676, 52);
+            this.searchCB.Name = "searchCB";
+            this.searchCB.Size = new System.Drawing.Size(304, 21);
+            this.searchCB.TabIndex = 18;
+            this.searchCB.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
             // ModSelectionList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(992, 473);
+            this.Controls.Add(this.searchCB);
             this.Controls.Add(this.colapseAllButton);
             this.Controls.Add(this.expandAllButton);
             this.Controls.Add(this.TanksVersionLabel);
@@ -269,5 +282,6 @@
         private System.Windows.Forms.TabControl modTabGroups;
         private System.Windows.Forms.Button expandAllButton;
         private System.Windows.Forms.Button colapseAllButton;
+        private System.Windows.Forms.ComboBox searchCB;
     }
 }
