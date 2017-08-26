@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace RelhaxModpack
 {
@@ -17,6 +18,8 @@ namespace RelhaxModpack
         public string endAddress { get; set; }
         public string crc { get; set; }
         public bool enabled { get; set; }
+        //the tab index in the modpack 
+        public TabPage tabIndex { get; set; }
         //later a unique name of the config entry
         public string packageName { get; set; }
         //size of the mod zip file
