@@ -364,6 +364,7 @@ namespace RelhaxModpack
             modCheckBox.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
             if (Settings.darkUI)
                 modCheckBox.FontWeight = System.Windows.FontWeights.Bold;
+            modCheckBox.VerticalAlignment = System.Windows.VerticalAlignment.Center;
             //make the tree view item for the modCheckBox
             System.Windows.Controls.TreeViewItem tvi = new System.Windows.Controls.TreeViewItem();
             if(Settings.expandAllLegacy)
@@ -465,6 +466,7 @@ namespace RelhaxModpack
                     configControlRB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
                     if (Settings.darkUI)
                         configControlRB.FontWeight = System.Windows.FontWeights.Bold;
+                    configControlRB.VerticalAlignment = System.Windows.VerticalAlignment.Center;
                     configControlRB.catagory = c;
                     configControlRB.mod = m;
                     configControlRB.config = con;
@@ -621,6 +623,7 @@ namespace RelhaxModpack
                     configControlCB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
                     if (Settings.darkUI)
                         configControlCB.FontWeight = System.Windows.FontWeights.Bold;
+                    configControlCB.VerticalAlignment = System.Windows.VerticalAlignment.Center;
                     configControlCB.catagory = c;
                     configControlCB.mod = m;
                     configControlCB.config = con;
