@@ -2406,31 +2406,47 @@ namespace RelhaxModpack
 
         private void searchComboBox_TextUpdate(object sender, EventArgs e)
         {
-            ComboBox searchComboBox = (ComboBox)sender;
-            string filter_param = searchComboBox.Text;
-
-            List<Mod> filteredItems = completeModSearchList.FindAll(x => x.name.ToLower().Contains(filter_param.ToLower()));
-
-            searchComboBox.DataSource = filteredItems;
-
-            if (String.IsNullOrWhiteSpace(filter_param))
+            try
             {
-                searchComboBox.DataSource = completeModSearchList;
+                ComboBox searchComboBox = (ComboBox)sender;
+                string filter_param = searchComboBox.Text;
+
+                Char delimiter = '*';
+                String[] filter_parts = filter_param.Split(delimiter);
+
+                List<Mod> filteredItems = completeModSearchList;
+
+                foreach (var f in filter_parts)
+                {
+                    filteredItems = filteredItems.FindAll(x => x.name.ToLower().Contains(f.ToLower()));
+                }
+
+                searchComboBox.DataSource = filteredItems;
+
+                if (String.IsNullOrWhiteSpace(filter_param))
+                {
+                    searchComboBox.DataSource = completeModSearchList;
+                }
+
+                searchComboBox.DroppedDown = true;
+                Cursor.Current = Cursors.Default;
+
+                // this will ensure that the drop down is as long as the list
+                searchComboBox.IntegralHeight = true;
+
+                // remove automatically selected first item
+                searchComboBox.SelectedIndex = -1;
+
+                searchComboBox.Text = filter_param;
+
+                // set the position of the cursor
+                searchComboBox.SelectionStart = filter_param.Length;
+                searchComboBox.SelectionLength = 0;
             }
-            searchComboBox.DroppedDown = true;
-            Cursor.Current = Cursors.Default;
-
-            // this will ensure that the drop down is as long as the list
-            searchComboBox.IntegralHeight = true;
-
-            // remove automatically selected first item
-            searchComboBox.SelectedIndex = -1;
-
-            searchComboBox.Text = filter_param;
-
-            // set the position of the cursor
-            searchComboBox.SelectionStart = filter_param.Length;
-            searchComboBox.SelectionLength = 0;
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("searchComboBox_TextUpdate", ex);
+            }
         }
     }
 }

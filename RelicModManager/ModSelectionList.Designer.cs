@@ -230,7 +230,7 @@ namespace RelhaxModpack
             // 
             this.searchCB.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.searchCB.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.searchCB.FormattingEnabled = true;
+            this.searchCB.FormattingEnabled = false;
             this.searchCB.Location = new System.Drawing.Point(676, 52);
             this.searchCB.Name = "searchCB";
             this.searchCB.Size = new System.Drawing.Size(304, 21);
