@@ -30,6 +30,7 @@ namespace RelhaxModpack
         bool hasRadioButtonConfigSelected = false;
         bool modHasRadioButtons = false;
         bool firstLoad = true;
+        bool ignoreSelections = false;
         private enum loadConfigMode
         {
             error = -1,
@@ -2382,7 +2383,16 @@ namespace RelhaxModpack
             try
             {
                 ComboBox sendah = (ComboBox)sender;
-                if (sendah.SelectedIndex == -1) { return; };
+                if (sendah.SelectedIndex == -1 || ignoreSelections)
+                {
+                    if (sendah.SelectedIndex != -1)
+                    {
+                        sendah.SelectedIndexChanged -= searchComboBox_SelectionChangeCommitted;
+                        sendah.SelectedIndex = -1;
+                        sendah.SelectedIndexChanged += searchComboBox_SelectionChangeCommitted;
+                    }
+                    return;
+                }
                 Mod m = (Mod)sendah.SelectedItem;
                 if (modTabGroups.TabPages.Contains(m.tabIndex))
                 {
@@ -2411,16 +2421,29 @@ namespace RelhaxModpack
         {
             ComboBox searchComboBox = (ComboBox)sender;
             string filter_param = searchComboBox.Text;
-
-            List<Mod> filteredItems = completeModSearchList.FindAll(x => x.name.ToLower().Contains(filter_param.ToLower()));
-
-            searchComboBox.DataSource = filteredItems;
-
             if (String.IsNullOrWhiteSpace(filter_param))
             {
                 searchComboBox.DataSource = completeModSearchList;
             }
-            searchComboBox.DroppedDown = true;
+            else
+            {
+                List<Mod> filteredItems = completeModSearchList.FindAll(x => x.name.ToLower().Contains(filter_param.ToLower()));
+                if (filteredItems.Count != 0)
+                {
+                    ignoreSelections = false;
+                    searchComboBox.DataSource = filteredItems;
+                    searchComboBox.DropDown -= searchCB_DropDown;
+                    searchComboBox.DroppedDown = true;
+                    searchComboBox.DropDown += searchCB_DropDown;
+                }
+                else
+                {
+                    ignoreSelections = true;
+                    searchComboBox.SelectedIndex = -1;
+                }
+            }
+            
+            
             Cursor.Current = Cursors.Default;
 
             // this will ensure that the drop down is as long as the list
@@ -2434,6 +2457,11 @@ namespace RelhaxModpack
             // set the position of the cursor
             searchComboBox.SelectionStart = filter_param.Length;
             searchComboBox.SelectionLength = 0;
+        }
+
+        private void searchCB_DropDown(object sender, EventArgs e)
+        {
+            searchComboBox_TextUpdate(sender, null);
         }
     }
 }
