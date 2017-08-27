@@ -235,6 +235,7 @@ namespace RelhaxModpack
             this.searchCB.Name = "searchCB";
             this.searchCB.Size = new System.Drawing.Size(304, 21);
             this.searchCB.TabIndex = 18;
+            this.searchCB.DropDown += new System.EventHandler(this.searchCB_DropDown);
             this.searchCB.SelectionChangeCommitted += new System.EventHandler(this.searchComboBox_SelectionChangeCommitted);
             this.searchCB.TextUpdate += new System.EventHandler(this.searchComboBox_TextUpdate);
             // 
@@ -267,6 +268,7 @@ namespace RelhaxModpack
             this.SizeChanged += new System.EventHandler(this.ModSelectionList_SizeChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion

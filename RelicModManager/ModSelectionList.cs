@@ -30,6 +30,7 @@ namespace RelhaxModpack
         bool hasRadioButtonConfigSelected = false;
         bool modHasRadioButtons = false;
         bool firstLoad = true;
+        bool ignoreSelections = false;
         private enum loadConfigMode
         {
             error = -1,
@@ -364,6 +365,7 @@ namespace RelhaxModpack
             modCheckBox.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
             if (Settings.darkUI)
                 modCheckBox.FontWeight = System.Windows.FontWeights.Bold;
+            modCheckBox.VerticalAlignment = System.Windows.VerticalAlignment.Center;
             //make the tree view item for the modCheckBox
             System.Windows.Controls.TreeViewItem tvi = new System.Windows.Controls.TreeViewItem();
             if(Settings.expandAllLegacy)
@@ -465,6 +467,7 @@ namespace RelhaxModpack
                     configControlRB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
                     if (Settings.darkUI)
                         configControlRB.FontWeight = System.Windows.FontWeights.Bold;
+                    configControlRB.VerticalAlignment = System.Windows.VerticalAlignment.Center;
                     configControlRB.catagory = c;
                     configControlRB.mod = m;
                     configControlRB.config = con;
@@ -621,6 +624,7 @@ namespace RelhaxModpack
                     configControlCB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
                     if (Settings.darkUI)
                         configControlCB.FontWeight = System.Windows.FontWeights.Bold;
+                    configControlCB.VerticalAlignment = System.Windows.VerticalAlignment.Center;
                     configControlCB.catagory = c;
                     configControlCB.mod = m;
                     configControlCB.config = con;
@@ -2379,7 +2383,16 @@ namespace RelhaxModpack
             try
             {
                 ComboBox sendah = (ComboBox)sender;
-                if (sendah.SelectedIndex == -1) { return; };
+                if (sendah.SelectedIndex == -1 || ignoreSelections)
+                {
+                    if (sendah.SelectedIndex != -1)
+                    {
+                        sendah.SelectedIndexChanged -= searchComboBox_SelectionChangeCommitted;
+                        sendah.SelectedIndex = -1;
+                        sendah.SelectedIndexChanged += searchComboBox_SelectionChangeCommitted;
+                    }
+                    return;
+                }
                 Mod m = (Mod)sendah.SelectedItem;
                 if (modTabGroups.TabPages.Contains(m.tabIndex))
                 {
@@ -2406,47 +2419,49 @@ namespace RelhaxModpack
 
         private void searchComboBox_TextUpdate(object sender, EventArgs e)
         {
-            try
+            ComboBox searchComboBox = (ComboBox)sender;
+            string filter_param = searchComboBox.Text;
+            if (String.IsNullOrWhiteSpace(filter_param))
             {
-                ComboBox searchComboBox = (ComboBox)sender;
-                string filter_param = searchComboBox.Text;
-
-                Char delimiter = '*';
-                String[] filter_parts = filter_param.Split(delimiter);
-
-                List<Mod> filteredItems = completeModSearchList;
-
-                foreach (var f in filter_parts)
-                {
-                    filteredItems = filteredItems.FindAll(x => x.name.ToLower().Contains(f.ToLower()));
-                }
-
-                searchComboBox.DataSource = filteredItems;
-
-                if (String.IsNullOrWhiteSpace(filter_param))
-                {
-                    searchComboBox.DataSource = completeModSearchList;
-                }
-
-                searchComboBox.DroppedDown = true;
-                Cursor.Current = Cursors.Default;
-
-                // this will ensure that the drop down is as long as the list
-                searchComboBox.IntegralHeight = true;
-
-                // remove automatically selected first item
-                searchComboBox.SelectedIndex = -1;
-
-                searchComboBox.Text = filter_param;
-
-                // set the position of the cursor
-                searchComboBox.SelectionStart = filter_param.Length;
-                searchComboBox.SelectionLength = 0;
+                searchComboBox.DataSource = completeModSearchList;
             }
-            catch (Exception ex)
+            else
             {
-                Utils.exceptionLog("searchComboBox_TextUpdate", ex);
+                List<Mod> filteredItems = completeModSearchList.FindAll(x => x.name.ToLower().Contains(filter_param.ToLower()));
+                if (filteredItems.Count != 0)
+                {
+                    ignoreSelections = false;
+                    searchComboBox.DataSource = filteredItems;
+                    searchComboBox.DropDown -= searchCB_DropDown;
+                    searchComboBox.DroppedDown = true;
+                    searchComboBox.DropDown += searchCB_DropDown;
+                }
+                else
+                {
+                    ignoreSelections = true;
+                    searchComboBox.SelectedIndex = -1;
+                }
             }
+            
+            
+            Cursor.Current = Cursors.Default;
+
+            // this will ensure that the drop down is as long as the list
+            searchComboBox.IntegralHeight = true;
+
+            // remove automatically selected first item
+            searchComboBox.SelectedIndex = -1;
+
+            searchComboBox.Text = filter_param;
+
+            // set the position of the cursor
+            searchComboBox.SelectionStart = filter_param.Length;
+            searchComboBox.SelectionLength = 0;
+        }
+
+        private void searchCB_DropDown(object sender, EventArgs e)
+        {
+            searchComboBox_TextUpdate(sender, null);
         }
     }
 }
