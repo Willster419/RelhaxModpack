@@ -1,4 +1,6 @@
-﻿namespace RelhaxModpack
+﻿using System.Windows.Forms;
+
+namespace RelhaxModpack
 {
     partial class ModSelectionList
     {
@@ -226,14 +228,15 @@
             // 
             // searchCB
             // 
-            this.searchCB.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.searchCB.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.searchCB.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.searchCB.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.searchCB.FormattingEnabled = true;
             this.searchCB.Location = new System.Drawing.Point(676, 52);
             this.searchCB.Name = "searchCB";
             this.searchCB.Size = new System.Drawing.Size(304, 21);
             this.searchCB.TabIndex = 18;
-            this.searchCB.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.searchCB.SelectionChangeCommitted += new System.EventHandler(this.searchComboBox_SelectionChangeCommitted);
+            this.searchCB.TextUpdate += new System.EventHandler(this.searchComboBox_TextUpdate);
             // 
             // ModSelectionList
             // 
@@ -264,7 +267,6 @@
             this.SizeChanged += new System.EventHandler(this.ModSelectionList_SizeChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion

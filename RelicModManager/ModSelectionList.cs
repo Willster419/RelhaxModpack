@@ -18,6 +18,7 @@ namespace RelhaxModpack
         private Preview p = new Preview(null, null, null);
         private PleaseWait pw;
         public List<Dependency> globalDependencies;
+        public List<Mod> completeModSearchList;
         private bool loadingConfig = false;
         private bool taskBarHidden = false;
         private const int titleBar = 23;//set origionally for 23
@@ -249,6 +250,7 @@ namespace RelhaxModpack
             }
             loadingConfig = true;
             Utils.appendToLog("Loading ModSelectionList with view " + Settings.sView);
+            completeModSearchList = new List<Mod>();
             foreach (TabPage t in this.modTabGroups.TabPages)
             {
                 foreach (Category c in parsedCatagoryList)
@@ -346,7 +348,8 @@ namespace RelhaxModpack
             //add the root UI object to the memory database
             m.modFormCheckBox = modCheckBox;
             m.tabIndex = t;
-            searchCB.Items.Add(m);
+            // searchCB.Items.Add(m);
+            completeModSearchList.Add(m);
             switch (Settings.fontSizeforum)
             {
                 case Settings.FontSize.fontRegular:
@@ -1138,7 +1141,8 @@ namespace RelhaxModpack
             modCheckBox.mod = m;
             m.tabIndex = t;
             m.modFormCheckBox = modCheckBox;
-            searchCB.Items.Add(m);
+            // searchCB.Items.Add(m);
+            completeModSearchList.Add(m);
             //the mod checksum logic
             string modDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.zipFile;
             if (firstLoad)
@@ -2370,27 +2374,63 @@ namespace RelhaxModpack
             }
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void searchComboBox_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            ComboBox sendah = (ComboBox)sender;
-            Mod m = (Mod)sendah.SelectedItem;
-            if(modTabGroups.TabPages.Contains(m.tabIndex))
+            try
             {
-                modTabGroups.SelectedTab = m.tabIndex;
+                ComboBox sendah = (ComboBox)sender;
+                if (sendah.SelectedIndex == -1) { return; };
+                Mod m = (Mod)sendah.SelectedItem;
+                if (modTabGroups.TabPages.Contains(m.tabIndex))
+                {
+                    modTabGroups.SelectedTab = m.tabIndex;
+                }
+                TabPage tp = modTabGroups.SelectedTab;
+                if (Settings.sView == Settings.SelectionView.defaultt)
+                {
+                    ModFormCheckBox c = (ModFormCheckBox)m.modFormCheckBox;
+                    tp.ScrollControlIntoView(c);
+                }
+                else if (Settings.sView == Settings.SelectionView.legacy)
+                {
+                    ModWPFCheckBox c = (ModWPFCheckBox)m.modFormCheckBox;
+                    c.Focus();
+                    this.ModSelectionList_SizeChanged(null, null);
+                }
             }
-            TabPage tp = modTabGroups.SelectedTab;
-            if (Settings.sView == Settings.SelectionView.defaultt)
+            catch (Exception ex)
             {
-                ModFormCheckBox c = (ModFormCheckBox)m.modFormCheckBox;
-                tp.ScrollControlIntoView(c);
+                Utils.exceptionLog("searchComboBox_SelectionChangeCommitted", ex);
             }
-            else if (Settings.sView == Settings.SelectionView.legacy)
+        }
+
+        private void searchComboBox_TextUpdate(object sender, EventArgs e)
+        {
+            ComboBox searchComboBox = (ComboBox)sender;
+            string filter_param = searchComboBox.Text;
+
+            List<Mod> filteredItems = completeModSearchList.FindAll(x => x.name.ToLower().Contains(filter_param.ToLower()));
+
+            searchComboBox.DataSource = filteredItems;
+
+            if (String.IsNullOrWhiteSpace(filter_param))
             {
-                ModWPFCheckBox c = (ModWPFCheckBox)m.modFormCheckBox;
-                c.Focus();
-                this.ModSelectionList_SizeChanged(null, null);
+                searchComboBox.DataSource = completeModSearchList;
             }
-            
+            searchComboBox.DroppedDown = true;
+            Cursor.Current = Cursors.Default;
+
+            // this will ensure that the drop down is as long as the list
+            searchComboBox.IntegralHeight = true;
+
+            // remove automatically selected first item
+            searchComboBox.SelectedIndex = -1;
+
+            searchComboBox.Text = filter_param;
+
+            // set the position of the cursor
+            searchComboBox.SelectionStart = filter_param.Length;
+            searchComboBox.SelectionLength = 0;
         }
     }
 }
