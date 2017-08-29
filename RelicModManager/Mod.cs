@@ -28,7 +28,7 @@ namespace RelhaxModpack
         public string description { get; set; }
         public string devURL { get; set; }
         public List<string> userFiles = new List<string>();
-        public List<Picture> pictureList = new List<Picture>();
+        public List<Media> pictureList = new List<Media>();
         public List<Config> configs = new List<Config>();
         public List<Dependency> dependencies = new List<Dependency>();
         //the parent of a mod is a category

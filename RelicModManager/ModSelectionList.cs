@@ -15,7 +15,7 @@ namespace RelhaxModpack
         public List<Category> parsedCatagoryList;//can be grabbed by MainWindow
         public List<Mod> userMods;//can be grabbed by MainWindow
         public bool cancel = true;//used to determine if the user canceled
-        private Preview p = new Preview(null, null, null);
+        private Preview p;
         private PleaseWait pw;
         public List<Dependency> globalDependencies;
         public List<Mod> completeModSearchList;
@@ -1075,7 +1075,12 @@ namespace RelhaxModpack
                 Mod m = cb.mod;
                 if (m.devURL == null)
                     m.devURL = "";
-                p.Close();
+                if (p != null)
+                {
+                    p.Close();
+                    p.Dispose();
+                    p = null;
+                }
                 p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
                 p.Show();
             }
@@ -1092,7 +1097,12 @@ namespace RelhaxModpack
             Config m = cbi.config;
             if (m.devURL == null)
                 m.devURL = "";
-            p.Close();
+            if (p != null)
+            {
+                p.Close();
+                p.Dispose();
+                p = null;
+            }
             p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
             p.Show();
         }
@@ -1107,7 +1117,12 @@ namespace RelhaxModpack
             Config m = cb.config;
             if (m.devURL == null)
                 m.devURL = "";
-            p.Close();
+            if (p != null)
+            {
+                p.Close();
+                p.Dispose();
+                p = null;
+            }
             p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
             p.Show();
         }
@@ -1122,7 +1137,12 @@ namespace RelhaxModpack
             Config m = cb.config;
             if (m.devURL == null)
                 m.devURL = "";
-            p.Close();
+            if (p != null)
+            {
+                p.Close();
+                p.Dispose();
+                p = null;
+            }
             p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
             p.Show();
         }
@@ -2037,7 +2057,12 @@ namespace RelhaxModpack
                 Mod m = cb.mod;
                 if (m.devURL == null)
                     m.devURL = "";
-                p.Close();
+                if (p != null)
+                {
+                    p.Close();
+                    p.Dispose();
+                    p = null;
+                }
                 p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
                 p.Show();
             }
@@ -2051,7 +2076,12 @@ namespace RelhaxModpack
             Config m = cb.config;
             if (m.devURL == null)
                 m.devURL = "";
-            p.Close();
+            if (p != null)
+            {
+                p.Close();
+                p.Dispose();
+                p = null;
+            }
             p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
             p.Show();
         }
@@ -2065,7 +2095,12 @@ namespace RelhaxModpack
             Config m = cbi.config;
             if (m.devURL == null)
                 m.devURL = "";
-            p.Close();
+            if (p != null)
+            {
+                p.Close();
+                p.Dispose();
+                p = null;
+            }
             p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
             p.Show();
         }
@@ -2085,7 +2120,12 @@ namespace RelhaxModpack
             Config m = cb.config;
             if (m.devURL == null)
                 m.devURL = "";
-            p.Close();
+            if (p != null)
+            {
+                p.Close();
+                p.Dispose();
+                p = null;
+            }
             p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
             p.Show();
         }
@@ -2208,7 +2248,11 @@ namespace RelhaxModpack
                 Settings.ModSelectionFullscreen = false;
             //close the preview window if it is open
             if (p != null)
+            {
                 p.Close();
+                p.Dispose();
+                p = null;
+            }
         }
 
         private void clearSelectionsButton_Click(object sender, EventArgs e)

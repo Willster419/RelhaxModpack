@@ -6,7 +6,7 @@ namespace RelhaxModpack
         picture = 1,
         youtube = 2
     }
-    public class Picture
+    public class Media
     {
         //two-part variable. specifies wether it's part of a mod, or a mod's config
         //and the mod/config name
@@ -18,14 +18,14 @@ namespace RelhaxModpack
         public MediaType mediaType { get; set; }
         //constructor to setup the picture with the "name" and
         //the URL where the picture is located
-        public Picture(string newName, string newURL)
+        public Media(string newName, string newURL)
         {
             name = newName;
             URL = newURL;
             mediaType = MediaType.picture;
         }
         //sorts the mods
-        public static int ComparePictures(Picture x, Picture y)
+        public static int ComparePictures(Media x, Media y)
         {
             //name looks like this
             //Mod:name

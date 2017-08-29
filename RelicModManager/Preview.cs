@@ -9,21 +9,26 @@ namespace RelhaxModpack
     //ro config name, pictures, description, and any update comments
     public partial class Preview : Form
     {
+        private Size previewComponentSize = new Size(418, 309);
+        private Point previewComponentLocation = new Point(12, 12);
+        private Color previewComponentBackColor = SystemColors.ControlDarkDark;
+        private PictureBoxSizeMode previewComponentSizeMode = PictureBoxSizeMode.Zoom;
         public string modOrConfigName { get; set; }
         public string description { get; set; }
         public string updateComments { get; set; }
-        List<Picture> pictures = new List<Picture>();
+        List<Media> medias = new List<Media>();
         private Image loadingImage;
         public string devURL { get; set; }
         private int currentlySelected = 0;
         private const int titleBar = 23;//set origionally for 23
         private int difference = 0;
+        private WebBrowser youtubedisplay;
         //Preview constructor that sets all the required values
-        public Preview(string title, List<Picture> pictureList, string desc, string update = "", string dev = "")
+        public Preview(string title, List<Media> pictureList, string desc, string update = "", string dev = "")
         {
             InitializeComponent();
             modOrConfigName = title;
-            pictures = pictureList;
+            medias = pictureList;
             updateComments = update;
             description = desc;
             devURL = dev;
@@ -36,17 +41,57 @@ namespace RelhaxModpack
         }
         //sets the window title to reflect the new picture, and
         //begine the async process of loading the new picture
-        public void displayPictures(string name, string URL)
+        public void displayMedia(Media m)
         {
             previewPicture.Image = null;
-            if (pictures.Count == 0)
+            if (medias.Count == 0)
                 return;
-            if (URL.Equals(""))
+            if (m.URL.Equals(""))
                 return;
-            previewPicture.Image = Settings.getLoadingImage();
-            previewPicture.LoadAsync(URL);
-            this.Text = name + " - " + currentlySelected;
-            Utils.appendToLog("Preview: started loading of picture '" + name + "' at URL '" + URL + "'");
+            if (this.Controls.Contains(previewPicture))
+            {
+                this.Controls.Remove(previewPicture);
+                previewPicture.Dispose();
+                previewPicture = null;
+            }
+            if(this.Contains(youtubedisplay))
+            {
+                this.Controls.Remove(youtubedisplay);
+                youtubedisplay.Dispose();
+                youtubedisplay = null;
+            }
+            if (m.mediaType == MediaType.picture)
+            {
+                previewPicture = new PictureBox()
+                {
+                    Size = previewComponentSize,
+                    BackColor = previewComponentBackColor,
+                    Location = previewComponentLocation,
+                    SizeMode = previewComponentSizeMode
+                };
+                previewPicture.Click += previewPicture_Click;
+                this.Controls.Add(previewPicture);
+                previewPicture.Image = Settings.getLoadingImage();
+                previewPicture.LoadAsync(m.URL);
+                this.Text = m.name + " - " + currentlySelected;
+                Utils.appendToLog("Preview: started loading of picture '" + m.name + "' at URL '" + m.URL + "'");
+            }
+            else if (m.mediaType == MediaType.youtube)
+            {
+                youtubedisplay = new WebBrowser()
+                {
+                    Size = previewComponentSize,
+                    Location = previewComponentLocation,
+                };
+                this.Controls.Add(youtubedisplay);
+                youtubedisplay.Navigate(m.URL);
+                this.Text = m.name + " - " + currentlySelected;
+                Utils.appendToLog("Preview: started loading of youtube video '" + m.name + "' at URL '" + m.URL + "'");
+            }
+            else
+            {
+                Utils.appendToLog("ERROR: Unknown media type: " + m.mediaType);
+            }
         }
         //make the linked labels for each picture in the picturesList
         //so a user can navagate easily through the pictures
@@ -70,7 +115,7 @@ namespace RelhaxModpack
             int i = int.Parse(lb.Text);
             //i--;
             currentlySelected = i;
-            this.displayPictures(pictures[i].name, pictures[i].URL);
+            this.displayMedia(medias[i]);
         }
         //show the suplied dev url thread
         private void devLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -82,12 +127,12 @@ namespace RelhaxModpack
         private void nextPicButton_Click(object sender, EventArgs e)
         {
             currentlySelected++;
-            if (currentlySelected >= pictures.Count)
+            if (currentlySelected >= medias.Count)
             {
                 currentlySelected--;
                 return;
             }
-            this.displayPictures(pictures[currentlySelected].name, pictures[currentlySelected].URL);
+            this.displayMedia(medias[currentlySelected]);
         }
         //load the previous picture in the list
         private void previousPicButton_Click(object sender, EventArgs e)
@@ -98,7 +143,7 @@ namespace RelhaxModpack
                 currentlySelected++;
                 return;
             }
-            this.displayPictures(pictures[currentlySelected].name, pictures[currentlySelected].URL);
+            this.displayMedia(medias[currentlySelected]);
         }
         //handler for if the user changes the size of the window
         private void Preview_SizeChanged(object sender, EventArgs e)
@@ -119,7 +164,10 @@ namespace RelhaxModpack
                     scale = 75;
                     break;
             }
-            previewPicture.Size = new Size(width, applicationHeight - 265 - difference - scale);
+            if(previewPicture != null)
+                previewPicture.Size = new Size(width, applicationHeight - 265 - difference - scale);
+            if (youtubedisplay != null)
+                youtubedisplay.Size = new Size(width, applicationHeight - 265 - difference - scale);
             updateBox.Location = new Point(12, 12 + previewPicture.Size.Height + 6 + nextPicButton.Size.Height + 6 + descriptionBox.Size.Height + 6);
             descriptionBox.Location = new Point(12, 12 + previewPicture.Size.Height + 6 + nextPicButton.Size.Height + 6);
             nextPicButton.Location = new Point(this.Size.Width - 21 - nextPicButton.Size.Width, 12 + previewPicture.Size.Height + 6);
@@ -148,17 +196,17 @@ namespace RelhaxModpack
                 this.Scale(new System.Drawing.SizeF(Settings.scaleSize, Settings.scaleSize));
             }
             this.Text = modOrConfigName;
-            for (int i = 0; i < pictures.Count; i++)
+            for (int i = 0; i < medias.Count; i++)
             {
                 this.makeLinkedLabel(i);
             }
             previewPicture.WaitOnLoad = false;
             previewPicture.InitialImage = Settings.getLoadingImage();
-            if (pictures != null)
+            if (medias != null)
             {
                 currentlySelected = 0;
-                if (pictures.Count > 0)
-                    this.displayPictures(pictures[currentlySelected].name, pictures[currentlySelected].URL);
+                if (medias.Count > 0)
+                    this.displayMedia(medias[currentlySelected]);
             }
             if (description == null)
                 description = "No Description Provided";

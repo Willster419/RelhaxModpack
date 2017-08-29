@@ -606,7 +606,7 @@ namespace RelhaxModpack
                                                                                     continue;
                                                                                 if (innerText.Equals(""))
                                                                                     continue;
-                                                                                m.pictureList.Add(new Picture(m.name, pictureNode.Value));
+                                                                                m.pictureList.Add(new Media(m.name, pictureNode.Value));
                                                                                 break;
                                                                             default:
                                                                                 Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => picture =>expected nodes: URL (line {3})", pictureNode.Name.ToString(), m.name, m.zipFile, ((IXmlLineInfo)pictureNode).LineNumber));
@@ -866,7 +866,7 @@ namespace RelhaxModpack
                                                                     continue;
                                                                 if (innerText.Equals(""))
                                                                     continue;
-                                                                c.pictureList.Add(new Picture(c.name, pictureNode.Value));
+                                                                c.pictureList.Add(new Media(c.name, pictureNode.Value));
                                                                 break;
                                                             default:
                                                                 Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => configs {1} ({2}) => pictures => expected nodes: URL (line {3})", pictureNode.Name.ToString(), c.name, c.zipFile, ((IXmlLineInfo)pictureNode).LineNumber));
@@ -1207,7 +1207,7 @@ namespace RelhaxModpack
             catagoryList.Sort(Category.CompareCatagories);
         }
         //sorts a list of pictures by mod or config, then name
-        public static List<Picture> sortPictureList(List<Picture> pictureList)
+        public static List<Media> sortPictureList(List<Media> pictureList)
         {
             //don't actually sort them anymore
             //they will not apprea in the order of which they were loaded from the xml file

@@ -322,7 +322,7 @@ namespace RelhaxModpack
                     modRoot.AppendChild(modDatas);
                     //pictures for the mods
                     XmlElement modPictures = doc.CreateElement("pictures");
-                    foreach (Picture p in m.pictureList)
+                    foreach (Media p in m.pictureList)
                     {
                         XmlElement pictureRoot = doc.CreateElement("picture");
                         XmlElement pictureURL = doc.CreateElement("URL");
@@ -431,7 +431,7 @@ namespace RelhaxModpack
                 configRoot.AppendChild(configDatas);
                 //pictures for the configs
                 XmlElement configPictures = doc.CreateElement("pictures");
-                foreach (Picture p in cc.pictureList)
+                foreach (Media p in cc.pictureList)
                 {
                     XmlElement configpictureRoot = doc.CreateElement("picture");
                     XmlElement configpictureURL = doc.CreateElement("URL");

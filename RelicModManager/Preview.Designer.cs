@@ -11,12 +11,37 @@
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// https://stackoverflow.com/questions/1052147/how-do-i-extend-a-winforms-dispose-method
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+
+                // Dispose stuff here
+                if (youtubedisplay != null)
+                {
+                    youtubedisplay.Dispose();
+                    youtubedisplay = null;
+                }
+                if (previewPicture != null)
+                {
+                    previewPicture.Dispose();
+                    previewPicture = null;
+                }
+                for(int i = 0; i < this.Controls.Count; i++)
+                {
+                    if(Controls[i] != null)
+                    {
+                        Controls[i].Dispose();
+                    }
+                }
+                this.Controls.Clear();
             }
+
             base.Dispose(disposing);
         }
 
