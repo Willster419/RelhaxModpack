@@ -48,6 +48,7 @@ namespace RelhaxModpack
         string helperText;
         string currentModDownloading;
         private Installer ins;
+        private Installer unI;
         private string tanksVersion;//0.9.x.y
         //list to maintain the refrence lines in a json patch
         List<double> timeRemainArray;
@@ -1091,6 +1092,11 @@ namespace RelhaxModpack
                     ins.Dispose();
                     ins = null;
                 }
+                if(unI != null)
+                {
+                    unI.Dispose();
+                    unI = null;
+                }
                 globalDependenciesToInstall = null;
                 dependenciesToInstall = null;
                 logicalDependenciesToInstall = null;
@@ -1151,40 +1157,38 @@ namespace RelhaxModpack
             tanksVersion = this.getFolderVersion();
             if (MessageBox.Show(Translations.getTranslatedString("confirmUninstallMessage"), Translations.getTranslatedString("confirmUninstallHeader"), MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                using (Installer unI = new Installer()
+                unI = new Installer()
                 {
                     AppPath = Application.StartupPath,
                     TanksLocation = tanksLocation,
                     TanksVersion = tanksVersion
-                })
+                };
+                unI.InstallProgressChanged += I_InstallProgressChanged;
+                Utils.appendToLog("Started Uninstallation process");
+                if (Settings.cleanUninstall)
                 {
-                    unI.InstallProgressChanged += I_InstallProgressChanged;
-                    Utils.appendToLog("Started Uninstallation process");
-                    if (Settings.cleanUninstall)
+                    //run the recursive complete uninstaller
+                    unI.StartCleanUninstallation();
+                }
+                else
+                {
+                    //run the smart uninstaller
+                    if (!File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
                     {
-                        //run the recursive complete uninstaller
-                        unI.StartCleanUninstallation();
-                    }
-                    else
-                    {
-                        //run the smart uninstaller
-                        if (!File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
+                        Utils.appendToLog("ERROR: installedRelhaxFiles.log does not exist, prompt user to delete everything instead");
+                        DialogResult result = MessageBox.Show(Translations.getTranslatedString("noUninstallLogMessage"), Translations.getTranslatedString("noUninstallLogHeader"), MessageBoxButtons.YesNo);
+                        if (result == DialogResult.Yes)
                         {
-                            Utils.appendToLog("ERROR: installedRelhaxFiles.log does not exist, prompt user to delete everything instead");
-                            DialogResult result = MessageBox.Show(Translations.getTranslatedString("noUninstallLogMessage"), Translations.getTranslatedString("noUninstallLogHeader"), MessageBoxButtons.YesNo);
-                            if (result == DialogResult.Yes)
-                            {
-                                Utils.appendToLog("User said yes to delete");
-                                unI.StartCleanUninstallation();
-                            }
-                            else
-                            {
-                                Utils.appendToLog("User said no, aborting");
-                            }
-                            return;
+                            Utils.appendToLog("User said yes to delete");
+                            unI.StartCleanUninstallation();
                         }
-                        unI.StartUninstallation();
+                        else
+                        {
+                            Utils.appendToLog("User said no, aborting");
+                        }
+                        return;
                     }
+                    unI.StartUninstallation();
                 }
             }
             else
