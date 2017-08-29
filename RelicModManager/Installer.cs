@@ -867,7 +867,6 @@ namespace RelhaxModpack
                 //create a patch instance to take the patch information
                 Patch p = new Patch();
                 p.actualPatchName = originalPatchNames[0];
-                originalPatchNames.RemoveAt(0);
                 p.nativeProcessingFile = tmpXmlFilename;
                 //foreach node in this specific "patch" node
                 foreach (XmlNode nn in n.ChildNodes)
@@ -905,6 +904,7 @@ namespace RelhaxModpack
                 tmpXmlFilename = "";
                 patchList.Add(p);
             }
+            originalPatchNames.RemoveAt(0);
         }
         //do nothing at this point
         private void SmartUninstall()
