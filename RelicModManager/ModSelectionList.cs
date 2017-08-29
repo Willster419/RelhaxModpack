@@ -2386,7 +2386,12 @@ namespace RelhaxModpack
             List<Mod> filteredItems = null;
             if (!String.IsNullOrWhiteSpace(filter_param))
             {
-                filteredItems = completeModSearchList.FindAll(x => x.name.ToLower().Contains(filter_param.ToLower()));
+                String[] filtered_parts = filter_param.Split('*');
+                filteredItems = completeModSearchList;
+                foreach (var f in filtered_parts)
+                {
+                    filteredItems = filteredItems.FindAll(x => x.name.ToLower().Contains(f.ToLower()));
+                }
             }
 
             if (filteredItems == null)
@@ -2398,11 +2403,12 @@ namespace RelhaxModpack
             else if (filteredItems.Count == 0)
             {
                 ignoreSelections = true;
-
+                searchComboBox.ForeColor = System.Drawing.Color.Red;
             }
             else
             {
                 ignoreSelections = false;
+                searchComboBox.ForeColor = System.Drawing.Color.Black;
                 searchComboBox.SelectedIndexChanged -= searchCB_SelectedIndexChanged;
                 searchComboBox.DataSource = filteredItems;
                 searchComboBox.SelectedIndex = -1;
@@ -2419,15 +2425,7 @@ namespace RelhaxModpack
 
         private void searchCB_DropDown(object sender, EventArgs e)
         {
-            ComboBox searchComboBox = (ComboBox)sender;
-            if (ignoreSelections)
-            {
-                searchComboBox.SelectedIndexChanged -= searchCB_SelectedIndexChanged;
-                searchComboBox.DataSource = completeModSearchList;
-                //searchComboBox.SelectedIndex = -1;
-                searchComboBox.SelectedIndexChanged += searchCB_SelectedIndexChanged;
-            }
-            searchComboBox.IntegralHeight = true;
+            searchComboBox_TextUpdate(sender, null);
         }
 
         private void searchCB_SelectedIndexChanged(object sender, EventArgs e)
@@ -2447,7 +2445,6 @@ namespace RelhaxModpack
             ComboBox sendah = (ComboBox)sender;
             if (sendah.SelectedIndex == -1 || ignoreSelections)
             {
-                
                 return;
             }
             Mod m = (Mod)sendah.SelectedItem;
