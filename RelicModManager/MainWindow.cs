@@ -710,6 +710,12 @@ namespace RelhaxModpack
             //reset the childProgressBar value
             childProgressBar.Maximum = 100;
             childProgressBar.Value = 0;
+            //check to make sure that the md5hashdatabase is valid before using it
+            string md5HashDatabaseLocation = Path.Combine(Application.StartupPath, "RelHaxDownloads", "MD5HashDatabase.xml");
+            if ((File.Exists(md5HashDatabaseLocation)) && (!Utils.IsValidXml(md5HashDatabaseLocation)))
+            {
+                File.Delete(md5HashDatabaseLocation);
+            }
             //show the mod selection window
             ModSelectionList list = new ModSelectionList(selectionListTanksVersion, tanksLocation, this.Location.X + this.Size.Width, this.Location.Y);
             list.ShowDialog();

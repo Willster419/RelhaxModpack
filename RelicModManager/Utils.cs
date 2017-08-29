@@ -186,17 +186,17 @@ namespace RelhaxModpack
                 string exception = "";
                 try { exception = string.Format("Code: {0}\n", e.ToString()); } catch { };
                 string stackTrace = "";
-                try { stackTrace = string.Format("StackTrace: {0}\n", e.StackTrace.Equals("") ? "(empty)" : e.StackTrace == null ? "(null)" : e.StackTrace.ToString()); } catch { };
+                try { stackTrace = string.Format("StackTrace: {0}\n", e.StackTrace == null ? "(null)" : e.StackTrace.Equals("") ? "(empty)" : e.StackTrace.ToString()); } catch { };
                 string message = "";
-                try { message = string.Format("Message: {0}\n", e.Message.Equals("") ? "(empty)" : e.Message == null ? "(null)" : e.Message.ToString()); } catch { };
+                try { message = string.Format("Message: {0}\n", e.Message == null ? "(null)" : e.Message.Equals("") ? "(empty)" : e.Message.ToString()); } catch { };
                 string source = "";
-                try { source = string.Format("Source: {0}\n", e.Source.Equals("") ? "(empty)" : e.Source == null ? "(null)" : e.Source.ToString()); } catch { };
+                try { source = string.Format("Source: {0}\n", e.Source == null ? "(null)" : e.Source.Equals("") ? "(empty)" : e.Source.ToString()); } catch { };
                 string targetSite = "";
-                try { targetSite = string.Format("TargetSite: {0}\n", e.TargetSite.Equals("") ? "(empty)" : e.TargetSite == null ? "(null)" : e.TargetSite.ToString()); } catch { };
+                try { targetSite = string.Format("TargetSite: {0}\n", e.TargetSite == null ? "(null)" : e.TargetSite.Equals("") ? "(empty)" : e.TargetSite.ToString()); } catch { };
                 string innerException = "";
-                try { innerException = string.Format("InnerException: {0}\n", e.InnerException.Equals("") ? "(empty)" : e.InnerException == null ? "(null)" : e.InnerException.ToString()); } catch { };
+                try { innerException = string.Format("InnerException: {0}\n", e.InnerException == null ? "(null)" : e.InnerException.Equals("") ? "(empty)" : e.InnerException.ToString()); } catch { };
                 string data = "";
-                try { data = string.Format("Data: {0}\n", e.Data.Equals("") ? "(empty)" : e.Data == null ? "(null)" : e.Data.ToString()); } catch { };
+                try { data = string.Format("Data: {0}\n", e.Data == null ? "(null)" : e.Data.Equals("") ? "(empty)" : e.Data.ToString()); } catch { };
 
                 if (e is WebException)
                 {
@@ -235,7 +235,22 @@ namespace RelhaxModpack
                 Utils.appendToLog(msg);
             }
         }
-
+        public static bool IsValidXml(string xmlString)
+        {
+            XmlTextReader read = new XmlTextReader(xmlString);
+            try
+            {
+                while (read.Read()) ;
+                read.Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Utils.exceptionLog(e);
+                read.Close();
+                return false;
+            }
+        }
         //returns the md5 hash of the file based on the input file string location. It is searching in the database first. If not found in database or the filetime is not the same, it will create a new Hash and update the database
         public static string getMd5Hash(string inputFile)
         {
