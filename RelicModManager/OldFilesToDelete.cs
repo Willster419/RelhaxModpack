@@ -26,6 +26,8 @@ namespace RelhaxModpack
             noDeleteButton.Text = Translations.getTranslatedString("no");
             yesDeleteButton.Text = Translations.getTranslatedString("yes");
             OldFilesToDelete_SizeChanged(null, null);
+            if (Program.autoInstall)
+                yesDeleteButton_Click(null, null);
         }
 
         private void OldFilesToDelete_FormClosing(object sender, FormClosingEventArgs e)
