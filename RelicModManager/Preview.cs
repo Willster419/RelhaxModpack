@@ -164,15 +164,22 @@ namespace RelhaxModpack
                     scale = 75;
                     break;
             }
-            if(previewPicture != null)
+            Size tempSize = new Size(0,0);
+            if (previewPicture != null)
+            {
                 previewPicture.Size = new Size(width, applicationHeight - 265 - difference - scale);
+                tempSize = previewPicture.Size;
+            }
             if (youtubedisplay != null)
+            {
                 youtubedisplay.Size = new Size(width, applicationHeight - 265 - difference - scale);
-            updateBox.Location = new Point(12, 12 + previewPicture.Size.Height + 6 + nextPicButton.Size.Height + 6 + descriptionBox.Size.Height + 6);
-            descriptionBox.Location = new Point(12, 12 + previewPicture.Size.Height + 6 + nextPicButton.Size.Height + 6);
-            nextPicButton.Location = new Point(this.Size.Width - 21 - nextPicButton.Size.Width, 12 + previewPicture.Size.Height + 6);
-            previousPicButton.Location = new Point(12, 12 + previewPicture.Size.Height + 6);
-            pictureCountPanel.Location = new Point(12 + previousPicButton.Size.Width + 12, 12 + previewPicture.Size.Height + 6);
+                tempSize = youtubedisplay.Size;
+            }
+            updateBox.Location = new Point(12, 12 + tempSize.Height + 6 + nextPicButton.Size.Height + 6 + descriptionBox.Size.Height + 6);
+            descriptionBox.Location = new Point(12, 12 + tempSize.Height + 6 + nextPicButton.Size.Height + 6);
+            nextPicButton.Location = new Point(this.Size.Width - 21 - nextPicButton.Size.Width, 12 + tempSize.Height + 6);
+            previousPicButton.Location = new Point(12, 12 + tempSize.Height + 6);
+            pictureCountPanel.Location = new Point(12 + previousPicButton.Size.Width + 12, 12 + tempSize.Height + 6);
             pictureCountPanel.Size = new Size(width - pictureCountPanel.Location.X - nextPicButton.Size.Width - 4, pictureCountPanel.Size.Height);
             devLinkLabel.Location = new Point(this.Size.Width - 12 - devLinkLabel.Size.Width - 4, applicationHeight - 49 - difference -5 );
         }

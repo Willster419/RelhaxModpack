@@ -325,8 +325,11 @@ namespace RelhaxModpack
                     foreach (Media p in m.pictureList)
                     {
                         XmlElement pictureRoot = doc.CreateElement("picture");
+                        XmlElement pictureType = doc.CreateElement("type");
                         XmlElement pictureURL = doc.CreateElement("URL");
                         pictureURL.InnerText = p.URL;
+                        pictureType.InnerText = "" + (int)p.mediaType;
+                        pictureRoot.AppendChild(pictureType);
                         pictureRoot.AppendChild(pictureURL);
                         modPictures.AppendChild(pictureRoot);
                     }
@@ -433,11 +436,14 @@ namespace RelhaxModpack
                 XmlElement configPictures = doc.CreateElement("pictures");
                 foreach (Media p in cc.pictureList)
                 {
-                    XmlElement configpictureRoot = doc.CreateElement("picture");
-                    XmlElement configpictureURL = doc.CreateElement("URL");
-                    configpictureURL.InnerText = p.URL;
-                    configpictureRoot.AppendChild(configpictureURL);
-                    configPictures.AppendChild(configpictureRoot);
+                    XmlElement pictureRoot = doc.CreateElement("picture");
+                    XmlElement pictureType = doc.CreateElement("type");
+                    XmlElement pictureURL = doc.CreateElement("URL");
+                    pictureURL.InnerText = p.URL;
+                    pictureType.InnerText = "" + (int)p.mediaType;
+                    pictureRoot.AppendChild(pictureType);
+                    pictureRoot.AppendChild(pictureURL);
+                    configPictures.AppendChild(pictureRoot);
                 }
                 configRoot.AppendChild(configPictures);
                 //configs for the configs (meta)

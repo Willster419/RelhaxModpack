@@ -593,6 +593,7 @@ namespace RelhaxModpack
                                                         //parse every picture
                                                         foreach (XElement pictureHolder in modNode.Elements())
                                                         {
+                                                            Media med = new Media(null, null);
                                                             switch (pictureHolder.Name.ToString())
                                                             {
                                                                 case "picture":
@@ -606,7 +607,19 @@ namespace RelhaxModpack
                                                                                     continue;
                                                                                 if (innerText.Equals(""))
                                                                                     continue;
-                                                                                m.pictureList.Add(new Media(m.name, pictureNode.Value));
+                                                                                med.name = m.name;
+                                                                                med.URL = innerText;
+                                                                                break;
+                                                                            case "type":
+                                                                                int innerValue = Utils.parseInt(pictureNode.Value, 1);
+                                                                                switch (innerValue) { 
+                                                                                    case 1:
+                                                                                        med.mediaType = MediaType.picture;
+                                                                                        break;
+                                                                                    case 2:
+                                                                                        med.mediaType = MediaType.youtube;
+                                                                                        break;
+                                                                                }
                                                                                 break;
                                                                             default:
                                                                                 Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => picture =>expected nodes: URL (line {3})", pictureNode.Name.ToString(), m.name, m.zipFile, ((IXmlLineInfo)pictureNode).LineNumber));
@@ -620,6 +633,7 @@ namespace RelhaxModpack
                                                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected node: picture\n\nNode found: {0}\n\nmore informations, see logfile", pictureHolder.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                                     break;
                                                             }
+                                                            m.pictureList.Add(med);
                                                         }
                                                         break;
                                                     case "dependencies":
@@ -853,6 +867,7 @@ namespace RelhaxModpack
                                         //parse every picture
                                         foreach (XElement pictureHolder in configNode.Elements())
                                         {
+                                            Media med = new Media(null, null);
                                             switch (pictureHolder.Name.ToString())
                                             {
                                                 case "picture":
@@ -866,20 +881,34 @@ namespace RelhaxModpack
                                                                     continue;
                                                                 if (innerText.Equals(""))
                                                                     continue;
-                                                                c.pictureList.Add(new Media(c.name, pictureNode.Value));
+                                                                med.name = c.name;
+                                                                med.URL = innerText;
+                                                                break;
+                                                            case "type":
+                                                                int innerValue = Utils.parseInt(pictureNode.Value, 1);
+                                                                switch (innerValue)
+                                                                {
+                                                                    case 1:
+                                                                        med.mediaType = MediaType.picture;
+                                                                        break;
+                                                                    case 2:
+                                                                        med.mediaType = MediaType.youtube;
+                                                                        break;
+                                                                }
                                                                 break;
                                                             default:
-                                                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => configs {1} ({2}) => pictures => expected nodes: URL (line {3})", pictureNode.Name.ToString(), c.name, c.zipFile, ((IXmlLineInfo)pictureNode).LineNumber));
-                                                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: URL\n\nNode found: {0}\n\nmore informations, see logfile", pictureNode.Name.ToString())); };
+                                                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => picture =>expected nodes: URL (line {3})", pictureNode.Name.ToString(), m.name, m.zipFile, ((IXmlLineInfo)pictureNode).LineNumber));
+                                                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: URL\n\nNode found: {0}\n\nmore informations, see logfile", pictureNode.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                                 break;
                                                         }
                                                     }
                                                     break;
                                                 default:
-                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => expected node: picture (line {3})", pictureHolder.Name.ToString(), c.name, c.zipFile, ((IXmlLineInfo)pictureHolder).LineNumber));
+                                                    Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => expected node: picture (line {3})", pictureHolder.Name, m.name, m.zipFile, ((IXmlLineInfo)pictureHolder).LineNumber));
                                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected node: picture\n\nNode found: {0}\n\nmore informations, see logfile", pictureHolder.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                     break;
                                             }
+                                            c.pictureList.Add(med);
                                         }
                                         break;
                                     case "dependencies":
