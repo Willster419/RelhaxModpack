@@ -2516,11 +2516,15 @@ namespace RelhaxModpack
             {
                 if(writeToLog)
                     appendToLog("ERROR: xvm config boot file does not exist at " + xvmBootFileLoc1 + ", checking " + xvmBootFileLoc2);
+                else
+                    appendToLog("NOTICE: default run, xvm config boot file does not exist at " + xvmBootFileLoc1 + ", checking " + xvmBootFileLoc2);
                 bootFile = xvmBootFileLoc2;
                 if (!File.Exists(bootFile))
                 {
                     if(writeToLog)
                         appendToLog("ERROR: xvm config boot file does not exist at " + xvmBootFileLoc2 + ", aborting patch");
+                    else
+                        appendToLog("NOTICE: default run, xvm config boot file does not exist at " + xvmBootFileLoc2 + ", user did not install xvm");
                     return null;
                 }
             }
@@ -3167,7 +3171,8 @@ namespace RelhaxModpack
 
         private static void loadProcessConfigsV2(string parentName, List<Config> configList, ref List<string> savedConfigList)
         {
-
+            bool shouldBeBA = false;
+            Panel panelRef = null;
             foreach (Config c in configList)
             {
                 if (savedConfigList.Contains(c.packageName))
@@ -3186,7 +3191,9 @@ namespace RelhaxModpack
                             {
                                 ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
                                 CBTemp.Checked = true;
-                                CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
+                                shouldBeBA = true;
+                                if (CBTemp.Parent is Panel)
+                                    panelRef = (Panel)CBTemp.Parent;
                             }
                             else if (c.configUIComponent is ConfigFormComboBox)
                             {
@@ -3203,13 +3210,17 @@ namespace RelhaxModpack
                                         }
                                     }
                                 }
-                                CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
+                                shouldBeBA = true;
+                                if (CBTemp.Parent is Panel)
+                                    panelRef = (Panel)CBTemp.Parent;
                             }
                             else if (c.configUIComponent is ConfigFormRadioButton)
                             {
                                 ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
                                 CBTemp.Checked = true;
-                                CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
+                                shouldBeBA = true;
+                                if(CBTemp.Parent is Panel)
+                                    panelRef = (Panel)CBTemp.Parent;
                             }
                             else if (c.configUIComponent is ConfigWPFCheckBox)
                             {
@@ -3282,6 +3293,10 @@ namespace RelhaxModpack
                 {
                     loadProcessConfigsV2(c.name, c.configs, ref savedConfigList);
                 }
+            }
+            if(shouldBeBA && panelRef != null)
+            {
+                panelRef.BackColor = System.Drawing.Color.BlanchedAlmond;
             }
         }
 
