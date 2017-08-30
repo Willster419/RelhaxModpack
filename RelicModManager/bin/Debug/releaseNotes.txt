@@ -1,64 +1,13 @@
-Version 24.5.6:
-https://www.virustotal.com/#/file/ab74424017b7b5a6acbfe1aee6ddc1a476fa20ff892ab33e387127d03f6f66ce/detection
--Fixed bug where global dependencies were not being downloaded
--Fixed bug where old zip files were not being deleted
-
-Version 24.5.5:
-https://www.virustotal.com/#/file/ca46d56738c168a065544ed2a3348200cec5931c705c181c5bf11fbe37e05cff/detection
--Fixed bugs with Regex patcher (whitespace characters)
--Added more exception handling to the md5 hash database
-
-Version 24.5.4:
-https://www.virustotal.com/#/file/beb24780236b4b25475aabd35a174c649005c3b9fab0cb9da00a7d07bc4091c9/detection
--Added feature where if an error occurs with the xml database downloaded files, it will delete it and create a new one
--Fixed some back-end tools
--Updated Polish Translations
-
-Version 24.5.3:
-https://www.virustotal.com/#/file/7d5c1c8fb9524107d41b794b37d56bdf698b7bba96c88da9f3c0cc279a6f148f/detection
--Fixed bug with application not downloading the required dll extension files
--Fixed bug with configs of level 3 and below not being installed
-
-Version 24.5.2:
-https://www.virustotal.com/#/file/ecf8d0a4437107946aa0857e47d8af0df490bc5d7d26d51721b638575ac8c27e/detection
--Fixed bug with loading configs, if loading a second config, it would not clear the first one
-
-Version 24.5.1:
--Updated Translations
-
-Version 24.5.0:
--Fixed issue with SSL certificate. Temporary solution to antivirus problems. We are working on a permanent solution. You can see the new virustotal scan here: https://www.virustotal.com/#/file/ed81484aa5238523c8d40f767957baac4bc6242d375d2c6d9a96936979abbfed/detection
--Fixed flickering in the display text box
--Changed UI handling. If you unselect an item, all sub-items are unselected. Finally
--Added support for clearing the WoT cache (appdata) folder, like in the old OMC
--Added support for extracting files to the WoT cache (appdata) folder
--Updated installer code. Installs by each tab top down, rather than each tab at each level
--Updated exception handling code
--Added universal build time
--Changed mod database parser from XMLDocument to XDocument. It is faster and offers more debugging info
--Fixed memory leak, should significantly reduce the "not enough memory" errors
--Optimized the loading of a config, the UI is not redrawn. Reduces time from 1.5 seconds to 100milliseconds
--Fixed display to file during installation. It will now stay on the same line
-
-
-Version 24.1.0:
--Fixed Install procedure. Fonts are only installed at the end
--Fixed bug with the actual font install process
--Fixed bug with both uninstallers not putting back the WoT version folders
--Found major bug with the smart uninstaller, have disabled it for now. Clean uninstaller still works
-
-Hello Everyone, please welcome the latest and greatest modpack installer version, Version 24!!
-A lot has changed in this update:
--The installation process has been completely re-written. Now, the code is much cleaner and the installer is 100% off the UI thread. It is also more efficient
--The method for uniquely storing mod and config names has been re-written. Now, when we change the name of a component, you won't get that annoying "could not find the mod/config with the name ..." anymore
--The feedback on the installer textbox window is now more complete and has more helpful information
--There are now 3 progress bars that show: the total progress, the progress of a specific phase, and the process in that phase (if applicable)
--Loading a preference selection, or clearing your selections, has had the time reduced by about 80%
--Lots (about 500 lines) of dead and inefficient code cleanup
--The uninstaller was built into the installer class, no more duplicate code between the two
--Optimizations to the database parser
--Changed encoding of the log from ASCII to UTF-8-BOM
--Added more exception logging
--Modified the auto-detection to greatly increase the chance it can quickly find your WoT installation
--Modified the Manuel detection so that it can try to locate the WoT folder, but won't cause exceptions
+Everyone, we have a new version ready! Version 25! Many fixes and some unique new features are here!
+https://www.virustotal.com/#/file/250341df62499afaf4833d50485ffd24cb314d5ef57c53b99e117a073d43b4d4/detection
+-We have (hopefully) fixed an issue where the application will delete itself. It was a weird bug to say the least
+-In the OMC view, the content has been vertically allighed to the check boxes and buttons
+-There is now a search feature where you can search for your mod, and the installer will open the tab and scroll to where it is in the list. The first modpack with a search feature!
+-The patching system has been re-worked for giving the ability to order the patching process in the same way that the mods are installed
+-Added an additional check to verify the integrity of the local cached database. If invalid it will delete it
+-Fixed a bug in the default view where panel colors would not be set properly
+-Fixed a bug where in the auto install mode, the application would still present a window for deleting old files
+-Added the ability to embed youtube (or other) videos into the database, as if it was a picture. An example of this can be seen in the "sound mods" tab->Relhax
+-Other back-end tools fixes
+-Other bug fixes
 -Updated translations
