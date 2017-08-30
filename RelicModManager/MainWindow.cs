@@ -1082,7 +1082,7 @@ namespace RelhaxModpack
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Maximum = 1;
                 childProgressBar.Value = childProgressBar.Maximum;
-                if(!Program.testMode)
+                if(!Program.testMode && (ins != null))
                 {
                     this.checkForOldZipFiles();
                 }
