@@ -1,3 +1,8 @@
+Version 25.0.2:
+https://www.virustotal.com/#/file/703795841346a4e13ec40d01580bc629d0f415d9a0ac2c149588b52c5887ef07/detection
+-Fixed bug in default view where disabled drop down items would cause a crash
+-Fixed bug in default view where when loading from last installed config, it would not color the panels properly.
+
 Everyone, we have a new version ready! Version 25! Many fixes and some unique new features are here!
 https://www.virustotal.com/#/file/250341df62499afaf4833d50485ffd24cb314d5ef57c53b99e117a073d43b4d4/detection
 -We have (hopefully) fixed an issue where the application will delete itself. It was a weird bug to say the least

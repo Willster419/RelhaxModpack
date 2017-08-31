@@ -1207,6 +1207,10 @@ namespace RelhaxModpack
             mainPanel.AutoSize = true;
             mainPanel.AutoSizeMode = AutoSizeMode.GrowOnly;
             mainPanel.Size = new System.Drawing.Size(t.Size.Width - 25, 20);
+            if (m.enabled && m.Checked)
+                mainPanel.BackColor = Color.BlanchedAlmond;
+            else
+                mainPanel.BackColor = Settings.getBackColor();
             int panelCountYLocation = 70 * (panelCount - 1);
             //if this is not the first mod being added to the panel
             int panelYLocation = 6; //tab plus delimiter
@@ -1456,9 +1460,11 @@ namespace RelhaxModpack
                         configControlDDALL.Enabled = true;
                     }
                     if (configControlDDALL.Items.Count > 0)
+                    { 
                         configControlDDALL.Enabled = true;
-                    if (configControlDDALL.SelectedIndex == -1)
-                        configControlDDALL.SelectedIndex = 0;
+                        if (configControlDDALL.SelectedIndex == -1)
+                            configControlDDALL.SelectedIndex = 0;
+                    }
                 }
                 else if (con.type.Equals("multi"))
                 {
