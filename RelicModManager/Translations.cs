@@ -472,7 +472,7 @@ namespace RelhaxModpack
             english.Add("loading", "Loading");
             german.Add("loading", "Laden");
             polish.Add("loading", "Ładowanie");
-            french.Add("loading", "Chargement");
+            french.Add("loading", "Chargement de");
 
             //Componet: 
             //
@@ -1088,7 +1088,7 @@ namespace RelhaxModpack
             english.Add("expandNodesDefault", "Expand all");
             german.Add("expandNodesDefault", "Alle erweitern");
             polish.Add("expandNodesDefault", "Rozwiń wszystkie");
-            french.Add("expandNodesDefault", "Agrandir tout");
+            french.Add("expandNodesDefault", "Développer tout");
 
             //Component: expandAllDesc
             //
