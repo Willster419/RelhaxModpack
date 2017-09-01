@@ -238,6 +238,10 @@ namespace RelhaxModpack
                     //polish
                     Translations.language = Translations.Languages.Polish;
                     break;
+                case 3:
+                    //french
+                    Translations.language = Translations.Languages.French;
+                    break;
             }
             //apply the internal setting of the view selection
             switch (Settings.tempLoadedView)

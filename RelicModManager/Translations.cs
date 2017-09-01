@@ -104,7 +104,7 @@ namespace RelhaxModpack
             english.Add("forceManuel", "Force manual game detection");
             german.Add("forceManuel", "Erzwinge manuelle Spielerkennung");
             polish.Add("forceManuel", "Wymuś ręczną weryfikację ścieżki gry");
-            french.Add("forcemanuel", "Forcer détection manuel");
+            french.Add("forceManuel", "Forcer détection manuel");
 
             //Componet: forceManuel
             //
@@ -132,7 +132,7 @@ namespace RelhaxModpack
             english.Add("cleanInstallCB", "Clean Installation (Recommended)");
             german.Add("cleanInstallCB", "Saubere Installation (Empfohlen)");
             polish.Add("cleanInstallCB", "Czysta instalacja (Zalecane)");
-            french.Add("cleanInstallCB", "Installation propre (Recommandé");
+            french.Add("cleanInstallCB", "Installation propre (Recommandé)");
 
             //Componet: cancerFontCB
             //
@@ -246,7 +246,7 @@ namespace RelhaxModpack
             english.Add("donateLabel", "Donation for further development");
             german.Add("donateLabel", "Spende für die Weiterentwicklung");
             polish.Add("donateLabel", "Dotacja na dalszy rozwój");
-            french.Add("donatelabel", "Donation pour aider au développement");
+            french.Add("donateLabel", "Donation pour aider au développement");
 
             //Section: ModSelectionList
 
@@ -609,7 +609,7 @@ namespace RelhaxModpack
             english.Add("cleanUninstallDescription", "Selected - All mods will be erased\nNot Selected - Only Modpack installed mods will be erased");
             german.Add("cleanUninstallDescription", "Ausgewählt - Alle Mods werden gelöscht\nNicht ausgewählt - Nur Mods, die vom Modpack installiert wurden, werden gelöscht");
             polish.Add("cleanUninstallDescription", "Zaznaczone - Wszystkie mody zostaną usunięte\nNie zaznaczone - Tylko zainstalowane mody z paczki zostaną usunięte");
-            french.Add("cleanInstallDescription", "Sélectionné - Tout les mods vont être supprimé\nNon sélectionné - Seulement les mods installé par le modpack vont être supprimé");
+            french.Add("cleanUninstallDescription", "Sélectionné - Tout les mods vont être supprimé\nNon sélectionné - Seulement les mods installé par le modpack vont être supprimé");
 
             //Componet: 
             //
