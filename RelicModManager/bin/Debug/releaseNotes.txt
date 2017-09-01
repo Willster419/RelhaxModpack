@@ -1,3 +1,6 @@
+Version 25.0.3:
+Nothing has changed. This serves as notification that the modpack is ready for 9.20
+
 Version 25.0.2:
 https://www.virustotal.com/#/file/703795841346a4e13ec40d01580bc629d0f415d9a0ac2c149588b52c5887ef07/detection
 -Fixed bug in default view where disabled drop down items would cause a crash
