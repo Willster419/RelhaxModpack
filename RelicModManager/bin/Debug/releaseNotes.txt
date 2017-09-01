@@ -1,3 +1,10 @@
+Version 25.1.0:
+https://www.virustotal.com/#/file/bf9a963179d62f83909c9201423ca7c94c7a2be8ec24ce2f9d6ba66ffb83f62a/detection
+-Added French translations (thanks Merkk)
+-Fixed English translations
+-Fixed bug in the loading window for the mod selection list, for those with aero themes the progress bar does not make it all the way to the end. So I made my own.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 25.0.3:
 Nothing has changed. This serves as notification that the modpack is ready for 9.20
 
