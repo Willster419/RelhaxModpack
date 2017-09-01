@@ -710,7 +710,7 @@ namespace RelhaxModpack
             }
             //reset the childProgressBar value
             childProgressBar.Maximum = 100;
-            childProgressBar.Value = 0;
+            //childProgressBar.Value = 0;
             //check to make sure that the md5hashdatabase is valid before using it
             string md5HashDatabaseLocation = Path.Combine(Application.StartupPath, "RelHaxDownloads", "MD5HashDatabase.xml");
             if ((File.Exists(md5HashDatabaseLocation)) && (!Utils.IsValidXml(md5HashDatabaseLocation)))
@@ -1826,6 +1826,12 @@ namespace RelhaxModpack
         private void languagePL_CheckedChanged(object sender, EventArgs e)
         {
             Translations.language = Translations.Languages.Polish;
+            this.applySettings();
+        }
+
+        private void languageFR_CheckedChanged(object sender, EventArgs e)
+        {
+            Translations.language = Translations.Languages.French;
             this.applySettings();
         }
 
