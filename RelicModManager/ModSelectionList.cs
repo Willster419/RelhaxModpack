@@ -32,6 +32,7 @@ namespace RelhaxModpack
         bool firstLoad = true;
         bool ignoreSelections = true;
         bool mouseCLick = false;
+        int prog = 0;
         private enum loadConfigMode
         {
             error = -1,
@@ -69,6 +70,7 @@ namespace RelhaxModpack
             //create the loading window
             pw = new PleaseWait(mainWindowStartX, mainWindowStartY);
             pw.Show();
+            prog = 0;
             //font scaling
             this.AutoScaleMode = Settings.appScalingMode;
             this.Font = Settings.appFont;
@@ -246,9 +248,11 @@ namespace RelhaxModpack
         {
             if (pw != null)
             {
-                pw.progressBar1.Minimum = 0;
-                pw.progressBar1.Maximum = Utils.totalModConfigComponents;
-                pw.progressBar1.Value = 0;
+                //pw.progressBar1.Minimum = 0;
+                //pw.progressBar1.Maximum = Utils.totalModConfigComponents;
+                //pw.progressBar1.Value = 0;
+                pw.progres_max = Utils.totalModConfigComponents;
+                pw.SetProgress(0);
             }
             loadingConfig = true;
             Utils.appendToLog("Loading ModSelectionList with view " + Settings.sView);
@@ -282,9 +286,12 @@ namespace RelhaxModpack
                             if (pw != null)
                             {
                                 pw.loadingDescBox.Text = Translations.getTranslatedString("loading") + " " + m.name;
-                                int prog = pw.progressBar1.Value + 1;
+                                /*int prog = pw.progressBar1.Value + 1;
                                 if ((pw.progressBar1.Minimum < prog) && (prog <= pw.progressBar1.Maximum))
                                     pw.progressBar1.Value++;
+                                Application.DoEvents();*/
+                                prog++;
+                                pw.SetProgress(prog);
                                 Application.DoEvents();
                             }
                             if (Settings.sView == Settings.SelectionView.defaultt)

@@ -8,6 +8,8 @@ namespace RelhaxModpack
     {
         private int startX = -1;
         private int startY = -1;
+        private int PGMAX = 0;
+        public float progres_max;
         public PleaseWait()
         {
             InitializeComponent();
@@ -31,6 +33,23 @@ namespace RelhaxModpack
                 this.Location = new System.Drawing.Point(startX + 10, startY);
             label1.Text = Translations.getTranslatedString(label1.Name);
             Settings.setUIColor(this);
+            //align the text box to the middle of the forum
+            label1.Location = new System.Drawing.Point((this.Size.Width / 2) - (label1.Size.Width/2), label1.Location.Y);
+            PGMAX = forgroundPanel.Size.Width;
+            forgroundPanel.BackColor = System.Drawing.Color.Blue;
+            forgroundPanel.ForeColor = System.Drawing.Color.Blue;
+            forgroundPanel.Size = new System.Drawing.Size(0, forgroundPanel.Size.Height);
+        }
+        public void SetProgress(int progres_value)
+        {
+            float tempVal = (float)progres_value;
+            float percent = tempVal / progres_max;
+            //percent = percent * 100;
+            if (0 <= percent && percent <= 100)
+            {
+                int temp = (int) (PGMAX * percent);
+                forgroundPanel.Size = new System.Drawing.Size(temp, forgroundPanel.Size.Height);
+            }
         }
     }
 }

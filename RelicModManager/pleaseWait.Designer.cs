@@ -30,9 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PleaseWait));
             this.label1 = new System.Windows.Forms.Label();
-            this.loadingDescLabel = new System.Windows.Forms.Label();
             this.loadingDescBox = new System.Windows.Forms.RichTextBox();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.backgroundPanel = new System.Windows.Forms.Panel();
+            this.forgroundPanel = new System.Windows.Forms.Panel();
+            this.backgroundPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -45,18 +46,6 @@
             this.label1.Text = "Loading...please wait...";
             this.label1.UseWaitCursor = true;
             // 
-            // loadingDescLabel
-            // 
-            this.loadingDescLabel.AutoSize = true;
-            this.loadingDescLabel.Enabled = false;
-            this.loadingDescLabel.Location = new System.Drawing.Point(239, 9);
-            this.loadingDescLabel.Name = "loadingDescLabel";
-            this.loadingDescLabel.Size = new System.Drawing.Size(35, 13);
-            this.loadingDescLabel.TabIndex = 1;
-            this.loadingDescLabel.Text = "label2";
-            this.loadingDescLabel.UseWaitCursor = true;
-            this.loadingDescLabel.Visible = false;
-            // 
             // loadingDescBox
             // 
             this.loadingDescBox.Location = new System.Drawing.Point(12, 25);
@@ -68,31 +57,41 @@
             this.loadingDescBox.Text = "";
             this.loadingDescBox.UseWaitCursor = true;
             // 
-            // progressBar1
+            // backgroundPanel
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 87);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(262, 23);
-            this.progressBar1.TabIndex = 3;
-            this.progressBar1.UseWaitCursor = true;
+            this.backgroundPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.backgroundPanel.Controls.Add(this.forgroundPanel);
+            this.backgroundPanel.Location = new System.Drawing.Point(12, 87);
+            this.backgroundPanel.Name = "backgroundPanel";
+            this.backgroundPanel.Size = new System.Drawing.Size(262, 22);
+            this.backgroundPanel.TabIndex = 4;
+            // 
+            // forgroundPanel
+            // 
+            this.forgroundPanel.BackColor = System.Drawing.Color.Blue;
+            this.forgroundPanel.ForeColor = System.Drawing.Color.Blue;
+            this.forgroundPanel.Location = new System.Drawing.Point(3, 3);
+            this.forgroundPanel.Name = "forgroundPanel";
+            this.forgroundPanel.Size = new System.Drawing.Size(252, 12);
+            this.forgroundPanel.TabIndex = 5;
             // 
             // PleaseWait
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(286, 117);
+            this.ClientSize = new System.Drawing.Size(286, 113);
             this.ControlBox = false;
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.backgroundPanel);
             this.Controls.Add(this.loadingDescBox);
-            this.Controls.Add(this.loadingDescLabel);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "PleaseWait";
-            this.Text = "pleaseWait";
+            this.Text = "Loading Window";
             this.UseWaitCursor = true;
             this.Load += new System.EventHandler(this.PleaseWait_Load);
+            this.backgroundPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -101,8 +100,8 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        public System.Windows.Forms.Label loadingDescLabel;
         public System.Windows.Forms.RichTextBox loadingDescBox;
-        public System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Panel backgroundPanel;
+        private System.Windows.Forms.Panel forgroundPanel;
     }
 }
