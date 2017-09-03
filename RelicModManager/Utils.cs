@@ -534,7 +534,7 @@ namespace RelhaxModpack
                                     switch (modHolder.Name.ToString())
                                     {
                                         case "mod":
-                                            string[] modNodeList = new string[] { "name", "version", "zipFile", "startAddress", "endAddress", "crc", "enabled", "packageName", "size", "description", "updateComment", "devURL", "userDatas", "pictures", "dependencies", "configs" };
+                                            string[] modNodeList = new string[] { "name", "version", "zipFile", "startAddress", "endAddress", "crc", "enabled", "visable", "packageName", "size", "description", "updateComment", "devURL", "userDatas", "pictures", "dependencies", "configs" };
                                             Mod m = new Mod();
                                             m.packageName = "";
                                             foreach (XElement modNode in modHolder.Elements())
@@ -563,6 +563,9 @@ namespace RelhaxModpack
                                                         break;
                                                     case "enabled":
                                                         m.enabled = Utils.parseBool(modNode.Value, false);
+                                                        break;
+                                                    case "visable":
+                                                        m.visable = Utils.parseBool(modNode.Value, true);
                                                         break;
                                                     case "packageName":
                                                         m.packageName = modNode.Value.Trim();
@@ -803,7 +806,7 @@ namespace RelhaxModpack
                     switch (configHolder.Name.ToString())
                     {
                         case "config":
-                            string[] confNodeList = new string[] { "name", "version", "zipFile", "startAddress", "endAddress", "crc", "enabled", "packageName", "size", "updateComment", "description", "devURL", "type", "configs", "userDatas", "pictures", "dependencies" };
+                            string[] confNodeList = new string[] { "name", "version", "zipFile", "startAddress", "endAddress", "crc", "enabled", "visable", "packageName", "size", "updateComment", "description", "devURL", "type", "configs", "userDatas", "pictures", "dependencies" };
                             Config c = new Config();
                             c.packageName = "";
                             foreach (XElement configNode in configHolder.Elements())
@@ -831,6 +834,9 @@ namespace RelhaxModpack
                                         break;
                                     case "enabled":
                                         c.enabled = Utils.parseBool(configNode.Value, false);
+                                        break;
+                                    case "visable":
+                                        c.visable = Utils.parseBool(configNode.Value, true);
                                         break;
                                     case "packageName":
                                         c.packageName = configNode.Value.Trim();

@@ -296,6 +296,9 @@ namespace RelhaxModpack
                     XmlElement modEnabled = doc.CreateElement("enabled");
                     modEnabled.InnerText = "" + m.enabled;
                     modRoot.AppendChild(modEnabled);
+                    XmlElement modVisable = doc.CreateElement("visable");
+                    modVisable.InnerText = "" + m.visable;
+                    modRoot.AppendChild(modVisable);
                     XmlElement modPackageName = doc.CreateElement("packageName");
                     modPackageName.InnerText = m.packageName;
                     modRoot.AppendChild(modPackageName);
@@ -405,6 +408,9 @@ namespace RelhaxModpack
                 XmlElement configEnabled = doc.CreateElement("enabled");
                 configEnabled.InnerText = "" + cc.enabled;
                 configRoot.AppendChild(configEnabled);
+                XmlElement configVisable = doc.CreateElement("visable");
+                configVisable.InnerText = "" + cc.visable;
+                configRoot.AppendChild(configVisable);
                 XmlElement configPackageName = doc.CreateElement("packageName");
                 configPackageName.InnerText = cc.packageName;
                 configRoot.AppendChild(configPackageName);
