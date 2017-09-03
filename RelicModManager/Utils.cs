@@ -2866,6 +2866,8 @@ namespace RelhaxModpack
                     {
                         case "name":
                             m = Utils.linkMod(nn.InnerText, parsedCatagoryList);
+                            if ((m != null) && (!m.visible))
+                                return;
                             if (m == null)
                             {
                                 Utils.appendToLog("WARNING: mod \"" + nn.InnerText + "\" not found");
@@ -2989,54 +2991,57 @@ namespace RelhaxModpack
             {
                 foreach (Mod m in c.mods)
                 {
-                    if (savedConfigList.Contains(m.packageName))
+                    if (m.visible)
                     {
-                        savedConfigList.Remove(m.packageName);
-                        if (!m.enabled)
+                        if (savedConfigList.Contains(m.packageName))
                         {
-                            MessageBox.Show(string.Format(Translations.getTranslatedString("modDeactivated"), m.name), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            savedConfigList.Remove(m.packageName);
+                            if (!m.enabled)
+                            {
+                                MessageBox.Show(string.Format(Translations.getTranslatedString("modDeactivated"), m.name), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            else
+                            {
+                                m.Checked = true;
+                                if (m.modFormCheckBox != null)
+                                {
+                                    if (m.modFormCheckBox is ModFormCheckBox)
+                                    {
+                                        ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
+                                        mfcb.Checked = true;
+                                        mfcb.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
+                                    }
+                                    else if (m.modFormCheckBox is ModWPFCheckBox)
+                                    {
+                                        ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.modFormCheckBox;
+                                        mfCB2.IsChecked = true;
+                                    }
+                                }
+                                Utils.appendToLog("Checking mod " + m.name);
+                            }
                         }
                         else
                         {
-                            m.Checked = true;
+                            //uncheck
                             if (m.modFormCheckBox != null)
                             {
-                                if(m.modFormCheckBox is ModFormCheckBox)
+                                if (m.modFormCheckBox is ModFormCheckBox)
                                 {
                                     ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
-                                    mfcb.Checked = true;
-                                    mfcb.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
+                                    mfcb.Checked = false;
+                                    mfcb.Parent.BackColor = Settings.getBackColor();
                                 }
                                 else if (m.modFormCheckBox is ModWPFCheckBox)
                                 {
                                     ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.modFormCheckBox;
-                                    mfCB2.IsChecked = true;
+                                    mfCB2.IsChecked = false;
                                 }
                             }
-                            Utils.appendToLog("Checking mod " + m.name);
                         }
-                    }
-                    else
-                    {
-                        //uncheck
-                        if (m.modFormCheckBox != null)
+                        if (m.configs.Count > 0)
                         {
-                            if (m.modFormCheckBox is ModFormCheckBox)
-                            {
-                                ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
-                                mfcb.Checked = false;
-                                mfcb.Parent.BackColor = Settings.getBackColor();
-                            }
-                            else if (m.modFormCheckBox is ModWPFCheckBox)
-                            {
-                                ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.modFormCheckBox;
-                                mfCB2.IsChecked = false;
-                            }
+                            loadProcessConfigsV2(m.name, m.configs, ref savedConfigList);
                         }
-                    }
-                    if (m.configs.Count > 0)
-                    {
-                        loadProcessConfigsV2(m.name, m.configs, ref savedConfigList);
                     }
                 }
             }
@@ -3096,10 +3101,14 @@ namespace RelhaxModpack
                             if (parentIsMod)
                             {
                                 c = m.getConfig(nnnn.InnerText);
+                                if ((c != null) && (!c.visible))
+                                    return;
                             }
                             else
                             {
                                 c = con.getSubConfig(nnnn.InnerText);
+                                if ((c != null) && (!c.visible))
+                                    return;
                             }
                             if (c == null)
                             {
@@ -3225,123 +3234,126 @@ namespace RelhaxModpack
             Panel panelRef = null;
             foreach (Config c in configList)
             {
-                if (savedConfigList.Contains(c.packageName))
+                if (c.visible)
                 {
-                    savedConfigList.Remove(c.packageName);
-                    if (!c.enabled)
+                    if (savedConfigList.Contains(c.packageName))
                     {
-                        MessageBox.Show(string.Format(Translations.getTranslatedString("configDeactivated"), c.name, parentName), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        savedConfigList.Remove(c.packageName);
+                        if (!c.enabled)
+                        {
+                            MessageBox.Show(string.Format(Translations.getTranslatedString("configDeactivated"), c.name, parentName), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            c.Checked = true;
+                            if (c.configUIComponent != null)
+                            {
+                                if (c.configUIComponent is ConfigFormCheckBox)
+                                {
+                                    ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
+                                    CBTemp.Checked = true;
+                                    shouldBeBA = true;
+                                    if (CBTemp.Parent is Panel)
+                                        panelRef = (Panel)CBTemp.Parent;
+                                }
+                                else if (c.configUIComponent is ConfigFormComboBox)
+                                {
+                                    ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.configUIComponent;
+                                    foreach (Object o in CBTemp.Items)
+                                    {
+                                        if (o is ComboBoxItem)
+                                        {
+                                            ComboBoxItem tempCBI = (ComboBoxItem)o;
+                                            if (tempCBI.config.packageName.Equals(c.packageName))
+                                            {
+                                                CBTemp.SelectedItem = o;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    shouldBeBA = true;
+                                    if (CBTemp.Parent is Panel)
+                                        panelRef = (Panel)CBTemp.Parent;
+                                }
+                                else if (c.configUIComponent is ConfigFormRadioButton)
+                                {
+                                    ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
+                                    CBTemp.Checked = true;
+                                    shouldBeBA = true;
+                                    if (CBTemp.Parent is Panel)
+                                        panelRef = (Panel)CBTemp.Parent;
+                                }
+                                else if (c.configUIComponent is ConfigWPFCheckBox)
+                                {
+                                    ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.configUIComponent;
+                                    CBTemp.IsChecked = true;
+                                }
+                                else if (c.configUIComponent is ConfigWPFComboBox)
+                                {
+                                    ConfigWPFComboBox CBTemp = (ConfigWPFComboBox)c.configUIComponent;
+                                    foreach (Object o in CBTemp.Items)
+                                    {
+                                        if (o is ComboBoxItem)
+                                        {
+                                            ComboBoxItem tempCBI = (ComboBoxItem)o;
+                                            if (tempCBI.config.packageName.Equals(c.packageName))
+                                            {
+                                                CBTemp.SelectedItem = o;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (c.configUIComponent is ConfigWPFRadioButton)
+                                {
+                                    ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.configUIComponent;
+                                    CBTemp.IsChecked = true;
+                                }
+                            }
+                            Utils.appendToLog("Checking mod " + c.name);
+                        }
                     }
                     else
                     {
-                        c.Checked = true;
-                        if(c.configUIComponent != null)
+                        if (c.configUIComponent != null)
                         {
                             if (c.configUIComponent is ConfigFormCheckBox)
                             {
                                 ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
-                                CBTemp.Checked = true;
-                                shouldBeBA = true;
-                                if (CBTemp.Parent is Panel)
-                                    panelRef = (Panel)CBTemp.Parent;
+                                CBTemp.Checked = false;
+                                CBTemp.Parent.BackColor = Settings.getBackColor();
                             }
                             else if (c.configUIComponent is ConfigFormComboBox)
                             {
                                 ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.configUIComponent;
-                                foreach(Object o in CBTemp.Items)
-                                {
-                                    if(o is ComboBoxItem)
-                                    {
-                                        ComboBoxItem tempCBI = (ComboBoxItem)o;
-                                        if(tempCBI.config.packageName.Equals(c.packageName))
-                                        {
-                                            CBTemp.SelectedItem = o;
-                                            break;
-                                        }
-                                    }
-                                }
-                                shouldBeBA = true;
-                                if (CBTemp.Parent is Panel)
-                                    panelRef = (Panel)CBTemp.Parent;
+                                CBTemp.Parent.BackColor = Settings.getBackColor();
                             }
                             else if (c.configUIComponent is ConfigFormRadioButton)
                             {
                                 ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
-                                CBTemp.Checked = true;
-                                shouldBeBA = true;
-                                if(CBTemp.Parent is Panel)
-                                    panelRef = (Panel)CBTemp.Parent;
+                                CBTemp.Checked = false;
+                                CBTemp.Parent.BackColor = Settings.getBackColor();
                             }
                             else if (c.configUIComponent is ConfigWPFCheckBox)
                             {
                                 ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.configUIComponent;
-                                CBTemp.IsChecked = true;
+                                CBTemp.IsChecked = false;
                             }
                             else if (c.configUIComponent is ConfigWPFComboBox)
                             {
-                                ConfigWPFComboBox CBTemp = (ConfigWPFComboBox)c.configUIComponent;
-                                foreach (Object o in CBTemp.Items)
-                                {
-                                    if (o is ComboBoxItem)
-                                    {
-                                        ComboBoxItem tempCBI = (ComboBoxItem)o;
-                                        if (tempCBI.config.packageName.Equals(c.packageName))
-                                        {
-                                            CBTemp.SelectedItem = o;
-                                            break;
-                                        }
-                                    }
-                                }
+                                //do nothing...
                             }
                             else if (c.configUIComponent is ConfigWPFRadioButton)
                             {
                                 ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.configUIComponent;
-                                CBTemp.IsChecked = true;
+                                CBTemp.IsChecked = false;
                             }
                         }
-                        Utils.appendToLog("Checking mod " + c.name);
                     }
-                }
-                else
-                {
-                    if (c.configUIComponent != null)
+                    if (c.configs.Count > 0)
                     {
-                        if (c.configUIComponent is ConfigFormCheckBox)
-                        {
-                            ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
-                            CBTemp.Checked = false;
-                            CBTemp.Parent.BackColor = Settings.getBackColor();
-                        }
-                        else if (c.configUIComponent is ConfigFormComboBox)
-                        {
-                            ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.configUIComponent;
-                            CBTemp.Parent.BackColor = Settings.getBackColor();
-                        }
-                        else if (c.configUIComponent is ConfigFormRadioButton)
-                        {
-                            ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
-                            CBTemp.Checked = false;
-                            CBTemp.Parent.BackColor = Settings.getBackColor();
-                        }
-                        else if (c.configUIComponent is ConfigWPFCheckBox)
-                        {
-                            ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.configUIComponent;
-                            CBTemp.IsChecked = false;
-                        }
-                        else if (c.configUIComponent is ConfigWPFComboBox)
-                        {
-                            //do nothing...
-                        }
-                        else if (c.configUIComponent is ConfigWPFRadioButton)
-                        {
-                            ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.configUIComponent;
-                            CBTemp.IsChecked = false;
-                        }
+                        loadProcessConfigsV2(c.name, c.configs, ref savedConfigList);
                     }
-                }
-                if (c.configs.Count > 0)
-                {
-                    loadProcessConfigsV2(c.name, c.configs, ref savedConfigList);
                 }
             }
             if(shouldBeBA && panelRef != null)
