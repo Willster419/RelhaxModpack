@@ -301,7 +301,7 @@
             this.languageSelectionGB.Controls.Add(this.languageENG);
             this.languageSelectionGB.Location = new System.Drawing.Point(193, 389);
             this.languageSelectionGB.Name = "languageSelectionGB";
-            this.languageSelectionGB.Size = new System.Drawing.Size(120, 56);
+            this.languageSelectionGB.Size = new System.Drawing.Size(120, 49);
             this.languageSelectionGB.TabIndex = 30;
             this.languageSelectionGB.TabStop = false;
             this.languageSelectionGB.Text = "Language";
@@ -309,7 +309,7 @@
             // languageFR
             // 
             this.languageFR.AutoSize = true;
-            this.languageFR.Location = new System.Drawing.Point(61, 31);
+            this.languageFR.Location = new System.Drawing.Point(61, 29);
             this.languageFR.Name = "languageFR";
             this.languageFR.Size = new System.Drawing.Size(39, 17);
             this.languageFR.TabIndex = 3;
@@ -336,7 +336,7 @@
             // languageGER
             // 
             this.languageGER.AutoSize = true;
-            this.languageGER.Location = new System.Drawing.Point(6, 33);
+            this.languageGER.Location = new System.Drawing.Point(6, 29);
             this.languageGER.Name = "languageGER";
             this.languageGER.Size = new System.Drawing.Size(48, 17);
             this.languageGER.TabIndex = 1;
