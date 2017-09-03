@@ -3,6 +3,7 @@ https://www.virustotal.com/#/file/de4204364180897a50616e6a9764d8bacf2fdfff5926a7
 -Fixed French translations
 -Fixed Polish translations causing crash on mod selection list load
 -Added new property, 'visible' to the database and application. If set to false it will not show in the mod selection list
+-Added "Colored Skulls" and "Kill Skulls" to Yasenkraken's Session Statistics
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 
