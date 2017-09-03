@@ -82,6 +82,7 @@ namespace RelhaxModpack
                 {
                     Size = previewComponentSize,
                     Location = previewComponentLocation,
+                    ScriptErrorsSuppressed = true
                 };
                 this.Controls.Add(youtubedisplay);
                 youtubedisplay.Navigate(m.URL);

@@ -72,7 +72,7 @@ namespace RelhaxModpack
         {
             DateTimeFormatInfo myDTFI = new CultureInfo("en-US").DateTimeFormat;
             string[] mask = new string[] { "dd.MM.yyyy  h:mm:ss,ff", "dd.MM.yyyy HH:mm:ss,ff", "YYYY-MM-DD  h:mm:ss.ff", "YYYY-MM-DD HH:mm:ss.ff", "MM/DD/YYYY  h:mm:ss.ff",
-                "MM/DD/YYYY HH:mm:ss.ff", "ddd MM/DD/YYYY  h:mm:ss.ff", "ddd MM/DD/YYYY HH:mm:ss.ff","ddd M/d/yyyy h:mm:ss.ff"};
+                "MM/DD/YYYY HH:mm:ss.ff", "ddd MM/DD/YYYY  h:mm:ss.ff", "ddd MM/DD/YYYY HH:mm:ss.ff","ddd M/d/yyyy h:mm:ss.ff","ddd M/d/yyyy H:mm:ss.ff"};
             foreach (var m in mask)
             {
                 if (DateTime.TryParseExact(CiInfo.BuildTag, m, System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite | DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite, out DateTime dateValue))
@@ -710,7 +710,7 @@ namespace RelhaxModpack
             }
             //reset the childProgressBar value
             childProgressBar.Maximum = 100;
-            childProgressBar.Value = 0;
+            //childProgressBar.Value = 0;
             //check to make sure that the md5hashdatabase is valid before using it
             string md5HashDatabaseLocation = Path.Combine(Application.StartupPath, "RelHaxDownloads", "MD5HashDatabase.xml");
             if ((File.Exists(md5HashDatabaseLocation)) && (!Utils.IsValidXml(md5HashDatabaseLocation)))
@@ -1082,7 +1082,7 @@ namespace RelhaxModpack
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Maximum = 1;
                 childProgressBar.Value = childProgressBar.Maximum;
-                if(!Program.testMode)
+                if(!Program.testMode && (ins != null))
                 {
                     this.checkForOldZipFiles();
                 }
@@ -1826,6 +1826,12 @@ namespace RelhaxModpack
         private void languagePL_CheckedChanged(object sender, EventArgs e)
         {
             Translations.language = Translations.Languages.Polish;
+            this.applySettings();
+        }
+
+        private void languageFR_CheckedChanged(object sender, EventArgs e)
+        {
+            Translations.language = Translations.Languages.French;
             this.applySettings();
         }
 

@@ -48,6 +48,7 @@
             this.saveUserDataCB = new System.Windows.Forms.CheckBox();
             this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
             this.languageSelectionGB = new System.Windows.Forms.GroupBox();
+            this.languageFR = new System.Windows.Forms.RadioButton();
             this.languagePL = new System.Windows.Forms.RadioButton();
             this.languageGER = new System.Windows.Forms.RadioButton();
             this.languageENG = new System.Windows.Forms.RadioButton();
@@ -86,7 +87,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(9, 416);
+            this.statusLabel.Location = new System.Drawing.Point(8, 441);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(53, 13);
             this.statusLabel.TabIndex = 10;
@@ -95,7 +96,7 @@
             // 
             // childProgressBar
             // 
-            this.childProgressBar.Location = new System.Drawing.Point(12, 558);
+            this.childProgressBar.Location = new System.Drawing.Point(11, 583);
             this.childProgressBar.Name = "childProgressBar";
             this.childProgressBar.Size = new System.Drawing.Size(302, 15);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -123,7 +124,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(9, 598);
+            this.formPageLink.Location = new System.Drawing.Point(8, 623);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -133,7 +134,7 @@
             // 
             // parrentProgressBar
             // 
-            this.parrentProgressBar.Location = new System.Drawing.Point(12, 537);
+            this.parrentProgressBar.Location = new System.Drawing.Point(11, 562);
             this.parrentProgressBar.Name = "parrentProgressBar";
             this.parrentProgressBar.Size = new System.Drawing.Size(302, 15);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -294,15 +295,28 @@
             // 
             // languageSelectionGB
             // 
+            this.languageSelectionGB.Controls.Add(this.languageFR);
             this.languageSelectionGB.Controls.Add(this.languagePL);
             this.languageSelectionGB.Controls.Add(this.languageGER);
             this.languageSelectionGB.Controls.Add(this.languageENG);
-            this.languageSelectionGB.Location = new System.Drawing.Point(154, 386);
+            this.languageSelectionGB.Location = new System.Drawing.Point(193, 389);
             this.languageSelectionGB.Name = "languageSelectionGB";
-            this.languageSelectionGB.Size = new System.Drawing.Size(160, 37);
+            this.languageSelectionGB.Size = new System.Drawing.Size(120, 56);
             this.languageSelectionGB.TabIndex = 30;
             this.languageSelectionGB.TabStop = false;
             this.languageSelectionGB.Text = "Language";
+            // 
+            // languageFR
+            // 
+            this.languageFR.AutoSize = true;
+            this.languageFR.Location = new System.Drawing.Point(61, 31);
+            this.languageFR.Name = "languageFR";
+            this.languageFR.Size = new System.Drawing.Size(39, 17);
+            this.languageFR.TabIndex = 3;
+            this.languageFR.TabStop = true;
+            this.languageFR.Text = "FR";
+            this.languageFR.UseVisualStyleBackColor = true;
+            this.languageFR.CheckedChanged += new System.EventHandler(this.languageFR_CheckedChanged);
             // 
             // languagePL
             // 
@@ -322,7 +336,7 @@
             // languageGER
             // 
             this.languageGER.AutoSize = true;
-            this.languageGER.Location = new System.Drawing.Point(109, 13);
+            this.languageGER.Location = new System.Drawing.Point(6, 33);
             this.languageGER.Name = "languageGER";
             this.languageGER.Size = new System.Drawing.Size(48, 17);
             this.languageGER.TabIndex = 1;
@@ -351,9 +365,9 @@
             // 
             this.loadingImageGroupBox.Controls.Add(this.thirdGuardsLoadingImageRB);
             this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(11, 364);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(11, 389);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
-            this.loadingImageGroupBox.Size = new System.Drawing.Size(137, 49);
+            this.loadingImageGroupBox.Size = new System.Drawing.Size(173, 49);
             this.loadingImageGroupBox.TabIndex = 26;
             this.loadingImageGroupBox.TabStop = false;
             this.loadingImageGroupBox.Text = "Loading Image";
@@ -391,7 +405,7 @@
             // findBugAddModLabel
             // 
             this.findBugAddModLabel.AutoSize = true;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 579);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(8, 604);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
             this.findBugAddModLabel.TabIndex = 27;
@@ -402,7 +416,7 @@
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(221, 579);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(220, 604);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
             this.cancelDownloadButton.Size = new System.Drawing.Size(93, 60);
             this.cancelDownloadButton.TabIndex = 28;
@@ -419,7 +433,7 @@
             // downloadProgress
             // 
             this.downloadProgress.DetectUrls = false;
-            this.downloadProgress.Location = new System.Drawing.Point(12, 432);
+            this.downloadProgress.Location = new System.Drawing.Point(11, 457);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
             this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
@@ -435,7 +449,7 @@
             this.viewTypeGB.Controls.Add(this.selectionDefault);
             this.viewTypeGB.Location = new System.Drawing.Point(11, 268);
             this.viewTypeGB.Name = "viewTypeGB";
-            this.viewTypeGB.Size = new System.Drawing.Size(173, 93);
+            this.viewTypeGB.Size = new System.Drawing.Size(173, 115);
             this.viewTypeGB.TabIndex = 31;
             this.viewTypeGB.TabStop = false;
             this.viewTypeGB.Text = "Selection View";
@@ -457,7 +471,7 @@
             // expandNodesDefault
             // 
             this.expandNodesDefault.AutoSize = true;
-            this.expandNodesDefault.Location = new System.Drawing.Point(18, 68);
+            this.expandNodesDefault.Location = new System.Drawing.Point(19, 76);
             this.expandNodesDefault.Name = "expandNodesDefault";
             this.expandNodesDefault.Size = new System.Drawing.Size(75, 17);
             this.expandNodesDefault.TabIndex = 2;
@@ -471,7 +485,7 @@
             // selectionLegacy
             // 
             this.selectionLegacy.AutoSize = true;
-            this.selectionLegacy.Location = new System.Drawing.Point(6, 53);
+            this.selectionLegacy.Location = new System.Drawing.Point(7, 61);
             this.selectionLegacy.Name = "selectionLegacy";
             this.selectionLegacy.Size = new System.Drawing.Size(60, 17);
             this.selectionLegacy.TabIndex = 1;
@@ -501,7 +515,7 @@
             // donateLabel
             // 
             this.donateLabel.AutoSize = true;
-            this.donateLabel.Location = new System.Drawing.Point(9, 618);
+            this.donateLabel.Location = new System.Drawing.Point(8, 643);
             this.donateLabel.Name = "donateLabel";
             this.donateLabel.Size = new System.Drawing.Size(48, 13);
             this.donateLabel.TabIndex = 32;
@@ -610,7 +624,7 @@
             // 
             // totalProgressBar
             // 
-            this.totalProgressBar.Location = new System.Drawing.Point(12, 516);
+            this.totalProgressBar.Location = new System.Drawing.Point(11, 541);
             this.totalProgressBar.Name = "totalProgressBar";
             this.totalProgressBar.Size = new System.Drawing.Size(302, 15);
             this.totalProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -619,7 +633,7 @@
             // DiscordServerLink
             // 
             this.DiscordServerLink.AutoSize = true;
-            this.DiscordServerLink.Location = new System.Drawing.Point(9, 637);
+            this.DiscordServerLink.Location = new System.Drawing.Point(8, 662);
             this.DiscordServerLink.Name = "DiscordServerLink";
             this.DiscordServerLink.Size = new System.Drawing.Size(77, 13);
             this.DiscordServerLink.TabIndex = 35;
@@ -632,7 +646,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(326, 654);
+            this.ClientSize = new System.Drawing.Size(326, 680);
             this.Controls.Add(this.DiscordServerLink);
             this.Controls.Add(this.totalProgressBar);
             this.Controls.Add(this.fontSizeGB);
@@ -718,6 +732,7 @@
         private System.Windows.Forms.ProgressBar totalProgressBar;
         private System.Windows.Forms.LinkLabel DiscordServerLink;
         private System.Windows.Forms.CheckBox clearCacheCB;
+        private System.Windows.Forms.RadioButton languageFR;
     }
 }
 

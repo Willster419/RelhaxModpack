@@ -11,6 +11,8 @@ namespace RelhaxModpack
         //the developer's version of the mod
         public string version { get; set; }
         public string zipFile { get; set; }
+        //a flag to determine wether or not the mod should be shown
+        public bool visable { get; set; }
         //the start address of the zip file location. enabled us to use sites that
         //generate random filenames for publicly shared files.
         public string startAddress { get; set; }
