@@ -843,7 +843,7 @@ namespace RelhaxModpack
             english.Add("modNotFound", "The mod, \"{0}\" was not found in the modpack. It could have been renamed or removed.");
             german.Add("modNotFound", "Der Mod, \"{0}\" wurde im Modpack nicht gefunden. Er könnte umbenannt oder entfernt worden sein.");
             polish.Add("modNotFound", "Modyfikacja \"{0}\" nie została znaleziona w paczce. Sprawdź, czy nie została usunięta lub zmieniona nazwa.");
-            french.Add("modNotFound", "Impossible de trouver le mod \"{0}\" dans le mod pack. Il est possible qu`il sois supprimé ou changé de nom");
+            french.Add("modNotFound", "Impossible de trouver le mod, \"{0}\" dans le mod pack. Il est possible qu`il sois supprimé ou changé de nom");
 
             //Componet: 
             //
