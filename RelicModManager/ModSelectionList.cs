@@ -341,7 +341,7 @@ namespace RelhaxModpack
         //adds a mod m to a tabpage t, OMC treeview style
         private void addModTreeview(Mod m, TabPage t, int panelCount, LegacySelectionList lsl, Category c)
         {
-            if (m.visable)
+            if (m.visible)
             {
                 if (Settings.darkUI)
                     lsl.legacyTreeView.Background = System.Windows.Media.Brushes.Gray;
@@ -452,7 +452,7 @@ namespace RelhaxModpack
             //process the configs
             foreach (Config con in configs)
             {
-                if (con.visable)
+                if (con.visible)
                 { 
                 //link stuff in memory
                 con.parentMod = m;
@@ -1166,7 +1166,7 @@ namespace RelhaxModpack
         //adds a mod m to a tabpage t
         private void addMod(Mod m, TabPage t, int panelCount, Category catagory)
         {
-            if (m.visable)
+            if (m.visible)
             {
                 //bool for keeping track if a radioButton config has been selected
                 hasRadioButtonConfigSelected = false;
@@ -1335,7 +1335,7 @@ namespace RelhaxModpack
             configControlDD2.DropDownStyle = ComboBoxStyle.DropDownList;
             foreach (Config con in configs)
             {
-                if (con.visable)
+                if (con.visible)
                 {
                     ConfigFormComboBox configControlDDALL = null;
                     con.parentMod = m;
