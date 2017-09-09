@@ -235,13 +235,20 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("getMd5Hash", "read from onlineDatabaseXml = " + file, ex);
+                    Utils.exceptionLog("getFileSize", "read from onlineDatabaseXml: " + file, ex);
                 }
             }
             else
             {
-                FileInfo fi = new FileInfo(file);
-                fileSizeBytes = fi.Length;
+                try
+                {
+                    FileInfo fi = new FileInfo(file);
+                    fileSizeBytes = fi.Length;
+                }
+                catch (Exception ex)
+                {
+                    Utils.exceptionLog("getFileSize", "FileInfo from local file: " + file, ex);
+                }
             }
             try
             {
