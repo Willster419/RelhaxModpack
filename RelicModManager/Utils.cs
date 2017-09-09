@@ -552,7 +552,7 @@ namespace RelhaxModpack
                     }
                     if (d != null)
                     {
-                        if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.dependencyZipFile, ((IXmlLineInfo)d).LineNumber)); };
+                        if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.dependencyZipFile, ((IXmlLineInfo)dependencyNode).LineNumber)); };
                         if (d.packageName.Equals("")) { string rad = Utils.RandomString(30);  d.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
                         globalDependencies.Add(d);
                     };
@@ -602,7 +602,7 @@ namespace RelhaxModpack
                     }
                     if (d != null)
                     {
-                        if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.dependencyZipFile, ((IXmlLineInfo)d).LineNumber)); };
+                        if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.dependencyZipFile, ((IXmlLineInfo)dependencyNode).LineNumber)); };
                         if (d.packageName.Equals("")) { string rad = Utils.RandomString(30); d.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
                         dependencies.Add(d);
                     };
@@ -649,7 +649,7 @@ namespace RelhaxModpack
                     }
                     if (d != null)
                     {
-                        if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.dependencyZipFile, ((IXmlLineInfo)d).LineNumber)); };
+                        if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.dependencyZipFile, ((IXmlLineInfo)dependencyNode).LineNumber)); };
                         if (d.packageName.Equals("")) { string rad = Utils.RandomString(30); d.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
                         logicalDependencies.Add(d);
                     };
