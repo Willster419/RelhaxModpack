@@ -235,7 +235,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("getMd5Hash", "read from databaseupdate = " + file, ex);
+                    Utils.exceptionLog("getMd5Hash", "read from onlineDatabaseXml = " + file, ex);
                 }
             }
             else
