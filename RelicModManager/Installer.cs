@@ -37,6 +37,7 @@ namespace RelhaxModpack
         public List<DatabaseObject> ModsConfigsToInstall { get; set; }
         public List<Mod> ModsWithData { get; set; }
         public List<Config> ConfigsWithData { get; set; }
+        public List<DatabaseObject> ModsConfigsWithData { get; set; }
         public List<Mod> UserMods { get; set; }
         private List<Patch> patchList { get; set; }
         public string TanksVersion { get; set; }
