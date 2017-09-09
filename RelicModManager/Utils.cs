@@ -502,7 +502,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("createModStructure_new", "tried to access " + databaseURL, ex);
+                    Utils.exceptionLog("createModStructure", "tried to access " + databaseURL, ex);
                     MessageBox.Show(Translations.getTranslatedString("databaseNotFound"));
                     Application.Exit();
                     return;
@@ -902,7 +902,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("createModStructure_new", ex);
+                Utils.exceptionLog("createModStructure", ex);
             }
         }
 
