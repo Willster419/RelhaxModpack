@@ -31,12 +31,8 @@ namespace RelhaxModpack
         public List<Dependency> GlobalDependencies { get; set; }
         public List<Dependency> Dependencies { get; set; }
         public List<LogicalDependnecy> LogicalDependencies { get; set; }
-        //DEPRECATED
-        //public List<Mod> ModsToInstall { get; set; }
-        //public List<List<Config>> ConfigListsToInstall { get; set; }
+        public List<Dependency> AppendedDependencies { get; set; }
         public List<DatabaseObject> ModsConfigsToInstall { get; set; }
-        public List<Mod> ModsWithData { get; set; }
-        public List<Config> ConfigsWithData { get; set; }
         public List<DatabaseObject> ModsConfigsWithData { get; set; }
         public List<Mod> UserMods { get; set; }
         private List<Patch> patchList { get; set; }
@@ -224,31 +220,13 @@ namespace RelhaxModpack
         //Step 2: Backup User Data
         public void BackupUserData()
         {
-            foreach (Mod m in ModsWithData)
+            foreach (DatabaseObject dbo in ModsConfigsWithData)
             {
-                foreach (string s in m.userFiles)
+                foreach (string s in dbo.userFiles)
                 {
 
                     string startLoc = TanksLocation + s;
-                    string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + Utils.getValidFilename(m.name + "_" + Path.GetFileName(s));
-                    try
-                    {
-                        if (File.Exists(startLoc))
-                            File.Move(startLoc, destLoc);
-                    }
-                    catch
-                    {
-                        if (Program.testMode) { MessageBox.Show(string.Format("Error: can not move file.\nstartLoc: \"{0}\"\ndestLoc: \"{1}\"", startLoc, destLoc)); };
-                        Utils.appendToLog(string.Format("Error: can not move file. startLoc: \"{0}\" destLoc: \"{1}\"", startLoc, destLoc));
-                    }
-                }
-            }
-            foreach (Config cfg in ConfigsWithData)
-            {
-                foreach (string s in cfg.userFiles)
-                {
-                    string startLoc = TanksLocation + s;
-                    string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + Utils.getValidFilename(cfg.name + "_" + Path.GetFileName(s));
+                    string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + Utils.getValidFilename(dbo.name + "_" + Path.GetFileName(s));
                     try
                     {
                         if (File.Exists(startLoc))
@@ -384,6 +362,10 @@ namespace RelhaxModpack
                 if (!dbo.zipFile.Equals(""))
                     args.ParrentTotalToProcess++;
 
+            foreach (Dependency d in AppendedDependencies)
+                if (!d.dependencyZipFile.Equals(""))
+                    args.ParrentTotalToProcess++;
+
             InstallWorker.ReportProgress(0);
             //extract global dependencies
             foreach (Dependency d in GlobalDependencies)
@@ -485,6 +467,31 @@ namespace RelhaxModpack
                 }
                 InstallWorker.ReportProgress(0);
             }
+            //extract dependencies
+            args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractAppendedDependencies;
+            InstallWorker.ReportProgress(0);
+            foreach (Dependency d in AppendedDependencies)
+            {
+                Utils.appendToLog("Extracting Appended Dependency " + d.dependencyZipFile);
+                if (!d.dependencyZipFile.Equals(""))
+                {
+                    try
+                    {
+                        this.Unzip(downloadedFilesDir + d.dependencyZipFile, TanksLocation);
+                        args.ParrentProcessed++;
+                    }
+                    catch (Exception ex)
+                    {
+                        //append the exception to the log
+                        Utils.exceptionLog("ExtractDatabaseObjects", ex);
+                        //show the error message
+                        MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                        //exit the application
+                        Application.Exit();
+                    }
+                }
+                InstallWorker.ReportProgress(0);
+            }
             //finish by moving WoTAppData folder contents into application data folder
             //folder name is "WoTAppData"
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractConfigs;
@@ -530,46 +537,18 @@ namespace RelhaxModpack
         //Step 10: Restore User Data
         public void RestoreUserData()
         {
-            args.ParrentTotalToProcess = ModsWithData.Count + ConfigsWithData.Count;
+            args.ParrentTotalToProcess = ModsConfigsWithData.Count;
             InstallWorker.ReportProgress(0);
             string[] fileList = Directory.GetFiles(Application.StartupPath + "\\RelHaxTemp");
-            foreach (Mod m in ModsWithData)
+            foreach (DatabaseObject dbo in ModsConfigsWithData)
             {
-                args.ChildTotalToProcess = m.userFiles.Count;
-                foreach (string s in m.userFiles)
+                args.ChildTotalToProcess = dbo.userFiles.Count;
+                foreach (string s in dbo.userFiles)
                 {
                     args.currentFile = s;
                     InstallWorker.ReportProgress(0);
                     //find the file
-                    string parsedFileName = Utils.getValidFilename(m.name + "_" + Path.GetFileName(s));
-                    foreach (string ss in fileList)
-                    {
-                        string thePath = Path.GetFileName(ss);
-                        if (thePath.Equals(parsedFileName))
-                        {
-                            //the file has been found in the temp directory
-                            if (!Directory.Exists(TanksLocation + "\\" + Path.GetFullPath(s)))
-                                Directory.CreateDirectory(TanksLocation + "\\" + Path.GetDirectoryName(s));
-                            if (File.Exists(TanksLocation + "\\" + s))
-                                File.Delete(TanksLocation + "\\" + s);
-                            File.Move(ss, TanksLocation + "\\" + s);
-                        }
-                    }
-                    args.ChildProcessed++;
-                    InstallWorker.ReportProgress(0);
-                }
-                args.ParrentProcessed++;
-                InstallWorker.ReportProgress(0);
-            }
-            foreach (Config cfg in ConfigsWithData)
-            {
-                args.ChildTotalToProcess = cfg.userFiles.Count;
-                foreach (string s in cfg.userFiles)
-                {
-                    args.currentFile = s;
-                    InstallWorker.ReportProgress(0);
-                    //find the file
-                    string parsedFileName = Utils.getValidFilename(cfg.name + "_" + Path.GetFileName(s));
+                    string parsedFileName = Utils.getValidFilename(dbo.name + "_" + Path.GetFileName(s));
                     foreach (string ss in fileList)
                     {
                         string thePath = Path.GetFileName(ss);
@@ -1175,8 +1154,8 @@ namespace RelhaxModpack
                     Dependencies = null;
                     LogicalDependencies = null;
                     ModsConfigsToInstall = null;
-                    ModsWithData = null;
-                    ConfigsWithData = null;
+                    AppendedDependencies = null;
+                    ModsConfigsWithData = null;
                     UserMods = null;
                     patchList = null;
                     args = null;

@@ -37,6 +37,7 @@ namespace RelhaxModpack
         private List<Dependency> dependenciesToInstall;
         private List<LogicalDependnecy> logicalDependenciesToInstall;
         private List<DatabaseObject> modsConfigsToInstall;
+        private List<Dependency> appendedDependenciesToInstall;
         //list of all current dependencies
         private List<Dependency> currentDependencies;
         private List<LogicalDependnecy> currentLogicalDependencies;
@@ -62,8 +63,7 @@ namespace RelhaxModpack
         private loadingGifPreview gp;
         private string suportedVersions = null;
         string[] supportedVersions = null;
-        List<Mod> modsWithData;
-        List<Config> configsWithData;
+        List<DatabaseObject> modsConfigsWithData;
         private float windowHeight;
         private float windowWidth;
         private float scale = 1.0f;
@@ -222,9 +222,9 @@ namespace RelhaxModpack
                     GlobalDependencies = this.globalDependenciesToInstall,
                     Dependencies = this.dependenciesToInstall,
                     LogicalDependencies = this.logicalDependenciesToInstall,
+                    AppendedDependencies = this.appendedDependenciesToInstall,
                     ModsConfigsToInstall = this.modsConfigsToInstall,
-                    ConfigsWithData = this.configsWithData,
-                    ModsWithData = this.modsWithData,
+                    ModsConfigsWithData = this.modsConfigsWithData,
                     TanksLocation = this.tanksLocation,
                     TanksVersion = this.tanksVersion,
                     UserMods = this.userMods,
@@ -772,9 +772,8 @@ namespace RelhaxModpack
             dependenciesToInstall = new List<Dependency>();
             logicalDependenciesToInstall = new List<LogicalDependnecy>();
             modsConfigsToInstall = new List<DatabaseObject>();
-            //TODO: look to combine the two below to one list of DatabaseObject
-            modsWithData = new List<Mod>();
-            configsWithData = new List<Config>();
+            appendedDependenciesToInstall = new List<Dependency>();
+            modsConfigsWithData = new List<DatabaseObject>();
             patchList = new List<Patch>();
             userMods = new List<Mod>();
 
@@ -794,7 +793,7 @@ namespace RelhaxModpack
 
                         //since it is checked, regardless if it has a zipfile, check if it has userdata
                         if (m.userFiles.Count > 0)
-                            modsWithData.Add(m);
+                            modsConfigsWithData.Add(m);
 
                         //check for configs
                         if (m.configs.Count > 0)
@@ -810,6 +809,17 @@ namespace RelhaxModpack
                     }
                 }
             }
+
+            //check for dependencies that actually need to be installed at the end
+            foreach(Dependency d in dependenciesToInstall)
+            {
+                if(d.appendExtraction)
+                {
+                    appendedDependenciesToInstall.Add(d);
+                    dependenciesToInstall.Remove(d);
+                }
+            }
+
             //check for any user mods to install
             for (int i = 0; i < list.userMods.Count; i++)
             {
@@ -856,6 +866,13 @@ namespace RelhaxModpack
                     downloadQueue.Add(new DownloadItem(new Uri(d.startAddress + d.dependencyZipFile + d.endAddress), localFilesDir + d.dependencyZipFile));
                 }
             }
+            foreach (Dependency d in appendedDependenciesToInstall)
+            {
+                if (d.downloadFlag)
+                {
+                    downloadQueue.Add(new DownloadItem(new Uri(d.startAddress + d.dependencyZipFile + d.endAddress), localFilesDir + d.dependencyZipFile));
+                }
+            }
             foreach (LogicalDependnecy ld in logicalDependenciesToInstall)
             {
                 if (ld.downloadFlag)
@@ -896,7 +913,7 @@ namespace RelhaxModpack
 
                     //check for userdata
                     if (config.userFiles.Count > 0)
-                        configsWithData.Add(config);
+                        modsConfigsWithData.Add(config);
 
                     //check for configs
                     if (config.configs.Count > 0)
@@ -1043,6 +1060,19 @@ namespace RelhaxModpack
                         childProgressBar.Value = e.ChildProcessed;
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractConfigs;
             }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractAppendedDependencies)
+            {
+                message = "Extracting Package " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
+                message = message + "File:" + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
+                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
+                    parrentProgressBar.Value = e.ParrentProcessed;
+                childProgressBar.Maximum = e.ChildTotalToProcess;
+                if (e.ChildProcessed > 0)
+                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                        childProgressBar.Value = e.ChildProcessed;
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractAppendedDependencies;
+            }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.RestoreUserData)
             {
                 message = "Restoring User Data " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
@@ -1123,6 +1153,7 @@ namespace RelhaxModpack
                 globalDependenciesToInstall = null;
                 dependenciesToInstall = null;
                 logicalDependenciesToInstall = null;
+                appendedDependenciesToInstall = null;
                 modsConfigsToInstall = null;
                 downloadQueue = null;
                 parsedCatagoryLists = null;
@@ -1138,8 +1169,7 @@ namespace RelhaxModpack
                     gp.Dispose();
                     gp = null;
                 }
-                modsWithData = null;
-                configsWithData = null;
+                modsConfigsWithData = null;
                 toggleUIButtons(true);
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Uninstall)
