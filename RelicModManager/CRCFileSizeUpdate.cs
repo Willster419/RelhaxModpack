@@ -62,6 +62,7 @@ namespace RelhaxModpack
             }
             // set this flag, so getMd5Hash and getFileSize should parse downloaded online database.xml
             Program.databaseUpdateOnline = true;
+            filesNotFoundSB.Clear();
             globalDepsSB.Clear();
             dependenciesSB.Clear();
             logicalDependenciesSB.Clear();
