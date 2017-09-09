@@ -458,7 +458,7 @@ namespace RelhaxModpack
 
         //parses the xml mod info into the memory database (change XML reader to from XMLDocument to XDocument)
         // https://www.google.de/search?q=c%23+xdocument+get+line+number&oq=c%23+xdocument+get+line+number&aqs=chrome..69i57j69i58.11773j0j7&sourceid=chrome&ie=UTF-8
-        public static void createModStructure(string databaseURL, bool backendFlag, List<Dependency> globalDependencies, List<Category> parsedCatagoryList)
+        public static void createModStructure(string databaseURL, List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies, List<Category> parsedCatagoryList)
         {
             try
             {
@@ -527,6 +527,100 @@ namespace RelhaxModpack
                         if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.dependencyZipFile, ((IXmlLineInfo)d).LineNumber)); };
                         if (d.packageName.Equals("")) { string rad = Utils.RandomString(30);  d.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
                         globalDependencies.Add(d);
+                    };
+                }
+                //add the dependencies
+                foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/dependencies/dependency"))
+                {
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                    Dependency d = new Dependency();
+                    d.packageName = "";
+                    foreach (XElement globs in dependencyNode.Elements())
+                    {
+                        depNodeList = depNodeList.Except(new string[] { globs.Name.ToString() }).ToArray();
+                        switch (globs.Name.ToString())
+                        {
+                            case "dependencyZipFile":
+                                d.dependencyZipFile = globs.Value;
+                                break;
+                            case "dependencyZipCRC":
+                                d.dependencyZipCRC = globs.Value;
+                                break;
+                            case "startAddress":
+                                d.startAddress = globs.Value;
+                                break;
+                            case "endAddress":
+                                d.endAddress = globs.Value;
+                                break;
+                            case "dependencyenabled":
+                                d.enabled = Utils.parseBool(globs.Value, false);
+                                break;
+                            case "packageName":
+                                d.packageName = globs.Value.Trim();
+                                if (d.packageName.Equals(""))
+                                {
+                                    Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => globsPend {1}\n\nmore informations, see logfile", globs.Name.ToString(), d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                }
+                                break;
+                            default:
+                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}\n\nmore informations, see logfile", globs.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                break;
+                        }
+                    }
+                    if (d != null)
+                    {
+                        if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.dependencyZipFile, ((IXmlLineInfo)d).LineNumber)); };
+                        if (d.packageName.Equals("")) { string rad = Utils.RandomString(30); d.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
+                        dependencies.Add(d);
+                    };
+                }
+                //add the dependencies
+                foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/logicalDependencies/logicalDependency"))
+                {
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                    LogicalDependnecy d = new LogicalDependnecy();
+                    d.packageName = "";
+                    foreach (XElement globs in dependencyNode.Elements())
+                    {
+                        depNodeList = depNodeList.Except(new string[] { globs.Name.ToString() }).ToArray();
+                        switch (globs.Name.ToString())
+                        {
+                            case "dependencyZipFile":
+                                d.dependencyZipFile = globs.Value;
+                                break;
+                            case "dependencyZipCRC":
+                                d.dependencyZipCRC = globs.Value;
+                                break;
+                            case "startAddress":
+                                d.startAddress = globs.Value;
+                                break;
+                            case "endAddress":
+                                d.endAddress = globs.Value;
+                                break;
+                            case "dependencyenabled":
+                                d.enabled = Utils.parseBool(globs.Value, false);
+                                break;
+                            case "packageName":
+                                d.packageName = globs.Value.Trim();
+                                if (d.packageName.Equals(""))
+                                {
+                                    Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => globsPend {1}\n\nmore informations, see logfile", globs.Name.ToString(), d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                }
+                                break;
+                            default:
+                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}\n\nmore informations, see logfile", globs.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                break;
+                        }
+                    }
+                    if (d != null)
+                    {
+                        if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.dependencyZipFile, ((IXmlLineInfo)d).LineNumber)); };
+                        if (d.packageName.Equals("")) { string rad = Utils.RandomString(30); d.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
+                        logicalDependencies.Add(d);
                     };
                 }
                 foreach (XElement catagoryHolder in doc.XPathSelectElements("/modInfoAlpha.xml/catagories/catagory"))
@@ -674,7 +768,7 @@ namespace RelhaxModpack
                                                         //parse all dependencies
                                                         foreach (XElement dependencyHolder in modNode.Elements())
                                                         {
-                                                            string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                                                            string[] depNodeList = new string[] { "packageName" };
                                                             Dependency d = new Dependency();
                                                             d.packageName = "";
                                                             foreach (XElement dependencyNode in dependencyHolder.Elements())
@@ -682,21 +776,6 @@ namespace RelhaxModpack
                                                                 depNodeList = depNodeList.Except(new string[] { dependencyNode.Name.ToString() }).ToArray();
                                                                 switch (dependencyNode.Name.ToString())
                                                                 {
-                                                                    case "dependencyZipFile":
-                                                                        d.dependencyZipFile = dependencyNode.Value;
-                                                                        break;
-                                                                    case "dependencyZipCRC":
-                                                                        d.dependencyZipCRC = dependencyNode.Value;
-                                                                        break;
-                                                                    case "startAddress":
-                                                                        d.startAddress = dependencyNode.Value;
-                                                                        break;
-                                                                    case "endAddress":
-                                                                        d.endAddress = dependencyNode.Value;
-                                                                        break;
-                                                                    case "dependencyenabled":
-                                                                        d.enabled = Utils.parseBool(dependencyNode.Value, false);
-                                                                        break;
                                                                     case "packageName":
                                                                         d.packageName = dependencyNode.Value.Trim();
                                                                         if (d.packageName.Equals(""))
@@ -707,7 +786,7 @@ namespace RelhaxModpack
                                                                         break;
                                                                     default:
                                                                         Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), m.name, m.zipFile, d.dependencyZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
-                                                                        if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                                        if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: packageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                                         break;
                                                                 }
                                                             }
@@ -721,7 +800,7 @@ namespace RelhaxModpack
                                                         break;
                                                     case "configs":
                                                         //run the process configs method
-                                                        Utils.processConfigs(modNode, backendFlag, m, true);
+                                                        Utils.processConfigs(modNode, m, true);
                                                         break;
                                                     default:
                                                         Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) (line {3})", modNode.Name.ToString(), m.name, m.zipFile, ((IXmlLineInfo)modNode).LineNumber));
@@ -744,10 +823,10 @@ namespace RelhaxModpack
                                 }
                                 break;
                             case "dependencies":
-                                //parse every config for that mod
+                                //parse every dependency for that mod
                                 foreach (XElement dependencyHolder in catagoryNode.Elements())
                                 {
-                                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                                    string[] depNodeList = new string[] { "packageName" };
                                     Dependency d = new Dependency();
                                     d.packageName = "";
                                     foreach (XElement dependencyNode in dependencyHolder.Elements())
@@ -755,21 +834,6 @@ namespace RelhaxModpack
                                         depNodeList = depNodeList.Except(new string[] { dependencyNode.Name.ToString() }).ToArray();
                                         switch (dependencyNode.Name.ToString())
                                         {
-                                            case "dependencyZipFile":
-                                                d.dependencyZipFile = dependencyNode.Value;
-                                                break;
-                                            case "dependencyZipCRC":
-                                                d.dependencyZipCRC = dependencyNode.Value;
-                                                break;
-                                            case "startAddress":
-                                                d.startAddress = dependencyNode.Value;
-                                                break;
-                                            case "endAddress":
-                                                d.endAddress = dependencyNode.Value;
-                                                break;
-                                            case "dependencyenabled":
-                                                d.enabled = Utils.parseBool(dependencyNode.Value, false);
-                                                break;
                                             case "packageName":
                                                 d.packageName = dependencyNode.Value.Trim();
                                                 if (d.packageName.Equals(""))
@@ -780,7 +844,7 @@ namespace RelhaxModpack
                                                 break;
                                             default:
                                                 Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1} => dep {2} (line {3})", dependencyNode.Name, cat.name, d.dependencyZipFile,((IXmlLineInfo)dependencyNode).LineNumber));
-                                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: packageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                 break;
                                         }
                                     }
@@ -812,7 +876,7 @@ namespace RelhaxModpack
         }
 
         //recursivly processes the configs
-        public static void processConfigs(XElement holder, bool backendFlag, Mod m, bool parentIsMod, Config con = null)
+        public static void processConfigs(XElement holder, Mod m, bool parentIsMod, Config con = null)
         {
             try
             {
@@ -878,7 +942,7 @@ namespace RelhaxModpack
                                         c.type = configNode.Value;
                                         break;
                                     case "configs":
-                                        Utils.processConfigs(configNode, backendFlag, m, false, c);
+                                        Utils.processConfigs(configNode, m, false, c);
                                         break;
                                     case "userDatas":
                                         foreach (XElement userDataNode in configNode.Elements())
@@ -952,7 +1016,7 @@ namespace RelhaxModpack
                                         //parse all dependencies
                                         foreach (XElement dependencyHolder in configNode.Elements())
                                         {
-                                            string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                                            string[] depNodeList = new string[] { "packageName" };
                                             Dependency d = new Dependency();
                                             d.packageName = "";
                                             foreach (XElement dependencyNode in dependencyHolder.Elements())
@@ -960,21 +1024,6 @@ namespace RelhaxModpack
                                                 depNodeList = confNodeList.Except(new string[] { dependencyNode.Name.ToString() }).ToArray();
                                                 switch (dependencyNode.Name.ToString())
                                                 {
-                                                    case "dependencyZipFile":
-                                                        d.dependencyZipFile = dependencyNode.Value;
-                                                        break;
-                                                    case "dependencyZipCRC":
-                                                        d.dependencyZipCRC = dependencyNode.Value;
-                                                        break;
-                                                    case "startAddress":
-                                                        d.startAddress = dependencyNode.Value;
-                                                        break;
-                                                    case "endAddress":
-                                                        d.endAddress = dependencyNode.Value;
-                                                        break;
-                                                    case "dependencyenabled":
-                                                        d.enabled = Utils.parseBool(dependencyNode.Value, false);
-                                                        break;
                                                     case "packageName":
                                                         d.packageName = dependencyNode.Value.Trim();
                                                         if (d.packageName.Equals(""))
@@ -985,7 +1034,7 @@ namespace RelhaxModpack
                                                         break;
                                                     default:
                                                         Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), c.name, c.zipFile, d.dependencyZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
-                                                        if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name.ToString())); };
+                                                        if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: packageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name.ToString())); };
                                                         break;
                                                 }
                                             }
@@ -1104,7 +1153,7 @@ namespace RelhaxModpack
                 }
                 if (c.dependencies.Count > 0)
                 {
-                    duplicatesPackageName_dependencyRead(ref c.dependencies, ref checkStorageList);
+                    //duplicatesPackageName_dependencyRead(ref c.dependencies, ref checkStorageList);
                 }
             }
         }
@@ -1118,7 +1167,7 @@ namespace RelhaxModpack
             {
                 if (c.dependencies.Count > 0)
                 {
-                    duplicatesPackageName_dependencyRead(ref c.dependencies, ref checkStorageList);
+                    //duplicatesPackageName_dependencyRead(ref c.dependencies, ref checkStorageList);
                 }
                 foreach (Mod m in c.mods)
                 {
@@ -1135,7 +1184,7 @@ namespace RelhaxModpack
                     }
                     if (m.dependencies.Count > 0)
                     {
-                        duplicatesPackageName_dependencyRead(ref m.dependencies, ref checkStorageList);
+                        //duplicatesPackageName_dependencyRead(ref m.dependencies, ref checkStorageList);
                     }
                 }
             }
@@ -1161,12 +1210,12 @@ namespace RelhaxModpack
                     }
                     if (m.dependencies.Count > 0)
                     {
-                        duplicatesPackageName_dependencyCheck(m.dependencies, checkStorageList, ref duplicatesCounter);
+                        //duplicatesPackageName_dependencyCheck(m.dependencies, checkStorageList, ref duplicatesCounter);
                     }
                 }
                 if (c.dependencies.Count > 0)
                 {
-                    duplicatesPackageName_dependencyCheck(c.dependencies, checkStorageList, ref duplicatesCounter);
+                    //duplicatesPackageName_dependencyCheck(c.dependencies, checkStorageList, ref duplicatesCounter);
                 }
             }
             if (duplicatesCounter > 0)
@@ -2882,6 +2931,8 @@ namespace RelhaxModpack
                     {
                         case "name":
                             m = Utils.linkMod(nn.InnerText, parsedCatagoryList);
+                            if ((m != null) && (!m.visible))
+                                return;
                             if (m == null)
                             {
                                 Utils.appendToLog("WARNING: mod \"" + nn.InnerText + "\" not found");
@@ -3005,54 +3056,57 @@ namespace RelhaxModpack
             {
                 foreach (Mod m in c.mods)
                 {
-                    if (savedConfigList.Contains(m.packageName))
+                    if (m.visible)
                     {
-                        savedConfigList.Remove(m.packageName);
-                        if (!m.enabled)
+                        if (savedConfigList.Contains(m.packageName))
                         {
-                            MessageBox.Show(string.Format(Translations.getTranslatedString("modDeactivated"), m.name), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            savedConfigList.Remove(m.packageName);
+                            if (!m.enabled)
+                            {
+                                MessageBox.Show(string.Format(Translations.getTranslatedString("modDeactivated"), m.name), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            else
+                            {
+                                m.Checked = true;
+                                if (m.modFormCheckBox != null)
+                                {
+                                    if (m.modFormCheckBox is ModFormCheckBox)
+                                    {
+                                        ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
+                                        mfcb.Checked = true;
+                                        mfcb.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
+                                    }
+                                    else if (m.modFormCheckBox is ModWPFCheckBox)
+                                    {
+                                        ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.modFormCheckBox;
+                                        mfCB2.IsChecked = true;
+                                    }
+                                }
+                                Utils.appendToLog("Checking mod " + m.name);
+                            }
                         }
                         else
                         {
-                            m.Checked = true;
+                            //uncheck
                             if (m.modFormCheckBox != null)
                             {
-                                if(m.modFormCheckBox is ModFormCheckBox)
+                                if (m.modFormCheckBox is ModFormCheckBox)
                                 {
                                     ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
-                                    mfcb.Checked = true;
-                                    mfcb.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
+                                    mfcb.Checked = false;
+                                    mfcb.Parent.BackColor = Settings.getBackColor();
                                 }
                                 else if (m.modFormCheckBox is ModWPFCheckBox)
                                 {
                                     ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.modFormCheckBox;
-                                    mfCB2.IsChecked = true;
+                                    mfCB2.IsChecked = false;
                                 }
                             }
-                            Utils.appendToLog("Checking mod " + m.name);
                         }
-                    }
-                    else
-                    {
-                        //uncheck
-                        if (m.modFormCheckBox != null)
+                        if (m.configs.Count > 0)
                         {
-                            if (m.modFormCheckBox is ModFormCheckBox)
-                            {
-                                ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
-                                mfcb.Checked = false;
-                                mfcb.Parent.BackColor = Settings.getBackColor();
-                            }
-                            else if (m.modFormCheckBox is ModWPFCheckBox)
-                            {
-                                ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.modFormCheckBox;
-                                mfCB2.IsChecked = false;
-                            }
+                            loadProcessConfigsV2(m.name, m.configs, ref savedConfigList);
                         }
-                    }
-                    if (m.configs.Count > 0)
-                    {
-                        loadProcessConfigsV2(m.name, m.configs, ref savedConfigList);
                     }
                 }
             }
@@ -3112,10 +3166,14 @@ namespace RelhaxModpack
                             if (parentIsMod)
                             {
                                 c = m.getConfig(nnnn.InnerText);
+                                if ((c != null) && (!c.visible))
+                                    return;
                             }
                             else
                             {
                                 c = con.getSubConfig(nnnn.InnerText);
+                                if ((c != null) && (!c.visible))
+                                    return;
                             }
                             if (c == null)
                             {
@@ -3241,123 +3299,126 @@ namespace RelhaxModpack
             Panel panelRef = null;
             foreach (Config c in configList)
             {
-                if (savedConfigList.Contains(c.packageName))
+                if (c.visible)
                 {
-                    savedConfigList.Remove(c.packageName);
-                    if (!c.enabled)
+                    if (savedConfigList.Contains(c.packageName))
                     {
-                        MessageBox.Show(string.Format(Translations.getTranslatedString("configDeactivated"), c.name, parentName), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        savedConfigList.Remove(c.packageName);
+                        if (!c.enabled)
+                        {
+                            MessageBox.Show(string.Format(Translations.getTranslatedString("configDeactivated"), c.name, parentName), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            c.Checked = true;
+                            if (c.configUIComponent != null)
+                            {
+                                if (c.configUIComponent is ConfigFormCheckBox)
+                                {
+                                    ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
+                                    CBTemp.Checked = true;
+                                    shouldBeBA = true;
+                                    if (CBTemp.Parent is Panel)
+                                        panelRef = (Panel)CBTemp.Parent;
+                                }
+                                else if (c.configUIComponent is ConfigFormComboBox)
+                                {
+                                    ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.configUIComponent;
+                                    foreach (Object o in CBTemp.Items)
+                                    {
+                                        if (o is ComboBoxItem)
+                                        {
+                                            ComboBoxItem tempCBI = (ComboBoxItem)o;
+                                            if (tempCBI.config.packageName.Equals(c.packageName))
+                                            {
+                                                CBTemp.SelectedItem = o;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    shouldBeBA = true;
+                                    if (CBTemp.Parent is Panel)
+                                        panelRef = (Panel)CBTemp.Parent;
+                                }
+                                else if (c.configUIComponent is ConfigFormRadioButton)
+                                {
+                                    ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
+                                    CBTemp.Checked = true;
+                                    shouldBeBA = true;
+                                    if (CBTemp.Parent is Panel)
+                                        panelRef = (Panel)CBTemp.Parent;
+                                }
+                                else if (c.configUIComponent is ConfigWPFCheckBox)
+                                {
+                                    ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.configUIComponent;
+                                    CBTemp.IsChecked = true;
+                                }
+                                else if (c.configUIComponent is ConfigWPFComboBox)
+                                {
+                                    ConfigWPFComboBox CBTemp = (ConfigWPFComboBox)c.configUIComponent;
+                                    foreach (Object o in CBTemp.Items)
+                                    {
+                                        if (o is ComboBoxItem)
+                                        {
+                                            ComboBoxItem tempCBI = (ComboBoxItem)o;
+                                            if (tempCBI.config.packageName.Equals(c.packageName))
+                                            {
+                                                CBTemp.SelectedItem = o;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (c.configUIComponent is ConfigWPFRadioButton)
+                                {
+                                    ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.configUIComponent;
+                                    CBTemp.IsChecked = true;
+                                }
+                            }
+                            Utils.appendToLog("Checking mod " + c.name);
+                        }
                     }
                     else
                     {
-                        c.Checked = true;
-                        if(c.configUIComponent != null)
+                        if (c.configUIComponent != null)
                         {
                             if (c.configUIComponent is ConfigFormCheckBox)
                             {
                                 ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
-                                CBTemp.Checked = true;
-                                shouldBeBA = true;
-                                if (CBTemp.Parent is Panel)
-                                    panelRef = (Panel)CBTemp.Parent;
+                                CBTemp.Checked = false;
+                                CBTemp.Parent.BackColor = Settings.getBackColor();
                             }
                             else if (c.configUIComponent is ConfigFormComboBox)
                             {
                                 ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.configUIComponent;
-                                foreach(Object o in CBTemp.Items)
-                                {
-                                    if(o is ComboBoxItem)
-                                    {
-                                        ComboBoxItem tempCBI = (ComboBoxItem)o;
-                                        if(tempCBI.config.packageName.Equals(c.packageName))
-                                        {
-                                            CBTemp.SelectedItem = o;
-                                            break;
-                                        }
-                                    }
-                                }
-                                shouldBeBA = true;
-                                if (CBTemp.Parent is Panel)
-                                    panelRef = (Panel)CBTemp.Parent;
+                                CBTemp.Parent.BackColor = Settings.getBackColor();
                             }
                             else if (c.configUIComponent is ConfigFormRadioButton)
                             {
                                 ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
-                                CBTemp.Checked = true;
-                                shouldBeBA = true;
-                                if(CBTemp.Parent is Panel)
-                                    panelRef = (Panel)CBTemp.Parent;
+                                CBTemp.Checked = false;
+                                CBTemp.Parent.BackColor = Settings.getBackColor();
                             }
                             else if (c.configUIComponent is ConfigWPFCheckBox)
                             {
                                 ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.configUIComponent;
-                                CBTemp.IsChecked = true;
+                                CBTemp.IsChecked = false;
                             }
                             else if (c.configUIComponent is ConfigWPFComboBox)
                             {
-                                ConfigWPFComboBox CBTemp = (ConfigWPFComboBox)c.configUIComponent;
-                                foreach (Object o in CBTemp.Items)
-                                {
-                                    if (o is ComboBoxItem)
-                                    {
-                                        ComboBoxItem tempCBI = (ComboBoxItem)o;
-                                        if (tempCBI.config.packageName.Equals(c.packageName))
-                                        {
-                                            CBTemp.SelectedItem = o;
-                                            break;
-                                        }
-                                    }
-                                }
+                                //do nothing...
                             }
                             else if (c.configUIComponent is ConfigWPFRadioButton)
                             {
                                 ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.configUIComponent;
-                                CBTemp.IsChecked = true;
+                                CBTemp.IsChecked = false;
                             }
                         }
-                        Utils.appendToLog("Checking mod " + c.name);
                     }
-                }
-                else
-                {
-                    if (c.configUIComponent != null)
+                    if (c.configs.Count > 0)
                     {
-                        if (c.configUIComponent is ConfigFormCheckBox)
-                        {
-                            ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
-                            CBTemp.Checked = false;
-                            CBTemp.Parent.BackColor = Settings.getBackColor();
-                        }
-                        else if (c.configUIComponent is ConfigFormComboBox)
-                        {
-                            ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.configUIComponent;
-                            CBTemp.Parent.BackColor = Settings.getBackColor();
-                        }
-                        else if (c.configUIComponent is ConfigFormRadioButton)
-                        {
-                            ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
-                            CBTemp.Checked = false;
-                            CBTemp.Parent.BackColor = Settings.getBackColor();
-                        }
-                        else if (c.configUIComponent is ConfigWPFCheckBox)
-                        {
-                            ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.configUIComponent;
-                            CBTemp.IsChecked = false;
-                        }
-                        else if (c.configUIComponent is ConfigWPFComboBox)
-                        {
-                            //do nothing...
-                        }
-                        else if (c.configUIComponent is ConfigWPFRadioButton)
-                        {
-                            ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.configUIComponent;
-                            CBTemp.IsChecked = false;
-                        }
+                        loadProcessConfigsV2(c.name, c.configs, ref savedConfigList);
                     }
-                }
-                if (c.configs.Count > 0)
-                {
-                    loadProcessConfigsV2(c.name, c.configs, ref savedConfigList);
                 }
             }
             if(shouldBeBA && panelRef != null)

@@ -18,6 +18,8 @@ namespace RelhaxModpack
         private Preview p;
         private PleaseWait pw;
         public List<Dependency> globalDependencies;
+        public List<Dependency> dependencies;
+        public List<LogicalDependnecy> logicalDependencies;
         public List<Mod> completeModSearchList;
         private bool loadingConfig = false;
         private bool taskBarHidden = false;
@@ -98,7 +100,9 @@ namespace RelhaxModpack
             //create new lists for memory database and serialize from xml->lists
             globalDependencies = new List<Dependency>();
             parsedCatagoryList = new List<Category>();
-            Utils.createModStructure(databaseURL, false, globalDependencies, parsedCatagoryList);
+            dependencies = new List<Dependency>();
+            logicalDependencies = new List<LogicalDependnecy>();
+            Utils.createModStructure(databaseURL, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             if (Program.testMode)
             {
                 if (Utils.duplicates(parsedCatagoryList))
@@ -115,9 +119,10 @@ namespace RelhaxModpack
                     Application.Exit();
                 }
             }
-            this.initUserMods();
             pw.loadingDescBox.Text = Translations.getTranslatedString("buildingUI");
             Application.DoEvents();
+            this.initUserMods();
+            this.initDependencies();
             //the default loadConfig mode shold be from clicking the button
             loadMode = loadConfigMode.fromButton;
             //if the load config from last selection is checked, then set the mode to it
@@ -213,6 +218,50 @@ namespace RelhaxModpack
                     m.name = Path.GetFileNameWithoutExtension(s);
                     m.enabled = true;
                     userMods.Add(m);
+                }
+            }
+        }
+        //initialize the globalDependency, dependency, and logicalDependency list. should only be done once
+        private void initDependencies()
+        {
+            string modDownloadFilePath = "";
+            //init the global dependencies
+            foreach (Dependency d in globalDependencies)
+            {
+                //default to false, then check if it can be true
+                d.downloadFlag = false;
+                modDownloadFilePath = Application.StartupPath + "\\RelHaxDownloads\\" + d.dependencyZipFile;
+                //get the local md5 hash. a -1 indicates the file is not on the disk
+                string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
+                if ((!d.dependencyZipFile.Equals("")) && (!d.dependencyZipCRC.Equals(oldCRC2)))
+                {
+                    d.downloadFlag = true;
+                }
+            }
+            //init the dependencies
+            foreach (Dependency d in dependencies)
+            {
+                //default to false, then check if it can be true
+                d.downloadFlag = false;
+                modDownloadFilePath = Application.StartupPath + "\\RelHaxDownloads\\" + d.dependencyZipFile;
+                //get the local md5 hash. a -1 indicates the file is not on the disk
+                string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
+                if ((!d.dependencyZipFile.Equals("")) && (!d.dependencyZipCRC.Equals(oldCRC2)))
+                {
+                    d.downloadFlag = true;
+                }
+            }
+            //init the logicalDependencies
+            foreach (LogicalDependnecy d in logicalDependencies)
+            {
+                //default to false, then check if it can be true
+                d.downloadFlag = false;
+                modDownloadFilePath = Application.StartupPath + "\\RelHaxDownloads\\" + d.dependencyZipFile;
+                //get the local md5 hash. a -1 indicates the file is not on the disk
+                string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
+                if ((!d.dependencyZipFile.Equals("")) && (!d.dependencyZipCRC.Equals(oldCRC2)))
+                {
+                    d.downloadFlag = true;
                 }
             }
         }
@@ -393,7 +442,7 @@ namespace RelhaxModpack
                 {
                     //get the local md5 hash. a -1 indicates the file is not on the disk
                     string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
-                    if (!(m.crc.Equals(oldCRC2)) && (!m.zipFile.Equals("")))
+                    if ((!m.zipFile.Equals("")) && (!m.crc.Equals(oldCRC2)))
                     {
                         modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Translations.getTranslatedString("updated"));
                         m.downloadFlag = true;
@@ -525,7 +574,7 @@ namespace RelhaxModpack
                     if (firstLoad)
                     {
                         string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
-                        if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                        if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
                             configControlRB.Content = configControlRB.Content + " (Updated)";
                             con.downloadFlag = true;
@@ -579,7 +628,7 @@ namespace RelhaxModpack
                     if (firstLoad)
                     {
                         string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
-                        if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                        if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
                             toAdd = toAdd + "_Updated";
                             con.downloadFlag = true;
@@ -683,7 +732,7 @@ namespace RelhaxModpack
                     if (firstLoad)
                     {
                         string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
-                        if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                        if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
                             configControlCB.Content = configControlCB.Content + " (Updated)";
                             con.downloadFlag = true;
@@ -1192,7 +1241,7 @@ namespace RelhaxModpack
                 {
                     string oldCRC2 = Utils.getMd5Hash(modDownloadPath);
                     //if the CRC's don't match and the mod actually has a zip file
-                    if (!(m.crc.Equals(oldCRC2)) && (!m.zipFile.Equals("")))
+                    if ((!m.zipFile.Equals("")) && (!m.crc.Equals(oldCRC2)))
                     {
                         modCheckBox.Text = modCheckBox.Text + " (Updated)";
                         m.downloadFlag = true;
@@ -1400,7 +1449,7 @@ namespace RelhaxModpack
                         if (firstLoad)
                         {
                             string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
-                            if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                            if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                             {
                                 configControlRB.Text = configControlRB.Text + " (Updated)";
                                 con.downloadFlag = true;
@@ -1449,7 +1498,7 @@ namespace RelhaxModpack
                         if (firstLoad)
                         {
                             string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
-                            if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                            if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                             {
                                 con.downloadFlag = true;
                                 toAdd = toAdd + "_Updated";
@@ -1536,7 +1585,7 @@ namespace RelhaxModpack
                         if (firstLoad)
                         {
                             string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
-                            if (!oldCRC.Equals(con.crc) && (!con.crc.Equals("")))
+                            if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                             {
                                 con.downloadFlag = true;
                                 configControlCB.Text = configControlCB.Text + " (Updated)";

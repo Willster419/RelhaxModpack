@@ -60,7 +60,7 @@ namespace RelhaxModpack
             //load database
             globalDependencies = new List<Dependency>();
             parsedCatagoryList = new List<Category>();
-            Utils.createModStructure(databaseLocationTextBox.Text, true, globalDependencies, parsedCatagoryList);
+            //Utils.createModStructure(databaseLocationTextBox.Text, true, globalDependencies, parsedCatagoryList);
             int duplicatesCounter = 0;
             //check for duplicates
             if (Utils.duplicates(parsedCatagoryList) && Utils.duplicatesPackageName(parsedCatagoryList, ref duplicatesCounter ))

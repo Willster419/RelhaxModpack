@@ -843,7 +843,7 @@ namespace RelhaxModpack
             english.Add("modNotFound", "The mod, \"{0}\" was not found in the modpack. It could have been renamed or removed.");
             german.Add("modNotFound", "Der Mod, \"{0}\" wurde im Modpack nicht gefunden. Er könnte umbenannt oder entfernt worden sein.");
             polish.Add("modNotFound", "Modyfikacja \"{0}\" nie została znaleziona w paczce. Sprawdź, czy nie została usunięta lub zmieniona nazwa.");
-            french.Add("modNotFound", "Impossible de trouver le mod \"{0}\" dans le mod pack. Il est possible qu`il sois supprimé ou changé de nom");
+            french.Add("modNotFound", "Impossible de trouver le mod, \"{0}\" dans le mod pack. Il est possible qu`il sois supprimé ou changé de nom");
 
             //Componet: 
             //
@@ -863,14 +863,14 @@ namespace RelhaxModpack
             //
             english.Add("configDeactivated", "The config \"{0}\" of \"{1}\" is currently deactivated in the modpack and could not to be selected to install.");
             german.Add("configDeactivated", "Die Konfiguration \"{0}\" von \"{1}\" ist derzeit im Modpack deaktiviert und kann für die Installation nicht markiert werden.");
-            polish.Add("configDeactivated", "Konfiguracja \"{ 0}\" z \"{ 1}\" jest obecnie zdezaktywowana w paczce i nie może zostać wybrana.");
+            polish.Add("configDeactivated", "Konfiguracja \"{0}\" z \"{1}\" jest obecnie zdezaktywowana w paczce i nie może zostać wybrana.");
             french.Add("configDeactivated", "La configuration \"{0}\" du mod \"{1}\" est actuellement désactivé dans le mod pack et ne seras pas installé");
 
             //Componet: 
             //
             english.Add("modsNotFoundTechnical", "The following mods could not be found and were most likely removed. There are only technical names available:\n{0}");
             german.Add("modsNotFoundTechnical", "Die folgenden Modifikationen können nicht gefunden werden und wurden wahrscheinlich entfernt/gelöscht. Es sind leider nur technische Namen verfügbar:\n{0}");
-            polish.Add("modsNotFoundTechnical", "Następujące modyfikacje nie zostały znalezione, najprawdopodobniej zostały usunięte:\n{ 0}");
+            polish.Add("modsNotFoundTechnical", "Następujące modyfikacje nie zostały znalezione, najprawdopodobniej zostały usunięte:\n{0}");
             french.Add("modsNotFoundTechnical", "Les mods suivants n'ont pas pu être trouvés et ont probablement été supprimés. Il n'y a que des noms techniques disponibles:\n{0}");
 
             //Componet: 
