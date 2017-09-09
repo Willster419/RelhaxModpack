@@ -254,7 +254,7 @@ namespace RelhaxModpack
         //returns the md5 hash of the file based on the input file string location. It is searching in the database first. If not found in database or the filetime is not the same, it will create a new Hash and update the database
         public static string getMd5Hash(string inputFile)
         {
-            if (Program.databaseupdate)
+            if (Program.databaseUpdateOnline)
             {
                 // if in databaseupdate mode, the online databse is downloader to get the informations of all accessable online files of this gameVersion
                 try

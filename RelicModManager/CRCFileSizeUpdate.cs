@@ -60,6 +60,8 @@ namespace RelhaxModpack
                 MessageBox.Show("FAILED to download online file database");
                 Application.Exit();
             }
+            // set this flag, so getMd5Hash and getFileSize should parse downloaded online database.xml
+            Program.databaseUpdateOnline = true;
             globalDepsSB.Clear();
             dependenciesSB.Clear();
             logicalDependenciesSB.Clear();
@@ -76,6 +78,7 @@ namespace RelhaxModpack
             if (Utils.duplicates(parsedCatagoryList) && Utils.duplicatesPackageName(parsedCatagoryList, ref duplicatesCounter ))
             {
                 MessageBox.Show(string.Format("{0} duplicates found !!!",duplicatesCounter));
+                Program.databaseUpdateOnline = false;
                 return;
             }
             updatingLabel.Text = "Updating database...";
@@ -170,6 +173,7 @@ namespace RelhaxModpack
             this.saveDatabase(databaseLocationTextBox.Text, gameVersion);
             MessageBox.Show(filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
             updatingLabel.Text = "Idle";
+            Program.databaseUpdateOnline = false;
         }
 
         private void processConfigsCRCUpdate(List<Config> cfgList)
@@ -211,24 +215,32 @@ namespace RelhaxModpack
         private float getFileSize(string file)
         {
             Int64 fileSizeBytes = 0;
-            try
+            if (Program.databaseUpdateOnline)
             {
-                XDocument doc = XDocument.Load(MainWindow.onlineDatabaseXmlFile);
                 try
                 {
-                    XElement element = doc.Descendants("file")
-                       .Where(arg => arg.Attribute("name").Value == file)
-                       .Single();
-                    Int64.TryParse(element.Attribute("size").Value, out fileSizeBytes);
+                    XDocument doc = XDocument.Load(MainWindow.onlineDatabaseXmlFile);
+                    try
+                    {
+                        XElement element = doc.Descendants("file")
+                           .Where(arg => arg.Attribute("name").Value == file)
+                           .Single();
+                        Int64.TryParse(element.Attribute("size").Value, out fileSizeBytes);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // catch the Exception if no entry is found
+                    }
                 }
-                catch (InvalidOperationException)
+                catch (Exception ex)
                 {
-                    // catch the Exception if no entry is found
+                    Utils.exceptionLog("getMd5Hash", "read from databaseupdate = " + file, ex);
                 }
             }
-            catch (Exception ex)
+            else
             {
-                Utils.exceptionLog("getMd5Hash", "read from databaseupdate = " + file, ex);
+                FileInfo fi = new FileInfo(file);
+                fileSizeBytes = fi.Length;
             }
             try
             {

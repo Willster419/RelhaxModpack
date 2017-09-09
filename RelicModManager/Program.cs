@@ -15,7 +15,7 @@ namespace RelhaxModpack
         public static bool skipUpdate = false;
         public static bool patchDayTest = false;
         public static bool saveSettings = false;
-        public static bool databaseupdate = false;
+        public static bool databaseUpdateOnline = false;
         public static string configName = "";
         [STAThread]
         static void Main()
@@ -71,7 +71,6 @@ namespace RelhaxModpack
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"databaseupdate$"))
                 {
-                    databaseupdate = true;
                     Utils.appendToLog("/databaseupdate detected, loading in database update mode");
                     Application.Run(new CRCFileSizeUpdate());
                     return;
