@@ -522,7 +522,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             using (WebClient client = new WebClient())
             {
-                OnlineScriptOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateDatabase.php");
+                OnlineScriptOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateDatabase.php").Replace("<br />", "\n");
             }
             Application.DoEvents();
         }
