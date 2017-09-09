@@ -98,14 +98,14 @@ namespace RelhaxModpack
                 if (!d.dependencyZipCRC.Equals(hash))
                 {
                     d.dependencyZipCRC = hash;
-                    if (hash.Equals("f"))
-                    {
-                        filesNotFoundSB.Append(d.dependencyZipFile + "\n");
-                    }
-                    else
+                    if (!hash.Equals("f"))
                     {
                         globalDepsSB.Append(d.dependencyZipFile + "\n");
-                    };
+                    }
+                }
+                if (hash.Equals("f"))
+                {
+                    filesNotFoundSB.Append(d.dependencyZipFile + "\n");
                 }
             }
             foreach (Dependency d in dependencies)
@@ -114,14 +114,14 @@ namespace RelhaxModpack
                 if (!d.dependencyZipCRC.Equals(hash))
                 {
                     d.dependencyZipCRC = hash;
-                    if (hash.Equals("f"))
-                    {
-                        filesNotFoundSB.Append(d.dependencyZipFile + "\n");
-                    }
-                    else
+                    if (!hash.Equals("f"))
                     {
                         dependenciesSB.Append(d.dependencyZipFile + "\n");
                     }
+                }
+                if (hash.Equals("f"))
+                {
+                    filesNotFoundSB.Append(d.dependencyZipFile + "\n");
                 }
             }
             foreach (LogicalDependnecy d in logicalDependencies)
@@ -130,14 +130,14 @@ namespace RelhaxModpack
                 if (!d.dependencyZipCRC.Equals(hash))
                 {
                     d.dependencyZipCRC = hash;
-                    if (hash.Equals("f"))
-                    {
-                        filesNotFoundSB.Append(d.dependencyZipFile + "\n");
-                    }
-                    else
+                    if (!hash.Equals("f"))
                     {
                         logicalDependenciesSB.Append(d.dependencyZipFile + "\n");
                     }
+                }
+                if (hash.Equals("f"))
+                {
+                    filesNotFoundSB.Append(d.dependencyZipFile + "\n");
                 }
             }
             foreach (Category c in parsedCatagoryList)
@@ -151,14 +151,15 @@ namespace RelhaxModpack
                         if (!m.crc.Equals(hash))
                         {
                             m.crc = hash;
-                            if (hash.Equals("f"))
-                            {
-                                filesNotFoundSB.Append(m.zipFile + "\n");
-                            }
-                            else
+
+                            if (!hash.Equals("f"))
                             {
                                 modsSB.Append(m.zipFile + "\n");
                             }
+                        }
+                        if (hash.Equals("f"))
+                        {
+                            filesNotFoundSB.Append(m.zipFile + "\n");
                         }
                     }
                     if (m.configs.Count > 0)
@@ -184,18 +185,14 @@ namespace RelhaxModpack
             {
                 if (!cat.zipFile.Equals(""))
                 {
+                    hash = Utils.getMd5Hash(cat.zipFile);
                     cat.size = this.getFileSize(cat.zipFile);
                     if (cat.size != 0)
                     {
-                        hash = Utils.getMd5Hash(cat.zipFile);
                         if (!cat.crc.Equals(hash))
                         {
                             cat.crc = hash;
-                            if (hash.Equals("f"))
-                            {
-                                filesNotFoundSB.Append(cat.zipFile + "\n");
-                            }
-                            else
+                            if (!hash.Equals("f"))
                             {
                                 configsSB.Append(cat.zipFile + "\n");
                             }
@@ -203,9 +200,19 @@ namespace RelhaxModpack
                     }
                     else
                     {
-                        cat.crc = "";
+                        cat.crc = "f";
                     }
+                    if (hash.Equals("f") | cat.crc.Equals("f"))
+                    {
+                        filesNotFoundSB.Append(cat.zipFile + "\n");
+                    }
+
                 }
+                else
+                {
+                    cat.crc = "";
+                }
+
                 if (cat.configs.Count > 0)
                 {
                     this.processConfigsCRCUpdate(cat.configs);
