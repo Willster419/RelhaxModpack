@@ -18,9 +18,11 @@ namespace RelhaxModpack
         private string zipfile = "";
         private bool enabled = false;
         private string devURL = "";
-        private List<Dependency> globalDependencies = new List<Dependency>();
-        private List<Category> parsedCatagoryList = new List<Category>();
-        private string header = "Index\tCategory\tMod\tConfig\tLevel\tZip\tDevURL\tEnabled";
+        private List<Dependency> globalDependencies;
+        private List<Category> parsedCatagoryList;
+        private List<Dependency> dependencies;
+        private List<LogicalDependnecy> logicalDependencies;
+        private string header;
 
         public DatabaseListGenerater()
         {
@@ -48,13 +50,15 @@ namespace RelhaxModpack
             //except actually load it here
             //load database
             globalDependencies = new List<Dependency>();
+            dependencies = new List<Dependency>();
+            logicalDependencies = new List<LogicalDependnecy>();
             parsedCatagoryList = new List<Category>();
-            //Utils.createModStructure(LoadDatabaseFileDialog.FileName, true, globalDependencies, parsedCatagoryList);
+            Utils.createModStructure(LoadDatabaseFileDialog.FileName, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             if(!SpreadsheetLocation.Text.Equals(""))
                 SpreadsheetLocation.Text = "(old) " + SpreadsheetLocation.Text;
         }
 
-        private void GenretateSpreadsheetButton_Click(object sender, EventArgs e)
+        private void GenretateInternalSpreadsheetButton_Click(object sender, EventArgs e)
         {
             //reset everything
             header = "packageName\tCategory\tMod\tConfig\tLevel\tZip\tDevURL\tEnabled";
@@ -72,6 +76,33 @@ namespace RelhaxModpack
                 return;
             //save it
             sb.Append(header + "\n");
+            //first save globaldependencies
+            category = "globalDependencies";
+            foreach(Dependency d in globalDependencies)
+            {
+                packageName = d.packageName;
+                zipfile = d.dependencyZipFile;
+                enabled = d.enabled;
+                sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
+            }
+            //next save depenedneices
+            category = "dependencies";
+            foreach (Dependency d in dependencies)
+            {
+                packageName = d.packageName;
+                zipfile = d.dependencyZipFile;
+                enabled = d.enabled;
+                sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
+            }
+            //next save logicaldepenedneices
+            category = "logicalDependencies";
+            foreach (LogicalDependnecy d in logicalDependencies)
+            {
+                packageName = d.packageName;
+                zipfile = d.dependencyZipFile;
+                enabled = d.enabled;
+                sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
+            }
             foreach (Category cat in parsedCatagoryList)
             {
                 category = cat.name;
@@ -104,7 +135,6 @@ namespace RelhaxModpack
         }
         private void processConfigsSpreadsheetGenerate(List<Config> configList, int newLevel)
         {
-            //level++;
             foreach (Config con in configList)
             {
                 //remove the old devURL value if there
@@ -114,16 +144,13 @@ namespace RelhaxModpack
                 zipfile = con.zipFile;
                 enabled = con.enabled;
                 devURL = "=HYPERLINK(\"" + con.devURL + "\",\"link\")";
-                //header = "Index,Category,Mod,Config,Level,Zip,Enabled";
                 sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + newLevel + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
                 if (con.configs.Count > 0)
                     processConfigsSpreadsheetGenerate(con.configs, newLevel + 1);
-                //else
-                    //level--;
             }
         }
 
-        private void generateSpreadsheetUserButton_Click(object sender, EventArgs e)
+        private void GenerateSpreadsheetUserButton_Click(object sender, EventArgs e)
         {
             header = "Category\tMod\tDevURL";
             //reset everything
@@ -148,10 +175,8 @@ namespace RelhaxModpack
                 {
                     //remove the old devURL value if there
                     devURL = "";
-                    //level = 1;
                     modName = m.name;
                     devURL = "=HYPERLINK(\"" + m.devURL + "\",\"link\")";
-                    //header = "Category\tMod\tDevURL"
                     sb.Append(category + "\t" + modName + "\t" + devURL + "\n");
                     if (m.configs.Count > 0)
                         processConfigsSpreadsheetGenerateUser(m.configs, level + 1);
@@ -181,11 +206,15 @@ namespace RelhaxModpack
                 }
                 configname = configname + con.name;
                 devURL = "=HYPERLINK(\"" + con.devURL + "\",\"link\")";
-                //header = "Category\tMod\tConfig\tDevURL";
                 sb.Append(category + "\t" + configname + "\t" + devURL + "\n");
                 if (con.configs.Count > 0)
                     processConfigsSpreadsheetGenerateUser(con.configs, newLevel + 1);
             }
+        }
+
+        private void DatabaseListGenerater_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
         }
     }
 }

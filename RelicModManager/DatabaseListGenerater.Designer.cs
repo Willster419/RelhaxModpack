@@ -55,7 +55,7 @@
             this.GenretateSpreadsheetButton.TabIndex = 1;
             this.GenretateSpreadsheetButton.Text = "generate internal spreadsheet";
             this.GenretateSpreadsheetButton.UseVisualStyleBackColor = true;
-            this.GenretateSpreadsheetButton.Click += new System.EventHandler(this.GenretateSpreadsheetButton_Click);
+            this.GenretateSpreadsheetButton.Click += new System.EventHandler(this.GenretateInternalSpreadsheetButton_Click);
             // 
             // DatabaseLocation
             // 
@@ -95,7 +95,7 @@
             this.generateSpreadsheetUserButton.TabIndex = 4;
             this.generateSpreadsheetUserButton.Text = "generate user spreadsheet";
             this.generateSpreadsheetUserButton.UseVisualStyleBackColor = true;
-            this.generateSpreadsheetUserButton.Click += new System.EventHandler(this.generateSpreadsheetUserButton_Click);
+            this.generateSpreadsheetUserButton.Click += new System.EventHandler(this.GenerateSpreadsheetUserButton_Click);
             // 
             // DatabaseListGenerater
             // 
@@ -110,6 +110,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "DatabaseListGenerater";
             this.Text = "DatabaseListGenerater";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DatabaseListGenerater_FormClosing);
             this.Load += new System.EventHandler(this.DatabaseListGenerater_Load);
             this.ResumeLayout(false);
 
