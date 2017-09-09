@@ -620,16 +620,16 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("failedToDownload_1", "Failed to download");
-            german.Add("failedToDownload_1", "Fehler beim Herunterladen");
-            polish.Add("failedToDownload_1", "Ściąganie zakończone niepowodzeniem, plik");
-            french.Add("failedToDownload_1", "Échec de téléchargement");
+            english.Add("failedToDownload_1", "Failed to download:");
+            german.Add("failedToDownload_1", "Fehler beim Herunterladen:");
+            polish.Add("failedToDownload_1", "Ściąganie zakończone niepowodzeniem, plik:");
+            french.Add("failedToDownload_1", "Échec de téléchargement:");
 
             //Componet: 
             //
-            english.Add("failedToDownload_2", ". If you know which mod this is, uncheck it and you should be fine. It will be fixed soon. Restart this when it exits");
-            german.Add("failedToDownload_2", ". Wenn du weisst, welcher Mod das ist, deaktiviere ihn und alles sollte funktionieren. Es wird bald behoben. Starte das Programm neu nach dem beenden.");
-            polish.Add("failedToDownload_2", ". Jeśli wiesz który to mod, odznacz go i wszystko powinno byćw porządku. Wkrótce naprawimy błąd. Zrestartuj, jeśli problem pojawia się ponownie.");
+            english.Add("failedToDownload_2", "If you know which mod this is, uncheck it and you should be fine. It will be fixed soon. Restart this when it exits");
+            german.Add("failedToDownload_2", "Wenn du weisst, welcher Mod das ist, deaktiviere ihn und alles sollte funktionieren. Es wird bald behoben. Starte das Programm neu nach dem beenden.");
+            polish.Add("failedToDownload_2", "Jeśli wiesz który to mod, odznacz go i wszystko powinno byćw porządku. Wkrótce naprawimy błąd. Zrestartuj, jeśli problem pojawia się ponownie.");
             french.Add("failedToDownload_2", "Si vous savez quel mod est la cause, déséléectionnez celui-ci. Un corrigé vas être disponible bientôt. Redémarrez ceci a la fermeture");
 
             //Componet: 

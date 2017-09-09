@@ -175,7 +175,7 @@ namespace RelhaxModpack
             {
                 //404
                 Utils.appendToLog("ERROR: " + tempOldDownload + " failed to download");
-                MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + tempOldDownload + Translations.getTranslatedString("failedToDownload_2"));
+                MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + "\n" + tempOldDownload + "\n\n" + Translations.getTranslatedString("failedToDownload_2"));
                 Application.Exit();
             }
             if (downloadQueue.Count != 0)
