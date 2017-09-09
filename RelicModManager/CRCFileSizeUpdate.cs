@@ -91,7 +91,7 @@ namespace RelhaxModpack
                 if (!d.dependencyZipCRC.Equals(hash))
                 {
                     d.dependencyZipCRC = hash;
-                    globalDepsSB.Append(d.dependencyZipFile + " - " + d.packageName + "\n");
+                    globalDepsSB.Append(d.dependencyZipFile + "\n");
                 }
             }
             foreach (Dependency d in dependencies)
@@ -100,7 +100,7 @@ namespace RelhaxModpack
                 if (!d.dependencyZipCRC.Equals(hash))
                 {
                     d.dependencyZipCRC = hash;
-                    dependenciesSB.Append(d.dependencyZipFile + " - " + d.packageName + "\n");
+                    dependenciesSB.Append(d.dependencyZipFile + "\n");
                 }
             }
             foreach (LogicalDependnecy d in logicalDependencies)
@@ -109,7 +109,7 @@ namespace RelhaxModpack
                 if (!d.dependencyZipCRC.Equals(hash))
                 {
                     d.dependencyZipCRC = hash;
-                    logicalDependenciesSB.Append(d.dependencyZipFile + " - " + d.packageName + "\n");
+                    logicalDependenciesSB.Append(d.dependencyZipFile + "\n");
                 }
             }
             foreach (Category c in parsedCatagoryList)
@@ -123,12 +123,12 @@ namespace RelhaxModpack
                         if (!m.crc.Equals(hash))
                         {
                             m.crc = hash;
-                            modsSB.Append(m.zipFile + " - " + m.packageName + "\n");
+                            modsSB.Append(m.zipFile + "\n");
                         }
-                        if (m.configs.Count > 0)
-                        {
-                            this.processConfigsCRCUpdate(m.configs);
-                        }
+                    }
+                    if (m.configs.Count > 0)
+                    {
+                        this.processConfigsCRCUpdate(m.configs);
                     }
                 }
             }
@@ -155,17 +155,17 @@ namespace RelhaxModpack
                         if (!cat.crc.Equals(hash))
                         {
                             cat.crc = hash;
-                            configsSB.Append(cat.zipFile + " - " + cat.packageName + "\n");
+                            configsSB.Append(cat.zipFile + "\n");
                         }
                     }
                     else
                     {
                         cat.crc = "";
                     }
-                    if (cat.configs.Count > 0)
-                    {
-                        this.processConfigsCRCUpdate(cat.configs);
-                    }
+                }
+                if (cat.configs.Count > 0)
+                {
+                    this.processConfigsCRCUpdate(cat.configs);
                 }
             }
         }
