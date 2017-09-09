@@ -34,7 +34,7 @@ namespace RelhaxModpack
             databaseLocationTextBox.Text = loadDatabaseDialog.FileName;
         }
 
-        private void loadZipFilesButton_Click(object sender, EventArgs e)
+        private void updateDatabaseOnline_Click(object sender, EventArgs e)
         {
             // check for database
             if (databaseLocationTextBox.Text.Equals("-none-"))
@@ -525,6 +525,140 @@ namespace RelhaxModpack
                 OnlineScriptOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateDatabase.php");
             }
             Application.DoEvents();
+        }
+
+        private void updateDatabaseOffline_Click(object sender, EventArgs e)
+        {
+            //check for database
+            if (databaseLocationTextBox.Text.Equals("-none-"))
+                return;
+            //show file dialog
+            if (addZipsDialog.ShowDialog() == DialogResult.Cancel)
+                return;
+            globalDepsSB.Clear();
+            dependenciesSB.Clear();
+            modsSB.Clear();
+            configsSB.Clear();
+            //load database
+            globalDependencies = new List<Dependency>();
+            parsedCatagoryList = new List<Category>();
+            dependencies = new List<Dependency>();
+            logicalDependencies = new List<LogicalDependnecy>();
+            string gameVersion = Utils.readVersionFromModInfo(databaseLocationTextBox.Text);
+            Utils.createModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            int duplicatesCounter = 0;
+            //check for duplicates
+            if (Utils.duplicates(parsedCatagoryList) && Utils.duplicatesPackageName(parsedCatagoryList, ref duplicatesCounter))
+            {
+                MessageBox.Show(string.Format("{0} duplicates found !!!", duplicatesCounter));
+                return;
+            }
+            updatingLabel.Text = "Updating database...";
+            Application.DoEvents();
+            globalDepsSB.Append("Global Dependencies updated:\n");
+            dependenciesSB.Append("Dependencies updated:\n");
+            modsSB.Append("Mods updated:\n");
+            configsSB.Append("Configs updated:\n");
+            //foreach zip file name
+            foreach (Dependency d in globalDependencies)
+            {
+                int index = this.getZipIndex(d.dependencyZipFile);
+                if (index == -1)
+                {
+                    continue;
+                }
+                if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
+                {
+                    d.dependencyZipCRC = Utils.createMd5Hash(addZipsDialog.FileNames[index]);
+                    globalDepsSB.Append(d.dependencyZipFile + "\n");
+                }
+            }
+            foreach (Dependency d in dependencies)
+            {
+                int index = this.getZipIndex(d.dependencyZipFile);
+                if (index == -1)
+                {
+                    continue;
+                }
+                if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
+                {
+                    d.dependencyZipCRC = Utils.createMd5Hash(addZipsDialog.FileNames[index]);
+                    dependenciesSB.Append(d.dependencyZipFile + "\n");
+                }
+            }
+            foreach (Category c in parsedCatagoryList)
+            {
+                foreach (Mod m in c.mods)
+                {
+                    int index = this.getZipIndex(m.zipFile);
+                    if (index != -1)
+                    {
+                        m.size = this.getFileSize(addZipsDialog.FileNames[index]);
+                        if (m.crc == null || m.crc.Equals("") || m.crc.Equals("f"))
+                        {
+                            m.crc = Utils.createMd5Hash(addZipsDialog.FileNames[index]);
+
+                            modsSB.Append(m.zipFile + "\n");
+                        }
+                    }
+                    if (m.configs.Count > 0)
+                    {
+                        this.processConfigsCRCUpdate_old(m.configs);
+                    }
+                }
+            }
+            //update the crc value
+            //update the file size
+            //save config file
+            string newModInfo = databaseLocationTextBox.Text;
+            this.saveDatabase(databaseLocationTextBox.Text, gameVersion);
+            MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
+            updatingLabel.Text = "Idle";
+        }
+
+        private void processConfigsCRCUpdate_old(List<Config> cfgList)
+        {
+            foreach (Config cat in cfgList)
+            {
+                int cindex = this.getZipIndex(cat.zipFile);
+                if (cindex != -1)
+                {
+                    cat.size = this.getFileSize(addZipsDialog.FileNames[cindex]);
+                    if (cat.crc == null || cat.crc.Equals("") || cat.crc.Equals("f"))
+                    {
+                        cat.crc = Utils.createMd5Hash(addZipsDialog.FileNames[cindex]);
+
+                        configsSB.Append(cat.zipFile + "\n");
+                    }
+                }
+                if (cat.configs.Count > 0)
+                {
+                    this.processConfigsCRCUpdate_old(cat.configs);
+                }
+            }
+        }
+
+        private float getFileSize_old(string file)
+        {
+            FileInfo fi = new FileInfo(file);
+            float fileSizeBytes = fi.Length;
+            float fileSizeKBytes = fileSizeBytes / 1024;
+            float fileSizeMBytes = fileSizeKBytes / 1024;
+            fileSizeMBytes = (float)Math.Round(fileSizeMBytes, 1);
+            if (fileSizeMBytes == 0.0)
+                fileSizeMBytes = 0.1f;
+            return fileSizeMBytes;
+        }
+
+        private int getZipIndex(string zipFile)
+        {
+            for (int i = 0; i < addZipsDialog.FileNames.Count(); i++)
+            {
+                string fileName = Path.GetFileName(addZipsDialog.FileNames[i]);
+                if (fileName.Equals(zipFile))
+                    return i;
+            }
+            return -1;
         }
     }
 }
