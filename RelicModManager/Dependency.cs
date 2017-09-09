@@ -20,6 +20,8 @@ namespace RelhaxModpack
         public bool downloadFlag { get; set; }
         //needed to excatly identify double packageNames and its position
         public int CheckDatabaseListIndex { get; set; }
+        //property to determine if it will be installed in the beginning or in the end
+        public bool appendExtraction;
         public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
         public Dependency() { }
     }

@@ -510,7 +510,7 @@ namespace RelhaxModpack
                 //add the global dependencies
                 foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency"))
                 {
-                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction", "packageName" };
                     Dependency d = new Dependency();
                     d.packageName = "";
                     foreach (XElement globs in dependencyNode.Elements())
@@ -532,6 +532,9 @@ namespace RelhaxModpack
                                 break;
                             case "dependencyenabled":
                                 d.enabled = Utils.parseBool(globs.Value, false);
+                                break;
+                            case "appendExtraction":
+                                d.appendExtraction = Utils.parseBool(globs.Value, false);
                                 break;
                             case "packageName":
                                 d.packageName = globs.Value.Trim();
@@ -557,7 +560,7 @@ namespace RelhaxModpack
                 //add the dependencies
                 foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/dependencies/dependency"))
                 {
-                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction", "packageName" };
                     Dependency d = new Dependency();
                     d.packageName = "";
                     foreach (XElement globs in dependencyNode.Elements())
@@ -580,6 +583,9 @@ namespace RelhaxModpack
                             case "dependencyenabled":
                                 d.enabled = Utils.parseBool(globs.Value, false);
                                 break;
+                            case "appendExtraction":
+                                d.appendExtraction = Utils.parseBool(globs.Value, false);
+                                break;
                             case "packageName":
                                 d.packageName = globs.Value.Trim();
                                 if (d.packageName.Equals(""))
@@ -601,7 +607,7 @@ namespace RelhaxModpack
                         dependencies.Add(d);
                     };
                 }
-                //add the dependencies
+                //add the logicalDependencies (TODO)
                 foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/logicalDependencies/logicalDependency"))
                 {
                     string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
