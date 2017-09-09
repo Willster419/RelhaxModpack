@@ -35,10 +35,10 @@ namespace RelhaxModpack
         private List<Dependency> globalDependenciesToInstall;
         private List<Dependency> dependenciesToInstall;
         private List<LogicalDependnecy> logicalDependenciesToInstall;
-        //DEPRECATED: list of mods and configs to install of each level
-        //private List<Mod> modsToInstall;
-        //private List<List<Config>> configListsToInstall;
         private List<DatabaseObject> modsConfigsToInstall;
+        //list of all current dependencies
+        private List<Dependency> currentDependencies;
+        private List<LogicalDependnecy> currentLogicalDependencies;
         //list of patches
         private List<Patch> patchList;
         //installing the RelhaxModpack of the Relhax Sound Mod
@@ -764,11 +764,14 @@ namespace RelhaxModpack
              * like mods/configs to install, mods/configs with data, and others
             */
             //copies it instead
+            currentDependencies = new List<Dependency>(list.dependencies);
+            currentLogicalDependencies = new List<LogicalDependnecy>(list.logicalDependencies);
             parsedCatagoryLists = new List<Category>(list.parsedCatagoryList);
             globalDependenciesToInstall = new List<Dependency>(list.globalDependencies);
             dependenciesToInstall = new List<Dependency>();
             logicalDependenciesToInstall = new List<LogicalDependnecy>();
             modsConfigsToInstall = new List<DatabaseObject>();
+            //TODO: look to combine the two below to one list of DatabaseObject
             modsWithData = new List<Mod>();
             configsWithData = new List<Config>();
             patchList = new List<Patch>();
@@ -797,20 +800,12 @@ namespace RelhaxModpack
                             ProcessConfigs(m.configs);
 
                         //at least one mod of this catagory is checked, add any dependenciesToInstall required
-                        //add dependenciesToInstall
-                        foreach (Dependency d in c.dependencies)
-                        {
-                            //check dependency is enabled and has a zip file with it
-                            if (d.enabled && !d.dependencyZipFile.Equals(""))
-                                this.addUniqueDependency(d);
-                        }
-                        
+                        if (c.dependencies.Count > 0)
+                            processDependencies(c.dependencies);
+
                         //check dependency is enabled and has a zip file with it
-                        foreach (Dependency d in m.dependencies)
-                        {
-                            if (d.enabled && !d.dependencyZipFile.Equals(""))
-                                this.addUniqueDependency(d);
-                        }
+                        if (m.dependencies.Count > 0)
+                            processDependencies(m.dependencies);
                     }
                 }
             }
@@ -848,21 +843,21 @@ namespace RelhaxModpack
             string localFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
             foreach (Dependency d in globalDependenciesToInstall)
             {
-                if (!Utils.CRCsMatch(localFilesDir + d.dependencyZipFile, d.dependencyZipCRC))
+                if (d.downloadFlag)
                 {
                     downloadQueue.Add(new DownloadItem(new Uri(d.startAddress + d.dependencyZipFile + d.endAddress), localFilesDir + d.dependencyZipFile));
                 }
             }
             foreach (Dependency d in dependenciesToInstall)
             {
-                if (!Utils.CRCsMatch(localFilesDir + d.dependencyZipFile, d.dependencyZipCRC))
+                if (d.downloadFlag)
                 {
                     downloadQueue.Add(new DownloadItem(new Uri(d.startAddress + d.dependencyZipFile + d.endAddress), localFilesDir + d.dependencyZipFile));
                 }
             }
             foreach (LogicalDependnecy ld in logicalDependenciesToInstall)
             {
-                if (!Utils.CRCsMatch(localFilesDir + ld.dependencyZipFile, ld.dependencyZipCRC))
+                if (ld.downloadFlag)
                 {
                     downloadQueue.Add(new DownloadItem(new Uri(ld.startAddress + ld.dependencyZipFile + ld.endAddress), localFilesDir + ld.dependencyZipFile));
                 }
@@ -907,13 +902,40 @@ namespace RelhaxModpack
                         ProcessConfigs(config.configs);
 
                     //check for dependencies
-                    foreach (Dependency d in config.dependencies)
+                    if (config.dependencies.Count > 0)
+                        processDependencies(config.dependencies);
+                }
+            }
+        }
+
+        //processes a list of dependencies to add them (if needed) to the list of dependencies to install
+        private void processDependencies(List<Dependency> dependencies)
+        {
+            //every dependency is only a packageName, and each must be added if they are not there already
+            //but first need to find it
+            foreach(Dependency d in dependencies)
+            {
+                Dependency temp = null;
+                //find the actual dependency object from the list of available dependencies
+                bool error = true;
+                foreach(Dependency dd in currentDependencies)
+                {
+                    if (dd.packageName.Equals(d.packageName))
                     {
-                        //check dependency is enabled and has a zip file with it
-                        if (d.enabled && !d.dependencyZipFile.Equals(""))
-                            this.addUniqueDependency(d);
+                        //the packageName has been linked to the dependency
+                        error = false;
+                        temp = dd;
+                        break;
                     }
                 }
+                if(error)
+                {
+                    Utils.appendToLog("ERROR: could not match packageName '" + d.packageName + "' from the list of dependencies");
+                    break;
+                }
+                //dependency has been found, if it's not in the list currently to install, add it
+                if (!dependenciesToInstall.Contains(temp))
+                    dependenciesToInstall.Add(temp);
             }
         }
 

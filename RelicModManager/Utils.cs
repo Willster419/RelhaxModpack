@@ -442,7 +442,7 @@ namespace RelhaxModpack
 
         //parses the xml mod info into the memory database (change XML reader to from XMLDocument to XDocument)
         // https://www.google.de/search?q=c%23+xdocument+get+line+number&oq=c%23+xdocument+get+line+number&aqs=chrome..69i57j69i58.11773j0j7&sourceid=chrome&ie=UTF-8
-        public static void createModStructure(string databaseURL, bool backendFlag, List<Dependency> globalDependencies, List<Category> parsedCatagoryList)
+        public static void createModStructure(string databaseURL, List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies, List<Category> parsedCatagoryList)
         {
             try
             {
@@ -511,6 +511,100 @@ namespace RelhaxModpack
                         if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.dependencyZipFile, ((IXmlLineInfo)d).LineNumber)); };
                         if (d.packageName.Equals("")) { string rad = Utils.RandomString(30);  d.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
                         globalDependencies.Add(d);
+                    };
+                }
+                //add the dependencies
+                foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/dependencies/dependency"))
+                {
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                    Dependency d = new Dependency();
+                    d.packageName = "";
+                    foreach (XElement globs in dependencyNode.Elements())
+                    {
+                        depNodeList = depNodeList.Except(new string[] { globs.Name.ToString() }).ToArray();
+                        switch (globs.Name.ToString())
+                        {
+                            case "dependencyZipFile":
+                                d.dependencyZipFile = globs.Value;
+                                break;
+                            case "dependencyZipCRC":
+                                d.dependencyZipCRC = globs.Value;
+                                break;
+                            case "startAddress":
+                                d.startAddress = globs.Value;
+                                break;
+                            case "endAddress":
+                                d.endAddress = globs.Value;
+                                break;
+                            case "dependencyenabled":
+                                d.enabled = Utils.parseBool(globs.Value, false);
+                                break;
+                            case "packageName":
+                                d.packageName = globs.Value.Trim();
+                                if (d.packageName.Equals(""))
+                                {
+                                    Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => globsPend {1}\n\nmore informations, see logfile", globs.Name.ToString(), d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                }
+                                break;
+                            default:
+                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}\n\nmore informations, see logfile", globs.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                break;
+                        }
+                    }
+                    if (d != null)
+                    {
+                        if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.dependencyZipFile, ((IXmlLineInfo)d).LineNumber)); };
+                        if (d.packageName.Equals("")) { string rad = Utils.RandomString(30); d.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
+                        dependencies.Add(d);
+                    };
+                }
+                //add the dependencies
+                foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/logicalDependencies/logicalDependency"))
+                {
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                    LogicalDependnecy d = new LogicalDependnecy();
+                    d.packageName = "";
+                    foreach (XElement globs in dependencyNode.Elements())
+                    {
+                        depNodeList = depNodeList.Except(new string[] { globs.Name.ToString() }).ToArray();
+                        switch (globs.Name.ToString())
+                        {
+                            case "dependencyZipFile":
+                                d.dependencyZipFile = globs.Value;
+                                break;
+                            case "dependencyZipCRC":
+                                d.dependencyZipCRC = globs.Value;
+                                break;
+                            case "startAddress":
+                                d.startAddress = globs.Value;
+                                break;
+                            case "endAddress":
+                                d.endAddress = globs.Value;
+                                break;
+                            case "dependencyenabled":
+                                d.enabled = Utils.parseBool(globs.Value, false);
+                                break;
+                            case "packageName":
+                                d.packageName = globs.Value.Trim();
+                                if (d.packageName.Equals(""))
+                                {
+                                    Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => globsPend {1}\n\nmore informations, see logfile", globs.Name.ToString(), d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                }
+                                break;
+                            default:
+                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}\n\nmore informations, see logfile", globs.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                break;
+                        }
+                    }
+                    if (d != null)
+                    {
+                        if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.dependencyZipFile, ((IXmlLineInfo)d).LineNumber)); };
+                        if (d.packageName.Equals("")) { string rad = Utils.RandomString(30); d.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
+                        logicalDependencies.Add(d);
                     };
                 }
                 foreach (XElement catagoryHolder in doc.XPathSelectElements("/modInfoAlpha.xml/catagories/catagory"))
@@ -658,7 +752,7 @@ namespace RelhaxModpack
                                                         //parse all dependencies
                                                         foreach (XElement dependencyHolder in modNode.Elements())
                                                         {
-                                                            string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                                                            string[] depNodeList = new string[] { "packageName" };
                                                             Dependency d = new Dependency();
                                                             d.packageName = "";
                                                             foreach (XElement dependencyNode in dependencyHolder.Elements())
@@ -666,21 +760,6 @@ namespace RelhaxModpack
                                                                 depNodeList = depNodeList.Except(new string[] { dependencyNode.Name.ToString() }).ToArray();
                                                                 switch (dependencyNode.Name.ToString())
                                                                 {
-                                                                    case "dependencyZipFile":
-                                                                        d.dependencyZipFile = dependencyNode.Value;
-                                                                        break;
-                                                                    case "dependencyZipCRC":
-                                                                        d.dependencyZipCRC = dependencyNode.Value;
-                                                                        break;
-                                                                    case "startAddress":
-                                                                        d.startAddress = dependencyNode.Value;
-                                                                        break;
-                                                                    case "endAddress":
-                                                                        d.endAddress = dependencyNode.Value;
-                                                                        break;
-                                                                    case "dependencyenabled":
-                                                                        d.enabled = Utils.parseBool(dependencyNode.Value, false);
-                                                                        break;
                                                                     case "packageName":
                                                                         d.packageName = dependencyNode.Value.Trim();
                                                                         if (d.packageName.Equals(""))
@@ -691,7 +770,7 @@ namespace RelhaxModpack
                                                                         break;
                                                                     default:
                                                                         Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), m.name, m.zipFile, d.dependencyZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
-                                                                        if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                                        if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: packageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                                         break;
                                                                 }
                                                             }
@@ -705,7 +784,7 @@ namespace RelhaxModpack
                                                         break;
                                                     case "configs":
                                                         //run the process configs method
-                                                        Utils.processConfigs(modNode, backendFlag, m, true);
+                                                        Utils.processConfigs(modNode, m, true);
                                                         break;
                                                     default:
                                                         Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) (line {3})", modNode.Name.ToString(), m.name, m.zipFile, ((IXmlLineInfo)modNode).LineNumber));
@@ -728,10 +807,10 @@ namespace RelhaxModpack
                                 }
                                 break;
                             case "dependencies":
-                                //parse every config for that mod
+                                //parse every dependency for that mod
                                 foreach (XElement dependencyHolder in catagoryNode.Elements())
                                 {
-                                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                                    string[] depNodeList = new string[] { "packageName" };
                                     Dependency d = new Dependency();
                                     d.packageName = "";
                                     foreach (XElement dependencyNode in dependencyHolder.Elements())
@@ -739,21 +818,6 @@ namespace RelhaxModpack
                                         depNodeList = depNodeList.Except(new string[] { dependencyNode.Name.ToString() }).ToArray();
                                         switch (dependencyNode.Name.ToString())
                                         {
-                                            case "dependencyZipFile":
-                                                d.dependencyZipFile = dependencyNode.Value;
-                                                break;
-                                            case "dependencyZipCRC":
-                                                d.dependencyZipCRC = dependencyNode.Value;
-                                                break;
-                                            case "startAddress":
-                                                d.startAddress = dependencyNode.Value;
-                                                break;
-                                            case "endAddress":
-                                                d.endAddress = dependencyNode.Value;
-                                                break;
-                                            case "dependencyenabled":
-                                                d.enabled = Utils.parseBool(dependencyNode.Value, false);
-                                                break;
                                             case "packageName":
                                                 d.packageName = dependencyNode.Value.Trim();
                                                 if (d.packageName.Equals(""))
@@ -764,7 +828,7 @@ namespace RelhaxModpack
                                                 break;
                                             default:
                                                 Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1} => dep {2} (line {3})", dependencyNode.Name, cat.name, d.dependencyZipFile,((IXmlLineInfo)dependencyNode).LineNumber));
-                                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: packageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                 break;
                                         }
                                     }
@@ -796,7 +860,7 @@ namespace RelhaxModpack
         }
 
         //recursivly processes the configs
-        public static void processConfigs(XElement holder, bool backendFlag, Mod m, bool parentIsMod, Config con = null)
+        public static void processConfigs(XElement holder, Mod m, bool parentIsMod, Config con = null)
         {
             try
             {
@@ -862,7 +926,7 @@ namespace RelhaxModpack
                                         c.type = configNode.Value;
                                         break;
                                     case "configs":
-                                        Utils.processConfigs(configNode, backendFlag, m, false, c);
+                                        Utils.processConfigs(configNode, m, false, c);
                                         break;
                                     case "userDatas":
                                         foreach (XElement userDataNode in configNode.Elements())
@@ -936,7 +1000,7 @@ namespace RelhaxModpack
                                         //parse all dependencies
                                         foreach (XElement dependencyHolder in configNode.Elements())
                                         {
-                                            string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                                            string[] depNodeList = new string[] { "packageName" };
                                             Dependency d = new Dependency();
                                             d.packageName = "";
                                             foreach (XElement dependencyNode in dependencyHolder.Elements())
@@ -944,21 +1008,6 @@ namespace RelhaxModpack
                                                 depNodeList = confNodeList.Except(new string[] { dependencyNode.Name.ToString() }).ToArray();
                                                 switch (dependencyNode.Name.ToString())
                                                 {
-                                                    case "dependencyZipFile":
-                                                        d.dependencyZipFile = dependencyNode.Value;
-                                                        break;
-                                                    case "dependencyZipCRC":
-                                                        d.dependencyZipCRC = dependencyNode.Value;
-                                                        break;
-                                                    case "startAddress":
-                                                        d.startAddress = dependencyNode.Value;
-                                                        break;
-                                                    case "endAddress":
-                                                        d.endAddress = dependencyNode.Value;
-                                                        break;
-                                                    case "dependencyenabled":
-                                                        d.enabled = Utils.parseBool(dependencyNode.Value, false);
-                                                        break;
                                                     case "packageName":
                                                         d.packageName = dependencyNode.Value.Trim();
                                                         if (d.packageName.Equals(""))
@@ -969,7 +1018,7 @@ namespace RelhaxModpack
                                                         break;
                                                     default:
                                                         Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), c.name, c.zipFile, d.dependencyZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
-                                                        if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name.ToString())); };
+                                                        if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: packageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name.ToString())); };
                                                         break;
                                                 }
                                             }
@@ -1088,7 +1137,7 @@ namespace RelhaxModpack
                 }
                 if (c.dependencies.Count > 0)
                 {
-                    duplicatesPackageName_dependencyRead(ref c.dependencies, ref checkStorageList);
+                    //duplicatesPackageName_dependencyRead(ref c.dependencies, ref checkStorageList);
                 }
             }
         }
@@ -1102,7 +1151,7 @@ namespace RelhaxModpack
             {
                 if (c.dependencies.Count > 0)
                 {
-                    duplicatesPackageName_dependencyRead(ref c.dependencies, ref checkStorageList);
+                    //duplicatesPackageName_dependencyRead(ref c.dependencies, ref checkStorageList);
                 }
                 foreach (Mod m in c.mods)
                 {
@@ -1119,7 +1168,7 @@ namespace RelhaxModpack
                     }
                     if (m.dependencies.Count > 0)
                     {
-                        duplicatesPackageName_dependencyRead(ref m.dependencies, ref checkStorageList);
+                        //duplicatesPackageName_dependencyRead(ref m.dependencies, ref checkStorageList);
                     }
                 }
             }
@@ -1145,12 +1194,12 @@ namespace RelhaxModpack
                     }
                     if (m.dependencies.Count > 0)
                     {
-                        duplicatesPackageName_dependencyCheck(m.dependencies, checkStorageList, ref duplicatesCounter);
+                        //duplicatesPackageName_dependencyCheck(m.dependencies, checkStorageList, ref duplicatesCounter);
                     }
                 }
                 if (c.dependencies.Count > 0)
                 {
-                    duplicatesPackageName_dependencyCheck(c.dependencies, checkStorageList, ref duplicatesCounter);
+                    //duplicatesPackageName_dependencyCheck(c.dependencies, checkStorageList, ref duplicatesCounter);
                 }
             }
             if (duplicatesCounter > 0)

@@ -16,6 +16,8 @@ namespace RelhaxModpack
         public string endAddress { get; set; }
         //later a unique name of the config entry
         public string packageName { get; set; }
+        //used to determine at install time if the zip file needs to be downloaded
+        public bool downloadFlag { get; set; }
         //needed to excatly identify double packageNames and its position
         public int CheckDatabaseListIndex { get; set; }
         public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
