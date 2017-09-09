@@ -30,11 +30,13 @@
         {
             this.loadDatabaseButton = new System.Windows.Forms.Button();
             this.databaseLocationTextBox = new System.Windows.Forms.RichTextBox();
-            this.loadZipFilesButton = new System.Windows.Forms.Button();
+            this.updateDatabaseOnline = new System.Windows.Forms.Button();
             this.updatingLabel = new System.Windows.Forms.Label();
+            this.addZipsDialog = new System.Windows.Forms.OpenFileDialog();
             this.loadDatabaseDialog = new System.Windows.Forms.OpenFileDialog();
             this.RunOnlineScriptButton = new System.Windows.Forms.Button();
             this.OnlineScriptOutput = new System.Windows.Forms.RichTextBox();
+            this.updateDatabaseOffline = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // loadDatabaseButton
@@ -56,24 +58,33 @@
             this.databaseLocationTextBox.TabIndex = 1;
             this.databaseLocationTextBox.Text = "-none-";
             // 
-            // loadZipFilesButton
+            // updateDatabaseOnline
             // 
-            this.loadZipFilesButton.Location = new System.Drawing.Point(12, 86);
-            this.loadZipFilesButton.Name = "loadZipFilesButton";
-            this.loadZipFilesButton.Size = new System.Drawing.Size(111, 23);
-            this.loadZipFilesButton.TabIndex = 3;
-            this.loadZipFilesButton.Text = "add file(s) to update";
-            this.loadZipFilesButton.UseVisualStyleBackColor = true;
-            this.loadZipFilesButton.Click += new System.EventHandler(this.loadZipFilesButton_Click);
+            this.updateDatabaseOnline.Location = new System.Drawing.Point(12, 86);
+            this.updateDatabaseOnline.Name = "updateDatabaseOnline";
+            this.updateDatabaseOnline.Size = new System.Drawing.Size(111, 35);
+            this.updateDatabaseOnline.TabIndex = 3;
+            this.updateDatabaseOnline.Text = "update database (online method)";
+            this.updateDatabaseOnline.UseVisualStyleBackColor = true;
+            this.updateDatabaseOnline.Click += new System.EventHandler(this.updateDatabaseOnline_Click);
             // 
             // updatingLabel
             // 
             this.updatingLabel.AutoSize = true;
-            this.updatingLabel.Location = new System.Drawing.Point(12, 112);
+            this.updatingLabel.Location = new System.Drawing.Point(12, 124);
             this.updatingLabel.Name = "updatingLabel";
             this.updatingLabel.Size = new System.Drawing.Size(24, 13);
             this.updatingLabel.TabIndex = 4;
             this.updatingLabel.Text = "Idle";
+            // 
+            // addZipsDialog
+            // 
+            this.addZipsDialog.DefaultExt = "xml";
+            this.addZipsDialog.FileName = "file.zip";
+            this.addZipsDialog.Filter = "*.zip|*.zip";
+            this.addZipsDialog.Multiselect = true;
+            this.addZipsDialog.RestoreDirectory = true;
+            this.addZipsDialog.Title = "select zip files to update";
             // 
             // loadDatabaseDialog
             // 
@@ -85,7 +96,7 @@
             // 
             // RunOnlineScriptButton
             // 
-            this.RunOnlineScriptButton.Location = new System.Drawing.Point(12, 128);
+            this.RunOnlineScriptButton.Location = new System.Drawing.Point(12, 140);
             this.RunOnlineScriptButton.Name = "RunOnlineScriptButton";
             this.RunOnlineScriptButton.Size = new System.Drawing.Size(135, 23);
             this.RunOnlineScriptButton.TabIndex = 5;
@@ -95,22 +106,33 @@
             // 
             // OnlineScriptOutput
             // 
-            this.OnlineScriptOutput.Location = new System.Drawing.Point(12, 157);
+            this.OnlineScriptOutput.Location = new System.Drawing.Point(12, 169);
             this.OnlineScriptOutput.Name = "OnlineScriptOutput";
             this.OnlineScriptOutput.ReadOnly = true;
             this.OnlineScriptOutput.Size = new System.Drawing.Size(301, 105);
             this.OnlineScriptOutput.TabIndex = 6;
             this.OnlineScriptOutput.Text = "";
             // 
+            // updateDatabaseOffline
+            // 
+            this.updateDatabaseOffline.Location = new System.Drawing.Point(129, 86);
+            this.updateDatabaseOffline.Name = "updateDatabaseOffline";
+            this.updateDatabaseOffline.Size = new System.Drawing.Size(111, 35);
+            this.updateDatabaseOffline.TabIndex = 7;
+            this.updateDatabaseOffline.Text = "update database (local method)";
+            this.updateDatabaseOffline.UseVisualStyleBackColor = true;
+            this.updateDatabaseOffline.Click += new System.EventHandler(this.updateDatabaseOffline_Click);
+            // 
             // CRCFileSizeUpdate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(326, 280);
+            this.ClientSize = new System.Drawing.Size(326, 284);
+            this.Controls.Add(this.updateDatabaseOffline);
             this.Controls.Add(this.OnlineScriptOutput);
             this.Controls.Add(this.RunOnlineScriptButton);
             this.Controls.Add(this.updatingLabel);
-            this.Controls.Add(this.loadZipFilesButton);
+            this.Controls.Add(this.updateDatabaseOnline);
             this.Controls.Add(this.databaseLocationTextBox);
             this.Controls.Add(this.loadDatabaseButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
@@ -128,11 +150,12 @@
 
         private System.Windows.Forms.Button loadDatabaseButton;
         private System.Windows.Forms.RichTextBox databaseLocationTextBox;
-        private System.Windows.Forms.Button loadZipFilesButton;
+        private System.Windows.Forms.Button updateDatabaseOnline;
         private System.Windows.Forms.Label updatingLabel;
-        // private System.Windows.Forms.OpenFileDialog addZipsDialog;
+        private System.Windows.Forms.OpenFileDialog addZipsDialog;
         private System.Windows.Forms.OpenFileDialog loadDatabaseDialog;
         private System.Windows.Forms.Button RunOnlineScriptButton;
         private System.Windows.Forms.RichTextBox OnlineScriptOutput;
+        private System.Windows.Forms.Button updateDatabaseOffline;
     }
 }
