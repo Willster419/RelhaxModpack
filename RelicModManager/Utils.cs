@@ -400,6 +400,22 @@ namespace RelhaxModpack
             }
         }
 
+        public static string readVersionFromModInfo(string f)
+        {
+            XDocument doc = XDocument.Load(f);
+            try
+            {
+                XElement element = doc.Descendants("modInfoAlpha.xml").Single();
+                // .Where(arg => arg.Attribute("filename").Value == inputFile && arg.Attribute("filetime").Value == inputFiletime)
+
+                return element.Attribute("version").Value;
+            }
+            catch (InvalidOperationException)
+            {
+                return "error"; // catch the Exception if no entry is found
+            }
+        }
+
         public static bool parseBool(string input, bool defaultValue)
         {
             bool returnVal;

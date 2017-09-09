@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -10,6 +11,7 @@ namespace RelhaxModpack
 {
     public partial class CRCFileSizeUpdate : Form
     {
+        private WebClient downloader;
         private List<Dependency> globalDependencies;
         private List<Category> parsedCatagoryList;
         StringBuilder globalDepsSB = new StringBuilder();
@@ -33,6 +35,21 @@ namespace RelhaxModpack
             //check for database
             if (databaseLocationTextBox.Text.Equals("-none-"))
                 return;
+            string version = Utils.readVersionFromModInfo(databaseLocationTextBox.Text);
+            // download online database
+            try
+            {
+                using (downloader = new WebClient())
+                {
+                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/" + version + "/database.xml", Path.Combine(Application.StartupPath, "RelHaxTemp", "DotNetZip.dll"));
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("loadZipFilesButton_Click", "http://wotmods.relhaxmodpack.com/RelhaxModpack/" + version + "/database.xml", ex);
+                MessageBox.Show("FAILED to download Onlien file database");
+                Application.Exit();
+            }
             //show file dialog
             if (addZipsDialog.ShowDialog() == DialogResult.Cancel)
                 return;
@@ -197,6 +214,9 @@ namespace RelhaxModpack
             XmlDocument doc = new XmlDocument();
             //database root modInfo.xml
             XmlElement root = doc.CreateElement("modInfoAlpha.xml");
+            XmlAttribute nsAttribute = doc.CreateAttribute("versiond","0.9.20.0");
+            // nsAttribute.Value = ns;
+            root.Attributes.Append(nsAttribute);
             doc.AppendChild(root);
             //global dependencies
             XmlElement globalDependenciesXml = doc.CreateElement("globaldependencies");
