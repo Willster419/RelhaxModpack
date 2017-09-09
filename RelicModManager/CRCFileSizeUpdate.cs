@@ -19,6 +19,7 @@ namespace RelhaxModpack
         private List<Category> parsedCatagoryList;
         StringBuilder globalDepsSB = new StringBuilder();
         StringBuilder dependenciesSB = new StringBuilder();
+        StringBuilder logicalDependenciesSB = new StringBuilder();
         StringBuilder modsSB = new StringBuilder();
         StringBuilder configsSB = new StringBuilder();
         public CRCFileSizeUpdate()
@@ -57,6 +58,7 @@ namespace RelhaxModpack
             }
             globalDepsSB.Clear();
             dependenciesSB.Clear();
+            logicalDependenciesSB.Clear();
             modsSB.Clear();
             configsSB.Clear();
             //load database
@@ -65,8 +67,8 @@ namespace RelhaxModpack
             dependencies = new List<Dependency>();
             logicalDependencies = new List<LogicalDependnecy>();
             Utils.createModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
-            int duplicatesCounter = 0;
             //check for duplicates
+            int duplicatesCounter = 0;
             if (Utils.duplicates(parsedCatagoryList) && Utils.duplicatesPackageName(parsedCatagoryList, ref duplicatesCounter ))
             {
                 MessageBox.Show(string.Format("{0} duplicates found !!!",duplicatesCounter));
@@ -76,34 +78,57 @@ namespace RelhaxModpack
             Application.DoEvents();
             globalDepsSB.Append("Global Dependencies updated:\n");
             dependenciesSB.Append("Dependencies updated:\n");
+            logicalDependenciesSB.Append("Logical Dependencies updated:\n");
             modsSB.Append("Mods updated:\n");
             configsSB.Append("Configs updated:\n");
+            string hash = ""; 
             //foreach zip file name
             foreach (Dependency d in globalDependencies)
             {
-                if (d.dependencyZipCRC != Utils.getMd5Hash(d.dependencyZipFile))
+                hash = Utils.getMd5Hash(d.dependencyZipFile);
+                if (d.dependencyZipCRC != hash)
                 {
-                    d.dependencyZipCRC = Utils.getMd5Hash(d.dependencyZipFile);
-                    globalDepsSB.Append(d.dependencyZipFile + "\n");
+                    d.dependencyZipCRC = hash;
+                    globalDepsSB.Append(d.dependencyZipFile + " - " + d.packageName + "\n");
+                }
+            }
+            foreach (Dependency d in dependencies)
+            {
+                hash = Utils.getMd5Hash(d.dependencyZipFile);
+                if (d.dependencyZipCRC != hash)
+                {
+                    d.dependencyZipCRC = hash;
+                    dependenciesSB.Append(d.dependencyZipFile + " - " + d.packageName + "\n");
+                }
+            }
+            foreach (LogicalDependnecy d in logicalDependencies)
+            {
+                hash = Utils.getMd5Hash(d.dependencyZipFile);
+                if (d.dependencyZipCRC != hash)
+                {
+                    d.dependencyZipCRC = hash;
+                    logicalDependenciesSB.Append(d.dependencyZipFile + " - " + d.packageName + "\n");
                 }
             }
             foreach (Category c in parsedCatagoryList)
             {
                 foreach (Dependency d in c.dependencies)
                 {
-                    if (d.dependencyZipCRC != Utils.getMd5Hash(d.dependencyZipFile))
+                    hash = Utils.getMd5Hash(d.dependencyZipFile);
+                    if (d.dependencyZipCRC != hash)
                     {
-                        d.dependencyZipCRC = Utils.getMd5Hash(d.dependencyZipFile);
-                        dependenciesSB.Append(d.dependencyZipFile + "\n");
+                        d.dependencyZipCRC = hash;
+                        dependenciesSB.Append(d.dependencyZipFile + " - " + d.packageName + "\n");
                     }
                 }
                 foreach (Mod m in c.mods)
                 {
                     m.size = this.getFileSize(m.zipFile);
-                    if (m.crc != Utils.getMd5Hash(m.zipFile))
+                    hash = Utils.getMd5Hash(m.zipFile);
+                    if (m.crc != hash)
                     {
-                        m.crc = Utils.getMd5Hash(m.zipFile);
-                        modsSB.Append(m.zipFile + "\n");
+                        m.crc = hash;
+                        modsSB.Append(m.zipFile + " - " + m.packageName + "\n");
                     }
                     if (m.configs.Count > 0)
                     {
@@ -111,10 +136,11 @@ namespace RelhaxModpack
                     }
                     foreach (Dependency d in m.dependencies)
                     {
-                        if (d.dependencyZipCRC != Utils.getMd5Hash(d.dependencyZipFile))
+                        hash = Utils.getMd5Hash(d.dependencyZipFile);
+                        if (d.dependencyZipCRC != hash)
                         {
-                            d.dependencyZipCRC = Utils.getMd5Hash(d.dependencyZipFile);
-                            dependenciesSB.Append(d.dependencyZipFile + "\n");
+                            d.dependencyZipCRC = hash;
+                            dependenciesSB.Append(d.dependencyZipFile + " - " + d.packageName + "\n");
                         }
                     }
                 }
@@ -124,26 +150,36 @@ namespace RelhaxModpack
             //save config file
             // string newModInfo = databaseLocationTextBox.Text;
             this.saveDatabase(databaseLocationTextBox.Text, gameVersion);
-            MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
+            MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
             updatingLabel.Text = "Idle";
         }
 
         private void processConfigsCRCUpdate(List<Config> cfgList)
         {
+            string hash = "";
             foreach (Config cat in cfgList)
             {
                 cat.size = this.getFileSize(cat.zipFile);
-                if (cat.crc != Utils.getMd5Hash(cat.zipFile))
+                if (cat.size != 0)
                 {
-                    cat.crc = Utils.getMd5Hash(cat.zipFile);
-                    configsSB.Append(cat.zipFile + "\n");
+                    hash = Utils.getMd5Hash(cat.zipFile);
+                    if (cat.crc != hash)
+                    {
+                        cat.crc = hash;
+                        configsSB.Append(cat.zipFile + " - " + cat.packageName + "\n");
+                    }
+                }
+                else
+                {
+                    cat.crc = "";
                 }
                 foreach (Dependency d in cat.dependencies)
                 {
-                    if (d.dependencyZipCRC != Utils.getMd5Hash(d.dependencyZipFile))
+                    hash = Utils.getMd5Hash(d.dependencyZipFile);
+                    if (d.dependencyZipCRC != hash)
                     {
-                        d.dependencyZipCRC = Utils.getMd5Hash(d.dependencyZipFile);
-                        dependenciesSB.Append(d.dependencyZipFile + "\n");
+                        d.dependencyZipCRC = hash;
+                        dependenciesSB.Append(d.dependencyZipFile + " - " + d.packageName + "\n");
                     }
                 }
                 if (cat.configs.Count > 0)
