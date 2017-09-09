@@ -27,6 +27,7 @@ namespace RelhaxModpack
         //where all the downloaded mods are placed
         public static string downloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads");
         public static string md5HashDatabaseXmlFile = Path.Combine(downloadPath, "MD5HashDatabase.xml");
+        public static string onlineDatabaseXmlFile = Path.Combine(downloadPath, "onlineDatabase.xml");
         //timer to measure download speed
         Stopwatch sw = new Stopwatch();
         //The list of all mods
@@ -696,7 +697,7 @@ namespace RelhaxModpack
             tanksVersion = this.getFolderVersion();
             Utils.appendToLog("tanksVersion parsed as " + tanksVersion);
             //determine if the tanks client version is supported
-            string selectionListTanksVersion = tanksVersion;
+            // string selectionListTanksVersion = tanksVersion;
             if (!isClientVersionSupported(tanksVersion))
             {
                 //log and inform the user
@@ -706,7 +707,7 @@ namespace RelhaxModpack
                 string publicVersions = string.Join(",", suportedVersions.Split(',').Select(sValue => sValue.Trim()).ToArray().Where(s => !(s.Substring(0, 1) == "T")).ToArray());
                 MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}: {4}", Translations.getTranslatedString("detectedClientVersion"), tanksVersion, Translations.getTranslatedString("supportNotGuarnteed"), Translations.getTranslatedString("supportedClientVersions"), publicVersions), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 // select the last public modpack version
-                selectionListTanksVersion = publicVersions.Split(',')[publicVersions.Split(',').Count() - 1];
+                tanksVersion = publicVersions.Split(',')[publicVersions.Split(',').Count() - 1];
             }
             //reset the childProgressBar value
             childProgressBar.Maximum = 100;
@@ -718,7 +719,7 @@ namespace RelhaxModpack
                 File.Delete(md5HashDatabaseLocation);
             }
             //show the mod selection window
-            ModSelectionList list = new ModSelectionList(selectionListTanksVersion, tanksLocation, this.Location.X + this.Size.Width, this.Location.Y);
+            ModSelectionList list = new ModSelectionList(tanksVersion, tanksLocation, this.Location.X + this.Size.Width, this.Location.Y);
             list.ShowDialog();
             if (list.cancel)
             {

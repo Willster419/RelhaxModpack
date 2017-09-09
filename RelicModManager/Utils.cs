@@ -254,6 +254,31 @@ namespace RelhaxModpack
         //returns the md5 hash of the file based on the input file string location. It is searching in the database first. If not found in database or the filetime is not the same, it will create a new Hash and update the database
         public static string getMd5Hash(string inputFile)
         {
+            if (Program.databaseupdate)
+            {
+                // if in databaseupdate mode, the online databse is downloader to get the informations of all accessable online files of this gameVersion
+                try
+                {
+                    XDocument doc = XDocument.Load(MainWindow.onlineDatabaseXmlFile);
+                    try
+                    {
+                        XElement element = doc.Descendants("file")
+                           .Where(arg => arg.Attribute("name").Value == inputFile)
+                           .Single();
+                        return element.Attribute("md5").Value;
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // catch the Exception if no entry is found
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Utils.exceptionLog("getMd5Hash", "read from databaseupdate", ex);
+                }
+                return "f";
+            }
+            
             // check if databse exists and if not, create it
             Utils.createMd5HashDatabase();
             // get filetime from file, convert it to string with base 10

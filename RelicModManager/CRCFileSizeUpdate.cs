@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace RelhaxModpack
 {
@@ -32,27 +33,26 @@ namespace RelhaxModpack
 
         private void loadZipFilesButton_Click(object sender, EventArgs e)
         {
-            //check for database
+            // check for database
             if (databaseLocationTextBox.Text.Equals("-none-"))
                 return;
-            string version = Utils.readVersionFromModInfo(databaseLocationTextBox.Text);
-            // download online database
+            // read gameVersion of the selected local modInfo.xml to get the right online database.xml
+            string gameVersion = Utils.readVersionFromModInfo(databaseLocationTextBox.Text);
+            Utils.appendToLog("working with game version: " + gameVersion);
+            // download online database.xml
             try
             {
                 using (downloader = new WebClient())
                 {
-                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/" + version + "/database.xml", Path.Combine(Application.StartupPath, "RelHaxTemp", "DotNetZip.dll"));
+                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/WoT/" + gameVersion + "/database.xml", Path.Combine(Application.StartupPath, "RelHaxTemp", MainWindow.onlineDatabaseXmlFile));
                 }
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("loadZipFilesButton_Click", "http://wotmods.relhaxmodpack.com/RelhaxModpack/" + version + "/database.xml", ex);
-                MessageBox.Show("FAILED to download Onlien file database");
+                Utils.exceptionLog("loadZipFilesButton_Click", "http://wotmods.relhaxmodpack.com/WoT/" + gameVersion + "/database.xml", ex);
+                MessageBox.Show("FAILED to download online file database");
                 Application.Exit();
             }
-            //show file dialog
-            if (addZipsDialog.ShowDialog() == DialogResult.Cancel)
-                return;
             globalDepsSB.Clear();
             dependenciesSB.Clear();
             modsSB.Clear();
@@ -77,14 +77,9 @@ namespace RelhaxModpack
             //foreach zip file name
             foreach (Dependency d in globalDependencies)
             {
-                int index = this.getZipIndex(d.dependencyZipFile);
-                if (index == -1)
+                if (d.dependencyZipCRC != Utils.getMd5Hash(d.dependencyZipFile))
                 {
-                    continue;
-                }
-                if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
-                {
-                    d.dependencyZipCRC = Utils.getMd5Hash(addZipsDialog.FileNames[index]);
+                    d.dependencyZipCRC = Utils.getMd5Hash(d.dependencyZipFile);
                     globalDepsSB.Append(d.dependencyZipFile + "\n");
                 }
             }
@@ -92,29 +87,19 @@ namespace RelhaxModpack
             {
                 foreach (Dependency d in c.dependencies)
                 {
-                    int index = this.getZipIndex(d.dependencyZipFile);
-                    if (index == -1)
+                    if (d.dependencyZipCRC != Utils.getMd5Hash(d.dependencyZipFile))
                     {
-                        continue;
-                    }
-                    if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
-                    {
-                        d.dependencyZipCRC = Utils.getMd5Hash(addZipsDialog.FileNames[index]);
+                        d.dependencyZipCRC = Utils.getMd5Hash(d.dependencyZipFile);
                         dependenciesSB.Append(d.dependencyZipFile + "\n");
                     }
                 }
                 foreach (Mod m in c.mods)
                 {
-                    int index = this.getZipIndex(m.zipFile);
-                    if (index != -1)
+                    m.size = this.getFileSize(m.zipFile);
+                    if (m.crc != Utils.getMd5Hash(m.zipFile))
                     {
-                        m.size = this.getFileSize(addZipsDialog.FileNames[index]);
-                        if (m.crc == null || m.crc.Equals("") || m.crc.Equals("f"))
-                        {
-                            m.crc = Utils.getMd5Hash(addZipsDialog.FileNames[index]);
-
-                            modsSB.Append(m.zipFile + "\n");
-                        }
+                        m.crc = Utils.getMd5Hash(m.zipFile);
+                        modsSB.Append(m.zipFile + "\n");
                     }
                     if (m.configs.Count > 0)
                     {
@@ -122,14 +107,10 @@ namespace RelhaxModpack
                     }
                     foreach (Dependency d in m.dependencies)
                     {
-                        int mindex = this.getZipIndex(d.dependencyZipFile);
-                        if (mindex != -1)
+                        if (d.dependencyZipCRC != Utils.getMd5Hash(d.dependencyZipFile))
                         {
-                            if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
-                            {
-                                d.dependencyZipCRC = Utils.getMd5Hash(addZipsDialog.FileNames[mindex]);
-                                dependenciesSB.Append(d.dependencyZipFile + "\n");
-                            }
+                            d.dependencyZipCRC = Utils.getMd5Hash(d.dependencyZipFile);
+                            dependenciesSB.Append(d.dependencyZipFile + "\n");
                         }
                     }
                 }
@@ -137,36 +118,28 @@ namespace RelhaxModpack
             //update the crc value
             //update the file size
             //save config file
-            string newModInfo = databaseLocationTextBox.Text;
-            this.saveDatabase(newModInfo);
+            // string newModInfo = databaseLocationTextBox.Text;
+            this.saveDatabase(databaseLocationTextBox.Text, gameVersion);
             MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
             updatingLabel.Text = "Idle";
         }
+
         private void processConfigsCRCUpdate(List<Config> cfgList)
         {
             foreach (Config cat in cfgList)
             {
-                int cindex = this.getZipIndex(cat.zipFile);
-                if (cindex != -1)
+                cat.size = this.getFileSize(cat.zipFile);
+                if (cat.crc != Utils.getMd5Hash(cat.zipFile))
                 {
-                    cat.size = this.getFileSize(addZipsDialog.FileNames[cindex]);
-                    if (cat.crc == null || cat.crc.Equals("") || cat.crc.Equals("f"))
-                    {
-                        cat.crc = Utils.getMd5Hash(addZipsDialog.FileNames[cindex]);
-
-                        configsSB.Append(cat.zipFile + "\n");
-                    }
+                    cat.crc = Utils.getMd5Hash(cat.zipFile);
+                    configsSB.Append(cat.zipFile + "\n");
                 }
                 foreach (Dependency d in cat.dependencies)
                 {
-                    int cindex2 = this.getZipIndex(d.dependencyZipFile);
-                    if (cindex2 != -1)
+                    if (d.dependencyZipCRC != Utils.getMd5Hash(d.dependencyZipFile))
                     {
-                        if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
-                        {
-                            d.dependencyZipCRC = Utils.getMd5Hash(addZipsDialog.FileNames[cindex2]);
-                            dependenciesSB.Append(d.dependencyZipFile + "\n");
-                        }
+                        d.dependencyZipCRC = Utils.getMd5Hash(d.dependencyZipFile);
+                        dependenciesSB.Append(d.dependencyZipFile + "\n");
                     }
                 }
                 if (cat.configs.Count > 0)
@@ -175,17 +148,45 @@ namespace RelhaxModpack
                 }
             }
         }
+
         private float getFileSize(string file)
         {
-            FileInfo fi = new FileInfo(file);
-            float fileSizeBytes = fi.Length;
-            float fileSizeKBytes = fileSizeBytes / 1024;
-            float fileSizeMBytes = fileSizeKBytes / 1024;
-            fileSizeMBytes = (float)Math.Round(fileSizeMBytes, 1);
-            if (fileSizeMBytes == 0.0)
-                fileSizeMBytes = 0.1f;
-            return fileSizeMBytes;
+            Int64 fileSizeBytes = 0;
+            try
+            {
+                XDocument doc = XDocument.Load(MainWindow.onlineDatabaseXmlFile);
+                try
+                {
+                    XElement element = doc.Descendants("file")
+                       .Where(arg => arg.Attribute("name").Value == file)
+                       .Single();
+                    Int64.TryParse(element.Attribute("size").Value, out fileSizeBytes);
+                }
+                catch (InvalidOperationException)
+                {
+                    // catch the Exception if no entry is found
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("getMd5Hash", "read from databaseupdate = " + file, ex);
+            }
+            try
+            {
+                float fileSizeKBytes = fileSizeBytes / 1024;
+                float fileSizeMBytes = fileSizeKBytes / 1024;
+                fileSizeMBytes = (float)Math.Round(fileSizeMBytes, 1);
+                if (fileSizeMBytes == 0.0)
+                    fileSizeMBytes = 0.1f;
+                return fileSizeMBytes;
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("getFileSize", "building format", ex);
+            }
+            return 0;
         }
+
         private void CRCFileSizeUpdate_Load(object sender, EventArgs e)
         {
             //font scaling
@@ -195,28 +196,16 @@ namespace RelhaxModpack
             {
                 this.Scale(new System.Drawing.SizeF(Settings.scaleSize, Settings.scaleSize));
             }
-            //addZipsDialog.InitialDirectory = Application.StartupPath;
             loadDatabaseDialog.InitialDirectory = Application.StartupPath;
         }
-        private int getZipIndex(string zipFile)
-        {
-            for (int i = 0; i < addZipsDialog.FileNames.Count(); i++)
-            {
-                string fileName = Path.GetFileName(addZipsDialog.FileNames[i]);
-                if (fileName.Equals(zipFile))
-                    return i;
-            }
-            return -1;
-        }
+
         //saves the mod database
-        private void saveDatabase(string saveLocation)
+        private void saveDatabase(string saveLocation, string gameVersion)
         {
             XmlDocument doc = new XmlDocument();
             //database root modInfo.xml
             XmlElement root = doc.CreateElement("modInfoAlpha.xml");
-            XmlAttribute nsAttribute = doc.CreateAttribute("versiond","0.9.20.0");
-            // nsAttribute.Value = ns;
-            root.Attributes.Append(nsAttribute);
+            root.SetAttribute("version", gameVersion);
             doc.AppendChild(root);
             //global dependencies
             XmlElement globalDependenciesXml = doc.CreateElement("globaldependencies");

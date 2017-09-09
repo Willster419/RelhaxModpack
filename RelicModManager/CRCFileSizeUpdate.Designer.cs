@@ -32,7 +32,7 @@
             this.databaseLocationTextBox = new System.Windows.Forms.RichTextBox();
             this.loadZipFilesButton = new System.Windows.Forms.Button();
             this.updatingLabel = new System.Windows.Forms.Label();
-            this.addZipsDialog = new System.Windows.Forms.OpenFileDialog();
+            // this.addZipsDialog = new System.Windows.Forms.OpenFileDialog();
             this.loadDatabaseDialog = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
@@ -76,12 +76,14 @@
             // 
             // addZipsDialog
             // 
+            /*
             this.addZipsDialog.DefaultExt = "xml";
             this.addZipsDialog.FileName = "file.zip";
             this.addZipsDialog.Filter = "*.zip|*.zip";
             this.addZipsDialog.Multiselect = true;
             this.addZipsDialog.RestoreDirectory = true;
             this.addZipsDialog.Title = "select zip files to update";
+            */
             // 
             // loadDatabaseDialog
             // 
@@ -116,7 +118,7 @@
         private System.Windows.Forms.RichTextBox databaseLocationTextBox;
         private System.Windows.Forms.Button loadZipFilesButton;
         private System.Windows.Forms.Label updatingLabel;
-        private System.Windows.Forms.OpenFileDialog addZipsDialog;
+        // private System.Windows.Forms.OpenFileDialog addZipsDialog;
         private System.Windows.Forms.OpenFileDialog loadDatabaseDialog;
     }
 }
