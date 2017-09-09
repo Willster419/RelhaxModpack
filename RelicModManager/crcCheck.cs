@@ -31,5 +31,10 @@ namespace RelhaxModpack
                 this.Scale(new System.Drawing.SizeF(Settings.scaleSize, Settings.scaleSize));
             }
         }
+
+        private void CRCCheck_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
+        }
     }
 }

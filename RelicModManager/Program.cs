@@ -53,13 +53,13 @@ namespace RelhaxModpack
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"crccheck2$"))
                 {
-                    Utils.appendToLog("/crccheck2 detected, why are you using this??");
+                    Utils.appendToLog("(DEPRECATED) /crccheck2 detected, loading in crccheck2 mode");
                     Application.Run(new CRCCHECK2());
                     return;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"crccheck$"))
                 {
-                    Utils.appendToLog("/crccheck detected, why are you using this???");
+                    Utils.appendToLog("(DEPRECATED) /crccheck detected, loading in crccheck mode");
                     Application.Run(new CRCCheck());
                     return;
                 }

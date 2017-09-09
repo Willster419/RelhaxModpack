@@ -339,5 +339,10 @@ namespace RelhaxModpack
 
             doc.Save(fileName);
         }
+
+        private void PatchTester_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
+        }
     }
 }

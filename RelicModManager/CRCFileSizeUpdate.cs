@@ -14,6 +14,8 @@ namespace RelhaxModpack
     {
         private WebClient downloader;
         private List<Dependency> globalDependencies;
+        private List<Dependency> dependencies;
+        private List<LogicalDependnecy> logicalDependencies;
         private List<Category> parsedCatagoryList;
         StringBuilder globalDepsSB = new StringBuilder();
         StringBuilder dependenciesSB = new StringBuilder();
@@ -60,7 +62,9 @@ namespace RelhaxModpack
             //load database
             globalDependencies = new List<Dependency>();
             parsedCatagoryList = new List<Category>();
-            //Utils.createModStructure(databaseLocationTextBox.Text, true, globalDependencies, parsedCatagoryList);
+            dependencies = new List<Dependency>();
+            logicalDependencies = new List<LogicalDependnecy>();
+            Utils.createModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             int duplicatesCounter = 0;
             //check for duplicates
             if (Utils.duplicates(parsedCatagoryList) && Utils.duplicatesPackageName(parsedCatagoryList, ref duplicatesCounter ))
@@ -498,6 +502,11 @@ namespace RelhaxModpack
                 configRoot.AppendChild(catDependencies);
                 configsHolder.AppendChild(configRoot);
             }
+        }
+
+        private void CRCFileSizeUpdate_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
         }
     }
 }

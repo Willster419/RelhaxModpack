@@ -52,6 +52,7 @@
             // 
             this.crcTB.Location = new System.Drawing.Point(12, 41);
             this.crcTB.Name = "crcTB";
+            this.crcTB.ReadOnly = true;
             this.crcTB.Size = new System.Drawing.Size(234, 20);
             this.crcTB.TabIndex = 1;
             // 
@@ -65,6 +66,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "CRCCheck";
             this.Text = "crcCheck";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CRCCheck_FormClosing);
             this.Load += new System.EventHandler(this.CRCCheck_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

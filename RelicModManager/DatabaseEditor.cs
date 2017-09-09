@@ -15,5 +15,15 @@ namespace RelhaxModpack
         {
             InitializeComponent();
         }
+
+        private void DatabaseEditor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
+        }
+
+        private void DatabaseEditor_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -819,6 +819,7 @@
             this.MaximizeBox = false;
             this.Name = "PatchTester";
             this.Text = "PatchTester";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PatchTester_FormClosing);
             this.Load += new System.EventHandler(this.PatchTester_Load);
             this.xmlModsGroupBox.ResumeLayout(false);
             this.xmlModsGroupBox.PerformLayout();

@@ -32,7 +32,6 @@
             this.databaseLocationTextBox = new System.Windows.Forms.RichTextBox();
             this.loadZipFilesButton = new System.Windows.Forms.Button();
             this.updatingLabel = new System.Windows.Forms.Label();
-            // this.addZipsDialog = new System.Windows.Forms.OpenFileDialog();
             this.loadDatabaseDialog = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
@@ -74,17 +73,6 @@
             this.updatingLabel.TabIndex = 4;
             this.updatingLabel.Text = "Idle";
             // 
-            // addZipsDialog
-            // 
-            /*
-            this.addZipsDialog.DefaultExt = "xml";
-            this.addZipsDialog.FileName = "file.zip";
-            this.addZipsDialog.Filter = "*.zip|*.zip";
-            this.addZipsDialog.Multiselect = true;
-            this.addZipsDialog.RestoreDirectory = true;
-            this.addZipsDialog.Title = "select zip files to update";
-            */
-            // 
             // loadDatabaseDialog
             // 
             this.loadDatabaseDialog.DefaultExt = "xml";
@@ -106,6 +94,7 @@
             this.MaximizeBox = false;
             this.Name = "CRCFileSizeUpdate";
             this.Text = "CRCFileSizeUpdate";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CRCFileSizeUpdate_FormClosing);
             this.Load += new System.EventHandler(this.CRCFileSizeUpdate_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
