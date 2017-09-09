@@ -47,7 +47,9 @@ namespace RelhaxModpack
             {
                 using (downloader = new WebClient())
                 {
-                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/WoT/" + gameVersion + "/database.xml", Path.Combine(Application.StartupPath, "RelHaxTemp", MainWindow.onlineDatabaseXmlFile));
+                    string address = "http://wotmods.relhaxmodpack.com/WoT/" + gameVersion + "/database.xml";
+                    string fileName = Path.Combine(Application.StartupPath, "RelHaxTemp", MainWindow.onlineDatabaseXmlFile);
+                    downloader.DownloadFile(address, fileName);
                 }
             }
             catch (Exception ex)
@@ -86,7 +88,7 @@ namespace RelhaxModpack
             foreach (Dependency d in globalDependencies)
             {
                 hash = Utils.getMd5Hash(d.dependencyZipFile);
-                if (d.dependencyZipCRC != hash)
+                if (!d.dependencyZipCRC.Equals(hash))
                 {
                     d.dependencyZipCRC = hash;
                     globalDepsSB.Append(d.dependencyZipFile + " - " + d.packageName + "\n");
@@ -95,7 +97,7 @@ namespace RelhaxModpack
             foreach (Dependency d in dependencies)
             {
                 hash = Utils.getMd5Hash(d.dependencyZipFile);
-                if (d.dependencyZipCRC != hash)
+                if (!d.dependencyZipCRC.Equals(hash))
                 {
                     d.dependencyZipCRC = hash;
                     dependenciesSB.Append(d.dependencyZipFile + " - " + d.packageName + "\n");
@@ -104,7 +106,7 @@ namespace RelhaxModpack
             foreach (LogicalDependnecy d in logicalDependencies)
             {
                 hash = Utils.getMd5Hash(d.dependencyZipFile);
-                if (d.dependencyZipCRC != hash)
+                if (!d.dependencyZipCRC.Equals(hash))
                 {
                     d.dependencyZipCRC = hash;
                     logicalDependenciesSB.Append(d.dependencyZipFile + " - " + d.packageName + "\n");
@@ -112,35 +114,20 @@ namespace RelhaxModpack
             }
             foreach (Category c in parsedCatagoryList)
             {
-                foreach (Dependency d in c.dependencies)
-                {
-                    hash = Utils.getMd5Hash(d.dependencyZipFile);
-                    if (d.dependencyZipCRC != hash)
-                    {
-                        d.dependencyZipCRC = hash;
-                        dependenciesSB.Append(d.dependencyZipFile + " - " + d.packageName + "\n");
-                    }
-                }
                 foreach (Mod m in c.mods)
                 {
-                    m.size = this.getFileSize(m.zipFile);
-                    hash = Utils.getMd5Hash(m.zipFile);
-                    if (m.crc != hash)
+                    if (!m.zipFile.Equals(""))
                     {
-                        m.crc = hash;
-                        modsSB.Append(m.zipFile + " - " + m.packageName + "\n");
-                    }
-                    if (m.configs.Count > 0)
-                    {
-                        this.processConfigsCRCUpdate(m.configs);
-                    }
-                    foreach (Dependency d in m.dependencies)
-                    {
-                        hash = Utils.getMd5Hash(d.dependencyZipFile);
-                        if (d.dependencyZipCRC != hash)
+                        m.size = this.getFileSize(m.zipFile);
+                        hash = Utils.getMd5Hash(m.zipFile);
+                        if (!m.crc.Equals(hash))
                         {
-                            d.dependencyZipCRC = hash;
-                            dependenciesSB.Append(d.dependencyZipFile + " - " + d.packageName + "\n");
+                            m.crc = hash;
+                            modsSB.Append(m.zipFile + " - " + m.packageName + "\n");
+                        }
+                        if (m.configs.Count > 0)
+                        {
+                            this.processConfigsCRCUpdate(m.configs);
                         }
                     }
                 }
@@ -159,36 +146,30 @@ namespace RelhaxModpack
             string hash = "";
             foreach (Config cat in cfgList)
             {
-                cat.size = this.getFileSize(cat.zipFile);
-                if (cat.size != 0)
+                if (!cat.zipFile.Equals(""))
                 {
-                    hash = Utils.getMd5Hash(cat.zipFile);
-                    if (cat.crc != hash)
+                    cat.size = this.getFileSize(cat.zipFile);
+                    if (cat.size != 0)
                     {
-                        cat.crc = hash;
-                        configsSB.Append(cat.zipFile + " - " + cat.packageName + "\n");
+                        hash = Utils.getMd5Hash(cat.zipFile);
+                        if (!cat.crc.Equals(hash))
+                        {
+                            cat.crc = hash;
+                            configsSB.Append(cat.zipFile + " - " + cat.packageName + "\n");
+                        }
                     }
-                }
-                else
-                {
-                    cat.crc = "";
-                }
-                foreach (Dependency d in cat.dependencies)
-                {
-                    hash = Utils.getMd5Hash(d.dependencyZipFile);
-                    if (d.dependencyZipCRC != hash)
+                    else
                     {
-                        d.dependencyZipCRC = hash;
-                        dependenciesSB.Append(d.dependencyZipFile + " - " + d.packageName + "\n");
+                        cat.crc = "";
                     }
-                }
-                if (cat.configs.Count > 0)
-                {
-                    this.processConfigsCRCUpdate(cat.configs);
+                    if (cat.configs.Count > 0)
+                    {
+                        this.processConfigsCRCUpdate(cat.configs);
+                    }
                 }
             }
         }
-
+        
         private float getFileSize(string file)
         {
             Int64 fileSizeBytes = 0;
@@ -276,6 +257,42 @@ namespace RelhaxModpack
                 globalDependenciesXml.AppendChild(globalDependencyRoot);
             }
             root.AppendChild(globalDependenciesXml);
+            //dependencies
+            XmlElement DependenciesXml = doc.CreateElement("dependencies");
+            foreach (Dependency d in dependencies)
+            {
+                //declare dependency root
+                XmlElement dependencyRoot = doc.CreateElement("dependency");
+                //make dependency
+                XmlElement depZipFile = doc.CreateElement("dependencyZipFile");
+                depZipFile.InnerText = d.dependencyZipFile;
+                dependencyRoot.AppendChild(depZipFile);
+                XmlElement depStartAddress = doc.CreateElement("startAddress");
+                depStartAddress.InnerText = d.startAddress;
+                dependencyRoot.AppendChild(depStartAddress);
+                XmlElement depEndAddress = doc.CreateElement("endAddress");
+                depEndAddress.InnerText = d.endAddress;
+                dependencyRoot.AppendChild(depEndAddress);
+                XmlElement depCRC = doc.CreateElement("dependencyZipCRC");
+                depCRC.InnerText = d.dependencyZipCRC;
+                dependencyRoot.AppendChild(depCRC);
+                XmlElement depEnabled = doc.CreateElement("dependencyenabled");
+                depEnabled.InnerText = "" + d.enabled;
+                dependencyRoot.AppendChild(depEnabled);
+                XmlElement depPackageName = doc.CreateElement("packageName");
+                depPackageName.InnerText = d.packageName;
+                dependencyRoot.AppendChild(depPackageName);
+                //attach dependency root
+                DependenciesXml.AppendChild(dependencyRoot);
+            }
+            root.AppendChild(DependenciesXml);
+            //dependencies
+            XmlElement logicalDependenciesXml = doc.CreateElement("logicalDependencies");
+            foreach (LogicalDependnecy d in logicalDependencies)
+            {
+                //TODO
+            }
+            root.AppendChild(logicalDependenciesXml);
             //catagories
             XmlElement catagoriesHolder = doc.CreateElement("catagories");
             foreach (Category c in parsedCatagoryList)
@@ -295,22 +312,6 @@ namespace RelhaxModpack
                 {
                     //declare dependency root
                     XmlElement DependencyRoot = doc.CreateElement("dependency");
-                    //make dependency
-                    XmlElement DepZipFile = doc.CreateElement("dependencyZipFile");
-                    DepZipFile.InnerText = d.dependencyZipFile;
-                    DependencyRoot.AppendChild(DepZipFile);
-                    XmlElement DepStartAddress = doc.CreateElement("startAddress");
-                    DepStartAddress.InnerText = d.startAddress;
-                    DependencyRoot.AppendChild(DepStartAddress);
-                    XmlElement DepEndAddress = doc.CreateElement("endAddress");
-                    DepEndAddress.InnerText = d.endAddress;
-                    DependencyRoot.AppendChild(DepEndAddress);
-                    XmlElement DepCRC = doc.CreateElement("dependencyZipCRC");
-                    DepCRC.InnerText = d.dependencyZipCRC;
-                    DependencyRoot.AppendChild(DepCRC);
-                    XmlElement DepEnabled = doc.CreateElement("dependencyenabled");
-                    DepEnabled.InnerText = "" + d.enabled;
-                    DependencyRoot.AppendChild(DepEnabled);
                     XmlElement DepPackageName = doc.CreateElement("packageName");
                     DepPackageName.InnerText = d.packageName;
                     DependencyRoot.AppendChild(DepPackageName);
@@ -398,21 +399,6 @@ namespace RelhaxModpack
                         //declare dependency root
                         XmlElement DependencyRoot = doc.CreateElement("dependency");
                         //make dependency
-                        XmlElement DepZipFile = doc.CreateElement("dependencyZipFile");
-                        DepZipFile.InnerText = d.dependencyZipFile;
-                        DependencyRoot.AppendChild(DepZipFile);
-                        XmlElement DepStartAddress = doc.CreateElement("startAddress");
-                        DepStartAddress.InnerText = d.startAddress;
-                        DependencyRoot.AppendChild(DepStartAddress);
-                        XmlElement DepEndAddress = doc.CreateElement("endAddress");
-                        DepEndAddress.InnerText = d.endAddress;
-                        DependencyRoot.AppendChild(DepEndAddress);
-                        XmlElement DepCRC = doc.CreateElement("dependencyZipCRC");
-                        DepCRC.InnerText = d.dependencyZipCRC;
-                        DependencyRoot.AppendChild(DepCRC);
-                        XmlElement DepEnabled = doc.CreateElement("dependencyenabled");
-                        DepEnabled.InnerText = "" + d.enabled;
-                        DependencyRoot.AppendChild(DepEnabled);
                         XmlElement DepPackageName = doc.CreateElement("packageName");
                         DepPackageName.InnerText = d.packageName;
                         DependencyRoot.AppendChild(DepPackageName);
@@ -514,21 +500,6 @@ namespace RelhaxModpack
                     //declare dependency root
                     XmlElement DependencyRoot = doc.CreateElement("dependency");
                     //make dependency
-                    XmlElement DepZipFile = doc.CreateElement("dependencyZipFile");
-                    DepZipFile.InnerText = d.dependencyZipFile;
-                    DependencyRoot.AppendChild(DepZipFile);
-                    XmlElement DepStartAddress = doc.CreateElement("startAddress");
-                    DepStartAddress.InnerText = d.startAddress;
-                    DependencyRoot.AppendChild(DepStartAddress);
-                    XmlElement DepEndAddress = doc.CreateElement("endAddress");
-                    DepEndAddress.InnerText = d.endAddress;
-                    DependencyRoot.AppendChild(DepEndAddress);
-                    XmlElement DepCRC = doc.CreateElement("dependencyZipCRC");
-                    DepCRC.InnerText = d.dependencyZipCRC;
-                    DependencyRoot.AppendChild(DepCRC);
-                    XmlElement DepEnabled = doc.CreateElement("dependencyenabled");
-                    DepEnabled.InnerText = "" + d.enabled;
-                    DependencyRoot.AppendChild(DepEnabled);
                     XmlElement DepPackageName = doc.CreateElement("packageName");
                     DepPackageName.InnerText = d.packageName;
                     DependencyRoot.AppendChild(DepPackageName);
@@ -543,6 +514,17 @@ namespace RelhaxModpack
         private void CRCFileSizeUpdate_FormClosing(object sender, FormClosingEventArgs e)
         {
             Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
+        }
+
+        private void RunOnlineScriptButton_Click(object sender, EventArgs e)
+        {
+            OnlineScriptOutput.Text = "Running online script...";
+            Application.DoEvents();
+            using (WebClient client = new WebClient())
+            {
+                OnlineScriptOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateDatabase.php");
+            }
+            Application.DoEvents();
         }
     }
 }
