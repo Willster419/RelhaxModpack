@@ -646,13 +646,14 @@ namespace RelhaxModpack
                                 toAdd = toAdd + " (" + con.size + " MB)";
                         }
                     }
-                    //add it with
+                    //add it
                     if (con.enabled)
                     {
                         cbi = new ComboBoxItem(con, toAdd);
                         configControlDDALL.Items.Add(cbi);
+                        if (con.Checked)
+                            configControlDDALL.SelectedItem = cbi;
                     }
-                    if (con.Checked) configControlDDALL.SelectedItem = cbi;
                     //add the dropdown to the thing. it will only run this once
                     if (configControlDDALL.Name.Equals("notAddedYet"))
                     {
@@ -1520,11 +1521,11 @@ namespace RelhaxModpack
                         {
                             cbi = new ComboBoxItem(con, toAdd);
                             configControlDDALL.Items.Add(cbi);
-                        }
-                        if (con.Checked)
-                        {
-                            configControlDDALL.SelectedItem = cbi;
-                            configControlDDALL.Enabled = true;
+                            if (con.Checked)
+                            {
+                                configControlDDALL.SelectedItem = cbi;
+                                configControlDDALL.Enabled = true;
+                            }
                         }
                         if (configControlDDALL.Items.Count > 0)
                         {
@@ -1820,7 +1821,8 @@ namespace RelhaxModpack
                     if (parentM.modFormCheckBox is ModFormCheckBox)
                     {
                         ModFormCheckBox tempCB = (ModFormCheckBox)parentM.modFormCheckBox;
-                        tempCB.Checked = true;
+                        if(!tempCB.Checked)
+                            tempCB.Checked = true;
                     }
                 }
                 else if (obj is Config)
@@ -1830,12 +1832,14 @@ namespace RelhaxModpack
                     if (parentC.configUIComponent is ConfigFormCheckBox)
                     {
                         ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.configUIComponent;
-                        parentCB.Checked = true;
+                        if(!parentCB.Checked)
+                            parentCB.Checked = true;
                     }
                     else if (parentC.configUIComponent is ConfigFormRadioButton)
                     {
                         ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.configUIComponent;
-                        parentRB.Checked = true;
+                        if(!parentRB.Checked)
+                            parentRB.Checked = true;
                     }
                 }
             }
@@ -1889,43 +1893,13 @@ namespace RelhaxModpack
                 }
             }
             //trigger the panel color change
-            if (cfg.configs.Count > 0)
-            {
-                if (cb.Checked)
-                {
-                    UIComponent comp = cfg.configs[0].configUIComponent;
-                    if (comp is ConfigFormCheckBox)
-                    {
-                        ConfigFormCheckBox fcb = (ConfigFormCheckBox)comp;
-                        Panel pan = (Panel)fcb.Parent;
-                        pan.BackColor = Color.BlanchedAlmond;
-                    }
-                    else if (comp is ConfigFormRadioButton)
-                    {
-                        ConfigFormRadioButton fcb = (ConfigFormRadioButton)comp;
-                        Panel pan = (Panel)fcb.Parent;
-                        pan.BackColor = Color.BlanchedAlmond;
-                    }
-                }
-                else
-                {
-                    UIComponent comp = cfg.configs[0].configUIComponent;
-                    if (comp is ConfigFormCheckBox)
-                    {
-                        ConfigFormCheckBox fcb = (ConfigFormCheckBox)comp;
-                        Panel pan = (Panel)fcb.Parent;
-                        pan.BackColor = Settings.getBackColor();
-                    }
-                    else if (comp is ConfigFormRadioButton)
-                    {
-                        ConfigFormRadioButton fcb = (ConfigFormRadioButton)comp;
-                        Panel pan = (Panel)fcb.Parent;
-                        pan.BackColor = Settings.getBackColor();
-                    }
-                }
-            }
+            if (cb.Checked)
+                configPanel.BackColor = Color.BlanchedAlmond;
+            else
+                configPanel.BackColor = Settings.getBackColor();
         }
-
+        /*
+         * not used???
         // uncheck ALL subconfigs if "parent" is unchecked
         void uncheckAllSubconfigs(Mod m)
         {
@@ -1945,47 +1919,48 @@ namespace RelhaxModpack
                 if (sc.configs.Count > 0) { uncheckAllSubconfigs(sc); }
             }
         }
-
+        */
         //handler for when a config selection is made from the drop down list
         void configControlDD_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (loadingConfig)
+                return;
             //uncheck all other dorp down configs
             ConfigFormComboBox cb = (ConfigFormComboBox)sender;
-            if (!loadingConfig)
+            //propagate the check back up if required
+            if (cb.SelectedIndex != -1)
             {
-                //propagate the check back up if required
-                if (cb.SelectedIndex != -1)
+                ComboBoxItem cbi22 = (ComboBoxItem)cb.SelectedItem;
+                DatabaseObject obj = cbi22.config.parent;
+                if (obj is Mod)
                 {
-                    ComboBoxItem cbi22 = (ComboBoxItem)cb.SelectedItem;
-                    DatabaseObject obj = cbi22.config.parent;
-                    if (obj is Mod)
+                    Mod parentM = (Mod)obj;
+                    if (parentM.modFormCheckBox is ModFormCheckBox)
                     {
-                        Mod parentM = (Mod)obj;
-                        if (parentM.modFormCheckBox is ModFormCheckBox)
-                        {
-                            ModFormCheckBox tempCB = (ModFormCheckBox)parentM.modFormCheckBox;
+                        ModFormCheckBox tempCB = (ModFormCheckBox)parentM.modFormCheckBox;
+                        //adding the if statement prevents it from running again when it's not needed to
+                        if(!tempCB.Checked)
                             tempCB.Checked = true;
-                        }
                     }
-                    else if (obj is Config)
+                }
+                else if (obj is Config)
+                {
+                    Config parentC = (Config)obj;
+                    parentC.Checked = true;
+                    if (parentC.configUIComponent is ConfigFormCheckBox)
                     {
-                        Config parentC = (Config)obj;
-                        parentC.Checked = true;
-                        if (parentC.configUIComponent is ConfigFormCheckBox)
-                        {
-                            ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.configUIComponent;
+                        ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.configUIComponent;
+                        if(!parentCB.Checked)
                             parentCB.Checked = true;
-                        }
-                        else if (parentC.configUIComponent is ConfigFormRadioButton)
-                        {
-                            ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.configUIComponent;
+                    }
+                    else if (parentC.configUIComponent is ConfigFormRadioButton)
+                    {
+                        ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.configUIComponent;
+                        if(!parentRB.Checked)
                             parentRB.Checked = true;
-                        }
                     }
                 }
             }
-            //if no index selected, select one
-            //does not need to run this anymore tho
             //itterate through the items, get each config, disable it
             //unless it's the same name as the selectedItem
             foreach (ComboBoxItem cbi in cb.Items)
@@ -1994,6 +1969,8 @@ namespace RelhaxModpack
             }
             ComboBoxItem cbi2 = (ComboBoxItem)cb.SelectedItem;
             cbi2.config.Checked = true;
+            Panel configPanel = (Panel)cb.Parent;
+            configPanel.BackColor = Color.BlanchedAlmond;
         }
         //handler for when a config radioButton is pressed
         void configControlRB_CheckedChanged(object sender, EventArgs e)
@@ -2017,7 +1994,8 @@ namespace RelhaxModpack
                     if (parentM.modFormCheckBox is ModFormCheckBox)
                     {
                         ModFormCheckBox tempCB = (ModFormCheckBox)parentM.modFormCheckBox;
-                        tempCB.Checked = true;
+                        if(!tempCB.Checked)
+                            tempCB.Checked = true;
                     }
                 }
                 else if (obj is Config)
@@ -2027,20 +2005,24 @@ namespace RelhaxModpack
                     if (parentC.configUIComponent is ConfigFormCheckBox)
                     {
                         ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.configUIComponent;
-                        parentCB.Checked = true;
+                        if(!parentCB.Checked)
+                            parentCB.Checked = true;
                     }
                     else if (parentC.configUIComponent is ConfigFormRadioButton)
                     {
                         ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.configUIComponent;
-                        parentRB.Checked = true;
+                        if(!parentRB.Checked)
+                            parentRB.Checked = true;
                     }
                 }
             }
-            //process any subconfigs
+            //propagate the change back down if required
             bool configSelected = false;
             int radioButtonCount = 0;
             if (cfg.configs.Count > 0 && rb.Checked)
             {
+                //configs present and the radio button is checked
+                //singles - at lease one must be selected
                 foreach (Config c in cfg.configs)
                 {
                     if (c.type.Equals("single") || c.type.Equals("single1"))
@@ -2067,6 +2049,8 @@ namespace RelhaxModpack
             }
             else if (cfg.configs.Count > 0 && !rb.Checked)
             {
+                //configs present and the radio button is not checked
+                //singles - uncheck all of them
                 foreach (Config c in cfg.configs)
                 {
                     if (c.type.Equals("single") || c.type.Equals("single1") || c.type.Equals("multi"))
@@ -2086,6 +2070,11 @@ namespace RelhaxModpack
                 }
             }
             //trigger the panel color change
+            if (rb.Checked)
+                configPanel.BackColor = Color.BlanchedAlmond;
+            else
+                configPanel.BackColor = Settings.getBackColor();
+            /*
             if (cfg.configs.Count > 0)
             {
                 if (rb.Checked)
@@ -2120,7 +2109,7 @@ namespace RelhaxModpack
                         pan.BackColor = Settings.getBackColor();
                     }
                 }
-            }
+            }*/
         }
         //hander for when any mouse button is clicked on a specific control
         void modCheckBox_MouseDown(object sender, MouseEventArgs e)
@@ -2426,20 +2415,6 @@ namespace RelhaxModpack
             if (loadMode == loadConfigMode.fromButton || loadMode == loadConfigMode.fromAutoInstall)
             {
                 if (loadMode == loadConfigMode.fromButton) MessageBox.Show(Translations.getTranslatedString("prefrencesSet"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //reload the UI
-                //Don't actually reload the UI anymore
-                /*
-                this.UseWaitCursor = true;
-                modTabGroups.Enabled = false;
-                this.makeTabs();
-                Settings.setUIColor(this);
-                this.addAllMods();
-                this.addUserMods();
-                Settings.setUIColor(this);
-                this.UseWaitCursor = false;
-                modTabGroups.Enabled = true;
-                */
-                //but still do a resize i guess
                 loadingConfig = false;
                 ModSelectionList_SizeChanged(null, null);
             }
