@@ -2713,7 +2713,7 @@ namespace RelhaxModpack
             return theNewPath;
         }
         //unchecks all mods from memory
-        public static void clearSelectionMemory(List<Category> parsedCatagoryList, List<Mod> UserMods)
+        public static void clearSelectionMemory_org(List<Category> parsedCatagoryList, List<Mod> UserMods)
         {
             Utils.appendToLog("Unchecking all mods");
             foreach (Category c in parsedCatagoryList)
@@ -2721,7 +2721,7 @@ namespace RelhaxModpack
                 foreach (Mod m in c.mods)
                 {
                     m.Checked = false;
-                    Utils.uncheckProcessConfigs(m.configs);
+                    Utils.uncheckProcessConfigs_org(m.configs);
                 }
             }
             if(UserMods != null)
@@ -2732,14 +2732,93 @@ namespace RelhaxModpack
                 }
             }
         }
-        private static void uncheckProcessConfigs(List<Config> configList)
+
+        private static void uncheckProcessConfigs_org(List<Config> configList)
         {
             foreach (Config cc in configList)
             {
                 cc.Checked = false;
-                Utils.uncheckProcessConfigs(cc.configs);
+                Utils.uncheckProcessConfigs_org(cc.configs);
             }
         }
+
+        //unchecks all mods from memory
+        public static void clearSelectionMemory(List<Category> parsedCatagoryList, List<Mod> UserMods)
+        {
+            Utils.appendToLog("Unchecking all mods");
+            foreach (Category c in parsedCatagoryList)
+            {
+                foreach (Mod m in c.mods)
+                {
+                    m.Checked = false;
+                    if (m.modFormCheckBox is ModFormCheckBox)
+                    {
+                        ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
+                        mfcb.Checked = false;
+                        mfcb.Parent.BackColor = Settings.getBackColor();
+                    }
+                    else if (m.modFormCheckBox is ModWPFCheckBox)
+                    {
+                        ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.modFormCheckBox;
+                        mfCB2.IsChecked = false;
+                    }
+                    Utils.uncheckProcessConfigs(m.configs);
+                }
+            }
+            if (UserMods != null)
+            {
+                foreach (Mod um in UserMods)
+                {
+                    um.Checked = false;
+                    if (um.modFormCheckBox != null)
+                    {
+                        ModFormCheckBox mfcb = (ModFormCheckBox)um.modFormCheckBox;
+                        mfcb.Checked = false;
+                    }
+                }
+            }
+        }
+
+        private static void uncheckProcessConfigs(List<Config> configList)
+        {
+            foreach (Config c in configList)
+            {
+                c.Checked = false;
+                if (c.configUIComponent is ConfigFormCheckBox)
+                {
+                    ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
+                    CBTemp.Checked = false;
+                    CBTemp.Parent.BackColor = Settings.getBackColor();
+                }
+                else if (c.configUIComponent is ConfigFormComboBox)
+                {
+                    ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.configUIComponent;
+                    CBTemp.Parent.BackColor = Settings.getBackColor();
+                }
+                else if (c.configUIComponent is ConfigFormRadioButton)
+                {
+                    ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
+                    CBTemp.Checked = false;
+                    CBTemp.Parent.BackColor = Settings.getBackColor();
+                }
+                else if (c.configUIComponent is ConfigWPFCheckBox)
+                {
+                    ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.configUIComponent;
+                    CBTemp.IsChecked = false;
+                }
+                else if (c.configUIComponent is ConfigWPFComboBox)
+                {
+                    //do nothing...
+                }
+                else if (c.configUIComponent is ConfigWPFRadioButton)
+                {
+                    ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.configUIComponent;
+                    CBTemp.IsChecked = false;
+                }
+                Utils.uncheckProcessConfigs(c.configs);
+            }
+        }
+
         //saves the currently checked configs and mods
         public static void saveConfig_old(bool fromButton, List<Category> parsedCatagoryList, List<Mod> userMods)
         {

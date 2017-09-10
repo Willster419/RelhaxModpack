@@ -2330,6 +2330,7 @@ namespace RelhaxModpack
             Utils.appendToLog("clearSelectionsButton pressed, clearing selections");
             Utils.clearSelectionMemory(parsedCatagoryList, userMods);
             //dispose of not needed stuff and reload the UI
+            /*
             this.UseWaitCursor = true;
             modTabGroups.Enabled = false;
             if (modTabGroups != null)
@@ -2373,6 +2374,7 @@ namespace RelhaxModpack
             Settings.setUIColor(this);
             this.UseWaitCursor = false;
             modTabGroups.Enabled = true;
+            */
             MessageBox.Show(Translations.getTranslatedString("selectionsCleared"));
             ModSelectionList_SizeChanged(null, null);
         }
