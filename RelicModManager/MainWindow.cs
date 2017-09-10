@@ -851,6 +851,7 @@ namespace RelhaxModpack
                 //clear any dependenciesand logicalDependencies since this is a user mod only installation
                 dependenciesToInstall.Clear();
                 logicalDependenciesToInstall.Clear();
+                appendedDependenciesToInstall.Clear();
             }
             //foreach mod and config and dependnecy, if the crc's don't match, add it to the downloadQueue
             string localFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";
@@ -1403,7 +1404,7 @@ namespace RelhaxModpack
                 {
                     zipFilesList.Add(f.Name);
                 }
-                List<string> filesToDelete = Utils.createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists, globalDependenciesToInstall);
+                List<string> filesToDelete = Utils.createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists, globalDependenciesToInstall, dependenciesToInstall, logicalDependenciesToInstall, appendedDependenciesToInstall);
                 string listOfFiles = "";
                 foreach (string s in filesToDelete)
                     listOfFiles = listOfFiles + s + "\n";
