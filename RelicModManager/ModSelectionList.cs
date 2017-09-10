@@ -275,12 +275,13 @@ namespace RelhaxModpack
             for (int i = 0; i < userMods.Count; i++)
             {
                 //make modCheckBox
-                CheckBox modCheckBox = new CheckBox();
+                ModFormCheckBox modCheckBox = new ModFormCheckBox();
+                userMods[i].modFormCheckBox = modCheckBox;
+                modCheckBox.mod = userMods[i];
                 modCheckBox.Font = Settings.appFont;
                 modCheckBox.AutoSize = true;
                 int yLocation = 3 + (modCheckBox.Size.Height * (i));
                 modCheckBox.Location = new System.Drawing.Point(3, yLocation);
-                //modCheckBox.Size = new System.Drawing.Size(49, 17);
                 modCheckBox.TabIndex = 1;
                 modCheckBox.Text = userMods[i].name;
                 modCheckBox.Checked = userMods[i].Checked;
@@ -1639,21 +1640,16 @@ namespace RelhaxModpack
         {
             if (loadingConfig)
                 return;
-            if (sender is CheckBox)
+            ModFormCheckBox cbUser = (ModFormCheckBox)sender;
+            if (cbUser.Parent is TabPage)
             {
                 //user mod code
-                CheckBox cbUser = (CheckBox)sender;
-                if (cbUser.Parent is TabPage)
+                TabPage t = (TabPage)cbUser.Parent;
+                if (t.Text.Equals("User Mods"))
                 {
-                    TabPage t = (TabPage)cbUser.Parent;
-                    if (t.Text.Equals("User Mods"))
-                    {
-                        //this is a check from the user checkboxes
-                        Mod m2 = Utils.getUserMod(cbUser.Text, userMods);
-                        if (m2 != null)
-                            m2.Checked = cbUser.Checked;
-                        return;
-                    }
+                    //verified, this is a check from the user checkboxes
+                    cbUser.mod.Checked = cbUser.Checked;
+                    return;
                 }
             }
             //the mod info handler should only be concerned with checking for enabling componets
@@ -2323,8 +2319,8 @@ namespace RelhaxModpack
 
         private void clearSelectionsButton_Click(object sender, EventArgs e)
         {
-            Utils.clearSelectionMemory(parsedCatagoryList);
             Utils.appendToLog("clearSelectionsButton pressed, clearing selections");
+            Utils.clearSelectionMemory(parsedCatagoryList, userMods);
             //dispose of not needed stuff and reload the UI
             this.UseWaitCursor = true;
             modTabGroups.Enabled = false;
