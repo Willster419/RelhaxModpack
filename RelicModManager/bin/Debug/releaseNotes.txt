@@ -1,3 +1,30 @@
+Version 25.5.1:
+
+NOTE: We have relaxed exception handling so that we can try to find this bug where the application deletes itself. We have been unsuccessful with reproducing the error ourselves. If you get this error PLEASE reply on the forums about it.
+
+https://www.virustotal.com/#/file/bcb97b0a0b34da67a770558e1da1d9630a86269033669a6155fbf76a4a60350b/detection
+-Fixed exception in deleting old zip files
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 25.5.0: (Mostly back-end work, you won't notice much)
+
+NOTE: We have relaxed exception handling so that we can try to find this bug where the application deletes itself. We have been unsuccessful with reproducing the error ourselves. If you get this error PLEASE reply on the forums about it.
+
+https://www.virustotal.com/#/file/8211519d0a2af090f8e355fe78c71449a367c1c73d9434b235cdbdbfa91dbf87/detection
+-Rewrote the dependency system so it is easier to manage them in the future
+-Added new method of creating database updates, it speeds up the time it takes to make one
+-Updated the old method of creating database updates
+-Updated all launch-able forms with proper log ending tags
+-Installer optimizations
+-Improved loading times of the Mod selection window
+-Improved loading times of pre-install section of installation
+-Fixed bugs with default view where the panels would not properly change color
+-Fixed bugs with user mods
+-Added/Improved exception handling
+-Added more logging of info to try to isolate this bug where the application deletes itself
+-Updated French Translations
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 25.1.1:
 https://www.virustotal.com/#/file/de4204364180897a50616e6a9764d8bacf2fdfff5926a7d1c39d88913a511a95/detection
 -Fixed French translations
