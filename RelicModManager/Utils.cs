@@ -354,6 +354,17 @@ namespace RelhaxModpack
             try
             {
                 XDocument doc = XDocument.Load(MainWindow.md5HashDatabaseXmlFile);
+                bool exists = doc.Descendants("file")
+                       .Where(arg => arg.Attribute("filename").Value == inputFile && arg.Attribute("filetime").Value == inputFiletime)
+                       .Any();
+                if(exists)
+                {
+                    XElement element = doc.Descendants("file")
+                       .Where(arg => arg.Attribute("filename").Value == inputFile && arg.Attribute("filetime").Value == inputFiletime)
+                       .Single();
+                    return element.Attribute("md5").Value;
+                }
+                /*
                 try
                 {
                     XElement element = doc.Descendants("file")
@@ -365,6 +376,7 @@ namespace RelhaxModpack
                 {
                     // catch the Exception if no entry is found
                 }
+                */
             }
             catch (Exception e)
             {
@@ -2703,7 +2715,7 @@ namespace RelhaxModpack
             return theNewPath;
         }
         //unchecks all mods from memory
-        public static void clearSelectionMemory(List<Category> parsedCatagoryList)
+        public static void clearSelectionMemory(List<Category> parsedCatagoryList, List<Mod> UserMods)
         {
             Utils.appendToLog("Unchecking all mods");
             foreach (Category c in parsedCatagoryList)
@@ -2712,6 +2724,13 @@ namespace RelhaxModpack
                 {
                     m.Checked = false;
                     Utils.uncheckProcessConfigs(m.configs);
+                }
+            }
+            if(UserMods != null)
+            {
+                foreach(Mod m in UserMods)
+                {
+                    m.Checked = false;
                 }
             }
         }
@@ -2922,7 +2941,7 @@ namespace RelhaxModpack
         public static void loadConfig(bool fromButton, string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
             //uncheck everythihng in memory first
-            Utils.clearSelectionMemory(parsedCatagoryList);
+            Utils.clearSelectionMemory(parsedCatagoryList, userMods);
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
             //check config file version
@@ -3036,6 +3055,11 @@ namespace RelhaxModpack
                                 if (File.Exists(Application.StartupPath + "\\RelHaxUserMods\\" + filename))
                                 {
                                     m.Checked = true;
+                                    if (m.modFormCheckBox != null)
+                                    {
+                                        ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
+                                        mfcb.Checked = true;
+                                    }
                                     Utils.appendToLog("checking user mod " + m.zipFile);
                                 }
                             }
@@ -3153,7 +3177,13 @@ namespace RelhaxModpack
                     string filename = um.name + ".zip";
                     if (File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename)))
                     {
+                        //it will be done in the UI code
                         um.Checked = true;
+                        if (um.modFormCheckBox != null)
+                        {
+                            ModFormCheckBox mfcb = (ModFormCheckBox)um.modFormCheckBox;
+                            mfcb.Checked = true;
+                        }
                         Utils.appendToLog("Checking user mod " + um.zipFile);
                     }
                 }

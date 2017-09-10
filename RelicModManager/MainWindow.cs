@@ -90,7 +90,7 @@ namespace RelhaxModpack
         /// https://www.mikrocontroller.net/topic/140764
         /// </summary>
         /// <returns></returns>
-        public static string managerVersion()
+        public string managerVersion()
         {
             return "version " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().IndexOf('.') + 1);
         }
@@ -512,9 +512,9 @@ namespace RelhaxModpack
             //enforces a single instance of the program
             try
             {
-                File.WriteAllText(tempPath + "\\RelHaxOneInstance.txt", "this file is open and cannot be deleted");
-                File.OpenWrite(tempPath + "\\RelHaxOneInstance.txt");
-                Utils.appendToLog("Successfully made single instance text file");
+                //File.WriteAllText(tempPath + "\\RelHaxOneInstance.txt", "this file is open and cannot be deleted");
+                //File.OpenWrite(tempPath + "\\RelHaxOneInstance.txt");
+                //Utils.appendToLog("Successfully made single instance text file");
             }
             //catching an EXCEPTION means that this is not the only instance open
             catch (IOException)
@@ -548,6 +548,7 @@ namespace RelhaxModpack
             }
             wait.loadingDescBox.Text = Translations.getTranslatedString("verDirStructure");
             Application.DoEvents();
+            Utils.appendToLog("Verifying Directory Structure");
             //create directory structures
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxDownloads")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxDownloads");
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxUserMods")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxUserMods");
@@ -555,6 +556,7 @@ namespace RelhaxModpack
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxUserConfigs")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxUserConfigs");
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxTemp")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxTemp");
             //check for required external application libraries (dlls only)
+            Utils.appendToLog("Checking for required external files");
             if (!File.Exists(Application.StartupPath + "\\DotNetZip.dll"))
             {
                 try

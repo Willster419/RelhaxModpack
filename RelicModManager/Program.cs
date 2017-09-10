@@ -86,14 +86,7 @@ namespace RelhaxModpack
             Utils.appendToLog("Loading translation hashes");
             Translations.loadHashes();
             Utils.appendToLog("Attempting to load MainWindow");
-            try
-            {
-                Application.Run(new MainWindow());
-            }
-            catch (Exception ex)
-            {
-                Utils.exceptionLog("Main", "Application load", ex);
-            }
+            Application.Run(new MainWindow());
         }
     }
 }
