@@ -443,8 +443,6 @@ namespace RelhaxModpack
             try
             {
                 XElement element = doc.Descendants("modInfoAlpha.xml").Single();
-                // .Where(arg => arg.Attribute("filename").Value == inputFile && arg.Attribute("filetime").Value == inputFiletime)
-
                 return element.Attribute("version").Value;
             }
             catch (InvalidOperationException)
