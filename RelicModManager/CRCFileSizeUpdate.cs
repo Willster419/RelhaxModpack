@@ -315,6 +315,9 @@ namespace RelhaxModpack
                 XmlElement globalDepEnabled = doc.CreateElement("dependencyenabled");
                 globalDepEnabled.InnerText = "" + d.enabled;
                 globalDependencyRoot.AppendChild(globalDepEnabled);
+                XmlElement globalDepAppendExtraction = doc.CreateElement("appendExtraction");
+                globalDepAppendExtraction.InnerText = "" + d.appendExtraction;
+                globalDependencyRoot.AppendChild(globalDepAppendExtraction);
                 XmlElement globalDepPackageName = doc.CreateElement("packageName");
                 globalDepPackageName.InnerText = d.packageName;
                 globalDependencyRoot.AppendChild(globalDepPackageName);
@@ -344,6 +347,9 @@ namespace RelhaxModpack
                 XmlElement depEnabled = doc.CreateElement("dependencyenabled");
                 depEnabled.InnerText = "" + d.enabled;
                 dependencyRoot.AppendChild(depEnabled);
+                XmlElement depAppendExtraction = doc.CreateElement("appendExtraction");
+                depAppendExtraction.InnerText = "" + d.appendExtraction;
+                dependencyRoot.AppendChild(depAppendExtraction);
                 XmlElement depPackageName = doc.CreateElement("packageName");
                 depPackageName.InnerText = d.packageName;
                 dependencyRoot.AppendChild(depPackageName);
