@@ -152,7 +152,7 @@ namespace RelhaxModpack
             //actually build the UI display
             this.makeTabs();
             this.addAllMods();
-            this.addUserMods();
+            this.addUserMods(false);
             //set the size to the last closed size
             this.Size = new Size(Settings.modSelectionWidth, Settings.modSelectionHeight);
             //set the UI colors
@@ -266,7 +266,7 @@ namespace RelhaxModpack
             }
         }
         //adds all usermods to thier own userMods tab
-        private void addUserMods()
+        private void addUserMods(bool forceUnchecked)
         {
             //make the new tab
             TabPage tb = new TabPage("User Mods");
@@ -283,7 +283,14 @@ namespace RelhaxModpack
                 //modCheckBox.Size = new System.Drawing.Size(49, 17);
                 modCheckBox.TabIndex = 1;
                 modCheckBox.Text = userMods[i].name;
-                modCheckBox.Checked = userMods[i].Checked;
+                if (forceUnchecked)
+                {
+                    modCheckBox.Checked = false;
+                }
+                else
+                {
+                    modCheckBox.Checked = userMods[i].Checked;
+                }
                 modCheckBox.UseVisualStyleBackColor = true;
                 modCheckBox.Enabled = true;
                 modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
@@ -1386,6 +1393,7 @@ namespace RelhaxModpack
             {
                 if (con.visible)
                 {
+                    // if (parentIsMod) completeModSearchList.Add(con);
                     ConfigFormComboBox configControlDDALL = null;
                     con.parentMod = m;
                     if (parentIsMod)
@@ -2376,7 +2384,7 @@ namespace RelhaxModpack
             this.makeTabs();
             Settings.setUIColor(this);
             this.addAllMods();
-            this.addUserMods();
+            this.addUserMods(true);
             Settings.setUIColor(this);
             this.UseWaitCursor = false;
             modTabGroups.Enabled = true;
