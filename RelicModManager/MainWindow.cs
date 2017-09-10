@@ -548,6 +548,7 @@ namespace RelhaxModpack
             }
             wait.loadingDescBox.Text = Translations.getTranslatedString("verDirStructure");
             Application.DoEvents();
+            Utils.appendToLog("Verifying Directory Structure");
             //create directory structures
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxDownloads")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxDownloads");
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxUserMods")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxUserMods");
@@ -555,6 +556,7 @@ namespace RelhaxModpack
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxUserConfigs")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxUserConfigs");
             if (!Directory.Exists(Application.StartupPath + "\\RelHaxTemp")) Directory.CreateDirectory(Application.StartupPath + "\\RelHaxTemp");
             //check for required external application libraries (dlls only)
+            Utils.appendToLog("Checking for required external files");
             if (!File.Exists(Application.StartupPath + "\\DotNetZip.dll"))
             {
                 try
