@@ -90,7 +90,7 @@ namespace RelhaxModpack
         /// https://www.mikrocontroller.net/topic/140764
         /// </summary>
         /// <returns></returns>
-        public static string managerVersion()
+        public string managerVersion()
         {
             return "version " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().IndexOf('.') + 1);
         }
@@ -512,9 +512,9 @@ namespace RelhaxModpack
             //enforces a single instance of the program
             try
             {
-                File.WriteAllText(tempPath + "\\RelHaxOneInstance.txt", "this file is open and cannot be deleted");
-                File.OpenWrite(tempPath + "\\RelHaxOneInstance.txt");
-                Utils.appendToLog("Successfully made single instance text file");
+                //File.WriteAllText(tempPath + "\\RelHaxOneInstance.txt", "this file is open and cannot be deleted");
+                //File.OpenWrite(tempPath + "\\RelHaxOneInstance.txt");
+                //Utils.appendToLog("Successfully made single instance text file");
             }
             //catching an EXCEPTION means that this is not the only instance open
             catch (IOException)
