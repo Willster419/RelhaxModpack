@@ -354,6 +354,17 @@ namespace RelhaxModpack
             try
             {
                 XDocument doc = XDocument.Load(MainWindow.md5HashDatabaseXmlFile);
+                bool exists = doc.Descendants("file")
+                       .Where(arg => arg.Attribute("filename").Value == inputFile && arg.Attribute("filetime").Value == inputFiletime)
+                       .Any();
+                if(exists)
+                {
+                    XElement element = doc.Descendants("file")
+                       .Where(arg => arg.Attribute("filename").Value == inputFile && arg.Attribute("filetime").Value == inputFiletime)
+                       .Single();
+                    return element.Attribute("md5").Value;
+                }
+                /*
                 try
                 {
                     XElement element = doc.Descendants("file")
@@ -365,6 +376,7 @@ namespace RelhaxModpack
                 {
                     // catch the Exception if no entry is found
                 }
+                */
             }
             catch (Exception e)
             {
