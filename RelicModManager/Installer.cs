@@ -295,7 +295,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("ClearWoTCache, step 1", ex);
+                Utils.exceptionLog("ClearWoTCache", "step 1", ex);
             }
 
             //2 - recursivly delete entire WorldOfTanks folder
@@ -306,7 +306,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("ClearWoTCache, step 2", ex);
+                Utils.exceptionLog("ClearWoTCache", "step 2", ex);
             }
 
             //3 - re-create WorldOfTanks folder and move back 3 above files and delete temp file

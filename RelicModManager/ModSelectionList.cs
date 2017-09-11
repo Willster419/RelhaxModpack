@@ -584,7 +584,7 @@ namespace RelhaxModpack
                         string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
-                            configControlRB.Content = configControlRB.Content + " (Updated)";
+                            configControlRB.Content = configControlRB.Content + " (" + Translations.getTranslatedString("updated") + ")";
                             con.downloadFlag = true;
                             if (con.size > 0)
                                 configControlRB.Content = configControlRB.Content + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
@@ -594,7 +594,7 @@ namespace RelhaxModpack
                     {
                         if (con.downloadFlag)
                         {
-                            configControlRB.Content = configControlRB.Content + " (Updated)";
+                            configControlRB.Content = configControlRB.Content + " (" + Translations.getTranslatedString("updated") + ")";
                             if (con.size > 0)
                                 configControlRB.Content = configControlRB.Content + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
                         }
@@ -638,7 +638,7 @@ namespace RelhaxModpack
                         string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
-                            toAdd = toAdd + "_Updated";
+                            toAdd = toAdd + " (" + Translations.getTranslatedString("updated") + ")";
                             con.downloadFlag = true;
                             if (con.size > 0)
                                 toAdd = toAdd + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
@@ -648,7 +648,7 @@ namespace RelhaxModpack
                     {
                         if (con.downloadFlag)
                         {
-                            toAdd = toAdd + "_Updated";
+                            toAdd = toAdd + " (" + Translations.getTranslatedString("updated") + ")";
                             con.downloadFlag = true;
                             if (con.size > 0)
                                 toAdd = toAdd + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
@@ -743,7 +743,7 @@ namespace RelhaxModpack
                         string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
-                            configControlCB.Content = configControlCB.Content + " (Updated)";
+                            configControlCB.Content = configControlCB.Content + " (" + Translations.getTranslatedString("updated") + ")";
                             con.downloadFlag = true;
                             if (con.size > 0)
                                 configControlCB.Content = configControlCB.Content + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
@@ -753,7 +753,7 @@ namespace RelhaxModpack
                     {
                         if (con.downloadFlag)
                         {
-                            configControlCB.Content = configControlCB.Content + " (Updated)";
+                            configControlCB.Content = configControlCB.Content + " (" + Translations.getTranslatedString("updated") + ")";
                             con.downloadFlag = true;
                             if (con.size > 0)
                                 configControlCB.Content = configControlCB.Content + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
@@ -1252,7 +1252,7 @@ namespace RelhaxModpack
                     //if the CRC's don't match and the mod actually has a zip file
                     if ((!m.zipFile.Equals("")) && (!m.crc.Equals(oldCRC2)))
                     {
-                        modCheckBox.Text = modCheckBox.Text + " (Updated)";
+                        modCheckBox.Text = modCheckBox.Text + " (" + Translations.getTranslatedString("updated") + ")";
                         m.downloadFlag = true;
                         if ((m.size > 0))
                             modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
@@ -1262,7 +1262,7 @@ namespace RelhaxModpack
                 {
                     if (m.downloadFlag)
                     {
-                        modCheckBox.Text = modCheckBox.Text + " (Updated)";
+                        modCheckBox.Text = modCheckBox.Text + " (" + Translations.getTranslatedString("updated") + ")";
                         if ((m.size > 0))
                             modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
                     }
@@ -1461,7 +1461,7 @@ namespace RelhaxModpack
                             string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                             if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                             {
-                                configControlRB.Text = configControlRB.Text + " (Updated)";
+                                configControlRB.Text = configControlRB.Text + " (" + Translations.getTranslatedString("updated") + ")";
                                 con.downloadFlag = true;
                                 if (con.size > 0)
                                     configControlRB.Text = configControlRB.Text + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
@@ -1471,7 +1471,7 @@ namespace RelhaxModpack
                         {
                             if (con.downloadFlag)
                             {
-                                configControlRB.Text = configControlRB.Text + " (Updated)";
+                                configControlRB.Text = configControlRB.Text + " (" + Translations.getTranslatedString("updated") + ")";
                                 if (con.size > 0)
                                     configControlRB.Text = configControlRB.Text + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
                             }
@@ -1511,7 +1511,7 @@ namespace RelhaxModpack
                             if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                             {
                                 con.downloadFlag = true;
-                                toAdd = toAdd + "_Updated";
+                                toAdd = toAdd + " (" + Translations.getTranslatedString("updated") + ")";
                                 if (con.size > 0)
                                     toAdd = toAdd + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
                             }
@@ -1520,7 +1520,7 @@ namespace RelhaxModpack
                         {
                             if (con.downloadFlag)
                             {
-                                toAdd = toAdd + "_Updated";
+                                toAdd = toAdd + " (" + Translations.getTranslatedString("updated") + ")";
                                 if (con.size > 0)
                                     toAdd = toAdd + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
                             }
@@ -1598,7 +1598,7 @@ namespace RelhaxModpack
                             if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                             {
                                 con.downloadFlag = true;
-                                configControlCB.Text = configControlCB.Text + " (Updated)";
+                                configControlCB.Text = configControlCB.Text + " (" + Translations.getTranslatedString("updated") + ")";
                                 if (con.size > 0)
                                     configControlCB.Text = configControlCB.Text + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
                             }
@@ -1607,7 +1607,7 @@ namespace RelhaxModpack
                         {
                             if (con.downloadFlag)
                             {
-                                configControlCB.Text = configControlCB.Text + " (Updated)";
+                                configControlCB.Text = configControlCB.Text + " (" + Translations.getTranslatedString("updated") + ")";
                                 if (con.size > 0)
                                     configControlCB.Text = configControlCB.Text + " (" + Utils.SizeSuffix(con.size,1, true) + ")";
                             }
