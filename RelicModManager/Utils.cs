@@ -727,7 +727,8 @@ namespace RelhaxModpack
                                                         }
                                                         break;
                                                     case "size":
-                                                        m.size = Utils.parseFloat(modNode.Value, 0.0f);
+                                                        // m.size = Utils.parseFloat(modNode.Value, 0.0f);
+                                                        m.size = Utils.parseInt(modNode.Value, 0);
                                                         break;
                                                     case "description":
                                                         m.description = modNode.Value;
@@ -968,7 +969,7 @@ namespace RelhaxModpack
                                         }
                                         break;
                                     case "size":
-                                        c.size = Utils.parseFloat(configNode.Value, 0.0f);
+                                        c.size = Utils.parseInt(configNode.Value, 0);
                                         break;
                                     case "updateComment":
                                         c.updateComment = configNode.Value;
@@ -3689,13 +3690,12 @@ namespace RelhaxModpack
         }
 
         // https://stackoverflow.com/questions/14488796/does-net-provide-an-easy-way-convert-bytes-to-kb-mb-gb-etc
-        static readonly string[] SizeSuffixes =
-                   { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
-        public static string SizeSuffix(Int64 value, int decimalPlaces = 1)
+        static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+        public static string SizeSuffix(Int64 value, int decimalPlaces = 1, bool sizeSuffix = false)
         {
             if (value < 0) { return "-" + SizeSuffix(-value); }
-            if (value == 0) { return "0.0 bytes"; }
-            if (value < 1000) { return string.Format("{0:n" + decimalPlaces + "} {1}", 0.1, SizeSuffixes[1]); }
+            if (value == 0) { if (sizeSuffix) return "0.0 bytes"; else return "0.0"; }
+            if (value < 1000) { if (sizeSuffix) return string.Format("{0:n" + decimalPlaces + "} {1}", 0.1, SizeSuffixes[1]); else return string.Format("{0:n" + decimalPlaces + "}", 0.1); }
 
             // mag is 0 for bytes, 1 for KB, 2, for MB, etc.
             int mag = (int)Math.Log(value, 1024);
@@ -3712,9 +3712,10 @@ namespace RelhaxModpack
                 adjustedSize /= 1024;
             }
 
-            return string.Format("{0:n" + decimalPlaces + "} {1}",
-                adjustedSize,
-                SizeSuffixes[mag]);
+            if (sizeSuffix)
+                return string.Format("{0:n" + decimalPlaces + "} {1}", adjustedSize, SizeSuffixes[mag]);
+            else
+                return string.Format("{0:n" + decimalPlaces + "}", adjustedSize);
         }
 
         public static string getValidFilename(String fileName)
