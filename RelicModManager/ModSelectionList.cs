@@ -1254,7 +1254,7 @@ namespace RelhaxModpack
                     {
                         modCheckBox.Text = modCheckBox.Text + " (Updated)";
                         m.downloadFlag = true;
-                        if ((m.size > 0.0f))
+                        if ((m.size > 0))
                             modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
                     }
                 }
@@ -1263,7 +1263,7 @@ namespace RelhaxModpack
                     if (m.downloadFlag)
                     {
                         modCheckBox.Text = modCheckBox.Text + " (Updated)";
-                        if ((m.size > 0.0f))
+                        if ((m.size > 0))
                             modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
                     }
                 }
@@ -1609,7 +1609,7 @@ namespace RelhaxModpack
                             {
                                 configControlCB.Text = configControlCB.Text + " (Updated)";
                                 if (con.size > 0)
-                                    configControlCB.Text = configControlCB.Text + " (" + Utils.SizeSuffix(con.size,1,true) + ")";
+                                    configControlCB.Text = configControlCB.Text + " (" + Utils.SizeSuffix(con.size,1, true) + ")";
                             }
                         }
                         //add config to the form
