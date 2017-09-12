@@ -24,7 +24,6 @@ namespace RelhaxModpack
         public static bool saveLastConfig { get; set; }
         public static bool saveUserData { get; set; }
         public static bool darkUI { get; set; }
-        public static bool cleanUninstall { get; set; }
         public static bool disableBorders { get; set; }
         //toggle if the program will delete the WoT appdata cache
         public static bool clearCache { get; set; }
@@ -33,6 +32,8 @@ namespace RelhaxModpack
         public static int loadingGif { get; set; }
         public static string fontName { get; set; }
         public static float scaleSize { get; set; }
+        public static bool deleteLogs { get; set; }
+        public static bool disableColorChange { get; set; }
         public static string settingsXmlFile = Application.StartupPath + "\\RelHaxSettings.xml";
         public static string configFileVersion = "2.0";     // for later imports of this files, we need a better identification
         public enum LoadingGifs { standard = 0, thirdGuards = 1 };
@@ -84,8 +85,6 @@ namespace RelhaxModpack
                 Settings.saveLastConfig = false;
                 Settings.saveUserData = false;
                 Settings.clearCache = false;
-                //need to set this to true for now
-                Settings.cleanUninstall = true;
                 Settings.disableBorders = false;
                 Settings.tempLoadedLanguage = 0;
                 Settings.modSelectionHeight = 480;
@@ -93,6 +92,8 @@ namespace RelhaxModpack
                 Settings.fontSizeforum = Settings.FontSize.fontRegular;
                 Settings.expandAllLegacy = false;
                 Settings.ModSelectionFullscreen = false;
+                Settings.disableColorChange = false;
+                Settings.deleteLogs = false;
                 Settings.previewX = 0;
                 Settings.previewY = 0;
                 Settings.customModInfoPath = "";
@@ -138,11 +139,6 @@ namespace RelhaxModpack
                         case "saveUserData":
                             Settings.saveUserData = bool.Parse(n.InnerText);
                             break;
-                        case "cleanUninstall":
-                            Settings.cleanUninstall = bool.Parse(n.InnerText);
-                            //need to force true for now
-                            Settings.cleanUninstall = true;
-                            break;
                         case "clearCache":
                             Settings.clearCache = bool.Parse(n.InnerText);
                             break;
@@ -154,6 +150,12 @@ namespace RelhaxModpack
                             break;
                         case "disableBorders":
                             Settings.disableBorders = bool.Parse(n.InnerText);
+                            break;
+                        case "disableColorChange":
+                            Settings.disableColorChange = bool.Parse(n.InnerText);
+                            break;
+                        case "deleteLogs":
+                            Settings.deleteLogs = bool.Parse(n.InnerText);
                             break;
                         case "language":
                             Settings.tempLoadedLanguage = int.Parse(n.InnerText);
@@ -284,9 +286,6 @@ namespace RelhaxModpack
             XmlElement xsaveUserData = doc.CreateElement("saveUserData");
             xsaveUserData.InnerText = "" + Settings.saveUserData;
             settingsHolder.AppendChild(xsaveUserData);
-            XmlElement xcleanUninstall = doc.CreateElement("cleanUninstall");
-            xcleanUninstall.InnerText = "" + Settings.cleanUninstall;
-            settingsHolder.AppendChild(xcleanUninstall);
             XmlElement xclearCache = doc.CreateElement("clearCache");
             xclearCache.InnerText = "" + Settings.clearCache;
             settingsHolder.AppendChild(xclearCache);
@@ -299,6 +298,12 @@ namespace RelhaxModpack
             XmlElement xdisableBorders = doc.CreateElement("disableBorders");
             xdisableBorders.InnerText = "" + Settings.disableBorders;
             settingsHolder.AppendChild(xdisableBorders);
+            XmlElement xdisableColorChange = doc.CreateElement("disableColorChange");
+            xdisableColorChange.InnerText = "" + Settings.disableColorChange;
+            settingsHolder.AppendChild(xdisableColorChange);
+            XmlElement xdeleteLogs = doc.CreateElement("deleteLogs");
+            xdeleteLogs.InnerText = "" + Settings.deleteLogs;
+            settingsHolder.AppendChild(xdeleteLogs);
             XmlElement xlanguage = doc.CreateElement("language");
             xlanguage.InnerText = "" + (int)Translations.language;
             settingsHolder.AppendChild(xlanguage);

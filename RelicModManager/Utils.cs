@@ -2793,6 +2793,8 @@ namespace RelhaxModpack
                 else if (c.configUIComponent is ConfigFormComboBox)
                 {
                     ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.configUIComponent;
+                    if (CBTemp.SelectedIndex != 0)
+                        CBTemp.SelectedIndex = 0;
                     CBTemp.Parent.BackColor = Settings.getBackColor();
                 }
                 else if (c.configUIComponent is ConfigFormRadioButton)
@@ -3075,7 +3077,8 @@ namespace RelhaxModpack
                                     {
                                         ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
                                         mfcb.Checked = true;
-                                        mfcb.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
+                                        if(!Settings.disableColorChange)
+                                            mfcb.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
                                     else if (m.modFormCheckBox is ModWPFCheckBox)
                                     {
@@ -3206,7 +3209,8 @@ namespace RelhaxModpack
                                     {
                                         ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
                                         mfcb.Checked = true;
-                                        mfcb.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
+                                        if (!Settings.disableColorChange)
+                                            mfcb.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
                                     else if (m.modFormCheckBox is ModWPFCheckBox)
                                     {
@@ -3328,7 +3332,8 @@ namespace RelhaxModpack
                                     {
                                         ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
                                         CBTemp.Checked = true;
-                                        CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
+                                        if (!Settings.disableColorChange)
+                                            CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
                                     else if (c.configUIComponent is ConfigFormComboBox)
                                     {
@@ -3345,13 +3350,15 @@ namespace RelhaxModpack
                                                 }
                                             }
                                         }
-                                        CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
+                                        if (!Settings.disableColorChange)
+                                            CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
                                     else if (c.configUIComponent is ConfigFormRadioButton)
                                     {
                                         ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
                                         CBTemp.Checked = true;
-                                        CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
+                                        if (!Settings.disableColorChange)
+                                            CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
                                     else if (c.configUIComponent is ConfigWPFCheckBox)
                                     {
@@ -3561,7 +3568,8 @@ namespace RelhaxModpack
             }
             if(shouldBeBA && panelRef != null)
             {
-                panelRef.BackColor = System.Drawing.Color.BlanchedAlmond;
+                if (!Settings.disableColorChange)
+                    panelRef.BackColor = System.Drawing.Color.BlanchedAlmond;
             }
         }
 

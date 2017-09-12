@@ -75,23 +75,6 @@ namespace RelhaxModpack
             InstallWorker.DoWork += ActuallyStartInstallation;
             InstallWorker.RunWorkerAsync();
         }
-        //Start uinstallation on UI thread
-        public void StartUninstallation()
-        {
-            InstallWorker.DoWork += ActuallyStartUnInstallation;
-            InstallWorker.RunWorkerAsync();
-        }
-        //regular uninstallation method. currently does nothing
-        public void ActuallyStartUnInstallation(object sender, DoWorkEventArgs e)
-        {
-            ResetArgs();
-            args.InstalProgress = InstallerEventArgs.InstallProgress.Uninstall;
-            SmartUninstall();
-            Utils.appendToLog("Re-creating directories if they arn't already there");
-            //put them back
-            if (!Directory.Exists(TanksLocation + "\\res_mods\\" + TanksVersion)) Directory.CreateDirectory(TanksLocation + "\\res_mods\\" + TanksVersion);
-            if (!Directory.Exists(TanksLocation + "\\mods\\" + TanksVersion)) Directory.CreateDirectory(TanksLocation + "\\mods\\" + TanksVersion);
-        }
 
         public void StartCleanUninstallation()
         {
@@ -132,6 +115,24 @@ namespace RelhaxModpack
             {
                 args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteMods;
                 DeleteMods();
+            }
+            //Setp 3a: delete log files
+            if (Settings.deleteLogs)
+            {
+                Utils.appendToLog("deleteLogs selected, deleting wot, xvm, and pmod logs");
+                try
+                {
+                    if (File.Exists(TanksLocation + "\\python.log"))
+                        File.Delete(TanksLocation + "\\python.log");
+                    if (File.Exists(TanksLocation + "\\xvm.log"))
+                        File.Delete(TanksLocation + "\\xvm.log");
+                    if (File.Exists(TanksLocation + "\\pmod.log"))
+                        File.Delete(TanksLocation + "\\pmod.log");
+                }
+                catch (Exception ex)
+                {
+                    Utils.exceptionLog(ex);
+                }
             }
             ResetArgs();
             //Step 4: Delete user apadata cache
@@ -885,12 +886,6 @@ namespace RelhaxModpack
                 patchList.Add(p);
             }
             originalPatchNames.RemoveAt(0);
-        }
-        //do nothing at this point
-        private void SmartUninstall()
-        {
-            
-            
         }
         //gets the total number of files to process to eithor delete or copy
         private void NumFilesToProcess(string folder)

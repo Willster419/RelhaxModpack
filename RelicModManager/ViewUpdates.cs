@@ -1,0 +1,83 @@
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Net;
+
+namespace RelhaxModpack
+{
+    public partial class ViewUpdates : Form
+    {
+        int x, y;
+        WebClient client = new WebClient();
+        string url = "";
+        int difference;
+        private const int titleBar = 23;//set origionally for 23
+        public ViewUpdates(int xx, int yy, string urll)
+        {
+            InitializeComponent();
+            //parse in the new ints location of where to display the application
+            x = xx;
+            y = yy;
+            url = urll;
+        }
+
+        private void ViewUpdates_Load(object sender, EventArgs e)
+        {
+            this.Location = new Point(x, y);
+            //setting UI color
+            Settings.setUIColor(this);
+            //font scaling
+            this.AutoScaleMode = Settings.appScalingMode;
+            richTextBox1.Font = Settings.appFont;
+            this.Font = Settings.appFont;
+            if (Settings.appScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
+            {
+                this.Scale(new SizeF(Settings.scaleSize, Settings.scaleSize));
+            }
+            //title bar height
+            //get the size of the title bar window
+            Rectangle screenRektangle = RectangleToScreen(this.ClientRectangle);
+            int titleHeight = screenRektangle.Top - this.Top;
+            //largest possible is 46
+            //mine (programmed for) is 23
+            if (titleHeight > titleBar)
+            {
+                difference = titleHeight - titleBar;
+            }
+            client.DownloadStringCompleted += Client_DownloadStringCompleted;
+            try
+            {
+                client.DownloadStringAsync(new Uri(url));
+            }
+            catch (WebException ex)
+            {
+                richTextBox1.Text = "Error downloading data";
+                Utils.exceptionLog(ex);
+            }
+            ViewUpdates_SizeChanged(null, null);
+        }
+
+        private void ViewUpdates_SizeChanged(object sender, EventArgs e)
+        {
+            richTextBox1.Size = new Size(this.Size.Width - 35, this.Size.Height - 50 - difference);
+        }
+
+        private void richTextBox1_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(e.LinkText);
+        }
+
+        private void Client_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            try
+            {
+                richTextBox1.Text = e.Result;
+            }
+            catch
+            {
+                richTextBox1.Text = e.Error.ToString();
+                Utils.exceptionLog(e.Error);
+            }  
+        }
+    }
+}

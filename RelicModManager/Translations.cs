@@ -36,7 +36,7 @@ namespace RelhaxModpack
                         return (string)polish[componetName];
                     }
                     break;
-            case (Languages.French):
+                case (Languages.French):
                     if (french.Contains(componetName))
                     {
                         return (string)french[componetName];
@@ -211,27 +211,55 @@ namespace RelhaxModpack
             polish.Add("cancelDownloadButton", "Anuluj pobieranie");
             french.Add("cancelDownloadButton", "Anuler le téléchargement");
 
-            //Componet: cancelDownloadButton
+            //Componet: appDataFolderNotExistHeader
             //
             english.Add("appDataFolderNotExistHeader", "Could not detect WoT cache folder");
             german.Add("appDataFolderNotExistHeader", "Konnte den Cache-Ordner WoT nicht erkennen");
             polish.Add("appDataFolderNotExistHeader", "Nie wykryto foldera WoT cache");
             french.Add("appDataFolderNotExistHeader", "Impossible de détecter le dossier de cache WoT");
-      
 
-            //Componet: cancelDownloadButton
+
+            //Componet: appDataFolderNotExist
             //
             english.Add("appDataFolderNotExist", "The installer could not detect the WoT cache folder. Continue the installation witout clearing WoT cache?");
             german.Add("appDataFolderNotExist", "Der Installer konnte den WoT-Cache-Ordner nicht erkennen. Setzen Sie die Installation fort, um den WoT-Cache zu löschen?");
             polish.Add("appDataFolderNotExist", "Instalato nie wykrył foldera cache. Czy kontynuować bez czyszczenia folderu cache?");
             french.Add("appDataFolderNotExist", "L'installateur n'as pas pus détecter le dossier de cache WoT. Continuer l'installation sans nettoyer le cache?");
 
-            //Componet: cancelDownloadButton
+            //Componet: DiscordServerLink
             //
             english.Add("DiscordServerLink", "Discord Server");
             german.Add("DiscordServerLink", "Discord Server");
             polish.Add("DiscordServerLink", "Serwer Discorda");
             french.Add("DiscordServerLink", "Serveur Discord");
+
+            //Componet: viewAppUpdates
+            //
+            english.Add("viewAppUpdates", "View latest application updates");
+            german.Add("viewAppUpdates", "TODO");
+            polish.Add("viewAppUpdates", "TODO");
+            french.Add("viewAppUpdates", "TODO");
+
+            //Componet: viewDBUpdates
+            //
+            english.Add("viewDBUpdates", "View latest database updates");
+            german.Add("viewDBUpdates", "TODO");
+            polish.Add("viewDBUpdates", "TODO");
+            french.Add("viewDBUpdates", "TODO");
+
+            //Componet: disableColorsCB
+            //
+            english.Add("disableColorsCB", "Disable color change");
+            german.Add("disableColorsCB", "TODO");
+            polish.Add("disableColorsCB", "TODO");
+            french.Add("disableColorsCB", "TODO");
+
+            //Componet: clearLogFilesCB
+            //
+            english.Add("clearLogFilesCB", "Clear log files");
+            german.Add("clearLogFilesCB", "TODO");
+            polish.Add("clearLogFilesCB", "TODO");
+            french.Add("clearLogFilesCB", "TODO");
 
             //Section: FirstLoadHelper
 
@@ -375,8 +403,8 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("clickHereUpdateLabel", "click here.");
-            german.Add("clickHereUpdateLabel", "klick hier.");
+            english.Add("clickHereUpdateLabel", "click here");
+            german.Add("clickHereUpdateLabel", "klick hier");
             polish.Add("clickHereUpdateLabel", "kliknij tutaj");
             french.Add("clickHereUpdateLabel", "Cliquez ici");
 
@@ -545,7 +573,7 @@ namespace RelhaxModpack
                     "speicherortes. Nutze dies wenn Du Probleme mit der automatischen Suche des Spiels hast.");
             polish.Add("forceManuelDescription", "Ta opcja wymusza ręczne znalezienie lokacji gry World of Tanks." +
                     "Zaznacz, jeśli masz problem z automatycznym znalezieniem ścieżki dostępu do gry.");
-                  french.Add("forceManuelDescription", "Cette option consiste à forcer une détection manuel" +
+            french.Add("forceManuelDescription", "Cette option consiste à forcer une détection manuel" +
                     "de World of Tanks. Sélectionnez cette option si vous rencontrez des problèmes pour localiser automatiquement le jeu.");    
 
             //Componet: 
@@ -556,7 +584,7 @@ namespace RelhaxModpack
                     "Deiner neuen Mod-Auswahl. Bis du genau weißt, was du tust, empfohlen wir, dass du das weiter behältst, um Probleme zu vermeiden.");
             polish.Add("cleanInstallDescription", "To rekomendowane ustawienie usunie zawartość folderu res_mods przed instalacją" +
                      "nowej konfiguracji modów. Jeśli nie wiesz co robisz zalecamy włączyć tą opcję, aby uniknąć problemów.");
-                french.Add("cleanInstallDescription", "Cette option recommandé vas nettoyer le dossier res_mods avant d'installer" +
+            french.Add("cleanInstallDescription", "Cette option recommandé vas nettoyer le dossier res_mods avant d'installer" +
                     "votre nouvelle sélection de mods. À moins que vous ne sachiez ce que vous faites, il est recommandé de laisser ceci activé pour éviter des problèmes.");     
 
             //Componet: 
@@ -708,7 +736,7 @@ namespace RelhaxModpack
             english.Add("configNotExist", "ERROR: {0} does NOT exist, loading in regular mode");
             german.Add("configNotExist", "FEHLER: {0} existiert nicht, laedt im regulaeren Modus");
             polish.Add("configNotExist", "BŁĄD: {0} nie istnieje, ładowanie podstawowego trybu");
-            french.Add("configNotExist", "ERREUR: [0] n'existe pas, chargement en mode normal");
+            french.Add("configNotExist", "ERREUR: {0} n'existe pas, chargement en mode normal");
 
             //Componet: 
             //
@@ -793,6 +821,40 @@ namespace RelhaxModpack
             german.Add("noUninstallLogHeader", "Entferne alle Mods");
             polish.Add("noUninstallLogHeader", "Usuń wszystkie modyfikacje");
             french.Add("noUninstallLogHeader", "Supprimer tout les mods");
+
+            //Component: appDataFolderError
+            //If the appDataFolder is not parsed properly
+            english.Add("appDataFolderError", "The app data folder for WoT was not found. Clearing WoT cache will be skipped. Please report this to the developer team.");
+            german.Add("appDataFolderError", "Der App-Datenordner für WoT wurde nicht gefunden. Das Löschen von WoT-Cache wird übersprungen. Bitte melden Sie dies dem Entwicklerteam.");
+            polish.Add("appDataFolderError", "Nie znaleziono foderu app data dla WoT. Czyszczenie folderu cache zostanie pominięte. Prosimy zgłosić problem naszym deweloperom.");
+            french.Add("appDataFolderError", "Le dossier App Data pour WoT n'as pas pus être trouvé. Nettoyage du cache vas être ignoré. Veuillez avertir l`équipe de développement");
+            //Component: clearCacheCB
+            //
+            english.Add("clearCacheCB", "Clear WoT cache data");
+            german.Add("clearCacheCB", "Cache-Daten für WoT löschen");
+            polish.Add("clearCacheCB", "Usuń dane WoT cache");
+            french.Add("clearCacheCB", "Nettoyer le dossier de Cache WoT");
+
+            //Component: clearCachCBExplanation
+            //
+            english.Add("clearCachCBExplanation", "Clear the WoT cache app data directory. Performs the same task as the similar option that was in OMC.");
+            german.Add("clearCachCBExplanation", "Löschen Sie das WoT-Cache-App-Datenverzeichnis. Führt die gleiche Aufgabe wie die ähnliche Option aus, die in OMC war.");
+            polish.Add("clearCachCBExplanation", "Usuń dane aplikacji z lokacji WoT cache. Działa na podobnej zasadzie, jak kiedyś opcja z paczki OMC.");
+            french.Add("clearCachCBExplanation", "Nettoyer le dossier cache WoT. Effectue la même tâche que l'option similaire qui était dans OMC.");
+
+            //Component: clearLogFilesCBExplanation
+            //
+            english.Add("clearLogFilesCBExplanation", "Clear the WoT log files, (python.log), as well as xvm log files (xvm.log) and pmod log files (pmod.log)");
+            german.Add("clearLogFilesCBExplanation", "TODO");
+            polish.Add("clearLogFilesCBExplanation", "TODO");
+            french.Add("clearLogFilesCBExplanation", "TODO");
+
+            //Component: disableColorsCBExplanation
+            //
+            english.Add("disableColorsCBExplanation", "Disable the changing of colors when toggling the selection of a mod or config");
+            german.Add("disableColorsCBExplanation", "TODO");
+            polish.Add("disableColorsCBExplanation", "TODO");
+            french.Add("disableColorsCBExplanation", "TODO");
 
             //Section: Messages from ModSelectionList
 
@@ -1131,26 +1193,6 @@ namespace RelhaxModpack
             german.Add("updated", "aktualisiert");
             polish.Add("updated", "zaktualizowane");
             french.Add("updated", "Mis à jours");
-
-            //Component: MainWindow
-            //If the appDataFolder is not parsed properly
-            english.Add("appDataFolderError", "The app data folder for WoT was not found. Clearing WoT cache will be skipped. Please report this to the developer team.");
-            german.Add("appDataFolderError", "Der App-Datenordner für WoT wurde nicht gefunden. Das Löschen von WoT-Cache wird übersprungen. Bitte melden Sie dies dem Entwicklerteam.");
-            polish.Add("appDataFolderError", "Nie znaleziono foderu app data dla WoT. Czyszczenie folderu cache zostanie pominięte. Prosimy zgłosić problem naszym deweloperom.");
-            french.Add("appDataFolderError", "Le dossier App Data pour WoT n'as pas pus être trouvé. Nettoyage du cache vas être ignoré. Veuillez avertir l`équipe de développement");
-            //Component: clearCacheCB
-            //
-            english.Add("clearCacheCB", "Clear WoT cache data");
-            german.Add("clearCacheCB", "Cache-Daten für WoT löschen");
-            polish.Add("clearCacheCB", "Usuń dane WoT cache");
-            french.Add("clearCacheCB", "Nettoyer le dossier de Cache WoT");
-
-            //Component: clearCachCBExplanation
-            //
-            english.Add("clearCachCBExplanation", "Clear the WoT cache app data directory. Performs the same task as the similar option that was in OMC.");
-            german.Add("clearCachCBExplanation", "Löschen Sie das WoT-Cache-App-Datenverzeichnis. Führt die gleiche Aufgabe wie die ähnliche Option aus, die in OMC war.");
-            polish.Add("clearCachCBExplanation", "Usuń dane aplikacji z lokacji WoT cache. Działa na podobnej zasadzie, jak kiedyś opcja z paczki OMC.");
-            french.Add("clearCachCBExplanation", "Nettoyer le dossier cache WoT. Effectue la même tâche que l'option similaire qui était dans OMC.");
         }
     }
 }

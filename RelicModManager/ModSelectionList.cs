@@ -1280,7 +1280,7 @@ namespace RelhaxModpack
                 mainPanel.AutoSize = true;
                 mainPanel.AutoSizeMode = AutoSizeMode.GrowOnly;
                 mainPanel.Size = new System.Drawing.Size(t.Size.Width - 25, 20);
-                if (m.enabled && m.Checked)
+                if (m.enabled && m.Checked && !Settings.disableColorChange)
                     mainPanel.BackColor = Color.BlanchedAlmond;
                 else
                     mainPanel.BackColor = Settings.getBackColor();
@@ -1333,14 +1333,14 @@ namespace RelhaxModpack
             configPanel.AutoSize = true;
             if (parentIsMod)
             {
-                if (m.enabled && m.Checked)
+                if (m.enabled && m.Checked && !Settings.disableColorChange)
                     configPanel.BackColor = Color.BlanchedAlmond;
                 else
                     configPanel.BackColor = Settings.getBackColor();
             }
             else
             {
-                if (parentConfig.enabled && parentConfig.Checked)
+                if (parentConfig.enabled && parentConfig.Checked && !Settings.disableColorChange)
                     configPanel.BackColor = Color.BlanchedAlmond;
                 else
                     configPanel.BackColor = Settings.getBackColor();
@@ -1719,7 +1719,7 @@ namespace RelhaxModpack
             //toggle the mod in memory, enabled or disabled
             m.Checked = cb.Checked;
             //toggle the mod panel color
-            if (cb.Checked)
+            if (cb.Checked && !Settings.disableColorChange)
             {
                 modPanel.BackColor = Color.BlanchedAlmond;
             }
@@ -1743,7 +1743,7 @@ namespace RelhaxModpack
             //the first one is always the mod checkbox
             //the second one is always the config panel
             Panel configPanel = (Panel)modPanel.Controls[1];
-            if (cb.Checked)
+            if (cb.Checked && !Settings.disableColorChange)
             {
                 configPanel.BackColor = Color.BlanchedAlmond;
             }
@@ -1897,33 +1897,11 @@ namespace RelhaxModpack
                 }
             }
             //trigger the panel color change
-            if (cb.Checked)
+            if (cb.Checked && !Settings.disableColorChange)
                 configPanel.BackColor = Color.BlanchedAlmond;
             else
                 configPanel.BackColor = Settings.getBackColor();
         }
-        /*
-         * not used???
-        // uncheck ALL subconfigs if "parent" is unchecked
-        void uncheckAllSubconfigs(Mod m)
-        {
-            foreach (Config sc in m.configs)
-            {
-                if (sc.Checked) { sc.Checked = false; }
-                if (sc.configs.Count > 0) { uncheckAllSubconfigs(sc); }
-            }
-        }
-
-        // uncheck ALL subconfigs if "parent" is unchecked
-        void uncheckAllSubconfigs(Config c)
-        {
-            foreach (Config sc in c.configs)
-            {
-                if (sc.Checked) { sc.Checked = false; }
-                if (sc.configs.Count > 0) { uncheckAllSubconfigs(sc); }
-            }
-        }
-        */
         //handler for when a config selection is made from the drop down list
         void configControlDD_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1974,7 +1952,8 @@ namespace RelhaxModpack
             ComboBoxItem cbi2 = (ComboBoxItem)cb.SelectedItem;
             cbi2.config.Checked = true;
             Panel configPanel = (Panel)cb.Parent;
-            configPanel.BackColor = Color.BlanchedAlmond;
+            if(!Settings.disableColorChange)
+                configPanel.BackColor = Color.BlanchedAlmond;
         }
         //handler for when a config radioButton is pressed
         void configControlRB_CheckedChanged(object sender, EventArgs e)
@@ -2074,46 +2053,10 @@ namespace RelhaxModpack
                 }
             }
             //trigger the panel color change
-            if (rb.Checked)
+            if (rb.Checked && !Settings.disableColorChange)
                 configPanel.BackColor = Color.BlanchedAlmond;
             else
                 configPanel.BackColor = Settings.getBackColor();
-            /*
-            if (cfg.configs.Count > 0)
-            {
-                if (rb.Checked)
-                {
-                    UIComponent comp = cfg.configs[0].configUIComponent;
-                    if (comp is ConfigFormCheckBox)
-                    {
-                        ConfigFormCheckBox fcb = (ConfigFormCheckBox)comp;
-                        Panel pan = (Panel)fcb.Parent;
-                        pan.BackColor = Color.BlanchedAlmond;
-                    }
-                    else if (comp is ConfigFormRadioButton)
-                    {
-                        ConfigFormRadioButton fcb = (ConfigFormRadioButton)comp;
-                        Panel pan = (Panel)fcb.Parent;
-                        pan.BackColor = Color.BlanchedAlmond;
-                    }
-                }
-                else
-                {
-                    UIComponent comp = cfg.configs[0].configUIComponent;
-                    if (comp is ConfigFormCheckBox)
-                    {
-                        ConfigFormCheckBox fcb = (ConfigFormCheckBox)comp;
-                        Panel pan = (Panel)fcb.Parent;
-                        pan.BackColor = Settings.getBackColor();
-                    }
-                    else if (comp is ConfigFormRadioButton)
-                    {
-                        ConfigFormRadioButton fcb = (ConfigFormRadioButton)comp;
-                        Panel pan = (Panel)fcb.Parent;
-                        pan.BackColor = Settings.getBackColor();
-                    }
-                }
-            }*/
         }
         //hander for when any mouse button is clicked on a specific control
         void modCheckBox_MouseDown(object sender, MouseEventArgs e)
@@ -2327,6 +2270,8 @@ namespace RelhaxModpack
 
         private void clearSelectionsButton_Click(object sender, EventArgs e)
         {
+            //not actually *loading* a config, but want to disable the handlers anyways
+            loadingConfig = true;
             Utils.appendToLog("clearSelectionsButton pressed, clearing selections");
             Utils.clearSelectionMemory(parsedCatagoryList, userMods);
             //dispose of not needed stuff and reload the UI
@@ -2375,6 +2320,7 @@ namespace RelhaxModpack
             this.UseWaitCursor = false;
             modTabGroups.Enabled = true;
             */
+            loadingConfig = false;
             MessageBox.Show(Translations.getTranslatedString("selectionsCleared"));
             ModSelectionList_SizeChanged(null, null);
         }

@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            this.statusLabel = new System.Windows.Forms.Label();
             this.childProgressBar = new System.Windows.Forms.ProgressBar();
             this.findWotExe = new System.Windows.Forms.OpenFileDialog();
             this.forceManuel = new System.Windows.Forms.CheckBox();
@@ -44,7 +43,6 @@
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
             this.clearCacheCB = new System.Windows.Forms.CheckBox();
             this.darkUICB = new System.Windows.Forms.CheckBox();
-            this.cleanUninstallCB = new System.Windows.Forms.CheckBox();
             this.saveUserDataCB = new System.Windows.Forms.CheckBox();
             this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
             this.languageSelectionGB = new System.Windows.Forms.GroupBox();
@@ -74,6 +72,10 @@
             this.fontSizeDefault = new System.Windows.Forms.RadioButton();
             this.totalProgressBar = new System.Windows.Forms.ProgressBar();
             this.DiscordServerLink = new System.Windows.Forms.LinkLabel();
+            this.viewAppUpdates = new System.Windows.Forms.Button();
+            this.viewDBUpdates = new System.Windows.Forms.Button();
+            this.disableColorsCB = new System.Windows.Forms.CheckBox();
+            this.clearLogFilesCB = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
@@ -81,24 +83,11 @@
             this.fontSizeGB.SuspendLayout();
             this.SuspendLayout();
             // 
-            // statusLabel
-            // 
-            this.statusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(8, 441);
-            this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(53, 13);
-            this.statusLabel.TabIndex = 10;
-            this.statusLabel.Text = "STATUS:";
-            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // childProgressBar
             // 
-            this.childProgressBar.Location = new System.Drawing.Point(11, 583);
+            this.childProgressBar.Location = new System.Drawing.Point(11, 462);
             this.childProgressBar.Name = "childProgressBar";
-            this.childProgressBar.Size = new System.Drawing.Size(302, 15);
+            this.childProgressBar.Size = new System.Drawing.Size(418, 16);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.childProgressBar.TabIndex = 11;
             // 
@@ -124,7 +113,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(8, 623);
+            this.formPageLink.Location = new System.Drawing.Point(8, 503);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -134,28 +123,28 @@
             // 
             // parrentProgressBar
             // 
-            this.parrentProgressBar.Location = new System.Drawing.Point(11, 562);
+            this.parrentProgressBar.Location = new System.Drawing.Point(11, 440);
             this.parrentProgressBar.Name = "parrentProgressBar";
-            this.parrentProgressBar.Size = new System.Drawing.Size(302, 15);
+            this.parrentProgressBar.Size = new System.Drawing.Size(418, 16);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.parrentProgressBar.TabIndex = 17;
             // 
             // installRelhaxMod
             // 
             this.installRelhaxMod.AutoSize = true;
-            this.installRelhaxMod.Location = new System.Drawing.Point(12, 12);
+            this.installRelhaxMod.Location = new System.Drawing.Point(224, 12);
             this.installRelhaxMod.Name = "installRelhaxMod";
-            this.installRelhaxMod.Size = new System.Drawing.Size(302, 33);
+            this.installRelhaxMod.Size = new System.Drawing.Size(205, 30);
             this.installRelhaxMod.TabIndex = 19;
-            this.installRelhaxMod.Text = "Install Relhax ModPack";
+            this.installRelhaxMod.Text = "Install Relhax Modpack";
             this.installRelhaxMod.UseVisualStyleBackColor = true;
             this.installRelhaxMod.Click += new System.EventHandler(this.installRelhaxMod_Click);
             // 
             // uninstallRelhaxMod
             // 
-            this.uninstallRelhaxMod.Location = new System.Drawing.Point(12, 51);
+            this.uninstallRelhaxMod.Location = new System.Drawing.Point(11, 12);
             this.uninstallRelhaxMod.Name = "uninstallRelhaxMod";
-            this.uninstallRelhaxMod.Size = new System.Drawing.Size(302, 33);
+            this.uninstallRelhaxMod.Size = new System.Drawing.Size(205, 30);
             this.uninstallRelhaxMod.TabIndex = 20;
             this.uninstallRelhaxMod.Text = "Uninstall Relhax Modpack";
             this.uninstallRelhaxMod.UseVisualStyleBackColor = true;
@@ -207,18 +196,18 @@
             // 
             // settingsGroupBox
             // 
+            this.settingsGroupBox.Controls.Add(this.clearLogFilesCB);
             this.settingsGroupBox.Controls.Add(this.clearCacheCB);
             this.settingsGroupBox.Controls.Add(this.darkUICB);
-            this.settingsGroupBox.Controls.Add(this.cleanUninstallCB);
             this.settingsGroupBox.Controls.Add(this.saveUserDataCB);
             this.settingsGroupBox.Controls.Add(this.saveLastInstallCB);
             this.settingsGroupBox.Controls.Add(this.forceManuel);
             this.settingsGroupBox.Controls.Add(this.cancerFontCB);
             this.settingsGroupBox.Controls.Add(this.backupModsCheckBox);
             this.settingsGroupBox.Controls.Add(this.cleanInstallCB);
-            this.settingsGroupBox.Location = new System.Drawing.Point(12, 90);
+            this.settingsGroupBox.Location = new System.Drawing.Point(12, 77);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(302, 172);
+            this.settingsGroupBox.Size = new System.Drawing.Size(302, 185);
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "Modpack Settings";
@@ -226,7 +215,7 @@
             // clearCacheCB
             // 
             this.clearCacheCB.AutoSize = true;
-            this.clearCacheCB.Location = new System.Drawing.Point(6, 149);
+            this.clearCacheCB.Location = new System.Drawing.Point(6, 132);
             this.clearCacheCB.Name = "clearCacheCB";
             this.clearCacheCB.Size = new System.Drawing.Size(137, 17);
             this.clearCacheCB.TabIndex = 31;
@@ -240,7 +229,7 @@
             // darkUICB
             // 
             this.darkUICB.AutoSize = true;
-            this.darkUICB.Location = new System.Drawing.Point(6, 131);
+            this.darkUICB.Location = new System.Drawing.Point(6, 115);
             this.darkUICB.Name = "darkUICB";
             this.darkUICB.Size = new System.Drawing.Size(63, 17);
             this.darkUICB.TabIndex = 30;
@@ -250,20 +239,6 @@
             this.darkUICB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.darkUICB_MouseDown);
             this.darkUICB.MouseEnter += new System.EventHandler(this.darkUICB_MouseEnter);
             this.darkUICB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // cleanUninstallCB
-            // 
-            this.cleanUninstallCB.AutoSize = true;
-            this.cleanUninstallCB.Location = new System.Drawing.Point(6, 114);
-            this.cleanUninstallCB.Name = "cleanUninstallCB";
-            this.cleanUninstallCB.Size = new System.Drawing.Size(117, 17);
-            this.cleanUninstallCB.TabIndex = 29;
-            this.cleanUninstallCB.Text = "Clean uninstallation";
-            this.cleanUninstallCB.UseVisualStyleBackColor = true;
-            this.cleanUninstallCB.CheckedChanged += new System.EventHandler(this.cleanUninstallCB_CheckedChanged);
-            this.cleanUninstallCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cleanUninstallCB_MouseDown);
-            this.cleanUninstallCB.MouseEnter += new System.EventHandler(this.cleanUninstallCB_MouseEnter);
-            this.cleanUninstallCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // saveUserDataCB
             // 
@@ -299,9 +274,9 @@
             this.languageSelectionGB.Controls.Add(this.languagePL);
             this.languageSelectionGB.Controls.Add(this.languageGER);
             this.languageSelectionGB.Controls.Add(this.languageENG);
-            this.languageSelectionGB.Location = new System.Drawing.Point(193, 389);
+            this.languageSelectionGB.Location = new System.Drawing.Point(320, 266);
             this.languageSelectionGB.Name = "languageSelectionGB";
-            this.languageSelectionGB.Size = new System.Drawing.Size(120, 49);
+            this.languageSelectionGB.Size = new System.Drawing.Size(109, 80);
             this.languageSelectionGB.TabIndex = 30;
             this.languageSelectionGB.TabStop = false;
             this.languageSelectionGB.Text = "Language";
@@ -309,24 +284,24 @@
             // languageFR
             // 
             this.languageFR.AutoSize = true;
-            this.languageFR.Location = new System.Drawing.Point(61, 29);
+            this.languageFR.Location = new System.Drawing.Point(6, 60);
             this.languageFR.Name = "languageFR";
-            this.languageFR.Size = new System.Drawing.Size(39, 17);
+            this.languageFR.Size = new System.Drawing.Size(65, 17);
             this.languageFR.TabIndex = 3;
             this.languageFR.TabStop = true;
-            this.languageFR.Text = "FR";
+            this.languageFR.Text = "Français";
             this.languageFR.UseVisualStyleBackColor = true;
             this.languageFR.CheckedChanged += new System.EventHandler(this.languageFR_CheckedChanged);
             // 
             // languagePL
             // 
             this.languagePL.AutoSize = true;
-            this.languagePL.Location = new System.Drawing.Point(61, 13);
+            this.languagePL.Location = new System.Drawing.Point(6, 45);
             this.languagePL.Name = "languagePL";
-            this.languagePL.Size = new System.Drawing.Size(46, 17);
+            this.languagePL.Size = new System.Drawing.Size(53, 17);
             this.languagePL.TabIndex = 2;
             this.languagePL.TabStop = true;
-            this.languagePL.Text = "POL";
+            this.languagePL.Text = "Polski";
             this.languagePL.UseVisualStyleBackColor = true;
             this.languagePL.CheckedChanged += new System.EventHandler(this.languagePL_CheckedChanged);
             this.languagePL.MouseDown += new System.Windows.Forms.MouseEventHandler(this.language_MouseDown);
@@ -336,11 +311,11 @@
             // languageGER
             // 
             this.languageGER.AutoSize = true;
-            this.languageGER.Location = new System.Drawing.Point(6, 29);
+            this.languageGER.Location = new System.Drawing.Point(6, 30);
             this.languageGER.Name = "languageGER";
-            this.languageGER.Size = new System.Drawing.Size(48, 17);
+            this.languageGER.Size = new System.Drawing.Size(65, 17);
             this.languageGER.TabIndex = 1;
-            this.languageGER.Text = "GER";
+            this.languageGER.Text = "Deutsch";
             this.languageGER.UseVisualStyleBackColor = true;
             this.languageGER.CheckedChanged += new System.EventHandler(this.languageGER_CheckedChanged);
             this.languageGER.MouseDown += new System.Windows.Forms.MouseEventHandler(this.language_MouseDown);
@@ -350,11 +325,11 @@
             // languageENG
             // 
             this.languageENG.AutoSize = true;
-            this.languageENG.Location = new System.Drawing.Point(6, 13);
+            this.languageENG.Location = new System.Drawing.Point(6, 15);
             this.languageENG.Name = "languageENG";
-            this.languageENG.Size = new System.Drawing.Size(48, 17);
+            this.languageENG.Size = new System.Drawing.Size(59, 17);
             this.languageENG.TabIndex = 0;
-            this.languageENG.Text = "ENG";
+            this.languageENG.Text = "English";
             this.languageENG.UseVisualStyleBackColor = true;
             this.languageENG.CheckedChanged += new System.EventHandler(this.languageENG_CheckedChanged);
             this.languageENG.MouseDown += new System.Windows.Forms.MouseEventHandler(this.language_MouseDown);
@@ -365,9 +340,9 @@
             // 
             this.loadingImageGroupBox.Controls.Add(this.thirdGuardsLoadingImageRB);
             this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(11, 389);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(320, 198);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
-            this.loadingImageGroupBox.Size = new System.Drawing.Size(173, 49);
+            this.loadingImageGroupBox.Size = new System.Drawing.Size(109, 64);
             this.loadingImageGroupBox.TabIndex = 26;
             this.loadingImageGroupBox.TabStop = false;
             this.loadingImageGroupBox.Text = "Loading Image";
@@ -405,7 +380,7 @@
             // findBugAddModLabel
             // 
             this.findBugAddModLabel.AutoSize = true;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(8, 604);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(8, 484);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
             this.findBugAddModLabel.TabIndex = 27;
@@ -416,9 +391,9 @@
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(220, 604);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(326, 484);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
-            this.cancelDownloadButton.Size = new System.Drawing.Size(93, 60);
+            this.cancelDownloadButton.Size = new System.Drawing.Size(103, 60);
             this.cancelDownloadButton.TabIndex = 28;
             this.cancelDownloadButton.Text = "Cancel Download";
             this.cancelDownloadButton.UseVisualStyleBackColor = true;
@@ -433,33 +408,35 @@
             // downloadProgress
             // 
             this.downloadProgress.DetectUrls = false;
-            this.downloadProgress.Location = new System.Drawing.Point(11, 457);
+            this.downloadProgress.Location = new System.Drawing.Point(11, 352);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
             this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.downloadProgress.Size = new System.Drawing.Size(302, 82);
+            this.downloadProgress.Size = new System.Drawing.Size(418, 60);
             this.downloadProgress.TabIndex = 29;
             this.downloadProgress.Text = "";
             // 
             // viewTypeGB
             // 
+            this.viewTypeGB.Controls.Add(this.disableColorsCB);
             this.viewTypeGB.Controls.Add(this.disableBordersCB);
             this.viewTypeGB.Controls.Add(this.expandNodesDefault);
             this.viewTypeGB.Controls.Add(this.selectionLegacy);
             this.viewTypeGB.Controls.Add(this.selectionDefault);
-            this.viewTypeGB.Location = new System.Drawing.Point(11, 268);
+            this.viewTypeGB.Location = new System.Drawing.Point(11, 266);
             this.viewTypeGB.Name = "viewTypeGB";
-            this.viewTypeGB.Size = new System.Drawing.Size(173, 115);
+            this.viewTypeGB.Size = new System.Drawing.Size(303, 80);
             this.viewTypeGB.TabIndex = 31;
             this.viewTypeGB.TabStop = false;
             this.viewTypeGB.Text = "Selection View";
             // 
             // disableBordersCB
             // 
-            this.disableBordersCB.AutoSize = true;
             this.disableBordersCB.Location = new System.Drawing.Point(18, 30);
+            this.disableBordersCB.MaximumSize = new System.Drawing.Size(100, 40);
+            this.disableBordersCB.MinimumSize = new System.Drawing.Size(50, 20);
             this.disableBordersCB.Name = "disableBordersCB";
-            this.disableBordersCB.Size = new System.Drawing.Size(99, 17);
+            this.disableBordersCB.Size = new System.Drawing.Size(100, 32);
             this.disableBordersCB.TabIndex = 3;
             this.disableBordersCB.Text = "Disable borders";
             this.disableBordersCB.UseVisualStyleBackColor = true;
@@ -471,7 +448,7 @@
             // expandNodesDefault
             // 
             this.expandNodesDefault.AutoSize = true;
-            this.expandNodesDefault.Location = new System.Drawing.Point(19, 76);
+            this.expandNodesDefault.Location = new System.Drawing.Point(170, 31);
             this.expandNodesDefault.Name = "expandNodesDefault";
             this.expandNodesDefault.Size = new System.Drawing.Size(75, 17);
             this.expandNodesDefault.TabIndex = 2;
@@ -485,7 +462,7 @@
             // selectionLegacy
             // 
             this.selectionLegacy.AutoSize = true;
-            this.selectionLegacy.Location = new System.Drawing.Point(7, 61);
+            this.selectionLegacy.Location = new System.Drawing.Point(160, 13);
             this.selectionLegacy.Name = "selectionLegacy";
             this.selectionLegacy.Size = new System.Drawing.Size(60, 17);
             this.selectionLegacy.TabIndex = 1;
@@ -515,12 +492,12 @@
             // donateLabel
             // 
             this.donateLabel.AutoSize = true;
-            this.donateLabel.Location = new System.Drawing.Point(8, 643);
+            this.donateLabel.Location = new System.Drawing.Point(8, 523);
             this.donateLabel.Name = "donateLabel";
-            this.donateLabel.Size = new System.Drawing.Size(48, 13);
+            this.donateLabel.Size = new System.Drawing.Size(162, 13);
             this.donateLabel.TabIndex = 32;
             this.donateLabel.TabStop = true;
-            this.donateLabel.Text = "Donate?";
+            this.donateLabel.Text = "Donation for further development";
             this.donateLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.donateLabel_LinkClicked);
             // 
             // fontSizeGB
@@ -531,9 +508,9 @@
             this.fontSizeGB.Controls.Add(this.fontSizeHUD);
             this.fontSizeGB.Controls.Add(this.fontSizeLarge);
             this.fontSizeGB.Controls.Add(this.fontSizeDefault);
-            this.fontSizeGB.Location = new System.Drawing.Point(193, 268);
+            this.fontSizeGB.Location = new System.Drawing.Point(320, 77);
             this.fontSizeGB.Name = "fontSizeGB";
-            this.fontSizeGB.Size = new System.Drawing.Size(121, 115);
+            this.fontSizeGB.Size = new System.Drawing.Size(109, 115);
             this.fontSizeGB.TabIndex = 33;
             this.fontSizeGB.TabStop = false;
             this.fontSizeGB.Text = "Scaling Mode";
@@ -624,16 +601,16 @@
             // 
             // totalProgressBar
             // 
-            this.totalProgressBar.Location = new System.Drawing.Point(11, 541);
+            this.totalProgressBar.Location = new System.Drawing.Point(11, 418);
             this.totalProgressBar.Name = "totalProgressBar";
-            this.totalProgressBar.Size = new System.Drawing.Size(302, 15);
+            this.totalProgressBar.Size = new System.Drawing.Size(418, 16);
             this.totalProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.totalProgressBar.TabIndex = 34;
             // 
             // DiscordServerLink
             // 
             this.DiscordServerLink.AutoSize = true;
-            this.DiscordServerLink.Location = new System.Drawing.Point(8, 662);
+            this.DiscordServerLink.Location = new System.Drawing.Point(8, 542);
             this.DiscordServerLink.Name = "DiscordServerLink";
             this.DiscordServerLink.Size = new System.Drawing.Size(77, 13);
             this.DiscordServerLink.TabIndex = 35;
@@ -641,12 +618,62 @@
             this.DiscordServerLink.Text = "Discord Server";
             this.DiscordServerLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.DiscordServerLink_LinkClicked);
             // 
+            // viewAppUpdates
+            // 
+            this.viewAppUpdates.Location = new System.Drawing.Point(12, 48);
+            this.viewAppUpdates.Name = "viewAppUpdates";
+            this.viewAppUpdates.Size = new System.Drawing.Size(204, 23);
+            this.viewAppUpdates.TabIndex = 36;
+            this.viewAppUpdates.Text = "View latest application updates";
+            this.viewAppUpdates.UseVisualStyleBackColor = true;
+            this.viewAppUpdates.Click += new System.EventHandler(this.viewAppUpdates_Click);
+            // 
+            // viewDBUpdates
+            // 
+            this.viewDBUpdates.Location = new System.Drawing.Point(224, 48);
+            this.viewDBUpdates.Name = "viewDBUpdates";
+            this.viewDBUpdates.Size = new System.Drawing.Size(205, 23);
+            this.viewDBUpdates.TabIndex = 37;
+            this.viewDBUpdates.Text = "View latest database updates";
+            this.viewDBUpdates.UseVisualStyleBackColor = true;
+            this.viewDBUpdates.Click += new System.EventHandler(this.viewDBUpdates_Click);
+            // 
+            // disableColorsCB
+            // 
+            this.disableColorsCB.AutoSize = true;
+            this.disableColorsCB.Location = new System.Drawing.Point(18, 61);
+            this.disableColorsCB.Name = "disableColorsCB";
+            this.disableColorsCB.Size = new System.Drawing.Size(126, 17);
+            this.disableColorsCB.TabIndex = 4;
+            this.disableColorsCB.Text = "Disable color change";
+            this.disableColorsCB.UseVisualStyleBackColor = true;
+            this.disableColorsCB.CheckedChanged += new System.EventHandler(this.disableColorsCB_CheckedChanged);
+            this.disableColorsCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.disableColorsCB_MouseDown);
+            this.disableColorsCB.MouseEnter += new System.EventHandler(this.disableColorsCB_MouseEnter);
+            this.disableColorsCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
+            // clearLogFilesCB
+            // 
+            this.clearLogFilesCB.AutoSize = true;
+            this.clearLogFilesCB.Location = new System.Drawing.Point(6, 149);
+            this.clearLogFilesCB.Name = "clearLogFilesCB";
+            this.clearLogFilesCB.Size = new System.Drawing.Size(88, 17);
+            this.clearLogFilesCB.TabIndex = 32;
+            this.clearLogFilesCB.Text = "Clear log files";
+            this.clearLogFilesCB.UseVisualStyleBackColor = true;
+            this.clearLogFilesCB.CheckedChanged += new System.EventHandler(this.clearLogFilesCB_CheckedChanged);
+            this.clearLogFilesCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.clearLogFilesCB_MouseDown);
+            this.clearLogFilesCB.MouseEnter += new System.EventHandler(this.clearLogFilesCB_MouseEnter);
+            this.clearLogFilesCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(326, 680);
+            this.ClientSize = new System.Drawing.Size(441, 562);
+            this.Controls.Add(this.viewDBUpdates);
+            this.Controls.Add(this.viewAppUpdates);
             this.Controls.Add(this.DiscordServerLink);
             this.Controls.Add(this.totalProgressBar);
             this.Controls.Add(this.fontSizeGB);
@@ -663,7 +690,6 @@
             this.Controls.Add(this.parrentProgressBar);
             this.Controls.Add(this.formPageLink);
             this.Controls.Add(this.childProgressBar);
-            this.Controls.Add(this.statusLabel);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -688,8 +714,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.ProgressBar childProgressBar;
         private System.Windows.Forms.OpenFileDialog findWotExe;
         private System.Windows.Forms.CheckBox forceManuel;
@@ -709,7 +733,6 @@
         private System.Windows.Forms.Button cancelDownloadButton;
         private System.Windows.Forms.CheckBox saveUserDataCB;
         private System.Windows.Forms.Timer downloadTimer;
-        private System.Windows.Forms.CheckBox cleanUninstallCB;
         private System.Windows.Forms.RichTextBox downloadProgress;
         private System.Windows.Forms.CheckBox darkUICB;
         private System.Windows.Forms.GroupBox languageSelectionGB;
@@ -733,6 +756,10 @@
         private System.Windows.Forms.LinkLabel DiscordServerLink;
         private System.Windows.Forms.CheckBox clearCacheCB;
         private System.Windows.Forms.RadioButton languageFR;
+        private System.Windows.Forms.Button viewAppUpdates;
+        private System.Windows.Forms.Button viewDBUpdates;
+        private System.Windows.Forms.CheckBox disableColorsCB;
+        private System.Windows.Forms.CheckBox clearLogFilesCB;
     }
 }
 
