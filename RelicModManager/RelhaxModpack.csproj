@@ -227,6 +227,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SelectionRadioButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SelectionViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectionViewer.Designer.cs">
+      <DependentUpon>SelectionViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="StringSave.cs" />
     <Compile Include="Translations.cs" />
@@ -287,6 +296,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectionViewer.resx">
+      <DependentUpon>SelectionViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VersionInfo.resx">
       <DependentUpon>VersionInfo.cs</DependentUpon>

@@ -2275,51 +2275,7 @@ namespace RelhaxModpack
             Utils.appendToLog("clearSelectionsButton pressed, clearing selections");
             Utils.clearSelectionMemory(parsedCatagoryList, userMods);
             //dispose of not needed stuff and reload the UI
-            /*
-            this.UseWaitCursor = true;
-            modTabGroups.Enabled = false;
-            if (modTabGroups != null)
-            {
-                foreach (System.Windows.Forms.TabPage t in this.modTabGroups.TabPages)
-                {
-                    foreach (System.Windows.Forms.Control host in t.Controls)
-                    {
-                        if (host is System.Windows.Forms.Integration.ElementHost)
-                        {
-                            System.Windows.Forms.Integration.ElementHost host2 = (System.Windows.Forms.Integration.ElementHost)host;
-                            host2.Child = null;
-                            host2.Dispose();
-                            host2 = null;
-                        }
-                    }
-                    if (t.Controls.Count > 0)
-                        t.Controls.Clear();
-                    if (t != null)
-                        t.Dispose();
-                }
-                if (modTabGroups.TabPages.Count > 0)
-                    modTabGroups.TabPages.Clear();
-                if (modTabGroups.Controls.Count > 0)
-                    modTabGroups.Controls.Clear();
-                if (p != null)
-                {
-                    p.Dispose();
-                    p = null;
-                }
-                if (pw != null)
-                {
-                    pw.Dispose();
-                    pw = null;
-                }
-            }
-            this.makeTabs();
-            Settings.setUIColor(this);
-            this.addAllMods();
-            this.addUserMods(true);
-            Settings.setUIColor(this);
-            this.UseWaitCursor = false;
-            modTabGroups.Enabled = true;
-            */
+            
             loadingConfig = false;
             MessageBox.Show(Translations.getTranslatedString("selectionsCleared"));
             ModSelectionList_SizeChanged(null, null);
@@ -2330,38 +2286,51 @@ namespace RelhaxModpack
             loadingConfig = true;
             OpenFileDialog loadLocation = new OpenFileDialog();
             string filePath = "";
-            if (loadMode == loadConfigMode.fromAutoInstall)
+            using (SelectionViewer sv = new SelectionViewer(this.Location.X + 100, this.Location.Y + 100, "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/developerSelections/selections.xml"))
             {
-                filePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", Program.configName);
-                if (!File.Exists(filePath))
+                if (loadMode == loadConfigMode.fromAutoInstall)
                 {
-                    Utils.appendToLog(string.Format("ERROR: {0} not found, not loading configs", filePath));
-                    MessageBox.Show(Translations.getTranslatedString("configLoadFailed"));
-                    return;
+                    filePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", Program.configName);
+                    if (!File.Exists(filePath))
+                    {
+                        Utils.appendToLog(string.Format("ERROR: {0} not found, not loading configs", filePath));
+                        MessageBox.Show(Translations.getTranslatedString("configLoadFailed"));
+                        return;
+                    }
                 }
-            }
-            else if (loadMode == loadConfigMode.fromSaveLastConfig)
-            {
-                filePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml");
-                if (!File.Exists(filePath))
+                else if (loadMode == loadConfigMode.fromSaveLastConfig)
                 {
-                    Utils.appendToLog(string.Format("ERROR: {0} not found, not loading configs", filePath));
-                    return;
+                    filePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml");
+                    if (!File.Exists(filePath))
+                    {
+                        Utils.appendToLog(string.Format("ERROR: {0} not found, not loading configs", filePath));
+                        return;
+                    }
                 }
-            }
-            else
-            {
-                loadLocation.AddExtension = true;
-                loadLocation.DefaultExt = ".xml";
-                loadLocation.Filter = "*.xml|*.xml";
-                loadLocation.InitialDirectory = Path.Combine(Application.StartupPath, "RelHaxUserConfigs");
-                loadLocation.Title = Translations.getTranslatedString("selectConfigFile");
-                if (loadLocation.ShowDialog().Equals(DialogResult.Cancel))
+                else
                 {
-                    //quit
-                    return;
+                    DialogResult res = sv.ShowDialog();
+                    if(res == DialogResult.OK)
+                    {
+                        filePath = sv.SelectedXML;
+                    }
+                    else
+                    { return; }
+                    if (filePath.Equals("localFile"))
+                    {
+                        loadLocation.AddExtension = true;
+                        loadLocation.DefaultExt = ".xml";
+                        loadLocation.Filter = "*.xml|*.xml";
+                        loadLocation.InitialDirectory = Path.Combine(Application.StartupPath, "RelHaxUserConfigs");
+                        loadLocation.Title = Translations.getTranslatedString("selectConfigFile");
+                        if (loadLocation.ShowDialog().Equals(DialogResult.Cancel))
+                        {
+                            //quit
+                            return;
+                        }
+                        filePath = loadLocation.FileName;
+                    }
                 }
-                filePath = loadLocation.FileName;
             }
             Utils.loadConfig(loadMode == loadConfigMode.fromButton, filePath, parsedCatagoryList, userMods);
             if (loadMode == loadConfigMode.fromButton || loadMode == loadConfigMode.fromAutoInstall)
