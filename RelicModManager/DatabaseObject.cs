@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace RelhaxModpack
 {
@@ -20,7 +21,7 @@ namespace RelhaxModpack
         //later a unique name of the config entry
         public string packageName { get; set; }
         //size of the mod zip file
-        public float size { get; set; }
+        public Int64 size { get; set; }
         public string updateComment { get; set; }
         public string description { get; set; }
         public string devURL { get; set; }

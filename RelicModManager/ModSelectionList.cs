@@ -454,8 +454,8 @@ namespace RelhaxModpack
                     {
                         modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Translations.getTranslatedString("updated"));
                         m.downloadFlag = true;
-                        if ((m.size > 0.0f))
-                            modCheckBox.Content = string.Format("{0} ({1} MB)", modCheckBox.Content, m.size);
+                        if ((m.size > 0))
+                            modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Utils.SizeSuffix(m.size, 1, true));
                     }
                 }
                 else
@@ -463,8 +463,8 @@ namespace RelhaxModpack
                     if (m.downloadFlag)
                     {
                         modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Translations.getTranslatedString("updated"));
-                        if ((m.size > 0.0f))
-                            modCheckBox.Content = string.Format("{0} ({1} MB)", modCheckBox.Content, m.size);
+                        if ((m.size > 0))
+                            modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Utils.SizeSuffix(m.size, 1, true));
                     }
                 }
                 //set mod's enabled status
@@ -584,19 +584,19 @@ namespace RelhaxModpack
                         string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
-                            configControlRB.Content = configControlRB.Content + " (Updated)";
+                            configControlRB.Content = configControlRB.Content + " (" + Translations.getTranslatedString("updated") + ")";
                             con.downloadFlag = true;
-                            if (con.size > 0.0f)
-                                configControlRB.Content = configControlRB.Content + " (" + con.size + " MB)";
+                            if (con.size > 0)
+                                configControlRB.Content = configControlRB.Content + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
                         }
                     }
                     else
                     {
                         if (con.downloadFlag)
                         {
-                            configControlRB.Content = configControlRB.Content + " (Updated)";
-                            if (con.size > 0.0f)
-                                configControlRB.Content = configControlRB.Content + " (" + con.size + " MB)";
+                            configControlRB.Content = configControlRB.Content + " (" + Translations.getTranslatedString("updated") + ")";
+                            if (con.size > 0)
+                                configControlRB.Content = configControlRB.Content + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
                         }
                     }
                     //add the handlers at the end
@@ -638,20 +638,20 @@ namespace RelhaxModpack
                         string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
-                            toAdd = toAdd + "_Updated";
+                            toAdd = toAdd + " (" + Translations.getTranslatedString("updated") + ")";
                             con.downloadFlag = true;
-                            if (con.size > 0.0f)
-                                toAdd = toAdd + " (" + con.size + " MB)";
+                            if (con.size > 0)
+                                toAdd = toAdd + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
                         }
                     }
                     else
                     {
                         if (con.downloadFlag)
                         {
-                            toAdd = toAdd + "_Updated";
+                            toAdd = toAdd + " (" + Translations.getTranslatedString("updated") + ")";
                             con.downloadFlag = true;
-                            if (con.size > 0.0f)
-                                toAdd = toAdd + " (" + con.size + " MB)";
+                            if (con.size > 0)
+                                toAdd = toAdd + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
                         }
                     }
                     //add it
@@ -743,20 +743,20 @@ namespace RelhaxModpack
                         string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
-                            configControlCB.Content = configControlCB.Content + " (Updated)";
+                            configControlCB.Content = configControlCB.Content + " (" + Translations.getTranslatedString("updated") + ")";
                             con.downloadFlag = true;
-                            if (con.size > 0.0f)
-                                configControlCB.Content = configControlCB.Content + " (" + con.size + " MB)";
+                            if (con.size > 0)
+                                configControlCB.Content = configControlCB.Content + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
                         }
                     }
                     else
                     {
                         if (con.downloadFlag)
                         {
-                            configControlCB.Content = configControlCB.Content + " (Updated)";
+                            configControlCB.Content = configControlCB.Content + " (" + Translations.getTranslatedString("updated") + ")";
                             con.downloadFlag = true;
-                            if (con.size > 0.0f)
-                                configControlCB.Content = configControlCB.Content + " (" + con.size + " MB)";
+                            if (con.size > 0)
+                                configControlCB.Content = configControlCB.Content + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
                         }
                     }
                     //add the handlers at the end
@@ -1252,19 +1252,19 @@ namespace RelhaxModpack
                     //if the CRC's don't match and the mod actually has a zip file
                     if ((!m.zipFile.Equals("")) && (!m.crc.Equals(oldCRC2)))
                     {
-                        modCheckBox.Text = modCheckBox.Text + " (Updated)";
+                        modCheckBox.Text = modCheckBox.Text + " (" + Translations.getTranslatedString("updated") + ")";
                         m.downloadFlag = true;
-                        if ((m.size > 0.0f))
-                            modCheckBox.Text = string.Format("{0} ({1} MB)", modCheckBox.Text, m.size);
+                        if ((m.size > 0))
+                            modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
                     }
                 }
                 else
                 {
                     if (m.downloadFlag)
                     {
-                        modCheckBox.Text = modCheckBox.Text + " (Updated)";
-                        if ((m.size > 0.0f))
-                            modCheckBox.Text = string.Format("{0} ({1} MB)", modCheckBox.Text, m.size);
+                        modCheckBox.Text = modCheckBox.Text + " (" + Translations.getTranslatedString("updated") + ")";
+                        if ((m.size > 0))
+                            modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
                     }
                 }
                 modCheckBox.UseVisualStyleBackColor = true;
@@ -1461,19 +1461,19 @@ namespace RelhaxModpack
                             string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                             if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                             {
-                                configControlRB.Text = configControlRB.Text + " (Updated)";
+                                configControlRB.Text = configControlRB.Text + " (" + Translations.getTranslatedString("updated") + ")";
                                 con.downloadFlag = true;
-                                if (con.size > 0.0f)
-                                    configControlRB.Text = configControlRB.Text + " (" + con.size + " MB)";
+                                if (con.size > 0)
+                                    configControlRB.Text = configControlRB.Text + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
                             }
                         }
                         else
                         {
                             if (con.downloadFlag)
                             {
-                                configControlRB.Text = configControlRB.Text + " (Updated)";
-                                if (con.size > 0.0f)
-                                    configControlRB.Text = configControlRB.Text + " (" + con.size + " MB)";
+                                configControlRB.Text = configControlRB.Text + " (" + Translations.getTranslatedString("updated") + ")";
+                                if (con.size > 0)
+                                    configControlRB.Text = configControlRB.Text + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
                             }
                         }
                         //add the config to the form
@@ -1511,18 +1511,18 @@ namespace RelhaxModpack
                             if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                             {
                                 con.downloadFlag = true;
-                                toAdd = toAdd + "_Updated";
-                                if (con.size > 0.0f)
-                                    toAdd = toAdd + " (" + con.size + " MB)";
+                                toAdd = toAdd + " (" + Translations.getTranslatedString("updated") + ")";
+                                if (con.size > 0)
+                                    toAdd = toAdd + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
                             }
                         }
                         else
                         {
                             if (con.downloadFlag)
                             {
-                                toAdd = toAdd + "_Updated";
-                                if (con.size > 0.0f)
-                                    toAdd = toAdd + " (" + con.size + " MB)";
+                                toAdd = toAdd + " (" + Translations.getTranslatedString("updated") + ")";
+                                if (con.size > 0)
+                                    toAdd = toAdd + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
                             }
                         }
                         //add it
@@ -1598,18 +1598,18 @@ namespace RelhaxModpack
                             if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                             {
                                 con.downloadFlag = true;
-                                configControlCB.Text = configControlCB.Text + " (Updated)";
-                                if (con.size > 0.0f)
-                                    configControlCB.Text = configControlCB.Text + " (" + con.size + " MB)";
+                                configControlCB.Text = configControlCB.Text + " (" + Translations.getTranslatedString("updated") + ")";
+                                if (con.size > 0)
+                                    configControlCB.Text = configControlCB.Text + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
                             }
                         }
                         else
                         {
                             if (con.downloadFlag)
                             {
-                                configControlCB.Text = configControlCB.Text + " (Updated)";
-                                if (con.size > 0.0f)
-                                    configControlCB.Text = configControlCB.Text + " (" + con.size + " MB)";
+                                configControlCB.Text = configControlCB.Text + " (" + Translations.getTranslatedString("updated") + ")";
+                                if (con.size > 0)
+                                    configControlCB.Text = configControlCB.Text + " (" + Utils.SizeSuffix(con.size,1, true) + ")";
                             }
                         }
                         //add config to the form

@@ -220,7 +220,7 @@ namespace RelhaxModpack
             }
         }
         
-        private float getFileSize(string file)
+        private Int64 getFileSize(string file)
         {
             Int64 fileSizeBytes = 0;
             if (Program.databaseUpdateOnline)
@@ -259,12 +259,7 @@ namespace RelhaxModpack
             }
             try
             {
-                float fileSizeKBytes = fileSizeBytes / 1024;
-                float fileSizeMBytes = fileSizeKBytes / 1024;
-                fileSizeMBytes = (float)Math.Round(fileSizeMBytes, 1);
-                if (fileSizeMBytes == 0.0)
-                    fileSizeMBytes = 0.1f;
-                return fileSizeMBytes;
+                return fileSizeBytes;
             }
             catch (Exception ex)
             {
