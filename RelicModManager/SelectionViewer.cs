@@ -90,7 +90,7 @@ namespace RelhaxModpack
             SelectionRadioButton b = new SelectionRadioButton
             {
                 XMLURL = "localFile",
-                Text = "Local File"
+                Text = Translations.getTranslatedString("localFile")
             };
             b.Location = new Point(6, (SelectConfigPanel.Controls.Count * b.Size.Height) + 5);
             SelectConfigPanel.Controls.Add(b);

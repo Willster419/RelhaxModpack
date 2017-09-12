@@ -66,6 +66,8 @@
             // 
             // SelectConfigPanel
             // 
+            this.SelectConfigPanel.AutoScroll = true;
+            this.SelectConfigPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.SelectConfigPanel.Location = new System.Drawing.Point(15, 25);
             this.SelectConfigPanel.Name = "SelectConfigPanel";
             this.SelectConfigPanel.Size = new System.Drawing.Size(263, 201);

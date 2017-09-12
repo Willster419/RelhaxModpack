@@ -83,6 +83,11 @@ namespace RelhaxModpack
             polish.Add("information", "Informacja");
             french.Add("information", "information");
 
+            english.Add("select", "Select");
+            german.Add("select", "TODO");
+            polish.Add("select", "TODO");
+            french.Add("select", "TODO");
+
             //Section: MainWindow
 
             //Componet: installRelhaxMod
@@ -536,6 +541,7 @@ namespace RelhaxModpack
             german.Add("extractingUserMods", "Extrahieren von benutzerdefinierten Mods");
             polish.Add("extractingUserMods", "Wypakowywanie modyfikacji użytkownika");
             french.Add("extractingUserMods", "Extraction des mods d'utilisateur");
+
 
             //Componet: 
             //
@@ -1193,6 +1199,94 @@ namespace RelhaxModpack
             german.Add("updated", "aktualisiert");
             polish.Add("updated", "zaktualizowane");
             french.Add("updated", "Mis à jours");
+
+            //Section: SelectionViewer
+
+            //Component: SelectConfigLabel
+            //The label in the window informing the user to select a config option to use
+            english.Add("SelectConfigLabel", "Select a config to load");
+            german.Add("SelectConfigLabel", "TODO");
+            polish.Add("SelectConfigLabel", "TODO");
+            french.Add("SelectConfigLabel", "TODO");
+
+            //Component: localFile
+            //The text in the first radioButton in the selection viewer, for the user to select their own personal config file to load
+            english.Add("localFile", "Local File");
+            german.Add("localFile", "TODO");
+            polish.Add("localFile", "TODO");
+            french.Add("localFile", "TODO");
+
+            //Section: Installer Messages
+
+            //Componet: extractingPackage
+            //
+            english.Add("extractingPackage", "Extracting Package");
+            german.Add("extractingPackage", "TODO");
+            polish.Add("extractingPackage", "TODO");
+            french.Add("extractingPackage", "TODO");
+
+            //Componet: backupModFile
+            //
+            english.Add("backupModFile", "Backing up mod file");
+            german.Add("backupModFile", "TODO");
+            polish.Add("backupModFile", "TODO");
+            french.Add("backupModFile", "TODO");
+
+            //Componet: backupUserdatas
+            //
+            english.Add("backupUserdatas", "Backing up userdatas");
+            german.Add("backupUserdatas", "TODO");
+            polish.Add("backupUserdatas", "TODO");
+            french.Add("backupUserdatas", "TODO");
+
+            //Componet: deletingFiles
+            //
+            english.Add("deletingFiles", "Deleting files");
+            german.Add("deletingFiles", "TODO");
+            polish.Add("deletingFiles", "TODO");
+            french.Add("deletingFiles", "TODO");
+
+            //Componet: deletingWOTCache
+            //
+            english.Add("deletingWOTCache", "Deleting WoT Cache");
+            german.Add("deletingWOTCache", "TODO");
+            polish.Add("deletingWOTCache", "TODO");
+            french.Add("deletingWOTCache", "TODO");
+
+            //Componet: restoringUserData
+            //
+            english.Add("restoringUserData", "Restoring User Data");
+            german.Add("restoringUserData", "TODO");
+            polish.Add("restoringUserData", "TODO");
+            french.Add("restoringUserData", "TODO");
+
+            //Componet: patchingFile
+            //
+            english.Add("patchingFile", "Patching File");
+            german.Add("patchingFile", "TODO");
+            polish.Add("patchingFile", "TODO");
+            french.Add("patchingFile", "TODO");
+
+            //Componet: extractingUserMod
+            //
+            english.Add("extractingUserMod", "Extracting User Mod");
+            german.Add("extractingUserMod", "TODO");
+            polish.Add("extractingUserMod", "TODO");
+            french.Add("extractingUserMod", "TODO");
+
+            //Componet: userPatchingFile
+            //
+            english.Add("userPatchingFile", "User Patching File");
+            german.Add("userPatchingFile", "TODO");
+            polish.Add("userPatchingFile", "TODO");
+            french.Add("userPatchingFile", "TODO");
+
+            //Componet: installingUserFonts
+            //
+            english.Add("installingUserFonts", "Installing User Fonts");
+            german.Add("installingUserFonts", "TODO");
+            polish.Add("installingUserFonts", "TODO");
+            french.Add("installingUserFonts", "TODO");
         }
     }
 }
