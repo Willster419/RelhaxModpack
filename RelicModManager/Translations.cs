@@ -86,7 +86,7 @@ namespace RelhaxModpack
             english.Add("select", "Select");
             german.Add("select", "TODO");
             polish.Add("select", "TODO");
-            french.Add("select", "TODO");
+            french.Add("select", "Sélectionner");
 
             //Section: MainWindow
 
@@ -243,28 +243,28 @@ namespace RelhaxModpack
             english.Add("viewAppUpdates", "View latest application updates");
             german.Add("viewAppUpdates", "TODO");
             polish.Add("viewAppUpdates", "TODO");
-            french.Add("viewAppUpdates", "TODO");
+            french.Add("viewAppUpdates", "Afficher les dernières mises à jour de l'applications");
 
             //Componet: viewDBUpdates
             //
             english.Add("viewDBUpdates", "View latest database updates");
             german.Add("viewDBUpdates", "TODO");
             polish.Add("viewDBUpdates", "TODO");
-            french.Add("viewDBUpdates", "TODO");
+            french.Add("viewDBUpdates", "Afficher les dernières mises à jour de la base de données");
 
             //Componet: disableColorsCB
             //
             english.Add("disableColorsCB", "Disable color change");
             german.Add("disableColorsCB", "TODO");
             polish.Add("disableColorsCB", "TODO");
-            french.Add("disableColorsCB", "TODO");
+            french.Add("disableColorsCB", "Désactiver le changement de couleur");
 
             //Componet: clearLogFilesCB
             //
             english.Add("clearLogFilesCB", "Clear log files");
             german.Add("clearLogFilesCB", "TODO");
             polish.Add("clearLogFilesCB", "TODO");
-            french.Add("clearLogFilesCB", "TODO");
+            french.Add("clearLogFilesCB", "Effacer les fichiers logs");
 
             //Section: FirstLoadHelper
 
@@ -853,14 +853,14 @@ namespace RelhaxModpack
             english.Add("clearLogFilesCBExplanation", "Clear the WoT log files, (python.log), as well as xvm log files (xvm.log) and pmod log files (pmod.log)");
             german.Add("clearLogFilesCBExplanation", "TODO");
             polish.Add("clearLogFilesCBExplanation", "TODO");
-            french.Add("clearLogFilesCBExplanation", "TODO");
+            french.Add("clearLogFilesCBExplanation", "Effacez les fichiers logs WoT (python.log), ainsi que les fichiers logs xvm (xvm.log) et les fichiers logs pmod (pmod.log)");
 
             //Component: disableColorsCBExplanation
             //
             english.Add("disableColorsCBExplanation", "Disable the changing of colors when toggling the selection of a mod or config");
             german.Add("disableColorsCBExplanation", "TODO");
             polish.Add("disableColorsCBExplanation", "TODO");
-            french.Add("disableColorsCBExplanation", "TODO");
+            french.Add("disableColorsCBExplanation", "Désactiver le changement de couleurs lors de la sélection d'un mod ou config");
 
             //Section: Messages from ModSelectionList
 
@@ -1207,86 +1207,86 @@ namespace RelhaxModpack
             english.Add("SelectConfigLabel", "Select a config to load");
             german.Add("SelectConfigLabel", "TODO");
             polish.Add("SelectConfigLabel", "TODO");
-            french.Add("SelectConfigLabel", "TODO");
+            french.Add("SelectConfigLabel", "Sélectionnez une configuration à charger");
 
             //Component: localFile
             //The text in the first radioButton in the selection viewer, for the user to select their own personal config file to load
             english.Add("localFile", "Local File");
             german.Add("localFile", "TODO");
             polish.Add("localFile", "TODO");
-            french.Add("localFile", "TODO");
+            french.Add("localFile", "Fichier local");
 
             //Section: Installer Messages
 
             //Componet: extractingPackage
             //
-            english.Add("extractingPackage", "Extracting Package");
+            english.Add("extractingPackage", "Extracting package");
             german.Add("extractingPackage", "TODO");
             polish.Add("extractingPackage", "TODO");
-            french.Add("extractingPackage", "TODO");
+            french.Add("extractingPackage", "Extraction du package");
 
             //Componet: backupModFile
             //
             english.Add("backupModFile", "Backing up mod file");
             german.Add("backupModFile", "TODO");
             polish.Add("backupModFile", "TODO");
-            french.Add("backupModFile", "TODO");
+            french.Add("backupModFile", "Sauvegarde du fichier mod");
 
             //Componet: backupUserdatas
             //
             english.Add("backupUserdatas", "Backing up userdatas");
             german.Add("backupUserdatas", "TODO");
             polish.Add("backupUserdatas", "TODO");
-            french.Add("backupUserdatas", "TODO");
+            french.Add("backupUserdatas", "Sauvegarde des données utilisateur");
 
             //Componet: deletingFiles
             //
             english.Add("deletingFiles", "Deleting files");
             german.Add("deletingFiles", "TODO");
             polish.Add("deletingFiles", "TODO");
-            french.Add("deletingFiles", "TODO");
+            french.Add("deletingFiles", "Suppression de fichiers");
 
             //Componet: deletingWOTCache
             //
-            english.Add("deletingWOTCache", "Deleting WoT Cache");
+            english.Add("deletingWOTCache", "Deleting WoT cache");
             german.Add("deletingWOTCache", "TODO");
             polish.Add("deletingWOTCache", "TODO");
-            french.Add("deletingWOTCache", "TODO");
+            french.Add("deletingWOTCache", "Suppression du cache WoT");
 
             //Componet: restoringUserData
             //
-            english.Add("restoringUserData", "Restoring User Data");
+            english.Add("restoringUserData", "Restoring user data");
             german.Add("restoringUserData", "TODO");
             polish.Add("restoringUserData", "TODO");
-            french.Add("restoringUserData", "TODO");
+            french.Add("restoringUserData", "Restoration des données utilisateur");
 
             //Componet: patchingFile
             //
-            english.Add("patchingFile", "Patching File");
+            english.Add("patchingFile", "Patching file");
             german.Add("patchingFile", "TODO");
             polish.Add("patchingFile", "TODO");
-            french.Add("patchingFile", "TODO");
+            french.Add("patchingFile", "Patch du fichier");
 
             //Componet: extractingUserMod
             //
-            english.Add("extractingUserMod", "Extracting User Mod");
+            english.Add("extractingUserMod", "Extracting user mod");
             german.Add("extractingUserMod", "TODO");
             polish.Add("extractingUserMod", "TODO");
-            french.Add("extractingUserMod", "TODO");
+            french.Add("extractingUserMod", "Extraction des mods utilisateur");
 
             //Componet: userPatchingFile
             //
-            english.Add("userPatchingFile", "User Patching File");
+            english.Add("userPatchingFile", "User patching file");
             german.Add("userPatchingFile", "TODO");
             polish.Add("userPatchingFile", "TODO");
-            french.Add("userPatchingFile", "TODO");
+            french.Add("userPatchingFile", "Fichier utilisateur patch");
 
             //Componet: installingUserFonts
             //
-            english.Add("installingUserFonts", "Installing User Fonts");
+            english.Add("installingUserFonts", "Installing user fonts");
             german.Add("installingUserFonts", "TODO");
             polish.Add("installingUserFonts", "TODO");
-            french.Add("installingUserFonts", "TODO");
+            french.Add("installingUserFonts", "Installation des polices utilisateur");
         }
     }
 }
