@@ -50,7 +50,7 @@ namespace RelhaxModpack
             //this.DialogResult = DialogResult.Cancel;
             SelectConfigLabel.Text = Translations.getTranslatedString("loading");
             SelectButton.Text = Translations.getTranslatedString("select");
-            CancelButton.Text = Translations.getTranslatedString("cancel");
+            CancelCloseButton.Text = Translations.getTranslatedString("cancel");
             client.DownloadStringCompleted += Client_DownloadStringCompleted;
             try
             {

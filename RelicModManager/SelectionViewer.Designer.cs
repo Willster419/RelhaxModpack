@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectionViewer));
             this.SelectConfigLabel = new System.Windows.Forms.Label();
             this.SelectButton = new System.Windows.Forms.Button();
-            this.CancelButton = new System.Windows.Forms.Button();
+            this.CancelCloseButton = new System.Windows.Forms.Button();
             this.SelectConfigPanel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
@@ -54,15 +54,15 @@
             this.SelectButton.UseVisualStyleBackColor = true;
             this.SelectButton.Click += new System.EventHandler(this.SelectButton_Click);
             // 
-            // CancelButton
+            // CancelCloseButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(12, 232);
-            this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(75, 23);
-            this.CancelButton.TabIndex = 2;
-            this.CancelButton.Text = "button2";
-            this.CancelButton.UseVisualStyleBackColor = true;
-            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            this.CancelCloseButton.Location = new System.Drawing.Point(12, 232);
+            this.CancelCloseButton.Name = "CancelCloseButton";
+            this.CancelCloseButton.Size = new System.Drawing.Size(75, 23);
+            this.CancelCloseButton.TabIndex = 2;
+            this.CancelCloseButton.Text = "button2";
+            this.CancelCloseButton.UseVisualStyleBackColor = true;
+            this.CancelCloseButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // SelectConfigPanel
             // 
@@ -79,7 +79,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(290, 267);
             this.Controls.Add(this.SelectConfigPanel);
-            this.Controls.Add(this.CancelButton);
+            this.Controls.Add(this.CancelCloseButton);
             this.Controls.Add(this.SelectButton);
             this.Controls.Add(this.SelectConfigLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -97,7 +97,7 @@
 
         private System.Windows.Forms.Label SelectConfigLabel;
         private System.Windows.Forms.Button SelectButton;
-        private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button CancelCloseButton;
         private System.Windows.Forms.Panel SelectConfigPanel;
     }
 }

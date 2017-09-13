@@ -348,6 +348,23 @@ namespace RelhaxModpack
                 XmlElement depPackageName = doc.CreateElement("packageName");
                 depPackageName.InnerText = d.packageName;
                 dependencyRoot.AppendChild(depPackageName);
+                //logicalDependencies for the configs
+                XmlElement depLogicalDependencies = doc.CreateElement("logicalDependencies");
+                foreach (LogicalDependnecy ld in d.logicalDependencies)
+                {
+                    //declare logicalDependency root
+                    XmlElement LogicalDependencyRoot = doc.CreateElement("logicalDependency");
+                    //make logicalDependency
+                    XmlElement LogicalDependencyPackageName = doc.CreateElement("packageName");
+                    LogicalDependencyPackageName.InnerText = ld.packageName;
+                    LogicalDependencyRoot.AppendChild(LogicalDependencyPackageName);
+                    XmlElement LogicalDependencyNegateFlag = doc.CreateElement("negateFlag");
+                    LogicalDependencyNegateFlag.InnerText = "" + ld.negateFlag;
+                    LogicalDependencyRoot.AppendChild(LogicalDependencyNegateFlag);
+                    //attach logicalDependency root
+                    depLogicalDependencies.AppendChild(LogicalDependencyRoot);
+                }
+                dependencyRoot.AppendChild(depLogicalDependencies);
                 //attach dependency root
                 DependenciesXml.AppendChild(dependencyRoot);
             }
@@ -356,7 +373,29 @@ namespace RelhaxModpack
             XmlElement logicalDependenciesXml = doc.CreateElement("logicalDependencies");
             foreach (LogicalDependnecy d in logicalDependencies)
             {
-                //TODO
+                //declare dependency root
+                XmlElement logicalDependencyRoot = doc.CreateElement("logicalDependency");
+                //make dependency
+                XmlElement logicalDepZipFile = doc.CreateElement("dependencyZipFile");
+                logicalDepZipFile.InnerText = d.dependencyZipFile;
+                logicalDependencyRoot.AppendChild(logicalDepZipFile);
+                XmlElement logicalDepStartAddress = doc.CreateElement("startAddress");
+                logicalDepStartAddress.InnerText = d.startAddress;
+                logicalDependencyRoot.AppendChild(logicalDepStartAddress);
+                XmlElement logicalDepEndAddress = doc.CreateElement("endAddress");
+                logicalDepEndAddress.InnerText = d.endAddress;
+                logicalDependencyRoot.AppendChild(logicalDepEndAddress);
+                XmlElement logicalDepCRC = doc.CreateElement("dependencyZipCRC");
+                logicalDepCRC.InnerText = d.dependencyZipCRC;
+                logicalDependencyRoot.AppendChild(logicalDepCRC);
+                XmlElement logicalDepEnabled = doc.CreateElement("dependencyenabled");
+                logicalDepEnabled.InnerText = "" + d.enabled;
+                logicalDependencyRoot.AppendChild(logicalDepEnabled);
+                XmlElement logicalDepPackageName = doc.CreateElement("packageName");
+                logicalDepPackageName.InnerText = d.packageName;
+                logicalDependencyRoot.AppendChild(logicalDepPackageName);
+                //attach dependency root
+                logicalDependenciesXml.AppendChild(logicalDependencyRoot);
             }
             root.AppendChild(logicalDependenciesXml);
             //catagories
@@ -472,6 +511,23 @@ namespace RelhaxModpack
                         modDependencies.AppendChild(DependencyRoot);
                     }
                     modRoot.AppendChild(modDependencies);
+                    //logicalDependencies for the configs
+                    XmlElement modLogicalDependencies = doc.CreateElement("logicalDependencies");
+                    foreach (LogicalDependnecy ld in m.logicalDependencies)
+                    {
+                        //declare logicalDependency root
+                        XmlElement LogicalDependencyRoot = doc.CreateElement("logicalDependency");
+                        //make logicalDependency
+                        XmlElement LogicalDependencyPackageName = doc.CreateElement("packageName");
+                        LogicalDependencyPackageName.InnerText = ld.packageName;
+                        LogicalDependencyRoot.AppendChild(LogicalDependencyPackageName);
+                        XmlElement LogicalDependencyNegateFlag = doc.CreateElement("negateFlag");
+                        LogicalDependencyNegateFlag.InnerText = "" + ld.negateFlag;
+                        LogicalDependencyRoot.AppendChild(LogicalDependencyNegateFlag);
+                        //attach logicalDependency root
+                        modLogicalDependencies.AppendChild(LogicalDependencyRoot);
+                    }
+                    modRoot.AppendChild(modLogicalDependencies);
                     modsHolder.AppendChild(modRoot);
                 }
                 catagoryRoot.AppendChild(modsHolder);
@@ -573,6 +629,23 @@ namespace RelhaxModpack
                     catDependencies.AppendChild(DependencyRoot);
                 }
                 configRoot.AppendChild(catDependencies);
+                //logicalDependencies for the configs
+                XmlElement conLogicalDependencies = doc.CreateElement("logicalDependencies");
+                foreach(LogicalDependnecy ld in cc.logicalDependencies)
+                {
+                    //declare logicalDependency root
+                    XmlElement LogicalDependencyRoot = doc.CreateElement("logicalDependency");
+                    //make logicalDependency
+                    XmlElement LogicalDependencyPackageName = doc.CreateElement("packageName");
+                    LogicalDependencyPackageName.InnerText = ld.packageName;
+                    LogicalDependencyRoot.AppendChild(LogicalDependencyPackageName);
+                    XmlElement LogicalDependencyNegateFlag = doc.CreateElement("negateFlag");
+                    LogicalDependencyNegateFlag.InnerText = "" + ld.negateFlag;
+                    LogicalDependencyRoot.AppendChild(LogicalDependencyNegateFlag);
+                    //attach logicalDependency root
+                    conLogicalDependencies.AppendChild(LogicalDependencyRoot);
+                }
+                configRoot.AppendChild(conLogicalDependencies);
                 configsHolder.AppendChild(configRoot);
             }
         }

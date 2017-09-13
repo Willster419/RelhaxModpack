@@ -6,8 +6,11 @@ namespace RelhaxModpack
     //i.e. and sound mods require the sound memory to be increased
     public class Dependency
     {
+        //the zip file of the dependency
         public string dependencyZipFile { get; set; }
+        //the crc of the dependency
         public string dependencyZipCRC { get; set; }
+        //flag to set to disable the dependency from being installed
         public bool enabled { get; set; }
         //the start address of the zip file location. enabled us to use sites that
         //generate random filenames for publicly shared files.
@@ -22,7 +25,7 @@ namespace RelhaxModpack
         public int CheckDatabaseListIndex { get; set; }
         //property to determine if it will be installed in the beginning or in the end
         public bool appendExtraction;
-        public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
+        public List<LogicalDependnecy> logicalDependencies = new List<LogicalDependnecy>();
         public Dependency() { }
     }
 }

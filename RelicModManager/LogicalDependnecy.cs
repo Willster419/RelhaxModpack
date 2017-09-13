@@ -4,8 +4,11 @@ namespace RelhaxModpack
 {
     public class LogicalDependnecy
     {
+        //the zip file of the dependency
         public string dependencyZipFile { get; set; }
+        //the crc of the dependency
         public string dependencyZipCRC { get; set; }
+        //flag to set to disable the dependency from being installed
         public bool enabled { get; set; }
         //the start address of the zip file location. enabled us to use sites that
         //generate random filenames for publicly shared files.
@@ -20,6 +23,7 @@ namespace RelhaxModpack
         public bool negateFlag { get; set; }
         //needed to excatly identify double packageNames and its position
         public int CheckDatabaseListIndex { get; set; }
+        //list of linked mods and configs that use 
         public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
         public LogicalDependnecy() { }
     }
