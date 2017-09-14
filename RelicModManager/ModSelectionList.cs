@@ -2497,7 +2497,6 @@ namespace RelhaxModpack
             } else if (sender is Config)
             {
                 Config c = (Config)sender;
-                lastSearchFieldInSelectionView = c;
                 if (c.configUIComponent is ConfigFormCheckBox)
                 {
                     ConfigFormCheckBox cFCB = (ConfigFormCheckBox)c.configUIComponent;
@@ -2507,8 +2506,8 @@ namespace RelhaxModpack
                 else if (c.configUIComponent is ConfigFormComboBox)
                 {
                     ConfigFormComboBox cFCB = (ConfigFormComboBox)c.configUIComponent;
-                    cFCB.BackColor = Color.LightSteelBlue;
-                    cFCB.Focus();
+                    handleBackColorOfSearchResult(c.parentMod);
+                    return;
                 }
                 else if (c.configUIComponent is ConfigFormRadioButton)
                 {
@@ -2516,6 +2515,7 @@ namespace RelhaxModpack
                     cFRB.BackColor = Color.LightSteelBlue;
                     cFRB.Focus();
                 }
+                lastSearchFieldInSelectionView = c;
             }
         }
 
@@ -2566,15 +2566,15 @@ namespace RelhaxModpack
                         s.Focus();
                         this.ModSelectionList_SizeChanged(null, null);
                     }
-                    else if (c.configUIComponent is ConfigFormComboBox)
+                    else if (c.configUIComponent is ConfigWPFComboBox)
                     {
-                        ConfigFormComboBox s = (ConfigFormComboBox)c.configUIComponent;
+                        ConfigWPFComboBox s = (ConfigWPFComboBox)c.configUIComponent;
                         s.Focus();
                         this.ModSelectionList_SizeChanged(null, null);
                     }
-                    else if (c.configUIComponent is ConfigFormCheckBox)
+                    else if (c.configUIComponent is ConfigWPFCheckBox)
                     {
-                        ConfigFormCheckBox s = (ConfigFormCheckBox)c.configUIComponent;
+                        ConfigWPFCheckBox s = (ConfigWPFCheckBox)c.configUIComponent;
                         s.Focus();
                         this.ModSelectionList_SizeChanged(null, null);
                     }
