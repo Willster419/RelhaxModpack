@@ -70,37 +70,38 @@
             this.OpenDatabaseDialog = new System.Windows.Forms.OpenFileDialog();
             this.SaveDatabaseDialog = new System.Windows.Forms.SaveFileDialog();
             this.DatabaseSubeditPanel = new System.Windows.Forms.Panel();
-            this.ObjectPicturesList = new System.Windows.Forms.ListBox();
-            this.ObjectLogicalDependenciesList = new System.Windows.Forms.ListBox();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.AddDependencyButton = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.RemoveDependencyButton = new System.Windows.Forms.Button();
+            this.DependencyPackageNameLabel = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.AddLogicalDependencyButton = new System.Windows.Forms.Button();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.ObjectLogicalDependenciesLabel = new System.Windows.Forms.Label();
+            this.RemoveLogicalDependencyButton = new System.Windows.Forms.Button();
             this.LogicalDependencyPackageNameLabel = new System.Windows.Forms.Label();
+            this.LogicalDependnecyNegateFlagCB = new System.Windows.Forms.CheckBox();
+            this.ObjectLogicalDependenciesList = new System.Windows.Forms.ListBox();
+            this.ObjectPicturesList = new System.Windows.Forms.ListBox();
             this.PicturesTypeLabel = new System.Windows.Forms.Label();
             this.PicturesTypeCBox = new System.Windows.Forms.ComboBox();
             this.PicturesURLLabel = new System.Windows.Forms.Label();
             this.PictureURLTB = new System.Windows.Forms.RichTextBox();
-            this.LogicalDependnecyNegateFlagCB = new System.Windows.Forms.CheckBox();
-            this.DependencyPackageNameLabel = new System.Windows.Forms.Label();
-            this.RemoveDependencyButton = new System.Windows.Forms.Button();
-            this.RemoveLogicalDependencyButton = new System.Windows.Forms.Button();
             this.MovePictureButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.AddDependencyButton = new System.Windows.Forms.Button();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.AddLogicalDependencyButton = new System.Windows.Forms.Button();
-            this.RemovePictureButton = new System.Windows.Forms.Button();
-            this.ApplyPictureEditButton = new System.Windows.Forms.Button();
-            this.AddPictureButton = new System.Windows.Forms.Button();
-            this.MovePictureTB = new System.Windows.Forms.TextBox();
             this.AddPictureTB = new System.Windows.Forms.TextBox();
+            this.MovePictureTB = new System.Windows.Forms.TextBox();
+            this.AddPictureButton = new System.Windows.Forms.Button();
+            this.ApplyPictureEditButton = new System.Windows.Forms.Button();
+            this.RemovePictureButton = new System.Windows.Forms.Button();
+            this.MoveButton = new System.Windows.Forms.Button();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.DatabaseSubeditPanel.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // DatabaseTreeView
@@ -501,21 +502,86 @@
             this.DatabaseSubeditPanel.Size = new System.Drawing.Size(284, 364);
             this.DatabaseSubeditPanel.TabIndex = 26;
             // 
-            // ObjectPicturesList
+            // panel3
             // 
-            this.ObjectPicturesList.FormattingEnabled = true;
-            this.ObjectPicturesList.Location = new System.Drawing.Point(5, 20);
-            this.ObjectPicturesList.Name = "ObjectPicturesList";
-            this.ObjectPicturesList.Size = new System.Drawing.Size(269, 56);
-            this.ObjectPicturesList.TabIndex = 27;
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.AddDependencyButton);
+            this.panel3.Controls.Add(this.comboBox1);
+            this.panel3.Controls.Add(this.ObjectDependenciesList);
+            this.panel3.Controls.Add(this.ObjectDependenciesLabel);
+            this.panel3.Controls.Add(this.RemoveDependencyButton);
+            this.panel3.Controls.Add(this.DependencyPackageNameLabel);
+            this.panel3.Location = new System.Drawing.Point(3, 3);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(278, 183);
+            this.panel3.TabIndex = 28;
             // 
-            // ObjectLogicalDependenciesList
+            // AddDependencyButton
             // 
-            this.ObjectLogicalDependenciesList.FormattingEnabled = true;
-            this.ObjectLogicalDependenciesList.Location = new System.Drawing.Point(6, 20);
-            this.ObjectLogicalDependenciesList.Name = "ObjectLogicalDependenciesList";
-            this.ObjectLogicalDependenciesList.Size = new System.Drawing.Size(267, 82);
-            this.ObjectLogicalDependenciesList.TabIndex = 26;
+            this.AddDependencyButton.Location = new System.Drawing.Point(162, 154);
+            this.AddDependencyButton.Name = "AddDependencyButton";
+            this.AddDependencyButton.Size = new System.Drawing.Size(48, 23);
+            this.AddDependencyButton.TabIndex = 39;
+            this.AddDependencyButton.Text = "add";
+            this.AddDependencyButton.UseVisualStyleBackColor = true;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(5, 132);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(270, 21);
+            this.comboBox1.TabIndex = 38;
+            // 
+            // RemoveDependencyButton
+            // 
+            this.RemoveDependencyButton.Location = new System.Drawing.Point(216, 154);
+            this.RemoveDependencyButton.Name = "RemoveDependencyButton";
+            this.RemoveDependencyButton.Size = new System.Drawing.Size(59, 23);
+            this.RemoveDependencyButton.TabIndex = 37;
+            this.RemoveDependencyButton.Text = "remove";
+            this.RemoveDependencyButton.UseVisualStyleBackColor = true;
+            // 
+            // DependencyPackageNameLabel
+            // 
+            this.DependencyPackageNameLabel.AutoSize = true;
+            this.DependencyPackageNameLabel.Location = new System.Drawing.Point(3, 116);
+            this.DependencyPackageNameLabel.Name = "DependencyPackageNameLabel";
+            this.DependencyPackageNameLabel.Size = new System.Drawing.Size(77, 13);
+            this.DependencyPackageNameLabel.TabIndex = 35;
+            this.DependencyPackageNameLabel.Text = "packageName";
+            // 
+            // panel2
+            // 
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.AddLogicalDependencyButton);
+            this.panel2.Controls.Add(this.comboBox2);
+            this.panel2.Controls.Add(this.ObjectLogicalDependenciesLabel);
+            this.panel2.Controls.Add(this.RemoveLogicalDependencyButton);
+            this.panel2.Controls.Add(this.LogicalDependencyPackageNameLabel);
+            this.panel2.Controls.Add(this.LogicalDependnecyNegateFlagCB);
+            this.panel2.Controls.Add(this.ObjectLogicalDependenciesList);
+            this.panel2.Location = new System.Drawing.Point(3, 189);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(278, 170);
+            this.panel2.TabIndex = 28;
+            // 
+            // AddLogicalDependencyButton
+            // 
+            this.AddLogicalDependencyButton.Location = new System.Drawing.Point(159, 143);
+            this.AddLogicalDependencyButton.Name = "AddLogicalDependencyButton";
+            this.AddLogicalDependencyButton.Size = new System.Drawing.Size(48, 23);
+            this.AddLogicalDependencyButton.TabIndex = 40;
+            this.AddLogicalDependencyButton.Text = "add";
+            this.AddLogicalDependencyButton.UseVisualStyleBackColor = true;
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(6, 122);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(266, 21);
+            this.comboBox2.TabIndex = 39;
             // 
             // ObjectLogicalDependenciesLabel
             // 
@@ -526,6 +592,15 @@
             this.ObjectLogicalDependenciesLabel.TabIndex = 24;
             this.ObjectLogicalDependenciesLabel.Text = "logical dependencies (click to edit)";
             // 
+            // RemoveLogicalDependencyButton
+            // 
+            this.RemoveLogicalDependencyButton.Location = new System.Drawing.Point(213, 143);
+            this.RemoveLogicalDependencyButton.Name = "RemoveLogicalDependencyButton";
+            this.RemoveLogicalDependencyButton.Size = new System.Drawing.Size(59, 23);
+            this.RemoveLogicalDependencyButton.TabIndex = 38;
+            this.RemoveLogicalDependencyButton.Text = "remove";
+            this.RemoveLogicalDependencyButton.UseVisualStyleBackColor = true;
+            // 
             // LogicalDependencyPackageNameLabel
             // 
             this.LogicalDependencyPackageNameLabel.AutoSize = true;
@@ -534,6 +609,32 @@
             this.LogicalDependencyPackageNameLabel.Size = new System.Drawing.Size(77, 13);
             this.LogicalDependencyPackageNameLabel.TabIndex = 28;
             this.LogicalDependencyPackageNameLabel.Text = "packageName";
+            // 
+            // LogicalDependnecyNegateFlagCB
+            // 
+            this.LogicalDependnecyNegateFlagCB.AutoSize = true;
+            this.LogicalDependnecyNegateFlagCB.Location = new System.Drawing.Point(6, 143);
+            this.LogicalDependnecyNegateFlagCB.Name = "LogicalDependnecyNegateFlagCB";
+            this.LogicalDependnecyNegateFlagCB.Size = new System.Drawing.Size(81, 17);
+            this.LogicalDependnecyNegateFlagCB.TabIndex = 34;
+            this.LogicalDependnecyNegateFlagCB.Text = "NegateFlag";
+            this.LogicalDependnecyNegateFlagCB.UseVisualStyleBackColor = true;
+            // 
+            // ObjectLogicalDependenciesList
+            // 
+            this.ObjectLogicalDependenciesList.FormattingEnabled = true;
+            this.ObjectLogicalDependenciesList.Location = new System.Drawing.Point(6, 20);
+            this.ObjectLogicalDependenciesList.Name = "ObjectLogicalDependenciesList";
+            this.ObjectLogicalDependenciesList.Size = new System.Drawing.Size(267, 82);
+            this.ObjectLogicalDependenciesList.TabIndex = 26;
+            // 
+            // ObjectPicturesList
+            // 
+            this.ObjectPicturesList.FormattingEnabled = true;
+            this.ObjectPicturesList.Location = new System.Drawing.Point(5, 20);
+            this.ObjectPicturesList.Name = "ObjectPicturesList";
+            this.ObjectPicturesList.Size = new System.Drawing.Size(269, 56);
+            this.ObjectPicturesList.TabIndex = 27;
             // 
             // PicturesTypeLabel
             // 
@@ -573,43 +674,6 @@
             this.PictureURLTB.TabIndex = 33;
             this.PictureURLTB.Text = "";
             // 
-            // LogicalDependnecyNegateFlagCB
-            // 
-            this.LogicalDependnecyNegateFlagCB.AutoSize = true;
-            this.LogicalDependnecyNegateFlagCB.Location = new System.Drawing.Point(6, 143);
-            this.LogicalDependnecyNegateFlagCB.Name = "LogicalDependnecyNegateFlagCB";
-            this.LogicalDependnecyNegateFlagCB.Size = new System.Drawing.Size(81, 17);
-            this.LogicalDependnecyNegateFlagCB.TabIndex = 34;
-            this.LogicalDependnecyNegateFlagCB.Text = "NegateFlag";
-            this.LogicalDependnecyNegateFlagCB.UseVisualStyleBackColor = true;
-            // 
-            // DependencyPackageNameLabel
-            // 
-            this.DependencyPackageNameLabel.AutoSize = true;
-            this.DependencyPackageNameLabel.Location = new System.Drawing.Point(3, 116);
-            this.DependencyPackageNameLabel.Name = "DependencyPackageNameLabel";
-            this.DependencyPackageNameLabel.Size = new System.Drawing.Size(77, 13);
-            this.DependencyPackageNameLabel.TabIndex = 35;
-            this.DependencyPackageNameLabel.Text = "packageName";
-            // 
-            // RemoveDependencyButton
-            // 
-            this.RemoveDependencyButton.Location = new System.Drawing.Point(216, 154);
-            this.RemoveDependencyButton.Name = "RemoveDependencyButton";
-            this.RemoveDependencyButton.Size = new System.Drawing.Size(59, 23);
-            this.RemoveDependencyButton.TabIndex = 37;
-            this.RemoveDependencyButton.Text = "remove";
-            this.RemoveDependencyButton.UseVisualStyleBackColor = true;
-            // 
-            // RemoveLogicalDependencyButton
-            // 
-            this.RemoveLogicalDependencyButton.Location = new System.Drawing.Point(213, 143);
-            this.RemoveLogicalDependencyButton.Name = "RemoveLogicalDependencyButton";
-            this.RemoveLogicalDependencyButton.Size = new System.Drawing.Size(59, 23);
-            this.RemoveLogicalDependencyButton.TabIndex = 38;
-            this.RemoveLogicalDependencyButton.Text = "remove";
-            this.RemoveLogicalDependencyButton.UseVisualStyleBackColor = true;
-            // 
             // MovePictureButton
             // 
             this.MovePictureButton.Location = new System.Drawing.Point(3, 237);
@@ -639,86 +703,19 @@
             this.panel1.Size = new System.Drawing.Size(278, 297);
             this.panel1.TabIndex = 27;
             // 
-            // panel2
+            // AddPictureTB
             // 
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.AddLogicalDependencyButton);
-            this.panel2.Controls.Add(this.comboBox2);
-            this.panel2.Controls.Add(this.ObjectLogicalDependenciesLabel);
-            this.panel2.Controls.Add(this.RemoveLogicalDependencyButton);
-            this.panel2.Controls.Add(this.LogicalDependencyPackageNameLabel);
-            this.panel2.Controls.Add(this.LogicalDependnecyNegateFlagCB);
-            this.panel2.Controls.Add(this.ObjectLogicalDependenciesList);
-            this.panel2.Location = new System.Drawing.Point(3, 189);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(278, 170);
-            this.panel2.TabIndex = 28;
+            this.AddPictureTB.Location = new System.Drawing.Point(102, 268);
+            this.AddPictureTB.Name = "AddPictureTB";
+            this.AddPictureTB.Size = new System.Drawing.Size(31, 20);
+            this.AddPictureTB.TabIndex = 44;
             // 
-            // panel3
+            // MovePictureTB
             // 
-            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel3.Controls.Add(this.AddDependencyButton);
-            this.panel3.Controls.Add(this.comboBox1);
-            this.panel3.Controls.Add(this.ObjectDependenciesList);
-            this.panel3.Controls.Add(this.ObjectDependenciesLabel);
-            this.panel3.Controls.Add(this.RemoveDependencyButton);
-            this.panel3.Controls.Add(this.DependencyPackageNameLabel);
-            this.panel3.Location = new System.Drawing.Point(3, 3);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(278, 183);
-            this.panel3.TabIndex = 28;
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(5, 132);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(270, 21);
-            this.comboBox1.TabIndex = 38;
-            // 
-            // AddDependencyButton
-            // 
-            this.AddDependencyButton.Location = new System.Drawing.Point(162, 154);
-            this.AddDependencyButton.Name = "AddDependencyButton";
-            this.AddDependencyButton.Size = new System.Drawing.Size(48, 23);
-            this.AddDependencyButton.TabIndex = 39;
-            this.AddDependencyButton.Text = "add";
-            this.AddDependencyButton.UseVisualStyleBackColor = true;
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(6, 122);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(266, 21);
-            this.comboBox2.TabIndex = 39;
-            // 
-            // AddLogicalDependencyButton
-            // 
-            this.AddLogicalDependencyButton.Location = new System.Drawing.Point(159, 143);
-            this.AddLogicalDependencyButton.Name = "AddLogicalDependencyButton";
-            this.AddLogicalDependencyButton.Size = new System.Drawing.Size(48, 23);
-            this.AddLogicalDependencyButton.TabIndex = 40;
-            this.AddLogicalDependencyButton.Text = "add";
-            this.AddLogicalDependencyButton.UseVisualStyleBackColor = true;
-            // 
-            // RemovePictureButton
-            // 
-            this.RemovePictureButton.Location = new System.Drawing.Point(210, 237);
-            this.RemovePictureButton.Name = "RemovePictureButton";
-            this.RemovePictureButton.Size = new System.Drawing.Size(64, 23);
-            this.RemovePictureButton.TabIndex = 40;
-            this.RemovePictureButton.Text = "remove";
-            this.RemovePictureButton.UseVisualStyleBackColor = true;
-            // 
-            // ApplyPictureEditButton
-            // 
-            this.ApplyPictureEditButton.Location = new System.Drawing.Point(210, 266);
-            this.ApplyPictureEditButton.Name = "ApplyPictureEditButton";
-            this.ApplyPictureEditButton.Size = new System.Drawing.Size(64, 23);
-            this.ApplyPictureEditButton.TabIndex = 41;
-            this.ApplyPictureEditButton.Text = "apply edit";
-            this.ApplyPictureEditButton.UseVisualStyleBackColor = true;
+            this.MovePictureTB.Location = new System.Drawing.Point(102, 239);
+            this.MovePictureTB.Name = "MovePictureTB";
+            this.MovePictureTB.Size = new System.Drawing.Size(31, 20);
+            this.MovePictureTB.TabIndex = 43;
             // 
             // AddPictureButton
             // 
@@ -729,25 +726,40 @@
             this.AddPictureButton.Text = "add at position";
             this.AddPictureButton.UseVisualStyleBackColor = true;
             // 
-            // MovePictureTB
+            // ApplyPictureEditButton
             // 
-            this.MovePictureTB.Location = new System.Drawing.Point(102, 239);
-            this.MovePictureTB.Name = "MovePictureTB";
-            this.MovePictureTB.Size = new System.Drawing.Size(31, 20);
-            this.MovePictureTB.TabIndex = 43;
+            this.ApplyPictureEditButton.Location = new System.Drawing.Point(210, 266);
+            this.ApplyPictureEditButton.Name = "ApplyPictureEditButton";
+            this.ApplyPictureEditButton.Size = new System.Drawing.Size(64, 23);
+            this.ApplyPictureEditButton.TabIndex = 41;
+            this.ApplyPictureEditButton.Text = "apply edit";
+            this.ApplyPictureEditButton.UseVisualStyleBackColor = true;
             // 
-            // AddPictureTB
+            // RemovePictureButton
             // 
-            this.AddPictureTB.Location = new System.Drawing.Point(102, 268);
-            this.AddPictureTB.Name = "AddPictureTB";
-            this.AddPictureTB.Size = new System.Drawing.Size(31, 20);
-            this.AddPictureTB.TabIndex = 44;
+            this.RemovePictureButton.Location = new System.Drawing.Point(210, 237);
+            this.RemovePictureButton.Name = "RemovePictureButton";
+            this.RemovePictureButton.Size = new System.Drawing.Size(64, 23);
+            this.RemovePictureButton.TabIndex = 40;
+            this.RemovePictureButton.Text = "remove";
+            this.RemovePictureButton.UseVisualStyleBackColor = true;
+            // 
+            // MoveButton
+            // 
+            this.MoveButton.Location = new System.Drawing.Point(133, 478);
+            this.MoveButton.Name = "MoveButton";
+            this.MoveButton.Size = new System.Drawing.Size(75, 23);
+            this.MoveButton.TabIndex = 28;
+            this.MoveButton.Text = "move";
+            this.MoveButton.UseVisualStyleBackColor = true;
+            this.MoveButton.Click += new System.EventHandler(this.MoveButton_Click);
             // 
             // DatabaseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1301, 512);
+            this.Controls.Add(this.MoveButton);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.DatabaseSubeditPanel);
             this.Controls.Add(this.LogicalDependencyRB);
@@ -768,12 +780,12 @@
             this.DatabaseEditPanel.ResumeLayout(false);
             this.DatabaseEditPanel.PerformLayout();
             this.DatabaseSubeditPanel.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -848,5 +860,6 @@
         private System.Windows.Forms.Button AddPictureButton;
         private System.Windows.Forms.Button ApplyPictureEditButton;
         private System.Windows.Forms.Button RemovePictureButton;
+        private System.Windows.Forms.Button MoveButton;
     }
 }

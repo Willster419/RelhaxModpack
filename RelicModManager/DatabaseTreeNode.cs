@@ -12,12 +12,14 @@ namespace RelhaxModpack
         public Dependency Dependency { get; set; }
         public LogicalDependnecy LogicalDependency { get; set; }
         public DatabaseObject DatabaseObject { get; set; }
+        public Category Category { get; set; }
         public DatabaseTreeNode(Object o, int mode)
         {
             //0 = global dependency
             //1 = dependency
             //2 = logical dependency
             //3 = DBO
+            //4 = category
             switch (mode)
             {
                 case 0:
@@ -25,6 +27,7 @@ namespace RelhaxModpack
                     Dependency = null;
                     LogicalDependency = null;
                     DatabaseObject = null;
+                    Category = null;
                     this.Text = GlobalDependency.packageName;
                     break;
                 case 1:
@@ -32,6 +35,7 @@ namespace RelhaxModpack
                     Dependency = (Dependency)o;
                     LogicalDependency = null;
                     DatabaseObject = null;
+                    Category = null;
                     this.Text = Dependency.packageName;
                     break;
                 case 2:
@@ -39,6 +43,7 @@ namespace RelhaxModpack
                     Dependency = null;
                     LogicalDependency = (LogicalDependnecy)o;
                     DatabaseObject = null;
+                    Category = null;
                     this.Text = LogicalDependency.packageName;
                     break;
                 case 3:
@@ -46,7 +51,16 @@ namespace RelhaxModpack
                     Dependency = null;
                     LogicalDependency = null;
                     DatabaseObject = (DatabaseObject)o;
+                    Category = null;
                     this.Text = DatabaseObject.packageName;
+                    break;
+                case 4:
+                    GlobalDependency = null;
+                    Dependency = null;
+                    LogicalDependency = null;
+                    DatabaseObject = null;
+                    Category = (Category)o;
+                    this.Text = Category.name;
                     break;
             }
 

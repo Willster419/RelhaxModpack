@@ -83,8 +83,24 @@ namespace RelhaxModpack
                 DatabaseTreeView.Nodes.Clear();
                 foreach(Category cat in ParsedCategoryList)
                 {
-
+                    DatabaseTreeNode catNode = new DatabaseTreeNode(cat, 4);
+                    DatabaseTreeView.Nodes.Add(catNode);
+                    foreach(Mod m in cat.mods)
+                    {
+                        DatabaseTreeNode modNode = new DatabaseTreeNode(m, (int)DatabaseEditorMode);
+                        catNode.Nodes.Add(modNode);
+                        DisplayDatabaseConfigs(modNode, m.configs);
+                    }
                 }
+            }
+        }
+        private void DisplayDatabaseConfigs(DatabaseTreeNode parrent, List<Config> configs)
+        {
+            foreach(Config c in configs)
+            {
+                DatabaseTreeNode ConfigParrent = new DatabaseTreeNode(c, (int)DatabaseEditorMode);
+                parrent.Nodes.Add(ConfigParrent);
+                DisplayDatabaseConfigs(ConfigParrent, c.configs);
             }
         }
         //show the load database dialog and load the database
@@ -110,8 +126,6 @@ namespace RelhaxModpack
             if (SaveDatabaseDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             DatabaseLocation = SaveDatabaseDialog.FileName;
-            if (!File.Exists(DatabaseLocation))
-                return;
             Utils.SaveDatabase(DatabaseLocation, GameVersion, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
         }
         //Apply all changes from the form
@@ -209,6 +223,15 @@ namespace RelhaxModpack
             {
 
             }
+            else if (node.Category != null)
+            {
+
+            }
+        }
+
+        private void MoveButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
