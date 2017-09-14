@@ -145,6 +145,12 @@
     <Compile Include="CRCFileSizeUpdate.Designer.cs">
       <DependentUpon>CRCFileSizeUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="DatabaseAdder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DatabaseAdder.Designer.cs">
+      <DependentUpon>DatabaseAdder.cs</DependentUpon>
+    </Compile>
     <Compile Include="DatabaseEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -159,6 +165,7 @@
     </Compile>
     <Compile Include="DatabaseLogic.cs" />
     <Compile Include="DatabaseObject.cs" />
+    <Compile Include="DatabaseTreeNode.cs" />
     <Compile Include="Dependency.cs" />
     <Compile Include="FirstLoadHelper.cs">
       <SubType>Form</SubType>
@@ -262,6 +269,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CRCFileSizeUpdate.resx">
       <DependentUpon>CRCFileSizeUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DatabaseAdder.resx">
+      <DependentUpon>DatabaseAdder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DatabaseEditor.resx">
       <DependentUpon>DatabaseEditor.cs</DependentUpon>
