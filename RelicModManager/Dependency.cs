@@ -27,5 +27,10 @@ namespace RelhaxModpack
         public bool appendExtraction;
         public List<LogicalDependnecy> logicalDependencies = new List<LogicalDependnecy>();
         public Dependency() { }
+        //for the tostring thing
+        public override string ToString()
+        {
+            return packageName;
+        }
     }
 }

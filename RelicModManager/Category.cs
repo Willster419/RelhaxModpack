@@ -33,5 +33,10 @@ namespace RelhaxModpack
         {
             return x.name.CompareTo(y.name);
         }
+        //for the tostring thing
+        public override string ToString()
+        {
+            return name;
+        }
     }
 }

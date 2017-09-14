@@ -396,6 +396,7 @@
             this.RemoveEntryButton.TabIndex = 8;
             this.RemoveEntryButton.Text = "remove";
             this.RemoveEntryButton.UseVisualStyleBackColor = true;
+            this.RemoveEntryButton.Click += new System.EventHandler(this.RemoveEntryButton_Click);
             // 
             // AddEntryButton
             // 
@@ -495,6 +496,7 @@
             this.AddDependencyButton.TabIndex = 39;
             this.AddDependencyButton.Text = "add";
             this.AddDependencyButton.UseVisualStyleBackColor = true;
+            this.AddDependencyButton.Click += new System.EventHandler(this.AddDependencyButton_Click);
             // 
             // CurrentDependenciesCB
             // 
@@ -512,6 +514,7 @@
             this.RemoveDependencyButton.TabIndex = 37;
             this.RemoveDependencyButton.Text = "remove";
             this.RemoveDependencyButton.UseVisualStyleBackColor = true;
+            this.RemoveDependencyButton.Click += new System.EventHandler(this.RemoveDependencyButton_Click);
             // 
             // DependencyPackageNameLabel
             // 
@@ -545,6 +548,7 @@
             this.AddLogicalDependencyButton.TabIndex = 40;
             this.AddLogicalDependencyButton.Text = "add";
             this.AddLogicalDependencyButton.UseVisualStyleBackColor = true;
+            this.AddLogicalDependencyButton.Click += new System.EventHandler(this.AddLogicalDependencyButton_Click);
             // 
             // CurrentLogicalDependenciesCB
             // 
@@ -571,6 +575,7 @@
             this.RemoveLogicalDependencyButton.TabIndex = 38;
             this.RemoveLogicalDependencyButton.Text = "remove";
             this.RemoveLogicalDependencyButton.UseVisualStyleBackColor = true;
+            this.RemoveLogicalDependencyButton.Click += new System.EventHandler(this.RemoveLogicalDependencyButton_Click);
             // 
             // LogicalDependencyPackageNameLabel
             // 
@@ -653,6 +658,7 @@
             this.MovePictureButton.TabIndex = 39;
             this.MovePictureButton.Text = "move to position";
             this.MovePictureButton.UseVisualStyleBackColor = true;
+            this.MovePictureButton.Click += new System.EventHandler(this.MovePictureButton_Click);
             // 
             // PicturePanel
             // 
@@ -696,6 +702,7 @@
             this.AddPictureButton.TabIndex = 42;
             this.AddPictureButton.Text = "add at position";
             this.AddPictureButton.UseVisualStyleBackColor = true;
+            this.AddPictureButton.Click += new System.EventHandler(this.AddPictureButton_Click);
             // 
             // ApplyPictureEditButton
             // 
@@ -705,6 +712,7 @@
             this.ApplyPictureEditButton.TabIndex = 41;
             this.ApplyPictureEditButton.Text = "apply edit";
             this.ApplyPictureEditButton.UseVisualStyleBackColor = true;
+            this.ApplyPictureEditButton.Click += new System.EventHandler(this.ApplyPictureEditButton_Click);
             // 
             // RemovePictureButton
             // 
@@ -714,6 +722,7 @@
             this.RemovePictureButton.TabIndex = 40;
             this.RemovePictureButton.Text = "remove";
             this.RemovePictureButton.UseVisualStyleBackColor = true;
+            this.RemovePictureButton.Click += new System.EventHandler(this.RemovePictureButton_Click);
             // 
             // MoveButton
             // 
