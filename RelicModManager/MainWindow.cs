@@ -829,7 +829,7 @@ namespace RelhaxModpack
                                 PackageName = depD.packageName,
                                 Enabled = depD.enabled,
                                 Checked = dependenciesToInstall.Contains(depD),
-                                NotFlag = false
+                                NotFlag = ld.negateFlag
                             };
                             d.DatabasePackageLogic.Add(dbl);
                         }
@@ -894,7 +894,7 @@ namespace RelhaxModpack
                         }
                     }
                 }
-                if (addIt)
+                if (addIt && !logicalDependenciesToInstall.Contains(ld))
                     logicalDependenciesToInstall.Add(ld);
             }
 
