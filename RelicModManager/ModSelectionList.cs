@@ -21,6 +21,7 @@ namespace RelhaxModpack
         public List<Dependency> dependencies;
         public List<LogicalDependnecy> logicalDependencies;
         public List<CompleteModSearch> completeModSearchList;
+        public CompleteModSearch lastSearchFieldInSelectionView;
         private bool loadingConfig = false;
         private bool taskBarHidden = false;
         private const int titleBar = 23;//set origionally for 23
@@ -2411,7 +2412,6 @@ namespace RelhaxModpack
                     filteredItems = filteredItems.FindAll(x => x.name.ToLower().Contains(f.ToLower()));
                 }
             }
-
             if (filteredItems == null)
             {
                 ignoreSelections = true;
@@ -2458,6 +2458,67 @@ namespace RelhaxModpack
             }
         }
 
+        // call expected with Mod or Config structure
+        private void handleBackColorOfSearchResult(object sender)
+        {
+            if (lastSearchFieldInSelectionView is Mod)
+            {
+                Mod m = (Mod)lastSearchFieldInSelectionView;
+                ModFormCheckBox lS = (ModFormCheckBox)m.modFormCheckBox;
+                lS.BackColor = Settings.getBackColor();
+            }
+            else if (lastSearchFieldInSelectionView is Config)
+            {
+                Config c = (Config)lastSearchFieldInSelectionView;
+                if (lastSearchFieldInSelectionView is ConfigFormCheckBox)
+                {
+                    ConfigFormCheckBox lS = (ConfigFormCheckBox)c.configUIComponent;
+                    lS.BackColor = Settings.getBackColor();
+                }
+                else if (lastSearchFieldInSelectionView is ConfigFormComboBox)
+                {
+                    ConfigFormComboBox lS = (ConfigFormComboBox)c.configUIComponent;
+                    lS.BackColor = Settings.getBackColor();
+                }
+                else if (lastSearchFieldInSelectionView is ConfigFormRadioButton)
+                {
+                    ConfigFormRadioButton lS = (ConfigFormRadioButton)c.configUIComponent;
+                    lS.BackColor = Settings.getBackColor();
+                }
+            }
+            
+            if (sender is Mod)
+            {
+                Mod m = (Mod)sender;
+                lastSearchFieldInSelectionView = m;
+                ModFormCheckBox mFCB = (ModFormCheckBox)m.modFormCheckBox;
+                mFCB.BackColor = Color.LightSteelBlue;
+                mFCB.Focus();
+            } else if (sender is Config)
+            {
+                Config c = (Config)sender;
+                if (c.configUIComponent is ConfigFormCheckBox)
+                {
+                    ConfigFormCheckBox cFCB = (ConfigFormCheckBox)c.configUIComponent;
+                    cFCB.BackColor = Color.LightSteelBlue;
+                    cFCB.Focus();
+                }
+                else if (c.configUIComponent is ConfigFormComboBox)
+                {
+                    ConfigFormComboBox cFCB = (ConfigFormComboBox)c.configUIComponent;
+                    handleBackColorOfSearchResult(c.parentMod);
+                    return;
+                }
+                else if (c.configUIComponent is ConfigFormRadioButton)
+                {
+                    ConfigFormRadioButton cFRB = (ConfigFormRadioButton)c.configUIComponent;
+                    cFRB.BackColor = Color.LightSteelBlue;
+                    cFRB.Focus();
+                }
+                lastSearchFieldInSelectionView = c;
+            }
+        }
+
         private void searchCB_SelectionChangeCommitted(object sender, EventArgs e)
         {
             ComboBox sendah = (ComboBox)sender;
@@ -2475,12 +2536,12 @@ namespace RelhaxModpack
                 TabPage tp = modTabGroups.SelectedTab;
                 if (Settings.sView == Settings.SelectionView.defaultt)
                 {
-                    ModFormCheckBox c = (ModFormCheckBox)m.modFormCheckBox;
-                    c.Focus();
+                    handleBackColorOfSearchResult(m);
                 }
                 else if (Settings.sView == Settings.SelectionView.legacy)
                 {
                     ModWPFCheckBox c = (ModWPFCheckBox)m.modFormCheckBox;
+                    // c.Background = Color.LightSteelBlue;
                     c.Focus();
                     this.ModSelectionList_SizeChanged(null, null);
                 }
@@ -2495,21 +2556,7 @@ namespace RelhaxModpack
                 TabPage tp = modTabGroups.SelectedTab;
                 if (Settings.sView == Settings.SelectionView.defaultt)
                 {
-                    if (c.configUIComponent is ConfigFormRadioButton)
-                    {
-                        ConfigFormRadioButton s = (ConfigFormRadioButton)c.configUIComponent;
-                        s.Focus();
-                    }
-                    else if (c.configUIComponent is ConfigFormComboBox)
-                    {
-                        ConfigFormComboBox s = (ConfigFormComboBox)c.configUIComponent;
-                        s.Focus();
-                    }
-                    else if (c.configUIComponent is ConfigFormCheckBox)
-                    {
-                        ConfigFormCheckBox s = (ConfigFormCheckBox)c.configUIComponent;
-                        s.Focus();
-                    }
+                    handleBackColorOfSearchResult(c);
                 }
                 else if (Settings.sView == Settings.SelectionView.legacy)
                 {
@@ -2519,15 +2566,15 @@ namespace RelhaxModpack
                         s.Focus();
                         this.ModSelectionList_SizeChanged(null, null);
                     }
-                    else if (c.configUIComponent is ConfigFormComboBox)
+                    else if (c.configUIComponent is ConfigWPFComboBox)
                     {
-                        ConfigFormComboBox s = (ConfigFormComboBox)c.configUIComponent;
+                        ConfigWPFComboBox s = (ConfigWPFComboBox)c.configUIComponent;
                         s.Focus();
                         this.ModSelectionList_SizeChanged(null, null);
                     }
-                    else if (c.configUIComponent is ConfigFormCheckBox)
+                    else if (c.configUIComponent is ConfigWPFCheckBox)
                     {
-                        ConfigFormCheckBox s = (ConfigFormCheckBox)c.configUIComponent;
+                        ConfigWPFCheckBox s = (ConfigWPFCheckBox)c.configUIComponent;
                         s.Focus();
                         this.ModSelectionList_SizeChanged(null, null);
                     }
