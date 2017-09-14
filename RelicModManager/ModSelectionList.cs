@@ -20,7 +20,7 @@ namespace RelhaxModpack
         public List<Dependency> globalDependencies;
         public List<Dependency> dependencies;
         public List<LogicalDependnecy> logicalDependencies;
-        public List<Mod> completeModSearchList;
+        public List<CompleteModSearch> completeModSearchList;
         private bool loadingConfig = false;
         private bool taskBarHidden = false;
         private const int titleBar = 23;//set origionally for 23
@@ -313,7 +313,7 @@ namespace RelhaxModpack
             }
             loadingConfig = true;
             Utils.appendToLog("Loading ModSelectionList with view " + Settings.sView);
-            completeModSearchList = new List<Mod>();
+            completeModSearchList = new List<CompleteModSearch>();
             foreach (TabPage t in this.modTabGroups.TabPages)
             {
                 foreach (Category c in parsedCatagoryList)
@@ -416,8 +416,7 @@ namespace RelhaxModpack
                 //add the root UI object to the memory database
                 m.modFormCheckBox = modCheckBox;
                 m.tabIndex = t;
-                // searchCB.Items.Add(m);
-                completeModSearchList.Add(m);
+                completeModSearchList.Add((CompleteModSearch)m);
                 switch (Settings.fontSizeforum)
                 {
                     case Settings.FontSize.fontRegular:
@@ -514,7 +513,10 @@ namespace RelhaxModpack
                 //link stuff in memory
                 con.parentMod = m;
                 if (parentIsMod)
+                {
+                    completeModSearchList.Add((CompleteModSearch)con);
                     con.parent = m;
+                }
                 else
                     con.parent = parentConfig;
                 //create the init stuff for each config
@@ -1242,8 +1244,7 @@ namespace RelhaxModpack
                 modCheckBox.mod = m;
                 m.tabIndex = t;
                 m.modFormCheckBox = modCheckBox;
-                // searchCB.Items.Add(m);
-                completeModSearchList.Add(m);
+                completeModSearchList.Add((CompleteModSearch)m);
                 //the mod checksum logic
                 string modDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.zipFile;
                 if (firstLoad)
@@ -2400,7 +2401,7 @@ namespace RelhaxModpack
         {
             ComboBox searchComboBox = (ComboBox)sender;
             string filter_param = searchComboBox.Text;
-            List<Mod> filteredItems = null;
+            List<CompleteModSearch> filteredItems = null;
             if (!String.IsNullOrWhiteSpace(filter_param))
             {
                 String[] filtered_parts = filter_param.Split('*');
@@ -2464,23 +2465,77 @@ namespace RelhaxModpack
             {
                 return;
             }
-            Mod m = (Mod)sendah.SelectedItem;
-            if (modTabGroups.TabPages.Contains(m.tabIndex))
+            if (sendah.SelectedItem is Mod)
             {
-                modTabGroups.SelectedTab = m.tabIndex;
+                Mod m = (Mod)sendah.SelectedItem;
+                if (modTabGroups.TabPages.Contains(m.tabIndex))
+                {
+                    modTabGroups.SelectedTab = m.tabIndex;
+                }
+                TabPage tp = modTabGroups.SelectedTab;
+                if (Settings.sView == Settings.SelectionView.defaultt)
+                {
+                    ModFormCheckBox c = (ModFormCheckBox)m.modFormCheckBox;
+                    c.Focus();
+                }
+                else if (Settings.sView == Settings.SelectionView.legacy)
+                {
+                    ModWPFCheckBox c = (ModWPFCheckBox)m.modFormCheckBox;
+                    c.Focus();
+                    this.ModSelectionList_SizeChanged(null, null);
+                }
             }
-            TabPage tp = modTabGroups.SelectedTab;
-            if (Settings.sView == Settings.SelectionView.defaultt)
+            else if (sendah.SelectedItem is Config)
             {
-                ModFormCheckBox c = (ModFormCheckBox)m.modFormCheckBox;
-                //tp.ScrollControlIntoView(c);
-                c.Focus();
+                Config c = (Config)sendah.SelectedItem;
+                if (modTabGroups.TabPages.Contains(c.parentMod.tabIndex))
+                {
+                    modTabGroups.SelectedTab = c.parentMod.tabIndex;
+                }
+                TabPage tp = modTabGroups.SelectedTab;
+                if (Settings.sView == Settings.SelectionView.defaultt)
+                {
+                    if (c.configUIComponent is ConfigFormRadioButton)
+                    {
+                        ConfigFormRadioButton s = (ConfigFormRadioButton)c.configUIComponent;
+                        s.Focus();
+                    }
+                    else if (c.configUIComponent is ConfigFormComboBox)
+                    {
+                        ConfigFormComboBox s = (ConfigFormComboBox)c.configUIComponent;
+                        s.Focus();
+                    }
+                    else if (c.configUIComponent is ConfigFormCheckBox)
+                    {
+                        ConfigFormCheckBox s = (ConfigFormCheckBox)c.configUIComponent;
+                        s.Focus();
+                    }
+                }
+                else if (Settings.sView == Settings.SelectionView.legacy)
+                {
+                    if (c.configUIComponent is ConfigWPFRadioButton)
+                    {
+                        ConfigWPFRadioButton s = (ConfigWPFRadioButton)c.configUIComponent;
+                        s.Focus();
+                        this.ModSelectionList_SizeChanged(null, null);
+                    }
+                    else if (c.configUIComponent is ConfigFormComboBox)
+                    {
+                        ConfigFormComboBox s = (ConfigFormComboBox)c.configUIComponent;
+                        s.Focus();
+                        this.ModSelectionList_SizeChanged(null, null);
+                    }
+                    else if (c.configUIComponent is ConfigFormCheckBox)
+                    {
+                        ConfigFormCheckBox s = (ConfigFormCheckBox)c.configUIComponent;
+                        s.Focus();
+                        this.ModSelectionList_SizeChanged(null, null);
+                    }
+                }
             }
-            else if (Settings.sView == Settings.SelectionView.legacy)
+            else
             {
-                ModWPFCheckBox c = (ModWPFCheckBox)m.modFormCheckBox;
-                c.Focus();
-                this.ModSelectionList_SizeChanged(null, null);
+                Utils.appendToLog("searchCB_SelectionChangeCommitted\nelse: no sendah identified");
             }
             mouseCLick = false;
         }

@@ -5,7 +5,7 @@ namespace RelhaxModpack
 {
     //a mod is the core of the modpack. A modification for WoT.
     //spacer
-    public class Mod : DatabaseObject
+    public class Mod : DatabaseObject, CompleteModSearch
     {
         //the tab index in the modpack 
         public TabPage tabIndex { get; set; }

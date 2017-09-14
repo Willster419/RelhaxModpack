@@ -4,7 +4,7 @@ namespace RelhaxModpack
 {
     //a config is a configuration for a mod to make the mod function if a certain way
     //in some scenarios, the config is the mod itself
-    public class Config : DatabaseObject
+    public class Config : DatabaseObject, CompleteModSearch
     {
         //can the user select multiple configs or one only?
         public string type { get; set; }
