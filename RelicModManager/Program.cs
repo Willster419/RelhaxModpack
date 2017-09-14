@@ -81,6 +81,12 @@ namespace RelhaxModpack
                     Application.Run(new DatabaseListGenerater());
                     return;
                 }
+                else if (Regex.IsMatch(commandArgs[i], @"databaseedit$"))
+                {
+                    Utils.appendToLog("/databaseedit detected, loading in database edit mode");
+                    Application.Run(new DatabaseEditor());
+                    return;
+                }
             }
             //load the translations
             Utils.appendToLog("Loading translation hashes");
