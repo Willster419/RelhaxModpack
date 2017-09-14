@@ -33,10 +33,8 @@
             this.ObjectNameTB = new System.Windows.Forms.TextBox();
             this.DatabasePanelTree = new System.Windows.Forms.Panel();
             this.DatabaseEditPanel = new System.Windows.Forms.Panel();
-            this.AppendExtractionCB = new System.Windows.Forms.CheckBox();
-            this.AppendExtractionLabel = new System.Windows.Forms.Label();
+            this.ObjectAppendExtractionCB = new System.Windows.Forms.CheckBox();
             this.ObjectVisableCheckBox = new System.Windows.Forms.CheckBox();
-            this.ObjectVisable = new System.Windows.Forms.Label();
             this.ObjectTypeComboBox = new System.Windows.Forms.ComboBox();
             this.ObjectType = new System.Windows.Forms.Label();
             this.ObjectUpdateNotes = new System.Windows.Forms.Label();
@@ -47,7 +45,6 @@
             this.ObjectDevURL = new System.Windows.Forms.Label();
             this.ApplyChangesButton = new System.Windows.Forms.Button();
             this.ObjectEnabledCheckBox = new System.Windows.Forms.CheckBox();
-            this.ObjectEnabled = new System.Windows.Forms.Label();
             this.ObjectZipFileTB = new System.Windows.Forms.TextBox();
             this.ObjectZipFile = new System.Windows.Forms.Label();
             this.ObjectEndAddressTB = new System.Windows.Forms.TextBox();
@@ -70,14 +67,14 @@
             this.OpenDatabaseDialog = new System.Windows.Forms.OpenFileDialog();
             this.SaveDatabaseDialog = new System.Windows.Forms.SaveFileDialog();
             this.DatabaseSubeditPanel = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
+            this.DependencyPanel = new System.Windows.Forms.Panel();
             this.AddDependencyButton = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.CurrentDependenciesCB = new System.Windows.Forms.ComboBox();
             this.RemoveDependencyButton = new System.Windows.Forms.Button();
             this.DependencyPackageNameLabel = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.LogicalDependencyPanel = new System.Windows.Forms.Panel();
             this.AddLogicalDependencyButton = new System.Windows.Forms.Button();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.CurrentLogicalDependenciesCB = new System.Windows.Forms.ComboBox();
             this.ObjectLogicalDependenciesLabel = new System.Windows.Forms.Label();
             this.RemoveLogicalDependencyButton = new System.Windows.Forms.Button();
             this.LogicalDependencyPackageNameLabel = new System.Windows.Forms.Label();
@@ -89,7 +86,7 @@
             this.PicturesURLLabel = new System.Windows.Forms.Label();
             this.PictureURLTB = new System.Windows.Forms.RichTextBox();
             this.MovePictureButton = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.PicturePanel = new System.Windows.Forms.Panel();
             this.AddPictureTB = new System.Windows.Forms.TextBox();
             this.MovePictureTB = new System.Windows.Forms.TextBox();
             this.AddPictureButton = new System.Windows.Forms.Button();
@@ -99,9 +96,9 @@
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.DatabaseSubeditPanel.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.DependencyPanel.SuspendLayout();
+            this.LogicalDependencyPanel.SuspendLayout();
+            this.PicturePanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // DatabaseTreeView
@@ -141,10 +138,8 @@
             // DatabaseEditPanel
             // 
             this.DatabaseEditPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.DatabaseEditPanel.Controls.Add(this.AppendExtractionCB);
-            this.DatabaseEditPanel.Controls.Add(this.AppendExtractionLabel);
+            this.DatabaseEditPanel.Controls.Add(this.ObjectAppendExtractionCB);
             this.DatabaseEditPanel.Controls.Add(this.ObjectVisableCheckBox);
-            this.DatabaseEditPanel.Controls.Add(this.ObjectVisable);
             this.DatabaseEditPanel.Controls.Add(this.ObjectTypeComboBox);
             this.DatabaseEditPanel.Controls.Add(this.ObjectType);
             this.DatabaseEditPanel.Controls.Add(this.ObjectUpdateNotes);
@@ -155,7 +150,6 @@
             this.DatabaseEditPanel.Controls.Add(this.ObjectDevURL);
             this.DatabaseEditPanel.Controls.Add(this.ApplyChangesButton);
             this.DatabaseEditPanel.Controls.Add(this.ObjectEnabledCheckBox);
-            this.DatabaseEditPanel.Controls.Add(this.ObjectEnabled);
             this.DatabaseEditPanel.Controls.Add(this.ObjectZipFileTB);
             this.DatabaseEditPanel.Controls.Add(this.ObjectZipFile);
             this.DatabaseEditPanel.Controls.Add(this.ObjectEndAddressTB);
@@ -171,41 +165,25 @@
             this.DatabaseEditPanel.Size = new System.Drawing.Size(396, 442);
             this.DatabaseEditPanel.TabIndex = 4;
             // 
-            // AppendExtractionCB
+            // ObjectAppendExtractionCB
             // 
-            this.AppendExtractionCB.AutoSize = true;
-            this.AppendExtractionCB.Location = new System.Drawing.Point(313, 185);
-            this.AppendExtractionCB.Name = "AppendExtractionCB";
-            this.AppendExtractionCB.Size = new System.Drawing.Size(15, 14);
-            this.AppendExtractionCB.TabIndex = 25;
-            this.AppendExtractionCB.UseVisualStyleBackColor = true;
-            // 
-            // AppendExtractionLabel
-            // 
-            this.AppendExtractionLabel.AutoSize = true;
-            this.AppendExtractionLabel.Location = new System.Drawing.Point(217, 185);
-            this.AppendExtractionLabel.Name = "AppendExtractionLabel";
-            this.AppendExtractionLabel.Size = new System.Drawing.Size(90, 13);
-            this.AppendExtractionLabel.TabIndex = 24;
-            this.AppendExtractionLabel.Text = "appendExtraction";
+            this.ObjectAppendExtractionCB.AutoSize = true;
+            this.ObjectAppendExtractionCB.Location = new System.Drawing.Point(248, 184);
+            this.ObjectAppendExtractionCB.Name = "ObjectAppendExtractionCB";
+            this.ObjectAppendExtractionCB.Size = new System.Drawing.Size(109, 17);
+            this.ObjectAppendExtractionCB.TabIndex = 25;
+            this.ObjectAppendExtractionCB.Text = "appendExtraction";
+            this.ObjectAppendExtractionCB.UseVisualStyleBackColor = true;
             // 
             // ObjectVisableCheckBox
             // 
             this.ObjectVisableCheckBox.AutoSize = true;
             this.ObjectVisableCheckBox.Location = new System.Drawing.Point(173, 185);
             this.ObjectVisableCheckBox.Name = "ObjectVisableCheckBox";
-            this.ObjectVisableCheckBox.Size = new System.Drawing.Size(15, 14);
+            this.ObjectVisableCheckBox.Size = new System.Drawing.Size(59, 17);
             this.ObjectVisableCheckBox.TabIndex = 23;
+            this.ObjectVisableCheckBox.Text = "visable";
             this.ObjectVisableCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // ObjectVisable
-            // 
-            this.ObjectVisable.AutoSize = true;
-            this.ObjectVisable.Location = new System.Drawing.Point(127, 185);
-            this.ObjectVisable.Name = "ObjectVisable";
-            this.ObjectVisable.Size = new System.Drawing.Size(40, 13);
-            this.ObjectVisable.TabIndex = 22;
-            this.ObjectVisable.Text = "visable";
             // 
             // ObjectTypeComboBox
             // 
@@ -295,18 +273,10 @@
             this.ObjectEnabledCheckBox.AutoSize = true;
             this.ObjectEnabledCheckBox.Location = new System.Drawing.Point(91, 184);
             this.ObjectEnabledCheckBox.Name = "ObjectEnabledCheckBox";
-            this.ObjectEnabledCheckBox.Size = new System.Drawing.Size(15, 14);
+            this.ObjectEnabledCheckBox.Size = new System.Drawing.Size(64, 17);
             this.ObjectEnabledCheckBox.TabIndex = 12;
+            this.ObjectEnabledCheckBox.Text = "enabled";
             this.ObjectEnabledCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // ObjectEnabled
-            // 
-            this.ObjectEnabled.AutoSize = true;
-            this.ObjectEnabled.Location = new System.Drawing.Point(40, 185);
-            this.ObjectEnabled.Name = "ObjectEnabled";
-            this.ObjectEnabled.Size = new System.Drawing.Size(45, 13);
-            this.ObjectEnabled.TabIndex = 11;
-            this.ObjectEnabled.Text = "enabled";
             // 
             // ObjectZipFileTB
             // 
@@ -435,6 +405,7 @@
             this.AddEntryButton.TabIndex = 9;
             this.AddEntryButton.Text = "add";
             this.AddEntryButton.UseVisualStyleBackColor = true;
+            this.AddEntryButton.Click += new System.EventHandler(this.AddEntryButton_Click);
             // 
             // DBORB
             // 
@@ -495,26 +466,26 @@
             // DatabaseSubeditPanel
             // 
             this.DatabaseSubeditPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.DatabaseSubeditPanel.Controls.Add(this.panel3);
-            this.DatabaseSubeditPanel.Controls.Add(this.panel2);
+            this.DatabaseSubeditPanel.Controls.Add(this.DependencyPanel);
+            this.DatabaseSubeditPanel.Controls.Add(this.LogicalDependencyPanel);
             this.DatabaseSubeditPanel.Location = new System.Drawing.Point(730, 30);
             this.DatabaseSubeditPanel.Name = "DatabaseSubeditPanel";
             this.DatabaseSubeditPanel.Size = new System.Drawing.Size(284, 364);
             this.DatabaseSubeditPanel.TabIndex = 26;
             // 
-            // panel3
+            // DependencyPanel
             // 
-            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel3.Controls.Add(this.AddDependencyButton);
-            this.panel3.Controls.Add(this.comboBox1);
-            this.panel3.Controls.Add(this.ObjectDependenciesList);
-            this.panel3.Controls.Add(this.ObjectDependenciesLabel);
-            this.panel3.Controls.Add(this.RemoveDependencyButton);
-            this.panel3.Controls.Add(this.DependencyPackageNameLabel);
-            this.panel3.Location = new System.Drawing.Point(3, 3);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(278, 183);
-            this.panel3.TabIndex = 28;
+            this.DependencyPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.DependencyPanel.Controls.Add(this.AddDependencyButton);
+            this.DependencyPanel.Controls.Add(this.CurrentDependenciesCB);
+            this.DependencyPanel.Controls.Add(this.ObjectDependenciesList);
+            this.DependencyPanel.Controls.Add(this.ObjectDependenciesLabel);
+            this.DependencyPanel.Controls.Add(this.RemoveDependencyButton);
+            this.DependencyPanel.Controls.Add(this.DependencyPackageNameLabel);
+            this.DependencyPanel.Location = new System.Drawing.Point(3, 3);
+            this.DependencyPanel.Name = "DependencyPanel";
+            this.DependencyPanel.Size = new System.Drawing.Size(278, 183);
+            this.DependencyPanel.TabIndex = 28;
             // 
             // AddDependencyButton
             // 
@@ -525,13 +496,13 @@
             this.AddDependencyButton.Text = "add";
             this.AddDependencyButton.UseVisualStyleBackColor = true;
             // 
-            // comboBox1
+            // CurrentDependenciesCB
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(5, 132);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(270, 21);
-            this.comboBox1.TabIndex = 38;
+            this.CurrentDependenciesCB.FormattingEnabled = true;
+            this.CurrentDependenciesCB.Location = new System.Drawing.Point(5, 132);
+            this.CurrentDependenciesCB.Name = "CurrentDependenciesCB";
+            this.CurrentDependenciesCB.Size = new System.Drawing.Size(270, 21);
+            this.CurrentDependenciesCB.TabIndex = 38;
             // 
             // RemoveDependencyButton
             // 
@@ -551,20 +522,20 @@
             this.DependencyPackageNameLabel.TabIndex = 35;
             this.DependencyPackageNameLabel.Text = "packageName";
             // 
-            // panel2
+            // LogicalDependencyPanel
             // 
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.AddLogicalDependencyButton);
-            this.panel2.Controls.Add(this.comboBox2);
-            this.panel2.Controls.Add(this.ObjectLogicalDependenciesLabel);
-            this.panel2.Controls.Add(this.RemoveLogicalDependencyButton);
-            this.panel2.Controls.Add(this.LogicalDependencyPackageNameLabel);
-            this.panel2.Controls.Add(this.LogicalDependnecyNegateFlagCB);
-            this.panel2.Controls.Add(this.ObjectLogicalDependenciesList);
-            this.panel2.Location = new System.Drawing.Point(3, 189);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(278, 170);
-            this.panel2.TabIndex = 28;
+            this.LogicalDependencyPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.LogicalDependencyPanel.Controls.Add(this.AddLogicalDependencyButton);
+            this.LogicalDependencyPanel.Controls.Add(this.CurrentLogicalDependenciesCB);
+            this.LogicalDependencyPanel.Controls.Add(this.ObjectLogicalDependenciesLabel);
+            this.LogicalDependencyPanel.Controls.Add(this.RemoveLogicalDependencyButton);
+            this.LogicalDependencyPanel.Controls.Add(this.LogicalDependencyPackageNameLabel);
+            this.LogicalDependencyPanel.Controls.Add(this.LogicalDependnecyNegateFlagCB);
+            this.LogicalDependencyPanel.Controls.Add(this.ObjectLogicalDependenciesList);
+            this.LogicalDependencyPanel.Location = new System.Drawing.Point(3, 189);
+            this.LogicalDependencyPanel.Name = "LogicalDependencyPanel";
+            this.LogicalDependencyPanel.Size = new System.Drawing.Size(278, 170);
+            this.LogicalDependencyPanel.TabIndex = 28;
             // 
             // AddLogicalDependencyButton
             // 
@@ -575,13 +546,13 @@
             this.AddLogicalDependencyButton.Text = "add";
             this.AddLogicalDependencyButton.UseVisualStyleBackColor = true;
             // 
-            // comboBox2
+            // CurrentLogicalDependenciesCB
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(6, 122);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(266, 21);
-            this.comboBox2.TabIndex = 39;
+            this.CurrentLogicalDependenciesCB.FormattingEnabled = true;
+            this.CurrentLogicalDependenciesCB.Location = new System.Drawing.Point(6, 122);
+            this.CurrentLogicalDependenciesCB.Name = "CurrentLogicalDependenciesCB";
+            this.CurrentLogicalDependenciesCB.Size = new System.Drawing.Size(266, 21);
+            this.CurrentLogicalDependenciesCB.TabIndex = 39;
             // 
             // ObjectLogicalDependenciesLabel
             // 
@@ -683,25 +654,25 @@
             this.MovePictureButton.Text = "move to position";
             this.MovePictureButton.UseVisualStyleBackColor = true;
             // 
-            // panel1
+            // PicturePanel
             // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.AddPictureTB);
-            this.panel1.Controls.Add(this.MovePictureTB);
-            this.panel1.Controls.Add(this.AddPictureButton);
-            this.panel1.Controls.Add(this.ApplyPictureEditButton);
-            this.panel1.Controls.Add(this.RemovePictureButton);
-            this.panel1.Controls.Add(this.MovePictureButton);
-            this.panel1.Controls.Add(this.ObjectPicturesLabel);
-            this.panel1.Controls.Add(this.PictureURLTB);
-            this.panel1.Controls.Add(this.ObjectPicturesList);
-            this.panel1.Controls.Add(this.PicturesURLLabel);
-            this.panel1.Controls.Add(this.PicturesTypeLabel);
-            this.panel1.Controls.Add(this.PicturesTypeCBox);
-            this.panel1.Location = new System.Drawing.Point(1020, 30);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(278, 297);
-            this.panel1.TabIndex = 27;
+            this.PicturePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PicturePanel.Controls.Add(this.AddPictureTB);
+            this.PicturePanel.Controls.Add(this.MovePictureTB);
+            this.PicturePanel.Controls.Add(this.AddPictureButton);
+            this.PicturePanel.Controls.Add(this.ApplyPictureEditButton);
+            this.PicturePanel.Controls.Add(this.RemovePictureButton);
+            this.PicturePanel.Controls.Add(this.MovePictureButton);
+            this.PicturePanel.Controls.Add(this.ObjectPicturesLabel);
+            this.PicturePanel.Controls.Add(this.PictureURLTB);
+            this.PicturePanel.Controls.Add(this.ObjectPicturesList);
+            this.PicturePanel.Controls.Add(this.PicturesURLLabel);
+            this.PicturePanel.Controls.Add(this.PicturesTypeLabel);
+            this.PicturePanel.Controls.Add(this.PicturesTypeCBox);
+            this.PicturePanel.Location = new System.Drawing.Point(1020, 30);
+            this.PicturePanel.Name = "PicturePanel";
+            this.PicturePanel.Size = new System.Drawing.Size(278, 297);
+            this.PicturePanel.TabIndex = 27;
             // 
             // AddPictureTB
             // 
@@ -760,7 +731,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1301, 512);
             this.Controls.Add(this.MoveButton);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.PicturePanel);
             this.Controls.Add(this.DatabaseSubeditPanel);
             this.Controls.Add(this.LogicalDependencyRB);
             this.Controls.Add(this.DependencyRB);
@@ -780,12 +751,12 @@
             this.DatabaseEditPanel.ResumeLayout(false);
             this.DatabaseEditPanel.PerformLayout();
             this.DatabaseSubeditPanel.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.DependencyPanel.ResumeLayout(false);
+            this.DependencyPanel.PerformLayout();
+            this.LogicalDependencyPanel.ResumeLayout(false);
+            this.LogicalDependencyPanel.PerformLayout();
+            this.PicturePanel.ResumeLayout(false);
+            this.PicturePanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -798,7 +769,6 @@
         private System.Windows.Forms.TextBox ObjectNameTB;
         private System.Windows.Forms.Panel DatabasePanelTree;
         private System.Windows.Forms.Panel DatabaseEditPanel;
-        private System.Windows.Forms.Label ObjectEnabled;
         private System.Windows.Forms.TextBox ObjectZipFileTB;
         private System.Windows.Forms.Label ObjectZipFile;
         private System.Windows.Forms.TextBox ObjectEndAddressTB;
@@ -829,29 +799,27 @@
         private System.Windows.Forms.OpenFileDialog OpenDatabaseDialog;
         private System.Windows.Forms.SaveFileDialog SaveDatabaseDialog;
         private System.Windows.Forms.CheckBox ObjectVisableCheckBox;
-        private System.Windows.Forms.Label ObjectVisable;
         private System.Windows.Forms.ComboBox ObjectTypeComboBox;
         private System.Windows.Forms.Label ObjectType;
         private System.Windows.Forms.Panel DatabaseSubeditPanel;
         private System.Windows.Forms.ListBox ObjectLogicalDependenciesList;
         private System.Windows.Forms.Label ObjectLogicalDependenciesLabel;
         private System.Windows.Forms.ListBox ObjectPicturesList;
-        private System.Windows.Forms.CheckBox AppendExtractionCB;
-        private System.Windows.Forms.Label AppendExtractionLabel;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.CheckBox ObjectAppendExtractionCB;
+        private System.Windows.Forms.Panel PicturePanel;
         private System.Windows.Forms.Button MovePictureButton;
         private System.Windows.Forms.RichTextBox PictureURLTB;
         private System.Windows.Forms.Label PicturesURLLabel;
         private System.Windows.Forms.Label PicturesTypeLabel;
         private System.Windows.Forms.ComboBox PicturesTypeCBox;
-        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel DependencyPanel;
         private System.Windows.Forms.Button AddDependencyButton;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox CurrentDependenciesCB;
         private System.Windows.Forms.Button RemoveDependencyButton;
         private System.Windows.Forms.Label DependencyPackageNameLabel;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel LogicalDependencyPanel;
         private System.Windows.Forms.Button AddLogicalDependencyButton;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox CurrentLogicalDependenciesCB;
         private System.Windows.Forms.Button RemoveLogicalDependencyButton;
         private System.Windows.Forms.Label LogicalDependencyPackageNameLabel;
         private System.Windows.Forms.CheckBox LogicalDependnecyNegateFlagCB;

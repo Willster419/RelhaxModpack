@@ -23,6 +23,7 @@ namespace RelhaxModpack
         private Dependency SelectedDependency;
         private LogicalDependnecy SelectedLogicalDependency;
         private DatabaseObject SelectedDatabaseObject;
+        private Category SelectedCategory;
         private int currentSelectedIndex = -1;
         string GameVersion = "";
 
@@ -93,6 +94,11 @@ namespace RelhaxModpack
                     }
                 }
             }
+            ResetUI();
+        }
+        private void ResetUI()
+        {
+            //TODO
         }
         private void DisplayDatabaseConfigs(DatabaseTreeNode parrent, List<Config> configs)
         {
@@ -131,7 +137,29 @@ namespace RelhaxModpack
         //Apply all changes from the form
         private void ApplyChangesButton_Click(object sender, EventArgs e)
         {
-
+            if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
+            {
+                int index = GlobalDependencies.IndexOf(SelectedGlobalDependency);
+                SelectedGlobalDependency.packageName = ObjectPackageNameTB.Text;
+                SelectedGlobalDependency.startAddress = ObjectStartAddressTB.Text;
+                SelectedGlobalDependency.endAddress = ObjectEndAddressTB.Text;
+                SelectedGlobalDependency.dependencyZipFile = ObjectZipFileTB.Text;
+                SelectedGlobalDependency.enabled = ObjectEnabledCheckBox.Checked;
+                SelectedGlobalDependency.appendExtraction = ObjectAppendExtractionCB.Checked;
+                GlobalDependencies[index] = SelectedGlobalDependency;
+            }
+            else if (DatabaseEditorMode == EditorMode.Dependency)
+            {
+                
+            }
+            else if (DatabaseEditorMode == EditorMode.LogicalDependency)
+            {
+                
+            }
+            else if (DatabaseEditorMode == EditorMode.DBO)
+            {
+               
+            }
         }
         //mode set to globalDependency
         private void GlobalDependencyRB_CheckedChanged(object sender, EventArgs e)
@@ -187,29 +215,46 @@ namespace RelhaxModpack
                 SelectedDependency = null;
                 SelectedLogicalDependency = null;
                 SelectedDatabaseObject = null;
+                SelectedCategory = null;
+
                 ObjectNameTB.Enabled = false;
                 ObjectNameTB.Text = "";
+
+                ObjectPackageNameTB.Enabled = true;
                 ObjectPackageNameTB.Text = node.GlobalDependency.packageName;
+
+                ObjectStartAddressTB.Enabled = true;
                 ObjectStartAddressTB.Text = node.GlobalDependency.startAddress;
+
+                ObjectEndAddressTB.Enabled = true;
                 ObjectEndAddressTB.Text = node.GlobalDependency.endAddress;
+
+                ObjectZipFileTB.Enabled = true;
                 ObjectZipFileTB.Text = node.GlobalDependency.dependencyZipFile;
+
                 ObjectDevURLTB.Enabled = false;
                 ObjectDevURLTB.Text = "";
-                ObjectTypeComboBox.SelectedIndex = 0;
+
                 ObjectTypeComboBox.Enabled = false;
+                ObjectTypeComboBox.SelectedIndex = 0;
+
+                ObjectEnabledCheckBox.Enabled = true;
                 ObjectEnabledCheckBox.Checked = node.GlobalDependency.enabled;
+
                 ObjectVisableCheckBox.Enabled = false;
-                ObjectDescTB.Text = "";
+                ObjectVisableCheckBox.Checked = false;
+
+                ObjectAppendExtractionCB.Enabled = true;
+                ObjectAppendExtractionCB.Checked = node.GlobalDependency.appendExtraction;
+
                 ObjectDescTB.Enabled = false;
-                ObjectUpdateNotesTB.Text = "";
+                ObjectDescTB.Text = "";
+
                 ObjectUpdateNotesTB.Enabled = false;
-                ObjectDependenciesList.Enabled = false;
-                ObjectDependenciesList.BackColor = SystemColors.Control;
-                AppendExtractionCB.Enabled = true;
-                AppendExtractionCB.Checked = node.GlobalDependency.appendExtraction;
-                ObjectLogicalDependenciesList.Enabled = true;
-                ObjectPicturesList.Enabled = false;
-                ObjectPicturesList.BackColor = SystemColors.Control;
+                ObjectUpdateNotesTB.Text = "";
+
+                DatabaseSubeditPanel.Enabled = false;
+                PicturePanel.Enabled = false;
             }
             else if (node.Dependency != null)
             {
@@ -230,6 +275,11 @@ namespace RelhaxModpack
         }
 
         private void MoveButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AddEntryButton_Click(object sender, EventArgs e)
         {
 
         }
