@@ -112,6 +112,7 @@
   <ItemGroup>
     <Compile Include="Category.cs" />
     <Compile Include="CiInfo.cs" />
+    <Compile Include="CompleteModSearchList.cs" />
     <Compile Include="ComboBoxItem.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ConfigFormCheckBox.cs">
