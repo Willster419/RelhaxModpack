@@ -8,6 +8,8 @@ namespace RelhaxModpack
     public class DatabaseLogic
     {
         public string PackageName { get; set; }
+        public bool Enabled { get; set; }
+        public bool Checked { get; set; }
         public bool NotFlag { get; set; }
     }
 }

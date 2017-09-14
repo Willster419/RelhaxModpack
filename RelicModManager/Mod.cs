@@ -11,7 +11,7 @@ namespace RelhaxModpack
         public TabPage tabIndex { get; set; }
         public List<Media> pictureList = new List<Media>();
         public List<Config> configs = new List<Config>();
-        public List<Dependency> dependencies = new List<Dependency>();
+        
         //the parent of a mod is a category
         public Category parent { get; set; }
         //needed to excatly identify double packageNames and its position

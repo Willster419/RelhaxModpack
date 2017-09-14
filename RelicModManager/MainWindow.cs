@@ -758,7 +758,10 @@ namespace RelhaxModpack
                 if (File.Exists(tanksLocation + "\\installedRelhaxFiles.log"))
                     File.Delete(tanksLocation + "\\installedRelhaxFiles.log");
             }
-            catch { }
+            catch(Exception ex)
+            {
+                Utils.exceptionLog(ex);
+            }
             //have the application display that it is loading. it is actually doing installation calculations
             downloadProgress.Text = Translations.getTranslatedString("loading");
             Application.DoEvents();
@@ -810,6 +813,89 @@ namespace RelhaxModpack
                             processDependencies(m.dependencies);
                     }
                 }
+            }
+
+            //build the list of mods and configs that use each logical dependency
+            foreach(LogicalDependnecy d in currentLogicalDependencies)
+            {
+                foreach(Dependency depD in currentDependencies)
+                {
+                    foreach(LogicalDependnecy ld in depD.logicalDependencies)
+                    {
+                        if(ld.packageName.Equals(d.packageName))
+                        {
+                            DatabaseLogic dbl = new DatabaseLogic()
+                            {
+                                PackageName = depD.packageName,
+                                Enabled = depD.enabled,
+                                Checked = dependenciesToInstall.Contains(depD),
+                                NotFlag = ld.negateFlag
+                            };
+                            d.DatabasePackageLogic.Add(dbl);
+                        }
+                    }
+                }
+                //itterate through every mod and config once for each dependency
+                //check each one's dependecy list, if packageName's match, add it to the dependency's list of mods/configs that use it
+                foreach (Category c in parsedCatagoryLists)
+                {
+                    //will itterate through every catagory once
+                    foreach (Mod m in c.mods)
+                    {
+                        foreach(LogicalDependnecy ld in m.logicalDependencies)
+                        {
+                            if(ld.packageName.Equals(d.packageName))
+                            {
+                                DatabaseLogic dbl = new DatabaseLogic()
+                                {
+                                    PackageName = m.packageName,
+                                    Enabled = m.enabled,
+                                    Checked = m.Checked,
+                                    NotFlag = ld.negateFlag
+                                };
+                                d.DatabasePackageLogic.Add(dbl);
+                            }
+                        }
+                        if (m.configs.Count > 0)
+                            ProcessConfigsLogical(d, m.configs);
+                    }
+                }
+            }
+
+            //now each logical dependency has a complete list of every dependency, mod, and config that uses it, and if it is enabled and checked
+            //indicate if the logical dependency will be installed
+            foreach(LogicalDependnecy ld in currentLogicalDependencies)
+            {
+                //idea is that if all mod/config/dependency are to be installed, then install the logical dependency
+                //and factor in the negate flag
+                bool addIt = true;
+                foreach(DatabaseLogic dl in ld.DatabasePackageLogic)
+                {
+                    if(dl.NotFlag)
+                    {
+                        //package must NOT be checked for it to be included
+                        //enabled must = true, checked must = false
+                        //otherwise break and don't add
+                        if(dl.Enabled && dl.Checked)
+                        {
+                            addIt = false;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        //package MUST be checked for it to be included
+                        //enabled must = true, checked must = true
+                        //otherwise break and don't add
+                        if(dl.Enabled && !dl.Checked)
+                        {
+                            addIt = false;
+                            break;
+                        }
+                    }
+                }
+                if (addIt && !logicalDependenciesToInstall.Contains(ld))
+                    logicalDependenciesToInstall.Add(ld);
             }
 
             //check for dependencies that actually need to be installed at the end
@@ -925,6 +1011,27 @@ namespace RelhaxModpack
                     //check for dependencies
                     if (config.dependencies.Count > 0)
                         processDependencies(config.dependencies);
+                }
+            }
+        }
+
+        private void ProcessConfigsLogical(LogicalDependnecy d, List<Config> configList)
+        {
+            foreach (Config config in configList)
+            {
+                foreach(LogicalDependnecy ld in config.logicalDependencies)
+                {
+                    if(ld.packageName.Equals(d.packageName))
+                    {
+                        DatabaseLogic dl = new DatabaseLogic()
+                        {
+                            PackageName = config.packageName,
+                            Enabled = config.enabled,
+                            Checked = config.Checked,
+                            NotFlag = ld.negateFlag
+                        };
+                        d.DatabasePackageLogic.Add(dl);
+                    }
                 }
             }
         }
