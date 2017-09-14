@@ -1396,11 +1396,11 @@ namespace RelhaxModpack
             {
                 if (con.visible)
                 {
-                    // if (parentIsMod) completeModSearchList.Add(con);
                     ConfigFormComboBox configControlDDALL = null;
                     con.parentMod = m;
                     if (parentIsMod)
                     {
+                        completeModSearchList.Add((CompleteModSearch)con);
                         con.parent = m;
                     }
                     else
