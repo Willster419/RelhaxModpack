@@ -2575,6 +2575,7 @@ namespace RelhaxModpack
                     else if (c.configUIComponent is ConfigWPFCheckBox)
                     {
                         ConfigWPFCheckBox s = (ConfigWPFCheckBox)c.configUIComponent;
+                        s.Foreground = System.Windows.Media.Brushes.LightSteelBlue;
                         s.Focus();
                         this.ModSelectionList_SizeChanged(null, null);
                     }
