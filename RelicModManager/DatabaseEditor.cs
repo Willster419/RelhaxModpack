@@ -205,6 +205,7 @@ namespace RelhaxModpack
                 SelectedGlobalDependency.packageName = ObjectPackageNameTB.Text;
                 SelectedGlobalDependency.startAddress = ObjectStartAddressTB.Text;
                 SelectedGlobalDependency.endAddress = ObjectEndAddressTB.Text;
+                SelectedGlobalDependency.devURL = ObjectDevURLTB.Text;
                 SelectedGlobalDependency.dependencyZipFile = ObjectZipFileTB.Text;
                 SelectedGlobalDependency.enabled = ObjectEnabledCheckBox.Checked;
                 SelectedGlobalDependency.appendExtraction = ObjectAppendExtractionCB.Checked;
@@ -216,6 +217,7 @@ namespace RelhaxModpack
                 SelectedDependency.packageName = ObjectPackageNameTB.Text;
                 SelectedDependency.startAddress = ObjectStartAddressTB.Text;
                 SelectedDependency.endAddress = ObjectEndAddressTB.Text;
+                SelectedDependency.devURL = ObjectDevURLTB.Text;
                 SelectedDependency.dependencyZipFile = ObjectZipFileTB.Text;
                 SelectedDependency.enabled = ObjectEnabledCheckBox.Checked;
                 SelectedDependency.appendExtraction = ObjectAppendExtractionCB.Checked;
@@ -227,6 +229,7 @@ namespace RelhaxModpack
                 SelectedLogicalDependency.packageName = ObjectPackageNameTB.Text;
                 SelectedLogicalDependency.startAddress = ObjectStartAddressTB.Text;
                 SelectedLogicalDependency.endAddress = ObjectEndAddressTB.Text;
+                SelectedLogicalDependency.devURL = ObjectDevURLTB.Text;
                 SelectedLogicalDependency.dependencyZipFile = ObjectZipFileTB.Text;
                 SelectedLogicalDependency.enabled = ObjectEnabledCheckBox.Checked;
                 LogicalDependencies[index] = SelectedLogicalDependency;
@@ -435,8 +438,8 @@ namespace RelhaxModpack
                 ObjectZipFileTB.Enabled = true;
                 ObjectZipFileTB.Text = node.GlobalDependency.dependencyZipFile;
 
-                ObjectDevURLTB.Enabled = false;
-                ObjectDevURLTB.Text = "";
+                ObjectDevURLTB.Enabled = true;
+                ObjectDevURLTB.Text = SelectedGlobalDependency.devURL;
 
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
@@ -482,8 +485,8 @@ namespace RelhaxModpack
                 ObjectZipFileTB.Enabled = true;
                 ObjectZipFileTB.Text = SelectedDependency.dependencyZipFile;
 
-                ObjectDevURLTB.Enabled = false;
-                ObjectDevURLTB.Text = "";
+                ObjectDevURLTB.Enabled = true;
+                ObjectDevURLTB.Text = SelectedDependency.devURL;
 
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
@@ -541,8 +544,8 @@ namespace RelhaxModpack
                 ObjectZipFileTB.Enabled = true;
                 ObjectZipFileTB.Text = SelectedLogicalDependency.dependencyZipFile;
 
-                ObjectDevURLTB.Enabled = false;
-                ObjectDevURLTB.Text = "";
+                ObjectDevURLTB.Enabled = true;
+                ObjectDevURLTB.Text = SelectedLogicalDependency.devURL;
 
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
@@ -825,6 +828,7 @@ namespace RelhaxModpack
                     newDep.dependencyZipFile = ObjectZipFileTB.Text;
                     newDep.enabled = ObjectEnabledCheckBox.Checked;
                     newDep.appendExtraction = ObjectAppendExtractionCB.Checked;
+                    newDep.devURL = ObjectDevURLTB.Text;
                     int index = GlobalDependencies.IndexOf(dba.SelectedGlobalDependency);
                     GlobalDependencies.Insert(index, newDep);
                     DisplayDatabase();
@@ -840,6 +844,7 @@ namespace RelhaxModpack
                     newDep.dependencyZipFile = ObjectZipFileTB.Text;
                     newDep.enabled = ObjectEnabledCheckBox.Checked;
                     newDep.appendExtraction = ObjectAppendExtractionCB.Checked;
+                    newDep.devURL = ObjectDevURLTB.Text;
                     List<LogicalDependnecy> logicalDeps = (List<LogicalDependnecy>)ObjectLogicalDependenciesList.DataSource;
                     int index = Dependencies.IndexOf(dba.SelectedDependency);
                     Dependencies.Insert(index, newDep);
@@ -855,6 +860,7 @@ namespace RelhaxModpack
                     newDep.endAddress = ObjectEndAddressTB.Text;
                     newDep.dependencyZipFile = ObjectZipFileTB.Text;
                     newDep.enabled = ObjectEnabledCheckBox.Checked;
+                    newDep.devURL = ObjectDevURLTB.Text;
                     int index = LogicalDependencies.IndexOf(dba.SelectedLogicalDependency);
                     LogicalDependencies.Insert(index, newDep);
                     DisplayDatabase();

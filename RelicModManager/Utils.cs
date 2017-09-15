@@ -520,7 +520,7 @@ namespace RelhaxModpack
                 //add the global dependencies
                 foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency"))
                 {
-                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction", "packageName" };
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction", "packageName", "devURL" };
                     Dependency d = new Dependency();
                     d.packageName = "";
                     foreach (XElement globs in dependencyNode.Elements())
@@ -539,6 +539,9 @@ namespace RelhaxModpack
                                 break;
                             case "endAddress":
                                 d.endAddress = globs.Value;
+                                break;
+                            case "devURL":
+                                d.devURL = globs.Value;
                                 break;
                             case "dependencyenabled":
                                 d.enabled = Utils.parseBool(globs.Value, false);
@@ -570,7 +573,7 @@ namespace RelhaxModpack
                 //add the dependencies
                 foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/dependencies/dependency"))
                 {
-                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction", "packageName", "logicalDependencies" };
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction", "packageName", "logicalDependencies", "devURL" };
                     Dependency d = new Dependency();
                     d.packageName = "";
                     foreach (XElement globs in dependencyNode.Elements())
@@ -589,6 +592,9 @@ namespace RelhaxModpack
                                 break;
                             case "endAddress":
                                 d.endAddress = globs.Value;
+                                break;
+                            case "devURL":
+                                d.devURL = globs.Value;
                                 break;
                             case "dependencyenabled":
                                 d.enabled = Utils.parseBool(globs.Value, false);
@@ -657,7 +663,7 @@ namespace RelhaxModpack
                 //add the logicalDependencies (TODO)
                 foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/logicalDependencies/logicalDependency"))
                 {
-                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName" };
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName", "devURL" };
                     LogicalDependnecy d = new LogicalDependnecy();
                     d.packageName = "";
                     foreach (XElement globs in dependencyNode.Elements())
@@ -676,6 +682,9 @@ namespace RelhaxModpack
                                 break;
                             case "endAddress":
                                 d.endAddress = globs.Value;
+                                break;
+                            case "devURL":
+                                d.devURL = globs.Value;
                                 break;
                             case "dependencyenabled":
                                 d.enabled = Utils.parseBool(globs.Value, false);
@@ -3883,6 +3892,9 @@ namespace RelhaxModpack
                 XmlElement globalDepEndAddress = doc.CreateElement("endAddress");
                 globalDepEndAddress.InnerText = d.endAddress;
                 globalDependencyRoot.AppendChild(globalDepEndAddress);
+                XmlElement globalDepURL = doc.CreateElement("devURL");
+                globalDepURL.InnerText = d.devURL;
+                globalDependencyRoot.AppendChild(globalDepURL);
                 XmlElement globalDepCRC = doc.CreateElement("dependencyZipCRC");
                 globalDepCRC.InnerText = d.dependencyZipCRC;
                 globalDependencyRoot.AppendChild(globalDepCRC);
@@ -3915,6 +3927,9 @@ namespace RelhaxModpack
                 XmlElement depEndAddress = doc.CreateElement("endAddress");
                 depEndAddress.InnerText = d.endAddress;
                 dependencyRoot.AppendChild(depEndAddress);
+                XmlElement depdevURl = doc.CreateElement("devURl");
+                depdevURl.InnerText = d.devURL;
+                dependencyRoot.AppendChild(depdevURl);
                 XmlElement depCRC = doc.CreateElement("dependencyZipCRC");
                 depCRC.InnerText = d.dependencyZipCRC;
                 dependencyRoot.AppendChild(depCRC);
@@ -3964,6 +3979,9 @@ namespace RelhaxModpack
                 XmlElement logicalDepEndAddress = doc.CreateElement("endAddress");
                 logicalDepEndAddress.InnerText = d.endAddress;
                 logicalDependencyRoot.AppendChild(logicalDepEndAddress);
+                XmlElement logicalDepdevURL = doc.CreateElement("devURL");
+                logicalDepdevURL.InnerText = d.devURL;
+                logicalDependencyRoot.AppendChild(logicalDepdevURL);
                 XmlElement logicalDepCRC = doc.CreateElement("dependencyZipCRC");
                 logicalDepCRC.InnerText = d.dependencyZipCRC;
                 logicalDependencyRoot.AppendChild(logicalDepCRC);

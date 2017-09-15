@@ -25,6 +25,7 @@ namespace RelhaxModpack
         public int CheckDatabaseListIndex { get; set; }
         //list of linked mods and configs that use 
         public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
+        public string devURL { get; set; }
         public LogicalDependnecy() { }
         //for the tostring thing
         public override string ToString()
