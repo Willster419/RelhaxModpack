@@ -349,6 +349,7 @@
             this.ObjectDependenciesList.Name = "ObjectDependenciesList";
             this.ObjectDependenciesList.Size = new System.Drawing.Size(270, 95);
             this.ObjectDependenciesList.TabIndex = 23;
+            this.ObjectDependenciesList.SelectedIndexChanged += new System.EventHandler(this.ObjectDependenciesList_SelectedIndexChanged);
             // 
             // ObjectDependenciesLabel
             // 

@@ -16,7 +16,7 @@ namespace RelhaxModpack
         GlobalDependnecy = 0,
         Dependency = 1,
         LogicalDependency = 2,
-        DBO = 3
+        DBO = 3,
     };
     public partial class DatabaseEditor : Form
     {
@@ -227,8 +227,30 @@ namespace RelhaxModpack
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-               
+               //TODO
+               if(SelectedDatabaseObject is Mod)
+                {
+
+                }
+                else if (SelectedDatabaseObject is Config)
+                {
+
+                }
             }
+        }
+        private List<Mod> ListContainsDBO(DatabaseObject DBO)
+        {
+            Mod mod = (Mod)DBO;
+            foreach(Category cat in ParsedCategoryList)
+            {
+                if (cat.mods.Contains(mod))
+                    return cat.mods;
+                foreach(Mod m in cat.mods)
+                {
+                    
+                }
+            }
+            return null;
         }
         //mode set to globalDependency
         private void GlobalDependencyRB_CheckedChanged(object sender, EventArgs e)
@@ -453,73 +475,31 @@ namespace RelhaxModpack
             }
             else if (node.DatabaseObject != null)
             {
-                SelectedGlobalDependency = node.GlobalDependency;
-                SelectedDependency = null;
-                SelectedLogicalDependency = null;
-                SelectedDatabaseObject = null;
-                SelectedCategory = null;
-
-                ObjectNameTB.Enabled = false;
-                ObjectNameTB.Text = "";
-
-                ObjectPackageNameTB.Enabled = true;
-                ObjectPackageNameTB.Text = node.GlobalDependency.packageName;
-
-                ObjectStartAddressTB.Enabled = true;
-                ObjectStartAddressTB.Text = node.GlobalDependency.startAddress;
-
-                ObjectEndAddressTB.Enabled = true;
-                ObjectEndAddressTB.Text = node.GlobalDependency.endAddress;
-
-                ObjectZipFileTB.Enabled = true;
-                ObjectZipFileTB.Text = node.GlobalDependency.dependencyZipFile;
-
-                ObjectDevURLTB.Enabled = false;
-                ObjectDevURLTB.Text = "";
-
-                ObjectTypeComboBox.Enabled = false;
-                ObjectTypeComboBox.SelectedIndex = 0;
-
-                ObjectEnabledCheckBox.Enabled = true;
-                ObjectEnabledCheckBox.Checked = node.GlobalDependency.enabled;
-
-                ObjectVisableCheckBox.Enabled = false;
-                ObjectVisableCheckBox.Checked = false;
-
-                ObjectAppendExtractionCB.Enabled = true;
-                ObjectAppendExtractionCB.Checked = node.GlobalDependency.appendExtraction;
-
-                ObjectDescTB.Enabled = false;
-                ObjectDescTB.Text = "";
-
-                ObjectUpdateNotesTB.Enabled = false;
-                ObjectUpdateNotesTB.Text = "";
-
-                DatabaseSubeditPanel.Enabled = false;
-                PicturePanel.Enabled = false;
+                //TODO
             }
             else if (node.Category != null)
             {
-                SelectedGlobalDependency = node.GlobalDependency;
+                //TODO
+                SelectedGlobalDependency = null;
                 SelectedDependency = null;
                 SelectedLogicalDependency = null;
                 SelectedDatabaseObject = null;
-                SelectedCategory = null;
+                SelectedCategory = node.Category;
 
-                ObjectNameTB.Enabled = false;
-                ObjectNameTB.Text = "";
+                ObjectNameTB.Enabled = true;
+                ObjectNameTB.Text = SelectedCategory.name;
 
-                ObjectPackageNameTB.Enabled = true;
-                ObjectPackageNameTB.Text = node.GlobalDependency.packageName;
+                ObjectPackageNameTB.Enabled = false;
+                ObjectPackageNameTB.Text = "";
 
-                ObjectStartAddressTB.Enabled = true;
-                ObjectStartAddressTB.Text = node.GlobalDependency.startAddress;
+                ObjectStartAddressTB.Enabled = false;
+                ObjectStartAddressTB.Text = "";
 
-                ObjectEndAddressTB.Enabled = true;
-                ObjectEndAddressTB.Text = node.GlobalDependency.endAddress;
+                ObjectEndAddressTB.Enabled = false;
+                ObjectEndAddressTB.Text = "";
 
-                ObjectZipFileTB.Enabled = true;
-                ObjectZipFileTB.Text = node.GlobalDependency.dependencyZipFile;
+                ObjectZipFileTB.Enabled = false;
+                ObjectZipFileTB.Text ="";
 
                 ObjectDevURLTB.Enabled = false;
                 ObjectDevURLTB.Text = "";
@@ -527,14 +507,14 @@ namespace RelhaxModpack
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
 
-                ObjectEnabledCheckBox.Enabled = true;
-                ObjectEnabledCheckBox.Checked = node.GlobalDependency.enabled;
+                ObjectEnabledCheckBox.Enabled = false;
+                ObjectEnabledCheckBox.Checked = false;
 
                 ObjectVisableCheckBox.Enabled = false;
                 ObjectVisableCheckBox.Checked = false;
 
-                ObjectAppendExtractionCB.Enabled = true;
-                ObjectAppendExtractionCB.Checked = node.GlobalDependency.appendExtraction;
+                ObjectAppendExtractionCB.Enabled = false;
+                ObjectAppendExtractionCB.Checked = false;
 
                 ObjectDescTB.Enabled = false;
                 ObjectDescTB.Text = "";
@@ -542,7 +522,16 @@ namespace RelhaxModpack
                 ObjectUpdateNotesTB.Enabled = false;
                 ObjectUpdateNotesTB.Text = "";
 
-                DatabaseSubeditPanel.Enabled = false;
+                DatabaseSubeditPanel.Enabled = true;
+                DependencyPanel.Enabled = true;
+                LogicalDependencyPanel.Enabled = false;
+
+                ObjectDependenciesList.DataSource = null;
+                ObjectDependenciesList.Items.Clear();
+                ObjectDependenciesList.DataSource = SelectedCategory.dependencies;
+                CurrentDependenciesCB.DataSource = Dependencies;
+                CurrentDependenciesCB.SelectedIndex = -1;
+
                 PicturePanel.Enabled = false;
             }
         }
@@ -586,7 +575,7 @@ namespace RelhaxModpack
                 }
                 else if (DatabaseEditorMode == EditorMode.DBO)
                 {
-
+                    //TODO
                 }
             }
         }
@@ -648,9 +637,8 @@ namespace RelhaxModpack
                 }
                 else if (DatabaseEditorMode == EditorMode.DBO)
                 {
-
+                    //TODO
                 }
-                
             }
         }
 
@@ -693,13 +681,7 @@ namespace RelhaxModpack
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-                foreach(Category cat in ParsedCategoryList)
-                {
-                    foreach(Mod m in cat.mods)
-                    {
-
-                    }
-                }
+                //TODO
             }
             DisplayDatabase();
         }
@@ -778,29 +760,48 @@ namespace RelhaxModpack
 
         private void AddDependencyButton_Click(object sender, EventArgs e)
         {
-           
+            if (MessageBox.Show("Confirm you wish to add dependency", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+            if (SelectedCategory != null)
+            {
+                Dependency ld = new Dependency();
+                Dependency ld2 = (Dependency)CurrentDependenciesCB.SelectedItem;
+                ld.packageName = ld2.packageName;
+                SelectedCategory.dependencies.Add(ld);
+                ObjectDependenciesList.DataSource = null;
+                ObjectDependenciesList.Items.Clear();
+                ObjectDependenciesList.DataSource = SelectedCategory.dependencies;
+            }
+            else if (DatabaseEditorMode == EditorMode.DBO)
+            {
+                Dependency ld = new Dependency();
+                Dependency ld2 = (Dependency)CurrentDependenciesCB.SelectedItem;
+                ld.packageName = ld2.packageName;
+                SelectedDatabaseObject.dependencies.Add(ld);
+                ObjectDependenciesList.DataSource = null;
+                ObjectDependenciesList.Items.Clear();
+                ObjectDependenciesList.DataSource = SelectedDatabaseObject.dependencies;
+            }
         }
 
         private void RemoveDependencyButton_Click(object sender, EventArgs e)
         {
-           /*
-            if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
+            if (MessageBox.Show("Confirm you wish to remove dependency", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+            if (SelectedCategory != null)
             {
-                
-            }
-            else if (DatabaseEditorMode == EditorMode.Dependency)
-            {
-
-            }
-            else if (DatabaseEditorMode == EditorMode.LogicalDependency)
-            {
-
+                SelectedCategory.dependencies.Remove((Dependency)ObjectDependenciesList.SelectedItem);
+                ObjectDependenciesList.DataSource = null;
+                ObjectDependenciesList.Items.Clear();
+                ObjectDependenciesList.DataSource = SelectedCategory.dependencies;
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-
-            }
-            */
+                SelectedDatabaseObject.dependencies.Remove((Dependency)ObjectDependenciesList.SelectedItem);
+                ObjectDependenciesList.DataSource = null;
+                ObjectDependenciesList.Items.Clear();
+                ObjectDependenciesList.DataSource = SelectedDatabaseObject.dependencies;
+            } 
         }
 
         private void AddLogicalDependencyButton_Click(object sender, EventArgs e)
@@ -809,14 +810,25 @@ namespace RelhaxModpack
                 return;
             if (DatabaseEditorMode == EditorMode.Dependency)
             {
-                
+                LogicalDependnecy ld = new LogicalDependnecy();
+                LogicalDependnecy ld2 = (LogicalDependnecy)CurrentLogicalDependenciesCB.SelectedItem;
+                ld.packageName = ld2.packageName;
+                ld.negateFlag = LogicalDependnecyNegateFlagCB.Checked;
+                SelectedDependency.logicalDependencies.Add(ld);
                 ObjectLogicalDependenciesList.DataSource = null;
                 ObjectLogicalDependenciesList.Items.Clear();
                 ObjectLogicalDependenciesList.DataSource = SelectedDependency.logicalDependencies;
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-                SelectedDatabaseObject.logicalDependencies.Remove((LogicalDependnecy)ObjectLogicalDependenciesList.SelectedItem);
+                LogicalDependnecy ld = new LogicalDependnecy();
+                LogicalDependnecy ld2 = (LogicalDependnecy)CurrentLogicalDependenciesCB.SelectedItem;
+                ld.packageName = ld2.packageName;
+                ld.negateFlag = LogicalDependnecyNegateFlagCB.Checked;
+                SelectedDatabaseObject.logicalDependencies.Add(ld);
+                ObjectLogicalDependenciesList.DataSource = null;
+                ObjectLogicalDependenciesList.Items.Clear();
+                ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.logicalDependencies;
             }
         }
 
@@ -834,29 +846,30 @@ namespace RelhaxModpack
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
                 SelectedDatabaseObject.logicalDependencies.Remove((LogicalDependnecy)ObjectLogicalDependenciesList.SelectedItem);
-
+                ObjectLogicalDependenciesList.DataSource = null;
+                ObjectLogicalDependenciesList.Items.Clear();
+                ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.logicalDependencies;
             }
-
         }
 
         private void MovePictureButton_Click(object sender, EventArgs e)
         {
-            
+            //TODO
         }
 
         private void AddPictureButton_Click(object sender, EventArgs e)
         {
-           
+           //TODO
         }
 
         private void RemovePictureButton_Click(object sender, EventArgs e)
         {
-           
+           //TODO
         }
 
         private void ApplyPictureEditButton_Click(object sender, EventArgs e)
         {
-            
+            //TODO
         }
 
         private void ObjectLogicalDependenciesList_SelectedIndexChanged(object sender, EventArgs e)
@@ -880,7 +893,7 @@ namespace RelhaxModpack
 
         private void LogicalDependnecyNegateFlagCB_CheckedChanged(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to change logical dependency negate flag status", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("change logical dependency negate flag status (yes) or change flag status for adding new logical dependency (no)", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
                 return;
             if (DatabaseEditorMode == EditorMode.Dependency)
             {
@@ -892,11 +905,28 @@ namespace RelhaxModpack
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
+                //TODO:TEST
                 LogicalDependnecy ld = (LogicalDependnecy)ObjectLogicalDependenciesList.SelectedItem;
                 ld.negateFlag = LogicalDependnecyNegateFlagCB.Checked;
                 ObjectLogicalDependenciesList.DataSource = null;
                 ObjectLogicalDependenciesList.Items.Clear();
                 ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.logicalDependencies;
+            }
+        }
+
+        private void ObjectDependenciesList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListBox lb = (ListBox)sender;
+            if (lb.DataSource == null)
+                return;
+            Dependency ld = (Dependency)lb.SelectedItem;
+            foreach (Dependency d in Dependencies)
+            {
+                if (d.packageName.Equals(ld.packageName))
+                {
+                    CurrentDependenciesCB.SelectedItem = d;
+                    break;
+                }
             }
         }
     }
