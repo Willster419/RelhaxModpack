@@ -554,6 +554,41 @@ namespace RelhaxModpack
                 MessageBox.Show("Database Not Loaded");
                 return;
             }
+            using (DatabaseAdder dba = new DatabaseAdder(DatabaseEditorMode, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList))
+            {
+                dba.ShowDialog();
+                if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
+                {
+                    if (dba.SelectedGlobalDependency == null)
+                        return;
+                    GlobalDependencies.Remove(SelectedGlobalDependency);
+                    int index = GlobalDependencies.IndexOf(dba.SelectedGlobalDependency);
+                    GlobalDependencies.Insert(index, SelectedGlobalDependency);
+                    DisplayDatabase();
+                }
+                else if (DatabaseEditorMode == EditorMode.Dependency)
+                {
+                    if (dba.SelectedDependency == null)
+                        return;
+                    Dependencies.Remove(SelectedDependency);
+                    int index = Dependencies.IndexOf(dba.SelectedDependency);
+                    Dependencies.Insert(index, SelectedDependency);
+                    DisplayDatabase();
+                }
+                else if (DatabaseEditorMode == EditorMode.LogicalDependency)
+                {
+                    if (dba.SelectedLogicalDependency == null)
+                        return;
+                    LogicalDependencies.Remove(SelectedLogicalDependency);
+                    int index = LogicalDependencies.IndexOf(dba.SelectedLogicalDependency);
+                    LogicalDependencies.Insert(index, SelectedLogicalDependency);
+                    DisplayDatabase();
+                }
+                else if (DatabaseEditorMode == EditorMode.DBO)
+                {
+
+                }
+            }
         }
 
         private void AddEntryButton_Click(object sender, EventArgs e)

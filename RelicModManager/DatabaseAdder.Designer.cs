@@ -54,9 +54,9 @@
             this.ConfirmAddLabel.AutoSize = true;
             this.ConfirmAddLabel.Location = new System.Drawing.Point(3, 9);
             this.ConfirmAddLabel.Name = "ConfirmAddLabel";
-            this.ConfirmAddLabel.Size = new System.Drawing.Size(266, 13);
+            this.ConfirmAddLabel.Size = new System.Drawing.Size(251, 13);
             this.ConfirmAddLabel.TabIndex = 0;
-            this.ConfirmAddLabel.Text = "Confirm you wish to add the typed properties to the list?";
+            this.ConfirmAddLabel.Text = "Confirm you wish to add/move the object to the list?";
             // 
             // ConfirmAddNo
             // 
