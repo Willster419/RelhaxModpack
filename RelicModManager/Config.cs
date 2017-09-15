@@ -8,7 +8,7 @@ namespace RelhaxModpack
     {
         //can the user select multiple configs or one only?
         public string type { get; set; }
-        public List<Media> pictureList = new List<Media>();
+        
         public List<Config> configs = new List<Config>();
         //the list of dependencies for this catagory
         //the parent of a config is a mod OR another config

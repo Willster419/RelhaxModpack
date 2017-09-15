@@ -475,11 +475,107 @@ namespace RelhaxModpack
             }
             else if (node.DatabaseObject != null)
             {
-                //TODO
+                SelectedGlobalDependency = null;
+                SelectedDependency = null;
+                SelectedLogicalDependency = null;
+                SelectedDatabaseObject = node.DatabaseObject;
+                SelectedCategory = null;
+
+                ObjectNameTB.Enabled = true;
+                ObjectNameTB.Text = SelectedDatabaseObject.name;
+
+                ObjectPackageNameTB.Enabled = true;
+                ObjectPackageNameTB.Text = SelectedDatabaseObject.packageName;
+
+                ObjectStartAddressTB.Enabled = true;
+                ObjectStartAddressTB.Text = SelectedDatabaseObject.startAddress;
+
+                ObjectEndAddressTB.Enabled = true;
+                ObjectEndAddressTB.Text = SelectedDatabaseObject.endAddress;
+
+                ObjectZipFileTB.Enabled = true;
+                ObjectZipFileTB.Text = SelectedDatabaseObject.zipFile;
+
+                ObjectDevURLTB.Enabled = true;
+                ObjectDevURLTB.Text = SelectedDatabaseObject.devURL;
+
+                if(SelectedDatabaseObject is Config)
+                {
+                    ObjectTypeComboBox.Enabled = true;
+                    Config cfg = (Config)SelectedDatabaseObject;
+                    switch(cfg.type)
+                    {
+                        case "single":
+                            ObjectTypeComboBox.SelectedIndex = 1;
+                            break;
+                        case "single1":
+                            ObjectTypeComboBox.SelectedIndex = 1;
+                            break;
+                        case "single_dropDown":
+                            ObjectTypeComboBox.SelectedIndex = 2;
+                            break;
+                        case "single_dropDown1":
+                            ObjectTypeComboBox.SelectedIndex = 2;
+                            break;
+                        case "single_dropDown2":
+                            ObjectTypeComboBox.SelectedIndex = 3;
+                            break;
+                        case "multi":
+                            ObjectTypeComboBox.SelectedIndex = 4;
+                            break;
+                    }
+                }
+                else
+                {
+                    ObjectTypeComboBox.Enabled = false;
+                    ObjectTypeComboBox.SelectedIndex = 0;
+                }
+
+                ObjectEnabledCheckBox.Enabled = true;
+                ObjectEnabledCheckBox.Checked = SelectedDatabaseObject.enabled;
+
+                ObjectVisableCheckBox.Enabled = true;
+                ObjectVisableCheckBox.Checked = SelectedDatabaseObject.visible;
+
+                ObjectAppendExtractionCB.Enabled = false;
+                ObjectAppendExtractionCB.Checked = false;
+
+                ObjectDescTB.Enabled = true;
+                ObjectDescTB.Text = SelectedDatabaseObject.description;
+
+                ObjectUpdateNotesTB.Enabled = true;
+                ObjectUpdateNotesTB.Text = SelectedDatabaseObject.updateComment;
+
+                DatabaseSubeditPanel.Enabled = true;
+                DependencyPanel.Enabled = true;
+                LogicalDependencyPanel.Enabled = true;
+                PicturePanel.Enabled = true;
+
+                //logicalDependencies
+                ObjectLogicalDependenciesList.DataSource = null;
+                ObjectLogicalDependenciesList.Items.Clear();
+                ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.logicalDependencies;
+                CurrentLogicalDependenciesCB.DataSource = LogicalDependencies;
+                CurrentLogicalDependenciesCB.SelectedIndex = -1;
+                LogicalDependnecyNegateFlagCB.CheckedChanged -= LogicalDependnecyNegateFlagCB_CheckedChanged;
+                LogicalDependnecyNegateFlagCB.Checked = false;
+                LogicalDependnecyNegateFlagCB.CheckedChanged += LogicalDependnecyNegateFlagCB_CheckedChanged;
+
+                //dependencies
+                ObjectDependenciesList.DataSource = null;
+                ObjectDependenciesList.Items.Clear();
+                ObjectDependenciesList.DataSource = SelectedDatabaseObject.dependencies;
+                CurrentDependenciesCB.DataSource = Dependencies;
+                CurrentDependenciesCB.SelectedIndex = -1;
+
+                //pictures
+                ObjectPicturesList.DataSource = null;
+                ObjectPicturesList.Items.Clear();
+                ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
+
             }
             else if (node.Category != null)
             {
-                //TODO
                 SelectedGlobalDependency = null;
                 SelectedDependency = null;
                 SelectedLogicalDependency = null;
@@ -854,22 +950,98 @@ namespace RelhaxModpack
 
         private void MovePictureButton_Click(object sender, EventArgs e)
         {
-            //TODO
+            if (MessageBox.Show("Confirm you wish to move picture in list", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+            int index = Utils.parseInt(MovePictureTB.Text, -1);
+            if (index == -1)
+            {
+                MessageBox.Show("Invalid index in move to position");
+                return;
+            }
+            if (index > SelectedDatabaseObject.pictureList.Count)
+            {
+                MessageBox.Show("Invalid index in move to position");
+                return;
+            }
+            Media media = (Media)ObjectPicturesList.SelectedItem;
+            SelectedDatabaseObject.pictureList.Remove(media);
+            //if the index is now out of range, just put it in the bottom
+            if (index > SelectedDatabaseObject.pictureList.Count)
+                index = SelectedDatabaseObject.pictureList.Count;
+            SelectedDatabaseObject.pictureList.Insert(index, media);
+            ObjectPicturesList.DataSource = null;
+            ObjectPicturesList.Items.Clear();
+            ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
         }
 
         private void AddPictureButton_Click(object sender, EventArgs e)
         {
-           //TODO
+            if (MessageBox.Show("Confirm you wish to add picture", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+            if (PicturesTypeCBox.SelectedIndex == -1 || PicturesTypeCBox.SelectedIndex == 0)
+            {
+                MessageBox.Show("Invalid entry in Picture Type");
+                return;
+            }
+            int index = Utils.parseInt(AddPictureTB.Text, -1);
+            if(index == -1)
+            {
+                MessageBox.Show("Invalid index in add at positon");
+                return;
+            }
+            if (index > SelectedDatabaseObject.pictureList.Count)
+            {
+                MessageBox.Show("Invalid index in add at positon");
+                return;
+            }
+            Media media = new Media(SelectedDatabaseObject.name, PictureURLTB.Text);
+            if (PicturesTypeCBox.SelectedIndex == 1)
+            {
+                media.mediaType = MediaType.picture;
+            }
+            else if (PicturesTypeCBox.SelectedIndex == 2)
+            {
+                media.mediaType = MediaType.youtube;
+            }
+            SelectedDatabaseObject.pictureList.Insert(index, media);
+            ObjectPicturesList.DataSource = null;
+            ObjectPicturesList.Items.Clear();
+            ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
         }
 
         private void RemovePictureButton_Click(object sender, EventArgs e)
         {
-           //TODO
+            if (MessageBox.Show("Confirm you wish to remove picture", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+            Media media = (Media)ObjectPicturesList.SelectedItem;
+            SelectedDatabaseObject.pictureList.Remove(media);
+            ObjectPicturesList.DataSource = null;
+            ObjectPicturesList.Items.Clear();
+            ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
         }
 
         private void ApplyPictureEditButton_Click(object sender, EventArgs e)
         {
-            //TODO
+            if (MessageBox.Show("Confirm you wish to edit picture entry", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+            Media media = (Media)ObjectPicturesList.SelectedItem;
+            if(PicturesTypeCBox.SelectedIndex == -1 || PicturesTypeCBox.SelectedIndex == 0)
+            {
+                MessageBox.Show("Invalid entry in Picture Type");
+                return;
+            }
+            if(PicturesTypeCBox.SelectedIndex == 1)
+            {
+                media.mediaType = MediaType.picture;
+            }
+            else if (PicturesTypeCBox.SelectedIndex == 2)
+            {
+                media.mediaType = MediaType.youtube;
+            }
+            media.URL = PictureURLTB.Text;
+            ObjectPicturesList.DataSource = null;
+            ObjectPicturesList.Items.Clear();
+            ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
         }
 
         private void ObjectLogicalDependenciesList_SelectedIndexChanged(object sender, EventArgs e)
@@ -905,7 +1077,6 @@ namespace RelhaxModpack
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-                //TODO:TEST
                 LogicalDependnecy ld = (LogicalDependnecy)ObjectLogicalDependenciesList.SelectedItem;
                 ld.negateFlag = LogicalDependnecyNegateFlagCB.Checked;
                 ObjectLogicalDependenciesList.DataSource = null;
@@ -928,6 +1099,26 @@ namespace RelhaxModpack
                     break;
                 }
             }
+        }
+
+        private void ObjectPicturesList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListBox lb = (ListBox)sender;
+            if (lb.DataSource == null)
+                return;
+            Media med = (Media)lb.SelectedItem;
+            switch(med.mediaType)
+            {
+                case MediaType.picture:
+                    PicturesTypeCBox.SelectedIndex = 1;
+                    break;
+                case MediaType.youtube:
+                    PicturesTypeCBox.SelectedIndex = 2;
+                    break;
+            }
+            PictureURLTB.Text = med.URL;
+            MovePictureTB.Text = "" + SelectedDatabaseObject.pictureList.IndexOf(med);
+            AddPictureTB.Text = "" + SelectedDatabaseObject.pictureList.IndexOf(med);
         }
     }
 }

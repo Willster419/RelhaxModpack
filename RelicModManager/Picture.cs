@@ -45,5 +45,13 @@ namespace RelhaxModpack
             //mod first, then config
             return typeResult * -1;
         }
+
+        public override string ToString()
+        {
+            if(URL.Length > 33)
+                return "Type: " + (int)mediaType + " - " + URL.Substring(0, 34) + "...";
+            else
+                return "Type: " + (int)mediaType + " - " + URL;
+        }
     }
 }
