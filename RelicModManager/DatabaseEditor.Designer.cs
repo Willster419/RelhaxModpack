@@ -260,11 +260,11 @@
             // 
             // ApplyChangesButton
             // 
-            this.ApplyChangesButton.Location = new System.Drawing.Point(307, 411);
+            this.ApplyChangesButton.Location = new System.Drawing.Point(222, 411);
             this.ApplyChangesButton.Name = "ApplyChangesButton";
-            this.ApplyChangesButton.Size = new System.Drawing.Size(86, 23);
+            this.ApplyChangesButton.Size = new System.Drawing.Size(169, 23);
             this.ApplyChangesButton.TabIndex = 13;
-            this.ApplyChangesButton.Text = "apply changes";
+            this.ApplyChangesButton.Text = "apply changes (from this panel)";
             this.ApplyChangesButton.UseVisualStyleBackColor = true;
             this.ApplyChangesButton.Click += new System.EventHandler(this.ApplyChangesButton_Click);
             // 
@@ -595,6 +595,7 @@
             this.LogicalDependnecyNegateFlagCB.TabIndex = 34;
             this.LogicalDependnecyNegateFlagCB.Text = "NegateFlag";
             this.LogicalDependnecyNegateFlagCB.UseVisualStyleBackColor = true;
+            this.LogicalDependnecyNegateFlagCB.CheckedChanged += new System.EventHandler(this.LogicalDependnecyNegateFlagCB_CheckedChanged);
             // 
             // ObjectLogicalDependenciesList
             // 
@@ -603,6 +604,7 @@
             this.ObjectLogicalDependenciesList.Name = "ObjectLogicalDependenciesList";
             this.ObjectLogicalDependenciesList.Size = new System.Drawing.Size(267, 82);
             this.ObjectLogicalDependenciesList.TabIndex = 26;
+            this.ObjectLogicalDependenciesList.SelectedIndexChanged += new System.EventHandler(this.ObjectLogicalDependenciesList_SelectedIndexChanged);
             // 
             // ObjectPicturesList
             // 
