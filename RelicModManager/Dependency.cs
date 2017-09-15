@@ -26,6 +26,7 @@ namespace RelhaxModpack
         //property to determine if it will be installed in the beginning or in the end
         public bool appendExtraction;
         public List<LogicalDependnecy> logicalDependencies = new List<LogicalDependnecy>();
+        public string devURL { get; set; }
         public Dependency() { }
         //for the tostring thing
         public override string ToString()

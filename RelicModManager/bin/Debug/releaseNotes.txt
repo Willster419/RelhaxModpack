@@ -1,63 +1,16 @@
-Version 25.5.1:
+Hello everyone, we have a full new release, version 26!!!
+  This is the biggest and most significant update yet!
+https://www.virustotal.com/#/file/e968183097438e69602cc50b79cdcf08111fc7ee32afe4f3ab04a6803c74e2f8/detection
+-The application is now signed with a trusted certificate from the StarCom signing authority! say goodbye to virus and certificate warnings!
+-Un-checking all options in the selection list no longer rebuilds the UI, where it does that weird "collapsing" of the window
+-The size information of each mod and config is now displayed in the most accurate size (kb, mb, etc), and shown with the local method of display (US decimal is ".", EU is ",")
+-Added translations to the installation steps
+-Many users missed from OMC the option to load a config from one of the developer team members. That feature is back
+-The dependency system has be updated again, so now it can use boolean logic to determine if a package should be installed. For example, you no longer have to specify if you want to "xvm" or "non xvm" version of mirroring the contour icons
+-Added the first level of configs to the search bar
+-(For database managers) we have now added a GUI for editing the database!
 
-NOTE: We have relaxed exception handling so that we can try to find this bug where the application deletes itself. We have been unsuccessful with reproducing the error ourselves. If you get this error PLEASE reply on the forums about it.
-
-https://www.virustotal.com/#/file/bcb97b0a0b34da67a770558e1da1d9630a86269033669a6155fbf76a4a60350b/detection
--Fixed exception in deleting old zip files
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Version 25.5.0: (Mostly back-end work, you won't notice much)
-
-NOTE: We have relaxed exception handling so that we can try to find this bug where the application deletes itself. We have been unsuccessful with reproducing the error ourselves. If you get this error PLEASE reply on the forums about it.
-
-https://www.virustotal.com/#/file/8211519d0a2af090f8e355fe78c71449a367c1c73d9434b235cdbdbfa91dbf87/detection
--Rewrote the dependency system so it is easier to manage them in the future
--Added new method of creating database updates, it speeds up the time it takes to make one
--Updated the old method of creating database updates
--Updated all launch-able forms with proper log ending tags
--Installer optimizations
--Improved loading times of the Mod selection window
--Improved loading times of pre-install section of installation
--Fixed bugs with default view where the panels would not properly change color
--Fixed bugs with user mods
--Added/Improved exception handling
--Added more logging of info to try to isolate this bug where the application deletes itself
--Updated French Translations
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Version 25.1.1:
-https://www.virustotal.com/#/file/de4204364180897a50616e6a9764d8bacf2fdfff5926a7d1c39d88913a511a95/detection
--Fixed French translations
--Fixed Polish translations causing crash on mod selection list load
--Added new property, 'visible' to the database and application. If set to false it will not show in the mod selection list
--Added "Colored Skulls" and "Kill Skulls" to Yasenkraken's Session Statistics
+At this time, all OMC and other features have been implemented. We can now focus more on the database and application bug fixes. We hope you enjoy this latest build!
+-The Relhax Modpack Team
 
 --------------------------------------------------------------------------------------------------------------------------------------------
-
-Version 25.1.0:
-https://www.virustotal.com/#/file/bf9a963179d62f83909c9201423ca7c94c7a2be8ec24ce2f9d6ba66ffb83f62a/detection
--Added French translations (thanks Merkk)
--Fixed English translations
--Fixed bug in the loading window for the mod selection list, for those with aero themes the progress bar does not make it all the way to the end. So I made my own.
-
-Version 25.0.3:
-Nothing has changed. This serves as notification that the modpack is ready for 9.20
-
-Version 25.0.2:
-https://www.virustotal.com/#/file/703795841346a4e13ec40d01580bc629d0f415d9a0ac2c149588b52c5887ef07/detection
--Fixed bug in default view where disabled drop down items would cause a crash
--Fixed bug in default view where when loading from last installed config, it would not color the panels properly.
-
-Everyone, we have a new version ready! Version 25! Many fixes and some unique new features are here!
-https://www.virustotal.com/#/file/250341df62499afaf4833d50485ffd24cb314d5ef57c53b99e117a073d43b4d4/detection
--We have (hopefully) fixed an issue where the application will delete itself. It was a weird bug to say the least
--In the OMC view, the content has been vertically allighed to the check boxes and buttons
--There is now a search feature where you can search for your mod, and the installer will open the tab and scroll to where it is in the list. The first modpack with a search feature!
--The patching system has been re-worked for giving the ability to order the patching process in the same way that the mods are installed
--Added an additional check to verify the integrity of the local cached database. If invalid it will delete it
--Fixed a bug in the default view where panel colors would not be set properly
--Fixed a bug where in the auto install mode, the application would still present a window for deleting old files
--Added the ability to embed youtube (or other) videos into the database, as if it was a picture. An example of this can be seen in the "sound mods" tab->Relhax
--Other back-end tools fixes
--Other bug fixes
--Updated translations

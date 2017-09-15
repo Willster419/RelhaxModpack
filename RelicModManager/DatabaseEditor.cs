@@ -35,6 +35,7 @@ namespace RelhaxModpack
         private int currentSelectedIndex = -1;
         string GameVersion = "";
         private StringBuilder InUseSB;
+        private List<Config> ListThatContainsConfig;
 
         private EditorMode DatabaseEditorMode;
 
@@ -54,7 +55,7 @@ namespace RelhaxModpack
             ResetUI();
         }
         //loads the database depending on the mode of the radiobuttons
-        private void DisplayDatabase()
+        private void DisplayDatabase(bool resetUI = true)
         {
             if(DatabaseEditorMode == EditorMode.GlobalDependnecy)
             {
@@ -91,11 +92,14 @@ namespace RelhaxModpack
                     {
                         DatabaseTreeNode modNode = new DatabaseTreeNode(m, (int)DatabaseEditorMode);
                         catNode.Nodes.Add(modNode);
+                        if (SelectedDatabaseObject != null && SelectedDatabaseObject.packageName.Equals(m.packageName))
+                            modNode.EnsureVisible();
                         DisplayDatabaseConfigs(modNode, m.configs);
                     }
                 }
             }
-            ResetUI();
+            if(resetUI)
+                ResetUI();
         }
         private void ResetUI()
         {
@@ -150,6 +154,8 @@ namespace RelhaxModpack
             {
                 DatabaseTreeNode ConfigParrent = new DatabaseTreeNode(c, (int)DatabaseEditorMode);
                 parrent.Nodes.Add(ConfigParrent);
+                if (SelectedDatabaseObject != null && SelectedDatabaseObject.packageName.Equals(c.packageName))
+                    ConfigParrent.EnsureVisible();
                 DisplayDatabaseConfigs(ConfigParrent, c.configs);
             }
         }
@@ -199,6 +205,7 @@ namespace RelhaxModpack
                 SelectedGlobalDependency.packageName = ObjectPackageNameTB.Text;
                 SelectedGlobalDependency.startAddress = ObjectStartAddressTB.Text;
                 SelectedGlobalDependency.endAddress = ObjectEndAddressTB.Text;
+                SelectedGlobalDependency.devURL = ObjectDevURLTB.Text;
                 SelectedGlobalDependency.dependencyZipFile = ObjectZipFileTB.Text;
                 SelectedGlobalDependency.enabled = ObjectEnabledCheckBox.Checked;
                 SelectedGlobalDependency.appendExtraction = ObjectAppendExtractionCB.Checked;
@@ -210,6 +217,7 @@ namespace RelhaxModpack
                 SelectedDependency.packageName = ObjectPackageNameTB.Text;
                 SelectedDependency.startAddress = ObjectStartAddressTB.Text;
                 SelectedDependency.endAddress = ObjectEndAddressTB.Text;
+                SelectedDependency.devURL = ObjectDevURLTB.Text;
                 SelectedDependency.dependencyZipFile = ObjectZipFileTB.Text;
                 SelectedDependency.enabled = ObjectEnabledCheckBox.Checked;
                 SelectedDependency.appendExtraction = ObjectAppendExtractionCB.Checked;
@@ -221,36 +229,123 @@ namespace RelhaxModpack
                 SelectedLogicalDependency.packageName = ObjectPackageNameTB.Text;
                 SelectedLogicalDependency.startAddress = ObjectStartAddressTB.Text;
                 SelectedLogicalDependency.endAddress = ObjectEndAddressTB.Text;
+                SelectedLogicalDependency.devURL = ObjectDevURLTB.Text;
                 SelectedLogicalDependency.dependencyZipFile = ObjectZipFileTB.Text;
                 SelectedLogicalDependency.enabled = ObjectEnabledCheckBox.Checked;
                 LogicalDependencies[index] = SelectedLogicalDependency;
             }
+            else if (SelectedCategory != null)
+            {
+                int index = ParsedCategoryList.IndexOf(SelectedCategory);
+                SelectedCategory.name = ObjectNameTB.Text;
+                ParsedCategoryList[index] = SelectedCategory;
+            }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-               //TODO
-               if(SelectedDatabaseObject is Mod)
+                if (SelectedDatabaseObject is Mod)
                 {
-
+                    Mod m = (Mod)SelectedDatabaseObject;
+                    List<Mod> ModList = ListContainsMod(m);
+                    int index = ModList.IndexOf(m);
+                    //make changes
+                    m.name = ObjectNameTB.Text;
+                    m.packageName = ObjectPackageNameTB.Text;
+                    m.startAddress = ObjectStartAddressTB.Text;
+                    m.endAddress = ObjectEndAddressTB.Text;
+                    m.zipFile = ObjectZipFileTB.Text;
+                    m.devURL = ObjectDevURLTB.Text;
+                    m.enabled = ObjectEnabledCheckBox.Checked;
+                    m.visible = ObjectVisableCheckBox.Checked;
+                    m.description = ObjectDescTB.Text;
+                    m.updateComment = ObjectUpdateNotesTB.Text;
+                    ModList[index] = m;
                 }
                 else if (SelectedDatabaseObject is Config)
                 {
-
+                    if(ObjectTypeComboBox.SelectedIndex == -1 || ObjectTypeComboBox.SelectedIndex == 0)
+                    {
+                        MessageBox.Show("Invalid Index of config type");
+                        return;
+                    }
+                    ListThatContainsConfig = null;
+                    Config cfg = (Config)SelectedDatabaseObject;
+                    ListContainsConfig(cfg);
+                    if (ListThatContainsConfig != null)
+                    {
+                        int index = ListThatContainsConfig.IndexOf(cfg);
+                        //make changes
+                        cfg.name = ObjectNameTB.Text;
+                        cfg.packageName = ObjectPackageNameTB.Text;
+                        cfg.startAddress = ObjectStartAddressTB.Text;
+                        cfg.endAddress = ObjectEndAddressTB.Text;
+                        cfg.zipFile = ObjectZipFileTB.Text;
+                        cfg.devURL = ObjectDevURLTB.Text;
+                        switch(ObjectTypeComboBox.SelectedIndex)
+                        {
+                            case 1:
+                                cfg.type = "single1";
+                                break;
+                            case 2:
+                                cfg.type = "single_dropdown1";
+                                break;
+                            case 3:
+                                cfg.type = "single_dropdown2";
+                                break;
+                            case 4:
+                                cfg.type = "multi";
+                                break;
+                        }
+                        cfg.enabled = ObjectEnabledCheckBox.Checked;
+                        cfg.visible = ObjectVisableCheckBox.Checked;
+                        cfg.description = ObjectDescTB.Text;
+                        cfg.updateComment = ObjectUpdateNotesTB.Text;
+                        ListThatContainsConfig[index] = cfg;
+                    }
                 }
             }
+            this.DisplayDatabase(false);
         }
-        private List<Mod> ListContainsDBO(DatabaseObject DBO)
+        private List<Mod> ListContainsMod(Mod mod)
         {
-            Mod mod = (Mod)DBO;
             foreach(Category cat in ParsedCategoryList)
             {
                 if (cat.mods.Contains(mod))
                     return cat.mods;
-                foreach(Mod m in cat.mods)
-                {
-                    
-                }
             }
             return null;
+        }
+        private void ListContainsConfig(Config cfg)
+        {
+            foreach (Category cat in ParsedCategoryList)
+            {
+                foreach(Mod m in cat.mods)
+                {
+                    if (m.configs.Contains(cfg) && ListThatContainsConfig == null)
+                    {
+                        ListThatContainsConfig = m.configs;
+                        return;
+                    }
+                    if(m.configs.Count > 0)
+                    {
+                        ListContainsConfigRecursive(m.configs, cfg);
+                    }
+                }
+            }
+        }
+        private void ListContainsConfigRecursive(List<Config> cfgList, Config cfg)
+        {
+            foreach(Config c in cfgList)
+            {
+                if(c.configs.Contains(cfg) && ListThatContainsConfig == null)
+                {
+                    ListThatContainsConfig = c.configs;
+                    return;
+                }
+                if(c.configs.Count > 0)
+                {
+                    ListContainsConfigRecursive(c.configs, cfg);
+                }
+            }
         }
         //mode set to globalDependency
         private void GlobalDependencyRB_CheckedChanged(object sender, EventArgs e)
@@ -343,8 +438,8 @@ namespace RelhaxModpack
                 ObjectZipFileTB.Enabled = true;
                 ObjectZipFileTB.Text = node.GlobalDependency.dependencyZipFile;
 
-                ObjectDevURLTB.Enabled = false;
-                ObjectDevURLTB.Text = "";
+                ObjectDevURLTB.Enabled = true;
+                ObjectDevURLTB.Text = SelectedGlobalDependency.devURL;
 
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
@@ -390,8 +485,8 @@ namespace RelhaxModpack
                 ObjectZipFileTB.Enabled = true;
                 ObjectZipFileTB.Text = SelectedDependency.dependencyZipFile;
 
-                ObjectDevURLTB.Enabled = false;
-                ObjectDevURLTB.Text = "";
+                ObjectDevURLTB.Enabled = true;
+                ObjectDevURLTB.Text = SelectedDependency.devURL;
 
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
@@ -449,8 +544,8 @@ namespace RelhaxModpack
                 ObjectZipFileTB.Enabled = true;
                 ObjectZipFileTB.Text = SelectedLogicalDependency.dependencyZipFile;
 
-                ObjectDevURLTB.Enabled = false;
-                ObjectDevURLTB.Text = "";
+                ObjectDevURLTB.Enabled = true;
+                ObjectDevURLTB.Text = SelectedLogicalDependency.devURL;
 
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
@@ -475,11 +570,107 @@ namespace RelhaxModpack
             }
             else if (node.DatabaseObject != null)
             {
-                //TODO
+                SelectedGlobalDependency = null;
+                SelectedDependency = null;
+                SelectedLogicalDependency = null;
+                SelectedDatabaseObject = node.DatabaseObject;
+                SelectedCategory = null;
+
+                ObjectNameTB.Enabled = true;
+                ObjectNameTB.Text = SelectedDatabaseObject.name;
+
+                ObjectPackageNameTB.Enabled = true;
+                ObjectPackageNameTB.Text = SelectedDatabaseObject.packageName;
+
+                ObjectStartAddressTB.Enabled = true;
+                ObjectStartAddressTB.Text = SelectedDatabaseObject.startAddress;
+
+                ObjectEndAddressTB.Enabled = true;
+                ObjectEndAddressTB.Text = SelectedDatabaseObject.endAddress;
+
+                ObjectZipFileTB.Enabled = true;
+                ObjectZipFileTB.Text = SelectedDatabaseObject.zipFile;
+
+                ObjectDevURLTB.Enabled = true;
+                ObjectDevURLTB.Text = SelectedDatabaseObject.devURL;
+
+                if(SelectedDatabaseObject is Config)
+                {
+                    ObjectTypeComboBox.Enabled = true;
+                    Config cfg = (Config)SelectedDatabaseObject;
+                    switch(cfg.type)
+                    {
+                        case "single":
+                            ObjectTypeComboBox.SelectedIndex = 1;
+                            break;
+                        case "single1":
+                            ObjectTypeComboBox.SelectedIndex = 1;
+                            break;
+                        case "single_dropDown":
+                            ObjectTypeComboBox.SelectedIndex = 2;
+                            break;
+                        case "single_dropDown1":
+                            ObjectTypeComboBox.SelectedIndex = 2;
+                            break;
+                        case "single_dropDown2":
+                            ObjectTypeComboBox.SelectedIndex = 3;
+                            break;
+                        case "multi":
+                            ObjectTypeComboBox.SelectedIndex = 4;
+                            break;
+                    }
+                }
+                else
+                {
+                    ObjectTypeComboBox.Enabled = false;
+                    ObjectTypeComboBox.SelectedIndex = 0;
+                }
+
+                ObjectEnabledCheckBox.Enabled = true;
+                ObjectEnabledCheckBox.Checked = SelectedDatabaseObject.enabled;
+
+                ObjectVisableCheckBox.Enabled = true;
+                ObjectVisableCheckBox.Checked = SelectedDatabaseObject.visible;
+
+                ObjectAppendExtractionCB.Enabled = false;
+                ObjectAppendExtractionCB.Checked = false;
+
+                ObjectDescTB.Enabled = true;
+                ObjectDescTB.Text = SelectedDatabaseObject.description;
+
+                ObjectUpdateNotesTB.Enabled = true;
+                ObjectUpdateNotesTB.Text = SelectedDatabaseObject.updateComment;
+
+                DatabaseSubeditPanel.Enabled = true;
+                DependencyPanel.Enabled = true;
+                LogicalDependencyPanel.Enabled = true;
+                PicturePanel.Enabled = true;
+
+                //logicalDependencies
+                ObjectLogicalDependenciesList.DataSource = null;
+                ObjectLogicalDependenciesList.Items.Clear();
+                ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.logicalDependencies;
+                CurrentLogicalDependenciesCB.DataSource = LogicalDependencies;
+                CurrentLogicalDependenciesCB.SelectedIndex = -1;
+                LogicalDependnecyNegateFlagCB.CheckedChanged -= LogicalDependnecyNegateFlagCB_CheckedChanged;
+                LogicalDependnecyNegateFlagCB.Checked = false;
+                LogicalDependnecyNegateFlagCB.CheckedChanged += LogicalDependnecyNegateFlagCB_CheckedChanged;
+
+                //dependencies
+                ObjectDependenciesList.DataSource = null;
+                ObjectDependenciesList.Items.Clear();
+                ObjectDependenciesList.DataSource = SelectedDatabaseObject.dependencies;
+                CurrentDependenciesCB.DataSource = Dependencies;
+                CurrentDependenciesCB.SelectedIndex = -1;
+
+                //pictures
+                ObjectPicturesList.DataSource = null;
+                ObjectPicturesList.Items.Clear();
+                ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
+
             }
             else if (node.Category != null)
             {
-                //TODO
                 SelectedGlobalDependency = null;
                 SelectedDependency = null;
                 SelectedLogicalDependency = null;
@@ -543,6 +734,13 @@ namespace RelhaxModpack
                 MessageBox.Show("Database Not Loaded");
                 return;
             }
+            if(SelectedCategory != null)
+            {
+                MessageBox.Show("Moving categories is not supported");
+                return;
+            }
+            if (MessageBox.Show("Confirm you wish to move the object?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
             using (DatabaseAdder dba = new DatabaseAdder(DatabaseEditorMode, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList))
             {
                 dba.ShowDialog();
@@ -575,9 +773,33 @@ namespace RelhaxModpack
                 }
                 else if (DatabaseEditorMode == EditorMode.DBO)
                 {
-                    //TODO
+                    if (SelectedDatabaseObject is Mod)
+                    {
+                        Mod modToMove = (Mod)SelectedDatabaseObject;
+                        Mod Ref = (Mod)dba.SelectedDatabaseObject;
+                        List<Mod> ModList = ListContainsMod(modToMove);
+                        int index = ModList.IndexOf(Ref);
+                        //make move
+                        ModList.Remove(modToMove);
+                        ModList.Insert(index, modToMove);
+                    }
+                    else if (SelectedDatabaseObject is Config)
+                    {
+                        ListThatContainsConfig = null;
+                        Config cfgToMove = (Config)SelectedDatabaseObject;
+                        Config Ref = (Config)dba.SelectedDatabaseObject;
+                        ListContainsConfig(cfgToMove);
+                        if (ListThatContainsConfig != null)
+                        {
+                            int index = ListThatContainsConfig.IndexOf(Ref);
+                            //make move
+                            ListThatContainsConfig.Remove(cfgToMove);
+                            ListThatContainsConfig.Insert(index, cfgToMove);
+                        }
+                    }
                 }
             }
+            this.DisplayDatabase(false);
         }
 
         private void AddEntryButton_Click(object sender, EventArgs e)
@@ -585,6 +807,11 @@ namespace RelhaxModpack
             if(ParsedCategoryList == null || GlobalDependencies == null || Dependencies == null || LogicalDependencies == null)
             {
                 MessageBox.Show("Database Not Loaded");
+                return;
+            }
+            if (SelectedCategory != null)
+            {
+                MessageBox.Show("Adding categories is not supported");
                 return;
             }
             using (DatabaseAdder dba = new DatabaseAdder(DatabaseEditorMode, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList))
@@ -601,6 +828,7 @@ namespace RelhaxModpack
                     newDep.dependencyZipFile = ObjectZipFileTB.Text;
                     newDep.enabled = ObjectEnabledCheckBox.Checked;
                     newDep.appendExtraction = ObjectAppendExtractionCB.Checked;
+                    newDep.devURL = ObjectDevURLTB.Text;
                     int index = GlobalDependencies.IndexOf(dba.SelectedGlobalDependency);
                     GlobalDependencies.Insert(index, newDep);
                     DisplayDatabase();
@@ -616,6 +844,7 @@ namespace RelhaxModpack
                     newDep.dependencyZipFile = ObjectZipFileTB.Text;
                     newDep.enabled = ObjectEnabledCheckBox.Checked;
                     newDep.appendExtraction = ObjectAppendExtractionCB.Checked;
+                    newDep.devURL = ObjectDevURLTB.Text;
                     List<LogicalDependnecy> logicalDeps = (List<LogicalDependnecy>)ObjectLogicalDependenciesList.DataSource;
                     int index = Dependencies.IndexOf(dba.SelectedDependency);
                     Dependencies.Insert(index, newDep);
@@ -631,15 +860,78 @@ namespace RelhaxModpack
                     newDep.endAddress = ObjectEndAddressTB.Text;
                     newDep.dependencyZipFile = ObjectZipFileTB.Text;
                     newDep.enabled = ObjectEnabledCheckBox.Checked;
+                    newDep.devURL = ObjectDevURLTB.Text;
                     int index = LogicalDependencies.IndexOf(dba.SelectedLogicalDependency);
                     LogicalDependencies.Insert(index, newDep);
                     DisplayDatabase();
                 }
                 else if (DatabaseEditorMode == EditorMode.DBO)
                 {
-                    //TODO
+                    if (SelectedDatabaseObject is Mod)
+                    {
+                        Mod mm = (Mod)dba.SelectedDatabaseObject;
+                        List<Mod> ModList = ListContainsMod(mm);
+                        int index = ModList.IndexOf(mm);
+                        //make changes
+                        Mod m = new Mod();
+                        m.name = ObjectNameTB.Text;
+                        m.packageName = ObjectPackageNameTB.Text;
+                        m.startAddress = ObjectStartAddressTB.Text;
+                        m.endAddress = ObjectEndAddressTB.Text;
+                        m.zipFile = ObjectZipFileTB.Text;
+                        m.devURL = ObjectDevURLTB.Text;
+                        m.enabled = ObjectEnabledCheckBox.Checked;
+                        m.visible = ObjectVisableCheckBox.Checked;
+                        m.description = ObjectDescTB.Text;
+                        m.updateComment = ObjectUpdateNotesTB.Text;
+                        ModList.Insert(index, m);
+                    }
+                    else if (SelectedDatabaseObject is Config)
+                    {
+                        if (ObjectTypeComboBox.SelectedIndex == -1 || ObjectTypeComboBox.SelectedIndex == 0)
+                        {
+                            MessageBox.Show("Invalid Index of config type");
+                            return;
+                        }
+                        ListThatContainsConfig = null;
+                        Config cfgg = (Config)dba.SelectedDatabaseObject;
+                        ListContainsConfig(cfgg);
+                        if (ListThatContainsConfig != null)
+                        {
+                            int index = ListThatContainsConfig.IndexOf(cfgg);
+                            //make changes
+                            Config cfg = new Config();
+                            cfg.name = ObjectNameTB.Text;
+                            cfg.packageName = ObjectPackageNameTB.Text;
+                            cfg.startAddress = ObjectStartAddressTB.Text;
+                            cfg.endAddress = ObjectEndAddressTB.Text;
+                            cfg.zipFile = ObjectZipFileTB.Text;
+                            cfg.devURL = ObjectDevURLTB.Text;
+                            switch (ObjectTypeComboBox.SelectedIndex)
+                            {
+                                case 1:
+                                    cfg.type = "single1";
+                                    break;
+                                case 2:
+                                    cfg.type = "single_dropdown1";
+                                    break;
+                                case 3:
+                                    cfg.type = "single_dropdown2";
+                                    break;
+                                case 4:
+                                    cfg.type = "multi";
+                                    break;
+                            }
+                            cfg.enabled = ObjectEnabledCheckBox.Checked;
+                            cfg.visible = ObjectVisableCheckBox.Checked;
+                            cfg.description = ObjectDescTB.Text;
+                            cfg.updateComment = ObjectUpdateNotesTB.Text;
+                            ListThatContainsConfig.Insert(index, cfg);
+                        }
+                    }
                 }
             }
+            this.DisplayDatabase(false);
         }
 
         private void RemoveEntryButton_Click(object sender, EventArgs e)
@@ -647,6 +939,11 @@ namespace RelhaxModpack
             if (ParsedCategoryList == null || GlobalDependencies == null || Dependencies == null || LogicalDependencies == null)
             {
                 MessageBox.Show("Database Not Loaded");
+                return;
+            }
+            if (SelectedCategory != null)
+            {
+                MessageBox.Show("Removing categories is not supported");
                 return;
             }
             if (MessageBox.Show("Confirm you wish to remove the object?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.No)
@@ -681,9 +978,26 @@ namespace RelhaxModpack
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-                //TODO
+                if (SelectedDatabaseObject is Mod)
+                {
+                    Mod m = (Mod)SelectedDatabaseObject;
+                    List<Mod> ModList = ListContainsMod(m);
+                    int index = ModList.IndexOf(m);
+                    ModList.RemoveAt(index);
+                }
+                else if (SelectedDatabaseObject is Config)
+                {
+                    ListThatContainsConfig = null;
+                    Config cfg = (Config)SelectedDatabaseObject;
+                    ListContainsConfig(cfg);
+                    if (ListThatContainsConfig != null)
+                    {
+                        int index = ListThatContainsConfig.IndexOf(cfg);
+                        ListThatContainsConfig.RemoveAt(index);
+                    }
+                }
             }
-            DisplayDatabase();
+            DisplayDatabase(false);
         }
 
         private bool DependencyInUse(string packageName, bool isDependency)
@@ -854,22 +1168,98 @@ namespace RelhaxModpack
 
         private void MovePictureButton_Click(object sender, EventArgs e)
         {
-            //TODO
+            if (MessageBox.Show("Confirm you wish to move picture in list", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+            int index = Utils.parseInt(MovePictureTB.Text, -1);
+            if (index == -1)
+            {
+                MessageBox.Show("Invalid index in move to position");
+                return;
+            }
+            if (index > SelectedDatabaseObject.pictureList.Count)
+            {
+                MessageBox.Show("Invalid index in move to position");
+                return;
+            }
+            Media media = (Media)ObjectPicturesList.SelectedItem;
+            SelectedDatabaseObject.pictureList.Remove(media);
+            //if the index is now out of range, just put it in the bottom
+            if (index > SelectedDatabaseObject.pictureList.Count)
+                index = SelectedDatabaseObject.pictureList.Count;
+            SelectedDatabaseObject.pictureList.Insert(index, media);
+            ObjectPicturesList.DataSource = null;
+            ObjectPicturesList.Items.Clear();
+            ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
         }
 
         private void AddPictureButton_Click(object sender, EventArgs e)
         {
-           //TODO
+            if (MessageBox.Show("Confirm you wish to add picture", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+            if (PicturesTypeCBox.SelectedIndex == -1 || PicturesTypeCBox.SelectedIndex == 0)
+            {
+                MessageBox.Show("Invalid entry in Picture Type");
+                return;
+            }
+            int index = Utils.parseInt(AddPictureTB.Text, -1);
+            if(index == -1)
+            {
+                MessageBox.Show("Invalid index in add at positon");
+                return;
+            }
+            if (index > SelectedDatabaseObject.pictureList.Count)
+            {
+                MessageBox.Show("Invalid index in add at positon");
+                return;
+            }
+            Media media = new Media(SelectedDatabaseObject.name, PictureURLTB.Text);
+            if (PicturesTypeCBox.SelectedIndex == 1)
+            {
+                media.mediaType = MediaType.picture;
+            }
+            else if (PicturesTypeCBox.SelectedIndex == 2)
+            {
+                media.mediaType = MediaType.youtube;
+            }
+            SelectedDatabaseObject.pictureList.Insert(index, media);
+            ObjectPicturesList.DataSource = null;
+            ObjectPicturesList.Items.Clear();
+            ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
         }
 
         private void RemovePictureButton_Click(object sender, EventArgs e)
         {
-           //TODO
+            if (MessageBox.Show("Confirm you wish to remove picture", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+            Media media = (Media)ObjectPicturesList.SelectedItem;
+            SelectedDatabaseObject.pictureList.Remove(media);
+            ObjectPicturesList.DataSource = null;
+            ObjectPicturesList.Items.Clear();
+            ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
         }
 
         private void ApplyPictureEditButton_Click(object sender, EventArgs e)
         {
-            //TODO
+            if (MessageBox.Show("Confirm you wish to edit picture entry", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+            Media media = (Media)ObjectPicturesList.SelectedItem;
+            if(PicturesTypeCBox.SelectedIndex == -1 || PicturesTypeCBox.SelectedIndex == 0)
+            {
+                MessageBox.Show("Invalid entry in Picture Type");
+                return;
+            }
+            if(PicturesTypeCBox.SelectedIndex == 1)
+            {
+                media.mediaType = MediaType.picture;
+            }
+            else if (PicturesTypeCBox.SelectedIndex == 2)
+            {
+                media.mediaType = MediaType.youtube;
+            }
+            media.URL = PictureURLTB.Text;
+            ObjectPicturesList.DataSource = null;
+            ObjectPicturesList.Items.Clear();
+            ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
         }
 
         private void ObjectLogicalDependenciesList_SelectedIndexChanged(object sender, EventArgs e)
@@ -905,7 +1295,6 @@ namespace RelhaxModpack
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-                //TODO:TEST
                 LogicalDependnecy ld = (LogicalDependnecy)ObjectLogicalDependenciesList.SelectedItem;
                 ld.negateFlag = LogicalDependnecyNegateFlagCB.Checked;
                 ObjectLogicalDependenciesList.DataSource = null;
@@ -928,6 +1317,26 @@ namespace RelhaxModpack
                     break;
                 }
             }
+        }
+
+        private void ObjectPicturesList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListBox lb = (ListBox)sender;
+            if (lb.DataSource == null)
+                return;
+            Media med = (Media)lb.SelectedItem;
+            switch(med.mediaType)
+            {
+                case MediaType.picture:
+                    PicturesTypeCBox.SelectedIndex = 1;
+                    break;
+                case MediaType.youtube:
+                    PicturesTypeCBox.SelectedIndex = 2;
+                    break;
+            }
+            PictureURLTB.Text = med.URL;
+            MovePictureTB.Text = "" + SelectedDatabaseObject.pictureList.IndexOf(med);
+            AddPictureTB.Text = "" + SelectedDatabaseObject.pictureList.IndexOf(med);
         }
     }
 }

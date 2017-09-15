@@ -614,6 +614,7 @@
             this.ObjectPicturesList.Name = "ObjectPicturesList";
             this.ObjectPicturesList.Size = new System.Drawing.Size(269, 56);
             this.ObjectPicturesList.TabIndex = 27;
+            this.ObjectPicturesList.SelectedIndexChanged += new System.EventHandler(this.ObjectPicturesList_SelectedIndexChanged);
             // 
             // PicturesTypeLabel
             // 
@@ -647,6 +648,7 @@
             // 
             // PictureURLTB
             // 
+            this.PictureURLTB.DetectUrls = false;
             this.PictureURLTB.Location = new System.Drawing.Point(6, 117);
             this.PictureURLTB.Name = "PictureURLTB";
             this.PictureURLTB.Size = new System.Drawing.Size(268, 119);
@@ -657,9 +659,9 @@
             // 
             this.MovePictureButton.Location = new System.Drawing.Point(3, 237);
             this.MovePictureButton.Name = "MovePictureButton";
-            this.MovePictureButton.Size = new System.Drawing.Size(92, 23);
+            this.MovePictureButton.Size = new System.Drawing.Size(92, 41);
             this.MovePictureButton.TabIndex = 39;
-            this.MovePictureButton.Text = "move to position";
+            this.MovePictureButton.Text = "move to position (0 index based)";
             this.MovePictureButton.UseVisualStyleBackColor = true;
             this.MovePictureButton.Click += new System.EventHandler(this.MovePictureButton_Click);
             // 
@@ -680,30 +682,30 @@
             this.PicturePanel.Controls.Add(this.PicturesTypeCBox);
             this.PicturePanel.Location = new System.Drawing.Point(1020, 30);
             this.PicturePanel.Name = "PicturePanel";
-            this.PicturePanel.Size = new System.Drawing.Size(278, 297);
+            this.PicturePanel.Size = new System.Drawing.Size(278, 328);
             this.PicturePanel.TabIndex = 27;
             // 
             // AddPictureTB
             // 
-            this.AddPictureTB.Location = new System.Drawing.Point(102, 268);
+            this.AddPictureTB.Location = new System.Drawing.Point(101, 291);
             this.AddPictureTB.Name = "AddPictureTB";
             this.AddPictureTB.Size = new System.Drawing.Size(31, 20);
             this.AddPictureTB.TabIndex = 44;
             // 
             // MovePictureTB
             // 
-            this.MovePictureTB.Location = new System.Drawing.Point(102, 239);
+            this.MovePictureTB.Location = new System.Drawing.Point(101, 242);
             this.MovePictureTB.Name = "MovePictureTB";
             this.MovePictureTB.Size = new System.Drawing.Size(31, 20);
             this.MovePictureTB.TabIndex = 43;
             // 
             // AddPictureButton
             // 
-            this.AddPictureButton.Location = new System.Drawing.Point(3, 266);
+            this.AddPictureButton.Location = new System.Drawing.Point(3, 284);
             this.AddPictureButton.Name = "AddPictureButton";
-            this.AddPictureButton.Size = new System.Drawing.Size(92, 23);
+            this.AddPictureButton.Size = new System.Drawing.Size(92, 39);
             this.AddPictureButton.TabIndex = 42;
-            this.AddPictureButton.Text = "add at position";
+            this.AddPictureButton.Text = "add at position (0 index based)";
             this.AddPictureButton.UseVisualStyleBackColor = true;
             this.AddPictureButton.Click += new System.EventHandler(this.AddPictureButton_Click);
             // 
