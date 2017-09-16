@@ -2541,7 +2541,6 @@ namespace RelhaxModpack
                 else if (Settings.sView == Settings.SelectionView.legacy)
                 {
                     ModWPFCheckBox c = (ModWPFCheckBox)m.modFormCheckBox;
-                    // c.Background = Color.LightSteelBlue;
                     c.Focus();
                     this.ModSelectionList_SizeChanged(null, null);
                 }
@@ -2575,7 +2574,6 @@ namespace RelhaxModpack
                     else if (c.configUIComponent is ConfigWPFCheckBox)
                     {
                         ConfigWPFCheckBox s = (ConfigWPFCheckBox)c.configUIComponent;
-                        s.Foreground = System.Windows.Media.Brushes.LightSteelBlue;
                         s.Focus();
                         this.ModSelectionList_SizeChanged(null, null);
                     }
