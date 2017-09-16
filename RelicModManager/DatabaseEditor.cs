@@ -145,7 +145,7 @@ namespace RelhaxModpack
             ObjectUpdateNotesTB.Enabled = false;
             ObjectUpdateNotesTB.Text = "";
 
-            DatabaseSubeditPanel.Enabled = false;
+            DependenciesTabPage.Enabled = false;
             PicturePanel.Enabled = false;
         }
         private void DisplayDatabaseConfigs(DatabaseTreeNode parrent, List<Config> configs)
@@ -459,7 +459,7 @@ namespace RelhaxModpack
                 ObjectUpdateNotesTB.Enabled = false;
                 ObjectUpdateNotesTB.Text = "";
 
-                DatabaseSubeditPanel.Enabled = false;
+                DependenciesTabPage.Enabled = false;
                 PicturePanel.Enabled = false;
             }
             else if (node.Dependency != null)
@@ -506,7 +506,7 @@ namespace RelhaxModpack
                 ObjectUpdateNotesTB.Enabled = false;
                 ObjectUpdateNotesTB.Text = "";
 
-                DatabaseSubeditPanel.Enabled = true;
+                DependenciesTabPage.Enabled = true;
                 DependencyPanel.Enabled = false;
 
                 LogicalDependencyPanel.Enabled = true;
@@ -565,7 +565,7 @@ namespace RelhaxModpack
                 ObjectUpdateNotesTB.Enabled = false;
                 ObjectUpdateNotesTB.Text = "";
 
-                DatabaseSubeditPanel.Enabled = false;
+                DependenciesTabPage.Enabled = false;
                 PicturePanel.Enabled = false;
             }
             else if (node.DatabaseObject != null)
@@ -641,7 +641,7 @@ namespace RelhaxModpack
                 ObjectUpdateNotesTB.Enabled = true;
                 ObjectUpdateNotesTB.Text = SelectedDatabaseObject.updateComment;
 
-                DatabaseSubeditPanel.Enabled = true;
+                DependenciesTabPage.Enabled = true;
                 DependencyPanel.Enabled = true;
                 LogicalDependencyPanel.Enabled = true;
                 PicturePanel.Enabled = true;
@@ -713,7 +713,7 @@ namespace RelhaxModpack
                 ObjectUpdateNotesTB.Enabled = false;
                 ObjectUpdateNotesTB.Text = "";
 
-                DatabaseSubeditPanel.Enabled = true;
+                DependenciesTabPage.Enabled = true;
                 DependencyPanel.Enabled = true;
                 LogicalDependencyPanel.Enabled = false;
 
