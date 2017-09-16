@@ -296,16 +296,19 @@ namespace RelhaxModpack
 
             if (!File.Exists(Application.StartupPath + "\\RelicCopyUpdate.bat"))
             {
-                try
+                using (downloader = new WebClient())
                 {
-                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/RelicCopyUpdate.txt", Application.StartupPath + "\\RelicCopyUpdate.bat");
-                }
-                catch (Exception e2)
-                {
-                    Utils.exceptionLog("failed to download => RelicCopyUpdate.bat", e2);
-                    // Utils.appendToLog("Error: failed to download => RelicCopyUpdate.bat");
-                    MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " RelicCopyUpdate.bat");
-                    Application.Exit();
+                    try
+                    {
+                        downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/RelicCopyUpdate.txt", Application.StartupPath + "\\RelicCopyUpdate.bat");
+                    }
+                    catch (Exception e2)
+                    {
+                        Utils.exceptionLog("failed to download => RelicCopyUpdate.bat", e2);
+                        // Utils.appendToLog("Error: failed to download => RelicCopyUpdate.bat");
+                        MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " RelicCopyUpdate.bat");
+                        Application.Exit();
+                    }
                 }
             }
             string newExeName = Application.StartupPath + "\\RelicCopyUpdate.bat";

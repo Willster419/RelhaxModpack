@@ -1,3 +1,8 @@
+Version 26.0.3:
+https://www.virustotal.com/#/file/bc36592fbe4a2a472ccae2b9dfe369a562e4317c88494fa5c28488c5fd8c3c55/detection
+-Fixed bug with updater, downloading "RelicCopyUpdate.bat"
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 26.0.2:
 https://www.virustotal.com/#/file/8791b8814ab7104439e55e925e6866a5f5577cfe065f0cfdde397de1e9229116/detection
 -Fixed bug with selection "local file" from the load preference window
