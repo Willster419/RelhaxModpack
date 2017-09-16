@@ -3,8 +3,6 @@ using System.Windows.Forms;
 using System.Net;
 using System.Drawing;
 using System.Xml;
-using System.Xml.Linq;
-using System.Xml.XPath;
 
 namespace RelhaxModpack
 {
@@ -65,17 +63,22 @@ namespace RelhaxModpack
         private void SelectButton_Click(object sender, EventArgs e)
         {
             SelectedDocument = this.getSelectedXMLDoc();
-            if (!SelectedDocument.Equals("-1") || !SelectedDocument.Equals("localFile"))
+            if(SelectedDocument.Equals("-1"))
             {
-                try
-                {
-                    SelectedXML = "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/developerSelections/" + SelectedDocument;
-                    this.DialogResult = DialogResult.OK;
-                }
-                catch (WebException ex)
-                {
-                    Utils.exceptionLog(ex);
-                }
+                //error
+                Utils.appendToLog("ERROR: Failed to parse XML File");
+                SelectedXML = SelectedDocument;
+            }
+            else if (SelectedDocument.Equals("localFile"))
+            {
+                //local file dialog box
+                SelectedXML = SelectedDocument;
+                this.DialogResult = DialogResult.OK;
+            }
+            else
+            {
+                SelectedXML = "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/developerSelections/" + SelectedDocument;
+                this.DialogResult = DialogResult.OK;
             }
             this.Close();
         }

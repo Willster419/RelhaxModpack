@@ -13,10 +13,12 @@ namespace RelhaxModpack
         public DatabaseObject SelectedDatabaseObject;
         private List<Config> configList;
         private bool ignoreResult = true;
+        public bool sublist = false;
         public DatabaseAdder(EditorMode mode, List<Dependency> GlobalDependency, List<Dependency> Dependencies, List<LogicalDependnecy> LogicalDepdnedncies, List<Category> ParsedCatList)
         {
             InitializeComponent();
             Mode = mode;
+            sublist = false;
             if(mode == EditorMode.GlobalDependnecy)
             {
                 AddUnderCB.DataSource = GlobalDependency;
@@ -37,6 +39,7 @@ namespace RelhaxModpack
             }
             else if (mode == EditorMode.DBO)
             {
+                SelectModePanel.Visible = true;
                 AddUnderCB.DataSource = ParsedCatList;
                 ModPanel.Enabled = false;
                 ConfigPanel.Enabled = false;
@@ -79,19 +82,25 @@ namespace RelhaxModpack
         {
             ComboBox cb = (ComboBox)sender;
             Mod selectedMod = (Mod)cb.SelectedItem;
-            if(selectedMod.configs.Count == 0)
+            SelectedDatabaseObject = selectedMod;
+            if (selectedMod.configs.Count == 0)
             {
-                SelectedDatabaseObject = selectedMod;
+                ConfigPanel.Enabled = false;
             }
-            if(cb.SelectedIndex != -1)
+            else
+            {
                 ConfigPanel.Enabled = true;
-            configList = new List<Config>();
-            foreach(Config c in selectedMod.configs)
-            {
-                configList.Add(c);
-                processConfigs(c.configs);
+                configList = new List<Config>();
+                foreach (Config c in selectedMod.configs)
+                {
+                    configList.Add(c);
+                    processConfigs(c.configs);
+                }
+                ConfigCB.SelectedIndexChanged -= ConfigCB_SelectedIndexChanged;
+                ConfigCB.DataSource = configList;
+                ConfigCB.SelectedIndex = -1;
+                ConfigCB.SelectedIndexChanged += ConfigCB_SelectedIndexChanged;
             }
-            ConfigCB.DataSource = configList;
         }
 
         private void processConfigs(List<Config> cfgList)
@@ -123,6 +132,26 @@ namespace RelhaxModpack
                 SelectedDependency = null;
                 SelectedGlobalDependency = null;
                 SelectedLogicalDependency = null;
+            }
+        }
+
+        private void SameLevelRB_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = (RadioButton)sender;
+            if(rb.Checked)
+            {
+                //adding a mod, don't show config stuff
+                sublist = false;
+            }
+        }
+
+        private void NewLevelRB_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = (RadioButton)sender;
+            if (rb.Checked)
+            {
+                //adding a config
+                sublist = true;
             }
         }
     }

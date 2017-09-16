@@ -1,3 +1,18 @@
+Version 26.0.4:
+https://www.virustotal.com/#/file/68b74f57c23441bf1155ea26a9fe7478790734e0725e5e3004923368769dd4d2/detection
+-Fixed bug with database editor for adding entries of same or different level
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 26.0.3:
+https://www.virustotal.com/#/file/bc36592fbe4a2a472ccae2b9dfe369a562e4317c88494fa5c28488c5fd8c3c55/detection
+-Fixed bug with updater, downloading "RelicCopyUpdate.bat"
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 26.0.2:
+https://www.virustotal.com/#/file/8791b8814ab7104439e55e925e6866a5f5577cfe065f0cfdde397de1e9229116/detection
+-Fixed bug with selection "local file" from the load preference window
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Hello everyone, we have a full new release, version 26!!!
   This is the biggest and most significant update yet!
 https://www.virustotal.com/#/file/e968183097438e69602cc50b79cdcf08111fc7ee32afe4f3ab04a6803c74e2f8/detection

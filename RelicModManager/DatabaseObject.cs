@@ -9,6 +9,7 @@ namespace RelhaxModpack
         //the developer's version of the mod
         public string version { get; set; }
         public string zipFile { get; set; }
+        public List<Config> configs = new List<Config>();
         //the start address of the zip file location. enabled us to use sites that
         //generate random filenames for ly shared files.
         public string startAddress { get; set; }

@@ -43,10 +43,15 @@
             this.ConfigLabel = new System.Windows.Forms.Label();
             this.ConfigCB = new System.Windows.Forms.ComboBox();
             this.applyButton = new System.Windows.Forms.Button();
+            this.SelectModePanel = new System.Windows.Forms.Panel();
+            this.SelectModeLabel = new System.Windows.Forms.Label();
+            this.SameLevelRB = new System.Windows.Forms.RadioButton();
+            this.NewLevelRB = new System.Windows.Forms.RadioButton();
             this.ConfirmAddPanel.SuspendLayout();
             this.AddUnderPanel.SuspendLayout();
             this.ModPanel.SuspendLayout();
             this.ConfigPanel.SuspendLayout();
+            this.SelectModePanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // ConfirmAddLabel
@@ -97,7 +102,7 @@
             this.AddUnderPanel.Controls.Add(this.AddUnderCB);
             this.AddUnderPanel.Controls.Add(this.AddUnderLabel);
             this.AddUnderPanel.Enabled = false;
-            this.AddUnderPanel.Location = new System.Drawing.Point(12, 64);
+            this.AddUnderPanel.Location = new System.Drawing.Point(12, 106);
             this.AddUnderPanel.Name = "AddUnderPanel";
             this.AddUnderPanel.Size = new System.Drawing.Size(276, 65);
             this.AddUnderPanel.TabIndex = 4;
@@ -134,7 +139,7 @@
             this.ModPanel.Controls.Add(this.ModLabel);
             this.ModPanel.Controls.Add(this.ModCB);
             this.ModPanel.Enabled = false;
-            this.ModPanel.Location = new System.Drawing.Point(12, 135);
+            this.ModPanel.Location = new System.Drawing.Point(12, 177);
             this.ModPanel.Name = "ModPanel";
             this.ModPanel.Size = new System.Drawing.Size(276, 45);
             this.ModPanel.TabIndex = 5;
@@ -162,7 +167,7 @@
             this.ConfigPanel.Controls.Add(this.ConfigLabel);
             this.ConfigPanel.Controls.Add(this.ConfigCB);
             this.ConfigPanel.Enabled = false;
-            this.ConfigPanel.Location = new System.Drawing.Point(12, 186);
+            this.ConfigPanel.Location = new System.Drawing.Point(12, 228);
             this.ConfigPanel.Name = "ConfigPanel";
             this.ConfigPanel.Size = new System.Drawing.Size(276, 43);
             this.ConfigPanel.TabIndex = 5;
@@ -187,7 +192,7 @@
             // 
             // applyButton
             // 
-            this.applyButton.Location = new System.Drawing.Point(213, 235);
+            this.applyButton.Location = new System.Drawing.Point(213, 274);
             this.applyButton.Name = "applyButton";
             this.applyButton.Size = new System.Drawing.Size(75, 23);
             this.applyButton.TabIndex = 6;
@@ -195,11 +200,56 @@
             this.applyButton.UseVisualStyleBackColor = true;
             this.applyButton.Click += new System.EventHandler(this.applyButton_Click);
             // 
+            // SelectModePanel
+            // 
+            this.SelectModePanel.Controls.Add(this.NewLevelRB);
+            this.SelectModePanel.Controls.Add(this.SameLevelRB);
+            this.SelectModePanel.Controls.Add(this.SelectModeLabel);
+            this.SelectModePanel.Location = new System.Drawing.Point(12, 60);
+            this.SelectModePanel.Name = "SelectModePanel";
+            this.SelectModePanel.Size = new System.Drawing.Size(276, 40);
+            this.SelectModePanel.TabIndex = 7;
+            this.SelectModePanel.Visible = false;
+            // 
+            // SelectModeLabel
+            // 
+            this.SelectModeLabel.AutoSize = true;
+            this.SelectModeLabel.Location = new System.Drawing.Point(0, 1);
+            this.SelectModeLabel.Name = "SelectModeLabel";
+            this.SelectModeLabel.Size = new System.Drawing.Size(188, 13);
+            this.SelectModeLabel.TabIndex = 0;
+            this.SelectModeLabel.Text = "Adding at same level or new sublevel?";
+            // 
+            // SameLevelRB
+            // 
+            this.SameLevelRB.AutoSize = true;
+            this.SameLevelRB.Location = new System.Drawing.Point(4, 18);
+            this.SameLevelRB.Name = "SameLevelRB";
+            this.SameLevelRB.Size = new System.Drawing.Size(75, 17);
+            this.SameLevelRB.TabIndex = 1;
+            this.SameLevelRB.TabStop = true;
+            this.SameLevelRB.Text = "same level";
+            this.SameLevelRB.UseVisualStyleBackColor = true;
+            this.SameLevelRB.CheckedChanged += new System.EventHandler(this.SameLevelRB_CheckedChanged);
+            // 
+            // NewLevelRB
+            // 
+            this.NewLevelRB.AutoSize = true;
+            this.NewLevelRB.Location = new System.Drawing.Point(85, 17);
+            this.NewLevelRB.Name = "NewLevelRB";
+            this.NewLevelRB.Size = new System.Drawing.Size(70, 17);
+            this.NewLevelRB.TabIndex = 2;
+            this.NewLevelRB.TabStop = true;
+            this.NewLevelRB.Text = "new level";
+            this.NewLevelRB.UseVisualStyleBackColor = true;
+            this.NewLevelRB.CheckedChanged += new System.EventHandler(this.NewLevelRB_CheckedChanged);
+            // 
             // DatabaseAdder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(295, 264);
+            this.ClientSize = new System.Drawing.Size(295, 302);
+            this.Controls.Add(this.SelectModePanel);
             this.Controls.Add(this.applyButton);
             this.Controls.Add(this.ConfigPanel);
             this.Controls.Add(this.ModPanel);
@@ -216,6 +266,8 @@
             this.ModPanel.PerformLayout();
             this.ConfigPanel.ResumeLayout(false);
             this.ConfigPanel.PerformLayout();
+            this.SelectModePanel.ResumeLayout(false);
+            this.SelectModePanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -237,5 +289,9 @@
         private System.Windows.Forms.Label ConfigLabel;
         private System.Windows.Forms.ComboBox ConfigCB;
         private System.Windows.Forms.Button applyButton;
+        private System.Windows.Forms.Panel SelectModePanel;
+        private System.Windows.Forms.RadioButton NewLevelRB;
+        private System.Windows.Forms.RadioButton SameLevelRB;
+        private System.Windows.Forms.Label SelectModeLabel;
     }
 }

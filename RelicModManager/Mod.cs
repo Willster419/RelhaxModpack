@@ -9,7 +9,7 @@ namespace RelhaxModpack
     {
         //the tab index in the modpack 
         public TabPage tabIndex { get; set; }
-        public List<Config> configs = new List<Config>();
+        //public List<Config> configs = new List<Config>();
         
         //the parent of a mod is a category
         public Category parent { get; set; }
