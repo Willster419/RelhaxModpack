@@ -870,36 +870,8 @@ namespace RelhaxModpack
                     if (SelectedDatabaseObject is Mod)
                     {
                         Mod mm = (Mod)dba.SelectedDatabaseObject;
-                        List<Mod> ModList = ListContainsMod(mm);
-                        int index = ModList.IndexOf(mm);
-                        //make changes
-                        Mod m = new Mod();
-                        m.name = ObjectNameTB.Text;
-                        m.packageName = ObjectPackageNameTB.Text;
-                        m.startAddress = ObjectStartAddressTB.Text;
-                        m.endAddress = ObjectEndAddressTB.Text;
-                        m.zipFile = ObjectZipFileTB.Text;
-                        m.devURL = ObjectDevURLTB.Text;
-                        m.enabled = ObjectEnabledCheckBox.Checked;
-                        m.visible = ObjectVisableCheckBox.Checked;
-                        m.description = ObjectDescTB.Text;
-                        m.updateComment = ObjectUpdateNotesTB.Text;
-                        ModList.Insert(index, m);
-                    }
-                    else if (SelectedDatabaseObject is Config)
-                    {
-                        if (ObjectTypeComboBox.SelectedIndex == -1 || ObjectTypeComboBox.SelectedIndex == 0)
+                        if(dba.sublist)
                         {
-                            MessageBox.Show("Invalid Index of config type");
-                            return;
-                        }
-                        ListThatContainsConfig = null;
-                        Config cfgg = (Config)dba.SelectedDatabaseObject;
-                        ListContainsConfig(cfgg);
-                        if (ListThatContainsConfig != null)
-                        {
-                            int index = ListThatContainsConfig.IndexOf(cfgg);
-                            //make changes
                             Config cfg = new Config();
                             cfg.name = ObjectNameTB.Text;
                             cfg.packageName = ObjectPackageNameTB.Text;
@@ -926,7 +898,102 @@ namespace RelhaxModpack
                             cfg.visible = ObjectVisableCheckBox.Checked;
                             cfg.description = ObjectDescTB.Text;
                             cfg.updateComment = ObjectUpdateNotesTB.Text;
-                            ListThatContainsConfig.Insert(index, cfg);
+                            mm.configs.Add(cfg);
+                        }
+                        else
+                        {
+                            List<Mod> ModList = ListContainsMod(mm);
+                            int index = ModList.IndexOf(mm);
+                            //make changes
+                            Mod m = new Mod();
+                            m.name = ObjectNameTB.Text;
+                            m.packageName = ObjectPackageNameTB.Text;
+                            m.startAddress = ObjectStartAddressTB.Text;
+                            m.endAddress = ObjectEndAddressTB.Text;
+                            m.zipFile = ObjectZipFileTB.Text;
+                            m.devURL = ObjectDevURLTB.Text;
+                            m.enabled = ObjectEnabledCheckBox.Checked;
+                            m.visible = ObjectVisableCheckBox.Checked;
+                            m.description = ObjectDescTB.Text;
+                            m.updateComment = ObjectUpdateNotesTB.Text;
+                            ModList.Insert(index, m);
+                        }
+                    }
+                    else if (SelectedDatabaseObject is Config)
+                    {
+                        if (ObjectTypeComboBox.SelectedIndex == -1 || ObjectTypeComboBox.SelectedIndex == 0)
+                        {
+                            MessageBox.Show("Invalid Index of config type");
+                            return;
+                        }
+                        if(dba.sublist)
+                        {
+                            Config cfg = new Config();
+                            cfg.name = ObjectNameTB.Text;
+                            cfg.packageName = ObjectPackageNameTB.Text;
+                            cfg.startAddress = ObjectStartAddressTB.Text;
+                            cfg.endAddress = ObjectEndAddressTB.Text;
+                            cfg.zipFile = ObjectZipFileTB.Text;
+                            cfg.devURL = ObjectDevURLTB.Text;
+                            switch (ObjectTypeComboBox.SelectedIndex)
+                            {
+                                case 1:
+                                    cfg.type = "single1";
+                                    break;
+                                case 2:
+                                    cfg.type = "single_dropdown1";
+                                    break;
+                                case 3:
+                                    cfg.type = "single_dropdown2";
+                                    break;
+                                case 4:
+                                    cfg.type = "multi";
+                                    break;
+                            }
+                            cfg.enabled = ObjectEnabledCheckBox.Checked;
+                            cfg.visible = ObjectVisableCheckBox.Checked;
+                            cfg.description = ObjectDescTB.Text;
+                            cfg.updateComment = ObjectUpdateNotesTB.Text;
+                            dba.SelectedDatabaseObject.configs.Add(cfg);
+                            //SelectedDatabaseObject.configs.Add(cfg);
+                        }
+                        else
+                        {
+                            Config cfgg = (Config)dba.SelectedDatabaseObject;
+                            ListThatContainsConfig = null;
+                            ListContainsConfig(cfgg);
+                            if (ListThatContainsConfig != null)
+                            {
+                                int index = ListThatContainsConfig.IndexOf(cfgg);
+                                //make changes
+                                Config cfg = new Config();
+                                cfg.name = ObjectNameTB.Text;
+                                cfg.packageName = ObjectPackageNameTB.Text;
+                                cfg.startAddress = ObjectStartAddressTB.Text;
+                                cfg.endAddress = ObjectEndAddressTB.Text;
+                                cfg.zipFile = ObjectZipFileTB.Text;
+                                cfg.devURL = ObjectDevURLTB.Text;
+                                switch (ObjectTypeComboBox.SelectedIndex)
+                                {
+                                    case 1:
+                                        cfg.type = "single1";
+                                        break;
+                                    case 2:
+                                        cfg.type = "single_dropdown1";
+                                        break;
+                                    case 3:
+                                        cfg.type = "single_dropdown2";
+                                        break;
+                                    case 4:
+                                        cfg.type = "multi";
+                                        break;
+                                }
+                                cfg.enabled = ObjectEnabledCheckBox.Checked;
+                                cfg.visible = ObjectVisableCheckBox.Checked;
+                                cfg.description = ObjectDescTB.Text;
+                                cfg.updateComment = ObjectUpdateNotesTB.Text;
+                                ListThatContainsConfig.Insert(index, cfg);
+                            }
                         }
                     }
                 }

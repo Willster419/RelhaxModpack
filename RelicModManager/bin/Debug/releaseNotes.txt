@@ -1,3 +1,8 @@
+Version 26.0.4:
+https://www.virustotal.com/#/file/68b74f57c23441bf1155ea26a9fe7478790734e0725e5e3004923368769dd4d2/detection
+-Fixed bug with database editor for adding entries of same or different level
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 26.0.3:
 https://www.virustotal.com/#/file/bc36592fbe4a2a472ccae2b9dfe369a562e4317c88494fa5c28488c5fd8c3c55/detection
 -Fixed bug with updater, downloading "RelicCopyUpdate.bat"
