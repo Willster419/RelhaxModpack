@@ -612,38 +612,38 @@ namespace RelhaxModpack
                                 break;
                             case "logicalDependencies":
                                 //parse all dependencies
-                                foreach (XElement dependencyHolder in globs.Elements())
+                                foreach (XElement logDependencyHolder in globs.Elements())
                                 {
-                                    string[] depNodeList2 = new string[] { "packageName", "negateFlag" };
-                                    LogicalDependnecy d2 = new LogicalDependnecy();
-                                    d2.packageName = "";
-                                    foreach (XElement logDependencyNode in dependencyHolder.Elements())
+                                    string[] logDepNodeList = new string[] { "packageName", "negateFlag" };
+                                    LogicalDependnecy ld = new LogicalDependnecy();
+                                    ld.packageName = "";
+                                    foreach (XElement logDependencyNode in logDependencyHolder.Elements())
                                     {
-                                        depNodeList2 = depNodeList2.Except(new string[] { logDependencyNode.Name.ToString() }).ToArray();
+                                        logDepNodeList = logDepNodeList.Except(new string[] { logDependencyNode.Name.ToString() }).ToArray();
                                         switch (logDependencyNode.Name.ToString())
                                         {
                                             case "packageName":
-                                                d2.packageName = logDependencyNode.Value.Trim();
-                                                if (d2.packageName.Equals(""))
+                                                ld.packageName = logDependencyNode.Value.Trim();
+                                                if (ld.packageName.Equals(""))
                                                 {
-                                                    Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => dep {1} (line {2})", logDependencyNode.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)logDependencyNode).LineNumber));
+                                                    Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => logDep {1} (line {2})", logDependencyNode.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)logDependencyNode).LineNumber));
                                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\"  => dep {1}", logDependencyNode.Name.ToString(), d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                 }
                                                 break;
                                             case "negateFlag":
-                                                d2.negateFlag = Utils.parseBool(logDependencyNode.Value, true);
+                                                ld.negateFlag = Utils.parseBool(logDependencyNode.Value, true);
                                                 break;
                                             default:
-                                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => dep {1} (line {2})", logDependencyNode.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)logDependencyNode).LineNumber));
+                                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => logDep {1} (line {2})", logDependencyNode.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)logDependencyNode).LineNumber));
                                                 if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: packageName\n\nNode found: {0}\n\nmore informations, see logfile", logDependencyNode.Name.ToString())); };
                                                 break;
                                         }
                                     }
-                                    if (d2 != null)
+                                    if (ld != null)
                                     {
-                                        if (depNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => dep {3} (line {4})", string.Join(",", depNodeList), d2.dependencyZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber)); };
-                                        if (d2.packageName.Equals("")) { string rad = Utils.RandomString(30); d2.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
-                                        d.logicalDependencies.Add(d2);
+                                        if (logDepNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => logDep {3} (line {4})", string.Join(",", logDepNodeList), ld.dependencyZipFile, ((IXmlLineInfo)logDependencyHolder).LineNumber)); };
+                                        if (ld.packageName.Equals("")) { string rad = Utils.RandomString(30); ld.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
+                                        d.logicalDependencies.Add(ld);
                                     };
                                 }
                                 break;
