@@ -42,6 +42,7 @@ namespace RelhaxModpack
         public DatabaseEditor()
         {
             InitializeComponent();
+            Settings.loadSettings();
         }
 
         private void DatabaseEditor_FormClosing(object sender, FormClosingEventArgs e)
@@ -162,6 +163,11 @@ namespace RelhaxModpack
         //show the load database dialog and load the database
         private void LoadDatabaseButton_Click(object sender, EventArgs e)
         {
+            string workingDirectory = Path.Combine(string.IsNullOrEmpty(Settings.customModInfoPath) ? Application.StartupPath : Settings.customModInfoPath);
+            if (Directory.Exists(workingDirectory))
+            {
+                OpenDatabaseDialog.InitialDirectory = workingDirectory;
+            }
             if (OpenDatabaseDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             DatabaseLocation = OpenDatabaseDialog.FileName;
