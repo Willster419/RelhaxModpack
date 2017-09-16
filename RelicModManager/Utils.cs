@@ -617,25 +617,25 @@ namespace RelhaxModpack
                                     string[] depNodeList2 = new string[] { "packageName", "negateFlag" };
                                     LogicalDependnecy d2 = new LogicalDependnecy();
                                     d2.packageName = "";
-                                    foreach (XElement dependencyNode2 in dependencyHolder.Elements())
+                                    foreach (XElement logDependencyNode in dependencyHolder.Elements())
                                     {
-                                        depNodeList2 = depNodeList2.Except(new string[] { dependencyNode2.Name.ToString() }).ToArray();
-                                        switch (dependencyNode2.Name.ToString())
+                                        depNodeList2 = depNodeList2.Except(new string[] { logDependencyNode.Name.ToString() }).ToArray();
+                                        switch (logDependencyNode.Name.ToString())
                                         {
                                             case "packageName":
-                                                d2.packageName = dependencyNode2.Value.Trim();
+                                                d2.packageName = logDependencyNode.Value.Trim();
                                                 if (d2.packageName.Equals(""))
                                                 {
-                                                    Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => dep {1} (line {2})", dependencyNode2.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)dependencyNode2).LineNumber));
-                                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\"  => dep {1}", dependencyNode2.Name.ToString(), d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                                    Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => dep {1} (line {2})", logDependencyNode.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)logDependencyNode).LineNumber));
+                                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\"  => dep {1}", logDependencyNode.Name.ToString(), d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                 }
                                                 break;
                                             case "negateFlag":
-                                                d2.negateFlag = Utils.parseBool(dependencyNode2.Value, true);
+                                                d2.negateFlag = Utils.parseBool(logDependencyNode.Value, true);
                                                 break;
                                             default:
-                                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => dep {1} (line {2})", dependencyNode2.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)dependencyNode2).LineNumber));
-                                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: packageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode2.Name.ToString())); };
+                                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => dep {1} (line {2})", logDependencyNode.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)logDependencyNode).LineNumber));
+                                                if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: packageName\n\nNode found: {0}\n\nmore informations, see logfile", logDependencyNode.Name.ToString())); };
                                                 break;
                                         }
                                     }
@@ -3927,9 +3927,9 @@ namespace RelhaxModpack
                 XmlElement depEndAddress = doc.CreateElement("endAddress");
                 depEndAddress.InnerText = d.endAddress;
                 dependencyRoot.AppendChild(depEndAddress);
-                XmlElement depdevURl = doc.CreateElement("devURl");
-                depdevURl.InnerText = d.devURL;
-                dependencyRoot.AppendChild(depdevURl);
+                XmlElement depdevURL = doc.CreateElement("devURL");
+                depdevURL.InnerText = d.devURL;
+                dependencyRoot.AppendChild(depdevURL);
                 XmlElement depCRC = doc.CreateElement("dependencyZipCRC");
                 depCRC.InnerText = d.dependencyZipCRC;
                 dependencyRoot.AppendChild(depCRC);

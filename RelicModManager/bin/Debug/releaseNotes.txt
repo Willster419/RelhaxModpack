@@ -1,3 +1,8 @@
+Version 26.0.2:
+https://www.virustotal.com/#/file/8791b8814ab7104439e55e925e6866a5f5577cfe065f0cfdde397de1e9229116/detection
+-Fixed bug with selection "local file" from the load preference window
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Hello everyone, we have a full new release, version 26!!!
   This is the biggest and most significant update yet!
 https://www.virustotal.com/#/file/e968183097438e69602cc50b79cdcf08111fc7ee32afe4f3ab04a6803c74e2f8/detection
