@@ -2188,7 +2188,7 @@ namespace RelhaxModpack
 
         private void disableColorsCB_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.disableColorChange = disableBordersCB.Checked;
+            Settings.disableColorChange = disableColorsCB.Checked;
         }
 
         private void viewAppUpdates_Click(object sender, EventArgs e)
