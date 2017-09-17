@@ -475,6 +475,7 @@ namespace RelhaxModpack
                 ObjectUpdateNotesTB.Text = "";
 
                 DependenciesTabPage.Enabled = false;
+                ObjectDependenciesLabel.Text = "dependencies (click to edit)";
                 PictureTabPage.Enabled = false;
                 UserDatasTabPage.Enabled = false;
             }
@@ -524,6 +525,7 @@ namespace RelhaxModpack
                 ObjectUpdateNotesTB.Text = "";
 
                 DependenciesTabPage.Enabled = true;
+                ObjectDependenciesLabel.Text = "dependencies (click to edit)";
                 DependencyPanel.Enabled = false;
 
                 LogicalDependencyPanel.Enabled = true;
@@ -585,6 +587,12 @@ namespace RelhaxModpack
                 ObjectUpdateNotesTB.Text = "";
 
                 DependenciesTabPage.Enabled = false;
+                ObjectDependenciesLabel.Text = "Objects that use this logical dependency...";
+                SelectedLogicalDependency.DatabasePackageLogic.Clear();
+                BuildDatabaseLogic(SelectedLogicalDependency);
+                ObjectDependenciesList.DataSource = null;
+                ObjectDependenciesList.Items.Clear();
+                ObjectDependenciesList.DataSource = SelectedLogicalDependency.DatabasePackageLogic;
                 PictureTabPage.Enabled = false;
                 UserDatasTabPage.Enabled = false;
             }
@@ -683,6 +691,7 @@ namespace RelhaxModpack
                 LogicalDependnecyNegateFlagCB.CheckedChanged += LogicalDependnecyNegateFlagCB_CheckedChanged;
 
                 //dependencies
+                ObjectDependenciesLabel.Text = "dependencies (click to edit)";
                 ObjectDependenciesList.DataSource = null;
                 ObjectDependenciesList.Items.Clear();
                 ObjectDependenciesList.DataSource = SelectedDatabaseObject.dependencies;
@@ -751,6 +760,7 @@ namespace RelhaxModpack
                 DependencyPanel.Enabled = true;
                 LogicalDependencyPanel.Enabled = false;
 
+                ObjectDependenciesLabel.Text = "dependencies (click to edit)";
                 ObjectDependenciesList.DataSource = null;
                 ObjectDependenciesList.Items.Clear();
                 ObjectDependenciesList.DataSource = SelectedCategory.dependencies;
@@ -1525,6 +1535,8 @@ namespace RelhaxModpack
             ListBox lb = (ListBox)sender;
             if (lb.DataSource == null)
                 return;
+            if (lb.SelectedItem is DatabaseLogic)
+                return;
             Dependency ld = (Dependency)lb.SelectedItem;
             foreach (Dependency d in Dependencies)
             {
@@ -1632,6 +1644,70 @@ namespace RelhaxModpack
                     dtn.EnsureVisible();
                     DatabaseTreeView.SelectedNode = dtn;
                     DatabaseTreeView_NodeMouseClick(null, new TreeNodeMouseClickEventArgs(dtn, MouseButtons.Left, 0, 0, 0));
+                }
+            }
+        }
+
+        private void BuildDatabaseLogic(LogicalDependnecy d)
+        {
+            foreach (Dependency depD in Dependencies)
+            {
+                foreach (LogicalDependnecy ld in depD.logicalDependencies)
+                {
+                    if (ld.packageName.Equals(d.packageName))
+                    {
+                        DatabaseLogic dbl = new DatabaseLogic()
+                        {
+                            PackageName = depD.packageName,
+                            Enabled = false,
+                            Checked = false,
+                            NotFlag = ld.negateFlag
+                        };
+                        d.DatabasePackageLogic.Add(dbl);
+                    }
+                }
+            }
+            foreach (Category c in ParsedCategoryList)
+            {
+                //will itterate through every catagory once
+                foreach (Mod m in c.mods)
+                {
+                    foreach (LogicalDependnecy ld in m.logicalDependencies)
+                    {
+                        if (ld.packageName.Equals(d.packageName))
+                        {
+                            DatabaseLogic dbl = new DatabaseLogic()
+                            {
+                                PackageName = m.packageName,
+                                Enabled = false,
+                                Checked = false,
+                                NotFlag = ld.negateFlag
+                            };
+                            d.DatabasePackageLogic.Add(dbl);
+                        }
+                    }
+                    if (m.configs.Count > 0)
+                        ProcessConfigsLogical(d, m.configs);
+                }
+            }
+        }
+        private void ProcessConfigsLogical(LogicalDependnecy d, List<Config> configList)
+        {
+            foreach (Config config in configList)
+            {
+                foreach (LogicalDependnecy ld in config.logicalDependencies)
+                {
+                    if (ld.packageName.Equals(d.packageName))
+                    {
+                        DatabaseLogic dl = new DatabaseLogic()
+                        {
+                            PackageName = config.packageName,
+                            Enabled = false,
+                            Checked = false,
+                            NotFlag = ld.negateFlag
+                        };
+                        d.DatabasePackageLogic.Add(dl);
+                    }
                 }
             }
         }
