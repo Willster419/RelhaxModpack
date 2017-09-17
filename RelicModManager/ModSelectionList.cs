@@ -20,8 +20,9 @@ namespace RelhaxModpack
         public List<Dependency> globalDependencies;
         public List<Dependency> dependencies;
         public List<LogicalDependnecy> logicalDependencies;
-        public List<CompleteModSearch> completeModSearchList;
-        public CompleteModSearch lastSearchFieldInSelectionView;
+        public List<Mod> completeModSearchList;
+        // public List<CompleteModSearch> completeModSearchList_New;
+        // public CompleteModSearch lastSearchFieldInSelectionView;
         private bool loadingConfig = false;
         private bool taskBarHidden = false;
         private const int titleBar = 23;//set origionally for 23
@@ -314,7 +315,8 @@ namespace RelhaxModpack
             }
             loadingConfig = true;
             Utils.appendToLog("Loading ModSelectionList with view " + Settings.sView);
-            completeModSearchList = new List<CompleteModSearch>();
+            completeModSearchList = new List<Mod>();
+            // completeModSearchList_New = new List<CompleteModSearch>();
             foreach (TabPage t in this.modTabGroups.TabPages)
             {
                 foreach (Category c in parsedCatagoryList)
@@ -417,7 +419,8 @@ namespace RelhaxModpack
                 //add the root UI object to the memory database
                 m.modFormCheckBox = modCheckBox;
                 m.tabIndex = t;
-                completeModSearchList.Add((CompleteModSearch)m);
+                completeModSearchList.Add(m);
+                // completeModSearchList_New.Add(m);
                 switch (Settings.fontSizeforum)
                 {
                     case Settings.FontSize.fontRegular:
@@ -515,7 +518,7 @@ namespace RelhaxModpack
                     con.parentMod = m;
                     if (parentIsMod)
                     {
-                        // completeModSearchList.Add((CompleteModSearch)con);
+                        // completeModSearchList_New.Add(con);
                         con.parent = m;
                     }
                     else
@@ -1245,7 +1248,8 @@ namespace RelhaxModpack
                 modCheckBox.mod = m;
                 m.tabIndex = t;
                 m.modFormCheckBox = modCheckBox;
-                completeModSearchList.Add((CompleteModSearch)m);
+                completeModSearchList.Add(m);
+                // completeModSearchList_New.Add(m);
                 //the mod checksum logic
                 string modDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.zipFile;
                 if (firstLoad)
@@ -1401,7 +1405,7 @@ namespace RelhaxModpack
                     con.parentMod = m;
                     if (parentIsMod)
                     {
-                        completeModSearchList.Add((CompleteModSearch)con);
+                        // completeModSearchList_New.Add(con);
                         con.parent = m;
                     }
                     else
@@ -2402,7 +2406,8 @@ namespace RelhaxModpack
         {
             ComboBox searchComboBox = (ComboBox)sender;
             string filter_param = searchComboBox.Text;
-            List<CompleteModSearch> filteredItems = null;
+            List<Mod> filteredItems = null;
+            // List<CompleteModSearch> filteredItems_New = null;
             if (!String.IsNullOrWhiteSpace(filter_param))
             {
                 String[] filtered_parts = filter_param.Split('*');
@@ -2458,6 +2463,35 @@ namespace RelhaxModpack
             }
         }
 
+        private void searchCB_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            ComboBox sendah = (ComboBox)sender;
+            if (sendah.SelectedIndex == -1 || ignoreSelections)
+            {
+                return;
+            }
+            Mod m = (Mod)sendah.SelectedItem;
+            if (modTabGroups.TabPages.Contains(m.tabIndex))
+            {
+                modTabGroups.SelectedTab = m.tabIndex;
+            }
+            TabPage tp = modTabGroups.SelectedTab;
+            if (Settings.sView == Settings.SelectionView.defaultt)
+            {
+                ModFormCheckBox c = (ModFormCheckBox)m.modFormCheckBox;
+                //tp.ScrollControlIntoView(c);
+                c.Focus();
+            }
+            else if (Settings.sView == Settings.SelectionView.legacy)
+            {
+                ModWPFCheckBox c = (ModWPFCheckBox)m.modFormCheckBox;
+                c.Focus();
+                this.ModSelectionList_SizeChanged(null, null);
+            }
+            mouseCLick = false;
+        }
+        
+        /*
         // call expected with Mod or Config structure
         private void handleBackColorOfSearchResult(object sender)
         {
@@ -2519,7 +2553,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void searchCB_SelectionChangeCommitted(object sender, EventArgs e)
+        private void searchCB_SelectionChangeCommitted_New(object sender, EventArgs e)
         {
             ComboBox sendah = (ComboBox)sender;
             if (sendah.SelectedIndex == -1 || ignoreSelections)
@@ -2581,10 +2615,11 @@ namespace RelhaxModpack
             }
             else
             {
-                Utils.appendToLog("searchCB_SelectionChangeCommitted\nelse: no sendah identified");
+                Utils.appendToLog("searchCB_SelectionChangeCommitted_New\nelse: no sendah identified");
             }
             mouseCLick = false;
         }
+        */
 
         private void searchCB_KeyDown(object sender, KeyEventArgs e)
         {

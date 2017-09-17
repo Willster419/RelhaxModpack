@@ -5,8 +5,10 @@ using System.Text;
 
 namespace RelhaxModpack
 {
+    /*
     public interface CompleteModSearch
     {
         string name { get; set; }
     }
+    */
 }
