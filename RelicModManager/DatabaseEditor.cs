@@ -790,10 +790,12 @@ namespace RelhaxModpack
                             if (dba.SelectedDatabaseObject is Mod)
                             { 
                                 Mod Ref = (Mod)dba.SelectedDatabaseObject;
+                                //remove mod from list
                                 List<Mod> ModList = ListContainsMod(modToMove);
-                                int index = ModList.IndexOf(Ref);
-                                //make move
                                 ModList.Remove(modToMove);
+                                //add mod to other list
+                                ModList = ListContainsMod(Ref);
+                                int index = ModList.IndexOf(Ref);
                                 ModList.Insert(index, modToMove);
                             }
                             else if (dba.SelectedDatabaseObject is Config)
@@ -843,12 +845,18 @@ namespace RelhaxModpack
                             if (dba.SelectedDatabaseObject is Config)
                             {
                                 Config Ref = (Config)dba.SelectedDatabaseObject;
+                                //remove config from list
                                 ListContainsConfig(cfgToMove);
                                 if (ListThatContainsConfig != null)
                                 {
-                                    int index = ListThatContainsConfig.IndexOf(Ref);
-                                    //make move
                                     ListThatContainsConfig.Remove(cfgToMove);
+                                }
+                                //add config to other list
+                                ListThatContainsConfig = null;
+                                ListContainsConfig(Ref);
+                                if (ListThatContainsConfig != null)
+                                {
+                                    int index = ListThatContainsConfig.IndexOf(Ref);
                                     ListThatContainsConfig.Insert(index, cfgToMove);
                                 }
                             }
