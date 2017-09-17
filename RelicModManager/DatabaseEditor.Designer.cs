@@ -33,6 +33,8 @@
             this.ObjectNameTB = new System.Windows.Forms.TextBox();
             this.DatabasePanelTree = new System.Windows.Forms.Panel();
             this.DatabaseEditPanel = new System.Windows.Forms.Panel();
+            this.ObjectVersionTB = new System.Windows.Forms.TextBox();
+            this.ObjectVersionLabel = new System.Windows.Forms.Label();
             this.ObjectPropertiesTabControl = new System.Windows.Forms.TabControl();
             this.DescriptionTabPage = new System.Windows.Forms.TabPage();
             this.ObjectDescription = new System.Windows.Forms.Label();
@@ -102,8 +104,6 @@
             this.OpenDatabaseDialog = new System.Windows.Forms.OpenFileDialog();
             this.SaveDatabaseDialog = new System.Windows.Forms.SaveFileDialog();
             this.MoveButton = new System.Windows.Forms.Button();
-            this.ObjectVersionLabel = new System.Windows.Forms.Label();
-            this.ObjectVersionTB = new System.Windows.Forms.TextBox();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.ObjectPropertiesTabControl.SuspendLayout();
@@ -177,6 +177,22 @@
             this.DatabaseEditPanel.Name = "DatabaseEditPanel";
             this.DatabaseEditPanel.Size = new System.Drawing.Size(547, 600);
             this.DatabaseEditPanel.TabIndex = 4;
+            // 
+            // ObjectVersionTB
+            // 
+            this.ObjectVersionTB.Location = new System.Drawing.Point(91, 158);
+            this.ObjectVersionTB.Name = "ObjectVersionTB";
+            this.ObjectVersionTB.Size = new System.Drawing.Size(447, 20);
+            this.ObjectVersionTB.TabIndex = 31;
+            // 
+            // ObjectVersionLabel
+            // 
+            this.ObjectVersionLabel.AutoSize = true;
+            this.ObjectVersionLabel.Location = new System.Drawing.Point(8, 161);
+            this.ObjectVersionLabel.Name = "ObjectVersionLabel";
+            this.ObjectVersionLabel.Size = new System.Drawing.Size(41, 13);
+            this.ObjectVersionLabel.TabIndex = 30;
+            this.ObjectVersionLabel.Text = "version";
             // 
             // ObjectPropertiesTabControl
             // 
@@ -278,9 +294,9 @@
             // CurrentLogicalDependenciesCB
             // 
             this.CurrentLogicalDependenciesCB.FormattingEnabled = true;
-            this.CurrentLogicalDependenciesCB.Location = new System.Drawing.Point(6, 97);
+            this.CurrentLogicalDependenciesCB.Location = new System.Drawing.Point(3, 97);
             this.CurrentLogicalDependenciesCB.Name = "CurrentLogicalDependenciesCB";
-            this.CurrentLogicalDependenciesCB.Size = new System.Drawing.Size(508, 21);
+            this.CurrentLogicalDependenciesCB.Size = new System.Drawing.Size(511, 21);
             this.CurrentLogicalDependenciesCB.TabIndex = 39;
             // 
             // ObjectLogicalDependenciesLabel
@@ -325,11 +341,12 @@
             // ObjectLogicalDependenciesList
             // 
             this.ObjectLogicalDependenciesList.FormattingEnabled = true;
-            this.ObjectLogicalDependenciesList.Location = new System.Drawing.Point(6, 20);
+            this.ObjectLogicalDependenciesList.Location = new System.Drawing.Point(3, 20);
             this.ObjectLogicalDependenciesList.Name = "ObjectLogicalDependenciesList";
-            this.ObjectLogicalDependenciesList.Size = new System.Drawing.Size(508, 56);
+            this.ObjectLogicalDependenciesList.Size = new System.Drawing.Size(511, 56);
             this.ObjectLogicalDependenciesList.TabIndex = 26;
             this.ObjectLogicalDependenciesList.SelectedIndexChanged += new System.EventHandler(this.ObjectLogicalDependenciesList_SelectedIndexChanged);
+            this.ObjectLogicalDependenciesList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ObjectLogicalDependenciesList_MouseDoubleClick);
             // 
             // DependencyPanel
             // 
@@ -358,9 +375,9 @@
             // CurrentDependenciesCB
             // 
             this.CurrentDependenciesCB.FormattingEnabled = true;
-            this.CurrentDependenciesCB.Location = new System.Drawing.Point(5, 106);
+            this.CurrentDependenciesCB.Location = new System.Drawing.Point(3, 106);
             this.CurrentDependenciesCB.Name = "CurrentDependenciesCB";
-            this.CurrentDependenciesCB.Size = new System.Drawing.Size(509, 21);
+            this.CurrentDependenciesCB.Size = new System.Drawing.Size(511, 21);
             this.CurrentDependenciesCB.TabIndex = 38;
             // 
             // ObjectDependenciesList
@@ -371,6 +388,7 @@
             this.ObjectDependenciesList.Size = new System.Drawing.Size(511, 69);
             this.ObjectDependenciesList.TabIndex = 23;
             this.ObjectDependenciesList.SelectedIndexChanged += new System.EventHandler(this.ObjectDependenciesList_SelectedIndexChanged);
+            this.ObjectDependenciesList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ObjectDependenciesList_MouseDoubleClick);
             // 
             // ObjectDependenciesLabel
             // 
@@ -848,22 +866,6 @@
             this.MoveButton.Text = "move";
             this.MoveButton.UseVisualStyleBackColor = true;
             this.MoveButton.Click += new System.EventHandler(this.MoveButton_Click);
-            // 
-            // ObjectVersionLabel
-            // 
-            this.ObjectVersionLabel.AutoSize = true;
-            this.ObjectVersionLabel.Location = new System.Drawing.Point(8, 161);
-            this.ObjectVersionLabel.Name = "ObjectVersionLabel";
-            this.ObjectVersionLabel.Size = new System.Drawing.Size(41, 13);
-            this.ObjectVersionLabel.TabIndex = 30;
-            this.ObjectVersionLabel.Text = "version";
-            // 
-            // ObjectVersionTB
-            // 
-            this.ObjectVersionTB.Location = new System.Drawing.Point(91, 158);
-            this.ObjectVersionTB.Name = "ObjectVersionTB";
-            this.ObjectVersionTB.Size = new System.Drawing.Size(447, 20);
-            this.ObjectVersionTB.TabIndex = 31;
             // 
             // DatabaseEditor
             // 

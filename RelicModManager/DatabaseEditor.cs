@@ -1597,5 +1597,43 @@ namespace RelhaxModpack
             ObjectUserdatasList.DataSource = SelectedDatabaseObject.userFiles;
             UnsavedModifications = true;
         }
+
+        private void ObjectDependenciesList_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (MessageBox.Show("Confirm you wish to jump and loose any chanes to this mod/config you may have made", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+            string savePackageName = "";
+            Dependency d = (Dependency)ObjectDependenciesList.SelectedItem;
+            savePackageName = d.packageName;
+            DependencyRB.Checked = true;
+            foreach (DatabaseTreeNode dtn in DatabaseTreeView.Nodes)
+            {
+                if (dtn.Dependency.packageName.Equals(savePackageName))
+                {
+                    dtn.EnsureVisible();
+                    DatabaseTreeView.SelectedNode = dtn;
+                    DatabaseTreeView_NodeMouseClick(null, new TreeNodeMouseClickEventArgs(dtn,MouseButtons.Left,0,0,0));
+                }
+            }
+        }
+
+        private void ObjectLogicalDependenciesList_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (MessageBox.Show("Confirm you wish to jump and loose any chanes to this mod/config you may have made", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+            string savePackageName = "";
+            LogicalDependnecy d = (LogicalDependnecy)ObjectLogicalDependenciesList.SelectedItem;
+            savePackageName = d.packageName;
+            LogicalDependencyRB.Checked = true;
+            foreach (DatabaseTreeNode dtn in DatabaseTreeView.Nodes)
+            {
+                if (dtn.LogicalDependency.packageName.Equals(savePackageName))
+                {
+                    dtn.EnsureVisible();
+                    DatabaseTreeView.SelectedNode = dtn;
+                    DatabaseTreeView_NodeMouseClick(null, new TreeNodeMouseClickEventArgs(dtn, MouseButtons.Left, 0, 0, 0));
+                }
+            }
+        }
     }
 }
