@@ -837,61 +837,135 @@ namespace RelhaxModpack
             //this section deals with enabling the configs, if there are any
             if (m.configs.Count == 0)
                 return;
-            //get the string name of the last radiobutton for refrence later
-            string lastConfigName = "null";
-            bool configSelected = false;
-            foreach (Config configs in m.configs)
+            if (m.Checked)
             {
-                if (configs.type.Equals("single") || configs.type.Equals("single1"))
+                //mod checked, check at least one single1, one single_dropdown1, one single_dropdown2
+                //checking for single/single1 configs
+                bool configSelected = false;
+                foreach (Config con in m.configs)
                 {
-                    lastConfigName = configs.name;
-                }
-            }
-            //there is at least one config, so at least one UI element
-            foreach (System.Windows.Controls.TreeViewItem item in TVI.Items)
-            {
-                System.Windows.Controls.Control c = (System.Windows.Controls.Control)item.Header;
-                Config cfg = null;
-                if ((c is ConfigWPFRadioButton) && m.Checked)
-                {
-                    ConfigWPFRadioButton cbox = (ConfigWPFRadioButton)c;
-                    cfg = cbox.config;
-                    if (cfg.Checked)
-                        configSelected = true;
-                    //create a section of code to run for only the last radioButton
-                    if (cfg.name.Equals(lastConfigName) && !configSelected)
+                    if ((!con.visible) || (!con.enabled))
+                        continue;
+                    if ((con.type.Equals("single")) || (con.type.Equals("single1")))
                     {
-                        //last radioButton in the section, try to check at least one radioButton in the configs
-                        foreach (System.Windows.Controls.TreeViewItem item2 in TVI.Items)
+                        if (con.Checked)
+                            configSelected = true;
+                    }
+                }
+                if (!configSelected)
+                {
+                    foreach (Config con in m.configs)
+                    {
+                        if ((!con.visible) || (!con.enabled))
+                            continue;
+                        if ((con.type.Equals("single")) || (con.type.Equals("single1")))
                         {
-                            System.Windows.Controls.Control c2 = (System.Windows.Controls.Control)item2.Header;
-                            if (c2 is ConfigWPFRadioButton)
-                            {
-                                ConfigWPFRadioButton c2r = (ConfigWPFRadioButton)c2;
-                                cfg = c2r.config;
-                                if (cfg.enabled)
-                                {
-                                    c2r.IsChecked = true;
-                                    cfg.Checked = true;
-                                    break;
-                                }
-                            }
+                            con.Checked = true;
+                            ConfigWPFRadioButton cwpfrb = (ConfigWPFRadioButton)con.configUIComponent;
+                            cwpfrb.IsChecked = true;
+                            break;
                         }
                     }
                 }
-                else if ((c is ConfigWPFRadioButton) && !m.Checked)
+                //checking for single_dropdown/single_dropdown1 configs
+                configSelected = false;
+                foreach (Config con in m.configs)
                 {
-                    ConfigWPFRadioButton tempRB = (ConfigWPFRadioButton)c;
-                    cfg = tempRB.config;
-                    cfg.Checked = false;
-                    tempRB.IsChecked = false;
+                    if ((!con.visible) || (!con.enabled))
+                        continue;
+                    if ((con.type.Equals("single_dropdown")) || (con.type.Equals("single_dropdown1")))
+                    {
+                        if (con.Checked)
+                            configSelected = true;
+                    }
                 }
-                else if ((c is ConfigWPFCheckBox) && !m.Checked)
+                if (!configSelected)
                 {
-                    ConfigWPFCheckBox tempRB = (ConfigWPFCheckBox)c;
-                    cfg = tempRB.config;
-                    cfg.Checked = false;
-                    tempRB.IsChecked = false;
+                    foreach (Config con in m.configs)
+                    {
+                        if ((!con.visible) || (!con.enabled))
+                            continue;
+                        if ((con.type.Equals("single_dropdown")) || (con.type.Equals("single_dropdown1")))
+                        {
+                            con.Checked = true;
+                            ConfigWPFComboBox cwpfcb = (ConfigWPFComboBox)con.configUIComponent;
+                            bool breakOut = false;
+                            foreach (ComboBoxItem cbi in cwpfcb.Items)
+                            {
+                                if (cbi.config.name.Equals(con.name))
+                                {
+                                    cwpfcb.SelectionChanged -= configControlDDALL_SelectionChanged;
+                                    cwpfcb.SelectedItem = cbi;
+                                    cwpfcb.SelectionChanged += configControlDDALL_SelectionChanged;
+                                    breakOut = true;
+                                    break;
+                                }
+                            }
+                            if (breakOut)
+                                break;
+                        }
+                    }
+                }
+                //checking for single_dropdown2 configs
+                configSelected = false;
+                foreach (Config con in m.configs)
+                {
+                    if ((!con.visible) || (!con.enabled) || (!con.type.Equals("single_dropdown2")))
+                        continue;
+                    if (con.Checked)
+                        configSelected = true;
+                }
+                if (!configSelected)
+                {
+                    foreach (Config con in m.configs)
+                    {
+                        if ((!con.visible) || (!con.enabled) || (!con.type.Equals("single_dropdown2")))
+                            continue;
+                        con.Checked = true;
+                        ConfigWPFComboBox cwpfcb = (ConfigWPFComboBox)con.configUIComponent;
+                        bool breakOut = false;
+                        foreach (ComboBoxItem cbi in cwpfcb.Items)
+                        {
+                            if (cbi.config.name.Equals(con.name))
+                            {
+                                cwpfcb.SelectionChanged -= configControlDDALL_SelectionChanged;
+                                cwpfcb.SelectedItem = cbi;
+                                cwpfcb.SelectionChanged += configControlDDALL_SelectionChanged;
+                                breakOut = true;
+                                break;
+                            }
+                        }
+                        if (breakOut)
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                //mod not checked, uncheck all the configs
+                foreach (Config cfg in m.configs)
+                {
+                    if (cfg.enabled)
+                    {
+                        cfg.Checked = false;
+                        if (cfg.configUIComponent is ConfigFormCheckBox)
+                        {
+                            ConfigFormCheckBox cfcb = (ConfigFormCheckBox)cfg.configUIComponent;
+                            cfcb.Checked = false;
+                        }
+                        else if (cfg.configUIComponent is ConfigFormRadioButton)
+                        {
+                            ConfigFormRadioButton cfrb = (ConfigFormRadioButton)cfg.configUIComponent;
+                            cfrb.Checked = false;
+                        }
+                        else if (cfg.configUIComponent is ConfigFormComboBox)
+                        {
+                            ConfigFormComboBox cfcb = (ConfigFormComboBox)cfg.configUIComponent;
+                            cfcb.SelectedIndexChanged -= configControlDD_SelectedIndexChanged;
+                            cfcb.SelectedIndex = -1;
+                            cfcb.SelectedIndexChanged += configControlDD_SelectedIndexChanged;
+                        }
+                    }
                 }
             }
         }
@@ -1676,6 +1750,10 @@ namespace RelhaxModpack
             Mod m = cb.mod;
             Category cat = cb.catagory;
 
+            //just a check
+            if (!m.visible)
+                return;
+
             //check to see if the mod is part of a single selection only catagory
             //if it is uncheck the other mods first, then deal with mod loop selection
             if (cat.selectionType.Equals("single") && cb.Checked)
@@ -1736,16 +1814,6 @@ namespace RelhaxModpack
             //this deals with enabling the componets and triggering the handlers
             if (m.configs.Count == 0)
                 return;
-            string lastConfigName = "null";
-            bool configSelected = false;
-            foreach (Config configs in m.configs)
-            {
-                if (configs.type.Equals("single") || configs.type.Equals("single1"))
-                {
-                    lastConfigName = configs.name;
-                }
-            }
-            //checkbox and dropDownList, including if loading a config, if there are any
             //the first one is always the mod checkbox
             //the second one is always the config panel
             Panel configPanel = (Panel)modPanel.Controls[1];
@@ -1757,55 +1825,138 @@ namespace RelhaxModpack
             {
                 configPanel.BackColor = Settings.getBackColor();
             }
-            foreach (Control cc in configPanel.Controls)
+            if (m.Checked)
             {
-                Config cfg = null;
-                if ((cc is ConfigFormRadioButton) && m.Checked)
+                //mod checked, check at least one single1, one single_dropdown1, one single_dropdown2
+                //checking for single/single1 configs
+                bool configSelected = false;
+                foreach (Config con in m.configs)
                 {
-                    ConfigFormRadioButton ccRB = (ConfigFormRadioButton)cc;
-                    cfg = ccRB.config;
-                    if (cfg.Checked)
-                        configSelected = true;
-                    //create a section of code to run fo only the last radioButton
-                    if (cfg.name.Equals(lastConfigName) && !configSelected)
+                    if ((!con.visible) || (!con.enabled))
+                        continue;
+                    if ((con.type.Equals("single")) || (con.type.Equals("single1")))
                     {
-                        //last radioButton in the section, try to check the first radioButton
-                        foreach (Control cccc in configPanel.Controls)
+                        if (con.Checked)
+                            configSelected = true;
+                    }
+                }
+                if(!configSelected)
+                {
+                    foreach (Config con in m.configs)
+                    {
+                        if ((!con.visible) || (!con.enabled))
+                            continue;
+                        if ((con.type.Equals("single")) || (con.type.Equals("single1")))
                         {
-                            if (cccc is ConfigFormRadioButton)
-                            {
-                                ConfigFormRadioButton ccccc = (ConfigFormRadioButton)cccc;
-                                cfg = ccccc.config;
-                                if (cfg.enabled)
-                                {
-                                    ccccc.CheckedChanged -= configControlRB_CheckedChanged;
-                                    ccccc.Checked = true;
-                                    cfg.Checked = true;
-                                    configControlRB_CheckedChanged(ccccc, null);
-                                    ccccc.CheckedChanged += configControlRB_CheckedChanged;
-                                    break;
-                                }
-                            }
+                            con.Checked = true;
+                            ConfigFormRadioButton cfrb = (ConfigFormRadioButton)con.configUIComponent;
+                            cfrb.Checked = true;
+                            break;
                         }
                     }
                 }
-                else if ((cc is ConfigFormRadioButton) && !m.Checked)
+                //checking for single_dropdown/single_dropdown1 configs
+                configSelected = false;
+                foreach (Config con in m.configs)
                 {
-                    ConfigFormRadioButton tempRB = (ConfigFormRadioButton)cc;
-                    cfg = tempRB.config;
-                    cfg.Checked = false;
-                    //setting checked to false should trigger the checked handler
-                    tempRB.Checked = false;
+                    if ((!con.visible) || (!con.enabled))
+                        continue;
+                    if ((con.type.Equals("single_dropdown")) || (con.type.Equals("single_dropdown1")))
+                    {
+                        if (con.Checked)
+                        configSelected = true;
+                    }
                 }
-                else if ((cc is ConfigFormCheckBox) && !m.Checked)
+                if (!configSelected)
                 {
-                    ConfigFormCheckBox tempRB = (ConfigFormCheckBox)cc;
-                    cfg = tempRB.config;
-                    cfg.Checked = false;
-                    //setting checked to false should trigger the checked handler
-                    tempRB.Checked = false;
+                    foreach (Config con in m.configs)
+                    {
+                        if ((!con.visible) || (!con.enabled))
+                            continue;
+                        if ((con.type.Equals("single_dropdown")) || (con.type.Equals("single_dropdown1")))
+                        {
+                            con.Checked = true;
+                            ConfigFormComboBox cfcb = (ConfigFormComboBox)con.configUIComponent;
+                            bool breakOut = false;
+                            foreach (ComboBoxItem cbi in cfcb.Items)
+                            {
+                                if (cbi.config.name.Equals(con.name))
+                                {
+                                    cfcb.SelectedIndexChanged -= configControlDD_SelectedIndexChanged;
+                                    cfcb.SelectedItem = cbi;
+                                    cfcb.SelectedIndexChanged += configControlDD_SelectedIndexChanged;
+                                    breakOut = true;
+                                    break;
+                                }
+                            }
+                            if (breakOut)
+                                break;
+                        }
+                    }
+                }
+                //checking for single_dropdown2 configs
+                configSelected = false;
+                foreach (Config con in m.configs)
+                {
+                    if ((!con.visible) || (!con.enabled) || (!con.type.Equals("single_dropdown2")))
+                        continue;
+                    if (con.Checked)
+                        configSelected = true;
+                }
+                if (!configSelected)
+                {
+                    foreach (Config con in m.configs)
+                    {
+                        if ((!con.visible) || (!con.enabled) || (!con.type.Equals("single_dropdown2")))
+                            continue;
+                        con.Checked = true;
+                        ConfigFormComboBox cfcb = (ConfigFormComboBox)con.configUIComponent;
+                        bool breakOut = false;
+                        foreach (ComboBoxItem cbi in cfcb.Items)
+                        {
+                            if (cbi.config.name.Equals(con.name))
+                            {
+                                cfcb.SelectedIndexChanged -= configControlDD_SelectedIndexChanged;
+                                cfcb.SelectedItem = cbi;
+                                cfcb.SelectedIndexChanged += configControlDD_SelectedIndexChanged;
+                                breakOut = true;
+                                break;
+                            }
+                        }
+                        if (breakOut)
+                            break;
+                    }
                 }
             }
+            else
+            {
+                //mod not checked, uncheck all the configs
+                foreach(Config cfg in m.configs)
+                {
+                    if(cfg.enabled)
+                    {
+                        cfg.Checked = false;
+                        if(cfg.configUIComponent is ConfigFormCheckBox)
+                        {
+                            ConfigFormCheckBox cfcb = (ConfigFormCheckBox)cfg.configUIComponent;
+                            cfcb.Checked = false;
+                        }
+                        else if (cfg.configUIComponent is ConfigFormRadioButton)
+                        {
+                            ConfigFormRadioButton cfrb = (ConfigFormRadioButton)cfg.configUIComponent;
+                            cfrb.Checked = false;
+                        }
+                        else if (cfg.configUIComponent is ConfigFormComboBox)
+                        {
+                            ConfigFormComboBox cfcb = (ConfigFormComboBox)cfg.configUIComponent;
+                            cfcb.SelectedIndexChanged -= configControlDD_SelectedIndexChanged;
+                            cfcb.SelectedIndex = 0;
+                            cfcb.SelectedIndexChanged += configControlDD_SelectedIndexChanged;
+                        }
+                    }
+                }
+            }
+            
         }
 
         //handler for when the config checkbox is checked or unchecked
