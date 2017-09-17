@@ -3695,7 +3695,7 @@ namespace RelhaxModpack
         }
 
         public static List<string> createDownloadedOldZipsList(List<string> currentZipFiles, List<Category> parsedCatagoryList,
-            List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies, List<Dependency> appendedDependenciesToInstall)
+            List<Dependency> globalDependencies, List<Dependency> currentDependencies, List<LogicalDependnecy> currentLogicalDependencies)
         {
             parsedZips = new List<string>();
             foreach (Dependency d in globalDependencies)
@@ -3705,21 +3705,14 @@ namespace RelhaxModpack
                     parsedZips.Add(d.dependencyZipFile);
                 }
             }
-            foreach (Dependency d in dependencies)
+            foreach (Dependency d in currentDependencies)
             {
                 if (!d.dependencyZipFile.Equals("") && !parsedZips.Contains(d.dependencyZipFile))
                 {
                     parsedZips.Add(d.dependencyZipFile);
                 }
             }
-            foreach (Dependency d in appendedDependenciesToInstall)
-            {
-                if (!d.dependencyZipFile.Equals("") && !parsedZips.Contains(d.dependencyZipFile))
-                {
-                    parsedZips.Add(d.dependencyZipFile);
-                }
-            }
-            foreach (LogicalDependnecy d in logicalDependencies)
+            foreach (LogicalDependnecy d in currentLogicalDependencies)
             {
                 if (!d.dependencyZipFile.Equals("") && !parsedZips.Contains(d.dependencyZipFile))
                 {
@@ -3728,7 +3721,6 @@ namespace RelhaxModpack
             }
             foreach (Category cat in parsedCatagoryList)
             {
-                
                 foreach (Mod m in cat.mods)
                 {
                     

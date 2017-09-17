@@ -1492,51 +1492,53 @@ namespace RelhaxModpack
                 {
                     zipFilesList.Add(f.Name);
                 }
-                List<string> filesToDelete = Utils.createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists, globalDependenciesToInstall, dependenciesToInstall, logicalDependenciesToInstall, appendedDependenciesToInstall);
+                List<string> filesToDelete = Utils.createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists, globalDependenciesToInstall, currentDependencies, currentLogicalDependencies);
                 string listOfFiles = "";
                 foreach (string s in filesToDelete)
                     listOfFiles = listOfFiles + s + "\n";
-                OldFilesToDelete oftd = new OldFilesToDelete();
-                oftd.filesList.Text = listOfFiles;
-                if (listOfFiles.Count() == 0)
-                    return;
-                oftd.ShowDialog();
-                if (oftd.result)
+                using (OldFilesToDelete oftd = new OldFilesToDelete())
                 {
-                    childProgressBar.Minimum = 0;
-                    childProgressBar.Value = childProgressBar.Minimum;
-                    childProgressBar.Maximum = filesToDelete.Count;
-                    foreach (string s in filesToDelete)
+                    oftd.filesList.Text = listOfFiles;
+                    if (listOfFiles.Count() == 0)
+                        return;
+                    oftd.ShowDialog();
+                    if (oftd.result)
                     {
-                        bool retry = true;
-                        bool breakOut = false;
-                        while (retry)
+                        childProgressBar.Minimum = 0;
+                        childProgressBar.Value = childProgressBar.Minimum;
+                        childProgressBar.Maximum = filesToDelete.Count;
+                        foreach (string s in filesToDelete)
                         {
-                            //for each zip file, verify it exists, set properties to normal, delete it
-                            try
+                            bool retry = true;
+                            bool breakOut = false;
+                            while (retry)
                             {
-                                string file = Application.StartupPath + "\\RelHaxDownloads\\" + s;
-                                File.SetAttributes(file, FileAttributes.Normal);
-                                File.Delete(file);
-                                // remove file from database, too
-                                Utils.deleteMd5HashDatabase(file);
-                                childProgressBar.Value++;
-                                retry = false;
-                            }
-                            catch (Exception e)
-                            {
-                                retry = true;
-                                Utils.exceptionLog("checkForOldZipFiles","delete", e);
-                                DialogResult res = MessageBox.Show(Translations.getTranslatedString("fileDeleteFailed") + " " + s, "", MessageBoxButtons.RetryCancel);
-                                if (res == System.Windows.Forms.DialogResult.Cancel)
+                                //for each zip file, verify it exists, set properties to normal, delete it
+                                try
                                 {
-                                    breakOut = true;
+                                    string file = Application.StartupPath + "\\RelHaxDownloads\\" + s;
+                                    File.SetAttributes(file, FileAttributes.Normal);
+                                    File.Delete(file);
+                                    // remove file from database, too
+                                    Utils.deleteMd5HashDatabase(file);
+                                    childProgressBar.Value++;
                                     retry = false;
                                 }
+                                catch (Exception e)
+                                {
+                                    retry = true;
+                                    Utils.exceptionLog("checkForOldZipFiles", "delete", e);
+                                    DialogResult res = MessageBox.Show(Translations.getTranslatedString("fileDeleteFailed") + " " + s, "", MessageBoxButtons.RetryCancel);
+                                    if (res == System.Windows.Forms.DialogResult.Cancel)
+                                    {
+                                        breakOut = true;
+                                        retry = false;
+                                    }
+                                }
                             }
+                            if (breakOut)
+                                break;
                         }
-                        if (breakOut)
-                            break;
                     }
                 }
             }
