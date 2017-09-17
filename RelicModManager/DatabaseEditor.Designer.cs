@@ -56,20 +56,8 @@
             this.RemoveDependencyButton = new System.Windows.Forms.Button();
             this.DependencyPackageNameLabel = new System.Windows.Forms.Label();
             this.PictureTabPage = new System.Windows.Forms.TabPage();
-            this.PicturePanel = new System.Windows.Forms.Panel();
-            this.AddPictureTB = new System.Windows.Forms.TextBox();
-            this.MovePictureTB = new System.Windows.Forms.TextBox();
-            this.AddPictureButton = new System.Windows.Forms.Button();
-            this.ApplyPictureEditButton = new System.Windows.Forms.Button();
-            this.RemovePictureButton = new System.Windows.Forms.Button();
-            this.MovePictureButton = new System.Windows.Forms.Button();
-            this.ObjectPicturesLabel = new System.Windows.Forms.Label();
-            this.PictureURLTB = new System.Windows.Forms.RichTextBox();
-            this.ObjectPicturesList = new System.Windows.Forms.ListBox();
-            this.PicturesURLLabel = new System.Windows.Forms.Label();
-            this.PicturesTypeLabel = new System.Windows.Forms.Label();
-            this.PicturesTypeCBox = new System.Windows.Forms.ComboBox();
             this.UserDatasTabPage = new System.Windows.Forms.TabPage();
+            this.EditUserdatasButton = new System.Windows.Forms.Button();
             this.ObjectUserdatasTB = new System.Windows.Forms.TextBox();
             this.AddUserdatasButton = new System.Windows.Forms.Button();
             this.ObjectUserdatasList = new System.Windows.Forms.ListBox();
@@ -102,7 +90,18 @@
             this.OpenDatabaseDialog = new System.Windows.Forms.OpenFileDialog();
             this.SaveDatabaseDialog = new System.Windows.Forms.SaveFileDialog();
             this.MoveButton = new System.Windows.Forms.Button();
-            this.EditUserdatasButton = new System.Windows.Forms.Button();
+            this.AddPictureTB = new System.Windows.Forms.TextBox();
+            this.MovePictureTB = new System.Windows.Forms.TextBox();
+            this.AddPictureButton = new System.Windows.Forms.Button();
+            this.ApplyPictureEditButton = new System.Windows.Forms.Button();
+            this.RemovePictureButton = new System.Windows.Forms.Button();
+            this.MovePictureButton = new System.Windows.Forms.Button();
+            this.ObjectPicturesLabel = new System.Windows.Forms.Label();
+            this.PictureURLTB = new System.Windows.Forms.RichTextBox();
+            this.ObjectPicturesList = new System.Windows.Forms.ListBox();
+            this.PicturesURLLabel = new System.Windows.Forms.Label();
+            this.PicturesTypeLabel = new System.Windows.Forms.Label();
+            this.PicturesTypeCBox = new System.Windows.Forms.ComboBox();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.ObjectPropertiesTabControl.SuspendLayout();
@@ -111,7 +110,6 @@
             this.LogicalDependencyPanel.SuspendLayout();
             this.DependencyPanel.SuspendLayout();
             this.PictureTabPage.SuspendLayout();
-            this.PicturePanel.SuspendLayout();
             this.UserDatasTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -400,7 +398,18 @@
             // 
             // PictureTabPage
             // 
-            this.PictureTabPage.Controls.Add(this.PicturePanel);
+            this.PictureTabPage.Controls.Add(this.AddPictureTB);
+            this.PictureTabPage.Controls.Add(this.MovePictureTB);
+            this.PictureTabPage.Controls.Add(this.AddPictureButton);
+            this.PictureTabPage.Controls.Add(this.ApplyPictureEditButton);
+            this.PictureTabPage.Controls.Add(this.RemovePictureButton);
+            this.PictureTabPage.Controls.Add(this.MovePictureButton);
+            this.PictureTabPage.Controls.Add(this.ObjectPicturesLabel);
+            this.PictureTabPage.Controls.Add(this.PictureURLTB);
+            this.PictureTabPage.Controls.Add(this.ObjectPicturesList);
+            this.PictureTabPage.Controls.Add(this.PicturesURLLabel);
+            this.PictureTabPage.Controls.Add(this.PicturesTypeLabel);
+            this.PictureTabPage.Controls.Add(this.PicturesTypeCBox);
             this.PictureTabPage.Location = new System.Drawing.Point(4, 22);
             this.PictureTabPage.Name = "PictureTabPage";
             this.PictureTabPage.Padding = new System.Windows.Forms.Padding(3);
@@ -408,137 +417,6 @@
             this.PictureTabPage.TabIndex = 3;
             this.PictureTabPage.Text = "Pictures";
             this.PictureTabPage.UseVisualStyleBackColor = true;
-            // 
-            // PicturePanel
-            // 
-            this.PicturePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PicturePanel.Controls.Add(this.AddPictureTB);
-            this.PicturePanel.Controls.Add(this.MovePictureTB);
-            this.PicturePanel.Controls.Add(this.AddPictureButton);
-            this.PicturePanel.Controls.Add(this.ApplyPictureEditButton);
-            this.PicturePanel.Controls.Add(this.RemovePictureButton);
-            this.PicturePanel.Controls.Add(this.MovePictureButton);
-            this.PicturePanel.Controls.Add(this.ObjectPicturesLabel);
-            this.PicturePanel.Controls.Add(this.PictureURLTB);
-            this.PicturePanel.Controls.Add(this.ObjectPicturesList);
-            this.PicturePanel.Controls.Add(this.PicturesURLLabel);
-            this.PicturePanel.Controls.Add(this.PicturesTypeLabel);
-            this.PicturePanel.Controls.Add(this.PicturesTypeCBox);
-            this.PicturePanel.Location = new System.Drawing.Point(6, 6);
-            this.PicturePanel.Name = "PicturePanel";
-            this.PicturePanel.Size = new System.Drawing.Size(519, 328);
-            this.PicturePanel.TabIndex = 27;
-            // 
-            // AddPictureTB
-            // 
-            this.AddPictureTB.Location = new System.Drawing.Point(104, 291);
-            this.AddPictureTB.Name = "AddPictureTB";
-            this.AddPictureTB.Size = new System.Drawing.Size(31, 20);
-            this.AddPictureTB.TabIndex = 44;
-            // 
-            // MovePictureTB
-            // 
-            this.MovePictureTB.Location = new System.Drawing.Point(239, 288);
-            this.MovePictureTB.Name = "MovePictureTB";
-            this.MovePictureTB.Size = new System.Drawing.Size(31, 20);
-            this.MovePictureTB.TabIndex = 43;
-            // 
-            // AddPictureButton
-            // 
-            this.AddPictureButton.Location = new System.Drawing.Point(6, 281);
-            this.AddPictureButton.Name = "AddPictureButton";
-            this.AddPictureButton.Size = new System.Drawing.Size(92, 39);
-            this.AddPictureButton.TabIndex = 42;
-            this.AddPictureButton.Text = "add at position (0 index based)";
-            this.AddPictureButton.UseVisualStyleBackColor = true;
-            this.AddPictureButton.Click += new System.EventHandler(this.AddPictureButton_Click);
-            // 
-            // ApplyPictureEditButton
-            // 
-            this.ApplyPictureEditButton.Location = new System.Drawing.Point(448, 279);
-            this.ApplyPictureEditButton.Name = "ApplyPictureEditButton";
-            this.ApplyPictureEditButton.Size = new System.Drawing.Size(64, 23);
-            this.ApplyPictureEditButton.TabIndex = 41;
-            this.ApplyPictureEditButton.Text = "apply edit";
-            this.ApplyPictureEditButton.UseVisualStyleBackColor = true;
-            this.ApplyPictureEditButton.Click += new System.EventHandler(this.ApplyPictureEditButton_Click);
-            // 
-            // RemovePictureButton
-            // 
-            this.RemovePictureButton.Location = new System.Drawing.Point(378, 279);
-            this.RemovePictureButton.Name = "RemovePictureButton";
-            this.RemovePictureButton.Size = new System.Drawing.Size(64, 23);
-            this.RemovePictureButton.TabIndex = 40;
-            this.RemovePictureButton.Text = "remove";
-            this.RemovePictureButton.UseVisualStyleBackColor = true;
-            this.RemovePictureButton.Click += new System.EventHandler(this.RemovePictureButton_Click);
-            // 
-            // MovePictureButton
-            // 
-            this.MovePictureButton.Location = new System.Drawing.Point(141, 279);
-            this.MovePictureButton.Name = "MovePictureButton";
-            this.MovePictureButton.Size = new System.Drawing.Size(92, 41);
-            this.MovePictureButton.TabIndex = 39;
-            this.MovePictureButton.Text = "move to position (0 index based)";
-            this.MovePictureButton.UseVisualStyleBackColor = true;
-            this.MovePictureButton.Click += new System.EventHandler(this.MovePictureButton_Click);
-            // 
-            // ObjectPicturesLabel
-            // 
-            this.ObjectPicturesLabel.AutoSize = true;
-            this.ObjectPicturesLabel.Location = new System.Drawing.Point(3, 4);
-            this.ObjectPicturesLabel.Name = "ObjectPicturesLabel";
-            this.ObjectPicturesLabel.Size = new System.Drawing.Size(107, 13);
-            this.ObjectPicturesLabel.TabIndex = 20;
-            this.ObjectPicturesLabel.Text = "pictures (click to edit)";
-            // 
-            // PictureURLTB
-            // 
-            this.PictureURLTB.DetectUrls = false;
-            this.PictureURLTB.Location = new System.Drawing.Point(6, 153);
-            this.PictureURLTB.Name = "PictureURLTB";
-            this.PictureURLTB.Size = new System.Drawing.Size(508, 120);
-            this.PictureURLTB.TabIndex = 33;
-            this.PictureURLTB.Text = "";
-            // 
-            // ObjectPicturesList
-            // 
-            this.ObjectPicturesList.FormattingEnabled = true;
-            this.ObjectPicturesList.Location = new System.Drawing.Point(5, 20);
-            this.ObjectPicturesList.Name = "ObjectPicturesList";
-            this.ObjectPicturesList.Size = new System.Drawing.Size(509, 82);
-            this.ObjectPicturesList.TabIndex = 27;
-            this.ObjectPicturesList.SelectedIndexChanged += new System.EventHandler(this.ObjectPicturesList_SelectedIndexChanged);
-            // 
-            // PicturesURLLabel
-            // 
-            this.PicturesURLLabel.AutoSize = true;
-            this.PicturesURLLabel.Location = new System.Drawing.Point(3, 137);
-            this.PicturesURLLabel.Name = "PicturesURLLabel";
-            this.PicturesURLLabel.Size = new System.Drawing.Size(29, 13);
-            this.PicturesURLLabel.TabIndex = 32;
-            this.PicturesURLLabel.Text = "URL";
-            // 
-            // PicturesTypeLabel
-            // 
-            this.PicturesTypeLabel.AutoSize = true;
-            this.PicturesTypeLabel.Location = new System.Drawing.Point(3, 111);
-            this.PicturesTypeLabel.Name = "PicturesTypeLabel";
-            this.PicturesTypeLabel.Size = new System.Drawing.Size(27, 13);
-            this.PicturesTypeLabel.TabIndex = 30;
-            this.PicturesTypeLabel.Text = "type";
-            // 
-            // PicturesTypeCBox
-            // 
-            this.PicturesTypeCBox.FormattingEnabled = true;
-            this.PicturesTypeCBox.Items.AddRange(new object[] {
-            "-none-",
-            "1 - picture",
-            "2 - video"});
-            this.PicturesTypeCBox.Location = new System.Drawing.Point(41, 108);
-            this.PicturesTypeCBox.Name = "PicturesTypeCBox";
-            this.PicturesTypeCBox.Size = new System.Drawing.Size(151, 21);
-            this.PicturesTypeCBox.TabIndex = 31;
             // 
             // UserDatasTabPage
             // 
@@ -555,6 +433,16 @@
             this.UserDatasTabPage.TabIndex = 4;
             this.UserDatasTabPage.Text = "Userdatas";
             this.UserDatasTabPage.UseVisualStyleBackColor = true;
+            // 
+            // EditUserdatasButton
+            // 
+            this.EditUserdatasButton.Location = new System.Drawing.Point(407, 119);
+            this.EditUserdatasButton.Name = "EditUserdatasButton";
+            this.EditUserdatasButton.Size = new System.Drawing.Size(48, 23);
+            this.EditUserdatasButton.TabIndex = 45;
+            this.EditUserdatasButton.Text = "edit";
+            this.EditUserdatasButton.UseVisualStyleBackColor = true;
+            this.EditUserdatasButton.Click += new System.EventHandler(this.EditUserdatasButton_Click);
             // 
             // ObjectUserdatasTB
             // 
@@ -662,11 +550,11 @@
             // 
             // ApplyChangesButton
             // 
-            this.ApplyChangesButton.Location = new System.Drawing.Point(370, 178);
+            this.ApplyChangesButton.Location = new System.Drawing.Point(291, 178);
             this.ApplyChangesButton.Name = "ApplyChangesButton";
-            this.ApplyChangesButton.Size = new System.Drawing.Size(165, 27);
+            this.ApplyChangesButton.Size = new System.Drawing.Size(244, 27);
             this.ApplyChangesButton.TabIndex = 13;
-            this.ApplyChangesButton.Text = "apply changes (from this panel)";
+            this.ApplyChangesButton.Text = "apply changes (from above and description tab)";
             this.ApplyChangesButton.UseVisualStyleBackColor = true;
             this.ApplyChangesButton.Click += new System.EventHandler(this.ApplyChangesButton_Click);
             // 
@@ -789,9 +677,9 @@
             this.DBORB.AutoSize = true;
             this.DBORB.Location = new System.Drawing.Point(346, 7);
             this.DBORB.Name = "DBORB";
-            this.DBORB.Size = new System.Drawing.Size(48, 17);
+            this.DBORB.Size = new System.Drawing.Size(165, 17);
             this.DBORB.TabIndex = 1;
-            this.DBORB.Text = "DBO";
+            this.DBORB.Text = "DatabaseObject (mod/config)";
             this.DBORB.UseVisualStyleBackColor = true;
             this.DBORB.CheckedChanged += new System.EventHandler(this.DBO_CheckedChanged);
             // 
@@ -850,15 +738,111 @@
             this.MoveButton.UseVisualStyleBackColor = true;
             this.MoveButton.Click += new System.EventHandler(this.MoveButton_Click);
             // 
-            // EditUserdatasButton
+            // AddPictureTB
             // 
-            this.EditUserdatasButton.Location = new System.Drawing.Point(407, 119);
-            this.EditUserdatasButton.Name = "EditUserdatasButton";
-            this.EditUserdatasButton.Size = new System.Drawing.Size(48, 23);
-            this.EditUserdatasButton.TabIndex = 45;
-            this.EditUserdatasButton.Text = "edit";
-            this.EditUserdatasButton.UseVisualStyleBackColor = true;
-            this.EditUserdatasButton.Click += new System.EventHandler(this.EditUserdatasButton_Click);
+            this.AddPictureTB.Location = new System.Drawing.Point(111, 294);
+            this.AddPictureTB.Name = "AddPictureTB";
+            this.AddPictureTB.Size = new System.Drawing.Size(31, 20);
+            this.AddPictureTB.TabIndex = 56;
+            // 
+            // MovePictureTB
+            // 
+            this.MovePictureTB.Location = new System.Drawing.Point(246, 291);
+            this.MovePictureTB.Name = "MovePictureTB";
+            this.MovePictureTB.Size = new System.Drawing.Size(31, 20);
+            this.MovePictureTB.TabIndex = 55;
+            // 
+            // AddPictureButton
+            // 
+            this.AddPictureButton.Location = new System.Drawing.Point(13, 284);
+            this.AddPictureButton.Name = "AddPictureButton";
+            this.AddPictureButton.Size = new System.Drawing.Size(92, 39);
+            this.AddPictureButton.TabIndex = 54;
+            this.AddPictureButton.Text = "add at position (0 index based)";
+            this.AddPictureButton.UseVisualStyleBackColor = true;
+            // 
+            // ApplyPictureEditButton
+            // 
+            this.ApplyPictureEditButton.Location = new System.Drawing.Point(455, 282);
+            this.ApplyPictureEditButton.Name = "ApplyPictureEditButton";
+            this.ApplyPictureEditButton.Size = new System.Drawing.Size(64, 23);
+            this.ApplyPictureEditButton.TabIndex = 53;
+            this.ApplyPictureEditButton.Text = "apply edit";
+            this.ApplyPictureEditButton.UseVisualStyleBackColor = true;
+            // 
+            // RemovePictureButton
+            // 
+            this.RemovePictureButton.Location = new System.Drawing.Point(385, 282);
+            this.RemovePictureButton.Name = "RemovePictureButton";
+            this.RemovePictureButton.Size = new System.Drawing.Size(64, 23);
+            this.RemovePictureButton.TabIndex = 52;
+            this.RemovePictureButton.Text = "remove";
+            this.RemovePictureButton.UseVisualStyleBackColor = true;
+            // 
+            // MovePictureButton
+            // 
+            this.MovePictureButton.Location = new System.Drawing.Point(148, 282);
+            this.MovePictureButton.Name = "MovePictureButton";
+            this.MovePictureButton.Size = new System.Drawing.Size(92, 41);
+            this.MovePictureButton.TabIndex = 51;
+            this.MovePictureButton.Text = "move to position (0 index based)";
+            this.MovePictureButton.UseVisualStyleBackColor = true;
+            // 
+            // ObjectPicturesLabel
+            // 
+            this.ObjectPicturesLabel.AutoSize = true;
+            this.ObjectPicturesLabel.Location = new System.Drawing.Point(10, 7);
+            this.ObjectPicturesLabel.Name = "ObjectPicturesLabel";
+            this.ObjectPicturesLabel.Size = new System.Drawing.Size(107, 13);
+            this.ObjectPicturesLabel.TabIndex = 45;
+            this.ObjectPicturesLabel.Text = "pictures (click to edit)";
+            // 
+            // PictureURLTB
+            // 
+            this.PictureURLTB.DetectUrls = false;
+            this.PictureURLTB.Location = new System.Drawing.Point(13, 156);
+            this.PictureURLTB.Name = "PictureURLTB";
+            this.PictureURLTB.Size = new System.Drawing.Size(508, 120);
+            this.PictureURLTB.TabIndex = 50;
+            this.PictureURLTB.Text = "";
+            // 
+            // ObjectPicturesList
+            // 
+            this.ObjectPicturesList.FormattingEnabled = true;
+            this.ObjectPicturesList.Location = new System.Drawing.Point(12, 23);
+            this.ObjectPicturesList.Name = "ObjectPicturesList";
+            this.ObjectPicturesList.Size = new System.Drawing.Size(509, 82);
+            this.ObjectPicturesList.TabIndex = 46;
+            // 
+            // PicturesURLLabel
+            // 
+            this.PicturesURLLabel.AutoSize = true;
+            this.PicturesURLLabel.Location = new System.Drawing.Point(10, 140);
+            this.PicturesURLLabel.Name = "PicturesURLLabel";
+            this.PicturesURLLabel.Size = new System.Drawing.Size(29, 13);
+            this.PicturesURLLabel.TabIndex = 49;
+            this.PicturesURLLabel.Text = "URL";
+            // 
+            // PicturesTypeLabel
+            // 
+            this.PicturesTypeLabel.AutoSize = true;
+            this.PicturesTypeLabel.Location = new System.Drawing.Point(10, 114);
+            this.PicturesTypeLabel.Name = "PicturesTypeLabel";
+            this.PicturesTypeLabel.Size = new System.Drawing.Size(27, 13);
+            this.PicturesTypeLabel.TabIndex = 47;
+            this.PicturesTypeLabel.Text = "type";
+            // 
+            // PicturesTypeCBox
+            // 
+            this.PicturesTypeCBox.FormattingEnabled = true;
+            this.PicturesTypeCBox.Items.AddRange(new object[] {
+            "-none-",
+            "1 - picture",
+            "2 - video"});
+            this.PicturesTypeCBox.Location = new System.Drawing.Point(48, 111);
+            this.PicturesTypeCBox.Name = "PicturesTypeCBox";
+            this.PicturesTypeCBox.Size = new System.Drawing.Size(151, 21);
+            this.PicturesTypeCBox.TabIndex = 48;
             // 
             // DatabaseEditor
             // 
@@ -893,8 +877,7 @@
             this.DependencyPanel.ResumeLayout(false);
             this.DependencyPanel.PerformLayout();
             this.PictureTabPage.ResumeLayout(false);
-            this.PicturePanel.ResumeLayout(false);
-            this.PicturePanel.PerformLayout();
+            this.PictureTabPage.PerformLayout();
             this.UserDatasTabPage.ResumeLayout(false);
             this.UserDatasTabPage.PerformLayout();
             this.ResumeLayout(false);
@@ -919,7 +902,6 @@
         private System.Windows.Forms.Label ObjectPacakgeName;
         private System.Windows.Forms.ListBox ObjectDependenciesList;
         private System.Windows.Forms.Label ObjectDependenciesLabel;
-        private System.Windows.Forms.Label ObjectPicturesLabel;
         private System.Windows.Forms.Label ObjectUpdateNotes;
         private System.Windows.Forms.Label ObjectDescription;
         private System.Windows.Forms.RichTextBox ObjectUpdateNotesTB;
@@ -943,14 +925,7 @@
         private System.Windows.Forms.Label ObjectType;
         private System.Windows.Forms.ListBox ObjectLogicalDependenciesList;
         private System.Windows.Forms.Label ObjectLogicalDependenciesLabel;
-        private System.Windows.Forms.ListBox ObjectPicturesList;
         private System.Windows.Forms.CheckBox ObjectAppendExtractionCB;
-        private System.Windows.Forms.Panel PicturePanel;
-        private System.Windows.Forms.Button MovePictureButton;
-        private System.Windows.Forms.RichTextBox PictureURLTB;
-        private System.Windows.Forms.Label PicturesURLLabel;
-        private System.Windows.Forms.Label PicturesTypeLabel;
-        private System.Windows.Forms.ComboBox PicturesTypeCBox;
         private System.Windows.Forms.Panel DependencyPanel;
         private System.Windows.Forms.Button AddDependencyButton;
         private System.Windows.Forms.ComboBox CurrentDependenciesCB;
@@ -962,11 +937,6 @@
         private System.Windows.Forms.Button RemoveLogicalDependencyButton;
         private System.Windows.Forms.Label LogicalDependencyPackageNameLabel;
         private System.Windows.Forms.CheckBox LogicalDependnecyNegateFlagCB;
-        private System.Windows.Forms.TextBox AddPictureTB;
-        private System.Windows.Forms.TextBox MovePictureTB;
-        private System.Windows.Forms.Button AddPictureButton;
-        private System.Windows.Forms.Button ApplyPictureEditButton;
-        private System.Windows.Forms.Button RemovePictureButton;
         private System.Windows.Forms.Button MoveButton;
         private System.Windows.Forms.TabControl ObjectPropertiesTabControl;
         private System.Windows.Forms.TabPage DescriptionTabPage;
@@ -979,5 +949,17 @@
         private System.Windows.Forms.Label ObjectUserdatasLabel;
         private System.Windows.Forms.Button RemoveUserdatasButton;
         private System.Windows.Forms.Button EditUserdatasButton;
+        private System.Windows.Forms.TextBox AddPictureTB;
+        private System.Windows.Forms.TextBox MovePictureTB;
+        private System.Windows.Forms.Button AddPictureButton;
+        private System.Windows.Forms.Button ApplyPictureEditButton;
+        private System.Windows.Forms.Button RemovePictureButton;
+        private System.Windows.Forms.Button MovePictureButton;
+        private System.Windows.Forms.Label ObjectPicturesLabel;
+        private System.Windows.Forms.RichTextBox PictureURLTB;
+        private System.Windows.Forms.ListBox ObjectPicturesList;
+        private System.Windows.Forms.Label PicturesURLLabel;
+        private System.Windows.Forms.Label PicturesTypeLabel;
+        private System.Windows.Forms.ComboBox PicturesTypeCBox;
     }
 }

@@ -140,14 +140,10 @@ namespace RelhaxModpack
             ObjectAppendExtractionCB.Enabled = false;
             ObjectAppendExtractionCB.Checked = false;
 
-            ObjectDescTB.Enabled = false;
-            ObjectDescTB.Text = "";
-
-            ObjectUpdateNotesTB.Enabled = false;
-            ObjectUpdateNotesTB.Text = "";
-
+            DescriptionTabPage.Enabled = false;
             DependenciesTabPage.Enabled = false;
-            PicturePanel.Enabled = false;
+            PictureTabPage.Enabled = false;
+            UserDatasTabPage.Enabled = false;
         }
         private void DisplayDatabaseConfigs(DatabaseTreeNode parrent, List<Config> configs)
         {
@@ -459,14 +455,13 @@ namespace RelhaxModpack
                 ObjectAppendExtractionCB.Enabled = true;
                 ObjectAppendExtractionCB.Checked = node.GlobalDependency.appendExtraction;
 
-                ObjectDescTB.Enabled = false;
+                DescriptionTabPage.Enabled = false;
                 ObjectDescTB.Text = "";
-
-                ObjectUpdateNotesTB.Enabled = false;
                 ObjectUpdateNotesTB.Text = "";
 
                 DependenciesTabPage.Enabled = false;
-                PicturePanel.Enabled = false;
+                PictureTabPage.Enabled = false;
+                UserDatasTabPage.Enabled = false;
             }
             else if (node.Dependency != null)
             {
@@ -506,10 +501,8 @@ namespace RelhaxModpack
                 ObjectAppendExtractionCB.Enabled = true;
                 ObjectAppendExtractionCB.Checked = SelectedDependency.appendExtraction;
 
-                ObjectDescTB.Enabled = false;
+                DescriptionTabPage.Enabled = false;
                 ObjectDescTB.Text = "";
-
-                ObjectUpdateNotesTB.Enabled = false;
                 ObjectUpdateNotesTB.Text = "";
 
                 DependenciesTabPage.Enabled = true;
@@ -525,7 +518,8 @@ namespace RelhaxModpack
                 LogicalDependnecyNegateFlagCB.Checked = false;
                 LogicalDependnecyNegateFlagCB.CheckedChanged += LogicalDependnecyNegateFlagCB_CheckedChanged;
 
-                PicturePanel.Enabled = false;
+                PictureTabPage.Enabled = false;
+                UserDatasTabPage.Enabled = false;
             }
             else if (node.LogicalDependency != null)
             {
@@ -565,14 +559,13 @@ namespace RelhaxModpack
                 ObjectAppendExtractionCB.Enabled = false;
                 ObjectAppendExtractionCB.Checked = false;
 
-                ObjectDescTB.Enabled = false;
+                DescriptionTabPage.Enabled = false;
                 ObjectDescTB.Text = "";
-
-                ObjectUpdateNotesTB.Enabled = false;
                 ObjectUpdateNotesTB.Text = "";
 
                 DependenciesTabPage.Enabled = false;
-                PicturePanel.Enabled = false;
+                PictureTabPage.Enabled = false;
+                UserDatasTabPage.Enabled = false;
             }
             else if (node.DatabaseObject != null)
             {
@@ -641,6 +634,8 @@ namespace RelhaxModpack
                 ObjectAppendExtractionCB.Enabled = false;
                 ObjectAppendExtractionCB.Checked = false;
 
+                DescriptionTabPage.Enabled = true;
+
                 ObjectDescTB.Enabled = true;
                 ObjectDescTB.Text = SelectedDatabaseObject.description;
 
@@ -650,7 +645,8 @@ namespace RelhaxModpack
                 DependenciesTabPage.Enabled = true;
                 DependencyPanel.Enabled = true;
                 LogicalDependencyPanel.Enabled = true;
-                PicturePanel.Enabled = true;
+                PictureTabPage.Enabled = true;
+                UserDatasTabPage.Enabled = true;
 
                 //logicalDependencies
                 ObjectLogicalDependenciesList.DataSource = null;
@@ -733,7 +729,8 @@ namespace RelhaxModpack
                 CurrentDependenciesCB.DataSource = Dependencies;
                 CurrentDependenciesCB.SelectedIndex = -1;
 
-                PicturePanel.Enabled = false;
+                PictureTabPage.Enabled = false;
+                UserDatasTabPage.Enabled = false;
             }
         }
 
