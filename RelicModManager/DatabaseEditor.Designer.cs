@@ -56,6 +56,18 @@
             this.RemoveDependencyButton = new System.Windows.Forms.Button();
             this.DependencyPackageNameLabel = new System.Windows.Forms.Label();
             this.PictureTabPage = new System.Windows.Forms.TabPage();
+            this.AddPictureTB = new System.Windows.Forms.TextBox();
+            this.MovePictureTB = new System.Windows.Forms.TextBox();
+            this.AddPictureButton = new System.Windows.Forms.Button();
+            this.ApplyPictureEditButton = new System.Windows.Forms.Button();
+            this.RemovePictureButton = new System.Windows.Forms.Button();
+            this.MovePictureButton = new System.Windows.Forms.Button();
+            this.ObjectPicturesLabel = new System.Windows.Forms.Label();
+            this.PictureURLTB = new System.Windows.Forms.RichTextBox();
+            this.ObjectPicturesList = new System.Windows.Forms.ListBox();
+            this.PicturesURLLabel = new System.Windows.Forms.Label();
+            this.PicturesTypeLabel = new System.Windows.Forms.Label();
+            this.PicturesTypeCBox = new System.Windows.Forms.ComboBox();
             this.UserDatasTabPage = new System.Windows.Forms.TabPage();
             this.EditUserdatasButton = new System.Windows.Forms.Button();
             this.ObjectUserdatasTB = new System.Windows.Forms.TextBox();
@@ -64,7 +76,7 @@
             this.ObjectUserdatasLabel = new System.Windows.Forms.Label();
             this.RemoveUserdatasButton = new System.Windows.Forms.Button();
             this.ObjectAppendExtractionCB = new System.Windows.Forms.CheckBox();
-            this.ObjectVisableCheckBox = new System.Windows.Forms.CheckBox();
+            this.ObjectVisibleCheckBox = new System.Windows.Forms.CheckBox();
             this.ObjectTypeComboBox = new System.Windows.Forms.ComboBox();
             this.ObjectType = new System.Windows.Forms.Label();
             this.ObjectDevURLTB = new System.Windows.Forms.TextBox();
@@ -90,18 +102,6 @@
             this.OpenDatabaseDialog = new System.Windows.Forms.OpenFileDialog();
             this.SaveDatabaseDialog = new System.Windows.Forms.SaveFileDialog();
             this.MoveButton = new System.Windows.Forms.Button();
-            this.AddPictureTB = new System.Windows.Forms.TextBox();
-            this.MovePictureTB = new System.Windows.Forms.TextBox();
-            this.AddPictureButton = new System.Windows.Forms.Button();
-            this.ApplyPictureEditButton = new System.Windows.Forms.Button();
-            this.RemovePictureButton = new System.Windows.Forms.Button();
-            this.MovePictureButton = new System.Windows.Forms.Button();
-            this.ObjectPicturesLabel = new System.Windows.Forms.Label();
-            this.PictureURLTB = new System.Windows.Forms.RichTextBox();
-            this.ObjectPicturesList = new System.Windows.Forms.ListBox();
-            this.PicturesURLLabel = new System.Windows.Forms.Label();
-            this.PicturesTypeLabel = new System.Windows.Forms.Label();
-            this.PicturesTypeCBox = new System.Windows.Forms.ComboBox();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.ObjectPropertiesTabControl.SuspendLayout();
@@ -152,7 +152,7 @@
             this.DatabaseEditPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.DatabaseEditPanel.Controls.Add(this.ObjectPropertiesTabControl);
             this.DatabaseEditPanel.Controls.Add(this.ObjectAppendExtractionCB);
-            this.DatabaseEditPanel.Controls.Add(this.ObjectVisableCheckBox);
+            this.DatabaseEditPanel.Controls.Add(this.ObjectVisibleCheckBox);
             this.DatabaseEditPanel.Controls.Add(this.ObjectTypeComboBox);
             this.DatabaseEditPanel.Controls.Add(this.ObjectType);
             this.DatabaseEditPanel.Controls.Add(this.ObjectDevURLTB);
@@ -418,6 +418,112 @@
             this.PictureTabPage.Text = "Pictures";
             this.PictureTabPage.UseVisualStyleBackColor = true;
             // 
+            // AddPictureTB
+            // 
+            this.AddPictureTB.Location = new System.Drawing.Point(111, 294);
+            this.AddPictureTB.Name = "AddPictureTB";
+            this.AddPictureTB.Size = new System.Drawing.Size(31, 20);
+            this.AddPictureTB.TabIndex = 56;
+            // 
+            // MovePictureTB
+            // 
+            this.MovePictureTB.Location = new System.Drawing.Point(246, 291);
+            this.MovePictureTB.Name = "MovePictureTB";
+            this.MovePictureTB.Size = new System.Drawing.Size(31, 20);
+            this.MovePictureTB.TabIndex = 55;
+            // 
+            // AddPictureButton
+            // 
+            this.AddPictureButton.Location = new System.Drawing.Point(13, 284);
+            this.AddPictureButton.Name = "AddPictureButton";
+            this.AddPictureButton.Size = new System.Drawing.Size(92, 39);
+            this.AddPictureButton.TabIndex = 54;
+            this.AddPictureButton.Text = "add at position (0 index based)";
+            this.AddPictureButton.UseVisualStyleBackColor = true;
+            // 
+            // ApplyPictureEditButton
+            // 
+            this.ApplyPictureEditButton.Location = new System.Drawing.Point(455, 282);
+            this.ApplyPictureEditButton.Name = "ApplyPictureEditButton";
+            this.ApplyPictureEditButton.Size = new System.Drawing.Size(64, 23);
+            this.ApplyPictureEditButton.TabIndex = 53;
+            this.ApplyPictureEditButton.Text = "apply edit";
+            this.ApplyPictureEditButton.UseVisualStyleBackColor = true;
+            // 
+            // RemovePictureButton
+            // 
+            this.RemovePictureButton.Location = new System.Drawing.Point(385, 282);
+            this.RemovePictureButton.Name = "RemovePictureButton";
+            this.RemovePictureButton.Size = new System.Drawing.Size(64, 23);
+            this.RemovePictureButton.TabIndex = 52;
+            this.RemovePictureButton.Text = "remove";
+            this.RemovePictureButton.UseVisualStyleBackColor = true;
+            // 
+            // MovePictureButton
+            // 
+            this.MovePictureButton.Location = new System.Drawing.Point(148, 282);
+            this.MovePictureButton.Name = "MovePictureButton";
+            this.MovePictureButton.Size = new System.Drawing.Size(92, 41);
+            this.MovePictureButton.TabIndex = 51;
+            this.MovePictureButton.Text = "move to position (0 index based)";
+            this.MovePictureButton.UseVisualStyleBackColor = true;
+            // 
+            // ObjectPicturesLabel
+            // 
+            this.ObjectPicturesLabel.AutoSize = true;
+            this.ObjectPicturesLabel.Location = new System.Drawing.Point(10, 7);
+            this.ObjectPicturesLabel.Name = "ObjectPicturesLabel";
+            this.ObjectPicturesLabel.Size = new System.Drawing.Size(107, 13);
+            this.ObjectPicturesLabel.TabIndex = 45;
+            this.ObjectPicturesLabel.Text = "pictures (click to edit)";
+            // 
+            // PictureURLTB
+            // 
+            this.PictureURLTB.DetectUrls = false;
+            this.PictureURLTB.Location = new System.Drawing.Point(13, 156);
+            this.PictureURLTB.Name = "PictureURLTB";
+            this.PictureURLTB.Size = new System.Drawing.Size(508, 120);
+            this.PictureURLTB.TabIndex = 50;
+            this.PictureURLTB.Text = "";
+            // 
+            // ObjectPicturesList
+            // 
+            this.ObjectPicturesList.FormattingEnabled = true;
+            this.ObjectPicturesList.Location = new System.Drawing.Point(12, 23);
+            this.ObjectPicturesList.Name = "ObjectPicturesList";
+            this.ObjectPicturesList.Size = new System.Drawing.Size(509, 82);
+            this.ObjectPicturesList.TabIndex = 46;
+            // 
+            // PicturesURLLabel
+            // 
+            this.PicturesURLLabel.AutoSize = true;
+            this.PicturesURLLabel.Location = new System.Drawing.Point(10, 140);
+            this.PicturesURLLabel.Name = "PicturesURLLabel";
+            this.PicturesURLLabel.Size = new System.Drawing.Size(29, 13);
+            this.PicturesURLLabel.TabIndex = 49;
+            this.PicturesURLLabel.Text = "URL";
+            // 
+            // PicturesTypeLabel
+            // 
+            this.PicturesTypeLabel.AutoSize = true;
+            this.PicturesTypeLabel.Location = new System.Drawing.Point(10, 114);
+            this.PicturesTypeLabel.Name = "PicturesTypeLabel";
+            this.PicturesTypeLabel.Size = new System.Drawing.Size(27, 13);
+            this.PicturesTypeLabel.TabIndex = 47;
+            this.PicturesTypeLabel.Text = "type";
+            // 
+            // PicturesTypeCBox
+            // 
+            this.PicturesTypeCBox.FormattingEnabled = true;
+            this.PicturesTypeCBox.Items.AddRange(new object[] {
+            "-none-",
+            "1 - picture",
+            "2 - video"});
+            this.PicturesTypeCBox.Location = new System.Drawing.Point(48, 111);
+            this.PicturesTypeCBox.Name = "PicturesTypeCBox";
+            this.PicturesTypeCBox.Size = new System.Drawing.Size(151, 21);
+            this.PicturesTypeCBox.TabIndex = 48;
+            // 
             // UserDatasTabPage
             // 
             this.UserDatasTabPage.Controls.Add(this.EditUserdatasButton);
@@ -499,15 +605,15 @@
             this.ObjectAppendExtractionCB.Text = "appendExtraction";
             this.ObjectAppendExtractionCB.UseVisualStyleBackColor = true;
             // 
-            // ObjectVisableCheckBox
+            // ObjectVisibleCheckBox
             // 
-            this.ObjectVisableCheckBox.AutoSize = true;
-            this.ObjectVisableCheckBox.Location = new System.Drawing.Point(358, 160);
-            this.ObjectVisableCheckBox.Name = "ObjectVisableCheckBox";
-            this.ObjectVisableCheckBox.Size = new System.Drawing.Size(59, 17);
-            this.ObjectVisableCheckBox.TabIndex = 23;
-            this.ObjectVisableCheckBox.Text = "visable";
-            this.ObjectVisableCheckBox.UseVisualStyleBackColor = true;
+            this.ObjectVisibleCheckBox.AutoSize = true;
+            this.ObjectVisibleCheckBox.Location = new System.Drawing.Point(358, 160);
+            this.ObjectVisibleCheckBox.Name = "ObjectVisibleCheckBox";
+            this.ObjectVisibleCheckBox.Size = new System.Drawing.Size(55, 17);
+            this.ObjectVisibleCheckBox.TabIndex = 23;
+            this.ObjectVisibleCheckBox.Text = "visible";
+            this.ObjectVisibleCheckBox.UseVisualStyleBackColor = true;
             // 
             // ObjectTypeComboBox
             // 
@@ -738,112 +844,6 @@
             this.MoveButton.UseVisualStyleBackColor = true;
             this.MoveButton.Click += new System.EventHandler(this.MoveButton_Click);
             // 
-            // AddPictureTB
-            // 
-            this.AddPictureTB.Location = new System.Drawing.Point(111, 294);
-            this.AddPictureTB.Name = "AddPictureTB";
-            this.AddPictureTB.Size = new System.Drawing.Size(31, 20);
-            this.AddPictureTB.TabIndex = 56;
-            // 
-            // MovePictureTB
-            // 
-            this.MovePictureTB.Location = new System.Drawing.Point(246, 291);
-            this.MovePictureTB.Name = "MovePictureTB";
-            this.MovePictureTB.Size = new System.Drawing.Size(31, 20);
-            this.MovePictureTB.TabIndex = 55;
-            // 
-            // AddPictureButton
-            // 
-            this.AddPictureButton.Location = new System.Drawing.Point(13, 284);
-            this.AddPictureButton.Name = "AddPictureButton";
-            this.AddPictureButton.Size = new System.Drawing.Size(92, 39);
-            this.AddPictureButton.TabIndex = 54;
-            this.AddPictureButton.Text = "add at position (0 index based)";
-            this.AddPictureButton.UseVisualStyleBackColor = true;
-            // 
-            // ApplyPictureEditButton
-            // 
-            this.ApplyPictureEditButton.Location = new System.Drawing.Point(455, 282);
-            this.ApplyPictureEditButton.Name = "ApplyPictureEditButton";
-            this.ApplyPictureEditButton.Size = new System.Drawing.Size(64, 23);
-            this.ApplyPictureEditButton.TabIndex = 53;
-            this.ApplyPictureEditButton.Text = "apply edit";
-            this.ApplyPictureEditButton.UseVisualStyleBackColor = true;
-            // 
-            // RemovePictureButton
-            // 
-            this.RemovePictureButton.Location = new System.Drawing.Point(385, 282);
-            this.RemovePictureButton.Name = "RemovePictureButton";
-            this.RemovePictureButton.Size = new System.Drawing.Size(64, 23);
-            this.RemovePictureButton.TabIndex = 52;
-            this.RemovePictureButton.Text = "remove";
-            this.RemovePictureButton.UseVisualStyleBackColor = true;
-            // 
-            // MovePictureButton
-            // 
-            this.MovePictureButton.Location = new System.Drawing.Point(148, 282);
-            this.MovePictureButton.Name = "MovePictureButton";
-            this.MovePictureButton.Size = new System.Drawing.Size(92, 41);
-            this.MovePictureButton.TabIndex = 51;
-            this.MovePictureButton.Text = "move to position (0 index based)";
-            this.MovePictureButton.UseVisualStyleBackColor = true;
-            // 
-            // ObjectPicturesLabel
-            // 
-            this.ObjectPicturesLabel.AutoSize = true;
-            this.ObjectPicturesLabel.Location = new System.Drawing.Point(10, 7);
-            this.ObjectPicturesLabel.Name = "ObjectPicturesLabel";
-            this.ObjectPicturesLabel.Size = new System.Drawing.Size(107, 13);
-            this.ObjectPicturesLabel.TabIndex = 45;
-            this.ObjectPicturesLabel.Text = "pictures (click to edit)";
-            // 
-            // PictureURLTB
-            // 
-            this.PictureURLTB.DetectUrls = false;
-            this.PictureURLTB.Location = new System.Drawing.Point(13, 156);
-            this.PictureURLTB.Name = "PictureURLTB";
-            this.PictureURLTB.Size = new System.Drawing.Size(508, 120);
-            this.PictureURLTB.TabIndex = 50;
-            this.PictureURLTB.Text = "";
-            // 
-            // ObjectPicturesList
-            // 
-            this.ObjectPicturesList.FormattingEnabled = true;
-            this.ObjectPicturesList.Location = new System.Drawing.Point(12, 23);
-            this.ObjectPicturesList.Name = "ObjectPicturesList";
-            this.ObjectPicturesList.Size = new System.Drawing.Size(509, 82);
-            this.ObjectPicturesList.TabIndex = 46;
-            // 
-            // PicturesURLLabel
-            // 
-            this.PicturesURLLabel.AutoSize = true;
-            this.PicturesURLLabel.Location = new System.Drawing.Point(10, 140);
-            this.PicturesURLLabel.Name = "PicturesURLLabel";
-            this.PicturesURLLabel.Size = new System.Drawing.Size(29, 13);
-            this.PicturesURLLabel.TabIndex = 49;
-            this.PicturesURLLabel.Text = "URL";
-            // 
-            // PicturesTypeLabel
-            // 
-            this.PicturesTypeLabel.AutoSize = true;
-            this.PicturesTypeLabel.Location = new System.Drawing.Point(10, 114);
-            this.PicturesTypeLabel.Name = "PicturesTypeLabel";
-            this.PicturesTypeLabel.Size = new System.Drawing.Size(27, 13);
-            this.PicturesTypeLabel.TabIndex = 47;
-            this.PicturesTypeLabel.Text = "type";
-            // 
-            // PicturesTypeCBox
-            // 
-            this.PicturesTypeCBox.FormattingEnabled = true;
-            this.PicturesTypeCBox.Items.AddRange(new object[] {
-            "-none-",
-            "1 - picture",
-            "2 - video"});
-            this.PicturesTypeCBox.Location = new System.Drawing.Point(48, 111);
-            this.PicturesTypeCBox.Name = "PicturesTypeCBox";
-            this.PicturesTypeCBox.Size = new System.Drawing.Size(151, 21);
-            this.PicturesTypeCBox.TabIndex = 48;
-            // 
             // DatabaseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -920,7 +920,7 @@
         private System.Windows.Forms.RadioButton LogicalDependencyRB;
         private System.Windows.Forms.OpenFileDialog OpenDatabaseDialog;
         private System.Windows.Forms.SaveFileDialog SaveDatabaseDialog;
-        private System.Windows.Forms.CheckBox ObjectVisableCheckBox;
+        private System.Windows.Forms.CheckBox ObjectVisibleCheckBox;
         private System.Windows.Forms.ComboBox ObjectTypeComboBox;
         private System.Windows.Forms.Label ObjectType;
         private System.Windows.Forms.ListBox ObjectLogicalDependenciesList;
