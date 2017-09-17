@@ -56,6 +56,18 @@
             this.RemoveDependencyButton = new System.Windows.Forms.Button();
             this.DependencyPackageNameLabel = new System.Windows.Forms.Label();
             this.PictureTabPage = new System.Windows.Forms.TabPage();
+            this.AddPictureTB = new System.Windows.Forms.TextBox();
+            this.MovePictureTB = new System.Windows.Forms.TextBox();
+            this.AddPictureButton = new System.Windows.Forms.Button();
+            this.ApplyPictureEditButton = new System.Windows.Forms.Button();
+            this.RemovePictureButton = new System.Windows.Forms.Button();
+            this.MovePictureButton = new System.Windows.Forms.Button();
+            this.ObjectPicturesLabel = new System.Windows.Forms.Label();
+            this.PictureURLTB = new System.Windows.Forms.RichTextBox();
+            this.ObjectPicturesList = new System.Windows.Forms.ListBox();
+            this.PicturesURLLabel = new System.Windows.Forms.Label();
+            this.PicturesTypeLabel = new System.Windows.Forms.Label();
+            this.PicturesTypeCBox = new System.Windows.Forms.ComboBox();
             this.UserDatasTabPage = new System.Windows.Forms.TabPage();
             this.EditUserdatasButton = new System.Windows.Forms.Button();
             this.ObjectUserdatasTB = new System.Windows.Forms.TextBox();
@@ -90,18 +102,8 @@
             this.OpenDatabaseDialog = new System.Windows.Forms.OpenFileDialog();
             this.SaveDatabaseDialog = new System.Windows.Forms.SaveFileDialog();
             this.MoveButton = new System.Windows.Forms.Button();
-            this.AddPictureTB = new System.Windows.Forms.TextBox();
-            this.MovePictureTB = new System.Windows.Forms.TextBox();
-            this.AddPictureButton = new System.Windows.Forms.Button();
-            this.ApplyPictureEditButton = new System.Windows.Forms.Button();
-            this.RemovePictureButton = new System.Windows.Forms.Button();
-            this.MovePictureButton = new System.Windows.Forms.Button();
-            this.ObjectPicturesLabel = new System.Windows.Forms.Label();
-            this.PictureURLTB = new System.Windows.Forms.RichTextBox();
-            this.ObjectPicturesList = new System.Windows.Forms.ListBox();
-            this.PicturesURLLabel = new System.Windows.Forms.Label();
-            this.PicturesTypeLabel = new System.Windows.Forms.Label();
-            this.PicturesTypeCBox = new System.Windows.Forms.ComboBox();
+            this.ObjectVersionLabel = new System.Windows.Forms.Label();
+            this.ObjectVersionTB = new System.Windows.Forms.TextBox();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.ObjectPropertiesTabControl.SuspendLayout();
@@ -118,7 +120,7 @@
             this.DatabaseTreeView.ForeColor = System.Drawing.Color.Blue;
             this.DatabaseTreeView.Location = new System.Drawing.Point(3, 3);
             this.DatabaseTreeView.Name = "DatabaseTreeView";
-            this.DatabaseTreeView.Size = new System.Drawing.Size(497, 565);
+            this.DatabaseTreeView.Size = new System.Drawing.Size(497, 592);
             this.DatabaseTreeView.TabIndex = 0;
             this.DatabaseTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.DatabaseTreeView_NodeMouseClick);
             // 
@@ -144,12 +146,14 @@
             this.DatabasePanelTree.Controls.Add(this.DatabaseTreeView);
             this.DatabasePanelTree.Location = new System.Drawing.Point(12, 30);
             this.DatabasePanelTree.Name = "DatabasePanelTree";
-            this.DatabasePanelTree.Size = new System.Drawing.Size(505, 573);
+            this.DatabasePanelTree.Size = new System.Drawing.Size(505, 600);
             this.DatabasePanelTree.TabIndex = 3;
             // 
             // DatabaseEditPanel
             // 
             this.DatabaseEditPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.DatabaseEditPanel.Controls.Add(this.ObjectVersionTB);
+            this.DatabaseEditPanel.Controls.Add(this.ObjectVersionLabel);
             this.DatabaseEditPanel.Controls.Add(this.ObjectPropertiesTabControl);
             this.DatabaseEditPanel.Controls.Add(this.ObjectAppendExtractionCB);
             this.DatabaseEditPanel.Controls.Add(this.ObjectVisableCheckBox);
@@ -171,7 +175,7 @@
             this.DatabaseEditPanel.Controls.Add(this.ObjectName);
             this.DatabaseEditPanel.Location = new System.Drawing.Point(523, 30);
             this.DatabaseEditPanel.Name = "DatabaseEditPanel";
-            this.DatabaseEditPanel.Size = new System.Drawing.Size(547, 573);
+            this.DatabaseEditPanel.Size = new System.Drawing.Size(547, 600);
             this.DatabaseEditPanel.TabIndex = 4;
             // 
             // ObjectPropertiesTabControl
@@ -180,7 +184,7 @@
             this.ObjectPropertiesTabControl.Controls.Add(this.DependenciesTabPage);
             this.ObjectPropertiesTabControl.Controls.Add(this.PictureTabPage);
             this.ObjectPropertiesTabControl.Controls.Add(this.UserDatasTabPage);
-            this.ObjectPropertiesTabControl.Location = new System.Drawing.Point(3, 211);
+            this.ObjectPropertiesTabControl.Location = new System.Drawing.Point(3, 238);
             this.ObjectPropertiesTabControl.Name = "ObjectPropertiesTabControl";
             this.ObjectPropertiesTabControl.SelectedIndex = 0;
             this.ObjectPropertiesTabControl.Size = new System.Drawing.Size(539, 357);
@@ -418,326 +422,6 @@
             this.PictureTabPage.Text = "Pictures";
             this.PictureTabPage.UseVisualStyleBackColor = true;
             // 
-            // UserDatasTabPage
-            // 
-            this.UserDatasTabPage.Controls.Add(this.EditUserdatasButton);
-            this.UserDatasTabPage.Controls.Add(this.ObjectUserdatasTB);
-            this.UserDatasTabPage.Controls.Add(this.AddUserdatasButton);
-            this.UserDatasTabPage.Controls.Add(this.ObjectUserdatasList);
-            this.UserDatasTabPage.Controls.Add(this.ObjectUserdatasLabel);
-            this.UserDatasTabPage.Controls.Add(this.RemoveUserdatasButton);
-            this.UserDatasTabPage.Location = new System.Drawing.Point(4, 22);
-            this.UserDatasTabPage.Name = "UserDatasTabPage";
-            this.UserDatasTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.UserDatasTabPage.Size = new System.Drawing.Size(531, 331);
-            this.UserDatasTabPage.TabIndex = 4;
-            this.UserDatasTabPage.Text = "Userdatas";
-            this.UserDatasTabPage.UseVisualStyleBackColor = true;
-            // 
-            // EditUserdatasButton
-            // 
-            this.EditUserdatasButton.Location = new System.Drawing.Point(407, 119);
-            this.EditUserdatasButton.Name = "EditUserdatasButton";
-            this.EditUserdatasButton.Size = new System.Drawing.Size(48, 23);
-            this.EditUserdatasButton.TabIndex = 45;
-            this.EditUserdatasButton.Text = "edit";
-            this.EditUserdatasButton.UseVisualStyleBackColor = true;
-            this.EditUserdatasButton.Click += new System.EventHandler(this.EditUserdatasButton_Click);
-            // 
-            // ObjectUserdatasTB
-            // 
-            this.ObjectUserdatasTB.Location = new System.Drawing.Point(9, 93);
-            this.ObjectUserdatasTB.Name = "ObjectUserdatasTB";
-            this.ObjectUserdatasTB.Size = new System.Drawing.Size(511, 20);
-            this.ObjectUserdatasTB.TabIndex = 44;
-            // 
-            // AddUserdatasButton
-            // 
-            this.AddUserdatasButton.Location = new System.Drawing.Point(353, 119);
-            this.AddUserdatasButton.Name = "AddUserdatasButton";
-            this.AddUserdatasButton.Size = new System.Drawing.Size(48, 23);
-            this.AddUserdatasButton.TabIndex = 43;
-            this.AddUserdatasButton.Text = "add";
-            this.AddUserdatasButton.UseVisualStyleBackColor = true;
-            this.AddUserdatasButton.Click += new System.EventHandler(this.AddUserdatasButton_Click);
-            // 
-            // ObjectUserdatasList
-            // 
-            this.ObjectUserdatasList.FormattingEnabled = true;
-            this.ObjectUserdatasList.Location = new System.Drawing.Point(9, 18);
-            this.ObjectUserdatasList.Name = "ObjectUserdatasList";
-            this.ObjectUserdatasList.Size = new System.Drawing.Size(511, 69);
-            this.ObjectUserdatasList.TabIndex = 41;
-            this.ObjectUserdatasList.SelectedIndexChanged += new System.EventHandler(this.ObjectUserdatasList_SelectedIndexChanged);
-            // 
-            // ObjectUserdatasLabel
-            // 
-            this.ObjectUserdatasLabel.AutoSize = true;
-            this.ObjectUserdatasLabel.Location = new System.Drawing.Point(6, 3);
-            this.ObjectUserdatasLabel.Name = "ObjectUserdatasLabel";
-            this.ObjectUserdatasLabel.Size = new System.Drawing.Size(116, 13);
-            this.ObjectUserdatasLabel.TabIndex = 40;
-            this.ObjectUserdatasLabel.Text = "userdatas (click to edit)";
-            // 
-            // RemoveUserdatasButton
-            // 
-            this.RemoveUserdatasButton.Location = new System.Drawing.Point(461, 119);
-            this.RemoveUserdatasButton.Name = "RemoveUserdatasButton";
-            this.RemoveUserdatasButton.Size = new System.Drawing.Size(59, 23);
-            this.RemoveUserdatasButton.TabIndex = 42;
-            this.RemoveUserdatasButton.Text = "remove";
-            this.RemoveUserdatasButton.UseVisualStyleBackColor = true;
-            this.RemoveUserdatasButton.Click += new System.EventHandler(this.RemoveUserdatasButton_Click);
-            // 
-            // ObjectAppendExtractionCB
-            // 
-            this.ObjectAppendExtractionCB.AutoSize = true;
-            this.ObjectAppendExtractionCB.Location = new System.Drawing.Point(243, 160);
-            this.ObjectAppendExtractionCB.Name = "ObjectAppendExtractionCB";
-            this.ObjectAppendExtractionCB.Size = new System.Drawing.Size(109, 17);
-            this.ObjectAppendExtractionCB.TabIndex = 25;
-            this.ObjectAppendExtractionCB.Text = "appendExtraction";
-            this.ObjectAppendExtractionCB.UseVisualStyleBackColor = true;
-            // 
-            // ObjectVisableCheckBox
-            // 
-            this.ObjectVisableCheckBox.AutoSize = true;
-            this.ObjectVisableCheckBox.Location = new System.Drawing.Point(358, 160);
-            this.ObjectVisableCheckBox.Name = "ObjectVisableCheckBox";
-            this.ObjectVisableCheckBox.Size = new System.Drawing.Size(59, 17);
-            this.ObjectVisableCheckBox.TabIndex = 23;
-            this.ObjectVisableCheckBox.Text = "visable";
-            this.ObjectVisableCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // ObjectTypeComboBox
-            // 
-            this.ObjectTypeComboBox.FormattingEnabled = true;
-            this.ObjectTypeComboBox.Items.AddRange(new object[] {
-            "-none-",
-            "single1",
-            "single_dropDown1",
-            "single_dropDown2",
-            "multi"});
-            this.ObjectTypeComboBox.Location = new System.Drawing.Point(91, 158);
-            this.ObjectTypeComboBox.Name = "ObjectTypeComboBox";
-            this.ObjectTypeComboBox.Size = new System.Drawing.Size(146, 21);
-            this.ObjectTypeComboBox.TabIndex = 21;
-            // 
-            // ObjectType
-            // 
-            this.ObjectType.AutoSize = true;
-            this.ObjectType.Location = new System.Drawing.Point(8, 161);
-            this.ObjectType.Name = "ObjectType";
-            this.ObjectType.Size = new System.Drawing.Size(27, 13);
-            this.ObjectType.TabIndex = 20;
-            this.ObjectType.Text = "type";
-            // 
-            // ObjectDevURLTB
-            // 
-            this.ObjectDevURLTB.Location = new System.Drawing.Point(91, 133);
-            this.ObjectDevURLTB.Name = "ObjectDevURLTB";
-            this.ObjectDevURLTB.Size = new System.Drawing.Size(447, 20);
-            this.ObjectDevURLTB.TabIndex = 15;
-            // 
-            // ObjectDevURL
-            // 
-            this.ObjectDevURL.AutoSize = true;
-            this.ObjectDevURL.Location = new System.Drawing.Point(8, 136);
-            this.ObjectDevURL.Name = "ObjectDevURL";
-            this.ObjectDevURL.Size = new System.Drawing.Size(50, 13);
-            this.ObjectDevURL.TabIndex = 14;
-            this.ObjectDevURL.Text = "dev URL";
-            // 
-            // ApplyChangesButton
-            // 
-            this.ApplyChangesButton.Location = new System.Drawing.Point(291, 178);
-            this.ApplyChangesButton.Name = "ApplyChangesButton";
-            this.ApplyChangesButton.Size = new System.Drawing.Size(244, 27);
-            this.ApplyChangesButton.TabIndex = 13;
-            this.ApplyChangesButton.Text = "apply changes (from above and description tab)";
-            this.ApplyChangesButton.UseVisualStyleBackColor = true;
-            this.ApplyChangesButton.Click += new System.EventHandler(this.ApplyChangesButton_Click);
-            // 
-            // ObjectEnabledCheckBox
-            // 
-            this.ObjectEnabledCheckBox.AutoSize = true;
-            this.ObjectEnabledCheckBox.Location = new System.Drawing.Point(423, 160);
-            this.ObjectEnabledCheckBox.Name = "ObjectEnabledCheckBox";
-            this.ObjectEnabledCheckBox.Size = new System.Drawing.Size(64, 17);
-            this.ObjectEnabledCheckBox.TabIndex = 12;
-            this.ObjectEnabledCheckBox.Text = "enabled";
-            this.ObjectEnabledCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // ObjectZipFileTB
-            // 
-            this.ObjectZipFileTB.Location = new System.Drawing.Point(91, 107);
-            this.ObjectZipFileTB.Name = "ObjectZipFileTB";
-            this.ObjectZipFileTB.Size = new System.Drawing.Size(447, 20);
-            this.ObjectZipFileTB.TabIndex = 10;
-            // 
-            // ObjectZipFile
-            // 
-            this.ObjectZipFile.AutoSize = true;
-            this.ObjectZipFile.Location = new System.Drawing.Point(8, 110);
-            this.ObjectZipFile.Name = "ObjectZipFile";
-            this.ObjectZipFile.Size = new System.Drawing.Size(36, 13);
-            this.ObjectZipFile.TabIndex = 9;
-            this.ObjectZipFile.Text = "zip file";
-            // 
-            // ObjectEndAddressTB
-            // 
-            this.ObjectEndAddressTB.Location = new System.Drawing.Point(91, 81);
-            this.ObjectEndAddressTB.Name = "ObjectEndAddressTB";
-            this.ObjectEndAddressTB.Size = new System.Drawing.Size(447, 20);
-            this.ObjectEndAddressTB.TabIndex = 8;
-            // 
-            // ObjectEdnAddress
-            // 
-            this.ObjectEdnAddress.AutoSize = true;
-            this.ObjectEdnAddress.Location = new System.Drawing.Point(8, 84);
-            this.ObjectEdnAddress.Name = "ObjectEdnAddress";
-            this.ObjectEdnAddress.Size = new System.Drawing.Size(65, 13);
-            this.ObjectEdnAddress.TabIndex = 7;
-            this.ObjectEdnAddress.Text = "end address";
-            // 
-            // ObjectStartAddressTB
-            // 
-            this.ObjectStartAddressTB.Location = new System.Drawing.Point(91, 55);
-            this.ObjectStartAddressTB.Name = "ObjectStartAddressTB";
-            this.ObjectStartAddressTB.Size = new System.Drawing.Size(447, 20);
-            this.ObjectStartAddressTB.TabIndex = 6;
-            // 
-            // ObjectStartAddress
-            // 
-            this.ObjectStartAddress.AutoSize = true;
-            this.ObjectStartAddress.Location = new System.Drawing.Point(8, 58);
-            this.ObjectStartAddress.Name = "ObjectStartAddress";
-            this.ObjectStartAddress.Size = new System.Drawing.Size(67, 13);
-            this.ObjectStartAddress.TabIndex = 5;
-            this.ObjectStartAddress.Text = "start address";
-            // 
-            // ObjectPackageNameTB
-            // 
-            this.ObjectPackageNameTB.Location = new System.Drawing.Point(91, 29);
-            this.ObjectPackageNameTB.Name = "ObjectPackageNameTB";
-            this.ObjectPackageNameTB.Size = new System.Drawing.Size(447, 20);
-            this.ObjectPackageNameTB.TabIndex = 4;
-            // 
-            // ObjectPacakgeName
-            // 
-            this.ObjectPacakgeName.AutoSize = true;
-            this.ObjectPacakgeName.Location = new System.Drawing.Point(8, 32);
-            this.ObjectPacakgeName.Name = "ObjectPacakgeName";
-            this.ObjectPacakgeName.Size = new System.Drawing.Size(77, 13);
-            this.ObjectPacakgeName.TabIndex = 3;
-            this.ObjectPacakgeName.Text = "packageName";
-            // 
-            // SaveDatabaseButton
-            // 
-            this.SaveDatabaseButton.Location = new System.Drawing.Point(966, 609);
-            this.SaveDatabaseButton.Name = "SaveDatabaseButton";
-            this.SaveDatabaseButton.Size = new System.Drawing.Size(104, 23);
-            this.SaveDatabaseButton.TabIndex = 5;
-            this.SaveDatabaseButton.Text = "save database";
-            this.SaveDatabaseButton.UseVisualStyleBackColor = true;
-            this.SaveDatabaseButton.Click += new System.EventHandler(this.SaveDatabaseButton_Click);
-            // 
-            // LoadDatabaseButton
-            // 
-            this.LoadDatabaseButton.Location = new System.Drawing.Point(876, 609);
-            this.LoadDatabaseButton.Name = "LoadDatabaseButton";
-            this.LoadDatabaseButton.Size = new System.Drawing.Size(84, 23);
-            this.LoadDatabaseButton.TabIndex = 6;
-            this.LoadDatabaseButton.Text = "load database";
-            this.LoadDatabaseButton.UseVisualStyleBackColor = true;
-            this.LoadDatabaseButton.Click += new System.EventHandler(this.LoadDatabaseButton_Click);
-            // 
-            // RemoveEntryButton
-            // 
-            this.RemoveEntryButton.Location = new System.Drawing.Point(12, 609);
-            this.RemoveEntryButton.Name = "RemoveEntryButton";
-            this.RemoveEntryButton.Size = new System.Drawing.Size(75, 23);
-            this.RemoveEntryButton.TabIndex = 8;
-            this.RemoveEntryButton.Text = "remove";
-            this.RemoveEntryButton.UseVisualStyleBackColor = true;
-            this.RemoveEntryButton.Click += new System.EventHandler(this.RemoveEntryButton_Click);
-            // 
-            // AddEntryButton
-            // 
-            this.AddEntryButton.Location = new System.Drawing.Point(174, 609);
-            this.AddEntryButton.Name = "AddEntryButton";
-            this.AddEntryButton.Size = new System.Drawing.Size(75, 23);
-            this.AddEntryButton.TabIndex = 9;
-            this.AddEntryButton.Text = "add";
-            this.AddEntryButton.UseVisualStyleBackColor = true;
-            this.AddEntryButton.Click += new System.EventHandler(this.AddEntryButton_Click);
-            // 
-            // DBORB
-            // 
-            this.DBORB.AutoSize = true;
-            this.DBORB.Location = new System.Drawing.Point(346, 7);
-            this.DBORB.Name = "DBORB";
-            this.DBORB.Size = new System.Drawing.Size(165, 17);
-            this.DBORB.TabIndex = 1;
-            this.DBORB.Text = "DatabaseObject (mod/config)";
-            this.DBORB.UseVisualStyleBackColor = true;
-            this.DBORB.CheckedChanged += new System.EventHandler(this.DBO_CheckedChanged);
-            // 
-            // GlobalDependencyRB
-            // 
-            this.GlobalDependencyRB.AutoSize = true;
-            this.GlobalDependencyRB.Checked = true;
-            this.GlobalDependencyRB.Location = new System.Drawing.Point(12, 7);
-            this.GlobalDependencyRB.Name = "GlobalDependencyRB";
-            this.GlobalDependencyRB.Size = new System.Drawing.Size(115, 17);
-            this.GlobalDependencyRB.TabIndex = 10;
-            this.GlobalDependencyRB.TabStop = true;
-            this.GlobalDependencyRB.Text = "global dependency";
-            this.GlobalDependencyRB.UseVisualStyleBackColor = true;
-            this.GlobalDependencyRB.CheckedChanged += new System.EventHandler(this.GlobalDependencyRB_CheckedChanged);
-            // 
-            // DependencyRB
-            // 
-            this.DependencyRB.AutoSize = true;
-            this.DependencyRB.Location = new System.Drawing.Point(133, 7);
-            this.DependencyRB.Name = "DependencyRB";
-            this.DependencyRB.Size = new System.Drawing.Size(84, 17);
-            this.DependencyRB.TabIndex = 11;
-            this.DependencyRB.TabStop = true;
-            this.DependencyRB.Text = "dependency";
-            this.DependencyRB.UseVisualStyleBackColor = true;
-            this.DependencyRB.CheckedChanged += new System.EventHandler(this.DependencyRB_CheckedChanged);
-            // 
-            // LogicalDependencyRB
-            // 
-            this.LogicalDependencyRB.AutoSize = true;
-            this.LogicalDependencyRB.Location = new System.Drawing.Point(223, 7);
-            this.LogicalDependencyRB.Name = "LogicalDependencyRB";
-            this.LogicalDependencyRB.Size = new System.Drawing.Size(117, 17);
-            this.LogicalDependencyRB.TabIndex = 12;
-            this.LogicalDependencyRB.TabStop = true;
-            this.LogicalDependencyRB.Text = "logical dependency";
-            this.LogicalDependencyRB.UseVisualStyleBackColor = true;
-            this.LogicalDependencyRB.CheckedChanged += new System.EventHandler(this.LogicalDependencyRB_CheckedChanged);
-            // 
-            // OpenDatabaseDialog
-            // 
-            this.OpenDatabaseDialog.Title = "Open Database";
-            // 
-            // SaveDatabaseDialog
-            // 
-            this.SaveDatabaseDialog.Title = "Save Database";
-            // 
-            // MoveButton
-            // 
-            this.MoveButton.Location = new System.Drawing.Point(93, 609);
-            this.MoveButton.Name = "MoveButton";
-            this.MoveButton.Size = new System.Drawing.Size(75, 23);
-            this.MoveButton.TabIndex = 28;
-            this.MoveButton.Text = "move";
-            this.MoveButton.UseVisualStyleBackColor = true;
-            this.MoveButton.Click += new System.EventHandler(this.MoveButton_Click);
-            // 
             // AddPictureTB
             // 
             this.AddPictureTB.Location = new System.Drawing.Point(111, 294);
@@ -813,6 +497,7 @@
             this.ObjectPicturesList.Name = "ObjectPicturesList";
             this.ObjectPicturesList.Size = new System.Drawing.Size(509, 82);
             this.ObjectPicturesList.TabIndex = 46;
+            this.ObjectPicturesList.SelectedIndexChanged += new System.EventHandler(this.ObjectPicturesList_SelectedIndexChanged);
             // 
             // PicturesURLLabel
             // 
@@ -844,11 +529,347 @@
             this.PicturesTypeCBox.Size = new System.Drawing.Size(151, 21);
             this.PicturesTypeCBox.TabIndex = 48;
             // 
+            // UserDatasTabPage
+            // 
+            this.UserDatasTabPage.Controls.Add(this.EditUserdatasButton);
+            this.UserDatasTabPage.Controls.Add(this.ObjectUserdatasTB);
+            this.UserDatasTabPage.Controls.Add(this.AddUserdatasButton);
+            this.UserDatasTabPage.Controls.Add(this.ObjectUserdatasList);
+            this.UserDatasTabPage.Controls.Add(this.ObjectUserdatasLabel);
+            this.UserDatasTabPage.Controls.Add(this.RemoveUserdatasButton);
+            this.UserDatasTabPage.Location = new System.Drawing.Point(4, 22);
+            this.UserDatasTabPage.Name = "UserDatasTabPage";
+            this.UserDatasTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.UserDatasTabPage.Size = new System.Drawing.Size(531, 331);
+            this.UserDatasTabPage.TabIndex = 4;
+            this.UserDatasTabPage.Text = "Userdatas";
+            this.UserDatasTabPage.UseVisualStyleBackColor = true;
+            // 
+            // EditUserdatasButton
+            // 
+            this.EditUserdatasButton.Location = new System.Drawing.Point(407, 119);
+            this.EditUserdatasButton.Name = "EditUserdatasButton";
+            this.EditUserdatasButton.Size = new System.Drawing.Size(48, 23);
+            this.EditUserdatasButton.TabIndex = 45;
+            this.EditUserdatasButton.Text = "edit";
+            this.EditUserdatasButton.UseVisualStyleBackColor = true;
+            this.EditUserdatasButton.Click += new System.EventHandler(this.EditUserdatasButton_Click);
+            // 
+            // ObjectUserdatasTB
+            // 
+            this.ObjectUserdatasTB.Location = new System.Drawing.Point(9, 93);
+            this.ObjectUserdatasTB.Name = "ObjectUserdatasTB";
+            this.ObjectUserdatasTB.Size = new System.Drawing.Size(511, 20);
+            this.ObjectUserdatasTB.TabIndex = 44;
+            // 
+            // AddUserdatasButton
+            // 
+            this.AddUserdatasButton.Location = new System.Drawing.Point(353, 119);
+            this.AddUserdatasButton.Name = "AddUserdatasButton";
+            this.AddUserdatasButton.Size = new System.Drawing.Size(48, 23);
+            this.AddUserdatasButton.TabIndex = 43;
+            this.AddUserdatasButton.Text = "add";
+            this.AddUserdatasButton.UseVisualStyleBackColor = true;
+            this.AddUserdatasButton.Click += new System.EventHandler(this.AddUserdatasButton_Click);
+            // 
+            // ObjectUserdatasList
+            // 
+            this.ObjectUserdatasList.FormattingEnabled = true;
+            this.ObjectUserdatasList.Location = new System.Drawing.Point(9, 18);
+            this.ObjectUserdatasList.Name = "ObjectUserdatasList";
+            this.ObjectUserdatasList.Size = new System.Drawing.Size(511, 69);
+            this.ObjectUserdatasList.TabIndex = 41;
+            this.ObjectUserdatasList.SelectedIndexChanged += new System.EventHandler(this.ObjectUserdatasList_SelectedIndexChanged);
+            // 
+            // ObjectUserdatasLabel
+            // 
+            this.ObjectUserdatasLabel.AutoSize = true;
+            this.ObjectUserdatasLabel.Location = new System.Drawing.Point(6, 3);
+            this.ObjectUserdatasLabel.Name = "ObjectUserdatasLabel";
+            this.ObjectUserdatasLabel.Size = new System.Drawing.Size(116, 13);
+            this.ObjectUserdatasLabel.TabIndex = 40;
+            this.ObjectUserdatasLabel.Text = "userdatas (click to edit)";
+            // 
+            // RemoveUserdatasButton
+            // 
+            this.RemoveUserdatasButton.Location = new System.Drawing.Point(461, 119);
+            this.RemoveUserdatasButton.Name = "RemoveUserdatasButton";
+            this.RemoveUserdatasButton.Size = new System.Drawing.Size(59, 23);
+            this.RemoveUserdatasButton.TabIndex = 42;
+            this.RemoveUserdatasButton.Text = "remove";
+            this.RemoveUserdatasButton.UseVisualStyleBackColor = true;
+            this.RemoveUserdatasButton.Click += new System.EventHandler(this.RemoveUserdatasButton_Click);
+            // 
+            // ObjectAppendExtractionCB
+            // 
+            this.ObjectAppendExtractionCB.AutoSize = true;
+            this.ObjectAppendExtractionCB.Location = new System.Drawing.Point(243, 186);
+            this.ObjectAppendExtractionCB.Name = "ObjectAppendExtractionCB";
+            this.ObjectAppendExtractionCB.Size = new System.Drawing.Size(109, 17);
+            this.ObjectAppendExtractionCB.TabIndex = 25;
+            this.ObjectAppendExtractionCB.Text = "appendExtraction";
+            this.ObjectAppendExtractionCB.UseVisualStyleBackColor = true;
+            // 
+            // ObjectVisableCheckBox
+            // 
+            this.ObjectVisableCheckBox.AutoSize = true;
+            this.ObjectVisableCheckBox.Location = new System.Drawing.Point(358, 186);
+            this.ObjectVisableCheckBox.Name = "ObjectVisableCheckBox";
+            this.ObjectVisableCheckBox.Size = new System.Drawing.Size(59, 17);
+            this.ObjectVisableCheckBox.TabIndex = 23;
+            this.ObjectVisableCheckBox.Text = "visable";
+            this.ObjectVisableCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // ObjectTypeComboBox
+            // 
+            this.ObjectTypeComboBox.FormattingEnabled = true;
+            this.ObjectTypeComboBox.Items.AddRange(new object[] {
+            "-none-",
+            "single1",
+            "single_dropDown1",
+            "single_dropDown2",
+            "multi"});
+            this.ObjectTypeComboBox.Location = new System.Drawing.Point(91, 184);
+            this.ObjectTypeComboBox.Name = "ObjectTypeComboBox";
+            this.ObjectTypeComboBox.Size = new System.Drawing.Size(146, 21);
+            this.ObjectTypeComboBox.TabIndex = 21;
+            // 
+            // ObjectType
+            // 
+            this.ObjectType.AutoSize = true;
+            this.ObjectType.Location = new System.Drawing.Point(8, 187);
+            this.ObjectType.Name = "ObjectType";
+            this.ObjectType.Size = new System.Drawing.Size(27, 13);
+            this.ObjectType.TabIndex = 20;
+            this.ObjectType.Text = "type";
+            // 
+            // ObjectDevURLTB
+            // 
+            this.ObjectDevURLTB.Location = new System.Drawing.Point(91, 133);
+            this.ObjectDevURLTB.Name = "ObjectDevURLTB";
+            this.ObjectDevURLTB.Size = new System.Drawing.Size(447, 20);
+            this.ObjectDevURLTB.TabIndex = 15;
+            // 
+            // ObjectDevURL
+            // 
+            this.ObjectDevURL.AutoSize = true;
+            this.ObjectDevURL.Location = new System.Drawing.Point(8, 136);
+            this.ObjectDevURL.Name = "ObjectDevURL";
+            this.ObjectDevURL.Size = new System.Drawing.Size(50, 13);
+            this.ObjectDevURL.TabIndex = 14;
+            this.ObjectDevURL.Text = "dev URL";
+            // 
+            // ApplyChangesButton
+            // 
+            this.ApplyChangesButton.Location = new System.Drawing.Point(291, 209);
+            this.ApplyChangesButton.Name = "ApplyChangesButton";
+            this.ApplyChangesButton.Size = new System.Drawing.Size(244, 27);
+            this.ApplyChangesButton.TabIndex = 13;
+            this.ApplyChangesButton.Text = "apply changes (from above and description tab)";
+            this.ApplyChangesButton.UseVisualStyleBackColor = true;
+            this.ApplyChangesButton.Click += new System.EventHandler(this.ApplyChangesButton_Click);
+            // 
+            // ObjectEnabledCheckBox
+            // 
+            this.ObjectEnabledCheckBox.AutoSize = true;
+            this.ObjectEnabledCheckBox.Location = new System.Drawing.Point(423, 186);
+            this.ObjectEnabledCheckBox.Name = "ObjectEnabledCheckBox";
+            this.ObjectEnabledCheckBox.Size = new System.Drawing.Size(64, 17);
+            this.ObjectEnabledCheckBox.TabIndex = 12;
+            this.ObjectEnabledCheckBox.Text = "enabled";
+            this.ObjectEnabledCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // ObjectZipFileTB
+            // 
+            this.ObjectZipFileTB.Location = new System.Drawing.Point(91, 107);
+            this.ObjectZipFileTB.Name = "ObjectZipFileTB";
+            this.ObjectZipFileTB.Size = new System.Drawing.Size(447, 20);
+            this.ObjectZipFileTB.TabIndex = 10;
+            // 
+            // ObjectZipFile
+            // 
+            this.ObjectZipFile.AutoSize = true;
+            this.ObjectZipFile.Location = new System.Drawing.Point(8, 110);
+            this.ObjectZipFile.Name = "ObjectZipFile";
+            this.ObjectZipFile.Size = new System.Drawing.Size(36, 13);
+            this.ObjectZipFile.TabIndex = 9;
+            this.ObjectZipFile.Text = "zip file";
+            // 
+            // ObjectEndAddressTB
+            // 
+            this.ObjectEndAddressTB.Location = new System.Drawing.Point(91, 81);
+            this.ObjectEndAddressTB.Name = "ObjectEndAddressTB";
+            this.ObjectEndAddressTB.Size = new System.Drawing.Size(447, 20);
+            this.ObjectEndAddressTB.TabIndex = 8;
+            // 
+            // ObjectEdnAddress
+            // 
+            this.ObjectEdnAddress.AutoSize = true;
+            this.ObjectEdnAddress.Location = new System.Drawing.Point(8, 84);
+            this.ObjectEdnAddress.Name = "ObjectEdnAddress";
+            this.ObjectEdnAddress.Size = new System.Drawing.Size(65, 13);
+            this.ObjectEdnAddress.TabIndex = 7;
+            this.ObjectEdnAddress.Text = "end address";
+            // 
+            // ObjectStartAddressTB
+            // 
+            this.ObjectStartAddressTB.Location = new System.Drawing.Point(91, 55);
+            this.ObjectStartAddressTB.Name = "ObjectStartAddressTB";
+            this.ObjectStartAddressTB.Size = new System.Drawing.Size(447, 20);
+            this.ObjectStartAddressTB.TabIndex = 6;
+            // 
+            // ObjectStartAddress
+            // 
+            this.ObjectStartAddress.AutoSize = true;
+            this.ObjectStartAddress.Location = new System.Drawing.Point(8, 58);
+            this.ObjectStartAddress.Name = "ObjectStartAddress";
+            this.ObjectStartAddress.Size = new System.Drawing.Size(67, 13);
+            this.ObjectStartAddress.TabIndex = 5;
+            this.ObjectStartAddress.Text = "start address";
+            // 
+            // ObjectPackageNameTB
+            // 
+            this.ObjectPackageNameTB.Location = new System.Drawing.Point(91, 29);
+            this.ObjectPackageNameTB.Name = "ObjectPackageNameTB";
+            this.ObjectPackageNameTB.Size = new System.Drawing.Size(447, 20);
+            this.ObjectPackageNameTB.TabIndex = 4;
+            // 
+            // ObjectPacakgeName
+            // 
+            this.ObjectPacakgeName.AutoSize = true;
+            this.ObjectPacakgeName.Location = new System.Drawing.Point(8, 32);
+            this.ObjectPacakgeName.Name = "ObjectPacakgeName";
+            this.ObjectPacakgeName.Size = new System.Drawing.Size(77, 13);
+            this.ObjectPacakgeName.TabIndex = 3;
+            this.ObjectPacakgeName.Text = "packageName";
+            // 
+            // SaveDatabaseButton
+            // 
+            this.SaveDatabaseButton.Location = new System.Drawing.Point(966, 636);
+            this.SaveDatabaseButton.Name = "SaveDatabaseButton";
+            this.SaveDatabaseButton.Size = new System.Drawing.Size(104, 23);
+            this.SaveDatabaseButton.TabIndex = 5;
+            this.SaveDatabaseButton.Text = "save database";
+            this.SaveDatabaseButton.UseVisualStyleBackColor = true;
+            this.SaveDatabaseButton.Click += new System.EventHandler(this.SaveDatabaseButton_Click);
+            // 
+            // LoadDatabaseButton
+            // 
+            this.LoadDatabaseButton.Location = new System.Drawing.Point(876, 636);
+            this.LoadDatabaseButton.Name = "LoadDatabaseButton";
+            this.LoadDatabaseButton.Size = new System.Drawing.Size(84, 23);
+            this.LoadDatabaseButton.TabIndex = 6;
+            this.LoadDatabaseButton.Text = "load database";
+            this.LoadDatabaseButton.UseVisualStyleBackColor = true;
+            this.LoadDatabaseButton.Click += new System.EventHandler(this.LoadDatabaseButton_Click);
+            // 
+            // RemoveEntryButton
+            // 
+            this.RemoveEntryButton.Location = new System.Drawing.Point(12, 636);
+            this.RemoveEntryButton.Name = "RemoveEntryButton";
+            this.RemoveEntryButton.Size = new System.Drawing.Size(75, 23);
+            this.RemoveEntryButton.TabIndex = 8;
+            this.RemoveEntryButton.Text = "remove";
+            this.RemoveEntryButton.UseVisualStyleBackColor = true;
+            this.RemoveEntryButton.Click += new System.EventHandler(this.RemoveEntryButton_Click);
+            // 
+            // AddEntryButton
+            // 
+            this.AddEntryButton.Location = new System.Drawing.Point(174, 636);
+            this.AddEntryButton.Name = "AddEntryButton";
+            this.AddEntryButton.Size = new System.Drawing.Size(75, 23);
+            this.AddEntryButton.TabIndex = 9;
+            this.AddEntryButton.Text = "add";
+            this.AddEntryButton.UseVisualStyleBackColor = true;
+            this.AddEntryButton.Click += new System.EventHandler(this.AddEntryButton_Click);
+            // 
+            // DBORB
+            // 
+            this.DBORB.AutoSize = true;
+            this.DBORB.Location = new System.Drawing.Point(346, 7);
+            this.DBORB.Name = "DBORB";
+            this.DBORB.Size = new System.Drawing.Size(165, 17);
+            this.DBORB.TabIndex = 1;
+            this.DBORB.Text = "DatabaseObject (mod/config)";
+            this.DBORB.UseVisualStyleBackColor = true;
+            this.DBORB.CheckedChanged += new System.EventHandler(this.DBO_CheckedChanged);
+            // 
+            // GlobalDependencyRB
+            // 
+            this.GlobalDependencyRB.AutoSize = true;
+            this.GlobalDependencyRB.Checked = true;
+            this.GlobalDependencyRB.Location = new System.Drawing.Point(12, 7);
+            this.GlobalDependencyRB.Name = "GlobalDependencyRB";
+            this.GlobalDependencyRB.Size = new System.Drawing.Size(115, 17);
+            this.GlobalDependencyRB.TabIndex = 10;
+            this.GlobalDependencyRB.TabStop = true;
+            this.GlobalDependencyRB.Text = "global dependency";
+            this.GlobalDependencyRB.UseVisualStyleBackColor = true;
+            this.GlobalDependencyRB.CheckedChanged += new System.EventHandler(this.GlobalDependencyRB_CheckedChanged);
+            // 
+            // DependencyRB
+            // 
+            this.DependencyRB.AutoSize = true;
+            this.DependencyRB.Location = new System.Drawing.Point(133, 7);
+            this.DependencyRB.Name = "DependencyRB";
+            this.DependencyRB.Size = new System.Drawing.Size(84, 17);
+            this.DependencyRB.TabIndex = 11;
+            this.DependencyRB.TabStop = true;
+            this.DependencyRB.Text = "dependency";
+            this.DependencyRB.UseVisualStyleBackColor = true;
+            this.DependencyRB.CheckedChanged += new System.EventHandler(this.DependencyRB_CheckedChanged);
+            // 
+            // LogicalDependencyRB
+            // 
+            this.LogicalDependencyRB.AutoSize = true;
+            this.LogicalDependencyRB.Location = new System.Drawing.Point(223, 7);
+            this.LogicalDependencyRB.Name = "LogicalDependencyRB";
+            this.LogicalDependencyRB.Size = new System.Drawing.Size(117, 17);
+            this.LogicalDependencyRB.TabIndex = 12;
+            this.LogicalDependencyRB.TabStop = true;
+            this.LogicalDependencyRB.Text = "logical dependency";
+            this.LogicalDependencyRB.UseVisualStyleBackColor = true;
+            this.LogicalDependencyRB.CheckedChanged += new System.EventHandler(this.LogicalDependencyRB_CheckedChanged);
+            // 
+            // OpenDatabaseDialog
+            // 
+            this.OpenDatabaseDialog.Title = "Open Database";
+            // 
+            // SaveDatabaseDialog
+            // 
+            this.SaveDatabaseDialog.Title = "Save Database";
+            // 
+            // MoveButton
+            // 
+            this.MoveButton.Location = new System.Drawing.Point(93, 636);
+            this.MoveButton.Name = "MoveButton";
+            this.MoveButton.Size = new System.Drawing.Size(75, 23);
+            this.MoveButton.TabIndex = 28;
+            this.MoveButton.Text = "move";
+            this.MoveButton.UseVisualStyleBackColor = true;
+            this.MoveButton.Click += new System.EventHandler(this.MoveButton_Click);
+            // 
+            // ObjectVersionLabel
+            // 
+            this.ObjectVersionLabel.AutoSize = true;
+            this.ObjectVersionLabel.Location = new System.Drawing.Point(8, 161);
+            this.ObjectVersionLabel.Name = "ObjectVersionLabel";
+            this.ObjectVersionLabel.Size = new System.Drawing.Size(41, 13);
+            this.ObjectVersionLabel.TabIndex = 30;
+            this.ObjectVersionLabel.Text = "version";
+            // 
+            // ObjectVersionTB
+            // 
+            this.ObjectVersionTB.Location = new System.Drawing.Point(91, 158);
+            this.ObjectVersionTB.Name = "ObjectVersionTB";
+            this.ObjectVersionTB.Size = new System.Drawing.Size(447, 20);
+            this.ObjectVersionTB.TabIndex = 31;
+            // 
             // DatabaseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1078, 644);
+            this.ClientSize = new System.Drawing.Size(1078, 671);
             this.Controls.Add(this.MoveButton);
             this.Controls.Add(this.LogicalDependencyRB);
             this.Controls.Add(this.DependencyRB);
@@ -961,5 +982,7 @@
         private System.Windows.Forms.Label PicturesURLLabel;
         private System.Windows.Forms.Label PicturesTypeLabel;
         private System.Windows.Forms.ComboBox PicturesTypeCBox;
+        private System.Windows.Forms.TextBox ObjectVersionTB;
+        private System.Windows.Forms.Label ObjectVersionLabel;
     }
 }

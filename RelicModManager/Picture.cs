@@ -48,8 +48,8 @@ namespace RelhaxModpack
 
         public override string ToString()
         {
-            if(URL.Length > 33)
-                return "Type: " + (int)mediaType + " - " + URL.Substring(0, 34) + "...";
+            if(URL.Length > 79)
+                return "Type: " + (int)mediaType + " - " + URL.Substring(0, 80) + "...";
             else
                 return "Type: " + (int)mediaType + " - " + URL;
         }

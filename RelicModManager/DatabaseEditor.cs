@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
@@ -36,6 +32,7 @@ namespace RelhaxModpack
         string GameVersion = "";
         private StringBuilder InUseSB;
         private List<Config> ListThatContainsConfig;
+        private bool UnsavedModifications = false;
 
         private EditorMode DatabaseEditorMode;
 
@@ -47,6 +44,14 @@ namespace RelhaxModpack
 
         private void DatabaseEditor_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if(UnsavedModifications)
+            {
+                if(MessageBox.Show("You have unsaved changes, return to editor?","unsaved changes",MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
             Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
         }
         //hook into the database editor loading
@@ -128,6 +133,9 @@ namespace RelhaxModpack
             ObjectDevURLTB.Enabled = false;
             ObjectDevURLTB.Text = "";
 
+            ObjectVersionTB.Enabled = false;
+            ObjectVersionTB.Text = "";
+
             ObjectTypeComboBox.Enabled = false;
             ObjectTypeComboBox.SelectedIndex = 0;
 
@@ -190,6 +198,7 @@ namespace RelhaxModpack
                 return;
             DatabaseLocation = SaveDatabaseDialog.FileName;
             Utils.SaveDatabase(DatabaseLocation, GameVersion, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
+            UnsavedModifications = false;
         }
         //Apply all changes from the form
         private void ApplyChangesButton_Click(object sender, EventArgs e)
@@ -256,6 +265,7 @@ namespace RelhaxModpack
                     m.endAddress = ObjectEndAddressTB.Text;
                     m.zipFile = ObjectZipFileTB.Text;
                     m.devURL = ObjectDevURLTB.Text;
+                    m.version = ObjectVersionTB.Text;
                     m.enabled = ObjectEnabledCheckBox.Checked;
                     m.visible = ObjectVisableCheckBox.Checked;
                     m.description = ObjectDescTB.Text;
@@ -282,6 +292,7 @@ namespace RelhaxModpack
                         cfg.endAddress = ObjectEndAddressTB.Text;
                         cfg.zipFile = ObjectZipFileTB.Text;
                         cfg.devURL = ObjectDevURLTB.Text;
+                        cfg.version = ObjectVersionTB.Text;
                         switch(ObjectTypeComboBox.SelectedIndex)
                         {
                             case 1:
@@ -306,6 +317,7 @@ namespace RelhaxModpack
                 }
             }
             this.DisplayDatabase(false);
+            UnsavedModifications = true;
         }
         private List<Mod> ListContainsMod(Mod mod)
         {
@@ -443,6 +455,9 @@ namespace RelhaxModpack
                 ObjectDevURLTB.Enabled = true;
                 ObjectDevURLTB.Text = SelectedGlobalDependency.devURL;
 
+                ObjectVersionTB.Enabled = false;
+                ObjectVersionTB.Text = "";
+
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
 
@@ -488,6 +503,9 @@ namespace RelhaxModpack
 
                 ObjectDevURLTB.Enabled = true;
                 ObjectDevURLTB.Text = SelectedDependency.devURL;
+
+                ObjectVersionTB.Enabled = false;
+                ObjectVersionTB.Text = "";
 
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
@@ -547,6 +565,9 @@ namespace RelhaxModpack
                 ObjectDevURLTB.Enabled = true;
                 ObjectDevURLTB.Text = SelectedLogicalDependency.devURL;
 
+                ObjectVersionTB.Enabled = false;
+                ObjectVersionTB.Text = "";
+
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
 
@@ -593,7 +614,10 @@ namespace RelhaxModpack
                 ObjectDevURLTB.Enabled = true;
                 ObjectDevURLTB.Text = SelectedDatabaseObject.devURL;
 
-                if(SelectedDatabaseObject is Config)
+                ObjectVersionTB.Enabled = true;
+                ObjectVersionTB.Text = SelectedDatabaseObject.version;
+
+                if (SelectedDatabaseObject is Config)
                 {
                     ObjectTypeComboBox.Enabled = true;
                     Config cfg = (Config)SelectedDatabaseObject;
@@ -671,6 +695,7 @@ namespace RelhaxModpack
                 ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
 
                 //userdatas
+                ObjectUserdatasTB.Text = "";
                 ObjectUserdatasList.DataSource = null;
                 ObjectUserdatasList.Items.Clear();
                 ObjectUserdatasList.DataSource = SelectedDatabaseObject.userFiles;
@@ -700,6 +725,9 @@ namespace RelhaxModpack
 
                 ObjectDevURLTB.Enabled = false;
                 ObjectDevURLTB.Text = "";
+
+                ObjectVersionTB.Enabled = false;
+                ObjectVersionTB.Text = "";
 
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
@@ -903,6 +931,7 @@ namespace RelhaxModpack
                 }
             }
             this.DisplayDatabase(false);
+            UnsavedModifications = true;
         }
 
         private void AddEntryButton_Click(object sender, EventArgs e)
@@ -984,6 +1013,7 @@ namespace RelhaxModpack
                                 cfg.endAddress = ObjectEndAddressTB.Text;
                                 cfg.zipFile = ObjectZipFileTB.Text;
                                 cfg.devURL = ObjectDevURLTB.Text;
+                                cfg.version = ObjectVersionTB.Text;
                                 switch (ObjectTypeComboBox.SelectedIndex)
                                 {
                                     case 1:
@@ -1017,6 +1047,7 @@ namespace RelhaxModpack
                                 m.endAddress = ObjectEndAddressTB.Text;
                                 m.zipFile = ObjectZipFileTB.Text;
                                 m.devURL = ObjectDevURLTB.Text;
+                                m.version = ObjectVersionTB.Text;
                                 m.enabled = ObjectEnabledCheckBox.Checked;
                                 m.visible = ObjectVisableCheckBox.Checked;
                                 m.description = ObjectDescTB.Text;
@@ -1040,6 +1071,7 @@ namespace RelhaxModpack
                                 cfg.endAddress = ObjectEndAddressTB.Text;
                                 cfg.zipFile = ObjectZipFileTB.Text;
                                 cfg.devURL = ObjectDevURLTB.Text;
+                                cfg.version = ObjectVersionTB.Text;
                                 switch (ObjectTypeComboBox.SelectedIndex)
                                 {
                                     case 1:
@@ -1078,6 +1110,7 @@ namespace RelhaxModpack
                                     cfg.endAddress = ObjectEndAddressTB.Text;
                                     cfg.zipFile = ObjectZipFileTB.Text;
                                     cfg.devURL = ObjectDevURLTB.Text;
+                                    cfg.version = ObjectVersionTB.Text;
                                     switch (ObjectTypeComboBox.SelectedIndex)
                                     {
                                         case 1:
@@ -1105,6 +1138,7 @@ namespace RelhaxModpack
                 }
             }
             this.DisplayDatabase(false);
+            UnsavedModifications = true;
         }
 
         private void RemoveEntryButton_Click(object sender, EventArgs e)
@@ -1171,6 +1205,7 @@ namespace RelhaxModpack
                 }
             }
             DisplayDatabase(false);
+            UnsavedModifications = true;
         }
 
         private bool DependencyInUse(string packageName, bool isDependency)
@@ -1269,6 +1304,7 @@ namespace RelhaxModpack
                 ObjectDependenciesList.Items.Clear();
                 ObjectDependenciesList.DataSource = SelectedDatabaseObject.dependencies;
             }
+            UnsavedModifications = true;
         }
 
         private void RemoveDependencyButton_Click(object sender, EventArgs e)
@@ -1288,7 +1324,8 @@ namespace RelhaxModpack
                 ObjectDependenciesList.DataSource = null;
                 ObjectDependenciesList.Items.Clear();
                 ObjectDependenciesList.DataSource = SelectedDatabaseObject.dependencies;
-            } 
+            }
+            UnsavedModifications = true;
         }
 
         private void AddLogicalDependencyButton_Click(object sender, EventArgs e)
@@ -1317,6 +1354,7 @@ namespace RelhaxModpack
                 ObjectLogicalDependenciesList.Items.Clear();
                 ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.logicalDependencies;
             }
+            UnsavedModifications = true;
         }
 
         private void RemoveLogicalDependencyButton_Click(object sender, EventArgs e)
@@ -1337,6 +1375,7 @@ namespace RelhaxModpack
                 ObjectLogicalDependenciesList.Items.Clear();
                 ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.logicalDependencies;
             }
+            UnsavedModifications = true;
         }
 
         private void MovePictureButton_Click(object sender, EventArgs e)
@@ -1363,6 +1402,7 @@ namespace RelhaxModpack
             ObjectPicturesList.DataSource = null;
             ObjectPicturesList.Items.Clear();
             ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
+            UnsavedModifications = true;
         }
 
         private void AddPictureButton_Click(object sender, EventArgs e)
@@ -1398,6 +1438,7 @@ namespace RelhaxModpack
             ObjectPicturesList.DataSource = null;
             ObjectPicturesList.Items.Clear();
             ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
+            UnsavedModifications = true;
         }
 
         private void RemovePictureButton_Click(object sender, EventArgs e)
@@ -1409,6 +1450,7 @@ namespace RelhaxModpack
             ObjectPicturesList.DataSource = null;
             ObjectPicturesList.Items.Clear();
             ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
+            UnsavedModifications = true;
         }
 
         private void ApplyPictureEditButton_Click(object sender, EventArgs e)
@@ -1433,6 +1475,7 @@ namespace RelhaxModpack
             ObjectPicturesList.DataSource = null;
             ObjectPicturesList.Items.Clear();
             ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
+            UnsavedModifications = true;
         }
 
         private void ObjectLogicalDependenciesList_SelectedIndexChanged(object sender, EventArgs e)
@@ -1456,7 +1499,7 @@ namespace RelhaxModpack
 
         private void LogicalDependnecyNegateFlagCB_CheckedChanged(object sender, EventArgs e)
         {
-            if (MessageBox.Show("change logical dependency negate flag status (yes) or change flag status for adding new logical dependency (no)", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("confirm change logical dependency negate flag status (press 'no' if changing negate flag for adding a new logical dependency)", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
                 return;
             if (DatabaseEditorMode == EditorMode.Dependency)
             {
@@ -1474,6 +1517,7 @@ namespace RelhaxModpack
                 ObjectLogicalDependenciesList.Items.Clear();
                 ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.logicalDependencies;
             }
+            UnsavedModifications = true;
         }
 
         private void ObjectDependenciesList_SelectedIndexChanged(object sender, EventArgs e)
@@ -1520,6 +1564,7 @@ namespace RelhaxModpack
             ObjectUserdatasList.DataSource = null;
             ObjectUserdatasList.Items.Clear();
             ObjectUserdatasList.DataSource = SelectedDatabaseObject.userFiles;
+            UnsavedModifications = true;
         }
 
         private void RemoveUserdatasButton_Click(object sender, EventArgs e)
@@ -1531,6 +1576,7 @@ namespace RelhaxModpack
             ObjectUserdatasList.DataSource = null;
             ObjectUserdatasList.Items.Clear();
             ObjectUserdatasList.DataSource = SelectedDatabaseObject.userFiles;
+            UnsavedModifications = true;
         }
 
         private void ObjectUserdatasList_SelectedIndexChanged(object sender, EventArgs e)
@@ -1549,6 +1595,7 @@ namespace RelhaxModpack
             ObjectUserdatasList.DataSource = null;
             ObjectUserdatasList.Items.Clear();
             ObjectUserdatasList.DataSource = SelectedDatabaseObject.userFiles;
+            UnsavedModifications = true;
         }
     }
 }
