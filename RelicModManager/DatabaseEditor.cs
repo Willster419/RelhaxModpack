@@ -674,6 +674,10 @@ namespace RelhaxModpack
                 ObjectPicturesList.Items.Clear();
                 ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
 
+                //userdatas
+                ObjectUserdatasList.DataSource = null;
+                ObjectUserdatasList.Items.Clear();
+                ObjectUserdatasList.DataSource = SelectedDatabaseObject.userFiles;
             }
             else if (node.Category != null)
             {
@@ -747,60 +751,148 @@ namespace RelhaxModpack
             }
             if (MessageBox.Show("Confirm you wish to move the object?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.No)
                 return;
-            using (DatabaseAdder dba = new DatabaseAdder(DatabaseEditorMode, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList))
+            using (DatabaseAdder dba = new DatabaseAdder(DatabaseEditorMode, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList,true))
             {
                 dba.ShowDialog();
-                if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
+                if (dba.DialogResult == DialogResult.OK)
                 {
-                    if (dba.SelectedGlobalDependency == null)
-                        return;
-                    GlobalDependencies.Remove(SelectedGlobalDependency);
-                    int index = GlobalDependencies.IndexOf(dba.SelectedGlobalDependency);
-                    GlobalDependencies.Insert(index, SelectedGlobalDependency);
-                    DisplayDatabase();
-                }
-                else if (DatabaseEditorMode == EditorMode.Dependency)
-                {
-                    if (dba.SelectedDependency == null)
-                        return;
-                    Dependencies.Remove(SelectedDependency);
-                    int index = Dependencies.IndexOf(dba.SelectedDependency);
-                    Dependencies.Insert(index, SelectedDependency);
-                    DisplayDatabase();
-                }
-                else if (DatabaseEditorMode == EditorMode.LogicalDependency)
-                {
-                    if (dba.SelectedLogicalDependency == null)
-                        return;
-                    LogicalDependencies.Remove(SelectedLogicalDependency);
-                    int index = LogicalDependencies.IndexOf(dba.SelectedLogicalDependency);
-                    LogicalDependencies.Insert(index, SelectedLogicalDependency);
-                    DisplayDatabase();
-                }
-                else if (DatabaseEditorMode == EditorMode.DBO)
-                {
-                    if (SelectedDatabaseObject is Mod)
+                    if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
                     {
-                        Mod modToMove = (Mod)SelectedDatabaseObject;
-                        Mod Ref = (Mod)dba.SelectedDatabaseObject;
-                        List<Mod> ModList = ListContainsMod(modToMove);
-                        int index = ModList.IndexOf(Ref);
-                        //make move
-                        ModList.Remove(modToMove);
-                        ModList.Insert(index, modToMove);
+                        if (dba.SelectedGlobalDependency == null)
+                            return;
+                        GlobalDependencies.Remove(SelectedGlobalDependency);
+                        int index = GlobalDependencies.IndexOf(dba.SelectedGlobalDependency);
+                        GlobalDependencies.Insert(index, SelectedGlobalDependency);
+                        DisplayDatabase();
                     }
-                    else if (SelectedDatabaseObject is Config)
+                    else if (DatabaseEditorMode == EditorMode.Dependency)
                     {
-                        ListThatContainsConfig = null;
-                        Config cfgToMove = (Config)SelectedDatabaseObject;
-                        Config Ref = (Config)dba.SelectedDatabaseObject;
-                        ListContainsConfig(cfgToMove);
-                        if (ListThatContainsConfig != null)
+                        if (dba.SelectedDependency == null)
+                            return;
+                        Dependencies.Remove(SelectedDependency);
+                        int index = Dependencies.IndexOf(dba.SelectedDependency);
+                        Dependencies.Insert(index, SelectedDependency);
+                        DisplayDatabase();
+                    }
+                    else if (DatabaseEditorMode == EditorMode.LogicalDependency)
+                    {
+                        if (dba.SelectedLogicalDependency == null)
+                            return;
+                        LogicalDependencies.Remove(SelectedLogicalDependency);
+                        int index = LogicalDependencies.IndexOf(dba.SelectedLogicalDependency);
+                        LogicalDependencies.Insert(index, SelectedLogicalDependency);
+                        DisplayDatabase();
+                    }
+                    else if (DatabaseEditorMode == EditorMode.DBO)
+                    {
+                        if (SelectedDatabaseObject is Mod)
                         {
-                            int index = ListThatContainsConfig.IndexOf(Ref);
-                            //make move
-                            ListThatContainsConfig.Remove(cfgToMove);
-                            ListThatContainsConfig.Insert(index, cfgToMove);
+                            //mod->mod
+                            //mod->config
+                            Mod modToMove = (Mod)SelectedDatabaseObject;
+                            if (dba.SelectedDatabaseObject is Mod)
+                            { 
+                                Mod Ref = (Mod)dba.SelectedDatabaseObject;
+                                List<Mod> ModList = ListContainsMod(modToMove);
+                                int index = ModList.IndexOf(Ref);
+                                //make move
+                                ModList.Remove(modToMove);
+                                ModList.Insert(index, modToMove);
+                            }
+                            else if (dba.SelectedDatabaseObject is Config)
+                            {
+                                Config Ref = (Config)dba.SelectedDatabaseObject;
+                                //remove mod first
+                                List<Mod> ModList = ListContainsMod(modToMove);
+                                ModList.Remove(modToMove);
+                                //convert to config
+                                Config c = new Config()
+                                {
+                                    name = modToMove.name,
+                                    version = modToMove.version,
+                                    zipFile = modToMove.zipFile,
+                                    configs = modToMove.configs,
+                                    startAddress = modToMove.startAddress,
+                                    logicalDependencies = modToMove.logicalDependencies,
+                                    dependencies = modToMove.dependencies,
+                                    pictureList = modToMove.pictureList,
+                                    endAddress = modToMove.endAddress,
+                                    crc = modToMove.crc,
+                                    enabled = modToMove.enabled,
+                                    visible = modToMove.visible,
+                                    packageName = modToMove.packageName,
+                                    size = modToMove.size,
+                                    updateComment = modToMove.updateComment,
+                                    description = modToMove.description,
+                                    devURL = modToMove.devURL,
+                                    userFiles = modToMove.userFiles,
+                                    type = "multi"
+                                };
+                                //move to config list
+                                ListContainsConfig(Ref);
+                                if (ListThatContainsConfig != null)
+                                {
+                                    int index = ListThatContainsConfig.IndexOf(Ref);
+                                    ListThatContainsConfig.Insert(index, c);
+                                }
+                            }
+                        }
+                        else if (SelectedDatabaseObject is Config)
+                        {
+                            //config->mod
+                            //config->config
+                            ListThatContainsConfig = null;
+                            Config cfgToMove = (Config)SelectedDatabaseObject;
+                            if (dba.SelectedDatabaseObject is Config)
+                            {
+                                Config Ref = (Config)dba.SelectedDatabaseObject;
+                                ListContainsConfig(cfgToMove);
+                                if (ListThatContainsConfig != null)
+                                {
+                                    int index = ListThatContainsConfig.IndexOf(Ref);
+                                    //make move
+                                    ListThatContainsConfig.Remove(cfgToMove);
+                                    ListThatContainsConfig.Insert(index, cfgToMove);
+                                }
+                            }
+                            else if (dba.SelectedDatabaseObject is Mod)
+                            {
+                                Mod Ref = (Mod)dba.SelectedDatabaseObject;
+                                //remove the config first
+                                ListContainsConfig(cfgToMove);
+                                if (ListThatContainsConfig != null)
+                                {
+                                    
+                                    //make move
+                                    ListThatContainsConfig.Remove(cfgToMove);
+                                }
+                                //convert it to a mod
+                                Mod m = new Mod()
+                                {
+                                    name = cfgToMove.name,
+                                    version = cfgToMove.version,
+                                    zipFile = cfgToMove.zipFile,
+                                    configs = cfgToMove.configs,
+                                    startAddress = cfgToMove.startAddress,
+                                    logicalDependencies = cfgToMove.logicalDependencies,
+                                    dependencies = cfgToMove.dependencies,
+                                    pictureList = cfgToMove.pictureList,
+                                    endAddress = cfgToMove.endAddress,
+                                    crc = cfgToMove.crc,
+                                    enabled = cfgToMove.enabled,
+                                    visible = cfgToMove.visible,
+                                    packageName = cfgToMove.packageName,
+                                    size = cfgToMove.size,
+                                    updateComment = cfgToMove.updateComment,
+                                    description = cfgToMove.description,
+                                    devURL = cfgToMove.devURL,
+                                    userFiles = cfgToMove.userFiles
+                                };
+                                //move it to mod list
+                                List<Mod> ModList = ListContainsMod(Ref);
+                                int index2 = ModList.IndexOf(Ref);
+                                ModList.Insert(index2, m);
+                            }
                         }
                     }
                 }
@@ -820,158 +912,66 @@ namespace RelhaxModpack
                 MessageBox.Show("Adding categories is not supported");
                 return;
             }
-            using (DatabaseAdder dba = new DatabaseAdder(DatabaseEditorMode, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList))
+            using (DatabaseAdder dba = new DatabaseAdder(DatabaseEditorMode, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList,false))
             {
                 dba.ShowDialog();
-                if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
+                if (dba.DialogResult == DialogResult.OK)
                 {
-                    if (dba.SelectedGlobalDependency == null)
-                        return;
-                    Dependency newDep = new Dependency();
-                    newDep.packageName = ObjectPackageNameTB.Text;
-                    newDep.startAddress = ObjectStartAddressTB.Text;
-                    newDep.endAddress = ObjectEndAddressTB.Text;
-                    newDep.dependencyZipFile = ObjectZipFileTB.Text;
-                    newDep.enabled = ObjectEnabledCheckBox.Checked;
-                    newDep.appendExtraction = ObjectAppendExtractionCB.Checked;
-                    newDep.devURL = ObjectDevURLTB.Text;
-                    int index = GlobalDependencies.IndexOf(dba.SelectedGlobalDependency);
-                    GlobalDependencies.Insert(index, newDep);
-                    DisplayDatabase();
-                }
-                else if (DatabaseEditorMode == EditorMode.Dependency)
-                {
-                    if (dba.SelectedDependency == null)
-                        return;
-                    Dependency newDep = new Dependency();
-                    newDep.packageName = ObjectPackageNameTB.Text;
-                    newDep.startAddress = ObjectStartAddressTB.Text;
-                    newDep.endAddress = ObjectEndAddressTB.Text;
-                    newDep.dependencyZipFile = ObjectZipFileTB.Text;
-                    newDep.enabled = ObjectEnabledCheckBox.Checked;
-                    newDep.appendExtraction = ObjectAppendExtractionCB.Checked;
-                    newDep.devURL = ObjectDevURLTB.Text;
-                    List<LogicalDependnecy> logicalDeps = (List<LogicalDependnecy>)ObjectLogicalDependenciesList.DataSource;
-                    int index = Dependencies.IndexOf(dba.SelectedDependency);
-                    Dependencies.Insert(index, newDep);
-                    DisplayDatabase();
-                }
-                else if (DatabaseEditorMode == EditorMode.LogicalDependency)
-                {
-                    if (dba.SelectedLogicalDependency == null)
-                        return;
-                    LogicalDependnecy newDep = new LogicalDependnecy();
-                    newDep.packageName = ObjectPackageNameTB.Text;
-                    newDep.startAddress = ObjectStartAddressTB.Text;
-                    newDep.endAddress = ObjectEndAddressTB.Text;
-                    newDep.dependencyZipFile = ObjectZipFileTB.Text;
-                    newDep.enabled = ObjectEnabledCheckBox.Checked;
-                    newDep.devURL = ObjectDevURLTB.Text;
-                    int index = LogicalDependencies.IndexOf(dba.SelectedLogicalDependency);
-                    LogicalDependencies.Insert(index, newDep);
-                    DisplayDatabase();
-                }
-                else if (DatabaseEditorMode == EditorMode.DBO)
-                {
-                    if (SelectedDatabaseObject is Mod)
+                    if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
                     {
-                        Mod mm = (Mod)dba.SelectedDatabaseObject;
-                        if(dba.sublist)
-                        {
-                            Config cfg = new Config();
-                            cfg.name = ObjectNameTB.Text;
-                            cfg.packageName = ObjectPackageNameTB.Text;
-                            cfg.startAddress = ObjectStartAddressTB.Text;
-                            cfg.endAddress = ObjectEndAddressTB.Text;
-                            cfg.zipFile = ObjectZipFileTB.Text;
-                            cfg.devURL = ObjectDevURLTB.Text;
-                            switch (ObjectTypeComboBox.SelectedIndex)
-                            {
-                                case 1:
-                                    cfg.type = "single1";
-                                    break;
-                                case 2:
-                                    cfg.type = "single_dropdown1";
-                                    break;
-                                case 3:
-                                    cfg.type = "single_dropdown2";
-                                    break;
-                                case 4:
-                                    cfg.type = "multi";
-                                    break;
-                            }
-                            cfg.enabled = ObjectEnabledCheckBox.Checked;
-                            cfg.visible = ObjectVisableCheckBox.Checked;
-                            cfg.description = ObjectDescTB.Text;
-                            cfg.updateComment = ObjectUpdateNotesTB.Text;
-                            mm.configs.Add(cfg);
-                        }
-                        else
-                        {
-                            List<Mod> ModList = ListContainsMod(mm);
-                            int index = ModList.IndexOf(mm);
-                            //make changes
-                            Mod m = new Mod();
-                            m.name = ObjectNameTB.Text;
-                            m.packageName = ObjectPackageNameTB.Text;
-                            m.startAddress = ObjectStartAddressTB.Text;
-                            m.endAddress = ObjectEndAddressTB.Text;
-                            m.zipFile = ObjectZipFileTB.Text;
-                            m.devURL = ObjectDevURLTB.Text;
-                            m.enabled = ObjectEnabledCheckBox.Checked;
-                            m.visible = ObjectVisableCheckBox.Checked;
-                            m.description = ObjectDescTB.Text;
-                            m.updateComment = ObjectUpdateNotesTB.Text;
-                            ModList.Insert(index, m);
-                        }
-                    }
-                    else if (SelectedDatabaseObject is Config)
-                    {
-                        if (ObjectTypeComboBox.SelectedIndex == -1 || ObjectTypeComboBox.SelectedIndex == 0)
-                        {
-                            MessageBox.Show("Invalid Index of config type");
+                        if (dba.SelectedGlobalDependency == null)
                             return;
-                        }
-                        if(dba.sublist)
+                        Dependency newDep = new Dependency();
+                        newDep.packageName = ObjectPackageNameTB.Text;
+                        newDep.startAddress = ObjectStartAddressTB.Text;
+                        newDep.endAddress = ObjectEndAddressTB.Text;
+                        newDep.dependencyZipFile = ObjectZipFileTB.Text;
+                        newDep.enabled = ObjectEnabledCheckBox.Checked;
+                        newDep.appendExtraction = ObjectAppendExtractionCB.Checked;
+                        newDep.devURL = ObjectDevURLTB.Text;
+                        int index = GlobalDependencies.IndexOf(dba.SelectedGlobalDependency);
+                        GlobalDependencies.Insert(index, newDep);
+                        DisplayDatabase();
+                    }
+                    else if (DatabaseEditorMode == EditorMode.Dependency)
+                    {
+                        if (dba.SelectedDependency == null)
+                            return;
+                        Dependency newDep = new Dependency();
+                        newDep.packageName = ObjectPackageNameTB.Text;
+                        newDep.startAddress = ObjectStartAddressTB.Text;
+                        newDep.endAddress = ObjectEndAddressTB.Text;
+                        newDep.dependencyZipFile = ObjectZipFileTB.Text;
+                        newDep.enabled = ObjectEnabledCheckBox.Checked;
+                        newDep.appendExtraction = ObjectAppendExtractionCB.Checked;
+                        newDep.devURL = ObjectDevURLTB.Text;
+                        List<LogicalDependnecy> logicalDeps = (List<LogicalDependnecy>)ObjectLogicalDependenciesList.DataSource;
+                        int index = Dependencies.IndexOf(dba.SelectedDependency);
+                        Dependencies.Insert(index, newDep);
+                        DisplayDatabase();
+                    }
+                    else if (DatabaseEditorMode == EditorMode.LogicalDependency)
+                    {
+                        if (dba.SelectedLogicalDependency == null)
+                            return;
+                        LogicalDependnecy newDep = new LogicalDependnecy();
+                        newDep.packageName = ObjectPackageNameTB.Text;
+                        newDep.startAddress = ObjectStartAddressTB.Text;
+                        newDep.endAddress = ObjectEndAddressTB.Text;
+                        newDep.dependencyZipFile = ObjectZipFileTB.Text;
+                        newDep.enabled = ObjectEnabledCheckBox.Checked;
+                        newDep.devURL = ObjectDevURLTB.Text;
+                        int index = LogicalDependencies.IndexOf(dba.SelectedLogicalDependency);
+                        LogicalDependencies.Insert(index, newDep);
+                        DisplayDatabase();
+                    }
+                    else if (DatabaseEditorMode == EditorMode.DBO)
+                    {
+                        if (SelectedDatabaseObject is Mod)
                         {
-                            Config cfg = new Config();
-                            cfg.name = ObjectNameTB.Text;
-                            cfg.packageName = ObjectPackageNameTB.Text;
-                            cfg.startAddress = ObjectStartAddressTB.Text;
-                            cfg.endAddress = ObjectEndAddressTB.Text;
-                            cfg.zipFile = ObjectZipFileTB.Text;
-                            cfg.devURL = ObjectDevURLTB.Text;
-                            switch (ObjectTypeComboBox.SelectedIndex)
+                            Mod mm = (Mod)dba.SelectedDatabaseObject;
+                            if (dba.sublist)
                             {
-                                case 1:
-                                    cfg.type = "single1";
-                                    break;
-                                case 2:
-                                    cfg.type = "single_dropdown1";
-                                    break;
-                                case 3:
-                                    cfg.type = "single_dropdown2";
-                                    break;
-                                case 4:
-                                    cfg.type = "multi";
-                                    break;
-                            }
-                            cfg.enabled = ObjectEnabledCheckBox.Checked;
-                            cfg.visible = ObjectVisableCheckBox.Checked;
-                            cfg.description = ObjectDescTB.Text;
-                            cfg.updateComment = ObjectUpdateNotesTB.Text;
-                            dba.SelectedDatabaseObject.configs.Add(cfg);
-                            //SelectedDatabaseObject.configs.Add(cfg);
-                        }
-                        else
-                        {
-                            Config cfgg = (Config)dba.SelectedDatabaseObject;
-                            ListThatContainsConfig = null;
-                            ListContainsConfig(cfgg);
-                            if (ListThatContainsConfig != null)
-                            {
-                                int index = ListThatContainsConfig.IndexOf(cfgg);
-                                //make changes
                                 Config cfg = new Config();
                                 cfg.name = ObjectNameTB.Text;
                                 cfg.packageName = ObjectPackageNameTB.Text;
@@ -998,7 +998,102 @@ namespace RelhaxModpack
                                 cfg.visible = ObjectVisableCheckBox.Checked;
                                 cfg.description = ObjectDescTB.Text;
                                 cfg.updateComment = ObjectUpdateNotesTB.Text;
-                                ListThatContainsConfig.Insert(index, cfg);
+                                mm.configs.Add(cfg);
+                            }
+                            else
+                            {
+                                List<Mod> ModList = ListContainsMod(mm);
+                                int index = ModList.IndexOf(mm);
+                                //make changes
+                                Mod m = new Mod();
+                                m.name = ObjectNameTB.Text;
+                                m.packageName = ObjectPackageNameTB.Text;
+                                m.startAddress = ObjectStartAddressTB.Text;
+                                m.endAddress = ObjectEndAddressTB.Text;
+                                m.zipFile = ObjectZipFileTB.Text;
+                                m.devURL = ObjectDevURLTB.Text;
+                                m.enabled = ObjectEnabledCheckBox.Checked;
+                                m.visible = ObjectVisableCheckBox.Checked;
+                                m.description = ObjectDescTB.Text;
+                                m.updateComment = ObjectUpdateNotesTB.Text;
+                                ModList.Insert(index, m);
+                            }
+                        }
+                        else if (SelectedDatabaseObject is Config)
+                        {
+                            if (ObjectTypeComboBox.SelectedIndex == -1 || ObjectTypeComboBox.SelectedIndex == 0)
+                            {
+                                MessageBox.Show("Invalid Index of config type");
+                                return;
+                            }
+                            if (dba.sublist)
+                            {
+                                Config cfg = new Config();
+                                cfg.name = ObjectNameTB.Text;
+                                cfg.packageName = ObjectPackageNameTB.Text;
+                                cfg.startAddress = ObjectStartAddressTB.Text;
+                                cfg.endAddress = ObjectEndAddressTB.Text;
+                                cfg.zipFile = ObjectZipFileTB.Text;
+                                cfg.devURL = ObjectDevURLTB.Text;
+                                switch (ObjectTypeComboBox.SelectedIndex)
+                                {
+                                    case 1:
+                                        cfg.type = "single1";
+                                        break;
+                                    case 2:
+                                        cfg.type = "single_dropdown1";
+                                        break;
+                                    case 3:
+                                        cfg.type = "single_dropdown2";
+                                        break;
+                                    case 4:
+                                        cfg.type = "multi";
+                                        break;
+                                }
+                                cfg.enabled = ObjectEnabledCheckBox.Checked;
+                                cfg.visible = ObjectVisableCheckBox.Checked;
+                                cfg.description = ObjectDescTB.Text;
+                                cfg.updateComment = ObjectUpdateNotesTB.Text;
+                                dba.SelectedDatabaseObject.configs.Add(cfg);
+                                //SelectedDatabaseObject.configs.Add(cfg);
+                            }
+                            else
+                            {
+                                Config cfgg = (Config)dba.SelectedDatabaseObject;
+                                ListThatContainsConfig = null;
+                                ListContainsConfig(cfgg);
+                                if (ListThatContainsConfig != null)
+                                {
+                                    int index = ListThatContainsConfig.IndexOf(cfgg);
+                                    //make changes
+                                    Config cfg = new Config();
+                                    cfg.name = ObjectNameTB.Text;
+                                    cfg.packageName = ObjectPackageNameTB.Text;
+                                    cfg.startAddress = ObjectStartAddressTB.Text;
+                                    cfg.endAddress = ObjectEndAddressTB.Text;
+                                    cfg.zipFile = ObjectZipFileTB.Text;
+                                    cfg.devURL = ObjectDevURLTB.Text;
+                                    switch (ObjectTypeComboBox.SelectedIndex)
+                                    {
+                                        case 1:
+                                            cfg.type = "single1";
+                                            break;
+                                        case 2:
+                                            cfg.type = "single_dropdown1";
+                                            break;
+                                        case 3:
+                                            cfg.type = "single_dropdown2";
+                                            break;
+                                        case 4:
+                                            cfg.type = "multi";
+                                            break;
+                                    }
+                                    cfg.enabled = ObjectEnabledCheckBox.Checked;
+                                    cfg.visible = ObjectVisableCheckBox.Checked;
+                                    cfg.description = ObjectDescTB.Text;
+                                    cfg.updateComment = ObjectUpdateNotesTB.Text;
+                                    ListThatContainsConfig.Insert(index, cfg);
+                                }
                             }
                         }
                     }
@@ -1410,6 +1505,45 @@ namespace RelhaxModpack
             PictureURLTB.Text = med.URL;
             MovePictureTB.Text = "" + SelectedDatabaseObject.pictureList.IndexOf(med);
             AddPictureTB.Text = "" + SelectedDatabaseObject.pictureList.IndexOf(med);
+        }
+
+        private void AddUserdatasButton_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Confirm you wish to add userdata entry", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+            SelectedDatabaseObject.userFiles.Add(ObjectUserdatasTB.Text);
+            ObjectUserdatasList.DataSource = null;
+            ObjectUserdatasList.Items.Clear();
+            ObjectUserdatasList.DataSource = SelectedDatabaseObject.userFiles;
+        }
+
+        private void RemoveUserdatasButton_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Confirm you wish to remove userdata entry", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+            int index = SelectedDatabaseObject.userFiles.IndexOf((string)ObjectUserdatasList.SelectedItem);
+            SelectedDatabaseObject.userFiles.RemoveAt(index);
+            ObjectUserdatasList.DataSource = null;
+            ObjectUserdatasList.Items.Clear();
+            ObjectUserdatasList.DataSource = SelectedDatabaseObject.userFiles;
+        }
+
+        private void ObjectUserdatasList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ObjectUserdatasList.DataSource == null)
+                return;
+            ObjectUserdatasTB.Text = ObjectUserdatasList.SelectedItem.ToString();
+        }
+
+        private void EditUserdatasButton_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Confirm you wish to edit userdata entry", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+            int index = SelectedDatabaseObject.userFiles.IndexOf((string)ObjectUserdatasList.SelectedItem);
+            SelectedDatabaseObject.userFiles[index] = ObjectUserdatasTB.Text;
+            ObjectUserdatasList.DataSource = null;
+            ObjectUserdatasList.Items.Clear();
+            ObjectUserdatasList.DataSource = SelectedDatabaseObject.userFiles;
         }
     }
 }

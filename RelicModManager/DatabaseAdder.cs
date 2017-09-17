@@ -14,7 +14,7 @@ namespace RelhaxModpack
         private List<Config> configList;
         private bool ignoreResult = true;
         public bool sublist = false;
-        public DatabaseAdder(EditorMode mode, List<Dependency> GlobalDependency, List<Dependency> Dependencies, List<LogicalDependnecy> LogicalDepdnedncies, List<Category> ParsedCatList)
+        public DatabaseAdder(EditorMode mode, List<Dependency> GlobalDependency, List<Dependency> Dependencies, List<LogicalDependnecy> LogicalDepdnedncies, List<Category> ParsedCatList, bool moveMode)
         {
             InitializeComponent();
             Mode = mode;
@@ -43,6 +43,11 @@ namespace RelhaxModpack
                 AddUnderCB.DataSource = ParsedCatList;
                 ModPanel.Enabled = false;
                 ConfigPanel.Enabled = false;
+                if(moveMode)
+                {
+                    SelectModePanel.Visible = false;
+                    AddUnderLabel.Text = "Move to the same level as...";
+                }
             }
         }
 
@@ -121,6 +126,7 @@ namespace RelhaxModpack
         private void applyButton_Click(object sender, EventArgs e)
         {
             ignoreResult = false;
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
