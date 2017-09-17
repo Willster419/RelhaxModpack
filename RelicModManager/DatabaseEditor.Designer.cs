@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DatabaseEditor));
             this.DatabaseTreeView = new System.Windows.Forms.TreeView();
             this.ObjectName = new System.Windows.Forms.Label();
             this.ObjectNameTB = new System.Windows.Forms.TextBox();
@@ -883,6 +884,8 @@
             this.Controls.Add(this.SaveDatabaseButton);
             this.Controls.Add(this.DatabaseEditPanel);
             this.Controls.Add(this.DatabasePanelTree);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "DatabaseEditor";
             this.Text = "DatabaseEditor";

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DatabaseAdder));
             this.ConfirmAddLabel = new System.Windows.Forms.Label();
             this.ConfirmAddNo = new System.Windows.Forms.RadioButton();
             this.ConfirmAddYes = new System.Windows.Forms.RadioButton();
@@ -44,9 +45,9 @@
             this.ConfigCB = new System.Windows.Forms.ComboBox();
             this.applyButton = new System.Windows.Forms.Button();
             this.SelectModePanel = new System.Windows.Forms.Panel();
-            this.SelectModeLabel = new System.Windows.Forms.Label();
-            this.SameLevelRB = new System.Windows.Forms.RadioButton();
             this.NewLevelRB = new System.Windows.Forms.RadioButton();
+            this.SameLevelRB = new System.Windows.Forms.RadioButton();
+            this.SelectModeLabel = new System.Windows.Forms.Label();
             this.ConfirmAddPanel.SuspendLayout();
             this.AddUnderPanel.SuspendLayout();
             this.ModPanel.SuspendLayout();
@@ -211,14 +212,17 @@
             this.SelectModePanel.TabIndex = 7;
             this.SelectModePanel.Visible = false;
             // 
-            // SelectModeLabel
+            // NewLevelRB
             // 
-            this.SelectModeLabel.AutoSize = true;
-            this.SelectModeLabel.Location = new System.Drawing.Point(0, 1);
-            this.SelectModeLabel.Name = "SelectModeLabel";
-            this.SelectModeLabel.Size = new System.Drawing.Size(188, 13);
-            this.SelectModeLabel.TabIndex = 0;
-            this.SelectModeLabel.Text = "Adding at same level or new sublevel?";
+            this.NewLevelRB.AutoSize = true;
+            this.NewLevelRB.Location = new System.Drawing.Point(85, 17);
+            this.NewLevelRB.Name = "NewLevelRB";
+            this.NewLevelRB.Size = new System.Drawing.Size(70, 17);
+            this.NewLevelRB.TabIndex = 2;
+            this.NewLevelRB.TabStop = true;
+            this.NewLevelRB.Text = "new level";
+            this.NewLevelRB.UseVisualStyleBackColor = true;
+            this.NewLevelRB.CheckedChanged += new System.EventHandler(this.NewLevelRB_CheckedChanged);
             // 
             // SameLevelRB
             // 
@@ -232,17 +236,14 @@
             this.SameLevelRB.UseVisualStyleBackColor = true;
             this.SameLevelRB.CheckedChanged += new System.EventHandler(this.SameLevelRB_CheckedChanged);
             // 
-            // NewLevelRB
+            // SelectModeLabel
             // 
-            this.NewLevelRB.AutoSize = true;
-            this.NewLevelRB.Location = new System.Drawing.Point(85, 17);
-            this.NewLevelRB.Name = "NewLevelRB";
-            this.NewLevelRB.Size = new System.Drawing.Size(70, 17);
-            this.NewLevelRB.TabIndex = 2;
-            this.NewLevelRB.TabStop = true;
-            this.NewLevelRB.Text = "new level";
-            this.NewLevelRB.UseVisualStyleBackColor = true;
-            this.NewLevelRB.CheckedChanged += new System.EventHandler(this.NewLevelRB_CheckedChanged);
+            this.SelectModeLabel.AutoSize = true;
+            this.SelectModeLabel.Location = new System.Drawing.Point(0, 1);
+            this.SelectModeLabel.Name = "SelectModeLabel";
+            this.SelectModeLabel.Size = new System.Drawing.Size(188, 13);
+            this.SelectModeLabel.TabIndex = 0;
+            this.SelectModeLabel.Text = "Adding at same level or new sublevel?";
             // 
             // DatabaseAdder
             // 
@@ -255,6 +256,9 @@
             this.Controls.Add(this.ModPanel);
             this.Controls.Add(this.AddUnderPanel);
             this.Controls.Add(this.ConfirmAddPanel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "DatabaseAdder";
             this.Text = "DatabaseAdder";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DatabaseAdder_FormClosing);
