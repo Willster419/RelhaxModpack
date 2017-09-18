@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace RelhaxModpack
 {
@@ -33,6 +34,7 @@ namespace RelhaxModpack
         private StringBuilder InUseSB;
         private List<Config> ListThatContainsConfig;
         private bool UnsavedModifications = false;
+        List<string> allPackageNames = new List<string>();
 
         private EditorMode DatabaseEditorMode;
 
@@ -63,11 +65,15 @@ namespace RelhaxModpack
         //loads the database depending on the mode of the radiobuttons
         private void DisplayDatabase(bool resetUI = true)
         {
-            if(DatabaseEditorMode == EditorMode.GlobalDependnecy)
+            SearchBox.Items.Clear();
+            allPackageNames.Clear();
+            if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
             {
                 DatabaseTreeView.Nodes.Clear();
                 foreach(Dependency d in GlobalDependencies)
                 {
+                    SearchBox.Items.Add(d.packageName);
+                    allPackageNames.Add(d.packageName);
                     DatabaseTreeView.Nodes.Add(new DatabaseTreeNode(d, (int)DatabaseEditorMode));
                 }
             }
@@ -76,6 +82,8 @@ namespace RelhaxModpack
                 DatabaseTreeView.Nodes.Clear();
                 foreach (Dependency d in Dependencies)
                 {
+                    SearchBox.Items.Add(d.packageName);
+                    allPackageNames.Add(d.packageName);
                     DatabaseTreeView.Nodes.Add(new DatabaseTreeNode(d, (int)DatabaseEditorMode));
                 }
             }
@@ -84,6 +92,8 @@ namespace RelhaxModpack
                 DatabaseTreeView.Nodes.Clear();
                 foreach (LogicalDependnecy d in LogicalDependencies)
                 {
+                    SearchBox.Items.Add(d.packageName);
+                    allPackageNames.Add(d.packageName);
                     DatabaseTreeView.Nodes.Add(new DatabaseTreeNode(d, (int)DatabaseEditorMode));
                 }
             }
@@ -92,10 +102,14 @@ namespace RelhaxModpack
                 DatabaseTreeView.Nodes.Clear();
                 foreach(Category cat in ParsedCategoryList)
                 {
+                    SearchBox.Items.Add(cat.name);
+                    allPackageNames.Add(cat.name);
                     DatabaseTreeNode catNode = new DatabaseTreeNode(cat, 4);
                     DatabaseTreeView.Nodes.Add(catNode);
                     foreach(Mod m in cat.mods)
                     {
+                        SearchBox.Items.Add(m.packageName);
+                        allPackageNames.Add(m.packageName);
                         DatabaseTreeNode modNode = new DatabaseTreeNode(m, (int)DatabaseEditorMode);
                         catNode.Nodes.Add(modNode);
                         if (SelectedDatabaseObject != null && SelectedDatabaseObject.packageName.Equals(m.packageName))
@@ -103,6 +117,7 @@ namespace RelhaxModpack
                         DisplayDatabaseConfigs(modNode, m.configs);
                     }
                 }
+                
             }
             if(resetUI)
                 ResetUI();
@@ -157,6 +172,8 @@ namespace RelhaxModpack
         {
             foreach(Config c in configs)
             {
+                SearchBox.Items.Add(c.packageName);
+                allPackageNames.Add(c.packageName);
                 DatabaseTreeNode ConfigParrent = new DatabaseTreeNode(c, (int)DatabaseEditorMode);
                 parrent.Nodes.Add(ConfigParrent);
                 if (SelectedDatabaseObject != null && SelectedDatabaseObject.packageName.Equals(c.packageName))
@@ -435,6 +452,8 @@ namespace RelhaxModpack
         private void DatabaseTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             DatabaseTreeView.SelectedNode = e.Node;
+            DatabaseTreeView.Focus();
+            e.Node.ForeColor = System.Drawing.Color.Blue;
             currentSelectedIndex = DatabaseTreeView.SelectedNode.Index;
             //DatabaseTreeView.SelectedNode.BackColor = Color.Blue;
             //DatabaseTreeView.SelectedNode.ForeColor = Color.Blue;
@@ -1719,6 +1738,99 @@ namespace RelhaxModpack
                         d.DatabasePackageLogic.Add(dl);
                     }
                 }
+            }
+        }
+
+        private void SearchBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void SearchBox_TextUpdate(object sender, EventArgs e)
+        {
+            ComboBox cb = (ComboBox)sender;
+            string currentText = cb.Text;
+            cb.Items.Clear();
+            
+            foreach(string s in allPackageNames)
+            {
+                if (Regex.IsMatch(s, cb.Text,RegexOptions.IgnoreCase))
+                {
+                    cb.Items.Add(s);
+                }
+                else if (cb.Text.Equals(""))
+                {
+                    cb.Items.Add(s);
+                }
+            }
+            cb.DroppedDown = true;
+            Cursor.Current = Cursors.Default;
+            cb.IntegralHeight = true;
+            // set the position of the cursor
+            cb.Text = currentText;
+            cb.SelectionStart = currentText.Length;
+            cb.SelectionLength = 0;
+        }
+
+        private void SearchBox_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            ComboBox cb = (ComboBox)sender;
+            string packageNameSearch = "";
+            packageNameSearch = (string)cb.SelectedItem;
+            foreach(DatabaseTreeNode node in DatabaseTreeView.Nodes)
+            {
+                if(node.GlobalDependency != null)
+                {
+                    if(node.GlobalDependency.packageName.Equals(packageNameSearch))
+                    {
+                        DatabaseTreeView_NodeMouseClick(DatabaseTreeView, new TreeNodeMouseClickEventArgs(node, MouseButtons.Left, 0, 0, 0));
+                    }
+                }
+                else if (node.Dependency != null)
+                {
+                    if (node.Dependency.packageName.Equals(packageNameSearch))
+                    {
+                        DatabaseTreeView_NodeMouseClick(DatabaseTreeView, new TreeNodeMouseClickEventArgs(node, MouseButtons.Left, 0, 0, 0));
+                    }
+                }
+                else if (node.LogicalDependency != null)
+                {
+                    if (node.LogicalDependency.packageName.Equals(packageNameSearch))
+                    {
+                        DatabaseTreeView_NodeMouseClick(DatabaseTreeView, new TreeNodeMouseClickEventArgs(node, MouseButtons.Left, 0, 0, 0));
+                    }
+                }
+                else if (node.Category != null)
+                {
+                    if (node.Category.name.Equals(packageNameSearch))
+                    {
+                        DatabaseTreeView_NodeMouseClick(DatabaseTreeView, new TreeNodeMouseClickEventArgs(node, MouseButtons.Left, 0, 0, 0));
+                    }
+                }
+                else if (node.DatabaseObject != null)
+                {
+                    if (node.DatabaseObject.packageName.Equals(packageNameSearch))
+                    {
+                        DatabaseTreeView_NodeMouseClick(DatabaseTreeView, new TreeNodeMouseClickEventArgs(node, MouseButtons.Left, 0, 0, 0));
+                    }
+                }
+                if (node.Nodes.Count > 0)
+                    SearchBoxConfig(node.Nodes, packageNameSearch);
+            }
+        }
+        private void SearchBoxConfig(TreeNodeCollection nodes, string packageNameSearch)
+        {
+            foreach (DatabaseTreeNode node in nodes)
+            {
+                if (node.DatabaseObject != null)
+                {
+                    if (node.DatabaseObject.packageName.Equals(packageNameSearch))
+                    {
+                        DatabaseTreeView_NodeMouseClick(DatabaseTreeView, new TreeNodeMouseClickEventArgs(node, MouseButtons.Left, 0, 0, 0));
+                    }
+                }
+                if (node.Nodes.Count > 0)
+                    SearchBoxConfig(node.Nodes, packageNameSearch);
             }
         }
     }

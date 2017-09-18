@@ -105,6 +105,7 @@
             this.OpenDatabaseDialog = new System.Windows.Forms.OpenFileDialog();
             this.SaveDatabaseDialog = new System.Windows.Forms.SaveFileDialog();
             this.MoveButton = new System.Windows.Forms.Button();
+            this.SearchBox = new System.Windows.Forms.ComboBox();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.ObjectPropertiesTabControl.SuspendLayout();
@@ -118,7 +119,9 @@
             // 
             // DatabaseTreeView
             // 
+            this.DatabaseTreeView.BackColor = System.Drawing.SystemColors.Window;
             this.DatabaseTreeView.ForeColor = System.Drawing.Color.Blue;
+            this.DatabaseTreeView.HideSelection = false;
             this.DatabaseTreeView.Location = new System.Drawing.Point(3, 3);
             this.DatabaseTreeView.Name = "DatabaseTreeView";
             this.DatabaseTreeView.Size = new System.Drawing.Size(497, 592);
@@ -868,11 +871,23 @@
             this.MoveButton.UseVisualStyleBackColor = true;
             this.MoveButton.Click += new System.EventHandler(this.MoveButton_Click);
             // 
+            // SearchBox
+            // 
+            this.SearchBox.FormattingEnabled = true;
+            this.SearchBox.Location = new System.Drawing.Point(815, 3);
+            this.SearchBox.Name = "SearchBox";
+            this.SearchBox.Size = new System.Drawing.Size(255, 21);
+            this.SearchBox.TabIndex = 29;
+            this.SearchBox.SelectedIndexChanged += new System.EventHandler(this.SearchBox_SelectedIndexChanged);
+            this.SearchBox.SelectionChangeCommitted += new System.EventHandler(this.SearchBox_SelectionChangeCommitted);
+            this.SearchBox.TextUpdate += new System.EventHandler(this.SearchBox_TextUpdate);
+            // 
             // DatabaseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1078, 671);
+            this.Controls.Add(this.SearchBox);
             this.Controls.Add(this.MoveButton);
             this.Controls.Add(this.LogicalDependencyRB);
             this.Controls.Add(this.DependencyRB);
@@ -989,5 +1004,6 @@
         private System.Windows.Forms.ComboBox PicturesTypeCBox;
         private System.Windows.Forms.TextBox ObjectVersionTB;
         private System.Windows.Forms.Label ObjectVersionLabel;
+        private System.Windows.Forms.ComboBox SearchBox;
     }
 }
