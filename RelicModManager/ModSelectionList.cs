@@ -2570,23 +2570,23 @@ namespace RelhaxModpack
             }
             if (filteredItems == null)
             {
-                ignoreSelections = true;
+                //ignoreSelections = true;
                 searchComboBox.DataSource = completeModSearchList;
                 searchComboBox.SelectedIndex = -1;
             }
             else if (filteredItems.Count == 0)
             {
-                ignoreSelections = true;
+                //ignoreSelections = true;
                 searchComboBox.ForeColor = System.Drawing.Color.Red;
             }
             else
             {
                 ignoreSelections = false;
                 searchComboBox.ForeColor = System.Drawing.Color.Black;
-                searchComboBox.SelectedIndexChanged -= searchCB_SelectedIndexChanged;
+                //searchComboBox.SelectedIndexChanged -= searchCB_SelectedIndexChanged;
                 searchComboBox.DataSource = filteredItems;
-                searchComboBox.SelectedIndex = -1;
-                searchComboBox.SelectedIndexChanged += searchCB_SelectedIndexChanged;
+                //searchComboBox.SelectedIndex = -1;
+                //searchComboBox.SelectedIndexChanged += searchCB_SelectedIndexChanged;
                 searchComboBox.DroppedDown = true;
             }
             Cursor.Current = Cursors.Default;
@@ -2596,12 +2596,12 @@ namespace RelhaxModpack
             searchComboBox.SelectionStart = filter_param.Length;
             searchComboBox.SelectionLength = 0;
         }
-
+        /*
         private void searchCB_DropDown(object sender, EventArgs e)
         {
             searchComboBox_TextUpdate(sender, null);
         }
-
+        
         private void searchCB_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (mouseCLick)
@@ -2613,7 +2613,7 @@ namespace RelhaxModpack
                 ignoreSelections = ignoreSelectionBack;
             }
         }
-
+        */
         private void searchCB_SelectionChangeCommitted(object sender, EventArgs e)
         {
             ComboBox sendah = (ComboBox)sender;
@@ -2630,7 +2630,6 @@ namespace RelhaxModpack
             if (Settings.sView == Settings.SelectionView.defaultt)
             {
                 ModFormCheckBox c = (ModFormCheckBox)m.modFormCheckBox;
-                //tp.ScrollControlIntoView(c);
                 c.Focus();
             }
             else if (Settings.sView == Settings.SelectionView.legacy)
@@ -2641,7 +2640,7 @@ namespace RelhaxModpack
             }
             mouseCLick = false;
         }
-        
+
         /*
         // call expected with Mod or Config structure
         private void handleBackColorOfSearchResult(object sender)
@@ -2771,7 +2770,7 @@ namespace RelhaxModpack
             mouseCLick = false;
         }
         */
-
+        /*
         private void searchCB_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -2789,6 +2788,13 @@ namespace RelhaxModpack
             if (e.Button == MouseButtons.Left)
             {
                 mouseCLick = true;
+            }
+        }*/
+        private void searchCB_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                searchCB_SelectionChangeCommitted(sender, null);
             }
         }
     }

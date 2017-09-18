@@ -232,12 +232,9 @@ namespace RelhaxModpack
             this.searchCB.Name = "searchCB";
             this.searchCB.Size = new System.Drawing.Size(304, 21);
             this.searchCB.TabIndex = 18;
-            this.searchCB.DropDown += new System.EventHandler(this.searchCB_DropDown);
-            this.searchCB.SelectedIndexChanged += new System.EventHandler(this.searchCB_SelectedIndexChanged);
             this.searchCB.SelectionChangeCommitted += new System.EventHandler(this.searchCB_SelectionChangeCommitted);
             this.searchCB.TextUpdate += new System.EventHandler(this.searchComboBox_TextUpdate);
             this.searchCB.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchCB_KeyDown);
-            this.searchCB.MouseClick += new System.Windows.Forms.MouseEventHandler(this.searchCB_MouseClick);
             // 
             // ModSelectionList
             // 
