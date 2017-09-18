@@ -217,6 +217,8 @@ namespace RelhaxModpack
                 SelectedGlobalDependency.startAddress = ObjectStartAddressTB.Text;
                 SelectedGlobalDependency.endAddress = ObjectEndAddressTB.Text;
                 SelectedGlobalDependency.devURL = ObjectDevURLTB.Text;
+                if (!SelectedGlobalDependency.dependencyZipFile.Equals(ObjectZipFile.Text))
+                    SelectedGlobalDependency.dependencyZipCRC = "f";
                 SelectedGlobalDependency.dependencyZipFile = ObjectZipFileTB.Text;
                 SelectedGlobalDependency.enabled = ObjectEnabledCheckBox.Checked;
                 SelectedGlobalDependency.appendExtraction = ObjectAppendExtractionCB.Checked;
@@ -229,6 +231,8 @@ namespace RelhaxModpack
                 SelectedDependency.startAddress = ObjectStartAddressTB.Text;
                 SelectedDependency.endAddress = ObjectEndAddressTB.Text;
                 SelectedDependency.devURL = ObjectDevURLTB.Text;
+                if (!SelectedDependency.dependencyZipFile.Equals(ObjectZipFile.Text))
+                    SelectedDependency.dependencyZipCRC = "f";
                 SelectedDependency.dependencyZipFile = ObjectZipFileTB.Text;
                 SelectedDependency.enabled = ObjectEnabledCheckBox.Checked;
                 SelectedDependency.appendExtraction = ObjectAppendExtractionCB.Checked;
@@ -241,6 +245,8 @@ namespace RelhaxModpack
                 SelectedLogicalDependency.startAddress = ObjectStartAddressTB.Text;
                 SelectedLogicalDependency.endAddress = ObjectEndAddressTB.Text;
                 SelectedLogicalDependency.devURL = ObjectDevURLTB.Text;
+                if (!SelectedLogicalDependency.dependencyZipFile.Equals(ObjectZipFile.Text))
+                    SelectedLogicalDependency.dependencyZipCRC = "f";
                 SelectedLogicalDependency.dependencyZipFile = ObjectZipFileTB.Text;
                 SelectedLogicalDependency.enabled = ObjectEnabledCheckBox.Checked;
                 LogicalDependencies[index] = SelectedLogicalDependency;
@@ -263,6 +269,8 @@ namespace RelhaxModpack
                     m.packageName = ObjectPackageNameTB.Text;
                     m.startAddress = ObjectStartAddressTB.Text;
                     m.endAddress = ObjectEndAddressTB.Text;
+                    if (!SelectedDatabaseObject.zipFile.Equals(ObjectZipFile.Text))
+                        m.crc = "f";
                     m.zipFile = ObjectZipFileTB.Text;
                     m.devURL = ObjectDevURLTB.Text;
                     m.version = ObjectVersionTB.Text;
@@ -290,6 +298,8 @@ namespace RelhaxModpack
                         cfg.packageName = ObjectPackageNameTB.Text;
                         cfg.startAddress = ObjectStartAddressTB.Text;
                         cfg.endAddress = ObjectEndAddressTB.Text;
+                        if (!SelectedDatabaseObject.zipFile.Equals(ObjectZipFile.Text))
+                            cfg.crc = "f";
                         cfg.zipFile = ObjectZipFileTB.Text;
                         cfg.devURL = ObjectDevURLTB.Text;
                         cfg.version = ObjectVersionTB.Text;
