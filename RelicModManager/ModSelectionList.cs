@@ -20,7 +20,7 @@ namespace RelhaxModpack
         public List<Dependency> globalDependencies;
         public List<Dependency> dependencies;
         public List<LogicalDependnecy> logicalDependencies;
-        public List<Mod> completeModSearchList;
+        public List<DatabaseObject> completeModSearchList;
         // public List<CompleteModSearch> completeModSearchList_New;
         // public CompleteModSearch lastSearchFieldInSelectionView;
         private bool loadingConfig = false;
@@ -315,7 +315,7 @@ namespace RelhaxModpack
             }
             loadingConfig = true;
             Utils.appendToLog("Loading ModSelectionList with view " + Settings.sView);
-            completeModSearchList = new List<Mod>();
+            completeModSearchList = new List<DatabaseObject>();
             // completeModSearchList_New = new List<CompleteModSearch>();
             foreach (TabPage t in this.modTabGroups.TabPages)
             {
@@ -519,6 +519,7 @@ namespace RelhaxModpack
                     if (parentIsMod)
                     {
                         // completeModSearchList_New.Add(con);
+                        completeModSearchList.Add(con);
                         con.parent = m;
                     }
                     else
@@ -1481,6 +1482,7 @@ namespace RelhaxModpack
                     {
                         // completeModSearchList_New.Add(con);
                         con.parent = m;
+                        completeModSearchList.Add(con);
                     }
                     else
                     {
@@ -2557,12 +2559,30 @@ namespace RelhaxModpack
         {
             ComboBox searchComboBox = (ComboBox)sender;
             string filter_param = searchComboBox.Text;
-            List<Mod> filteredItems = null;
+            List<DatabaseObject> filteredItems = null;
             // List<CompleteModSearch> filteredItems_New = null;
             if (!String.IsNullOrWhiteSpace(filter_param))
             {
                 String[] filtered_parts = filter_param.Split('*');
-                filteredItems = completeModSearchList;
+                //force filteredItems to be mod or first level config
+                filteredItems = new List<DatabaseObject>(completeModSearchList);
+                /*
+                filteredItems = new List<DatabaseObject>();
+                foreach (Category cat in parsedCatagoryList)
+                {
+                    foreach(Mod m in cat.mods)
+                    {
+                        filteredItems.Add(m);
+                        if(m.configs.Count > 0)
+                        {
+                            foreach(Config c in m.configs)
+                            {
+                                filteredItems.Add(c);
+                            }
+                        }
+                    }
+                }
+                */
                 foreach (var f in filtered_parts)
                 {
                     filteredItems = filteredItems.FindAll(x => x.name.ToLower().Contains(f.ToLower()));
@@ -2621,24 +2641,73 @@ namespace RelhaxModpack
             {
                 return;
             }
-            Mod m = (Mod)sendah.SelectedItem;
-            if (modTabGroups.TabPages.Contains(m.tabIndex))
-            {
-                modTabGroups.SelectedTab = m.tabIndex;
-            }
-            TabPage tp = modTabGroups.SelectedTab;
             if (Settings.sView == Settings.SelectionView.defaultt)
             {
-                ModFormCheckBox c = (ModFormCheckBox)m.modFormCheckBox;
-                c.Focus();
+                if(sendah.SelectedItem is Mod)
+                {
+                    Mod m = (Mod)sendah.SelectedItem;
+                    if (modTabGroups.TabPages.Contains(m.tabIndex))
+                    {
+                        modTabGroups.SelectedTab = m.tabIndex;
+                    }
+                    ModFormCheckBox c = (ModFormCheckBox)m.modFormCheckBox;
+                    c.Focus();
+                    
+                }
+                else if (sendah.SelectedItem is Config)
+                {
+                    Config c = (Config)sendah.SelectedItem;
+                    if (modTabGroups.TabPages.Contains(c.parentMod.tabIndex))
+                    {
+                        modTabGroups.SelectedTab = c.parentMod.tabIndex;
+                    }
+                    if(c.configUIComponent is ConfigFormCheckBox)
+                    {
+                        ConfigFormCheckBox cb = (ConfigFormCheckBox)c.configUIComponent;
+                        cb.Focus();
+                    }
+                    else if (c.configUIComponent is ConfigFormComboBox)
+                    {
+                        ConfigFormComboBox cb = (ConfigFormComboBox)c.configUIComponent;
+                        cb.Focus();
+                    }
+                    else if (c.configUIComponent is ConfigFormRadioButton)
+                    {
+                        //this one is the problem
+                        ConfigFormRadioButton cb = (ConfigFormRadioButton)c.configUIComponent;
+                        cb.CheckedChanged -= configControlRB_CheckedChanged;
+                        bool realChecked = cb.Checked;
+                        cb.Focus();
+                        cb.Checked = realChecked;
+                        cb.CheckedChanged += configControlRB_CheckedChanged;
+                    }
+                }
             }
             else if (Settings.sView == Settings.SelectionView.legacy)
             {
-                ModWPFCheckBox c = (ModWPFCheckBox)m.modFormCheckBox;
-                c.Focus();
-                this.ModSelectionList_SizeChanged(null, null);
+                if (sendah.SelectedItem is Mod)
+                {
+                    Mod m = (Mod)sendah.SelectedItem;
+                    if (modTabGroups.TabPages.Contains(m.tabIndex))
+                    {
+                        modTabGroups.SelectedTab = m.tabIndex;
+                    }
+                    ModWPFCheckBox c = (ModWPFCheckBox)m.modFormCheckBox;
+                    c.Focus();
+                    this.ModSelectionList_SizeChanged(null, null);
+                }
+                else if (sendah.SelectedItem is Config)
+                {
+                    Config c = (Config)sendah.SelectedItem;
+                    if(modTabGroups.TabPages.Contains(c.parentMod.tabIndex))
+                    {
+                        modTabGroups.SelectedTab = c.parentMod.tabIndex;
+                    }
+                    System.Windows.Controls.Control con = (System.Windows.Controls.Control)c.configUIComponent;
+                    con.Focus();
+                    this.ModSelectionList_SizeChanged(null, null);
+                }
             }
-            mouseCLick = false;
         }
 
         /*
