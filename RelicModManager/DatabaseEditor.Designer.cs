@@ -878,7 +878,6 @@
             this.SearchBox.Name = "SearchBox";
             this.SearchBox.Size = new System.Drawing.Size(255, 21);
             this.SearchBox.TabIndex = 29;
-            this.SearchBox.SelectedIndexChanged += new System.EventHandler(this.SearchBox_SelectedIndexChanged);
             this.SearchBox.SelectionChangeCommitted += new System.EventHandler(this.SearchBox_SelectionChangeCommitted);
             this.SearchBox.TextUpdate += new System.EventHandler(this.SearchBox_TextUpdate);
             // 

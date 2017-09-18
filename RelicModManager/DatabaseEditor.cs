@@ -1741,11 +1741,6 @@ namespace RelhaxModpack
             }
         }
 
-        private void SearchBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-        }
-
         private void SearchBox_TextUpdate(object sender, EventArgs e)
         {
             ComboBox cb = (ComboBox)sender;
