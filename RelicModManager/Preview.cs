@@ -134,6 +134,7 @@ namespace RelhaxModpack
                 return;
             }
             this.displayMedia(medias[currentlySelected]);
+            Preview_SizeChanged(null, null);
         }
         //load the previous picture in the list
         private void previousPicButton_Click(object sender, EventArgs e)
@@ -145,6 +146,7 @@ namespace RelhaxModpack
                 return;
             }
             this.displayMedia(medias[currentlySelected]);
+            Preview_SizeChanged(null, null);
         }
         //handler for if the user changes the size of the window
         private void Preview_SizeChanged(object sender, EventArgs e)
@@ -163,6 +165,29 @@ namespace RelhaxModpack
                     break;
                 case Settings.FontSize.font175:
                     scale = 75;
+                    break;
+                case Settings.FontSize.font225:
+                    scale = 120;
+                    break;
+                case Settings.FontSize.font275:
+                    scale = 165;
+                    break;
+                case Settings.FontSize.DPI125:
+                    scale = 30;
+                    break;
+                case Settings.FontSize.DPI175:
+                    scale = 75;
+                    break;
+                case Settings.FontSize.DPI225:
+                    scale = 120;
+                    break;
+                case Settings.FontSize.DPI275:
+                    scale = 165;
+                    break;
+                case Settings.FontSize.DPIAUTO:
+                    int settingsScale = (int)Settings.scaleSize;
+                    scale = settingsScale * 45;
+                    scale = scale + 30;
                     break;
             }
             Size tempSize = new Size(0,0);

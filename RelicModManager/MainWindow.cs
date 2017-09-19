@@ -1610,9 +1610,14 @@ namespace RelhaxModpack
             fontSize100.Enabled = enableToggle;
             fontSize125.Enabled = enableToggle;
             fontSize175.Enabled = enableToggle;
+            fontSize225.Enabled = enableToggle;
+            fontSize275.Enabled = enableToggle;
             DPI100.Enabled = enableToggle;
             DPI125.Enabled = enableToggle;
             DPI175.Enabled = enableToggle;
+            DPI225.Enabled = enableToggle;
+            DPI275.Enabled = enableToggle;
+            DPIAUTO.Enabled = enableToggle;
             clearCacheCB.Enabled = enableToggle;
             clearLogFilesCB.Enabled = enableToggle;
         }
