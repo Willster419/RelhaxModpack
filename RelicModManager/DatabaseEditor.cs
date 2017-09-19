@@ -1865,6 +1865,7 @@ namespace RelhaxModpack
             if(ObjectZipFileTB.Text.Equals(""))
             {
                 MessageBox.Show("Nothing to download");
+                return;
             }
             string DownloadURL = ObjectStartAddressTB.Text + ObjectZipFileTB.Text + ObjectEndAddressTB.Text;
             DatabaseDownloadEditor editor = new DatabaseDownloadEditor(DownloadURL, Path.GetFileName(ObjectZipFileTB.Text));
