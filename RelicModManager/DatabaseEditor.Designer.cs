@@ -891,9 +891,9 @@
             // SearchBox
             // 
             this.SearchBox.FormattingEnabled = true;
-            this.SearchBox.Location = new System.Drawing.Point(815, 3);
+            this.SearchBox.Location = new System.Drawing.Point(523, 3);
             this.SearchBox.Name = "SearchBox";
-            this.SearchBox.Size = new System.Drawing.Size(255, 21);
+            this.SearchBox.Size = new System.Drawing.Size(547, 21);
             this.SearchBox.TabIndex = 29;
             this.SearchBox.SelectionChangeCommitted += new System.EventHandler(this.SearchBox_SelectionChangeCommitted);
             this.SearchBox.TextUpdate += new System.EventHandler(this.SearchBox_TextUpdate);

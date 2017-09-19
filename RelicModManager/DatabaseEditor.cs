@@ -1771,14 +1771,25 @@ namespace RelhaxModpack
             ComboBox cb = (ComboBox)sender;
             string currentText = cb.Text;
             cb.Items.Clear();
-            List<string> filteredItems = null;
-            String[] filtered_parts = currentText.Split('*');
-            filteredItems = new List<string>(allPackageNames);
-            foreach (var f in filtered_parts)
+            foreach (string s in allPackageNames)
             {
-                filteredItems = filteredItems.FindAll(x => x.ToLower().Contains(f.ToLower()));
+                if (Regex.IsMatch(s, cb.Text,RegexOptions.IgnoreCase))
+                {
+                    cb.Items.Add(s);
+                }
+                else if (cb.Text.Equals(""))
+                {
+                    cb.Items.Add(s);
+                }
             }
-            cb.Items.AddRange(filteredItems.ToArray());
+            if (cb.Items.Count == 0)
+            {
+                cb.BackColor = System.Drawing.Color.Red;
+                cb.Items.Add("none");
+                cb.SelectedIndex = 0;
+            }
+            else
+                cb.BackColor = System.Drawing.SystemColors.Window;
             cb.DroppedDown = true;
             Cursor.Current = Cursors.Default;
             cb.IntegralHeight = true;
@@ -1791,6 +1802,8 @@ namespace RelhaxModpack
         private void SearchBox_SelectionChangeCommitted(object sender, EventArgs e)
         {
             ComboBox cb = (ComboBox)sender;
+            if (cb.SelectedIndex == -1)
+                return;
             string packageNameSearch = "";
             packageNameSearch = (string)cb.SelectedItem;
             foreach(DatabaseTreeNode node in DatabaseTreeView.Nodes)
