@@ -163,6 +163,8 @@ namespace RelhaxModpack
             ObjectAppendExtractionCB.Enabled = false;
             ObjectAppendExtractionCB.Checked = false;
 
+            DownloadZipfileButton.Enabled = false;
+
             DescriptionTabPage.Enabled = false;
             DependenciesTabPage.Enabled = false;
             PictureTabPage.Enabled = false;
@@ -499,6 +501,8 @@ namespace RelhaxModpack
                 ObjectAppendExtractionCB.Enabled = true;
                 ObjectAppendExtractionCB.Checked = node.GlobalDependency.appendExtraction;
 
+                DownloadZipfileButton.Enabled = true;
+
                 DescriptionTabPage.Enabled = false;
                 ObjectDescTB.Text = "";
                 ObjectUpdateNotesTB.Text = "";
@@ -548,6 +552,8 @@ namespace RelhaxModpack
 
                 ObjectAppendExtractionCB.Enabled = true;
                 ObjectAppendExtractionCB.Checked = SelectedDependency.appendExtraction;
+
+                DownloadZipfileButton.Enabled = true;
 
                 DescriptionTabPage.Enabled = false;
                 ObjectDescTB.Text = "";
@@ -610,6 +616,8 @@ namespace RelhaxModpack
 
                 ObjectAppendExtractionCB.Enabled = false;
                 ObjectAppendExtractionCB.Checked = false;
+
+                DownloadZipfileButton.Enabled = true;
 
                 DescriptionTabPage.Enabled = false;
                 ObjectDescTB.Text = "";
@@ -703,6 +711,8 @@ namespace RelhaxModpack
                 ObjectUpdateNotesTB.Enabled = true;
                 ObjectUpdateNotesTB.Text = SelectedDatabaseObject.updateComment;
 
+                DownloadZipfileButton.Enabled = true;
+
                 DependenciesTabPage.Enabled = true;
                 DependencyPanel.Enabled = true;
                 LogicalDependencyPanel.Enabled = true;
@@ -778,6 +788,8 @@ namespace RelhaxModpack
 
                 ObjectAppendExtractionCB.Enabled = false;
                 ObjectAppendExtractionCB.Checked = false;
+
+                DownloadZipfileButton.Enabled = false;
 
                 ObjectDescTB.Enabled = false;
                 ObjectDescTB.Text = "";
@@ -1827,6 +1839,17 @@ namespace RelhaxModpack
                 if (node.Nodes.Count > 0)
                     SearchBoxConfig(node.Nodes, packageNameSearch);
             }
+        }
+
+        private void DownloadZipfileButton_Click(object sender, EventArgs e)
+        {
+            if(ObjectZipFileTB.Text.Equals(""))
+            {
+                MessageBox.Show("Nothing to download");
+            }
+            string DownloadURL = ObjectStartAddressTB.Text + ObjectZipFileTB.Text + ObjectEndAddressTB.Text;
+            DatabaseDownloadEditor editor = new DatabaseDownloadEditor(DownloadURL, Path.GetFileName(ObjectZipFileTB.Text));
+            editor.Show();
         }
     }
 }

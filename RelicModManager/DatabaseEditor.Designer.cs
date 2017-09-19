@@ -106,6 +106,7 @@
             this.SaveDatabaseDialog = new System.Windows.Forms.SaveFileDialog();
             this.MoveButton = new System.Windows.Forms.Button();
             this.SearchBox = new System.Windows.Forms.ComboBox();
+            this.DownloadZipfileButton = new System.Windows.Forms.Button();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.ObjectPropertiesTabControl.SuspendLayout();
@@ -156,6 +157,7 @@
             // DatabaseEditPanel
             // 
             this.DatabaseEditPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.DatabaseEditPanel.Controls.Add(this.DownloadZipfileButton);
             this.DatabaseEditPanel.Controls.Add(this.ObjectVersionTB);
             this.DatabaseEditPanel.Controls.Add(this.ObjectVersionLabel);
             this.DatabaseEditPanel.Controls.Add(this.ObjectPropertiesTabControl);
@@ -881,6 +883,17 @@
             this.SearchBox.SelectionChangeCommitted += new System.EventHandler(this.SearchBox_SelectionChangeCommitted);
             this.SearchBox.TextUpdate += new System.EventHandler(this.SearchBox_TextUpdate);
             // 
+            // DownloadZipfileButton
+            // 
+            this.DownloadZipfileButton.Enabled = false;
+            this.DownloadZipfileButton.Location = new System.Drawing.Point(202, 209);
+            this.DownloadZipfileButton.Name = "DownloadZipfileButton";
+            this.DownloadZipfileButton.Size = new System.Drawing.Size(83, 27);
+            this.DownloadZipfileButton.TabIndex = 32;
+            this.DownloadZipfileButton.Text = "Download Zip";
+            this.DownloadZipfileButton.UseVisualStyleBackColor = true;
+            this.DownloadZipfileButton.Click += new System.EventHandler(this.DownloadZipfileButton_Click);
+            // 
             // DatabaseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1004,5 +1017,6 @@
         private System.Windows.Forms.TextBox ObjectVersionTB;
         private System.Windows.Forms.Label ObjectVersionLabel;
         private System.Windows.Forms.ComboBox SearchBox;
+        private System.Windows.Forms.Button DownloadZipfileButton;
     }
 }
