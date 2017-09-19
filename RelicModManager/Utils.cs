@@ -15,6 +15,8 @@ using System.Net;
 using System.Globalization;
 using System.Xml.XPath;
 using Ionic.Zip;
+using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace RelhaxModpack
 {
@@ -4249,6 +4251,42 @@ namespace RelhaxModpack
                 configRoot.AppendChild(conLogicalDependencies);
                 configsHolder.AppendChild(configRoot);
             }
+        }
+
+        //https://stackoverflow.com/questions/5977445/how-to-get-windows-display-settings
+        public static float GetDisplayScale(Graphics graphics)
+        {
+            //get the DPI setting
+            float dpiX, dpiY;
+            dpiX = graphics.DpiX;
+            dpiY = graphics.DpiY;
+            if(dpiX != dpiY)
+            {
+                Utils.appendToLog("WARNING: scale values do not equal, using x value");
+            }
+            return dpiX / 96;
+        }
+
+        [DllImport("gdi32.dll")]
+        static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+        public enum DeviceCap
+        {
+            VERTRES = 10,
+            DESKTOPVERTRES = 117,
+
+            // http://pinvoke.net/default.aspx/gdi32/GetDeviceCaps.html
+        }
+
+        public static float getScalingFactor()
+        {
+            Graphics g = Graphics.FromHwnd(IntPtr.Zero);
+            IntPtr desktop = g.GetHdc();
+            int LogicalScreenHeight = GetDeviceCaps(desktop, (int)DeviceCap.VERTRES);
+            int PhysicalScreenHeight = GetDeviceCaps(desktop, (int)DeviceCap.DESKTOPVERTRES);
+
+            float ScreenScalingFactor = (float)PhysicalScreenHeight / (float)LogicalScreenHeight;
+
+            return ScreenScalingFactor; // 1.25 = 125%
         }
     }
 }

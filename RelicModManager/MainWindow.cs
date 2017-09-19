@@ -1448,23 +1448,38 @@ namespace RelhaxModpack
                 }
                 switch (Settings.fontSizeforum)
                 {
-                    case (Settings.FontSize.fontRegular):
-                        fontSizeDefault.Checked = true;
+                    case (Settings.FontSize.font100):
+                        fontSize100.Checked = true;
                         break;
-                    case (Settings.FontSize.fontLarge):
-                        fontSizeLarge.Checked = true;
+                    case (Settings.FontSize.font125):
+                        fontSize125.Checked = true;
                         break;
-                    case (Settings.FontSize.fontUHD):
-                        fontSizeHUD.Checked = true;
+                    case (Settings.FontSize.font175):
+                        fontSize175.Checked = true;
                         break;
-                    case(Settings.FontSize.DPIRegular):
-                        DPIDefault.Checked = true;
+                    case (Settings.FontSize.font225):
+                        fontSize225.Checked = true;
                         break;
-                    case(Settings.FontSize.DPILarge):
-                        DPILarge.Checked = true;
+                    case (Settings.FontSize.font275):
+                        fontSize275.Checked = true;
                         break;
-                    case(Settings.FontSize.DPIUHD):
-                        DPIUHD.Checked = true;
+                    case (Settings.FontSize.DPI100):
+                        DPI100.Checked = true;
+                        break;
+                    case(Settings.FontSize.DPI125):
+                        DPI125.Checked = true;
+                        break;
+                    case(Settings.FontSize.DPI175):
+                        DPI175.Checked = true;
+                        break;
+                    case (Settings.FontSize.DPI225):
+                        DPI225.Checked = true;
+                        break;
+                    case (Settings.FontSize.DPI275):
+                        DPI275.Checked = true;
+                        break;
+                    case (Settings.FontSize.DPIAUTO):
+                        DPIAUTO.Checked = true;
                         break;
                 }
             }
@@ -1592,12 +1607,12 @@ namespace RelhaxModpack
             darkUICB.Enabled = enableToggle;
             saveUserDataCB.Enabled = enableToggle;
             saveLastInstallCB.Enabled = enableToggle;
-            fontSizeDefault.Enabled = enableToggle;
-            fontSizeLarge.Enabled = enableToggle;
-            fontSizeHUD.Enabled = enableToggle;
-            DPIDefault.Enabled = enableToggle;
-            DPILarge.Enabled = enableToggle;
-            DPIUHD.Enabled = enableToggle;
+            fontSize100.Enabled = enableToggle;
+            fontSize125.Enabled = enableToggle;
+            fontSize175.Enabled = enableToggle;
+            DPI100.Enabled = enableToggle;
+            DPI125.Enabled = enableToggle;
+            DPI175.Enabled = enableToggle;
             clearCacheCB.Enabled = enableToggle;
             clearLogFilesCB.Enabled = enableToggle;
         }
@@ -2055,13 +2070,13 @@ namespace RelhaxModpack
             Settings.clearCache = clearCacheCB.Checked;
         }
 
-        private void fontSizeDefault_CheckedChanged(object sender, EventArgs e)
+        private void fontSize100_CheckedChanged(object sender, EventArgs e)
         {
-            if (fontSizeDefault.Checked)
+            if (fontSize100.Checked)
             {
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
-                    Settings.fontSizeforum = Settings.FontSize.DPIRegular;
+                    Settings.fontSizeforum = Settings.FontSize.DPI100;
                     Settings.ApplyScalingProperties();
                     this.AutoScaleMode = Settings.appScalingMode;
                     float temp = 1.0f / scale;
@@ -2069,20 +2084,24 @@ namespace RelhaxModpack
                     scale = 1.0f;
                     this.Font = Settings.appFont;
                 }
-                Settings.fontSizeforum = Settings.FontSize.fontRegular;
+                //change settings enum
+                Settings.fontSizeforum = Settings.FontSize.font100;
+                //apply change of settings enum
                 Settings.ApplyScalingProperties();
+                //get new scalingMode (or no change, get it anyway)
                 this.AutoScaleMode = Settings.appScalingMode;
+                //get new font
                 this.Font = Settings.appFont;
             }
         }
 
-        private void fontSizeLarge_CheckedChanged(object sender, EventArgs e)
+        private void fontSize125_CheckedChanged(object sender, EventArgs e)
         {
-            if (fontSizeLarge.Checked)
+            if (fontSize125.Checked)
             {
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
-                    Settings.fontSizeforum = Settings.FontSize.DPIRegular;
+                    Settings.fontSizeforum = Settings.FontSize.DPI100;
                     Settings.ApplyScalingProperties();
                     this.AutoScaleMode = Settings.appScalingMode;
                     float temp = 1.0f / scale;
@@ -2090,20 +2109,20 @@ namespace RelhaxModpack
                     scale = 1.0f;
                     this.Font = Settings.appFont;
                 }
-                Settings.fontSizeforum = Settings.FontSize.fontLarge;
+                Settings.fontSizeforum = Settings.FontSize.font125;
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
                 this.Font = Settings.appFont;
             }
         }
 
-        private void fontSizeHUD_CheckedChanged(object sender, EventArgs e)
+        private void fontSize175_CheckedChanged(object sender, EventArgs e)
         {
-            if (fontSizeHUD.Checked)
+            if (fontSize175.Checked)
             {
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
-                    Settings.fontSizeforum = Settings.FontSize.DPIRegular;
+                    Settings.fontSizeforum = Settings.FontSize.DPI100;
                     Settings.ApplyScalingProperties();
                     this.AutoScaleMode = Settings.appScalingMode;
                     float temp = 1.0f / scale;
@@ -2111,25 +2130,67 @@ namespace RelhaxModpack
                     scale = 1.0f;
                     this.Font = Settings.appFont;
                 }
-                Settings.fontSizeforum = Settings.FontSize.fontUHD;
+                Settings.fontSizeforum = Settings.FontSize.font175;
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
                 this.Font = Settings.appFont;
             }
         }
 
-        private void DPI_CheckedChanged(object sender, EventArgs e)
+        private void fontSize225_CheckedChanged(object sender, EventArgs e)
         {
-            if (DPIDefault.Checked)
+            if (fontSize225.Checked)
+            {
+                if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
+                {
+                    Settings.fontSizeforum = Settings.FontSize.DPI100;
+                    Settings.ApplyScalingProperties();
+                    this.AutoScaleMode = Settings.appScalingMode;
+                    float temp = 1.0f / scale;
+                    this.Scale(new SizeF(temp, temp));
+                    scale = 1.0f;
+                    this.Font = Settings.appFont;
+                }
+                Settings.fontSizeforum = Settings.FontSize.font225;
+                Settings.ApplyScalingProperties();
+                this.AutoScaleMode = Settings.appScalingMode;
+                this.Font = Settings.appFont;
+            }
+        }
+
+        private void fontSize275_CheckedChanged(object sender, EventArgs e)
+        {
+            if (fontSize275.Checked)
+            {
+                if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
+                {
+                    Settings.fontSizeforum = Settings.FontSize.DPI100;
+                    Settings.ApplyScalingProperties();
+                    this.AutoScaleMode = Settings.appScalingMode;
+                    float temp = 1.0f / scale;
+                    this.Scale(new SizeF(temp, temp));
+                    scale = 1.0f;
+                    this.Font = Settings.appFont;
+                }
+                Settings.fontSizeforum = Settings.FontSize.font275;
+                Settings.ApplyScalingProperties();
+                this.AutoScaleMode = Settings.appScalingMode;
+                this.Font = Settings.appFont;
+            }
+        }
+
+        private void DPI100_CheckedChanged(object sender, EventArgs e)
+        {
+            if (DPI100.Checked)
             {
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
-                    Settings.fontSizeforum = Settings.FontSize.fontRegular;
+                    Settings.fontSizeforum = Settings.FontSize.font100;
                     Settings.ApplyScalingProperties();
                     this.AutoScaleMode = Settings.appScalingMode;
                     this.Font = Settings.appFont;
                 }
-                Settings.fontSizeforum = Settings.FontSize.DPIRegular;
+                Settings.fontSizeforum = Settings.FontSize.DPI100;
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
                 float temp = 1.0f / scale;
@@ -2139,18 +2200,18 @@ namespace RelhaxModpack
             }
         }
 
-        private void DPILarge_CheckedChanged(object sender, EventArgs e)
+        private void DPI125_CheckedChanged(object sender, EventArgs e)
         {
-            if (DPILarge.Checked)
+            if (DPI125.Checked)
             {
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
-                    Settings.fontSizeforum = Settings.FontSize.fontRegular;
+                    Settings.fontSizeforum = Settings.FontSize.font100;
                     Settings.ApplyScalingProperties();
                     this.AutoScaleMode = Settings.appScalingMode;
                     this.Font = Settings.appFont;
                 }
-                Settings.fontSizeforum = Settings.FontSize.DPILarge;
+                Settings.fontSizeforum = Settings.FontSize.DPI125;
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
                 float temp = 1.25f / scale;
@@ -2160,24 +2221,87 @@ namespace RelhaxModpack
             }
         }
 
-        private void DPIUHD_CheckedChanged(object sender, EventArgs e)
+        private void DPI175_CheckedChanged(object sender, EventArgs e)
         {
-            if (DPIUHD.Checked)
+            if (DPI175.Checked)
             {
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
-                    Settings.fontSizeforum = Settings.FontSize.fontRegular;
+                    Settings.fontSizeforum = Settings.FontSize.font100;
                     Settings.ApplyScalingProperties();
                     this.AutoScaleMode = Settings.appScalingMode;
                     this.Font = Settings.appFont;
                 }
-                Settings.fontSizeforum = Settings.FontSize.DPIUHD;
+                Settings.fontSizeforum = Settings.FontSize.DPI175;
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
                 this.Font = Settings.appFont;
-                float temp = 1.75f / scale;
+                float temp = Settings.scale175 / scale;
                 this.Scale(new SizeF(temp, temp));
-                scale = 1.75f;
+                scale = Settings.scale175;
+            }
+        }
+
+        private void DPI225_CheckedChanged(object sender, EventArgs e)
+        {
+            if (DPI225.Checked)
+            {
+                if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
+                {
+                    Settings.fontSizeforum = Settings.FontSize.font100;
+                    Settings.ApplyScalingProperties();
+                    this.AutoScaleMode = Settings.appScalingMode;
+                    this.Font = Settings.appFont;
+                }
+                Settings.fontSizeforum = Settings.FontSize.DPI225;
+                Settings.ApplyScalingProperties();
+                this.AutoScaleMode = Settings.appScalingMode;
+                this.Font = Settings.appFont;
+                float temp = Settings.scale225 / scale;
+                this.Scale(new SizeF(temp, temp));
+                scale = Settings.scale225;
+            }
+        }
+
+        private void DPI275_CheckedChanged(object sender, EventArgs e)
+        {
+            if (DPI275.Checked)
+            {
+                if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
+                {
+                    Settings.fontSizeforum = Settings.FontSize.font100;
+                    Settings.ApplyScalingProperties();
+                    this.AutoScaleMode = Settings.appScalingMode;
+                    this.Font = Settings.appFont;
+                }
+                Settings.fontSizeforum = Settings.FontSize.DPI275;
+                Settings.ApplyScalingProperties();
+                this.AutoScaleMode = Settings.appScalingMode;
+                this.Font = Settings.appFont;
+                float temp = Settings.scale275 / scale;
+                this.Scale(new SizeF(temp, temp));
+                scale = Settings.scale275;
+            }
+        }
+
+        private void DPIAUTO_CheckedChanged(object sender, EventArgs e)
+        {
+            if (DPIAUTO.Checked)
+            {
+                if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
+                {
+                    Settings.fontSizeforum = Settings.FontSize.font100;
+                    Settings.ApplyScalingProperties();
+                    this.AutoScaleMode = Settings.appScalingMode;
+                    this.Font = Settings.appFont;
+                }
+                Settings.fontSizeforum = Settings.FontSize.DPIAUTO;
+                Settings.ApplyScalingProperties();
+                this.AutoScaleMode = Settings.appScalingMode;
+                this.Font = Settings.appFont;
+                float temp = Settings.scaleSize / scale;
+                this.Scale(new SizeF(temp, temp));
+                scale = Settings.scaleSize;
             }
         }
 

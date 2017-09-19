@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Runtime.InteropServices;
 using System;
-using System.ComponentModel;
 
 namespace RelhaxModpack
 {
@@ -38,12 +34,16 @@ namespace RelhaxModpack
         public static string configFileVersion = "2.0";     // for later imports of this files, we need a better identification
         public enum LoadingGifs { standard = 0, thirdGuards = 1 };
         public static LoadingGifs gif;
-        public const float normalSizeFont = 8.25F;//1.0 font scaling
-        public const float largeSizeFont = 10.25F;//1.25 font scaling
-        public const float UHDSizeFont = 13.5F;//1.75 font scaling
-        public const float scaleNormal = 1.0f;//1.0 font scaling
-        public const float scaleLarge = 1.25f;//1.25 font scaing
-        public const float scaleUHD = 1.75f;//1.75 font scaling
+        public const float fontSize100 = 8.25F;//1.0 font scaling
+        public const float fontSize125 = 10.25F;//1.25 font scaling
+        public const float fontSize175 = 14.25F;//1.75 font scaling
+        public const float fontSize225 = 18.5F;//2.25 font scaling
+        public const float fontSize275 = 22.5F;//2.75 font scaling
+        public const float scale100 = 1.0f;//1.0 font scaling
+        public const float scale125 = 1.25f;//1.25 font scaing
+        public const float scale175 = 1.75f;//1.75 font scaling
+        public const float scale225 = 2.25f;//2.25 font scaling
+        public const float scale275 = 2.75f;//2.75 font scaling
         public const string defaultFontType = "Microsoft Sance Serif";
         public const string comicSansFontType = "Comic Sans MS";
         private static int tempLoadedLanguage = -1;
@@ -55,17 +55,24 @@ namespace RelhaxModpack
         public enum SelectionView { defaultt = 0, legacy = 1 };
         public static SelectionView sView = SelectionView.defaultt;
         public static int tempLoadedView = 0;
-        public enum FontSize {  fontRegular = 0,
-                                fontLarge = 1,
-                                fontUHD = 2,
-                                DPIRegular = 3,
-                                DPILarge = 4,
-                                DPIUHD = 5
-                             };
-        public static FontSize fontSizeforum = FontSize.fontRegular;
+        public enum FontSize
+        {
+            font100 = 0,
+            font125 = 1,
+            font175 = 2,
+            DPI100 = 3,
+            DPI125 = 4,
+            DPI175 = 5,
+            font225 = 6,
+            font275 = 7,
+            DPI225 = 8,
+            DPI275 = 9,
+            DPIAUTO = 10
+        };
+        public static FontSize fontSizeforum = FontSize.font100;
         public static int tempFontSizeForum = 0;//default to font scale, regular
         public static AutoScaleMode appScalingMode = AutoScaleMode.Font;
-        public static Font appFont = new System.Drawing.Font(defaultFontType, normalSizeFont);
+        public static Font appFont = new System.Drawing.Font(defaultFontType, fontSize100);
         //loads settings from xml file
         public static void loadSettings()
         {
@@ -89,7 +96,7 @@ namespace RelhaxModpack
                 Settings.tempLoadedLanguage = 0;
                 Settings.modSelectionHeight = 480;
                 Settings.modSelectionWidth = 800;
-                Settings.fontSizeforum = Settings.FontSize.fontRegular;
+                Settings.fontSizeforum = Settings.FontSize.font100;
                 Settings.expandAllLegacy = false;
                 Settings.ModSelectionFullscreen = false;
                 Settings.disableColorChange = false;
@@ -98,7 +105,7 @@ namespace RelhaxModpack
                 Settings.previewY = 0;
                 Settings.customModInfoPath = "";
                 Settings.tempFontSizeForum = 0;
-                Settings.fontSizeforum = FontSize.fontRegular;
+                Settings.fontSizeforum = FontSize.font100;
                 Settings.sView = SelectionView.defaultt;
                 Settings.applyInternalSettings();
             }
@@ -190,23 +197,41 @@ namespace RelhaxModpack
         {
             switch (Settings.tempFontSizeForum)
             {
+                default:
+                    Settings.fontSizeforum = FontSize.font100;
+                    break;
                 case 0:
-                    Settings.fontSizeforum = FontSize.fontRegular;
+                    Settings.fontSizeforum = FontSize.font100;
                     break;
                 case 1:
-                    Settings.fontSizeforum = FontSize.fontLarge;
+                    Settings.fontSizeforum = FontSize.font125;
                     break;
                 case 2:
-                    Settings.fontSizeforum = FontSize.fontUHD;
+                    Settings.fontSizeforum = FontSize.font175;
                     break;
                 case 3:
-                    Settings.fontSizeforum = FontSize.DPIRegular;
+                    Settings.fontSizeforum = FontSize.DPI100;
                     break;
                 case 4:
-                    Settings.fontSizeforum = FontSize.DPILarge;
+                    Settings.fontSizeforum = FontSize.DPI125;
                     break;
                 case 5:
-                    Settings.fontSizeforum = FontSize.DPIUHD;
+                    Settings.fontSizeforum = FontSize.DPI175;
+                    break;
+                case 6:
+                    Settings.fontSizeforum = FontSize.font225;
+                    break;
+                case 7:
+                    Settings.fontSizeforum = FontSize.font275;
+                    break;
+                case 8:
+                    Settings.fontSizeforum = FontSize.DPI225;
+                    break;
+                case 9:
+                    Settings.fontSizeforum = FontSize.DPI275;
+                    break;
+                case 10:
+                    Settings.fontSizeforum = FontSize.DPIAUTO;
                     break;
             }
             if (Settings.comicSans)
@@ -385,40 +410,67 @@ namespace RelhaxModpack
                 default:
                     //set the autoscale mode
                     appScalingMode = AutoScaleMode.Font;
-                    //set the scale to default
-                    scaleSize = scaleNormal;
-                    //set the font type
-                    appFont = new Font(defaultFontType, normalSizeFont);
+                    //set the scale amount
+                    scaleSize = scale100;
+                    //set the font
+                    appFont = new Font(defaultFontType, fontSize100);
                     break;
-                case FontSize.fontRegular:
-                    scaleSize = scaleNormal;
+                case FontSize.font100:
+                    scaleSize = scale100;
                     appScalingMode = AutoScaleMode.Font;
-                    appFont = new Font(fontName, normalSizeFont);
+                    appFont = new Font(fontName, fontSize100);
                     break;
-                case FontSize.fontLarge:
-                    scaleSize = scaleNormal;
+                case FontSize.font125:
+                    scaleSize = scale125;
                     appScalingMode = AutoScaleMode.Font;
-                    appFont = new Font(fontName, largeSizeFont);
+                    appFont = new Font(fontName, fontSize125);
                     break;
-                case FontSize.fontUHD:
-                    scaleSize = scaleNormal;
+                case FontSize.font175:
+                    scaleSize = scale175;
                     appScalingMode = AutoScaleMode.Font;
-                    appFont = new Font(fontName, UHDSizeFont);
+                    appFont = new Font(fontName, fontSize175);
                     break;
-                case FontSize.DPIRegular:
-                    scaleSize = scaleNormal;
-                    appScalingMode = AutoScaleMode.Dpi;
-                    appFont = new Font(fontName, normalSizeFont);
+                case FontSize.font225:
+                    scaleSize = scale225;
+                    appScalingMode = AutoScaleMode.Font;
+                    appFont = new Font(fontName, fontSize225);
                     break;
-                case FontSize.DPILarge:
-                    scaleSize = scaleLarge;
-                    appScalingMode = AutoScaleMode.Dpi;
-                    appFont = new Font(fontName, largeSizeFont);
+                case FontSize.font275:
+                    scaleSize = scale275;
+                    appScalingMode = AutoScaleMode.Font;
+                    appFont = new Font(fontName, fontSize275);
                     break;
-                case FontSize.DPIUHD:
-                    scaleSize = scaleUHD;
+                case FontSize.DPI100:
+                    scaleSize = scale100;
                     appScalingMode = AutoScaleMode.Dpi;
-                    appFont = new Font(fontName, UHDSizeFont);
+                    appFont = new Font(fontName, fontSize100);
+                    break;
+                case FontSize.DPI125:
+                    scaleSize = scale125;
+                    appScalingMode = AutoScaleMode.Dpi;
+                    appFont = new Font(fontName, fontSize125);
+                    break;
+                case FontSize.DPI175:
+                    scaleSize = scale175;
+                    appScalingMode = AutoScaleMode.Dpi;
+                    appFont = new Font(fontName, fontSize175);
+                    break;
+                case FontSize.DPI225:
+                    scaleSize = scale225;
+                    appScalingMode = AutoScaleMode.Dpi;
+                    appFont = new Font(fontName, fontSize225);
+                    break;
+                case FontSize.DPI275:
+                    scaleSize = scale275;
+                    appScalingMode = AutoScaleMode.Dpi;
+                    appFont = new Font(fontName, fontSize275);
+                    break;
+                case FontSize.DPIAUTO:
+                    scaleSize = Utils.getScalingFactor();
+                    appScalingMode = AutoScaleMode.Dpi;
+                    float nweFontSize = 8.25F * scaleSize;
+                    float roundedanswer = (float)Math.Round(nweFontSize * 4, MidpointRounding.ToEven) / 4;
+                    appFont = new Font(fontName, roundedanswer);
                     break;
             }
         }
