@@ -236,7 +236,7 @@ namespace RelhaxModpack
                 SelectedGlobalDependency.startAddress = ObjectStartAddressTB.Text;
                 SelectedGlobalDependency.endAddress = ObjectEndAddressTB.Text;
                 SelectedGlobalDependency.devURL = ObjectDevURLTB.Text;
-                if (!SelectedGlobalDependency.dependencyZipFile.Equals(ObjectZipFile.Text))
+                if (!SelectedGlobalDependency.dependencyZipFile.Equals(ObjectZipFileTB.Text))
                     SelectedGlobalDependency.dependencyZipCRC = "f";
                 SelectedGlobalDependency.dependencyZipFile = ObjectZipFileTB.Text;
                 SelectedGlobalDependency.enabled = ObjectEnabledCheckBox.Checked;
@@ -250,7 +250,7 @@ namespace RelhaxModpack
                 SelectedDependency.startAddress = ObjectStartAddressTB.Text;
                 SelectedDependency.endAddress = ObjectEndAddressTB.Text;
                 SelectedDependency.devURL = ObjectDevURLTB.Text;
-                if (!SelectedDependency.dependencyZipFile.Equals(ObjectZipFile.Text))
+                if (!SelectedDependency.dependencyZipFile.Equals(ObjectZipFileTB.Text))
                     SelectedDependency.dependencyZipCRC = "f";
                 SelectedDependency.dependencyZipFile = ObjectZipFileTB.Text;
                 SelectedDependency.enabled = ObjectEnabledCheckBox.Checked;
@@ -264,7 +264,7 @@ namespace RelhaxModpack
                 SelectedLogicalDependency.startAddress = ObjectStartAddressTB.Text;
                 SelectedLogicalDependency.endAddress = ObjectEndAddressTB.Text;
                 SelectedLogicalDependency.devURL = ObjectDevURLTB.Text;
-                if (!SelectedLogicalDependency.dependencyZipFile.Equals(ObjectZipFile.Text))
+                if (!SelectedLogicalDependency.dependencyZipFile.Equals(ObjectZipFileTB.Text))
                     SelectedLogicalDependency.dependencyZipCRC = "f";
                 SelectedLogicalDependency.dependencyZipFile = ObjectZipFileTB.Text;
                 SelectedLogicalDependency.enabled = ObjectEnabledCheckBox.Checked;
@@ -288,7 +288,7 @@ namespace RelhaxModpack
                     m.packageName = ObjectPackageNameTB.Text;
                     m.startAddress = ObjectStartAddressTB.Text;
                     m.endAddress = ObjectEndAddressTB.Text;
-                    if (!SelectedDatabaseObject.zipFile.Equals(ObjectZipFile.Text))
+                    if (!SelectedDatabaseObject.zipFile.Equals(ObjectZipFileTB.Text))
                         m.crc = "f";
                     m.zipFile = ObjectZipFileTB.Text;
                     m.devURL = ObjectDevURLTB.Text;
@@ -317,7 +317,7 @@ namespace RelhaxModpack
                         cfg.packageName = ObjectPackageNameTB.Text;
                         cfg.startAddress = ObjectStartAddressTB.Text;
                         cfg.endAddress = ObjectEndAddressTB.Text;
-                        if (!SelectedDatabaseObject.zipFile.Equals(ObjectZipFile.Text))
+                        if (!SelectedDatabaseObject.zipFile.Equals(ObjectZipFileTB.Text))
                             cfg.crc = "f";
                         cfg.zipFile = ObjectZipFileTB.Text;
                         cfg.devURL = ObjectDevURLTB.Text;
@@ -1014,6 +1014,8 @@ namespace RelhaxModpack
                         newDep.enabled = ObjectEnabledCheckBox.Checked;
                         newDep.appendExtraction = ObjectAppendExtractionCB.Checked;
                         newDep.devURL = ObjectDevURLTB.Text;
+                        if(!ObjectZipFileTB.Text.Equals(""))
+                            newDep.dependencyZipCRC = "f";
                         int index = GlobalDependencies.IndexOf(dba.SelectedGlobalDependency);
                         GlobalDependencies.Insert(index, newDep);
                         DisplayDatabase();
@@ -1030,6 +1032,8 @@ namespace RelhaxModpack
                         newDep.enabled = ObjectEnabledCheckBox.Checked;
                         newDep.appendExtraction = ObjectAppendExtractionCB.Checked;
                         newDep.devURL = ObjectDevURLTB.Text;
+                        if (!ObjectZipFileTB.Text.Equals(""))
+                            newDep.dependencyZipCRC = "f";
                         List<LogicalDependnecy> logicalDeps = (List<LogicalDependnecy>)ObjectLogicalDependenciesList.DataSource;
                         int index = Dependencies.IndexOf(dba.SelectedDependency);
                         Dependencies.Insert(index, newDep);
@@ -1046,6 +1050,8 @@ namespace RelhaxModpack
                         newDep.dependencyZipFile = ObjectZipFileTB.Text;
                         newDep.enabled = ObjectEnabledCheckBox.Checked;
                         newDep.devURL = ObjectDevURLTB.Text;
+                        if (!ObjectZipFileTB.Text.Equals(""))
+                            newDep.dependencyZipCRC = "f";
                         int index = LogicalDependencies.IndexOf(dba.SelectedLogicalDependency);
                         LogicalDependencies.Insert(index, newDep);
                         DisplayDatabase();
@@ -1084,6 +1090,8 @@ namespace RelhaxModpack
                                 cfg.visible = ObjectVisableCheckBox.Checked;
                                 cfg.description = ObjectDescTB.Text;
                                 cfg.updateComment = ObjectUpdateNotesTB.Text;
+                                if (!ObjectZipFileTB.Text.Equals(""))
+                                    cfg.crc = "f";
                                 mm.configs.Add(cfg);
                             }
                             else
@@ -1103,6 +1111,8 @@ namespace RelhaxModpack
                                 m.visible = ObjectVisableCheckBox.Checked;
                                 m.description = ObjectDescTB.Text;
                                 m.updateComment = ObjectUpdateNotesTB.Text;
+                                if (!ObjectZipFileTB.Text.Equals(""))
+                                    m.crc = "f";
                                 ModList.Insert(index, m);
                             }
                         }
@@ -1142,8 +1152,9 @@ namespace RelhaxModpack
                                 cfg.visible = ObjectVisableCheckBox.Checked;
                                 cfg.description = ObjectDescTB.Text;
                                 cfg.updateComment = ObjectUpdateNotesTB.Text;
+                                if (!ObjectZipFileTB.Text.Equals(""))
+                                    cfg.crc = "f";
                                 dba.SelectedDatabaseObject.configs.Add(cfg);
-                                //SelectedDatabaseObject.configs.Add(cfg);
                             }
                             else
                             {
@@ -1181,6 +1192,8 @@ namespace RelhaxModpack
                                     cfg.visible = ObjectVisableCheckBox.Checked;
                                     cfg.description = ObjectDescTB.Text;
                                     cfg.updateComment = ObjectUpdateNotesTB.Text;
+                                    if (!ObjectZipFileTB.Text.Equals(""))
+                                        cfg.crc = "f";
                                     ListThatContainsConfig.Insert(index, cfg);
                                 }
                             }
