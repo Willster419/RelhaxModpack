@@ -2566,6 +2566,7 @@ namespace RelhaxModpack
                 String[] filtered_parts = filter_param.Split('*');
                 //force filteredItems to be mod or first level config
                 filteredItems = new List<DatabaseObject>(completeModSearchList);
+                //below is a conceptual example of what I did the the completeModSearchList
                 /*
                 filteredItems = new List<DatabaseObject>();
                 foreach (Category cat in parsedCatagoryList)
@@ -2583,6 +2584,7 @@ namespace RelhaxModpack
                     }
                 }
                 */
+                //end example
                 foreach (var f in filtered_parts)
                 {
                     filteredItems = filteredItems.FindAll(x => x.name.ToLower().Contains(f.ToLower()));
