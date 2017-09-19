@@ -80,7 +80,7 @@
             this.ObjectUserdatasLabel = new System.Windows.Forms.Label();
             this.RemoveUserdatasButton = new System.Windows.Forms.Button();
             this.ObjectAppendExtractionCB = new System.Windows.Forms.CheckBox();
-            this.ObjectVisableCheckBox = new System.Windows.Forms.CheckBox();
+            this.ObjectVisibleCheckBox = new System.Windows.Forms.CheckBox();
             this.ObjectTypeComboBox = new System.Windows.Forms.ComboBox();
             this.ObjectType = new System.Windows.Forms.Label();
             this.ObjectDevURLTB = new System.Windows.Forms.TextBox();
@@ -162,7 +162,7 @@
             this.DatabaseEditPanel.Controls.Add(this.ObjectVersionLabel);
             this.DatabaseEditPanel.Controls.Add(this.ObjectPropertiesTabControl);
             this.DatabaseEditPanel.Controls.Add(this.ObjectAppendExtractionCB);
-            this.DatabaseEditPanel.Controls.Add(this.ObjectVisableCheckBox);
+            this.DatabaseEditPanel.Controls.Add(this.ObjectVisibleCheckBox);
             this.DatabaseEditPanel.Controls.Add(this.ObjectTypeComboBox);
             this.DatabaseEditPanel.Controls.Add(this.ObjectType);
             this.DatabaseEditPanel.Controls.Add(this.ObjectDevURLTB);
@@ -651,13 +651,13 @@
             // 
             // ObjectVisableCheckBox
             // 
-            this.ObjectVisableCheckBox.AutoSize = true;
-            this.ObjectVisableCheckBox.Location = new System.Drawing.Point(358, 186);
-            this.ObjectVisableCheckBox.Name = "ObjectVisableCheckBox";
-            this.ObjectVisableCheckBox.Size = new System.Drawing.Size(59, 17);
-            this.ObjectVisableCheckBox.TabIndex = 23;
-            this.ObjectVisableCheckBox.Text = "visable";
-            this.ObjectVisableCheckBox.UseVisualStyleBackColor = true;
+            this.ObjectVisibleCheckBox.AutoSize = true;
+            this.ObjectVisibleCheckBox.Location = new System.Drawing.Point(358, 186);
+            this.ObjectVisibleCheckBox.Name = "ObjectVisableCheckBox";
+            this.ObjectVisibleCheckBox.Size = new System.Drawing.Size(55, 17);
+            this.ObjectVisibleCheckBox.TabIndex = 23;
+            this.ObjectVisibleCheckBox.Text = "visible";
+            this.ObjectVisibleCheckBox.UseVisualStyleBackColor = true;
             // 
             // ObjectTypeComboBox
             // 
@@ -977,7 +977,7 @@
         private System.Windows.Forms.RadioButton LogicalDependencyRB;
         private System.Windows.Forms.OpenFileDialog OpenDatabaseDialog;
         private System.Windows.Forms.SaveFileDialog SaveDatabaseDialog;
-        private System.Windows.Forms.CheckBox ObjectVisableCheckBox;
+        private System.Windows.Forms.CheckBox ObjectVisibleCheckBox;
         private System.Windows.Forms.ComboBox ObjectTypeComboBox;
         private System.Windows.Forms.Label ObjectType;
         private System.Windows.Forms.ListBox ObjectLogicalDependenciesList;

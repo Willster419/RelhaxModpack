@@ -157,8 +157,8 @@ namespace RelhaxModpack
             ObjectEnabledCheckBox.Enabled = false;
             ObjectEnabledCheckBox.Checked = false;
 
-            ObjectVisableCheckBox.Enabled = false;
-            ObjectVisableCheckBox.Checked = false;
+            ObjectVisibleCheckBox.Enabled = false;
+            ObjectVisibleCheckBox.Checked = false;
 
             ObjectAppendExtractionCB.Enabled = false;
             ObjectAppendExtractionCB.Checked = false;
@@ -294,7 +294,7 @@ namespace RelhaxModpack
                     m.devURL = ObjectDevURLTB.Text;
                     m.version = ObjectVersionTB.Text;
                     m.enabled = ObjectEnabledCheckBox.Checked;
-                    m.visible = ObjectVisableCheckBox.Checked;
+                    m.visible = ObjectVisibleCheckBox.Checked;
                     m.description = ObjectDescTB.Text;
                     m.updateComment = ObjectUpdateNotesTB.Text;
                     ModList[index] = m;
@@ -338,7 +338,7 @@ namespace RelhaxModpack
                                 break;
                         }
                         cfg.enabled = ObjectEnabledCheckBox.Checked;
-                        cfg.visible = ObjectVisableCheckBox.Checked;
+                        cfg.visible = ObjectVisibleCheckBox.Checked;
                         cfg.description = ObjectDescTB.Text;
                         cfg.updateComment = ObjectUpdateNotesTB.Text;
                         ListThatContainsConfig[index] = cfg;
@@ -495,8 +495,8 @@ namespace RelhaxModpack
                 ObjectEnabledCheckBox.Enabled = true;
                 ObjectEnabledCheckBox.Checked = node.GlobalDependency.enabled;
 
-                ObjectVisableCheckBox.Enabled = false;
-                ObjectVisableCheckBox.Checked = false;
+                ObjectVisibleCheckBox.Enabled = false;
+                ObjectVisibleCheckBox.Checked = false;
 
                 ObjectAppendExtractionCB.Enabled = true;
                 ObjectAppendExtractionCB.Checked = node.GlobalDependency.appendExtraction;
@@ -547,8 +547,8 @@ namespace RelhaxModpack
                 ObjectEnabledCheckBox.Enabled = true;
                 ObjectEnabledCheckBox.Checked = SelectedDependency.enabled;
 
-                ObjectVisableCheckBox.Enabled = false;
-                ObjectVisableCheckBox.Checked = false;
+                ObjectVisibleCheckBox.Enabled = false;
+                ObjectVisibleCheckBox.Checked = false;
 
                 ObjectAppendExtractionCB.Enabled = true;
                 ObjectAppendExtractionCB.Checked = SelectedDependency.appendExtraction;
@@ -611,8 +611,8 @@ namespace RelhaxModpack
                 ObjectEnabledCheckBox.Enabled = true;
                 ObjectEnabledCheckBox.Checked = SelectedLogicalDependency.enabled;
 
-                ObjectVisableCheckBox.Enabled = false;
-                ObjectVisableCheckBox.Checked = false;
+                ObjectVisibleCheckBox.Enabled = false;
+                ObjectVisibleCheckBox.Checked = false;
 
                 ObjectAppendExtractionCB.Enabled = false;
                 ObjectAppendExtractionCB.Checked = false;
@@ -697,8 +697,8 @@ namespace RelhaxModpack
                 ObjectEnabledCheckBox.Enabled = true;
                 ObjectEnabledCheckBox.Checked = SelectedDatabaseObject.enabled;
 
-                ObjectVisableCheckBox.Enabled = true;
-                ObjectVisableCheckBox.Checked = SelectedDatabaseObject.visible;
+                ObjectVisibleCheckBox.Enabled = true;
+                ObjectVisibleCheckBox.Checked = SelectedDatabaseObject.visible;
 
                 ObjectAppendExtractionCB.Enabled = false;
                 ObjectAppendExtractionCB.Checked = false;
@@ -783,8 +783,8 @@ namespace RelhaxModpack
                 ObjectEnabledCheckBox.Enabled = false;
                 ObjectEnabledCheckBox.Checked = false;
 
-                ObjectVisableCheckBox.Enabled = false;
-                ObjectVisableCheckBox.Checked = false;
+                ObjectVisibleCheckBox.Enabled = false;
+                ObjectVisibleCheckBox.Checked = false;
 
                 ObjectAppendExtractionCB.Enabled = false;
                 ObjectAppendExtractionCB.Checked = false;
@@ -1087,7 +1087,7 @@ namespace RelhaxModpack
                                         break;
                                 }
                                 cfg.enabled = ObjectEnabledCheckBox.Checked;
-                                cfg.visible = ObjectVisableCheckBox.Checked;
+                                cfg.visible = ObjectVisibleCheckBox.Checked;
                                 cfg.description = ObjectDescTB.Text;
                                 cfg.updateComment = ObjectUpdateNotesTB.Text;
                                 if (!ObjectZipFileTB.Text.Equals(""))
@@ -1108,7 +1108,7 @@ namespace RelhaxModpack
                                 m.devURL = ObjectDevURLTB.Text;
                                 m.version = ObjectVersionTB.Text;
                                 m.enabled = ObjectEnabledCheckBox.Checked;
-                                m.visible = ObjectVisableCheckBox.Checked;
+                                m.visible = ObjectVisibleCheckBox.Checked;
                                 m.description = ObjectDescTB.Text;
                                 m.updateComment = ObjectUpdateNotesTB.Text;
                                 if (!ObjectZipFileTB.Text.Equals(""))
@@ -1149,7 +1149,7 @@ namespace RelhaxModpack
                                         break;
                                 }
                                 cfg.enabled = ObjectEnabledCheckBox.Checked;
-                                cfg.visible = ObjectVisableCheckBox.Checked;
+                                cfg.visible = ObjectVisibleCheckBox.Checked;
                                 cfg.description = ObjectDescTB.Text;
                                 cfg.updateComment = ObjectUpdateNotesTB.Text;
                                 if (!ObjectZipFileTB.Text.Equals(""))
@@ -1189,7 +1189,7 @@ namespace RelhaxModpack
                                             break;
                                     }
                                     cfg.enabled = ObjectEnabledCheckBox.Checked;
-                                    cfg.visible = ObjectVisableCheckBox.Checked;
+                                    cfg.visible = ObjectVisibleCheckBox.Checked;
                                     cfg.description = ObjectDescTB.Text;
                                     cfg.updateComment = ObjectUpdateNotesTB.Text;
                                     if (!ObjectZipFileTB.Text.Equals(""))
