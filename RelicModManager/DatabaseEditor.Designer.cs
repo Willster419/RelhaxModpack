@@ -34,6 +34,7 @@
             this.ObjectNameTB = new System.Windows.Forms.TextBox();
             this.DatabasePanelTree = new System.Windows.Forms.Panel();
             this.DatabaseEditPanel = new System.Windows.Forms.Panel();
+            this.DownloadZipfileButton = new System.Windows.Forms.Button();
             this.ObjectVersionTB = new System.Windows.Forms.TextBox();
             this.ObjectVersionLabel = new System.Windows.Forms.Label();
             this.ObjectPropertiesTabControl = new System.Windows.Forms.TabControl();
@@ -106,7 +107,6 @@
             this.SaveDatabaseDialog = new System.Windows.Forms.SaveFileDialog();
             this.MoveButton = new System.Windows.Forms.Button();
             this.SearchBox = new System.Windows.Forms.ComboBox();
-            this.DownloadZipfileButton = new System.Windows.Forms.Button();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.ObjectPropertiesTabControl.SuspendLayout();
@@ -183,6 +183,17 @@
             this.DatabaseEditPanel.Name = "DatabaseEditPanel";
             this.DatabaseEditPanel.Size = new System.Drawing.Size(547, 600);
             this.DatabaseEditPanel.TabIndex = 4;
+            // 
+            // DownloadZipfileButton
+            // 
+            this.DownloadZipfileButton.Enabled = false;
+            this.DownloadZipfileButton.Location = new System.Drawing.Point(202, 209);
+            this.DownloadZipfileButton.Name = "DownloadZipfileButton";
+            this.DownloadZipfileButton.Size = new System.Drawing.Size(83, 27);
+            this.DownloadZipfileButton.TabIndex = 32;
+            this.DownloadZipfileButton.Text = "Download Zip";
+            this.DownloadZipfileButton.UseVisualStyleBackColor = true;
+            this.DownloadZipfileButton.Click += new System.EventHandler(this.DownloadZipfileButton_Click);
             // 
             // ObjectVersionTB
             // 
@@ -468,6 +479,7 @@
             this.AddPictureButton.TabIndex = 54;
             this.AddPictureButton.Text = "add at position (0 index based)";
             this.AddPictureButton.UseVisualStyleBackColor = true;
+            this.AddPictureButton.Click += new System.EventHandler(this.AddPictureButton_Click);
             // 
             // ApplyPictureEditButton
             // 
@@ -477,6 +489,7 @@
             this.ApplyPictureEditButton.TabIndex = 53;
             this.ApplyPictureEditButton.Text = "apply edit";
             this.ApplyPictureEditButton.UseVisualStyleBackColor = true;
+            this.ApplyPictureEditButton.Click += new System.EventHandler(this.ApplyPictureEditButton_Click);
             // 
             // RemovePictureButton
             // 
@@ -486,6 +499,7 @@
             this.RemovePictureButton.TabIndex = 52;
             this.RemovePictureButton.Text = "remove";
             this.RemovePictureButton.UseVisualStyleBackColor = true;
+            this.RemovePictureButton.Click += new System.EventHandler(this.RemovePictureButton_Click);
             // 
             // MovePictureButton
             // 
@@ -495,6 +509,7 @@
             this.MovePictureButton.TabIndex = 51;
             this.MovePictureButton.Text = "move to position (0 index based)";
             this.MovePictureButton.UseVisualStyleBackColor = true;
+            this.MovePictureButton.Click += new System.EventHandler(this.MovePictureButton_Click);
             // 
             // ObjectPicturesLabel
             // 
@@ -882,17 +897,6 @@
             this.SearchBox.TabIndex = 29;
             this.SearchBox.SelectionChangeCommitted += new System.EventHandler(this.SearchBox_SelectionChangeCommitted);
             this.SearchBox.TextUpdate += new System.EventHandler(this.SearchBox_TextUpdate);
-            // 
-            // DownloadZipfileButton
-            // 
-            this.DownloadZipfileButton.Enabled = false;
-            this.DownloadZipfileButton.Location = new System.Drawing.Point(202, 209);
-            this.DownloadZipfileButton.Name = "DownloadZipfileButton";
-            this.DownloadZipfileButton.Size = new System.Drawing.Size(83, 27);
-            this.DownloadZipfileButton.TabIndex = 32;
-            this.DownloadZipfileButton.Text = "Download Zip";
-            this.DownloadZipfileButton.UseVisualStyleBackColor = true;
-            this.DownloadZipfileButton.Click += new System.EventHandler(this.DownloadZipfileButton_Click);
             // 
             // DatabaseEditor
             // 
