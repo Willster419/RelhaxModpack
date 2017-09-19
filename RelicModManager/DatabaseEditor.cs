@@ -1771,17 +1771,14 @@ namespace RelhaxModpack
             ComboBox cb = (ComboBox)sender;
             string currentText = cb.Text;
             cb.Items.Clear();
-            foreach (string s in allPackageNames)
+            List<string> filteredItems = null;
+            String[] filtered_parts = currentText.Split('*');
+            filteredItems = new List<string>(allPackageNames);
+            foreach (var f in filtered_parts)
             {
-                if (Regex.IsMatch(s, cb.Text,RegexOptions.IgnoreCase))
-                {
-                    cb.Items.Add(s);
-                }
-                else if (cb.Text.Equals(""))
-                {
-                    cb.Items.Add(s);
-                }
+                filteredItems = filteredItems.FindAll(x => x.ToLower().Contains(f.ToLower()));
             }
+            cb.Items.AddRange(filteredItems.ToArray());
             if (cb.Items.Count == 0)
             {
                 cb.BackColor = System.Drawing.Color.Red;
