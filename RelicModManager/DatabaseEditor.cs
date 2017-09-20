@@ -1014,7 +1014,8 @@ namespace RelhaxModpack
                         newDep.enabled = ObjectEnabledCheckBox.Checked;
                         newDep.appendExtraction = ObjectAppendExtractionCB.Checked;
                         newDep.devURL = ObjectDevURLTB.Text;
-                        if(!ObjectZipFileTB.Text.Equals(""))
+                        newDep.dependencyZipCRC = "";
+                        if (!ObjectZipFileTB.Text.Equals(""))
                             newDep.dependencyZipCRC = "f";
                         int index = GlobalDependencies.IndexOf(dba.SelectedGlobalDependency);
                         GlobalDependencies.Insert(index, newDep);
@@ -1032,6 +1033,7 @@ namespace RelhaxModpack
                         newDep.enabled = ObjectEnabledCheckBox.Checked;
                         newDep.appendExtraction = ObjectAppendExtractionCB.Checked;
                         newDep.devURL = ObjectDevURLTB.Text;
+                        newDep.dependencyZipCRC = "";
                         if (!ObjectZipFileTB.Text.Equals(""))
                             newDep.dependencyZipCRC = "f";
                         List<LogicalDependnecy> logicalDeps = (List<LogicalDependnecy>)ObjectLogicalDependenciesList.DataSource;
@@ -1050,6 +1052,7 @@ namespace RelhaxModpack
                         newDep.dependencyZipFile = ObjectZipFileTB.Text;
                         newDep.enabled = ObjectEnabledCheckBox.Checked;
                         newDep.devURL = ObjectDevURLTB.Text;
+                        newDep.dependencyZipCRC = "";
                         if (!ObjectZipFileTB.Text.Equals(""))
                             newDep.dependencyZipCRC = "f";
                         int index = LogicalDependencies.IndexOf(dba.SelectedLogicalDependency);
@@ -1090,6 +1093,7 @@ namespace RelhaxModpack
                                 cfg.visible = ObjectVisibleCheckBox.Checked;
                                 cfg.description = ObjectDescTB.Text;
                                 cfg.updateComment = ObjectUpdateNotesTB.Text;
+                                cfg.crc = "";
                                 if (!ObjectZipFileTB.Text.Equals(""))
                                     cfg.crc = "f";
                                 mm.configs.Add(cfg);
@@ -1111,6 +1115,7 @@ namespace RelhaxModpack
                                 m.visible = ObjectVisibleCheckBox.Checked;
                                 m.description = ObjectDescTB.Text;
                                 m.updateComment = ObjectUpdateNotesTB.Text;
+                                m.crc = "";
                                 if (!ObjectZipFileTB.Text.Equals(""))
                                     m.crc = "f";
                                 ModList.Insert(index, m);
@@ -1152,6 +1157,7 @@ namespace RelhaxModpack
                                 cfg.visible = ObjectVisibleCheckBox.Checked;
                                 cfg.description = ObjectDescTB.Text;
                                 cfg.updateComment = ObjectUpdateNotesTB.Text;
+                                cfg.crc = "";
                                 if (!ObjectZipFileTB.Text.Equals(""))
                                     cfg.crc = "f";
                                 dba.SelectedDatabaseObject.configs.Add(cfg);
@@ -1192,6 +1198,7 @@ namespace RelhaxModpack
                                     cfg.visible = ObjectVisibleCheckBox.Checked;
                                     cfg.description = ObjectDescTB.Text;
                                     cfg.updateComment = ObjectUpdateNotesTB.Text;
+                                    cfg.crc = "";
                                     if (!ObjectZipFileTB.Text.Equals(""))
                                         cfg.crc = "f";
                                     ListThatContainsConfig.Insert(index, cfg);
