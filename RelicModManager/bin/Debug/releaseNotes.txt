@@ -1,3 +1,10 @@
+Version 26.1.3:
+https://www.virustotal.com/#/file/24d9d86c6e5629929069ce1a99b70f627ef788d04605600414197cabb19f1626/detection
+-Optimized the searching in the mod selection list
+-Added configs of first level to the search-able fields in the mod selection list
+-Fixed bugs with the database editor
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 26.1.0:
 https://www.virustotal.com/#/file/1dbcf807c5028f919a29b03254b3281ff71f7a6c81fef300f5603e74090c4ac6/detection
 -Fixed bug where dependencies and logicalDependencies would always show up as old files to delete if not installed
