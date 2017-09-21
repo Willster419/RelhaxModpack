@@ -250,7 +250,9 @@ namespace RelhaxModpack
             else if (updateComments.Equals(""))
                 updateComments = Translations.getTranslatedString("noUpdateInfo");
             // descriptionBox.Lines = description.Split('@');
+            descriptionBox.Text = description;
             // updateBox.Lines = updateComments.Split('@');
+            updateBox.Text = updateComments;
             //get the size of the title bar window
             Rectangle screenRektangle = RectangleToScreen(this.ClientRectangle);
             int titleHeight = screenRektangle.Top - this.Top;

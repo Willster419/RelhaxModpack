@@ -350,14 +350,14 @@ namespace RelhaxModpack
             //Section: Preview
             //Componet: 
             //
-            english.Add("noDescription", "no Description Provided");
+            english.Add("noDescription", "No Description Provided");
             german.Add("noDescription", "keine Beschreibung verfügbar");
             polish.Add("noDescription", "nie podano opisu");
             french.Add("noDescription", "non Description fournie");
 
             //Componet: 
             //
-            english.Add("noUpdateInfo", "no Update Info Provided");
+            english.Add("noUpdateInfo", "No Update Info Provided");
             german.Add("noUpdateInfo", "keine Aktualisierungsinformationen verfügbar");
             polish.Add("noUpdateInfo", "brak informacji o aktualizacji");
             french.Add("noUpdateInfo", "Aucune information mise à jour fournie");
