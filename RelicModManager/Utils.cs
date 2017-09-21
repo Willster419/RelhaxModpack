@@ -3862,6 +3862,18 @@ namespace RelhaxModpack
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
+        //convert string with CR and/or LF to Xml save format
+        private static string convertToXmlSaveFormat(string s)
+        {
+            string replaceCR = char.ConvertFromUtf32(13);
+            string replaceLF = char.ConvertFromUtf32(10);
+            s = s.TrimEnd();
+            s = s.Replace(replaceCR + replaceLF, "@");
+            s = s.Replace(replaceCR, "@");
+            s = s.Replace(replaceLF, "@");
+            return s;
+        }
+
         //saves the mod database
         public static void SaveDatabase(string saveLocation, string gameVersion, List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies, List<Category> parsedCatagoryList)
         {
@@ -4052,10 +4064,10 @@ namespace RelhaxModpack
                     modZipSize.InnerText = "" + m.size;
                     modRoot.AppendChild(modZipSize);
                     XmlElement modUpdateComment = doc.CreateElement("updateComment");
-                    modUpdateComment.InnerText = m.updateComment.TrimEnd();
+                    modUpdateComment.InnerText = convertToXmlSaveFormat(m.updateComment);
                     modRoot.AppendChild(modUpdateComment);
                     XmlElement modDescription = doc.CreateElement("description");
-                    modDescription.InnerText = m.description.TrimEnd();
+                    modDescription.InnerText = convertToXmlSaveFormat(m.description);
                     modRoot.AppendChild(modDescription);
                     XmlElement modDevURL = doc.CreateElement("devURL");
                     modDevURL.InnerText = m.devURL.Trim();
@@ -4178,10 +4190,10 @@ namespace RelhaxModpack
                 configSize.InnerText = "" + cc.size;
                 configRoot.AppendChild(configSize);
                 XmlElement configComment = doc.CreateElement("updateComment");
-                configComment.InnerText = cc.updateComment.TrimEnd();
+                configComment.InnerText = convertToXmlSaveFormat(cc.updateComment);
                 configRoot.AppendChild(configComment);
                 XmlElement configDescription = doc.CreateElement("description");
-                configDescription.InnerText = cc.description.TrimEnd();
+                configDescription.InnerText = convertToXmlSaveFormat(cc.description);
                 configRoot.AppendChild(configDescription);
                 XmlElement configDevURL = doc.CreateElement("devURL");
                 configDevURL.InnerText = cc.devURL.Trim();
