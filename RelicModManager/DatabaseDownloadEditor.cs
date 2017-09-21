@@ -62,7 +62,7 @@ namespace RelhaxModpack
                 DownloadingLabel.Text = "Download Complete";
                 OpenFileButton.Enabled = true;
                 OpenFolderButton.Enabled = true;
-                CancelButton.Enabled = false;
+                CancelButtonn.Enabled = false;
             }
         }
 

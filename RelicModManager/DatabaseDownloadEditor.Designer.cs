@@ -34,7 +34,7 @@
             this.OpenFolderButton = new System.Windows.Forms.Button();
             this.DownloadProgressBar = new System.Windows.Forms.ProgressBar();
             this.SaveDownloadDialog = new System.Windows.Forms.SaveFileDialog();
-            this.CancelButton = new System.Windows.Forms.Button();
+            this.CancelButtonn = new System.Windows.Forms.Button();
             this.SizeToDownload = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -80,15 +80,15 @@
             this.SaveDownloadDialog.SupportMultiDottedExtensions = true;
             this.SaveDownloadDialog.Title = "Save File";
             // 
-            // CancelButton
+            // CancelButtonn
             // 
-            this.CancelButton.Location = new System.Drawing.Point(91, 123);
-            this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(75, 23);
-            this.CancelButton.TabIndex = 4;
-            this.CancelButton.Text = "Cancel";
-            this.CancelButton.UseVisualStyleBackColor = true;
-            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            this.CancelButtonn.Location = new System.Drawing.Point(91, 123);
+            this.CancelButtonn.Name = "CancelButtonn";
+            this.CancelButtonn.Size = new System.Drawing.Size(75, 23);
+            this.CancelButtonn.TabIndex = 4;
+            this.CancelButtonn.Text = "Cancel";
+            this.CancelButtonn.UseVisualStyleBackColor = true;
+            this.CancelButtonn.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // SizeToDownload
             // 
@@ -105,7 +105,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(340, 150);
             this.Controls.Add(this.SizeToDownload);
-            this.Controls.Add(this.CancelButton);
+            this.Controls.Add(this.CancelButtonn);
             this.Controls.Add(this.DownloadProgressBar);
             this.Controls.Add(this.OpenFolderButton);
             this.Controls.Add(this.OpenFileButton);
@@ -129,7 +129,7 @@
         private System.Windows.Forms.Button OpenFolderButton;
         private System.Windows.Forms.ProgressBar DownloadProgressBar;
         private System.Windows.Forms.SaveFileDialog SaveDownloadDialog;
-        private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button CancelButtonn;
         private System.Windows.Forms.Label SizeToDownload;
     }
 }
