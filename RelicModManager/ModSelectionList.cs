@@ -2560,31 +2560,11 @@ namespace RelhaxModpack
             ComboBox searchComboBox = (ComboBox)sender;
             string filter_param = searchComboBox.Text;
             List<DatabaseObject> filteredItems = null;
-            // List<CompleteModSearch> filteredItems_New = null;
             if (!String.IsNullOrWhiteSpace(filter_param))
             {
                 String[] filtered_parts = filter_param.Split('*');
                 //force filteredItems to be mod or first level config
                 filteredItems = new List<DatabaseObject>(completeModSearchList);
-                //below is a conceptual example of what I did the the completeModSearchList
-                /*
-                filteredItems = new List<DatabaseObject>();
-                foreach (Category cat in parsedCatagoryList)
-                {
-                    foreach(Mod m in cat.mods)
-                    {
-                        filteredItems.Add(m);
-                        if(m.configs.Count > 0)
-                        {
-                            foreach(Config c in m.configs)
-                            {
-                                filteredItems.Add(c);
-                            }
-                        }
-                    }
-                }
-                */
-                //end example
                 foreach (var f in filtered_parts)
                 {
                     filteredItems = filteredItems.FindAll(x => x.name.ToLower().Contains(f.ToLower()));
@@ -2592,23 +2572,18 @@ namespace RelhaxModpack
             }
             if (filteredItems == null)
             {
-                //ignoreSelections = true;
                 searchComboBox.DataSource = completeModSearchList;
                 searchComboBox.SelectedIndex = -1;
             }
             else if (filteredItems.Count == 0)
             {
-                //ignoreSelections = true;
                 searchComboBox.ForeColor = System.Drawing.Color.Red;
             }
             else
             {
                 ignoreSelections = false;
                 searchComboBox.ForeColor = System.Drawing.Color.Black;
-                //searchComboBox.SelectedIndexChanged -= searchCB_SelectedIndexChanged;
                 searchComboBox.DataSource = filteredItems;
-                //searchComboBox.SelectedIndex = -1;
-                //searchComboBox.SelectedIndexChanged += searchCB_SelectedIndexChanged;
                 searchComboBox.DroppedDown = true;
             }
             Cursor.Current = Cursors.Default;
@@ -2618,24 +2593,7 @@ namespace RelhaxModpack
             searchComboBox.SelectionStart = filter_param.Length;
             searchComboBox.SelectionLength = 0;
         }
-        /*
-        private void searchCB_DropDown(object sender, EventArgs e)
-        {
-            searchComboBox_TextUpdate(sender, null);
-        }
-        
-        private void searchCB_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (mouseCLick)
-            {
-                bool ignoreSelectionBack = ignoreSelections;
-                ignoreSelections = false;
-                mouseCLick = false;
-                searchCB_SelectionChangeCommitted(sender, null);
-                ignoreSelections = ignoreSelectionBack;
-            }
-        }
-        */
+
         private void searchCB_SelectionChangeCommitted(object sender, EventArgs e)
         {
             ComboBox sendah = (ComboBox)sender;
@@ -2712,155 +2670,6 @@ namespace RelhaxModpack
             }
         }
 
-        /*
-        // call expected with Mod or Config structure
-        private void handleBackColorOfSearchResult(object sender)
-        {
-            if (lastSearchFieldInSelectionView is Mod)
-            {
-                Mod m = (Mod)lastSearchFieldInSelectionView;
-                ModFormCheckBox lS = (ModFormCheckBox)m.modFormCheckBox;
-                lS.BackColor = Settings.getBackColor();
-            }
-            else if (lastSearchFieldInSelectionView is Config)
-            {
-                Config c = (Config)lastSearchFieldInSelectionView;
-                if (lastSearchFieldInSelectionView is ConfigFormCheckBox)
-                {
-                    ConfigFormCheckBox lS = (ConfigFormCheckBox)c.configUIComponent;
-                    lS.BackColor = Settings.getBackColor();
-                }
-                else if (lastSearchFieldInSelectionView is ConfigFormComboBox)
-                {
-                    ConfigFormComboBox lS = (ConfigFormComboBox)c.configUIComponent;
-                    lS.BackColor = Settings.getBackColor();
-                }
-                else if (lastSearchFieldInSelectionView is ConfigFormRadioButton)
-                {
-                    ConfigFormRadioButton lS = (ConfigFormRadioButton)c.configUIComponent;
-                    lS.BackColor = Settings.getBackColor();
-                }
-            }
-            
-            if (sender is Mod)
-            {
-                Mod m = (Mod)sender;
-                lastSearchFieldInSelectionView = m;
-                ModFormCheckBox mFCB = (ModFormCheckBox)m.modFormCheckBox;
-                mFCB.BackColor = Color.LightSteelBlue;
-                mFCB.Focus();
-            } else if (sender is Config)
-            {
-                Config c = (Config)sender;
-                if (c.configUIComponent is ConfigFormCheckBox)
-                {
-                    ConfigFormCheckBox cFCB = (ConfigFormCheckBox)c.configUIComponent;
-                    cFCB.BackColor = Color.LightSteelBlue;
-                    cFCB.Focus();
-                }
-                else if (c.configUIComponent is ConfigFormComboBox)
-                {
-                    ConfigFormComboBox cFCB = (ConfigFormComboBox)c.configUIComponent;
-                    handleBackColorOfSearchResult(c.parentMod);
-                    return;
-                }
-                else if (c.configUIComponent is ConfigFormRadioButton)
-                {
-                    ConfigFormRadioButton cFRB = (ConfigFormRadioButton)c.configUIComponent;
-                    cFRB.BackColor = Color.LightSteelBlue;
-                    cFRB.Focus();
-                }
-                lastSearchFieldInSelectionView = c;
-            }
-        }
-
-        private void searchCB_SelectionChangeCommitted_New(object sender, EventArgs e)
-        {
-            ComboBox sendah = (ComboBox)sender;
-            if (sendah.SelectedIndex == -1 || ignoreSelections)
-            {
-                return;
-            }
-            if (sendah.SelectedItem is Mod)
-            {
-                Mod m = (Mod)sendah.SelectedItem;
-                if (modTabGroups.TabPages.Contains(m.tabIndex))
-                {
-                    modTabGroups.SelectedTab = m.tabIndex;
-                }
-                TabPage tp = modTabGroups.SelectedTab;
-                if (Settings.sView == Settings.SelectionView.defaultt)
-                {
-                    handleBackColorOfSearchResult(m);
-                }
-                else if (Settings.sView == Settings.SelectionView.legacy)
-                {
-                    ModWPFCheckBox c = (ModWPFCheckBox)m.modFormCheckBox;
-                    c.Focus();
-                    this.ModSelectionList_SizeChanged(null, null);
-                }
-            }
-            else if (sendah.SelectedItem is Config)
-            {
-                Config c = (Config)sendah.SelectedItem;
-                if (modTabGroups.TabPages.Contains(c.parentMod.tabIndex))
-                {
-                    modTabGroups.SelectedTab = c.parentMod.tabIndex;
-                }
-                TabPage tp = modTabGroups.SelectedTab;
-                if (Settings.sView == Settings.SelectionView.defaultt)
-                {
-                    handleBackColorOfSearchResult(c);
-                }
-                else if (Settings.sView == Settings.SelectionView.legacy)
-                {
-                    if (c.configUIComponent is ConfigWPFRadioButton)
-                    {
-                        ConfigWPFRadioButton s = (ConfigWPFRadioButton)c.configUIComponent;
-                        s.Focus();
-                        this.ModSelectionList_SizeChanged(null, null);
-                    }
-                    else if (c.configUIComponent is ConfigWPFComboBox)
-                    {
-                        ConfigWPFComboBox s = (ConfigWPFComboBox)c.configUIComponent;
-                        s.Focus();
-                        this.ModSelectionList_SizeChanged(null, null);
-                    }
-                    else if (c.configUIComponent is ConfigWPFCheckBox)
-                    {
-                        ConfigWPFCheckBox s = (ConfigWPFCheckBox)c.configUIComponent;
-                        s.Focus();
-                        this.ModSelectionList_SizeChanged(null, null);
-                    }
-                }
-            }
-            else
-            {
-                Utils.appendToLog("searchCB_SelectionChangeCommitted_New\nelse: no sendah identified");
-            }
-            mouseCLick = false;
-        }
-        */
-        /*
-        private void searchCB_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                searchCB_SelectionChangeCommitted(sender, null);
-            }
-            else
-            {
-                mouseCLick = false;
-            }
-        }
-
-        private void searchCB_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                mouseCLick = true;
-            }
-        }*/
         private void searchCB_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)

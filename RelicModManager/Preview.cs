@@ -242,15 +242,15 @@ namespace RelhaxModpack
                     this.displayMedia(medias[currentlySelected]);
             }
             if (description == null)
-                description = "No Description Provided";
+                description = Translations.getTranslatedString("noDescription");
             else if (description.Equals(""))
-                description = "No Description Provided";
+                description = Translations.getTranslatedString("noDescription");
             if (updateComments == null)
-                updateComments = "No Update Info Provided";
+                updateComments = Translations.getTranslatedString("noUpdateInfo");
             else if (updateComments.Equals(""))
-                updateComments = "No Update Info Provided";
-            descriptionBox.Lines = description.Split('@');
-            updateBox.Lines = updateComments.Split('@');
+                updateComments = Translations.getTranslatedString("noUpdateInfo");
+            // descriptionBox.Lines = description.Split('@');
+            // updateBox.Lines = updateComments.Split('@');
             //get the size of the title bar window
             Rectangle screenRektangle = RectangleToScreen(this.ClientRectangle);
             int titleHeight = screenRektangle.Top - this.Top;

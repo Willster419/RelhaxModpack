@@ -779,10 +779,10 @@ namespace RelhaxModpack
                                                         m.size = Utils.parseInt(modNode.Value, 0);
                                                         break;
                                                     case "description":
-                                                        m.description = modNode.Value;
+                                                        m.description = convertFromXmlSaveFormat(modNode.Value);
                                                         break;
                                                     case "updateComment":
-                                                        m.updateComment = modNode.Value;
+                                                        m.updateComment = convertFromXmlSaveFormat(modNode.Value);
                                                         break;
                                                     case "devURL":
                                                         m.devURL = modNode.Value;
@@ -1057,10 +1057,10 @@ namespace RelhaxModpack
                                         c.size = Utils.parseInt(configNode.Value, 0);
                                         break;
                                     case "updateComment":
-                                        c.updateComment = configNode.Value;
+                                        c.updateComment = convertFromXmlSaveFormat(configNode.Value);
                                         break;
                                     case "description":
-                                        c.description = configNode.Value;
+                                        c.description = convertFromXmlSaveFormat(configNode.Value);
                                         break;
                                     case "devURL":
                                         c.devURL = configNode.Value;
@@ -1233,7 +1233,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("processConfigs_new", ex);
+                Utils.exceptionLog("processConfigs", ex);
             }
         }
 
@@ -3862,16 +3862,16 @@ namespace RelhaxModpack
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
+        //convert string with CR and/or LF from Xml save format
+        private static string convertFromXmlSaveFormat(string s)
+        {
+            return s.TrimEnd().Replace("@","\n").Replace(@"\r", "\r").Replace(@"\t", "\t").Replace(@"\n", "\n").Replace(@"&#92;", @"\");
+        }
+
         //convert string with CR and/or LF to Xml save format
         private static string convertToXmlSaveFormat(string s)
         {
-            string replaceCR = char.ConvertFromUtf32(13);
-            string replaceLF = char.ConvertFromUtf32(10);
-            s = s.TrimEnd();
-            s = s.Replace(replaceCR + replaceLF, "@");
-            s = s.Replace(replaceCR, "@");
-            s = s.Replace(replaceLF, "@");
-            return s;
+            return s.TrimEnd().Replace(@"\", @"&#92;").Replace("\r", @"\r").Replace("\t", @"\t").Replace("\n", @"\n");
         }
 
         //saves the mod database
