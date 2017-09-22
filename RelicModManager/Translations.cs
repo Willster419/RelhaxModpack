@@ -1014,10 +1014,10 @@ namespace RelhaxModpack
 
             //Componet:
             //
-            english.Add("InstallingTo", "Installing to");
-            german.Add("InstallingTo", "Installiere nach");
-            polish.Add("InstallingTo", "Instalowanie w");
-            french.Add("InstallingTo", "Installation à");
+            english.Add("InstallingTo", "Installing to {0}");
+            german.Add("InstallingTo", "Installiere nach {0}");
+            polish.Add("InstallingTo", "Instalowanie w {0}");
+            french.Add("InstallingTo", "Installation à {0}");
 
             //Componet:
             //

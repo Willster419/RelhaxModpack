@@ -21,8 +21,6 @@ namespace RelhaxModpack
         public List<Dependency> dependencies;
         public List<LogicalDependnecy> logicalDependencies;
         public List<DatabaseObject> completeModSearchList;
-        // public List<CompleteModSearch> completeModSearchList_New;
-        // public CompleteModSearch lastSearchFieldInSelectionView;
         private bool loadingConfig = false;
         private bool taskBarHidden = false;
         private const int titleBar = 23;//set origionally for 23
@@ -163,7 +161,7 @@ namespace RelhaxModpack
             pw.Dispose();
             //set label properties
             TanksVersionLabel.Text = TanksVersionLabel.Text + tanksVersion;
-            TanksPath.Text = Translations.getTranslatedString("InstallingTo") + " " + tanksLocation;
+            TanksPath.Text = string.Format(Translations.getTranslatedString("InstallingTo"), tanksLocation);
             //if the task bar was set to auto hide, set it to always on top
             //it will be set back to auto hide when this window closes
             Settings.AppBarStates currentState = Settings.GetTaskbarState();
@@ -316,7 +314,6 @@ namespace RelhaxModpack
             loadingConfig = true;
             Utils.appendToLog("Loading ModSelectionList with view " + Settings.sView);
             completeModSearchList = new List<DatabaseObject>();
-            // completeModSearchList_New = new List<CompleteModSearch>();
             foreach (TabPage t in this.modTabGroups.TabPages)
             {
                 foreach (Category c in parsedCatagoryList)
@@ -591,19 +588,19 @@ namespace RelhaxModpack
                             string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                             if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                             {
-                                configControlRB.Content = configControlRB.Content + " (" + Translations.getTranslatedString("updated") + ")";
+                                configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Translations.getTranslatedString("updated"));
                                 con.downloadFlag = true;
                                 if (con.size > 0)
-                                    configControlRB.Content = configControlRB.Content + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
+                                    configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Utils.SizeSuffix(con.size, 1, true));
                             }
                         }
                         else
                         {
                             if (con.downloadFlag)
                             {
-                                configControlRB.Content = configControlRB.Content + " (" + Translations.getTranslatedString("updated") + ")";
+                                configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Translations.getTranslatedString("updated"));
                                 if (con.size > 0)
-                                    configControlRB.Content = configControlRB.Content + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
+                                    configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Utils.SizeSuffix(con.size, 1, true));
                             }
                         }
                         //add the handlers at the end
@@ -645,20 +642,20 @@ namespace RelhaxModpack
                             string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                             if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                             {
-                                toAdd = toAdd + " (" + Translations.getTranslatedString("updated") + ")";
+                                toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
                                 con.downloadFlag = true;
                                 if (con.size > 0)
-                                    toAdd = toAdd + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
+                                    toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.size, 1, true));
                             }
                         }
                         else
                         {
                             if (con.downloadFlag)
                             {
-                                toAdd = toAdd + " (" + Translations.getTranslatedString("updated") + ")";
+                                toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
                                 con.downloadFlag = true;
                                 if (con.size > 0)
-                                    toAdd = toAdd + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
+                                    toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.size, 1, true));
                             }
                         }
                         //add it
@@ -750,20 +747,20 @@ namespace RelhaxModpack
                             string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                             if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                             {
-                                configControlCB.Content = configControlCB.Content + " (" + Translations.getTranslatedString("updated") + ")";
+                                configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Translations.getTranslatedString("updated"));
                                 con.downloadFlag = true;
                                 if (con.size > 0)
-                                    configControlCB.Content = configControlCB.Content + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
+                                    configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Utils.SizeSuffix(con.size, 1, true));
                             }
                         }
                         else
                         {
                             if (con.downloadFlag)
                             {
-                                configControlCB.Content = configControlCB.Content + " (" + Translations.getTranslatedString("updated") + ")";
+                                configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Translations.getTranslatedString("updated"));
                                 con.downloadFlag = true;
                                 if (con.size > 0)
-                                    configControlCB.Content = configControlCB.Content + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
+                                    configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Utils.SizeSuffix(con.size, 1, true));
                             }
                         }
                         //add the handlers at the end
@@ -782,7 +779,7 @@ namespace RelhaxModpack
                     }
                     else
                     {
-                        Utils.appendToLog("WARNING: Unknown config type for " + con.name + ": " + con.type);
+                        Utils.appendToLog(string.Format("WARNING: Unknown config type for {0}: {1}", con.name, con.type));
                     }
                 }
             }
@@ -1333,7 +1330,7 @@ namespace RelhaxModpack
                     //if the CRC's don't match and the mod actually has a zip file
                     if ((!m.zipFile.Equals("")) && (!m.crc.Equals(oldCRC2)))
                     {
-                        modCheckBox.Text = modCheckBox.Text + " (" + Translations.getTranslatedString("updated") + ")";
+                        modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
                         m.downloadFlag = true;
                         if ((m.size > 0))
                             modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
@@ -1343,7 +1340,7 @@ namespace RelhaxModpack
                 {
                     if (m.downloadFlag)
                     {
-                        modCheckBox.Text = modCheckBox.Text + " (" + Translations.getTranslatedString("updated") + ")";
+                        modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
                         if ((m.size > 0))
                             modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
                     }
@@ -1543,19 +1540,19 @@ namespace RelhaxModpack
                             string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
                             if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                             {
-                                configControlRB.Text = configControlRB.Text + " (" + Translations.getTranslatedString("updated") + ")";
+                                configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
                                 con.downloadFlag = true;
                                 if (con.size > 0)
-                                    configControlRB.Text = configControlRB.Text + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
+                                    configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.size, 1, true));
                             }
                         }
                         else
                         {
                             if (con.downloadFlag)
                             {
-                                configControlRB.Text = configControlRB.Text + " (" + Translations.getTranslatedString("updated") + ")";
+                                configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
                                 if (con.size > 0)
-                                    configControlRB.Text = configControlRB.Text + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
+                                    configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.size, 1, true));
                             }
                         }
                         //add the config to the form
@@ -1593,18 +1590,18 @@ namespace RelhaxModpack
                             if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                             {
                                 con.downloadFlag = true;
-                                toAdd = toAdd + " (" + Translations.getTranslatedString("updated") + ")";
+                                toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
                                 if (con.size > 0)
-                                    toAdd = toAdd + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
+                                    toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.size, 1, true));
                             }
                         }
                         else
                         {
                             if (con.downloadFlag)
                             {
-                                toAdd = toAdd + " (" + Translations.getTranslatedString("updated") + ")";
+                                toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
                                 if (con.size > 0)
-                                    toAdd = toAdd + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
+                                    toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.size, 1, true));
                             }
                         }
                         //add it
@@ -1680,18 +1677,18 @@ namespace RelhaxModpack
                             if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                             {
                                 con.downloadFlag = true;
-                                configControlCB.Text = configControlCB.Text + " (" + Translations.getTranslatedString("updated") + ")";
+                                configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Translations.getTranslatedString("updated"));
                                 if (con.size > 0)
-                                    configControlCB.Text = configControlCB.Text + " (" + Utils.SizeSuffix(con.size, 1, true) + ")";
+                                    configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Utils.SizeSuffix(con.size, 1, true));
                             }
                         }
                         else
                         {
                             if (con.downloadFlag)
                             {
-                                configControlCB.Text = configControlCB.Text + " (" + Translations.getTranslatedString("updated") + ")";
+                                configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Translations.getTranslatedString("updated"));
                                 if (con.size > 0)
-                                    configControlCB.Text = configControlCB.Text + " (" + Utils.SizeSuffix(con.size,1, true) + ")";
+                                    configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Utils.SizeSuffix(con.size, 1, true));
                             }
                         }
                         //add config to the form
@@ -1702,7 +1699,7 @@ namespace RelhaxModpack
                     }
                     else
                     {
-                        Utils.appendToLog("WARNING: Unknown config type for " + con.name + ": " + con.type);
+                        Utils.appendToLog(string.Format("WARNING: Unknown config type for {0}: {1}", con.name, con.type));
                     }
                 }
             }
@@ -1958,7 +1955,6 @@ namespace RelhaxModpack
                     }
                 }
             }
-            
         }
 
         //handler for when the config checkbox is checked or unchecked
@@ -2347,7 +2343,7 @@ namespace RelhaxModpack
                             }
                             catch
                             {
-                                // values are nativ !
+                                // values are negative !
                                 // this is catching the exception if the ModSelectionWindow is going to minimize
                             }
                         }
@@ -2453,7 +2449,7 @@ namespace RelhaxModpack
                     if (!File.Exists(filePath))
                     {
                         Utils.appendToLog(string.Format("ERROR: {0} not found, not loading configs", filePath));
-                        MessageBox.Show(Translations.getTranslatedString("configLoadFailed"));
+                        MessageBox.Show(Translations.getTranslatedString("configLoadFailed"), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Stop);
                         return;
                     }
                 }
