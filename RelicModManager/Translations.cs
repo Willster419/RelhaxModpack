@@ -227,7 +227,7 @@ namespace RelhaxModpack
             //Componet: appDataFolderNotExist
             //
             english.Add("appDataFolderNotExist", "The installer could not detect the WoT cache folder. Continue the installation witout clearing WoT cache?");
-            german.Add("appDataFolderNotExist", "Der Installer konnte den WoT-Cache-Ordner nicht erkennen. Setzen Sie die Installation fort, um den WoT-Cache zu löschen?");
+            german.Add("appDataFolderNotExist", "Der Installer konnte den WoT-Cache-Ordner nicht erkennen. Installation fortsetzen ohne den WoT-Cache zu löschen?");
             polish.Add("appDataFolderNotExist", "Instalato nie wykrył foldera cache. Czy kontynuować bez czyszczenia folderu cache?");
             french.Add("appDataFolderNotExist", "L'installateur n'as pas pus détecter le dossier de cache WoT. Continuer l'installation sans nettoyer le cache?");
 
@@ -271,7 +271,7 @@ namespace RelhaxModpack
             //Componet: helperText
             //
             english.Add("helperText", "Welcome to the RelHax Modpack! I have tried to make the modpack as straight-forward as possible, but questions may still arise. Hover over (or right click) a setting to have it explained. You won't see this dialog box again, unless you delete the settings xml file.");
-            german.Add("helperText", "Willkommen im RelHax Modpack! Ich habe versucht, das Modpack so einfach wie möglich zu gestalten, aber Fragen können dennoch entstehen. Rechtsklick auf eine Einstellung erklaert diese dann. Du siehst diese Dialogbox nicht mehr, ausser du loescht die xml Datei.");
+            german.Add("helperText", "Willkommen im RelHax Modpack! Ich habe versucht, das Modpack so einfach wie möglich zu gestalten, aber Fragen können dennoch entstehen. Rechtsklick auf eine Einstellung erklärt diese dann. Du siehst diese Dialogbox nicht mehr, ausser du löscht die xml Datei.");
             polish.Add("helperText", "Witamy w paczce RelHax! Próbowałem stworzyć jak najprostszą w użytku paczkę modyfikacji, ale wciąż możesz mieć pytania. Kliknik PPM na opcji, by wyświetlić opis. Nie zobaczysz tej wiadomości ponownie, dopóki nie usuniesz pliku ustawień xml.");
             french.Add("helperText", "Bienvenue au ModPack Relhax! J'ai aissayé de faire le modpack le plus simple possible, mais des questions peuvent survenir. Survolez (ou cliquez droit) un paramètre pour voire une explication. Vous n'allez plus voire cette boite, sauf si vous supprimez le fichier de configuration xml ");
 
@@ -348,14 +348,14 @@ namespace RelhaxModpack
             french.Add("buildingUI", "Construction de l'interface");
 
             //Section: Preview
-            //Componet: 
+            //Componet: descriptionBox
             //
             english.Add("noDescription", "No Description Provided");
             german.Add("noDescription", "keine Beschreibung verfügbar");
             polish.Add("noDescription", "nie podano opisu");
             french.Add("noDescription", "non Description fournie");
 
-            //Componet: 
+            //Componet: updateBox
             //
             english.Add("noUpdateInfo", "No Update Info Provided");
             german.Add("noUpdateInfo", "keine Aktualisierungsinformationen verfügbar");
