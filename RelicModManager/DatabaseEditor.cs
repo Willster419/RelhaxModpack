@@ -741,6 +741,8 @@ namespace RelhaxModpack
                 ObjectPicturesList.DataSource = null;
                 ObjectPicturesList.Items.Clear();
                 ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
+                if (SelectedDatabaseObject.pictureList.Count == 0)
+                    PictureURLTB.Text = "";
 
                 //userdatas
                 ObjectUserdatasTB.Text = "";
