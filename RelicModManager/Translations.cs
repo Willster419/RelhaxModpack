@@ -895,8 +895,8 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("databaseReadFailed", "CRITICAL: Failed to read database");
-            german.Add("databaseReadFailed", "KRITISCH: Datenbank konnte nicht gelesen werden");
+            english.Add("databaseReadFailed", "CRITICAL: Failed to read database\n\nsee Logfile for detailed info");
+            german.Add("databaseReadFailed", "KRITISCH: Datenbank konnte nicht gelesen werden\n\nin der Protokolldatei stehen weitere Informationen zu diesem Fehler");
             polish.Add("databaseReadFailed", "BŁĄD KRYTYCZNY: Nie udało się wczytać bazy danych");
             french.Add("databaseReadFailed", "CRITIQUE: Impossible de lire la base de données");
 

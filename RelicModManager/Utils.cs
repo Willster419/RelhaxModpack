@@ -342,10 +342,7 @@ namespace RelhaxModpack
         {
             if (!File.Exists(MainWindow.md5HashDatabaseXmlFile))
             {
-                XDocument doc = new XDocument(
-                new XDeclaration("1.0", "utf-8", "yes"),
-                new XElement("database")
-                );
+                XDocument doc = new XDocument( new XDeclaration("1.0", "utf-8", "yes"), new XElement("database"));
                 doc.Save(MainWindow.md5HashDatabaseXmlFile);
             }
         }
@@ -366,19 +363,6 @@ namespace RelhaxModpack
                        .Single();
                     return element.Attribute("md5").Value;
                 }
-                /*
-                try
-                {
-                    XElement element = doc.Descendants("file")
-                       .Where(arg => arg.Attribute("filename").Value == inputFile && arg.Attribute("filetime").Value == inputFiletime)
-                       .Single();
-                    return element.Attribute("md5").Value;
-                }
-                catch (InvalidOperationException)
-                {
-                    // catch the Exception if no entry is found
-                }
-                */
             }
             catch (Exception e)
             {
@@ -404,10 +388,7 @@ namespace RelhaxModpack
                 }
                 catch (InvalidOperationException)
                 {
-                    doc.Element("database").Add(new XElement("file",
-                        new XAttribute("filename", inputFile),
-                        new XAttribute("filetime", inputFiletime),
-                        new XAttribute("md5", inputMd5Hash)));
+                    doc.Element("database").Add(new XElement("file", new XAttribute("filename", inputFile), new XAttribute("filetime", inputFiletime), new XAttribute("md5", inputMd5Hash)));
                 }
                 doc.Save(MainWindow.md5HashDatabaseXmlFile);
             }
@@ -428,9 +409,7 @@ namespace RelhaxModpack
             XDocument doc = XDocument.Load(MainWindow.md5HashDatabaseXmlFile);
             try
             {
-                doc.Descendants("file")
-                   .Where(arg => arg.Attribute("filename").Value == tempFilename)
-                    .Remove();
+                doc.Descendants("file").Where(arg => arg.Attribute("filename").Value == tempFilename).Remove();
                 doc.Save(MainWindow.md5HashDatabaseXmlFile);
             }
             catch (InvalidOperationException)
@@ -507,8 +486,8 @@ namespace RelhaxModpack
                 }
                 catch (XmlException ex)
                 {
-                    Utils.appendToLog("CRITICAL: Failed to read database: " + databaseURL + "\nMessage: " + ex.Message);
-                    MessageBox.Show(Translations.getTranslatedString("databaseReadFailed") + "\n\nsee Logfile for detailed info");
+                    Utils.appendToLog(string.Format("CRITICAL: Failed to read database: {0}\nMessage: {1}", databaseURL, ex.Message));
+                    MessageBox.Show(Translations.getTranslatedString("databaseReadFailed"));
                     Application.Exit();
                     return;
                 }
@@ -1941,7 +1920,7 @@ namespace RelhaxModpack
             }
             catch (JsonReaderException j)
             {
-                Utils.appendToLog("ERROR: Failed to patch " + jsonFile);
+                Utils.appendToLog(string.Format("ERROR: Failed to patch {0}",jsonFile));
                 if (Program.testMode)
                 {
                     //in test mode this is worthy of an EXCEPTION
@@ -1959,7 +1938,7 @@ namespace RelhaxModpack
                 //pull out if it failed to get the selection
                 if (newObject == null)
                 {
-                    Utils.appendToLog("ERROR: path " + jsonPath + " not found for " + Path.GetFileName(jsonFile));
+                    Utils.appendToLog(string.Format("ERROR: path {0} not found for {1}", jsonPath, Path.GetFileName(jsonFile)));
                 }
                 else if (useBool)
                 {
@@ -1996,7 +1975,7 @@ namespace RelhaxModpack
             }
             else
             {
-                Utils.appendToLog("ERROR: Unknown json patch mode, " + mode);
+                Utils.appendToLog(string.Format("ERROR: Unknown json patch mode, {0}", mode));
             }
             StringBuilder rebuilder = new StringBuilder();
             string[] putBackDollas = root.ToString().Split('\n');
@@ -2026,7 +2005,7 @@ namespace RelhaxModpack
                 rebuilder.Append(putBackDollas[i] + "\n");
             }
             if (ssList.Count != 0)
-                Utils.appendToLog("There was an error with patching the file " + jsonFile + ", with extra refrences");
+                Utils.appendToLog(string.Format("There was an error with patching the file {0}, with extra refrences", jsonFile));
             File.WriteAllText(jsonFile, rebuilder.ToString());
         }
         public static void pmodPatch(string bootFile, string xvmPath, string search, string newValue, string mode, string tanksLocation, string tanksVersion, bool testMods = false, string testXVMBootLoc = "")
@@ -2217,7 +2196,7 @@ namespace RelhaxModpack
                     //split the array into an array lol
                     if (readUntill(fileContents, sb, @"\[") == "null")
                     {
-                        Utils.appendToLog("ERROR: Path not found: " + origXvmPath);
+                        Utils.appendToLog(string.Format("ERROR: Path not found: {0}", origXvmPath));
                         return;
                     }
                     string arrayContents = peekUntill(fileContents, @"\]");
@@ -2290,7 +2269,7 @@ namespace RelhaxModpack
                         if (indexToReadTo < 0 || indexToReadTo >= carray.Count())
                         {
                             //error and abort
-                            Utils.appendToLog("invalid index: " + pathArray[0]);
+                            Utils.appendToLog(string.Format("invalid index: {0}", pathArray[0]));
                             return;
                         }
                     }
@@ -2326,7 +2305,7 @@ namespace RelhaxModpack
                 {
                     default:
                         //do nothing
-                        Utils.appendToLog("Invalid mode: " + mode + " for xvm patch " + origXvmPath);
+                        Utils.appendToLog(string.Format("Invalid mode: {0} for xvm patch {1}", mode, origXvmPath));
                         break;
                     case "edit":
                         xvmEdit(fileContents, sb, newFilePath, replaceValue, search);
@@ -2358,7 +2337,7 @@ namespace RelhaxModpack
             //it's a refrence, move it to the next file and readInsideEdit (yes recursion)
             if (readUntill(fileContents, sb, @"\${[ \t]*""") == "null")
             {
-                Utils.appendToLog("ERROR: Path not found: " + origXvmPath);
+                Utils.appendToLog(string.Format("ERROR: Path not found: {0}", origXvmPath));
                 return;
             }
             //now read untill the next quote for the temp path
@@ -2413,7 +2392,7 @@ namespace RelhaxModpack
             //ref style refrence
             if (readUntill(fileContents, sb, @"""\$ref"":") == "null")
             {
-                Utils.appendToLog("ERROR: Path not found: " + origXvmPath);
+                Utils.appendToLog(string.Format("ERROR: Path not found: {0}", origXvmPath));
                 return;
             }
             readUntill(fileContents, sb, ":");
@@ -2793,17 +2772,17 @@ namespace RelhaxModpack
                 bootFile = customBootFileLoc;
             if (!File.Exists(bootFile))
             {
-                if(writeToLog)
-                    appendToLog("ERROR: xvm config boot file does not exist at " + xvmBootFileLoc1 + ", checking " + xvmBootFileLoc2);
+                if (writeToLog)
+                    appendToLog(string.Format("ERROR: xvm config boot file does not exist at {0}, checking {1}", xvmBootFileLoc1, xvmBootFileLoc2));
                 else
-                    appendToLog("NOTICE: default run, xvm config boot file does not exist at " + xvmBootFileLoc1 + ", checking " + xvmBootFileLoc2);
+                    appendToLog(string.Format("NOTICE: default run, xvm config boot file does not exist at {0}, checking {1}", xvmBootFileLoc1, xvmBootFileLoc2));
                 bootFile = xvmBootFileLoc2;
                 if (!File.Exists(bootFile))
                 {
                     if(writeToLog)
-                        appendToLog("ERROR: xvm config boot file does not exist at " + xvmBootFileLoc2 + ", aborting patch");
+                        appendToLog(string.Format("ERROR: xvm config boot file does not exist at {0}, aborting patch", xvmBootFileLoc2));
                     else
-                        appendToLog("NOTICE: default run, xvm config boot file does not exist at " + xvmBootFileLoc2 + ", user did not install xvm");
+                        appendToLog(string.Format("NOTICE: default run, xvm config boot file does not exist at {0}, user did not install xvm", xvmBootFileLoc2));
                     return null;
                 }
             }
@@ -2966,7 +2945,7 @@ namespace RelhaxModpack
             if (Settings.saveLastConfig && !fromButton)
             {
                 savePath = Application.StartupPath + "\\RelHaxUserConfigs\\lastInstalledConfig.xml";
-                Utils.appendToLog("Save last config checked, saving to " + savePath);
+                Utils.appendToLog(string.Format("Save last config checked, saving to {0}", savePath));
             }
             //XmlDocument save time!
             XmlDocument doc = new XmlDocument();
