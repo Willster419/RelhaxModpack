@@ -43,7 +43,7 @@ namespace RelhaxModpack
                     }
                     break;
             }
-            Utils.appendToLog("ERROR: no value in language hash for key: " + componetName + ": Language: " + language);
+            Utils.appendToLog(string.Format("ERROR: no value in language hash for key: {0}  Language: {1}", componetName , language));
             return componetName;
         }
         //method to load each translated string based on which language is selected
@@ -121,7 +121,7 @@ namespace RelhaxModpack
             //Componet: formPageLink
             //
             english.Add("formPageLink", "View Modpack Form Page (NA)");
-            german.Add("formPageLink", "Zeige Modpack Formularseite (NA)");
+            german.Add("formPageLink", "Zeige Modpack Forumbeiträge (NA)");
             polish.Add("formPageLink", "Forum Paczki (NA)");
             french.Add("formPageLink", "Afficher la page du formulaire (NA)");
 
@@ -135,7 +135,7 @@ namespace RelhaxModpack
             //Componet: cleanInstallCB
             //
             english.Add("cleanInstallCB", "Clean Installation (Recommended)");
-            german.Add("cleanInstallCB", "Saubere Installation (Empfohlen)");
+            german.Add("cleanInstallCB", "Saubere Installation (empfohlen)");
             polish.Add("cleanInstallCB", "Czysta instalacja (Zalecane)");
             french.Add("cleanInstallCB", "Installation propre (Recommandé)");
 
@@ -163,7 +163,7 @@ namespace RelhaxModpack
             //Componet: darkUICB
             //
             english.Add("darkUICB", "Dark UI");
-            german.Add("darkUICB", "Dunkle Benutzeroberflaeche");
+            german.Add("darkUICB", "Dunkle Benutzeroberfläche");
             polish.Add("darkUICB", "Ciemny Interfejs");
             french.Add("darkUICB", "Interface sombre");
 
@@ -184,14 +184,14 @@ namespace RelhaxModpack
             //Componet: largerFontButton
             //
             english.Add("largerFontButton", "Larger Font");
-            german.Add("largerFontButton", "Groessere Schriftart");
+            german.Add("largerFontButton", "Grössere Schriftart");
             polish.Add("largerFontButton", "Większa czcionka");
             french.Add("largeFontButton", "Grande police");
 
             //Componet: loadingImageGroupBox
             //
             english.Add("loadingImageGroupBox", "Loading Image");
-            german.Add("loadingImageGroupBox", "Bild laden");
+            german.Add("loadingImageGroupBox", "lade Bild");
             polish.Add("loadingImageGroupBox", "Ładowanie obrazka");
             french.Add("loadingImageGroupBox", "Image de chargement");
 
@@ -205,7 +205,7 @@ namespace RelhaxModpack
             //Componet: findBugAddModLabel
             //
             english.Add("findBugAddModLabel", "Find a bug? Want a mod added?");
-            german.Add("findBugAddModLabel", "Fehler gefunden? Willst Du einen Mod hinzufuegen?");
+            german.Add("findBugAddModLabel", "Fehler gefunden? Willst Du einen Mod hinzufügen?");
             polish.Add("findBugAddModLabel", "Znalazłeś błąd? Chcesz dodać mod?");
             french.Add("findBugAddModLabel", "Trouvé un bug? Recommandation de mod?");
 
@@ -755,7 +755,7 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("configNotExist", "ERROR: {0} does NOT exist, loading in regular mode");
-            german.Add("configNotExist", "FEHLER: {0} existiert nicht, laedt im regulaeren Modus");
+            german.Add("configNotExist", "FEHLER: {0} existiert nicht, lädt im regulären Modus");
             polish.Add("configNotExist", "BŁĄD: {0} nie istnieje, ładowanie podstawowego trybu");
             french.Add("configNotExist", "ERREUR: {0} n'existe pas, chargement en mode normal");
 
