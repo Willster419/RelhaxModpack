@@ -119,6 +119,7 @@
             // 
             // AddUnderCB
             // 
+            this.AddUnderCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.AddUnderCB.FormattingEnabled = true;
             this.AddUnderCB.Location = new System.Drawing.Point(3, 35);
             this.AddUnderCB.Name = "AddUnderCB";
@@ -156,6 +157,7 @@
             // 
             // ModCB
             // 
+            this.ModCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ModCB.FormattingEnabled = true;
             this.ModCB.Location = new System.Drawing.Point(0, 18);
             this.ModCB.Name = "ModCB";
@@ -184,6 +186,7 @@
             // 
             // ConfigCB
             // 
+            this.ConfigCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ConfigCB.FormattingEnabled = true;
             this.ConfigCB.Location = new System.Drawing.Point(1, 16);
             this.ConfigCB.Name = "ConfigCB";
