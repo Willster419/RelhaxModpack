@@ -1943,9 +1943,9 @@ namespace RelhaxModpack
         private string GetNewPackageName(string oldPackageName)
         {
             int i = 1;
-            string packageName = oldPackageName + "_NEW_" + i;
+            string packageName = string.Format("{0}_NEW_{1}", oldPackageName, i);
             while (DuplicatePackageName(this.GlobalDependencies, this.Dependencies, this.LogicalDependencies, this.ParsedCategoryList, packageName))
-                packageName = oldPackageName + "_NEW_" + i++;
+                packageName = string.Format("{0}_NEW_{1}", oldPackageName, i++);
             return packageName;
         }
     }
