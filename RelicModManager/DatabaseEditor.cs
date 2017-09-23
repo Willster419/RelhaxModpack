@@ -1237,7 +1237,7 @@ namespace RelhaxModpack
                 //check if the dependency is in use first
                 if (DependencyInUse(SelectedDependency.packageName, true))
                 {
-                    MessageBox.Show("Cannot remove because it is in use:\n" + InUseSB.ToString());
+                    MessageBox.Show(string.Format("Cannot remove because it is in use:\n{0}",InUseSB.ToString()));
                 }
                 else
                 {
@@ -1249,7 +1249,7 @@ namespace RelhaxModpack
                 //check if the dependency is in use first
                 if (DependencyInUse(SelectedLogicalDependency.packageName, false))
                 {
-                    MessageBox.Show("Cannot remove because it is in use:\n" + InUseSB.ToString());
+                    MessageBox.Show(string.Format("Cannot remove because it is in use:\n{0}", InUseSB.ToString()));
                 }
                 else
                 {
@@ -1292,7 +1292,7 @@ namespace RelhaxModpack
                     if (d.packageName.Equals(packageName))
                     {
                         InUse = true;
-                        InUseSB.Append("Dependency: " + d.packageName + "\n");
+                        InUseSB.Append(string.Format("Dependency: {0}\n", d.packageName));
                     }
                 }
             }
@@ -1303,7 +1303,7 @@ namespace RelhaxModpack
                     if (d.packageName.Equals(packageName))
                     {
                         InUse = true;
-                        InUseSB.Append("Category: " + c.name);
+                        InUseSB.Append(string.Format("Category: {0}", c.name));
                     }
                 }
                 foreach (Mod m in c.mods)
@@ -1313,7 +1313,7 @@ namespace RelhaxModpack
                         if (d.packageName.Equals(packageName))
                         {
                             InUse = true;
-                            InUseSB.Append("Mod: " + m.packageName + "\n");
+                            InUseSB.Append(string.Format("Mod: {0}\n", m.packageName));
                         }
                     }
                     foreach (LogicalDependnecy d in m.logicalDependencies)
@@ -1321,7 +1321,7 @@ namespace RelhaxModpack
                         if (d.packageName.Equals(packageName))
                         {
                             InUse = true;
-                            InUseSB.Append("Mod: " + m.packageName + "\n");
+                            InUseSB.Append(string.Format("Mod: {0}\n", m.packageName));
                         }
                     }
                     ProcessConfigsInUse(InUseSB, m.configs, InUse, packageName);
@@ -1338,7 +1338,7 @@ namespace RelhaxModpack
                     if (d.packageName.Equals(packageName))
                     {
                         InUse = true;
-                        InUseSB.Append("Config: " + c.packageName + "\n");
+                        InUseSB.Append(string.Format("Config: {0}\n", c.packageName));
                     }
                 }
                 foreach (LogicalDependnecy d in c.logicalDependencies)
@@ -1346,7 +1346,7 @@ namespace RelhaxModpack
                     if (d.packageName.Equals(packageName))
                     {
                         InUse = true;
-                        InUseSB.Append("Config: " + c.packageName + "\n");
+                        InUseSB.Append(string.Format("Config: {0}\n", c.packageName));
                     }
                 }
                 ProcessConfigsInUse(sb, c.configs, InUse, packageName);
