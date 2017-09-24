@@ -481,7 +481,7 @@ namespace RelhaxModpack
             // Dependencies tab
             ObjectDependenciesList.DataSource = null;
             ObjectDependenciesList.Items.Clear();
-            ObjectDependenciesLabel.Text = "";
+            ObjectDependenciesLabel.Text = "dependencies (click to edit)";
             CurrentDependenciesCB.DataSource = null;
             CurrentDependenciesCB.Items.Clear();
             CurrentDependenciesCB.SelectedIndex = -1;
@@ -604,7 +604,6 @@ namespace RelhaxModpack
                 ObjectEnabledCheckBox.Checked = SelectedDependency.enabled;
 
                 ObjectVisibleCheckBox.Enabled = false;
-                // ObjectVisibleCheckBox.Checked = false;
 
                 ObjectAppendExtractionCB.Enabled = true;
                 ObjectAppendExtractionCB.Checked = SelectedDependency.appendExtraction;
@@ -612,17 +611,21 @@ namespace RelhaxModpack
                 DownloadZipfileButton.Enabled = true;
 
                 DescriptionTabPage.Enabled = false;
-                // ObjectDescTB.Text = "";
-                // ObjectUpdateNotesTB.Text = "";
 
                 DependenciesTabPage.Enabled = true;
-                ObjectDependenciesLabel.Text = "dependencies (click to edit)";
-                DependencyPanel.Enabled = false;
+                DependencyPanel.Enabled = true;
+                ObjectDependenciesLabel.Text = "Objects that use this dependency...";
+                ObjectDependenciesLabel.Enabled = true;
+                ObjectDependenciesList.Enabled = true;
+                ObjectDependenciesList.DataSource = BuildDatabaseLogic(SelectedDependency);
+                
 
                 LogicalDependencyPanel.Enabled = true;
-                // ObjectLogicalDependenciesList.DataSource = null;
-                // ObjectLogicalDependenciesList.Items.Clear();
+                ObjectLogicalDependenciesList.DataSource = null;
+                ObjectLogicalDependenciesList.Items.Clear();
                 ObjectLogicalDependenciesList.DataSource = SelectedDependency.logicalDependencies;
+                CurrentLogicalDependenciesCB.DataSource = null;
+                CurrentLogicalDependenciesCB.Items.Clear();
                 CurrentLogicalDependenciesCB.DataSource = LogicalDependencies;
                 CurrentLogicalDependenciesCB.SelectedIndex = -1;
                 LogicalDependnecyNegateFlagCB.CheckedChanged -= LogicalDependnecyNegateFlagCB_CheckedChanged;
@@ -659,7 +662,6 @@ namespace RelhaxModpack
                 ObjectDevURLTB.Text = SelectedLogicalDependency.devURL;
 
                 ObjectVersionTB.Enabled = false;
-                // ObjectVersionTB.Text = "";
 
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
@@ -668,23 +670,20 @@ namespace RelhaxModpack
                 ObjectEnabledCheckBox.Checked = SelectedLogicalDependency.enabled;
 
                 ObjectVisibleCheckBox.Enabled = false;
-                // ObjectVisibleCheckBox.Checked = false;
 
                 ObjectAppendExtractionCB.Enabled = false;
-                // ObjectAppendExtractionCB.Checked = false;
 
                 DownloadZipfileButton.Enabled = true;
 
                 DescriptionTabPage.Enabled = false;
-                // ObjectDescTB.Text = "";
-                // ObjectUpdateNotesTB.Text = "";
 
-                DependenciesTabPage.Enabled = false;
+                DependenciesTabPage.Enabled = true;
+                DependencyPanel.Enabled = true;
                 ObjectDependenciesLabel.Text = "Objects that use this logical dependency...";
                 SelectedLogicalDependency.DatabasePackageLogic.Clear();
                 BuildDatabaseLogic(SelectedLogicalDependency);
-                // ObjectDependenciesList.DataSource = null;
-                // ObjectDependenciesList.Items.Clear();
+                ObjectDependenciesList.DataSource = null;
+                ObjectDependenciesList.Items.Clear();
                 ObjectDependenciesList.DataSource = SelectedLogicalDependency.DatabasePackageLogic;
                 PictureTabPage.Enabled = false;
                 UserDatasTabPage.Enabled = false;
@@ -1689,13 +1688,18 @@ namespace RelhaxModpack
                 return;
             if (lb.SelectedItem is DatabaseLogic)
                 return;
-            Dependency ld = (Dependency)lb.SelectedItem;
-            foreach (Dependency d in Dependencies)
+            if (lb.SelectedItem is string)
+                return;
+            if (lb.SelectedItem is Dependency)
             {
-                if (d.packageName.Equals(ld.packageName))
+                Dependency ld = (Dependency)lb.SelectedItem;
+                foreach (Dependency d in Dependencies)
                 {
-                    CurrentDependenciesCB.SelectedItem = d;
-                    break;
+                    if (d.packageName.Equals(ld.packageName))
+                    {
+                        CurrentDependenciesCB.SelectedItem = d;
+                        break;
+                    }
                 }
             }
         }
@@ -1764,7 +1768,14 @@ namespace RelhaxModpack
 
         private void ObjectDependenciesList_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to jump and loose any chanes to this mod/config you may have made", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            ListBox lb = (ListBox)sender;
+            if (lb.DataSource == null)
+                return;
+            if (lb.SelectedItem is DatabaseLogic)
+                return;
+            if (lb.SelectedItem is string)
+                return;
+            if (MessageBox.Show("Confirm you wish to jump and loose any changes to this object you may have made", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
                 return;
             string savePackageName = "";
             Dependency d = (Dependency)ObjectDependenciesList.SelectedItem;
@@ -1783,7 +1794,7 @@ namespace RelhaxModpack
 
         private void ObjectLogicalDependenciesList_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to jump and loose any chanes to this mod/config you may have made", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to jump and loose any changes to this object you may have made", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
                 return;
             string savePackageName = "";
             LogicalDependnecy d = (LogicalDependnecy)ObjectLogicalDependenciesList.SelectedItem;
@@ -1843,6 +1854,7 @@ namespace RelhaxModpack
                 }
             }
         }
+
         private void ProcessConfigsLogical(LogicalDependnecy d, List<Config> configList)
         {
             foreach (Config config in configList)
@@ -1861,6 +1873,46 @@ namespace RelhaxModpack
                         d.DatabasePackageLogic.Add(dl);
                     }
                 }
+                if (config.configs.Count > 0)
+                    ProcessConfigsLogical(d, config.configs);
+            }
+        }
+
+        private List<string> BuildDatabaseLogic(Dependency d)
+        {
+            List<string> objectsThatUseDependency = new List<string>();
+            foreach (Category c in ParsedCategoryList)
+            {
+                //will itterate through every catagory once
+                foreach (Mod m in c.mods)
+                {
+                    foreach (Dependency dep in m.dependencies)
+                    {
+                        if (dep.packageName.Equals(d.packageName))
+                        {
+                            objectsThatUseDependency.Add(m.packageName);
+                        }
+                    }
+                    if (m.configs.Count > 0)
+                        ProcessConfigsLogical(d, m.configs,objectsThatUseDependency);
+                }
+            }
+            return objectsThatUseDependency;
+        }
+        
+        private void ProcessConfigsLogical(Dependency d, List<Config> configList, List<string> objectsThatUseDependency)
+        {
+            foreach (Config config in configList)
+            {
+                foreach (Dependency dep in config.dependencies)
+                {
+                    if (dep.packageName.Equals(d.packageName))
+                    {
+                        objectsThatUseDependency.Add(config.packageName);
+                    }
+                }
+                if (config.configs.Count > 0)
+                    ProcessConfigsLogical(d, config.configs, objectsThatUseDependency);
             }
         }
 
