@@ -477,11 +477,11 @@ namespace RelhaxModpack
             ObjectDependenciesList.DataSource = null;
             ObjectDependenciesList.Items.Clear();
             ObjectDependenciesLabel.Text = "";
-            ObjectLogicalDependenciesList.DataSource = null;
-            ObjectLogicalDependenciesList.Items.Clear();
             CurrentDependenciesCB.DataSource = null;
             CurrentDependenciesCB.Items.Clear();
             CurrentDependenciesCB.SelectedIndex = -1;
+            ObjectLogicalDependenciesList.DataSource = null;
+            ObjectLogicalDependenciesList.Items.Clear();
             CurrentLogicalDependenciesCB.DataSource = null;
             CurrentLogicalDependenciesCB.Items.Clear();
             CurrentLogicalDependenciesCB.SelectedIndex = -1;
@@ -520,7 +520,7 @@ namespace RelhaxModpack
                 SelectedCategory = null;
 
                 ObjectNameTB.Enabled = false;
-                ObjectNameTB.Text = "";
+                // ObjectNameTB.Text = "";
 
                 ObjectPackageNameTB.Enabled = true;
                 ObjectPackageNameTB.Text = node.GlobalDependency.packageName;
@@ -538,7 +538,7 @@ namespace RelhaxModpack
                 ObjectDevURLTB.Text = SelectedGlobalDependency.devURL;
 
                 ObjectVersionTB.Enabled = false;
-                ObjectVersionTB.Text = "";
+                // ObjectVersionTB.Text = "";
 
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
@@ -547,7 +547,7 @@ namespace RelhaxModpack
                 ObjectEnabledCheckBox.Checked = node.GlobalDependency.enabled;
 
                 ObjectVisibleCheckBox.Enabled = false;
-                ObjectVisibleCheckBox.Checked = false;
+                // ObjectVisibleCheckBox.Checked = false;
 
                 ObjectAppendExtractionCB.Enabled = true;
                 ObjectAppendExtractionCB.Checked = node.GlobalDependency.appendExtraction;
@@ -555,8 +555,8 @@ namespace RelhaxModpack
                 DownloadZipfileButton.Enabled = true;
 
                 DescriptionTabPage.Enabled = false;
-                ObjectDescTB.Text = "";
-                ObjectUpdateNotesTB.Text = "";
+                // ObjectDescTB.Text = "";
+                // ObjectUpdateNotesTB.Text = "";
 
                 DependenciesTabPage.Enabled = false;
                 ObjectDependenciesLabel.Text = "dependencies (click to edit)";
@@ -572,7 +572,7 @@ namespace RelhaxModpack
                 SelectedCategory = null;
 
                 ObjectNameTB.Enabled = false;
-                ObjectNameTB.Text = "";
+                // ObjectNameTB.Text = "";
 
                 ObjectPackageNameTB.Enabled = true;
                 ObjectPackageNameTB.Text = SelectedDependency.packageName;
@@ -590,7 +590,7 @@ namespace RelhaxModpack
                 ObjectDevURLTB.Text = SelectedDependency.devURL;
 
                 ObjectVersionTB.Enabled = false;
-                ObjectVersionTB.Text = "";
+                // ObjectVersionTB.Text = "";
 
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
@@ -599,7 +599,7 @@ namespace RelhaxModpack
                 ObjectEnabledCheckBox.Checked = SelectedDependency.enabled;
 
                 ObjectVisibleCheckBox.Enabled = false;
-                ObjectVisibleCheckBox.Checked = false;
+                // ObjectVisibleCheckBox.Checked = false;
 
                 ObjectAppendExtractionCB.Enabled = true;
                 ObjectAppendExtractionCB.Checked = SelectedDependency.appendExtraction;
@@ -607,16 +607,16 @@ namespace RelhaxModpack
                 DownloadZipfileButton.Enabled = true;
 
                 DescriptionTabPage.Enabled = false;
-                ObjectDescTB.Text = "";
-                ObjectUpdateNotesTB.Text = "";
+                // ObjectDescTB.Text = "";
+                // ObjectUpdateNotesTB.Text = "";
 
                 DependenciesTabPage.Enabled = true;
                 ObjectDependenciesLabel.Text = "dependencies (click to edit)";
                 DependencyPanel.Enabled = false;
 
                 LogicalDependencyPanel.Enabled = true;
-                ObjectLogicalDependenciesList.DataSource = null;
-                ObjectLogicalDependenciesList.Items.Clear();
+                // ObjectLogicalDependenciesList.DataSource = null;
+                // ObjectLogicalDependenciesList.Items.Clear();
                 ObjectLogicalDependenciesList.DataSource = SelectedDependency.logicalDependencies;
                 CurrentLogicalDependenciesCB.DataSource = LogicalDependencies;
                 CurrentLogicalDependenciesCB.SelectedIndex = -1;
@@ -636,7 +636,7 @@ namespace RelhaxModpack
                 SelectedCategory = null;
 
                 ObjectNameTB.Enabled = false;
-                ObjectNameTB.Text = "";
+                // ObjectNameTB.Text = "";
 
                 ObjectPackageNameTB.Enabled = true;
                 ObjectPackageNameTB.Text = SelectedLogicalDependency.packageName;
@@ -654,7 +654,7 @@ namespace RelhaxModpack
                 ObjectDevURLTB.Text = SelectedLogicalDependency.devURL;
 
                 ObjectVersionTB.Enabled = false;
-                ObjectVersionTB.Text = "";
+                // ObjectVersionTB.Text = "";
 
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
@@ -663,23 +663,23 @@ namespace RelhaxModpack
                 ObjectEnabledCheckBox.Checked = SelectedLogicalDependency.enabled;
 
                 ObjectVisibleCheckBox.Enabled = false;
-                ObjectVisibleCheckBox.Checked = false;
+                // ObjectVisibleCheckBox.Checked = false;
 
                 ObjectAppendExtractionCB.Enabled = false;
-                ObjectAppendExtractionCB.Checked = false;
+                // ObjectAppendExtractionCB.Checked = false;
 
                 DownloadZipfileButton.Enabled = true;
 
                 DescriptionTabPage.Enabled = false;
-                ObjectDescTB.Text = "";
-                ObjectUpdateNotesTB.Text = "";
+                // ObjectDescTB.Text = "";
+                // ObjectUpdateNotesTB.Text = "";
 
                 DependenciesTabPage.Enabled = false;
                 ObjectDependenciesLabel.Text = "Objects that use this logical dependency...";
                 SelectedLogicalDependency.DatabasePackageLogic.Clear();
                 BuildDatabaseLogic(SelectedLogicalDependency);
-                ObjectDependenciesList.DataSource = null;
-                ObjectDependenciesList.Items.Clear();
+                // ObjectDependenciesList.DataSource = null;
+                // ObjectDependenciesList.Items.Clear();
                 ObjectDependenciesList.DataSource = SelectedLogicalDependency.DatabasePackageLogic;
                 PictureTabPage.Enabled = false;
                 UserDatasTabPage.Enabled = false;
@@ -752,7 +752,7 @@ namespace RelhaxModpack
                 ObjectVisibleCheckBox.Checked = SelectedDatabaseObject.visible;
 
                 ObjectAppendExtractionCB.Enabled = false;
-                ObjectAppendExtractionCB.Checked = false;
+                // ObjectAppendExtractionCB.Checked = false;
 
                 DescriptionTabPage.Enabled = true;
 
@@ -771,34 +771,34 @@ namespace RelhaxModpack
                 UserDatasTabPage.Enabled = true;
 
                 //logicalDependencies
-                ObjectLogicalDependenciesList.DataSource = null;
-                ObjectLogicalDependenciesList.Items.Clear();
+                // ObjectLogicalDependenciesList.DataSource = null;
+                // ObjectLogicalDependenciesList.Items.Clear();
                 ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.logicalDependencies;
                 CurrentLogicalDependenciesCB.DataSource = LogicalDependencies;
                 CurrentLogicalDependenciesCB.SelectedIndex = -1;
-                LogicalDependnecyNegateFlagCB.CheckedChanged -= LogicalDependnecyNegateFlagCB_CheckedChanged;
-                LogicalDependnecyNegateFlagCB.Checked = false;
-                LogicalDependnecyNegateFlagCB.CheckedChanged += LogicalDependnecyNegateFlagCB_CheckedChanged;
+                // LogicalDependnecyNegateFlagCB.CheckedChanged -= LogicalDependnecyNegateFlagCB_CheckedChanged;
+                // LogicalDependnecyNegateFlagCB.Checked = false;
+                // LogicalDependnecyNegateFlagCB.CheckedChanged += LogicalDependnecyNegateFlagCB_CheckedChanged;
 
                 //dependencies
                 ObjectDependenciesLabel.Text = "dependencies (click to edit)";
-                ObjectDependenciesList.DataSource = null;
-                ObjectDependenciesList.Items.Clear();
+                // ObjectDependenciesList.DataSource = null;
+                // ObjectDependenciesList.Items.Clear();
                 ObjectDependenciesList.DataSource = SelectedDatabaseObject.dependencies;
                 CurrentDependenciesCB.DataSource = Dependencies;
                 CurrentDependenciesCB.SelectedIndex = -1;
 
                 //pictures
-                ObjectPicturesList.DataSource = null;
-                ObjectPicturesList.Items.Clear();
+                // ObjectPicturesList.DataSource = null;
+                // ObjectPicturesList.Items.Clear();
                 ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
                 if (SelectedDatabaseObject.pictureList.Count == 0)
                     PictureURLTB.Text = "";
 
                 //userdatas
-                ObjectUserdatasTB.Text = "";
-                ObjectUserdatasList.DataSource = null;
-                ObjectUserdatasList.Items.Clear();
+                // ObjectUserdatasTB.Text = "";
+                // ObjectUserdatasList.DataSource = null;
+                // ObjectUserdatasList.Items.Clear();
                 ObjectUserdatasList.DataSource = SelectedDatabaseObject.userFiles;
             }
             else if (node.Category != null)
@@ -813,50 +813,50 @@ namespace RelhaxModpack
                 ObjectNameTB.Text = SelectedCategory.name;
 
                 ObjectPackageNameTB.Enabled = false;
-                ObjectPackageNameTB.Text = "";
+                // ObjectPackageNameTB.Text = "";
 
                 ObjectStartAddressTB.Enabled = false;
-                ObjectStartAddressTB.Text = "";
+                // ObjectStartAddressTB.Text = "";
 
                 ObjectEndAddressTB.Enabled = false;
-                ObjectEndAddressTB.Text = "";
+                // ObjectEndAddressTB.Text = "";
 
                 ObjectZipFileTB.Enabled = false;
-                ObjectZipFileTB.Text = "";
+                // ObjectZipFileTB.Text = "";
 
                 ObjectDevURLTB.Enabled = false;
-                ObjectDevURLTB.Text = "";
+                // ObjectDevURLTB.Text = "";
 
                 ObjectVersionTB.Enabled = false;
-                ObjectVersionTB.Text = "";
+                // ObjectVersionTB.Text = "";
 
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
 
                 ObjectEnabledCheckBox.Enabled = false;
-                ObjectEnabledCheckBox.Checked = false;
+                // ObjectEnabledCheckBox.Checked = false;
 
                 ObjectVisibleCheckBox.Enabled = false;
-                ObjectVisibleCheckBox.Checked = false;
+                // ObjectVisibleCheckBox.Checked = false;
 
                 ObjectAppendExtractionCB.Enabled = false;
-                ObjectAppendExtractionCB.Checked = false;
+                // ObjectAppendExtractionCB.Checked = false;
 
                 DownloadZipfileButton.Enabled = false;
 
                 ObjectDescTB.Enabled = false;
-                ObjectDescTB.Text = "";
+                // ObjectDescTB.Text = "";
 
                 ObjectUpdateNotesTB.Enabled = false;
-                ObjectUpdateNotesTB.Text = "";
+                // ObjectUpdateNotesTB.Text = "";
 
                 DependenciesTabPage.Enabled = true;
                 DependencyPanel.Enabled = true;
                 LogicalDependencyPanel.Enabled = false;
 
                 ObjectDependenciesLabel.Text = "dependencies (click to edit)";
-                ObjectDependenciesList.DataSource = null;
-                ObjectDependenciesList.Items.Clear();
+                // ObjectDependenciesList.DataSource = null;
+                // ObjectDependenciesList.Items.Clear();
                 ObjectDependenciesList.DataSource = SelectedCategory.dependencies;
                 CurrentDependenciesCB.DataSource = Dependencies;
                 CurrentDependenciesCB.SelectedIndex = -1;
