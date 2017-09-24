@@ -402,6 +402,7 @@ namespace RelhaxModpack
             if (rb1.Checked)
             {
                 DatabaseEditorMode = EditorMode.GlobalDependnecy;
+                clearDatabaseDetailsUI();
                 DisplayDatabase();
             }
         }
@@ -417,6 +418,7 @@ namespace RelhaxModpack
             if (rb1.Checked)
             {
                 DatabaseEditorMode = EditorMode.Dependency;
+                clearDatabaseDetailsUI();
                 DisplayDatabase();
             }
         }
@@ -432,6 +434,7 @@ namespace RelhaxModpack
             if (rb1.Checked)
             {
                 DatabaseEditorMode = EditorMode.LogicalDependency;
+                clearDatabaseDetailsUI();
                 DisplayDatabase();
             }
         }
@@ -447,8 +450,55 @@ namespace RelhaxModpack
             if (rb1.Checked)
             {
                 DatabaseEditorMode = EditorMode.DBO;
+                clearDatabaseDetailsUI();
                 DisplayDatabase();
             }
+        }
+
+        private void clearDatabaseDetailsUI()
+        {
+            ObjectNameTB.Text = "";
+            ObjectPackageNameTB.Text = "";
+            ObjectStartAddressTB.Text = "";
+            ObjectEndAddressTB.Text = "";
+            ObjectZipFileTB.Text = "";
+            ObjectDevURLTB.Text = "";
+            ObjectVersionTB.Text = "";
+            ObjectTypeComboBox.SelectedIndex = -1;
+            ObjectAppendExtractionCB.Checked = false;
+            ObjectVisibleCheckBox.Checked = false;
+            ObjectEnabledCheckBox.Checked = false;
+
+            // Description tab
+            ObjectDescTB.Text = "";
+            ObjectUpdateNotesTB.Text = "";
+
+            // Dependencies tab
+            ObjectDependenciesList.DataSource = null;
+            ObjectDependenciesList.Items.Clear();
+            ObjectDependenciesLabel.Text = "";
+            ObjectLogicalDependenciesList.DataSource = null;
+            ObjectLogicalDependenciesList.Items.Clear();
+            CurrentDependenciesCB.DataSource = null;
+            CurrentDependenciesCB.Items.Clear();
+            CurrentDependenciesCB.SelectedIndex = -1;
+            CurrentLogicalDependenciesCB.DataSource = null;
+            CurrentLogicalDependenciesCB.Items.Clear();
+            CurrentLogicalDependenciesCB.SelectedIndex = -1;
+            LogicalDependnecyNegateFlagCB.CheckedChanged -= LogicalDependnecyNegateFlagCB_CheckedChanged;
+            LogicalDependnecyNegateFlagCB.Checked = false;
+            LogicalDependnecyNegateFlagCB.CheckedChanged += LogicalDependnecyNegateFlagCB_CheckedChanged;
+
+            // Pictures tab
+            ObjectPicturesList.DataSource = null;
+            ObjectPicturesList.Items.Clear();
+            PicturesTypeCBox.SelectedIndex = -1;
+            PictureURLTB.Text = "";
+
+            // Userdata tab
+            ObjectUserdatasList.DataSource = null;
+            ObjectUserdatasList.Items.Clear();
+            ObjectUserdatasTB.Text = "";
         }
 
         private void DatabaseTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -459,6 +509,7 @@ namespace RelhaxModpack
             currentSelectedIndex = DatabaseTreeView.SelectedNode.Index;
             //DatabaseTreeView.SelectedNode.BackColor = Color.Blue;
             //DatabaseTreeView.SelectedNode.ForeColor = Color.Blue;
+            clearDatabaseDetailsUI();
             DatabaseTreeNode node = (DatabaseTreeNode)DatabaseTreeView.SelectedNode;
             if (node.GlobalDependency != null)
             {
