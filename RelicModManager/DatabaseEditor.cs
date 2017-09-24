@@ -229,6 +229,11 @@ namespace RelhaxModpack
             }
             if (MessageBox.Show("Confirm you wish to apply changes", "Confirm", MessageBoxButtons.YesNo) == DialogResult.No)
                 return;
+            if(DuplicatePackageName(this.GlobalDependencies,this.Dependencies,this.LogicalDependencies,this.ParsedCategoryList, ObjectPackageNameTB.Text))
+            {
+                MessageBox.Show("Package name: " + ObjectPackageNameTB.Text + ", already exists");
+                return;
+            }
             if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
             {
                 int index = GlobalDependencies.IndexOf(SelectedGlobalDependency);
@@ -886,28 +891,7 @@ namespace RelhaxModpack
                                 List<Mod> ModList = ListContainsMod(modToMove);
                                 ModList.Remove(modToMove);
                                 //convert to config
-                                Config c = new Config()
-                                {
-                                    name = modToMove.name,
-                                    version = modToMove.version,
-                                    zipFile = modToMove.zipFile,
-                                    configs = modToMove.configs,
-                                    startAddress = modToMove.startAddress,
-                                    logicalDependencies = modToMove.logicalDependencies,
-                                    dependencies = modToMove.dependencies,
-                                    pictureList = modToMove.pictureList,
-                                    endAddress = modToMove.endAddress,
-                                    crc = modToMove.crc,
-                                    enabled = modToMove.enabled,
-                                    visible = modToMove.visible,
-                                    packageName = modToMove.packageName,
-                                    size = modToMove.size,
-                                    updateComment = modToMove.updateComment,
-                                    description = modToMove.description,
-                                    devURL = modToMove.devURL,
-                                    userFiles = modToMove.userFiles,
-                                    type = "multi"
-                                };
+                                Config c = ModToConfig(modToMove);
                                 //move to config list
                                 ListContainsConfig(Ref);
                                 if (ListThatContainsConfig != null)
@@ -948,32 +932,11 @@ namespace RelhaxModpack
                                 ListContainsConfig(cfgToMove);
                                 if (ListThatContainsConfig != null)
                                 {
-
                                     //make move
                                     ListThatContainsConfig.Remove(cfgToMove);
                                 }
                                 //convert it to a mod
-                                Mod m = new Mod()
-                                {
-                                    name = cfgToMove.name,
-                                    version = cfgToMove.version,
-                                    zipFile = cfgToMove.zipFile,
-                                    configs = cfgToMove.configs,
-                                    startAddress = cfgToMove.startAddress,
-                                    logicalDependencies = cfgToMove.logicalDependencies,
-                                    dependencies = cfgToMove.dependencies,
-                                    pictureList = cfgToMove.pictureList,
-                                    endAddress = cfgToMove.endAddress,
-                                    crc = cfgToMove.crc,
-                                    enabled = cfgToMove.enabled,
-                                    visible = cfgToMove.visible,
-                                    packageName = cfgToMove.packageName,
-                                    size = cfgToMove.size,
-                                    updateComment = cfgToMove.updateComment,
-                                    description = cfgToMove.description,
-                                    devURL = cfgToMove.devURL,
-                                    userFiles = cfgToMove.userFiles
-                                };
+                                Mod m = ConfigToMod(cfgToMove);
                                 //move it to mod list
                                 List<Mod> ModList = ListContainsMod(Ref);
                                 int index2 = ModList.IndexOf(Ref);
@@ -1065,7 +1028,6 @@ namespace RelhaxModpack
                     {
                         if (SelectedDatabaseObject is Mod)
                         {
-                            Mod mm = (Mod)dba.SelectedDatabaseObject;
                             if (dba.sublist)
                             {
                                 Config cfg = new Config();
@@ -1098,29 +1060,77 @@ namespace RelhaxModpack
                                 cfg.crc = "";
                                 if (!ObjectZipFileTB.Text.Equals(""))
                                     cfg.crc = "f";
-                                mm.configs.Add(cfg);
+                                dba.SelectedDatabaseObject.configs.Add(cfg);
                             }
                             else
                             {
-                                List<Mod> ModList = ListContainsMod(mm);
-                                int index = ModList.IndexOf(mm);
-                                //make changes
-                                Mod m = new Mod();
-                                m.name = ObjectNameTB.Text;
-                                m.packageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
-                                m.startAddress = ObjectStartAddressTB.Text;
-                                m.endAddress = ObjectEndAddressTB.Text;
-                                m.zipFile = ObjectZipFileTB.Text;
-                                m.devURL = ObjectDevURLTB.Text;
-                                m.version = ObjectVersionTB.Text;
-                                m.enabled = ObjectEnabledCheckBox.Checked;
-                                m.visible = ObjectVisibleCheckBox.Checked;
-                                m.description = ObjectDescTB.Text;
-                                m.updateComment = ObjectUpdateNotesTB.Text;
-                                m.crc = "";
-                                if (!ObjectZipFileTB.Text.Equals(""))
-                                    m.crc = "f";
-                                ModList.Insert(index, m);
+                                //mod->mod
+                                if(dba.SelectedDatabaseObject is Mod)
+                                {
+                                    Mod mm = (Mod)dba.SelectedDatabaseObject;
+                                    List<Mod> ModList = ListContainsMod(mm);
+                                    int index = ModList.IndexOf(mm);
+                                    //make changes
+                                    Mod m = new Mod();
+                                    m.name = ObjectNameTB.Text;
+                                    m.packageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
+                                    m.startAddress = ObjectStartAddressTB.Text;
+                                    m.endAddress = ObjectEndAddressTB.Text;
+                                    m.zipFile = ObjectZipFileTB.Text;
+                                    m.devURL = ObjectDevURLTB.Text;
+                                    m.version = ObjectVersionTB.Text;
+                                    m.enabled = ObjectEnabledCheckBox.Checked;
+                                    m.visible = ObjectVisibleCheckBox.Checked;
+                                    m.description = ObjectDescTB.Text;
+                                    m.updateComment = ObjectUpdateNotesTB.Text;
+                                    m.crc = "";
+                                    if (!ObjectZipFileTB.Text.Equals(""))
+                                        m.crc = "f";
+                                    ModList.Insert(index, m);
+                                }
+                                //mod->config
+                                else if (dba.SelectedDatabaseObject is Config)
+                                {
+                                    Config cfgg = (Config)dba.SelectedDatabaseObject;
+                                    ListThatContainsConfig = null;
+                                    ListContainsConfig(cfgg);
+                                    if (ListThatContainsConfig != null)
+                                    {
+                                        int index = ListThatContainsConfig.IndexOf(cfgg);
+                                        //make changes
+                                        Config cfg = new Config();
+                                        cfg.name = ObjectNameTB.Text;
+                                        cfg.packageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
+                                        cfg.startAddress = ObjectStartAddressTB.Text;
+                                        cfg.endAddress = ObjectEndAddressTB.Text;
+                                        cfg.zipFile = ObjectZipFileTB.Text;
+                                        cfg.devURL = ObjectDevURLTB.Text;
+                                        cfg.version = ObjectVersionTB.Text;
+                                        switch (ObjectTypeComboBox.SelectedIndex)
+                                        {
+                                            case 1:
+                                                cfg.type = "single1";
+                                                break;
+                                            case 2:
+                                                cfg.type = "single_dropdown1";
+                                                break;
+                                            case 3:
+                                                cfg.type = "single_dropdown2";
+                                                break;
+                                            case 4:
+                                                cfg.type = "multi";
+                                                break;
+                                        }
+                                        cfg.enabled = ObjectEnabledCheckBox.Checked;
+                                        cfg.visible = ObjectVisibleCheckBox.Checked;
+                                        cfg.description = ObjectDescTB.Text;
+                                        cfg.updateComment = ObjectUpdateNotesTB.Text;
+                                        cfg.crc = "";
+                                        if (!ObjectZipFileTB.Text.Equals(""))
+                                            cfg.crc = "f";
+                                        ListThatContainsConfig.Insert(index, cfg);
+                                    }
+                                }
                             }
                         }
                         else if (SelectedDatabaseObject is Config)
@@ -1166,44 +1176,72 @@ namespace RelhaxModpack
                             }
                             else
                             {
-                                Config cfgg = (Config)dba.SelectedDatabaseObject;
-                                ListThatContainsConfig = null;
-                                ListContainsConfig(cfgg);
-                                if (ListThatContainsConfig != null)
+                                //config->config
+                                if(dba.SelectedDatabaseObject is Config)
                                 {
-                                    int index = ListThatContainsConfig.IndexOf(cfgg);
-                                    //make changes
-                                    Config cfg = new Config();
-                                    cfg.name = ObjectNameTB.Text;
-                                    cfg.packageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
-                                    cfg.startAddress = ObjectStartAddressTB.Text;
-                                    cfg.endAddress = ObjectEndAddressTB.Text;
-                                    cfg.zipFile = ObjectZipFileTB.Text;
-                                    cfg.devURL = ObjectDevURLTB.Text;
-                                    cfg.version = ObjectVersionTB.Text;
-                                    switch (ObjectTypeComboBox.SelectedIndex)
+                                    Config cfgg = (Config)dba.SelectedDatabaseObject;
+                                    ListThatContainsConfig = null;
+                                    ListContainsConfig(cfgg);
+                                    if (ListThatContainsConfig != null)
                                     {
-                                        case 1:
-                                            cfg.type = "single1";
-                                            break;
-                                        case 2:
-                                            cfg.type = "single_dropdown1";
-                                            break;
-                                        case 3:
-                                            cfg.type = "single_dropdown2";
-                                            break;
-                                        case 4:
-                                            cfg.type = "multi";
-                                            break;
+                                        int index = ListThatContainsConfig.IndexOf(cfgg);
+                                        //make changes
+                                        Config cfg = new Config();
+                                        cfg.name = ObjectNameTB.Text;
+                                        cfg.packageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
+                                        cfg.startAddress = ObjectStartAddressTB.Text;
+                                        cfg.endAddress = ObjectEndAddressTB.Text;
+                                        cfg.zipFile = ObjectZipFileTB.Text;
+                                        cfg.devURL = ObjectDevURLTB.Text;
+                                        cfg.version = ObjectVersionTB.Text;
+                                        switch (ObjectTypeComboBox.SelectedIndex)
+                                        {
+                                            case 1:
+                                                cfg.type = "single1";
+                                                break;
+                                            case 2:
+                                                cfg.type = "single_dropdown1";
+                                                break;
+                                            case 3:
+                                                cfg.type = "single_dropdown2";
+                                                break;
+                                            case 4:
+                                                cfg.type = "multi";
+                                                break;
+                                        }
+                                        cfg.enabled = ObjectEnabledCheckBox.Checked;
+                                        cfg.visible = ObjectVisibleCheckBox.Checked;
+                                        cfg.description = ObjectDescTB.Text;
+                                        cfg.updateComment = ObjectUpdateNotesTB.Text;
+                                        cfg.crc = "";
+                                        if (!ObjectZipFileTB.Text.Equals(""))
+                                            cfg.crc = "f";
+                                        ListThatContainsConfig.Insert(index, cfg);
                                     }
-                                    cfg.enabled = ObjectEnabledCheckBox.Checked;
-                                    cfg.visible = ObjectVisibleCheckBox.Checked;
-                                    cfg.description = ObjectDescTB.Text;
-                                    cfg.updateComment = ObjectUpdateNotesTB.Text;
-                                    cfg.crc = "";
+                                }
+                                //config->mod
+                                else if (dba.SelectedDatabaseObject is Mod)
+                                {
+                                    Mod mm = (Mod)dba.SelectedDatabaseObject;
+                                    List<Mod> ModList = ListContainsMod(mm);
+                                    int index = ModList.IndexOf(mm);
+                                    //make changes
+                                    Mod m = new Mod();
+                                    m.name = ObjectNameTB.Text;
+                                    m.packageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
+                                    m.startAddress = ObjectStartAddressTB.Text;
+                                    m.endAddress = ObjectEndAddressTB.Text;
+                                    m.zipFile = ObjectZipFileTB.Text;
+                                    m.devURL = ObjectDevURLTB.Text;
+                                    m.version = ObjectVersionTB.Text;
+                                    m.enabled = ObjectEnabledCheckBox.Checked;
+                                    m.visible = ObjectVisibleCheckBox.Checked;
+                                    m.description = ObjectDescTB.Text;
+                                    m.updateComment = ObjectUpdateNotesTB.Text;
+                                    m.crc = "";
                                     if (!ObjectZipFileTB.Text.Equals(""))
-                                        cfg.crc = "f";
-                                    ListThatContainsConfig.Insert(index, cfg);
+                                        m.crc = "f";
+                                    ModList.Insert(index, m);
                                 }
                             }
                         }
@@ -1947,6 +1985,59 @@ namespace RelhaxModpack
             while (DuplicatePackageName(this.GlobalDependencies, this.Dependencies, this.LogicalDependencies, this.ParsedCategoryList, packageName))
                 packageName = oldPackageName + "_NEW_" + i++;
             return packageName;
+        }
+
+        private Mod ConfigToMod(Config cfgToMove)
+        {
+            Mod m = new Mod()
+            {
+                name = cfgToMove.name,
+                version = cfgToMove.version,
+                zipFile = cfgToMove.zipFile,
+                configs = cfgToMove.configs,
+                startAddress = cfgToMove.startAddress,
+                logicalDependencies = cfgToMove.logicalDependencies,
+                dependencies = cfgToMove.dependencies,
+                pictureList = cfgToMove.pictureList,
+                endAddress = cfgToMove.endAddress,
+                crc = cfgToMove.crc,
+                enabled = cfgToMove.enabled,
+                visible = cfgToMove.visible,
+                packageName = cfgToMove.packageName,
+                size = cfgToMove.size,
+                updateComment = cfgToMove.updateComment,
+                description = cfgToMove.description,
+                devURL = cfgToMove.devURL,
+                userFiles = cfgToMove.userFiles
+            };
+            return m;
+        }
+
+        private Config ModToConfig(Mod modToMove)
+        {
+            Config c = new Config()
+            {
+                name = modToMove.name,
+                version = modToMove.version,
+                zipFile = modToMove.zipFile,
+                configs = modToMove.configs,
+                startAddress = modToMove.startAddress,
+                logicalDependencies = modToMove.logicalDependencies,
+                dependencies = modToMove.dependencies,
+                pictureList = modToMove.pictureList,
+                endAddress = modToMove.endAddress,
+                crc = modToMove.crc,
+                enabled = modToMove.enabled,
+                visible = modToMove.visible,
+                packageName = modToMove.packageName,
+                size = modToMove.size,
+                updateComment = modToMove.updateComment,
+                description = modToMove.description,
+                devURL = modToMove.devURL,
+                userFiles = modToMove.userFiles,
+                type = "multi"
+            };
+            return c;
         }
     }
 }
