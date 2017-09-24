@@ -493,7 +493,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("createModStructure", "tried to access " + databaseURL, ex);
+                    Utils.exceptionLog("createModStructure", string.Format("tried to access {0}", databaseURL), ex);
                     MessageBox.Show(Translations.getTranslatedString("databaseNotFound"));
                     Application.Exit();
                     return;
@@ -2171,7 +2171,7 @@ namespace RelhaxModpack
                 //read untill the value we want
                 if (readUntill(fileContents, sb, regex) == "null")
                 {
-                    Utils.appendToLog("ERROR: Path not found: " + origXvmPath);
+                    Utils.appendToLog(string.Format("ERROR: Path not found: {0}", origXvmPath));
                     return;
                 }
                 //determine if the this value is actually a file refrence
@@ -3166,7 +3166,7 @@ namespace RelhaxModpack
                                 return;
                             if (m == null)
                             {
-                                Utils.appendToLog("WARNING: mod \"" + nn.InnerText + "\" not found");
+                                Utils.appendToLog(string.Format("WARNING: mod \"{0}\" not found", nn.InnerText));
                                 MessageBox.Show(string.Format(Translations.getTranslatedString("modNotFound"), nn.InnerText));
                                 continue;
                             }
@@ -3188,7 +3188,7 @@ namespace RelhaxModpack
                                         mfCB2.IsChecked = true;
                                     }
                                 }
-                                Utils.appendToLog("Checking mod " + m.name);
+                                Utils.appendToLog(string.Format("Checking mod {0}", m.name));
                             }
                             else
                             {
@@ -3242,7 +3242,7 @@ namespace RelhaxModpack
                                         ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
                                         mfcb.Checked = true;
                                     }
-                                    Utils.appendToLog("checking user mod " + m.zipFile);
+                                    Utils.appendToLog(string.Format("checking user mod {0}", m.zipFile));
                                 }
                             }
                             break;
@@ -3282,7 +3282,7 @@ namespace RelhaxModpack
         //loads a saved config from xml and parses it into the memory database
         public static void loadConfigV2(string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
-            Utils.appendToLog("Loading mod selections v2.0 from " + filePath);
+            Utils.appendToLog(string.Format("Loading mod selections v2.0 from {0}", filePath));
             List<string> savedConfigList = new List<string>();
             var doc = new XPathDocument(filePath);
             foreach (var mod in doc.CreateNavigator().Select("//relhaxMods/mod"))
@@ -3320,7 +3320,7 @@ namespace RelhaxModpack
                                         mfCB2.IsChecked = true;
                                     }
                                 }
-                                Utils.appendToLog("Checking mod " + m.name);
+                                Utils.appendToLog(string.Format("Checking mod {0}", m.name));
                             }
                         }
                         else
@@ -3367,7 +3367,7 @@ namespace RelhaxModpack
                             ModFormCheckBox mfcb = (ModFormCheckBox)um.modFormCheckBox;
                             mfcb.Checked = true;
                         }
-                        Utils.appendToLog("Checking user mod " + um.zipFile);
+                        Utils.appendToLog(string.Format("Checking user mod {0}", um.zipFile));
                     }
                 }
             }
@@ -3421,7 +3421,7 @@ namespace RelhaxModpack
                             }
                             if (c == null)
                             {
-                                Utils.appendToLog("WARNING: config \"" + nnnn.InnerText + "\" not found for mod/config \"" + holder.InnerText + "\"");
+                                Utils.appendToLog(string.Format("WARNING: config \"{0}\" not found for mod/config \"{1}\"", nnnn.InnerText, holder.InnerText));
                                 MessageBox.Show(string.Format(Translations.getTranslatedString("configNotFound"), nnnn.InnerText, holder.InnerText));
                                 continue;
                             }
@@ -3489,7 +3489,7 @@ namespace RelhaxModpack
                                         CBTemp.IsChecked = true;
                                     }
                                 }
-                                Utils.appendToLog("Checking mod " + c.name);
+                                Utils.appendToLog(string.Format("Checking mod {0}", c.name));
                             }
                             else
                             {
@@ -3622,7 +3622,7 @@ namespace RelhaxModpack
                                     CBTemp.IsChecked = true;
                                 }
                             }
-                            Utils.appendToLog("Checking mod " + c.name);
+                            Utils.appendToLog(string.Format("Checking mod {0}", c.name));
                         }
                     }
                     else
@@ -3745,7 +3745,7 @@ namespace RelhaxModpack
                     Directory.GetDirectories(directory).Length == 0)
                 {
                     if(reportToLog)
-                        Utils.appendToLog("Deleting empty directory " + directory);
+                        Utils.appendToLog(string.Format("Deleting empty directory {0}", directory));
                     Directory.Delete(directory, false);
                 }
             }
