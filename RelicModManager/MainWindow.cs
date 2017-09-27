@@ -11,6 +11,7 @@ using Microsoft.Win32;
 using System.Drawing;
 using System.Globalization;
 using System.Xml.XPath;
+using Ionic.Zip;
 
 namespace RelhaxModpack
 {
@@ -93,7 +94,7 @@ namespace RelhaxModpack
         /// <returns></returns>
         public string managerVersion()
         {
-            return "version " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().IndexOf('.') + 1);
+            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().IndexOf('.') + 1);
         }
 
         //The constructur for the application
@@ -237,7 +238,7 @@ namespace RelhaxModpack
             }
         }
         //method to check for updates to the application on startup
-        private void checkmanagerUpdates()
+        private void checkmanagerUpdates_old()
         {
             Utils.appendToLog("Starting check for application updates");
             WebClient updater = new WebClient();
@@ -253,6 +254,64 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " supported_clients.txt");
                 Application.Exit();
             }
+            Utils.appendToLog("Local application is " + managerVersion() + ", current online is " + version);
+            if (!version.Equals(managerVersion()))
+            {
+                Utils.appendToLog("exe is out of date. displaying user update window");
+                //out of date
+                VersionInfo vi = new VersionInfo();
+                vi.ShowDialog();
+                DialogResult result = vi.result;
+                if (result.Equals(DialogResult.Yes))
+                {
+                    Utils.appendToLog("User accepted downloading new version");
+                    //download new version
+                    sw.Reset();
+                    sw.Start();
+                    string newExeName = Application.StartupPath + "\\RelhaxModpack_update" + ".exe";
+                    updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
+                    updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
+                    if (File.Exists(newExeName)) File.Delete(newExeName);
+                    updater.DownloadFileAsync(new Uri("http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe"), newExeName);
+                    Utils.appendToLog("New application download started");
+                    currentModDownloading = "update ";
+                }
+                else
+                {
+                    Utils.appendToLog("User declined downlading new version");
+                    //close the application
+                    this.Close();
+                }
+            }
+        }
+        //method to check for updates to the application on startup
+        private void checkmanagerUpdates()
+        {
+            Utils.appendToLog("Starting check for application updates");
+            //download the updates
+            WebClient updater = new WebClient();
+            updater.Proxy = null;
+            try
+            {
+                //updater.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.zip", Path.Combine(Application.StartupPath, "RelHaxTemp", "managerInfo.zip"));
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("checkmanagerUpdates", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.zip", ex);
+                MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " managerInfo.zip");
+                Application.Exit();
+            }
+            //extract the updates
+            /*
+            using (ZipFile zip = new ZipFile(Path.Combine(Application.StartupPath, "RelHaxTemp", "managerInfo.zip")))
+            {
+                zip.ExtractAll(Path.Combine(Application.StartupPath, "RelHaxTemp"), ExtractExistingFileAction.OverwriteSilently);
+            }
+            */
+            string version = "";
+            XPathDocument doc = new XPathDocument(Path.Combine(Application.StartupPath, "RelHaxTemp", "manager_version.xml"));//xml doc name can change
+            var databaseVersion = doc.CreateNavigator().SelectSingleNode("/version/manager");
+            version = databaseVersion.InnerXml;
             Utils.appendToLog("Local application is " + managerVersion() + ", current online is " + version);
             if (!version.Equals(managerVersion()))
             {
@@ -480,7 +539,7 @@ namespace RelhaxModpack
         private void MainWindow_Load(object sender, EventArgs e)
         {
             //set window header text to current version so user knows
-            this.Text = this.Text + managerVersion().Substring(8);
+            this.Text = this.Text + managerVersion();
             if (Program.testMode) this.Text = this.Text + " TEST MODE";
             //show the wait screen
             PleaseWait wait = new PleaseWait();
