@@ -33,7 +33,7 @@ namespace RelhaxModpack
         bool modHasRadioButtons = false;
         bool firstLoad = true;
         bool ignoreSelections = true;
-        bool mouseCLick = false;
+        //bool mouseCLick = false;
         int prog = 0;
         private enum loadConfigMode
         {

@@ -281,6 +281,12 @@ namespace RelhaxModpack
             polish.Add("donateLabel", "Dotacja na dalszy rozwój");
             french.Add("donateLabel", "Donation pour aider au développement");
 
+            //Component: notifyIfSameDatabaseCB
+            english.Add("notifyIfSameDatabaseCB", "Inform if no new database available");
+            german.Add("notifyIfSameDatabaseCB", "TODO");
+            polish.Add("notifyIfSameDatabaseCB", "TODO");
+            french.Add("notifyIfSameDatabaseCB", "TODO");
+
             //Section: ModSelectionList
 
             //Componet: continueButton
@@ -877,6 +883,13 @@ namespace RelhaxModpack
             polish.Add("disableColorsCBExplanation", "Wyłącz zmianę kolorów podczas wyboru modyfikacji lub konfiguracji.");
             french.Add("disableColorsCBExplanation", "Désactiver le changement de couleurs lors de la sélection d'un mod ou config");
 
+            //Component: notifyIfSameDatabaseCBExplanation
+            //
+            english.Add("notifyIfSameDatabaseCBExplanation", "Notify you if your last installed database version is the same. If so, it means that there is no update to any mods.");
+            german.Add("notifyIfSameDatabaseCBExplanation", "");
+            polish.Add("notifyIfSameDatabaseCBExplanation", "");
+            french.Add("notifyIfSameDatabaseCBExplanation", "");
+
             //Section: Messages from ModSelectionList
 
             //Componet: testModeDatabaseNotFound
@@ -1200,6 +1213,22 @@ namespace RelhaxModpack
             german.Add("moveOutOfTanksLocation", "Das Modpack kann nicht aus dem World_of_Tanks Verzeichnis laufen. Bitte verschiebe die Anwendung in ein anderes Verzeichnis und versuchen Sie es erneut.");
             polish.Add("moveOutOfTanksLocation", "Modpack nie może być uruchomiony z katalogu World_of_Tanks. Przenieś aplikację i spróbuj ponownie.");
             french.Add("moveOutOfTanksLocation", "Le Mod pack ne peut pas être éxecuté a partir du dossier de World of Tanks. Veuillez déplacer l`application dans un autre dossier et réessayer");
+
+            //Section: Messages from MainWindow
+
+            //Component: Current database is same as last installed database (body)
+            //
+            english.Add("DatabaseVersionsSameBody", "The database has not changed since your last installation. Therefore there are no updates to your current mods selection. Continue anyway?");
+            german.Add("DatabaseVersionsSameBody", "TODO");
+            polish.Add("DatabaseVersionsSameBody", "TODO");
+            french.Add("DatabaseVersionsSameBody", "TODO");
+
+            //Component: Current database is same as last installed database (header)
+            //
+            english.Add("DatabaseVersionsSameHeader", "Database version is the same");
+            german.Add("DatabaseVersionsSameHeader", "TODO");
+            polish.Add("DatabaseVersionsSameHeader", "TODO");
+            french.Add("DatabaseVersionsSameHeader", "TODO");
 
             //Section saveConfig
             //

@@ -39,7 +39,7 @@ namespace RelhaxModpack
         public string TanksVersion { get; set; }
         //the folder of the current user appdata
         public string AppDataFolder { get; set; }
-
+        public string DatabaseVersion { get; set; }
         //properties relevent to the handler and install
         private BackgroundWorker InstallWorker;
         private InstallerEventArgs args;
@@ -342,7 +342,10 @@ namespace RelhaxModpack
             if (Directory.Exists(TanksLocation + "\\_fonts")) Directory.Delete(TanksLocation + "\\_fonts", true);
             if (!Directory.Exists(TanksLocation + "\\res_mods")) Directory.CreateDirectory(TanksLocation + "\\res_mods");
             if (!Directory.Exists(TanksLocation + "\\mods")) Directory.CreateDirectory(TanksLocation + "\\mods");
-            
+
+            //start the entry for the database version in installedRelhaxFiles.log
+            File.WriteAllText(TanksLocation + "\\installedRelhaxFiles.log", "Database Version: " + DatabaseVersion + "\n");
+
             //extract RelHax Mods
             Utils.appendToLog("Starting Relhax Modpack Extraction");
             string downloadedFilesDir = Application.StartupPath + "\\RelHaxDownloads\\";

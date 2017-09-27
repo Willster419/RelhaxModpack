@@ -11,7 +11,12 @@ namespace RelhaxModpack
     //so all the forms have access to a single version of the settings
     public static class Settings
     {
+        ////general settings
+        //toggle if the program should notify the user if the database version is the same as the last installed version
+        public static bool NotifyIfSameDatabase { get; set; }
+        //toggle if the program will backup the current mod installation
         public static bool backupModFolder { get; set; }
+        //toggle if the program will clean the mods and res_mods folders before installation
         public static bool cleanInstallation { get; set; }
         public static bool forceManuel { get; set; }
         public static bool expandAllLegacy { get; set; }
@@ -34,6 +39,7 @@ namespace RelhaxModpack
         public static string configFileVersion = "2.0";     // for later imports of this files, we need a better identification
         public enum LoadingGifs { standard = 0, thirdGuards = 1 };
         public static LoadingGifs gif;
+        //font settings
         public const float fontSize100 = 8.25F;//1.0 font scaling
         public const float fontSize125 = 10.25F;//1.25 font scaling
         public const float fontSize175 = 14.25F;//1.75 font scaling
@@ -93,6 +99,7 @@ namespace RelhaxModpack
                 Settings.saveUserData = false;
                 Settings.clearCache = false;
                 Settings.disableBorders = false;
+                Settings.NotifyIfSameDatabase = false;
                 Settings.tempLoadedLanguage = 0;
                 Settings.modSelectionHeight = 480;
                 Settings.modSelectionWidth = 800;
@@ -169,6 +176,9 @@ namespace RelhaxModpack
                             break;
                         case "ModSelectionFullscreen":
                             Settings.ModSelectionFullscreen = bool.Parse(n.InnerText);
+                            break;
+                        case "NotifyIfSameDatabase":
+                            Settings.NotifyIfSameDatabase = bool.Parse(n.InnerText);
                             break;
                         case "previewX":
                             Settings.previewX = int.Parse(n.InnerText);
@@ -329,6 +339,9 @@ namespace RelhaxModpack
             XmlElement xdeleteLogs = doc.CreateElement("deleteLogs");
             xdeleteLogs.InnerText = "" + Settings.deleteLogs;
             settingsHolder.AppendChild(xdeleteLogs);
+            XmlElement xNotifyIfSameDatabase = doc.CreateElement("NotifyIfSameDatabase");
+            xNotifyIfSameDatabase.InnerText = "" + Settings.NotifyIfSameDatabase;
+            settingsHolder.AppendChild(xNotifyIfSameDatabase);
             XmlElement xlanguage = doc.CreateElement("language");
             xlanguage.InnerText = "" + (int)Translations.language;
             settingsHolder.AppendChild(xlanguage);

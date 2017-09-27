@@ -10,6 +10,7 @@ using System.Xml;
 using Microsoft.Win32;
 using System.Drawing;
 using System.Globalization;
+using System.Xml.XPath;
 
 namespace RelhaxModpack
 {
@@ -18,10 +19,12 @@ namespace RelhaxModpack
         //all instance variables required to be up here
         private FolderBrowserDialog selectWotFolder = new FolderBrowserDialog();
         private WebClient downloader;
-        private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
+        //private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
         private string tanksLocation;//sample:  c:/games/World_of_Tanks
+        private string tanksVersionForInstaller;//the location to pass into the installer
         private string appDataFolder;//the folder where the user's app data is stored (C:\Users\username\AppData)
+        private string databaseVersionString;
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
         //where all the downloaded mods are placed
@@ -43,7 +46,6 @@ namespace RelhaxModpack
         private List<LogicalDependnecy> currentLogicalDependencies;
         //list of patches
         private List<Patch> patchList;
-        //installing the RelhaxModpack of the Relhax Sound Mod
         string tempOldDownload;
         private List<Mod> userMods;
         private FirstLoadHelper helper;
@@ -52,7 +54,6 @@ namespace RelhaxModpack
         private Installer ins;
         private Installer unI;
         private string tanksVersion;//0.9.x.y
-        //list to maintain the refrence lines in a json patch
         List<double> timeRemainArray;
         //the ETA variable for downlading
         double actualTimeRemain = 0;
@@ -226,9 +227,10 @@ namespace RelhaxModpack
                     ModsConfigsToInstall = this.modsConfigsToInstall,
                     ModsConfigsWithData = this.modsConfigsWithData,
                     TanksLocation = this.tanksLocation,
-                    TanksVersion = this.tanksVersion,
+                    TanksVersion = this.tanksVersionForInstaller,
                     UserMods = this.userMods,
-                    AppDataFolder = this.appDataFolder
+                    AppDataFolder = this.appDataFolder,
+                    DatabaseVersion = this.databaseVersionString
                 };
                 ins.InstallProgressChanged += I_InstallProgressChanged;
                 ins.StartInstallation();
@@ -368,27 +370,6 @@ namespace RelhaxModpack
             return false;
         }
         //checks the registry to get the location of where WoT is installed
-        //idea: if the user can open replay files, this can get the WoT exe filepath
-        private string autoFindTanks_old()
-        {
-            object theObject = new object();
-            const string keyName = "HKEY_CURRENT_USER\\Software\\Classes\\.wotreplay\\shell\\open\\command";
-            theObject = Registry.GetValue(keyName, "", -1);
-            if (theObject == null) return null;
-            try
-            {
-                tanksLocation = (string)theObject;
-            }
-            catch (InvalidCastException)
-            {
-                return null;
-            }
-            tanksLocation = tanksLocation.Substring(1);
-            tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 6);
-            if (!File.Exists(tanksLocation)) return null;
-            return (string)theObject;
-        }
-
         private string autoFindTanks()
         {
             List<string> searchPathWoT = new List<string>();
@@ -700,10 +681,11 @@ namespace RelhaxModpack
                 return;
             }
             tanksVersion = this.getFolderVersion();
+            tanksVersionForInstaller = tanksVersion;
             Utils.appendToLog("tanksVersion parsed as " + tanksVersion);
             //determine if the tanks client version is supported
             // string selectionListTanksVersion = tanksVersion;
-            if (!isClientVersionSupported(tanksVersion))
+            if (!isClientVersionSupported(tanksVersion) && !Program.testMode)
             {
                 //log and inform the user
                 Utils.appendToLog("WARNING: Detected client version is " + tanksVersion + ", not supported");
@@ -713,6 +695,15 @@ namespace RelhaxModpack
                 MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}: {4}", Translations.getTranslatedString("detectedClientVersion"), tanksVersion, Translations.getTranslatedString("supportNotGuarnteed"), Translations.getTranslatedString("supportedClientVersions"), publicVersions), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 // select the last public modpack version
                 tanksVersion = publicVersions.Split(',')[publicVersions.Split(',').Count() - 1];
+            }
+            //if the user wants to, check if the database has actually changed
+            if (Settings.NotifyIfSameDatabase && SameDatabaseVersions())//put setting here
+            {
+                if (MessageBox.Show(Translations.getTranslatedString("DatabaseVersionsSameBody"), Translations.getTranslatedString("DatabaseVersionsSameHeader"), MessageBoxButtons.YesNo) == DialogResult.No)
+                {
+                    toggleUIButtons(true);
+                    return;
+                }
             }
             //reset the childProgressBar value
             childProgressBar.Maximum = 100;
@@ -1388,6 +1379,7 @@ namespace RelhaxModpack
             this.viewDBUpdates.Text = Translations.getTranslatedString(viewDBUpdates.Name);
             this.disableColorsCB.Text = Translations.getTranslatedString(disableColorsCB.Name);
             this.clearLogFilesCB.Text = Translations.getTranslatedString(clearLogFilesCB.Name);
+            this.notifyIfSameDatabaseCB.Text = Translations.getTranslatedString(notifyIfSameDatabaseCB.Name);
             if (helper != null)
             {
                 helper.helperText.Text = Translations.getTranslatedString("helperText");
@@ -1408,6 +1400,7 @@ namespace RelhaxModpack
                 this.disableColorsCB.Checked = Settings.disableColorChange;
                 this.clearLogFilesCB.Checked = Settings.deleteLogs;
                 this.Font = Settings.appFont;
+                this.notifyIfSameDatabaseCB.Checked = Settings.NotifyIfSameDatabase;
                 switch (Settings.gif)
                 {
                     case (Settings.LoadingGifs.standard):
@@ -1620,6 +1613,7 @@ namespace RelhaxModpack
             DPIAUTO.Enabled = enableToggle;
             clearCacheCB.Enabled = enableToggle;
             clearLogFilesCB.Enabled = enableToggle;
+            notifyIfSameDatabaseCB.Enabled = enableToggle;
         }
         //handler for when the window is goingto be closed
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -1796,6 +1790,12 @@ namespace RelhaxModpack
         {
             if (helper != null)
                 helper.helperText.Text = Translations.getTranslatedString("darkUIDesc");
+        }
+
+        private void notifyIfSameDatabaseCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("notifyIfSameDatabaseCBExplanation");
         }
 
         private void font_MouseDown(object sender, MouseEventArgs e)
@@ -1992,6 +1992,17 @@ namespace RelhaxModpack
             using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
             {
                 newHelper.helperText.Text = Translations.getTranslatedString("clearLogFilesCBExplanation");
+                newHelper.ShowDialog();
+            }
+        }
+
+        private void notifyIfSameDatabaseCB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
+            {
+                newHelper.helperText.Text = Translations.getTranslatedString("notifyIfSameDatabaseCBExplanation");
                 newHelper.ShowDialog();
             }
         }
@@ -2320,6 +2331,11 @@ namespace RelhaxModpack
             Settings.disableColorChange = disableColorsCB.Checked;
         }
 
+        private void notifyIfSameDatabaseCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.NotifyIfSameDatabase = notifyIfSameDatabaseCB.Checked;
+        }
+
         private void viewAppUpdates_Click(object sender, EventArgs e)
         {
             string appUpdatesURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/releaseNotes.txt";
@@ -2340,6 +2356,25 @@ namespace RelhaxModpack
             {
                 vu.ShowDialog();
             }
+        }
+
+        private bool SameDatabaseVersions()
+        {
+            XPathDocument doc = new XPathDocument(Path.Combine(Application.StartupPath, "RelHaxTemp", "manager_version.xml"));//xml doc name can change
+            var databaseVersion = doc.CreateNavigator().SelectSingleNode("/version/database");
+            databaseVersionString = databaseVersion.InnerXml;
+            string installedfilesLogPath = Path.Combine(tanksLocation, "installedRelhaxFiles.log");
+            if (!File.Exists(installedfilesLogPath))
+                return false;
+            string[] lastInstalledDatabaseVersionString = File.ReadAllText(installedfilesLogPath).Split('\n');
+            //use index 0 of array, index 18 of string array
+            string theDatabaseVersion = lastInstalledDatabaseVersionString[0];
+            theDatabaseVersion = theDatabaseVersion.Substring(18);
+            theDatabaseVersion = theDatabaseVersion.Trim();
+            if (databaseVersionString.Equals(theDatabaseVersion))
+                return true;
+            else
+                return false;
         }
     }
     //a class for the downloadQueue list, to make a queue of downloads
