@@ -113,6 +113,7 @@
   <ItemGroup>
     <Compile Include="Category.cs" />
     <Compile Include="CiInfo.cs" />
+    <Compile Include="DeveloperSelections.cs" />
     <Compile Include="CompleteModSearchList.cs" />
     <Compile Include="ComboBoxItem.cs" />
     <Compile Include="Config.cs" />

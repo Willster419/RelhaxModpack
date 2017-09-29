@@ -418,19 +418,54 @@ namespace RelhaxModpack
         //check to see if the supplied version of tanks is on the list of supported client versions
         private bool isClientVersionSupported(string detectedVersion)
         {
+            /*
             supportedVersions.Clear();
             bool result = false;
             string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "supported_clients.xml");  //xml doc name can change
             StringReader rdr = new StringReader(xmlString);
             var doc = new XPathDocument(rdr);
-            foreach (var version in doc.CreateNavigator().Select("//versions/version"))
+            foreach (XPathDocument version in doc.CreateNavigator().Select("//versions/version"))
             {
                 if (version.ToString().Equals(detectedVersion) || (version.ToString().Equals('T' + detectedVersion.Trim()) && Program.testMode))
                 {
+                    // Settings.tanksOnlineFolderVersion = version.CreateNavigator().GetAttribute("folder", null);
                     result = true;
                 }
                 supportedVersions.Add(version.ToString());
             }
+            return result;
+            */
+            supportedVersions.Clear();
+            Utils.appendToLog("Test 1");
+            string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "supported_clients.xml");  //xml doc name can change
+            Utils.appendToLog("Test 2");
+            XDocument doc = XDocument.Parse(xmlString); //               Load(MainWindow.md5HashDatabaseXmlFile);
+            Utils.appendToLog("Test 3");
+            bool result = doc.Descendants("version")
+                   .Where(arg => arg.Value.Equals(detectedVersion))
+                   .Any();
+            Utils.appendToLog("Test 4");
+            if (result)
+            {
+                Utils.appendToLog("Test 5");
+                XElement element = doc.Descendants("version")
+                   .Where(arg => arg.Value.Equals(detectedVersion))
+                   .Single();
+                Utils.appendToLog("Test 6");
+                Settings.tanksOnlineFolderVersion = element.Attribute("folder").Value;
+                Utils.appendToLog("Test 7 => onlineFolder: "+ Settings.tanksOnlineFolderVersion);
+            }
+            Utils.appendToLog("Test 8");
+            StringReader rdr = new StringReader(xmlString);
+            Utils.appendToLog("Test 9");
+            var docV = new XPathDocument(rdr);
+            Utils.appendToLog("Test 10");
+            foreach (var version in docV.CreateNavigator().Select("//versions/version"))
+            {
+                Utils.appendToLog("Test 11");
+                supportedVersions.Add(version.ToString());
+            }
+            Utils.appendToLog("Test 12");
             return result;
         }
 

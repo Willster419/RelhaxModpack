@@ -525,7 +525,6 @@ namespace RelhaxModpack
                 SelectedCategory = null;
 
                 ObjectNameTB.Enabled = false;
-                // ObjectNameTB.Text = "";
 
                 ObjectPackageNameTB.Enabled = true;
                 ObjectPackageNameTB.Text = node.GlobalDependency.packageName;
@@ -543,7 +542,6 @@ namespace RelhaxModpack
                 ObjectDevURLTB.Text = SelectedGlobalDependency.devURL;
 
                 ObjectVersionTB.Enabled = false;
-                // ObjectVersionTB.Text = "";
 
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;
@@ -552,7 +550,6 @@ namespace RelhaxModpack
                 ObjectEnabledCheckBox.Checked = node.GlobalDependency.enabled;
 
                 ObjectVisibleCheckBox.Enabled = false;
-                // ObjectVisibleCheckBox.Checked = false;
 
                 ObjectAppendExtractionCB.Enabled = true;
                 ObjectAppendExtractionCB.Checked = node.GlobalDependency.appendExtraction;
@@ -560,8 +557,6 @@ namespace RelhaxModpack
                 DownloadZipfileButton.Enabled = true;
 
                 DescriptionTabPage.Enabled = false;
-                // ObjectDescTB.Text = "";
-                // ObjectUpdateNotesTB.Text = "";
 
                 DependenciesTabPage.Enabled = false;
                 ObjectDependenciesLabel.Text = "dependencies (click to edit)";
@@ -577,7 +572,6 @@ namespace RelhaxModpack
                 SelectedCategory = null;
 
                 ObjectNameTB.Enabled = false;
-                // ObjectNameTB.Text = "";
 
                 ObjectPackageNameTB.Enabled = true;
                 ObjectPackageNameTB.Text = SelectedDependency.packageName;
@@ -595,7 +589,6 @@ namespace RelhaxModpack
                 ObjectDevURLTB.Text = SelectedDependency.devURL;
 
                 ObjectVersionTB.Enabled = false;
-                // ObjectVersionTB.Text = "";
 
                 ObjectTypeComboBox.Enabled = false;
                 ObjectTypeComboBox.SelectedIndex = 0;

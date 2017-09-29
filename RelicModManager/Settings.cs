@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Runtime.InteropServices;
 using System;
+using System.Collections.Generic;
 
 namespace RelhaxModpack
 {
@@ -16,6 +17,8 @@ namespace RelhaxModpack
         public static bool NotifyIfSameDatabase { get; set; }
         //toggle if the program will backup the current mod installation
         public static bool backupModFolder { get; set; }
+        //DeveloperSelections namelist
+        public static List<DeveloperSelections> developerSelections = new List<DeveloperSelections>();
         //toggle if the program will clean the mods and res_mods folders before installation
         public static bool cleanInstallation { get; set; }
         public static bool forceManuel { get; set; }
@@ -38,6 +41,7 @@ namespace RelhaxModpack
         public static string settingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxSettings.xml");
         public static string managerInfoDatFile = Path.Combine(Application.StartupPath, "RelHaxTemp", "managerInfo.dat");
         public static string modInfoDatFile = Path.Combine(Application.StartupPath, "RelHaxTemp", "modInfo.dat");
+        public static string tanksOnlineFolderVersion = "";
         public static string configFileVersion = "2.0";     // for later imports of this files, we need a better identification
         public enum LoadingGifs { standard = 0, thirdGuards = 1 };
         public static LoadingGifs gif;
