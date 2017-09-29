@@ -153,9 +153,11 @@ namespace RelhaxModpack
             //convert the total seconds to mins and seconds
             int actualTimeMins = (int)actualTimeRemain / 60;
             int actualTimeSecs = (int)actualTimeRemain % 60;
-            string downloadStatus = "";
-            downloadStatus = Translations.getTranslatedString("Downloading") + " " + currentModDownloadingShort + " (" + Math.Round(MBytesIn, 1) + " MB" + " of " + Math.Round(MBytesTotal, 1) + " MB)";
-            downloadStatus = downloadStatus + "\n" + totalSpeedLabel + " " + actualTimeMins + " mins " + actualTimeSecs + " secs ";
+            // string downloadStatus = "";
+            // downloadStatus = Translations.getTranslatedString("Downloading") + " " + currentModDownloadingShort + " (" + Math.Round(MBytesIn, 1) + " MB" + " of " + Math.Round(MBytesTotal, 1) + " MB)";
+            // downloadStatus = downloadStatus + "\n" + totalSpeedLabel + " " + actualTimeMins + " mins " + actualTimeSecs + " ";
+            string downloadStatus = string.Format("{0} {1} ({2} MB {3} {4} MB)\n{5} {6} mins {7} secs", 
+                Translations.getTranslatedString("Downloading"), currentModDownloadingShort, Math.Round(MBytesIn, 1), Translations.getTranslatedString("of"), Math.Round(MBytesTotal, 1), totalSpeedLabel, actualTimeMins, actualTimeSecs);
             //totalSpeedLabel = 
             downloadProgress.Text = downloadStatus;
             //speedLabel.Text = totalSpeedLabel;
