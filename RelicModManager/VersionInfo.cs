@@ -54,7 +54,7 @@ namespace RelhaxModpack
             catch (Exception ex)
             {
                 Utils.exceptionLog("VersionInfo_Load", "http://wotmods.relhaxmodpack.com/RelhaxModpack/releaseNotes.txt", ex);
-                MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " releaseNotes.txt");
+                MessageBox.Show(string.Format("{0} releaseNotes.txt", Translations.getTranslatedString("failedToDownload_1")));
                 Application.Exit();
             }
             Settings.setUIColor(this);

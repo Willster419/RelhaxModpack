@@ -176,8 +176,8 @@ namespace RelhaxModpack
             if (e != null && e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
             {
                 //404
-                Utils.appendToLog("ERROR: " + tempOldDownload + " failed to download");
-                MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + "\n" + tempOldDownload + "\n\n" + Translations.getTranslatedString("failedToDownload_2"));
+                Utils.appendToLog(string.Format("ERROR: {0} failed to download", tempOldDownload));
+                MessageBox.Show(string.Format("{0}\n{1}\n\n{2}", Translations.getTranslatedString("failedToDownload_1"), tempOldDownload, Translations.getTranslatedString("failedToDownload_2")));
                 Application.Exit();
             }
             if (downloadQueue.Count != 0)
@@ -251,7 +251,7 @@ namespace RelhaxModpack
             catch (Exception ex)
             {
                 Utils.exceptionLog("checkmanagerUpdates", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt", ex);
-                MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " manager version.txt");
+                MessageBox.Show(string.Format("{0} manager version.txt", Translations.getTranslatedString("failedToDownload_1")));
                 Application.Exit();
             }
             Utils.appendToLog("Local application is " + managerVersion() + ", current online is " + version);
@@ -298,7 +298,7 @@ namespace RelhaxModpack
             catch (Exception ex)
             {
                 Utils.exceptionLog("checkmanagerUpdates", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.zip", ex);
-                MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " managerInfo.zip");
+                MessageBox.Show(string.Format("{0} managerInfo.zip", Translations.getTranslatedString("failedToDownload_1")));
                 Application.Exit();
             }
             //extract the updates
@@ -367,7 +367,7 @@ namespace RelhaxModpack
                     {
                         Utils.exceptionLog("failed to download => RelicCopyUpdate.bat", e2);
                         // Utils.appendToLog("Error: failed to download => RelicCopyUpdate.bat");
-                        MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " RelicCopyUpdate.bat");
+                        MessageBox.Show(string.Format("{0} RelicCopyUpdate.bat", Translations.getTranslatedString("failedToDownload_1")));
                         Application.Exit();
                     }
                 }
@@ -417,7 +417,7 @@ namespace RelhaxModpack
             catch (WebException e)
             {
                 Utils.exceptionLog("Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/supported_clients.txt", e);
-                MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " supported_clients.txt");
+                MessageBox.Show(string.Format("{0} supported_clients.txt", Translations.getTranslatedString("failedToDownload_1")));
                 Application.Exit();
             }
             supportedVersions = suportedVersions.Split(',');
@@ -612,7 +612,7 @@ namespace RelhaxModpack
                 catch (Exception ex)
                 {
                     Utils.exceptionLog("MainWindow_Load", "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll", ex);
-                    MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " DotNetZip.dll");
+                    MessageBox.Show(string.Format("{0} DotNetZip.dll", Translations.getTranslatedString("failedToDownload_1")));
                     Application.Exit();
                 }
             }
@@ -628,7 +628,7 @@ namespace RelhaxModpack
                 catch (Exception ex)
                 {
                     Utils.exceptionLog("MainWindow_Load", "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll", ex);
-                    MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " Newtonsoft.Json.dll");
+                    MessageBox.Show(string.Format("{0} Newtonsoft.Json.dll", Translations.getTranslatedString("failedToDownload_1")));
                     Application.Exit();
                 }
             }

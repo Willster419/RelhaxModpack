@@ -770,7 +770,7 @@ namespace RelhaxModpack
                     catch (WebException ex)
                     {
                         Utils.exceptionLog("InstallFonts", "download FontReg.exe", ex);
-                        MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " FontReg.exe");
+                        MessageBox.Show(string.Format("{0} FontReg.exe", Translations.getTranslatedString("failedToDownload_1")));
                     }
                 }
                 ProcessStartInfo info = new ProcessStartInfo();
