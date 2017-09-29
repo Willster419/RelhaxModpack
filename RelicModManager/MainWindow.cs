@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Xml.XPath;
 using Ionic.Zip;
+using System.Xml.Linq;
 
 namespace RelhaxModpack
 {
@@ -250,7 +251,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("checkmanagerUpdates", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt", ex);
+                Utils.exceptionLog("checkmanagerUpdates_old", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt", ex);
                 MessageBox.Show(string.Format("{0} manager version.txt", Translations.getTranslatedString("failedToDownload_1")));
                 Application.Exit();
             }
@@ -284,6 +285,7 @@ namespace RelhaxModpack
                 }
             }
         }
+        
         //method to check for updates to the application on startup
         private void checkmanagerUpdates()
         {
@@ -291,28 +293,26 @@ namespace RelhaxModpack
             //download the updates
             WebClient updater = new WebClient();
             updater.Proxy = null;
+            string datFile = Path.Combine(Application.StartupPath, "RelHaxTemp", "managerInfo.dat");
             try
             {
-                //updater.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.zip", Path.Combine(Application.StartupPath, "RelHaxTemp", "managerInfo.zip"));
+                updater.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", datFile);
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("checkmanagerUpdates", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.zip", ex);
-                MessageBox.Show(string.Format("{0} managerInfo.zip", Translations.getTranslatedString("failedToDownload_1")));
+                Utils.exceptionLog("checkmanagerUpdates", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", ex);
+                MessageBox.Show(string.Format("{0} managerInfo.dat", Translations.getTranslatedString("failedToDownload_1")));
                 Application.Exit();
             }
-            //extract the updates
-            /*
-            using (ZipFile zip = new ZipFile(Path.Combine(Application.StartupPath, "RelHaxTemp", "managerInfo.zip")))
-            {
-                zip.ExtractAll(Path.Combine(Application.StartupPath, "RelHaxTemp"), ExtractExistingFileAction.OverwriteSilently);
-            }
-            */
+
             string version = "";
-            XPathDocument doc = new XPathDocument(Path.Combine(Application.StartupPath, "RelHaxTemp", "manager_version.xml"));//xml doc name can change
-            var databaseVersion = doc.CreateNavigator().SelectSingleNode("/version/manager");
-            version = databaseVersion.InnerXml;
-            Utils.appendToLog("Local application is " + managerVersion() + ", current online is " + version);
+            string xmlString = Utils.getStringFromZip(datFile, "manager_version.xml");  //xml doc name can change
+            XDocument doc = XDocument.Parse(xmlString);
+            var databaseVersion = doc.Descendants().Where(n => n.Name == "manager").FirstOrDefault();
+            if (databaseVersion != null)
+                version = databaseVersion.Value;
+            Utils.appendToLog(string.Format("Local application is {0}, current online is {1}", managerVersion(), version));
+
             if (!version.Equals(managerVersion()))
             {
                 Utils.appendToLog("exe is out of date. displaying user update window");

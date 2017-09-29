@@ -4279,5 +4279,28 @@ namespace RelhaxModpack
 
             return ScreenScalingFactor; // 1.25 = 125%
         }
+
+        // https://social.msdn.microsoft.com/Forums/vstudio/en-US/92a36534-0f01-4425-ab63-c5f8830d64ae/help-please-with-dotnetzip-extracting-data-form-ziped-file?forum=csharpgeneral
+        public static string getStringFromZip(string zipFilename, string archivedFilename, string password = null)
+        {
+            MemoryStream ms = new MemoryStream();
+            string textStr;
+            using (ZipFile zip = ZipFile.Read(zipFilename))
+            {
+                ZipEntry e = zip[archivedFilename];
+                if (password != null)
+                {
+                    e.ExtractWithPassword(ms, password);
+                }
+                else
+                {
+                    e.Extract(ms);
+                }
+                StreamReader sr = new StreamReader(ms);
+                ms.Position = 0;
+                textStr = sr.ReadToEnd();
+            }
+            return textStr;
+        }
     }
 }
