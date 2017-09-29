@@ -1,6 +1,6 @@
 ﻿namespace RelhaxModpack
 {
-    partial class loadingGifPreview
+    partial class LoadingGifPreview
     {
         /// <summary>
         /// Required designer variable.
@@ -42,7 +42,7 @@
             this.gifPreviewBox.TabIndex = 0;
             this.gifPreviewBox.TabStop = false;
             // 
-            // loadingGifPreview
+            // LoadingGifPreview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -50,8 +50,9 @@
             this.Controls.Add(this.gifPreviewBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
-            this.Name = "loadingGifPreview";
+            this.Name = "LoadingGifPreview";
             this.Text = "loadingGifPreview";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LoadingGifPreview_FormClosing);
             this.Load += new System.EventHandler(this.GifPreview_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gifPreviewBox)).EndInit();
             this.ResumeLayout(false);

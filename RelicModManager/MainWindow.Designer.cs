@@ -41,6 +41,7 @@
             this.cancerFontCB = new System.Windows.Forms.CheckBox();
             this.backupModsCheckBox = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
+            this.notifyIfSameDatabaseCB = new System.Windows.Forms.CheckBox();
             this.clearLogFilesCB = new System.Windows.Forms.CheckBox();
             this.clearCacheCB = new System.Windows.Forms.CheckBox();
             this.darkUICB = new System.Windows.Forms.CheckBox();
@@ -81,7 +82,6 @@
             this.DiscordServerLink = new System.Windows.Forms.LinkLabel();
             this.viewAppUpdates = new System.Windows.Forms.Button();
             this.viewDBUpdates = new System.Windows.Forms.Button();
-            this.notifyIfSameDatabaseCB = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
@@ -137,7 +137,6 @@
             // 
             // installRelhaxMod
             // 
-            this.installRelhaxMod.AutoSize = true;
             this.installRelhaxMod.Location = new System.Drawing.Point(224, 12);
             this.installRelhaxMod.Name = "installRelhaxMod";
             this.installRelhaxMod.Size = new System.Drawing.Size(205, 30);
@@ -218,6 +217,20 @@
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "Modpack Settings";
+            // 
+            // notifyIfSameDatabaseCB
+            // 
+            this.notifyIfSameDatabaseCB.AutoSize = true;
+            this.notifyIfSameDatabaseCB.Location = new System.Drawing.Point(6, 166);
+            this.notifyIfSameDatabaseCB.Name = "notifyIfSameDatabaseCB";
+            this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(193, 17);
+            this.notifyIfSameDatabaseCB.TabIndex = 33;
+            this.notifyIfSameDatabaseCB.Text = "Inform if no new database available";
+            this.notifyIfSameDatabaseCB.UseVisualStyleBackColor = true;
+            this.notifyIfSameDatabaseCB.CheckedChanged += new System.EventHandler(this.notifyIfSameDatabaseCB_CheckedChanged);
+            this.notifyIfSameDatabaseCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.notifyIfSameDatabaseCB_MouseDown);
+            this.notifyIfSameDatabaseCB.MouseEnter += new System.EventHandler(this.notifyIfSameDatabaseCB_MouseEnter);
+            this.notifyIfSameDatabaseCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // clearLogFilesCB
             // 
@@ -736,20 +749,6 @@
             this.viewDBUpdates.Text = "View latest database updates";
             this.viewDBUpdates.UseVisualStyleBackColor = true;
             this.viewDBUpdates.Click += new System.EventHandler(this.viewDBUpdates_Click);
-            // 
-            // notifyIfSameDatabaseCB
-            // 
-            this.notifyIfSameDatabaseCB.AutoSize = true;
-            this.notifyIfSameDatabaseCB.Location = new System.Drawing.Point(6, 166);
-            this.notifyIfSameDatabaseCB.Name = "notifyIfSameDatabaseCB";
-            this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(193, 17);
-            this.notifyIfSameDatabaseCB.TabIndex = 33;
-            this.notifyIfSameDatabaseCB.Text = "Inform if no new database available";
-            this.notifyIfSameDatabaseCB.UseVisualStyleBackColor = true;
-            this.notifyIfSameDatabaseCB.CheckedChanged += new System.EventHandler(this.notifyIfSameDatabaseCB_CheckedChanged);
-            this.notifyIfSameDatabaseCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.notifyIfSameDatabaseCB_MouseDown);
-            this.notifyIfSameDatabaseCB.MouseEnter += new System.EventHandler(this.notifyIfSameDatabaseCB_MouseEnter);
-            this.notifyIfSameDatabaseCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // MainWindow
             // 

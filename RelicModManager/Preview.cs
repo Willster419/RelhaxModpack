@@ -54,7 +54,7 @@ namespace RelhaxModpack
                 previewPicture.Dispose();
                 previewPicture = null;
             }
-            if(this.Contains(youtubedisplay))
+            if (this.Contains(youtubedisplay))
             {
                 this.Controls.Remove(youtubedisplay);
                 youtubedisplay.Dispose();
@@ -102,9 +102,10 @@ namespace RelhaxModpack
             label.Name = "" + i;
             label.Text = "" + i;
             label.LinkClicked += new LinkLabelLinkClickedEventHandler(label_LinkClicked);
-            label.Size = new Size(15, 10);
             label.AutoSize = true;
-            int xLocation = 14 * i;
+            int xLocation = 0;
+            foreach (Control c in pictureCountPanel.Controls)
+                xLocation += c.Size.Width;
             label.Location = new Point(xLocation, 5);
             label.TabStop = true;
             pictureCountPanel.Controls.Add(label);
@@ -117,6 +118,7 @@ namespace RelhaxModpack
             //i--;
             currentlySelected = i;
             this.displayMedia(medias[i]);
+            Preview_SizeChanged(null, null);
         }
         //show the suplied dev url thread
         private void devLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -167,10 +169,10 @@ namespace RelhaxModpack
                     scale = 75;
                     break;
                 case Settings.FontSize.font225:
-                    scale = 120;
+                    scale = 145;
                     break;
                 case Settings.FontSize.font275:
-                    scale = 165;
+                    scale = 200;
                     break;
                 case Settings.FontSize.DPI125:
                     scale = 30;
@@ -179,10 +181,10 @@ namespace RelhaxModpack
                     scale = 75;
                     break;
                 case Settings.FontSize.DPI225:
-                    scale = 120;
+                    scale = 145;
                     break;
                 case Settings.FontSize.DPI275:
-                    scale = 165;
+                    scale = 200;
                     break;
                 case Settings.FontSize.DPIAUTO:
                     int settingsScale = (int)Settings.scaleSize;
@@ -190,7 +192,7 @@ namespace RelhaxModpack
                     scale = scale + 30;
                     break;
             }
-            Size tempSize = new Size(0,0);
+            Size tempSize = new Size(0, 0);
             if (previewPicture != null)
             {
                 previewPicture.Size = new Size(width, applicationHeight - 265 - difference - scale);
@@ -207,7 +209,7 @@ namespace RelhaxModpack
             previousPicButton.Location = new Point(12, 12 + tempSize.Height + 6);
             pictureCountPanel.Location = new Point(12 + previousPicButton.Size.Width + 12, 12 + tempSize.Height + 6);
             pictureCountPanel.Size = new Size(width - pictureCountPanel.Location.X - nextPicButton.Size.Width - 4, pictureCountPanel.Size.Height);
-            devLinkLabel.Location = new Point(this.Size.Width - 12 - devLinkLabel.Size.Width - 4, applicationHeight - 49 - difference -5 );
+            devLinkLabel.Location = new Point(this.Size.Width - 12 - devLinkLabel.Size.Width - 4, applicationHeight - 49 - difference - 5);
         }
         //applies translations
         private void applyTranslations()
@@ -249,9 +251,7 @@ namespace RelhaxModpack
                 updateComments = Translations.getTranslatedString("noUpdateInfo");
             else if (updateComments.Equals(""))
                 updateComments = Translations.getTranslatedString("noUpdateInfo");
-            // descriptionBox.Lines = description.Split('@');
             descriptionBox.Text = description;
-            // updateBox.Lines = updateComments.Split('@');
             updateBox.Text = updateComments;
             //get the size of the title bar window
             Rectangle screenRektangle = RectangleToScreen(this.ClientRectangle);
@@ -291,7 +291,7 @@ namespace RelhaxModpack
         private void Preview_FormClosing(object sender, FormClosingEventArgs e)
         {
             // if preview window is minimized and will be closed directly via the taskbar, windows send -32000 coordinate X and Y, so not storing it
-            if (this.Location.X > 0 && this.Location.Y > 0)             
+            if (this.Location.X > 0 && this.Location.Y > 0)
             {
                 Settings.previewX = this.Location.X;
                 Settings.previewY = this.Location.Y;
