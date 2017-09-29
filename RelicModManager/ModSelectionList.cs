@@ -376,97 +376,95 @@ namespace RelhaxModpack
         //adds a mod m to a tabpage t, OMC treeview style
         private void addModTreeview(Mod m, TabPage t, int panelCount, LegacySelectionList lsl, Category c)
         {
-            if (m.visible)
+            if (!m.visible)
+                return;
+            if (Settings.darkUI)
+                lsl.legacyTreeView.Background = System.Windows.Media.Brushes.Gray;
+            //helpfull stuff
+            string modDownloadFilePath = Application.StartupPath + "\\RelHaxDownloads\\" + m.zipFile;
+            hasRadioButtonConfigSelected = false;
+            modHasRadioButtons = false;
+            //link the catagory and mod in memory
+            m.parent = c;
+            //create base mod checkbox
+            ModWPFCheckBox modCheckBox = new ModWPFCheckBox();
+            //use a custom datatype for the name
+            modCheckBox.mod = m;
+            modCheckBox.catagory = c;
+            //add the root UI object to the memory database
+            m.modFormCheckBox = modCheckBox;
+            m.tabIndex = t;
+            completeModSearchList.Add(m);
+            // completeModSearchList_New.Add(m);
+            switch (Settings.fontSizeforum)
             {
-                if (Settings.darkUI)
-                    lsl.legacyTreeView.Background = System.Windows.Media.Brushes.Gray;
-                //helpfull stuff
-                string modDownloadFilePath = Application.StartupPath + "\\RelHaxDownloads\\" + m.zipFile;
-                hasRadioButtonConfigSelected = false;
-                modHasRadioButtons = false;
-                //link the catagory and mod in memory
-                m.parent = c;
-                //create base mod checkbox
-                ModWPFCheckBox modCheckBox = new ModWPFCheckBox();
-                //use a custom datatype for the name
-                modCheckBox.mod = m;
-                modCheckBox.catagory = c;
-                //add the root UI object to the memory database
-                m.modFormCheckBox = modCheckBox;
-                m.tabIndex = t;
-                completeModSearchList.Add(m);
-                // completeModSearchList_New.Add(m);
-                switch (Settings.fontSizeforum)
-                {
-                    case Settings.FontSize.font100:
-                        break;
-                    case Settings.FontSize.font125:
-                        modCheckBox.FontSize = modCheckBox.FontSize + 4;
-                        break;
-                    case Settings.FontSize.font175:
-                        modCheckBox.FontSize = modCheckBox.FontSize + 8;
-                        break;
-                }
-                modCheckBox.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
-                if (Settings.darkUI)
-                    modCheckBox.FontWeight = System.Windows.FontWeights.Bold;
-                modCheckBox.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
-                modCheckBox.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
-                //make the tree view item for the modCheckBox
-                System.Windows.Controls.TreeViewItem tvi = new System.Windows.Controls.TreeViewItem();
-                if (Settings.expandAllLegacy)
-                    tvi.IsExpanded = true;
-                //process configs
-                if (m.configs.Count > 0)
-                    processConfigs(c, m, m.configs, tvi, true);
-                string nameForModCB = m.name;
-                //if there are underscores you need to actually display them #thanksWPF
-                nameForModCB = Regex.Replace(nameForModCB, "_", "__");
-                modCheckBox.Content = nameForModCB;
-                //if the CRC's don't match and the mod actually has a zip file
-                if (firstLoad)
-                {
-                    //get the local md5 hash. a -1 indicates the file is not on the disk
-                    string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
-                    if ((!m.zipFile.Equals("")) && (!m.crc.Equals(oldCRC2)))
-                    {
-                        modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Translations.getTranslatedString("updated"));
-                        m.downloadFlag = true;
-                        if ((m.size > 0))
-                            modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Utils.SizeSuffix(m.size, 1, true));
-                    }
-                }
-                else
-                {
-                    if (m.downloadFlag)
-                    {
-                        modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Translations.getTranslatedString("updated"));
-                        if ((m.size > 0))
-                            modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Utils.SizeSuffix(m.size, 1, true));
-                    }
-                }
-                //set mod's enabled status
-                modCheckBox.IsEnabled = m.enabled;
-                //set the mods checked status
-                if (m.enabled && m.Checked)
-                    modCheckBox.IsChecked = true;
-
-                tvi.Header = modCheckBox;
-                //add it's handlers, right click and when checked
-                modCheckBox.MouseDown += new System.Windows.Input.MouseButtonEventHandler(modCheckBoxL_MouseDown);
-
-                //add the mod check box to the legacy tree view
-                lsl.legacyTreeView.Items.Add(tvi);
-                //disable the logic for now
-                if (false && (bool)modCheckBox.IsChecked && modHasRadioButtons && !hasRadioButtonConfigSelected)
-                {
-                    //getting here means that the user has saved the prefrence for a selected mandatory radiobutton config that has been disabled, so his selection of that mod needs to be disabled
-                    m.Checked = false;
-                    modCheckBox.IsChecked = false;
-                }
-                modCheckBox.Checked += modCheckBoxL_Click;
-                modCheckBox.Unchecked += modCheckBoxL_Click;
+                case Settings.FontSize.font100:
+                    break;
+                case Settings.FontSize.font125:
+                    modCheckBox.FontSize = modCheckBox.FontSize + 4;
+                    break;
+                case Settings.FontSize.font175:
+                    modCheckBox.FontSize = modCheckBox.FontSize + 8;
+                    break;
+                case Settings.FontSize.font225:
+                    modCheckBox.FontSize = modCheckBox.FontSize + 12;
+                    break;
+                case Settings.FontSize.font275:
+                    modCheckBox.FontSize = modCheckBox.FontSize + 16;
+                    break;
             }
+            modCheckBox.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
+            if (Settings.darkUI)
+                modCheckBox.FontWeight = System.Windows.FontWeights.Bold;
+            modCheckBox.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
+            modCheckBox.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+            //make the tree view item for the modCheckBox
+            System.Windows.Controls.TreeViewItem tvi = new System.Windows.Controls.TreeViewItem();
+            if (Settings.expandAllLegacy)
+                tvi.IsExpanded = true;
+            //process configs
+            if (m.configs.Count > 0)
+                processConfigs(c, m, m.configs, tvi, true);
+            string nameForModCB = m.name;
+            //if there are underscores you need to actually display them #thanksWPF
+            nameForModCB = Regex.Replace(nameForModCB, "_", "__");
+            modCheckBox.Content = nameForModCB;
+            //if the CRC's don't match and the mod actually has a zip file
+            if (firstLoad)
+            {
+                //get the local md5 hash. a -1 indicates the file is not on the disk
+                string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
+                if ((!m.zipFile.Equals("")) && (!m.crc.Equals(oldCRC2)))
+                {
+                    modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Translations.getTranslatedString("updated"));
+                    m.downloadFlag = true;
+                    if ((m.size > 0))
+                        modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Utils.SizeSuffix(m.size, 1, true));
+                }
+            }
+            else
+            {
+                if (m.downloadFlag)
+                {
+                    modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Translations.getTranslatedString("updated"));
+                    if ((m.size > 0))
+                        modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Utils.SizeSuffix(m.size, 1, true));
+                }
+            }
+            //set mod's enabled status
+            modCheckBox.IsEnabled = m.enabled;
+            //set the mods checked status
+            if (m.enabled && m.Checked)
+                modCheckBox.IsChecked = true;
+
+            tvi.Header = modCheckBox;
+            //add it's handlers, right click and when checked
+            modCheckBox.MouseDown += new System.Windows.Input.MouseButtonEventHandler(Generic_MouseDown);
+
+            //add the mod check box to the legacy tree view
+            lsl.legacyTreeView.Items.Add(tvi);
+            modCheckBox.Checked += modCheckBoxL_Click;
+            modCheckBox.Unchecked += modCheckBoxL_Click;
         }
 
         void processConfigs(Category c, Mod m, List<Config> configs, System.Windows.Controls.TreeViewItem tvi, bool parentIsMod = false, Config parentConfig = null)
@@ -487,279 +485,279 @@ namespace RelhaxModpack
             //process the configs
             foreach (Config con in configs)
             {
-                if (con.visible)
-                { 
-                    //link stuff in memory
-                    con.parentMod = m;
-                    if (parentIsMod)
+                if (!con.visible)
+                    continue;
+                //link stuff in memory
+                con.parentMod = m;
+                if (parentIsMod)
+                {
+                    // completeModSearchList_New.Add(con);
+                    completeModSearchList.Add(con);
+                    con.parent = m;
+                }
+                else
+                    con.parent = parentConfig;
+                //create the init stuff for each config
+                ConfigWPFComboBox configControlDDALL = null;
+                if (con.type.Equals("single") || con.type.Equals("single1"))
+                {
+                    modHasRadioButtons = true;
+                    //make the radio button
+                    ConfigWPFRadioButton configControlRB = new ConfigWPFRadioButton();
+                    switch (Settings.fontSizeforum)
                     {
-                        // completeModSearchList_New.Add(con);
-                        completeModSearchList.Add(con);
-                        con.parent = m;
+                        case Settings.FontSize.font100:
+                            break;
+                        case Settings.FontSize.font125:
+                            configControlRB.FontSize = configControlRB.FontSize + 4;
+                            break;
+                        case Settings.FontSize.font175:
+                            configControlRB.FontSize = configControlRB.FontSize + 8;
+                            break;
                     }
-                    else
-                        con.parent = parentConfig;
-                    //create the init stuff for each config
-                    ConfigWPFComboBox configControlDDALL = null;
-                    if (con.type.Equals("single") || con.type.Equals("single1"))
+                    configControlRB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
+                    if (Settings.darkUI)
+                        configControlRB.FontWeight = System.Windows.FontWeights.Bold;
+                    configControlRB.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
+                    configControlRB.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+                    configControlRB.catagory = c;
+                    configControlRB.mod = m;
+                    configControlRB.config = con;
+                    //add the UI component to the config item in memory database
+                    con.configUIComponent = configControlRB;
+                    //logic for determining if it can be enabled
+                    configControlRB.IsEnabled = false;
+                    configControlRB.IsChecked = false;
+                    //get all levels up to the mod, then deal with the mod
+                    bool canBeEnabled = true;
+                    //check all parent configs, if any
+                    if (con.parent is Config)
                     {
-                        modHasRadioButtons = true;
-                        //make the radio button
-                        ConfigWPFRadioButton configControlRB = new ConfigWPFRadioButton();
-                        switch (Settings.fontSizeforum)
+                        Config parentConfig2 = (Config)con.parent;
+                        while (parentConfig2 is Config)
                         {
-                            case Settings.FontSize.font100:
+                            if (!parentConfig2.enabled)
+                                canBeEnabled = false;
+                            if (parentConfig2.parent is Mod)
                                 break;
-                            case Settings.FontSize.font125:
-                                configControlRB.FontSize = configControlRB.FontSize + 4;
-                                break;
-                            case Settings.FontSize.font175:
-                                configControlRB.FontSize = configControlRB.FontSize + 8;
-                                break;
-                        }
-                        configControlRB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
-                        if (Settings.darkUI)
-                            configControlRB.FontWeight = System.Windows.FontWeights.Bold;
-                        configControlRB.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
-                        configControlRB.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
-                        configControlRB.catagory = c;
-                        configControlRB.mod = m;
-                        configControlRB.config = con;
-                        //add the UI component to the config item in memory database
-                        con.configUIComponent = configControlRB;
-                        //logic for determining if it can be enabled
-                        configControlRB.IsEnabled = false;
-                        configControlRB.IsChecked = false;
-                        //get all levels up to the mod, then deal with the mod
-                        bool canBeEnabled = true;
-                        //check all parent configs, if any
-                        if (con.parent is Config)
-                        {
-                            Config parentConfig2 = (Config)con.parent;
-                            while (parentConfig2 is Config)
-                            {
-                                if (!parentConfig2.enabled)
-                                    canBeEnabled = false;
-                                if (parentConfig2.parent is Mod)
-                                    break;
-                                parentConfig2 = (Config)parentConfig2.parent;
-                            }
-                        }
-                        //check the parent mod
-                        if (!con.parentMod.enabled)
-                            canBeEnabled = false;
-                        //check itself (before it reks itself)
-                        if (!con.enabled)
-                            canBeEnabled = false;
-                        if (canBeEnabled)
-                            configControlRB.IsEnabled = true;
-                        if (configControlRB.IsEnabled)
-                            if (con.Checked)
-                                configControlRB.IsChecked = true;
-                        //run the checksum logix
-                        string nameForModCB = con.name;
-                        //if there are underscores you need to actually display them #thanksWPF
-                        nameForModCB = Regex.Replace(nameForModCB, "_", "__");
-                        configControlRB.Content = nameForModCB;
-                        if (firstLoad)
-                        {
-                            string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
-                            if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
-                            {
-                                configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Translations.getTranslatedString("updated"));
-                                con.downloadFlag = true;
-                                if (con.size > 0)
-                                    configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Utils.SizeSuffix(con.size, 1, true));
-                            }
-                        }
-                        else
-                        {
-                            if (con.downloadFlag)
-                            {
-                                configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Translations.getTranslatedString("updated"));
-                                if (con.size > 0)
-                                    configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Utils.SizeSuffix(con.size, 1, true));
-                            }
-                        }
-                        //add the handlers at the end
-                        configControlRB.Checked += configControlRB_Click;
-                        configControlRB.Unchecked += configControlRB_Click;
-                        configControlRB.MouseDown += new System.Windows.Input.MouseButtonEventHandler(configControlRB_MouseDown);
-                        //add it to the mod config list
-                        System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
-                        if (Settings.expandAllLegacy)
-                            configControlTVI.IsExpanded = true;
-                        configControlTVI.Header = configControlRB;
-                        tvi.Items.Add(configControlTVI);
-                        //process the subconfigs
-                        if (con.configs.Count > 0)
-                            processConfigs(c, m, con.configs, configControlTVI, false, con);
-                    }
-                    else if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1") || con.type.Equals("single_dropdown2"))
-                    {
-                        //set the all to whichever one it actually is
-                        if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1"))
-                        {
-                            configControlDDALL = configControlDD;
-                            //add the UI component to the config item in memory database
-                            con.configUIComponent = configControlDD;
-                        }
-                        else if (con.type.Equals("single_dropdown2"))
-                        {
-                            configControlDDALL = configControlDD2;
-                            //add the UI component to the config item in memory database
-                            con.configUIComponent = configControlDD2;
-                        }
-                        //make the dropdown selection list
-                        configControlDDALL.MinWidth = 100;
-                        ComboBoxItem cbi = null;
-                        string toAdd = con.name;
-                        //run the crc logics
-                        if (firstLoad)
-                        {
-                            string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
-                            if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
-                            {
-                                toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
-                                con.downloadFlag = true;
-                                if (con.size > 0)
-                                    toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.size, 1, true));
-                            }
-                        }
-                        else
-                        {
-                            if (con.downloadFlag)
-                            {
-                                toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
-                                con.downloadFlag = true;
-                                if (con.size > 0)
-                                    toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.size, 1, true));
-                            }
-                        }
-                        //add it
-                        if (con.enabled)
-                        {
-                            cbi = new ComboBoxItem(con, toAdd);
-                            configControlDDALL.Items.Add(cbi);
-                            if (con.Checked)
-                                configControlDDALL.SelectedItem = cbi;
-                        }
-                        //add the dropdown to the thing. it will only run this once
-                        if (configControlDDALL.Name.Equals("notAddedYet"))
-                        {
-                            configControlDDALL.Name = "added";
-                            configControlDDALL.catagory = c;
-                            configControlDDALL.mod = m;
-                            configControlDDALL.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(configControlDDALL_SelectionChanged);
-                            configControlDDALL.PreviewMouseRightButtonDown += new System.Windows.Input.MouseButtonEventHandler(configControlDDALL_MouseDown);
-                            if (configControlDDALL.Items.Count > 0)
-                                configControlDDALL.IsEnabled = true;
-                            if (configControlDDALL.SelectedIndex == -1)
-                                configControlDDALL.SelectedIndex = 0;
-                            System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
-                            configControlTVI.Header = configControlDDALL;
-                            tvi.Items.Add(configControlTVI);
+                            parentConfig2 = (Config)parentConfig2.parent;
                         }
                     }
-                    else if (con.type.Equals("multi"))
+                    //check the parent mod
+                    if (!con.parentMod.enabled)
+                        canBeEnabled = false;
+                    //check itself (before it reks itself)
+                    if (!con.enabled)
+                        canBeEnabled = false;
+                    if (canBeEnabled)
+                        configControlRB.IsEnabled = true;
+                    if (configControlRB.IsEnabled)
+                        if (con.Checked)
+                            configControlRB.IsChecked = true;
+                    //run the checksum logix
+                    string nameForModCB = con.name;
+                    //if there are underscores you need to actually display them #thanksWPF
+                    nameForModCB = Regex.Replace(nameForModCB, "_", "__");
+                    configControlRB.Content = nameForModCB;
+                    if (firstLoad)
                     {
-                        //make the checkbox
-                        ConfigWPFCheckBox configControlCB = new ConfigWPFCheckBox();
-                        switch (Settings.fontSizeforum)
+                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
-                            case Settings.FontSize.font100:
-                                break;
-                            case Settings.FontSize.font125:
-                                configControlCB.FontSize = configControlCB.FontSize + 4;
-                                break;
-                            case Settings.FontSize.font175:
-                                configControlCB.FontSize = configControlCB.FontSize + 8;
-                                break;
+                            configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Translations.getTranslatedString("updated"));
+                            con.downloadFlag = true;
+                            if (con.size > 0)
+                                configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Utils.SizeSuffix(con.size, 1, true));
                         }
-                        configControlCB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
-                        if (Settings.darkUI)
-                            configControlCB.FontWeight = System.Windows.FontWeights.Bold;
-                        configControlCB.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
-                        configControlCB.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
-                        configControlCB.catagory = c;
-                        configControlCB.mod = m;
-                        configControlCB.config = con;
-                        //add the UI component to the config item in memory database
-                        con.configUIComponent = configControlCB;
-                        //logic for determining if it can be enabled
-                        configControlCB.IsEnabled = false;
-                        configControlCB.IsChecked = false;
-                        //get all levels up to the mod, then deal with the mod
-                        bool canBeEnabled = true;
-                        //check all parent configs, if any
-                        if (con.parent is Config)
-                        {
-                            Config parentConfig2 = (Config)con.parent;
-                            while (parentConfig2 is Config)
-                            {
-                                if (!parentConfig2.enabled)
-                                    canBeEnabled = false;
-                                if (parentConfig2.parent is Mod)
-                                    break;
-                                parentConfig2 = (Config)parentConfig2.parent;
-                            }
-                        }
-                        //check the parent mod
-                        if (!con.parentMod.enabled)
-                            canBeEnabled = false;
-                        //check itself (before it reks itself)
-                        if (!con.enabled)
-                            canBeEnabled = false;
-                        if (canBeEnabled)
-                            configControlCB.IsEnabled = true;
-                        if (configControlCB.IsEnabled)
-                            if (con.Checked)
-                                configControlCB.IsChecked = true;
-                        //run the checksum logix
-                        string nameForModCB = con.name;
-                        //if there are underscores you need to actually display them #thanksWPF
-                        nameForModCB = Regex.Replace(nameForModCB, "_", "__");
-                        configControlCB.Content = nameForModCB;
-                        if (firstLoad)
-                        {
-                            string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
-                            if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
-                            {
-                                configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Translations.getTranslatedString("updated"));
-                                con.downloadFlag = true;
-                                if (con.size > 0)
-                                    configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Utils.SizeSuffix(con.size, 1, true));
-                            }
-                        }
-                        else
-                        {
-                            if (con.downloadFlag)
-                            {
-                                configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Translations.getTranslatedString("updated"));
-                                con.downloadFlag = true;
-                                if (con.size > 0)
-                                    configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Utils.SizeSuffix(con.size, 1, true));
-                            }
-                        }
-                        //add the handlers at the end
-                        configControlCB.Checked += configControlCB_Click;
-                        configControlCB.Unchecked += configControlCB_Click;
-                        configControlCB.MouseDown += new System.Windows.Input.MouseButtonEventHandler(configControlCB_MouseDown);
-                        //add it to the mod config list
-                        System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
-                        if (Settings.expandAllLegacy)
-                            configControlTVI.IsExpanded = true;
-                        configControlTVI.Header = configControlCB;
-                        tvi.Items.Add(configControlTVI);
-                        //process the subconfigs
-                        if (con.configs.Count > 0)
-                            processConfigs(c, m, con.configs, configControlTVI, false, con);
                     }
                     else
                     {
-                        Utils.appendToLog(string.Format("WARNING: Unknown config type for {0}: {1}", con.name, con.type));
+                        if (con.downloadFlag)
+                        {
+                            configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Translations.getTranslatedString("updated"));
+                            if (con.size > 0)
+                                configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Utils.SizeSuffix(con.size, 1, true));
+                        }
+                    }
+                    //add the handlers at the end
+                    configControlRB.Checked += configControlRB_Click;
+                    configControlRB.Unchecked += configControlRB_Click;
+                    configControlRB.MouseDown += new System.Windows.Input.MouseButtonEventHandler(Generic_MouseDown);
+                    //add it to the mod config list
+                    System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
+                    if (Settings.expandAllLegacy)
+                        configControlTVI.IsExpanded = true;
+                    configControlTVI.Header = configControlRB;
+                    tvi.Items.Add(configControlTVI);
+                    //process the subconfigs
+                    if (con.configs.Count > 0)
+                        processConfigs(c, m, con.configs, configControlTVI, false, con);
+                }
+                else if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1") || con.type.Equals("single_dropdown2"))
+                {
+                    //set the all to whichever one it actually is
+                    if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1"))
+                    {
+                        configControlDDALL = configControlDD;
+                        //add the UI component to the config item in memory database
+                        con.configUIComponent = configControlDD;
+                    }
+                    else if (con.type.Equals("single_dropdown2"))
+                    {
+                        configControlDDALL = configControlDD2;
+                        //add the UI component to the config item in memory database
+                        con.configUIComponent = configControlDD2;
+                    }
+                    //make the dropdown selection list
+                    configControlDDALL.MinWidth = 100;
+                    ComboBoxItem cbi = null;
+                    string toAdd = con.name;
+                    //run the crc logics
+                    if (firstLoad)
+                    {
+                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
+                        {
+                            toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
+                            con.downloadFlag = true;
+                            if (con.size > 0)
+                                toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.size, 1, true));
+                        }
+                    }
+                    else
+                    {
+                        if (con.downloadFlag)
+                        {
+                            toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
+                            con.downloadFlag = true;
+                            if (con.size > 0)
+                                toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.size, 1, true));
+                        }
+                    }
+                    //add it
+                    if (con.enabled)
+                    {
+                        cbi = new ComboBoxItem(con, toAdd);
+                        configControlDDALL.Items.Add(cbi);
+                        if (con.Checked)
+                            configControlDDALL.SelectedItem = cbi;
+                    }
+                    //add the dropdown to the thing. it will only run this once
+                    if (configControlDDALL.Name.Equals("notAddedYet"))
+                    {
+                        configControlDDALL.Name = "added";
+                        configControlDDALL.catagory = c;
+                        configControlDDALL.mod = m;
+                        configControlDDALL.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(configControlDDALL_SelectionChanged);
+                        configControlDDALL.PreviewMouseRightButtonDown += new System.Windows.Input.MouseButtonEventHandler(Generic_MouseDown);
+                        if (configControlDDALL.Items.Count > 0)
+                            configControlDDALL.IsEnabled = true;
+                        if (configControlDDALL.SelectedIndex == -1)
+                            configControlDDALL.SelectedIndex = 0;
+                        System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
+                        configControlTVI.Header = configControlDDALL;
+                        tvi.Items.Add(configControlTVI);
                     }
                 }
+                else if (con.type.Equals("multi"))
+                {
+                    //make the checkbox
+                    ConfigWPFCheckBox configControlCB = new ConfigWPFCheckBox();
+                    switch (Settings.fontSizeforum)
+                    {
+                        case Settings.FontSize.font100:
+                            break;
+                        case Settings.FontSize.font125:
+                            configControlCB.FontSize = configControlCB.FontSize + 4;
+                            break;
+                        case Settings.FontSize.font175:
+                            configControlCB.FontSize = configControlCB.FontSize + 8;
+                            break;
+                    }
+                    configControlCB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
+                    if (Settings.darkUI)
+                        configControlCB.FontWeight = System.Windows.FontWeights.Bold;
+                    configControlCB.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
+                    configControlCB.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+                    configControlCB.catagory = c;
+                    configControlCB.mod = m;
+                    configControlCB.config = con;
+                    //add the UI component to the config item in memory database
+                    con.configUIComponent = configControlCB;
+                    //logic for determining if it can be enabled
+                    configControlCB.IsEnabled = false;
+                    configControlCB.IsChecked = false;
+                    //get all levels up to the mod, then deal with the mod
+                    bool canBeEnabled = true;
+                    //check all parent configs, if any
+                    if (con.parent is Config)
+                    {
+                        Config parentConfig2 = (Config)con.parent;
+                        while (parentConfig2 is Config)
+                        {
+                            if (!parentConfig2.enabled)
+                                canBeEnabled = false;
+                            if (parentConfig2.parent is Mod)
+                                break;
+                            parentConfig2 = (Config)parentConfig2.parent;
+                        }
+                    }
+                    //check the parent mod
+                    if (!con.parentMod.enabled)
+                        canBeEnabled = false;
+                    //check itself (before it reks itself)
+                    if (!con.enabled)
+                        canBeEnabled = false;
+                    if (canBeEnabled)
+                        configControlCB.IsEnabled = true;
+                    if (configControlCB.IsEnabled)
+                        if (con.Checked)
+                            configControlCB.IsChecked = true;
+                    //run the checksum logix
+                    string nameForModCB = con.name;
+                    //if there are underscores you need to actually display them #thanksWPF
+                    nameForModCB = Regex.Replace(nameForModCB, "_", "__");
+                    configControlCB.Content = nameForModCB;
+                    if (firstLoad)
+                    {
+                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
+                        {
+                            configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Translations.getTranslatedString("updated"));
+                            con.downloadFlag = true;
+                            if (con.size > 0)
+                                configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Utils.SizeSuffix(con.size, 1, true));
+                        }
+                    }
+                    else
+                    {
+                        if (con.downloadFlag)
+                        {
+                            configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Translations.getTranslatedString("updated"));
+                            con.downloadFlag = true;
+                            if (con.size > 0)
+                                configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Utils.SizeSuffix(con.size, 1, true));
+                        }
+                    }
+                    //add the handlers at the end
+                    configControlCB.Checked += configControlCB_Click;
+                    configControlCB.Unchecked += configControlCB_Click;
+                    configControlCB.MouseDown += new System.Windows.Input.MouseButtonEventHandler(Generic_MouseDown);
+                    //add it to the mod config list
+                    System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
+                    if (Settings.expandAllLegacy)
+                        configControlTVI.IsExpanded = true;
+                    configControlTVI.Header = configControlCB;
+                    tvi.Items.Add(configControlTVI);
+                    //process the subconfigs
+                    if (con.configs.Count > 0)
+                        processConfigs(c, m, con.configs, configControlTVI, false, con);
+                }
+                else
+                {
+                    Utils.appendToLog(string.Format("WARNING: Unknown config type for {0}: {1}", con.name, con.type));
+                }
+
             }
         }
         //when a legacy mod checkbox is clicked
@@ -1192,189 +1190,103 @@ namespace RelhaxModpack
             }
         }
 
-        void modCheckBoxL_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            //we only care about the right mouse click tho
-            if (e.RightButton != System.Windows.Input.MouseButtonState.Pressed)
-            {
-                return;
-            }
-            if (sender is ModWPFCheckBox)
-            {
-                ModWPFCheckBox cb = (ModWPFCheckBox)sender;
-                Mod m = cb.mod;
-                if (m.devURL == null)
-                    m.devURL = "";
-                if (p != null)
-                {
-                    p.Close();
-                    p.Dispose();
-                    p = null;
-                }
-                p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
-                p.Show();
-            }
-        }
-
-        void configControlDDALL_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (e.RightButton != System.Windows.Input.MouseButtonState.Pressed)
-            {
-                return;
-            }
-            ConfigWPFComboBox cb = (ConfigWPFComboBox)sender;
-            ComboBoxItem cbi = (ComboBoxItem)cb.SelectedItem;
-            Config m = cbi.config;
-            if (m.devURL == null)
-                m.devURL = "";
-            if (p != null)
-            {
-                p.Close();
-                p.Dispose();
-                p = null;
-            }
-            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
-            p.Show();
-        }
-
-        void configControlCB_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (e.RightButton != System.Windows.Input.MouseButtonState.Pressed)
-            {
-                return;
-            }
-            ConfigWPFCheckBox cb = (ConfigWPFCheckBox)sender;
-            Config m = cb.config;
-            if (m.devURL == null)
-                m.devURL = "";
-            if (p != null)
-            {
-                p.Close();
-                p.Dispose();
-                p = null;
-            }
-            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
-            p.Show();
-        }
-
-        void configControlRB_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (e.RightButton != System.Windows.Input.MouseButtonState.Pressed)
-            {
-                return;
-            }
-            ConfigWPFRadioButton cb = (ConfigWPFRadioButton)sender;
-            Config m = cb.config;
-            if (m.devURL == null)
-                m.devURL = "";
-            if (p != null)
-            {
-                p.Close();
-                p.Dispose();
-                p = null;
-            }
-            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
-            p.Show();
-        }
-
         //adds a mod m to a tabpage t
         private void addMod(Mod m, TabPage t, int panelCount, Category catagory)
         {
-            if (m.visible)
+            if (!m.visible)
+                return;
+            //bool for keeping track if a radioButton config has been selected
+            hasRadioButtonConfigSelected = false;
+            modHasRadioButtons = false;
+            //make the mod check box
+            ModFormCheckBox modCheckBox = new ModFormCheckBox();
+            modCheckBox.AutoSize = true;
+            modCheckBox.Location = new System.Drawing.Point(3, 3);
+            modCheckBox.Size = new System.Drawing.Size(49, 15);
+            modCheckBox.TabIndex = 1;
+            modCheckBox.Text = m.name;
+            modCheckBox.Name = t.Name + "_" + m.name;
+            modCheckBox.Font = Settings.appFont;
+            modCheckBox.catagory = catagory;
+            modCheckBox.mod = m;
+            m.tabIndex = t;
+            m.modFormCheckBox = modCheckBox;
+            completeModSearchList.Add(m);
+            // completeModSearchList_New.Add(m);
+            //the mod checksum logic
+            string modDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.zipFile;
+            if (firstLoad)
             {
-                //bool for keeping track if a radioButton config has been selected
-                hasRadioButtonConfigSelected = false;
-                modHasRadioButtons = false;
-                //make the mod check box
-                ModFormCheckBox modCheckBox = new ModFormCheckBox();
-                modCheckBox.AutoSize = true;
-                modCheckBox.Location = new System.Drawing.Point(3, 3);
-                modCheckBox.Size = new System.Drawing.Size(49, 15);
-                modCheckBox.TabIndex = 1;
-                modCheckBox.Text = m.name;
-                modCheckBox.Name = t.Name + "_" + m.name;
-                modCheckBox.Font = Settings.appFont;
-                modCheckBox.catagory = catagory;
-                modCheckBox.mod = m;
-                m.tabIndex = t;
-                m.modFormCheckBox = modCheckBox;
-                completeModSearchList.Add(m);
-                // completeModSearchList_New.Add(m);
-                //the mod checksum logic
-                string modDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.zipFile;
-                if (firstLoad)
+                string oldCRC2 = Utils.getMd5Hash(modDownloadPath);
+                //if the CRC's don't match and the mod actually has a zip file
+                if ((!m.zipFile.Equals("")) && (!m.crc.Equals(oldCRC2)))
                 {
-                    string oldCRC2 = Utils.getMd5Hash(modDownloadPath);
-                    //if the CRC's don't match and the mod actually has a zip file
-                    if ((!m.zipFile.Equals("")) && (!m.crc.Equals(oldCRC2)))
-                    {
-                        modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
-                        m.downloadFlag = true;
-                        if ((m.size > 0))
-                            modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
-                    }
+                    modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
+                    m.downloadFlag = true;
+                    if ((m.size > 0))
+                        modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
                 }
-                else
-                {
-                    if (m.downloadFlag)
-                    {
-                        modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
-                        if ((m.size > 0))
-                            modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
-                    }
-                }
-                modCheckBox.UseVisualStyleBackColor = true;
-                modCheckBox.Enabled = m.enabled;
-                modCheckBox.MouseDown += new MouseEventHandler(modCheckBox_MouseDown);
-                //in theory it should trigger the handler for checked
-                //when initially made it should be false, if enabled from
-                //from user configs
-                //make the main panel
-                Panel mainPanel = new Panel();
-                mainPanel.BorderStyle = Settings.disableBorders ? BorderStyle.None : BorderStyle.FixedSingle;
-                mainPanel.TabIndex = 0;
-                mainPanel.AutoSize = true;
-                mainPanel.AutoSizeMode = AutoSizeMode.GrowOnly;
-                mainPanel.Size = new System.Drawing.Size(t.Size.Width - 25, 20);
-                if (m.enabled && m.Checked && !Settings.disableColorChange)
-                    mainPanel.BackColor = Color.BlanchedAlmond;
-                else
-                    mainPanel.BackColor = Settings.getBackColor();
-                int panelCountYLocation = 70 * (panelCount - 1);
-                //if this is not the first mod being added to the panel
-                int panelYLocation = 6; //tab plus delimiter
-                if (panelCount > 1)
-                {
-                    //create a list of other controlls and put this one 6 pixels below the others
-                    foreach (Control c in t.Controls)
-                    {
-                        panelYLocation += c.Size.Height;
-                        panelYLocation += 6;
-                    }
-                    panelCountYLocation = (panelCount - 1) * (t.Controls[0].Size.Height);
-                    panelCountYLocation = panelCountYLocation + 5;
-                }
-                mainPanel.Location = new System.Drawing.Point(5, panelYLocation);
-                //processes the subconfigs here
-                mainPanel.Controls.Clear();
-                //add to main panel
-                mainPanel.Controls.Add(modCheckBox);
-                if (m.configs.Count > 0)
-                    processConfigsDefault(t, m, catagory, modCheckBox, mainPanel, true, m.configs, mainPanel);
-                //add to tab
-                t.Controls.Add(mainPanel);
-                //add the event handler before changing the checked state so the event
-                //event handler is #triggered
-                modCheckBox.Checked = m.Checked;
-                //disable the logic for now
-                if (false && modHasRadioButtons && modCheckBox.Checked && !hasRadioButtonConfigSelected)
-                {
-                    //getting here means that the user has saved the prefrence for a selected mandatory radiobutton config that has been disabled, so his selection of that mod needs to be disabled
-                    modCheckBox.Checked = false;
-                    m.Checked = false;
-                }
-                modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
             }
+            else
+            {
+                if (m.downloadFlag)
+                {
+                    modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
+                    if ((m.size > 0))
+                        modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
+                }
+            }
+            modCheckBox.UseVisualStyleBackColor = true;
+            modCheckBox.Enabled = m.enabled;
+            modCheckBox.MouseDown += new MouseEventHandler(Generic_MouseDown);
+            //in theory it should trigger the handler for checked
+            //when initially made it should be false, if enabled from
+            //from user configs
+            //make the main panel
+            Panel mainPanel = new Panel();
+            mainPanel.BorderStyle = Settings.disableBorders ? BorderStyle.None : BorderStyle.FixedSingle;
+            mainPanel.TabIndex = 0;
+            mainPanel.AutoSize = true;
+            mainPanel.AutoSizeMode = AutoSizeMode.GrowOnly;
+            mainPanel.Size = new System.Drawing.Size(t.Size.Width - 25, 20);
+            if (m.enabled && m.Checked && !Settings.disableColorChange)
+                mainPanel.BackColor = Color.BlanchedAlmond;
+            else
+                mainPanel.BackColor = Settings.getBackColor();
+            int panelCountYLocation = 70 * (panelCount - 1);
+            //if this is not the first mod being added to the panel
+            int panelYLocation = 6; //tab plus delimiter
+            if (panelCount > 1)
+            {
+                //create a list of other controlls and put this one 6 pixels below the others
+                foreach (Control c in t.Controls)
+                {
+                    panelYLocation += c.Size.Height;
+                    panelYLocation += 6;
+                }
+                panelCountYLocation = (panelCount - 1) * (t.Controls[0].Size.Height);
+                panelCountYLocation = panelCountYLocation + 5;
+            }
+            mainPanel.Location = new System.Drawing.Point(5, panelYLocation);
+            //processes the subconfigs here
+            mainPanel.Controls.Clear();
+            //add to main panel
+            mainPanel.Controls.Add(modCheckBox);
+            if (m.configs.Count > 0)
+                processConfigsDefault(t, m, catagory, modCheckBox, mainPanel, true, m.configs, mainPanel);
+            //add to tab
+            t.Controls.Add(mainPanel);
+            //add the event handler before changing the checked state so the event
+            //event handler is #triggered
+            modCheckBox.Checked = m.Checked;
+            //disable the logic for now
+            if (false && modHasRadioButtons && modCheckBox.Checked && !hasRadioButtonConfigSelected)
+            {
+                //getting here means that the user has saved the prefrence for a selected mandatory radiobutton config that has been disabled, so his selection of that mod needs to be disabled
+                modCheckBox.Checked = false;
+                m.Checked = false;
+            }
+            modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
         }
         private void processConfigsDefault(TabPage t, Mod m, Category catagory, ModFormCheckBox modCheckBox, Panel mainPanel, bool parentIsMod, List<Config> configs, Panel topPanal, Config parentConfig = null)
         {
@@ -1405,13 +1317,18 @@ namespace RelhaxModpack
             switch (Settings.fontSizeforum)
             {
                 case Settings.FontSize.font100:
-                    //spacer += 3;
                     break;
                 case Settings.FontSize.font125:
                     spacer += 3;
                     break;
                 case Settings.FontSize.font175:
                     spacer += 6;
+                    break;
+                case Settings.FontSize.font225:
+                    spacer += 9;
+                    break;
+                case Settings.FontSize.font275:
+                    spacer += 12;
                     break;
             }
             if (parentIsMod)
@@ -1433,7 +1350,7 @@ namespace RelhaxModpack
             configControlDD.TabStop = true;
             configControlDD.Enabled = false;
             configControlDD.SelectedIndexChanged += new EventHandler(configControlDD_SelectedIndexChanged);
-            configControlDD.MouseDown += new MouseEventHandler(configControlDD_MouseDown);
+            configControlDD.MouseDown += new MouseEventHandler(Generic_MouseDown);
             configControlDD.Name = t.Name + "_" + m.name + "_DropDown";
             configControlDD.DropDownStyle = ComboBoxStyle.DropDownList;
             ConfigFormComboBox configControlDD2 = new ConfigFormComboBox();
@@ -1444,241 +1361,240 @@ namespace RelhaxModpack
             configControlDD2.TabStop = true;
             configControlDD2.Enabled = false;
             configControlDD2.SelectedIndexChanged += new EventHandler(configControlDD_SelectedIndexChanged);
-            configControlDD2.MouseDown += new MouseEventHandler(configControlDD_MouseDown);
+            configControlDD2.MouseDown += new MouseEventHandler(Generic_MouseDown);
             configControlDD2.Name = t.Name + "_" + m.name + "_DropDown2";
             configControlDD2.DropDownStyle = ComboBoxStyle.DropDownList;
             foreach (Config con in configs)
             {
-                if (con.visible)
+                if (!con.visible)
+                    continue;
+                ConfigFormComboBox configControlDDALL = null;
+                con.parentMod = m;
+                if (parentIsMod)
                 {
-                    ConfigFormComboBox configControlDDALL = null;
-                    con.parentMod = m;
-                    if (parentIsMod)
+                    // completeModSearchList_New.Add(con);
+                    con.parent = m;
+                    completeModSearchList.Add(con);
+                }
+                else
+                {
+                    con.parent = parentConfig;
+                }
+                if (con.type.Equals("single") || con.type.Equals("single1"))
+                {
+                    modHasRadioButtons = true;
+                    //make default radioButton
+                    ConfigFormRadioButton configControlRB = new ConfigFormRadioButton();
+                    configControlRB.AutoSize = true;
+                    configControlRB.Location = new Point(6, getYLocation(configPanel.Controls));
+                    configControlRB.Size = new System.Drawing.Size(150, 15);
+                    configControlRB.TabIndex = 1;
+                    configControlRB.TabStop = true;
+                    configControlRB.Font = Settings.appFont;
+                    configControlRB.catagory = catagory;
+                    configControlRB.mod = m;
+                    configControlRB.config = con;
+                    con.configUIComponent = configControlRB;
+                    //logic for determining if it can be enabled
+                    configControlRB.Enabled = false;
+                    configControlRB.Checked = false;
+                    //get all levels up to the mod, then deal with the mod
+                    bool canBeEnabled = true;
+                    //check all parent configs, if any
+                    if (con.parent is Config)
                     {
-                        // completeModSearchList_New.Add(con);
-                        con.parent = m;
-                        completeModSearchList.Add(con);
+                        Config parentConfig2 = (Config)con.parent;
+                        while (parentConfig2 is Config)
+                        {
+                            if (!parentConfig2.enabled)
+                                canBeEnabled = false;
+                            if (parentConfig2.parent is Mod)
+                                break;
+                            parentConfig2 = (Config)parentConfig2.parent;
+                        }
+                    }
+                    //check the parent mod
+                    if (!con.parentMod.enabled)
+                        canBeEnabled = false;
+                    //check itself (before it reks itself)
+                    if (!con.enabled)
+                        canBeEnabled = false;
+                    if (canBeEnabled)
+                        configControlRB.Enabled = true;
+                    if (configControlRB.Enabled)
+                        if (con.Checked)
+                            configControlRB.Checked = true;
+                    //add handlers
+                    configControlRB.CheckedChanged += new EventHandler(configControlRB_CheckedChanged);
+                    configControlRB.MouseDown += new MouseEventHandler(Generic_MouseDown);
+                    configControlRB.Name = t.Name + "_" + m.name + "_" + con.name;
+                    //run checksum logic
+                    configControlRB.Text = con.name;
+                    if (firstLoad)
+                    {
+                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
+                        {
+                            configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
+                            con.downloadFlag = true;
+                            if (con.size > 0)
+                                configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.size, 1, true));
+                        }
                     }
                     else
                     {
-                        con.parent = parentConfig;
+                        if (con.downloadFlag)
+                        {
+                            configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
+                            if (con.size > 0)
+                                configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.size, 1, true));
+                        }
                     }
-                    if (con.type.Equals("single") || con.type.Equals("single1"))
+                    //add the config to the form
+                    configPanel.Controls.Add(configControlRB);
+                    //process the subconfigs
+                    if (con.configs.Count > 0)
+                        processConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
+                }
+                else if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1") || con.type.Equals("single_dropdown2"))
+                {
+                    //set the all one to the version is actually is
+                    if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1"))
                     {
-                        modHasRadioButtons = true;
-                        //make default radioButton
-                        ConfigFormRadioButton configControlRB = new ConfigFormRadioButton();
-                        configControlRB.AutoSize = true;
-                        configControlRB.Location = new Point(6, getYLocation(configPanel.Controls));
-                        configControlRB.Size = new System.Drawing.Size(150, 15);
-                        configControlRB.TabIndex = 1;
-                        configControlRB.TabStop = true;
-                        configControlRB.Font = Settings.appFont;
-                        configControlRB.catagory = catagory;
-                        configControlRB.mod = m;
-                        configControlRB.config = con;
-                        con.configUIComponent = configControlRB;
-                        //logic for determining if it can be enabled
-                        configControlRB.Enabled = false;
-                        configControlRB.Checked = false;
-                        //get all levels up to the mod, then deal with the mod
-                        bool canBeEnabled = true;
-                        //check all parent configs, if any
-                        if (con.parent is Config)
-                        {
-                            Config parentConfig2 = (Config)con.parent;
-                            while (parentConfig2 is Config)
-                            {
-                                if (!parentConfig2.enabled)
-                                    canBeEnabled = false;
-                                if (parentConfig2.parent is Mod)
-                                    break;
-                                parentConfig2 = (Config)parentConfig2.parent;
-                            }
-                        }
-                        //check the parent mod
-                        if (!con.parentMod.enabled)
-                            canBeEnabled = false;
-                        //check itself (before it reks itself)
-                        if (!con.enabled)
-                            canBeEnabled = false;
-                        if (canBeEnabled)
-                            configControlRB.Enabled = true;
-                        if (configControlRB.Enabled)
-                            if (con.Checked)
-                                configControlRB.Checked = true;
-                        //add handlers
-                        configControlRB.CheckedChanged += new EventHandler(configControlRB_CheckedChanged);
-                        configControlRB.MouseDown += new MouseEventHandler(configControlRB_MouseDown);
-                        configControlRB.Name = t.Name + "_" + m.name + "_" + con.name;
-                        //run checksum logic
-                        configControlRB.Text = con.name;
-                        if (firstLoad)
-                        {
-                            string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
-                            if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
-                            {
-                                configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
-                                con.downloadFlag = true;
-                                if (con.size > 0)
-                                    configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.size, 1, true));
-                            }
-                        }
-                        else
-                        {
-                            if (con.downloadFlag)
-                            {
-                                configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
-                                if (con.size > 0)
-                                    configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.size, 1, true));
-                            }
-                        }
-                        //add the config to the form
-                        configPanel.Controls.Add(configControlRB);
-                        //process the subconfigs
-                        if (con.configs.Count > 0)
-                            processConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
+                        configControlDDALL = configControlDD;
+                        con.configUIComponent = configControlDD;
                     }
-                    else if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1") || con.type.Equals("single_dropdown2"))
+                    else if (con.type.Equals("single_dropdown2"))
                     {
-                        //set the all one to the version is actually is
-                        if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1"))
+                        configControlDDALL = configControlDD2;
+                        con.configUIComponent = configControlDD2;
+                    }
+                    //make a dropDown selection box
+                    if (configControlDDALL.Location.X == 0 && configControlDDALL.Location.Y == 0)
+                    {
+                        //init the box, including adding the label
+                        configControlDDALL.Location = new System.Drawing.Point(6, getYLocation(configPanel.Controls));
+                        configPanel.Controls.Add(configControlDDALL);
+                    }
+                    ComboBoxItem cbi = null;
+                    string toAdd = con.name;
+                    //run the checksum locics
+                    if (firstLoad)
+                    {
+                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
-                            configControlDDALL = configControlDD;
-                            con.configUIComponent = configControlDD;
+                            con.downloadFlag = true;
+                            toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
+                            if (con.size > 0)
+                                toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.size, 1, true));
                         }
-                        else if (con.type.Equals("single_dropdown2"))
+                    }
+                    else
+                    {
+                        if (con.downloadFlag)
                         {
-                            configControlDDALL = configControlDD2;
-                            con.configUIComponent = configControlDD2;
+                            toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
+                            if (con.size > 0)
+                                toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.size, 1, true));
                         }
-                        //make a dropDown selection box
-                        if (configControlDDALL.Location.X == 0 && configControlDDALL.Location.Y == 0)
+                    }
+                    //add it
+                    if (con.enabled)
+                    {
+                        cbi = new ComboBoxItem(con, toAdd);
+                        configControlDDALL.Items.Add(cbi);
+                        if (con.Checked)
                         {
-                            //init the box, including adding the label
-                            configControlDDALL.Location = new System.Drawing.Point(6, getYLocation(configPanel.Controls));
-                            configPanel.Controls.Add(configControlDDALL);
-                        }
-                        ComboBoxItem cbi = null;
-                        string toAdd = con.name;
-                        //run the checksum locics
-                        if (firstLoad)
-                        {
-                            string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
-                            if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
-                            {
-                                con.downloadFlag = true;
-                                toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
-                                if (con.size > 0)
-                                    toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.size, 1, true));
-                            }
-                        }
-                        else
-                        {
-                            if (con.downloadFlag)
-                            {
-                                toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
-                                if (con.size > 0)
-                                    toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.size, 1, true));
-                            }
-                        }
-                        //add it
-                        if (con.enabled)
-                        {
-                            cbi = new ComboBoxItem(con, toAdd);
-                            configControlDDALL.Items.Add(cbi);
-                            if (con.Checked)
-                            {
-                                configControlDDALL.SelectedItem = cbi;
-                                configControlDDALL.Enabled = true;
-                            }
-                        }
-                        if (configControlDDALL.Items.Count > 0)
-                        {
+                            configControlDDALL.SelectedItem = cbi;
                             configControlDDALL.Enabled = true;
-                            if (configControlDDALL.SelectedIndex == -1)
-                                configControlDDALL.SelectedIndex = 0;
                         }
                     }
-                    else if (con.type.Equals("multi"))
+                    if (configControlDDALL.Items.Count > 0)
                     {
-                        //make a checkBox
-                        ConfigFormCheckBox configControlCB = new ConfigFormCheckBox();
-                        configControlCB.AutoSize = true;
-                        configControlCB.Location = new Point(6, getYLocation(configPanel.Controls));
-                        configControlCB.Size = new System.Drawing.Size(150, 15);
-                        configControlCB.TabIndex = 1;
-                        configControlCB.TabStop = true;
-                        configControlCB.Font = Settings.appFont;
-                        configControlCB.catagory = catagory;
-                        configControlCB.mod = m;
-                        configControlCB.config = con;
-                        con.configUIComponent = configControlCB;
-                        //logic for determining if it can be enabled
-                        configControlCB.Enabled = false;
-                        configControlCB.Checked = false;
-                        //get all levels up to the mod, then deal with the mod
-                        bool canBeEnabled = true;
-                        //check all parent configs, if any
-                        if (con.parent is Config)
+                        configControlDDALL.Enabled = true;
+                        if (configControlDDALL.SelectedIndex == -1)
+                            configControlDDALL.SelectedIndex = 0;
+                    }
+                }
+                else if (con.type.Equals("multi"))
+                {
+                    //make a checkBox
+                    ConfigFormCheckBox configControlCB = new ConfigFormCheckBox();
+                    configControlCB.AutoSize = true;
+                    configControlCB.Location = new Point(6, getYLocation(configPanel.Controls));
+                    configControlCB.Size = new System.Drawing.Size(150, 15);
+                    configControlCB.TabIndex = 1;
+                    configControlCB.TabStop = true;
+                    configControlCB.Font = Settings.appFont;
+                    configControlCB.catagory = catagory;
+                    configControlCB.mod = m;
+                    configControlCB.config = con;
+                    con.configUIComponent = configControlCB;
+                    //logic for determining if it can be enabled
+                    configControlCB.Enabled = false;
+                    configControlCB.Checked = false;
+                    //get all levels up to the mod, then deal with the mod
+                    bool canBeEnabled = true;
+                    //check all parent configs, if any
+                    if (con.parent is Config)
+                    {
+                        Config parentConfig2 = (Config)con.parent;
+                        while (parentConfig2 is Config)
                         {
-                            Config parentConfig2 = (Config)con.parent;
-                            while (parentConfig2 is Config)
-                            {
-                                if (!parentConfig2.enabled)
-                                    canBeEnabled = false;
-                                if (parentConfig2.parent is Mod)
-                                    break;
-                                parentConfig2 = (Config)parentConfig2.parent;
-                            }
+                            if (!parentConfig2.enabled)
+                                canBeEnabled = false;
+                            if (parentConfig2.parent is Mod)
+                                break;
+                            parentConfig2 = (Config)parentConfig2.parent;
                         }
-                        //check the parent mod
-                        if (!con.parentMod.enabled)
-                            canBeEnabled = false;
-                        //check itself (before it reks itself)
-                        if (!con.enabled)
-                            canBeEnabled = false;
-                        if (canBeEnabled)
-                            configControlCB.Enabled = true;
-                        if (configControlCB.Enabled)
-                            if (con.Checked)
-                                configControlCB.Checked = true;
-                        //add handlers
-                        configControlCB.CheckedChanged += new EventHandler(configControlCB_CheckedChanged);
-                        configControlCB.MouseDown += new MouseEventHandler(configControlCB_MouseDown);
-                        configControlCB.Name = t.Name + "_" + m.name + "_" + con.name;
-                        //checksum logic
-                        configControlCB.Text = con.name;
-                        if (firstLoad)
+                    }
+                    //check the parent mod
+                    if (!con.parentMod.enabled)
+                        canBeEnabled = false;
+                    //check itself (before it reks itself)
+                    if (!con.enabled)
+                        canBeEnabled = false;
+                    if (canBeEnabled)
+                        configControlCB.Enabled = true;
+                    if (configControlCB.Enabled)
+                        if (con.Checked)
+                            configControlCB.Checked = true;
+                    //add handlers
+                    configControlCB.CheckedChanged += new EventHandler(configControlCB_CheckedChanged);
+                    configControlCB.MouseDown += new MouseEventHandler(Generic_MouseDown);
+                    configControlCB.Name = t.Name + "_" + m.name + "_" + con.name;
+                    //checksum logic
+                    configControlCB.Text = con.name;
+                    if (firstLoad)
+                    {
+                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
-                            string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
-                            if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
-                            {
-                                con.downloadFlag = true;
-                                configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Translations.getTranslatedString("updated"));
-                                if (con.size > 0)
-                                    configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Utils.SizeSuffix(con.size, 1, true));
-                            }
+                            con.downloadFlag = true;
+                            configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Translations.getTranslatedString("updated"));
+                            if (con.size > 0)
+                                configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Utils.SizeSuffix(con.size, 1, true));
                         }
-                        else
-                        {
-                            if (con.downloadFlag)
-                            {
-                                configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Translations.getTranslatedString("updated"));
-                                if (con.size > 0)
-                                    configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Utils.SizeSuffix(con.size, 1, true));
-                            }
-                        }
-                        //add config to the form
-                        configPanel.Controls.Add(configControlCB);
-                        //process subconfigs
-                        if (con.configs.Count > 0)
-                            processConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
                     }
                     else
                     {
-                        Utils.appendToLog(string.Format("WARNING: Unknown config type for {0}: {1}", con.name, con.type));
+                        if (con.downloadFlag)
+                        {
+                            configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Translations.getTranslatedString("updated"));
+                            if (con.size > 0)
+                                configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Utils.SizeSuffix(con.size, 1, true));
+                        }
                     }
+                    //add config to the form
+                    configPanel.Controls.Add(configControlCB);
+                    //process subconfigs
+                    if (con.configs.Count > 0)
+                        processConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
+                }
+                else
+                {
+                    Utils.appendToLog(string.Format("WARNING: Unknown config type for {0}: {1}", con.name, con.type));
                 }
             }
         }
@@ -1696,6 +1612,40 @@ namespace RelhaxModpack
                     y += c.Size.Height;
                     //spacing
                     y += 2;
+                }
+                if (c is ConfigFormComboBox)
+                {
+                    switch (Settings.fontSizeforum)
+                    {
+                        case Settings.FontSize.font100:
+                            break;
+                        case Settings.FontSize.font125:
+                            y += 3;
+                            break;
+                        case Settings.FontSize.font175:
+                            y += 6;
+                            break;
+                        case Settings.FontSize.font225:
+                            y += 9;
+                            break;
+                        case Settings.FontSize.font275:
+                            y += 12;
+                            break;
+                        case Settings.FontSize.DPI100:
+                            break;
+                        case Settings.FontSize.DPI125:
+                            y += 3;
+                            break;
+                        case Settings.FontSize.DPI175:
+                            y += 6;
+                            break;
+                        case Settings.FontSize.DPI225:
+                            y += 9;
+                            break;
+                        case Settings.FontSize.DPI275:
+                            y += 12;
+                            break;
+                    }
                 }
             }
             return y;
@@ -1817,7 +1767,7 @@ namespace RelhaxModpack
                             configSelected = true;
                     }
                 }
-                if(!configSelected)
+                if (!configSelected)
                 {
                     foreach (Config con in m.configs)
                     {
@@ -1841,7 +1791,7 @@ namespace RelhaxModpack
                     if ((con.type.Equals("single_dropdown")) || (con.type.Equals("single_dropdown1")))
                     {
                         if (con.Checked)
-                        configSelected = true;
+                            configSelected = true;
                     }
                 }
                 if (!configSelected)
@@ -1908,12 +1858,12 @@ namespace RelhaxModpack
             else
             {
                 //mod not checked, uncheck all the configs
-                foreach(Config cfg in m.configs)
+                foreach (Config cfg in m.configs)
                 {
-                    if(cfg.enabled)
+                    if (cfg.enabled)
                     {
                         cfg.Checked = false;
-                        if(cfg.configUIComponent is ConfigFormCheckBox)
+                        if (cfg.configUIComponent is ConfigFormCheckBox)
                         {
                             ConfigFormCheckBox cfcb = (ConfigFormCheckBox)cfg.configUIComponent;
                             cfcb.Checked = false;
@@ -1958,7 +1908,7 @@ namespace RelhaxModpack
                     if (parentM.modFormCheckBox is ModFormCheckBox)
                     {
                         ModFormCheckBox tempCB = (ModFormCheckBox)parentM.modFormCheckBox;
-                        if(!tempCB.Checked)
+                        if (!tempCB.Checked)
                             tempCB.Checked = true;
                     }
                 }
@@ -1969,13 +1919,13 @@ namespace RelhaxModpack
                     if (parentC.configUIComponent is ConfigFormCheckBox)
                     {
                         ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.configUIComponent;
-                        if(!parentCB.Checked)
+                        if (!parentCB.Checked)
                             parentCB.Checked = true;
                     }
                     else if (parentC.configUIComponent is ConfigFormRadioButton)
                     {
                         ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.configUIComponent;
-                        if(!parentRB.Checked)
+                        if (!parentRB.Checked)
                             parentRB.Checked = true;
                     }
                 }
@@ -2054,7 +2004,7 @@ namespace RelhaxModpack
                     {
                         ModFormCheckBox tempCB = (ModFormCheckBox)parentM.modFormCheckBox;
                         //adding the if statement prevents it from running again when it's not needed to
-                        if(!tempCB.Checked)
+                        if (!tempCB.Checked)
                             tempCB.Checked = true;
                     }
                 }
@@ -2065,13 +2015,13 @@ namespace RelhaxModpack
                     if (parentC.configUIComponent is ConfigFormCheckBox)
                     {
                         ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.configUIComponent;
-                        if(!parentCB.Checked)
+                        if (!parentCB.Checked)
                             parentCB.Checked = true;
                     }
                     else if (parentC.configUIComponent is ConfigFormRadioButton)
                     {
                         ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.configUIComponent;
-                        if(!parentRB.Checked)
+                        if (!parentRB.Checked)
                             parentRB.Checked = true;
                     }
                 }
@@ -2085,7 +2035,7 @@ namespace RelhaxModpack
             ComboBoxItem cbi2 = (ComboBoxItem)cb.SelectedItem;
             cbi2.config.Checked = true;
             Panel configPanel = (Panel)cb.Parent;
-            if(!Settings.disableColorChange)
+            if (!Settings.disableColorChange)
                 configPanel.BackColor = Color.BlanchedAlmond;
         }
         //handler for when a config radioButton is pressed
@@ -2110,7 +2060,7 @@ namespace RelhaxModpack
                     if (parentM.modFormCheckBox is ModFormCheckBox)
                     {
                         ModFormCheckBox tempCB = (ModFormCheckBox)parentM.modFormCheckBox;
-                        if(!tempCB.Checked)
+                        if (!tempCB.Checked)
                             tempCB.Checked = true;
                     }
                 }
@@ -2121,13 +2071,13 @@ namespace RelhaxModpack
                     if (parentC.configUIComponent is ConfigFormCheckBox)
                     {
                         ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.configUIComponent;
-                        if(!parentCB.Checked)
+                        if (!parentCB.Checked)
                             parentCB.Checked = true;
                     }
                     else if (parentC.configUIComponent is ConfigFormRadioButton)
                     {
                         ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.configUIComponent;
-                        if(!parentRB.Checked)
+                        if (!parentRB.Checked)
                             parentRB.Checked = true;
                     }
                 }
@@ -2191,90 +2141,175 @@ namespace RelhaxModpack
             else
                 configPanel.BackColor = Settings.getBackColor();
         }
-        //hander for when any mouse button is clicked on a specific control
-        void modCheckBox_MouseDown(object sender, MouseEventArgs e)
+        //generic hander for when any mouse button is clicked for MouseDown Events
+        void Generic_MouseDown(object sender, EventArgs e)
         {
             //we only care about the right mouse click tho
-            if (e.Button != MouseButtons.Right)
-                return;
-            if (sender is ModFormCheckBox)
+            if (e is MouseEventArgs)
             {
-                ModFormCheckBox cb = (ModFormCheckBox)sender;
-                Mod m = cb.mod;
-                if (m.devURL == null)
-                    m.devURL = "";
-                if (p != null)
+                MouseEventArgs ee = (MouseEventArgs)e;
+                if (ee.Button != MouseButtons.Right)
+                    return;
+            }
+            else if (e is System.Windows.Input.MouseButtonEventArgs)
+            {
+                System.Windows.Input.MouseButtonEventArgs ee = (System.Windows.Input.MouseButtonEventArgs)e;
+                if (ee.RightButton != System.Windows.Input.MouseButtonState.Pressed)
                 {
-                    p.Close();
-                    p.Dispose();
-                    p = null;
+                    return;
                 }
-                p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
-                p.Show();
+            }
+            if (sender is UIComponent)
+            {
+                UIComponent UIC = (UIComponent)sender;
+                DatabaseObject DBO = null;
+                if (UIC.config != null)
+                {
+                    DBO = UIC.config;
+                }
+                else if (UIC.mod != null)
+                {
+                    DBO = UIC.mod;
+                }
+                if (DBO != null)
+                {
+                    if (DBO.devURL == null)
+                        DBO.devURL = "";
+                    if (p != null)
+                    {
+                        p.Close();
+                        p.Dispose();
+                        p = null;
+                        GC.Collect();
+                    }
+                    p = new Preview(DBO.name, DBO.pictureList, DBO.description, DBO.updateComment, DBO.devURL);
+                    p.Show();
+                }
             }
         }
 
-        void configControlCB_MouseDown(object sender, MouseEventArgs e)
+        //handler to set the cancel bool to false
+        private void continueButton_Click(object sender, EventArgs e)
         {
-            if (e.Button != MouseButtons.Right)
-                return;
-            ConfigFormCheckBox cb = (ConfigFormCheckBox)sender;
-            Config m = cb.config;
-            if (m.devURL == null)
-                m.devURL = "";
+            cancel = false;
+            //save the last config if told to do so
+            if (Settings.saveLastConfig)
+            {
+                Utils.saveConfig(false, null, parsedCatagoryList, userMods);
+            }
+            this.Close();
+        }
+        //handler for when the cancal button is clicked
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        //handler for when the "load config" button is pressed
+        private void loadConfigButton_Click(object sender, EventArgs e)
+        {
+            loadMode = loadConfigMode.fromButton;
+            this.parseLoadConfig();
+        }
+        //handler for when the "save config" button is pressed
+        private void saveConfigButton_Click(object sender, EventArgs e)
+        {
+            Utils.saveConfig(true, null, parsedCatagoryList, userMods);
+        }
+        //handler for when the close button is pressed
+        private void ModSelectionList_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //save the size of this window for later.
+            Settings.modSelectionHeight = this.Size.Height;
+            Settings.modSelectionWidth = this.Size.Width;
+            if (taskBarHidden)
+                Settings.SetTaskbarState(Settings.AppBarStates.AutoHide);
+            //save wether the window was in fullscreen mods before closing
+            if (this.WindowState == FormWindowState.Maximized)
+                Settings.ModSelectionFullscreen = true;
+            else
+                Settings.ModSelectionFullscreen = false;
+            //close the preview window if it is open
             if (p != null)
             {
                 p.Close();
                 p.Dispose();
                 p = null;
             }
-            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
-            p.Show();
         }
 
-        void configControlDD_MouseDown(object sender, MouseEventArgs e)
+        private void clearSelectionsButton_Click(object sender, EventArgs e)
         {
-            if (e.Button != MouseButtons.Right)
-                return;
-            ConfigFormComboBox cb = (ConfigFormComboBox)sender;
-            ComboBoxItem cbi = (ComboBoxItem)cb.SelectedItem;
-            Config m = cbi.config;
-            if (m.devURL == null)
-                m.devURL = "";
-            if (p != null)
-            {
-                p.Close();
-                p.Dispose();
-                p = null;
-            }
-            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
-            p.Show();
+            //not actually *loading* a config, but want to disable the handlers anyways
+            loadingConfig = true;
+            Utils.appendToLog("clearSelectionsButton pressed, clearing selections");
+            Utils.clearSelectionMemory(parsedCatagoryList, userMods);
+            //dispose of not needed stuff and reload the UI
+
+            loadingConfig = false;
+            MessageBox.Show(Translations.getTranslatedString("selectionsCleared"));
+            ModSelectionList_SizeChanged(null, null);
         }
 
-        void configControlRB_MouseDown(object sender, MouseEventArgs e)
+        private void parseLoadConfig()
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            loadingConfig = true;
+            OpenFileDialog loadLocation = new OpenFileDialog();
+            string filePath = "";
+            using (SelectionViewer sv = new SelectionViewer(this.Location.X + 100, this.Location.Y + 100, "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/developerSelections/selections.xml"))
             {
-                ConfigFormRadioButton rb = (ConfigFormRadioButton)sender;
-                if (rb.Checked)
-                    configControlRB_CheckedChanged(rb, null);
-                return;
+                if (loadMode == loadConfigMode.fromAutoInstall)
+                {
+                    filePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", Program.configName);
+                    if (!File.Exists(filePath))
+                    {
+                        Utils.appendToLog(string.Format("ERROR: {0} not found, not loading configs", filePath));
+                        MessageBox.Show(Translations.getTranslatedString("configLoadFailed"), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        return;
+                    }
+                }
+                else if (loadMode == loadConfigMode.fromSaveLastConfig)
+                {
+                    filePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml");
+                    if (!File.Exists(filePath))
+                    {
+                        Utils.appendToLog(string.Format("ERROR: {0} not found, not loading configs", filePath));
+                        return;
+                    }
+                }
+                else
+                {
+                    DialogResult res = sv.ShowDialog();
+                    if (res == DialogResult.OK)
+                    {
+                        filePath = sv.SelectedXML;
+                    }
+                    else
+                    { return; }
+                    if (filePath.Equals("localFile"))
+                    {
+                        loadLocation.AddExtension = true;
+                        loadLocation.DefaultExt = ".xml";
+                        loadLocation.Filter = "*.xml|*.xml";
+                        loadLocation.InitialDirectory = Path.Combine(Application.StartupPath, "RelHaxUserConfigs");
+                        loadLocation.Title = Translations.getTranslatedString("selectConfigFile");
+                        if (loadLocation.ShowDialog().Equals(DialogResult.Cancel))
+                        {
+                            //quit
+                            return;
+                        }
+                        filePath = loadLocation.FileName;
+                    }
+                }
             }
-            if (e.Button != MouseButtons.Right)
-                return;
-            ConfigFormRadioButton cb = (ConfigFormRadioButton)sender;
-            Config m = cb.config;
-            if (m.devURL == null)
-                m.devURL = "";
-            if (p != null)
+            Utils.loadConfig(loadMode == loadConfigMode.fromButton, filePath, parsedCatagoryList, userMods);
+            if (loadMode == loadConfigMode.fromButton || loadMode == loadConfigMode.fromAutoInstall)
             {
-                p.Close();
-                p.Dispose();
-                p = null;
+                if (loadMode == loadConfigMode.fromButton) MessageBox.Show(Translations.getTranslatedString("prefrencesSet"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                loadingConfig = false;
+                ModSelectionList_SizeChanged(null, null);
             }
-            p = new Preview(m.name, m.pictureList, m.description, m.updateComment, m.devURL);
-            p.Show();
         }
+        #region UI event handlers (resize, expand toggling)
         //resizing handler for the window
         private void ModSelectionList_SizeChanged(object sender, EventArgs e)
         {
@@ -2342,33 +2377,6 @@ namespace RelhaxModpack
                 }
             }
         }
-        //handler to set the cancel bool to false
-        private void continueButton_Click(object sender, EventArgs e)
-        {
-            cancel = false;
-            //save the last config if told to do so
-            if (Settings.saveLastConfig)
-            {
-                Utils.saveConfig(false, null, parsedCatagoryList, userMods);
-            }
-            this.Close();
-        }
-        //handler for when the cancal button is clicked
-        private void cancelButton_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-        //handler for when the "load config" button is pressed
-        private void loadConfigButton_Click(object sender, EventArgs e)
-        {
-            loadMode = loadConfigMode.fromButton;
-            this.parseLoadConfig();
-        }
-        //handler for when the "save config" button is pressed
-        private void saveConfigButton_Click(object sender, EventArgs e)
-        {
-            Utils.saveConfig(true, null, parsedCatagoryList, userMods);
-        }
         //handler for when a new tab page is selected
         private void modTabGroups_Selected(object sender, TabControlEventArgs e)
         {
@@ -2379,101 +2387,6 @@ namespace RelhaxModpack
         {
             this.ModSelectionList_SizeChanged(null, null);
         }
-        //handler for when the close button is pressed
-        private void ModSelectionList_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //save the size of this window for later.
-            Settings.modSelectionHeight = this.Size.Height;
-            Settings.modSelectionWidth = this.Size.Width;
-            if (taskBarHidden)
-                Settings.SetTaskbarState(Settings.AppBarStates.AutoHide);
-            //save wether the window was in fullscreen mods before closing
-            if (this.WindowState == FormWindowState.Maximized)
-                Settings.ModSelectionFullscreen = true;
-            else
-                Settings.ModSelectionFullscreen = false;
-            //close the preview window if it is open
-            if (p != null)
-            {
-                p.Close();
-                p.Dispose();
-                p = null;
-            }
-        }
-
-        private void clearSelectionsButton_Click(object sender, EventArgs e)
-        {
-            //not actually *loading* a config, but want to disable the handlers anyways
-            loadingConfig = true;
-            Utils.appendToLog("clearSelectionsButton pressed, clearing selections");
-            Utils.clearSelectionMemory(parsedCatagoryList, userMods);
-            //dispose of not needed stuff and reload the UI
-            
-            loadingConfig = false;
-            MessageBox.Show(Translations.getTranslatedString("selectionsCleared"));
-            ModSelectionList_SizeChanged(null, null);
-        }
-
-        private void parseLoadConfig()
-        {
-            loadingConfig = true;
-            OpenFileDialog loadLocation = new OpenFileDialog();
-            string filePath = "";
-            using (SelectionViewer sv = new SelectionViewer(this.Location.X + 100, this.Location.Y + 100, "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/developerSelections/selections.xml"))
-            {
-                if (loadMode == loadConfigMode.fromAutoInstall)
-                {
-                    filePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", Program.configName);
-                    if (!File.Exists(filePath))
-                    {
-                        Utils.appendToLog(string.Format("ERROR: {0} not found, not loading configs", filePath));
-                        MessageBox.Show(Translations.getTranslatedString("configLoadFailed"), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                        return;
-                    }
-                }
-                else if (loadMode == loadConfigMode.fromSaveLastConfig)
-                {
-                    filePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml");
-                    if (!File.Exists(filePath))
-                    {
-                        Utils.appendToLog(string.Format("ERROR: {0} not found, not loading configs", filePath));
-                        return;
-                    }
-                }
-                else
-                {
-                    DialogResult res = sv.ShowDialog();
-                    if(res == DialogResult.OK)
-                    {
-                        filePath = sv.SelectedXML;
-                    }
-                    else
-                    { return; }
-                    if (filePath.Equals("localFile"))
-                    {
-                        loadLocation.AddExtension = true;
-                        loadLocation.DefaultExt = ".xml";
-                        loadLocation.Filter = "*.xml|*.xml";
-                        loadLocation.InitialDirectory = Path.Combine(Application.StartupPath, "RelHaxUserConfigs");
-                        loadLocation.Title = Translations.getTranslatedString("selectConfigFile");
-                        if (loadLocation.ShowDialog().Equals(DialogResult.Cancel))
-                        {
-                            //quit
-                            return;
-                        }
-                        filePath = loadLocation.FileName;
-                    }
-                }
-            }
-            Utils.loadConfig(loadMode == loadConfigMode.fromButton, filePath, parsedCatagoryList, userMods);
-            if (loadMode == loadConfigMode.fromButton || loadMode == loadConfigMode.fromAutoInstall)
-            {
-                if (loadMode == loadConfigMode.fromButton) MessageBox.Show(Translations.getTranslatedString("prefrencesSet"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-                loadingConfig = false;
-                ModSelectionList_SizeChanged(null, null);
-            }
-        }
-
         private void ColapseAllButton_Click(object sender, EventArgs e)
         {
             foreach (Control c in modTabGroups.SelectedTab.Controls)
@@ -2528,7 +2441,9 @@ namespace RelhaxModpack
                 }
             }
         }
+        #endregion
 
+        #region search box code
         private void searchComboBox_TextUpdate(object sender, EventArgs e)
         {
             ComboBox searchComboBox = (ComboBox)sender;
@@ -2577,7 +2492,7 @@ namespace RelhaxModpack
             }
             if (Settings.sView == Settings.SelectionView.defaultt)
             {
-                if(sendah.SelectedItem is Mod)
+                if (sendah.SelectedItem is Mod)
                 {
                     Mod m = (Mod)sendah.SelectedItem;
                     if (modTabGroups.TabPages.Contains(m.tabIndex))
@@ -2586,7 +2501,7 @@ namespace RelhaxModpack
                     }
                     ModFormCheckBox c = (ModFormCheckBox)m.modFormCheckBox;
                     c.Focus();
-                    
+
                 }
                 else if (sendah.SelectedItem is Config)
                 {
@@ -2595,7 +2510,7 @@ namespace RelhaxModpack
                     {
                         modTabGroups.SelectedTab = c.parentMod.tabIndex;
                     }
-                    if(c.configUIComponent is ConfigFormCheckBox)
+                    if (c.configUIComponent is ConfigFormCheckBox)
                     {
                         ConfigFormCheckBox cb = (ConfigFormCheckBox)c.configUIComponent;
                         cb.Focus();
@@ -2633,7 +2548,7 @@ namespace RelhaxModpack
                 else if (sendah.SelectedItem is Config)
                 {
                     Config c = (Config)sendah.SelectedItem;
-                    if(modTabGroups.TabPages.Contains(c.parentMod.tabIndex))
+                    if (modTabGroups.TabPages.Contains(c.parentMod.tabIndex))
                     {
                         modTabGroups.SelectedTab = c.parentMod.tabIndex;
                     }
@@ -2651,5 +2566,6 @@ namespace RelhaxModpack
                 searchCB_SelectionChangeCommitted(sender, null);
             }
         }
+        #endregion
     }
 }

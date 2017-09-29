@@ -11,7 +11,6 @@ using Microsoft.Win32;
 using System.Drawing;
 using System.Globalization;
 using System.Xml.XPath;
-using Ionic.Zip;
 using System.Xml.Linq;
 
 namespace RelhaxModpack
@@ -21,11 +20,14 @@ namespace RelhaxModpack
         //all instance variables required to be up here
         private FolderBrowserDialog selectWotFolder = new FolderBrowserDialog();
         private WebClient downloader;
-        //private string tempPath = Path.GetTempPath();//C:/users/userName/appdata/local/temp
         private const int MBDivisor = 1048576;
-        private string tanksLocation;//sample:  c:/games/World_of_Tanks
-        private string tanksVersionForInstaller;//the location to pass into the installer
-        private string appDataFolder;//the folder where the user's app data is stored (C:\Users\username\AppData)
+        //sample:  c:/games/World_of_Tanks
+        private string tanksLocation;
+        //the location to pass into the installer
+        private string tanksVersionForInstaller;
+        //the folder where the user's app data is stored (C:\Users\username\AppData)
+        private string appDataFolder;
+        //the string representation from the xml document manager_version.xml. also passed into the installer for logging the version of the database installed at that time
         private string databaseVersionString;
         //queue for downloading mods
         private List<DownloadItem> downloadQueue;
@@ -63,11 +65,9 @@ namespace RelhaxModpack
         float currentTotalBytesDownloaded = 0;
         float differenceTotalBytesDownloaded = 0;
         float sessionDownloadSpeed = 0;
-        private loadingGifPreview gp;
+        private LoadingGifPreview gp;
         List<string> supportedVersions = new List<string>();
         List<DatabaseObject> modsConfigsWithData;
-        private float windowHeight;
-        private float windowWidth;
         private float scale = 1.0f;
 
         //  interpret the created CiInfo buildTag as an "us-US" or a "de-DE" timeformat and return it as a local time- and dateformat string
@@ -83,7 +83,7 @@ namespace RelhaxModpack
                     return dateValue.ToString();
                 }
             }
-            return "Error in dateTime format: " + CiInfo.BuildTag; 
+            return "Error in dateTime format: " + CiInfo.BuildTag;
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace RelhaxModpack
             this.SetStyle(                                      /// add double buffering and possibly reduce flicker https://stackoverflow.com/questions/1550293/stopping-textbox-flicker-during-update
               ControlStyles.AllPaintingInWmPaint |
               ControlStyles.UserPaint |
-              ControlStyles.DoubleBuffer,true);
+              ControlStyles.DoubleBuffer, true);
         }
         //handler for the mod download file progress
         void downloader_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -155,7 +155,7 @@ namespace RelhaxModpack
             // string downloadStatus = "";
             // downloadStatus = Translations.getTranslatedString("Downloading") + " " + currentModDownloadingShort + " (" + Math.Round(MBytesIn, 1) + " MB" + " of " + Math.Round(MBytesTotal, 1) + " MB)";
             // downloadStatus = downloadStatus + "\n" + totalSpeedLabel + " " + actualTimeMins + " mins " + actualTimeSecs + " ";
-            string downloadStatus = string.Format("{0} {1} ({2} MB {3} {4} MB)\n{5} {6} mins {7} secs", 
+            string downloadStatus = string.Format("{0} {1} ({2} MB {3} {4} MB)\n{5} {6} mins {7} secs",
                 Translations.getTranslatedString("Downloading"), currentModDownloadingShort, Math.Round(MBytesIn, 1), Translations.getTranslatedString("of"), Math.Round(MBytesTotal, 1), totalSpeedLabel, actualTimeMins, actualTimeSecs);
             //totalSpeedLabel = 
             downloadProgress.Text = downloadStatus;
@@ -191,7 +191,7 @@ namespace RelhaxModpack
                 //for the next file in the queue, delete it.
                 if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
                 //download new zip file
-                if(downloader != null)
+                if (downloader != null)
                     downloader.Dispose();
                 downloader = new WebClient();
                 downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
@@ -286,7 +286,7 @@ namespace RelhaxModpack
                 }
             }
         }
-        
+
         //method to check for updates to the application on startup
         private void checkmanagerUpdates()
         {
@@ -294,6 +294,8 @@ namespace RelhaxModpack
             //download the updates
             WebClient updater = new WebClient();
             updater.Proxy = null;
+            if (File.Exists(Settings.managerInfoDatFile))
+                File.Delete(Settings.managerInfoDatFile);
             try
             {
                 updater.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", Settings.managerInfoDatFile);
@@ -403,7 +405,7 @@ namespace RelhaxModpack
             version = version.Substring(2);
             return version;
         }
-        
+
         //check to see if the supplied version of tanks is on the list of supported client versions
         private bool isClientVersionSupported(string detectedVersion)
         {
@@ -431,7 +433,7 @@ namespace RelhaxModpack
 
             // here we need the value for the searchlist
             // check replay link
-            registryPathArray = new string[] { @"HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.wotreplay\shell\open\command", @"HKEY_CURRENT_USER\Software\Classes\.wotreplay\shell\open\command"};
+            registryPathArray = new string[] { @"HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.wotreplay\shell\open\command", @"HKEY_CURRENT_USER\Software\Classes\.wotreplay\shell\open\command" };
             foreach (string regEntry in registryPathArray)
             {
                 // get values from from registry
@@ -452,7 +454,7 @@ namespace RelhaxModpack
             // here we need the value for the searchlist
             string regPath = @"HKEY_CURRENT_USER\Software\Wargaming.net\Launcher\Apps\wot";
             RegistryKey subKeyHandle = Registry.CurrentUser.OpenSubKey(regPath.Replace(@"HKEY_CURRENT_USER\", ""));
-            if (subKeyHandle!= null)
+            if (subKeyHandle != null)
             {
                 // get the value names at the reg Key one by one
                 foreach (string valueName in subKeyHandle.GetValueNames())
@@ -511,7 +513,7 @@ namespace RelhaxModpack
             // send "null" back if nothing found
             return null;
         }
-        
+
         //prompts the user to specify where the "WorldOfTanks.exe" file is
         //return the file path and name of "WorldOfTanks.exe"
         private string manuallyFindTanks()
@@ -536,32 +538,25 @@ namespace RelhaxModpack
             //set window header text to current version so user knows
             this.Text = this.Text + managerVersion();
             if (Program.testMode) this.Text = this.Text + " TEST MODE";
+            //setup the gif preview loading window
+            gp = new LoadingGifPreview(this.Location.X + this.Size.Width + 5, this.Location.Y);
             //show the wait screen
             PleaseWait wait = new PleaseWait();
             wait.Show();
             WebRequest.DefaultWebProxy = null;
-            wait.loadingDescBox.Text = "Verifying single instance...";
             Application.DoEvents();
             Utils.appendToLog("|RelHax Modpack " + managerVersion());
             Utils.appendToLog(string.Format("|Built on {0}", compileTime()));
             Utils.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
-            windowHeight = this.Size.Height;
-            windowWidth = this.Size.Width;
-            //enforces a single instance of the program
-            try
-            {
-                //File.WriteAllText(tempPath + "\\RelHaxOneInstance.txt", "this file is open and cannot be deleted");
-                //File.OpenWrite(tempPath + "\\RelHaxOneInstance.txt");
-                //Utils.appendToLog("Successfully made single instance text file");
-            }
-            //catching an EXCEPTION means that this is not the only instance open
-            catch (IOException)
-            {
-                wait.Close();
-                Utils.appendToLog("CRITICAL: Another Instance of the relic mod manager is already running");
-                MessageBox.Show(Translations.getTranslatedString("anotherInstanceRunning"));
-                this.Close();
-            }
+            wait.loadingDescBox.Text = Translations.getTranslatedString("verDirStructure");
+            Application.DoEvents();
+            Utils.appendToLog("Verifying Directory Structure");
+            //create directory structures
+            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxDownloads"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxDownloads"));
+            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxUserMods"));
+            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup"));
+            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxUserConfigs"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxUserConfigs"));
+            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxTemp"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxTemp"));
             //check for updates
             wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
             Application.DoEvents();
@@ -584,15 +579,6 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.getTranslatedString("patchDayMessage"));
                 this.Close();
             }
-            wait.loadingDescBox.Text = Translations.getTranslatedString("verDirStructure");
-            Application.DoEvents();
-            Utils.appendToLog("Verifying Directory Structure");
-            //create directory structures
-            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxDownloads"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxDownloads"));
-            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxUserMods"));
-            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup"));
-            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxUserConfigs"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxUserConfigs"));
-            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxTemp"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxTemp"));
             //check for required external application libraries (dlls only)
             Utils.appendToLog("Checking for required external files");
             if (!File.Exists(Path.Combine(Application.StartupPath, "DotNetZip.dll")))
@@ -678,13 +664,13 @@ namespace RelhaxModpack
             Application.DoEvents();
             Program.saveSettings = true;
         }
-        
+
         //when the "visit form page" link is clicked. the link clicked handler
         private void formPageLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
-        
+
         //handler for when the install relhax modpack button is pressed
         //basicly the entire install process
         private void installRelhaxMod_Click(object sender, EventArgs e)
@@ -695,7 +681,7 @@ namespace RelhaxModpack
             //get the user appData folder
             appDataFolder = Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Wargaming.net", "WorldOfTanks");
             Utils.appendToLog("appDataFolder parsed as " + appDataFolder);
-            if(!Directory.Exists(appDataFolder))
+            if (!Directory.Exists(appDataFolder))
             {
                 Utils.appendToLog("ERROR: appDataFolder does not exist");
                 appDataFolder = "-1";
@@ -704,7 +690,7 @@ namespace RelhaxModpack
                     //can't locate folder, continue installation anyway?
                     DialogResult clearCacheFailResult = MessageBox.Show(Translations.getTranslatedString("appDataFolderNotExist"), Translations.getTranslatedString("appDataFolderNotExistHeader"),
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if(clearCacheFailResult == DialogResult.No)
+                    if (clearCacheFailResult == DialogResult.No)
                     {
                         Utils.appendToLog("user stopped installation");
                         toggleUIButtons(true);
@@ -744,7 +730,7 @@ namespace RelhaxModpack
             {
                 //log and inform the user
                 Utils.appendToLog("WARNING: Detected client version is " + tanksVersion + ", not supported");
-                Utils.appendToLog("Supported versions are: " + string.Join(", ",supportedVersions));
+                Utils.appendToLog("Supported versions are: " + string.Join(", ", supportedVersions));
                 // parse the string that we get from the server and delete all "Testserver" entries (Testserver entries are the version number with prefix "T")
                 string publicVersions = string.Join("\n", supportedVersions.Select(sValue => sValue.Trim()).ToArray().Where(s => !(s.Substring(0, 1) == "T")).ToArray());
                 MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}:\n{4}", Translations.getTranslatedString("detectedClientVersion"), tanksVersion, Translations.getTranslatedString("supportNotGuarnteed"), Translations.getTranslatedString("supportedClientVersions"), publicVersions), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -807,7 +793,7 @@ namespace RelhaxModpack
                 if (File.Exists(Path.Combine(tanksLocation, "installedRelhaxFiles.log")))
                     File.Delete(Path.Combine(tanksLocation, "installedRelhaxFiles.log"));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Utils.exceptionLog(ex);
             }
@@ -865,13 +851,13 @@ namespace RelhaxModpack
             }
 
             //build the list of mods and configs that use each logical dependency
-            foreach(LogicalDependnecy d in currentLogicalDependencies)
+            foreach (LogicalDependnecy d in currentLogicalDependencies)
             {
-                foreach(Dependency depD in currentDependencies)
+                foreach (Dependency depD in currentDependencies)
                 {
-                    foreach(LogicalDependnecy ld in depD.logicalDependencies)
+                    foreach (LogicalDependnecy ld in depD.logicalDependencies)
                     {
-                        if(ld.packageName.Equals(d.packageName))
+                        if (ld.packageName.Equals(d.packageName))
                         {
                             DatabaseLogic dbl = new DatabaseLogic()
                             {
@@ -891,9 +877,9 @@ namespace RelhaxModpack
                     //will itterate through every catagory once
                     foreach (Mod m in c.mods)
                     {
-                        foreach(LogicalDependnecy ld in m.logicalDependencies)
+                        foreach (LogicalDependnecy ld in m.logicalDependencies)
                         {
-                            if(ld.packageName.Equals(d.packageName))
+                            if (ld.packageName.Equals(d.packageName))
                             {
                                 DatabaseLogic dbl = new DatabaseLogic()
                                 {
@@ -913,19 +899,19 @@ namespace RelhaxModpack
 
             //now each logical dependency has a complete list of every dependency, mod, and config that uses it, and if it is enabled and checked
             //indicate if the logical dependency will be installed
-            foreach(LogicalDependnecy ld in currentLogicalDependencies)
+            foreach (LogicalDependnecy ld in currentLogicalDependencies)
             {
                 //idea is that if all mod/config/dependency are to be installed, then install the logical dependency
                 //and factor in the negate flag
                 bool addIt = true;
-                foreach(DatabaseLogic dl in ld.DatabasePackageLogic)
+                foreach (DatabaseLogic dl in ld.DatabasePackageLogic)
                 {
-                    if(dl.NotFlag)
+                    if (dl.NotFlag)
                     {
                         //package must NOT be checked for it to be included
                         //enabled must = true, checked must = false
                         //otherwise break and don't add
-                        if(dl.Enabled && dl.Checked)
+                        if (dl.Enabled && dl.Checked)
                         {
                             addIt = false;
                             break;
@@ -936,7 +922,7 @@ namespace RelhaxModpack
                         //package MUST be checked for it to be included
                         //enabled must = true, checked must = true
                         //otherwise break and don't add
-                        if(dl.Enabled && !dl.Checked)
+                        if (dl.Enabled && !dl.Checked)
                         {
                             addIt = false;
                             break;
@@ -948,9 +934,9 @@ namespace RelhaxModpack
             }
 
             //check for dependencies that actually need to be installed at the end
-            foreach(Dependency d in dependenciesToInstall)
+            foreach (Dependency d in dependenciesToInstall)
             {
-                if(d.appendExtraction)
+                if (d.appendExtraction)
                 {
                     appendedDependenciesToInstall.Add(d);
                     dependenciesToInstall.Remove(d);
@@ -1026,7 +1012,7 @@ namespace RelhaxModpack
                     downloadQueue.Add(new DownloadItem(new Uri(dbo.startAddress + dbo.zipFile + dbo.endAddress), Path.Combine(localFilesDir, dbo.zipFile)));
                 }
             }
-            
+
             //reset the progress bars
             parrentProgressBar.Maximum = downloadQueue.Count;
             childProgressBar.Maximum = 100;
@@ -1068,9 +1054,9 @@ namespace RelhaxModpack
         {
             foreach (Config config in configList)
             {
-                foreach(LogicalDependnecy ld in config.logicalDependencies)
+                foreach (LogicalDependnecy ld in config.logicalDependencies)
                 {
-                    if(ld.packageName.Equals(d.packageName))
+                    if (ld.packageName.Equals(d.packageName))
                     {
                         DatabaseLogic dl = new DatabaseLogic()
                         {
@@ -1090,12 +1076,12 @@ namespace RelhaxModpack
         {
             //every dependency is only a packageName, and each must be added if they are not there already
             //but first need to find it
-            foreach(Dependency d in dependencies)
+            foreach (Dependency d in dependencies)
             {
                 Dependency temp = null;
                 //find the actual dependency object from the list of available dependencies
                 bool error = true;
-                foreach(Dependency dd in currentDependencies)
+                foreach (Dependency dd in currentDependencies)
                 {
                     if (dd.packageName.Equals(d.packageName))
                     {
@@ -1105,7 +1091,7 @@ namespace RelhaxModpack
                         break;
                     }
                 }
-                if(error)
+                if (error)
                 {
                     Utils.appendToLog("ERROR: could not match packageName '" + d.packageName + "' from the list of dependencies");
                     break;
@@ -1120,7 +1106,7 @@ namespace RelhaxModpack
         {
             string message = "";
             totalProgressBar.Maximum = (int)InstallerEventArgs.InstallProgress.Done;
-            if(e.InstalProgress == InstallerEventArgs.InstallProgress.BackupMods)
+            if (e.InstalProgress == InstallerEventArgs.InstallProgress.BackupMods)
             {
                 // message = Translations.getTranslatedString("backupModFile") + " " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
                 message = string.Format("{0} {1} {2} {3}", Translations.getTranslatedString("backupModFile"), e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
@@ -1160,12 +1146,12 @@ namespace RelhaxModpack
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractGlobalDependencies)
             {
                 message = Translations.getTranslatedString("extractingPackage") + " " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor,2) + " MB";
+                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
                 childProgressBar.Maximum = e.ChildTotalToProcess;
-                if(e.ChildProcessed > 0)
+                if (e.ChildProcessed > 0)
                     if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
                         childProgressBar.Value = e.ChildProcessed;
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractGlobalDependencies;
@@ -1297,7 +1283,7 @@ namespace RelhaxModpack
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Maximum = 1;
                 childProgressBar.Value = childProgressBar.Maximum;
-                if(!Program.testMode && (ins != null))
+                if (!Program.testMode && (ins != null))
                 {
                     this.checkForOldZipFiles();
                 }
@@ -1307,7 +1293,7 @@ namespace RelhaxModpack
                     ins.Dispose();
                     ins = null;
                 }
-                if(unI != null)
+                if (unI != null)
                 {
                     unI.Dispose();
                     unI = null;
@@ -1321,15 +1307,10 @@ namespace RelhaxModpack
                 parsedCatagoryLists = null;
                 patchList = null;
                 userMods = null;
-                if(helper != null)
+                if (helper != null)
                 {
                     helper.Dispose();
                     helper = null;
-                }
-                if(gp != null)
-                {
-                    gp.Dispose();
-                    gp = null;
                 }
                 modsConfigsWithData = null;
                 toggleUIButtons(true);
@@ -1340,7 +1321,7 @@ namespace RelhaxModpack
                 parrentProgressBar.Value = 0;
                 message = "Uninstalling file " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
                 childProgressBar.Maximum = e.ChildTotalToProcess;
-                if((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
                     childProgressBar.Value = e.ChildProcessed;
             }
             else
@@ -1349,7 +1330,6 @@ namespace RelhaxModpack
             }
             downloadProgress.Text = message;
         }
-        
         //Main method to uninstall the modpack
         private void uninstallRelhaxMod_Click(object sender, EventArgs e)
         {
@@ -1387,24 +1367,6 @@ namespace RelhaxModpack
             {
                 toggleUIButtons(true);
             }
-        }
-        //handler for what happends when the check box "clean install" is checked or not
-        private void cleanInstallCB_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.cleanInstallation = cleanInstallCB.Checked;
-        }
-        //method to bring up the crc checker to get the crc values of a mod
-        private void CIEplainLabel_Click(object sender, EventArgs e)
-        {
-            CRCCheck crcCHecker = new CRCCheck();
-            crcCHecker.Show();
-        }
-        //enalbes the user to use "comic sans" font for the 1 person that would ever want to do that
-        private void cancerFontCB_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.comicSans = cancerFontCB.Checked;
-            Settings.ApplyScalingProperties();
-            this.Font = Settings.appFont;
         }
         //applies all settings from static settings class to this form
         private void applySettings(bool init = false)
@@ -1517,10 +1479,10 @@ namespace RelhaxModpack
                     case (Settings.FontSize.DPI100):
                         DPI100.Checked = true;
                         break;
-                    case(Settings.FontSize.DPI125):
+                    case (Settings.FontSize.DPI125):
                         DPI125.Checked = true;
                         break;
-                    case(Settings.FontSize.DPI175):
+                    case (Settings.FontSize.DPI175):
                         DPI175.Checked = true;
                         break;
                     case (Settings.FontSize.DPI225):
@@ -1609,34 +1571,7 @@ namespace RelhaxModpack
                 }
             }
         }
-        //adds a dependency to the dependency list only if it is not already added
-        private void addUniqueDependency(Dependency toAdd)
-        {
-            foreach (Dependency existing in dependenciesToInstall)
-            {
-                //check if the mod zip name is the same
-                if (existing.dependencyZipFile.Equals(toAdd.dependencyZipFile))
-                    return;
-            }
-            //getting here means that the dependency to add is unique
-            dependenciesToInstall.Add(toAdd);
-        }
-
-        private void cancelDownloadButton_Click(object sender, EventArgs e)
-        {
-            downloader.CancelAsync();
-        }
-
-        //create the done display
-        private void doneDisplay()
-        {
-            downloadProgress.Text = Translations.getTranslatedString("done");
-            parrentProgressBar.Maximum = 1;
-            parrentProgressBar.Value = parrentProgressBar.Maximum;
-            childProgressBar.Value = childProgressBar.Maximum;
-            toggleUIButtons(true);
-            Utils.appendToLog("Installation done");
-        }
+        //for when downloads are started, a timer to keep track of the download speed and ETA
         private void downloadTimer_Tick(object sender, EventArgs e)
         {
             differenceTotalBytesDownloaded = currentTotalBytesDownloaded - previousTotalBytesDownloaded;
@@ -1673,6 +1608,25 @@ namespace RelhaxModpack
             clearLogFilesCB.Enabled = enableToggle;
             notifyIfSameDatabaseCB.Enabled = enableToggle;
         }
+        //Checks if the current database version is the same as the database version last installed into the selected World_of_Tanks directory
+        private bool SameDatabaseVersions()
+        {
+            XPathDocument doc = new XPathDocument(Path.Combine(Application.StartupPath, "RelHaxTemp", "manager_version.xml"));//xml doc name can change
+            var databaseVersion = doc.CreateNavigator().SelectSingleNode("/version/database");
+            databaseVersionString = databaseVersion.InnerXml;
+            string installedfilesLogPath = Path.Combine(tanksLocation, "installedRelhaxFiles.log");
+            if (!File.Exists(installedfilesLogPath))
+                return false;
+            string[] lastInstalledDatabaseVersionString = File.ReadAllText(installedfilesLogPath).Split('\n');
+            //use index 0 of array, index 18 of string array
+            string theDatabaseVersion = lastInstalledDatabaseVersionString[0];
+            theDatabaseVersion = theDatabaseVersion.Substring(18);
+            theDatabaseVersion = theDatabaseVersion.Trim();
+            if (databaseVersionString.Equals(theDatabaseVersion))
+                return true;
+            else
+                return false;
+        }
         //handler for when the window is goingto be closed
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -1682,6 +1636,7 @@ namespace RelhaxModpack
             Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
         }
 
+        #region LinkClicked Events
         private void donateLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2");
@@ -1696,6 +1651,9 @@ namespace RelhaxModpack
         {
             System.Diagnostics.Process.Start("https://discord.gg/58fdPvK");
         }
+        #endregion
+
+        #region Loading animations handlers
         //handler for when the "standard" loading animation is clicked
         private void standardImageRB_CheckedChanged(object sender, EventArgs e)
         {
@@ -1726,16 +1684,14 @@ namespace RelhaxModpack
             else
                 return;
             //create the preview
-            if (gp != null)
-            {
-                gp.Close();
-                gp = null;
-            }
-            gp = new loadingGifPreview(this.Location.X + this.Size.Width + 5, this.Location.Y);
+            gp.Hide();
+            gp.SetLoadingImage();
             gp.Show();
-            Settings.gif = backup;
+            GC.Collect();
         }
+        #endregion
 
+        #region MouseEnter/MouseLeave events
         private void generic_MouseLeave(object sender, EventArgs e)
         {
             if (helper != null)
@@ -1855,7 +1811,9 @@ namespace RelhaxModpack
             if (helper != null)
                 helper.helperText.Text = Translations.getTranslatedString("notifyIfSameDatabaseCBExplanation");
         }
+        #endregion
 
+        #region MouseDown events
         private void font_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Right)
@@ -1949,7 +1907,7 @@ namespace RelhaxModpack
             if (e.Button != MouseButtons.Right)
                 return;
             using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            { 
+            {
                 newHelper.helperText.Text = Translations.getTranslatedString("saveUserDataDesc");
                 newHelper.ShowDialog();
             }
@@ -2064,7 +2022,21 @@ namespace RelhaxModpack
                 newHelper.ShowDialog();
             }
         }
+        #endregion
 
+        #region Check changed events
+        //handler for what happends when the check box "clean install" is checked or not
+        private void cleanInstallCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.cleanInstallation = cleanInstallCB.Checked;
+        }
+        //enalbes the user to use "comic sans" font for the 1 person that would ever want to do that
+        private void cancerFontCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.comicSans = cancerFontCB.Checked;
+            Settings.ApplyScalingProperties();
+            this.Font = Settings.appFont;
+        }
         //handler for when the "force manuel" checkbox is checked
         private void forceManuel_CheckedChanged(object sender, EventArgs e)
         {
@@ -2268,7 +2240,7 @@ namespace RelhaxModpack
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
                 float temp = 1.0f / scale;
-                this.Scale(new SizeF(temp,temp));
+                this.Scale(new SizeF(temp, temp));
                 scale = 1.0f;
                 this.Font = Settings.appFont;
             }
@@ -2393,6 +2365,14 @@ namespace RelhaxModpack
         {
             Settings.NotifyIfSameDatabase = notifyIfSameDatabaseCB.Checked;
         }
+        #endregion
+
+        #region Click events
+
+        private void cancelDownloadButton_Click(object sender, EventArgs e)
+        {
+            downloader.CancelAsync();
+        }
 
         private void viewAppUpdates_Click(object sender, EventArgs e)
         {
@@ -2412,31 +2392,16 @@ namespace RelhaxModpack
             int xloc = this.Location.X + this.Size.Width + 10;
             int yloc = this.Location.Y;
             // using (ViewUpdates vu = new ViewUpdates(xloc,yloc,dbUpdatesURL))
-            using (ViewUpdates vu = new ViewUpdates(xloc, yloc, Settings.managerInfoDatFile, "databaseUpdate.txt")) 
+            using (ViewUpdates vu = new ViewUpdates(xloc, yloc, Settings.managerInfoDatFile, "databaseUpdate.txt"))
             {
                 vu.ShowDialog();
             }
         }
+        #endregion
 
-        private bool SameDatabaseVersions()
-        {
-            XPathDocument doc = new XPathDocument(Path.Combine(Application.StartupPath, "RelHaxTemp", "manager_version.xml"));//xml doc name can change
-            var databaseVersion = doc.CreateNavigator().SelectSingleNode("/version/database");
-            databaseVersionString = databaseVersion.InnerXml;
-            string installedfilesLogPath = Path.Combine(tanksLocation, "installedRelhaxFiles.log");
-            if (!File.Exists(installedfilesLogPath))
-                return false;
-            string[] lastInstalledDatabaseVersionString = File.ReadAllText(installedfilesLogPath).Split('\n');
-            //use index 0 of array, index 18 of string array
-            string theDatabaseVersion = lastInstalledDatabaseVersionString[0];
-            theDatabaseVersion = theDatabaseVersion.Substring(18);
-            theDatabaseVersion = theDatabaseVersion.Trim();
-            if (databaseVersionString.Equals(theDatabaseVersion))
-                return true;
-            else
-                return false;
-        }
+
     }
+    #region DownloadItem class definition
     //a class for the downloadQueue list, to make a queue of downloads
     class DownloadItem
     {
@@ -2449,4 +2414,5 @@ namespace RelhaxModpack
             zipFile = newZipFile;
         }
     }
+    #endregion
 }

@@ -4,10 +4,10 @@ using System.Windows.Forms;
 
 namespace RelhaxModpack
 {
-    public partial class loadingGifPreview : Form
+    public partial class LoadingGifPreview : Form
     {
         int x, y;
-        public loadingGifPreview(int newX, int newY)
+        public LoadingGifPreview(int newX, int newY)
         {
             InitializeComponent();
             x = newX;
@@ -26,6 +26,18 @@ namespace RelhaxModpack
             Utils.appendToLog("GifPreview: opening at x: " + x + ", y: " + y);
             this.Location = new Point(x, y);
             Settings.setUIColor(this);
+            SetLoadingImage();
+        }
+
+        private void LoadingGifPreview_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+        }
+
+        //sets the loading image
+        public void SetLoadingImage()
+        {
             gifPreviewBox.Image = Settings.getLoadingImage();
         }
     }
