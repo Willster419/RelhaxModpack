@@ -738,7 +738,7 @@ namespace RelhaxModpack
                 tanksVersion = supportedVersions.Last();
             }
             //if the user wants to, check if the database has actually changed
-            if (Settings.NotifyIfSameDatabase && SameDatabaseVersions())//put setting here
+            if (Settings.NotifyIfSameDatabase && SameDatabaseVersions())
             {
                 if (MessageBox.Show(Translations.getTranslatedString("DatabaseVersionsSameBody"), Translations.getTranslatedString("DatabaseVersionsSameHeader"), MessageBoxButtons.YesNo) == DialogResult.No)
                 {
@@ -1611,7 +1611,13 @@ namespace RelhaxModpack
         //Checks if the current database version is the same as the database version last installed into the selected World_of_Tanks directory
         private bool SameDatabaseVersions()
         {
+            //OLD CODE TO BE REPLACED
             XPathDocument doc = new XPathDocument(Path.Combine(Application.StartupPath, "RelHaxTemp", "manager_version.xml"));//xml doc name can change
+
+            //NEW CODE TO USE
+            //string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");  //xml doc name can change
+            //XDocument doc = XDocument.Parse(xmlString);
+
             var databaseVersion = doc.CreateNavigator().SelectSingleNode("/version/database");
             databaseVersionString = databaseVersion.InnerXml;
             string installedfilesLogPath = Path.Combine(tanksLocation, "installedRelhaxFiles.log");
