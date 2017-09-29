@@ -77,7 +77,7 @@ namespace RelhaxModpack
 
         private void ViewUpdates_SizeChanged(object sender, EventArgs e)
         {
-            richTextBox1.Size = new Size(this.Size.Width - 35, this.Size.Height - 50 - difference);
+            richTextBox1.Size = new Size(this.Size.Width - 35, this.Size.Height - 65 - difference);
         }
 
         private void richTextBox1_LinkClicked(object sender, LinkClickedEventArgs e)

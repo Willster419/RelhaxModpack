@@ -108,6 +108,7 @@
             // 
             // pictureCountPanel
             // 
+            this.pictureCountPanel.AutoScroll = true;
             this.pictureCountPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureCountPanel.Location = new System.Drawing.Point(93, 327);
             this.pictureCountPanel.Name = "pictureCountPanel";
