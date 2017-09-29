@@ -33,7 +33,7 @@ namespace RelhaxModpack
         bool modHasRadioButtons = false;
         bool firstLoad = true;
         bool ignoreSelections = true;
-        bool mouseCLick = false;
+        //bool mouseCLick = false;
         int prog = 0;
         private enum loadConfigMode
         {
@@ -150,7 +150,6 @@ namespace RelhaxModpack
                 return;
             }
             //actually build the UI display
-            this.makeTabs();
             this.addAllMods();
             this.addUserMods(false);
             //set the size to the last closed size
@@ -305,78 +304,12 @@ namespace RelhaxModpack
         {
             if (pw != null)
             {
-                //pw.progressBar1.Minimum = 0;
-                //pw.progressBar1.Maximum = Utils.totalModConfigComponents;
-                //pw.progressBar1.Value = 0;
                 pw.progres_max = Utils.totalModConfigComponents;
                 pw.SetProgress(0);
             }
             loadingConfig = true;
             Utils.appendToLog("Loading ModSelectionList with view " + Settings.sView);
             completeModSearchList = new List<DatabaseObject>();
-            foreach (TabPage t in this.modTabGroups.TabPages)
-            {
-                foreach (Category c in parsedCatagoryList)
-                {
-                    if (c.name.Equals(t.Name))
-                    {
-                        //matched the catagory to tab
-                        //add to the ui every mod of that catagory
-                        Utils.sortModsList(c.mods);
-                        int i = 1;
-                        LegacySelectionList lsl = null;
-                        if (Settings.sView == Settings.SelectionView.legacy)
-                        {
-                            //create the WPF host for this tabPage
-                            ElementHost host = new ElementHost();
-                            host.Location = new Point(5, 5);
-                            host.Size = new Size(t.Size.Width - 5 - 5, t.Size.Height - 5 - 5);
-                            host.BackColorTransparent = false;
-                            host.BackColor = Color.White;
-                            lsl = new LegacySelectionList();
-                            host.Child = lsl;
-                            lsl.legacyTreeView.Items.Clear();
-                            t.Controls.Add(host);
-                        }
-                        foreach (Mod m in c.mods)
-                        {
-                            if (pw != null)
-                            {
-                                pw.loadingDescBox.Text = Translations.getTranslatedString("loading") + " " + m.name;
-                                /*int prog = pw.progressBar1.Value + 1;
-                                if ((pw.progressBar1.Minimum < prog) && (prog <= pw.progressBar1.Maximum))
-                                    pw.progressBar1.Value++;
-                                Application.DoEvents();*/
-                                prog++;
-                                pw.SetProgress(prog);
-                                Application.DoEvents();
-                            }
-                            if (Settings.sView == Settings.SelectionView.defaultt)
-                            {
-                                //use default UI
-                                this.addMod(m, t, i++, c);
-                            }
-                            else if (Settings.sView == Settings.SelectionView.legacy)
-                            {
-                                //use legacy OMC UI
-                                this.addModTreeview(m, t, i++, lsl, c);
-                            }
-                            else
-                            {
-                                //default case, use default
-                                this.addMod(m, t, i++, c);
-                            }
-                        }
-                        break;
-                    }
-                }
-            }
-            loadingConfig = false;
-            firstLoad = false;
-        }
-        //adds a tab view for each mod catagory
-        private void makeTabs()
-        {
             if (modTabGroups.TabPages.Count > 0)
                 modTabGroups.TabPages.Clear();
             modTabGroups.Font = Settings.appFont;
@@ -392,8 +325,53 @@ namespace RelhaxModpack
                     //append a star so the user knows
                     t.Text = t.Text + "*";
                 }
+                //matched the catagory to tab
+                //add to the ui every mod of that catagory
+                Utils.sortModsList(c.mods);
+                int i = 1;
+                LegacySelectionList lsl = null;
+                if (Settings.sView == Settings.SelectionView.legacy)
+                {
+                    //create the WPF host for this tabPage
+                    ElementHost host = new ElementHost();
+                    host.Location = new Point(5, 5);
+                    host.Size = new Size(t.Size.Width - 5 - 5, t.Size.Height - 5 - 5);
+                    host.BackColorTransparent = false;
+                    host.BackColor = Color.White;
+                    lsl = new LegacySelectionList();
+                    host.Child = lsl;
+                    lsl.legacyTreeView.Items.Clear();
+                    t.Controls.Add(host);
+                }
+                foreach (Mod m in c.mods)
+                {
+                    if (pw != null)
+                    {
+                        pw.loadingDescBox.Text = Translations.getTranslatedString("loading") + " " + m.name;
+                        prog++;
+                        pw.SetProgress(prog);
+                        Application.DoEvents();
+                    }
+                    if (Settings.sView == Settings.SelectionView.defaultt)
+                    {
+                        //use default UI
+                        this.addMod(m, t, i++, c);
+                    }
+                    else if (Settings.sView == Settings.SelectionView.legacy)
+                    {
+                        //use legacy OMC UI
+                        this.addModTreeview(m, t, i++, lsl, c);
+                    }
+                    else
+                    {
+                        //default case, use default
+                        this.addMod(m, t, i++, c);
+                    }
+                }
                 modTabGroups.TabPages.Add(t);
             }
+            loadingConfig = false;
+            firstLoad = false;
         }
         //adds a mod m to a tabpage t, OMC treeview style
         private void addModTreeview(Mod m, TabPage t, int panelCount, LegacySelectionList lsl, Category c)

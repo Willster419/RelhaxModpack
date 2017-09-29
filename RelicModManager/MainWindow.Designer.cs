@@ -66,6 +66,10 @@
             this.selectionDefault = new System.Windows.Forms.RadioButton();
             this.donateLabel = new System.Windows.Forms.LinkLabel();
             this.fontSizeGB = new System.Windows.Forms.GroupBox();
+            this.DPI275 = new System.Windows.Forms.RadioButton();
+            this.DPI225 = new System.Windows.Forms.RadioButton();
+            this.fontSize275 = new System.Windows.Forms.RadioButton();
+            this.fontSize225 = new System.Windows.Forms.RadioButton();
             this.DPIAUTO = new System.Windows.Forms.RadioButton();
             this.DPI125 = new System.Windows.Forms.RadioButton();
             this.DPI175 = new System.Windows.Forms.RadioButton();
@@ -77,10 +81,7 @@
             this.DiscordServerLink = new System.Windows.Forms.LinkLabel();
             this.viewAppUpdates = new System.Windows.Forms.Button();
             this.viewDBUpdates = new System.Windows.Forms.Button();
-            this.fontSize225 = new System.Windows.Forms.RadioButton();
-            this.fontSize275 = new System.Windows.Forms.RadioButton();
-            this.DPI225 = new System.Windows.Forms.RadioButton();
-            this.DPI275 = new System.Windows.Forms.RadioButton();
+            this.notifyIfSameDatabaseCB = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
@@ -201,6 +202,7 @@
             // 
             // settingsGroupBox
             // 
+            this.settingsGroupBox.Controls.Add(this.notifyIfSameDatabaseCB);
             this.settingsGroupBox.Controls.Add(this.clearLogFilesCB);
             this.settingsGroupBox.Controls.Add(this.clearCacheCB);
             this.settingsGroupBox.Controls.Add(this.darkUICB);
@@ -552,6 +554,54 @@
             this.fontSizeGB.TabStop = false;
             this.fontSizeGB.Text = "Scaling Mode";
             // 
+            // DPI275
+            // 
+            this.DPI275.AutoSize = true;
+            this.DPI275.Location = new System.Drawing.Point(81, 77);
+            this.DPI275.Name = "DPI275";
+            this.DPI275.Size = new System.Drawing.Size(72, 17);
+            this.DPI275.TabIndex = 10;
+            this.DPI275.TabStop = true;
+            this.DPI275.Text = "DPI 2.75x";
+            this.DPI275.UseVisualStyleBackColor = true;
+            this.DPI275.CheckedChanged += new System.EventHandler(this.DPI275_CheckedChanged);
+            // 
+            // DPI225
+            // 
+            this.DPI225.AutoSize = true;
+            this.DPI225.Location = new System.Drawing.Point(81, 61);
+            this.DPI225.Name = "DPI225";
+            this.DPI225.Size = new System.Drawing.Size(72, 17);
+            this.DPI225.TabIndex = 9;
+            this.DPI225.TabStop = true;
+            this.DPI225.Text = "DPI 2.25x";
+            this.DPI225.UseVisualStyleBackColor = true;
+            this.DPI225.CheckedChanged += new System.EventHandler(this.DPI225_CheckedChanged);
+            // 
+            // fontSize275
+            // 
+            this.fontSize275.AutoSize = true;
+            this.fontSize275.Location = new System.Drawing.Point(6, 77);
+            this.fontSize275.Name = "fontSize275";
+            this.fontSize275.Size = new System.Drawing.Size(75, 17);
+            this.fontSize275.TabIndex = 8;
+            this.fontSize275.TabStop = true;
+            this.fontSize275.Text = "Font 2.75x";
+            this.fontSize275.UseVisualStyleBackColor = true;
+            this.fontSize275.CheckedChanged += new System.EventHandler(this.fontSize275_CheckedChanged);
+            // 
+            // fontSize225
+            // 
+            this.fontSize225.AutoSize = true;
+            this.fontSize225.Location = new System.Drawing.Point(6, 61);
+            this.fontSize225.Name = "fontSize225";
+            this.fontSize225.Size = new System.Drawing.Size(75, 17);
+            this.fontSize225.TabIndex = 7;
+            this.fontSize225.TabStop = true;
+            this.fontSize225.Text = "Font 2.25x";
+            this.fontSize225.UseVisualStyleBackColor = true;
+            this.fontSize225.CheckedChanged += new System.EventHandler(this.fontSize225_CheckedChanged);
+            // 
             // DPIAUTO
             // 
             this.DPIAUTO.AutoSize = true;
@@ -687,53 +737,19 @@
             this.viewDBUpdates.UseVisualStyleBackColor = true;
             this.viewDBUpdates.Click += new System.EventHandler(this.viewDBUpdates_Click);
             // 
-            // fontSize225
+            // notifyIfSameDatabaseCB
             // 
-            this.fontSize225.AutoSize = true;
-            this.fontSize225.Location = new System.Drawing.Point(6, 61);
-            this.fontSize225.Name = "fontSize225";
-            this.fontSize225.Size = new System.Drawing.Size(75, 17);
-            this.fontSize225.TabIndex = 7;
-            this.fontSize225.TabStop = true;
-            this.fontSize225.Text = "Font 2.25x";
-            this.fontSize225.UseVisualStyleBackColor = true;
-            this.fontSize225.CheckedChanged += new System.EventHandler(this.fontSize225_CheckedChanged);
-            // 
-            // fontSize275
-            // 
-            this.fontSize275.AutoSize = true;
-            this.fontSize275.Location = new System.Drawing.Point(6, 77);
-            this.fontSize275.Name = "fontSize275";
-            this.fontSize275.Size = new System.Drawing.Size(75, 17);
-            this.fontSize275.TabIndex = 8;
-            this.fontSize275.TabStop = true;
-            this.fontSize275.Text = "Font 2.75x";
-            this.fontSize275.UseVisualStyleBackColor = true;
-            this.fontSize275.CheckedChanged += new System.EventHandler(this.fontSize275_CheckedChanged);
-            // 
-            // DPI225
-            // 
-            this.DPI225.AutoSize = true;
-            this.DPI225.Location = new System.Drawing.Point(81, 61);
-            this.DPI225.Name = "DPI225";
-            this.DPI225.Size = new System.Drawing.Size(72, 17);
-            this.DPI225.TabIndex = 9;
-            this.DPI225.TabStop = true;
-            this.DPI225.Text = "DPI 2.25x";
-            this.DPI225.UseVisualStyleBackColor = true;
-            this.DPI225.CheckedChanged += new System.EventHandler(this.DPI225_CheckedChanged);
-            // 
-            // DPI275
-            // 
-            this.DPI275.AutoSize = true;
-            this.DPI275.Location = new System.Drawing.Point(81, 77);
-            this.DPI275.Name = "DPI275";
-            this.DPI275.Size = new System.Drawing.Size(72, 17);
-            this.DPI275.TabIndex = 10;
-            this.DPI275.TabStop = true;
-            this.DPI275.Text = "DPI 2.75x";
-            this.DPI275.UseVisualStyleBackColor = true;
-            this.DPI275.CheckedChanged += new System.EventHandler(this.DPI275_CheckedChanged);
+            this.notifyIfSameDatabaseCB.AutoSize = true;
+            this.notifyIfSameDatabaseCB.Location = new System.Drawing.Point(6, 166);
+            this.notifyIfSameDatabaseCB.Name = "notifyIfSameDatabaseCB";
+            this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(193, 17);
+            this.notifyIfSameDatabaseCB.TabIndex = 33;
+            this.notifyIfSameDatabaseCB.Text = "Inform if no new database available";
+            this.notifyIfSameDatabaseCB.UseVisualStyleBackColor = true;
+            this.notifyIfSameDatabaseCB.CheckedChanged += new System.EventHandler(this.notifyIfSameDatabaseCB_CheckedChanged);
+            this.notifyIfSameDatabaseCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.notifyIfSameDatabaseCB_MouseDown);
+            this.notifyIfSameDatabaseCB.MouseEnter += new System.EventHandler(this.notifyIfSameDatabaseCB_MouseEnter);
+            this.notifyIfSameDatabaseCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // MainWindow
             // 
@@ -834,6 +850,7 @@
         private System.Windows.Forms.RadioButton DPI225;
         private System.Windows.Forms.RadioButton fontSize275;
         private System.Windows.Forms.RadioButton fontSize225;
+        private System.Windows.Forms.CheckBox notifyIfSameDatabaseCB;
     }
 }
 
