@@ -687,6 +687,13 @@ namespace RelhaxModpack
             polish.Add("failedToDownload_2", "Jeśli wiesz który to mod, odznacz go i wszystko powinno byćw porządku. Wkrótce naprawimy błąd. Zrestartuj, jeśli problem pojawia się ponownie.");
             french.Add("failedToDownload_2", "Si vous savez quel mod est la cause, déséléectionnez celui-ci. Un corrigé vas être disponible bientôt. Redémarrez ceci a la fermeture");
 
+            //Component: initial download managerInfo.dat
+            //
+            english.Add("failedManager_version", "Failed to get 'manager_version.xml'\n\nRelhax Manager will be terminated.");
+            german.Add("failedManager_version", "Fehler beim holen von 'manager_version.xml'.\n\nDer Relhax Manager wird beendet.");
+            polish.Add("failedManager_version", "TODO");
+            french.Add("failedManager_version", "TODO");
+
             //Componet: 
             //
             english.Add("fontsPromptInstallHeader", "Admin to install fonts?");

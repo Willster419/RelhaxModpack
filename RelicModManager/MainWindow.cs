@@ -307,40 +307,51 @@ namespace RelhaxModpack
 
             string version = "";
             string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");  //xml doc name can change
-            XDocument doc = XDocument.Parse(xmlString);
-            var databaseVersion = doc.Descendants().Where(n => n.Name == "manager").FirstOrDefault();
-            if (databaseVersion != null)
-                version = databaseVersion.Value;
-            Utils.appendToLog(string.Format("Local application is {0}, current online is {1}", managerVersion(), version));
-
-            if (!version.Equals(managerVersion()))
+            if (!xmlString.Equals(""))
             {
-                Utils.appendToLog("exe is out of date. displaying user update window");
-                //out of date
-                VersionInfo vi = new VersionInfo();
-                vi.ShowDialog();
-                DialogResult result = vi.result;
-                if (result.Equals(DialogResult.Yes))
+                XDocument doc = XDocument.Parse(xmlString);
+                var databaseVersion = doc.Descendants().Where(n => n.Name == "manager").FirstOrDefault();
+                if (databaseVersion != null)
+                    version = databaseVersion.Value;
+                Utils.appendToLog(string.Format("Local application is {0}, current online is {1}", managerVersion(), version));
+
+                if (!version.Equals(managerVersion()))
                 {
-                    Utils.appendToLog("User accepted downloading new version");
-                    //download new version
-                    sw.Reset();
-                    sw.Start();
-                    string newExeName = Application.StartupPath + "\\RelhaxModpack_update" + ".exe";
-                    updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
-                    updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
-                    if (File.Exists(newExeName)) File.Delete(newExeName);
-                    updater.DownloadFileAsync(new Uri("http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe"), newExeName);
-                    Utils.appendToLog("New application download started");
-                    currentModDownloading = "update ";
-                }
-                else
-                {
-                    Utils.appendToLog("User declined downlading new version");
-                    //close the application
-                    this.Close();
+                    Utils.appendToLog("exe is out of date. displaying user update window");
+                    //out of date
+                    VersionInfo vi = new VersionInfo();
+                    vi.ShowDialog();
+                    DialogResult result = vi.result;
+                    if (result.Equals(DialogResult.Yes))
+                    {
+                        Utils.appendToLog("User accepted downloading new version");
+                        //download new version
+                        sw.Reset();
+                        sw.Start();
+                        string newExeName = Path.Combine(Application.StartupPath, "RelhaxModpack_update.exe");
+                        updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
+                        updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
+                        if (File.Exists(newExeName)) File.Delete(newExeName);
+                        updater.DownloadFileAsync(new Uri("http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe"), newExeName);
+                        Utils.appendToLog("New application download started");
+                        currentModDownloading = "update ";
+                    }
+                    else
+                    {
+                        Utils.appendToLog("User declined downlading new version");
+                        //close the application
+                        this.Close();
+                    }
                 }
             }
+            else
+            {
+                Utils.appendToLog("ERROR. Failed to get 'manager_version.xml'");
+                MessageBox.Show(Translations.getTranslatedString("failedManager_version"), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                //close the application
+                this.Close();
+            }
+
         }
         //handler for when the update download is complete
         void updater_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
@@ -355,7 +366,7 @@ namespace RelhaxModpack
             }
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
 
-            if (!File.Exists(Application.StartupPath + "\\RelicCopyUpdate.bat"))
+            if (!File.Exists(Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat")))
             {
                 using (downloader = new WebClient())
                 {

@@ -4284,21 +4284,28 @@ namespace RelhaxModpack
         public static string getStringFromZip(string zipFilename, string archivedFilename, string password = null)
         {
             MemoryStream ms = new MemoryStream();
-            string textStr;
-            using (ZipFile zip = ZipFile.Read(zipFilename))
+            string textStr = "no zipFilename";
+            if (File.Exists(zipFilename))
             {
-                ZipEntry e = zip[archivedFilename];
-                if (password != null)
+                using (ZipFile zip = ZipFile.Read(zipFilename))
                 {
-                    e.ExtractWithPassword(ms, password);
+                    ZipEntry e = zip[archivedFilename];
+                    if (password != null)
+                    {
+                        e.ExtractWithPassword(ms, password);
+                    }
+                    else
+                    {
+                        e.Extract(ms);
+                    }
+                    StreamReader sr = new StreamReader(ms);
+                    ms.Position = 0;
+                    textStr = sr.ReadToEnd();
                 }
-                else
-                {
-                    e.Extract(ms);
-                }
-                StreamReader sr = new StreamReader(ms);
-                ms.Position = 0;
-                textStr = sr.ReadToEnd();
+            } 
+            else
+            {
+
             }
             return textStr;
         }
