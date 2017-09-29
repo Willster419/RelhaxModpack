@@ -64,8 +64,7 @@ namespace RelhaxModpack
         float differenceTotalBytesDownloaded = 0;
         float sessionDownloadSpeed = 0;
         private loadingGifPreview gp;
-        private string suportedVersions = null;
-        string[] supportedVersions = null;
+        List<string> supportedVersions = new List<string>();
         List<DatabaseObject> modsConfigsWithData;
         private float windowHeight;
         private float windowWidth;
@@ -394,41 +393,36 @@ namespace RelhaxModpack
         //of the res_mods version folder i.e. 0.9.17.0.3
         private string getFolderVersion()
         {
-            if (!File.Exists(tanksLocation + "\\version.xml"))
+            if (!File.Exists(Path.Combine(tanksLocation, "version.xml")))
                 return null;
             XmlDocument doc = new XmlDocument();
-            doc.Load(tanksLocation + "\\version.xml");
+            doc.Load(Path.Combine(tanksLocation, "version.xml"));
             XmlNode node = doc.SelectSingleNode("//version.xml/version");
             string[] temp = node.InnerText.Split('#');
             string version = temp[0].Trim();
             version = version.Substring(2);
             return version;
         }
+        
         //check to see if the supplied version of tanks is on the list of supported client versions
         private bool isClientVersionSupported(string detectedVersion)
         {
-            //download a string of supported versions
-            try
+            supportedVersions.Clear();
+            bool result = false;
+            string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "supported_clients.xml");  //xml doc name can change
+            StringReader rdr = new StringReader(xmlString);
+            var doc = new XPathDocument(rdr);
+            foreach (var version in doc.CreateNavigator().Select("//versions/version"))
             {
-                using (downloader = new WebClient())
+                if (version.ToString().Equals(detectedVersion) || (version.ToString().Equals('T' + detectedVersion.Trim()) && Program.testMode))
                 {
-                    suportedVersions = downloader.DownloadString("http://wotmods.relhaxmodpack.com/RelhaxModpack/supported_clients.txt");
+                    result = true;
                 }
+                supportedVersions.Add(version.ToString());
             }
-            catch (WebException e)
-            {
-                Utils.exceptionLog("Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/supported_clients.txt", e);
-                MessageBox.Show(string.Format("{0} supported_clients.txt", Translations.getTranslatedString("failedToDownload_1")));
-                Application.Exit();
-            }
-            supportedVersions = suportedVersions.Split(',');
-            foreach (string s in supportedVersions)
-            {
-                if (s.Equals(detectedVersion) || (s.Equals('T'+detectedVersion) && Program.testMode))
-                    return true;
-            }
-            return false;
+            return result;
         }
+
         //checks the registry to get the location of where WoT is installed
         private string autoFindTanks()
         {
@@ -746,17 +740,16 @@ namespace RelhaxModpack
             tanksVersionForInstaller = tanksVersion;
             Utils.appendToLog("tanksVersion parsed as " + tanksVersion);
             //determine if the tanks client version is supported
-            // string selectionListTanksVersion = tanksVersion;
             if (!isClientVersionSupported(tanksVersion) && !Program.testMode)
             {
                 //log and inform the user
                 Utils.appendToLog("WARNING: Detected client version is " + tanksVersion + ", not supported");
-                Utils.appendToLog("Supported versions are: " + suportedVersions);
+                Utils.appendToLog("Supported versions are: " + string.Join(", ",supportedVersions));
                 // parse the string that we get from the server and delete all "Testserver" entries (Testserver entries are the version number with prefix "T")
-                string publicVersions = string.Join(",", suportedVersions.Split(',').Select(sValue => sValue.Trim()).ToArray().Where(s => !(s.Substring(0, 1) == "T")).ToArray());
-                MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}: {4}", Translations.getTranslatedString("detectedClientVersion"), tanksVersion, Translations.getTranslatedString("supportNotGuarnteed"), Translations.getTranslatedString("supportedClientVersions"), publicVersions), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                string publicVersions = string.Join("\n", supportedVersions.Select(sValue => sValue.Trim()).ToArray().Where(s => !(s.Substring(0, 1) == "T")).ToArray());
+                MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}:\n{4}", Translations.getTranslatedString("detectedClientVersion"), tanksVersion, Translations.getTranslatedString("supportNotGuarnteed"), Translations.getTranslatedString("supportedClientVersions"), publicVersions), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 // select the last public modpack version
-                tanksVersion = publicVersions.Split(',')[publicVersions.Split(',').Count() - 1];
+                tanksVersion = supportedVersions.Last();
             }
             //if the user wants to, check if the database has actually changed
             if (Settings.NotifyIfSameDatabase && SameDatabaseVersions())//put setting here
