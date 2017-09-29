@@ -295,10 +295,9 @@ namespace RelhaxModpack
             //download the updates
             WebClient updater = new WebClient();
             updater.Proxy = null;
-            string datFile = Path.Combine(Application.StartupPath, "RelHaxTemp", "managerInfo.dat");
             try
             {
-                updater.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", datFile);
+                updater.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", Settings.managerInfoDatFile);
             }
             catch (Exception ex)
             {
@@ -308,7 +307,7 @@ namespace RelhaxModpack
             }
 
             string version = "";
-            string xmlString = Utils.getStringFromZip(datFile, "manager_version.xml");  //xml doc name can change
+            string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");  //xml doc name can change
             XDocument doc = XDocument.Parse(xmlString);
             var databaseVersion = doc.Descendants().Where(n => n.Name == "manager").FirstOrDefault();
             if (databaseVersion != null)
@@ -685,11 +684,13 @@ namespace RelhaxModpack
             Application.DoEvents();
             Program.saveSettings = true;
         }
+        
         //when the "visit form page" link is clicked. the link clicked handler
         private void formPageLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
+        
         //handler for when the install relhax modpack button is pressed
         //basicly the entire install process
         private void installRelhaxMod_Click(object sender, EventArgs e)
@@ -2402,10 +2403,11 @@ namespace RelhaxModpack
 
         private void viewAppUpdates_Click(object sender, EventArgs e)
         {
-            string appUpdatesURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/releaseNotes.txt";
+            // string appUpdatesURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/releaseNotes.txt";
             int xloc = this.Location.X + this.Size.Width + 10;
             int yloc = this.Location.Y;
-            using (ViewUpdates vu = new ViewUpdates(xloc,yloc,appUpdatesURL))
+            // using (ViewUpdates vu = new ViewUpdates(xloc,yloc,appUpdatesURL))
+            using (ViewUpdates vu = new ViewUpdates(xloc, yloc, Settings.managerInfoDatFile, "releaseNotes.txt"))
             {
                 vu.ShowDialog();
             }
@@ -2413,10 +2415,11 @@ namespace RelhaxModpack
 
         private void viewDBUpdates_Click(object sender, EventArgs e)
         {
-            string dbUpdatesURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/databaseUpdate.txt";
+            // string dbUpdatesURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/databaseUpdate.txt";
             int xloc = this.Location.X + this.Size.Width + 10;
             int yloc = this.Location.Y;
-            using (ViewUpdates vu = new ViewUpdates(xloc,yloc,dbUpdatesURL))
+            // using (ViewUpdates vu = new ViewUpdates(xloc,yloc,dbUpdatesURL))
+            using (ViewUpdates vu = new ViewUpdates(xloc, yloc, Settings.managerInfoDatFile, "databaseUpdate.txt")) 
             {
                 vu.ShowDialog();
             }

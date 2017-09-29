@@ -35,7 +35,9 @@ namespace RelhaxModpack
         public static float scaleSize { get; set; }
         public static bool deleteLogs { get; set; }
         public static bool disableColorChange { get; set; }
-        public static string settingsXmlFile = Application.StartupPath + "\\RelHaxSettings.xml";
+        public static string settingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxSettings.xml");
+        public static string managerInfoDatFile = Path.Combine(Application.StartupPath, "RelHaxTemp", "managerInfo.dat");
+        public static string modInfoDatFile = Path.Combine(Application.StartupPath, "RelHaxTemp", "modInfo.dat");
         public static string configFileVersion = "2.0";     // for later imports of this files, we need a better identification
         public enum LoadingGifs { standard = 0, thirdGuards = 1 };
         public static LoadingGifs gif;

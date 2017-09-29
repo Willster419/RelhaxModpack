@@ -8,17 +8,22 @@ namespace RelhaxModpack
     public partial class ViewUpdates : Form
     {
         int x, y;
-        WebClient client = new WebClient();
-        string url = "";
+        // WebClient client = new WebClient();
+        // string url = "";
+        string zipFilename = "";
+        string archivedFilename = "";
         int difference;
         private const int titleBar = 23;//set origionally for 23
-        public ViewUpdates(int xx, int yy, string urll)
+        // public ViewUpdates(int xx, int yy, string urll)
+        public ViewUpdates(int xx, int yy, string tZipFilename, string tArchivedFilename)
         {
             InitializeComponent();
             //parse in the new ints location of where to display the application
             x = xx;
             y = yy;
-            url = urll;
+            zipFilename = tZipFilename;
+            archivedFilename = tArchivedFilename;
+            // url = urll;
         }
 
         private void ViewUpdates_Load(object sender, EventArgs e)
@@ -44,6 +49,18 @@ namespace RelhaxModpack
             {
                 difference = titleHeight - titleBar;
             }
+
+            string msgText = Utils.getStringFromZip(zipFilename, archivedFilename);
+            if (msgText.Equals(""))
+            {
+                richTextBox1.Text = "Error downloading data";
+            }
+            else
+            {
+                richTextBox1.Text = msgText;
+            }
+
+            /*
             client.DownloadStringCompleted += Client_DownloadStringCompleted;
             try
             {
@@ -54,6 +71,7 @@ namespace RelhaxModpack
                 richTextBox1.Text = "Error downloading data";
                 Utils.exceptionLog(ex);
             }
+            */
             ViewUpdates_SizeChanged(null, null);
         }
 
@@ -67,6 +85,7 @@ namespace RelhaxModpack
             System.Diagnostics.Process.Start(e.LinkText);
         }
 
+        /*
         private void Client_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
             try
@@ -76,8 +95,9 @@ namespace RelhaxModpack
             catch
             {
                 richTextBox1.Text = e.Error.ToString();
-                Utils.exceptionLog(e.Error);
+                Utils.exceptionLog("ViewUpdates", "Client_DownloadStringCompleted", e.Error);
             }  
         }
+        */
     }
 }
