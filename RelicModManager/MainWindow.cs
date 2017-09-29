@@ -248,7 +248,7 @@ namespace RelhaxModpack
             catch (Exception ex)
             {
                 Utils.exceptionLog("checkmanagerUpdates", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt", ex);
-                MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " supported_clients.txt");
+                MessageBox.Show(Translations.getTranslatedString("failedToDownload_1") + " manager version.txt");
                 Application.Exit();
             }
             Utils.appendToLog("Local application is " + managerVersion() + ", current online is " + version);
