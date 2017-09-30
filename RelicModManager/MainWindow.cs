@@ -1326,26 +1326,10 @@ namespace RelhaxModpack
                 }
                 modsConfigsWithData = null;
                 toggleUIButtons(true);
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Uninstall)
-            {
-                totalProgressBar.Value = 0;
-                parrentProgressBar.Value = 0;
-                message = string.Format("{0} {1} {2} {3}", Translations.getTranslatedString("uninstallingFile"), e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                    childProgressBar.Value = e.ChildProcessed;
-            }
-            else
-            {
-                Utils.appendToLog("Invalid state: " + e.InstalProgress);
-            }
-            downloadProgress.Text = message;
-            if (e.InstalProgress == InstallerEventArgs.InstallProgress.Done)
-            {
+
                 if (File.Exists(Path.Combine(tanksLocation, "WorldOfTanks.exe")))
                 {
-                    if (MessageBox.Show(string.Format("{0}\n\n{1}",Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("startGame")), Translations.getTranslatedString("information"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    if (MessageBox.Show(string.Format("{0}\n\n{1}", Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("startGame")), Translations.getTranslatedString("information"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         // call the worldoftanks client and close the relhax manager
                         ProcessStartInfo wot = new ProcessStartInfo();
@@ -1362,6 +1346,20 @@ namespace RelhaxModpack
                     MessageBox.Show(Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Uninstall)
+            {
+                totalProgressBar.Value = 0;
+                parrentProgressBar.Value = 0;
+                message = string.Format("{0} {1} {2} {3}", Translations.getTranslatedString("uninstallingFile"), e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
+                childProgressBar.Maximum = e.ChildTotalToProcess;
+                if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                    childProgressBar.Value = e.ChildProcessed;
+            }
+            else
+            {
+                Utils.appendToLog("Invalid state: " + e.InstalProgress);
+            }
+            downloadProgress.Text = message;
         }
 
         //Main method to uninstall the modpack
