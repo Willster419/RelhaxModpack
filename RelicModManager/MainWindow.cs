@@ -1375,7 +1375,7 @@ namespace RelhaxModpack
             {
                 totalProgressBar.Value = 0;
                 parrentProgressBar.Value = 0;
-                message = "Uninstalling file " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
+                message = string.Format("{0} {1} {2} {3}", Translations.getTranslatedString("uninstallingFile"), e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
                 childProgressBar.Maximum = e.ChildTotalToProcess;
                 if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
                     childProgressBar.Value = e.ChildProcessed;
@@ -1403,8 +1403,8 @@ namespace RelhaxModpack
             }
             //parse all strings
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
-            Utils.appendToLog("tanksLocation parsed as " + tanksLocation);
-            Utils.appendToLog("customUserMods parsed as " + Application.StartupPath + "\\RelHaxUserMods");
+            Utils.appendToLog(string.Format("tanksLocation parsed as {0}", tanksLocation));
+            Utils.appendToLog(string.Format("customUserMods parsed as {0}", Path.Combine(Application.StartupPath, "RelHaxUserMods")));
             tanksVersion = this.getFolderVersion();
             if (MessageBox.Show(Translations.getTranslatedString("confirmUninstallMessage"), Translations.getTranslatedString("confirmUninstallHeader"), MessageBoxButtons.YesNo) == DialogResult.Yes)
             {

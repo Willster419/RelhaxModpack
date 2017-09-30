@@ -843,6 +843,13 @@ namespace RelhaxModpack
             polish.Add("uninstallingText", "Deinstalacja w toku...");
             french.Add("uninstallingText", "Désinstallation...");
 
+            //Component:
+            //progress message
+            english.Add("uninstallingFile", "Uninstalling file");
+            german.Add("uninstallingFile", "Deinstalliere Datei");
+            polish.Add("uninstallingFile", "TODO");
+            french.Add("uninstallingFile", "TODO");
+
             //Componet: 
             //
             english.Add("specialMessage1", "If you are seeing this, it means that you have a specific computer configuration that is affected by a bug I can't replicate on my developer system. It's harmless, but if you could send your relHaxLog to me I can fix it and you can stop seeing this message");
