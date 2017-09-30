@@ -90,6 +90,8 @@ namespace RelhaxModpack
             //put them back when done
             if (!Directory.Exists(Path.Combine(TanksLocation, "res_mods", TanksVersion))) Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods", TanksVersion));
             if (!Directory.Exists(Path.Combine(TanksLocation, "mods", TanksVersion))) Directory.CreateDirectory(Path.Combine(TanksLocation, "mods", TanksVersion));
+            ResetArgs();
+            args.InstalProgress = InstallerEventArgs.InstallProgress.UninstallDone;
         }
 
         //Start the installation on the Wokrer thread

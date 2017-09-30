@@ -832,7 +832,7 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("confirmUninstallMessage", "Confirm you wish to uninstall?");
-            german.Add("confirmUninstallMessage", "Bestätige, wenn du installieren möchtest?");
+            german.Add("confirmUninstallMessage", "Möchtest du wirklich die Mods deinstallieren?");
             polish.Add("confirmUninstallMessage", "Potwierdzić deinstalację?");
             french.Add("confirmUninstallMessage", "Confirmez que vous voulez désinstaller?");
 
@@ -849,6 +849,13 @@ namespace RelhaxModpack
             german.Add("uninstallingFile", "Deinstalliere Datei");
             polish.Add("uninstallingFile", "TODO");
             french.Add("uninstallingFile", "TODO");
+
+            //Component: uninstallfinished messagebox
+            //
+            english.Add("uninstallFinished", "Uninstallation of Mods finished.");
+            german.Add("uninstallFinished", "Deinstallation der Mods beendet.");
+            polish.Add("uninstallFinished", "TODO");
+            french.Add("uninstallFinished", "TODO");
 
             //Componet: 
             //

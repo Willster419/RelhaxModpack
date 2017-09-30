@@ -1164,7 +1164,7 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractGlobalDependencies)
             {
-                message = createExtractionMsgBoxProgressOutput( new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() } );
+                message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -1354,6 +1354,10 @@ namespace RelhaxModpack
                 childProgressBar.Maximum = e.ChildTotalToProcess;
                 if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
                     childProgressBar.Value = e.ChildProcessed;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.UninstallDone)
+            {
+                MessageBox.Show(Translations.getTranslatedString("uninstallFinished"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
