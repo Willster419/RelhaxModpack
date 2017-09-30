@@ -70,7 +70,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("getTranslatedString", string.Format("key: {0}  Language: english", componetName), ex);
+                Utils.exceptionLog("getTranslatedString", string.Format("key: \"{0}\"  Language: english", componetName), ex);
                 return componetName;
             }
 
