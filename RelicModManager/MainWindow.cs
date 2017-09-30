@@ -389,7 +389,7 @@ namespace RelhaxModpack
             {
                 ProcessStartInfo info = new ProcessStartInfo();
                 info.FileName = newExeName;
-                info.Arguments = string.Join(" ", Environment.GetCommandLineArgs());
+                info.Arguments = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).ToArray());
                 Process installUpdate = new Process();
                 installUpdate.StartInfo = info;
                 installUpdate.Start();

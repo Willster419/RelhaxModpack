@@ -27,7 +27,7 @@ namespace RelhaxModpack
             //get the command line args for testing of auto install
             string[] commandArgs = Environment.GetCommandLineArgs();
             //log command line
-            Utils.appendToLog("Calling command line: " + string.Join(" ", commandArgs));
+            Utils.appendToLog("command line: " + string.Join(" ", commandArgs));
             for (int i = 0; i < commandArgs.Count(); i++)
             {
                 //check what type of arg each one is
