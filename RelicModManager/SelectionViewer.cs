@@ -55,7 +55,7 @@ namespace RelhaxModpack
                 XMLURL = "localFile",
                 Text = Translations.getTranslatedString("localFile")
             };
-            b.Location = new Point(6, (SelectConfigPanel.Controls.Count * b.Size.Height) + 5);
+            b.Location = new Point(6, (SelectConfigPanel.Controls.Count * (b.Size.Height-3)));
             SelectConfigPanel.Controls.Add(b);
 
             foreach (var node in Settings.developerSelections)
@@ -65,7 +65,7 @@ namespace RelhaxModpack
                     XMLURL = node.internalName,
                     Text = node.displayName
                 };
-                bb.Location = new Point(6, (SelectConfigPanel.Controls.Count * b.Size.Height) + 5);
+                bb.Location = new Point(6, (SelectConfigPanel.Controls.Count * (b.Size.Height-3)));
                 SelectConfigPanel.Controls.Add(bb);
             }
         }
