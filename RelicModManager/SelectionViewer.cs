@@ -15,7 +15,6 @@ namespace RelhaxModpack
         public string SelectedXML = "";
         private string SelectedDocument = "";
         private const int titleBar = 23;//set origionally for 23
-        private int ttIndex = -1;
         public SelectionViewer(int xx, int yy, string urll)
         {
             InitializeComponent();
