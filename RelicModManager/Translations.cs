@@ -1303,6 +1303,13 @@ namespace RelhaxModpack
             polish.Add("localFile", "Plik lokalny");
             french.Add("localFile", "Fichier local");
 
+            //Component: radioButtonToolTip
+            //
+            english.Add("createdAt", "Created at: {0}");
+            german.Add("createdAt", "Erstellt am: {0}");
+            polish.Add("createdAt", "TODO");
+            french.Add("createdAt", "TODO");
+
             //Section: Installer Messages
 
             //Componet: extractingPackage

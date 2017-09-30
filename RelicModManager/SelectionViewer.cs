@@ -74,8 +74,11 @@ namespace RelhaxModpack
                 rbToolTip.ReshowDelay = 500;
                 // Force the ToolTip text to be displayed whether or not the form is active.
                 rbToolTip.ShowAlways = true;
+                // create Date and Time with local syntax
+                string cultureDate = "";
+                Utils.convertDateToLocalCultureFormat(node.date, out cultureDate);
                 // Set up the ToolTip text for the Button and Checkbox.
-                rbToolTip.SetToolTip(bb, node.date);
+                rbToolTip.SetToolTip(bb, string.Format(Translations.getTranslatedString("createdAt"), cultureDate));
                 SelectConfigPanel.Controls.Add(bb);
             }
         }
@@ -106,40 +109,6 @@ namespace RelhaxModpack
         private void CancelButton_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void Client_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
-        {
-            SelectionRadioButton b = new SelectionRadioButton
-            {
-                XMLURL = "localFile",
-                Text = Translations.getTranslatedString("localFile")
-            };
-            b.Location = new Point(6, (SelectConfigPanel.Controls.Count * b.Size.Height) + 5);
-            SelectConfigPanel.Controls.Add(b);
-            XmlDocument doc = new XmlDocument();
-            try
-            {
-                doc.LoadXml(e.Result);
-                SelectConfigLabel.Text = Translations.getTranslatedString(SelectConfigLabel.Name);
-            }
-            catch
-            {
-                
-                Utils.exceptionLog(e.Error);
-                SelectConfigLabel.Text = Translations.getTranslatedString("error");
-            }
-            XmlNodeList Selections = doc.SelectNodes("//selections/selection");
-            foreach(XmlNode node in Selections)
-            {
-                SelectionRadioButton bb = new SelectionRadioButton
-                {
-                    XMLURL = node.InnerText,
-                    Text = node.Attributes[0].InnerText
-                };
-                bb.Location = new Point(6, (SelectConfigPanel.Controls.Count * b.Size.Height) + 5);
-                SelectConfigPanel.Controls.Add(bb);
-            }
         }
 
         private string getSelectedXMLDoc()

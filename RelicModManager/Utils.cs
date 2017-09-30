@@ -4361,5 +4361,28 @@ namespace RelhaxModpack
             }
             return textStr;
         }
+
+        public static bool convertDateToLocalCultureFormat(string date, out string dateOut)
+        {
+            DateTimeFormatInfo myDTFI = new CultureInfo("en-US").DateTimeFormat;
+            dateOut = date;
+            string[] mask = new string[] { "dd.MM.yyyy  h:mm:ss,ff", "dd.MM.yyyy HH:mm:ss,ff", "YYYY-MM-DD  h:mm:ss", "YYYY-MM-DD HH:mm:ss", "YYYY-MM-DD HH:mm:ss.ff", "YYYY-MM-DD  h:mm:ss.ff", "MM/DD/YYYY  h:mm:ss.ff",
+                "MM/DD/YYYY HH:mm:ss.ff", "ddd MM/DD/YYYY  h:mm:ss.ff", "ddd MM/DD/YYYY HH:mm:ss.ff","ddd M/d/yyyy h:mm:ss.ff","ddd M/d/yyyy H:mm:ss.ff", "yyyy-MM-dd HH:mm:ss"};
+            foreach (var m in mask)
+            {
+                if (DateTime.TryParseExact(date, m, System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite | DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite, out DateTime dateValue))
+                {
+                    Utils.appendToLog("found mask: " + m);
+                    dateOut = dateValue.ToString();
+                    return true;
+                }
+                else
+                {
+                    Utils.appendToLog("parsed: " + m);
+                }
+            }
+            Utils.appendToLog("not found: " + dateOut);
+            return false;
+        }
     }
 }

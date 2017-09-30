@@ -74,17 +74,11 @@ namespace RelhaxModpack
         //  interpret the created CiInfo buildTag as an "us-US" or a "de-DE" timeformat and return it as a local time- and dateformat string
         public static string compileTime()//if getting build error, check windows date and time format settings https://puu.sh/xgCqO/e97e2e4a34.png
         {
-            DateTimeFormatInfo myDTFI = new CultureInfo("en-US").DateTimeFormat;
-            string[] mask = new string[] { "dd.MM.yyyy  h:mm:ss,ff", "dd.MM.yyyy HH:mm:ss,ff", "YYYY-MM-DD  h:mm:ss.ff", "YYYY-MM-DD HH:mm:ss.ff", "MM/DD/YYYY  h:mm:ss.ff",
-                "MM/DD/YYYY HH:mm:ss.ff", "ddd MM/DD/YYYY  h:mm:ss.ff", "ddd MM/DD/YYYY HH:mm:ss.ff","ddd M/d/yyyy h:mm:ss.ff","ddd M/d/yyyy H:mm:ss.ff"};
-            foreach (var m in mask)
-            {
-                if (DateTime.TryParseExact(CiInfo.BuildTag, m, System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite | DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite, out DateTime dateValue))
-                {
-                    return dateValue.ToString();
-                }
-            }
-            return "Error in dateTime format: " + CiInfo.BuildTag;
+            string date = CiInfo.BuildTag;
+            if (Utils.convertDateToLocalCultureFormat(date, out date))
+                return date;
+            else
+                return "Error in dateTime format: " + date;
         }
 
         /// <summary>
