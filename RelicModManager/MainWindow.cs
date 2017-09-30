@@ -385,7 +385,34 @@ namespace RelhaxModpack
             catch (Exception ex)
             {
                 Utils.exceptionLog("updater_DownloadFileCompleted", "create RelicCopyUpdate.bat failed", ex);
-                MessageBox.Show(Translations.getTranslatedString("failedCreateUpdateBat") + newExeName, Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                string msgTxt = string.Format(Translations.getTranslatedString("failedCreateUpdateBat"), Path.Combine(Application.StartupPath, "RelhaxModpack.exe"), "RelhaxModpack_update.exe", "RelhaxModpack.exe");
+                if (DialogResult.Yes == MessageBox.Show(msgTxt, Translations.getTranslatedString("critical"), MessageBoxButtons.YesNo, MessageBoxIcon.Stop))
+                {
+                    // call the windows explorer and open at the relhax folder
+                    ProcessStartInfo explorer = new ProcessStartInfo();
+                    explorer.FileName = "explorer.exe";
+                    explorer.Arguments = Application.StartupPath;
+                    Process callExplorer = new Process();
+                    callExplorer.StartInfo = explorer;
+                    callExplorer.Start();
+                }
+                try
+                {
+                    // try to create a textfile at the temp folder
+                    string howToPath = Path.Combine(Path.GetTempPath(), "howTo.txt");
+                    File.WriteAllText(howToPath, msgTxt);
+                    // call the notepad and open the howto.txt file
+                    ProcessStartInfo notepad = new ProcessStartInfo();
+                    notepad.FileName = "notepad.exe";
+                    notepad.Arguments = howToPath;
+                    Process callNotepad = new Process();
+                    callNotepad.StartInfo = notepad;
+                    callNotepad.Start();
+                }
+                catch (Exception e2)
+                {
+                    Utils.exceptionLog("updater_DownloadFileCompleted", "failed to create howTo.txt", e2);
+                }
                 Application.Exit();
             }
 
