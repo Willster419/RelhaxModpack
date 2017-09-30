@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Xml.XPath;
 using System.Xml.Linq;
+using System.Text;
 
 namespace RelhaxModpack
 {
@@ -366,25 +367,28 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.getTranslatedString("cantDownloadNewVersion"));
                 this.Close();
             }
-            // string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
 
-            if (!File.Exists(Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat")))
-            {
-                using (downloader = new WebClient())
-                {
-                    try
-                    {
-                        downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/RelicCopyUpdate.txt", Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat"));
-                    }
-                    catch (Exception e2)
-                    {
-                        Utils.exceptionLog("updater_DownloadFileCompleted", "failed to download => RelicCopyUpdate.bat", e2);
-                        MessageBox.Show(string.Format("{0} RelicCopyUpdate.bat", Translations.getTranslatedString("failedToDownload_1")));
-                        Application.Exit();
-                    }
-                }
-            }
             string newExeName = Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat");
+            try
+            {
+                // http://www.motobit.com/util/base64-decoder-encoder.asp
+                string base64Str =
+                    "QEVDSE8gT0ZGDQpFQ0hPIFVwZGF0aW5nIEFwcGxpY2F0aW9uLi4uDQpwaW5nIDEyNy4wLjAuMSAt" +
+                    "biAzID4gbnVsDQpkZWwgIC9RIFJlbGhheE1vZHBhY2suZXhlIDI + IG51bA0KY29weSAvWSBSZWxo" +
+                    "YXhNb2RwYWNrX3VwZGF0ZS5leGUgUmVsaGF4TW9kcGFjay5leGUgMj4gbnVsDQpkZWwgL1EgUmVs" +
+                    "aWNNb2RNYW5hZ2VyX3VwZGF0ZS5leGUgMj4gbnVsDQpkZWwgL1EgUmVsaGF4TW9kcGFja191cGRh" +
+                    "dGUuZXhlIDI + IG51bA0KZGVsIC9RIFJlbGljTW9kTWFuYWdlci5leGUgMj4gbnVsDQpFQ0hPIFN0" +
+                    "YXJ0aW5nIEFwcGxpY2F0aW9uLi4uDQpzdGFydCAiIiAiUmVsaGF4TW9kcGFjay5leGUiICUxICUy" +
+                    "ICUzICU0ICU1ICU2ICU3ICU4ICU5IDI + IG51bA0K";
+                File.WriteAllBytes(@newExeName, Convert.FromBase64String(base64Str));
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("updater_DownloadFileCompleted", "create RelicCopyUpdate.bat failed", ex);
+                MessageBox.Show(Translations.getTranslatedString("failedCreateUpdateBat") + newExeName, Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                Application.Exit();
+            }
+
             try
             {
                 ProcessStartInfo info = new ProcessStartInfo();
@@ -396,7 +400,7 @@ namespace RelhaxModpack
             }
             catch (Win32Exception e3)
             {
-                Utils.exceptionLog("updater_DownloadFileCompleted", "WARNING: could not start new application version", e3);
+                Utils.exceptionLog("updater_DownloadFileCompleted", "could not start new application version", e3);
                 MessageBox.Show(Translations.getTranslatedString("cantStartNewApp") + newExeName);
             }
             Application.Exit();

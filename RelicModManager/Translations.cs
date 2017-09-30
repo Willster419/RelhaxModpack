@@ -16,6 +16,7 @@ namespace RelhaxModpack
 
         public static string getTranslatedString(string componetName)
         {
+            string s = "";
             switch (language)
             {
                 case (Languages.English):
@@ -27,19 +28,28 @@ namespace RelhaxModpack
                 case (Languages.German):
                     if (german.Contains(componetName))
                     {
-                        return (string)german[componetName];
+                        s = (string)german[componetName];
+                        if (s.ToUpper().Equals("TODO"))
+                            return (string)english[componetName];
+                        return s;
                     }
                     break;
                 case (Languages.Polish):
                     if (polish.Contains(componetName))
                     {
-                        return (string)polish[componetName];
+                        s = (string)polish[componetName];
+                        if (s.ToUpper().Equals("TODO"))
+                            return (string)english[componetName];
+                        return s;
                     }
                     break;
                 case (Languages.French):
                     if (french.Contains(componetName))
                     {
-                        return (string)french[componetName];
+                        s = (string)french[componetName];
+                        if (s.ToUpper().Equals("TODO"))
+                            return (string)english[componetName];
+                        return s;
                     }
                     break;
             }
@@ -728,6 +738,13 @@ namespace RelhaxModpack
             german.Add("cantDownloadNewVersion", "Die neue Version kann nicht heruntergeladen werden.");
             polish.Add("cantDownloadNewVersion", "Niepowodzenie przy pobieraniu nowej wersji.");
             french.Add("cantDownloadNewVersion", "Échec du téléchargement des mise à jours. Fermeture.");
+
+            //Componet: 
+            //
+            english.Add("failedCreateUpdateBat", "Unable to create update process.\n\nPlease manually delete the file:\n{0}\n\nrename file:\n{1}\nto:\n{2}\n\nDirectly jump to the folder?");
+            german.Add("failedCreateUpdateBat", "Updateprozess kann leider nicht erstellt werden.\n\nLösche bitte diese Datei von Hand:\n{0}\n\nbenennte diese Datei:\n{1}\nin diese um:\n{2}\n\nDirekt zum Ordner springen?");
+            polish.Add("failedCreateUpdateBat", "TODO");
+            french.Add("failedCreateUpdateBat", "TODO");
 
             //Componet: 
             //
