@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 
 namespace RelhaxModpack
 {
@@ -16,45 +17,63 @@ namespace RelhaxModpack
 
         public static string getTranslatedString(string componetName)
         {
-            string s = "";
-            switch (language)
+            try
             {
-                case (Languages.English):
-                    if (english.Contains(componetName))
-                    {
-                        return (string)english[componetName];
-                    }
-                    break;
-                case (Languages.German):
-                    if (german.Contains(componetName))
-                    {
-                        s = (string)german[componetName];
-                        if (s.ToUpper().Equals("TODO"))
+                string s = "";
+                switch (language)
+                {
+                    case (Languages.English):
+                        if (english.Contains(componetName))
+                        {
                             return (string)english[componetName];
-                        return s;
-                    }
-                    break;
-                case (Languages.Polish):
-                    if (polish.Contains(componetName))
-                    {
-                        s = (string)polish[componetName];
-                        if (s.ToUpper().Equals("TODO"))
-                            return (string)english[componetName];
-                        return s;
-                    }
-                    break;
-                case (Languages.French):
-                    if (french.Contains(componetName))
-                    {
-                        s = (string)french[componetName];
-                        if (s.ToUpper().Equals("TODO"))
-                            return (string)english[componetName];
-                        return s;
-                    }
-                    break;
+                        }
+                        break;
+                    case (Languages.German):
+                        if (german.Contains(componetName))
+                        {
+                            s = (string)german[componetName];
+                            if (s.ToUpper().Equals("TODO"))
+                            {
+                                Utils.appendToLog(string.Format("WARNING: german translation for \"{0}\" is missing.", componetName));
+                                s = (string)english[componetName];
+                            }
+                            return s;
+                        }
+                        break;
+                    case (Languages.Polish):
+                        if (polish.Contains(componetName))
+                        {
+                            s = (string)polish[componetName];
+                            if (s.ToUpper().Equals("TODO"))
+                            {
+                                Utils.appendToLog(string.Format("WARNING: polish translation for \"{0}\" is missing.", componetName));
+                                s = (string)english[componetName];
+                            }
+                            return s;
+                        }
+                        break;
+                    case (Languages.French):
+                        if (french.Contains(componetName))
+                        {
+                            s = (string)french[componetName];
+                            if (s.ToUpper().Equals("TODO"))
+                            {
+                                Utils.appendToLog(string.Format("WARNING: french translation for \"{0}\" is missing.", componetName));
+                                s = (string)english[componetName];
+                            }
+                            return s;
+                        }
+                        break;
+                }
+                Utils.appendToLog(string.Format("ERROR: no value in language hash for key: {0}  Language: {1}", componetName, language));
+                return componetName;
             }
-            Utils.appendToLog(string.Format("ERROR: no value in language hash for key: {0}  Language: {1}", componetName , language));
-            return componetName;
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("getTranslatedString", string.Format("key: {0}  Language: english", componetName), ex);
+                return componetName;
+            }
+
         }
         //method to load each translated string based on which language is selected
         public static void loadHashes()
