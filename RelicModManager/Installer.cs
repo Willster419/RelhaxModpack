@@ -561,11 +561,11 @@ namespace RelhaxModpack
                         if (thePath.Equals(parsedFileName))
                         {
                             //the file has been found in the temp directory
-                            if (!Directory.Exists(TanksLocation + "\\" + Path.GetFullPath(s)))
-                                Directory.CreateDirectory(TanksLocation + "\\" + Path.GetDirectoryName(s));
-                            if (File.Exists(TanksLocation + "\\" + s))
-                                File.Delete(TanksLocation + "\\" + s);
-                            File.Move(ss, TanksLocation + "\\" + s);
+                            if (!Directory.Exists(Path.Combine(TanksLocation, Path.GetFullPath(s))))
+                                Directory.CreateDirectory(Path.Combine(TanksLocation, Path.GetDirectoryName(s)));
+                            if (File.Exists(Path.Combine(TanksLocation, s)))
+                                File.Delete(Path.Combine(TanksLocation, s));
+                            File.Move(ss, Path.Combine(TanksLocation, s));
                         }
                     }
                     args.ChildProcessed++;
@@ -589,8 +589,8 @@ namespace RelhaxModpack
             {
                 try
                 {
-                    File.SetAttributes(TanksLocation + @"\_patch", FileAttributes.Normal);
-                    di = new DirectoryInfo(TanksLocation + @"\_patch");
+                    File.SetAttributes(Path.Combine(TanksLocation, "_patch"), FileAttributes.Normal);
+                    di = new DirectoryInfo(Path.Combine(TanksLocation, "_patch"));
                     //get every patch file in the folder
                     diArr = di.GetFiles(@"*.xml", System.IO.SearchOption.TopDirectoryOnly);
                     kontinue = true;
@@ -689,21 +689,21 @@ namespace RelhaxModpack
                 InstallWorker.ReportProgress(0);
             }
             //all done, delete the patch folder
-            if (Directory.Exists(TanksLocation + "\\_patch"))
-                Directory.Delete(TanksLocation + "\\_patch", true);
+            if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
+                Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
         }
 
         //Step 14: Install Fonts
         public void InstallFonts()
         {
             Utils.appendToLog("Checking for fonts to install");
-            if (!Directory.Exists(TanksLocation + "\\_fonts"))
+            if (!Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
             {
                 Utils.appendToLog("No fonts to install");
                 //no fonts to install, done display
                 return;
             }
-            string[] fonts = Directory.GetFiles(TanksLocation + "\\_fonts",@"*.*",System.IO.SearchOption.TopDirectoryOnly);
+            string[] fonts = Directory.GetFiles(Path.Combine(TanksLocation, "_fonts"), @"*.*",System.IO.SearchOption.TopDirectoryOnly);
             if (fonts.Count() == 0)
             {
                 //done display
