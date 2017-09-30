@@ -488,15 +488,9 @@ namespace RelhaxModpack
                     {
                         Utils.appendToLog("loading dat config file");
                         string xmlString = Utils.getStringFromZip(Settings.modInfoDatFile, "modInfo.xml");
-                        Utils.appendToLog("Test 20");
                         doc = XDocument.Parse(xmlString, LoadOptions.SetLineInfo);
-                        Utils.appendToLog("Test 21");
-                        // create new developerSelectionsNameList
-                        // Settings.developerSelections = new List<DeveloperSelections>();
-                        // parseDeveloperSelections(doc, Settings.developerSelections);
+                        // create new developerSelections NameList
                         parseDeveloperSelections(doc);
-                        Utils.appendToLog("Test 22");
-                        Utils.appendToLog("lenght: " + Settings.developerSelections.Count);
                     }
                     else
                     {
@@ -3781,26 +3775,15 @@ namespace RelhaxModpack
         }
         private static void parseDeveloperSelections(XDocument doc)
         {
-            // developerSelections.Clear();
-            Utils.appendToLog("Test 25");
             DeveloperSelections d;
-            Utils.appendToLog("Test 26");
             var xMembers = from members in doc.Descendants("selections").Elements() select members;
-
-            // foreach (XElement xe in doc.Descendants("selections").ToList())
             foreach (XElement x in xMembers)
             {
-                Utils.appendToLog("Test 27");
                 d = new DeveloperSelections();
-                Utils.appendToLog("Test 28");
-                Utils.appendToLog(x.Value);
                 d.internalName = x.Value;
-                Utils.appendToLog(x.Attribute("displayName").Value);
                 d.displayName = x.Attribute("displayName").Value;
-                Utils.appendToLog(x.Attribute("date").Value);
                 d.date = x.Attribute("date").Value;
                 Settings.developerSelections.Add(d);
-                Utils.appendToLog("lenght: " + Settings.developerSelections.Count);
             }
         }
 
