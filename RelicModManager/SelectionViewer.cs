@@ -11,7 +11,6 @@ namespace RelhaxModpack
         private int x, y;
         private WebClient client = new WebClient();
         private string url = "";
-        private string modInfoFile = "";
         private int difference;
         public string SelectedXML = "";
         private string SelectedDocument = "";
@@ -22,7 +21,6 @@ namespace RelhaxModpack
             //parse in the new ints location of where to display the application
             x = xx;
             y = yy;
-            // modInfoFile = mi;
             url = urll;
         }
         private void SelectionViewer_Load(object sender, EventArgs e)
@@ -51,17 +49,7 @@ namespace RelhaxModpack
             SelectConfigLabel.Text = Translations.getTranslatedString("loading");
             SelectButton.Text = Translations.getTranslatedString("select");
             CancelCloseButton.Text = Translations.getTranslatedString("cancel");
-            /*
-            client.DownloadStringCompleted += Client_DownloadStringCompleted;
-            try
-            {
-                client.DownloadStringAsync(new Uri(url));
-            }
-            catch (WebException ex)
-            {
-                Utils.exceptionLog(ex);
-            }
-            */
+
             SelectionRadioButton b = new SelectionRadioButton
             {
                 XMLURL = "localFile",
@@ -69,33 +57,7 @@ namespace RelhaxModpack
             };
             b.Location = new Point(6, (SelectConfigPanel.Controls.Count * b.Size.Height) + 5);
             SelectConfigPanel.Controls.Add(b);
-            // XmlDocument doc = new XmlDocument();
-            /*
-            try
-            {
 
-                doc.LoadXml(e.Result);
-                SelectConfigLabel.Text = Translations.getTranslatedString(SelectConfigLabel.Name);
-            }
-            catch
-            {
-
-                Utils.exceptionLog(e.Error);
-                SelectConfigLabel.Text = Translations.getTranslatedString("error");
-            }
-            XmlNodeList Selections = doc.SelectNodes("//selections/selection");
-            */
-            /*
-            foreach (XmlNode node in Selections)
-            {
-                SelectionRadioButton bb = new SelectionRadioButton
-                {
-                    XMLURL = node.InnerText,
-                    Text = node.Attributes[0].InnerText
-                };
-                bb.Location = new Point(6, (SelectConfigPanel.Controls.Count * b.Size.Height) + 5);
-                SelectConfigPanel.Controls.Add(bb);
-            }*/
             foreach (var node in Settings.developerSelections)
             {
                 SelectionRadioButton bb = new SelectionRadioButton
