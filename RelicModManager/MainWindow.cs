@@ -1694,6 +1694,7 @@ namespace RelhaxModpack
         {
             //save settings
             if (Program.saveSettings) Settings.saveSettings();
+            Utils.appendToLog("cleaning \"RelHaxTemp\" folder");
             Utils.DirectoryDelete(Path.Combine(Application.StartupPath, "RelHaxTemp"), true);
             Utils.appendToLog("Application Closing");
             Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
