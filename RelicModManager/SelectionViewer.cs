@@ -81,41 +81,6 @@ namespace RelhaxModpack
             }
         }
 
-        /*
-         // Create the ToolTip and associate with the Form container.
-         ToolTip toolTip1 = new ToolTip();
-
-         // Set up the delays for the ToolTip.
-         toolTip1.AutoPopDelay = 5000;
-         toolTip1.InitialDelay = 1000;
-         toolTip1.ReshowDelay = 500;
-         // Force the ToolTip text to be displayed whether or not the form is active.
-         toolTip1.ShowAlways = true;
-
-         // Set up the ToolTip text for the Button and Checkbox.
-         toolTip1.SetToolTip(this.button1, "My button1");
-         toolTip1.SetToolTip(this.checkBox1, "My checkBox1");
-         */
-        /*
-        // https://stackoverflow.com/questions/802213/tooltips-for-checkedlistbox-items
-        //Make ttIndex a global integer variable to store index of item currently showing tooltip.
-        //Check if current location is different from item having tooltip, if so call method
-        if (ttIndex != checkedListBox1.IndexFromPoint(e.Location))
-                ShowToolTip();
-
-
-        private void ShowToolTip()
-        {
-            ttIndex = checkedListBox1.IndexFromPoint(checkedListBox1.PointToClient(MousePosition));
-            if (ttIndex > -1)
-            {
-                Point p = PointToClient(MousePosition);
-                toolTip1.ToolTipTitle = "Tooltip Title";
-                toolTip1.SetToolTip(checkedListBox1, checkedListBox1.Items[ttIndex].ToString());
-
-            }
-        }*/
-
         private void SelectButton_Click(object sender, EventArgs e)
         {
             SelectedDocument = this.getSelectedXMLDoc();
