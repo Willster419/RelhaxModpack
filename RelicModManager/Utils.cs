@@ -4268,16 +4268,10 @@ namespace RelhaxModpack
             {
                 if (DateTime.TryParseExact(date, m, System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite | DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite, out DateTime dateValue))
                 {
-                    Utils.appendToLog("found mask: " + m);
                     dateOut = dateValue.ToString();
                     return true;
                 }
-                else
-                {
-                    Utils.appendToLog("parsed: " + m);
-                }
             }
-            Utils.appendToLog("not found: " + dateOut);
             return false;
         }
     }
