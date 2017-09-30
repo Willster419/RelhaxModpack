@@ -1560,8 +1560,8 @@ namespace RelhaxModpack
             FileInfo[] fi = null;
             try
             {
-                File.SetAttributes(Application.StartupPath + "\\RelHaxDownloads", FileAttributes.Normal);
-                DirectoryInfo di = new DirectoryInfo(Application.StartupPath + "\\RelHaxDownloads");
+                File.SetAttributes(Path.Combine(Application.StartupPath, "RelHaxDownloads"), FileAttributes.Normal);
+                DirectoryInfo di = new DirectoryInfo(Path.Combine(Application.StartupPath, "RelHaxDownloads"));
                 //get every patch file in the folder
                 fi = di.GetFiles(@"*.zip", SearchOption.TopDirectoryOnly);
             }
@@ -1600,7 +1600,7 @@ namespace RelhaxModpack
                                 //for each zip file, verify it exists, set properties to normal, delete it
                                 try
                                 {
-                                    string file = Application.StartupPath + "\\RelHaxDownloads\\" + s;
+                                    string file = Path.Combine(Application.StartupPath, "RelHaxDownloads", s);
                                     File.SetAttributes(file, FileAttributes.Normal);
                                     File.Delete(file);
                                     // remove file from database, too
@@ -1612,7 +1612,7 @@ namespace RelhaxModpack
                                 {
                                     retry = true;
                                     Utils.exceptionLog("checkForOldZipFiles", "delete", e);
-                                    DialogResult res = MessageBox.Show(Translations.getTranslatedString("fileDeleteFailed") + " " + s, "", MessageBoxButtons.RetryCancel);
+                                    DialogResult res = MessageBox.Show(string.Format("{0} {1}", Translations.getTranslatedString("fileDeleteFailed"), s), "", MessageBoxButtons.RetryCancel);
                                     if (res == System.Windows.Forms.DialogResult.Cancel)
                                     {
                                         breakOut = true;
@@ -1694,6 +1694,7 @@ namespace RelhaxModpack
         {
             //save settings
             if (Program.saveSettings) Settings.saveSettings();
+            Utils.DirectoryDelete(Path.Combine(Application.StartupPath, "RelHaxTemp"), true);
             Utils.appendToLog("Application Closing");
             Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
         }

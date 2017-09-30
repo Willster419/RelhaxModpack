@@ -4274,5 +4274,44 @@ namespace RelhaxModpack
             }
             return false;
         }
+
+        public static void DirectoryDelete(string folderPath, bool doSubfolder = false, bool deleteTopfolder = false)
+        {
+            foreach (string file in Directory.GetFiles(folderPath))
+            {
+                try
+                {
+                    File.Delete(file);
+                }
+                catch (Exception ex)
+                {
+                    Utils.exceptionLog("DirectoryDelete", "Filename=" + file, ex);
+                }
+            }
+
+            if (doSubfolder)
+            {
+                foreach (string dir in Directory.GetDirectories(folderPath))
+                {
+                    try
+                    {
+                        DirectoryDelete(dir, doSubfolder, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.exceptionLog("DirectoryDelete", "Folder=" + dir, ex);
+                    }
+                }
+            }
+
+            try
+            {
+                if (deleteTopfolder) Directory.Delete(folderPath);
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("DirectoryDelete", "Folder=" + folderPath, ex);
+            }
+        }
     }
 }

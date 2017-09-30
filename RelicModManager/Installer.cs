@@ -88,8 +88,8 @@ namespace RelhaxModpack
             args.InstalProgress = InstallerEventArgs.InstallProgress.Uninstall;
             DeleteMods();
             //put them back when done
-            if (!Directory.Exists(TanksLocation + "\\res_mods\\" + TanksVersion)) Directory.CreateDirectory(TanksLocation + "\\res_mods\\" + TanksVersion);
-            if (!Directory.Exists(TanksLocation + "\\mods\\" + TanksVersion)) Directory.CreateDirectory(TanksLocation + "\\mods\\" + TanksVersion);
+            if (!Directory.Exists(Path.Combine(TanksLocation, "res_mods", TanksVersion))) Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods", TanksVersion));
+            if (!Directory.Exists(Path.Combine(TanksLocation, "mods", TanksVersion))) Directory.CreateDirectory(Path.Combine(TanksLocation, "mods", TanksVersion));
         }
 
         //Start the installation on the Wokrer thread
@@ -122,12 +122,12 @@ namespace RelhaxModpack
                 Utils.appendToLog("deleteLogs selected, deleting wot, xvm, and pmod logs");
                 try
                 {
-                    if (File.Exists(TanksLocation + "\\python.log"))
-                        File.Delete(TanksLocation + "\\python.log");
-                    if (File.Exists(TanksLocation + "\\xvm.log"))
-                        File.Delete(TanksLocation + "\\xvm.log");
-                    if (File.Exists(TanksLocation + "\\pmod.log"))
-                        File.Delete(TanksLocation + "\\pmod.log");
+                    if (File.Exists(Path.Combine(TanksLocation, "python.log")))
+                        File.Delete(Path.Combine(TanksLocation, "python.log"));
+                    if (File.Exists(Path.Combine(TanksLocation, "xvm.log")))
+                        File.Delete(Path.Combine(TanksLocation, "xvm.log"));
+                    if (File.Exists(Path.Combine(TanksLocation, "pmod.log")))
+                        File.Delete(Path.Combine(TanksLocation, "pmod.log"));
                 }
                 catch (Exception ex)
                 {
@@ -155,7 +155,7 @@ namespace RelhaxModpack
             ResetArgs();
             //Step 11: Patch Mods
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchMods;
-            if (Directory.Exists(TanksLocation + "\\_patch"))
+            if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
                 PatchFiles();
             ResetArgs();
             //Step 12: Extract User Mods
@@ -165,12 +165,12 @@ namespace RelhaxModpack
             ResetArgs();
             //Step 13: Patch Mods if User Mods extracted patch files
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchUserMods;
-            if (Directory.Exists(TanksLocation + "\\_patch"))
+            if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
                 PatchFiles();
             ResetArgs();
             //Step 14: Install Fonts
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallUserFonts;
-            if (Directory.Exists(TanksLocation + "\\_fonts"))
+            if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
                 InstallFonts();
         }
 
@@ -201,21 +201,21 @@ namespace RelhaxModpack
         public void BackupMods()
         {
             //backupResMods the mods folder
-            if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup"))
-                Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup");
+            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup")))
+                Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup"));
             //create a new mods folder based on date and time
             //yyyy-MM-dd-HH-mm-ss
             DateTime now = DateTime.Now;
             string folderDateName = String.Format("{0:yyyy-MM-dd-HH-mm-ss}", now);
-            if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\res_mods"))
-                Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\res_mods");
-            if (!Directory.Exists(Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\mods"))
-                Directory.CreateDirectory(Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\mods");
-            NumFilesToProcess(Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\mods");
-            NumFilesToProcess(Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\res_mods");
+            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "res_mods")))
+                Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "res_mods"));
+            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "mods")))
+                Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "mods"));
+            NumFilesToProcess(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "mods"));
+            NumFilesToProcess(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "res_mods"));
             InstallWorker.ReportProgress(0);
-            DirectoryCopy(TanksLocation + "\\res_mods", Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\res_mods", true);
-            DirectoryCopy(TanksLocation + "\\mods", Application.StartupPath + "\\RelHaxModBackup\\" + folderDateName + "\\mods", true);
+            DirectoryCopy(Path.Combine(TanksLocation, "res_mods"), Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "res_mods"), true);
+            DirectoryCopy(Path.Combine(TanksLocation, "mods"), Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "mods"), true);
         }
 
         //Step 2: Backup User Data
@@ -227,7 +227,7 @@ namespace RelhaxModpack
                 {
 
                     string startLoc = TanksLocation + s;
-                    string destLoc = Application.StartupPath + "\\RelHaxTemp\\" + Utils.getValidFilename(dbo.name + "_" + Path.GetFileName(s));
+                    string destLoc = Path.Combine(Application.StartupPath, "RelHaxTemp", Utils.getValidFilename(dbo.name + "_" + Path.GetFileName(s)));
                     try
                     {
                         if (File.Exists(startLoc))
@@ -247,14 +247,14 @@ namespace RelhaxModpack
         {
             try
             {
-                NumFilesToProcess(TanksLocation + "\\res_mods");
-                NumFilesToProcess(TanksLocation + "\\mods");
+                NumFilesToProcess(Path.Combine(TanksLocation, "res_mods"));
+                NumFilesToProcess(Path.Combine(TanksLocation, "mods"));
                 InstallWorker.ReportProgress(0);
                 //don't forget to delete the readme files
-                if (Directory.Exists(TanksLocation + "\\_readme"))
-                    Directory.Delete(TanksLocation + "\\_readme", true);
-                DirectoryDelete(TanksLocation + "\\res_mods", true);
-                DirectoryDelete(TanksLocation + "\\mods", true);
+                if (Directory.Exists(Path.Combine(TanksLocation, "_readme")))
+                    Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
+                DirectoryDelete(Path.Combine(TanksLocation, "res_mods"), true);
+                DirectoryDelete(Path.Combine(TanksLocation, "mods"), true);
             }
             catch (Exception ex)
             {
@@ -543,7 +543,7 @@ namespace RelhaxModpack
         {
             args.ParrentTotalToProcess = ModsConfigsWithData.Count;
             InstallWorker.ReportProgress(0);
-            string[] fileList = Directory.GetFiles(Application.StartupPath + "\\RelHaxTemp");
+            string[] fileList = Directory.GetFiles(Path.Combine(Application.StartupPath, "RelHaxTemp"));
             foreach (DatabaseObject dbo in ModsConfigsWithData)
             {
                 args.ChildTotalToProcess = dbo.userFiles.Count;
@@ -931,7 +931,7 @@ namespace RelhaxModpack
                     }
                     catch (Exception e)
                     {
-                        Utils.exceptionLog("DirectoryDelete", e);
+                        Utils.exceptionLog("DirectoryDelete", file.FullName, e);
                         DialogResult res = MessageBox.Show(Translations.getTranslatedString("extractionErrorMessage"), Translations.getTranslatedString("extractionErrorHeader"), MessageBoxButtons.RetryCancel);
                         if (res == DialogResult.Retry)
                         {
@@ -973,6 +973,7 @@ namespace RelhaxModpack
                 }
             }
         }
+        
         //recursivly copies every file from one place to another
         private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, bool reportProgress = true)
         {
