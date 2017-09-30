@@ -309,40 +309,51 @@ namespace RelhaxModpack
 
             string version = "";
             string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");  //xml doc name can change
-            XDocument doc = XDocument.Parse(xmlString);
-            var databaseVersion = doc.Descendants().Where(n => n.Name == "manager").FirstOrDefault();
-            if (databaseVersion != null)
-                version = databaseVersion.Value;
-            Utils.appendToLog(string.Format("Local application is {0}, current online is {1}", managerVersion(), version));
-
-            if (!version.Equals(managerVersion()))
+            if (!xmlString.Equals(""))
             {
-                Utils.appendToLog("exe is out of date. displaying user update window");
-                //out of date
-                VersionInfo vi = new VersionInfo();
-                vi.ShowDialog();
-                DialogResult result = vi.result;
-                if (result.Equals(DialogResult.Yes))
+                XDocument doc = XDocument.Parse(xmlString);
+                var databaseVersion = doc.Descendants().Where(n => n.Name == "manager").FirstOrDefault();
+                if (databaseVersion != null)
+                    version = databaseVersion.Value;
+                Utils.appendToLog(string.Format("Local application is {0}, current online is {1}", managerVersion(), version));
+
+                if (!version.Equals(managerVersion()))
                 {
-                    Utils.appendToLog("User accepted downloading new version");
-                    //download new version
-                    sw.Reset();
-                    sw.Start();
-                    string newExeName = Application.StartupPath + "\\RelhaxModpack_update" + ".exe";
-                    updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
-                    updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
-                    if (File.Exists(newExeName)) File.Delete(newExeName);
-                    updater.DownloadFileAsync(new Uri("http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe"), newExeName);
-                    Utils.appendToLog("New application download started");
-                    currentModDownloading = "update ";
-                }
-                else
-                {
-                    Utils.appendToLog("User declined downlading new version");
-                    //close the application
-                    this.Close();
+                    Utils.appendToLog("exe is out of date. displaying user update window");
+                    //out of date
+                    VersionInfo vi = new VersionInfo();
+                    vi.ShowDialog();
+                    DialogResult result = vi.result;
+                    if (result.Equals(DialogResult.Yes))
+                    {
+                        Utils.appendToLog("User accepted downloading new version");
+                        //download new version
+                        sw.Reset();
+                        sw.Start();
+                        string newExeName = Path.Combine(Application.StartupPath, "RelhaxModpack_update.exe");
+                        updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
+                        updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
+                        if (File.Exists(newExeName)) File.Delete(newExeName);
+                        updater.DownloadFileAsync(new Uri("http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe"), newExeName);
+                        Utils.appendToLog("New application download started");
+                        currentModDownloading = "update ";
+                    }
+                    else
+                    {
+                        Utils.appendToLog("User declined downlading new version");
+                        //close the application
+                        this.Close();
+                    }
                 }
             }
+            else
+            {
+                Utils.appendToLog("ERROR. Failed to get 'manager_version.xml'");
+                MessageBox.Show(Translations.getTranslatedString("failedManager_version"), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                //close the application
+                this.Close();
+            }
+
         }
         //handler for when the update download is complete
         void updater_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
@@ -357,7 +368,7 @@ namespace RelhaxModpack
             }
             string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
 
-            if (!File.Exists(Application.StartupPath + "\\RelicCopyUpdate.bat"))
+            if (!File.Exists(Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat")))
             {
                 using (downloader = new WebClient())
                 {
@@ -409,19 +420,54 @@ namespace RelhaxModpack
         //check to see if the supplied version of tanks is on the list of supported client versions
         private bool isClientVersionSupported(string detectedVersion)
         {
+            /*
             supportedVersions.Clear();
             bool result = false;
             string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "supported_clients.xml");  //xml doc name can change
             StringReader rdr = new StringReader(xmlString);
             var doc = new XPathDocument(rdr);
-            foreach (var version in doc.CreateNavigator().Select("//versions/version"))
+            foreach (XPathDocument version in doc.CreateNavigator().Select("//versions/version"))
             {
                 if (version.ToString().Equals(detectedVersion) || (version.ToString().Equals('T' + detectedVersion.Trim()) && Program.testMode))
                 {
+                    // Settings.tanksOnlineFolderVersion = version.CreateNavigator().GetAttribute("folder", null);
                     result = true;
                 }
                 supportedVersions.Add(version.ToString());
             }
+            return result;
+            */
+            supportedVersions.Clear();
+            Utils.appendToLog("Test 1");
+            string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "supported_clients.xml");  //xml doc name can change
+            Utils.appendToLog("Test 2");
+            XDocument doc = XDocument.Parse(xmlString); //               Load(MainWindow.md5HashDatabaseXmlFile);
+            Utils.appendToLog("Test 3");
+            bool result = doc.Descendants("version")
+                   .Where(arg => arg.Value.Equals(detectedVersion))
+                   .Any();
+            Utils.appendToLog("Test 4");
+            if (result)
+            {
+                Utils.appendToLog("Test 5");
+                XElement element = doc.Descendants("version")
+                   .Where(arg => arg.Value.Equals(detectedVersion))
+                   .Single();
+                Utils.appendToLog("Test 6");
+                Settings.tanksOnlineFolderVersion = element.Attribute("folder").Value;
+                Utils.appendToLog("Test 7 => onlineFolder: "+ Settings.tanksOnlineFolderVersion);
+            }
+            Utils.appendToLog("Test 8");
+            StringReader rdr = new StringReader(xmlString);
+            Utils.appendToLog("Test 9");
+            var docV = new XPathDocument(rdr);
+            Utils.appendToLog("Test 10");
+            foreach (var version in docV.CreateNavigator().Select("//versions/version"))
+            {
+                Utils.appendToLog("Test 11");
+                supportedVersions.Add(version.ToString());
+            }
+            Utils.appendToLog("Test 12");
             return result;
         }
 

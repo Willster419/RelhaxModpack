@@ -5,7 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Text.RegularExpressions;
-
+using System.Net;
 
 namespace RelhaxModpack
 {
@@ -40,7 +40,8 @@ namespace RelhaxModpack
             error = -1,
             fromButton = 0,//this is the default state
             fromSaveLastConfig = 1,//this is the state if the user selected the setting "save last install's selection"
-            fromAutoInstall = 2//this is for when the user started the application in auto install mode. this takes precedence over the above 2
+            fromAutoInstall = 2,//this is for when the user started the application in auto install mode. this takes precedence over the above 2
+            fromModInfoDat = 3//this is when the manager is reading the modInfo.xml from the downloaded moInfo.dat file
         };
         private loadConfigMode loadMode = loadConfigMode.fromButton;
 
@@ -85,7 +86,8 @@ namespace RelhaxModpack
             this.applyTranslations();
             pw.loadingDescBox.Text = Translations.getTranslatedString("readingDatabase");
             Application.DoEvents();
-            string databaseURL = string.Format("http://wotmods.relhaxmodpack.com/RelhaxModpack/modInfo_{0}.xml", tanksVersion);
+            // string databaseURL = string.Format("http://wotmods.relhaxmodpack.com/RelhaxModpack/modInfo_{0}.xml", tanksVersion);
+            string databaseURL = Settings.modInfoDatFile;
             if (Program.testMode)
             {
                 // if customModInfoPath is empty, this creates a full valid path to the current manager location folder
@@ -94,6 +96,25 @@ namespace RelhaxModpack
                 {
                     Utils.appendToLog("Databasefile not found: " + databaseURL);
                     MessageBox.Show(string.Format(Translations.getTranslatedString("testModeDatabaseNotFound"), databaseURL));
+                    Application.Exit();
+                }
+            }
+            else
+            {
+                //download the modInfo.dat
+                Utils.appendToLog("downloading modInfo.dat");
+                WebClient downloader = new WebClient();
+                string dlURL = "";
+                downloader.Proxy = null;
+                try
+                {
+                    dlURL = string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/modInfo.dat", Settings.tanksOnlineFolderVersion);
+                    downloader.DownloadFile(dlURL, Settings.modInfoDatFile);
+                }
+                catch (Exception ex)
+                {
+                    Utils.exceptionLog(string.Format("ModSelectionList_Load", @"Tried to access {0}", dlURL), ex);
+                    MessageBox.Show(string.Format("{0} modInfo.dat", Translations.getTranslatedString("failedToDownload_1")));
                     Application.Exit();
                 }
             }
@@ -205,7 +226,7 @@ namespace RelhaxModpack
         private void initUserMods()
         {
             //create all the user mod objects
-            string modsPath = Application.StartupPath + "\\RelHaxUserMods";
+            string modsPath = Path.Combine(Application.StartupPath, "RelHaxUserMods");
             string[] userModFiles = Directory.GetFiles(modsPath);
             userMods = new List<Mod>();
             foreach (string s in userModFiles)
@@ -2255,7 +2276,8 @@ namespace RelhaxModpack
             loadingConfig = true;
             OpenFileDialog loadLocation = new OpenFileDialog();
             string filePath = "";
-            using (SelectionViewer sv = new SelectionViewer(this.Location.X + 100, this.Location.Y + 100, "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/developerSelections/selections.xml"))
+            // using (SelectionViewer sv = new SelectionViewer(this.Location.X + 100, this.Location.Y + 100, "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/developerSelections/selections.xml"))
+            using (SelectionViewer sv = new SelectionViewer(this.Location.X + 100, this.Location.Y + 100, Settings.modInfoDatFile))
             {
                 if (loadMode == loadConfigMode.fromAutoInstall)
                 {

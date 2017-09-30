@@ -474,15 +474,35 @@ namespace RelhaxModpack
 
         //parses the xml mod info into the memory database (change XML reader to from XMLDocument to XDocument)
         // https://www.google.de/search?q=c%23+xdocument+get+line+number&oq=c%23+xdocument+get+line+number&aqs=chrome..69i57j69i58.11773j0j7&sourceid=chrome&ie=UTF-8
+        // public static void createModStructure(string databaseURL, List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies, List<Category> parsedCatagoryList, List<DeveloperSelections> developerSelections = null)
         public static void createModStructure(string databaseURL, List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies, List<Category> parsedCatagoryList)
         {
             try
             {
+                Settings.developerSelections.Clear();
                 totalModConfigComponents = 0;
                 XDocument doc = null;
                 try
                 {
-                    doc = XDocument.Load(databaseURL, LoadOptions.SetLineInfo);
+                    if (databaseURL.ToLower().Equals(Settings.modInfoDatFile.ToLower()))
+                    {
+                        Utils.appendToLog("loading dat config file");
+                        string xmlString = Utils.getStringFromZip(Settings.modInfoDatFile, "modInfo.xml");
+                        Utils.appendToLog("Test 20");
+                        doc = XDocument.Parse(xmlString, LoadOptions.SetLineInfo);
+                        Utils.appendToLog("Test 21");
+                        // create new developerSelectionsNameList
+                        // Settings.developerSelections = new List<DeveloperSelections>();
+                        // parseDeveloperSelections(doc, Settings.developerSelections);
+                        parseDeveloperSelections(doc);
+                        Utils.appendToLog("Test 22");
+                        Utils.appendToLog("lenght: " + Settings.developerSelections.Count);
+                    }
+                    else
+                    {
+                        Utils.appendToLog("loading local config file");
+                        doc = XDocument.Load(databaseURL, LoadOptions.SetLineInfo);
+                    }
                 }
                 catch (XmlException ex)
                 {
@@ -3124,7 +3144,16 @@ namespace RelhaxModpack
             //uncheck everythihng in memory first
             Utils.clearSelectionMemory(parsedCatagoryList, userMods);
             XmlDocument doc = new XmlDocument();
-            doc.Load(filePath);
+            string[] filePathSplit = filePath.Split(',');
+            if (filePathSplit.Count() > 1)
+            {
+                string xmlString = Utils.getStringFromZip(Settings.modInfoDatFile, filePathSplit[1]);
+                doc.LoadXml(xmlString);
+            }
+            else
+            {
+                doc.Load(filePath);
+            }
             //check config file version
             XmlNode xmlNode = doc.SelectSingleNode("//mods");
             string ver = "";
@@ -3284,7 +3313,21 @@ namespace RelhaxModpack
         {
             Utils.appendToLog(string.Format("Loading mod selections v2.0 from {0}", filePath));
             List<string> savedConfigList = new List<string>();
-            var doc = new XPathDocument(filePath);
+            XPathDocument doc;
+            string[] filePathSplit = filePath.Split(',');
+            if (filePathSplit.Count() > 1)
+            {
+                // go here, if the config file selected is a developerSelection config and stored at the modInfo.dat file
+                string xmlString = getStringFromZip(Settings.modInfoDatFile, filePathSplit[1]);
+                StringReader rdr = new StringReader(xmlString);
+                doc = new XPathDocument(rdr);
+            }
+            else
+            {
+                Utils.appendToLog("parsing config file: " + filePath);
+                doc = new XPathDocument(filePath);
+            }
+
             foreach (var mod in doc.CreateNavigator().Select("//relhaxMods/mod"))
             {
                 savedConfigList.Add(mod.ToString());
@@ -3735,6 +3778,31 @@ namespace RelhaxModpack
                     parseZipFileConfigs(c.configs);
             }
         }
+        private static void parseDeveloperSelections(XDocument doc)
+        {
+            // developerSelections.Clear();
+            Utils.appendToLog("Test 25");
+            DeveloperSelections d;
+            Utils.appendToLog("Test 26");
+            var xMembers = from members in doc.Descendants("selections").Elements() select members;
+
+            // foreach (XElement xe in doc.Descendants("selections").ToList())
+            foreach (XElement x in xMembers)
+            {
+                Utils.appendToLog("Test 27");
+                d = new DeveloperSelections();
+                Utils.appendToLog("Test 28");
+                Utils.appendToLog(x.Value);
+                d.internalName = x.Value;
+                Utils.appendToLog(x.Attribute("displayName").Value);
+                d.displayName = x.Attribute("displayName").Value;
+                Utils.appendToLog(x.Attribute("date").Value);
+                d.date = x.Attribute("date").Value;
+                Settings.developerSelections.Add(d);
+                Utils.appendToLog("lenght: " + Settings.developerSelections.Count);
+            }
+        }
+
         //deletes all empty directories from a given start location
         public static void processDirectory(string startLocation, bool reportToLog = true)
         {
@@ -4284,21 +4352,28 @@ namespace RelhaxModpack
         public static string getStringFromZip(string zipFilename, string archivedFilename, string password = null)
         {
             MemoryStream ms = new MemoryStream();
-            string textStr;
-            using (ZipFile zip = ZipFile.Read(zipFilename))
+            string textStr = "";
+            if (File.Exists(zipFilename))
             {
-                ZipEntry e = zip[archivedFilename];
-                if (password != null)
+                using (ZipFile zip = ZipFile.Read(zipFilename))
                 {
-                    e.ExtractWithPassword(ms, password);
+                    ZipEntry e = zip[archivedFilename];
+                    if (password != null)
+                    {
+                        e.ExtractWithPassword(ms, password);
+                    }
+                    else
+                    {
+                        e.Extract(ms);
+                    }
+                    StreamReader sr = new StreamReader(ms);
+                    ms.Position = 0;
+                    textStr = sr.ReadToEnd();
                 }
-                else
-                {
-                    e.Extract(ms);
-                }
-                StreamReader sr = new StreamReader(ms);
-                ms.Position = 0;
-                textStr = sr.ReadToEnd();
+            } 
+            else
+            {
+                Utils.appendToLog(string.Format("ERROR: {0} not found", zipFilename));
             }
             return textStr;
         }
