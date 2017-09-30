@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -24,6 +25,17 @@ namespace RelhaxModpack
             Utils.appendToLog("Main Entry point launched");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            // delete RelicCopyUpdate.bat at start (it is only needed at updates, so kill it)
+            try
+            {
+                string updateBatPath = Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat");
+                if (System.IO.File.Exists(updateBatPath))
+                    System.IO.File.Delete(updateBatPath);
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("Main", "delete RelicCopyUpdate.bat", ex);
+            }
             //get the command line args for testing of auto install
             string[] commandArgs = Environment.GetCommandLineArgs();
             //log command line
