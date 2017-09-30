@@ -451,54 +451,36 @@ namespace RelhaxModpack
         //check to see if the supplied version of tanks is on the list of supported client versions
         private bool isClientVersionSupported(string detectedVersion)
         {
-            /*
             supportedVersions.Clear();
-            bool result = false;
             string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "supported_clients.xml");  //xml doc name can change
-            StringReader rdr = new StringReader(xmlString);
-            var doc = new XPathDocument(rdr);
-            foreach (XPathDocument version in doc.CreateNavigator().Select("//versions/version"))
-            {
-                if (version.ToString().Equals(detectedVersion) || (version.ToString().Equals('T' + detectedVersion.Trim()) && Program.testMode))
-                {
-                    // Settings.tanksOnlineFolderVersion = version.CreateNavigator().GetAttribute("folder", null);
-                    result = true;
-                }
-                supportedVersions.Add(version.ToString());
-            }
-            return result;
-            */
-            supportedVersions.Clear();
-            Utils.appendToLog("Test 1");
-            string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "supported_clients.xml");  //xml doc name can change
-            Utils.appendToLog("Test 2");
-            XDocument doc = XDocument.Parse(xmlString); //               Load(MainWindow.md5HashDatabaseXmlFile);
-            Utils.appendToLog("Test 3");
+            XDocument doc = XDocument.Parse(xmlString);
             bool result = doc.Descendants("version")
                    .Where(arg => arg.Value.Equals(detectedVersion))
                    .Any();
-            Utils.appendToLog("Test 4");
             if (result)
             {
-                Utils.appendToLog("Test 5");
                 XElement element = doc.Descendants("version")
                    .Where(arg => arg.Value.Equals(detectedVersion))
                    .Single();
-                Utils.appendToLog("Test 6");
+                // store the onlinefolder version to the string
                 Settings.tanksOnlineFolderVersion = element.Attribute("folder").Value;
-                Utils.appendToLog("Test 7 => onlineFolder: "+ Settings.tanksOnlineFolderVersion);
             }
-            Utils.appendToLog("Test 8");
+            else
+            {
+                // XElement element = doc.Descendants("version").Last();
+                // store the the last onlinefolder version to the string, if no valid detectedVersion association is found
+                Settings.tanksOnlineFolderVersion = doc.Descendants("version").Last().Attribute("folder").Value;
+                // .Where(arg => arg.Value == arg.Value)
+                // store the onlinefolder version to the string
+                // Settings.tanksOnlineFolderVersion = element.Attribute("folder").Value;
+            }
+            // fill the supportedVersions array to possible create messages
             StringReader rdr = new StringReader(xmlString);
-            Utils.appendToLog("Test 9");
             var docV = new XPathDocument(rdr);
-            Utils.appendToLog("Test 10");
             foreach (var version in docV.CreateNavigator().Select("//versions/version"))
             {
-                Utils.appendToLog("Test 11");
                 supportedVersions.Add(version.ToString());
             }
-            Utils.appendToLog("Test 12");
             return result;
         }
 
@@ -812,7 +794,9 @@ namespace RelhaxModpack
                 string publicVersions = string.Join("\n", supportedVersions.Select(sValue => sValue.Trim()).ToArray().Where(s => !(s.Substring(0, 1) == "T")).ToArray());
                 MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}:\n{4}", Translations.getTranslatedString("detectedClientVersion"), tanksVersion, Translations.getTranslatedString("supportNotGuarnteed"), Translations.getTranslatedString("supportedClientVersions"), publicVersions), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 // select the last public modpack version
-                tanksVersion = supportedVersions.Last();
+                tanksVersion = publicVersions.Split('\n').Last();
+                // go to Client check again, because the online folder must be set correct
+                isClientVersionSupported(tanksVersion);
             }
             //if the user wants to, check if the database has actually changed
             if (Settings.NotifyIfSameDatabase && SameDatabaseVersions())
