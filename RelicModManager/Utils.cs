@@ -2951,7 +2951,7 @@ namespace RelhaxModpack
             saveLocation.AddExtension = true;
             saveLocation.DefaultExt = ".xml";
             saveLocation.Filter = "*.xml|*.xml";
-            saveLocation.InitialDirectory = Application.StartupPath + "\\RelHaxUserConfigs";
+            saveLocation.InitialDirectory = Path.Combine(Application.StartupPath, "RelHaxUserConfigs");
             saveLocation.Title = Translations.getTranslatedString("selectWhereToSave");
             if (fromButton)
             {
@@ -2964,7 +2964,7 @@ namespace RelhaxModpack
             string savePath = saveLocation.FileName;
             if (Settings.saveLastConfig && !fromButton)
             {
-                savePath = Application.StartupPath + "\\RelHaxUserConfigs\\lastInstalledConfig.xml";
+                savePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml");
                 Utils.appendToLog(string.Format("Save last config checked, saving to {0}", savePath));
             }
             //XmlDocument save time!
@@ -3147,7 +3147,7 @@ namespace RelhaxModpack
             string[] filePathSplit = filePath.Split(',');
             if (filePathSplit.Count() > 1)
             {
-                string xmlString = Utils.getStringFromZip(Settings.modInfoDatFile, filePathSplit[1]);
+                string xmlString = Utils.getStringFromZip(filePathSplit[0], filePathSplit[1]);
                 doc.LoadXml(xmlString);
             }
             else
@@ -3263,7 +3263,7 @@ namespace RelhaxModpack
                             if (m != null)
                             {
                                 string filename = m.name + ".zip";
-                                if (File.Exists(Application.StartupPath + "\\RelHaxUserMods\\" + filename))
+                                if (File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename))
                                 {
                                     m.Checked = true;
                                     if (m.modFormCheckBox != null)
@@ -3318,7 +3318,8 @@ namespace RelhaxModpack
             if (filePathSplit.Count() > 1)
             {
                 // go here, if the config file selected is a developerSelection config and stored at the modInfo.dat file
-                string xmlString = getStringFromZip(Settings.modInfoDatFile, filePathSplit[1]);
+                Utils.appendToLog("parsing developerSelection file: " + filePath);
+                string xmlString = getStringFromZip(filePathSplit[0], filePathSplit[1]);
                 StringReader rdr = new StringReader(xmlString);
                 doc = new XPathDocument(rdr);
             }

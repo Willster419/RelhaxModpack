@@ -256,7 +256,7 @@ namespace RelhaxModpack
                 MessageBox.Show(string.Format("{0} manager version.txt", Translations.getTranslatedString("failedToDownload_1")));
                 Application.Exit();
             }
-            Utils.appendToLog("Local application is " + managerVersion() + ", current online is " + version);
+            Utils.appendToLog(string.Format("Local application is {0}, current online is {1}", managerVersion(),version));
             if (!version.Equals(managerVersion()))
             {
                 Utils.appendToLog("exe is out of date. displaying user update window");
@@ -270,7 +270,7 @@ namespace RelhaxModpack
                     //download new version
                     sw.Reset();
                     sw.Start();
-                    string newExeName = Application.StartupPath + "\\RelhaxModpack_update" + ".exe";
+                    string newExeName = Path.Combine(Application.StartupPath, "RelhaxModpack_update.exe");
                     updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
                     updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
                     if (File.Exists(newExeName)) File.Delete(newExeName);
@@ -366,7 +366,7 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.getTranslatedString("cantDownloadNewVersion"));
                 this.Close();
             }
-            string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
+            // string versionSaveLocation = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + "_version.txt";
 
             if (!File.Exists(Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat")))
             {
@@ -374,34 +374,34 @@ namespace RelhaxModpack
                 {
                     try
                     {
-                        downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/RelicCopyUpdate.txt", Application.StartupPath + "\\RelicCopyUpdate.bat");
+                        downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/RelicCopyUpdate.txt", Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat"));
                     }
                     catch (Exception e2)
                     {
-                        Utils.exceptionLog("failed to download => RelicCopyUpdate.bat", e2);
-                        // Utils.appendToLog("Error: failed to download => RelicCopyUpdate.bat");
+                        Utils.exceptionLog("updater_DownloadFileCompleted", "failed to download => RelicCopyUpdate.bat", e2);
                         MessageBox.Show(string.Format("{0} RelicCopyUpdate.bat", Translations.getTranslatedString("failedToDownload_1")));
                         Application.Exit();
                     }
                 }
             }
-            string newExeName = Application.StartupPath + "\\RelicCopyUpdate.bat";
+            string newExeName = Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat");
             try
             {
                 ProcessStartInfo info = new ProcessStartInfo();
                 info.FileName = newExeName;
+                info.Arguments = string.Join(" ", Environment.GetCommandLineArgs());
                 Process installUpdate = new Process();
                 installUpdate.StartInfo = info;
                 installUpdate.Start();
             }
             catch (Win32Exception e3)
             {
-                Utils.exceptionLog("WARNING: could not start new application version", e3);
-                // Utils.appendToLog("WARNING: could not start new application version");
+                Utils.exceptionLog("updater_DownloadFileCompleted", "WARNING: could not start new application version", e3);
                 MessageBox.Show(Translations.getTranslatedString("cantStartNewApp") + newExeName);
             }
             Application.Exit();
         }
+
         //gets the version of tanks that this is, in the format
         //of the res_mods version folder i.e. 0.9.17.0.3
         private string getFolderVersion()
