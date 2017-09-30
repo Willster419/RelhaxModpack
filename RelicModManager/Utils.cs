@@ -3263,7 +3263,7 @@ namespace RelhaxModpack
                             if (m != null)
                             {
                                 string filename = m.name + ".zip";
-                                if (File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename))
+                                if (File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename)))
                                 {
                                     m.Checked = true;
                                     if (m.modFormCheckBox != null)
