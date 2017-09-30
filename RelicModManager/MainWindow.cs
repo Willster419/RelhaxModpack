@@ -726,7 +726,7 @@ namespace RelhaxModpack
             tanksVersionForInstaller = tanksVersion;
             Utils.appendToLog("tanksVersion parsed as " + tanksVersion);
             //determine if the tanks client version is supported
-            if (!isClientVersionSupported(tanksVersion) && !Program.testMode)
+            if (!Program.testMode && !isClientVersionSupported(tanksVersion))
             {
                 //log and inform the user
                 Utils.appendToLog("WARNING: Detected client version is " + tanksVersion + ", not supported");
