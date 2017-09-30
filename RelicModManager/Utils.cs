@@ -432,6 +432,20 @@ namespace RelhaxModpack
             }
         }
 
+        public static string readOnlineFolderFromModInfo(string f)
+        {
+            XDocument doc = XDocument.Load(f);
+            try
+            {
+                XElement element = doc.Descendants("modInfoAlpha.xml").Single();
+                return element.Attribute("onlineFolder").Value;
+            }
+            catch (InvalidOperationException)
+            {
+                return "error"; // catch the Exception if no entry is found
+            }
+        }
+
         public static bool parseBool(string input, bool defaultValue)
         {
             bool returnVal;
@@ -3802,12 +3816,13 @@ namespace RelhaxModpack
         }
 
         //saves the mod database
-        public static void SaveDatabase(string saveLocation, string gameVersion, List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies, List<Category> parsedCatagoryList)
+        public static void SaveDatabase(string saveLocation, string gameVersion, string onlineFolderVersion, List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies, List<Category> parsedCatagoryList)
         {
             XmlDocument doc = new XmlDocument();
             //database root modInfo.xml
             XmlElement root = doc.CreateElement("modInfoAlpha.xml");
             root.SetAttribute("version", gameVersion);
+            root.SetAttribute("onlineFolder", onlineFolderVersion);
             doc.AppendChild(root);
             //global dependencies
             XmlElement globalDependenciesXml = doc.CreateElement("globaldependencies");

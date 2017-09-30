@@ -31,6 +31,7 @@ namespace RelhaxModpack
         private Category SelectedCategory;
         private int currentSelectedIndex = -1;
         string GameVersion = "";
+        string OnlineFolderVersion = "";
         private StringBuilder InUseSB;
         private List<Config> ListThatContainsConfig;
         private bool UnsavedModifications = false;
@@ -197,6 +198,7 @@ namespace RelhaxModpack
             if (!File.Exists(DatabaseLocation))
                 return;
             GameVersion = Utils.readVersionFromModInfo(DatabaseLocation);
+            OnlineFolderVersion = Utils.readOnlineFolderFromModInfo(DatabaseLocation);
             GlobalDependencies = new List<Dependency>();
             Dependencies = new List<Dependency>();
             LogicalDependencies = new List<LogicalDependnecy>();
@@ -216,7 +218,7 @@ namespace RelhaxModpack
             if (SaveDatabaseDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             DatabaseLocation = SaveDatabaseDialog.FileName;
-            Utils.SaveDatabase(DatabaseLocation, GameVersion, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
+            Utils.SaveDatabase(DatabaseLocation, GameVersion, OnlineFolderVersion, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
             UnsavedModifications = false;
         }
         //Apply all changes from the form

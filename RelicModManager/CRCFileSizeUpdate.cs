@@ -41,22 +41,24 @@ namespace RelhaxModpack
             // check for database
             if (databaseLocationTextBox.Text.Equals("-none-"))
                 return;
-            // read gameVersion of the selected local modInfo.xml to get the right online database.xml
+            // read onlineFolder of the selected local modInfo.xml to get the right online database.xml
+            string onlineFolderVersion = Utils.readOnlineFolderFromModInfo(databaseLocationTextBox.Text);
+            // read gameVersion of the selected local modInfo.xml
             string gameVersion = Utils.readVersionFromModInfo(databaseLocationTextBox.Text);
-            Utils.appendToLog("working with game version: " + gameVersion);
+            Utils.appendToLog("working with game version: " + onlineFolderVersion);
             // download online database.xml
             try
             {
                 using (downloader = new WebClient())
                 {
-                    string address = "http://wotmods.relhaxmodpack.com/WoT/" + gameVersion + "/database.xml";
+                    string address = "http://wotmods.relhaxmodpack.com/WoT/" + onlineFolderVersion + "/database.xml";
                     string fileName = Path.Combine(Application.StartupPath, "RelHaxTemp", MainWindow.onlineDatabaseXmlFile);
                     downloader.DownloadFile(address, fileName);
                 }
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("loadZipFilesButton_Click", "http://wotmods.relhaxmodpack.com/WoT/" + gameVersion + "/database.xml", ex);
+                Utils.exceptionLog("loadZipFilesButton_Click", "http://wotmods.relhaxmodpack.com/WoT/" + onlineFolderVersion + "/database.xml", ex);
                 MessageBox.Show("FAILED to download online file database");
                 Application.Exit();
             }
@@ -173,7 +175,7 @@ namespace RelhaxModpack
             //save config file
             // string newModInfo = databaseLocationTextBox.Text;
             //this.saveDatabase(databaseLocationTextBox.Text, gameVersion);
-            Utils.SaveDatabase(databaseLocationTextBox.Text, gameVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            Utils.SaveDatabase(databaseLocationTextBox.Text, gameVersion, onlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             MessageBox.Show(filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
             updatingLabel.Text = "Idle";
             Program.databaseUpdateOnline = false;
@@ -315,6 +317,7 @@ namespace RelhaxModpack
             dependencies = new List<Dependency>();
             logicalDependencies = new List<LogicalDependnecy>();
             string gameVersion = Utils.readVersionFromModInfo(databaseLocationTextBox.Text);
+            string onlineFolderVersion = Utils.readOnlineFolderFromModInfo(databaseLocationTextBox.Text);
             Utils.createModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             int duplicatesCounter = 0;
             //check for duplicates
@@ -382,7 +385,7 @@ namespace RelhaxModpack
             //save config file
             string newModInfo = databaseLocationTextBox.Text;
             //this.saveDatabase(databaseLocationTextBox.Text, gameVersion);
-            Utils.SaveDatabase(databaseLocationTextBox.Text, gameVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            Utils.SaveDatabase(databaseLocationTextBox.Text, gameVersion, onlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
             updatingLabel.Text = "Idle";
         }
