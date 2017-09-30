@@ -1326,6 +1326,20 @@ namespace RelhaxModpack
             polish.Add("extractingPackage", "Wypakowywanie paczki");
             french.Add("extractingPackage", "Extraction du package");
 
+            //Componet: extractingPackage
+            //
+            english.Add("file", "File");
+            german.Add("file", "Datei");
+            polish.Add("file", "TODO");
+            french.Add("file", "TODO");
+
+            //Componet: extractingPackage
+            //
+            english.Add("size", "Size");
+            german.Add("size", "Größe");
+            polish.Add("size", "TODO");
+            french.Add("size", "TODO");
+
             //Componet: backupModFile
             //
             english.Add("backupModFile", "Backing up mod file");
@@ -1388,6 +1402,20 @@ namespace RelhaxModpack
             german.Add("installingUserFonts", "Benutzer Schriftsätze installieren");
             polish.Add("installingUserFonts", "Instalowanie czcionek użytkownika");
             french.Add("installingUserFonts", "Installation des polices utilisateur");
+
+            //Componet: installation finished
+            //
+            english.Add("installationFinished", "Installation is finished");
+            german.Add("installationFinished", "Die Installation ist abgeschlossen");
+            polish.Add("installationFinished", "TODO");
+            french.Add("installationFinished", "TODO");
+
+            //Componet: installation finished
+            //
+            english.Add("startGame", "You want to start the Game now?");
+            german.Add("startGame", "Soll das Spiel jetzt gestartet werden?");
+            polish.Add("startGame", "TODO");
+            french.Add("StartGame", "TODO");
         }
     }
 }

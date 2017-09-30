@@ -234,53 +234,6 @@ namespace RelhaxModpack
                 ins.StartInstallation();
             }
         }
-        //method to check for updates to the application on startup
-        private void checkmanagerUpdates_old()
-        {
-            Utils.appendToLog("Starting check for application updates");
-            WebClient updater = new WebClient();
-            updater.Proxy = null;
-            string version = "";
-            try
-            {
-                version = updater.DownloadString("http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt");
-            }
-            catch (Exception ex)
-            {
-                Utils.exceptionLog("checkmanagerUpdates_old", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/manager version.txt", ex);
-                MessageBox.Show(string.Format("{0} manager version.txt", Translations.getTranslatedString("failedToDownload_1")));
-                Application.Exit();
-            }
-            Utils.appendToLog(string.Format("Local application is {0}, current online is {1}", managerVersion(),version));
-            if (!version.Equals(managerVersion()))
-            {
-                Utils.appendToLog("exe is out of date. displaying user update window");
-                //out of date
-                VersionInfo vi = new VersionInfo();
-                vi.ShowDialog();
-                DialogResult result = vi.result;
-                if (result.Equals(DialogResult.Yes))
-                {
-                    Utils.appendToLog("User accepted downloading new version");
-                    //download new version
-                    sw.Reset();
-                    sw.Start();
-                    string newExeName = Path.Combine(Application.StartupPath, "RelhaxModpack_update.exe");
-                    updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
-                    updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
-                    if (File.Exists(newExeName)) File.Delete(newExeName);
-                    updater.DownloadFileAsync(new Uri("http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe"), newExeName);
-                    Utils.appendToLog("New application download started");
-                    currentModDownloading = "update ";
-                }
-                else
-                {
-                    Utils.appendToLog("User declined downlading new version");
-                    //close the application
-                    this.Close();
-                }
-            }
-        }
 
         //method to check for updates to the application on startup
         private void checkmanagerUpdates()
@@ -1158,13 +1111,25 @@ namespace RelhaxModpack
             }
         }
 
+        private string createExtractionMsgBoxProgressOutput(string[] s)
+        {
+            return string.Format("{0} {1} {2} {3}\n{4}: {5}\n{6}: {7} MB",
+                Translations.getTranslatedString("extractingPackage"), 
+                    s[0],
+                    Translations.getTranslatedString("of"),
+                    s[1],
+                    Translations.getTranslatedString("file"),
+                    s[2],
+                    Translations.getTranslatedString("size"),
+                    s[3]);
+        }
+
         private void I_InstallProgressChanged(object sender, InstallerEventArgs e)
         {
             string message = "";
             totalProgressBar.Maximum = (int)InstallerEventArgs.InstallProgress.Done;
             if (e.InstalProgress == InstallerEventArgs.InstallProgress.BackupMods)
             {
-                // message = Translations.getTranslatedString("backupModFile") + " " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
                 message = string.Format("{0} {1} {2} {3}", Translations.getTranslatedString("backupModFile"), e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
                 childProgressBar.Maximum = e.ChildTotalToProcess;
                 if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
@@ -1174,7 +1139,6 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.BackupUserData)
             {
-                // message = Translations.getTranslatedString("backupUserdatas") + " " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
                 message = string.Format("{0} {1} {2} {3}", Translations.getTranslatedString("backupUserdatas"), e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
                 childProgressBar.Maximum = e.ChildTotalToProcess;
                 if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
@@ -1184,7 +1148,6 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.DeleteMods)
             {
-                // message = Translations.getTranslatedString("deletingFiles") + " " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
                 message = string.Format("{0} {1} {2} {3}", Translations.getTranslatedString("deletingFiles"), e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
                 childProgressBar.Maximum = e.ChildTotalToProcess;
                 if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
@@ -1201,8 +1164,7 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractGlobalDependencies)
             {
-                message = Translations.getTranslatedString("extractingPackage") + " " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                message = createExtractionMsgBoxProgressOutput( new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() } );
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -1214,8 +1176,7 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractDependencies)
             {
-                message = Translations.getTranslatedString("extractingPackage") + " " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -1227,8 +1188,7 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractLogicalDependencies)
             {
-                message = Translations.getTranslatedString("extractingPackage") + " " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -1240,8 +1200,7 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractMods)
             {
-                message = Translations.getTranslatedString("extractingPackage") + " " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -1253,8 +1212,7 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractConfigs)
             {
-                message = Translations.getTranslatedString("extractingPackage") + " " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -1266,8 +1224,7 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractAppendedDependencies)
             {
-                message = Translations.getTranslatedString("extractingPackage") + " " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -1279,7 +1236,7 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.RestoreUserData)
             {
-                message = Translations.getTranslatedString("restoringUserData") + " " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
+                message = string.Format("{0} {1} {2} {3}", Translations.getTranslatedString("restoringUserData"), e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
                 parrentProgressBar.Value = 0;
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.RestoreUserData;
                 childProgressBar.Maximum = e.ChildTotalToProcess;
@@ -1288,7 +1245,7 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.PatchMods)
             {
-                message = Translations.getTranslatedString("patchingFile") + " " + e.currentFile + ", " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
+                message = string.Format("{0} {1}, {2} {3} {4}", Translations.getTranslatedString("patchingFile"), e.currentFile, e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
                 parrentProgressBar.Maximum = e.ChildTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ChildProcessed;
@@ -1304,8 +1261,7 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractUserMods)
             {
-                message = Translations.getTranslatedString("extractingUserMod") + " " + e.ParrentProcessed + " of " + e.ParrentTotalToProcess + "\n";
-                message = message + "File: " + e.currentFile + "\nSize: " + (float)Math.Round(e.currentFileSizeProcessed / MBDivisor, 2) + " MB";
+                message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ParrentProcessed;
@@ -1316,7 +1272,7 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.PatchUserMods)
             {
-                message = Translations.getTranslatedString("userPatchingFile") + " " + e.currentFile + ", " + e.ChildProcessed + " of " + e.ChildTotalToProcess;
+                message = string.Format("{0} {1}, {2} {3} {4}", Translations.getTranslatedString("userPatchingFile"), e.currentFile, e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
                 parrentProgressBar.Maximum = e.ChildTotalToProcess;
                 if ((parrentProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ChildProcessed;
@@ -1385,7 +1341,29 @@ namespace RelhaxModpack
                 Utils.appendToLog("Invalid state: " + e.InstalProgress);
             }
             downloadProgress.Text = message;
+            if (e.InstalProgress == InstallerEventArgs.InstallProgress.Done)
+            {
+                if (File.Exists(Path.Combine(tanksLocation, "WorldOfTanks.exe")))
+                {
+                    if (MessageBox.Show(string.Format("{0}\n\n{1}",Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("startGame")), Translations.getTranslatedString("information"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        // call the worldoftanks client and close the relhax manager
+                        ProcessStartInfo wot = new ProcessStartInfo();
+                        wot.FileName = Path.Combine(tanksLocation, "WorldOfTanks.exe");
+                        wot.WorkingDirectory = tanksLocation;
+                        Process callWoT = new Process();
+                        callWoT.StartInfo = wot;
+                        callWoT.Start();
+                        Application.Exit();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
         }
+
         //Main method to uninstall the modpack
         private void uninstallRelhaxMod_Click(object sender, EventArgs e)
         {
@@ -2440,10 +2418,8 @@ namespace RelhaxModpack
 
         private void viewAppUpdates_Click(object sender, EventArgs e)
         {
-            // string appUpdatesURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/releaseNotes.txt";
             int xloc = this.Location.X + this.Size.Width + 10;
             int yloc = this.Location.Y;
-            // using (ViewUpdates vu = new ViewUpdates(xloc,yloc,appUpdatesURL))
             using (ViewUpdates vu = new ViewUpdates(xloc, yloc, Settings.managerInfoDatFile, "releaseNotes.txt"))
             {
                 vu.ShowDialog();
@@ -2452,10 +2428,8 @@ namespace RelhaxModpack
 
         private void viewDBUpdates_Click(object sender, EventArgs e)
         {
-            // string dbUpdatesURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/databaseUpdate.txt";
             int xloc = this.Location.X + this.Size.Width + 10;
             int yloc = this.Location.Y;
-            // using (ViewUpdates vu = new ViewUpdates(xloc,yloc,dbUpdatesURL))
             using (ViewUpdates vu = new ViewUpdates(xloc, yloc, Settings.managerInfoDatFile, "databaseUpdate.txt"))
             {
                 vu.ShowDialog();
