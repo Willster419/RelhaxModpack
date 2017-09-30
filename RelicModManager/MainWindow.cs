@@ -797,6 +797,7 @@ namespace RelhaxModpack
                 tanksVersion = publicVersions.Split('\n').Last();
                 // go to Client check again, because the online folder must be set correct
                 isClientVersionSupported(tanksVersion);
+                Utils.appendToLog(string.Format("Version selected: {0}  OnlineFolder: {1}", tanksVersion, Settings.tanksOnlineFolderVersion));
             }
             //if the user wants to, check if the database has actually changed
             if (Settings.NotifyIfSameDatabase && SameDatabaseVersions())
