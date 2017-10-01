@@ -599,7 +599,8 @@ namespace RelhaxModpack
                                     }
                                     catch (Exception p)
                                     {
-                                        Utils.exceptionLog("RestoreUserData", "p", p);
+                                        Utils.exceptionLog("RestoreUserData", "p\n"+ Path.Combine(TanksLocation, Path.GetFullPath(s))+"\n"+ Path.Combine(TanksLocation, Path.GetDirectoryName(s))+"\n"+ Path.Combine(TanksLocation, s), p);
+
                                     }
                                 }
                                 args.ChildProcessed++;
