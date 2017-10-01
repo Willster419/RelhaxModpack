@@ -175,7 +175,7 @@
             // cancerFontCB
             // 
             this.cancerFontCB.AutoSize = true;
-            this.cancerFontCB.Location = new System.Drawing.Point(6, 64);
+            this.cancerFontCB.Location = new System.Drawing.Point(6, 65);
             this.cancerFontCB.Name = "cancerFontCB";
             this.cancerFontCB.Size = new System.Drawing.Size(81, 17);
             this.cancerFontCB.TabIndex = 23;
@@ -223,7 +223,7 @@
             // ShowInstallCompleteWindowCB
             // 
             this.ShowInstallCompleteWindowCB.AutoSize = true;
-            this.ShowInstallCompleteWindowCB.Location = new System.Drawing.Point(6, 183);
+            this.ShowInstallCompleteWindowCB.Location = new System.Drawing.Point(6, 184);
             this.ShowInstallCompleteWindowCB.Name = "ShowInstallCompleteWindowCB";
             this.ShowInstallCompleteWindowCB.Size = new System.Drawing.Size(168, 17);
             this.ShowInstallCompleteWindowCB.TabIndex = 34;
@@ -237,7 +237,7 @@
             // notifyIfSameDatabaseCB
             // 
             this.notifyIfSameDatabaseCB.AutoSize = true;
-            this.notifyIfSameDatabaseCB.Location = new System.Drawing.Point(6, 166);
+            this.notifyIfSameDatabaseCB.Location = new System.Drawing.Point(6, 167);
             this.notifyIfSameDatabaseCB.Name = "notifyIfSameDatabaseCB";
             this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(193, 17);
             this.notifyIfSameDatabaseCB.TabIndex = 33;
@@ -251,7 +251,7 @@
             // clearLogFilesCB
             // 
             this.clearLogFilesCB.AutoSize = true;
-            this.clearLogFilesCB.Location = new System.Drawing.Point(6, 149);
+            this.clearLogFilesCB.Location = new System.Drawing.Point(6, 150);
             this.clearLogFilesCB.Name = "clearLogFilesCB";
             this.clearLogFilesCB.Size = new System.Drawing.Size(88, 17);
             this.clearLogFilesCB.TabIndex = 32;
@@ -265,7 +265,7 @@
             // clearCacheCB
             // 
             this.clearCacheCB.AutoSize = true;
-            this.clearCacheCB.Location = new System.Drawing.Point(6, 132);
+            this.clearCacheCB.Location = new System.Drawing.Point(6, 133);
             this.clearCacheCB.Name = "clearCacheCB";
             this.clearCacheCB.Size = new System.Drawing.Size(137, 17);
             this.clearCacheCB.TabIndex = 31;
@@ -279,7 +279,7 @@
             // darkUICB
             // 
             this.darkUICB.AutoSize = true;
-            this.darkUICB.Location = new System.Drawing.Point(6, 115);
+            this.darkUICB.Location = new System.Drawing.Point(6, 116);
             this.darkUICB.Name = "darkUICB";
             this.darkUICB.Size = new System.Drawing.Size(63, 17);
             this.darkUICB.TabIndex = 30;
@@ -293,7 +293,7 @@
             // saveUserDataCB
             // 
             this.saveUserDataCB.AutoSize = true;
-            this.saveUserDataCB.Location = new System.Drawing.Point(6, 97);
+            this.saveUserDataCB.Location = new System.Drawing.Point(6, 99);
             this.saveUserDataCB.Name = "saveUserDataCB";
             this.saveUserDataCB.Size = new System.Drawing.Size(139, 17);
             this.saveUserDataCB.TabIndex = 27;
@@ -307,7 +307,7 @@
             // saveLastInstallCB
             // 
             this.saveLastInstallCB.AutoSize = true;
-            this.saveLastInstallCB.Location = new System.Drawing.Point(6, 81);
+            this.saveLastInstallCB.Location = new System.Drawing.Point(6, 82);
             this.saveLastInstallCB.Name = "saveLastInstallCB";
             this.saveLastInstallCB.Size = new System.Drawing.Size(138, 17);
             this.saveLastInstallCB.TabIndex = 26;
@@ -511,9 +511,11 @@
             // expandNodesDefault
             // 
             this.expandNodesDefault.AutoSize = true;
-            this.expandNodesDefault.Location = new System.Drawing.Point(133, 30);
+            this.expandNodesDefault.Location = new System.Drawing.Point(133, 35);
+            this.expandNodesDefault.MaximumSize = new System.Drawing.Size(100, 40);
+            this.expandNodesDefault.MinimumSize = new System.Drawing.Size(50, 20);
             this.expandNodesDefault.Name = "expandNodesDefault";
-            this.expandNodesDefault.Size = new System.Drawing.Size(75, 17);
+            this.expandNodesDefault.Size = new System.Drawing.Size(75, 20);
             this.expandNodesDefault.TabIndex = 2;
             this.expandNodesDefault.Text = "Expand all";
             this.expandNodesDefault.UseVisualStyleBackColor = true;
