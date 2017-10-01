@@ -1164,7 +1164,14 @@ namespace RelhaxModpack
                 parrentProgressBar.Value = 0;
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.DeleteWoTCache;
             }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractGlobalDependencies)
+            else if (
+                    e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractGlobalDependencies ||
+                    e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractDependencies ||
+                    e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractLogicalDependencies ||
+                    e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractMods ||
+                    e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractConfigs ||
+                    e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractAppendedDependencies
+                    )
             {
                 message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
                 parrentProgressBar.Maximum = e.ParrentTotalToProcess;
@@ -1175,66 +1182,6 @@ namespace RelhaxModpack
                     if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
                         childProgressBar.Value = e.ChildProcessed;
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractGlobalDependencies;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractDependencies)
-            {
-                message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
-                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
-                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
-                    parrentProgressBar.Value = e.ParrentProcessed;
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if (e.ChildProcessed > 0)
-                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                        childProgressBar.Value = e.ChildProcessed;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractDependencies;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractLogicalDependencies)
-            {
-                message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
-                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
-                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
-                    parrentProgressBar.Value = e.ParrentProcessed;
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if (e.ChildProcessed > 0)
-                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                        childProgressBar.Value = e.ChildProcessed;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractLogicalDependencies;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractMods)
-            {
-                message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
-                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
-                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
-                    parrentProgressBar.Value = e.ParrentProcessed;
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if (e.ChildProcessed > 0)
-                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                        childProgressBar.Value = e.ChildProcessed;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractMods;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractConfigs)
-            {
-                message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
-                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
-                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
-                    parrentProgressBar.Value = e.ParrentProcessed;
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if (e.ChildProcessed > 0)
-                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                        childProgressBar.Value = e.ChildProcessed;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractConfigs;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractAppendedDependencies)
-            {
-                message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
-                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
-                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
-                    parrentProgressBar.Value = e.ParrentProcessed;
-                childProgressBar.Maximum = e.ChildTotalToProcess;
-                if (e.ChildProcessed > 0)
-                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                        childProgressBar.Value = e.ChildProcessed;
-                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractAppendedDependencies;
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.RestoreUserData)
             {
