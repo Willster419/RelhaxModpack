@@ -175,6 +175,7 @@ namespace RelhaxModpack
                 InstallFonts();
             ResetArgs();
             //Step 15: CheckDatabase and delete outdated or no more needed files
+            Utils.appendToLog("Installation CheckDatabase");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CheckDatabase;
             if (!Program.testMode)
             {
@@ -770,12 +771,12 @@ namespace RelhaxModpack
             if (dr == DialogResult.Yes)
             {
 
-                if (!File.Exists(TanksLocation + "\\_fonts\\FontReg.exe"))
+                if (!File.Exists(Path.Combine(TanksLocation, "_fonts","FontReg.exe")))
                 {
                     try
                     {
                         using (WebClient downloader = new WebClient())
-                            downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/FontReg.exe", TanksLocation + "\\_fonts\\FontReg.exe");
+                            downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/FontReg.exe", Path.Combine(TanksLocation, "_fonts", "FontReg.exe"));
                     }
                     catch (WebException ex)
                     {
@@ -788,7 +789,7 @@ namespace RelhaxModpack
                 info.UseShellExecute = true;
                 info.Verb = "runas"; // Provides Run as Administrator
                 info.Arguments = "/copy";
-                info.WorkingDirectory = TanksLocation + "\\_fonts";
+                info.WorkingDirectory = Path.Combine(TanksLocation, "_fonts");
                 Process installFontss = new Process();
                 installFontss.StartInfo = info;
                 try
@@ -803,8 +804,8 @@ namespace RelhaxModpack
                     Utils.appendToLog("Installation done, but fonts install failed");
                     return;
                 }
-                if (Directory.Exists(TanksLocation + "\\_fonts"))
-                    Directory.Delete(TanksLocation + "\\_fonts", true);
+                if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
+                    Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true);
                 Utils.appendToLog("Fonts Installed Successfully");
                 Utils.appendToLog("Installation done");
                 return;
@@ -844,30 +845,33 @@ namespace RelhaxModpack
             Utils.appendToLog("Finished Relhax Modpack User Mod Extraction");
         }
 
-        //Check the Database for outdated or no more needed files
+        //Step 15: Check the Database for outdated or no more needed files
         private void checkForOldZipFiles()
         {
+            args.ParrentTotalToProcess = 3;
+            args.ParrentProcessed = 1;
             List<string> zipFilesList = new List<string>();
             FileInfo[] fi = null;
             try
             {
                 File.SetAttributes(Path.Combine(Application.StartupPath, "RelHaxDownloads"), FileAttributes.Normal);
                 DirectoryInfo di = new DirectoryInfo(Path.Combine(Application.StartupPath, "RelHaxDownloads"));
-                //get every patch file in the folder
+                //get every zip file in the folder
                 fi = di.GetFiles(@"*.zip", SearchOption.TopDirectoryOnly);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Utils.exceptionLog("checkForOldZipFiles", e);
-                MessageBox.Show(Translations.getTranslatedString("folderDeleteFailed") + " _readme");
+                Utils.exceptionLog("checkForOldZipFiles", ex);
+                MessageBox.Show(string.Format(Translations.getTranslatedString("parseDownloadFolderFailed"), "RelHaxDownloads"));
             }
+            args.ParrentProcessed = 2;
             if (fi != null)
             {
                 foreach (FileInfo f in fi)
                 {
                     zipFilesList.Add(f.Name);
                 }
-                //now MainWindow.usedFilesList has every single possible zipFile in the database
+                //MainWindow.usedFilesList has every single possible zipFile of the modInfo database
                 //for each zipfile in it, remove it in zipFilesList if it exists
                 foreach (string s in MainWindow.usedFilesList)
                 {
@@ -886,9 +890,8 @@ namespace RelhaxModpack
                     oftd.ShowDialog();
                     if (oftd.result)
                     {
-                        childProgressBar.Minimum = 0;
-                        childProgressBar.Value = childProgressBar.Minimum;
-                        childProgressBar.Maximum = filesToDelete.Count;
+                        args.ParrentProcessed = 3;
+                        args.ChildTotalToProcess = filesToDelete.Count;
                         foreach (string s in filesToDelete)
                         {
                             bool retry = true;
@@ -899,12 +902,13 @@ namespace RelhaxModpack
                                 try
                                 {
                                     string file = Path.Combine(Application.StartupPath, "RelHaxDownloads", s);
+                                    args.currentFile = s;
                                     File.SetAttributes(file, FileAttributes.Normal);
                                     File.Delete(file);
                                     // remove file from database, too
                                     Utils.deleteMd5HashDatabase(file);
-                                    childProgressBar.Value++;
                                     retry = false;
+                                    args.ChildProcessed++;
                                 }
                                 catch (Exception e)
                                 {

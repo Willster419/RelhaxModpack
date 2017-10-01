@@ -617,7 +617,7 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("deletingFile", "Deleting file");
-            german.Add("deletingFile", "Löschen von Dateien");
+            german.Add("deletingFile", "Lösche Datei");
             polish.Add("deletingFile", "Usuwanie plików");
             french.Add("deletingFile", "Supression du fichier");
 
@@ -754,7 +754,7 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("fontsPromptError_2", "\\_fonts. Either install them yourself or run this again as Administrator.");
-            german.Add("fontsPromptError_2", "\\_fonts. Entweder installiere sie selbst oder führe es erneut als Administrator aus.");
+            german.Add("fontsPromptError_2", "\\_fonts. Entweder installiere sie selbst oder führe der Relhax Manager erneut als Administrator aus.");
             polish.Add("fontsPromptError_2", "\\_fonts. Albo zainstalujesz je własnoręcznie, albo uruchom jako administrator.");
             french.Add("fontsPromptError_2", "\\_fonts. Installez les polices manuellement ou redémarrez avec les droits Administrateur");
 
@@ -1050,7 +1050,7 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("selectionsCleared", "Selections Cleared");
-            german.Add("selectionsCleared", "Auswahlen Gelöscht");
+            german.Add("selectionsCleared", "Auswahl gelöscht");
             polish.Add("selectionsCleared", "Usunięto Zaznaczenia");
             french.Add("selectionsCleared", "Sélections effacées");
 
@@ -1169,7 +1169,7 @@ namespace RelhaxModpack
             //Componet: Supported clients notice
             //
             english.Add("supportNotGuarnteed", "This client version is not offically supported. Mods may not work.");
-            german.Add("supportNotGuarnteed", "Diese Client-Version wird nicht offiziell unterstützt. Die Mods könnten nicht funktionieren oder sogar Dein World of Tanks beschädigen.");
+            german.Add("supportNotGuarnteed", "Diese Client Version wird (noch) nicht offiziell unterstützt. Die Mods könnten nicht funktionieren oder sogar Dein World of Tanks beschädigen.");
             polish.Add("supportNotGuarnteed", "Ta wersja klienta gry nie jest oficjalnie wspomagana. Modyfikacje mogą nie działać prawidłowo.");
             french.Add("supportNotGuarnteed", "Ce client n'est pas supporté officiellement. Les mods risque de ne pas fonctionner.");
 
@@ -1297,7 +1297,7 @@ namespace RelhaxModpack
             //Section saveConfig
             //
             english.Add("selectWhereToSave", "Select where to save user prefs");
-            german.Add("selectWhereToSave", "Bitte wähle wo die Speicherung erfolgen soll");
+            german.Add("selectWhereToSave", "Bitte wähle wo die Konfiguation gespeichert werden soll");
             polish.Add("selectWhereToSave", "Wybór lokalizacji zapisu preferencji użytkownika");
             french.Add("selectWhereToSave", "Sélectionnez la location pour enregistrer les préférences utilisateur");
 
@@ -1423,6 +1423,13 @@ namespace RelhaxModpack
             german.Add("checkDatabase", "Durchsuche das Dateiarchive nach veralteten oder nicht mehr benötigten Dateien");
             polish.Add("checkDatabase", "TODO");
             french.Add("checkDatabase", "TODO");
+
+            //Component: 
+            //function checkForOldZipFiles() 
+            english.Add("parseDownloadFolderFailed", "Parsing the \"{0}\" folder failed.");
+            german.Add("parseDownloadFolderFailed", "Durchsehen des \"{0}\" Verzeichnisses ist fehlgeschlagen.");
+            polish.Add("parseDownloadFolderFailed", "TODO");
+            french.Add("parseDownloadFolderFailed", "TODO");
 
             //Componet: installation finished
             //

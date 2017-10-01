@@ -26,7 +26,7 @@ namespace RelhaxModpack
         private static int numByteReads = 0;
         private static bool patchDone = false;
         private static int genericTraverse = 0;
-        // private static List<string> parsedZips;
+        private static List<string> parsedZips;
         private static string xvmBootFileLoc1 = "\\res_mods\\configs\\xvm\\xvm.xc";
         private static string xvmBootFileLoc2 = "\\mods\\configs\\xvm\\xvm.xc";
         public static int totalModConfigComponents = 0;
@@ -3679,9 +3679,8 @@ namespace RelhaxModpack
             currentZipFilesOut = currentZipFiles;
         }
 
-        /*
         //moved to ModSelectionList.cs
-        public static List<string> createDownloadedOldZipsList(List<string> currentZipFiles, List<Category> parsedCatagoryList,
+        public static List<string> depricated_createDownloadedOldZipsList(List<string> currentZipFiles, List<Category> parsedCatagoryList,
             List<Dependency> globalDependencies, List<Dependency> currentDependencies, List<LogicalDependnecy> currentLogicalDependencies)  
         {
             parsedZips = new List<string>();
@@ -3716,7 +3715,7 @@ namespace RelhaxModpack
                         parsedZips.Add(m.zipFile);
                     }
                     if (m.configs.Count > 0)
-                        parseZipFileConfigs(m.configs);
+                        depricated_parseZipFileConfigs(m.configs);
                 }
             }
             //now parsedZips has every single possible zipFile in the database
@@ -3727,10 +3726,9 @@ namespace RelhaxModpack
                     currentZipFiles.Remove(s);
             }
             return currentZipFiles;
-        }*/
+        }
 
-        /*
-        public static void parseZipFileConfigs(List<Config> configList)
+        public static void depricated_parseZipFileConfigs(List<Config> configList)
         {
             foreach (Config c in configList)
             {
@@ -3740,9 +3738,9 @@ namespace RelhaxModpack
                     parsedZips.Add(c.zipFile);
                 }
                 if (c.configs.Count > 0)
-                    parseZipFileConfigs(c.configs);
+                    depricated_parseZipFileConfigs(c.configs);
             }
-        }*/
+        }
 
         private static void parseDeveloperSelections(XDocument doc)
         {

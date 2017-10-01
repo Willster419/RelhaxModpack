@@ -1290,10 +1290,13 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.CheckDatabase)
             {
-                message = Translations.getTranslatedString("no longer needed files");
+                message = string.Format("{0}: {1}", Translations.getTranslatedString("deletingFile"), e.currentFile);
+                parrentProgressBar.Maximum = e.ChildTotalToProcess;
+                if ((parrentProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= parrentProgressBar.Maximum))
+                    parrentProgressBar.Value = e.ChildProcessed;
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.CheckDatabase;
-                parrentProgressBar.Value = 0;
-                childProgressBar.Value = 0;
+                // parrentProgressBar.Value = 0;
+                // childProgressBar.Value = 0;
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.CleanUp)
             {
@@ -1541,7 +1544,7 @@ namespace RelhaxModpack
             }
         }
         //check for old zip files
-        private void checkForOldZipFiles()  // this process moved to Installer.cs
+        private void depricated_checkForOldZipFiles()  // this process moved to Installer.cs
         {
             List<string> zipFilesList = new List<string>();
             FileInfo[] fi = null;
@@ -1563,7 +1566,7 @@ namespace RelhaxModpack
                 {
                     zipFilesList.Add(f.Name);
                 }
-                List<string> filesToDelete = Utils.createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists, globalDependenciesToInstall, currentDependencies, currentLogicalDependencies);
+                List<string> filesToDelete = Utils.depricated_createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists, globalDependenciesToInstall, currentDependencies, currentLogicalDependencies);
                 string listOfFiles = "";
                 foreach (string s in filesToDelete)
                     listOfFiles = listOfFiles + s + "\n";
