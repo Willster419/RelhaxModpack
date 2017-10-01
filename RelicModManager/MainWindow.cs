@@ -1359,6 +1359,25 @@ namespace RelhaxModpack
                 }
                 modsConfigsWithData = null;
                 toggleUIButtons(true);
+
+                if (File.Exists(Path.Combine(tanksLocation, "WorldOfTanks.exe")))
+                {
+                    if (MessageBox.Show(string.Format("{0}\n\n{1}", Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("startGame")), Translations.getTranslatedString("information"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        // call the worldoftanks client and close the relhax manager
+                        ProcessStartInfo wot = new ProcessStartInfo();
+                        wot.FileName = Path.Combine(tanksLocation, "WorldOfTanks.exe");
+                        wot.WorkingDirectory = tanksLocation;
+                        Process callWoT = new Process();
+                        callWoT.StartInfo = wot;
+                        callWoT.Start();
+                        Application.Exit();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Uninstall)
             {
@@ -1467,6 +1486,7 @@ namespace RelhaxModpack
                 this.clearLogFilesCB.Checked = Settings.deleteLogs;
                 this.Font = Settings.appFont;
                 this.notifyIfSameDatabaseCB.Checked = Settings.NotifyIfSameDatabase;
+                this.ShowInstallCompleteWindowCB.Checked = Settings.ShowInstallCompleteWindow;
                 switch (Settings.gif)
                 {
                     case (Settings.LoadingGifs.standard):
@@ -1653,16 +1673,17 @@ namespace RelhaxModpack
             clearCacheCB.Enabled = enableToggle;
             clearLogFilesCB.Enabled = enableToggle;
             notifyIfSameDatabaseCB.Enabled = enableToggle;
+            ShowInstallCompleteWindowCB.Enabled = enableToggle;
         }
         //Checks if the current database version is the same as the database version last installed into the selected World_of_Tanks directory
         private bool SameDatabaseVersions()
         {
             //OLD CODE TO BE REPLACED
-            XPathDocument doc = new XPathDocument(Path.Combine(Application.StartupPath, "RelHaxTemp", "manager_version.xml"));//xml doc name can change
+            //XPathDocument doc = new XPathDocument(Path.Combine(Application.StartupPath, "RelHaxTemp", "manager_version.xml"));//xml doc name can change
 
             //NEW CODE TO USE
-            //string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");  //xml doc name can change
-            //XDocument doc = XDocument.Parse(xmlString);
+            string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");  //xml doc name can change
+            XDocument doc = XDocument.Parse(xmlString);
 
             var databaseVersion = doc.CreateNavigator().SelectSingleNode("/version/database");
             databaseVersionString = databaseVersion.InnerXml;
@@ -1864,6 +1885,12 @@ namespace RelhaxModpack
         {
             if (helper != null)
                 helper.helperText.Text = Translations.getTranslatedString("notifyIfSameDatabaseCBExplanation");
+        }
+
+        private void ShowInstallCompleteWindowCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("ShowInstallCompleteWindowCBExplanation");
         }
         #endregion
 
@@ -2076,9 +2103,20 @@ namespace RelhaxModpack
                 newHelper.ShowDialog();
             }
         }
+
+        private void ShowInstallCompleteWindowCB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
+            {
+                newHelper.helperText.Text = Translations.getTranslatedString("ShowInstallCompleteWindowCBExplanation");
+                newHelper.ShowDialog();
+            }
+        }
         #endregion
 
-        #region Check changed events
+        #region CheckChanged events
         //handler for what happends when the check box "clean install" is checked or not
         private void cleanInstallCB_CheckedChanged(object sender, EventArgs e)
         {
@@ -2419,6 +2457,11 @@ namespace RelhaxModpack
         {
             Settings.NotifyIfSameDatabase = notifyIfSameDatabaseCB.Checked;
         }
+
+        private void ShowInstallCompleteWindow_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.ShowInstallCompleteWindow = ShowInstallCompleteWindowCB.Checked;
+        }
         #endregion
 
         #region Click events
@@ -2447,9 +2490,8 @@ namespace RelhaxModpack
                 vu.ShowDialog();
             }
         }
+
         #endregion
-
-
     }
     #region DownloadItem class definition
     //a class for the downloadQueue list, to make a queue of downloads
