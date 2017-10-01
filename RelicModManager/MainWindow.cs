@@ -1311,6 +1311,7 @@ namespace RelhaxModpack
                 string gamePath = Path.Combine(tanksLocation, "WorldOfTanks.exe");
                 if (File.Exists(gamePath))
                 {
+                    /*
                     if (MessageBox.Show(string.Format("{0}\n\n{1}", Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("startGame")), Translations.getTranslatedString("information"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         Utils.appendToLog("User selected the program start: " + gamePath);
@@ -1322,6 +1323,14 @@ namespace RelhaxModpack
                         callWoT.StartInfo = wot;
                         callWoT.Start();
                         Application.Exit();
+                    }
+                    */
+                    if (Settings.ShowInstallCompleteWindow)
+                    {
+                        using (InstallFinished IF = new InstallFinished(tanksLocation))
+                        {
+                            IF.ShowDialog();
+                        }
                     }
                 }
                 else
@@ -1360,13 +1369,14 @@ namespace RelhaxModpack
                 modsConfigsWithData = null;
                 toggleUIButtons(true);
 
+                /*
                 if (Settings.ShowInstallCompleteWindow)
                 {
                     using (InstallFinished IF = new InstallFinished(tanksLocation))
                     {
                         IF.ShowDialog();
                     }
-                }
+                }*/
 
                 /*
                 if (File.Exists(Path.Combine(tanksLocation, "WorldOfTanks.exe")))

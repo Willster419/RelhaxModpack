@@ -136,7 +136,7 @@ namespace RelhaxModpack
                 }
             }
             ResetArgs();
-            //Step 4: Delete user apadata cache
+            //Step 4: Delete user appdata cache
             if (Settings.clearCache)
             {
                 args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteWoTCache;
@@ -160,16 +160,19 @@ namespace RelhaxModpack
                 PatchFiles();
             ResetArgs();
             //Step 12: Extract User Mods
+            Utils.appendToLog("Installation User-Mods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractUserMods;
             if(UserMods.Count > 0)
                 ExtractUserMods();
             ResetArgs();
             //Step 13: Patch Mods if User Mods extracted patch files
+            Utils.appendToLog("Installation User-Patches");
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchUserMods;
             if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
                 PatchFiles();
             ResetArgs();
             //Step 14: Install Fonts
+            Utils.appendToLog("Installation User-Fonts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallUserFonts;
             if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
                 InstallFonts();
