@@ -496,6 +496,13 @@ namespace RelhaxModpack
 
             //Componet: 
             //
+            english.Add("cleanUp", "Clean up resources");
+            german.Add("cleanUp", "Bereinige Ressourcen");
+            polish.Add("cleanUp", "TODO");
+            french.Add("cleanUp", "TODO");
+            
+            //Componet: 
+            //
             english.Add("idle", "Idle");
             german.Add("idle", "Leerlauf");
             polish.Add("idle", "Bezczynny");
@@ -1409,6 +1416,13 @@ namespace RelhaxModpack
             german.Add("installingUserFonts", "Benutzer Schriftsätze installieren");
             polish.Add("installingUserFonts", "Instalowanie czcionek użytkownika");
             french.Add("installingUserFonts", "Installation des polices utilisateur");
+
+            //Componet: CheckDatabase
+            //
+            english.Add("checkDatabase", "Checking the database for outdated or no longer needed files");
+            german.Add("checkDatabase", "Durchsuche das Dateiarchive nach veralteten oder nicht mehr benötigten Dateien");
+            polish.Add("checkDatabase", "TODO");
+            french.Add("checkDatabase", "TODO");
 
             //Componet: installation finished
             //

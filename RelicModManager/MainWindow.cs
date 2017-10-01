@@ -51,6 +51,8 @@ namespace RelhaxModpack
         private List<LogicalDependnecy> currentLogicalDependencies;
         //list of patches
         private List<Patch> patchList;
+        //list of all needed files from the current loaded modInfo file
+        public static List<string> usedFilesList;
         string tempOldDownload;
         private List<Mod> userMods;
         private FirstLoadHelper helper;
@@ -1286,19 +1288,47 @@ namespace RelhaxModpack
                 parrentProgressBar.Value = 0;
                 childProgressBar.Value = 0;
             }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Done)
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.CheckDatabase)
             {
-                Utils.appendToLog("Installation Done");
+                message = Translations.getTranslatedString("no longer needed files");
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.CheckDatabase;
+                parrentProgressBar.Value = 0;
+                childProgressBar.Value = 0;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.CleanUp)
+            {
+                Utils.appendToLog("Installation CleanUp");
                 message = Translations.getTranslatedString("done");
                 totalProgressBar.Value = totalProgressBar.Maximum;
                 parrentProgressBar.Maximum = 1;
                 parrentProgressBar.Value = parrentProgressBar.Maximum;
                 childProgressBar.Maximum = 1;
                 childProgressBar.Value = childProgressBar.Maximum;
-                if (!Program.testMode && (ins != null))
+                downloadProgress.Text = message;
+                string gamePath = Path.Combine(tanksLocation, "WorldOfTanks.exe");
+                if (File.Exists(gamePath))
                 {
-                    this.checkForOldZipFiles();
+                    if (MessageBox.Show(string.Format("{0}\n\n{1}", Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("startGame")), Translations.getTranslatedString("information"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        Utils.appendToLog("User selected the program start: " + gamePath);
+                        // call the worldoftanks client and close the relhax manager
+                        ProcessStartInfo wot = new ProcessStartInfo();
+                        wot.FileName = gamePath;
+                        wot.WorkingDirectory = tanksLocation;
+                        Process callWoT = new Process();
+                        callWoT.StartInfo = wot;
+                        callWoT.Start();
+                        Application.Exit();
+                    }
                 }
+                else
+                {
+                    MessageBox.Show(Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Done)
+            {
+                Utils.appendToLog("Installation Done");
                 //dispose of a lot of stuff
                 if (ins != null)
                 {
@@ -1326,25 +1356,6 @@ namespace RelhaxModpack
                 }
                 modsConfigsWithData = null;
                 toggleUIButtons(true);
-
-                if (File.Exists(Path.Combine(tanksLocation, "WorldOfTanks.exe")))
-                {
-                    if (MessageBox.Show(string.Format("{0}\n\n{1}", Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("startGame")), Translations.getTranslatedString("information"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        // call the worldoftanks client and close the relhax manager
-                        ProcessStartInfo wot = new ProcessStartInfo();
-                        wot.FileName = Path.Combine(tanksLocation, "WorldOfTanks.exe");
-                        wot.WorkingDirectory = tanksLocation;
-                        Process callWoT = new Process();
-                        callWoT.StartInfo = wot;
-                        callWoT.Start();
-                        Application.Exit();
-                    }
-                }
-                else
-                {
-                    MessageBox.Show(Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Uninstall)
             {
@@ -1354,10 +1365,6 @@ namespace RelhaxModpack
                 childProgressBar.Maximum = e.ChildTotalToProcess;
                 if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
                     childProgressBar.Value = e.ChildProcessed;
-            }
-            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.UninstallDone)
-            {
-                MessageBox.Show(Translations.getTranslatedString("uninstallFinished"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -1534,7 +1541,7 @@ namespace RelhaxModpack
             }
         }
         //check for old zip files
-        private void checkForOldZipFiles()
+        private void checkForOldZipFiles()  // this process moved to Installer.cs
         {
             List<string> zipFilesList = new List<string>();
             FileInfo[] fi = null;

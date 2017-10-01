@@ -221,6 +221,7 @@ namespace RelhaxModpack
                 expandAllButton.Enabled = true;
                 expandAllButton.Visible = true;
             }
+            MainWindow.usedFilesList = Utils.createUsedFilesList(parsedCatagoryList, globalDependencies, dependencies, logicalDependencies);
         }
         //initializes the userMods list. This should only be run once
         private void initUserMods()
@@ -250,7 +251,7 @@ namespace RelhaxModpack
             {
                 //default to false, then check if it can be true
                 d.downloadFlag = false;
-                modDownloadFilePath = Application.StartupPath + "\\RelHaxDownloads\\" + d.dependencyZipFile;
+                modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.dependencyZipFile);
                 //get the local md5 hash. a -1 indicates the file is not on the disk
                 string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
                 if ((!d.dependencyZipFile.Equals("")) && (!d.dependencyZipCRC.Equals(oldCRC2)))
@@ -263,7 +264,7 @@ namespace RelhaxModpack
             {
                 //default to false, then check if it can be true
                 d.downloadFlag = false;
-                modDownloadFilePath = Application.StartupPath + "\\RelHaxDownloads\\" + d.dependencyZipFile;
+                modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.dependencyZipFile);
                 //get the local md5 hash. a -1 indicates the file is not on the disk
                 string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
                 if ((!d.dependencyZipFile.Equals("")) && (!d.dependencyZipCRC.Equals(oldCRC2)))
@@ -276,7 +277,7 @@ namespace RelhaxModpack
             {
                 //default to false, then check if it can be true
                 d.downloadFlag = false;
-                modDownloadFilePath = Application.StartupPath + "\\RelHaxDownloads\\" + d.dependencyZipFile;
+                modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.dependencyZipFile);
                 //get the local md5 hash. a -1 indicates the file is not on the disk
                 string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
                 if ((!d.dependencyZipFile.Equals("")) && (!d.dependencyZipCRC.Equals(oldCRC2)))
@@ -402,7 +403,7 @@ namespace RelhaxModpack
             if (Settings.darkUI)
                 lsl.legacyTreeView.Background = System.Windows.Media.Brushes.Gray;
             //helpfull stuff
-            string modDownloadFilePath = Application.StartupPath + "\\RelHaxDownloads\\" + m.zipFile;
+            string modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", m.zipFile);
             hasRadioButtonConfigSelected = false;
             modHasRadioButtons = false;
             //link the catagory and mod in memory

@@ -26,7 +26,7 @@ namespace RelhaxModpack
         private static int numByteReads = 0;
         private static bool patchDone = false;
         private static int genericTraverse = 0;
-        private static List<string> parsedZips;
+        // private static List<string> parsedZips;
         private static string xvmBootFileLoc1 = "\\res_mods\\configs\\xvm\\xvm.xc";
         private static string xvmBootFileLoc2 = "\\mods\\configs\\xvm\\xvm.xc";
         public static int totalModConfigComponents = 0;
@@ -3623,8 +3623,66 @@ namespace RelhaxModpack
             }
         }
 
+        public static List<string> createUsedFilesList(List<Category> parsedCatagoryList,
+            List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies)
+        {
+            List<string> currentZipFiles = new List<string>();
+            foreach (Dependency d in globalDependencies)
+            {
+                if (!d.dependencyZipFile.Equals("") && !currentZipFiles.Contains(d.dependencyZipFile))
+                {
+                    currentZipFiles.Add(d.dependencyZipFile);
+                }
+            }
+            foreach (Dependency d in dependencies)
+            {
+                if (!d.dependencyZipFile.Equals("") && !currentZipFiles.Contains(d.dependencyZipFile))
+                {
+                    currentZipFiles.Add(d.dependencyZipFile);
+                }
+            }
+            foreach (LogicalDependnecy d in logicalDependencies)
+            {
+                if (!d.dependencyZipFile.Equals("") && !currentZipFiles.Contains(d.dependencyZipFile))
+                {
+                    currentZipFiles.Add(d.dependencyZipFile);
+                }
+            }
+            foreach (Category cat in parsedCatagoryList)
+            {
+                foreach (Mod m in cat.mods)
+                {
+
+                    if (!m.zipFile.Equals("") && !currentZipFiles.Contains(m.zipFile))
+                    {
+                        currentZipFiles.Add(m.zipFile);
+                    }
+                    if (m.configs.Count > 0)
+                        createUsedFilesListParseConfigs(m.configs, currentZipFiles, out currentZipFiles);
+                }
+            }
+            return currentZipFiles;
+        }
+
+        public static void createUsedFilesListParseConfigs(List<Config> configList, List<string> currentZipFiles, out List<string> currentZipFilesOut)
+        {
+            foreach (Config c in configList)
+            {
+
+                if (!c.zipFile.Equals("") && !currentZipFiles.Contains(c.zipFile))
+                {
+                    currentZipFiles.Add(c.zipFile);
+                }
+                if (c.configs.Count > 0)
+                    createUsedFilesListParseConfigs(c.configs, currentZipFiles, out currentZipFiles);
+            }
+            currentZipFilesOut = currentZipFiles;
+        }
+
+        /*
+        //moved to ModSelectionList.cs
         public static List<string> createDownloadedOldZipsList(List<string> currentZipFiles, List<Category> parsedCatagoryList,
-            List<Dependency> globalDependencies, List<Dependency> currentDependencies, List<LogicalDependnecy> currentLogicalDependencies)
+            List<Dependency> globalDependencies, List<Dependency> currentDependencies, List<LogicalDependnecy> currentLogicalDependencies)  
         {
             parsedZips = new List<string>();
             foreach (Dependency d in globalDependencies)
@@ -3669,7 +3727,9 @@ namespace RelhaxModpack
                     currentZipFiles.Remove(s);
             }
             return currentZipFiles;
-        }
+        }*/
+
+        /*
         public static void parseZipFileConfigs(List<Config> configList)
         {
             foreach (Config c in configList)
@@ -3682,7 +3742,8 @@ namespace RelhaxModpack
                 if (c.configs.Count > 0)
                     parseZipFileConfigs(c.configs);
             }
-        }
+        }*/
+
         private static void parseDeveloperSelections(XDocument doc)
         {
             DeveloperSelections d;

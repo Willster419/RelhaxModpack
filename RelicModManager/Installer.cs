@@ -90,8 +90,7 @@ namespace RelhaxModpack
             //put them back when done
             if (!Directory.Exists(Path.Combine(TanksLocation, "res_mods", TanksVersion))) Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods", TanksVersion));
             if (!Directory.Exists(Path.Combine(TanksLocation, "mods", TanksVersion))) Directory.CreateDirectory(Path.Combine(TanksLocation, "mods", TanksVersion));
-            ResetArgs();
-            args.InstalProgress = InstallerEventArgs.InstallProgress.UninstallDone;
+            MessageBox.Show(Translations.getTranslatedString("uninstallFinished"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         //Start the installation on the Wokrer thread
@@ -174,6 +173,13 @@ namespace RelhaxModpack
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallUserFonts;
             if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
                 InstallFonts();
+            ResetArgs();
+            //Step 15: CheckDatabase and delete outdated or no more needed files
+            args.InstalProgress = InstallerEventArgs.InstallProgress.CheckDatabase;
+            if (!Program.testMode)
+            {
+                checkForOldZipFiles();
+            }
         }
 
         public void WorkerReportProgress(object sender, ProgressChangedEventArgs e)
@@ -183,6 +189,8 @@ namespace RelhaxModpack
 
         public void WorkerReportComplete(object sender, AsyncCompletedEventArgs e)
         {
+            args.InstalProgress = InstallerEventArgs.InstallProgress.CleanUp;
+            OnInstallProgressChanged();
             args.InstalProgress = InstallerEventArgs.InstallProgress.Done;
             OnInstallProgressChanged();
         }
@@ -834,6 +842,88 @@ namespace RelhaxModpack
                 Utils.exceptionLog("ExtractUserMods", e);
             }
             Utils.appendToLog("Finished Relhax Modpack User Mod Extraction");
+        }
+
+        //Check the Database for outdated or no more needed files
+        private void checkForOldZipFiles()
+        {
+            List<string> zipFilesList = new List<string>();
+            FileInfo[] fi = null;
+            try
+            {
+                File.SetAttributes(Path.Combine(Application.StartupPath, "RelHaxDownloads"), FileAttributes.Normal);
+                DirectoryInfo di = new DirectoryInfo(Path.Combine(Application.StartupPath, "RelHaxDownloads"));
+                //get every patch file in the folder
+                fi = di.GetFiles(@"*.zip", SearchOption.TopDirectoryOnly);
+            }
+            catch (Exception e)
+            {
+                Utils.exceptionLog("checkForOldZipFiles", e);
+                MessageBox.Show(Translations.getTranslatedString("folderDeleteFailed") + " _readme");
+            }
+            if (fi != null)
+            {
+                foreach (FileInfo f in fi)
+                {
+                    zipFilesList.Add(f.Name);
+                }
+                //now MainWindow.usedFilesList has every single possible zipFile in the database
+                //for each zipfile in it, remove it in zipFilesList if it exists
+                foreach (string s in MainWindow.usedFilesList)
+                {
+                    if (zipFilesList.Contains(s))
+                        zipFilesList.Remove(s);
+                }
+                List<string> filesToDelete = zipFilesList;
+                string listOfFiles = "";
+                foreach (string s in filesToDelete)
+                    listOfFiles = listOfFiles + s + "\n";
+                using (OldFilesToDelete oftd = new OldFilesToDelete())
+                {
+                    oftd.filesList.Text = listOfFiles;
+                    if (listOfFiles.Count() == 0)
+                        return;
+                    oftd.ShowDialog();
+                    if (oftd.result)
+                    {
+                        childProgressBar.Minimum = 0;
+                        childProgressBar.Value = childProgressBar.Minimum;
+                        childProgressBar.Maximum = filesToDelete.Count;
+                        foreach (string s in filesToDelete)
+                        {
+                            bool retry = true;
+                            bool breakOut = false;
+                            while (retry)
+                            {
+                                //for each zip file, verify it exists, set properties to normal, delete it
+                                try
+                                {
+                                    string file = Path.Combine(Application.StartupPath, "RelHaxDownloads", s);
+                                    File.SetAttributes(file, FileAttributes.Normal);
+                                    File.Delete(file);
+                                    // remove file from database, too
+                                    Utils.deleteMd5HashDatabase(file);
+                                    childProgressBar.Value++;
+                                    retry = false;
+                                }
+                                catch (Exception e)
+                                {
+                                    retry = true;
+                                    Utils.exceptionLog("checkForOldZipFiles", "delete", e);
+                                    DialogResult res = MessageBox.Show(string.Format("{0} {1}", Translations.getTranslatedString("fileDeleteFailed"), s), "", MessageBoxButtons.RetryCancel);
+                                    if (res == System.Windows.Forms.DialogResult.Cancel)
+                                    {
+                                        breakOut = true;
+                                        retry = false;
+                                    }
+                                }
+                            }
+                            if (breakOut)
+                                break;
+                        }
+                    }
+                }
+            }
         }
 
         //parses a patch xml file into an xml patch instance in memory to be enqueued

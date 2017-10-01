@@ -25,10 +25,11 @@ namespace RelhaxModpack
             ExtractUserMods = 14,
             PatchUserMods = 15,
             InstallUserFonts = 16,
-            Done = 17,
+            CheckDatabase = 17,
+            CleanUp = 18,
+            Done = 19,
             //kept after done because it's not part of the uninstall process
-            Uninstall = 18,
-            UninstallDone = 19,
+            Uninstall = 20
         };
         public InstallProgress InstalProgress { get; set; }
         //the total parrent processed items
