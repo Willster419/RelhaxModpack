@@ -29,15 +29,17 @@ namespace RelhaxModpack
         public static bool saveUserData { get; set; }
         public static bool darkUI { get; set; }
         public static bool disableBorders { get; set; }
+        //toggle if the installation complete window will be shown
+        public static bool ShowInstallCompleteWindow { get; set; }
         //toggle if the program will delete the WoT appdata cache
         public static bool clearCache { get; set; }
+        public static bool deleteLogs { get; set; }
+        public static bool disableColorChange { get; set; }
         public static int modSelectionHeight { get; set; }
         public static int modSelectionWidth { get; set; }
         public static int loadingGif { get; set; }
         public static string fontName { get; set; }
         public static float scaleSize { get; set; }
-        public static bool deleteLogs { get; set; }
-        public static bool disableColorChange { get; set; }
         public static string settingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxSettings.xml");
         public static string managerInfoDatFile = Path.Combine(Application.StartupPath, "RelHaxTemp", "managerInfo.dat");
         public static string modInfoDatFile = Path.Combine(Application.StartupPath, "RelHaxTemp", "modInfo.dat");
@@ -120,6 +122,7 @@ namespace RelhaxModpack
                 Settings.tempFontSizeForum = 0;
                 Settings.fontSizeforum = FontSize.font100;
                 Settings.sView = SelectionView.defaultt;
+                Settings.ShowInstallCompleteWindow = false;
                 Settings.applyInternalSettings();
             }
             else
@@ -185,6 +188,9 @@ namespace RelhaxModpack
                             break;
                         case "NotifyIfSameDatabase":
                             Settings.NotifyIfSameDatabase = bool.Parse(n.InnerText);
+                            break;
+                        case "ShowInstallCompleteWindow":
+                            Settings.ShowInstallCompleteWindow = bool.Parse(n.InnerText);
                             break;
                         case "previewX":
                             Settings.previewX = int.Parse(n.InnerText);
@@ -348,6 +354,9 @@ namespace RelhaxModpack
             XmlElement xNotifyIfSameDatabase = doc.CreateElement("NotifyIfSameDatabase");
             xNotifyIfSameDatabase.InnerText = "" + Settings.NotifyIfSameDatabase;
             settingsHolder.AppendChild(xNotifyIfSameDatabase);
+            XmlElement xShowInstallCompleteWindow = doc.CreateElement("ShowInstallCompleteWindow");
+            xShowInstallCompleteWindow.InnerText = "" + Settings.ShowInstallCompleteWindow;
+            settingsHolder.AppendChild(xShowInstallCompleteWindow);
             XmlElement xlanguage = doc.CreateElement("language");
             xlanguage.InnerText = "" + (int)Translations.language;
             settingsHolder.AppendChild(xlanguage);

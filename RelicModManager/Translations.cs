@@ -184,10 +184,10 @@ namespace RelhaxModpack
 
             //Componet: settingsGroupBox
             //
-            english.Add("settingsGroupBox", "RelHax ModPack Settings");
-            german.Add("settingsGroupBox", "RelHax ModPack Einstellungen");
-            polish.Add("settingsGroupBox", "Ustawienia Paczki RelHax");
-            french.Add("settingsGroupBox", "Paramètres du ModPack Relhax");
+            english.Add("settingsGroupBox", "Settings (Right-click for descriptions)");
+            german.Add("settingsGroupBox", "TODO");
+            polish.Add("settingsGroupBox", "TODO");
+            french.Add("settingsGroupBox", "TODO");
 
             //Componet: darkUICB
             //
@@ -315,6 +315,12 @@ namespace RelhaxModpack
             german.Add("notifyIfSameDatabaseCB", "TODO");
             polish.Add("notifyIfSameDatabaseCB", "TODO");
             french.Add("notifyIfSameDatabaseCB", "TODO");
+
+            //Component: ShowInstallCompleteWindow
+            english.Add("ShowInstallCompleteWindow", "Show install complete window");
+            german.Add("ShowInstallCompleteWindow", "TODO");
+            polish.Add("ShowInstallCompleteWindow", "TODO");
+            french.Add("ShowInstallCompleteWindow", "TODO");
 
             //Section: ModSelectionList
 
@@ -940,6 +946,13 @@ namespace RelhaxModpack
             polish.Add("notifyIfSameDatabaseCBExplanation", "");
             french.Add("notifyIfSameDatabaseCBExplanation", "");
 
+            //Component: ShowInstallCompleteWindowCBExplanation
+            //
+            english.Add("ShowInstallCompleteWindowCBExplanation", "Show a window upon installation completion with popular operations to perform after modpack installation, such as launching the game, going to the xvm website, etc.");
+            german.Add("ShowInstallCompleteWindowCBExplanation", "");
+            polish.Add("ShowInstallCompleteWindowCBExplanation", "");
+            french.Add("ShowInstallCompleteWindowCBExplanation", "");
+
             //Section: Messages from ModSelectionList
 
             //Componet: testModeDatabaseNotFound
@@ -1416,6 +1429,35 @@ namespace RelhaxModpack
             german.Add("startGame", "Soll das Spiel jetzt gestartet werden?");
             polish.Add("startGame", "TODO");
             french.Add("StartGame", "TODO");
+
+            //Section: InstallFinished Components
+            //Componet: InstallCompleteLabel
+            //
+            english.Add("InstallCompleteLabel", "The Installation is complete. Would you like to...");
+            german.Add("InstallCompleteLabel", "TODO");
+            polish.Add("InstallCompleteLabel", "TODO");
+            french.Add("InstallCompleteLabel", "TODO");
+
+            //Componet: StartTanksButton
+            //
+            english.Add("StartTanksButton", "Start the game? (WorldofTanks.exe)");
+            german.Add("StartTanksButton", "TODO");
+            polish.Add("StartTanksButton", "TODO");
+            french.Add("StartTanksButton", "TODO");
+
+            //Componet: StartWoTLauncherButton
+            //
+            english.Add("StartWoTLauncherButton", "Start the game launcher? (WoTLauncher.exe)");
+            german.Add("StartWoTLauncherButton", "TODO");
+            polish.Add("StartWoTLauncherButton", "TODO");
+            french.Add("StartWoTLauncherButton", "TODO");
+
+            //Componet: StartXVMStatButton
+            //
+            english.Add("StartXVMStatButton", "Open your web browser to the xvm statistics login website?");
+            german.Add("StartXVMStatButton", "TODO");
+            polish.Add("StartXVMStatButton", "TODO");
+            french.Add("StartXVMStatButton", "TODO");
         }
     }
 }

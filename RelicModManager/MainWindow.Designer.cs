@@ -41,6 +41,7 @@
             this.cancerFontCB = new System.Windows.Forms.CheckBox();
             this.backupModsCheckBox = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
+            this.ShowInstallCompleteWindowCB = new System.Windows.Forms.CheckBox();
             this.notifyIfSameDatabaseCB = new System.Windows.Forms.CheckBox();
             this.clearLogFilesCB = new System.Windows.Forms.CheckBox();
             this.clearCacheCB = new System.Windows.Forms.CheckBox();
@@ -91,7 +92,7 @@
             // 
             // childProgressBar
             // 
-            this.childProgressBar.Location = new System.Drawing.Point(12, 498);
+            this.childProgressBar.Location = new System.Drawing.Point(12, 516);
             this.childProgressBar.Name = "childProgressBar";
             this.childProgressBar.Size = new System.Drawing.Size(418, 16);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -119,7 +120,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(9, 539);
+            this.formPageLink.Location = new System.Drawing.Point(9, 557);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -129,7 +130,7 @@
             // 
             // parrentProgressBar
             // 
-            this.parrentProgressBar.Location = new System.Drawing.Point(12, 476);
+            this.parrentProgressBar.Location = new System.Drawing.Point(12, 494);
             this.parrentProgressBar.Name = "parrentProgressBar";
             this.parrentProgressBar.Size = new System.Drawing.Size(418, 16);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -201,6 +202,7 @@
             // 
             // settingsGroupBox
             // 
+            this.settingsGroupBox.Controls.Add(this.ShowInstallCompleteWindowCB);
             this.settingsGroupBox.Controls.Add(this.notifyIfSameDatabaseCB);
             this.settingsGroupBox.Controls.Add(this.clearLogFilesCB);
             this.settingsGroupBox.Controls.Add(this.clearCacheCB);
@@ -213,10 +215,24 @@
             this.settingsGroupBox.Controls.Add(this.cleanInstallCB);
             this.settingsGroupBox.Location = new System.Drawing.Point(12, 77);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(308, 185);
+            this.settingsGroupBox.Size = new System.Drawing.Size(308, 203);
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
-            this.settingsGroupBox.Text = "Modpack Settings";
+            this.settingsGroupBox.Text = "Modpack Settings (Right click for description)";
+            // 
+            // ShowInstallCompleteWindowCB
+            // 
+            this.ShowInstallCompleteWindowCB.AutoSize = true;
+            this.ShowInstallCompleteWindowCB.Location = new System.Drawing.Point(6, 183);
+            this.ShowInstallCompleteWindowCB.Name = "ShowInstallCompleteWindowCB";
+            this.ShowInstallCompleteWindowCB.Size = new System.Drawing.Size(168, 17);
+            this.ShowInstallCompleteWindowCB.TabIndex = 34;
+            this.ShowInstallCompleteWindowCB.Text = "Show Install complete window";
+            this.ShowInstallCompleteWindowCB.UseVisualStyleBackColor = true;
+            this.ShowInstallCompleteWindowCB.CheckedChanged += new System.EventHandler(this.ShowInstallCompleteWindow_CheckedChanged);
+            this.ShowInstallCompleteWindowCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ShowInstallCompleteWindowCB_MouseDown);
+            this.ShowInstallCompleteWindowCB.MouseEnter += new System.EventHandler(this.ShowInstallCompleteWindowCB_MouseEnter);
+            this.ShowInstallCompleteWindowCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // notifyIfSameDatabaseCB
             // 
@@ -310,7 +326,7 @@
             this.languageSelectionGB.Controls.Add(this.languageENG);
             this.languageSelectionGB.Location = new System.Drawing.Point(326, 78);
             this.languageSelectionGB.Name = "languageSelectionGB";
-            this.languageSelectionGB.Size = new System.Drawing.Size(104, 113);
+            this.languageSelectionGB.Size = new System.Drawing.Size(104, 125);
             this.languageSelectionGB.TabIndex = 30;
             this.languageSelectionGB.TabStop = false;
             this.languageSelectionGB.Text = "Language";
@@ -374,7 +390,7 @@
             // 
             this.loadingImageGroupBox.Controls.Add(this.thirdGuardsLoadingImageRB);
             this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(326, 192);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(326, 209);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
             this.loadingImageGroupBox.Size = new System.Drawing.Size(103, 69);
             this.loadingImageGroupBox.TabIndex = 26;
@@ -414,7 +430,7 @@
             // findBugAddModLabel
             // 
             this.findBugAddModLabel.AutoSize = true;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 520);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(9, 538);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
             this.findBugAddModLabel.TabIndex = 27;
@@ -425,7 +441,7 @@
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(327, 520);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(327, 538);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
             this.cancelDownloadButton.Size = new System.Drawing.Size(103, 60);
             this.cancelDownloadButton.TabIndex = 28;
@@ -442,7 +458,7 @@
             // downloadProgress
             // 
             this.downloadProgress.DetectUrls = false;
-            this.downloadProgress.Location = new System.Drawing.Point(12, 388);
+            this.downloadProgress.Location = new System.Drawing.Point(12, 406);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
             this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
@@ -457,7 +473,7 @@
             this.viewTypeGB.Controls.Add(this.expandNodesDefault);
             this.viewTypeGB.Controls.Add(this.selectionLegacy);
             this.viewTypeGB.Controls.Add(this.selectionDefault);
-            this.viewTypeGB.Location = new System.Drawing.Point(177, 268);
+            this.viewTypeGB.Location = new System.Drawing.Point(177, 286);
             this.viewTypeGB.Name = "viewTypeGB";
             this.viewTypeGB.Size = new System.Drawing.Size(252, 114);
             this.viewTypeGB.TabIndex = 31;
@@ -539,7 +555,7 @@
             // donateLabel
             // 
             this.donateLabel.AutoSize = true;
-            this.donateLabel.Location = new System.Drawing.Point(9, 559);
+            this.donateLabel.Location = new System.Drawing.Point(9, 577);
             this.donateLabel.Name = "donateLabel";
             this.donateLabel.Size = new System.Drawing.Size(162, 13);
             this.donateLabel.TabIndex = 32;
@@ -560,7 +576,7 @@
             this.fontSizeGB.Controls.Add(this.fontSize175);
             this.fontSizeGB.Controls.Add(this.fontSize125);
             this.fontSizeGB.Controls.Add(this.fontSize100);
-            this.fontSizeGB.Location = new System.Drawing.Point(11, 268);
+            this.fontSizeGB.Location = new System.Drawing.Point(11, 286);
             this.fontSizeGB.Name = "fontSizeGB";
             this.fontSizeGB.Size = new System.Drawing.Size(160, 114);
             this.fontSizeGB.TabIndex = 33;
@@ -713,7 +729,7 @@
             // 
             // totalProgressBar
             // 
-            this.totalProgressBar.Location = new System.Drawing.Point(12, 454);
+            this.totalProgressBar.Location = new System.Drawing.Point(12, 472);
             this.totalProgressBar.Name = "totalProgressBar";
             this.totalProgressBar.Size = new System.Drawing.Size(418, 16);
             this.totalProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -722,7 +738,7 @@
             // DiscordServerLink
             // 
             this.DiscordServerLink.AutoSize = true;
-            this.DiscordServerLink.Location = new System.Drawing.Point(9, 578);
+            this.DiscordServerLink.Location = new System.Drawing.Point(9, 596);
             this.DiscordServerLink.Name = "DiscordServerLink";
             this.DiscordServerLink.Size = new System.Drawing.Size(77, 13);
             this.DiscordServerLink.TabIndex = 35;
@@ -755,7 +771,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(442, 596);
+            this.ClientSize = new System.Drawing.Size(442, 612);
             this.Controls.Add(this.viewDBUpdates);
             this.Controls.Add(this.viewAppUpdates);
             this.Controls.Add(this.DiscordServerLink);
@@ -850,6 +866,7 @@
         private System.Windows.Forms.RadioButton fontSize275;
         private System.Windows.Forms.RadioButton fontSize225;
         private System.Windows.Forms.CheckBox notifyIfSameDatabaseCB;
+        private System.Windows.Forms.CheckBox ShowInstallCompleteWindowCB;
     }
 }
 

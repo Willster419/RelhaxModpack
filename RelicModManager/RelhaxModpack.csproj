@@ -189,6 +189,12 @@
     </Compile>
     <Compile Include="Installer.cs" />
     <Compile Include="InstallerEventArgs.cs" />
+    <Compile Include="InstallFinished.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InstallFinished.Designer.cs">
+      <DependentUpon>InstallFinished.cs</DependentUpon>
+    </Compile>
     <Compile Include="LegacySelectionList.xaml.cs">
       <DependentUpon>LegacySelectionList.xaml</DependentUpon>
     </Compile>
@@ -295,6 +301,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GifPreview.resx">
       <DependentUpon>GifPreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InstallFinished.resx">
+      <DependentUpon>InstallFinished.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
