@@ -98,6 +98,7 @@ namespace RelhaxModpack
         {
             ResetArgs();
             //Step 1: do a backup if requested
+            Utils.appendToLog("Installation BackupMods");
             if (Settings.backupModFolder)
             {
                 args.InstalProgress = InstallerEventArgs.InstallProgress.BackupMods;
@@ -105,6 +106,7 @@ namespace RelhaxModpack
             }
             ResetArgs();
             //Step 2: do a backup of user data
+            Utils.appendToLog("Installation BackupUserData");
             if (Settings.saveUserData)
             {
                 args.InstalProgress = InstallerEventArgs.InstallProgress.BackupUserData;
@@ -112,12 +114,14 @@ namespace RelhaxModpack
             }
             ResetArgs();
             //Step 3: Delete Mods
+            Utils.appendToLog("Installation DeleteMods");
             if (Settings.cleanInstallation)
             {
                 args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteMods;
                 DeleteMods();
             }
             //Setp 3a: delete log files
+            Utils.appendToLog("Installation DeleteWoTCache");
             if (Settings.deleteLogs)
             {
                 Utils.appendToLog("deleteLogs selected, deleting wot, xvm, and pmod logs");
@@ -132,11 +136,12 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog(ex);
+                    Utils.exceptionLog("ActuallyStartInstallation", "deleteLogs", ex);
                 }
             }
             ResetArgs();
             //Step 4: Delete user appdata cache
+            Utils.appendToLog("Installation DeleteWoTCache");
             if (Settings.clearCache)
             {
                 args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteWoTCache;
@@ -144,10 +149,12 @@ namespace RelhaxModpack
             }
             ResetArgs();
             //Step 5-9: Extracts Mods
+            Utils.appendToLog("Installation ExtractGlobalDependencies");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractGlobalDependencies;
             ExtractDatabaseObjects();
             ResetArgs();
             //Step 10: Restore User Data
+            Utils.appendToLog("Installation RestoreUserData");
             if (Settings.saveUserData)
             {
                 args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreUserData;
@@ -155,24 +162,25 @@ namespace RelhaxModpack
             }
             ResetArgs();
             //Step 11: Patch Mods
+            Utils.appendToLog("Installation PatchMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchMods;
             if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
                 PatchFiles();
             ResetArgs();
             //Step 12: Extract User Mods
-            Utils.appendToLog("Installation User-Mods");
+            Utils.appendToLog("Installation ExtractUserMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractUserMods;
             if(UserMods.Count > 0)
                 ExtractUserMods();
             ResetArgs();
             //Step 13: Patch Mods if User Mods extracted patch files
-            Utils.appendToLog("Installation User-Patches");
+            Utils.appendToLog("Installation PatchUserMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchUserMods;
             if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
                 PatchFiles();
             ResetArgs();
             //Step 14: Install Fonts
-            Utils.appendToLog("Installation User-Fonts");
+            Utils.appendToLog("Installation InstallUserFonts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallUserFonts;
             if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
                 InstallFonts();
@@ -193,8 +201,10 @@ namespace RelhaxModpack
 
         public void WorkerReportComplete(object sender, AsyncCompletedEventArgs e)
         {
+            Utils.appendToLog("Installation CleanUp");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CleanUp;
             OnInstallProgressChanged();
+            Utils.appendToLog("Installation Done");
             args.InstalProgress = InstallerEventArgs.InstallProgress.Done;
             OnInstallProgressChanged();
         }
@@ -555,36 +565,64 @@ namespace RelhaxModpack
         //Step 10: Restore User Data
         public void RestoreUserData()
         {
-            args.ParrentTotalToProcess = ModsConfigsWithData.Count;
-            InstallWorker.ReportProgress(0);
-            string[] fileList = Directory.GetFiles(Path.Combine(Application.StartupPath, "RelHaxTemp"));
-            foreach (DatabaseObject dbo in ModsConfigsWithData)
+            try
             {
-                args.ChildTotalToProcess = dbo.userFiles.Count;
-                foreach (string s in dbo.userFiles)
-                {
-                    args.currentFile = s;
-                    InstallWorker.ReportProgress(0);
-                    //find the file
-                    string parsedFileName = Utils.getValidFilename(dbo.name + "_" + Path.GetFileName(s));
-                    foreach (string ss in fileList)
-                    {
-                        string thePath = Path.GetFileName(ss);
-                        if (thePath.Equals(parsedFileName))
-                        {
-                            //the file has been found in the temp directory
-                            if (!Directory.Exists(Path.Combine(TanksLocation, Path.GetFullPath(s))))
-                                Directory.CreateDirectory(Path.Combine(TanksLocation, Path.GetDirectoryName(s)));
-                            if (File.Exists(Path.Combine(TanksLocation, s)))
-                                File.Delete(Path.Combine(TanksLocation, s));
-                            File.Move(ss, Path.Combine(TanksLocation, s));
-                        }
-                    }
-                    args.ChildProcessed++;
-                    InstallWorker.ReportProgress(0);
-                }
-                args.ParrentProcessed++;
+                args.ParrentTotalToProcess = ModsConfigsWithData.Count;
                 InstallWorker.ReportProgress(0);
+                string[] fileList = Directory.GetFiles(Path.Combine(Application.StartupPath, "RelHaxTemp"));
+                foreach (DatabaseObject dbo in ModsConfigsWithData)
+                {
+                    try
+                    {
+                        args.ChildTotalToProcess = dbo.userFiles.Count;
+                        foreach (string s in dbo.userFiles)
+                        {
+                            try {
+                                args.currentFile = s;
+                                InstallWorker.ReportProgress(0);
+                                //find the file
+                                string parsedFileName = Utils.getValidFilename(dbo.name + "_" + Path.GetFileName(s));
+                                foreach (string ss in fileList)
+                                {
+                                    try
+                                    {
+                                        string thePath = Path.GetFileName(ss);
+                                        if (thePath.Equals(parsedFileName))
+                                        {
+                                            //the file has been found in the temp directory
+                                            if (!Directory.Exists(Path.Combine(TanksLocation, Path.GetFullPath(s))))
+                                                Directory.CreateDirectory(Path.Combine(TanksLocation, Path.GetDirectoryName(s)));
+                                            if (File.Exists(Path.Combine(TanksLocation, s)))
+                                                File.Delete(Path.Combine(TanksLocation, s));
+                                            File.Move(ss, Path.Combine(TanksLocation, s));
+                                        }
+                                    }
+                                    catch (Exception p)
+                                    {
+                                        Utils.exceptionLog("RestoreUserData", "p", p);
+                                    }
+                                }
+                                args.ChildProcessed++;
+                                InstallWorker.ReportProgress(0);
+                            }
+                            catch (Exception fl)
+                            {
+                                Utils.exceptionLog("RestoreUserData", "fl", fl);
+                            }
+                        }
+                        args.ParrentProcessed++;
+                        InstallWorker.ReportProgress(0);
+                    }
+                    catch (Exception uf)
+                    {
+                        Utils.exceptionLog("RestoreUserData", "uf", uf);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("RestoreUserData", ex);
             }
         }
 
