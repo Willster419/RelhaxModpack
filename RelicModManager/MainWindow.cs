@@ -1360,6 +1360,15 @@ namespace RelhaxModpack
                 modsConfigsWithData = null;
                 toggleUIButtons(true);
 
+                if (Settings.ShowInstallCompleteWindow)
+                {
+                    using (InstallFinished IF = new InstallFinished(tanksLocation))
+                    {
+                        IF.ShowDialog();
+                    }
+                }
+
+                /*
                 if (File.Exists(Path.Combine(tanksLocation, "WorldOfTanks.exe")))
                 {
                     if (MessageBox.Show(string.Format("{0}\n\n{1}", Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("startGame")), Translations.getTranslatedString("information"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -1377,7 +1386,7 @@ namespace RelhaxModpack
                 else
                 {
                     MessageBox.Show(Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                }*/
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Uninstall)
             {

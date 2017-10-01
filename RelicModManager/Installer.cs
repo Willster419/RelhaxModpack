@@ -827,13 +827,13 @@ namespace RelhaxModpack
                     xvmConfigDir = Utils.getXVMBootLoc(TanksLocation);
                 //extract user mods
                 Utils.appendToLog("Starting Relhax Modpack User Mod Extraction");
-                string downloadedFilesDir = Application.StartupPath + "\\RelHaxUserMods\\";
+                string downloadedFilesDir = Path.Combine(Application.StartupPath, "RelHaxUserMods");
                 foreach (Mod m in UserMods)
                 {
                     if (m.Checked)
                     {
                         Utils.appendToLog("Exracting " + Path.GetFileName(m.zipFile));
-                        this.Unzip(downloadedFilesDir + Path.GetFileName(m.zipFile), TanksLocation);
+                        this.Unzip(Path.Combine(downloadedFilesDir, Path.GetFileName(m.zipFile)), TanksLocation);
                         InstallWorker.ReportProgress(0);
                     }
                 }
@@ -1151,7 +1151,7 @@ namespace RelhaxModpack
         {
             string thisVersion = TanksVersion;
             //create a filestream to append installed files log data
-            using (FileStream fs = new FileStream(TanksLocation + "\\installedRelhaxFiles.log", FileMode.Append, FileAccess.Write))
+            using (FileStream fs = new FileStream(Path.Combine(TanksLocation, "installedRelhaxFiles.log"), FileMode.Append, FileAccess.Write))
             {
                 // create a comment with the name of the extracted and installed package, to better trace back the installation source
                 string commentLine = "/*  " + Path.GetFileNameWithoutExtension(zipFile) + "  */\n";
