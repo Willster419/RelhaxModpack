@@ -956,16 +956,16 @@ namespace RelhaxModpack
             //Component: notifyIfSameDatabaseCBExplanation
             //
             english.Add("notifyIfSameDatabaseCBExplanation", "Notify you if your last installed database version is the same. If so, it means that there is no update to any mods.");
-            german.Add("notifyIfSameDatabaseCBExplanation", "");
-            polish.Add("notifyIfSameDatabaseCBExplanation", "");
-            french.Add("notifyIfSameDatabaseCBExplanation", "");
+            german.Add("notifyIfSameDatabaseCBExplanation", "TODO");
+            polish.Add("notifyIfSameDatabaseCBExplanation", "TODO");
+            french.Add("notifyIfSameDatabaseCBExplanation", "TODO");
 
             //Component: ShowInstallCompleteWindowCBExplanation
             //
             english.Add("ShowInstallCompleteWindowCBExplanation", "Show a window upon installation completion with popular operations to perform after modpack installation, such as launching the game, going to the xvm website, etc.");
-            german.Add("ShowInstallCompleteWindowCBExplanation", "");
-            polish.Add("ShowInstallCompleteWindowCBExplanation", "");
-            french.Add("ShowInstallCompleteWindowCBExplanation", "");
+            german.Add("ShowInstallCompleteWindowCBExplanation", "TODO");
+            polish.Add("ShowInstallCompleteWindowCBExplanation", "TODO");
+            french.Add("ShowInstallCompleteWindowCBExplanation", "TODO");
 
             //Section: Messages from ModSelectionList
 
@@ -1200,7 +1200,14 @@ namespace RelhaxModpack
             polish.Add("fileDeleteFailed", "Próba usunięcia pliku zakończona niepowodzeniem");
             french.Add("fileDeleteFailed", "Échec de la supression du fichier");
 
-            //Componet: Found zip fiels to delete 1
+            //Componet: OldFilesToDelete
+            //Window header
+            english.Add("foundOldFilesHeader", "Old Files Question");
+            german.Add("foundOldFilesHeader", "alte Dateien löschen");
+            polish.Add("foundOldFilesHeader", "TODO");
+            french.Add("foundOldFilesHeader", "TODO");
+
+            //Componet: Found zip files to delete 1
             //
             english.Add("foundOldFilesDelete1", "The installer has found the following files that are old and can be deleted");
             german.Add("foundOldFilesDelete1", "Wir haben folgende veralteten Dateien gefunden die gelöscht werden können");

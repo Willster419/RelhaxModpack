@@ -1300,7 +1300,6 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.CleanUp)
             {
-                Utils.appendToLog("Installation CleanUp");
                 message = Translations.getTranslatedString("done");
                 totalProgressBar.Value = totalProgressBar.Maximum;
                 parrentProgressBar.Maximum = 1;
@@ -1308,29 +1307,11 @@ namespace RelhaxModpack
                 childProgressBar.Maximum = 1;
                 childProgressBar.Value = childProgressBar.Maximum;
                 downloadProgress.Text = message;
-                string gamePath = Path.Combine(tanksLocation, "WorldOfTanks.exe");
-                if (File.Exists(gamePath))
+                if (Settings.ShowInstallCompleteWindow)
                 {
-                    /*
-                    if (MessageBox.Show(string.Format("{0}\n\n{1}", Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("startGame")), Translations.getTranslatedString("information"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    using (InstallFinished IF = new InstallFinished(tanksLocation))
                     {
-                        Utils.appendToLog("User selected the program start: " + gamePath);
-                        // call the worldoftanks client and close the relhax manager
-                        ProcessStartInfo wot = new ProcessStartInfo();
-                        wot.FileName = gamePath;
-                        wot.WorkingDirectory = tanksLocation;
-                        Process callWoT = new Process();
-                        callWoT.StartInfo = wot;
-                        callWoT.Start();
-                        Application.Exit();
-                    }
-                    */
-                    if (Settings.ShowInstallCompleteWindow)
-                    {
-                        using (InstallFinished IF = new InstallFinished(tanksLocation))
-                        {
-                            IF.ShowDialog();
-                        }
+                        IF.ShowDialog();
                     }
                 }
                 else
@@ -1340,7 +1321,6 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Done)
             {
-                Utils.appendToLog("Installation Done");
                 //dispose of a lot of stuff
                 if (ins != null)
                 {
@@ -1368,35 +1348,6 @@ namespace RelhaxModpack
                 }
                 modsConfigsWithData = null;
                 toggleUIButtons(true);
-
-                /*
-                if (Settings.ShowInstallCompleteWindow)
-                {
-                    using (InstallFinished IF = new InstallFinished(tanksLocation))
-                    {
-                        IF.ShowDialog();
-                    }
-                }*/
-
-                /*
-                if (File.Exists(Path.Combine(tanksLocation, "WorldOfTanks.exe")))
-                {
-                    if (MessageBox.Show(string.Format("{0}\n\n{1}", Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("startGame")), Translations.getTranslatedString("information"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        // call the worldoftanks client and close the relhax manager
-                        ProcessStartInfo wot = new ProcessStartInfo();
-                        wot.FileName = Path.Combine(tanksLocation, "WorldOfTanks.exe");
-                        wot.WorkingDirectory = tanksLocation;
-                        Process callWoT = new Process();
-                        callWoT.StartInfo = wot;
-                        callWoT.Start();
-                        Application.Exit();
-                    }
-                }
-                else
-                {
-                    MessageBox.Show(Translations.getTranslatedString("installationFinished"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }*/
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Uninstall)
             {

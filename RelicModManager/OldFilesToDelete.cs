@@ -10,6 +10,7 @@ namespace RelhaxModpack
         public OldFilesToDelete()
         {
             InitializeComponent();
+            this.Text = Translations.getTranslatedString("foundOldFilesHeader");
         }
 
         private void OldFilesToDelete_Load(object sender, EventArgs e)

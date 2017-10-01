@@ -121,7 +121,7 @@ namespace RelhaxModpack
                 DeleteMods();
             }
             //Setp 3a: delete log files
-            Utils.appendToLog("Installation DeleteWoTCache");
+            Utils.appendToLog("Installation logFiles");
             if (Settings.deleteLogs)
             {
                 Utils.appendToLog("deleteLogs selected, deleting wot, xvm, and pmod logs");
@@ -577,29 +577,31 @@ namespace RelhaxModpack
                         args.ChildTotalToProcess = dbo.userFiles.Count;
                         foreach (string s in dbo.userFiles)
                         {
+                            string correctedUserFiles = s.Replace(@"\\", @"\");
                             try {
-                                args.currentFile = s;
+                                args.currentFile = correctedUserFiles;
                                 InstallWorker.ReportProgress(0);
                                 //find the file
-                                string parsedFileName = Utils.getValidFilename(dbo.name + "_" + Path.GetFileName(s));
+                                string parsedFileName = Utils.getValidFilename(dbo.name + "_" + Path.GetFileName(correctedUserFiles));
                                 foreach (string ss in fileList)
                                 {
                                     try
                                     {
-                                        string thePath = Path.GetFileName(ss);
+                                        string correctedPath = ss.Replace(@"\\",@"\");
+                                        string thePath = Path.GetFileName(correctedPath);
                                         if (thePath.Equals(parsedFileName))
                                         {
                                             //the file has been found in the temp directory
-                                            if (!Directory.Exists(Path.Combine(TanksLocation, Path.GetFullPath(s))))
-                                                Directory.CreateDirectory(Path.Combine(TanksLocation, Path.GetDirectoryName(s)));
-                                            if (File.Exists(Path.Combine(TanksLocation, s)))
-                                                File.Delete(Path.Combine(TanksLocation, s));
-                                            File.Move(ss, Path.Combine(TanksLocation, s));
+                                            if (!Directory.Exists(Path.Combine(TanksLocation, Path.GetFullPath(correctedUserFiles))))
+                                                Directory.CreateDirectory(Path.Combine(TanksLocation, Path.GetDirectoryName(correctedUserFiles)));
+                                            if (File.Exists(Path.Combine(TanksLocation, correctedUserFiles)))
+                                                File.Delete(Path.Combine(TanksLocation, correctedUserFiles));
+                                            File.Move(correctedPath, Path.Combine(TanksLocation, correctedUserFiles));
                                         }
                                     }
                                     catch (Exception p)
                                     {
-                                        Utils.exceptionLog("RestoreUserData", "p\n"+ Path.Combine(TanksLocation, Path.GetFullPath(s))+"\n"+ Path.Combine(TanksLocation, Path.GetDirectoryName(s))+"\n"+ Path.Combine(TanksLocation, s), p);
+                                        Utils.exceptionLog("RestoreUserData", "p", p);
 
                                     }
                                 }
@@ -849,7 +851,6 @@ namespace RelhaxModpack
                 if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
                     Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true);
                 Utils.appendToLog("Fonts Installed Successfully");
-                Utils.appendToLog("Installation done");
                 return;
             }
             else
