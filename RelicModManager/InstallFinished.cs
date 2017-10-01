@@ -13,7 +13,7 @@ namespace RelhaxModpack
         int difference;
         private string WoTEXELocation;
         private string WoTLauncherLocation;
-        private string XVMURL = "http://www.modxvm.com/en/";
+        private string XVMURL = "http://www.modxvm.com/{0}/";
         public InstallFinished(string tanksLocation)
         {
             InitializeComponent();
@@ -69,7 +69,7 @@ namespace RelhaxModpack
 
         private void StartXVMStatButton_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(XVMURL);
+            System.Diagnostics.Process.Start(string.Format(XVMURL, Translations.getTranslatedString("xvmUrlLocalisation")));
             this.Close();
         }
     }

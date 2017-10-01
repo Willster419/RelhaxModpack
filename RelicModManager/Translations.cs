@@ -1493,6 +1493,13 @@ namespace RelhaxModpack
             german.Add("StartXVMStatButton", "TODO");
             polish.Add("StartXVMStatButton", "TODO");
             french.Add("StartXVMStatButton", "TODO");
+
+            //Componet: StartXVMStatButton_Click
+            //localisation to which page you will jump
+            english.Add("xvmUrlLocalisation", "en");
+            german.Add("xvmUrlLocalisation", "de");
+            polish.Add("xvmUrlLocalisation", "en");
+            french.Add("xvmUrlLocalisation", "fr");
         }
     }
 }
