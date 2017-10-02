@@ -23,6 +23,19 @@ namespace RelhaxModpack
         StringBuilder modsSB = new StringBuilder();
         StringBuilder configsSB = new StringBuilder();
         StringBuilder filesNotFoundSB = new StringBuilder();
+        string serverInfo = "creating the manageInfo.dat file, containing the files: " +
+            "\nmanager_version.xml\n" +
+            "manager version.txt (will be deprecated)\n" +
+            "supported_clients.xml\n" +
+            "supported_clients.txt (will be deprecated)\n" +
+            "databaseUpdate.txt\n" +
+            "releaseNotes.txt\n";
+        string database = "creating the database.xml file at every online version folder of WoT, containing the filename, size and MD5Hash of " +
+            "the current folder, the script \"CreateMD5List.php\" is a needed subscript of CreateDatabase.php, \"relhax_db.sqlite\" is the needed sqlite database to " +
+            "be fast on parsing all files and only working on new or changed files";
+        string modInfo = "creating the modInfo.dat file at every online version folder  of WoT, added the onlineFolder name to the root element, " +
+            "added the \"selections\" (developerSelections) names, creation date and filenames to the modInfo.xml, adding all parsed develeoperSelection-Config " +
+            "files to the modInfo.dat archive";
 
         public CRCFileSizeUpdate()
         {
@@ -288,17 +301,6 @@ namespace RelhaxModpack
             Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
         }
 
-        private void RunOnlineScriptButton_Click(object sender, EventArgs e)
-        {
-            OnlineScriptOutput.Text = "Running online script...";
-            Application.DoEvents();
-            using (WebClient client = new WebClient())
-            {
-                OnlineScriptOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateDatabase.php").Replace("<br />", "\n");
-            }
-            Application.DoEvents();
-        }
-
         private void updateDatabaseOffline_Click(object sender, EventArgs e)
         {
             //check for database
@@ -433,6 +435,72 @@ namespace RelhaxModpack
                     return i;
             }
             return -1;
+        }
+
+        private void RunOnlineScriptButton_Click(object sender, EventArgs e)
+        {
+            OnlineScriptOutput.Text = "Running script CreateDatabase.php...";
+            Application.DoEvents();
+            using (WebClient client = new WebClient())
+            {
+                OnlineScriptOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateDatabase.php").Replace("<br />", "\n");
+            }
+            Application.DoEvents();
+        }
+
+        private void RunCreateModInfoPHP_Click(object sender, EventArgs e)
+        {
+            OnlineScriptOutput.Text = "Running script CreateModInfo.php...";
+            Application.DoEvents();
+            using (WebClient client = new WebClient())
+            {
+                OnlineScriptOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateModInfo.php").Replace("<br />", "\n");
+            }
+            Application.DoEvents();
+        }
+
+        private void RunCreateServerInfoPHP_Click(object sender, EventArgs e)
+        {
+            OnlineScriptOutput.Text = "Running script CreateServerInfo.php...";
+            Application.DoEvents();
+            using (WebClient client = new WebClient())
+            {
+                OnlineScriptOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateServerInfo.php").Replace("<br />", "\n");
+            }
+            Application.DoEvents();
+        }
+
+        private void RunCreateDatabasePHP_MouseEnter(object sender, EventArgs e)
+        {
+            OnlineScriptOutput.Text = database;
+        }
+
+        private void RunCreateModInfoPHP_MouseEnter(object sender, EventArgs e)
+        {
+            OnlineScriptOutput.Text = modInfo;
+        }
+
+        private void RunCreateServerInfoPHP_MouseEnter(object sender, EventArgs e)
+        {
+            OnlineScriptOutput.Text = serverInfo;
+        }
+
+        private void RunCreateDatabasePHP_MouseLeave(object sender, EventArgs e)
+        {
+            if (OnlineScriptOutput.Text.Equals(database))
+                OnlineScriptOutput.Text = "";
+        }
+
+        private void RunCreateModInfoPHP_MouseLeave(object sender, EventArgs e)
+        {
+            if (OnlineScriptOutput.Text.Equals(modInfo))
+                OnlineScriptOutput.Text = "";
+        }
+
+        private void RunCreateServerInfoPHP_MouseLeave(object sender, EventArgs e)
+        {
+            if (OnlineScriptOutput.Text.Equals(serverInfo))
+                OnlineScriptOutput.Text = "";
         }
     }
 }
