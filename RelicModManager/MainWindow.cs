@@ -320,6 +320,8 @@ namespace RelhaxModpack
             string newExeName = Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat");
             try
             {
+                //please lookat this alternative option (much more editable friendly in my opinion)
+                /*
                 // http://www.motobit.com/util/base64-decoder-encoder.asp
                 string base64Str =
                     "QEVDSE8gT0ZGDQpFQ0hPIFVwZGF0aW5nIEFwcGxpY2F0aW9uLi4uDQpwaW5nIDEyNy4wLjAuMSAt" +
@@ -330,6 +332,18 @@ namespace RelhaxModpack
                     "YXJ0aW5nIEFwcGxpY2F0aW9uLi4uDQpzdGFydCAiIiAiUmVsaGF4TW9kcGFjay5leGUiICUxICUy" +
                     "ICUzICU0ICU1ICU2ICU3ICU4ICU5IDI + IG51bA0K";
                 File.WriteAllBytes(@newExeName, Convert.FromBase64String(base64Str));
+                */
+                File.WriteAllText(newExeName, @"@ECHO OFF
+                ECHO Updating Application...
+                ping 127.0.0.1 -n 3 > nul
+                del  /Q RelhaxModpack.exe 2> nul
+                copy /Y RelhaxModpack_update.exe RelhaxModpack.exe 2> nul
+                del /Q RelicModManager_update.exe 2> nul
+                del /Q RelhaxModpack_update.exe 2> nul
+                del /Q RelicModManager.exe 2> nul
+                ECHO Starting Application...
+                start """" ""RelhaxModpack.exe"" 2> nul
+                ".Replace("                ", ""));
             }
             catch (Exception ex)
             {
