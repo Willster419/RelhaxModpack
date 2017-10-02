@@ -550,12 +550,14 @@ namespace RelhaxModpack
             return "all good";
         }
 
-        private void downloadResources(string resourcesFile)
+        private void downloadResources(string resourcesFile, PleaseWait wait)
         {
             string localDll = Path.Combine(Application.StartupPath, resourcesFile);
             string urlPath = string.Format("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/{0}", resourcesFile);
             try
             {
+                wait.loadingDescBox.Text = string.Format("{0} {1} ... ", Translations.getTranslatedString("Downloading"), resourcesFile);
+                Application.DoEvents();
                 using (downloader = new WebClient())
                 {
                     downloader.DownloadFile(urlPath, localDll);
@@ -570,7 +572,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void checkResources(bool onlyCheckIfExists)
+        private void checkResources(bool onlyCheckIfExists, PleaseWait wait)
         {
             string[] resourcesList = { "DotNetZip.dll", "Newtonsoft.Json.dll" };
 
@@ -590,7 +592,7 @@ namespace RelhaxModpack
                     if (!File.Exists(localDll))
                     {
                         Utils.appendToLog(string.Format("local Resource File \"{0}\" is not existing", resourcesFile));
-                        downloadResources(resourcesFile);
+                        downloadResources(resourcesFile, wait);
                     }
                 }
                 else
@@ -636,7 +638,7 @@ namespace RelhaxModpack
                     else // caseSwitch > 0      // local Version is smaller then the online Version => download
                     {
                         Utils.appendToLog(string.Format("online Resource File is v{0}. Outdated and download needed", onlineResourcesFileVersion));
-                        downloadResources(resourcesFile);
+                        downloadResources(resourcesFile, wait);
                     }
                 }
             }
@@ -680,7 +682,7 @@ namespace RelhaxModpack
             
             //check for required external application libraries (dlls only)
             Utils.appendToLog("Checking if required external files existing");
-            checkResources(true);
+            checkResources(true, wait);
             
             //check for updates
             wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
@@ -697,7 +699,7 @@ namespace RelhaxModpack
 
             // check the resources again and now it is possible to compair the versionnumbers (local and online)
             Utils.appendToLog("Checking for required external files if Up-To-Date");
-            checkResources(false);
+            checkResources(false, wait);
 
             //load settings
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
