@@ -574,18 +574,6 @@ namespace RelhaxModpack
             if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup"));
             if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxUserConfigs"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxUserConfigs"));
             if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxTemp"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxTemp"));
-            //check for updates
-            wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
-            Application.DoEvents();
-            if (Program.skipUpdate)
-            {
-                Utils.appendToLog("/skip-update switch detected, skipping application update");
-                if (!Program.testMode) MessageBox.Show(Translations.getTranslatedString("skipUpdateWarning"));
-            }
-            else
-            {
-                this.checkmanagerUpdates();
-            }
             //add method to disable the modpack for during patch day
             //this will involve having a hard coded true or false, along with a command line arguement to over-ride
             //to disable from patch day set it to false.
@@ -598,22 +586,46 @@ namespace RelhaxModpack
             }
             //check for required external application libraries (dlls only)
             Utils.appendToLog("Checking for required external files");
-            if (!File.Exists(Path.Combine(Application.StartupPath, "DotNetZip.dll")))
+
+            /*
+            
+
+            // Get the file version for the notepad.
+            FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(@localDll);
+
+            // Print the file name and version number.
+            Utils.appendToLog("File: " + myFileVersionInfo.FileDescription + '\n' +
+                              "Version number: " + myFileVersionInfo.FileVersion);'*/
+
+            string localDll = Path.Combine(Application.StartupPath, "DotNetZip.dll");
+            if (!File.Exists(localDll))
             {
+                string urlPath = "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll";
                 try
                 {
                     using (downloader = new WebClient())
                     {
-                        downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll", Path.Combine(Application.StartupPath, "DotNetZip.dll"));
+                        downloader.DownloadFile(urlPath, localDll);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("MainWindow_Load", "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll", ex);
+                    Utils.exceptionLog("MainWindow_Load", urlPath, ex);
                     MessageBox.Show(string.Format("{0} DotNetZip.dll", Translations.getTranslatedString("failedToDownload_1")));
                     Application.Exit();
                 }
             }
+
+            /*
+            localDll = Path.Combine(Application.StartupPath, "Newtonsoft.Json.dll");
+
+            // Get the file version for the notepad.
+            myFileVersionInfo = FileVersionInfo.GetVersionInfo(@localDll);
+
+            // Print the file name and version number.
+            Utils.appendToLog("File: " + myFileVersionInfo.FileDescription + '\n' +
+                              "Version number: " + myFileVersionInfo.FileVersion);*/
+
             if (!File.Exists(Path.Combine(Application.StartupPath, "Newtonsoft.Json.dll")))
             {
                 try
@@ -629,6 +641,18 @@ namespace RelhaxModpack
                     MessageBox.Show(string.Format("{0} Newtonsoft.Json.dll", Translations.getTranslatedString("failedToDownload_1")));
                     Application.Exit();
                 }
+            }
+            //check for updates
+            wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
+            Application.DoEvents();
+            if (Program.skipUpdate)
+            {
+                Utils.appendToLog("/skip-update switch detected, skipping application update");
+                if (!Program.testMode) MessageBox.Show(Translations.getTranslatedString("skipUpdateWarning"));
+            }
+            else
+            {
+                this.checkmanagerUpdates();
             }
             //load settings
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
