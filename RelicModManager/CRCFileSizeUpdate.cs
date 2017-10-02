@@ -97,7 +97,7 @@ namespace RelhaxModpack
                 Program.databaseUpdateOnline = false;
                 return;
             }
-            updatingLabel.Text = "Updating database...";
+            OnlineScriptOutput.Text = "Updating database...";
             Application.DoEvents();
             filesNotFoundSB.Append("FILES NOT FOUND:\n");
             globalDepsSB.Append("\nGlobal Dependencies updated:\n");
@@ -190,7 +190,7 @@ namespace RelhaxModpack
             //this.saveDatabase(databaseLocationTextBox.Text, gameVersion);
             Utils.SaveDatabase(databaseLocationTextBox.Text, gameVersion, onlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             MessageBox.Show(filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
-            updatingLabel.Text = "Idle";
+            //updatingLabel.Text = "Idle";
             Program.databaseUpdateOnline = false;
         }
 
@@ -328,7 +328,7 @@ namespace RelhaxModpack
                 MessageBox.Show(string.Format("{0} duplicates found !!!", duplicatesCounter));
                 return;
             }
-            updatingLabel.Text = "Updating database...";
+            OnlineScriptOutput.Text = "Updating database...";
             Application.DoEvents();
             globalDepsSB.Append("Global Dependencies updated:\n");
             dependenciesSB.Append("Dependencies updated:\n");
@@ -389,7 +389,7 @@ namespace RelhaxModpack
             //this.saveDatabase(databaseLocationTextBox.Text, gameVersion);
             Utils.SaveDatabase(databaseLocationTextBox.Text, gameVersion, onlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
-            updatingLabel.Text = "Idle";
+            //updatingLabel.Text = "Idle";
         }
 
         private void processConfigsCRCUpdate_old(List<Config> cfgList)
@@ -472,35 +472,22 @@ namespace RelhaxModpack
 
         private void RunCreateDatabasePHP_MouseEnter(object sender, EventArgs e)
         {
-            OnlineScriptOutput.Text = database;
+            InfoTB.Text = database;
         }
 
         private void RunCreateModInfoPHP_MouseEnter(object sender, EventArgs e)
         {
-            OnlineScriptOutput.Text = modInfo;
+            InfoTB.Text = modInfo;
         }
 
         private void RunCreateServerInfoPHP_MouseEnter(object sender, EventArgs e)
         {
-            OnlineScriptOutput.Text = serverInfo;
+            InfoTB.Text = serverInfo;
         }
 
-        private void RunCreateDatabasePHP_MouseLeave(object sender, EventArgs e)
+        private void Generic_MouseLeave(object sender, EventArgs e)
         {
-            if (OnlineScriptOutput.Text.Equals(database))
-                OnlineScriptOutput.Text = "";
-        }
-
-        private void RunCreateModInfoPHP_MouseLeave(object sender, EventArgs e)
-        {
-            if (OnlineScriptOutput.Text.Equals(modInfo))
-                OnlineScriptOutput.Text = "";
-        }
-
-        private void RunCreateServerInfoPHP_MouseLeave(object sender, EventArgs e)
-        {
-            if (OnlineScriptOutput.Text.Equals(serverInfo))
-                OnlineScriptOutput.Text = "";
+            InfoTB.Text = "";
         }
     }
 }

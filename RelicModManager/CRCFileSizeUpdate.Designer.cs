@@ -31,7 +31,6 @@
             this.loadDatabaseButton = new System.Windows.Forms.Button();
             this.databaseLocationTextBox = new System.Windows.Forms.RichTextBox();
             this.updateDatabaseOnline = new System.Windows.Forms.Button();
-            this.updatingLabel = new System.Windows.Forms.Label();
             this.addZipsDialog = new System.Windows.Forms.OpenFileDialog();
             this.loadDatabaseDialog = new System.Windows.Forms.OpenFileDialog();
             this.RunCreateDatabasePHP = new System.Windows.Forms.Button();
@@ -39,6 +38,7 @@
             this.updateDatabaseOffline = new System.Windows.Forms.Button();
             this.RunCreateModInfoPHP = new System.Windows.Forms.Button();
             this.RunCreateServerInfoPHP = new System.Windows.Forms.Button();
+            this.InfoTB = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // loadDatabaseButton
@@ -56,7 +56,7 @@
             this.databaseLocationTextBox.Location = new System.Drawing.Point(101, 14);
             this.databaseLocationTextBox.Name = "databaseLocationTextBox";
             this.databaseLocationTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.databaseLocationTextBox.Size = new System.Drawing.Size(468, 39);
+            this.databaseLocationTextBox.Size = new System.Drawing.Size(327, 39);
             this.databaseLocationTextBox.TabIndex = 1;
             this.databaseLocationTextBox.Text = "-none-";
             // 
@@ -69,15 +69,6 @@
             this.updateDatabaseOnline.Text = "update database (online method)";
             this.updateDatabaseOnline.UseVisualStyleBackColor = true;
             this.updateDatabaseOnline.Click += new System.EventHandler(this.updateDatabaseOnline_Click);
-            // 
-            // updatingLabel
-            // 
-            this.updatingLabel.AutoSize = true;
-            this.updatingLabel.Location = new System.Drawing.Point(12, 97);
-            this.updatingLabel.Name = "updatingLabel";
-            this.updatingLabel.Size = new System.Drawing.Size(24, 13);
-            this.updatingLabel.TabIndex = 4;
-            this.updatingLabel.Text = "Idle";
             // 
             // addZipsDialog
             // 
@@ -98,7 +89,7 @@
             // 
             // RunCreateDatabasePHP
             // 
-            this.RunCreateDatabasePHP.Location = new System.Drawing.Point(214, 59);
+            this.RunCreateDatabasePHP.Location = new System.Drawing.Point(497, 53);
             this.RunCreateDatabasePHP.Name = "RunCreateDatabasePHP";
             this.RunCreateDatabasePHP.Size = new System.Drawing.Size(113, 35);
             this.RunCreateDatabasePHP.TabIndex = 5;
@@ -106,14 +97,14 @@
             this.RunCreateDatabasePHP.UseVisualStyleBackColor = true;
             this.RunCreateDatabasePHP.Click += new System.EventHandler(this.RunOnlineScriptButton_Click);
             this.RunCreateDatabasePHP.MouseEnter += new System.EventHandler(this.RunCreateDatabasePHP_MouseEnter);
-            this.RunCreateDatabasePHP.MouseLeave += new System.EventHandler(this.RunCreateDatabasePHP_MouseLeave);
+            this.RunCreateDatabasePHP.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // OnlineScriptOutput
             // 
-            this.OnlineScriptOutput.Location = new System.Drawing.Point(12, 113);
+            this.OnlineScriptOutput.Location = new System.Drawing.Point(12, 100);
             this.OnlineScriptOutput.Name = "OnlineScriptOutput";
             this.OnlineScriptOutput.ReadOnly = true;
-            this.OnlineScriptOutput.Size = new System.Drawing.Size(557, 130);
+            this.OnlineScriptOutput.Size = new System.Drawing.Size(416, 130);
             this.OnlineScriptOutput.TabIndex = 6;
             this.OnlineScriptOutput.Text = "";
             // 
@@ -129,7 +120,7 @@
             // 
             // RunCreateModInfoPHP
             // 
-            this.RunCreateModInfoPHP.Location = new System.Drawing.Point(333, 59);
+            this.RunCreateModInfoPHP.Location = new System.Drawing.Point(559, 12);
             this.RunCreateModInfoPHP.Name = "RunCreateModInfoPHP";
             this.RunCreateModInfoPHP.Size = new System.Drawing.Size(111, 35);
             this.RunCreateModInfoPHP.TabIndex = 8;
@@ -137,11 +128,11 @@
             this.RunCreateModInfoPHP.UseVisualStyleBackColor = true;
             this.RunCreateModInfoPHP.Click += new System.EventHandler(this.RunCreateModInfoPHP_Click);
             this.RunCreateModInfoPHP.MouseEnter += new System.EventHandler(this.RunCreateModInfoPHP_MouseEnter);
-            this.RunCreateModInfoPHP.MouseLeave += new System.EventHandler(this.RunCreateModInfoPHP_MouseLeave);
+            this.RunCreateModInfoPHP.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // RunCreateServerInfoPHP
             // 
-            this.RunCreateServerInfoPHP.Location = new System.Drawing.Point(450, 59);
+            this.RunCreateServerInfoPHP.Location = new System.Drawing.Point(434, 12);
             this.RunCreateServerInfoPHP.Name = "RunCreateServerInfoPHP";
             this.RunCreateServerInfoPHP.Size = new System.Drawing.Size(119, 35);
             this.RunCreateServerInfoPHP.TabIndex = 9;
@@ -149,19 +140,28 @@
             this.RunCreateServerInfoPHP.UseVisualStyleBackColor = true;
             this.RunCreateServerInfoPHP.Click += new System.EventHandler(this.RunCreateServerInfoPHP_Click);
             this.RunCreateServerInfoPHP.MouseEnter += new System.EventHandler(this.RunCreateServerInfoPHP_MouseEnter);
-            this.RunCreateServerInfoPHP.MouseLeave += new System.EventHandler(this.RunCreateServerInfoPHP_MouseLeave);
+            this.RunCreateServerInfoPHP.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // InfoTB
+            // 
+            this.InfoTB.Location = new System.Drawing.Point(434, 100);
+            this.InfoTB.Name = "InfoTB";
+            this.InfoTB.ReadOnly = true;
+            this.InfoTB.Size = new System.Drawing.Size(238, 130);
+            this.InfoTB.TabIndex = 10;
+            this.InfoTB.Text = "";
             // 
             // CRCFileSizeUpdate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(581, 254);
+            this.ClientSize = new System.Drawing.Size(677, 237);
+            this.Controls.Add(this.InfoTB);
             this.Controls.Add(this.RunCreateServerInfoPHP);
             this.Controls.Add(this.RunCreateModInfoPHP);
             this.Controls.Add(this.updateDatabaseOffline);
             this.Controls.Add(this.OnlineScriptOutput);
             this.Controls.Add(this.RunCreateDatabasePHP);
-            this.Controls.Add(this.updatingLabel);
             this.Controls.Add(this.updateDatabaseOnline);
             this.Controls.Add(this.databaseLocationTextBox);
             this.Controls.Add(this.loadDatabaseButton);
@@ -172,7 +172,6 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CRCFileSizeUpdate_FormClosing);
             this.Load += new System.EventHandler(this.CRCFileSizeUpdate_Load);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -181,7 +180,6 @@
         private System.Windows.Forms.Button loadDatabaseButton;
         private System.Windows.Forms.RichTextBox databaseLocationTextBox;
         private System.Windows.Forms.Button updateDatabaseOnline;
-        private System.Windows.Forms.Label updatingLabel;
         private System.Windows.Forms.OpenFileDialog addZipsDialog;
         private System.Windows.Forms.OpenFileDialog loadDatabaseDialog;
         private System.Windows.Forms.Button RunCreateDatabasePHP;
@@ -189,5 +187,6 @@
         private System.Windows.Forms.Button updateDatabaseOffline;
         private System.Windows.Forms.Button RunCreateModInfoPHP;
         private System.Windows.Forms.Button RunCreateServerInfoPHP;
+        private System.Windows.Forms.RichTextBox InfoTB;
     }
 }
