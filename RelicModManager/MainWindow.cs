@@ -149,14 +149,9 @@ namespace RelhaxModpack
             //convert the total seconds to mins and seconds
             int actualTimeMins = (int)actualTimeRemain / 60;
             int actualTimeSecs = (int)actualTimeRemain % 60;
-            // string downloadStatus = "";
-            // downloadStatus = Translations.getTranslatedString("Downloading") + " " + currentModDownloadingShort + " (" + Math.Round(MBytesIn, 1) + " MB" + " of " + Math.Round(MBytesTotal, 1) + " MB)";
-            // downloadStatus = downloadStatus + "\n" + totalSpeedLabel + " " + actualTimeMins + " mins " + actualTimeSecs + " ";
             string downloadStatus = string.Format("{0} {1} ({2} MB {3} {4} MB)\n{5} {6} mins {7} secs",
                 Translations.getTranslatedString("Downloading"), currentModDownloadingShort, Math.Round(MBytesIn, 1), Translations.getTranslatedString("of"), Math.Round(MBytesTotal, 1), totalSpeedLabel, actualTimeMins, actualTimeSecs);
-            //totalSpeedLabel = 
             downloadProgress.Text = downloadStatus;
-            //speedLabel.Text = totalSpeedLabel;
         }
         //handler for the mod download file complete event
         void downloader_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
@@ -342,7 +337,7 @@ namespace RelhaxModpack
                 del /Q RelhaxModpack_update.exe 2> nul
                 del /Q RelicModManager.exe 2> nul
                 ECHO Starting Application...
-                start """" ""RelhaxModpack.exe"" 2> nul
+                start """" ""RelhaxModpack.exe"" %1 %2 %3 %4 %5 %6 %7 %8 %9 2> nul
                 ".Replace("                ", ""));
             }
             catch (Exception ex)
