@@ -15,6 +15,7 @@ namespace RelhaxModpack
         public static bool autoInstall = false;
         public static bool skipUpdate = false;
         public static bool patchDayTest = false;
+        public static bool ignoreResourseVersionFail = false;
         public static bool saveSettings = false;
         public static bool databaseUpdateOnline = false;
         public static string configName = "";
@@ -57,6 +58,11 @@ namespace RelhaxModpack
                 {
                     Utils.appendToLog("/patchday detected, welcome database manager");
                     patchDayTest = true;
+                }
+                else if (Regex.IsMatch(commandArgs[i], @"ignoreresourseversionfail$"))
+                {
+                    Utils.appendToLog("/ignoreResourseVersionFail detected, welcome developer");
+                    ignoreResourseVersionFail = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"auto-install$"))
                 {

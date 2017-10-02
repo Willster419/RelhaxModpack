@@ -4391,12 +4391,20 @@ namespace RelhaxModpack
         // https://stackoverflow.com/questions/30494/compare-version-identifiers
         /// <summary>
         /// Compare versions of form "1,2,3,4" or "1.2.3.4". Throws FormatException
-        /// in case of invalid version.
+        /// in case of invalid version. See function comments for more informations and samples.
         /// </summary>
         /// <param name="strA">the first version</param>
         /// <param name="strB">the second version</param>
         /// <returns>less than zero if strA is less than strB, equal to zero if
-        /// strA equals strB, and greater than zero if strA is greater than strB</returns>
+        /// strA equals strB, and greater than zero if strA is greater than strB
+        /// Samples:
+        /// 1.0.0.0     | 1.0.0.1 = -1
+        /// 1.0.0.1     | 1.0.0.0 =  1
+        /// 1.0.0.0     | 1.0.0.0 =  0
+        /// 1, 0.0.0    | 1.0.0.0 =  0
+        /// 9, 5, 1, 44 | 3.4.5.6 =  1
+        /// 1, 5, 1, 44 | 3.4.5.6 = -1
+        /// 6,5,4,3     | 6.5.4.3 =  0</returns>
         public static int CompareVersions(String strA, String strB)
         {
             Version vA = new Version(strA.Replace(",", "."));

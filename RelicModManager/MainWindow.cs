@@ -549,6 +549,99 @@ namespace RelhaxModpack
             tanksLocation = findWotExe.FileName;
             return "all good";
         }
+
+        private void downloadResources(string resourcesFile)
+        {
+            string localDll = Path.Combine(Application.StartupPath, resourcesFile);
+            string urlPath = string.Format("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/{0}", resourcesFile);
+            try
+            {
+                using (downloader = new WebClient())
+                {
+                    downloader.DownloadFile(urlPath, localDll);
+                    Utils.appendToLog(string.Format("successfully downloaded: {0}", resourcesFile));
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("downloadResources", urlPath, ex);
+                MessageBox.Show(string.Format("{0} {1}", Translations.getTranslatedString("failedToDownload_1"), resourcesFile));
+                Application.Exit();
+            }
+        }
+
+        private void checkResources(bool onlyCheckIfExists)
+        {
+            string[] resourcesList = { "DotNetZip.dll", "Newtonsoft.Json.dll" };
+
+            // this could only be working, if the manager could extract a file !!
+            XDocument doc = null;
+            if (!onlyCheckIfExists)
+            {
+                string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");
+                doc = XDocument.Parse(xmlString);
+            }
+
+            foreach (var resourcesFile in resourcesList)
+            {
+                string localDll = Path.Combine(Application.StartupPath, resourcesFile);
+                if (onlyCheckIfExists)
+                {
+                    if (!File.Exists(localDll))
+                    {
+                        Utils.appendToLog(string.Format("local Resource File \"{0}\" is not existing", resourcesFile));
+                        downloadResources(resourcesFile);
+                    }
+                }
+                else
+                {
+                    // Get the file version
+                    FileVersionInfo VersionInfo = FileVersionInfo.GetVersionInfo(@localDll);
+                    // Print the file name and version number
+                    Utils.appendToLog(string.Format("local Resource File: {0} ({1}, v{2})", VersionInfo.FileDescription, resourcesFile, VersionInfo.FileVersion));
+                    // check managerInfo.xml for online Version number of the file
+                    var onlineResourcesFile = doc.CreateNavigator().SelectSingleNode("/version/resources");
+                    bool exists = doc.Descendants("file")
+                       .Where(arg => arg.Value == resourcesFile)
+                       .Any();
+                    string onlineResourcesFileVersion = "0";
+                    if (exists)
+                    {
+                        XElement element = doc.Descendants("file")
+                           .Where(arg => arg.Value == resourcesFile)
+                           .FirstOrDefault();
+                        onlineResourcesFileVersion = element.Attribute("version").Value;
+                    }
+                    else
+                    {
+                        Utils.appendToLog(string.Format("ERROR, can not find the online Version of \"{0}\"", resourcesFile));
+                        continue;
+                    }
+
+                    // compaire the version numbers
+                    int caseSwitch = Utils.CompareVersions(onlineResourcesFileVersion.Trim(), VersionInfo.FileVersion.Trim());
+
+                    if (caseSwitch < 0)         // online Version is smaller then the local one (strange!)
+                    {
+                        Utils.appendToLog(string.Format("online Resource File is v{0}. STRANGE !!", onlineResourcesFileVersion));
+                        if (Program.testMode && !Program.ignoreResourseVersionFail)
+                        {
+                            MessageBox.Show(string.Format("The online resource file version of \"{0}\" is smaller then local version!", resourcesFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                    else if (caseSwitch == 0)   // online Version and local Version are equal
+                    {
+                        Utils.appendToLog(string.Format("online Resource File is v{0}. Up-To-Date and no download needed", onlineResourcesFileVersion));
+                    }
+                    else // caseSwitch > 0      // local Version is smaller then the online Version => download
+                    {
+                        Utils.appendToLog(string.Format("online Resource File is v{0}. Outdated and download needed", onlineResourcesFileVersion));
+                        downloadResources(resourcesFile);
+                    }
+                }
+            }
+        }
+        
         //handelr for before the window is displayed
         private void MainWindow_Load(object sender, EventArgs e)
         {
@@ -584,64 +677,11 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.getTranslatedString("patchDayMessage"));
                 this.Close();
             }
-            //check for required external application libraries (dlls only)
-            Utils.appendToLog("Checking for required external files");
-
-            /*
             
-
-            // Get the file version for the notepad.
-            FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(@localDll);
-
-            // Print the file name and version number.
-            Utils.appendToLog("File: " + myFileVersionInfo.FileDescription + '\n' +
-                              "Version number: " + myFileVersionInfo.FileVersion);'*/
-
-            string localDll = Path.Combine(Application.StartupPath, "DotNetZip.dll");
-            if (!File.Exists(localDll))
-            {
-                string urlPath = "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/DotNetZip.dll";
-                try
-                {
-                    using (downloader = new WebClient())
-                    {
-                        downloader.DownloadFile(urlPath, localDll);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Utils.exceptionLog("MainWindow_Load", urlPath, ex);
-                    MessageBox.Show(string.Format("{0} DotNetZip.dll", Translations.getTranslatedString("failedToDownload_1")));
-                    Application.Exit();
-                }
-            }
-
-            /*
-            localDll = Path.Combine(Application.StartupPath, "Newtonsoft.Json.dll");
-
-            // Get the file version for the notepad.
-            myFileVersionInfo = FileVersionInfo.GetVersionInfo(@localDll);
-
-            // Print the file name and version number.
-            Utils.appendToLog("File: " + myFileVersionInfo.FileDescription + '\n' +
-                              "Version number: " + myFileVersionInfo.FileVersion);*/
-
-            if (!File.Exists(Path.Combine(Application.StartupPath, "Newtonsoft.Json.dll")))
-            {
-                try
-                {
-                    using (downloader = new WebClient())
-                    {
-                        downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll", Path.Combine(Application.StartupPath, "Newtonsoft.Json.dll"));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Utils.exceptionLog("MainWindow_Load", "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/Newtonsoft.Json.dll", ex);
-                    MessageBox.Show(string.Format("{0} Newtonsoft.Json.dll", Translations.getTranslatedString("failedToDownload_1")));
-                    Application.Exit();
-                }
-            }
+            //check for required external application libraries (dlls only)
+            Utils.appendToLog("Checking if required external files existing");
+            checkResources(true);
+            
             //check for updates
             wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
             Application.DoEvents();
@@ -654,6 +694,11 @@ namespace RelhaxModpack
             {
                 this.checkmanagerUpdates();
             }
+
+            // check the resources again and now it is possible to compair the versionnumbers (local and online)
+            Utils.appendToLog("Checking for required external files if Up-To-Date");
+            checkResources(false);
+
             //load settings
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
             Utils.appendToLog("Loading settings");
