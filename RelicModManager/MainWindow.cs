@@ -1338,6 +1338,7 @@ namespace RelhaxModpack
                 {
                     using (InstallFinished IF = new InstallFinished(tanksLocation))
                     {
+                        System.Media.SystemSounds.Beep.Play();
                         IF.ShowDialog();
                     }
                 }
