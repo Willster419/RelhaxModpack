@@ -669,6 +669,19 @@ namespace RelhaxModpack
             if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup"));
             if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxUserConfigs"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxUserConfigs"));
             if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxTemp"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxTemp"));
+            //check if old dll files can be deleted
+            try
+            {
+                string[] filesToDelete = { "DotNetZip.dll", "Ionic.Zip.dll", "Newtonsoft.Json.dll" };
+                foreach (string s in filesToDelete)
+                    if (File.Exists(Path.Combine(Application.StartupPath, s)))
+                        File.Delete(Path.Combine(Application.StartupPath, s));
+            }
+            catch(Exception ex)
+            {
+                Utils.exceptionLog(ex);
+            }
+
             //add method to disable the modpack for during patch day
             //this will involve having a hard coded true or false, along with a command line arguement to over-ride
             //to disable from patch day set it to false.
@@ -681,9 +694,9 @@ namespace RelhaxModpack
             }
             
             //check for required external application libraries (dlls only)
-            Utils.appendToLog("Checking if required external files existing");
-            checkResources(true, wait);
-            
+            //Utils.appendToLog("Checking if required external files existing");
+            //checkResources(true, wait);
+            //checkResources(false, wait);
             //check for updates
             wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
             Application.DoEvents();
@@ -698,8 +711,8 @@ namespace RelhaxModpack
             }
 
             // check the resources again and now it is possible to compair the versionnumbers (local and online)
-            Utils.appendToLog("Checking for required external files if Up-To-Date");
-            checkResources(false, wait);
+            //Utils.appendToLog("Checking for required external files if Up-To-Date");
+            //checkResources(false, wait);
 
             //load settings
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");

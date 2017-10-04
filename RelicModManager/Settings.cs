@@ -122,7 +122,7 @@ namespace RelhaxModpack
                 Settings.tempFontSizeForum = 0;
                 Settings.fontSizeforum = FontSize.font100;
                 Settings.sView = SelectionView.defaultt;
-                Settings.ShowInstallCompleteWindow = true;
+                Settings.ShowInstallCompleteWindow = false;
                 Settings.applyInternalSettings();
             }
             else

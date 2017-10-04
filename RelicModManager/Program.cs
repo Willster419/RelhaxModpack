@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -26,6 +27,13 @@ namespace RelhaxModpack
             Utils.appendToLog("Main Entry point launched");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            //loading embeded dlls from the application
+            //https://www.codeproject.com/articles/528178/load-dll-from-embedded-resource
+            string resource1 = "RelhaxModpack.DotNetZip.dll";
+            string resource2 = "RelhaxModpack.Newtonsoft.Json.dll";
+            EmbeddedAssembly.Load(resource1, "DotNetZip.dll");
+            EmbeddedAssembly.Load(resource2, "Newtonsoft.Json.dll");
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
             // delete RelicCopyUpdate.bat at start (it is only needed at updates, so kill it)
             try
             {
@@ -120,6 +128,10 @@ namespace RelhaxModpack
             }
             Utils.appendToLog("Attempting to load MainWindow");
             Application.Run(new MainWindow());
+        }
+        static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            return EmbeddedAssembly.Get(args.Name);
         }
     }
 }

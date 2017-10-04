@@ -731,7 +731,7 @@ namespace RelhaxModpack
 
             //Component: initial download managerInfo.dat
             //
-            english.Add("failedManager_version", "Failed to get 'manager_version.xml'\n\nRelhax Manager will be terminated.");
+            english.Add("failedManager_version", "Failed to get 'manager_version.xml'\n\nApplication will be terminated.");
             german.Add("failedManager_version", "Fehler beim holen von 'manager_version.xml'.\n\nDer Relhax Manager wird beendet.");
             polish.Add("failedManager_version", "TODO");
             french.Add("failedManager_version", "TODO");
@@ -1462,8 +1462,8 @@ namespace RelhaxModpack
             //
             english.Add("startGame", "You want to start the Game now?");
             german.Add("startGame", "Soll das Spiel jetzt gestartet werden?");
-            polish.Add("startGame", "TODO");
-            french.Add("StartGame", "TODO");
+            polish.Add("startGame", "startGame");
+            french.Add("StartGame", "startGame");
 
             //Section: InstallFinished Components
             //Componet: InstallCompleteLabel

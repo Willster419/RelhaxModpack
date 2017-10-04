@@ -175,6 +175,7 @@
     <Compile Include="DatabaseObject.cs" />
     <Compile Include="DatabaseTreeNode.cs" />
     <Compile Include="Dependency.cs" />
+    <Compile Include="EmbeddedAssembly.cs" />
     <Compile Include="FirstLoadHelper.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -373,8 +374,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DotNetZip.dll" />
     <Content Include="loading.gif" />
     <Content Include="loading_3rdguards.gif" />
+    <EmbeddedResource Include="Newtonsoft.Json.dll" />
     <Content Include="relicbanner_for_ico.ico" />
   </ItemGroup>
   <ItemGroup />
