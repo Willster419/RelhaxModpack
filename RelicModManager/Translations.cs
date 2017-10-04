@@ -185,7 +185,7 @@ namespace RelhaxModpack
             //Componet: settingsGroupBox
             //
             english.Add("settingsGroupBox", "Settings (Right-click for descriptions)");
-            german.Add("settingsGroupBox", "TODO");
+            german.Add("settingsGroupBox", "Einstellungen (Rechts-Klick für eine Beschreibung)");
             polish.Add("settingsGroupBox", "Ustawienia (Opis pod PPM)");
             french.Add("settingsGroupBox", "Paramètres (clic droit pour les descriptions)");
 
@@ -312,13 +312,13 @@ namespace RelhaxModpack
 
             //Component: notifyIfSameDatabaseCB
             english.Add("notifyIfSameDatabaseCB", "Inform if no new database available");
-            german.Add("notifyIfSameDatabaseCB", "TODO");
+            german.Add("notifyIfSameDatabaseCB", "Hinweis wenn keine Aktuallisierungen erfolgt sind");
             polish.Add("notifyIfSameDatabaseCB", "Poinformuj, jeśli nie będzie dostępna nowa baza danych");
             french.Add("notifyIfSameDatabaseCB", "Informer si aucune nouvelle base de données est disponible");
 
             //Component: ShowInstallCompleteWindow
             english.Add("ShowInstallCompleteWindow", "Show install complete window");
-            german.Add("ShowInstallCompleteWindow", "TODO");
+            german.Add("ShowInstallCompleteWindow", "zeige 'Installation fertig' Fenster");
             polish.Add("ShowInstallCompleteWindow", "TODO");
             french.Add("ShowInstallCompleteWindow", "Afficher la fenêtre \"installation terminé\"");
 
@@ -732,7 +732,7 @@ namespace RelhaxModpack
             //Component: initial download managerInfo.dat
             //
             english.Add("failedManager_version", "Failed to get 'manager_version.xml'\n\nApplication will be terminated.");
-            german.Add("failedManager_version", "Fehler beim holen von 'manager_version.xml'.\n\nDer Relhax Manager wird beendet.");
+            german.Add("failedManager_version", "Fehler beim lesen der 'manager_version.xml' Datei.\n\nProgramm wird abgebrochen.");
             polish.Add("failedManager_version", "TODO");
             french.Add("failedManager_version", "Impossible d'obtenir 'manager_version.xml'\n\nL'application sera terminée.");
 
@@ -956,14 +956,14 @@ namespace RelhaxModpack
             //Component: notifyIfSameDatabaseCBExplanation
             //
             english.Add("notifyIfSameDatabaseCBExplanation", "Notify you if your last installed database version is the same. If so, it means that there is no update to any mods.");
-            german.Add("notifyIfSameDatabaseCBExplanation", "TODO");
+            german.Add("notifyIfSameDatabaseCBExplanation", "Benachrichtigt Dich wenn diese letzte verwendete Datenbank die selbe wie die aktuelle Online Version ist. Wenn dem so ist, sind keine Mods aktuallisiert worden und es gibt keine Veränderungen.");
             polish.Add("notifyIfSameDatabaseCBExplanation", "Powiadom, jeśli ostatnia zainstalowana wersja bazy danych jest taka sama. Jeśli tak, to nie ma potrzeby aktualizacji modyfikacji.");
             french.Add("notifyIfSameDatabaseCBExplanation", "Avertir si votre dernière version de base de données installée est identique. Si c'est le cas, cela signifie qu'il n'y a pas de mise à jour de mods.");
 
             //Component: ShowInstallCompleteWindowCBExplanation
             //
             english.Add("ShowInstallCompleteWindowCBExplanation", "Show a window upon installation completion with popular operations to perform after modpack installation, such as launching the game, going to the xvm website, etc.");
-            german.Add("ShowInstallCompleteWindowCBExplanation", "TODO");
+            german.Add("ShowInstallCompleteWindowCBExplanation", "Zeige am Ende der Installation ein Auswahlfenster mit nützlichen Befehlen an, wie: starte das Spiel, gehe zur XVM Webseite, usw ...");
             polish.Add("ShowInstallCompleteWindowCBExplanation", "Po zakończeniu instalacji otwórz okno dalszych akcji.");
             french.Add("ShowInstallCompleteWindowCBExplanation", "Afficher une fenêtre lors de l'achèvement de l'installation avec des opérations populaires à effectuer après l'installation de Modpack, telles que le lancement du jeu, le site Web de XVM, etc.");
 
@@ -1303,14 +1303,14 @@ namespace RelhaxModpack
             //Component: Current database is same as last installed database (body)
             //
             english.Add("DatabaseVersionsSameBody", "The database has not changed since your last installation. Therefore there are no updates to your current mods selection. Continue anyway?");
-            german.Add("DatabaseVersionsSameBody", "TODO");
+            german.Add("DatabaseVersionsSameBody", "Die Datenbank  wurde seit Deiner letzten Installation nicht verändert. Daher gibt es keine Aktuallisierungen zu Deinen aktuellen Modifikationen. Trotzdem fortfahren?");
             polish.Add("DatabaseVersionsSameBody", "TODO");
             french.Add("DatabaseVersionsSameBody", "La base de données n'a pas changé depuis votre dernière installation. Par conséquent, il n'y a pas de mise à jour pour votre sélection  de mods. Continuer de toute façon?");
 
             //Component: Current database is same as last installed database (header)
             //
             english.Add("DatabaseVersionsSameHeader", "Database version is the same");
-            german.Add("DatabaseVersionsSameHeader", "TODO");
+            german.Add("DatabaseVersionsSameHeader", "Datenbank Version ist identisch");
             polish.Add("DatabaseVersionsSameHeader", "TODO");
             french.Add("DatabaseVersionsSameHeader", "La version de la base de données est la même");
 
@@ -1469,28 +1469,28 @@ namespace RelhaxModpack
             //Componet: InstallCompleteLabel
             //
             english.Add("InstallCompleteLabel", "The Installation is complete. Would you like to...");
-            german.Add("InstallCompleteLabel", "TODO");
+            german.Add("InstallCompleteLabel", "Installation ist beendet. Willst du ...");
             polish.Add("InstallCompleteLabel", "TODO");
             french.Add("InstallCompleteLabel", "L'installation est terminée. Voudriez-vous...");
 
             //Componet: StartTanksButton
             //
             english.Add("StartTanksButton", "Start the game? (WorldofTanks.exe)");
-            german.Add("StartTanksButton", "TODO");
+            german.Add("StartTanksButton", "Das Spiel starten? (WorldofTanks.exe)");
             polish.Add("StartTanksButton", "TODO");
             french.Add("StartTanksButton", "Démarrez le jeu? (WorldofTanks.exe)");
 
             //Componet: StartWoTLauncherButton
             //
             english.Add("StartWoTLauncherButton", "Start the game launcher? (WoTLauncher.exe)");
-            german.Add("StartWoTLauncherButton", "TODO");
+            german.Add("StartWoTLauncherButton", "Den Spiel Launcher starten? (WoTLauncher.exe)");
             polish.Add("StartWoTLauncherButton", "TODO");
             french.Add("StartWoTLauncherButton", "Démarrez le lanceur de jeux? (WoTLauncher.exe)");
 
             //Componet: StartXVMStatButton
             //
             english.Add("StartXVMStatButton", "Open your web browser to the xvm statistics login website?");
-            german.Add("StartXVMStatButton", "TODO");
+            german.Add("StartXVMStatButton", "Öffne Deinen Browser auf der XVM Statistik Login Webseite?");
             polish.Add("StartXVMStatButton", "TODO");
             french.Add("StartXVMStatButton", "Ouvrir votre navigateur Web vers le site de connexion aux statistiques xvm?");
 
