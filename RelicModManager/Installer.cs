@@ -817,6 +817,12 @@ namespace RelhaxModpack
 
                 if (!File.Exists(Path.Combine(TanksLocation, "_fonts","FontReg.exe")))
                 {
+                    //get fontreg from the zip file
+                    using (ZipFile zip = new ZipFile(Settings.managerInfoDatFile))
+                    {
+                        zip.ExtractSelectedEntries("FontReg.exe", null, Path.Combine(TanksLocation, "_fonts"));
+                    }
+                    /*
                     try
                     {
                         using (WebClient downloader = new WebClient())
@@ -826,7 +832,7 @@ namespace RelhaxModpack
                     {
                         Utils.exceptionLog("InstallFonts", "download FontReg.exe", ex);
                         MessageBox.Show(string.Format("{0} FontReg.exe", Translations.getTranslatedString("failedToDownload_1")));
-                    }
+                    }*/
                 }
                 ProcessStartInfo info = new ProcessStartInfo();
                 info.FileName = "FontReg.exe";
