@@ -186,8 +186,8 @@ namespace RelhaxModpack
             //
             english.Add("settingsGroupBox", "Settings (Right-click for descriptions)");
             german.Add("settingsGroupBox", "TODO");
-            polish.Add("settingsGroupBox", "TODO");
-            french.Add("settingsGroupBox", "TODO");
+            polish.Add("settingsGroupBox", "Ustawienia (Opis pod PPM)");
+            french.Add("settingsGroupBox", "Paramètres (clic droit pour les descriptions)");
 
             //Componet: darkUICB
             //
@@ -313,14 +313,14 @@ namespace RelhaxModpack
             //Component: notifyIfSameDatabaseCB
             english.Add("notifyIfSameDatabaseCB", "Inform if no new database available");
             german.Add("notifyIfSameDatabaseCB", "TODO");
-            polish.Add("notifyIfSameDatabaseCB", "TODO");
-            french.Add("notifyIfSameDatabaseCB", "TODO");
+            polish.Add("notifyIfSameDatabaseCB", "Poinformuj, jeśli nie będzie dostępna nowa baza danych");
+            french.Add("notifyIfSameDatabaseCB", "Informer si aucune nouvelle base de données est disponible");
 
             //Component: ShowInstallCompleteWindow
             english.Add("ShowInstallCompleteWindow", "Show install complete window");
             german.Add("ShowInstallCompleteWindow", "TODO");
             polish.Add("ShowInstallCompleteWindow", "TODO");
-            french.Add("ShowInstallCompleteWindow", "TODO");
+            french.Add("ShowInstallCompleteWindow", "Afficher la fenêtre \"installation terminé\"");
 
             //Section: ModSelectionList
 
@@ -505,7 +505,7 @@ namespace RelhaxModpack
             english.Add("cleanUp", "Clean up resources");
             german.Add("cleanUp", "Bereinige Ressourcen");
             polish.Add("cleanUp", "TODO");
-            french.Add("cleanUp", "TODO");
+            french.Add("cleanUp", "Nettoyer les ressources");
             
             //Componet: 
             //
@@ -734,7 +734,7 @@ namespace RelhaxModpack
             english.Add("failedManager_version", "Failed to get 'manager_version.xml'\n\nApplication will be terminated.");
             german.Add("failedManager_version", "Fehler beim holen von 'manager_version.xml'.\n\nDer Relhax Manager wird beendet.");
             polish.Add("failedManager_version", "TODO");
-            french.Add("failedManager_version", "TODO");
+            french.Add("failedManager_version", "Impossible d'obtenir 'manager_version.xml'\n\nL'application sera terminée.");
 
             //Componet: 
             //
@@ -775,8 +775,8 @@ namespace RelhaxModpack
             //
             english.Add("failedCreateUpdateBat", "Unable to create update process.\n\nPlease manually delete the file:\n{0}\n\nrename file:\n{1}\nto:\n{2}\n\nDirectly jump to the folder?");
             german.Add("failedCreateUpdateBat", "Updateprozess kann leider nicht erstellt werden.\n\nLösche bitte diese Datei von Hand:\n{0}\n\nbenennte diese Datei:\n{1}\nin diese um:\n{2}\n\nDirekt zum Ordner springen?");
-            polish.Add("failedCreateUpdateBat", "TODO");
-            french.Add("failedCreateUpdateBat", "TODO");
+            polish.Add("failedCreateUpdateBat", "Nie można zaktualizować.\n\nProszę ręcznie usunąć plik:\n{0}\n\nrzmienić nazwę pliku:\n{1}\nna:\n{2}\n\nCzy chcesz otworzyć lokalizację pliku?");
+            french.Add("failedCreateUpdateBat", "fichier:\n{0}\n\nrenamefile:\n{1}\nto:\n{2}\n\nAfficher le dossier?");
 
             //Componet: 
             //
@@ -860,15 +860,15 @@ namespace RelhaxModpack
             //progress message
             english.Add("uninstallingFile", "Uninstalling file");
             german.Add("uninstallingFile", "Deinstalliere Datei");
-            polish.Add("uninstallingFile", "TODO");
-            french.Add("uninstallingFile", "TODO");
+            polish.Add("uninstallingFile", "Odinstalowanie pliku");
+            french.Add("uninstallingFile", "Désinstallation du fichier");
 
             //Component: uninstallfinished messagebox
             //
             english.Add("uninstallFinished", "Uninstallation of Mods finished.");
             german.Add("uninstallFinished", "Deinstallation der Mods beendet.");
-            polish.Add("uninstallFinished", "TODO");
-            french.Add("uninstallFinished", "TODO");
+            polish.Add("uninstallFinished", "Deinstalacja (modyfikacji) zakończona");
+            french.Add("uninstallFinished", "Désinstallation des Mods terminé");
 
             //Componet: 
             //
@@ -957,15 +957,15 @@ namespace RelhaxModpack
             //
             english.Add("notifyIfSameDatabaseCBExplanation", "Notify you if your last installed database version is the same. If so, it means that there is no update to any mods.");
             german.Add("notifyIfSameDatabaseCBExplanation", "TODO");
-            polish.Add("notifyIfSameDatabaseCBExplanation", "TODO");
-            french.Add("notifyIfSameDatabaseCBExplanation", "TODO");
+            polish.Add("notifyIfSameDatabaseCBExplanation", "Powiadom, jeśli ostatnia zainstalowana wersja bazy danych jest taka sama. Jeśli tak, to nie ma potrzeby aktualizacji modyfikacji.");
+            french.Add("notifyIfSameDatabaseCBExplanation", "Avertir si votre dernière version de base de données installée est identique. Si c'est le cas, cela signifie qu'il n'y a pas de mise à jour de mods.");
 
             //Component: ShowInstallCompleteWindowCBExplanation
             //
             english.Add("ShowInstallCompleteWindowCBExplanation", "Show a window upon installation completion with popular operations to perform after modpack installation, such as launching the game, going to the xvm website, etc.");
             german.Add("ShowInstallCompleteWindowCBExplanation", "TODO");
-            polish.Add("ShowInstallCompleteWindowCBExplanation", "TODO");
-            french.Add("ShowInstallCompleteWindowCBExplanation", "TODO");
+            polish.Add("ShowInstallCompleteWindowCBExplanation", "Po zakończeniu instalacji otwórz okno dalszych akcji.");
+            french.Add("ShowInstallCompleteWindowCBExplanation", "Afficher une fenêtre lors de l'achèvement de l'installation avec des opérations populaires à effectuer après l'installation de Modpack, telles que le lancement du jeu, le site Web de XVM, etc.");
 
             //Section: Messages from ModSelectionList
 
@@ -1205,7 +1205,7 @@ namespace RelhaxModpack
             english.Add("foundOldFilesHeader", "Old Files Question");
             german.Add("foundOldFilesHeader", "alte Dateien löschen");
             polish.Add("foundOldFilesHeader", "TODO");
-            french.Add("foundOldFilesHeader", "TODO");
+            french.Add("foundOldFilesHeader", "Question pour les fichiers anciens (français seulement)");
 
             //Componet: Found zip files to delete 1
             //
@@ -1305,14 +1305,14 @@ namespace RelhaxModpack
             english.Add("DatabaseVersionsSameBody", "The database has not changed since your last installation. Therefore there are no updates to your current mods selection. Continue anyway?");
             german.Add("DatabaseVersionsSameBody", "TODO");
             polish.Add("DatabaseVersionsSameBody", "TODO");
-            french.Add("DatabaseVersionsSameBody", "TODO");
+            french.Add("DatabaseVersionsSameBody", "La base de données n'a pas changé depuis votre dernière installation. Par conséquent, il n'y a pas de mise à jour pour votre sélection  de mods. Continuer de toute façon?");
 
             //Component: Current database is same as last installed database (header)
             //
             english.Add("DatabaseVersionsSameHeader", "Database version is the same");
             german.Add("DatabaseVersionsSameHeader", "TODO");
             polish.Add("DatabaseVersionsSameHeader", "TODO");
-            french.Add("DatabaseVersionsSameHeader", "TODO");
+            french.Add("DatabaseVersionsSameHeader", "La version de la base de données est la même");
 
             //Section saveConfig
             //
@@ -1349,7 +1349,7 @@ namespace RelhaxModpack
             english.Add("createdAt", "Created at: {0}");
             german.Add("createdAt", "Erstellt am: {0}");
             polish.Add("createdAt", "TODO");
-            french.Add("createdAt", "TODO");
+            french.Add("createdAt", "Créé à: {0}");
 
             //Section: Installer Messages
 
@@ -1365,14 +1365,14 @@ namespace RelhaxModpack
             english.Add("file", "File");
             german.Add("file", "Datei");
             polish.Add("file", "TODO");
-            french.Add("file", "TODO");
+            french.Add("file", "Fichier");
 
             //Componet: extractingPackage
             //
             english.Add("size", "Size");
             german.Add("size", "Größe");
             polish.Add("size", "TODO");
-            french.Add("size", "TODO");
+            french.Add("size", "Taille");
 
             //Componet: backupModFile
             //
@@ -1442,21 +1442,21 @@ namespace RelhaxModpack
             english.Add("checkDatabase", "Checking the database for outdated or no longer needed files");
             german.Add("checkDatabase", "Durchsuche das Dateiarchive nach veralteten oder nicht mehr benötigten Dateien");
             polish.Add("checkDatabase", "TODO");
-            french.Add("checkDatabase", "TODO");
+            french.Add("checkDatabase", "Vérification de la base de données pour les fichiers périmés ou non nécessaires");
 
             //Component: 
             //function checkForOldZipFiles() 
             english.Add("parseDownloadFolderFailed", "Parsing the \"{0}\" folder failed.");
             german.Add("parseDownloadFolderFailed", "Durchsehen des \"{0}\" Verzeichnisses ist fehlgeschlagen.");
             polish.Add("parseDownloadFolderFailed", "TODO");
-            french.Add("parseDownloadFolderFailed", "TODO");
+            french.Add("parseDownloadFolderFailed", "L'analyse du dossier \"{0}\" a échoué.");
 
             //Componet: installation finished
             //
             english.Add("installationFinished", "Installation is finished");
             german.Add("installationFinished", "Die Installation ist abgeschlossen");
             polish.Add("installationFinished", "TODO");
-            french.Add("installationFinished", "TODO");
+            french.Add("installationFinished", "L'installation est terminée");
 
             //Componet: installation finished
             //
@@ -1471,28 +1471,28 @@ namespace RelhaxModpack
             english.Add("InstallCompleteLabel", "The Installation is complete. Would you like to...");
             german.Add("InstallCompleteLabel", "TODO");
             polish.Add("InstallCompleteLabel", "TODO");
-            french.Add("InstallCompleteLabel", "TODO");
+            french.Add("InstallCompleteLabel", "L'installation est terminée. Voudriez-vous...");
 
             //Componet: StartTanksButton
             //
             english.Add("StartTanksButton", "Start the game? (WorldofTanks.exe)");
             german.Add("StartTanksButton", "TODO");
             polish.Add("StartTanksButton", "TODO");
-            french.Add("StartTanksButton", "TODO");
+            french.Add("StartTanksButton", "Démarrez le jeu? (WorldofTanks.exe)");
 
             //Componet: StartWoTLauncherButton
             //
             english.Add("StartWoTLauncherButton", "Start the game launcher? (WoTLauncher.exe)");
             german.Add("StartWoTLauncherButton", "TODO");
             polish.Add("StartWoTLauncherButton", "TODO");
-            french.Add("StartWoTLauncherButton", "TODO");
+            french.Add("StartWoTLauncherButton", "Démarrez le lanceur de jeux? (WoTLauncher.exe)");
 
             //Componet: StartXVMStatButton
             //
             english.Add("StartXVMStatButton", "Open your web browser to the xvm statistics login website?");
             german.Add("StartXVMStatButton", "TODO");
             polish.Add("StartXVMStatButton", "TODO");
-            french.Add("StartXVMStatButton", "TODO");
+            french.Add("StartXVMStatButton", "Ouvrir votre navigateur Web vers le site de connexion aux statistiques xvm?");
 
             //Componet: StartXVMStatButton_Click
             //localisation to which page you will jump
