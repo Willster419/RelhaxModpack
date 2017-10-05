@@ -318,7 +318,7 @@ namespace RelhaxModpack
 
             //Component: ShowInstallCompleteWindow
             english.Add("ShowInstallCompleteWindow", "Show install complete window");
-            german.Add("ShowInstallCompleteWindow", "zeige 'Installation fertig' Fenster");
+            german.Add("ShowInstallCompleteWindow", "Zeigt \"Installation fertig\" Fenster");
             polish.Add("ShowInstallCompleteWindow", "TODO");
             french.Add("ShowInstallCompleteWindow", "Afficher la fenêtre \"installation terminé\"");
 
@@ -956,14 +956,14 @@ namespace RelhaxModpack
             //Component: notifyIfSameDatabaseCBExplanation
             //
             english.Add("notifyIfSameDatabaseCBExplanation", "Notify you if your last installed database version is the same. If so, it means that there is no update to any mods.");
-            german.Add("notifyIfSameDatabaseCBExplanation", "Benachrichtigt Dich wenn diese letzte verwendete Datenbank die selbe wie die aktuelle Online Version ist. Wenn dem so ist, sind keine Mods aktuallisiert worden und es gibt keine Veränderungen.");
+            german.Add("notifyIfSameDatabaseCBExplanation", "Dich benachrichtigen: Die letzte verwendete Datenbank ist diesselbe, d.h. es gibts keine Aktualisierungen & Veränderungen.");
             polish.Add("notifyIfSameDatabaseCBExplanation", "Powiadom, jeśli ostatnia zainstalowana wersja bazy danych jest taka sama. Jeśli tak, to nie ma potrzeby aktualizacji modyfikacji.");
             french.Add("notifyIfSameDatabaseCBExplanation", "Avertir si votre dernière version de base de données installée est identique. Si c'est le cas, cela signifie qu'il n'y a pas de mise à jour de mods.");
 
             //Component: ShowInstallCompleteWindowCBExplanation
             //
             english.Add("ShowInstallCompleteWindowCBExplanation", "Show a window upon installation completion with popular operations to perform after modpack installation, such as launching the game, going to the xvm website, etc.");
-            german.Add("ShowInstallCompleteWindowCBExplanation", "Zeige am Ende der Installation ein Auswahlfenster mit nützlichen Befehlen an, wie: starte das Spiel, gehe zur XVM Webseite, usw ...");
+            german.Add("ShowInstallCompleteWindowCBExplanation", "Zeigte am Ende der Installation ein Auswahlfenster mit nützlichen Befehlen an, wie: starte das Spiel, gehe zur XVM Webseite, usw ...");
             polish.Add("ShowInstallCompleteWindowCBExplanation", "Po zakończeniu instalacji otwórz okno dalszych akcji.");
             french.Add("ShowInstallCompleteWindowCBExplanation", "Afficher une fenêtre lors de l'achèvement de l'installation avec des opérations populaires à effectuer après l'installation de Modpack, telles que le lancement du jeu, le site Web de XVM, etc.");
 
