@@ -317,10 +317,10 @@ namespace RelhaxModpack
             french.Add("notifyIfSameDatabaseCB", "Informer si aucune nouvelle base de données est disponible");
 
             //Component: ShowInstallCompleteWindow
-            english.Add("ShowInstallCompleteWindow", "Show install complete window");
-            german.Add("ShowInstallCompleteWindow", "Zeigt \"Installation fertig\" Fenster");
-            polish.Add("ShowInstallCompleteWindow", "TODO");
-            french.Add("ShowInstallCompleteWindow", "Afficher la fenêtre \"installation terminé\"");
+            english.Add("ShowInstallCompleteWindowCB", "Show install complete window");
+            german.Add("ShowInstallCompleteWindowCB", "Zeigt \"Installation fertig\" Fenster");
+            polish.Add("ShowInstallCompleteWindowCB", "TODO");
+            french.Add("ShowInstallCompleteWindowCB", "Afficher la fenêtre \"installation terminé\"");
 
             //Section: ModSelectionList
 
@@ -794,10 +794,10 @@ namespace RelhaxModpack
 
             //Componet: MainWindow_Load
             //
-            english.Add("anotherInstanceRunning", "CRITICAL: Another Instance of the relic mod manager is already running");
-            german.Add("anotherInstanceRunning", "KRITISCH: Eine weitere Instanz des Relic Mod Managers läuft bereits");
-            polish.Add("anotherInstanceRunning", "BŁĄD KRYTYCZNY: Inna instancja relic mod managera jest uruchomiona");
-            french.Add("anotherInstanceRunning", "CRITIQUE: Une autre instance de Relic Mod Manager est en cours d`éxecution");
+            english.Add("anotherInstanceRunning", "CRITICAL: Another Instance of the modpack is already running");
+            german.Add("anotherInstanceRunning", "KRITISCH: Eine weitere Instanz des modpack läuft bereits");
+            polish.Add("anotherInstanceRunning", "BŁĄD KRYTYCZNY: Inna instancja modpack jest uruchomiona");
+            french.Add("anotherInstanceRunning", "CRITIQUE: Une autre instance de modpack est en cours d`éxecution");
       
 
             //Componet: 
