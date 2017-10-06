@@ -660,10 +660,30 @@ namespace RelhaxModpack
             Utils.appendToLog("|RelHax Modpack " + managerVersion());
             Utils.appendToLog(string.Format("|Built on {0}", compileTime()));
             Utils.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
+            /*
+            //check for single instance
+            Utils.appendToLog("Check for single instance");
+            wait.loadingDescBox.Text = Translations.getTranslatedString("appSingleInstance");
+            Application.DoEvents();
+            int numberInstances = 0;
+            foreach (Process p in Process.GetProcesses())
+            {
+                string s = p.MainWindowTitle;
+                if(s.Contains("Relhax"))
+                {
+                    numberInstances++;
+                }
+            }
+            if(numberInstances > 2)
+            {
+                MessageBox.Show(Translations.getTranslatedString("anotherInstanceRunning"));
+                Application.Exit();
+            }
+            */
+            //create directory structures
             wait.loadingDescBox.Text = Translations.getTranslatedString("verDirStructure");
             Application.DoEvents();
             Utils.appendToLog("Verifying Directory Structure");
-            //create directory structures
             if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxDownloads"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxDownloads"));
             if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxUserMods"));
             if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup"));
@@ -1476,6 +1496,7 @@ namespace RelhaxModpack
             this.disableColorsCB.Text = Translations.getTranslatedString(disableColorsCB.Name);
             this.clearLogFilesCB.Text = Translations.getTranslatedString(clearLogFilesCB.Name);
             this.notifyIfSameDatabaseCB.Text = Translations.getTranslatedString(notifyIfSameDatabaseCB.Name);
+            this.ShowInstallCompleteWindowCB.Text = Translations.getTranslatedString(ShowInstallCompleteWindowCB.Name);
             if (helper != null)
             {
                 helper.helperText.Text = Translations.getTranslatedString("helperText");
