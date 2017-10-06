@@ -318,9 +318,9 @@ namespace RelhaxModpack
 
             //Component: ShowInstallCompleteWindow
             english.Add("ShowInstallCompleteWindow", "Show install complete window");
-            german.Add("ShowInstallCompleteWindow", "Zeigt 'Installation fertig' Fenster");
+            german.Add("ShowInstallCompleteWindow", "Zeigt \"Installation fertig\" Fenster");
             polish.Add("ShowInstallCompleteWindow", "TODO");
-            french.Add("ShowInstallCompleteWindow", "Afficher la fenêtre 'installation terminé'");
+            french.Add("ShowInstallCompleteWindow", "Afficher la fenêtre \"installation terminé\"");
 
             //Section: ModSelectionList
 
