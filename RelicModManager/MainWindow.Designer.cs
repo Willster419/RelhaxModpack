@@ -392,7 +392,7 @@
             this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
             this.loadingImageGroupBox.Location = new System.Drawing.Point(326, 209);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
-            this.loadingImageGroupBox.Size = new System.Drawing.Size(103, 70);
+            this.loadingImageGroupBox.Size = new System.Drawing.Size(103, 71);
             this.loadingImageGroupBox.TabIndex = 26;
             this.loadingImageGroupBox.TabStop = false;
             this.loadingImageGroupBox.Text = "Loading Image";
