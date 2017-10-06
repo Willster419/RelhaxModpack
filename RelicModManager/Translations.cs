@@ -220,7 +220,7 @@ namespace RelhaxModpack
             //Componet: loadingImageGroupBox
             //
             english.Add("loadingImageGroupBox", "Loading Image");
-            german.Add("loadingImageGroupBox", "lade Bild");
+            german.Add("loadingImageGroupBox", "Ladebildanimation");
             polish.Add("loadingImageGroupBox", "Ładowanie obrazka");
             french.Add("loadingImageGroupBox", "Image de chargement");
 
@@ -270,14 +270,14 @@ namespace RelhaxModpack
             //Componet: viewAppUpdates
             //
             english.Add("viewAppUpdates", "View latest application updates");
-            german.Add("viewAppUpdates", "letzte Programmaktualisierungen anzeigen");
+            german.Add("viewAppUpdates", "Programmaktualisierungen anzeigen");
             polish.Add("viewAppUpdates", "Pokaż ostatnie zmiany w aplikacji");
             french.Add("viewAppUpdates", "Afficher les dernières mises à jour de l'applications");
 
             //Componet: viewDBUpdates
             //
             english.Add("viewDBUpdates", "View latest database updates");
-            german.Add("viewDBUpdates", "letzte Datenbankaktualisierungen anzeigen");
+            german.Add("viewDBUpdates", "Datenbankaktualisierungen anzeigen");
             polish.Add("viewDBUpdates", "Pokaż ostatnie zmiany w bazie danych");
             french.Add("viewDBUpdates", "Afficher les dernières mises à jour de la base de données");
 
@@ -1140,7 +1140,7 @@ namespace RelhaxModpack
             //Componet: Mod Selection view Group Box
             //
             english.Add("ModSelectionListViewSelection", "Selection View");
-            german.Add("ModSelectionListViewSelection", "Auswahl anzeigen");
+            german.Add("ModSelectionListViewSelection", "Darstellungsart");
             polish.Add("ModSelectionListViewSelection", "Widok wyborów");
             french.Add("ModSelectionListViewSelection", "Affichage de sélection");
 
