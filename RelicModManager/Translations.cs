@@ -318,9 +318,9 @@ namespace RelhaxModpack
 
             //Component: ShowInstallCompleteWindow
             english.Add("ShowInstallCompleteWindow", "Show install complete window");
-            german.Add("ShowInstallCompleteWindow", "Zeigt \"Installation fertig\" Fenster");
+            german.Add("ShowInstallCompleteWindow", "Zeigt 'Installation fertig' Fenster");
             polish.Add("ShowInstallCompleteWindow", "TODO");
-            french.Add("ShowInstallCompleteWindow", "Afficher la fenêtre \"installation terminé\"");
+            french.Add("ShowInstallCompleteWindow", "Afficher la fenêtre 'installation terminé'");
 
             //Section: ModSelectionList
 
@@ -1348,7 +1348,7 @@ namespace RelhaxModpack
             //
             english.Add("createdAt", "Created at: {0}");
             german.Add("createdAt", "Erstellt am: {0}");
-            polish.Add("createdAt", "TODO");
+            polish.Add("createdAt", "Utworzono w");
             french.Add("createdAt", "Créé à: {0}");
 
             //Section: Installer Messages
@@ -1364,14 +1364,14 @@ namespace RelhaxModpack
             //
             english.Add("file", "File");
             german.Add("file", "Datei");
-            polish.Add("file", "TODO");
+            polish.Add("file", "pilnik");
             french.Add("file", "Fichier");
 
             //Componet: extractingPackage
             //
             english.Add("size", "Size");
             german.Add("size", "Größe");
-            polish.Add("size", "TODO");
+            polish.Add("size", "rozmiar");
             french.Add("size", "Taille");
 
             //Componet: backupModFile
@@ -1462,8 +1462,8 @@ namespace RelhaxModpack
             //
             english.Add("startGame", "You want to start the Game now?");
             german.Add("startGame", "Soll das Spiel jetzt gestartet werden?");
-            polish.Add("startGame", "startGame");
-            french.Add("StartGame", "startGame");
+            polish.Add("startGame", "TODO");
+            french.Add("startGame", "TODO");
 
             //Section: InstallFinished Components
             //Componet: InstallCompleteLabel
