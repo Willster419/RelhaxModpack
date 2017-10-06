@@ -1,5 +1,5 @@
 Version 26.3.0:
-
+https://www.virustotal.com/#/file/93e20f2643e0e0a64d6ec3da6c6998d47d76842271dd1c0e09c8be19692dbdfc/detection
 -Updated update system to use xml for keeping track of updates. (Try to say that 3 times fast)
 -Added a new feature for database updates. If the database hasn't been updated since your last installation, it will inform you. Then, if you are only checking for mod updates, you don't have to waste your time reinstalling.
 -Updated string formatting to string.format method

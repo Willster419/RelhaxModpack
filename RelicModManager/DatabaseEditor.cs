@@ -231,7 +231,28 @@ namespace RelhaxModpack
             }
             if (MessageBox.Show("Confirm you wish to apply changes", "Confirm", MessageBoxButtons.YesNo) == DialogResult.No)
                 return;
-            if(DuplicatePackageName(this.GlobalDependencies,this.Dependencies,this.LogicalDependencies,this.ParsedCategoryList, ObjectPackageNameTB.Text))
+            int duplicates = 0;
+            if(DatabaseEditorMode == EditorMode.GlobalDependnecy)
+            {
+                if (!SelectedGlobalDependency.packageName.Equals(ObjectPackageNameTB.Text))
+                    duplicates++;
+            }
+            else if (DatabaseEditorMode == EditorMode.Dependency)
+            {
+                if (!SelectedDependency.packageName.Equals(ObjectPackageNameTB.Text))
+                    duplicates++;
+            }
+            else if (DatabaseEditorMode == EditorMode.LogicalDependency)
+            {
+                if (!SelectedLogicalDependency.packageName.Equals(ObjectPackageNameTB.Text))
+                    duplicates++;
+            }
+            else if (DatabaseEditorMode == EditorMode.DBO)
+            {
+                if (!SelectedDatabaseObject.packageName.Equals(ObjectPackageNameTB.Text))
+                    duplicates++;
+            }
+            if(DuplicatePackageName(this.GlobalDependencies,this.Dependencies,this.LogicalDependencies,this.ParsedCategoryList, ObjectPackageNameTB.Text,duplicates))
             {
                 MessageBox.Show("Package name: " + ObjectPackageNameTB.Text + ", already exists");
                 return;
@@ -2017,31 +2038,28 @@ namespace RelhaxModpack
             editor.Show();
         }
 
-        private bool DuplicatePackageName(List<Dependency> GlobalDependencies, List<Dependency> Dependencies, List<LogicalDependnecy> LogicalDependencies, List<Category> ParsedCategoryList, string PackageName)
+        private bool DuplicatePackageName(List<Dependency> GlobalDependencies, List<Dependency> Dependencies, List<LogicalDependnecy> LogicalDependencies, List<Category> ParsedCategoryList, string PackageName, int duplicate)
         {
-            bool duplicate = false;
+            //int duplicate = 0;
             foreach (Dependency d in GlobalDependencies)
             {
                 if (d.packageName.Equals(PackageName))
                 {
-                    duplicate = true;
-                    return duplicate;
+                    duplicate++;
                 }
             }
             foreach (Dependency d in Dependencies)
             {
                 if (d.packageName.Equals(PackageName))
                 {
-                    duplicate = true;
-                    return duplicate;
+                    duplicate++;
                 }
             }
             foreach (LogicalDependnecy d in LogicalDependencies)
             {
                 if (d.packageName.Equals(PackageName))
                 {
-                    duplicate = true;
-                    return duplicate;
+                    duplicate++;
                 }
             }
             foreach (Category c in ParsedCategoryList)
@@ -2050,37 +2068,37 @@ namespace RelhaxModpack
                 {
                     if (m.packageName.Equals(PackageName))
                     {
-                        duplicate = true;
-                        return duplicate;
+                        duplicate++;
                     }
                     if (m.configs.Count > 0)
                     {
-                        duplicate = DuplicatePackageNameConfig(m.configs, PackageName);
-                        if (duplicate)
-                            return duplicate;
+                        DuplicatePackageNameConfig(m.configs, PackageName, duplicate);
                     }
                 }
             }
-            return duplicate;
+            if (duplicate > 1)
+                return true;
+            else 
+                return false;
         }
 
-        private bool DuplicatePackageNameConfig(List<Config> configList, string PackageName)
+        private void DuplicatePackageNameConfig(List<Config> configList, string PackageName, int duplicate)
         {
             foreach(Config c in configList)
             {
                 if(c.packageName.Equals(PackageName))
                 {
-                    return true;
+                    duplicate++;
                 }
             }
-            return false;
         }
 
         private string GetNewPackageName(string oldPackageName)
         {
             int i = 1;
+            int temp = 0;
             string packageName = string.Format("{0}_NEW_{1}", oldPackageName, i);
-            while (DuplicatePackageName(this.GlobalDependencies, this.Dependencies, this.LogicalDependencies, this.ParsedCategoryList, packageName))
+            while (DuplicatePackageName(this.GlobalDependencies, this.Dependencies, this.LogicalDependencies, this.ParsedCategoryList, packageName, temp))
                 packageName = string.Format("{0}_NEW_{1}", oldPackageName, i++);
             return packageName;
         }
