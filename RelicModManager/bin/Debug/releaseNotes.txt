@@ -1,3 +1,18 @@
+Version 26.3.0:
+
+-Updated update system to use xml for keeping track of updates. (Try to say that 3 times fast)
+-Added a new feature for database updates. If the database hasn't been updated since your last installation, it will inform you. Then, if you are only checking for mod updates, you don't have to waste your time reinstalling.
+-Updated string formatting to string.format method
+-Updated file path formatting to path.combine method
+-Updates to the database manager that you won't notice
+-Memory optimizations in the Mod Selection List
+-Added more logging at command line level
+-Moved the update (.bat) script to be internal, only written to disk when needed
+-Moved the two dll files to be embeded inside the application
+-Fixed bugs with the button display scaling in the main window
+-Moved the font registration system to be inside a zip file downloaded at install time
+-And what update would be complete without updating translations??
+
 Version 26.1.4:
 https://www.virustotal.com/#/file/f2bf375a87c1cebd962e5c43644168eebc29bbef3ff1926678daaa7074bcbfdd/detection
 -Fixed CRC handling of the database editor
