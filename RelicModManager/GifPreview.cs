@@ -26,6 +26,7 @@ namespace RelhaxModpack
             Utils.appendToLog("GifPreview: opening at x: " + x + ", y: " + y);
             this.Location = new Point(x, y);
             Settings.setUIColor(this);
+            this.Text = Translations.getTranslatedString("loadingGifpreview");
             SetLoadingImage();
         }
 
