@@ -1,3 +1,11 @@
+Version 26.3.1:
+https://www.virustotal.com/#/file/2bc65255e4e0c0cfd6bd8951aa23cf05ef0b616de340fe6a24e0238fcdf6442a/detection
+-Alligned Components in the main window
+-Fixed german and polish translations
+-Fixed bugs with the database editor
+-Fixed other bugs in the main window
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 26.3.0:
 https://www.virustotal.com/#/file/93e20f2643e0e0a64d6ec3da6c6998d47d76842271dd1c0e09c8be19692dbdfc/detection
 -Updated update system to use xml for keeping track of updates. (Try to say that 3 times fast)
@@ -12,6 +20,7 @@ https://www.virustotal.com/#/file/93e20f2643e0e0a64d6ec3da6c6998d47d76842271dd1c
 -Fixed bugs with the button display scaling in the main window
 -Moved the font registration system to be inside a zip file downloaded at install time
 -And what update would be complete without updating translations??
+--------------------------------------------------------------------------------------------------------------------------------------------
 
 Version 26.1.4:
 https://www.virustotal.com/#/file/f2bf375a87c1cebd962e5c43644168eebc29bbef3ff1926678daaa7074bcbfdd/detection

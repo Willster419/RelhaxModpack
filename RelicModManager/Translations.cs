@@ -319,7 +319,7 @@ namespace RelhaxModpack
             //Component: ShowInstallCompleteWindow
             english.Add("ShowInstallCompleteWindowCB", "Show install complete window");
             german.Add("ShowInstallCompleteWindowCB", "Zeigt \"Installation fertig\" Fenster");
-            polish.Add("ShowInstallCompleteWindowCB", "TODO");
+            polish.Add("ShowInstallCompleteWindowCB", "Pokaż pełne okno instalacji");
             french.Add("ShowInstallCompleteWindowCB", "Afficher la fenêtre \"installation terminé\"");
 
             //Section: ModSelectionList
@@ -504,7 +504,7 @@ namespace RelhaxModpack
             //
             english.Add("cleanUp", "Clean up resources");
             german.Add("cleanUp", "Bereinige Ressourcen");
-            polish.Add("cleanUp", "TODO");
+            polish.Add("cleanUp", "Oczyszczanie zasobów");
             french.Add("cleanUp", "Nettoyer les ressources");
             
             //Componet: 
@@ -733,7 +733,7 @@ namespace RelhaxModpack
             //
             english.Add("failedManager_version", "Failed to get 'manager_version.xml'\n\nApplication will be terminated.");
             german.Add("failedManager_version", "Fehler beim lesen der 'manager_version.xml' Datei.\n\nProgramm wird abgebrochen.");
-            polish.Add("failedManager_version", "TODO");
+            polish.Add("failedManager_version", "Nie udało się uzyskać 'manager_version.xml'\n\nApplication zostanie zakończona.");
             french.Add("failedManager_version", "Impossible d'obtenir 'manager_version.xml'\n\nL'application sera terminée.");
 
             //Componet: 
@@ -1204,7 +1204,7 @@ namespace RelhaxModpack
             //Window header
             english.Add("foundOldFilesHeader", "Old Files Question");
             german.Add("foundOldFilesHeader", "alte Dateien löschen");
-            polish.Add("foundOldFilesHeader", "TODO");
+            polish.Add("foundOldFilesHeader", "Stare pliki Pytanie");
             french.Add("foundOldFilesHeader", "Question pour les fichiers anciens (français seulement)");
 
             //Componet: Found zip files to delete 1
@@ -1304,14 +1304,14 @@ namespace RelhaxModpack
             //
             english.Add("DatabaseVersionsSameBody", "The database has not changed since your last installation. Therefore there are no updates to your current mods selection. Continue anyway?");
             german.Add("DatabaseVersionsSameBody", "Die Datenbank  wurde seit Deiner letzten Installation nicht verändert. Daher gibt es keine Aktuallisierungen zu Deinen aktuellen Modifikationen. Trotzdem fortfahren?");
-            polish.Add("DatabaseVersionsSameBody", "TODO");
+            polish.Add("DatabaseVersionsSameBody", "Baza danych nie uległa zmianie od ostatniej instalacji. Dlatego nie ma aktualizacji aktualnego wyboru modów. Kontynuować mimo to?");
             french.Add("DatabaseVersionsSameBody", "La base de données n'a pas changé depuis votre dernière installation. Par conséquent, il n'y a pas de mise à jour pour votre sélection  de mods. Continuer de toute façon?");
 
             //Component: Current database is same as last installed database (header)
             //
             english.Add("DatabaseVersionsSameHeader", "Database version is the same");
             german.Add("DatabaseVersionsSameHeader", "Datenbank Version ist identisch");
-            polish.Add("DatabaseVersionsSameHeader", "TODO");
+            polish.Add("DatabaseVersionsSameHeader", "Wersja bazy danych jest taka sama");
             french.Add("DatabaseVersionsSameHeader", "La version de la base de données est la même");
 
             //Section saveConfig
@@ -1441,57 +1441,51 @@ namespace RelhaxModpack
             //
             english.Add("checkDatabase", "Checking the database for outdated or no longer needed files");
             german.Add("checkDatabase", "Durchsuche das Dateiarchive nach veralteten oder nicht mehr benötigten Dateien");
-            polish.Add("checkDatabase", "TODO");
+            polish.Add("checkDatabase", "Sprawdzanie bazy danych w przypadku nieaktualnych lub nie potrzebnych plików");
             french.Add("checkDatabase", "Vérification de la base de données pour les fichiers périmés ou non nécessaires");
 
             //Component: 
             //function checkForOldZipFiles() 
             english.Add("parseDownloadFolderFailed", "Parsing the \"{0}\" folder failed.");
             german.Add("parseDownloadFolderFailed", "Durchsehen des \"{0}\" Verzeichnisses ist fehlgeschlagen.");
-            polish.Add("parseDownloadFolderFailed", "TODO");
+            polish.Add("parseDownloadFolderFailed", "Nie udało się przetworzyć katalogu \"{0}\".");
             french.Add("parseDownloadFolderFailed", "L'analyse du dossier \"{0}\" a échoué.");
 
             //Componet: installation finished
             //
             english.Add("installationFinished", "Installation is finished");
             german.Add("installationFinished", "Die Installation ist abgeschlossen");
-            polish.Add("installationFinished", "TODO");
+            polish.Add("installationFinished", "Instalacja jest zakończona");
             french.Add("installationFinished", "L'installation est terminée");
 
-            //Componet: installation finished
-            //
-            english.Add("startGame", "You want to start the Game now?");
-            german.Add("startGame", "Soll das Spiel jetzt gestartet werden?");
-            polish.Add("startGame", "TODO");
-            french.Add("startGame", "TODO");
 
             //Section: InstallFinished Components
             //Componet: InstallCompleteLabel
             //
             english.Add("InstallCompleteLabel", "The Installation is complete. Would you like to...");
-            german.Add("InstallCompleteLabel", "Installation ist beendet. Willst du ...");
-            polish.Add("InstallCompleteLabel", "TODO");
+            german.Add("InstallCompleteLabel", "Installation ist beendet. Willst du...");
+            polish.Add("InstallCompleteLabel", "Instalacja jest zakończona. Czy chciałbyś...");
             french.Add("InstallCompleteLabel", "L'installation est terminée. Voudriez-vous...");
 
             //Componet: StartTanksButton
             //
             english.Add("StartTanksButton", "Start the game? (WorldofTanks.exe)");
             german.Add("StartTanksButton", "Das Spiel starten? (WorldofTanks.exe)");
-            polish.Add("StartTanksButton", "TODO");
+            polish.Add("StartTanksButton", "Zacząć gre? (WorldofTanks.exe)");
             french.Add("StartTanksButton", "Démarrez le jeu? (WorldofTanks.exe)");
 
             //Componet: StartWoTLauncherButton
             //
             english.Add("StartWoTLauncherButton", "Start the game launcher? (WoTLauncher.exe)");
             german.Add("StartWoTLauncherButton", "Den Spiel Launcher starten? (WoTLauncher.exe)");
-            polish.Add("StartWoTLauncherButton", "TODO");
+            polish.Add("StartWoTLauncherButton", "Uruchom program uruchamiający grę? (WoTLauncher.exe)");
             french.Add("StartWoTLauncherButton", "Démarrez le lanceur de jeux? (WoTLauncher.exe)");
 
             //Componet: StartXVMStatButton
             //
             english.Add("StartXVMStatButton", "Open your web browser to the xvm statistics login website?");
             german.Add("StartXVMStatButton", "Öffne Deinen Browser auf der XVM Statistik Login Webseite?");
-            polish.Add("StartXVMStatButton", "TODO");
+            polish.Add("StartXVMStatButton", "Otwórz swoją przeglądarkę internetową na stronie logowania do statystyk xvm?");
             french.Add("StartXVMStatButton", "Ouvrir votre navigateur Web vers le site de connexion aux statistiques xvm?");
 
             //Componet: StartXVMStatButton_Click
