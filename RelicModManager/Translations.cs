@@ -133,6 +133,14 @@ namespace RelhaxModpack
             polish.Add("uninstallRelhaxMod", "Odinstaluj Paczkę Relhax");
             french.Add("uninstallRelhaxMod", "Désinstaller Relhax Modpack");
 
+            //Componet: toolTip
+            //MainForm
+            english.Add("mainFormToolTip", "Right Click for extended description");
+            german.Add("mainFormToolTip", "Rechtsklick für eine erweiterte Beschreibung");
+            polish.Add("mainFormToolTip", "TODO");
+            french.Add("mainFormToolTip", "TODO");
+            
+
             //Componet: forceManuel
             //
             english.Add("forceManuel", "Force manual game detection");
@@ -157,7 +165,7 @@ namespace RelhaxModpack
             //Componet: saveUserDataCB
             //
             english.Add("saveUserDataCB", "Save user data");
-            german.Add("saveUserDataCB", "Benutzerdaten speichern");
+            german.Add("saveUserDataCB", "Mod Daten speichern");
             polish.Add("saveUserDataCB", "Zapisz ustawienia użytkownika");
             french.Add("saveUserDataCB", "Sauvegarder les données utilisateur");
 
@@ -220,7 +228,7 @@ namespace RelhaxModpack
             //Componet: loadingImageGroupBox
             //
             english.Add("loadingImageGroupBox", "Loading Image");
-            german.Add("loadingImageGroupBox", "Ladebildanimation");
+            german.Add("loadingImageGroupBox", "Ladebild");
             polish.Add("loadingImageGroupBox", "Ładowanie obrazka");
             french.Add("loadingImageGroupBox", "Image de chargement");
 
@@ -1494,6 +1502,13 @@ namespace RelhaxModpack
             german.Add("xvmUrlLocalisation", "de");
             polish.Add("xvmUrlLocalisation", "en");
             french.Add("xvmUrlLocalisation", "fr");
+
+            //Componet: loadingGifpreview
+            //GifPreview.cs
+            english.Add("loadingGifpreview", "loading Picture Preview");
+            german.Add("loadingGifpreview", "Ladebild Vorschau");
+            polish.Add("loadingGifpreview", "TODO");
+            french.Add("loadingGifpreview", "TODO");
         }
     }
 }

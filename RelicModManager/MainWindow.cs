@@ -1467,6 +1467,13 @@ namespace RelhaxModpack
         //applies all settings from static settings class to this form
         private void applySettings(bool init = false)
         {
+            string text = Translations.getTranslatedString("mainFormToolTip");
+            Control[] toolTipSetList = new Control[] { forceManuel , cleanInstallCB, backupModsCheckBox, backupModsCheckBox, cancerFontCB, saveLastInstallCB, saveUserDataCB, darkUICB, languageSelectionGB, fontSizeGB, selectionDefault, selectionLegacy, disableBordersCB, disableColorsCB, clearCacheCB, clearLogFilesCB, viewAppUpdates, ShowInstallCompleteWindowCB, notifyIfSameDatabaseCB, standardImageRB, thirdGuardsLoadingImageRB, languageENG, languageGER, languagePL, languageFR, fontSize100, DPI100 };
+            foreach (var set in toolTipSetList)
+            {
+                // this.toolTip.SetToolTip(forceManuel, Translations.getTranslatedString("mainFormToolTip"));
+                this.toolTip.SetToolTip(set, text);
+            }
             this.forceManuel.Text = Translations.getTranslatedString(forceManuel.Name);
             this.cleanInstallCB.Text = Translations.getTranslatedString(cleanInstallCB.Name);
             this.backupModsCheckBox.Text = Translations.getTranslatedString(backupModsCheckBox.Name);
@@ -1545,6 +1552,10 @@ namespace RelhaxModpack
                     case (Translations.Languages.Polish):
                         //set polish translation
                         languagePL.Checked = true;
+                        break;
+                    case (Translations.Languages.French):
+                        //set french translation
+                        languageFR.Checked = true;
                         break;
                 }
                 switch (Settings.sView)
