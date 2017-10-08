@@ -315,19 +315,6 @@ namespace RelhaxModpack
             string newExeName = Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat");
             try
             {
-                //please lookat this alternative option (much more editable friendly in my opinion)
-                /*
-                // http://www.motobit.com/util/base64-decoder-encoder.asp
-                string base64Str =
-                    "QEVDSE8gT0ZGDQpFQ0hPIFVwZGF0aW5nIEFwcGxpY2F0aW9uLi4uDQpwaW5nIDEyNy4wLjAuMSAt" +
-                    "biAzID4gbnVsDQpkZWwgIC9RIFJlbGhheE1vZHBhY2suZXhlIDI + IG51bA0KY29weSAvWSBSZWxo" +
-                    "YXhNb2RwYWNrX3VwZGF0ZS5leGUgUmVsaGF4TW9kcGFjay5leGUgMj4gbnVsDQpkZWwgL1EgUmVs" +
-                    "aWNNb2RNYW5hZ2VyX3VwZGF0ZS5leGUgMj4gbnVsDQpkZWwgL1EgUmVsaGF4TW9kcGFja191cGRh" +
-                    "dGUuZXhlIDI + IG51bA0KZGVsIC9RIFJlbGljTW9kTWFuYWdlci5leGUgMj4gbnVsDQpFQ0hPIFN0" +
-                    "YXJ0aW5nIEFwcGxpY2F0aW9uLi4uDQpzdGFydCAiIiAiUmVsaGF4TW9kcGFjay5leGUiICUxICUy" +
-                    "ICUzICU0ICU1ICU2ICU3ICU4ICU5IDI + IG51bA0K";
-                File.WriteAllBytes(@newExeName, Convert.FromBase64String(base64Str));
-                */
                 File.WriteAllText(newExeName, @"@ECHO OFF
                 ECHO Updating Application...
                 ping 127.0.0.1 -n 3 > nul
