@@ -412,12 +412,8 @@ namespace RelhaxModpack
             }
             else
             {
-                // XElement element = doc.Descendants("version").Last();
                 // store the the last onlinefolder version to the string, if no valid detectedVersion association is found
                 Settings.tanksOnlineFolderVersion = doc.Descendants("version").Last().Attribute("folder").Value;
-                // .Where(arg => arg.Value == arg.Value)
-                // store the onlinefolder version to the string
-                // Settings.tanksOnlineFolderVersion = element.Attribute("folder").Value;
             }
             // fill the supportedVersions array to possible create messages
             StringReader rdr = new StringReader(xmlString);
