@@ -3891,28 +3891,36 @@ namespace RelhaxModpack
                 XmlElement globalDependencyRoot = doc.CreateElement("globaldependency");
                 //make dependency
                 XmlElement globalDepZipFile = doc.CreateElement("dependencyZipFile");
-                globalDepZipFile.InnerText = d.dependencyZipFile.Trim();
+                if (!d.dependencyZipFile.Trim().Equals(""))
+                    globalDepZipFile.InnerText = d.dependencyZipFile.Trim();
                 globalDependencyRoot.AppendChild(globalDepZipFile);
                 XmlElement globalDepStartAddress = doc.CreateElement("startAddress");
-                globalDepStartAddress.InnerText = d.startAddress.Trim();
+                if (!d.startAddress.Trim().Equals(""))
+                    globalDepStartAddress.InnerText = d.startAddress.Trim();
                 globalDependencyRoot.AppendChild(globalDepStartAddress);
                 XmlElement globalDepEndAddress = doc.CreateElement("endAddress");
-                globalDepEndAddress.InnerText = d.endAddress.Trim();
+                if (!d.endAddress.Trim().Equals(""))
+                    globalDepEndAddress.InnerText = d.endAddress.Trim();
                 globalDependencyRoot.AppendChild(globalDepEndAddress);
                 XmlElement globalDepURL = doc.CreateElement("devURL");
-                globalDepURL.InnerText = d.devURL.Trim();
+                if (!d.devURL.Trim().Equals(""))
+                    globalDepURL.InnerText = d.devURL.Trim();
                 globalDependencyRoot.AppendChild(globalDepURL);
                 XmlElement globalDepCRC = doc.CreateElement("dependencyZipCRC");
-                globalDepCRC.InnerText = d.dependencyZipCRC.Trim();
+                if (!d.dependencyZipCRC.Trim().Equals(""))
+                    globalDepCRC.InnerText = d.dependencyZipCRC.Trim();
                 globalDependencyRoot.AppendChild(globalDepCRC);
                 XmlElement globalDepEnabled = doc.CreateElement("dependencyenabled");
-                globalDepEnabled.InnerText = "" + d.enabled;
+                if (!d.enabled.ToString().Trim().Equals(""))
+                    globalDepEnabled.InnerText = "" + d.enabled;
                 globalDependencyRoot.AppendChild(globalDepEnabled);
                 XmlElement globalDepAppendExtraction = doc.CreateElement("appendExtraction");
-                globalDepAppendExtraction.InnerText = "" + d.appendExtraction;
+                if (!d.appendExtraction.ToString().Trim().Equals(""))
+                    globalDepAppendExtraction.InnerText = "" + d.appendExtraction;
                 globalDependencyRoot.AppendChild(globalDepAppendExtraction);
                 XmlElement globalDepPackageName = doc.CreateElement("packageName");
-                globalDepPackageName.InnerText = d.packageName.Trim();
+                if (!d.packageName.Trim().Equals(""))
+                    globalDepPackageName.InnerText = d.packageName.Trim();
                 globalDependencyRoot.AppendChild(globalDepPackageName);
                 //attach dependency root
                 globalDependenciesXml.AppendChild(globalDependencyRoot);
@@ -3926,28 +3934,36 @@ namespace RelhaxModpack
                 XmlElement dependencyRoot = doc.CreateElement("dependency");
                 //make dependency
                 XmlElement depZipFile = doc.CreateElement("dependencyZipFile");
-                depZipFile.InnerText = d.dependencyZipFile.Trim();
+                if (!d.dependencyZipFile.Trim().Equals(""))
+                    depZipFile.InnerText = d.dependencyZipFile.Trim();
                 dependencyRoot.AppendChild(depZipFile);
                 XmlElement depStartAddress = doc.CreateElement("startAddress");
-                depStartAddress.InnerText = d.startAddress.Trim();
+                if (!d.startAddress.Trim().Equals(""))
+                    depStartAddress.InnerText = d.startAddress.Trim();
                 dependencyRoot.AppendChild(depStartAddress);
                 XmlElement depEndAddress = doc.CreateElement("endAddress");
-                depEndAddress.InnerText = d.endAddress.Trim();
+                if (!d.endAddress.Trim().Equals(""))
+                    depEndAddress.InnerText = d.endAddress.Trim();
                 dependencyRoot.AppendChild(depEndAddress);
                 XmlElement depdevURL = doc.CreateElement("devURL");
-                depdevURL.InnerText = d.devURL.Trim();
+                if (!d.devURL.Trim().Equals(""))
+                    depdevURL.InnerText = d.devURL.Trim();
                 dependencyRoot.AppendChild(depdevURL);
                 XmlElement depCRC = doc.CreateElement("dependencyZipCRC");
-                depCRC.InnerText = d.dependencyZipCRC.Trim();
+                if (!d.dependencyZipCRC.Trim().Equals(""))
+                    depCRC.InnerText = d.dependencyZipCRC.Trim();
                 dependencyRoot.AppendChild(depCRC);
                 XmlElement depEnabled = doc.CreateElement("dependencyenabled");
-                depEnabled.InnerText = "" + d.enabled;
+                if (!d.enabled.ToString().Trim().Equals(""))
+                    depEnabled.InnerText = "" + d.enabled;
                 dependencyRoot.AppendChild(depEnabled);
                 XmlElement depAppendExtraction = doc.CreateElement("appendExtraction");
-                depAppendExtraction.InnerText = "" + d.appendExtraction;
+                if (!d.appendExtraction.ToString().Trim().Equals(""))
+                    depAppendExtraction.InnerText = "" + d.appendExtraction;
                 dependencyRoot.AppendChild(depAppendExtraction);
                 XmlElement depPackageName = doc.CreateElement("packageName");
-                depPackageName.InnerText = d.packageName.Trim();
+                if (!d.packageName.Trim().Equals(""))
+                    depPackageName.InnerText = d.packageName.Trim();
                 dependencyRoot.AppendChild(depPackageName);
                 //logicalDependencies for the configs
                 XmlElement depLogicalDependencies = doc.CreateElement("logicalDependencies");
@@ -3957,10 +3973,12 @@ namespace RelhaxModpack
                     XmlElement LogicalDependencyRoot = doc.CreateElement("logicalDependency");
                     //make logicalDependency
                     XmlElement LogicalDependencyPackageName = doc.CreateElement("packageName");
-                    LogicalDependencyPackageName.InnerText = ld.packageName.Trim();
+                    if (!ld.packageName.Trim().Equals(""))
+                        LogicalDependencyPackageName.InnerText = ld.packageName.Trim();
                     LogicalDependencyRoot.AppendChild(LogicalDependencyPackageName);
                     XmlElement LogicalDependencyNegateFlag = doc.CreateElement("negateFlag");
-                    LogicalDependencyNegateFlag.InnerText = "" + ld.negateFlag;
+                    if (!ld.negateFlag.ToString().Trim().Equals(""))
+                        LogicalDependencyNegateFlag.InnerText = "" + ld.negateFlag;
                     LogicalDependencyRoot.AppendChild(LogicalDependencyNegateFlag);
                     //attach logicalDependency root
                     depLogicalDependencies.AppendChild(LogicalDependencyRoot);
@@ -3978,25 +3996,32 @@ namespace RelhaxModpack
                 XmlElement logicalDependencyRoot = doc.CreateElement("logicalDependency");
                 //make dependency
                 XmlElement logicalDepZipFile = doc.CreateElement("dependencyZipFile");
-                logicalDepZipFile.InnerText = d.dependencyZipFile.Trim();
+                if (!d.dependencyZipFile.Trim().Equals(""))
+                    logicalDepZipFile.InnerText = d.dependencyZipFile.Trim();
                 logicalDependencyRoot.AppendChild(logicalDepZipFile);
                 XmlElement logicalDepStartAddress = doc.CreateElement("startAddress");
-                logicalDepStartAddress.InnerText = d.startAddress.Trim();
+                if (!d.startAddress.Trim().Equals(""))
+                    logicalDepStartAddress.InnerText = d.startAddress.Trim();
                 logicalDependencyRoot.AppendChild(logicalDepStartAddress);
                 XmlElement logicalDepEndAddress = doc.CreateElement("endAddress");
-                logicalDepEndAddress.InnerText = d.endAddress.Trim();
+                if (!d.endAddress.Trim().Equals(""))
+                    logicalDepEndAddress.InnerText = d.endAddress.Trim();
                 logicalDependencyRoot.AppendChild(logicalDepEndAddress);
                 XmlElement logicalDepdevURL = doc.CreateElement("devURL");
-                logicalDepdevURL.InnerText = d.devURL.Trim();
+                if (!d.devURL.Trim().Equals(""))
+                    logicalDepdevURL.InnerText = d.devURL.Trim();
                 logicalDependencyRoot.AppendChild(logicalDepdevURL);
                 XmlElement logicalDepCRC = doc.CreateElement("dependencyZipCRC");
-                logicalDepCRC.InnerText = d.dependencyZipCRC.Trim();
+                if (!d.dependencyZipCRC.Trim().Equals(""))
+                    logicalDepCRC.InnerText = d.dependencyZipCRC.Trim();
                 logicalDependencyRoot.AppendChild(logicalDepCRC);
                 XmlElement logicalDepEnabled = doc.CreateElement("dependencyenabled");
-                logicalDepEnabled.InnerText = "" + d.enabled;
+                if (!d.enabled.ToString().Trim().Equals(""))
+                    logicalDepEnabled.InnerText = "" + d.enabled;
                 logicalDependencyRoot.AppendChild(logicalDepEnabled);
                 XmlElement logicalDepPackageName = doc.CreateElement("packageName");
-                logicalDepPackageName.InnerText = d.packageName.Trim();
+                if (!d.packageName.Trim().Equals(""))
+                    logicalDepPackageName.InnerText = d.packageName.Trim();
                 logicalDependencyRoot.AppendChild(logicalDepPackageName);
                 //attach dependency root
                 logicalDependenciesXml.AppendChild(logicalDependencyRoot);
@@ -4010,10 +4035,12 @@ namespace RelhaxModpack
                 XmlElement catagoryRoot = doc.CreateElement("catagory");
                 //make catagory
                 XmlElement catagoryName = doc.CreateElement("name");
-                catagoryName.InnerText = c.name.Trim();
+                if (!c.name.Trim().Equals(""))
+                    catagoryName.InnerText = c.name.Trim();
                 catagoryRoot.AppendChild(catagoryName);
                 XmlElement catagorySelectionType = doc.CreateElement("selectionType");
-                catagorySelectionType.InnerText = c.selectionType;
+                if (!c.selectionType.Trim().Equals(""))
+                    catagorySelectionType.InnerText = c.selectionType;
                 catagoryRoot.AppendChild(catagorySelectionType);
                 //dependencies for catagory
                 XmlElement catagoryDependencies = doc.CreateElement("dependencies");
@@ -4022,7 +4049,8 @@ namespace RelhaxModpack
                     //declare dependency root
                     XmlElement DependencyRoot = doc.CreateElement("dependency");
                     XmlElement DepPackageName = doc.CreateElement("packageName");
-                    DepPackageName.InnerText = d.packageName.Trim();
+                    if (!d.packageName.Trim().Equals(""))
+                        DepPackageName.InnerText = d.packageName.Trim();
                     DependencyRoot.AppendChild(DepPackageName);
                     //attach dependency root
                     catagoryDependencies.AppendChild(DependencyRoot);
@@ -4035,50 +4063,64 @@ namespace RelhaxModpack
                     //add it to the list
                     XmlElement modRoot = doc.CreateElement("mod");
                     XmlElement modName = doc.CreateElement("name");
-                    modName.InnerText = m.name.Trim();
+                    if (!m.name.Trim().Equals(""))
+                        modName.InnerText = m.name.Trim();
                     modRoot.AppendChild(modName);
                     XmlElement modVersion = doc.CreateElement("version");
-                    modVersion.InnerText = m.version.Trim();
+                    if (!m.version.Trim().Equals(""))
+                        modVersion.InnerText = m.version.Trim();
                     modRoot.AppendChild(modVersion);
                     XmlElement modZipFile = doc.CreateElement("zipFile");
-                    modZipFile.InnerText = m.zipFile.Trim();
+                    if (!m.zipFile.Trim().Equals(""))
+                        modZipFile.InnerText = m.zipFile.Trim();
                     modRoot.AppendChild(modZipFile);
                     XmlElement modStartAddress = doc.CreateElement("startAddress");
-                    modStartAddress.InnerText = m.startAddress.Trim();
+                    if (!m.startAddress.Trim().Equals(""))
+                        modStartAddress.InnerText = m.startAddress.Trim();
                     modRoot.AppendChild(modStartAddress);
                     XmlElement modEndAddress = doc.CreateElement("endAddress");
-                    modEndAddress.InnerText = m.endAddress.Trim();
+                    if (!m.endAddress.Trim().Equals(""))
+                        modEndAddress.InnerText = m.endAddress.Trim();
                     modRoot.AppendChild(modEndAddress);
                     XmlElement modZipCRC = doc.CreateElement("crc");
-                    modZipCRC.InnerText = m.crc.Trim();
+                    if (!m.crc.Trim().Equals(""))
+                        modZipCRC.InnerText = m.crc.Trim();
                     modRoot.AppendChild(modZipCRC);
                     XmlElement modEnabled = doc.CreateElement("enabled");
-                    modEnabled.InnerText = "" + m.enabled;
+                    if (!m.enabled.ToString().Trim().Equals(""))
+                        modEnabled.InnerText = "" + m.enabled;
                     modRoot.AppendChild(modEnabled);
                     XmlElement modVisible = doc.CreateElement("visible");
-                    modVisible.InnerText = "" + m.visible;
+                    if (!m.visible.ToString().Trim().Equals(""))
+                        modVisible.InnerText = "" + m.visible;
                     modRoot.AppendChild(modVisible);
                     XmlElement modPackageName = doc.CreateElement("packageName");
-                    modPackageName.InnerText = m.packageName.Trim();
+                    if (!m.packageName.Trim().Equals(""))
+                        modPackageName.InnerText = m.packageName.Trim();
                     modRoot.AppendChild(modPackageName);
                     XmlElement modZipSize = doc.CreateElement("size");
-                    modZipSize.InnerText = "" + m.size;
+                    if (!m.size.ToString().Trim().Equals(""))
+                        modZipSize.InnerText = "" + m.size;
                     modRoot.AppendChild(modZipSize);
                     XmlElement modUpdateComment = doc.CreateElement("updateComment");
-                    modUpdateComment.InnerText = convertToXmlSaveFormat(m.updateComment);
+                    if (!m.updateComment.Trim().Equals(""))
+                        modUpdateComment.InnerText = convertToXmlSaveFormat(m.updateComment);
                     modRoot.AppendChild(modUpdateComment);
                     XmlElement modDescription = doc.CreateElement("description");
-                    modDescription.InnerText = convertToXmlSaveFormat(m.description);
+                    if (!m.description.Trim().Equals(""))
+                        modDescription.InnerText = convertToXmlSaveFormat(m.description);
                     modRoot.AppendChild(modDescription);
                     XmlElement modDevURL = doc.CreateElement("devURL");
-                    modDevURL.InnerText = m.devURL.Trim();
+                    if (!m.devURL.Trim().Equals(""))
+                        modDevURL.InnerText = m.devURL.Trim();
                     modRoot.AppendChild(modDevURL);
                     //datas for the mods
                     XmlElement modDatas = doc.CreateElement("userDatas");
                     foreach (string s in m.userFiles)
                     {
                         XmlElement userData = doc.CreateElement("userData");
-                        userData.InnerText = s.Trim();
+                        if (!s.Trim().Equals(""))
+                            userData.InnerText = s.Trim();
                         modDatas.AppendChild(userData);
                     }
                     modRoot.AppendChild(modDatas);
@@ -4089,8 +4131,10 @@ namespace RelhaxModpack
                         XmlElement pictureRoot = doc.CreateElement("picture");
                         XmlElement pictureType = doc.CreateElement("type");
                         XmlElement pictureURL = doc.CreateElement("URL");
-                        pictureURL.InnerText = p.URL.Trim();
-                        pictureType.InnerText = "" + (int)p.mediaType;
+                        if (!p.URL.Trim().Equals(""))
+                            pictureURL.InnerText = p.URL.Trim();
+                        if (!p.mediaType.ToString().Trim().Equals(""))
+                            pictureType.InnerText = "" + (int)p.mediaType;
                         pictureRoot.AppendChild(pictureType);
                         pictureRoot.AppendChild(pictureURL);
                         modPictures.AppendChild(pictureRoot);
@@ -4109,7 +4153,8 @@ namespace RelhaxModpack
                         XmlElement DependencyRoot = doc.CreateElement("dependency");
                         //make dependency
                         XmlElement DepPackageName = doc.CreateElement("packageName");
-                        DepPackageName.InnerText = d.packageName.Trim();
+                        if (!d.packageName.Trim().Equals(""))
+                            DepPackageName.InnerText = d.packageName.Trim();
                         DependencyRoot.AppendChild(DepPackageName);
                         //attach dependency root
                         modDependencies.AppendChild(DependencyRoot);
@@ -4123,10 +4168,12 @@ namespace RelhaxModpack
                         XmlElement LogicalDependencyRoot = doc.CreateElement("logicalDependency");
                         //make logicalDependency
                         XmlElement LogicalDependencyPackageName = doc.CreateElement("packageName");
-                        LogicalDependencyPackageName.InnerText = ld.packageName.Trim();
+                        if (!ld.packageName.Trim().Equals(""))
+                            LogicalDependencyPackageName.InnerText = ld.packageName.Trim();
                         LogicalDependencyRoot.AppendChild(LogicalDependencyPackageName);
                         XmlElement LogicalDependencyNegateFlag = doc.CreateElement("negateFlag");
-                        LogicalDependencyNegateFlag.InnerText = "" + ld.negateFlag;
+                        if (!ld.negateFlag.ToString().Trim().Equals(""))
+                            LogicalDependencyNegateFlag.InnerText = "" + ld.negateFlag;
                         LogicalDependencyRoot.AppendChild(LogicalDependencyNegateFlag);
                         //attach logicalDependency root
                         modLogicalDependencies.AppendChild(LogicalDependencyRoot);
@@ -4161,53 +4208,68 @@ namespace RelhaxModpack
                 XmlElement configRoot = doc.CreateElement("config");
                 configsHolder.AppendChild(configRoot);
                 XmlElement configName = doc.CreateElement("name");
-                configName.InnerText = cc.name.Trim();
+                if (!cc.name.Trim().Equals(""))
+                    configName.InnerText = cc.name.Trim();
                 configRoot.AppendChild(configName);
                 XmlElement configVersion = doc.CreateElement("version");
-                configVersion.InnerText = cc.version.Trim();
+                if (!cc.version.Trim().Equals(""))
+                    configVersion.InnerText = cc.version.Trim();
                 configRoot.AppendChild(configVersion);
                 XmlElement configZipFile = doc.CreateElement("zipFile");
-                configZipFile.InnerText = cc.zipFile.Trim();
+                if (!cc.zipFile.Trim().Equals(""))
+                    configZipFile.InnerText = cc.zipFile.Trim();
                 configRoot.AppendChild(configZipFile);
                 XmlElement configStartAddress = doc.CreateElement("startAddress");
-                configStartAddress.InnerText = cc.startAddress.Trim();
+                if (!cc.startAddress.Trim().Equals(""))
+                    configStartAddress.InnerText = cc.startAddress.Trim();
                 configRoot.AppendChild(configStartAddress);
                 XmlElement configEndAddress = doc.CreateElement("endAddress");
-                configEndAddress.InnerText = cc.endAddress.Trim();
+                if (!cc.endAddress.Trim().Equals(""))
+                    configEndAddress.InnerText = cc.endAddress.Trim();
                 configRoot.AppendChild(configEndAddress);
                 XmlElement configZipCRC = doc.CreateElement("crc");
-                configZipCRC.InnerText = cc.crc.Trim();
+                if (!cc.crc.Trim().Equals(""))
+                    configZipCRC.InnerText = cc.crc.Trim();
                 configRoot.AppendChild(configZipCRC);
                 XmlElement configEnabled = doc.CreateElement("enabled");
-                configEnabled.InnerText = "" + cc.enabled;
+                if (!cc.enabled.ToString().Trim().Equals(""))
+                    configEnabled.InnerText = "" + cc.enabled;
                 configRoot.AppendChild(configEnabled);
                 XmlElement configVisible = doc.CreateElement("visible");
-                configVisible.InnerText = "" + cc.visible;
+                if (!cc.visible.ToString().Trim().Equals(""))
+                    configVisible.InnerText = "" + cc.visible;
                 configRoot.AppendChild(configVisible);
                 XmlElement configPackageName = doc.CreateElement("packageName");
-                configPackageName.InnerText = cc.packageName.Trim();
+                if (!cc.packageName.Trim().Equals(""))
+                    configPackageName.InnerText = cc.packageName.Trim();
                 configRoot.AppendChild(configPackageName);
                 XmlElement configSize = doc.CreateElement("size");
-                configSize.InnerText = "" + cc.size;
+                if (!cc.size.ToString().Trim().Equals(""))
+                    configSize.InnerText = "" + cc.size;
                 configRoot.AppendChild(configSize);
                 XmlElement configComment = doc.CreateElement("updateComment");
-                configComment.InnerText = convertToXmlSaveFormat(cc.updateComment);
+                if (!cc.updateComment.Trim().Equals(""))
+                    configComment.InnerText = convertToXmlSaveFormat(cc.updateComment);
                 configRoot.AppendChild(configComment);
                 XmlElement configDescription = doc.CreateElement("description");
-                configDescription.InnerText = convertToXmlSaveFormat(cc.description);
+                if (!cc.description.Trim().Equals(""))
+                    configDescription.InnerText = convertToXmlSaveFormat(cc.description);
                 configRoot.AppendChild(configDescription);
                 XmlElement configDevURL = doc.CreateElement("devURL");
-                configDevURL.InnerText = cc.devURL.Trim();
+                if (!cc.devURL.Trim().Equals(""))
+                    configDevURL.InnerText = cc.devURL.Trim();
                 configRoot.AppendChild(configDevURL);
                 XmlElement configType = doc.CreateElement("type");
-                configType.InnerText = cc.type;
+                if (!cc.type.ToString().Trim().Equals(""))
+                    configType.InnerText = cc.type;
                 configRoot.AppendChild(configType);
                 //datas for the mods
                 XmlElement configDatas = doc.CreateElement("userDatas");
                 foreach (string s in cc.userFiles)
                 {
                     XmlElement userData = doc.CreateElement("userData");
-                    userData.InnerText = s.Trim();
+                    if (!s.Trim().Equals(""))
+                        userData.InnerText = s.Trim();
                     configDatas.AppendChild(userData);
                 }
                 configRoot.AppendChild(configDatas);
@@ -4218,8 +4280,10 @@ namespace RelhaxModpack
                     XmlElement pictureRoot = doc.CreateElement("picture");
                     XmlElement pictureType = doc.CreateElement("type");
                     XmlElement pictureURL = doc.CreateElement("URL");
-                    pictureURL.InnerText = p.URL.Trim();
-                    pictureType.InnerText = "" + (int)p.mediaType;
+                    if (!p.URL.Trim().Equals(""))
+                        pictureURL.InnerText = p.URL.Trim();
+                    if (!p.mediaType.ToString().Trim().Equals(""))
+                        pictureType.InnerText = "" + (int)p.mediaType;
                     pictureRoot.AppendChild(pictureType);
                     pictureRoot.AppendChild(pictureURL);
                     configPictures.AppendChild(pictureRoot);
@@ -4239,7 +4303,8 @@ namespace RelhaxModpack
                     XmlElement DependencyRoot = doc.CreateElement("dependency");
                     //make dependency
                     XmlElement DepPackageName = doc.CreateElement("packageName");
-                    DepPackageName.InnerText = d.packageName.Trim();
+                    if (!d.packageName.Trim().Equals(""))
+                        DepPackageName.InnerText = d.packageName.Trim();
                     DependencyRoot.AppendChild(DepPackageName);
                     //attach dependency root
                     catDependencies.AppendChild(DependencyRoot);
@@ -4253,10 +4318,12 @@ namespace RelhaxModpack
                     XmlElement LogicalDependencyRoot = doc.CreateElement("logicalDependency");
                     //make logicalDependency
                     XmlElement LogicalDependencyPackageName = doc.CreateElement("packageName");
-                    LogicalDependencyPackageName.InnerText = ld.packageName.Trim();
+                    if (!ld.packageName.Trim().Equals(""))
+                        LogicalDependencyPackageName.InnerText = ld.packageName.Trim();
                     LogicalDependencyRoot.AppendChild(LogicalDependencyPackageName);
                     XmlElement LogicalDependencyNegateFlag = doc.CreateElement("negateFlag");
-                    LogicalDependencyNegateFlag.InnerText = "" + ld.negateFlag;
+                    if (!ld.negateFlag.ToString().Trim().Equals(""))
+                        LogicalDependencyNegateFlag.InnerText = "" + ld.negateFlag;
                     LogicalDependencyRoot.AppendChild(LogicalDependencyNegateFlag);
                     //attach logicalDependency root
                     conLogicalDependencies.AppendChild(LogicalDependencyRoot);
