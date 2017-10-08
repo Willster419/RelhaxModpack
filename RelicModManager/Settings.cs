@@ -5,6 +5,7 @@ using System.Xml;
 using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace RelhaxModpack
 {
@@ -108,7 +109,24 @@ namespace RelhaxModpack
                 Settings.clearCache = false;
                 Settings.disableBorders = false;
                 Settings.NotifyIfSameDatabase = false;
-                Settings.tempLoadedLanguage = 0;
+                string lang = CultureInfo.InstalledUICulture.Name.Split('-')[0];
+                Utils.appendToLog("Language: " + lang);
+                if (lang.ToLower().Equals("de"))
+                {
+                    Settings.tempLoadedLanguage = 1;
+                }
+                else if (lang.ToLower().Equals("pl"))
+                {
+                    Settings.tempLoadedLanguage = 2;
+                }
+                else if (lang.ToLower().Equals("fr"))
+                {
+                    Settings.tempLoadedLanguage = 3;
+                }
+                else
+                {
+                    Settings.tempLoadedLanguage = 0;
+                }
                 Settings.modSelectionHeight = 480;
                 Settings.modSelectionWidth = 800;
                 Settings.fontSizeforum = Settings.FontSize.font100;
