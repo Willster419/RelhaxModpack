@@ -555,79 +555,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void checkResources(bool onlyCheckIfExists, PleaseWait wait)
-        {
-            string[] resourcesList = { "DotNetZip.dll", "Newtonsoft.Json.dll" };
-
-            // this could only be working, if the manager could extract a file !!
-            XDocument doc = null;
-            if (!onlyCheckIfExists)
-            {
-                string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");
-                doc = XDocument.Parse(xmlString);
-            }
-
-            foreach (var resourcesFile in resourcesList)
-            {
-                string localDll = Path.Combine(Application.StartupPath, resourcesFile);
-                if (onlyCheckIfExists)
-                {
-                    if (!File.Exists(localDll))
-                    {
-                        Utils.appendToLog(string.Format("local Resource File \"{0}\" is not existing", resourcesFile));
-                        downloadResources(resourcesFile, wait);
-                    }
-                }
-                else
-                {
-                    // Get the file version
-                    FileVersionInfo VersionInfo = FileVersionInfo.GetVersionInfo(@localDll);
-                    // Print the file name and version number
-                    Utils.appendToLog(string.Format("local Resource File: {0} ({1}, v{2})", VersionInfo.FileDescription, resourcesFile, VersionInfo.FileVersion));
-                    // check managerInfo.xml for online Version number of the file
-                    var onlineResourcesFile = doc.CreateNavigator().SelectSingleNode("/version/resources");
-                    bool exists = doc.Descendants("file")
-                       .Where(arg => arg.Value == resourcesFile)
-                       .Any();
-                    string onlineResourcesFileVersion = "0";
-                    if (exists)
-                    {
-                        XElement element = doc.Descendants("file")
-                           .Where(arg => arg.Value == resourcesFile)
-                           .FirstOrDefault();
-                        onlineResourcesFileVersion = element.Attribute("version").Value;
-                    }
-                    else
-                    {
-                        Utils.appendToLog(string.Format("ERROR, can not find the online Version of \"{0}\"", resourcesFile));
-                        continue;
-                    }
-
-                    // compaire the version numbers
-                    int caseSwitch = Utils.CompareVersions(onlineResourcesFileVersion.Trim(), VersionInfo.FileVersion.Trim());
-
-                    if (caseSwitch < 0)         // online Version is smaller then the local one (strange!)
-                    {
-                        Utils.appendToLog(string.Format("online Resource File is v{0}. STRANGE !!", onlineResourcesFileVersion));
-                        if (Program.testMode && !Program.ignoreResourseVersionFail)
-                        {
-                            MessageBox.Show(string.Format("The online resource file version of \"{0}\" is smaller then local version!", resourcesFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        }
-                    }
-                    else if (caseSwitch == 0)   // online Version and local Version are equal
-                    {
-                        Utils.appendToLog(string.Format("online Resource File is v{0}. Up-To-Date and no download needed", onlineResourcesFileVersion));
-                    }
-                    else // caseSwitch > 0      // local Version is smaller then the online Version => download
-                    {
-                        Utils.appendToLog(string.Format("online Resource File is v{0}. Outdated and download needed", onlineResourcesFileVersion));
-                        downloadResources(resourcesFile, wait);
-                    }
-                }
-            }
-        }
-        
-        //handelr for before the window is displayed
+        //handler for before the window is displayed
         private void MainWindow_Load(object sender, EventArgs e)
         {
             //set window header text to current version so user knows
@@ -696,10 +624,6 @@ namespace RelhaxModpack
                 this.Close();
             }
             
-            //check for required external application libraries (dlls only)
-            //Utils.appendToLog("Checking if required external files existing");
-            //checkResources(true, wait);
-            //checkResources(false, wait);
             //check for updates
             wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
             Application.DoEvents();
