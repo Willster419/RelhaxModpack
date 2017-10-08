@@ -33,6 +33,7 @@
             this.StartTanksButton = new System.Windows.Forms.Button();
             this.StartWoTLauncherButton = new System.Windows.Forms.Button();
             this.StartXVMStatButton = new System.Windows.Forms.Button();
+            this.CloseApplicationButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // InstallCompleteLabel
@@ -68,17 +69,28 @@
             // 
             this.StartXVMStatButton.Location = new System.Drawing.Point(12, 83);
             this.StartXVMStatButton.Name = "StartXVMStatButton";
-            this.StartXVMStatButton.Size = new System.Drawing.Size(267, 23);
+            this.StartXVMStatButton.Size = new System.Drawing.Size(267, 49);
             this.StartXVMStatButton.TabIndex = 3;
             this.StartXVMStatButton.Text = "Go to xvm stat website";
             this.StartXVMStatButton.UseVisualStyleBackColor = true;
             this.StartXVMStatButton.Click += new System.EventHandler(this.StartXVMStatButton_Click);
             // 
+            // CloseApplicationButton
+            // 
+            this.CloseApplicationButton.Location = new System.Drawing.Point(12, 138);
+            this.CloseApplicationButton.Name = "CloseApplicationButton";
+            this.CloseApplicationButton.Size = new System.Drawing.Size(267, 23);
+            this.CloseApplicationButton.TabIndex = 4;
+            this.CloseApplicationButton.Text = "Close the Application";
+            this.CloseApplicationButton.UseVisualStyleBackColor = true;
+            this.CloseApplicationButton.Click += new System.EventHandler(this.CloseApplicationButton_Click);
+            // 
             // InstallFinished
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(291, 151);
+            this.ClientSize = new System.Drawing.Size(291, 173);
+            this.Controls.Add(this.CloseApplicationButton);
             this.Controls.Add(this.StartXVMStatButton);
             this.Controls.Add(this.StartWoTLauncherButton);
             this.Controls.Add(this.StartTanksButton);
@@ -100,5 +112,6 @@
         private System.Windows.Forms.Button StartTanksButton;
         private System.Windows.Forms.Button StartWoTLauncherButton;
         private System.Windows.Forms.Button StartXVMStatButton;
+        private System.Windows.Forms.Button CloseApplicationButton;
     }
 }
