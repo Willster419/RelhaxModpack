@@ -137,7 +137,7 @@ namespace RelhaxModpack
             //MainForm
             english.Add("mainFormToolTip", "Right Click for extended description");
             german.Add("mainFormToolTip", "Rechtsklick für eine erweiterte Beschreibung");
-            polish.Add("mainFormToolTip", "TODO");
+            polish.Add("mainFormToolTip", "Rozwiń opis PPM");
             french.Add("mainFormToolTip", "TODO");
             
 
@@ -1212,7 +1212,7 @@ namespace RelhaxModpack
             //Window header
             english.Add("foundOldFilesHeader", "Old Files Question");
             german.Add("foundOldFilesHeader", "alte Dateien löschen");
-            polish.Add("foundOldFilesHeader", "Stare pliki Pytanie");
+            polish.Add("foundOldFilesHeader", "Zapytanie o starsze wersje plików");
             french.Add("foundOldFilesHeader", "Question pour les fichiers anciens (français seulement)");
 
             //Componet: Found zip files to delete 1
@@ -1456,7 +1456,7 @@ namespace RelhaxModpack
             //function checkForOldZipFiles() 
             english.Add("parseDownloadFolderFailed", "Parsing the \"{0}\" folder failed.");
             german.Add("parseDownloadFolderFailed", "Durchsehen des \"{0}\" Verzeichnisses ist fehlgeschlagen.");
-            polish.Add("parseDownloadFolderFailed", "Nie udało się przetworzyć katalogu \"{0}\".");
+            polish.Add("parseDownloadFolderFailed", "Pobieranie informacji o folderze \"{ 0}\" zakończone niepowodzeniem");
             french.Add("parseDownloadFolderFailed", "L'analyse du dossier \"{0}\" a échoué.");
 
             //Componet: installation finished
@@ -1500,7 +1500,7 @@ namespace RelhaxModpack
             //
             english.Add("CloseApplicationButton", "Close the application?");
             german.Add("CloseApplicationButton", "Anwendung schließen");
-            polish.Add("CloseApplicationButton", "TODO");
+            polish.Add("CloseApplicationButton", "Zamknij aplikację or Zamknij program");
             french.Add("CloseApplicationButton", "Fermer l'application");
 
             //Componet: StartXVMStatButton_Click
