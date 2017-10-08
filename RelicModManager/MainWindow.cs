@@ -1120,7 +1120,7 @@ namespace RelhaxModpack
                 }
                 if (error)
                 {
-                    Utils.appendToLog("ERROR: could not match packageName '" + d.packageName + "' from the list of dependencies");
+                    Utils.appendToLog(string.Format("ERROR: could not match packageName '{0}' from the list of dependencies", d.packageName));
                     break;
                 }
                 //dependency has been found, if it's not in the list currently to install, add it
@@ -1624,10 +1624,6 @@ namespace RelhaxModpack
         //Checks if the current database version is the same as the database version last installed into the selected World_of_Tanks directory
         private bool SameDatabaseVersions()
         {
-            //OLD CODE TO BE REPLACED
-            //XPathDocument doc = new XPathDocument(Path.Combine(Application.StartupPath, "RelHaxTemp", "manager_version.xml"));//xml doc name can change
-
-            //NEW CODE TO USE
             string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");  //xml doc name can change
             XDocument doc = XDocument.Parse(xmlString);
 
