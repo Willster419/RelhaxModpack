@@ -1456,7 +1456,7 @@ namespace RelhaxModpack
             //function checkForOldZipFiles() 
             english.Add("parseDownloadFolderFailed", "Parsing the \"{0}\" folder failed.");
             german.Add("parseDownloadFolderFailed", "Durchsehen des \"{0}\" Verzeichnisses ist fehlgeschlagen.");
-            polish.Add("parseDownloadFolderFailed", "Pobieranie informacji o folderze \"{ 0}\" zakończone niepowodzeniem");
+            polish.Add("parseDownloadFolderFailed", "Pobieranie informacji o folderze \"{0}\" zakończone niepowodzeniem");
             french.Add("parseDownloadFolderFailed", "L'analyse du dossier \"{0}\" a échoué.");
 
             //Componet: installation finished
