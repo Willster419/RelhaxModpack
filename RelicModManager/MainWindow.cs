@@ -637,10 +637,6 @@ namespace RelhaxModpack
                 this.checkmanagerUpdates();
             }
 
-            // check the resources again and now it is possible to compair the versionnumbers (local and online)
-            //Utils.appendToLog("Checking for required external files if Up-To-Date");
-            //checkResources(false, wait);
-
             //load settings
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
             Utils.appendToLog("Loading settings");
