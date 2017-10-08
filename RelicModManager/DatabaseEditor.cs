@@ -49,7 +49,7 @@ namespace RelhaxModpack
         {
             if (UnsavedModifications)
             {
-                if (MessageBox.Show("You have unsaved changes, return to editor?", "unsaved changes", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show("You have unsaved changes, return to editor?", "unsaved changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     e.Cancel = true;
                     return;
@@ -212,7 +212,7 @@ namespace RelhaxModpack
         {
             if (ParsedCategoryList == null || GlobalDependencies == null || Dependencies == null || LogicalDependencies == null)
             {
-                MessageBox.Show("Database Not Loaded");
+                MessageBox.Show("Database Not Loaded", "CRITICAL", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (SaveDatabaseDialog.ShowDialog() == DialogResult.Cancel)
@@ -229,10 +229,10 @@ namespace RelhaxModpack
                 MessageBox.Show("Database Not Loaded");
                 return;
             }
-            if (MessageBox.Show("Confirm you wish to apply changes", "Confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to apply changes", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             int duplicates = 0;
-            if(DatabaseEditorMode == EditorMode.GlobalDependnecy)
+            if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
             {
                 if (!SelectedGlobalDependency.packageName.Equals(ObjectPackageNameTB.Text))
                     duplicates++;
@@ -249,12 +249,15 @@ namespace RelhaxModpack
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-                if (!SelectedDatabaseObject.packageName.Equals(ObjectPackageNameTB.Text))
-                    duplicates++;
+                if (SelectedCategory == null)
+                {
+                    if (!SelectedDatabaseObject.packageName.Equals(ObjectPackageNameTB.Text))
+                        duplicates++;
+                }
             }
-            if(DuplicatePackageName(this.GlobalDependencies,this.Dependencies,this.LogicalDependencies,this.ParsedCategoryList, ObjectPackageNameTB.Text,duplicates))
+            if (DuplicatePackageName(this.GlobalDependencies,this.Dependencies,this.LogicalDependencies,this.ParsedCategoryList, ObjectPackageNameTB.Text,duplicates))
             {
-                MessageBox.Show("Package name: " + ObjectPackageNameTB.Text + ", already exists");
+                MessageBox.Show(string.Format("Package name: {0}, already exists", ObjectPackageNameTB.Text));
                 return;
             }
             if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
@@ -302,6 +305,24 @@ namespace RelhaxModpack
             {
                 int index = ParsedCategoryList.IndexOf(SelectedCategory);
                 SelectedCategory.name = ObjectNameTB.Text;
+                switch (ObjectTypeComboBox.SelectedIndex)
+                {
+                    case 1:
+                        SelectedCategory.selectionType = "single1";
+                        break;
+                    case 2:
+                        SelectedCategory.selectionType = "single1";
+                        break;
+                    case 3:
+                        SelectedCategory.selectionType = "single1";
+                        break;
+                    case 4:
+                        SelectedCategory.selectionType = "multi";
+                        break;
+                    default:
+                        SelectedCategory.selectionType = "multi";
+                        break;
+                }
                 ParsedCategoryList[index] = SelectedCategory;
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
@@ -531,358 +552,345 @@ namespace RelhaxModpack
 
         private void DatabaseTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            DatabaseTreeView.SelectedNode = e.Node;
-            DatabaseTreeView.Focus();
-            e.Node.ForeColor = System.Drawing.Color.Blue;
-            currentSelectedIndex = DatabaseTreeView.SelectedNode.Index;
-            //DatabaseTreeView.SelectedNode.BackColor = Color.Blue;
-            //DatabaseTreeView.SelectedNode.ForeColor = Color.Blue;
-            clearDatabaseDetailsUI();
-            DatabaseTreeNode node = (DatabaseTreeNode)DatabaseTreeView.SelectedNode;
-            if (node.GlobalDependency != null)
+            try
             {
-                SelectedGlobalDependency = node.GlobalDependency;
-                SelectedDependency = null;
-                SelectedLogicalDependency = null;
-                SelectedDatabaseObject = null;
-                SelectedCategory = null;
-
-                ObjectNameTB.Enabled = false;
-
-                ObjectPackageNameTB.Enabled = true;
-                ObjectPackageNameTB.Text = node.GlobalDependency.packageName;
-
-                ObjectStartAddressTB.Enabled = true;
-                ObjectStartAddressTB.Text = node.GlobalDependency.startAddress;
-
-                ObjectEndAddressTB.Enabled = true;
-                ObjectEndAddressTB.Text = node.GlobalDependency.endAddress;
-
-                ObjectZipFileTB.Enabled = true;
-                ObjectZipFileTB.Text = node.GlobalDependency.dependencyZipFile;
-
-                ObjectDevURLTB.Enabled = true;
-                ObjectDevURLTB.Text = SelectedGlobalDependency.devURL;
-
-                ObjectVersionTB.Enabled = false;
-
-                ObjectTypeComboBox.Enabled = false;
-                ObjectTypeComboBox.SelectedIndex = 0;
-
-                ObjectEnabledCheckBox.Enabled = true;
-                ObjectEnabledCheckBox.Checked = node.GlobalDependency.enabled;
-
-                ObjectVisibleCheckBox.Enabled = false;
-
-                ObjectAppendExtractionCB.Enabled = true;
-                ObjectAppendExtractionCB.Checked = node.GlobalDependency.appendExtraction;
-
-                DownloadZipfileButton.Enabled = true;
-
-                DescriptionTabPage.Enabled = false;
-
-                DependenciesTabPage.Enabled = false;
-                ObjectDependenciesLabel.Text = "dependencies (click to edit)";
-                PictureTabPage.Enabled = false;
-                UserDatasTabPage.Enabled = false;
-            }
-            else if (node.Dependency != null)
-            {
-                SelectedGlobalDependency = null;
-                SelectedDependency = node.Dependency;
-                SelectedLogicalDependency = null;
-                SelectedDatabaseObject = null;
-                SelectedCategory = null;
-
-                ObjectNameTB.Enabled = false;
-
-                ObjectPackageNameTB.Enabled = true;
-                ObjectPackageNameTB.Text = SelectedDependency.packageName;
-
-                ObjectStartAddressTB.Enabled = true;
-                ObjectStartAddressTB.Text = SelectedDependency.startAddress;
-
-                ObjectEndAddressTB.Enabled = true;
-                ObjectEndAddressTB.Text = SelectedDependency.endAddress;
-
-                ObjectZipFileTB.Enabled = true;
-                ObjectZipFileTB.Text = SelectedDependency.dependencyZipFile;
-
-                ObjectDevURLTB.Enabled = true;
-                ObjectDevURLTB.Text = SelectedDependency.devURL;
-
-                ObjectVersionTB.Enabled = false;
-
-                ObjectTypeComboBox.Enabled = false;
-                ObjectTypeComboBox.SelectedIndex = 0;
-
-                ObjectEnabledCheckBox.Enabled = true;
-                ObjectEnabledCheckBox.Checked = SelectedDependency.enabled;
-
-                ObjectVisibleCheckBox.Enabled = false;
-
-                ObjectAppendExtractionCB.Enabled = true;
-                ObjectAppendExtractionCB.Checked = SelectedDependency.appendExtraction;
-
-                DownloadZipfileButton.Enabled = true;
-
-                DescriptionTabPage.Enabled = false;
-
-                DependenciesTabPage.Enabled = true;
-                DependencyPanel.Enabled = true;
-                ObjectDependenciesLabel.Text = "Objects that use this dependency...";
-                ObjectDependenciesLabel.Enabled = true;
-                ObjectDependenciesList.Enabled = true;
-                ObjectDependenciesList.DataSource = BuildDatabaseLogic(SelectedDependency);
-                
-
-                LogicalDependencyPanel.Enabled = true;
-                ObjectLogicalDependenciesList.DataSource = null;
-                ObjectLogicalDependenciesList.Items.Clear();
-                ObjectLogicalDependenciesList.DataSource = SelectedDependency.logicalDependencies;
-                CurrentLogicalDependenciesCB.DataSource = null;
-                CurrentLogicalDependenciesCB.Items.Clear();
-                CurrentLogicalDependenciesCB.DataSource = LogicalDependencies;
-                CurrentLogicalDependenciesCB.SelectedIndex = -1;
-                LogicalDependnecyNegateFlagCB.CheckedChanged -= LogicalDependnecyNegateFlagCB_CheckedChanged;
-                LogicalDependnecyNegateFlagCB.Checked = false;
-                LogicalDependnecyNegateFlagCB.CheckedChanged += LogicalDependnecyNegateFlagCB_CheckedChanged;
-
-                PictureTabPage.Enabled = false;
-                UserDatasTabPage.Enabled = false;
-            }
-            else if (node.LogicalDependency != null)
-            {
-                SelectedGlobalDependency = null;
-                SelectedDependency = null;
-                SelectedLogicalDependency = node.LogicalDependency;
-                SelectedDatabaseObject = null;
-                SelectedCategory = null;
-
-                ObjectNameTB.Enabled = false;
-                // ObjectNameTB.Text = "";
-
-                ObjectPackageNameTB.Enabled = true;
-                ObjectPackageNameTB.Text = SelectedLogicalDependency.packageName;
-
-                ObjectStartAddressTB.Enabled = true;
-                ObjectStartAddressTB.Text = SelectedLogicalDependency.startAddress;
-
-                ObjectEndAddressTB.Enabled = true;
-                ObjectEndAddressTB.Text = SelectedLogicalDependency.endAddress;
-
-                ObjectZipFileTB.Enabled = true;
-                ObjectZipFileTB.Text = SelectedLogicalDependency.dependencyZipFile;
-
-                ObjectDevURLTB.Enabled = true;
-                ObjectDevURLTB.Text = SelectedLogicalDependency.devURL;
-
-                ObjectVersionTB.Enabled = false;
-
-                ObjectTypeComboBox.Enabled = false;
-                ObjectTypeComboBox.SelectedIndex = 0;
-
-                ObjectEnabledCheckBox.Enabled = true;
-                ObjectEnabledCheckBox.Checked = SelectedLogicalDependency.enabled;
-
-                ObjectVisibleCheckBox.Enabled = false;
-
-                ObjectAppendExtractionCB.Enabled = false;
-
-                DownloadZipfileButton.Enabled = true;
-
-                DescriptionTabPage.Enabled = false;
-
-                DependenciesTabPage.Enabled = true;
-                DependencyPanel.Enabled = true;
-                ObjectDependenciesLabel.Text = "Objects that use this logical dependency...";
-                SelectedLogicalDependency.DatabasePackageLogic.Clear();
-                BuildDatabaseLogic(SelectedLogicalDependency);
-                ObjectDependenciesList.DataSource = null;
-                ObjectDependenciesList.Items.Clear();
-                ObjectDependenciesList.DataSource = SelectedLogicalDependency.DatabasePackageLogic;
-                PictureTabPage.Enabled = false;
-                UserDatasTabPage.Enabled = false;
-            }
-            else if (node.DatabaseObject != null)
-            {
-                SelectedGlobalDependency = null;
-                SelectedDependency = null;
-                SelectedLogicalDependency = null;
-                SelectedDatabaseObject = node.DatabaseObject;
-                SelectedCategory = null;
-
-                ObjectNameTB.Enabled = true;
-                ObjectNameTB.Text = SelectedDatabaseObject.name;
-
-                ObjectPackageNameTB.Enabled = true;
-                ObjectPackageNameTB.Text = SelectedDatabaseObject.packageName;
-
-                ObjectStartAddressTB.Enabled = true;
-                ObjectStartAddressTB.Text = SelectedDatabaseObject.startAddress;
-
-                ObjectEndAddressTB.Enabled = true;
-                ObjectEndAddressTB.Text = SelectedDatabaseObject.endAddress;
-
-                ObjectZipFileTB.Enabled = true;
-                ObjectZipFileTB.Text = SelectedDatabaseObject.zipFile;
-
-                ObjectDevURLTB.Enabled = true;
-                ObjectDevURLTB.Text = SelectedDatabaseObject.devURL;
-
-                ObjectVersionTB.Enabled = true;
-                ObjectVersionTB.Text = SelectedDatabaseObject.version;
-
-                if (SelectedDatabaseObject is Config)
+                DatabaseTreeView.SelectedNode = e.Node;
+                DatabaseTreeView.Focus();
+                e.Node.ForeColor = System.Drawing.Color.Blue;
+                currentSelectedIndex = DatabaseTreeView.SelectedNode.Index;
+                //DatabaseTreeView.SelectedNode.BackColor = Color.Blue;
+                //DatabaseTreeView.SelectedNode.ForeColor = Color.Blue;
+                clearDatabaseDetailsUI();
+                DatabaseTreeNode node = (DatabaseTreeNode)DatabaseTreeView.SelectedNode;
+                if (node.GlobalDependency != null)
                 {
-                    ObjectTypeComboBox.Enabled = true;
-                    Config cfg = (Config)SelectedDatabaseObject;
-                    switch (cfg.type)
-                    {
-                        case "single":
-                            ObjectTypeComboBox.SelectedIndex = 1;
-                            break;
-                        case "single1":
-                            ObjectTypeComboBox.SelectedIndex = 1;
-                            break;
-                        case "single_dropDown":
-                            ObjectTypeComboBox.SelectedIndex = 2;
-                            break;
-                        case "single_dropDown1":
-                            ObjectTypeComboBox.SelectedIndex = 2;
-                            break;
-                        case "single_dropDown2":
-                            ObjectTypeComboBox.SelectedIndex = 3;
-                            break;
-                        case "multi":
-                            ObjectTypeComboBox.SelectedIndex = 4;
-                            break;
-                    }
-                }
-                else
-                {
+                    SelectedGlobalDependency = node.GlobalDependency;
+                    SelectedDependency = null;
+                    SelectedLogicalDependency = null;
+                    SelectedDatabaseObject = null;
+                    SelectedCategory = null;
+
+                    ObjectNameTB.Enabled = false;
+
+                    ObjectPackageNameTB.Enabled = true;
+                    ObjectPackageNameTB.Text = node.GlobalDependency.packageName;
+
+                    ObjectStartAddressTB.Enabled = true;
+                    ObjectStartAddressTB.Text = node.GlobalDependency.startAddress;
+
+                    ObjectEndAddressTB.Enabled = true;
+                    ObjectEndAddressTB.Text = node.GlobalDependency.endAddress;
+
+                    ObjectZipFileTB.Enabled = true;
+                    ObjectZipFileTB.Text = node.GlobalDependency.dependencyZipFile;
+
+                    ObjectDevURLTB.Enabled = true;
+                    ObjectDevURLTB.Text = SelectedGlobalDependency.devURL;
+
+                    ObjectVersionTB.Enabled = false;
+
                     ObjectTypeComboBox.Enabled = false;
                     ObjectTypeComboBox.SelectedIndex = 0;
+
+                    ObjectEnabledCheckBox.Enabled = true;
+                    ObjectEnabledCheckBox.Checked = node.GlobalDependency.enabled;
+
+                    ObjectVisibleCheckBox.Enabled = false;
+
+                    ObjectAppendExtractionCB.Enabled = true;
+                    ObjectAppendExtractionCB.Checked = node.GlobalDependency.appendExtraction;
+
+                    DownloadZipfileButton.Enabled = true;
+
+                    DescriptionTabPage.Enabled = false;
+
+                    DependenciesTabPage.Enabled = false;
+                    ObjectDependenciesLabel.Text = "dependencies (click to edit)";
+                    PictureTabPage.Enabled = false;
+                    UserDatasTabPage.Enabled = false;
                 }
+                else if (node.Dependency != null)
+                {
+                    SelectedGlobalDependency = null;
+                    SelectedDependency = node.Dependency;
+                    SelectedLogicalDependency = null;
+                    SelectedDatabaseObject = null;
+                    SelectedCategory = null;
 
-                ObjectEnabledCheckBox.Enabled = true;
-                ObjectEnabledCheckBox.Checked = SelectedDatabaseObject.enabled;
+                    ObjectNameTB.Enabled = false;
 
-                ObjectVisibleCheckBox.Enabled = true;
-                ObjectVisibleCheckBox.Checked = SelectedDatabaseObject.visible;
+                    ObjectPackageNameTB.Enabled = true;
+                    ObjectPackageNameTB.Text = SelectedDependency.packageName;
 
-                ObjectAppendExtractionCB.Enabled = false;
-                // ObjectAppendExtractionCB.Checked = false;
+                    ObjectStartAddressTB.Enabled = true;
+                    ObjectStartAddressTB.Text = SelectedDependency.startAddress;
 
-                DescriptionTabPage.Enabled = true;
+                    ObjectEndAddressTB.Enabled = true;
+                    ObjectEndAddressTB.Text = SelectedDependency.endAddress;
 
-                ObjectDescTB.Enabled = true;
-                ObjectDescTB.Text = SelectedDatabaseObject.description;
+                    ObjectZipFileTB.Enabled = true;
+                    ObjectZipFileTB.Text = SelectedDependency.dependencyZipFile;
 
-                ObjectUpdateNotesTB.Enabled = true;
-                ObjectUpdateNotesTB.Text = SelectedDatabaseObject.updateComment;
+                    ObjectDevURLTB.Enabled = true;
+                    ObjectDevURLTB.Text = SelectedDependency.devURL;
 
-                DownloadZipfileButton.Enabled = true;
+                    ObjectVersionTB.Enabled = false;
 
-                DependenciesTabPage.Enabled = true;
-                DependencyPanel.Enabled = true;
-                LogicalDependencyPanel.Enabled = true;
-                PictureTabPage.Enabled = true;
-                UserDatasTabPage.Enabled = true;
+                    ObjectTypeComboBox.Enabled = false;
+                    ObjectTypeComboBox.SelectedIndex = 0;
 
-                //logicalDependencies
-                // ObjectLogicalDependenciesList.DataSource = null;
-                // ObjectLogicalDependenciesList.Items.Clear();
-                ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.logicalDependencies;
-                CurrentLogicalDependenciesCB.DataSource = LogicalDependencies;
-                CurrentLogicalDependenciesCB.SelectedIndex = -1;
-                // LogicalDependnecyNegateFlagCB.CheckedChanged -= LogicalDependnecyNegateFlagCB_CheckedChanged;
-                // LogicalDependnecyNegateFlagCB.Checked = false;
-                // LogicalDependnecyNegateFlagCB.CheckedChanged += LogicalDependnecyNegateFlagCB_CheckedChanged;
+                    ObjectEnabledCheckBox.Enabled = true;
+                    ObjectEnabledCheckBox.Checked = SelectedDependency.enabled;
 
-                //dependencies
-                ObjectDependenciesLabel.Text = "dependencies (click to edit)";
-                // ObjectDependenciesList.DataSource = null;
-                // ObjectDependenciesList.Items.Clear();
-                ObjectDependenciesList.DataSource = SelectedDatabaseObject.dependencies;
-                CurrentDependenciesCB.DataSource = Dependencies;
-                CurrentDependenciesCB.SelectedIndex = -1;
+                    ObjectVisibleCheckBox.Enabled = false;
 
-                //pictures
-                // ObjectPicturesList.DataSource = null;
-                // ObjectPicturesList.Items.Clear();
-                ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
-                if (SelectedDatabaseObject.pictureList.Count == 0)
-                    PictureURLTB.Text = "";
+                    ObjectAppendExtractionCB.Enabled = true;
+                    ObjectAppendExtractionCB.Checked = SelectedDependency.appendExtraction;
 
-                //userdatas
-                // ObjectUserdatasTB.Text = "";
-                // ObjectUserdatasList.DataSource = null;
-                // ObjectUserdatasList.Items.Clear();
-                ObjectUserdatasList.DataSource = SelectedDatabaseObject.userFiles;
+                    DownloadZipfileButton.Enabled = true;
+
+                    DescriptionTabPage.Enabled = false;
+
+                    DependenciesTabPage.Enabled = true;
+                    DependencyPanel.Enabled = true;
+                    ObjectDependenciesLabel.Text = "Objects that use this dependency...";
+                    ObjectDependenciesLabel.Enabled = true;
+                    ObjectDependenciesList.Enabled = true;
+                    ObjectDependenciesList.DataSource = BuildDatabaseLogic(SelectedDependency);
+
+
+                    LogicalDependencyPanel.Enabled = true;
+                    ObjectLogicalDependenciesList.DataSource = null;
+                    ObjectLogicalDependenciesList.Items.Clear();
+                    ObjectLogicalDependenciesList.DataSource = SelectedDependency.logicalDependencies;
+                    CurrentLogicalDependenciesCB.DataSource = null;
+                    CurrentLogicalDependenciesCB.Items.Clear();
+                    CurrentLogicalDependenciesCB.DataSource = LogicalDependencies;
+                    CurrentLogicalDependenciesCB.SelectedIndex = -1;
+                    LogicalDependnecyNegateFlagCB.CheckedChanged -= LogicalDependnecyNegateFlagCB_CheckedChanged;
+                    LogicalDependnecyNegateFlagCB.Checked = false;
+                    LogicalDependnecyNegateFlagCB.CheckedChanged += LogicalDependnecyNegateFlagCB_CheckedChanged;
+
+                    PictureTabPage.Enabled = false;
+                    UserDatasTabPage.Enabled = false;
+                }
+                else if (node.LogicalDependency != null)
+                {
+                    SelectedGlobalDependency = null;
+                    SelectedDependency = null;
+                    SelectedLogicalDependency = node.LogicalDependency;
+                    SelectedDatabaseObject = null;
+                    SelectedCategory = null;
+
+                    ObjectNameTB.Enabled = false;
+
+                    ObjectPackageNameTB.Enabled = true;
+                    ObjectPackageNameTB.Text = SelectedLogicalDependency.packageName;
+
+                    ObjectStartAddressTB.Enabled = true;
+                    ObjectStartAddressTB.Text = SelectedLogicalDependency.startAddress;
+
+                    ObjectEndAddressTB.Enabled = true;
+                    ObjectEndAddressTB.Text = SelectedLogicalDependency.endAddress;
+
+                    ObjectZipFileTB.Enabled = true;
+                    ObjectZipFileTB.Text = SelectedLogicalDependency.dependencyZipFile;
+
+                    ObjectDevURLTB.Enabled = true;
+                    ObjectDevURLTB.Text = SelectedLogicalDependency.devURL;
+
+                    ObjectVersionTB.Enabled = false;
+
+                    ObjectTypeComboBox.Enabled = false;
+                    ObjectTypeComboBox.SelectedIndex = 0;
+
+                    ObjectEnabledCheckBox.Enabled = true;
+                    ObjectEnabledCheckBox.Checked = SelectedLogicalDependency.enabled;
+
+                    ObjectVisibleCheckBox.Enabled = false;
+
+                    ObjectAppendExtractionCB.Enabled = false;
+
+                    DownloadZipfileButton.Enabled = true;
+
+                    DescriptionTabPage.Enabled = false;
+
+                    DependenciesTabPage.Enabled = true;
+                    DependencyPanel.Enabled = true;
+                    ObjectDependenciesLabel.Text = "Objects that use this logical dependency...";
+                    SelectedLogicalDependency.DatabasePackageLogic.Clear();
+                    BuildDatabaseLogic(SelectedLogicalDependency);
+                    ObjectDependenciesList.DataSource = null;
+                    ObjectDependenciesList.Items.Clear();
+                    ObjectDependenciesList.DataSource = SelectedLogicalDependency.DatabasePackageLogic;
+                    PictureTabPage.Enabled = false;
+                    UserDatasTabPage.Enabled = false;
+                }
+                else if (node.DatabaseObject != null)
+                {
+                    SelectedGlobalDependency = null;
+                    SelectedDependency = null;
+                    SelectedLogicalDependency = null;
+                    SelectedDatabaseObject = node.DatabaseObject;
+                    SelectedCategory = null;
+
+                    ObjectNameTB.Enabled = true;
+                    ObjectNameTB.Text = SelectedDatabaseObject.name;
+
+                    ObjectPackageNameTB.Enabled = true;
+                    ObjectPackageNameTB.Text = SelectedDatabaseObject.packageName;
+
+                    ObjectStartAddressTB.Enabled = true;
+                    ObjectStartAddressTB.Text = SelectedDatabaseObject.startAddress;
+
+                    ObjectEndAddressTB.Enabled = true;
+                    ObjectEndAddressTB.Text = SelectedDatabaseObject.endAddress;
+
+                    ObjectZipFileTB.Enabled = true;
+                    ObjectZipFileTB.Text = SelectedDatabaseObject.zipFile;
+
+                    ObjectDevURLTB.Enabled = true;
+                    ObjectDevURLTB.Text = SelectedDatabaseObject.devURL;
+
+                    ObjectVersionTB.Enabled = true;
+                    ObjectVersionTB.Text = SelectedDatabaseObject.version;
+
+                    if (SelectedDatabaseObject is Config)
+                    {
+                        ObjectTypeComboBox.Enabled = true;
+                        Config cfg = (Config)SelectedDatabaseObject;
+                        switch (cfg.type)
+                        {
+                            case "single":
+                                ObjectTypeComboBox.SelectedIndex = 1;
+                                break;
+                            case "single1":
+                                ObjectTypeComboBox.SelectedIndex = 1;
+                                break;
+                            case "single_dropDown":
+                                ObjectTypeComboBox.SelectedIndex = 2;
+                                break;
+                            case "single_dropDown1":
+                                ObjectTypeComboBox.SelectedIndex = 2;
+                                break;
+                            case "single_dropDown2":
+                                ObjectTypeComboBox.SelectedIndex = 3;
+                                break;
+                            case "multi":
+                                ObjectTypeComboBox.SelectedIndex = 4;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        ObjectTypeComboBox.Enabled = false;
+                        ObjectTypeComboBox.SelectedIndex = 0;
+                    }
+
+                    ObjectEnabledCheckBox.Enabled = true;
+                    ObjectEnabledCheckBox.Checked = SelectedDatabaseObject.enabled;
+
+                    ObjectVisibleCheckBox.Enabled = true;
+                    ObjectVisibleCheckBox.Checked = SelectedDatabaseObject.visible;
+
+                    ObjectAppendExtractionCB.Enabled = false;
+
+                    DescriptionTabPage.Enabled = true;
+
+                    ObjectDescTB.Enabled = true;
+                    ObjectDescTB.Text = SelectedDatabaseObject.description;
+
+                    ObjectUpdateNotesTB.Enabled = true;
+                    ObjectUpdateNotesTB.Text = SelectedDatabaseObject.updateComment;
+
+                    DownloadZipfileButton.Enabled = true;
+
+                    DependenciesTabPage.Enabled = true;
+                    DependencyPanel.Enabled = true;
+                    LogicalDependencyPanel.Enabled = true;
+                    PictureTabPage.Enabled = true;
+                    UserDatasTabPage.Enabled = true;
+
+                    //logicalDependencies
+                    ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.logicalDependencies;
+                    CurrentLogicalDependenciesCB.DataSource = LogicalDependencies;
+                    CurrentLogicalDependenciesCB.SelectedIndex = -1;
+
+                    //dependencies
+                    ObjectDependenciesLabel.Text = "dependencies (click to edit)";
+                    ObjectDependenciesList.DataSource = SelectedDatabaseObject.dependencies;
+                    CurrentDependenciesCB.DataSource = Dependencies;
+                    CurrentDependenciesCB.SelectedIndex = -1;
+
+                    //pictures
+                    ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
+                    if (SelectedDatabaseObject.pictureList.Count == 0)
+                        PictureURLTB.Text = "";
+
+                    //userdatas
+                    ObjectUserdatasList.DataSource = SelectedDatabaseObject.userFiles;
+                }
+                else if (node.Category != null)
+                {
+                    SelectedGlobalDependency = null;
+                    SelectedDependency = null;
+                    SelectedLogicalDependency = null;
+                    SelectedDatabaseObject = null;
+                    SelectedCategory = node.Category;
+
+                    ObjectNameTB.Enabled = true;
+                    ObjectNameTB.Text = SelectedCategory.name;
+
+                    ObjectPackageNameTB.Enabled = false;
+
+                    ObjectStartAddressTB.Enabled = false;
+
+                    ObjectEndAddressTB.Enabled = false;
+
+                    ObjectZipFileTB.Enabled = false;
+
+                    ObjectDevURLTB.Enabled = false;
+
+                    ObjectVersionTB.Enabled = false;
+
+                    ObjectTypeComboBox.Enabled = true;
+                    if (SelectedCategory.selectionType.Substring(0, 5).Equals("multi"))
+                        ObjectTypeComboBox.SelectedIndex = 4;
+                    else if (SelectedCategory.selectionType.Substring(0, 6).Equals("single"))
+                        ObjectTypeComboBox.SelectedIndex = 1;
+                    else
+                        ObjectTypeComboBox.SelectedIndex = 4;
+
+                    ObjectEnabledCheckBox.Enabled = false;
+
+                    ObjectVisibleCheckBox.Enabled = false;
+
+                    ObjectAppendExtractionCB.Enabled = false;
+
+                    DownloadZipfileButton.Enabled = false;
+
+                    ObjectDescTB.Enabled = false;
+
+                    ObjectUpdateNotesTB.Enabled = false;
+
+                    DependenciesTabPage.Enabled = true;
+                    DependencyPanel.Enabled = true;
+                    LogicalDependencyPanel.Enabled = false;
+
+                    ObjectDependenciesLabel.Text = "dependencies (click to edit)";
+                    ObjectDependenciesList.DataSource = SelectedCategory.dependencies;
+                    CurrentDependenciesCB.DataSource = Dependencies;
+                    CurrentDependenciesCB.SelectedIndex = -1;
+
+                    PictureTabPage.Enabled = false;
+                    UserDatasTabPage.Enabled = false;
+                }
             }
-            else if (node.Category != null)
+            catch (Exception ex)
             {
-                SelectedGlobalDependency = null;
-                SelectedDependency = null;
-                SelectedLogicalDependency = null;
-                SelectedDatabaseObject = null;
-                SelectedCategory = node.Category;
-
-                ObjectNameTB.Enabled = true;
-                ObjectNameTB.Text = SelectedCategory.name;
-
-                ObjectPackageNameTB.Enabled = false;
-                // ObjectPackageNameTB.Text = "";
-
-                ObjectStartAddressTB.Enabled = false;
-                // ObjectStartAddressTB.Text = "";
-
-                ObjectEndAddressTB.Enabled = false;
-                // ObjectEndAddressTB.Text = "";
-
-                ObjectZipFileTB.Enabled = false;
-                // ObjectZipFileTB.Text = "";
-
-                ObjectDevURLTB.Enabled = false;
-                // ObjectDevURLTB.Text = "";
-
-                ObjectVersionTB.Enabled = false;
-                // ObjectVersionTB.Text = "";
-
-                ObjectTypeComboBox.Enabled = false;
-                ObjectTypeComboBox.SelectedIndex = 0;
-
-                ObjectEnabledCheckBox.Enabled = false;
-                // ObjectEnabledCheckBox.Checked = false;
-
-                ObjectVisibleCheckBox.Enabled = false;
-                // ObjectVisibleCheckBox.Checked = false;
-
-                ObjectAppendExtractionCB.Enabled = false;
-                // ObjectAppendExtractionCB.Checked = false;
-
-                DownloadZipfileButton.Enabled = false;
-
-                ObjectDescTB.Enabled = false;
-                // ObjectDescTB.Text = "";
-
-                ObjectUpdateNotesTB.Enabled = false;
-                // ObjectUpdateNotesTB.Text = "";
-
-                DependenciesTabPage.Enabled = true;
-                DependencyPanel.Enabled = true;
-                LogicalDependencyPanel.Enabled = false;
-
-                ObjectDependenciesLabel.Text = "dependencies (click to edit)";
-                // ObjectDependenciesList.DataSource = null;
-                // ObjectDependenciesList.Items.Clear();
-                ObjectDependenciesList.DataSource = SelectedCategory.dependencies;
-                CurrentDependenciesCB.DataSource = Dependencies;
-                CurrentDependenciesCB.SelectedIndex = -1;
-
-                PictureTabPage.Enabled = false;
-                UserDatasTabPage.Enabled = false;
+                Utils.exceptionLog("DatabaseTreeView_NodeMouseClick", ex);
+                MessageBox.Show("Exception at DatabaseTreeView_NodeMouseClick()", "CRITICAL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
             }
         }
 
@@ -898,7 +906,7 @@ namespace RelhaxModpack
                 MessageBox.Show("Moving categories is not supported");
                 return;
             }
-            if (MessageBox.Show("Confirm you wish to move the object?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to move the object?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             using (DatabaseAdder dba = new DatabaseAdder(DatabaseEditorMode, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList, true))
             {
@@ -1330,7 +1338,7 @@ namespace RelhaxModpack
                 MessageBox.Show("Removing categories is not supported");
                 return;
             }
-            if (MessageBox.Show("Confirm you wish to remove the object?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to remove the object?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
             {
@@ -1459,7 +1467,7 @@ namespace RelhaxModpack
 
         private void AddDependencyButton_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to add dependency", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to add dependency", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             if (SelectedCategory != null)
             {
@@ -1486,7 +1494,7 @@ namespace RelhaxModpack
 
         private void RemoveDependencyButton_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to remove dependency", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to remove dependency", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             if (SelectedCategory != null)
             {
@@ -1507,7 +1515,7 @@ namespace RelhaxModpack
 
         private void AddLogicalDependencyButton_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to add logical dependency", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to add logical dependency", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             if (DatabaseEditorMode == EditorMode.Dependency)
             {
@@ -1536,7 +1544,7 @@ namespace RelhaxModpack
 
         private void RemoveLogicalDependencyButton_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to remove logical dependency", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to remove logical dependency", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             if (DatabaseEditorMode == EditorMode.Dependency)
             {
@@ -1557,7 +1565,7 @@ namespace RelhaxModpack
 
         private void MovePictureButton_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to move picture in list", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to move picture in list", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             int index = Utils.parseInt(MovePictureTB.Text, -1);
             if (index == -1)
@@ -1584,7 +1592,7 @@ namespace RelhaxModpack
 
         private void AddPictureButton_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to add picture", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to add picture", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             if (PicturesTypeCBox.SelectedIndex == -1 || PicturesTypeCBox.SelectedIndex == 0)
             {
@@ -1620,7 +1628,7 @@ namespace RelhaxModpack
 
         private void RemovePictureButton_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to remove picture", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to remove picture", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             Media media = (Media)ObjectPicturesList.SelectedItem;
             SelectedDatabaseObject.pictureList.Remove(media);
@@ -1632,7 +1640,7 @@ namespace RelhaxModpack
 
         private void ApplyPictureEditButton_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to edit picture entry", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to edit picture entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             Media media = (Media)ObjectPicturesList.SelectedItem;
             if (PicturesTypeCBox.SelectedIndex == -1 || PicturesTypeCBox.SelectedIndex == 0)
@@ -1742,7 +1750,7 @@ namespace RelhaxModpack
 
         private void AddUserdatasButton_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to add userdata entry", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to add userdata entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             SelectedDatabaseObject.userFiles.Add(ObjectUserdatasTB.Text);
             ObjectUserdatasList.DataSource = null;
@@ -1753,7 +1761,7 @@ namespace RelhaxModpack
 
         private void RemoveUserdatasButton_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to remove userdata entry", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to remove userdata entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             int index = SelectedDatabaseObject.userFiles.IndexOf((string)ObjectUserdatasList.SelectedItem);
             SelectedDatabaseObject.userFiles.RemoveAt(index);
@@ -1772,7 +1780,7 @@ namespace RelhaxModpack
 
         private void EditUserdatasButton_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to edit userdata entry", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to edit userdata entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             int index = SelectedDatabaseObject.userFiles.IndexOf((string)ObjectUserdatasList.SelectedItem);
             SelectedDatabaseObject.userFiles[index] = ObjectUserdatasTB.Text;
@@ -1791,7 +1799,7 @@ namespace RelhaxModpack
                 return;
             if (lb.SelectedItem is string)
                 return;
-            if (MessageBox.Show("Confirm you wish to jump and loose any changes to this object you may have made", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to jump and loose any changes to this object you may have made", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             string savePackageName = "";
             Dependency d = (Dependency)ObjectDependenciesList.SelectedItem;
@@ -1810,7 +1818,7 @@ namespace RelhaxModpack
 
         private void ObjectLogicalDependenciesList_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to jump and loose any changes to this object you may have made", "confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Confirm you wish to jump and loose any changes to this object you may have made", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             string savePackageName = "";
             LogicalDependnecy d = (LogicalDependnecy)ObjectLogicalDependenciesList.SelectedItem;
