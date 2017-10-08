@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
+using System.Diagnostics;
 
 namespace RelhaxModpack
 {
@@ -58,19 +59,25 @@ namespace RelhaxModpack
 
         private void StartTanksButton_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(WoTEXELocation);
+            var startInfo = new ProcessStartInfo();
+            startInfo.WorkingDirectory = Path.GetDirectoryName(WoTEXELocation);
+            startInfo.FileName = WoTEXELocation;
+            Process.Start(startInfo);
             this.Close();
         }
 
         private void StartWoTLauncherButton_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(WoTLauncherLocation);
+            var startInfo = new ProcessStartInfo();
+            startInfo.WorkingDirectory = Path.GetDirectoryName(WoTLauncherLocation);
+            startInfo.FileName = WoTLauncherLocation;
+            Process.Start(startInfo);
             this.Close();
         }
 
         private void StartXVMStatButton_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(string.Format(XVMURL, Translations.getTranslatedString("xvmUrlLocalisation")));
+            Process.Start(string.Format(XVMURL, Translations.getTranslatedString("xvmUrlLocalisation")));
             this.Close();
         }
 

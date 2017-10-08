@@ -109,7 +109,7 @@ namespace RelhaxModpack
                 Settings.clearCache = false;
                 Settings.disableBorders = false;
                 Settings.NotifyIfSameDatabase = false;
-                Utils.appendToLog("Language: " + System.Globalization.CultureInfo.CurrentCulture.DisplayName);
+                Utils.appendToLog("Language: " + CultureInfo.CurrentCulture.DisplayName);
                 string lang = CultureInfo.InstalledUICulture.Name.Split('-')[0];
                 if (lang.ToLower().Equals("de"))
                 {
