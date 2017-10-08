@@ -249,13 +249,16 @@ namespace RelhaxModpack
             {
                 foreach (string s in dbo.userFiles)
                 {
-
-                    string startLoc = TanksLocation + s;
-                    string destLoc = Path.Combine(Application.StartupPath, "RelHaxTemp", Utils.getValidFilename(dbo.name + "_" + Path.GetFileName(s)));
+                    string correctedPath = s.TrimStart('\x005c').Replace(@"\\", @"\");
+                    string startLoc = Path.Combine(TanksLocation, correctedPath);
+                    string destLoc = Path.Combine(Application.StartupPath, "RelHaxTemp", Utils.getValidFilename(dbo.name + "_" + Path.GetFileName(correctedPath)));
                     try
                     {
-                        if (File.Exists(startLoc))
+                        if (File.Exists(@startLoc))
+                        {
                             File.Move(startLoc, destLoc);
+                            Utils.appendToLog(string.Format("BackupUserData: {0}", correctedPath));
+                        }
                     }
                     catch
                     {
@@ -577,7 +580,7 @@ namespace RelhaxModpack
                         args.ChildTotalToProcess = dbo.userFiles.Count;
                         foreach (string s in dbo.userFiles)
                         {
-                            string correctedUserFiles = s.Replace(@"\\", @"\");
+                            string correctedUserFiles = s.TrimStart('\x005c').Replace(@"\\", @"\");
                             try {
                                 args.currentFile = correctedUserFiles;
                                 InstallWorker.ReportProgress(0);
@@ -587,7 +590,7 @@ namespace RelhaxModpack
                                 {
                                     try
                                     {
-                                        string correctedPath = ss.Replace(@"\\",@"\");
+                                        string correctedPath = ss.TrimStart('\x005c').Replace(@"\\",@"\");
                                         string thePath = Path.GetFileName(correctedPath);
                                         if (thePath.Equals(parsedFileName))
                                         {
@@ -597,6 +600,7 @@ namespace RelhaxModpack
                                             if (File.Exists(Path.Combine(TanksLocation, correctedUserFiles)))
                                                 File.Delete(Path.Combine(TanksLocation, correctedUserFiles));
                                             File.Move(correctedPath, Path.Combine(TanksLocation, correctedUserFiles));
+                                            Utils.appendToLog(string.Format("RestoredUserData: {0}", correctedUserFiles));
                                         }
                                     }
                                     catch (Exception p)
