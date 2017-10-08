@@ -46,6 +46,7 @@ namespace RelhaxModpack
             StartTanksButton.Text = Translations.getTranslatedString(StartTanksButton.Name);
             StartWoTLauncherButton.Text = Translations.getTranslatedString(StartWoTLauncherButton.Name);
             StartXVMStatButton.Text = Translations.getTranslatedString(StartXVMStatButton.Name);
+            CloseApplicationButton.Text = Translations.getTranslatedString(CloseApplicationButton.Name);
             //check if files are available to launch before actually displaying them
             WoTEXELocation = Path.Combine(TanksLocation, "WorldOfTanks.exe");
             WoTLauncherLocation = Path.Combine(TanksLocation, "WoTLauncher.exe");
@@ -71,6 +72,11 @@ namespace RelhaxModpack
         {
             System.Diagnostics.Process.Start(string.Format(XVMURL, Translations.getTranslatedString("xvmUrlLocalisation")));
             this.Close();
+        }
+
+        private void CloseApplicationButton_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
