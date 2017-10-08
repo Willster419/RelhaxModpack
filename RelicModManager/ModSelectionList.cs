@@ -369,7 +369,7 @@ namespace RelhaxModpack
                 {
                     if (pw != null)
                     {
-                        pw.loadingDescBox.Text = Translations.getTranslatedString("loading") + " " + m.name;
+                        pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.getTranslatedString("loading"), m.name);
                         prog++;
                         pw.SetProgress(prog);
                         Application.DoEvents();
@@ -583,7 +583,7 @@ namespace RelhaxModpack
                     configControlRB.Content = nameForModCB;
                     if (firstLoad)
                     {
-                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        string oldCRC = Utils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
                             configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Translations.getTranslatedString("updated"));
@@ -637,7 +637,7 @@ namespace RelhaxModpack
                     //run the crc logics
                     if (firstLoad)
                     {
-                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        string oldCRC = Utils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
                             toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
@@ -742,7 +742,7 @@ namespace RelhaxModpack
                     configControlCB.Content = nameForModCB;
                     if (firstLoad)
                     {
-                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        string oldCRC = Utils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
                             configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Translations.getTranslatedString("updated"));
@@ -1236,7 +1236,7 @@ namespace RelhaxModpack
             completeModSearchList.Add(m);
             // completeModSearchList_New.Add(m);
             //the mod checksum logic
-            string modDownloadPath = Application.StartupPath + "\\RelHaxDownloads\\" + m.zipFile;
+            string modDownloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads", m.zipFile);
             if (firstLoad)
             {
                 string oldCRC2 = Utils.getMd5Hash(modDownloadPath);
@@ -1454,7 +1454,7 @@ namespace RelhaxModpack
                     configControlRB.Text = con.name;
                     if (firstLoad)
                     {
-                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        string oldCRC = Utils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
                             configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
@@ -1503,7 +1503,7 @@ namespace RelhaxModpack
                     //run the checksum locics
                     if (firstLoad)
                     {
-                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        string oldCRC = Utils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
                             con.downloadFlag = true;
@@ -1590,7 +1590,7 @@ namespace RelhaxModpack
                     configControlCB.Text = con.name;
                     if (firstLoad)
                     {
-                        string oldCRC = Utils.getMd5Hash(Application.StartupPath + "\\RelHaxDownloads\\" + con.zipFile);
+                        string oldCRC = Utils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
                             con.downloadFlag = true;
