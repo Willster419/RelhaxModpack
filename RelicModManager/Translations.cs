@@ -327,7 +327,7 @@ namespace RelhaxModpack
             //Component: ShowInstallCompleteWindow
             english.Add("ShowInstallCompleteWindowCB", "Show install complete window");
             german.Add("ShowInstallCompleteWindowCB", "Zeigt \"Installation fertig\" Fenster");
-            polish.Add("ShowInstallCompleteWindowCB", "Pokaż pełne okno instalacji");
+            polish.Add("ShowInstallCompleteWindowCB", "Pokaż okno akcji po instalacji");
             french.Add("ShowInstallCompleteWindowCB", "Afficher la fenêtre \"installation terminé\"");
 
             //Section: ModSelectionList
@@ -1312,7 +1312,7 @@ namespace RelhaxModpack
             //
             english.Add("DatabaseVersionsSameBody", "The database has not changed since your last installation. Therefore there are no updates to your current mods selection. Continue anyway?");
             german.Add("DatabaseVersionsSameBody", "Die Datenbank  wurde seit Deiner letzten Installation nicht verändert. Daher gibt es keine Aktuallisierungen zu Deinen aktuellen Modifikationen. Trotzdem fortfahren?");
-            polish.Add("DatabaseVersionsSameBody", "Baza danych nie uległa zmianie od ostatniej instalacji. Dlatego nie ma aktualizacji aktualnego wyboru modów. Kontynuować mimo to?");
+            polish.Add("DatabaseVersionsSameBody", "Baza danych nie została zmieniona od ostatniej instalacji, nie ma żadych aktualizacji dla wybranych uprzednio modyfikacji. Czy kontynuować?");
             french.Add("DatabaseVersionsSameBody", "La base de données n'a pas changé depuis votre dernière installation. Par conséquent, il n'y a pas de mise à jour pour votre sélection  de mods. Continuer de toute façon?");
 
             //Component: Current database is same as last installed database (header)
@@ -1356,7 +1356,7 @@ namespace RelhaxModpack
             //
             english.Add("createdAt", "Created at: {0}");
             german.Add("createdAt", "Erstellt am: {0}");
-            polish.Add("createdAt", "Utworzono w");
+            polish.Add("createdAt", "Utworzono w: {0}");
             french.Add("createdAt", "Créé à: {0}");
 
             //Section: Installer Messages
@@ -1372,14 +1372,14 @@ namespace RelhaxModpack
             //
             english.Add("file", "File");
             german.Add("file", "Datei");
-            polish.Add("file", "pilnik");
+            polish.Add("file", "Plik");
             french.Add("file", "Fichier");
 
             //Componet: extractingPackage
             //
             english.Add("size", "Size");
             german.Add("size", "Größe");
-            polish.Add("size", "rozmiar");
+            polish.Add("size", "Rozmiar");
             french.Add("size", "Taille");
 
             //Componet: backupModFile
@@ -1449,7 +1449,7 @@ namespace RelhaxModpack
             //
             english.Add("checkDatabase", "Checking the database for outdated or no longer needed files");
             german.Add("checkDatabase", "Durchsuche das Dateiarchive nach veralteten oder nicht mehr benötigten Dateien");
-            polish.Add("checkDatabase", "Sprawdzanie bazy danych w przypadku nieaktualnych lub nie potrzebnych plików");
+            polish.Add("checkDatabase", "Trwa przeszukiwanie w bazie danych przedawnionych i niepotrzebnych plików");
             french.Add("checkDatabase", "Vérification de la base de données pour les fichiers périmés ou non nécessaires");
 
             //Component: 
@@ -1479,22 +1479,29 @@ namespace RelhaxModpack
             //
             english.Add("StartTanksButton", "Start the game? (WorldofTanks.exe)");
             german.Add("StartTanksButton", "Das Spiel starten? (WorldofTanks.exe)");
-            polish.Add("StartTanksButton", "Zacząć gre? (WorldofTanks.exe)");
+            polish.Add("StartTanksButton", "Uruchomić grę? (WorldofTanks.exe)");
             french.Add("StartTanksButton", "Démarrez le jeu? (WorldofTanks.exe)");
 
             //Componet: StartWoTLauncherButton
             //
             english.Add("StartWoTLauncherButton", "Start the game launcher? (WoTLauncher.exe)");
             german.Add("StartWoTLauncherButton", "Den Spiel Launcher starten? (WoTLauncher.exe)");
-            polish.Add("StartWoTLauncherButton", "Uruchom program uruchamiający grę? (WoTLauncher.exe)");
+            polish.Add("StartWoTLauncherButton", "Uruchomić launcher? (WoTLauncher.exe)");
             french.Add("StartWoTLauncherButton", "Démarrez le lanceur de jeux? (WoTLauncher.exe)");
 
             //Componet: StartXVMStatButton
             //
             english.Add("StartXVMStatButton", "Open your web browser to the xvm statistics login website?");
             german.Add("StartXVMStatButton", "Öffne Deinen Browser auf der XVM Statistik Login Webseite?");
-            polish.Add("StartXVMStatButton", "Otwórz swoją przeglądarkę internetową na stronie logowania do statystyk xvm?");
+            polish.Add("StartXVMStatButton", "Otworzyć stronę statystyk XVM ?");
             french.Add("StartXVMStatButton", "Ouvrir votre navigateur Web vers le site de connexion aux statistiques xvm?");
+
+            //Componet: CloseApplicationButton
+            //
+            english.Add("CloseApplicationButton", "Close the application?");
+            german.Add("CloseApplicationButton", "Anwendung schließen");
+            polish.Add("CloseApplicationButton", "TODO");
+            french.Add("CloseApplicationButton", "Fermer l'application");
 
             //Componet: StartXVMStatButton_Click
             //localisation to which page you will jump
@@ -1505,7 +1512,7 @@ namespace RelhaxModpack
 
             //Componet: loadingGifpreview
             //GifPreview.cs
-            english.Add("loadingGifpreview", "loading Picture Preview");
+            english.Add("loadingGifpreview", "Loading Picture Preview");
             german.Add("loadingGifpreview", "Ladebild Vorschau");
             polish.Add("loadingGifpreview", "TODO");
             french.Add("loadingGifpreview", "TODO");
