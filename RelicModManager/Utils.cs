@@ -529,7 +529,7 @@ namespace RelhaxModpack
                 //add the global dependencies
                 foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency"))
                 {
-                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction", "packageName", "devURL" };
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction", "packageName", "devURL", "timestamp" };
                     Dependency d = new Dependency();
                     d.packageName = "";
                     foreach (XElement globs in dependencyNode.Elements())
@@ -539,6 +539,9 @@ namespace RelhaxModpack
                         {
                             case "dependencyZipFile":
                                 d.dependencyZipFile = globs.Value;
+                                break;
+                            case "timestamp":
+                                d.timestamp = Int64.Parse("0" + globs.Value);
                                 break;
                             case "dependencyZipCRC":
                                 d.dependencyZipCRC = globs.Value;
@@ -582,7 +585,7 @@ namespace RelhaxModpack
                 //add the dependencies
                 foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/dependencies/dependency"))
                 {
-                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction", "packageName", "logicalDependencies", "devURL" };
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction", "packageName", "logicalDependencies", "devURL", "timestamp" };
                     Dependency d = new Dependency();
                     d.packageName = "";
                     foreach (XElement globs in dependencyNode.Elements())
@@ -592,6 +595,9 @@ namespace RelhaxModpack
                         {
                             case "dependencyZipFile":
                                 d.dependencyZipFile = globs.Value;
+                                break;
+                            case "timestamp":
+                                d.timestamp = Int64.Parse("0" + globs.Value);
                                 break;
                             case "dependencyZipCRC":
                                 d.dependencyZipCRC = globs.Value;
@@ -672,7 +678,7 @@ namespace RelhaxModpack
                 //add the logicalDependencies (TODO)
                 foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/logicalDependencies/logicalDependency"))
                 {
-                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName", "devURL" };
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName", "devURL", "timestamp" };
                     LogicalDependnecy d = new LogicalDependnecy();
                     d.packageName = "";
                     foreach (XElement globs in dependencyNode.Elements())
@@ -682,6 +688,9 @@ namespace RelhaxModpack
                         {
                             case "dependencyZipFile":
                                 d.dependencyZipFile = globs.Value;
+                                break;
+                            case "timestamp":
+                                d.timestamp = Int64.Parse("0" + globs.Value);
                                 break;
                             case "dependencyZipCRC":
                                 d.dependencyZipCRC = globs.Value;
@@ -740,7 +749,7 @@ namespace RelhaxModpack
                                     switch (modHolder.Name.ToString())
                                     {
                                         case "mod":
-                                            string[] modNodeList = new string[] { "name", "version", "zipFile", "startAddress", "endAddress", "crc", "enabled", "visible", "packageName", "size", "description", "updateComment", "devURL", "userDatas", "pictures", "dependencies", "logicalDependencies", "configs" };
+                                            string[] modNodeList = new string[] { "name", "version", "zipFile", "timestamp", "startAddress", "endAddress", "crc", "enabled", "visible", "packageName", "size", "description", "updateComment", "devURL", "userDatas", "pictures", "dependencies", "logicalDependencies", "configs" };
                                             Mod m = new Mod();
                                             m.packageName = "";
                                             foreach (XElement modNode in modHolder.Elements())
@@ -757,6 +766,9 @@ namespace RelhaxModpack
                                                         break;
                                                     case "zipFile":
                                                         m.zipFile = modNode.Value;
+                                                        break;
+                                                    case "timestamp":
+                                                        m.timestamp = Int64.Parse("0" + modNode.Value);
                                                         break;
                                                     case "startAddress":
                                                         m.startAddress = modNode.Value;
@@ -1020,7 +1032,7 @@ namespace RelhaxModpack
                     switch (configHolder.Name.ToString())
                     {
                         case "config":
-                            string[] confNodeList = new string[] { "name", "version", "zipFile", "startAddress", "endAddress", "crc", "enabled", "visible", "packageName", "size", "updateComment", "description", "devURL", "type", "configs", "userDatas", "pictures", "dependencies", "logicalDependencies" };
+                            string[] confNodeList = new string[] { "name", "version", "zipFile", "timestamp", "startAddress", "endAddress", "crc", "enabled", "visible", "packageName", "size", "updateComment", "description", "devURL", "type", "configs", "userDatas", "pictures", "dependencies", "logicalDependencies" };
                             Config c = new Config();
                             c.packageName = "";
                             foreach (XElement configNode in configHolder.Elements())
@@ -1036,6 +1048,9 @@ namespace RelhaxModpack
                                         break;
                                     case "zipFile":
                                         c.zipFile = configNode.Value;
+                                        break;
+                                    case "timestamp":
+                                        c.timestamp = Int64.Parse("0" + configNode.Value);
                                         break;
                                     case "startAddress":
                                         c.startAddress = configNode.Value;
@@ -3894,6 +3909,10 @@ namespace RelhaxModpack
                 if (!d.dependencyZipFile.Trim().Equals(""))
                     globalDepZipFile.InnerText = d.dependencyZipFile.Trim();
                 globalDependencyRoot.AppendChild(globalDepZipFile);
+                XmlElement globalDepTimestamp = doc.CreateElement("timestamp");
+                if (d.timestamp != 0)
+                    globalDepTimestamp.InnerText = d.timestamp.ToString();
+                globalDependencyRoot.AppendChild(globalDepTimestamp);
                 XmlElement globalDepStartAddress = doc.CreateElement("startAddress");
                 if (!d.startAddress.Trim().Equals(""))
                     globalDepStartAddress.InnerText = d.startAddress.Trim();
@@ -3937,6 +3956,10 @@ namespace RelhaxModpack
                 if (!d.dependencyZipFile.Trim().Equals(""))
                     depZipFile.InnerText = d.dependencyZipFile.Trim();
                 dependencyRoot.AppendChild(depZipFile);
+                XmlElement depTimestamp = doc.CreateElement("timestamp");
+                if (d.timestamp != 0)
+                    depTimestamp.InnerText = d.timestamp.ToString();
+                dependencyRoot.AppendChild(depTimestamp);
                 XmlElement depStartAddress = doc.CreateElement("startAddress");
                 if (!d.startAddress.Trim().Equals(""))
                     depStartAddress.InnerText = d.startAddress.Trim();
@@ -3999,6 +4022,10 @@ namespace RelhaxModpack
                 if (!d.dependencyZipFile.Trim().Equals(""))
                     logicalDepZipFile.InnerText = d.dependencyZipFile.Trim();
                 logicalDependencyRoot.AppendChild(logicalDepZipFile);
+                XmlElement logicalDepTimestamp = doc.CreateElement("timestamp");
+                if (d.timestamp != 0)
+                    logicalDepTimestamp.InnerText = d.timestamp.ToString();
+                logicalDependencyRoot.AppendChild(logicalDepTimestamp);
                 XmlElement logicalDepStartAddress = doc.CreateElement("startAddress");
                 if (!d.startAddress.Trim().Equals(""))
                     logicalDepStartAddress.InnerText = d.startAddress.Trim();
@@ -4074,6 +4101,10 @@ namespace RelhaxModpack
                     if (!m.zipFile.Trim().Equals(""))
                         modZipFile.InnerText = m.zipFile.Trim();
                     modRoot.AppendChild(modZipFile);
+                    XmlElement modTimestamp = doc.CreateElement("timestamp");
+                    if (m.timestamp != 0)
+                        modTimestamp.InnerText = m.timestamp.ToString();
+                    modRoot.AppendChild(modTimestamp);
                     XmlElement modStartAddress = doc.CreateElement("startAddress");
                     if (!m.startAddress.Trim().Equals(""))
                         modStartAddress.InnerText = m.startAddress.Trim();
@@ -4219,6 +4250,10 @@ namespace RelhaxModpack
                 if (!cc.zipFile.Trim().Equals(""))
                     configZipFile.InnerText = cc.zipFile.Trim();
                 configRoot.AppendChild(configZipFile);
+                XmlElement configTimestamp = doc.CreateElement("timestamp");
+                if (cc.timestamp != 0)
+                    configTimestamp.InnerText = cc.timestamp.ToString();
+                configRoot.AppendChild(configTimestamp);
                 XmlElement configStartAddress = doc.CreateElement("startAddress");
                 if (!cc.startAddress.Trim().Equals(""))
                     configStartAddress.InnerText = cc.startAddress.Trim();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace RelhaxModpack
 {
@@ -8,6 +9,8 @@ namespace RelhaxModpack
     {
         //the zip file of the dependency
         public string dependencyZipFile { get; set; }
+        //the timestamp of last change of zipfile name 
+        public Int64 timestamp { get; set; }
         //the crc of the dependency
         public string dependencyZipCRC { get; set; }
         //flag to set to disable the dependency from being installed
