@@ -8,7 +8,7 @@ namespace RelhaxModpack
         //the zip file of the dependency
         public string dependencyZipFile { get; set; }
         //the timestamp of last change of zipfile name 
-        public double timestamp { get; set; }
+        public long timestamp { get; set; }
         //the crc of the dependency
         public string dependencyZipCRC { get; set; }
         //flag to set to disable the dependency from being installed
