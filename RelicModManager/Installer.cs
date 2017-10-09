@@ -245,27 +245,53 @@ namespace RelhaxModpack
         //Step 2: Backup User Data
         public void BackupUserData()
         {
-            foreach (DatabaseObject dbo in ModsConfigsWithData)
+            try
             {
-                foreach (string s in dbo.userFiles)
+                foreach (DatabaseObject dbo in ModsConfigsWithData)
                 {
-                    string correctedPath = s.TrimStart('\x005c').Replace(@"\\", @"\");
-                    string startLoc = Path.Combine(TanksLocation, correctedPath);
-                    string destLoc = Path.Combine(Application.StartupPath, "RelHaxTemp", Utils.getValidFilename(dbo.name + "_" + Path.GetFileName(correctedPath)));
                     try
                     {
-                        if (File.Exists(@startLoc))
+                        foreach (string s in dbo.userFiles)
                         {
-                            File.Move(startLoc, destLoc);
-                            Utils.appendToLog(string.Format("BackupUserData: {0}", correctedPath));
+                            try
+                            {
+                                string correctedPath = s.TrimStart('\x005c').Replace(@"\\", @"\");
+                                string folderPath = Path.Combine(TanksLocation, Path.GetDirectoryName(correctedPath));
+                                if (!Directory.Exists(folderPath)) continue;
+                                string[] fileList = Directory.GetFiles(folderPath, Path.GetFileName(correctedPath));   // use the GetFileName(correctedPath) as a search pattern, to only get wanted files
+                                foreach (string startLoc in fileList)
+                                {
+                                    string destLoc = Path.Combine(Application.StartupPath, "RelHaxTemp", Utils.getValidFilename(dbo.name + "_") + Path.GetFileName(startLoc));
+                                    try
+                                    {
+                                        if (File.Exists(@startLoc))
+                                        {
+                                            File.Move(startLoc, destLoc);
+                                            Utils.appendToLog(string.Format("BackupUserData: {0} ({1})", Path.Combine(Path.GetDirectoryName(correctedPath), Path.GetFileName(startLoc)), Path.GetFileName(correctedPath)));
+                                        }
+                                    }
+                                    catch
+                                    {
+                                        if (Program.testMode) { MessageBox.Show(string.Format("Error: can not move file.\nstartLoc: \"{0}\"\ndestLoc: \"{1}\"", startLoc, destLoc)); };
+                                        Utils.appendToLog(string.Format("Error: can not move file. startLoc: \"{0}\" destLoc: \"{1}\"", startLoc, destLoc));
+                                    }
+                                }
+                            }
+                            catch (Exception exStartLoc)
+                            {
+                                Utils.exceptionLog("BackupUserData", "exStartLoc", exStartLoc);
+                            }
                         }
                     }
-                    catch
+                    catch (Exception exS)
                     {
-                        if (Program.testMode) { MessageBox.Show(string.Format("Error: can not move file.\nstartLoc: \"{0}\"\ndestLoc: \"{1}\"", startLoc, destLoc)); };
-                        Utils.appendToLog(string.Format("Error: can not move file. startLoc: \"{0}\" destLoc: \"{1}\"", startLoc, destLoc));
+                        Utils.exceptionLog("BackupUserData", "s", exS);
                     }
                 }
+            }
+            catch (Exception exDbo)
+            {
+                Utils.exceptionLog("BackupUserData", "dbo", exDbo);
             }
         }
 
@@ -572,7 +598,6 @@ namespace RelhaxModpack
             {
                 args.ParrentTotalToProcess = ModsConfigsWithData.Count;
                 InstallWorker.ReportProgress(0);
-                string[] fileList = Directory.GetFiles(Path.Combine(Application.StartupPath, "RelHaxTemp"));
                 foreach (DatabaseObject dbo in ModsConfigsWithData)
                 {
                     try
@@ -580,33 +605,33 @@ namespace RelhaxModpack
                         args.ChildTotalToProcess = dbo.userFiles.Count;
                         foreach (string s in dbo.userFiles)
                         {
-                            string correctedUserFiles = s.TrimStart('\x005c').Replace(@"\\", @"\");
+                            
                             try {
+                                string correctedUserFiles = s.TrimStart('\x005c').Replace(@"\\", @"\");
+                                string targetDir = Path.GetDirectoryName(correctedUserFiles);
                                 args.currentFile = correctedUserFiles;
                                 InstallWorker.ReportProgress(0);
-                                //find the file
-                                string parsedFileName = Utils.getValidFilename(dbo.name + "_" + Path.GetFileName(correctedUserFiles));
+                                string filenamePrefix = Utils.getValidFilename(dbo.name + "_");
+                                //find the files with the specified pattern
+                                string[] fileList = Directory.GetFiles(Path.Combine(Application.StartupPath, "RelHaxTemp"), filenamePrefix + Path.GetFileName(correctedUserFiles));
+                                //if no results, go on with the next entry
+                                if (fileList.Length == 0) continue;
                                 foreach (string ss in fileList)
                                 {
+                                    string targetFilename = Path.GetFileName(ss).Replace(filenamePrefix, "");
                                     try
                                     {
-                                        string correctedPath = ss.TrimStart('\x005c').Replace(@"\\",@"\");
-                                        string thePath = Path.GetFileName(correctedPath);
-                                        if (thePath.Equals(parsedFileName))
-                                        {
-                                            //the file has been found in the temp directory
-                                            if (!Directory.Exists(Path.Combine(TanksLocation, Path.GetFullPath(correctedUserFiles))))
-                                                Directory.CreateDirectory(Path.Combine(TanksLocation, Path.GetDirectoryName(correctedUserFiles)));
-                                            if (File.Exists(Path.Combine(TanksLocation, correctedUserFiles)))
-                                                File.Delete(Path.Combine(TanksLocation, correctedUserFiles));
-                                            File.Move(correctedPath, Path.Combine(TanksLocation, correctedUserFiles));
-                                            Utils.appendToLog(string.Format("RestoredUserData: {0}", correctedUserFiles));
-                                        }
+                                        //the file has been found in the temp directory
+                                        if (!Directory.Exists(Path.Combine(TanksLocation, targetDir)))
+                                            Directory.CreateDirectory(Path.Combine(TanksLocation, targetDir));
+                                        if (File.Exists(Path.Combine(TanksLocation, targetDir, targetFilename)))
+                                            File.Delete(Path.Combine(TanksLocation, targetDir, targetFilename));
+                                        File.Move(Path.Combine(Application.StartupPath, "RelHaxTemp", Path.GetFileName(ss)), Path.Combine(TanksLocation, targetDir, targetFilename));
+                                        Utils.appendToLog(string.Format("RestoredUserData: {0}", Path.Combine(targetDir, targetFilename)));
                                     }
                                     catch (Exception p)
                                     {
-                                        Utils.exceptionLog("RestoreUserData", "p", p);
-
+                                        Utils.exceptionLog("RestoreUserData", "p\n" + ss, p);
                                     }
                                 }
                                 args.ChildProcessed++;
