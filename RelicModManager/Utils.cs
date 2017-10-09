@@ -541,7 +541,7 @@ namespace RelhaxModpack
                                 d.dependencyZipFile = globs.Value;
                                 break;
                             case "timestamp":
-                                d.timestamp = Int64.Parse("0" + globs.Value);
+                                d.timestamp = Double.Parse("0" + globs.Value);
                                 break;
                             case "dependencyZipCRC":
                                 d.dependencyZipCRC = globs.Value;
@@ -597,7 +597,7 @@ namespace RelhaxModpack
                                 d.dependencyZipFile = globs.Value;
                                 break;
                             case "timestamp":
-                                d.timestamp = Int64.Parse("0" + globs.Value);
+                                d.timestamp = Double.Parse("0" + globs.Value);
                                 break;
                             case "dependencyZipCRC":
                                 d.dependencyZipCRC = globs.Value;
@@ -690,7 +690,7 @@ namespace RelhaxModpack
                                 d.dependencyZipFile = globs.Value;
                                 break;
                             case "timestamp":
-                                d.timestamp = Int64.Parse("0" + globs.Value);
+                                d.timestamp = Double.Parse("0" + globs.Value);
                                 break;
                             case "dependencyZipCRC":
                                 d.dependencyZipCRC = globs.Value;
@@ -768,7 +768,7 @@ namespace RelhaxModpack
                                                         m.zipFile = modNode.Value;
                                                         break;
                                                     case "timestamp":
-                                                        m.timestamp = Int64.Parse("0" + modNode.Value);
+                                                        m.timestamp = Double.Parse("0" + modNode.Value);
                                                         break;
                                                     case "startAddress":
                                                         m.startAddress = modNode.Value;
@@ -1050,7 +1050,7 @@ namespace RelhaxModpack
                                         c.zipFile = configNode.Value;
                                         break;
                                     case "timestamp":
-                                        c.timestamp = Int64.Parse("0" + configNode.Value);
+                                        c.timestamp = Double.Parse("0" + configNode.Value);
                                         break;
                                     case "startAddress":
                                         c.startAddress = configNode.Value;
@@ -4514,5 +4514,34 @@ namespace RelhaxModpack
 
             return vA.CompareTo(vB);
         }
+
+        public static double getCurrentGmtTimestamp()
+        {
+            return DateTimeToUnixTimestamp(DateTime.Now.ToUniversalTime());
+        }
+
+        public static double convertGmtToLocalTimestamp(Int64 gmtInt)
+        {
+            return 0;
+        }
+
+        public static double convertLocalToGmtTimestamp(Int64 gmtInt)
+        {
+            return 0;
+        }
+
+        private static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+        {
+            // Unix timestamp is seconds past epoch
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            return dtDateTime;
+        }
+
+        private static double DateTimeToUnixTimestamp(DateTime dateTime)
+        {
+            return (TimeZoneInfo.ConvertTimeToUtc(dateTime) - new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc)).TotalSeconds;
+        }
+
     }
 }
