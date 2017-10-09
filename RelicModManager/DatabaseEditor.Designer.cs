@@ -94,7 +94,7 @@
             this.ObjectStartAddressTB = new System.Windows.Forms.TextBox();
             this.ObjectStartAddress = new System.Windows.Forms.Label();
             this.ObjectPackageNameTB = new System.Windows.Forms.TextBox();
-            this.ObjectPacakgeName = new System.Windows.Forms.Label();
+            this.ObjectPackageName = new System.Windows.Forms.Label();
             this.SaveDatabaseButton = new System.Windows.Forms.Button();
             this.LoadDatabaseButton = new System.Windows.Forms.Button();
             this.RemoveEntryButton = new System.Windows.Forms.Button();
@@ -176,7 +176,7 @@
             this.DatabaseEditPanel.Controls.Add(this.ObjectStartAddressTB);
             this.DatabaseEditPanel.Controls.Add(this.ObjectStartAddress);
             this.DatabaseEditPanel.Controls.Add(this.ObjectPackageNameTB);
-            this.DatabaseEditPanel.Controls.Add(this.ObjectPacakgeName);
+            this.DatabaseEditPanel.Controls.Add(this.ObjectPackageName);
             this.DatabaseEditPanel.Controls.Add(this.ObjectNameTB);
             this.DatabaseEditPanel.Controls.Add(this.ObjectName);
             this.DatabaseEditPanel.Location = new System.Drawing.Point(523, 30);
@@ -649,11 +649,11 @@
             this.ObjectAppendExtractionCB.Text = "appendExtraction";
             this.ObjectAppendExtractionCB.UseVisualStyleBackColor = true;
             // 
-            // ObjectVisableCheckBox
+            // ObjectVisibleCheckBox
             // 
             this.ObjectVisibleCheckBox.AutoSize = true;
             this.ObjectVisibleCheckBox.Location = new System.Drawing.Point(358, 186);
-            this.ObjectVisibleCheckBox.Name = "ObjectVisableCheckBox";
+            this.ObjectVisibleCheckBox.Name = "ObjectVisibleCheckBox";
             this.ObjectVisibleCheckBox.Size = new System.Drawing.Size(55, 17);
             this.ObjectVisibleCheckBox.TabIndex = 23;
             this.ObjectVisibleCheckBox.Text = "visible";
@@ -773,14 +773,14 @@
             this.ObjectPackageNameTB.Size = new System.Drawing.Size(447, 20);
             this.ObjectPackageNameTB.TabIndex = 4;
             // 
-            // ObjectPacakgeName
+            // ObjectPackageName
             // 
-            this.ObjectPacakgeName.AutoSize = true;
-            this.ObjectPacakgeName.Location = new System.Drawing.Point(8, 32);
-            this.ObjectPacakgeName.Name = "ObjectPacakgeName";
-            this.ObjectPacakgeName.Size = new System.Drawing.Size(77, 13);
-            this.ObjectPacakgeName.TabIndex = 3;
-            this.ObjectPacakgeName.Text = "packageName";
+            this.ObjectPackageName.AutoSize = true;
+            this.ObjectPackageName.Location = new System.Drawing.Point(8, 32);
+            this.ObjectPackageName.Name = "ObjectPackageName";
+            this.ObjectPackageName.Size = new System.Drawing.Size(77, 13);
+            this.ObjectPackageName.TabIndex = 3;
+            this.ObjectPackageName.Text = "packageName";
             // 
             // SaveDatabaseButton
             // 
@@ -956,7 +956,7 @@
         private System.Windows.Forms.TextBox ObjectStartAddressTB;
         private System.Windows.Forms.Label ObjectStartAddress;
         private System.Windows.Forms.TextBox ObjectPackageNameTB;
-        private System.Windows.Forms.Label ObjectPacakgeName;
+        private System.Windows.Forms.Label ObjectPackageName;
         private System.Windows.Forms.ListBox ObjectDependenciesList;
         private System.Windows.Forms.Label ObjectDependenciesLabel;
         private System.Windows.Forms.Label ObjectUpdateNotes;
