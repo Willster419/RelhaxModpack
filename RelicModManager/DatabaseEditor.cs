@@ -1640,6 +1640,7 @@ namespace RelhaxModpack
 
         private void ApplyPictureEditButton_Click(object sender, EventArgs e)
         {
+            if (ObjectPicturesList.Items.Count == 0) return;
             if (MessageBox.Show("Confirm you wish to edit picture entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             Media media = (Media)ObjectPicturesList.SelectedItem;
