@@ -541,7 +541,7 @@ namespace RelhaxModpack
                                 d.dependencyZipFile = globs.Value;
                                 break;
                             case "timestamp":
-                                d.timestamp = Double.Parse("0" + globs.Value);
+                                d.timestamp = long.Parse("0" + globs.Value);
                                 break;
                             case "dependencyZipCRC":
                                 d.dependencyZipCRC = globs.Value;
@@ -597,7 +597,7 @@ namespace RelhaxModpack
                                 d.dependencyZipFile = globs.Value;
                                 break;
                             case "timestamp":
-                                d.timestamp = Double.Parse("0" + globs.Value);
+                                d.timestamp = long.Parse("0" + globs.Value);
                                 break;
                             case "dependencyZipCRC":
                                 d.dependencyZipCRC = globs.Value;
@@ -690,7 +690,7 @@ namespace RelhaxModpack
                                 d.dependencyZipFile = globs.Value;
                                 break;
                             case "timestamp":
-                                d.timestamp = Double.Parse("0" + globs.Value);
+                                d.timestamp = long.Parse("0" + globs.Value);
                                 break;
                             case "dependencyZipCRC":
                                 d.dependencyZipCRC = globs.Value;
@@ -768,7 +768,7 @@ namespace RelhaxModpack
                                                         m.zipFile = modNode.Value;
                                                         break;
                                                     case "timestamp":
-                                                        m.timestamp = Double.Parse("0" + modNode.Value);
+                                                        m.timestamp = long.Parse("0" + modNode.Value);
                                                         break;
                                                     case "startAddress":
                                                         m.startAddress = modNode.Value;
@@ -1050,7 +1050,7 @@ namespace RelhaxModpack
                                         c.zipFile = configNode.Value;
                                         break;
                                     case "timestamp":
-                                        c.timestamp = Double.Parse("0" + configNode.Value);
+                                        c.timestamp = long.Parse("0" + configNode.Value);
                                         break;
                                     case "startAddress":
                                         c.startAddress = configNode.Value;
@@ -4515,22 +4515,44 @@ namespace RelhaxModpack
             return vA.CompareTo(vB);
         }
 
-        public static double getCurrentGmtTimestamp()
+        public static void testTimeOutput()
         {
-            return DateTimeToUnixTimestamp(DateTime.Now.ToUniversalTime());
+            Utils.appendToLog("getCurrentGmtTimestamp: " + getCurrentGmtTimestamp());
+            Utils.appendToLog("Date: " + new DateTime(Convert.ToInt32(getCurrentGmtTimestamp())));
+            Utils.appendToLog("Date: " + DateTimeToUnixTimestamp(new DateTime(Convert.ToInt32(getCurrentGmtTimestamp()))));
+            Utils.appendToLog("Date (local Time) fix: " + UnixTimeStampToDateTime(getCurrentGmtTimestamp()));
+            Utils.appendToLog("Date (UniversalTime): " + UnixTimeStampToDateTime(getCurrentGmtTimestamp()).ToUniversalTime());
+            Utils.appendToLog("Filetime (UniversalTime): " + getCurrentUniversalFiletimeTimestamp());
+            Utils.appendToLog("Date from Filetile (UniversalTime): " + convertFiletimeTimestampToDate(getCurrentUniversalFiletimeTimestamp()));
         }
 
-        public static double convertGmtToLocalTimestamp(Int64 gmtInt)
+        public static long getCurrentUniversalFiletimeTimestamp()
+        {
+            return DateTime.Now.ToUniversalTime().ToFileTime();
+        }
+
+        public static string convertFiletimeTimestampToDate(long timestamp)
+        {
+            return DateTime.FromFileTime(timestamp).ToString();
+        }
+
+        public static long getCurrentGmtTimestamp()
+        {
+            // return DateTimeToUnixTimestamp(DateTime.Now.ToUniversalTime());
+            return Convert.ToInt64(DateTimeToUnixTimestamp(DateTime.Now));
+        }
+
+        public static long convertGmtToLocalTimestamp(long gmtInt)
         {
             return 0;
         }
 
-        public static double convertLocalToGmtTimestamp(Int64 gmtInt)
+        public static long convertLocalToGmtTimestamp(long gmtInt)
         {
             return 0;
         }
 
-        private static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+        private static DateTime UnixTimeStampToDateTime(long unixTimeStamp)
         {
             // Unix timestamp is seconds past epoch
             System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
