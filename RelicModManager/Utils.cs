@@ -4515,6 +4515,7 @@ namespace RelhaxModpack
             return vA.CompareTo(vB);
         }
 
+        /*
         public static void testTimeOutput()
         {
             Utils.appendToLog("getCurrentGmtTimestamp: " + getCurrentGmtTimestamp());
@@ -4524,7 +4525,7 @@ namespace RelhaxModpack
             Utils.appendToLog("Date (UniversalTime): " + UnixTimeStampToDateTime(getCurrentGmtTimestamp()).ToUniversalTime());
             Utils.appendToLog("Filetime (UniversalTime): " + getCurrentUniversalFiletimeTimestamp());
             Utils.appendToLog("Date from Filetile (UniversalTime): " + convertFiletimeTimestampToDate(getCurrentUniversalFiletimeTimestamp()));
-        }
+        }*/
 
         public static long getCurrentUniversalFiletimeTimestamp()
         {
@@ -4536,6 +4537,7 @@ namespace RelhaxModpack
             return DateTime.FromFileTime(timestamp).ToString();
         }
 
+        /*
         public static long getCurrentGmtTimestamp()
         {
             // return DateTimeToUnixTimestamp(DateTime.Now.ToUniversalTime());
@@ -4563,7 +4565,6 @@ namespace RelhaxModpack
         private static double DateTimeToUnixTimestamp(DateTime dateTime)
         {
             return (TimeZoneInfo.ConvertTimeToUtc(dateTime) - new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc)).TotalSeconds;
-        }
-
+        }*/
     }
 }

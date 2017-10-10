@@ -107,6 +107,7 @@
             this.SaveDatabaseDialog = new System.Windows.Forms.SaveFileDialog();
             this.MoveButton = new System.Windows.Forms.Button();
             this.SearchBox = new System.Windows.Forms.ComboBox();
+            this.ObjectLastUpdatedLabel = new System.Windows.Forms.Label();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.ObjectPropertiesTabControl.SuspendLayout();
@@ -157,6 +158,7 @@
             // DatabaseEditPanel
             // 
             this.DatabaseEditPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.DatabaseEditPanel.Controls.Add(this.ObjectLastUpdatedLabel);
             this.DatabaseEditPanel.Controls.Add(this.DownloadZipfileButton);
             this.DatabaseEditPanel.Controls.Add(this.ObjectVersionTB);
             this.DatabaseEditPanel.Controls.Add(this.ObjectVersionLabel);
@@ -197,15 +199,15 @@
             // 
             // ObjectVersionTB
             // 
-            this.ObjectVersionTB.Location = new System.Drawing.Point(91, 158);
+            this.ObjectVersionTB.Location = new System.Drawing.Point(91, 133);
             this.ObjectVersionTB.Name = "ObjectVersionTB";
-            this.ObjectVersionTB.Size = new System.Drawing.Size(447, 20);
+            this.ObjectVersionTB.Size = new System.Drawing.Size(194, 20);
             this.ObjectVersionTB.TabIndex = 31;
             // 
             // ObjectVersionLabel
             // 
             this.ObjectVersionLabel.AutoSize = true;
-            this.ObjectVersionLabel.Location = new System.Drawing.Point(8, 161);
+            this.ObjectVersionLabel.Location = new System.Drawing.Point(8, 136);
             this.ObjectVersionLabel.Name = "ObjectVersionLabel";
             this.ObjectVersionLabel.Size = new System.Drawing.Size(41, 13);
             this.ObjectVersionLabel.TabIndex = 30;
@@ -684,7 +686,7 @@
             // 
             // ObjectDevURLTB
             // 
-            this.ObjectDevURLTB.Location = new System.Drawing.Point(91, 133);
+            this.ObjectDevURLTB.Location = new System.Drawing.Point(91, 158);
             this.ObjectDevURLTB.Name = "ObjectDevURLTB";
             this.ObjectDevURLTB.Size = new System.Drawing.Size(447, 20);
             this.ObjectDevURLTB.TabIndex = 15;
@@ -692,7 +694,7 @@
             // ObjectDevURL
             // 
             this.ObjectDevURL.AutoSize = true;
-            this.ObjectDevURL.Location = new System.Drawing.Point(8, 136);
+            this.ObjectDevURL.Location = new System.Drawing.Point(8, 161);
             this.ObjectDevURL.Name = "ObjectDevURL";
             this.ObjectDevURL.Size = new System.Drawing.Size(50, 13);
             this.ObjectDevURL.TabIndex = 14;
@@ -898,6 +900,15 @@
             this.SearchBox.SelectionChangeCommitted += new System.EventHandler(this.SearchBox_SelectionChangeCommitted);
             this.SearchBox.TextUpdate += new System.EventHandler(this.SearchBox_TextUpdate);
             // 
+            // ObjectLastUpdatedLabel
+            // 
+            this.ObjectLastUpdatedLabel.AutoSize = true;
+            this.ObjectLastUpdatedLabel.Location = new System.Drawing.Point(297, 136);
+            this.ObjectLastUpdatedLabel.Name = "ObjectLastUpdatedLabel";
+            this.ObjectLastUpdatedLabel.Size = new System.Drawing.Size(71, 13);
+            this.ObjectLastUpdatedLabel.TabIndex = 33;
+            this.ObjectLastUpdatedLabel.Text = "last updated: ";
+            // 
             // DatabaseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1022,5 +1033,6 @@
         private System.Windows.Forms.Label ObjectVersionLabel;
         private System.Windows.Forms.ComboBox SearchBox;
         private System.Windows.Forms.Button DownloadZipfileButton;
+        private System.Windows.Forms.Label ObjectLastUpdatedLabel;
     }
 }

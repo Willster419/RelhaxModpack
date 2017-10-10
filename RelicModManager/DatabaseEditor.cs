@@ -268,8 +268,11 @@ namespace RelhaxModpack
                 SelectedGlobalDependency.endAddress = ObjectEndAddressTB.Text;
                 SelectedGlobalDependency.devURL = ObjectDevURLTB.Text;
                 if (!SelectedGlobalDependency.dependencyZipFile.Equals(ObjectZipFileTB.Text))
+                {
                     SelectedGlobalDependency.dependencyZipCRC = "f";
-                SelectedGlobalDependency.dependencyZipFile = ObjectZipFileTB.Text;
+                    SelectedGlobalDependency.dependencyZipFile = ObjectZipFileTB.Text;
+                    SelectedGlobalDependency.timestamp = Utils.getCurrentUniversalFiletimeTimestamp();
+                }
                 SelectedGlobalDependency.enabled = ObjectEnabledCheckBox.Checked;
                 SelectedGlobalDependency.appendExtraction = ObjectAppendExtractionCB.Checked;
                 GlobalDependencies[index] = SelectedGlobalDependency;
@@ -282,8 +285,11 @@ namespace RelhaxModpack
                 SelectedDependency.endAddress = ObjectEndAddressTB.Text;
                 SelectedDependency.devURL = ObjectDevURLTB.Text;
                 if (!SelectedDependency.dependencyZipFile.Equals(ObjectZipFileTB.Text))
+                {
                     SelectedDependency.dependencyZipCRC = "f";
-                SelectedDependency.dependencyZipFile = ObjectZipFileTB.Text;
+                    SelectedDependency.dependencyZipFile = ObjectZipFileTB.Text;
+                    SelectedDependency.timestamp = Utils.getCurrentUniversalFiletimeTimestamp();
+                }
                 SelectedDependency.enabled = ObjectEnabledCheckBox.Checked;
                 SelectedDependency.appendExtraction = ObjectAppendExtractionCB.Checked;
                 Dependencies[index] = SelectedDependency;
@@ -296,8 +302,11 @@ namespace RelhaxModpack
                 SelectedLogicalDependency.endAddress = ObjectEndAddressTB.Text;
                 SelectedLogicalDependency.devURL = ObjectDevURLTB.Text;
                 if (!SelectedLogicalDependency.dependencyZipFile.Equals(ObjectZipFileTB.Text))
+                {
                     SelectedLogicalDependency.dependencyZipCRC = "f";
-                SelectedLogicalDependency.dependencyZipFile = ObjectZipFileTB.Text;
+                    SelectedLogicalDependency.dependencyZipFile = ObjectZipFileTB.Text;
+                    SelectedLogicalDependency.timestamp = Utils.getCurrentUniversalFiletimeTimestamp();
+                }
                 SelectedLogicalDependency.enabled = ObjectEnabledCheckBox.Checked;
                 LogicalDependencies[index] = SelectedLogicalDependency;
             }
@@ -338,8 +347,11 @@ namespace RelhaxModpack
                     m.startAddress = ObjectStartAddressTB.Text;
                     m.endAddress = ObjectEndAddressTB.Text;
                     if (!SelectedDatabaseObject.zipFile.Equals(ObjectZipFileTB.Text))
+                    {
                         m.crc = "f";
-                    m.zipFile = ObjectZipFileTB.Text;
+                        m.zipFile = ObjectZipFileTB.Text;
+                        m.timestamp = Utils.getCurrentUniversalFiletimeTimestamp();
+                    }
                     m.devURL = ObjectDevURLTB.Text;
                     m.version = ObjectVersionTB.Text;
                     m.enabled = ObjectEnabledCheckBox.Checked;
@@ -367,8 +379,11 @@ namespace RelhaxModpack
                         cfg.startAddress = ObjectStartAddressTB.Text;
                         cfg.endAddress = ObjectEndAddressTB.Text;
                         if (!SelectedDatabaseObject.zipFile.Equals(ObjectZipFileTB.Text))
+                        {
                             cfg.crc = "f";
-                        cfg.zipFile = ObjectZipFileTB.Text;
+                            cfg.zipFile = ObjectZipFileTB.Text;
+                            cfg.timestamp = Utils.getCurrentUniversalFiletimeTimestamp();
+                        }
                         cfg.devURL = ObjectDevURLTB.Text;
                         cfg.version = ObjectVersionTB.Text;
                         switch (ObjectTypeComboBox.SelectedIndex)
@@ -511,8 +526,9 @@ namespace RelhaxModpack
             ObjectStartAddressTB.Text = "";
             ObjectEndAddressTB.Text = "";
             ObjectZipFileTB.Text = "";
-            ObjectDevURLTB.Text = "";
             ObjectVersionTB.Text = "";
+            ObjectLastUpdatedLabel.Text = "";
+            ObjectDevURLTB.Text = "";
             ObjectTypeComboBox.SelectedIndex = -1;
             ObjectAppendExtractionCB.Checked = false;
             ObjectVisibleCheckBox.Checked = false;
@@ -584,10 +600,15 @@ namespace RelhaxModpack
                     ObjectZipFileTB.Enabled = true;
                     ObjectZipFileTB.Text = node.GlobalDependency.dependencyZipFile;
 
+                    ObjectVersionTB.Enabled = false;
+
+                    if (node.GlobalDependency.timestamp > 0)
+                        ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.convertFiletimeTimestampToDate(node.GlobalDependency.timestamp));
+                    else
+                        ObjectLastUpdatedLabel.Text = "last updated: (none)";
+
                     ObjectDevURLTB.Enabled = true;
                     ObjectDevURLTB.Text = SelectedGlobalDependency.devURL;
-
-                    ObjectVersionTB.Enabled = false;
 
                     ObjectTypeComboBox.Enabled = false;
                     ObjectTypeComboBox.SelectedIndex = 0;
@@ -631,10 +652,15 @@ namespace RelhaxModpack
                     ObjectZipFileTB.Enabled = true;
                     ObjectZipFileTB.Text = SelectedDependency.dependencyZipFile;
 
+                    ObjectVersionTB.Enabled = false;
+
+                    if (SelectedDependency.timestamp > 0)
+                        ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.convertFiletimeTimestampToDate(SelectedDependency.timestamp));
+                    else
+                        ObjectLastUpdatedLabel.Text = "last updated: (none)";
+
                     ObjectDevURLTB.Enabled = true;
                     ObjectDevURLTB.Text = SelectedDependency.devURL;
-
-                    ObjectVersionTB.Enabled = false;
 
                     ObjectTypeComboBox.Enabled = false;
                     ObjectTypeComboBox.SelectedIndex = 0;
@@ -657,7 +683,6 @@ namespace RelhaxModpack
                     ObjectDependenciesLabel.Enabled = true;
                     ObjectDependenciesList.Enabled = true;
                     ObjectDependenciesList.DataSource = BuildDatabaseLogic(SelectedDependency);
-
 
                     LogicalDependencyPanel.Enabled = true;
                     ObjectLogicalDependenciesList.DataSource = null;
@@ -696,10 +721,15 @@ namespace RelhaxModpack
                     ObjectZipFileTB.Enabled = true;
                     ObjectZipFileTB.Text = SelectedLogicalDependency.dependencyZipFile;
 
+                    ObjectVersionTB.Enabled = false;
+
+                    if (SelectedLogicalDependency.timestamp > 0)
+                        ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.convertFiletimeTimestampToDate(SelectedLogicalDependency.timestamp));
+                    else
+                        ObjectLastUpdatedLabel.Text = "last updated: (none)";
+
                     ObjectDevURLTB.Enabled = true;
                     ObjectDevURLTB.Text = SelectedLogicalDependency.devURL;
-
-                    ObjectVersionTB.Enabled = false;
 
                     ObjectTypeComboBox.Enabled = false;
                     ObjectTypeComboBox.SelectedIndex = 0;
@@ -749,11 +779,16 @@ namespace RelhaxModpack
                     ObjectZipFileTB.Enabled = true;
                     ObjectZipFileTB.Text = SelectedDatabaseObject.zipFile;
 
-                    ObjectDevURLTB.Enabled = true;
-                    ObjectDevURLTB.Text = SelectedDatabaseObject.devURL;
-
                     ObjectVersionTB.Enabled = true;
                     ObjectVersionTB.Text = SelectedDatabaseObject.version;
+
+                    if (SelectedDatabaseObject.timestamp > 0)
+                        ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.convertFiletimeTimestampToDate(SelectedDatabaseObject.timestamp));
+                    else
+                        ObjectLastUpdatedLabel.Text = "last updated: (none)";
+
+                    ObjectDevURLTB.Enabled = true;
+                    ObjectDevURLTB.Text = SelectedDatabaseObject.devURL;
 
                     if (SelectedDatabaseObject is Config)
                     {
@@ -849,9 +884,11 @@ namespace RelhaxModpack
 
                     ObjectZipFileTB.Enabled = false;
 
-                    ObjectDevURLTB.Enabled = false;
-
                     ObjectVersionTB.Enabled = false;
+
+                    ObjectLastUpdatedLabel.Text = "";
+
+                    ObjectDevURLTB.Enabled = false;
 
                     ObjectTypeComboBox.Enabled = true;
                     if (SelectedCategory.selectionType.Substring(0, 5).Equals("multi"))
