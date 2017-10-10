@@ -778,109 +778,131 @@ namespace RelhaxModpack
         //Step 14: Install Fonts
         public void InstallFonts()
         {
-            Utils.appendToLog("Checking for fonts to install");
-            if (!Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
+            try
             {
-                Utils.appendToLog("No fonts to install");
-                //no fonts to install, done display
-                return;
-            }
-            string[] fonts = Directory.GetFiles(Path.Combine(TanksLocation, "_fonts"), @"*.*",System.IO.SearchOption.TopDirectoryOnly);
-            if (fonts.Count() == 0)
-            {
-                //done display
-                Utils.appendToLog("No fonts to install");
-                return;
-            }
-            //load fonts and move names to a list
-            List<String> fontsList = new List<string>();
-            foreach (string s in fonts)
-            {
-                //load the font into a temporoary not loaded font collection
-                /*var fam = System.Windows.Media.Fonts.GetFontFamilies(s);
-                foreach (var temp in fam)
+                Utils.appendToLog("Checking for fonts to install");
+                if (!Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
                 {
-                    fontsList.Add(temp.Source.Split('#')[1]);
-                }*/
-                fontsList.Add(Path.GetFileNameWithoutExtension(s));
-            }
-            //removes any already installed fonts
-            for (int i = 0; i < fontsList.Count; i++)
-            {
-                //get the name of the font
-                using (var fontsCollection = new InstalledFontCollection())
+                    Utils.appendToLog("No fonts to install");
+                    //no fonts to install, done display
+                    return;
+                }
+                string[] fonts = Directory.GetFiles(Path.Combine(TanksLocation, "_fonts"), @"*.*",System.IO.SearchOption.TopDirectoryOnly);
+                if (fonts.Count() == 0)
                 {
-                    //get a list of installed fonts
-                    foreach (var fontFamiliy in fontsCollection.Families)
+                    //done display
+                    Utils.appendToLog("No fonts to install");
+                    return;
+                }
+                //load fonts and move names to a list
+                List<String> fontsList = new List<string>();
+                foreach (string s in fonts)
+                {
+                    //load the font into a temporoary not loaded font collection
+                    fontsList.Add(Path.GetFileName(s));
+                }
+                //removes any already installed fonts
+                for (int i = 0; i < fontsList.Count; i++)
+                {
+                    //get the name of the font
+                    string[] fontsCollection = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), @"*.*", SearchOption.TopDirectoryOnly);
                     {
-                        //check if the font name is installed
-                        if (fontFamiliy.Name.Equals(fontsList[i]))
+                        //get a list of installed fonts
+                        foreach (var fontFilename in fontsCollection)
                         {
-                            fontsList.RemoveAt(i);
-                            i--;
-                            break;
+                            //check if the font filename is installed
+                            if (Path.GetFileName(fontFilename).ToLower().Equals(fontsList[i].ToLower()))
+                            {
+                                fontsList.RemoveAt(i);
+                                i--;
+                                break;
+                            }
                         }
                     }
                 }
-            }
-            //re-check the fonts to install list
-            if (fontsList.Count == 0)
-            {
-                Utils.appendToLog("No fonts to install");
-                //done display
-                return;
-            }
-            Utils.appendToLog("Installing fonts");
-            DialogResult dr = DialogResult.No;
-            if (Program.autoInstall)
-            {
-                //assume rights to install
-                dr = DialogResult.Yes;
-            }
-            else
-            {
-                dr = MessageBox.Show(Translations.getTranslatedString("fontsPromptInstallText"), Translations.getTranslatedString("fontsPromptInstallHeader"), MessageBoxButtons.YesNo);
-            }
-            if (dr == DialogResult.Yes)
-            {
+                //re-check the fonts to install list
+                if (fontsList.Count == 0)
+                {
+                    Utils.appendToLog("No fonts to install");
+                    //done display
+                    return;
+                }
+                Utils.appendToLog("Installing fonts: " + string.Join(", ", fontsList));
+                DialogResult dr = DialogResult.No;
+                if (Program.autoInstall)
+                {
+                    //assume rights to install
+                    dr = DialogResult.Yes;
+                }
+                else
+                {
+                    dr = MessageBox.Show(Translations.getTranslatedString("fontsPromptInstallText"), Translations.getTranslatedString("fontsPromptInstallHeader"), MessageBoxButtons.YesNo);
+                }
+                if (dr == DialogResult.Yes)
+                {
 
-                if (!File.Exists(Path.Combine(TanksLocation, "_fonts","FontReg.exe")))
-                {
-                    //get fontreg from the zip file
-                    using (ZipFile zip = new ZipFile(Settings.managerInfoDatFile))
+                    string fontRegPath = Path.Combine(TanksLocation, "_fonts", "FontReg.exe");
+                    if (!File.Exists(fontRegPath))
                     {
-                        zip.ExtractSelectedEntries("FontReg.exe", null, Path.Combine(TanksLocation, "_fonts"));
+                        if (!Program.testMode)                  // if not in testMode, the managerInfoDatFile was downloaded
+                        {
+                            //get fontreg from the zip file
+                            using (ZipFile zip = new ZipFile(Settings.managerInfoDatFile))
+                            {
+                                zip.ExtractSelectedEntries("FontReg.exe", null, fontRegPath);
+                            }
+                        }
+                        else
+                        {
+                            // in testMode, the managerInfoDatFile was NOT downloaded and that have to be done now
+                            try
+                            {
+                                using (WebClient downloader = new WebClient())
+                                downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/FontReg.exe", fontRegPath);
+                            }
+                            catch (WebException ex)
+                            {
+                                Utils.exceptionLog("InstallFonts()", "download FontReg.exe", ex);
+                                MessageBox.Show(string.Format("{0} FontReg.exe", Translations.getTranslatedString("failedToDownload_1")));
+                            }
+                        }
                     }
+                    ProcessStartInfo info = new ProcessStartInfo();
+                    info.FileName = fontRegPath;
+                    info.UseShellExecute = true;
+                    info.Verb = "runas"; // Provides Run as Administrator
+                    info.Arguments = "/copy";
+                    info.WorkingDirectory = Path.Combine(TanksLocation, "_fonts");
+                    Process installFontss = new Process();
+                    installFontss.StartInfo = info;
+                    try
+                    {
+                        installFontss.Start();
+                        installFontss.WaitForExit();
+                        Utils.appendToLog("FontReg.exe ExitCode: " + installFontss.ExitCode);
+                    }
+                    catch (Exception e)
+                    {
+                        Utils.exceptionLog("InstallFonts", "could not start font installer", e);
+                        MessageBox.Show(Translations.getTranslatedString("fontsPromptError_1") + TanksLocation + Translations.getTranslatedString("fontsPromptError_2"));
+                        Utils.appendToLog("Installation done, but fonts install failed");
+                        return;
+                    }
+                    System.Threading.Thread.Sleep(200);
+                    if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
+                        Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true);
+                    Utils.appendToLog("Fonts Installed Successfully");
+                    return;
                 }
-                ProcessStartInfo info = new ProcessStartInfo();
-                info.FileName = "FontReg.exe";
-                info.UseShellExecute = true;
-                info.Verb = "runas"; // Provides Run as Administrator
-                info.Arguments = "/copy";
-                info.WorkingDirectory = Path.Combine(TanksLocation, "_fonts");
-                Process installFontss = new Process();
-                installFontss.StartInfo = info;
-                try
+                else
                 {
-                    installFontss.Start();
-                    installFontss.WaitForExit();
-                }
-                catch (Exception e)
-                {
-                    Utils.exceptionLog("InstallFonts", "could not start font installer", e);
-                    MessageBox.Show(Translations.getTranslatedString("fontsPromptError_1") + TanksLocation + Translations.getTranslatedString("fontsPromptError_2"));
                     Utils.appendToLog("Installation done, but fonts install failed");
                     return;
                 }
-                if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
-                    Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true);
-                Utils.appendToLog("Fonts Installed Successfully");
-                return;
             }
-            else
+            catch (Exception ex)
             {
-                Utils.appendToLog("Installation done, but fonts install failed");
-                return;
+                Utils.exceptionLog("InstallFonts()", ex);
             }
         }
 
