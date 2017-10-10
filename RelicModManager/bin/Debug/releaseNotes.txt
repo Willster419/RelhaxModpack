@@ -1,3 +1,23 @@
+Version 26.4.1:
+https://www.virustotal.com/#/file/8c1a2d90282aab592958d69acb5d31455c78cd50fd57c2463325ba3c15587dbc/detection
+-Fixed bugs with database editor
+-Fixed bugs with installing fonts
+-Updated translations
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 26.4.0:
+https://www.virustotal.com/#/file/ff7eda52f4e37a1d8debbccb25c9a3e157195987f33b40eeec4648ca838ba009/detection
+-Added tooltips to the main window (hover over checkbox to view)
+-Added translations to loading preview
+-Changed more string paths to Path.Combine() systax
+-Removed unused code
+-Fixes to database editor
+-Improvements to xml database generation
+-Added button (with translations) to the install finished window, to close the application
+-Added wildcard (*) syntax to userdata file entries
+-Updated translations (for the 999th time ;) )
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 26.3.1:
 https://www.virustotal.com/#/file/2bc65255e4e0c0cfd6bd8951aa23cf05ef0b616de340fe6a24e0238fcdf6442a/detection
 -Alligned Components in the main window
