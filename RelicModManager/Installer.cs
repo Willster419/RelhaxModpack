@@ -851,17 +851,6 @@ namespace RelhaxModpack
                     {
                         zip.ExtractSelectedEntries("FontReg.exe", null, Path.Combine(TanksLocation, "_fonts"));
                     }
-                    /*
-                    try
-                    {
-                        using (WebClient downloader = new WebClient())
-                            downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/FontReg.exe", Path.Combine(TanksLocation, "_fonts", "FontReg.exe"));
-                    }
-                    catch (WebException ex)
-                    {
-                        Utils.exceptionLog("InstallFonts", "download FontReg.exe", ex);
-                        MessageBox.Show(string.Format("{0} FontReg.exe", Translations.getTranslatedString("failedToDownload_1")));
-                    }*/
                 }
                 ProcessStartInfo info = new ProcessStartInfo();
                 info.FileName = "FontReg.exe";
