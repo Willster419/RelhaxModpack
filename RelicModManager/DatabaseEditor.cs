@@ -807,13 +807,13 @@ namespace RelhaxModpack
                             case "single1":
                                 ObjectTypeComboBox.SelectedIndex = 1;
                                 break;
-                            case "single_dropDown":
+                            case "single_dropdown":
                                 ObjectTypeComboBox.SelectedIndex = 2;
                                 break;
-                            case "single_dropDown1":
+                            case "single_dropdown1":
                                 ObjectTypeComboBox.SelectedIndex = 2;
                                 break;
-                            case "single_dropDown2":
+                            case "single_dropdown2":
                                 ObjectTypeComboBox.SelectedIndex = 3;
                                 break;
                             case "multi":
