@@ -1,3 +1,10 @@
+Version 26.4.2:
+https://www.virustotal.com/#/file/7c29738759b4a0701a9fc9eff88b18ab4e1ed8c14d507f6c389bb8cf494dde8f/detection
+-Fixed bug in ModSelectionList where either an incorrect or no preview would be shown for items of dropDown type
+-Fixed bugs in database editor
+-Fixed severity of some messages in the log file
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 26.4.1:
 https://www.virustotal.com/#/file/8c1a2d90282aab592958d69acb5d31455c78cd50fd57c2463325ba3c15587dbc/detection
 -Fixed bugs with database editor
