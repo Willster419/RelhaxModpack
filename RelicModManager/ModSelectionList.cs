@@ -2185,7 +2185,21 @@ namespace RelhaxModpack
             {
                 UIComponent UIC = (UIComponent)sender;
                 DatabaseObject DBO = null;
-                if (UIC.config != null)
+                //check if comboBox before mod or config
+                //check config before checking mod
+                if (sender is ConfigFormComboBox)
+                {
+                    ConfigFormComboBox cfcb = (ConfigFormComboBox)sender;
+                    ComboBoxItem cbi = (ComboBoxItem)cfcb.SelectedItem;
+                    DBO = cbi.config;
+                }
+                else if (sender is ConfigWPFComboBox)
+                {
+                    ConfigWPFComboBox cwpfcb = (ConfigWPFComboBox)sender;
+                    ComboBoxItem cbi = (ComboBoxItem)cwpfcb.SelectedItem;
+                    DBO = cbi.config;
+                }
+                else if (UIC.config != null)
                 {
                     DBO = UIC.config;
                 }
