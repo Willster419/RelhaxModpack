@@ -1981,7 +1981,7 @@ namespace RelhaxModpack
                 //pull out if it failed to get the selection
                 if (newObject == null)
                 {
-                    Utils.appendToLog(string.Format("ERROR: path {0} not found for {1}", jsonPath, Path.GetFileName(jsonFile)));
+                    Utils.appendToLog(string.Format("WARNING: path {0} not found for {1}", jsonPath, Path.GetFileName(jsonFile)));
                 }
                 else if (useBool)
                 {
