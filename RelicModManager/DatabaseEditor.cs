@@ -1829,7 +1829,7 @@ namespace RelhaxModpack
                 return;
             ShortCut sc = new ShortCut();
             sc.path = ObjectShortcutTB.Text;
-            sc.name = ObjectShortcutNameTB.Text;
+            sc.name = Utils.getValidFilename(ObjectShortcutNameTB.Text);
             sc.enabled = ObjectShortcutCB.Checked;
             ObjectShortcutList.DataSource = null;
             ObjectShortcutList.Items.Clear();
@@ -1874,7 +1874,7 @@ namespace RelhaxModpack
             if (MessageBox.Show("Confirm you wish to edit shortcut entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             sc.path = ObjectShortcutTB.Text;
-            sc.name = ObjectShortcutNameTB.Text;
+            sc.name = Utils.getValidFilename(ObjectShortcutNameTB.Text);
             sc.enabled = ObjectShortcutCB.Checked;
             ObjectShortcutList.DataSource = null;
             ObjectShortcutList.Items.Clear();
