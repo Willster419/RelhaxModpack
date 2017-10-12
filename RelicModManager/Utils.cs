@@ -4559,6 +4559,7 @@ namespace RelhaxModpack
                     XmlElement ShortCutEnabled = doc.CreateElement("enabled");
                     ShortCutEnabled.InnerText = sc.enabled.ToString().Trim();
                     ShortCutRoot.AppendChild(ShortCutEnabled);
+                    shortCuts.AppendChild(ShortCutRoot);
                 }
                 //attach ShortCuts to root
                 configRoot.AppendChild(shortCuts);
