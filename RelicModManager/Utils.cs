@@ -649,7 +649,7 @@ namespace RelhaxModpack
                                     }
                                     if (sc != null)
                                     {
-                                        if (depScNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => Dep {3} (line {4})", string.Join(",", depScNodeList), d.dependencyZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
+                                        if (depScNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => Dep {1} (line {2})", string.Join(",", depScNodeList), d.dependencyZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
                                         d.shortCuts.Add(sc);
                                     }
                                 }
@@ -685,7 +685,7 @@ namespace RelhaxModpack
                                     }
                                     if (ld != null)
                                     {
-                                        if (logDepNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => logDep {3} (line {4})", string.Join(",", logDepNodeList), ld.dependencyZipFile, ((IXmlLineInfo)logDependencyHolder).LineNumber)); };
+                                        if (logDepNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => logDep {1} (line {2})", string.Join(",", logDepNodeList), ld.dependencyZipFile, ((IXmlLineInfo)logDependencyHolder).LineNumber)); };
                                         if (ld.packageName.Equals("")) { string rad = Utils.RandomString(30); ld.packageName = rad; Utils.appendToLog("packageName is random generated: " + rad); };              // to avoid exceptions
                                         d.logicalDependencies.Add(ld);
                                     };
@@ -760,7 +760,7 @@ namespace RelhaxModpack
                                     }
                                     if (sc != null)
                                     {
-                                        if (logDepScNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => logDep {3} (line {4})", string.Join(",", logDepScNodeList), d.dependencyZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
+                                        if (logDepScNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => logDep {1} (line {2})", string.Join(",", logDepScNodeList), d.dependencyZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
                                         d.shortCuts.Add(sc);
                                     }
                                 }
