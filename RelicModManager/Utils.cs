@@ -17,7 +17,6 @@ using System.Xml.XPath;
 using Ionic.Zip;
 using System.Runtime.InteropServices;
 using System.Drawing;
-using IWshRuntimeLibrary;
 
 namespace RelhaxModpack
 {
@@ -4526,50 +4525,81 @@ namespace RelhaxModpack
             return DateTime.FromFileTime(timestamp).ToString();
         }
 
-        // https://code.msdn.microsoft.com/windowsdesktop/Create-a-shortcut-for-your-ad3d9cb3
+        // https://stackoverflow.com/questions/4897655/create-shortcut-on-desktop-c-sharp
         /// <summary>Creates or removes a shortcut at the specified pathname.</summary> 
         /// <param name="shortcutTarget">The path where the original file is located.</param> 
-        /// <param name="shortcutPathName">The path where the shortcut is to be created or removed from including the (.lnk) extension.</param>
-        /// <param name="shortcutDescription">The Name.lnk displayed on the specified location.</param>
+        /// <param name="shortcutName">The filename of the shortcut to be created or removed from desktop including the (.lnk) extension.</param>
         /// <param name="create">True to create a shortcut or False to remove the shortcut.</param> 
-        public static void CreateShortcut(string shortcutTarget, string shortcutPathName, string shortcutDescription, bool create)
+        public static void CreateShortcut(string shortcutTarget, string shortcutName, bool create)
         {
+            string modifiedName = Path.GetFileNameWithoutExtension(shortcutName) + ".lnk";
             if (create)
             {
                 try
                 {
-                    if (System.IO.File.Exists(shortcutTarget))
-                    {
-                        Utils.appendToLog(string.Format("ERROR: no shortcut creation. '{0}' is not existing.", shortcutTarget));
-                        return;
-                    }
-                    WshShell shell = new WshShell();
-                    WshShortcut shortcut = (WshShortcut)shell.CreateShortcut(shortcutPathName);
-                    shortcut.Description = shortcutDescription;
-                    shortcut.TargetPath = shortcutTarget; //The exe file this shortcut executes when double clicked 
-                    shortcut.IconLocation = shortcutTarget + ",0"; //Sets the icon of the shortcut to the exe`s icon 
-                    shortcut.WorkingDirectory = Path.GetDirectoryName(shortcutTarget); //The working directory for the exe 
-                    shortcut.Arguments = ""; //The arguments used when executing the exe
-                    shortcut.Hotkey = ""; // "Ctrl+Shift+N";
-                    shortcut.Save(); //Creates the shortcut 
+                    IShellLink link = (IShellLink)new ShellLink();
+
+                    // setup shortcut information
+                    link.SetDescription("created by the Relhax Manager");
+                    link.SetPath(@shortcutTarget);
+                    link.SetIconLocation(@shortcutTarget, 0);
+                    link.SetWorkingDirectory(Path.GetDirectoryName(@shortcutTarget));
+                    link.SetArguments(""); //The arguments used when executing the exe
+                    // save it
+                    System.Runtime.InteropServices.ComTypes.IPersistFile file = (System.Runtime.InteropServices.ComTypes.IPersistFile)link;
+                    string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                    file.Save(Path.Combine(desktopPath, modifiedName), false);
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("CreateShortcut", "create: " + shortcutPathName, ex);
+                    Utils.exceptionLog("CreateShortcut", "create: "+ modifiedName, ex);
                 }
             }
             else
             {
                 try
                 {
-                    if (System.IO.File.Exists(shortcutPathName))
-                        System.IO.File.Delete(shortcutPathName);
+                    if (File.Exists(modifiedName))
+                        File.Delete(modifiedName);
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("CreateShortcut", "detele: " + shortcutPathName, ex);
+                    Utils.exceptionLog("CreateShortcut", "delete: " + modifiedName, ex);
                 }
             }
         }
+    }
+
+    // needed for CreateShortcut
+    [ComImport]
+    [Guid("00021401-0000-0000-C000-000000000046")]
+    internal class ShellLink
+    {
+    }
+
+    // needed for CreateShortcut
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid("000214F9-0000-0000-C000-000000000046")]
+    internal interface IShellLink
+    {
+        void GetPath([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile, int cchMaxPath, out IntPtr pfd, int fFlags);
+        void GetIDList(out IntPtr ppidl);
+        void SetIDList(IntPtr pidl);
+        void GetDescription([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszName, int cchMaxName);
+        void SetDescription([MarshalAs(UnmanagedType.LPWStr)] string pszName);
+        void GetWorkingDirectory([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszDir, int cchMaxPath);
+        void SetWorkingDirectory([MarshalAs(UnmanagedType.LPWStr)] string pszDir);
+        void GetArguments([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszArgs, int cchMaxPath);
+        void SetArguments([MarshalAs(UnmanagedType.LPWStr)] string pszArgs);
+        void GetHotkey(out short pwHotkey);
+        void SetHotkey(short wHotkey);
+        void GetShowCmd(out int piShowCmd);
+        void SetShowCmd(int iShowCmd);
+        void GetIconLocation([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszIconPath, int cchIconPath, out int piIcon);
+        void SetIconLocation([MarshalAs(UnmanagedType.LPWStr)] string pszIconPath, int iIcon);
+        void SetRelativePath([MarshalAs(UnmanagedType.LPWStr)] string pszPathRel, int dwReserved);
+        void Resolve(IntPtr hwnd, int fFlags);
+        void SetPath([MarshalAs(UnmanagedType.LPWStr)] string pszFile);
     }
 }
