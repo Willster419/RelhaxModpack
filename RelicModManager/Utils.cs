@@ -17,6 +17,7 @@ using System.Xml.XPath;
 using Ionic.Zip;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using IWshRuntimeLibrary;
 
 namespace RelhaxModpack
 {
@@ -42,9 +43,9 @@ namespace RelhaxModpack
             {
                 //the method should automaticly make the file if it's not there
                 string filePath = Path.Combine(Application.StartupPath, "RelHaxLog.txt");
-                if (!File.Exists(filePath))
+                if (!System.IO.File.Exists(filePath))
                 {
-                    File.AppendAllText(filePath, "");
+                    System.IO.File.AppendAllText(filePath, "");
                 }
                 //if the info text is containing any linefeed/carrieage return, intend the next line with 26 space char
                 info = info.Replace("\n", "\n" + string.Concat(Enumerable.Repeat(" ", 26)));
@@ -67,7 +68,7 @@ namespace RelhaxModpack
 
                 if (fi.Length > iMaxLogLength * multi) // if the log file length is already too long
                 {
-                    using (BinaryReader br = new BinaryReader(File.Open(strFile, FileMode.Open)))
+                    using (BinaryReader br = new BinaryReader(System.IO.File.Open(strFile, FileMode.Open)))
                     {
                         // Seek to our required position of what you want saved.
                         br.BaseStream.Seek(iTrimmedLogLength * multi, SeekOrigin.End);
@@ -284,7 +285,7 @@ namespace RelhaxModpack
             // check if databse exists and if not, create it
             Utils.createMd5HashDatabase();
             // get filetime from file, convert it to string with base 10
-            string tempFiletime = Convert.ToString(File.GetLastWriteTime(inputFile).ToFileTime(), 10);
+            string tempFiletime = Convert.ToString(System.IO.File.GetLastWriteTime(inputFile).ToFileTime(), 10);
             // extract filename with path
             string tempFilename = Path.GetFileName(inputFile);
             // check database for filename with filetime
@@ -318,11 +319,11 @@ namespace RelhaxModpack
         public static string createMd5Hash(string inputFile)
         {
             //first, return if the file does not exist
-            if (!File.Exists(inputFile))
+            if (!System.IO.File.Exists(inputFile))
                 return "-1";
             MD5 md5Hash = MD5.Create();
             // Convert the input string to a byte array and compute the hash.
-            var stream = File.OpenRead(inputFile);
+            var stream = System.IO.File.OpenRead(inputFile);
             byte[] data = md5Hash.ComputeHash(stream);
             stream.Close();
             // Create a new Stringbuilder to collect the bytes
@@ -340,7 +341,7 @@ namespace RelhaxModpack
 
         public static void createMd5HashDatabase()
         {
-            if (!File.Exists(MainWindow.md5HashDatabaseXmlFile))
+            if (!System.IO.File.Exists(MainWindow.md5HashDatabaseXmlFile))
             {
                 XDocument doc = new XDocument( new XDeclaration("1.0", "utf-8", "yes"), new XElement("database"));
                 doc.Save(MainWindow.md5HashDatabaseXmlFile);
@@ -367,7 +368,7 @@ namespace RelhaxModpack
             catch (Exception e)
             {
                 Utils.exceptionLog("getMd5HashDatabase", e);
-                File.Delete(MainWindow.md5HashDatabaseXmlFile);     // delete damaged XML database
+                System.IO.File.Delete(MainWindow.md5HashDatabaseXmlFile);     // delete damaged XML database
                 createMd5HashDatabase();                            // create new XML database
             }
             return "-1";
@@ -1561,7 +1562,7 @@ namespace RelhaxModpack
             }
 
             //verify the file exists...
-            if (!File.Exists(filePath))
+            if (!System.IO.File.Exists(filePath))
                 return;
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
@@ -1629,7 +1630,7 @@ namespace RelhaxModpack
                         parrent.InsertAfter(child, parrent.FirstChild);
                     }
                     //save it
-                    if (File.Exists(filePath)) File.Delete(filePath);
+                    if (System.IO.File.Exists(filePath)) System.IO.File.Delete(filePath);
                     doc.Save(filePath);
                     break;
 
@@ -1654,7 +1655,7 @@ namespace RelhaxModpack
                         }
                     }
                     //save it
-                    if (File.Exists(filePath)) File.Delete(filePath);
+                    if (System.IO.File.Exists(filePath)) System.IO.File.Delete(filePath);
                     doc.Save(filePath);
                     break;
 
@@ -1669,12 +1670,12 @@ namespace RelhaxModpack
                         }
                     }
                     //save it
-                    if (File.Exists(filePath)) File.Delete(filePath);
+                    if (System.IO.File.Exists(filePath)) System.IO.File.Delete(filePath);
                     doc.Save(filePath);
                     //remove empty elements
                     XDocument doc2 = XDocument.Load(filePath);
                     doc2.Descendants().Where(e => string.IsNullOrEmpty(e.Value)).Remove();
-                    if (File.Exists(filePath)) File.Delete(filePath);
+                    if (System.IO.File.Exists(filePath)) System.IO.File.Delete(filePath);
                     doc2.Save(filePath);
                     break;
             }
@@ -1754,7 +1755,7 @@ namespace RelhaxModpack
             }
             
             //check that the file exists
-            if (!File.Exists(fileLocation))
+            if (!System.IO.File.Exists(fileLocation))
                 return;
 
             //replace all "fake escape characters" with real escape characters
@@ -1763,7 +1764,7 @@ namespace RelhaxModpack
             search = search.Replace(@"\t", "\t");
 
             //load file from disk...
-            string file = File.ReadAllText(fileLocation);
+            string file = System.IO.File.ReadAllText(fileLocation);
             //parse each line into an index array
             string[] fileParsed = file.Split('\n');
             StringBuilder sb = new StringBuilder();
@@ -1816,7 +1817,7 @@ namespace RelhaxModpack
             }
             //save the file back into the string and then the file
             file = sb.ToString();
-            File.WriteAllText(fileLocation, file);
+            System.IO.File.WriteAllText(fileLocation, file);
         }
         //method to parse json files
         public static void jsonPatch(string jsonFile, string jsonPath, string newValue, string mode, string tanksLocation, string tanksVersion, bool testMods = false, string testXVMBootLoc = "")
@@ -1899,11 +1900,11 @@ namespace RelhaxModpack
             }
 
             //check that the file exists
-            if (!File.Exists(jsonFile))
+            if (!System.IO.File.Exists(jsonFile))
                 return;
 
             //load file from disk...
-            string file = File.ReadAllText(jsonFile);
+            string file = System.IO.File.ReadAllText(jsonFile);
             //save the "$" lines
             List<StringSave> ssList = new List<StringSave>();
             StringBuilder backTogether = new StringBuilder();
@@ -2049,7 +2050,7 @@ namespace RelhaxModpack
             }
             if (ssList.Count != 0)
                 Utils.appendToLog(string.Format("There was an error with patching the file {0}, with extra refrences", jsonFile));
-            File.WriteAllText(jsonFile, rebuilder.ToString());
+            System.IO.File.WriteAllText(jsonFile, rebuilder.ToString());
         }
         public static void pmodPatch(string bootFile, string xvmPath, string search, string newValue, string mode, string tanksLocation, string tanksVersion, bool testMods = false, string testXVMBootLoc = "")
         {
@@ -2087,7 +2088,7 @@ namespace RelhaxModpack
             newValue = Regex.Replace(newValue, "newline", "\n");
 
             //check that the file exists
-            if (!File.Exists(bootFile))
+            if (!System.IO.File.Exists(bootFile))
                 return;
             //break down the path into an array
             string[] pathArrayy = xvmPath.Split('.');
@@ -2152,7 +2153,7 @@ namespace RelhaxModpack
             newValue = Regex.Replace(newValue, "newline", "\n");
 
             //check that the file exists
-            if (!File.Exists(bootFile))
+            if (!System.IO.File.Exists(bootFile))
                 return;
             //break down the path into an array
             string[] pathArrayy = xvmPath.Split('.');
@@ -2166,7 +2167,7 @@ namespace RelhaxModpack
 
             //read untill *start of string*${
             numByteReads = 0;
-            string fileContents = File.ReadAllText(bootFile);
+            string fileContents = System.IO.File.ReadAllText(bootFile);
             fileContents = Regex.Replace(fileContents, @"\/\*.*\*\/", "", RegexOptions.Singleline);
             string[] removeComments = fileContents.Split('\n');
             StringBuilder bootBuilder = new StringBuilder();
@@ -2196,7 +2197,7 @@ namespace RelhaxModpack
             StringBuilder sb = new StringBuilder();
             bool isToEnd = false;
             //load the file from disk
-            string fileContents = File.ReadAllText(newFilePath);
+            string fileContents = System.IO.File.ReadAllText(newFilePath);
             while (pathArray.Count != 0)
             {
                 string regex = "";
@@ -2479,8 +2480,8 @@ namespace RelhaxModpack
 
             if (modified)
             {
-                File.Delete(newFilePath);
-                File.WriteAllText(newFilePath, sb.ToString());
+                System.IO.File.Delete(newFilePath);
+                System.IO.File.WriteAllText(newFilePath, sb.ToString());
             }
 
         }
@@ -2518,8 +2519,8 @@ namespace RelhaxModpack
             patchDone = true;
             if (modified)
             {
-                File.Delete(newFilePath);
-                File.WriteAllText(newFilePath, sb.ToString());
+                System.IO.File.Delete(newFilePath);
+                System.IO.File.WriteAllText(newFilePath, sb.ToString());
             }
         }
         //clearing out an array
@@ -2536,8 +2537,8 @@ namespace RelhaxModpack
             patchDone = true;
             if (modified)
             {
-                File.Delete(newFilePath);
-                File.WriteAllText(newFilePath, sb.ToString());
+                System.IO.File.Delete(newFilePath);
+                System.IO.File.WriteAllText(newFilePath, sb.ToString());
             }
         }
         //adding a new entry
@@ -2574,8 +2575,8 @@ namespace RelhaxModpack
             patchDone = true;
             if (modified)
             {
-                File.Delete(newFilePath);
-                File.WriteAllText(newFilePath, sb.ToString());
+                System.IO.File.Delete(newFilePath);
+                System.IO.File.WriteAllText(newFilePath, sb.ToString());
             }
         }
         //editing an existing entry
@@ -2600,8 +2601,8 @@ namespace RelhaxModpack
             }
             if (modified)
             {
-                File.Delete(newFilePath);
-                File.WriteAllText(newFilePath, sb.ToString());
+                System.IO.File.Delete(newFilePath);
+                System.IO.File.WriteAllText(newFilePath, sb.ToString());
             }
         }
         //removing an existing entry
@@ -2632,8 +2633,8 @@ namespace RelhaxModpack
             }
             if (modified)
             {
-                File.Delete(newFilePath);
-                File.WriteAllText(newFilePath, sb.ToString());
+                System.IO.File.Delete(newFilePath);
+                System.IO.File.WriteAllText(newFilePath, sb.ToString());
             }
         }
         //advances the reader untill a certain set of characters are found
@@ -2813,14 +2814,14 @@ namespace RelhaxModpack
             string bootFile = tanksLocation + xvmBootFileLoc1;
             if (customBootFileLoc != null)
                 bootFile = customBootFileLoc;
-            if (!File.Exists(bootFile))
+            if (!System.IO.File.Exists(bootFile))
             {
                 if (writeToLog)
                     appendToLog(string.Format("ERROR: xvm config boot file does not exist at {0}, checking {1}", xvmBootFileLoc1, xvmBootFileLoc2));
                 else
                     appendToLog(string.Format("NOTICE: default run, xvm config boot file does not exist at {0}, checking {1}", xvmBootFileLoc1, xvmBootFileLoc2));
                 bootFile = xvmBootFileLoc2;
-                if (!File.Exists(bootFile))
+                if (!System.IO.File.Exists(bootFile))
                 {
                     if(writeToLog)
                         appendToLog(string.Format("ERROR: xvm config boot file does not exist at {0}, aborting patch", xvmBootFileLoc2));
@@ -2830,7 +2831,7 @@ namespace RelhaxModpack
                 }
             }
             appendToLog("xvm boot file located to parse");
-            string fileContents = File.ReadAllText(bootFile);
+            string fileContents = System.IO.File.ReadAllText(bootFile);
             //patch block comments out
             fileContents = Regex.Replace(fileContents, @"\/\*.*\*\/", "", RegexOptions.Singleline);
             //patch single line comments out
@@ -3182,7 +3183,7 @@ namespace RelhaxModpack
                             if (m != null)
                             {
                                 string filename = m.name + ".zip";
-                                if (File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename)))
+                                if (System.IO.File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename)))
                                 {
                                     m.Checked = true;
                                     if (m.modFormCheckBox != null)
@@ -3215,7 +3216,7 @@ namespace RelhaxModpack
                     // move file to new location now
                     try
                     {
-                        File.Move(filePath, targetFilePath);
+                        System.IO.File.Move(filePath, targetFilePath);
                     }
                     catch (Exception ex)
                     {
@@ -3321,7 +3322,7 @@ namespace RelhaxModpack
                 if (savedUserConfigList.Contains(um.name))
                 {
                     string filename = um.name + ".zip";
-                    if (File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename)))
+                    if (System.IO.File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename)))
                     {
                         //it will be done in the UI code
                         um.Checked = true;
@@ -3789,7 +3790,7 @@ namespace RelhaxModpack
         //returns true if the CRC's of each file match, false otherwise
         public static bool CRCsMatch(string localFile, string remoteCRC)
         {
-            if (!File.Exists(localFile))
+            if (!System.IO.File.Exists(localFile))
                 return false;
             string crc = Utils.getMd5Hash(localFile);
             if (crc.Equals(remoteCRC))
@@ -4409,7 +4410,7 @@ namespace RelhaxModpack
         {
             MemoryStream ms = new MemoryStream();
             string textStr = "";
-            if (File.Exists(zipFilename))
+            if (System.IO.File.Exists(zipFilename))
             {
                 using (ZipFile zip = ZipFile.Read(zipFilename))
                 {
@@ -4457,7 +4458,7 @@ namespace RelhaxModpack
             {
                 try
                 {
-                    File.Delete(file);
+                    System.IO.File.Delete(file);
                 }
                 catch (Exception ex)
                 {
@@ -4515,18 +4516,6 @@ namespace RelhaxModpack
             return vA.CompareTo(vB);
         }
 
-        /*
-        public static void testTimeOutput()
-        {
-            Utils.appendToLog("getCurrentGmtTimestamp: " + getCurrentGmtTimestamp());
-            Utils.appendToLog("Date: " + new DateTime(Convert.ToInt32(getCurrentGmtTimestamp())));
-            Utils.appendToLog("Date: " + DateTimeToUnixTimestamp(new DateTime(Convert.ToInt32(getCurrentGmtTimestamp()))));
-            Utils.appendToLog("Date (local Time) fix: " + UnixTimeStampToDateTime(getCurrentGmtTimestamp()));
-            Utils.appendToLog("Date (UniversalTime): " + UnixTimeStampToDateTime(getCurrentGmtTimestamp()).ToUniversalTime());
-            Utils.appendToLog("Filetime (UniversalTime): " + getCurrentUniversalFiletimeTimestamp());
-            Utils.appendToLog("Date from Filetile (UniversalTime): " + convertFiletimeTimestampToDate(getCurrentUniversalFiletimeTimestamp()));
-        }*/
-
         public static long getCurrentUniversalFiletimeTimestamp()
         {
             return DateTime.Now.ToUniversalTime().ToFileTime();
@@ -4537,34 +4526,50 @@ namespace RelhaxModpack
             return DateTime.FromFileTime(timestamp).ToString();
         }
 
-        /*
-        public static long getCurrentGmtTimestamp()
+        // https://code.msdn.microsoft.com/windowsdesktop/Create-a-shortcut-for-your-ad3d9cb3
+        /// <summary>Creates or removes a shortcut at the specified pathname.</summary> 
+        /// <param name="shortcutTarget">The path where the original file is located.</param> 
+        /// <param name="shortcutPathName">The path where the shortcut is to be created or removed from including the (.lnk) extension.</param>
+        /// <param name="shortcutDescription">The Name.lnk displayed on the specified location.</param>
+        /// <param name="create">True to create a shortcut or False to remove the shortcut.</param> 
+        public static void CreateShortcut(string shortcutTarget, string shortcutPathName, string shortcutDescription, bool create)
         {
-            // return DateTimeToUnixTimestamp(DateTime.Now.ToUniversalTime());
-            return Convert.ToInt64(DateTimeToUnixTimestamp(DateTime.Now));
+            if (create)
+            {
+                try
+                {
+                    if (System.IO.File.Exists(shortcutTarget))
+                    {
+                        Utils.appendToLog(string.Format("ERROR: no shortcut creation. '{0}' is not existing.", shortcutTarget));
+                        return;
+                    }
+                    WshShell shell = new WshShell();
+                    WshShortcut shortcut = (WshShortcut)shell.CreateShortcut(shortcutPathName);
+                    shortcut.Description = shortcutDescription;
+                    shortcut.TargetPath = shortcutTarget; //The exe file this shortcut executes when double clicked 
+                    shortcut.IconLocation = shortcutTarget + ",0"; //Sets the icon of the shortcut to the exe`s icon 
+                    shortcut.WorkingDirectory = Path.GetDirectoryName(shortcutTarget); //The working directory for the exe 
+                    shortcut.Arguments = ""; //The arguments used when executing the exe
+                    shortcut.Hotkey = ""; // "Ctrl+Shift+N";
+                    shortcut.Save(); //Creates the shortcut 
+                }
+                catch (Exception ex)
+                {
+                    Utils.exceptionLog("CreateShortcut", "create: " + shortcutPathName, ex);
+                }
+            }
+            else
+            {
+                try
+                {
+                    if (System.IO.File.Exists(shortcutPathName))
+                        System.IO.File.Delete(shortcutPathName);
+                }
+                catch (Exception ex)
+                {
+                    Utils.exceptionLog("CreateShortcut", "detele: " + shortcutPathName, ex);
+                }
+            }
         }
-
-        public static long convertGmtToLocalTimestamp(long gmtInt)
-        {
-            return 0;
-        }
-
-        public static long convertLocalToGmtTimestamp(long gmtInt)
-        {
-            return 0;
-        }
-
-        private static DateTime UnixTimeStampToDateTime(long unixTimeStamp)
-        {
-            // Unix timestamp is seconds past epoch
-            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
-            return dtDateTime;
-        }
-
-        private static double DateTimeToUnixTimestamp(DateTime dateTime)
-        {
-            return (TimeZoneInfo.ConvertTimeToUtc(dateTime) - new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc)).TotalSeconds;
-        }*/
     }
 }
