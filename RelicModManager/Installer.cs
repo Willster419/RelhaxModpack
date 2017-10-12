@@ -868,8 +868,7 @@ namespace RelhaxModpack
                         }
                     }
                     ProcessStartInfo info = new ProcessStartInfo();
-                    // info.FileName = fontRegPath;
-                    info.FileName = @"FontReg.exe";
+                    info.FileName = fontRegPath;
                     info.UseShellExecute = true;
                     info.Verb = "runas"; // Provides Run as Administrator
                     info.Arguments = "/copy";
