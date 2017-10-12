@@ -849,7 +849,7 @@ namespace RelhaxModpack
                             //get fontreg from the zip file
                             using (ZipFile zip = new ZipFile(Settings.managerInfoDatFile))
                             {
-                                zip.ExtractSelectedEntries("FontReg.exe", null, fontRegPath);
+                                zip.ExtractSelectedEntries("FontReg.exe", null, Path.GetDirectoryName(fontRegPath));
                             }
                         }
                         else
@@ -868,7 +868,8 @@ namespace RelhaxModpack
                         }
                     }
                     ProcessStartInfo info = new ProcessStartInfo();
-                    info.FileName = fontRegPath;
+                    // info.FileName = fontRegPath;
+                    info.FileName = @"FontReg.exe";
                     info.UseShellExecute = true;
                     info.Verb = "runas"; // Provides Run as Administrator
                     info.Arguments = "/copy";
