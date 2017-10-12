@@ -153,7 +153,7 @@ namespace RelhaxModpack
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractGlobalDependencies;
             ExtractDatabaseObjects();
             ResetArgs();
-            //Step 10: Restore User Data
+            //Step 11: Restore User Data
             Utils.appendToLog("Installation RestoreUserData");
             if (Settings.saveUserData)
             {
@@ -161,31 +161,38 @@ namespace RelhaxModpack
                 RestoreUserData();
             }
             ResetArgs();
-            //Step 11: Patch Mods
+            //Step 12: Patch Mods
             Utils.appendToLog("Installation PatchMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchMods;
             if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
                 PatchFiles();
             ResetArgs();
-            //Step 12: Extract User Mods
+            //Step 13: InstallFonts
+
+            //Step 14: Extract User Mods
             Utils.appendToLog("Installation ExtractUserMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractUserMods;
             if(UserMods.Count > 0)
                 ExtractUserMods();
             ResetArgs();
-            //Step 13: Patch Mods if User Mods extracted patch files
+            //Step 15: Patch Mods if User Mods extracted patch files
             Utils.appendToLog("Installation PatchUserMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchUserMods;
             if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
                 PatchFiles();
             ResetArgs();
-            //Step 14: Install Fonts
+            //Step 16: Install Fonts
             Utils.appendToLog("Installation InstallUserFonts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallUserFonts;
             if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
                 InstallFonts();
             ResetArgs();
-            //Step 15: CheckDatabase and delete outdated or no more needed files
+            //Step 17: CheckDatabase and delete outdated or no more needed files
+            Utils.appendToLog("Installation CreateShortscuts");
+            args.InstalProgress = InstallerEventArgs.InstallProgress.CreateShortCuts;
+            CreateShortCuts();
+            ResetArgs();
+            //Step 18: CheckDatabase and delete outdated or no more needed files
             Utils.appendToLog("Installation CheckDatabase");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CheckDatabase;
             if (!Program.testMode)
@@ -932,6 +939,101 @@ namespace RelhaxModpack
                 Utils.exceptionLog("ExtractUserMods", e);
             }
             Utils.appendToLog("Finished Relhax Modpack User Mod Extraction");
+        }
+
+        //Step 17: Extract User Mods
+        private void CreateShortCuts()
+        {
+            try
+            {
+                string logFile = Path.Combine(TanksLocation, "installedRelhaxFiles.log");
+                List<ShortCut> scToDoList = new List<ShortCut>();
+                using (StreamWriter sw = File.AppendText(logFile))
+                {
+                    sw.WriteLine(@"/*  Desktop shortcuts  */");
+                    foreach (Dependency d in Dependencies)
+                    {
+                        if (d.shortCuts.Count > 0)
+                        {
+                            foreach (ShortCut sc in d.shortCuts)
+                            {
+                                if (sc.enabled)
+                                {
+
+                                    string fileTarget = Path.Combine(TanksLocation, sc.path);
+                                    Utils.appendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
+                                    if (File.Exists(fileTarget))
+                                    {
+                                        sw.WriteLine(sc.path);
+                                        Utils.CreateShortcut(fileTarget, sc.name, true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    foreach (LogicalDependnecy ld in LogicalDependencies)
+                    {
+                        if (ld.shortCuts.Count > 0)
+                        {
+                            foreach (ShortCut sc in ld.shortCuts)
+                            {
+                                if (sc.enabled)
+                                {
+                                    string fileTarget = Path.Combine(TanksLocation, sc.path);
+                                    Utils.appendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
+                                    if (File.Exists(fileTarget))
+                                    {
+                                        sw.WriteLine(sc.path);
+                                        Utils.CreateShortcut(fileTarget, sc.name, true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    foreach (Dependency ad in AppendedDependencies)
+                    {
+                        if (ad.shortCuts.Count > 0)
+                        {
+                            foreach (ShortCut sc in ad.shortCuts)
+                            {
+                                if (sc.enabled)
+                                {
+                                    string fileTarget = Path.Combine(TanksLocation, sc.path);
+                                    Utils.appendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
+                                    if (File.Exists(fileTarget))
+                                    {
+                                        sw.WriteLine(sc.path);
+                                        Utils.CreateShortcut(fileTarget, sc.name, true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    foreach (DatabaseObject dbo in ModsConfigsToInstall)
+                    {
+                        if (dbo.shortCuts.Count > 0)
+                        {
+                            foreach (ShortCut sc in dbo.shortCuts)
+                            {
+                                if (sc.enabled)
+                                {
+                                    string fileTarget = Path.Combine(TanksLocation, sc.path);
+                                    Utils.appendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
+                                    if (File.Exists(fileTarget))
+                                    {
+                                        sw.WriteLine(sc.path);
+                                        Utils.CreateShortcut(fileTarget, sc.name, true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("CreateShortCuts()", ex);
+            }
         }
 
         //Step 15: Check the Database for outdated or no more needed files
