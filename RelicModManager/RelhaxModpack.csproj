@@ -113,6 +113,7 @@
   <ItemGroup>
     <Compile Include="Category.cs" />
     <Compile Include="CiInfo.cs" />
+    <Compile Include="ShortCut.cs" />
     <Compile Include="DeveloperSelections.cs" />
     <Compile Include="CompleteModSearchList.cs" />
     <Compile Include="ComboBoxItem.cs" />
@@ -380,12 +381,14 @@
     <EmbeddedResource Include="Newtonsoft.Json.dll" />
     <Content Include="relicbanner_for_ico.ico" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Page Include="LegacySelectionList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

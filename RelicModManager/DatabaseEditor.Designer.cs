@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DatabaseEditor));
             this.DatabaseTreeView = new System.Windows.Forms.TreeView();
             this.ObjectName = new System.Windows.Forms.Label();
             this.ObjectNameTB = new System.Windows.Forms.TextBox();
             this.DatabasePanelTree = new System.Windows.Forms.Panel();
             this.DatabaseEditPanel = new System.Windows.Forms.Panel();
+            this.ObjectLastUpdatedLabel = new System.Windows.Forms.Label();
             this.DownloadZipfileButton = new System.Windows.Forms.Button();
             this.ObjectVersionTB = new System.Windows.Forms.TextBox();
             this.ObjectVersionLabel = new System.Windows.Forms.Label();
@@ -79,6 +81,9 @@
             this.ObjectUserdatasList = new System.Windows.Forms.ListBox();
             this.ObjectUserdatasLabel = new System.Windows.Forms.Label();
             this.RemoveUserdatasButton = new System.Windows.Forms.Button();
+            this.ShortCutTabPage = new System.Windows.Forms.TabPage();
+            this.ObjectShortCutsLabel = new System.Windows.Forms.Label();
+            this.ObjectShortcutList = new System.Windows.Forms.ListBox();
             this.ObjectAppendExtractionCB = new System.Windows.Forms.CheckBox();
             this.ObjectVisibleCheckBox = new System.Windows.Forms.CheckBox();
             this.ObjectTypeComboBox = new System.Windows.Forms.ComboBox();
@@ -107,7 +112,15 @@
             this.SaveDatabaseDialog = new System.Windows.Forms.SaveFileDialog();
             this.MoveButton = new System.Windows.Forms.Button();
             this.SearchBox = new System.Windows.Forms.ComboBox();
-            this.ObjectLastUpdatedLabel = new System.Windows.Forms.Label();
+            this.ObjectUserdatasToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.ObjectShortcutTB = new System.Windows.Forms.TextBox();
+            this.ObjectShortcutNameTB = new System.Windows.Forms.TextBox();
+            this.ObjectShortcutCB = new System.Windows.Forms.CheckBox();
+            this.RemoveShortcutButton = new System.Windows.Forms.Button();
+            this.EditShortcutButton = new System.Windows.Forms.Button();
+            this.AddShortcutButton = new System.Windows.Forms.Button();
+            this.ObjectShortCutsPathLabel = new System.Windows.Forms.Label();
+            this.ObjectShortCutsNameLabel = new System.Windows.Forms.Label();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.ObjectPropertiesTabControl.SuspendLayout();
@@ -117,6 +130,7 @@
             this.DependencyPanel.SuspendLayout();
             this.PictureTabPage.SuspendLayout();
             this.UserDatasTabPage.SuspendLayout();
+            this.ShortCutTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // DatabaseTreeView
@@ -186,6 +200,15 @@
             this.DatabaseEditPanel.Size = new System.Drawing.Size(547, 600);
             this.DatabaseEditPanel.TabIndex = 4;
             // 
+            // ObjectLastUpdatedLabel
+            // 
+            this.ObjectLastUpdatedLabel.AutoSize = true;
+            this.ObjectLastUpdatedLabel.Location = new System.Drawing.Point(297, 136);
+            this.ObjectLastUpdatedLabel.Name = "ObjectLastUpdatedLabel";
+            this.ObjectLastUpdatedLabel.Size = new System.Drawing.Size(71, 13);
+            this.ObjectLastUpdatedLabel.TabIndex = 33;
+            this.ObjectLastUpdatedLabel.Text = "last updated: ";
+            // 
             // DownloadZipfileButton
             // 
             this.DownloadZipfileButton.Enabled = false;
@@ -219,6 +242,7 @@
             this.ObjectPropertiesTabControl.Controls.Add(this.DependenciesTabPage);
             this.ObjectPropertiesTabControl.Controls.Add(this.PictureTabPage);
             this.ObjectPropertiesTabControl.Controls.Add(this.UserDatasTabPage);
+            this.ObjectPropertiesTabControl.Controls.Add(this.ShortCutTabPage);
             this.ObjectPropertiesTabControl.Location = new System.Drawing.Point(3, 238);
             this.ObjectPropertiesTabControl.Name = "ObjectPropertiesTabControl";
             this.ObjectPropertiesTabControl.SelectedIndex = 0;
@@ -602,6 +626,7 @@
             this.ObjectUserdatasTB.Name = "ObjectUserdatasTB";
             this.ObjectUserdatasTB.Size = new System.Drawing.Size(511, 20);
             this.ObjectUserdatasTB.TabIndex = 44;
+            this.ObjectUserdatasToolTip.SetToolTip(this.ObjectUserdatasTB, "Wildcards as * and ? are allowed at the filename");
             // 
             // AddUserdatasButton
             // 
@@ -620,6 +645,7 @@
             this.ObjectUserdatasList.Name = "ObjectUserdatasList";
             this.ObjectUserdatasList.Size = new System.Drawing.Size(511, 69);
             this.ObjectUserdatasList.TabIndex = 41;
+            this.ObjectUserdatasToolTip.SetToolTip(this.ObjectUserdatasList, "Wildcards as * and ? are allowed at the filename");
             this.ObjectUserdatasList.SelectedIndexChanged += new System.EventHandler(this.ObjectUserdatasList_SelectedIndexChanged);
             // 
             // ObjectUserdatasLabel
@@ -640,6 +666,45 @@
             this.RemoveUserdatasButton.Text = "remove";
             this.RemoveUserdatasButton.UseVisualStyleBackColor = true;
             this.RemoveUserdatasButton.Click += new System.EventHandler(this.RemoveUserdatasButton_Click);
+            // 
+            // ShortCutTabPage
+            // 
+            this.ShortCutTabPage.Controls.Add(this.ObjectShortCutsNameLabel);
+            this.ShortCutTabPage.Controls.Add(this.ObjectShortCutsPathLabel);
+            this.ShortCutTabPage.Controls.Add(this.AddShortcutButton);
+            this.ShortCutTabPage.Controls.Add(this.EditShortcutButton);
+            this.ShortCutTabPage.Controls.Add(this.RemoveShortcutButton);
+            this.ShortCutTabPage.Controls.Add(this.ObjectShortcutCB);
+            this.ShortCutTabPage.Controls.Add(this.ObjectShortcutNameTB);
+            this.ShortCutTabPage.Controls.Add(this.ObjectShortcutTB);
+            this.ShortCutTabPage.Controls.Add(this.ObjectShortCutsLabel);
+            this.ShortCutTabPage.Controls.Add(this.ObjectShortcutList);
+            this.ShortCutTabPage.Location = new System.Drawing.Point(4, 22);
+            this.ShortCutTabPage.Name = "ShortCutTabPage";
+            this.ShortCutTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.ShortCutTabPage.Size = new System.Drawing.Size(531, 331);
+            this.ShortCutTabPage.TabIndex = 5;
+            this.ShortCutTabPage.Text = "Shortcuts";
+            this.ShortCutTabPage.UseVisualStyleBackColor = true;
+            // 
+            // ObjectShortCutsLabel
+            // 
+            this.ObjectShortCutsLabel.AutoSize = true;
+            this.ObjectShortCutsLabel.Location = new System.Drawing.Point(6, 3);
+            this.ObjectShortCutsLabel.Name = "ObjectShortCutsLabel";
+            this.ObjectShortCutsLabel.Size = new System.Drawing.Size(108, 13);
+            this.ObjectShortCutsLabel.TabIndex = 47;
+            this.ObjectShortCutsLabel.Text = "shortcut (click to edit)";
+            // 
+            // ObjectShortcutList
+            // 
+            this.ObjectShortcutList.FormattingEnabled = true;
+            this.ObjectShortcutList.HorizontalScrollbar = true;
+            this.ObjectShortcutList.Location = new System.Drawing.Point(9, 18);
+            this.ObjectShortcutList.Name = "ObjectShortcutList";
+            this.ObjectShortcutList.Size = new System.Drawing.Size(511, 69);
+            this.ObjectShortcutList.TabIndex = 0;
+            this.ObjectShortcutList.SelectedIndexChanged += new System.EventHandler(this.ObjectShortcutList_SelectedIndexChanged);
             // 
             // ObjectAppendExtractionCB
             // 
@@ -900,14 +965,77 @@
             this.SearchBox.SelectionChangeCommitted += new System.EventHandler(this.SearchBox_SelectionChangeCommitted);
             this.SearchBox.TextUpdate += new System.EventHandler(this.SearchBox_TextUpdate);
             // 
-            // ObjectLastUpdatedLabel
+            // ObjectShortcutTB
             // 
-            this.ObjectLastUpdatedLabel.AutoSize = true;
-            this.ObjectLastUpdatedLabel.Location = new System.Drawing.Point(297, 136);
-            this.ObjectLastUpdatedLabel.Name = "ObjectLastUpdatedLabel";
-            this.ObjectLastUpdatedLabel.Size = new System.Drawing.Size(71, 13);
-            this.ObjectLastUpdatedLabel.TabIndex = 33;
-            this.ObjectLastUpdatedLabel.Text = "last updated: ";
+            this.ObjectShortcutTB.Location = new System.Drawing.Point(45, 93);
+            this.ObjectShortcutTB.Name = "ObjectShortcutTB";
+            this.ObjectShortcutTB.Size = new System.Drawing.Size(475, 20);
+            this.ObjectShortcutTB.TabIndex = 48;
+            // 
+            // ObjectShortcutNameTB
+            // 
+            this.ObjectShortcutNameTB.Location = new System.Drawing.Point(45, 120);
+            this.ObjectShortcutNameTB.Name = "ObjectShortcutNameTB";
+            this.ObjectShortcutNameTB.Size = new System.Drawing.Size(405, 20);
+            this.ObjectShortcutNameTB.TabIndex = 49;
+            // 
+            // ObjectShortcutCB
+            // 
+            this.ObjectShortcutCB.AutoSize = true;
+            this.ObjectShortcutCB.Location = new System.Drawing.Point(456, 123);
+            this.ObjectShortcutCB.Name = "ObjectShortcutCB";
+            this.ObjectShortcutCB.Size = new System.Drawing.Size(64, 17);
+            this.ObjectShortcutCB.TabIndex = 50;
+            this.ObjectShortcutCB.Text = "enabled";
+            this.ObjectShortcutCB.UseVisualStyleBackColor = true;
+            // 
+            // RemoveShortcutButton
+            // 
+            this.RemoveShortcutButton.Location = new System.Drawing.Point(461, 145);
+            this.RemoveShortcutButton.Name = "RemoveShortcutButton";
+            this.RemoveShortcutButton.Size = new System.Drawing.Size(59, 23);
+            this.RemoveShortcutButton.TabIndex = 51;
+            this.RemoveShortcutButton.Text = "remove";
+            this.RemoveShortcutButton.UseVisualStyleBackColor = true;
+            this.RemoveShortcutButton.Click += new System.EventHandler(this.RemoveShortcutsButton_Click);
+            // 
+            // EditShortcutButton
+            // 
+            this.EditShortcutButton.Location = new System.Drawing.Point(407, 145);
+            this.EditShortcutButton.Name = "EditShortcutButton";
+            this.EditShortcutButton.Size = new System.Drawing.Size(48, 23);
+            this.EditShortcutButton.TabIndex = 52;
+            this.EditShortcutButton.Text = "edit";
+            this.EditShortcutButton.UseVisualStyleBackColor = true;
+            this.EditShortcutButton.Click += new System.EventHandler(this.EditShortcutsButton_Click);
+            // 
+            // AddShortcutButton
+            // 
+            this.AddShortcutButton.Location = new System.Drawing.Point(353, 145);
+            this.AddShortcutButton.Name = "AddShortcutButton";
+            this.AddShortcutButton.Size = new System.Drawing.Size(48, 23);
+            this.AddShortcutButton.TabIndex = 53;
+            this.AddShortcutButton.Text = "add";
+            this.AddShortcutButton.UseVisualStyleBackColor = true;
+            this.AddShortcutButton.Click += new System.EventHandler(this.AddShortcutsButton_Click);
+            // 
+            // ObjectShortCutsPathLabel
+            // 
+            this.ObjectShortCutsPathLabel.AutoSize = true;
+            this.ObjectShortCutsPathLabel.Location = new System.Drawing.Point(7, 96);
+            this.ObjectShortCutsPathLabel.Name = "ObjectShortCutsPathLabel";
+            this.ObjectShortCutsPathLabel.Size = new System.Drawing.Size(32, 13);
+            this.ObjectShortCutsPathLabel.TabIndex = 54;
+            this.ObjectShortCutsPathLabel.Text = "Path:";
+            // 
+            // ObjectShortCutsNameLabel
+            // 
+            this.ObjectShortCutsNameLabel.AutoSize = true;
+            this.ObjectShortCutsNameLabel.Location = new System.Drawing.Point(7, 123);
+            this.ObjectShortCutsNameLabel.Name = "ObjectShortCutsNameLabel";
+            this.ObjectShortCutsNameLabel.Size = new System.Drawing.Size(38, 13);
+            this.ObjectShortCutsNameLabel.TabIndex = 55;
+            this.ObjectShortCutsNameLabel.Text = "Name:";
             // 
             // DatabaseEditor
             // 
@@ -948,6 +1076,8 @@
             this.PictureTabPage.PerformLayout();
             this.UserDatasTabPage.ResumeLayout(false);
             this.UserDatasTabPage.PerformLayout();
+            this.ShortCutTabPage.ResumeLayout(false);
+            this.ShortCutTabPage.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1034,5 +1164,17 @@
         private System.Windows.Forms.ComboBox SearchBox;
         private System.Windows.Forms.Button DownloadZipfileButton;
         private System.Windows.Forms.Label ObjectLastUpdatedLabel;
+        private System.Windows.Forms.TabPage ShortCutTabPage;
+        private System.Windows.Forms.ListBox ObjectShortcutList;
+        private System.Windows.Forms.Label ObjectShortCutsLabel;
+        private System.Windows.Forms.ToolTip ObjectUserdatasToolTip;
+        private System.Windows.Forms.Label ObjectShortCutsPathLabel;
+        private System.Windows.Forms.Button AddShortcutButton;
+        private System.Windows.Forms.Button EditShortcutButton;
+        private System.Windows.Forms.Button RemoveShortcutButton;
+        private System.Windows.Forms.CheckBox ObjectShortcutCB;
+        private System.Windows.Forms.TextBox ObjectShortcutNameTB;
+        private System.Windows.Forms.TextBox ObjectShortcutTB;
+        private System.Windows.Forms.Label ObjectShortCutsNameLabel;
     }
 }
