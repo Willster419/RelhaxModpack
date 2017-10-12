@@ -29,6 +29,7 @@ namespace RelhaxModpack
         //list of linked mods and configs that use 
         public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
         public string devURL { get; set; }
+        public List<ShortCut> shortCuts = new List<ShortCut>();
         public LogicalDependnecy() { }
         //for the tostring thing
         public override string ToString()

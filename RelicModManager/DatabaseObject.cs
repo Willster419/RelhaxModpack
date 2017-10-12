@@ -17,6 +17,7 @@ namespace RelhaxModpack
         public List<LogicalDependnecy> logicalDependencies = new List<LogicalDependnecy>();
         public List<Dependency> dependencies = new List<Dependency>();
         public List<Media> pictureList = new List<Media>();
+        public List<ShortCut> shortCuts = new List<ShortCut>();
         //the end address of the zip file location. enables us to use dropbox (?dl=1)
         public string endAddress { get; set; }
         public string crc { get; set; }

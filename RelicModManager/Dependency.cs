@@ -30,6 +30,7 @@ namespace RelhaxModpack
         public bool appendExtraction;
         public List<LogicalDependnecy> logicalDependencies = new List<LogicalDependnecy>();
         public string devURL { get; set; }
+        public List<ShortCut> shortCuts = new List<ShortCut>();
         public Dependency() { }
         //for the tostring thing
         public override string ToString()
