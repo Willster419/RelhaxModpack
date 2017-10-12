@@ -486,7 +486,7 @@ namespace RelhaxModpack
             return returnVal;
         }
 
-        //parses the xml mod info into the memory database (change XML reader to from XMLDocument to XDocument)
+        //parses the xml mod info into the memory database (change XML reader from XMLDocument to XDocument)
         // https://www.google.de/search?q=c%23+xdocument+get+line+number&oq=c%23+xdocument+get+line+number&aqs=chrome..69i57j69i58.11773j0j7&sourceid=chrome&ie=UTF-8
         // public static void createModStructure(string databaseURL, List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies, List<Category> parsedCatagoryList, List<DeveloperSelections> developerSelections = null)
         public static void createModStructure(string databaseURL, List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies, List<Category> parsedCatagoryList)
@@ -585,7 +585,7 @@ namespace RelhaxModpack
                 //add the dependencies
                 foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/dependencies/dependency"))
                 {
-                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction", "packageName", "logicalDependencies", "devURL", "timestamp" };
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction", "packageName", "logicalDependencies", "devURL", "timestamp", "shortCuts" };
                     Dependency d = new Dependency();
                     d.packageName = "";
                     foreach (XElement globs in dependencyNode.Elements())
@@ -623,6 +623,35 @@ namespace RelhaxModpack
                                 {
                                     Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)globs).LineNumber));
                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => globsPend {1}\n\nmore informations, see logfile", globs.Name.ToString(), d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                }
+                                break;
+                            case "shortCuts":
+                                //parse all shortCuts
+                                foreach (XElement shortCutHolder in globs.Elements())
+                                {
+                                    ShortCut sc = new ShortCut();
+                                    string[] depScNodeList = new string[] { "path", "name", "enabled" };
+                                    foreach (XElement shortCutNode in shortCutHolder.Elements())
+                                    {
+                                        depScNodeList = depScNodeList.Except(new string[] { shortCutNode.Name.ToString() }).ToArray();
+                                        switch (shortCutNode.Name.ToString())
+                                        {
+                                            case "path":
+                                                sc.path = shortCutNode.Value;
+                                                break;
+                                            case "name":
+                                                sc.name = shortCutNode.Value;
+                                                break;
+                                            case "enabled":
+                                                sc.enabled = Utils.parseBool(shortCutNode.Value, false);
+                                                break;
+                                        }
+                                    }
+                                    if (sc != null)
+                                    {
+                                        if (depScNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => Dep {3} (line {4})", string.Join(",", depScNodeList), d.dependencyZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
+                                        d.shortCuts.Add(sc);
+                                    }
                                 }
                                 break;
                             case "logicalDependencies":
@@ -707,16 +736,45 @@ namespace RelhaxModpack
                             case "dependencyenabled":
                                 d.enabled = Utils.parseBool(globs.Value, false);
                                 break;
+                            case "shortCuts":
+                                //parse all shortCuts
+                                foreach (XElement shortCutHolder in globs.Elements())
+                                {
+                                    ShortCut sc = new ShortCut();
+                                    string[] logDepScNodeList = new string[] { "path", "name", "enabled" };
+                                    foreach (XElement shortCutNode in shortCutHolder.Elements())
+                                    {
+                                        logDepScNodeList = logDepScNodeList.Except(new string[] { shortCutNode.Name.ToString() }).ToArray();
+                                        switch (shortCutNode.Name.ToString())
+                                        {
+                                            case "path":
+                                                sc.path = shortCutNode.Value;
+                                                break;
+                                            case "name":
+                                                sc.name = shortCutNode.Value;
+                                                break;
+                                            case "enabled":
+                                                sc.enabled = Utils.parseBool(shortCutNode.Value, false);
+                                                break;
+                                        }
+                                    }
+                                    if (sc != null)
+                                    {
+                                        if (logDepScNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => logDep {3} (line {4})", string.Join(",", logDepScNodeList), d.dependencyZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
+                                        d.shortCuts.Add(sc);
+                                    }
+                                }
+                                break;
                             case "packageName":
                                 d.packageName = globs.Value.Trim();
                                 if (d.packageName.Equals(""))
                                 {
-                                    Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)globs).LineNumber));
-                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => globsPend {1}\n\nmore informations, see logfile", globs.Name.ToString(), d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
+                                    Utils.appendToLog(string.Format("Error modInfo.xml: packageName not defined. node \"{0}\" => logDep {1} (line {2})", globs.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                    if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: packageName not defined.\nnode \"{0}\" => logDep {1}\n\nmore informations, see logfile", globs.Name.ToString(), d.dependencyZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                 }
                                 break;
                             default:
-                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => logDep {1} (line {2})", globs.Name.ToString(), d.dependencyZipFile, ((IXmlLineInfo)globs).LineNumber));
                                 if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: dependencyZipFile, dependencyZipCRC, startAddress, endAddress, dependencyenabled, packageName\n\nNode found: {0}\n\nmore informations, see logfile", globs.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                 break;
                         }
@@ -871,6 +929,35 @@ namespace RelhaxModpack
                                                                     break;
                                                             }
                                                             m.pictureList.Add(med);
+                                                        }
+                                                        break;
+                                                    case "shortCuts":
+                                                        //parse all shortCuts
+                                                        foreach (XElement shortCutHolder in modNode.Elements())
+                                                        {
+                                                            ShortCut sc = new ShortCut();
+                                                            string[] depScNodeList = new string[] { "path", "name", "enabled" };
+                                                            foreach (XElement shortCutNode in shortCutHolder.Elements())
+                                                            {
+                                                                depScNodeList = depScNodeList.Except(new string[] { shortCutNode.Name.ToString() }).ToArray();
+                                                                switch (shortCutNode.Name.ToString())
+                                                                {
+                                                                    case "path":
+                                                                        sc.path = shortCutNode.Value;
+                                                                        break;
+                                                                    case "name":
+                                                                        sc.name = shortCutNode.Value;
+                                                                        break;
+                                                                    case "enabled":
+                                                                        sc.enabled = Utils.parseBool(shortCutNode.Value, false);
+                                                                        break;
+                                                                }
+                                                            }
+                                                            if (sc != null)
+                                                            {
+                                                                if (depScNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => mod {1} (line {2})", string.Join(",", depScNodeList), m.zipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
+                                                                m.shortCuts.Add(sc);
+                                                            }
                                                         }
                                                         break;
                                                     case "dependencies":
@@ -1159,6 +1246,35 @@ namespace RelhaxModpack
                                                     break;
                                             }
                                             c.pictureList.Add(med);
+                                        }
+                                        break;
+                                    case "shortCuts":
+                                        //parse all shortCuts
+                                        foreach (XElement shortCutHolder in configNode.Elements())
+                                        {
+                                            ShortCut sc = new ShortCut();
+                                            string[] cScNodeList = new string[] { "path", "name", "enabled" };
+                                            foreach (XElement shortCutNode in shortCutHolder.Elements())
+                                            {
+                                                cScNodeList = cScNodeList.Except(new string[] { shortCutNode.Name.ToString() }).ToArray();
+                                                switch (shortCutNode.Name.ToString())
+                                                {
+                                                    case "path":
+                                                        sc.path = shortCutNode.Value;
+                                                        break;
+                                                    case "name":
+                                                        sc.name = shortCutNode.Value;
+                                                        break;
+                                                    case "enabled":
+                                                        sc.enabled = Utils.parseBool(shortCutNode.Value, false);
+                                                        break;
+                                                }
+                                            }
+                                            if (sc != null)
+                                            {
+                                                if (cScNodeList.Length > 0) { Utils.appendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => mod {1} (line {2})", string.Join(",", cScNodeList), c.zipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
+                                                c.shortCuts.Add(sc);
+                                            }
                                         }
                                         break;
                                     case "dependencies":
@@ -4007,7 +4123,27 @@ namespace RelhaxModpack
                     depLogicalDependencies.AppendChild(LogicalDependencyRoot);
                 }
                 dependencyRoot.AppendChild(depLogicalDependencies);
-                //attach dependency root
+                XmlElement shortCuts = doc.CreateElement("shortCuts");
+                foreach (ShortCut sc in d.shortCuts)
+                {
+                    //declare ShortCut root
+                    XmlElement ShortCutRoot = doc.CreateElement("shortCut");
+                    //make ShortCut
+                    XmlElement ShortCutPath = doc.CreateElement("path");
+                    if (!sc.path.Trim().Equals(""))
+                        ShortCutPath.InnerText = sc.path.Trim();
+                    ShortCutRoot.AppendChild(ShortCutPath);
+                    XmlElement ShortCutName = doc.CreateElement("name");
+                    if (!sc.name.Trim().Equals(""))
+                        ShortCutName.InnerText = sc.name.Trim();
+                    ShortCutRoot.AppendChild(ShortCutName);
+                    XmlElement ShortCutEnabled = doc.CreateElement("enabled");
+                    ShortCutEnabled.InnerText = sc.enabled.ToString().Trim();
+                    ShortCutRoot.AppendChild(ShortCutEnabled);
+                    shortCuts.AppendChild(ShortCutRoot);
+                }
+                //attach ShortCuts to root
+                dependencyRoot.AppendChild(shortCuts);
                 DependenciesXml.AppendChild(dependencyRoot);
             }
             root.AppendChild(DependenciesXml);
@@ -4050,6 +4186,27 @@ namespace RelhaxModpack
                 if (!d.packageName.Trim().Equals(""))
                     logicalDepPackageName.InnerText = d.packageName.Trim();
                 logicalDependencyRoot.AppendChild(logicalDepPackageName);
+                XmlElement shortCuts = doc.CreateElement("shortCuts");
+                foreach (ShortCut sc in d.shortCuts)
+                {
+                    //declare ShortCut root
+                    XmlElement ShortCutRoot = doc.CreateElement("shortCut");
+                    //make ShortCut
+                    XmlElement ShortCutPath = doc.CreateElement("path");
+                    if (!sc.path.Trim().Equals(""))
+                        ShortCutPath.InnerText = sc.path.Trim();
+                    ShortCutRoot.AppendChild(ShortCutPath);
+                    XmlElement ShortCutName = doc.CreateElement("name");
+                    if (!sc.name.Trim().Equals(""))
+                        ShortCutName.InnerText = sc.name.Trim();
+                    ShortCutRoot.AppendChild(ShortCutName);
+                    XmlElement ShortCutEnabled = doc.CreateElement("enabled");
+                    ShortCutEnabled.InnerText = sc.enabled.ToString().Trim();
+                    ShortCutRoot.AppendChild(ShortCutEnabled);
+                    shortCuts.AppendChild(ShortCutRoot);
+                }
+                //attach ShortCuts to root
+                logicalDependencyRoot.AppendChild(shortCuts);
                 //attach dependency root
                 logicalDependenciesXml.AppendChild(logicalDependencyRoot);
             }
@@ -4210,6 +4367,27 @@ namespace RelhaxModpack
                         modLogicalDependencies.AppendChild(LogicalDependencyRoot);
                     }
                     modRoot.AppendChild(modLogicalDependencies);
+                    XmlElement shortCuts = doc.CreateElement("shortCuts");
+                    foreach (ShortCut sc in m.shortCuts)
+                    {
+                        //declare ShortCut root
+                        XmlElement ShortCutRoot = doc.CreateElement("shortCut");
+                        //make ShortCut
+                        XmlElement ShortCutPath = doc.CreateElement("path");
+                        if (!sc.path.Trim().Equals(""))
+                            ShortCutPath.InnerText = sc.path.Trim();
+                        ShortCutRoot.AppendChild(ShortCutPath);
+                        XmlElement ShortCutName = doc.CreateElement("name");
+                        if (!sc.name.Trim().Equals(""))
+                            ShortCutName.InnerText = sc.name.Trim();
+                        ShortCutRoot.AppendChild(ShortCutName);
+                        XmlElement ShortCutEnabled = doc.CreateElement("enabled");
+                        ShortCutEnabled.InnerText = sc.enabled.ToString().Trim();
+                        ShortCutRoot.AppendChild(ShortCutEnabled);
+                        shortCuts.AppendChild(ShortCutRoot);
+                    }
+                    //attach ShortCuts to root
+                    modRoot.AppendChild(shortCuts);
                     modsHolder.AppendChild(modRoot);
                 }
                 catagoryRoot.AppendChild(modsHolder);
@@ -4364,6 +4542,26 @@ namespace RelhaxModpack
                     conLogicalDependencies.AppendChild(LogicalDependencyRoot);
                 }
                 configRoot.AppendChild(conLogicalDependencies);
+                XmlElement shortCuts = doc.CreateElement("shortCuts");
+                foreach (ShortCut sc in cc.shortCuts)
+                {
+                    //declare ShortCut root
+                    XmlElement ShortCutRoot = doc.CreateElement("shortCut");
+                    //make ShortCut
+                    XmlElement ShortCutPath = doc.CreateElement("path");
+                    if (!sc.path.Trim().Equals(""))
+                        ShortCutPath.InnerText = sc.path.Trim();
+                    ShortCutRoot.AppendChild(ShortCutPath);
+                    XmlElement ShortCutName = doc.CreateElement("name");
+                    if (!sc.name.Trim().Equals(""))
+                        ShortCutName.InnerText = sc.name.Trim();
+                    ShortCutRoot.AppendChild(ShortCutName);
+                    XmlElement ShortCutEnabled = doc.CreateElement("enabled");
+                    ShortCutEnabled.InnerText = sc.enabled.ToString().Trim();
+                    ShortCutRoot.AppendChild(ShortCutEnabled);
+                }
+                //attach ShortCuts to root
+                configRoot.AppendChild(shortCuts);
                 configsHolder.AppendChild(configRoot);
             }
         }
