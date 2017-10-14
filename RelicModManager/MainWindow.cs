@@ -49,10 +49,14 @@ namespace RelhaxModpack
         //list of all current dependencies
         private List<Dependency> currentDependencies;
         private List<LogicalDependnecy> currentLogicalDependencies;
+        //DeveloperSelections namelist
+        public static List<DeveloperSelections> developerSelections = new List<DeveloperSelections>();
         //list of patches
         private List<Patch> patchList;
         //list of all needed files from the current loaded modInfo file
         public static List<string> usedFilesList;
+        //counter for Utils.exception calls
+        public static int errorCounter = 0;
         string tempOldDownload;
         private List<Mod> userMods;
         private FirstLoadHelper helper;
@@ -128,7 +132,7 @@ namespace RelhaxModpack
             sessionDownloadSpeed = (float)Math.Round(sessionDownloadSpeed, 2);
             totalSpeedLabel = "" + sessionDownloadSpeed + " MB/s";
             //get the ETA for the download
-            double totalTimeToDownload = MBytesTotal / (e.BytesReceived / 1048576d / sw.Elapsed.TotalSeconds);
+            double totalTimeToDownload = MBytesTotal / (e.BytesReceived / MBDivisor / sw.Elapsed.TotalSeconds);
             double timeRemain = totalTimeToDownload - sw.Elapsed.TotalSeconds;
             if (timeRemainArray == null)
                 timeRemainArray = new List<double>();
@@ -608,7 +612,7 @@ namespace RelhaxModpack
                     if (File.Exists(Path.Combine(Application.StartupPath, s)))
                         File.Delete(Path.Combine(Application.StartupPath, s));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Utils.exceptionLog(ex);
             }
@@ -623,7 +627,7 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.getTranslatedString("patchDayMessage"));
                 this.Close();
             }
-            
+
             //check for updates
             wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
             Application.DoEvents();
@@ -739,6 +743,9 @@ namespace RelhaxModpack
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
             Utils.appendToLog("tanksLocation parsed as " + tanksLocation);
             Utils.appendToLog("customUserMods parsed as " + Path.Combine(Application.StartupPath, "RelHaxUserMods"));
+            // logfile moved from WoT root folder to logs subfolder after manager version 26.4.2
+            if (File.Exists(Path.Combine(tanksLocation, "installedRelhaxFiles.log")))
+                File.Move(Path.Combine(tanksLocation, "installedRelhaxFiles.log"), Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log"));
             if (tanksLocation.Equals(Application.StartupPath))
             {
                 //display error and abort
@@ -815,7 +822,8 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.getTranslatedString("WoTRunningMessage"), Translations.getTranslatedString("WoTRunningHeader"));
             }
             // if the delete will raise an exception, it will be ignored
-            try
+            /*
+            try // moved it BEHIND INstaller.UninstallMods() function, cause this file is needed for this function
             {
                 if (File.Exists(Path.Combine(tanksLocation, "installedRelhaxFiles.log")))
                     File.Delete(Path.Combine(tanksLocation, "installedRelhaxFiles.log"));
@@ -823,7 +831,7 @@ namespace RelhaxModpack
             catch (Exception ex)
             {
                 Utils.exceptionLog(ex);
-            }
+            } */
             //have the application display that it is loading. it is actually doing installation calculations
             downloadProgress.Text = Translations.getTranslatedString("loading");
             Application.DoEvents();
@@ -1132,7 +1140,7 @@ namespace RelhaxModpack
         private string createExtractionMsgBoxProgressOutput(string[] s)
         {
             return string.Format("{0} {1} {2} {3}\n{4}: {5}\n{6}: {7} MB",
-                Translations.getTranslatedString("extractingPackage"), 
+                Translations.getTranslatedString("extractingPackage"),
                     s[0],
                     Translations.getTranslatedString("of"),
                     s[1],
@@ -1166,7 +1174,7 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.DeleteMods)
             {
-                message = string.Format("{0} {1} {2} {3}", Translations.getTranslatedString("deletingFiles"), e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
+                message = string.Format("{0} {1} {2} {3}\n{4}: {5}", Translations.getTranslatedString("deletingFiles"), e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess, Translations.getTranslatedString("file"), e.currentFile);
                 childProgressBar.Maximum = e.ChildTotalToProcess;
                 if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
                     childProgressBar.Value = e.ChildProcessed;
@@ -1258,8 +1266,6 @@ namespace RelhaxModpack
                 if ((parrentProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= parrentProgressBar.Maximum))
                     parrentProgressBar.Value = e.ChildProcessed;
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.CheckDatabase;
-                // parrentProgressBar.Value = 0;
-                // childProgressBar.Value = 0;
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.CleanUp)
             {
@@ -1317,14 +1323,28 @@ namespace RelhaxModpack
             {
                 totalProgressBar.Value = 0;
                 parrentProgressBar.Value = 0;
-                message = string.Format("{0} {1} {2} {3}", Translations.getTranslatedString("uninstallingFile"), e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
+                message = string.Format("{0} {1} {2} {3}\n{4}: {5}", Translations.getTranslatedString("uninstallingFile"), e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess, Translations.getTranslatedString("file"), e.currentFile);
                 childProgressBar.Maximum = e.ChildTotalToProcess;
                 if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
                     childProgressBar.Value = e.ChildProcessed;
             }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.UninstallDone)
+            {
+                message = Translations.getTranslatedString("done");
+                totalProgressBar.Value = totalProgressBar.Maximum;
+                parrentProgressBar.Maximum = 1;
+                parrentProgressBar.Value = parrentProgressBar.Maximum;
+                childProgressBar.Maximum = 1;
+                childProgressBar.Value = childProgressBar.Maximum;
+            }
             else
             {
                 Utils.appendToLog("Invalid state: " + e.InstalProgress);
+            }
+            if (errorCounter > 0 && Program.testMode)
+            {
+                this.ErrorCounterLabel.Visible = true;
+                this.ErrorCounterLabel.Text = string.Format("Error counter: {0}", errorCounter);
             }
             downloadProgress.Text = message;
         }
@@ -1349,7 +1369,7 @@ namespace RelhaxModpack
             Utils.appendToLog(string.Format("tanksLocation parsed as {0}", tanksLocation));
             Utils.appendToLog(string.Format("customUserMods parsed as {0}", Path.Combine(Application.StartupPath, "RelHaxUserMods")));
             tanksVersion = this.getFolderVersion();
-            if (MessageBox.Show(Translations.getTranslatedString("confirmUninstallMessage"), Translations.getTranslatedString("confirmUninstallHeader"), MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show(string.Format("{0}\n\n{1}", Translations.getTranslatedString("confirmUninstallMessage"), tanksLocation), Translations.getTranslatedString("confirmUninstallHeader"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 unI = new Installer()
                 {
@@ -1371,7 +1391,7 @@ namespace RelhaxModpack
         private void applySettings(bool init = false)
         {
             string text = Translations.getTranslatedString("mainFormToolTip");
-            Control[] toolTipSetList = new Control[] { forceManuel , cleanInstallCB, backupModsCheckBox, backupModsCheckBox, cancerFontCB, saveLastInstallCB, saveUserDataCB, darkUICB, languageSelectionGB, fontSizeGB, selectionDefault, selectionLegacy, disableBordersCB, disableColorsCB, clearCacheCB, clearLogFilesCB, viewAppUpdates, ShowInstallCompleteWindowCB, notifyIfSameDatabaseCB, standardImageRB, thirdGuardsLoadingImageRB, languageENG, languageGER, languagePL, languageFR, fontSize100, DPI100 };
+            Control[] toolTipSetList = new Control[] { forceManuel, cleanInstallCB, backupModsCheckBox, backupModsCheckBox, cancerFontCB, saveLastInstallCB, saveUserDataCB, darkUICB, languageSelectionGB, fontSizeGB, selectionDefault, selectionLegacy, disableBordersCB, disableColorsCB, clearCacheCB, clearLogFilesCB, viewAppUpdates, ShowInstallCompleteWindowCB, notifyIfSameDatabaseCB, standardImageRB, thirdGuardsLoadingImageRB, languageENG, languageGER, languagePL, languageFR, fontSize100, DPI100 };
             foreach (var set in toolTipSetList)
             {
                 // this.toolTip.SetToolTip(forceManuel, Translations.getTranslatedString("mainFormToolTip"));
@@ -1583,6 +1603,7 @@ namespace RelhaxModpack
                 }
             }
         }
+
         //for when downloads are started, a timer to keep track of the download speed and ETA
         private void downloadTimer_Tick(object sender, EventArgs e)
         {
@@ -1624,23 +1645,29 @@ namespace RelhaxModpack
         //Checks if the current database version is the same as the database version last installed into the selected World_of_Tanks directory
         private bool SameDatabaseVersions()
         {
-            string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");  //xml doc name can change
-            XDocument doc = XDocument.Parse(xmlString);
+            try
+            {
+                string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");  //xml doc name can change
+                XDocument doc = XDocument.Parse(xmlString);
 
-            var databaseVersion = doc.CreateNavigator().SelectSingleNode("/version/database");
-            databaseVersionString = databaseVersion.InnerXml;
-            string installedfilesLogPath = Path.Combine(tanksLocation, "installedRelhaxFiles.log");
-            if (!File.Exists(installedfilesLogPath))
+                var databaseVersion = doc.CreateNavigator().SelectSingleNode("/version/database");
+                databaseVersionString = databaseVersion.InnerXml;
+                string installedfilesLogPath = Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log");
+                if (!File.Exists(installedfilesLogPath))
+                    return false;
+                string[] lastInstalledDatabaseVersionString = File.ReadAllText(installedfilesLogPath).Split('\n');
+                //use index 0 of array, index 18 of string array
+                string theDatabaseVersion = lastInstalledDatabaseVersionString[0].Substring(18).Trim();
+                if (databaseVersionString.Equals(theDatabaseVersion))
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("SameDatabaseVersions", "ex", ex);
                 return false;
-            string[] lastInstalledDatabaseVersionString = File.ReadAllText(installedfilesLogPath).Split('\n');
-            //use index 0 of array, index 18 of string array
-            string theDatabaseVersion = lastInstalledDatabaseVersionString[0];
-            theDatabaseVersion = theDatabaseVersion.Substring(18);
-            theDatabaseVersion = theDatabaseVersion.Trim();
-            if (databaseVersionString.Equals(theDatabaseVersion))
-                return true;
-            else
-                return false;
+            }
         }
         //handler for when the window is goingto be closed
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -1649,6 +1676,7 @@ namespace RelhaxModpack
             if (Program.saveSettings) Settings.saveSettings();
             Utils.appendToLog("cleaning \"RelHaxTemp\" folder");
             Utils.DirectoryDelete(Path.Combine(Application.StartupPath, "RelHaxTemp"), true);
+            Utils.appendToLog(string.Format("Exception counted: {0}", errorCounter));
             Utils.appendToLog("Application Closing");
             Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
         }
