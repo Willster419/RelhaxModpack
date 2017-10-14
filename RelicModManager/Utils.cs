@@ -133,17 +133,10 @@ namespace RelhaxModpack
                 {
                     string name = descriptor.Name;
                     object value = descriptor.GetValue(n);
-                    switch (value)
-                    {
-                        case null:
-                            value = "(null)";
-                            break;
-                        case "":
-                            value = "(string with lenght 0)";
-                            break;
-                        default:
-                            break;
-                    }
+                    if (value == null)
+                        value = "(null)";
+                    else if (value is string && value.ToString().Trim().Equals(""))
+                        value = "(string with lenght 0)";
                     Utils.appendToLog(string.Format("{0}={1}", name, value));
                 }
                 Utils.appendToLog("----- end of dump ------");
@@ -177,6 +170,8 @@ namespace RelhaxModpack
         /// <param e=Exception>the exception object that would be catched</param>
         public static void exceptionLog(string msgString, string infoString, Exception e)
         {
+            // increase error Counter by every call of this function
+            MainWindow.errorCounter++;
             lock (_locker)              // avoid that 2 or more threads calling the Log function and writing lines in a mess
             {
                 e = e.GetBaseException();
@@ -232,11 +227,12 @@ namespace RelhaxModpack
                 string msgHeader = "";
                 try { msgHeader = string.Format("{0} {1}(call stack traceback)\n", errorType, msgString.Equals("") || msgString == null ? "" : string.Format(@"at ""{0}"" ", msgString)); } catch { };
                 string msg = "";
-                try { msg += string.Format(@"{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}", msgHeader, info, type, exception, stackTrace, message, source, targetSite, innerException, data); } catch { };
+                try { msg += string.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}", msgHeader, info, type, exception, stackTrace, message, source, targetSite, innerException, data); } catch { };
                 try { msg += "----------------------------"; } catch { };
                 Utils.appendToLog(msg);
             }
         }
+
         public static bool IsValidXml(string xmlString)
         {
             XmlTextReader read = new XmlTextReader(xmlString);
@@ -493,7 +489,7 @@ namespace RelhaxModpack
         {
             try
             {
-                Settings.developerSelections.Clear();
+                MainWindow.developerSelections.Clear();
                 totalModConfigComponents = 0;
                 XDocument doc = null;
                 try
@@ -3883,7 +3879,7 @@ namespace RelhaxModpack
                 d.internalName = x.Value;
                 d.displayName = x.Attribute("displayName").Value;
                 d.date = x.Attribute("date").Value;
-                Settings.developerSelections.Add(d);
+                MainWindow.developerSelections.Add(d);
             }
         }
 
@@ -4729,7 +4725,7 @@ namespace RelhaxModpack
         /// <param name="shortcutTarget">The path where the original file is located.</param> 
         /// <param name="shortcutName">The filename of the shortcut to be created or removed from desktop including the (.lnk) extension.</param>
         /// <param name="create">True to create a shortcut or False to remove the shortcut.</param> 
-        public static void CreateShortcut(string shortcutTarget, string shortcutName, bool create)
+        public static void CreateShortcut(string shortcutTarget, string shortcutName, bool create, bool log, StreamWriter sw)
         {
             string modifiedName = Path.GetFileNameWithoutExtension(shortcutName) + ".lnk";
             if (create)
@@ -4746,8 +4742,10 @@ namespace RelhaxModpack
                     link.SetArguments(""); //The arguments used when executing the exe
                     // save it
                     System.Runtime.InteropServices.ComTypes.IPersistFile file = (System.Runtime.InteropServices.ComTypes.IPersistFile)link;
-                    string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-                    file.Save(Path.Combine(desktopPath, modifiedName), false);
+                    string desktopPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), modifiedName);
+                    if (log)
+                        sw.WriteLine(desktopPath);
+                    file.Save(desktopPath, false);
                 }
                 catch (Exception ex)
                 {
