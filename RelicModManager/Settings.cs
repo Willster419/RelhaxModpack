@@ -18,8 +18,6 @@ namespace RelhaxModpack
         public static bool NotifyIfSameDatabase { get; set; }
         //toggle if the program will backup the current mod installation
         public static bool backupModFolder { get; set; }
-        //DeveloperSelections namelist
-        public static List<DeveloperSelections> developerSelections = new List<DeveloperSelections>();
         //toggle if the program will clean the mods and res_mods folders before installation
         public static bool cleanInstallation { get; set; }
         public static bool forceManuel { get; set; }
