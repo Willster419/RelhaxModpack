@@ -84,6 +84,7 @@
             this.viewAppUpdates = new System.Windows.Forms.Button();
             this.viewDBUpdates = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.ErrorCounterLabel = new System.Windows.Forms.Label();
             this.settingsGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
@@ -789,12 +790,23 @@
             this.viewDBUpdates.UseVisualStyleBackColor = true;
             this.viewDBUpdates.Click += new System.EventHandler(this.viewDBUpdates_Click);
             // 
+            // ErrorCounterLabel
+            // 
+            this.ErrorCounterLabel.AutoSize = true;
+            this.ErrorCounterLabel.Location = new System.Drawing.Point(329, 597);
+            this.ErrorCounterLabel.Name = "ErrorCounterLabel";
+            this.ErrorCounterLabel.Size = new System.Drawing.Size(80, 13);
+            this.ErrorCounterLabel.TabIndex = 38;
+            this.ErrorCounterLabel.Text = "Error counter: 0";
+            this.ErrorCounterLabel.Visible = false;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(442, 612);
+            this.Controls.Add(this.ErrorCounterLabel);
             this.Controls.Add(this.viewDBUpdates);
             this.Controls.Add(this.viewAppUpdates);
             this.Controls.Add(this.DiscordServerLink);
@@ -891,6 +903,7 @@
         private System.Windows.Forms.CheckBox notifyIfSameDatabaseCB;
         private System.Windows.Forms.CheckBox ShowInstallCompleteWindowCB;
         private System.Windows.Forms.ToolTip toolTip;
+        public System.Windows.Forms.Label ErrorCounterLabel;
     }
 }
 
