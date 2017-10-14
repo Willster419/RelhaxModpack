@@ -944,22 +944,32 @@ namespace RelhaxModpack
                     if (cfg.enabled)
                     {
                         cfg.Checked = false;
-                        if (cfg.configUIComponent is ConfigFormCheckBox)
+                        // if (cfg.configUIComponent is ConfigFormCheckBox)
+                        if (cfg.configUIComponent is ConfigWPFCheckBox)
                         {
-                            ConfigFormCheckBox cfcb = (ConfigFormCheckBox)cfg.configUIComponent;
-                            cfcb.Checked = false;
+                            // ConfigFormCheckBox cfcb = (ConfigFormCheckBox)cfg.configUIComponent;
+                            ConfigWPFCheckBox cfcb = (ConfigWPFCheckBox)cfg.configUIComponent;
+                            // cfcb.Checked = false;
+                            cfcb.IsChecked = false;
                         }
-                        else if (cfg.configUIComponent is ConfigFormRadioButton)
+                        // else if (cfg.configUIComponent is ConfigFormRadioButton)
+                        else if (cfg.configUIComponent is ConfigWPFRadioButton) 
                         {
-                            ConfigFormRadioButton cfrb = (ConfigFormRadioButton)cfg.configUIComponent;
-                            cfrb.Checked = false;
+                            // ConfigFormRadioButton cfrb = (ConfigFormRadioButton)cfg.configUIComponent;
+                            ConfigWPFRadioButton cfrb = (ConfigWPFRadioButton)cfg.configUIComponent;
+                            // cfrb.Checked = false;
+                            cfrb.IsChecked = false;
                         }
-                        else if (cfg.configUIComponent is ConfigFormComboBox)
+                        // else if (cfg.configUIComponent is ConfigFormComboBox)
+                        else if (cfg.configUIComponent is ConfigWPFComboBox) 
                         {
-                            ConfigFormComboBox cfcb = (ConfigFormComboBox)cfg.configUIComponent;
-                            cfcb.SelectedIndexChanged -= configControlDD_SelectedIndexChanged;
+                            // ConfigFormComboBox cfcb = (ConfigFormComboBox)cfg.configUIComponent;
+                            ConfigWPFComboBox cfcb = (ConfigWPFComboBox)cfg.configUIComponent;
+                            // cfcb.SelectedIndexChanged -= configControlDD_SelectedIndexChanged;
+                            cfcb.SelectionChanged -= configControlDDALL_SelectionChanged;
                             cfcb.SelectedIndex = -1;
-                            cfcb.SelectedIndexChanged += configControlDD_SelectedIndexChanged;
+                            // cfcb.SelectedIndexChanged += configControlDD_SelectedIndexChanged;
+                            cfcb.SelectionChanged += configControlDDALL_SelectionChanged;
                         }
                     }
                 }
