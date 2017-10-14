@@ -11,6 +11,7 @@ using System.Xml;
 using System.Diagnostics;
 using System.Net;
 using System.Drawing.Text;
+using System.Threading;
 
 namespace RelhaxModpack
 {
@@ -86,10 +87,13 @@ namespace RelhaxModpack
         {
             ResetArgs();
             args.InstalProgress = InstallerEventArgs.InstallProgress.Uninstall;
-            DeleteMods();
+            UninstallMods();
             //put them back when done
             if (!Directory.Exists(Path.Combine(TanksLocation, "res_mods", TanksVersion))) Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods", TanksVersion));
             if (!Directory.Exists(Path.Combine(TanksLocation, "mods", TanksVersion))) Directory.CreateDirectory(Path.Combine(TanksLocation, "mods", TanksVersion));
+            args.InstalProgress = InstallerEventArgs.InstallProgress.UninstallDone;
+            InstallWorker.ReportProgress(0);
+            Utils.appendToLog("Uninstallation process finished");
             MessageBox.Show(Translations.getTranslatedString("uninstallFinished"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -114,12 +118,14 @@ namespace RelhaxModpack
             }
             ResetArgs();
             //Step 3: Delete Mods
-            Utils.appendToLog("Installation DeleteMods");
+            Utils.appendToLog("Installation UninstallMods");
             if (Settings.cleanInstallation)
             {
                 args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteMods;
-                DeleteMods();
+                // DeleteMods();
+                UninstallMods();
             }
+            ResetArgs();
             //Setp 3a: delete log files
             Utils.appendToLog("Installation logFiles");
             if (Settings.deleteLogs)
@@ -231,22 +237,29 @@ namespace RelhaxModpack
         //Step 1: Backup Mods
         public void BackupMods()
         {
-            //backupResMods the mods folder
-            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup")))
-                Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup"));
-            //create a new mods folder based on date and time
-            //yyyy-MM-dd-HH-mm-ss
-            DateTime now = DateTime.Now;
-            string folderDateName = String.Format("{0:yyyy-MM-dd-HH-mm-ss}", now);
-            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "res_mods")))
-                Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "res_mods"));
-            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "mods")))
-                Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "mods"));
-            NumFilesToProcess(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "mods"));
-            NumFilesToProcess(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "res_mods"));
-            InstallWorker.ReportProgress(0);
-            DirectoryCopy(Path.Combine(TanksLocation, "res_mods"), Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "res_mods"), true);
-            DirectoryCopy(Path.Combine(TanksLocation, "mods"), Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "mods"), true);
+            try
+            {
+                //backupResMods the mods folder
+                if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup")))
+                    Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup"));
+                //create a new mods folder based on date and time
+                //yyyy-MM-dd-HH-mm-ss
+                DateTime now = DateTime.Now;
+                string folderDateName = String.Format("{0:yyyy-MM-dd-HH-mm-ss}", now);
+                if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "res_mods")))
+                    Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "res_mods"));
+                if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "mods")))
+                    Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "mods"));
+                NumFilesToProcess(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "mods"));
+                NumFilesToProcess(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "res_mods"));
+                InstallWorker.ReportProgress(0);
+                DirectoryCopy(Path.Combine(TanksLocation, "res_mods"), Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "res_mods"), true);
+                DirectoryCopy(Path.Combine(TanksLocation, "mods"), Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "mods"), true);
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("BackupMods", "ex", ex);
+            }
         }
 
         //Step 2: Backup User Data
@@ -302,6 +315,162 @@ namespace RelhaxModpack
             }
         }
 
+        private void DeleteFilesByList(List<string> list, bool reportProgress = false, TextWriter tw = null)
+        {
+            foreach (string line in list)
+            {
+                if (reportProgress)
+                {
+                    args.currentFile = line;
+                    InstallWorker.ReportProgress(args.ChildProcessed++);
+                }
+                // Utils.appendToLog(line);
+                
+                if (line.EndsWith("/") | line.EndsWith(@"\"))
+                {
+                    try
+                    {
+                        File.SetAttributes(line, FileAttributes.Normal);
+                        Directory.Delete(line);
+                    }
+                    catch       // catch exception if folder is not empty
+                    { }
+                }
+                else
+                {
+                    try
+                    {
+                        File.SetAttributes(line, FileAttributes.Normal);
+                        File.Delete(line);
+                    }
+                    catch (DirectoryNotFoundException)
+                    {
+                        // 
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        // 
+                    }
+                    catch (Exception ex)    // here is another problem, so logging it
+                    {
+                        Utils.exceptionLog("DeleteFilesByList", "delete file: " + line, ex);
+                    }
+                }
+                if (tw != null)
+                    tw.WriteLine(line);
+            }
+        }
+
+        public void UninstallMods()
+        {
+            try
+            {
+                List<string> lines = new List<string>();
+                string installLogFile = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
+                if (File.Exists(installLogFile))
+                {
+                    lines = File.ReadAllLines(installLogFile).ToList();
+                }
+                lines.Reverse();
+                while (args.ChildProcessed < lines.Count())
+                {
+                    try
+                    {
+                        if (!lines[args.ChildProcessed].Substring(0, 2).Equals("/*"))
+                        {
+                            if (lines[args.ChildProcessed].Length > 17)
+                            {
+                                if (lines[args.ChildProcessed].Substring(0, 17).Equals("Database Version:"))
+                                {
+                                    lines.RemoveAt(args.ChildProcessed);
+                                    continue;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            lines.RemoveAt(args.ChildProcessed);
+                            continue;
+                        }
+                        args.currentFile = lines[args.ChildProcessed].Replace("/",@"\");
+                        args.ChildProcessed++;
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.exceptionLog("UninstallMods", string.Format("e\nChildProcessed: {0}\nChildTotalToProcess: {1}\nlines.Count(): {2}", args.ChildProcessed, args.ChildTotalToProcess, lines.Count()), ex);
+                    }
+                }
+                InstallWorker.ReportProgress(0);
+                args.ChildProcessed = 0;
+                args.ChildTotalToProcess = lines.Count();
+                Utils.appendToLog(string.Format("Elements to delete (from logfile): {0}", lines.Count()));
+                try
+                {
+                    string logFile = Path.Combine(TanksLocation, "logs", "uninstallRelhaxFiles.log");
+                    TextWriter tw = null;
+                    if (args.InstalProgress == InstallerEventArgs.InstallProgress.Uninstall)
+                    {
+                        // back the last uninstall logfile
+                        if (File.Exists(logFile))
+                        {
+                            if (File.Exists(logFile + ".bak"))
+                                File.Delete(logFile + ".bak");
+                            File.Move(logFile, logFile + ".bak");
+                        }
+                        tw = new StreamWriter(logFile);
+                    }
+                    try
+                    {
+                        DeleteFilesByList(lines, true, tw);
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.exceptionLog("UninstallMods", "DeletePass1", ex);
+                    }
+                    lines = NumFilesToProcess(Path.Combine(TanksLocation, "res_mods"));
+                    lines.AddRange(NumFilesToProcess(Path.Combine(TanksLocation, "mods")));
+                    // reverse the parsed list, to delete files and folders from the lowest to the highest folder level
+                    lines.Reverse();
+                    if (tw != null)
+                        tw.WriteLine("/*  files and folders deleted after parsing  */");
+                    InstallWorker.ReportProgress(0);
+                    args.ChildProcessed = 0;
+                    args.ChildTotalToProcess = lines.Count();
+                    Utils.appendToLog(string.Format("Elements to delete (from parsing): {0}", lines.Count()));
+                    try
+                    {
+                        DeleteFilesByList(lines, true, tw);
+                        //don't forget to delete the readme files
+                        if (Directory.Exists(Path.Combine(TanksLocation, "_readme")))
+                            Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.exceptionLog("UninstallMods", "DeletePass2", ex);
+                    }
+                    if (tw != null)
+                        tw.Close();
+                }
+                catch (Exception ex)
+                {
+                    Utils.exceptionLog("UninstallMods", "sw", ex);
+                }
+                try       // if the delete will raise an exception, it will be ignored
+                {
+                    if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log")))
+                        File.Delete(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"));
+                }
+                catch (Exception ex)
+                {
+                    Utils.exceptionLog("UninstallMods", "Delete", ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("UninstallMods", "ex", ex);
+            }
+        }
+        
         //Step 3: Delete all mods
         public void DeleteMods()
         {
@@ -324,278 +493,292 @@ namespace RelhaxModpack
         //Step 4: Clear WoT program cache
         public void ClearWoTCache()
         {
-            if (AppDataFolder == null || AppDataFolder.Equals("") || AppDataFolder.Equals("-1"))
-            {
-                if (AppDataFolder == null) AppDataFolder = "(null)";
-                if (AppDataFolder.Equals("")) AppDataFolder = "(empty string)";
-                Utils.appendToLog("ERROR: AppDataFolder not correct, value: " + AppDataFolder);
-                Utils.appendToLog("Aborting ClearWoTCache()");
-                return;
-            }
-            Utils.appendToLog("Started clearing of WoT cache files");
-
-            string[] fileFolderNames = { "preferences.xml", "preferences_ct.xml", "modsettings.dat", "xvm", "pmod" };
-            string AppPathTempFolder = Path.Combine(AppPath, "RelHaxTemp", "AppDataBackup");
-
-            //1 - Move out prefrences.xml, prefrences_ct.xml, and xvm folder
             try
             {
-                if (!Directory.Exists(AppPathTempFolder))
-                    Directory.CreateDirectory(AppPathTempFolder);
-                foreach (var f in fileFolderNames)
+                if (AppDataFolder == null || AppDataFolder.Equals("") || AppDataFolder.Equals("-1"))
                 {
-                    if (Directory.Exists(Path.Combine(AppDataFolder, f)))
+                    if (AppDataFolder == null) AppDataFolder = "(null)";
+                    if (AppDataFolder.Equals("")) AppDataFolder = "(empty string)";
+                    Utils.appendToLog("ERROR: AppDataFolder not correct, value: " + AppDataFolder);
+                    Utils.appendToLog("Aborting ClearWoTCache()");
+                    return;
+                }
+                Utils.appendToLog("Started clearing of WoT cache files");
+
+                string[] fileFolderNames = { "preferences.xml", "preferences_ct.xml", "modsettings.dat", "xvm", "pmod" };
+                string AppPathTempFolder = Path.Combine(AppPath, "RelHaxTemp", "AppDataBackup");
+
+                //1 - Move out prefrences.xml, prefrences_ct.xml, and xvm folder
+                try
+                {
+                    if (!Directory.Exists(AppPathTempFolder))
+                        Directory.CreateDirectory(AppPathTempFolder);
+                    foreach (var f in fileFolderNames)
                     {
-                        DirectoryMove(Path.Combine(AppDataFolder, f), Path.Combine(AppPathTempFolder, f), true, true, false);
-                    }
-                    else if (File.Exists(Path.Combine(AppDataFolder, f)))
-                    {
-                        File.Move(Path.Combine(AppDataFolder, f), Path.Combine(AppPathTempFolder, f));
+                        if (Directory.Exists(Path.Combine(AppDataFolder, f)))
+                        {
+                            DirectoryMove(Path.Combine(AppDataFolder, f), Path.Combine(AppPathTempFolder, f), true, true, false);
+                        }
+                        else if (File.Exists(Path.Combine(AppDataFolder, f)))
+                        {
+                            File.Move(Path.Combine(AppDataFolder, f), Path.Combine(AppPathTempFolder, f));
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Utils.exceptionLog("ClearWoTCache", "step 1", ex);
-            }
-
-            //2 - recursivly delete entire WorldOfTanks folder
-            try
-            {
-                NumFilesToProcess(AppDataFolder);
-                DirectoryDelete(AppDataFolder, true);
-            }
-            catch (Exception ex)
-            {
-                Utils.exceptionLog("ClearWoTCache", "step 2", ex);
-            }
-
-            //3 - re-create WorldOfTanks folder and move back 3 above files and delete temp file
-            try
-            {
-                foreach (var f in fileFolderNames)
+                catch (Exception ex)
                 {
-                    if (Directory.Exists(Path.Combine(AppPathTempFolder, f)))
-                    {
-                        DirectoryMove(Path.Combine(AppPathTempFolder, f), Path.Combine(AppDataFolder, f), true, true, false);
-                    }
-                    else if (File.Exists(Path.Combine(AppPathTempFolder, f)))
-                    {
-                        File.Move(Path.Combine(AppPathTempFolder, f), Path.Combine(AppDataFolder, f));
-                    }
+                    Utils.exceptionLog("ClearWoTCache", "step 1", ex);
                 }
-                if (Directory.Exists(AppPathTempFolder))
-                    Directory.Delete(AppPathTempFolder);
+
+                //2 - recursivly delete entire WorldOfTanks folder
+                try
+                {
+                    NumFilesToProcess(AppDataFolder);
+                    DirectoryDelete(AppDataFolder, true);
+                }
+                catch (Exception ex)
+                {
+                    Utils.exceptionLog("ClearWoTCache", "step 2", ex);
+                }
+
+                //3 - re-create WorldOfTanks folder and move back 3 above files and delete temp file
+                try
+                {
+                    foreach (var f in fileFolderNames)
+                    {
+                        if (Directory.Exists(Path.Combine(AppPathTempFolder, f)))
+                        {
+                            DirectoryMove(Path.Combine(AppPathTempFolder, f), Path.Combine(AppDataFolder, f), true, true, false);
+                        }
+                        else if (File.Exists(Path.Combine(AppPathTempFolder, f)))
+                        {
+                            File.Move(Path.Combine(AppPathTempFolder, f), Path.Combine(AppDataFolder, f));
+                        }
+                    }
+                    if (Directory.Exists(AppPathTempFolder))
+                        Directory.Delete(AppPathTempFolder);
+                }
+                catch (Exception ex)
+                {
+                    Utils.exceptionLog("ClearWoTCache, step 3", ex);
+                }
+                Utils.appendToLog("Finished clearing of WoT cache files");
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("ClearWoTCache, step 3", ex);
+                Utils.exceptionLog("ClearWoTCache", "ex", ex);
             }
-            Utils.appendToLog("Finished clearing of WoT cache files");
         }
         
         //Step 5-9: Extract All DatabaseObjects
         public void ExtractDatabaseObjects()
         {
-            //just a double-check to delete all patches
-            if (Directory.Exists(Path.Combine(TanksLocation, "_patch"))) Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
-            if (Directory.Exists(Path.Combine(TanksLocation, "_fonts"))) Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true);
-            if (!Directory.Exists(Path.Combine(TanksLocation, "res_mods"))) Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods"));
-            if (!Directory.Exists(Path.Combine(TanksLocation, "mods"))) Directory.CreateDirectory(Path.Combine(TanksLocation, "mods"));
-
-            //start the entry for the database version in installedRelhaxFiles.log
-            File.WriteAllText(Path.Combine(TanksLocation, "installedRelhaxFiles.log"), "Database Version: " + DatabaseVersion + "\n");
-
-            //extract RelHax Mods
-            Utils.appendToLog("Starting Relhax Modpack Extraction");
-            string downloadedFilesDir = Path.Combine(Application.StartupPath, "RelHaxDownloads");
-            //calculate the total number of zip files to install
-            foreach (Dependency d in GlobalDependencies)
-                if (!d.dependencyZipFile.Equals(""))
-                    args.ParrentTotalToProcess++;
-
-            foreach (Dependency d in Dependencies)
-                if (!d.dependencyZipFile.Equals(""))
-                    args.ParrentTotalToProcess++;
-
-            foreach (LogicalDependnecy d in LogicalDependencies)
-                if (!d.dependencyZipFile.Equals(""))
-                    args.ParrentTotalToProcess++;
-
-            foreach (DatabaseObject dbo in ModsConfigsToInstall)
-                if (!dbo.zipFile.Equals(""))
-                    args.ParrentTotalToProcess++;
-
-            foreach (Dependency d in AppendedDependencies)
-                if (!d.dependencyZipFile.Equals(""))
-                    args.ParrentTotalToProcess++;
-
-            InstallWorker.ReportProgress(0);
-            //extract global dependencies
-            foreach (Dependency d in GlobalDependencies)
+            try
             {
-                Utils.appendToLog("Extracting Global Dependency " + d.dependencyZipFile);
-                if (!d.dependencyZipFile.Equals(""))
-                {
-                    try
-                    {
-                        this.Unzip(Path.Combine(downloadedFilesDir, d.dependencyZipFile), TanksLocation);
-                        args.ParrentProcessed++;
-                    }
-                    catch (Exception ex)
-                    {
-                        //append the exception to the log
-                        Utils.exceptionLog("ExtractDatabaseObjects", ex);
-                        //show the error message
-                        MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
-                        //exit the application
-                        Application.Exit();
-                    }
-                }
+                //just a double-check to delete all patches
+                if (Directory.Exists(Path.Combine(TanksLocation, "_patch"))) Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
+                if (Directory.Exists(Path.Combine(TanksLocation, "_fonts"))) Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true);
+                if (!Directory.Exists(Path.Combine(TanksLocation, "res_mods"))) Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods"));
+                if (!Directory.Exists(Path.Combine(TanksLocation, "mods"))) Directory.CreateDirectory(Path.Combine(TanksLocation, "mods"));
+
+                //start the entry for the database version in installedRelhaxFiles.log
+                File.WriteAllText(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), "Database Version: " + DatabaseVersion + "\n");
+
+                //extract RelHax Mods
+                Utils.appendToLog("Starting Relhax Modpack Extraction");
+                string downloadedFilesDir = Path.Combine(Application.StartupPath, "RelHaxDownloads");
+                //calculate the total number of zip files to install
+                foreach (Dependency d in GlobalDependencies)
+                    if (!d.dependencyZipFile.Equals(""))
+                        args.ParrentTotalToProcess++;
+
+                foreach (Dependency d in Dependencies)
+                    if (!d.dependencyZipFile.Equals(""))
+                        args.ParrentTotalToProcess++;
+
+                foreach (LogicalDependnecy d in LogicalDependencies)
+                    if (!d.dependencyZipFile.Equals(""))
+                        args.ParrentTotalToProcess++;
+
+                foreach (DatabaseObject dbo in ModsConfigsToInstall)
+                    if (!dbo.zipFile.Equals(""))
+                        args.ParrentTotalToProcess++;
+
+                foreach (Dependency d in AppendedDependencies)
+                    if (!d.dependencyZipFile.Equals(""))
+                        args.ParrentTotalToProcess++;
+
                 InstallWorker.ReportProgress(0);
-            }
-            //extract dependencies
-            args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractDependencies;
-            InstallWorker.ReportProgress(0);
-            foreach (Dependency d in Dependencies)
-            {
-                Utils.appendToLog("Extracting Dependency " + d.dependencyZipFile);
-                if (!d.dependencyZipFile.Equals(""))
+                //extract global dependencies
+                foreach (Dependency d in GlobalDependencies)
                 {
-                    try
+                    Utils.appendToLog("Extracting Global Dependency " + d.dependencyZipFile);
+                    if (!d.dependencyZipFile.Equals(""))
                     {
-                        this.Unzip(Path.Combine(downloadedFilesDir, d.dependencyZipFile), TanksLocation);
-                        args.ParrentProcessed++;
+                        try
+                        {
+                            this.Unzip(Path.Combine(downloadedFilesDir, d.dependencyZipFile), TanksLocation);
+                            args.ParrentProcessed++;
+                        }
+                        catch (Exception ex)
+                        {
+                            //append the exception to the log
+                            Utils.exceptionLog("ExtractDatabaseObjects", ex);
+                            //show the error message
+                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                            //exit the application
+                            Application.Exit();
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        //append the exception to the log
-                        Utils.exceptionLog("ExtractDatabaseObjects", ex);
-                        //show the error message
-                        MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
-                        //exit the application
-                        Application.Exit();
-                    }
-                }
-                InstallWorker.ReportProgress(0);
-            }
-            //extract logical dependencies
-            args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractLogicalDependencies;
-            InstallWorker.ReportProgress(0);
-            foreach (LogicalDependnecy d in LogicalDependencies)
-            {
-                Utils.appendToLog("Extracting Logical Dependency " + d.dependencyZipFile);
-                if (!d.dependencyZipFile.Equals(""))
-                {
-                    try
-                    {
-                        this.Unzip(Path.Combine(downloadedFilesDir, d.dependencyZipFile), TanksLocation);
-                        args.ParrentProcessed++;
-                    }
-                    catch (Exception ex)
-                    {
-                        //append the exception to the log
-                        Utils.exceptionLog("ExtractDatabaseObjects", ex);
-                        //show the error message
-                        MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
-                        //exit the application
-                        Application.Exit();
-                    }
-                }
-                InstallWorker.ReportProgress(0);
-            }
-            //set xvmConfigDir here because xvm is always a dependency, but don't log it
-            xvmConfigDir = Utils.getXVMBootLoc(TanksLocation,null,false);
-            //extract mods and configs
-            args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractMods;
-            InstallWorker.ReportProgress(0);
-            foreach (DatabaseObject dbo in ModsConfigsToInstall)
-            {
-                Utils.appendToLog("Extracting Mod/Config " + dbo.zipFile);
-                if (!dbo.zipFile.Equals(""))
-                {
-                    try
-                    {
-                        this.Unzip(Path.Combine(downloadedFilesDir, dbo.zipFile), TanksLocation);
-                        args.ParrentProcessed++;
-                    }
-                    catch (Exception ex)
-                    {
-                        //append the exception to the log
-                        Utils.exceptionLog("ExtractDatabaseObjects", ex);
-                        //show the error message
-                        MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + dbo.zipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
-                        //exit the application
-                        Application.Exit();
-                    }
-                }
-                InstallWorker.ReportProgress(0);
-            }
-            //extract dependencies
-            args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractAppendedDependencies;
-            InstallWorker.ReportProgress(0);
-            foreach (Dependency d in AppendedDependencies)
-            {
-                Utils.appendToLog("Extracting Appended Dependency " + d.dependencyZipFile);
-                if (!d.dependencyZipFile.Equals(""))
-                {
-                    try
-                    {
-                        this.Unzip(Path.Combine(downloadedFilesDir, d.dependencyZipFile), TanksLocation);
-                        args.ParrentProcessed++;
-                    }
-                    catch (Exception ex)
-                    {
-                        //append the exception to the log
-                        Utils.exceptionLog("ExtractDatabaseObjects", ex);
-                        //show the error message
-                        MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
-                        //exit the application
-                        Application.Exit();
-                    }
-                }
-                InstallWorker.ReportProgress(0);
-            }
-            //finish by moving WoTAppData folder contents into application data folder
-            //folder name is "WoTAppData"
-            args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractConfigs;
-            InstallWorker.ReportProgress(0);
-            string folderToMove = Path.Combine(TanksLocation, "WoTAppData");
-            if(Directory.Exists(folderToMove))
-            {
-                Utils.appendToLog("WoTAppData folder detected, moving files to WoT cache folder");
-                //get each file and folder and move them
-                // Get the subdirectories for the specified directory
-                DirectoryInfo dir = new DirectoryInfo(folderToMove);
-                DirectoryInfo[] dirs = dir.GetDirectories();
-                // Get the files in the directory
-                FileInfo[] files = dir.GetFiles();
-                foreach (FileInfo file in files)
-                {
-                    //move the file, overwrite if required
-                    string temppath = Path.Combine(AppDataFolder, file.Name);
-                    args.currentFile = temppath;
                     InstallWorker.ReportProgress(0);
-                    if (File.Exists(temppath))
-                        File.Delete(temppath);
-                    file.MoveTo(temppath);
                 }
-                foreach (DirectoryInfo subdir in dirs)
+                //extract dependencies
+                args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractDependencies;
+                InstallWorker.ReportProgress(0);
+                foreach (Dependency d in Dependencies)
                 {
-                    //call the recursive function to move
-                    //the sub dir is actaully the top dir for the function
-                    string temppath = Path.Combine(TanksLocation, "WoTAppData", subdir.Name);
-                    string temppath2 = Path.Combine(AppDataFolder, subdir.Name);
-                    args.currentFile = temppath;
+                    Utils.appendToLog("Extracting Dependency " + d.dependencyZipFile);
+                    if (!d.dependencyZipFile.Equals(""))
+                    {
+                        try
+                        {
+                            this.Unzip(Path.Combine(downloadedFilesDir, d.dependencyZipFile), TanksLocation);
+                            args.ParrentProcessed++;
+                        }
+                        catch (Exception ex)
+                        {
+                            //append the exception to the log
+                            Utils.exceptionLog("ExtractDatabaseObjects", ex);
+                            //show the error message
+                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                            //exit the application
+                            Application.Exit();
+                        }
+                    }
                     InstallWorker.ReportProgress(0);
-                    DirectoryMove(temppath,temppath2,true,true,false);
                 }
-                //call the process folders function to delete any leftover folders
-                Utils.processDirectory(folderToMove, false);
+                //extract logical dependencies
+                args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractLogicalDependencies;
+                InstallWorker.ReportProgress(0);
+                foreach (LogicalDependnecy d in LogicalDependencies)
+                {
+                    Utils.appendToLog("Extracting Logical Dependency " + d.dependencyZipFile);
+                    if (!d.dependencyZipFile.Equals(""))
+                    {
+                        try
+                        {
+                            this.Unzip(Path.Combine(downloadedFilesDir, d.dependencyZipFile), TanksLocation);
+                            args.ParrentProcessed++;
+                        }
+                        catch (Exception ex)
+                        {
+                            //append the exception to the log
+                            Utils.exceptionLog("ExtractDatabaseObjects", ex);
+                            //show the error message
+                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                            //exit the application
+                            Application.Exit();
+                        }
+                    }
+                    InstallWorker.ReportProgress(0);
+                }
+                //set xvmConfigDir here because xvm is always a dependency, but don't log it
+                xvmConfigDir = Utils.getXVMBootLoc(TanksLocation, null, false);
+                //extract mods and configs
+                args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractMods;
+                InstallWorker.ReportProgress(0);
+                foreach (DatabaseObject dbo in ModsConfigsToInstall)
+                {
+                    Utils.appendToLog("Extracting Mod/Config " + dbo.zipFile);
+                    if (!dbo.zipFile.Equals(""))
+                    {
+                        try
+                        {
+                            this.Unzip(Path.Combine(downloadedFilesDir, dbo.zipFile), TanksLocation);
+                            args.ParrentProcessed++;
+                        }
+                        catch (Exception ex)
+                        {
+                            //append the exception to the log
+                            Utils.exceptionLog("ExtractDatabaseObjects", ex);
+                            //show the error message
+                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + dbo.zipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                            //exit the application
+                            Application.Exit();
+                        }
+                    }
+                    InstallWorker.ReportProgress(0);
+                }
+                //extract dependencies
+                args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractAppendedDependencies;
+                InstallWorker.ReportProgress(0);
+                foreach (Dependency d in AppendedDependencies)
+                {
+                    Utils.appendToLog("Extracting Appended Dependency " + d.dependencyZipFile);
+                    if (!d.dependencyZipFile.Equals(""))
+                    {
+                        try
+                        {
+                            this.Unzip(Path.Combine(downloadedFilesDir, d.dependencyZipFile), TanksLocation);
+                            args.ParrentProcessed++;
+                        }
+                        catch (Exception ex)
+                        {
+                            //append the exception to the log
+                            Utils.exceptionLog("ExtractDatabaseObjects", ex);
+                            //show the error message
+                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                            //exit the application
+                            Application.Exit();
+                        }
+                    }
+                    InstallWorker.ReportProgress(0);
+                }
+                //finish by moving WoTAppData folder contents into application data folder
+                //folder name is "WoTAppData"
+                args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractConfigs;
+                InstallWorker.ReportProgress(0);
+                string folderToMove = Path.Combine(TanksLocation, "WoTAppData");
                 if (Directory.Exists(folderToMove))
-                    Directory.Delete(folderToMove);
+                {
+                    Utils.appendToLog("WoTAppData folder detected, moving files to WoT cache folder");
+                    //get each file and folder and move them
+                    // Get the subdirectories for the specified directory
+                    DirectoryInfo dir = new DirectoryInfo(folderToMove);
+                    DirectoryInfo[] dirs = dir.GetDirectories();
+                    // Get the files in the directory
+                    FileInfo[] files = dir.GetFiles();
+                    foreach (FileInfo file in files)
+                    {
+                        //move the file, overwrite if required
+                        string temppath = Path.Combine(AppDataFolder, file.Name);
+                        args.currentFile = temppath;
+                        InstallWorker.ReportProgress(0);
+                        if (File.Exists(temppath))
+                            File.Delete(temppath);
+                        file.MoveTo(temppath);
+                    }
+                    foreach (DirectoryInfo subdir in dirs)
+                    {
+                        //call the recursive function to move
+                        //the sub dir is actaully the top dir for the function
+                        string temppath = Path.Combine(TanksLocation, "WoTAppData", subdir.Name);
+                        string temppath2 = Path.Combine(AppDataFolder, subdir.Name);
+                        args.currentFile = temppath;
+                        InstallWorker.ReportProgress(0);
+                        DirectoryMove(temppath, temppath2, true, true, false);
+                    }
+                    //call the process folders function to delete any leftover folders
+                    Utils.processDirectory(folderToMove, false);
+                    if (Directory.Exists(folderToMove))
+                        Directory.Delete(folderToMove);
+                }
+                Utils.appendToLog("Finished Relhax Modpack Extraction");
             }
-            Utils.appendToLog("Finished Relhax Modpack Extraction");
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("ExtractDatabaseObjects", "ex", ex);
+            }
         }
 
         //Step 10: Restore User Data
@@ -661,125 +844,132 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("RestoreUserData", ex);
+                Utils.exceptionLog("RestoreUserData", "ex", ex);
             }
         }
 
         //Step 11/13: Patch All files
         public void PatchFiles()
         {
-            //Give the OS time to process the folder change...
-            System.Threading.Thread.Sleep(100);
-            //set the folder properties to read write
-            DirectoryInfo di = null;
-            FileInfo[] diArr = null;
-            bool kontinue = false;
-            while (!kontinue)
+            try
             {
-                try
+                //Give the OS time to process the folder change...
+                System.Threading.Thread.Sleep(100);
+                //set the folder properties to read write
+                DirectoryInfo di = null;
+                FileInfo[] diArr = null;
+                bool kontinue = false;
+                while (!kontinue)
                 {
-                    File.SetAttributes(Path.Combine(TanksLocation, "_patch"), FileAttributes.Normal);
-                    di = new DirectoryInfo(Path.Combine(TanksLocation, "_patch"));
-                    //get every patch file in the folder
-                    diArr = di.GetFiles(@"*.xml", System.IO.SearchOption.TopDirectoryOnly);
-                    kontinue = true;
-                }
-                catch (UnauthorizedAccessException e)
-                {
-                    Utils.exceptionLog("PatchFiles", e);
-                    DialogResult res = MessageBox.Show(Translations.getTranslatedString("patchingSystemDeneidAccessMessage"), Translations.getTranslatedString("patchingSystemDeneidAccessHeader"), MessageBoxButtons.RetryCancel);
-                    if (res == DialogResult.Cancel)
+                    try
                     {
-                        Application.Exit();
+                        File.SetAttributes(Path.Combine(TanksLocation, "_patch"), FileAttributes.Normal);
+                        di = new DirectoryInfo(Path.Combine(TanksLocation, "_patch"));
+                        //get every patch file in the folder
+                        diArr = di.GetFiles(@"*.xml", System.IO.SearchOption.TopDirectoryOnly);
+                        kontinue = true;
                     }
-                }
-            }
-            
-            //get any other old patches out of memory
-            patchList = new List<Patch>();
-            for (int i = 0; i < diArr.Count(); i++)
-            {
-                //set the attributes to normall
-                File.SetAttributes(diArr[i].FullName, FileAttributes.Normal);
-                //add patches to patchList
-                this.createPatchList(diArr[i].FullName);
-            }
-            args.ParrentTotalToProcess = patchList.Count;
-            args.ParrentProcessed = 0;
-            //the actual patch method
-            foreach (Patch p in patchList)
-            {
-                args.currentFile = p.file;
-                InstallWorker.ReportProgress(0);
-                //if nativeProcessingFile is not empty, it is the first entry of a new nativ xml processing file. Add a comment at the loglist, to be able to traceback the native Processing File
-                if (p.nativeProcessingFile != "") { Utils.appendToLog(string.Format("nativeProcessingFile: {0}, originalName: {1}", p.nativeProcessingFile, p.actualPatchName)); }
-                string patchFileOutput = p.file;
-                int maxLength = 200;
-                if (p.file.Length > maxLength)
-                    patchFileOutput = p.file.Substring(0, maxLength);
-                Application.DoEvents();
-                if (p.type.Equals("regx") || p.type.Equals("regex"))
-                {
-                    string temp = null;
-                    int tempp = 0;
-                    if (p.lines != null)
+                    catch (UnauthorizedAccessException e)
                     {
-                        temp = p.lines[0];
-                        tempp = int.Parse(temp);
-                    }
-                    if (p.lines == null)
-                    {
-                        //perform regex patch on entire file, line by line
-                        Utils.appendToLog("Regex patch, all lines, line by line, " + p.file + ", " + p.search + ", " + p.replace);
-                        Utils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion);
-                    }
-                    else if (p.lines.Count() == 1 && tempp == -1)
-                    {
-                        //perform regex patch on entire file, as one whole string
-                        Utils.appendToLog("Regex patch, all lines, whole file, " + p.file + ", " + p.search + ", " + p.replace);
-                        Utils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion, -1);
-                    }
-                    else
-                    {
-                        foreach (string s in p.lines)
+                        Utils.exceptionLog("PatchFiles", e);
+                        DialogResult res = MessageBox.Show(Translations.getTranslatedString("patchingSystemDeneidAccessMessage"), Translations.getTranslatedString("patchingSystemDeneidAccessHeader"), MessageBoxButtons.RetryCancel);
+                        if (res == DialogResult.Cancel)
                         {
-                            //perform regex patch on specific file lines
-                            //will need to be a standard for loop BTW
-                            Utils.appendToLog("Regex patch, line " + s + ", " + p.file + ", " + p.search + ", " + p.replace);
-                            Utils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion, int.Parse(s));
+                            Application.Exit();
                         }
                     }
                 }
-                else if (p.type.Equals("xml"))
+
+                //get any other old patches out of memory
+                patchList = new List<Patch>();
+                for (int i = 0; i < diArr.Count(); i++)
                 {
-                    //perform xml patch
-                    Utils.appendToLog("Xml patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
-                    Utils.xmlPatch(p.file, p.path, p.mode, p.search, p.replace, TanksLocation, TanksVersion);
+                    //set the attributes to normall
+                    File.SetAttributes(diArr[i].FullName, FileAttributes.Normal);
+                    //add patches to patchList
+                    this.createPatchList(diArr[i].FullName);
                 }
-                else if (p.type.Equals("json"))
+                args.ParrentTotalToProcess = patchList.Count;
+                args.ParrentProcessed = 0;
+                //the actual patch method
+                foreach (Patch p in patchList)
                 {
-                    //perform json patch
-                    Utils.appendToLog("Json patch, " + p.file + ", " + p.path + ", " + p.replace);
-                    Utils.jsonPatch(p.file, p.path, p.replace, p.mode, TanksLocation, TanksVersion);
+                    args.currentFile = p.file;
+                    InstallWorker.ReportProgress(0);
+                    //if nativeProcessingFile is not empty, it is the first entry of a new nativ xml processing file. Add a comment at the loglist, to be able to traceback the native Processing File
+                    if (p.nativeProcessingFile != "") { Utils.appendToLog(string.Format("nativeProcessingFile: {0}, originalName: {1}", p.nativeProcessingFile, p.actualPatchName)); }
+                    string patchFileOutput = p.file;
+                    int maxLength = 200;
+                    if (p.file.Length > maxLength)
+                        patchFileOutput = p.file.Substring(0, maxLength);
+                    Application.DoEvents();
+                    if (p.type.Equals("regx") || p.type.Equals("regex"))
+                    {
+                        string temp = null;
+                        int tempp = 0;
+                        if (p.lines != null)
+                        {
+                            temp = p.lines[0];
+                            tempp = int.Parse(temp);
+                        }
+                        if (p.lines == null)
+                        {
+                            //perform regex patch on entire file, line by line
+                            Utils.appendToLog("Regex patch, all lines, line by line, " + p.file + ", " + p.search + ", " + p.replace);
+                            Utils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion);
+                        }
+                        else if (p.lines.Count() == 1 && tempp == -1)
+                        {
+                            //perform regex patch on entire file, as one whole string
+                            Utils.appendToLog("Regex patch, all lines, whole file, " + p.file + ", " + p.search + ", " + p.replace);
+                            Utils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion, -1);
+                        }
+                        else
+                        {
+                            foreach (string s in p.lines)
+                            {
+                                //perform regex patch on specific file lines
+                                //will need to be a standard for loop BTW
+                                Utils.appendToLog("Regex patch, line " + s + ", " + p.file + ", " + p.search + ", " + p.replace);
+                                Utils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion, int.Parse(s));
+                            }
+                        }
+                    }
+                    else if (p.type.Equals("xml"))
+                    {
+                        //perform xml patch
+                        Utils.appendToLog("Xml patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
+                        Utils.xmlPatch(p.file, p.path, p.mode, p.search, p.replace, TanksLocation, TanksVersion);
+                    }
+                    else if (p.type.Equals("json"))
+                    {
+                        //perform json patch
+                        Utils.appendToLog("Json patch, " + p.file + ", " + p.path + ", " + p.replace);
+                        Utils.jsonPatch(p.file, p.path, p.replace, p.mode, TanksLocation, TanksVersion);
+                    }
+                    else if (p.type.Equals("xvm"))
+                    {
+                        //perform xvm style json patch
+                        Utils.appendToLog("XVM patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
+                        Utils.xvmPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
+                    }
+                    else if (p.type.Equals("pmod"))
+                    {
+                        //perform pmod/generic style json patch
+                        Utils.appendToLog("PMOD/Generic patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
+                        Utils.pmodPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
+                    }
+                    args.ParrentProcessed++;
+                    InstallWorker.ReportProgress(0);
                 }
-                else if (p.type.Equals("xvm"))
-                {
-                    //perform xvm style json patch
-                    Utils.appendToLog("XVM patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
-                    Utils.xvmPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
-                }
-                else if (p.type.Equals("pmod"))
-                {
-                    //perform pmod/generic style json patch
-                    Utils.appendToLog("PMOD/Generic patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
-                    Utils.pmodPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
-                }
-                args.ParrentProcessed++;
-                InstallWorker.ReportProgress(0);
+                //all done, delete the patch folder
+                if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
+                    Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
             }
-            //all done, delete the patch folder
-            if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
-                Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("PatchFiles","ex", ex);
+            }
         }
 
         //Step 14: Install Fonts
@@ -808,103 +998,111 @@ namespace RelhaxModpack
                     //load the font into a temporoary not loaded font collection
                     fontsList.Add(Path.GetFileName(s));
                 }
-                //removes any already installed fonts
-                for (int i = 0; i < fontsList.Count; i++)
-                {
-                    //get the name of the font
-                    string[] fontsCollection = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), @"*.*", SearchOption.TopDirectoryOnly);
-                    {
-                        //get a list of installed fonts
-                        foreach (var fontFilename in fontsCollection)
-                        {
-                            //check if the font filename is installed
-                            if (Path.GetFileName(fontFilename).ToLower().Equals(fontsList[i].ToLower()))
-                            {
-                                fontsList.RemoveAt(i);
-                                i--;
-                                break;
-                            }
-                        }
-                    }
-                }
-                //re-check the fonts to install list
-                if (fontsList.Count == 0)
-                {
-                    Utils.appendToLog("No fonts to install");
-                    //done display
-                    return;
-                }
-                Utils.appendToLog("Installing fonts: " + string.Join(", ", fontsList));
-                DialogResult dr = DialogResult.No;
-                if (Program.autoInstall)
-                {
-                    //assume rights to install
-                    dr = DialogResult.Yes;
-                }
-                else
-                {
-                    dr = MessageBox.Show(Translations.getTranslatedString("fontsPromptInstallText"), Translations.getTranslatedString("fontsPromptInstallHeader"), MessageBoxButtons.YesNo);
-                }
-                if (dr == DialogResult.Yes)
+                try
                 {
 
-                    string fontRegPath = Path.Combine(TanksLocation, "_fonts", "FontReg.exe");
-                    if (!File.Exists(fontRegPath))
+
+                    //removes any already installed fonts
+                    for (int i = 0; i < fontsList.Count; i++)
                     {
-                        if (!Program.testMode)                  // if not in testMode, the managerInfoDatFile was downloaded
+                        //get the name of the font
+                        string[] fontsCollection = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), @"*.*", SearchOption.TopDirectoryOnly);
                         {
-                            //get fontreg from the zip file
-                            using (ZipFile zip = new ZipFile(Settings.managerInfoDatFile))
+                            //get a list of installed fonts
+                            foreach (var fontFilename in fontsCollection)
                             {
-                                zip.ExtractSelectedEntries("FontReg.exe", null, Path.GetDirectoryName(fontRegPath));
-                            }
-                        }
-                        else
-                        {
-                            // in testMode, the managerInfoDatFile was NOT downloaded and that have to be done now
-                            try
-                            {
-                                using (WebClient downloader = new WebClient())
-                                downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/FontReg.exe", fontRegPath);
-                            }
-                            catch (WebException ex)
-                            {
-                                Utils.exceptionLog("InstallFonts()", "download FontReg.exe", ex);
-                                MessageBox.Show(string.Format("{0} FontReg.exe", Translations.getTranslatedString("failedToDownload_1")));
+                                //check if the font filename is installed
+                                if (Path.GetFileName(fontFilename).ToLower().Equals(fontsList[i].ToLower()))
+                                {
+                                    fontsList.RemoveAt(i);
+                                    i--;
+                                    break;
+                                }
                             }
                         }
                     }
-                    ProcessStartInfo info = new ProcessStartInfo();
-                    info.FileName = fontRegPath;
-                    info.UseShellExecute = true;
-                    info.Verb = "runas"; // Provides Run as Administrator
-                    info.Arguments = "/copy";
-                    info.WorkingDirectory = Path.Combine(TanksLocation, "_fonts");
-                    Process installFontss = new Process();
-                    installFontss.StartInfo = info;
-                    try
+                    //re-check the fonts to install list
+                    if (fontsList.Count == 0)
                     {
-                        installFontss.Start();
-                        installFontss.WaitForExit();
-                        Utils.appendToLog("FontReg.exe ExitCode: " + installFontss.ExitCode);
+                        Utils.appendToLog("No fonts to install");
+                        //done display
+                        return;
                     }
-                    catch (Exception e)
+                    Utils.appendToLog("Installing fonts: " + string.Join(", ", fontsList));
+                    DialogResult dr = DialogResult.No;
+                    if (Program.autoInstall)
                     {
-                        Utils.exceptionLog("InstallFonts", "could not start font installer", e);
-                        MessageBox.Show(Translations.getTranslatedString("fontsPromptError_1") + TanksLocation + Translations.getTranslatedString("fontsPromptError_2"));
+                        //assume rights to install
+                        dr = DialogResult.Yes;
+                    }
+                    else
+                    {
+                        dr = MessageBox.Show(Translations.getTranslatedString("fontsPromptInstallText"), Translations.getTranslatedString("fontsPromptInstallHeader"), MessageBoxButtons.YesNo);
+                    }
+                    if (dr == DialogResult.Yes)
+                    {
+
+                        string fontRegPath = Path.Combine(TanksLocation, "_fonts", "FontReg.exe");
+                        if (!File.Exists(fontRegPath))
+                        {
+                            if (!Program.testMode)                  // if not in testMode, the managerInfoDatFile was downloaded
+                            {
+                                //get fontreg from the zip file
+                                using (ZipFile zip = new ZipFile(Settings.managerInfoDatFile))
+                                {
+                                    zip.ExtractSelectedEntries("FontReg.exe", null, Path.GetDirectoryName(fontRegPath));
+                                }
+                            }
+                            else
+                            {
+                                // in testMode, the managerInfoDatFile was NOT downloaded and that have to be done now
+                                try
+                                {
+                                    using (WebClient downloader = new WebClient())
+                                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/FontReg.exe", fontRegPath);
+                                }
+                                catch (WebException ex)
+                                {
+                                    Utils.exceptionLog("InstallFonts()", "download FontReg.exe", ex);
+                                    MessageBox.Show(string.Format("{0} FontReg.exe", Translations.getTranslatedString("failedToDownload_1")));
+                                }
+                            }
+                        }
+                        ProcessStartInfo info = new ProcessStartInfo();
+                        info.FileName = fontRegPath;
+                        info.UseShellExecute = true;
+                        info.Verb = "runas"; // Provides Run as Administrator
+                        info.Arguments = "/copy";
+                        info.WorkingDirectory = Path.Combine(TanksLocation, "_fonts");
+                        Process installFontss = new Process();
+                        installFontss.StartInfo = info;
+                        try
+                        {
+                            installFontss.Start();
+                            installFontss.WaitForExit();
+                            Utils.appendToLog("FontReg.exe ExitCode: " + installFontss.ExitCode);
+                        }
+                        catch (Exception e)
+                        {
+                            Utils.exceptionLog("InstallFonts", "could not start font installer", e);
+                            MessageBox.Show(Translations.getTranslatedString("fontsPromptError_1") + TanksLocation + Translations.getTranslatedString("fontsPromptError_2"));
+                            Utils.appendToLog("Installation done, but fonts install failed");
+                            return;
+                        }
+                        Utils.appendToLog("Fonts Installed Successfully");
+                        return;
+                    }
+                    else
+                    {
                         Utils.appendToLog("Installation done, but fonts install failed");
                         return;
                     }
+                }
+                finally
+                {
                     System.Threading.Thread.Sleep(200);
                     if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
                         Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true);
-                    Utils.appendToLog("Fonts Installed Successfully");
-                    return;
-                }
-                else
-                {
-                    Utils.appendToLog("Installation done, but fonts install failed");
-                    return;
                 }
             }
             catch (Exception ex)
@@ -934,9 +1132,9 @@ namespace RelhaxModpack
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Utils.exceptionLog("ExtractUserMods", e);
+                Utils.exceptionLog("ExtractUserMods", "ex", ex);
             }
             Utils.appendToLog("Finished Relhax Modpack User Mod Extraction");
         }
@@ -946,7 +1144,7 @@ namespace RelhaxModpack
         {
             try
             {
-                string logFile = Path.Combine(TanksLocation, "installedRelhaxFiles.log");
+                string logFile = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
                 List<ShortCut> scToDoList = new List<ShortCut>();
                 using (StreamWriter sw = File.AppendText(logFile))
                 {
@@ -964,8 +1162,7 @@ namespace RelhaxModpack
                                     Utils.appendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
                                     if (File.Exists(fileTarget))
                                     {
-                                        sw.WriteLine(sc.path);
-                                        Utils.CreateShortcut(fileTarget, sc.name, true);
+                                        Utils.CreateShortcut(fileTarget, sc.name, true, true, sw);
                                     }
                                 }
                             }
@@ -983,8 +1180,7 @@ namespace RelhaxModpack
                                     Utils.appendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
                                     if (File.Exists(fileTarget))
                                     {
-                                        sw.WriteLine(sc.path);
-                                        Utils.CreateShortcut(fileTarget, sc.name, true);
+                                        Utils.CreateShortcut(fileTarget, sc.name, true, true, sw);
                                     }
                                 }
                             }
@@ -1002,8 +1198,7 @@ namespace RelhaxModpack
                                     Utils.appendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
                                     if (File.Exists(fileTarget))
                                     {
-                                        sw.WriteLine(sc.path);
-                                        Utils.CreateShortcut(fileTarget, sc.name, true);
+                                        Utils.CreateShortcut(fileTarget, sc.name, true, true, sw);
                                     }
                                 }
                             }
@@ -1021,8 +1216,7 @@ namespace RelhaxModpack
                                     Utils.appendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
                                     if (File.Exists(fileTarget))
                                     {
-                                        sw.WriteLine(sc.path);
-                                        Utils.CreateShortcut(fileTarget, sc.name, true);
+                                        Utils.CreateShortcut(fileTarget, sc.name, true, true, sw);
                                     }
                                 }
                             }
@@ -1039,162 +1233,183 @@ namespace RelhaxModpack
         //Step 15: Check the Database for outdated or no more needed files
         private void checkForOldZipFiles()
         {
-            args.ParrentTotalToProcess = 3;
-            args.ParrentProcessed = 1;
-            List<string> zipFilesList = new List<string>();
-            FileInfo[] fi = null;
             try
             {
-                File.SetAttributes(Path.Combine(Application.StartupPath, "RelHaxDownloads"), FileAttributes.Normal);
-                DirectoryInfo di = new DirectoryInfo(Path.Combine(Application.StartupPath, "RelHaxDownloads"));
-                //get every zip file in the folder
-                fi = di.GetFiles(@"*.zip", SearchOption.TopDirectoryOnly);
-            }
-            catch (Exception ex)
-            {
-                Utils.exceptionLog("checkForOldZipFiles", ex);
-                MessageBox.Show(string.Format(Translations.getTranslatedString("parseDownloadFolderFailed"), "RelHaxDownloads"));
-            }
-            args.ParrentProcessed = 2;
-            if (fi != null)
-            {
-                foreach (FileInfo f in fi)
+                args.ParrentTotalToProcess = 3;
+                args.ParrentProcessed = 1;
+                List<string> zipFilesList = new List<string>();
+                FileInfo[] fi = null;
+                try
                 {
-                    zipFilesList.Add(f.Name);
+                    File.SetAttributes(Path.Combine(Application.StartupPath, "RelHaxDownloads"), FileAttributes.Normal);
+                    DirectoryInfo di = new DirectoryInfo(Path.Combine(Application.StartupPath, "RelHaxDownloads"));
+                    //get every zip file in the folder
+                    fi = di.GetFiles(@"*.zip", SearchOption.TopDirectoryOnly);
                 }
-                //MainWindow.usedFilesList has every single possible zipFile of the modInfo database
-                //for each zipfile in it, remove it in zipFilesList if it exists
-                foreach (string s in MainWindow.usedFilesList)
+                catch (Exception ex)
                 {
-                    if (zipFilesList.Contains(s))
-                        zipFilesList.Remove(s);
+                    Utils.exceptionLog("checkForOldZipFiles", ex);
+                    MessageBox.Show(string.Format(Translations.getTranslatedString("parseDownloadFolderFailed"), "RelHaxDownloads"));
                 }
-                List<string> filesToDelete = zipFilesList;
-                string listOfFiles = "";
-                foreach (string s in filesToDelete)
-                    listOfFiles = listOfFiles + s + "\n";
-                using (OldFilesToDelete oftd = new OldFilesToDelete())
+                args.ParrentProcessed = 2;
+                if (fi != null)
                 {
-                    oftd.filesList.Text = listOfFiles;
-                    if (listOfFiles.Count() == 0)
-                        return;
-                    oftd.ShowDialog();
-                    if (oftd.result)
+                    foreach (FileInfo f in fi)
                     {
-                        args.ParrentProcessed = 3;
-                        args.ChildTotalToProcess = filesToDelete.Count;
-                        foreach (string s in filesToDelete)
+                        zipFilesList.Add(f.Name);
+                    }
+                    //MainWindow.usedFilesList has every single possible zipFile of the modInfo database
+                    //for each zipfile in it, remove it in zipFilesList if it exists
+                    foreach (string s in MainWindow.usedFilesList)
+                    {
+                        if (zipFilesList.Contains(s))
+                            zipFilesList.Remove(s);
+                    }
+                    List<string> filesToDelete = zipFilesList;
+                    string listOfFiles = "";
+                    foreach (string s in filesToDelete)
+                        listOfFiles = listOfFiles + s + "\n";
+                    using (OldFilesToDelete oftd = new OldFilesToDelete())
+                    {
+                        oftd.filesList.Text = listOfFiles;
+                        if (listOfFiles.Count() == 0)
+                            return;
+                        oftd.ShowDialog();
+                        if (oftd.result)
                         {
-                            bool retry = true;
-                            bool breakOut = false;
-                            while (retry)
+                            args.ParrentProcessed = 3;
+                            args.ChildTotalToProcess = filesToDelete.Count;
+                            foreach (string s in filesToDelete)
                             {
-                                //for each zip file, verify it exists, set properties to normal, delete it
-                                try
+                                bool retry = true;
+                                bool breakOut = false;
+                                while (retry)
                                 {
-                                    string file = Path.Combine(Application.StartupPath, "RelHaxDownloads", s);
-                                    args.currentFile = s;
-                                    File.SetAttributes(file, FileAttributes.Normal);
-                                    File.Delete(file);
-                                    // remove file from database, too
-                                    Utils.deleteMd5HashDatabase(file);
-                                    retry = false;
-                                    args.ChildProcessed++;
-                                }
-                                catch (Exception e)
-                                {
-                                    retry = true;
-                                    Utils.exceptionLog("checkForOldZipFiles", "delete", e);
-                                    DialogResult res = MessageBox.Show(string.Format("{0} {1}", Translations.getTranslatedString("fileDeleteFailed"), s), "", MessageBoxButtons.RetryCancel);
-                                    if (res == System.Windows.Forms.DialogResult.Cancel)
+                                    //for each zip file, verify it exists, set properties to normal, delete it
+                                    try
                                     {
-                                        breakOut = true;
+                                        string file = Path.Combine(Application.StartupPath, "RelHaxDownloads", s);
+                                        args.currentFile = s;
+                                        File.SetAttributes(file, FileAttributes.Normal);
+                                        File.Delete(file);
+                                        // remove file from database, too
+                                        Utils.deleteMd5HashDatabase(file);
                                         retry = false;
+                                        args.ChildProcessed++;
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        retry = true;
+                                        Utils.exceptionLog("checkForOldZipFiles", "delete", e);
+                                        DialogResult res = MessageBox.Show(string.Format("{0} {1}", Translations.getTranslatedString("fileDeleteFailed"), s), "", MessageBoxButtons.RetryCancel);
+                                        if (res == System.Windows.Forms.DialogResult.Cancel)
+                                        {
+                                            breakOut = true;
+                                            retry = false;
+                                        }
                                     }
                                 }
+                                if (breakOut)
+                                    break;
                             }
-                            if (breakOut)
-                                break;
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("checkForOldZipFiles", "ex", ex);
             }
         }
 
         //parses a patch xml file into an xml patch instance in memory to be enqueued
         private void createPatchList(string xmlFile)
         {
-            if (!File.Exists(xmlFile))
-                return;
-            XmlDocument doc = new XmlDocument();
-            doc.Load(xmlFile);
-            //loaded the xml file into memory, create an xml list of patchs
-            XmlNodeList patchesList = doc.SelectNodes("//patchs/patch");
-            // modify the xml filename for logging purpose
-            string tmpXmlFilename = Path.GetFileNameWithoutExtension(xmlFile);
-            //foreach "patch" node in the "patchs" node of the xml file
-            foreach (XmlNode n in patchesList)
+            try
             {
-                //create a patch instance to take the patch information
-                Patch p = new Patch();
-                p.actualPatchName = originalPatchNames[0];
-                p.nativeProcessingFile = tmpXmlFilename;
-                //foreach node in this specific "patch" node
-                foreach (XmlNode nn in n.ChildNodes)
+                if (!File.Exists(xmlFile))
+                    return;
+                XmlDocument doc = new XmlDocument();
+                doc.Load(xmlFile);
+                //loaded the xml file into memory, create an xml list of patchs
+                XmlNodeList patchesList = doc.SelectNodes("//patchs/patch");
+                // modify the xml filename for logging purpose
+                string tmpXmlFilename = Path.GetFileNameWithoutExtension(xmlFile);
+                //foreach "patch" node in the "patchs" node of the xml file
+                foreach (XmlNode n in patchesList)
                 {
-                    //each element in the xml gets put into the
-                    //the correcpondng attribute for the Patch instance
-                    switch (nn.Name)
+                    //create a patch instance to take the patch information
+                    Patch p = new Patch();
+                    p.actualPatchName = originalPatchNames[0];
+                    p.nativeProcessingFile = tmpXmlFilename;
+                    //foreach node in this specific "patch" node
+                    foreach (XmlNode nn in n.ChildNodes)
                     {
-                        case "type":
-                            p.type = nn.InnerText;
-                            break;
-                        case "mode":
-                            p.mode = nn.InnerText;
-                            break;
-                        case "file":
-                            p.file = nn.InnerText;
-                            break;
-                        case "path":
-                            p.path = nn.InnerText;
-                            break;
-                        case "line":
-                            if (nn.InnerText.Equals(""))
+                        //each element in the xml gets put into the
+                        //the correcpondng attribute for the Patch instance
+                        switch (nn.Name)
+                        {
+                            case "type":
+                                p.type = nn.InnerText;
                                 break;
-                            p.lines = nn.InnerText.Split(',');
-                            break;
-                        case "search":
-                            p.search = nn.InnerText;
-                            break;
-                        case "replace":
-                            p.replace = nn.InnerText;
-                            break;
+                            case "mode":
+                                p.mode = nn.InnerText;
+                                break;
+                            case "file":
+                                p.file = nn.InnerText;
+                                break;
+                            case "path":
+                                p.path = nn.InnerText;
+                                break;
+                            case "line":
+                                if (nn.InnerText.Equals(""))
+                                    break;
+                                p.lines = nn.InnerText.Split(',');
+                                break;
+                            case "search":
+                                p.search = nn.InnerText;
+                                break;
+                            case "replace":
+                                p.replace = nn.InnerText;
+                                break;
+                        }
                     }
+                    // filename only record once needed
+                    tmpXmlFilename = "";
+                    patchList.Add(p);
                 }
-                // filename only record once needed
-                tmpXmlFilename = "";
-                patchList.Add(p);
+                originalPatchNames.RemoveAt(0);
             }
-            originalPatchNames.RemoveAt(0);
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("createPatchList", "ex", ex);
+            }
         }
         //gets the total number of files to process to eithor delete or copy
-        private void NumFilesToProcess(string folder)
+        private List<string> NumFilesToProcess(string folder)
         {
-            // Get the subdirectories for the specified directory.
-            DirectoryInfo dir = new DirectoryInfo(folder);
-            DirectoryInfo[] dirs = dir.GetDirectories();
-            // Get the files in the directory
-            FileInfo[] files = dir.GetFiles();
-            foreach (FileInfo file in files)
+            List<string> list = new List<string>();
+            try
             {
-                args.ChildTotalToProcess++;
+                // Get the subdirectories for the specified directory.
+                DirectoryInfo dir = new DirectoryInfo(folder);
+                DirectoryInfo[] dirs = dir.GetDirectories();
+                // Get the files in the directory
+                FileInfo[] files = dir.GetFiles();
+                foreach (FileInfo file in files)
+                {
+                    list.Add(file.FullName);
+                    args.ChildTotalToProcess++;
+                }
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    list.Add(subdir.FullName + @"\");
+                    args.ChildTotalToProcess++;
+                    list.AddRange(NumFilesToProcess(subdir.FullName));
+                }
             }
-            foreach (DirectoryInfo subdir in dirs)
-            {
-                args.ChildTotalToProcess++;
-                NumFilesToProcess(subdir.FullName);
-            }
-            return;
+            catch { }
+            return list;
         }
         //recursivly deletes every file from one place to another
         private void DirectoryDelete(string sourceDirName, bool deleteSubDirs)
@@ -1342,7 +1557,7 @@ namespace RelhaxModpack
         {
             string thisVersion = TanksVersion;
             //create a filestream to append installed files log data
-            using (FileStream fs = new FileStream(Path.Combine(TanksLocation, "installedRelhaxFiles.log"), FileMode.Append, FileAccess.Write))
+            using (FileStream fs = new FileStream(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), FileMode.Append, FileAccess.Write))
             {
                 // create a comment with the name of the extracted and installed package, to better trace back the installation source
                 string commentLine = "/*  " + Path.GetFileNameWithoutExtension(zipFile) + "  */\n";
@@ -1386,7 +1601,7 @@ namespace RelhaxModpack
                                 originalPatchNames.Add(patchName);
                             }
                             //put the entries on disk
-                            fs.Write(Encoding.UTF8.GetBytes(zip[i].FileName + "\n"), 0, Encoding.UTF8.GetByteCount(zip[i].FileName + "\n"));
+                            fs.Write(Encoding.UTF8.GetBytes(Path.Combine(extractFolder, zip[i].FileName) + "\n"), 0, Encoding.UTF8.GetByteCount(Path.Combine(extractFolder, zip[i].FileName) + "\n"));
                         }
                         zip.ExtractProgress += Zip_ExtractProgress;
                         zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
