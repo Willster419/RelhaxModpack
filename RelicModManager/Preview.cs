@@ -153,7 +153,7 @@ namespace RelhaxModpack
         //handler for if the user changes the size of the window
         private void Preview_SizeChanged(object sender, EventArgs e)
         {
-            //previewPicture, diescriptionbox, nextpicturebutton and updatebox should all have the same size width.
+            //previewPicture, descriptionBox, nextPicButton and updateBox should all have the same size width.
             int width = this.Size.Width - 32;
             int applicationHeight = this.Size.Height;
             //do this from bottom to top
