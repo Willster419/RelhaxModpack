@@ -512,7 +512,7 @@ namespace RelhaxModpack
                 case FontSize.DPIAUTO:
                     scaleSize = Utils.getScalingFactor();
                     appScalingMode = AutoScaleMode.Dpi;
-                    float nweFontSize = 8.25F * scaleSize;
+                    float nweFontSize = fontSize100 * scaleSize;
                     float roundedanswer = (float)Math.Round(nweFontSize * 4, MidpointRounding.ToEven) / 4;
                     appFont = new Font(fontName, roundedanswer);
                     break;
