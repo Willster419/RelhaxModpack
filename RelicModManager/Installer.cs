@@ -54,7 +54,7 @@ namespace RelhaxModpack
         //the changed event (setups the hander)
         protected virtual void OnInstallProgressChanged()
         {
-            if (InstallProgressChanged != null)
+            if (InstallProgressChanged != null && args.InstalProgress != InstallerEventArgs.InstallProgress.Idle)
                 InstallProgressChanged(this, args);
         }
         
