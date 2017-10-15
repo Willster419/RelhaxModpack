@@ -772,7 +772,7 @@ namespace RelhaxModpack
                 Utils.appendToLog(string.Format("Version selected: {0}  OnlineFolder: {1}", tanksVersion, Settings.tanksOnlineFolderVersion));
             }
             //if the user wants to, check if the database has actually changed
-            if (Settings.NotifyIfSameDatabase && SameDatabaseVersions())
+            if (SameDatabaseVersions() && Settings.NotifyIfSameDatabase)        // the get the string databaseVersionString filles in any case, the function must be performed first!
             {
                 if (MessageBox.Show(Translations.getTranslatedString("DatabaseVersionsSameBody"), Translations.getTranslatedString("DatabaseVersionsSameHeader"), MessageBoxButtons.YesNo) == DialogResult.No)
                 {
