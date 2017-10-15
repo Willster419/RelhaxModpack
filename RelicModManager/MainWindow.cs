@@ -9,10 +9,9 @@ using System.Windows.Forms;
 using System.Xml;
 using Microsoft.Win32;
 using System.Drawing;
-using System.Globalization;
 using System.Xml.XPath;
 using System.Xml.Linq;
-using System.Text;
+
 
 namespace RelhaxModpack
 {
@@ -108,6 +107,7 @@ namespace RelhaxModpack
               ControlStyles.UserPaint |
               ControlStyles.DoubleBuffer, true);
         }
+
         //handler for the mod download file progress
         void downloader_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
@@ -1614,7 +1614,7 @@ namespace RelhaxModpack
             //set the previous for the last amount of bytes downloaded
             previousTotalBytesDownloaded = currentTotalBytesDownloaded;
         }
-        //toggle UI buttons to be enalbed or disabled
+        //toggle UI buttons to be enabled or disabled
         private void toggleUIButtons(bool enableToggle)
         {
             forceManuel.Enabled = enableToggle;
@@ -1626,6 +1626,7 @@ namespace RelhaxModpack
             darkUICB.Enabled = enableToggle;
             saveUserDataCB.Enabled = enableToggle;
             saveLastInstallCB.Enabled = enableToggle;
+            /*
             fontSize100.Enabled = enableToggle;
             fontSize125.Enabled = enableToggle;
             fontSize175.Enabled = enableToggle;
@@ -1636,12 +1637,49 @@ namespace RelhaxModpack
             DPI175.Enabled = enableToggle;
             DPI225.Enabled = enableToggle;
             DPI275.Enabled = enableToggle;
+            */
+            toggleScaleRBs(enableToggle);
             DPIAUTO.Enabled = enableToggle;
             clearCacheCB.Enabled = enableToggle;
             clearLogFilesCB.Enabled = enableToggle;
             notifyIfSameDatabaseCB.Enabled = enableToggle;
             ShowInstallCompleteWindowCB.Enabled = enableToggle;
         }
+
+        public void toggleScaleRBs(bool enableToggle)
+        {
+            float[] scales = new float[] { Settings.scale100, Settings.scale125, Settings.scale175, Settings.scale225, Settings.scale275 };
+            System.Windows.Forms.RadioButton[,] radioButtons = new System.Windows.Forms.RadioButton[,] { { fontSize100, DPI100 }, { fontSize125, DPI125 }, { fontSize175, DPI175 }, { fontSize225, DPI225 }, { fontSize275, DPI275 } };
+            for (int i = 0; i < scales.Count(); i++)
+            {
+                float floatHeight = (float)this.Size.Height * scales[i];
+                float floatWidth = (float)this.Size.Width * scales[i];
+                radioButtons[i, 0].Enabled = CheckMainWindowSizeToMonitorSize((int)floatHeight, (int)floatWidth) && enableToggle;
+                radioButtons[i, 1].Enabled = radioButtons[i, 0].Enabled;
+            }
+        }
+
+        private bool CheckMainWindowSizeToMonitorSize(int intHeight, int intWidth)              // https://stackoverflow.com/questions/254197/how-can-i-get-the-active-screen-dimensions
+        {
+            var hwnd = this.Handle;
+            var monitor = NativeMethods.MonitorFromWindow(hwnd, NativeMethods.MONITOR_DEFAULTTONEAREST);
+
+            if (monitor != IntPtr.Zero)
+            {
+                var monitorInfo = new NativeMethods.NativeMonitorInfo();
+                NativeMethods.GetMonitorInfo(monitor, monitorInfo);
+                // var left = monitorInfo.Monitor.Left;
+                // var top = monitorInfo.Monitor.Top;
+                var width = (monitorInfo.Monitor.Right - monitorInfo.Monitor.Left);
+                var height = (monitorInfo.Monitor.Bottom - monitorInfo.Monitor.Top);
+                return (intHeight < height && intWidth < width);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         //Checks if the current database version is the same as the database version last installed into the selected World_of_Tanks directory
         private bool SameDatabaseVersions()
         {
@@ -2200,6 +2238,7 @@ namespace RelhaxModpack
                 this.AutoScaleMode = Settings.appScalingMode;
                 //get new font
                 this.Font = Settings.appFont;
+                toggleScaleRBs(true);
             }
         }
 
@@ -2221,6 +2260,7 @@ namespace RelhaxModpack
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
                 this.Font = Settings.appFont;
+                toggleScaleRBs(true);
             }
         }
 
@@ -2242,6 +2282,7 @@ namespace RelhaxModpack
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
                 this.Font = Settings.appFont;
+                toggleScaleRBs(true);
             }
         }
 
@@ -2263,6 +2304,7 @@ namespace RelhaxModpack
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
                 this.Font = Settings.appFont;
+                toggleScaleRBs(true);
             }
         }
 
@@ -2284,6 +2326,7 @@ namespace RelhaxModpack
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
                 this.Font = Settings.appFont;
+                toggleScaleRBs(true);
             }
         }
 
@@ -2301,10 +2344,11 @@ namespace RelhaxModpack
                 Settings.fontSizeforum = Settings.FontSize.DPI100;
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
-                float temp = 1.0f / scale;
+                float temp = Settings.scale100 / scale;
                 this.Scale(new SizeF(temp, temp));
-                scale = 1.0f;
+                scale = Settings.scale100;
                 this.Font = Settings.appFont;
+                toggleScaleRBs(true);
             }
         }
 
@@ -2322,10 +2366,11 @@ namespace RelhaxModpack
                 Settings.fontSizeforum = Settings.FontSize.DPI125;
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
-                float temp = 1.25f / scale;
+                float temp = Settings.scale125 / scale;
                 this.Scale(new SizeF(temp, temp));
-                scale = 1.25f;
+                scale = Settings.scale125;
                 this.Font = Settings.appFont;
+                toggleScaleRBs(true);
             }
         }
 
@@ -2343,10 +2388,11 @@ namespace RelhaxModpack
                 Settings.fontSizeforum = Settings.FontSize.DPI175;
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
-                this.Font = Settings.appFont;
                 float temp = Settings.scale175 / scale;
                 this.Scale(new SizeF(temp, temp));
                 scale = Settings.scale175;
+                this.Font = Settings.appFont;
+                toggleScaleRBs(true);
             }
         }
 
@@ -2364,10 +2410,11 @@ namespace RelhaxModpack
                 Settings.fontSizeforum = Settings.FontSize.DPI225;
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
-                this.Font = Settings.appFont;
                 float temp = Settings.scale225 / scale;
                 this.Scale(new SizeF(temp, temp));
                 scale = Settings.scale225;
+                this.Font = Settings.appFont;
+                toggleScaleRBs(true);
             }
         }
 
@@ -2385,10 +2432,11 @@ namespace RelhaxModpack
                 Settings.fontSizeforum = Settings.FontSize.DPI275;
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
-                this.Font = Settings.appFont;
                 float temp = Settings.scale275 / scale;
                 this.Scale(new SizeF(temp, temp));
                 scale = Settings.scale275;
+                this.Font = Settings.appFont;
+                toggleScaleRBs(true);
             }
         }
 
@@ -2406,10 +2454,11 @@ namespace RelhaxModpack
                 Settings.fontSizeforum = Settings.FontSize.DPIAUTO;
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
-                this.Font = Settings.appFont;
                 float temp = Settings.scaleSize / scale;
                 this.Scale(new SizeF(temp, temp));
                 scale = Settings.scaleSize;
+                this.Font = Settings.appFont;
+                toggleScaleRBs(true);
             }
         }
 
