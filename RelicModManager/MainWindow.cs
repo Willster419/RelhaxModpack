@@ -75,6 +75,8 @@ namespace RelhaxModpack
         List<string> supportedVersions = new List<string>();
         List<DatabaseObject> modsConfigsWithData;
         private float scale = 1.0f;
+        public static float originalMainWindowHeight { get; set; }
+        public static float originalMainWindowWidth { get; set; }
 
         //  interpret the created CiInfo buildTag as an "us-US" or a "de-DE" timeformat and return it as a local time- and dateformat string
         public static string compileTime()//if getting build error, check windows date and time format settings https://puu.sh/xgCqO/e97e2e4a34.png
@@ -106,6 +108,9 @@ namespace RelhaxModpack
               ControlStyles.AllPaintingInWmPaint |
               ControlStyles.UserPaint |
               ControlStyles.DoubleBuffer, true);
+            originalMainWindowHeight = this.Size.Height;
+            originalMainWindowWidth = this.Size.Width;
+
         }
 
         //handler for the mod download file progress
@@ -1649,11 +1654,11 @@ namespace RelhaxModpack
         public void toggleScaleRBs(bool enableToggle)
         {
             float[] scales = new float[] { Settings.scale100, Settings.scale125, Settings.scale175, Settings.scale225, Settings.scale275 };
-            System.Windows.Forms.RadioButton[,] radioButtons = new System.Windows.Forms.RadioButton[,] { { fontSize100, DPI100 }, { fontSize125, DPI125 }, { fontSize175, DPI175 }, { fontSize225, DPI225 }, { fontSize275, DPI275 } };
+            RadioButton[,] radioButtons = new RadioButton[,] { { fontSize100, DPI100 }, { fontSize125, DPI125 }, { fontSize175, DPI175 }, { fontSize225, DPI225 }, { fontSize275, DPI275 } };
             for (int i = 0; i < scales.Count(); i++)
             {
-                float floatHeight = (float)this.Size.Height * scales[i];
-                float floatWidth = (float)this.Size.Width * scales[i];
+                float floatHeight = originalMainWindowHeight * scales[i];
+                float floatWidth = originalMainWindowWidth * scales[i];
                 radioButtons[i, 0].Enabled = CheckMainWindowSizeToMonitorSize((int)floatHeight, (int)floatWidth) && enableToggle;
                 radioButtons[i, 1].Enabled = radioButtons[i, 0].Enabled;
             }
