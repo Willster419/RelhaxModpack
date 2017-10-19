@@ -321,6 +321,7 @@ namespace RelhaxModpack
                 this.Close();
             }
 
+            // part/idea of a new batch script if previous download/update failed https://stackoverflow.com/questions/4619088/windows-batch-file-file-download-from-a-url
             string newExeName = Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat");
             try
             {

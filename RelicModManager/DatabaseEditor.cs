@@ -273,7 +273,7 @@ namespace RelhaxModpack
                     SelectedGlobalDependency.dependencyZipCRC = "f";
                     SelectedGlobalDependency.dependencyZipFile = ObjectZipFileTB.Text;
                     SelectedGlobalDependency.timestamp = Utils.getCurrentUniversalFiletimeTimestamp();
-                    ObjectLastUpdatedLabel.Text = string.Format("Last updated: {0}", Utils.convertFiletimeTimestampToDate(SelectedGlobalDependency.timestamp));
+                    ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.convertFiletimeTimestampToDate(SelectedGlobalDependency.timestamp));
                 }
                 SelectedGlobalDependency.enabled = ObjectEnabledCheckBox.Checked;
                 SelectedGlobalDependency.appendExtraction = ObjectAppendExtractionCB.Checked;
