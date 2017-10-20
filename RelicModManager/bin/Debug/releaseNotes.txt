@@ -1,3 +1,12 @@
+Version 26.5.0:
+https://www.virustotal.com/#/file/63cef9049d62eabb5326ed5fbc7089796f35f3839d99ef7c3377bd6b0f04e0c3/detection
+-Fixed bugs with font install system
+-Added new feature. Application can now create desktop shortcuts for mods that are actually external programs
+-Fixed bug with OMC legacy view, when unchecking a mod, child configs would not be unchecked
+-Added feature for display scaling. If the new scaling would make the application larger than the screen size, it disables that option. It prevents you from accidentally setting a scale wayyy to large. Excludes DPI Auto option
+-Fixed other bugs
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 26.4.2:
 https://www.virustotal.com/#/file/7c29738759b4a0701a9fc9eff88b18ab4e1ed8c14d507f6c389bb8cf494dde8f/detection
 -Fixed bug in ModSelectionList where either an incorrect or no preview would be shown for items of dropDown type
