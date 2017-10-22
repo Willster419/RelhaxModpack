@@ -477,7 +477,10 @@ namespace RelhaxModpack
             }
             //if it failed to parse show the message (above) and pull out
             if (root == null)
+            {
+                Utils.AppendToLog(string.Format("ERROR: Failed to patch {0}", jsonFile));
                 return;
+            }
             if (mode == null || mode.Equals("") || mode.Equals("edit") || mode.Equals("arrayEdit"))
             {
                 //the actual patch method
