@@ -89,10 +89,10 @@ namespace RelhaxModpack
         public static void loadSettings()
         {
             Settings.firstLoad = false;
-            Utils.appendToLog("Loading application settings");
+            Utils.AppendToLog("Loading application settings");
             if (!File.Exists(settingsXmlFile))
             {
-                Utils.appendToLog("WARNING:Settings xml not found, loading defaults");
+                Utils.AppendToLog("WARNING:Settings xml not found, loading defaults");
                 //could also use this to determine if first load or not
                 Settings.comicSans = false;
                 Settings.backupModFolder = false;
@@ -106,7 +106,7 @@ namespace RelhaxModpack
                 Settings.clearCache = false;
                 Settings.disableBorders = false;
                 Settings.NotifyIfSameDatabase = false;
-                Utils.appendToLog("Language: " + CultureInfo.CurrentCulture.DisplayName);
+                Utils.AppendToLog("Language: " + CultureInfo.CurrentCulture.DisplayName);
                 string lang = CultureInfo.InstalledUICulture.Name.Split('-')[0];
                 if (lang.ToLower().Equals("de"))
                 {
@@ -142,7 +142,7 @@ namespace RelhaxModpack
             }
             else
             {
-                Utils.appendToLog("Loading xml file");
+                Utils.AppendToLog("Loading xml file");
                 XmlDocument doc = new XmlDocument();
                 doc.Load(settingsXmlFile);
                 XmlNodeList settingsList = doc.ChildNodes[0].ChildNodes;
@@ -226,7 +226,7 @@ namespace RelhaxModpack
                 }
             }
             Settings.applyInternalSettings();
-            Utils.appendToLog("Settings loaded sucessfully");
+            Utils.AppendToLog("Settings loaded sucessfully");
         }
         //apply internal settings (font name, size, loading gif)
         //based on the boolean settings from above
@@ -325,7 +325,7 @@ namespace RelhaxModpack
         //saves settings to xml file
         public static void saveSettings()
         {
-            Utils.appendToLog("Saving application settings");
+            Utils.AppendToLog("Saving application settings");
             if (File.Exists(settingsXmlFile)) File.Delete(settingsXmlFile);
             XmlDocument doc = new XmlDocument();
             XmlElement settingsHolder = doc.CreateElement("settings");
@@ -419,7 +419,7 @@ namespace RelhaxModpack
             settingsHolder.AppendChild(customModInfoPath); 
 
             doc.Save(settingsXmlFile);
-            Utils.appendToLog("Settings saved sucessfully");
+            Utils.AppendToLog("Settings saved sucessfully");
         }
         //returns the loading image for the picture viewer, based on
         //which loading image the user specified
@@ -509,7 +509,7 @@ namespace RelhaxModpack
                     appFont = new Font(fontName, fontSize275);
                     break;
                 case FontSize.DPIAUTO:
-                    scaleSize = Utils.getScalingFactor();
+                    scaleSize = Utils.GetScalingFactor();
                     appScalingMode = AutoScaleMode.Dpi;
                     float nweFontSize = fontSize100 * scaleSize;
                     float roundedanswer = (float)Math.Round(nweFontSize * 4, MidpointRounding.ToEven) / 4;

@@ -55,7 +55,7 @@ namespace RelhaxModpack
                     return;
                 }
             }
-            Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
+            Utils.AppendToLog("|------------------------------------------------------------------------------------------------|");
         }
         //hook into the database editor loading
         private void DatabaseEditor_Load(object sender, EventArgs e)
@@ -272,8 +272,8 @@ namespace RelhaxModpack
                 {
                     SelectedGlobalDependency.dependencyZipCRC = "f";
                     SelectedGlobalDependency.dependencyZipFile = ObjectZipFileTB.Text;
-                    SelectedGlobalDependency.timestamp = Utils.getCurrentUniversalFiletimeTimestamp();
-                    ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.convertFiletimeTimestampToDate(SelectedGlobalDependency.timestamp));
+                    SelectedGlobalDependency.timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
+                    ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedGlobalDependency.timestamp));
                 }
                 SelectedGlobalDependency.enabled = ObjectEnabledCheckBox.Checked;
                 SelectedGlobalDependency.appendExtraction = ObjectAppendExtractionCB.Checked;
@@ -290,8 +290,8 @@ namespace RelhaxModpack
                 {
                     SelectedDependency.dependencyZipCRC = "f";
                     SelectedDependency.dependencyZipFile = ObjectZipFileTB.Text;
-                    SelectedDependency.timestamp = Utils.getCurrentUniversalFiletimeTimestamp();
-                    ObjectLastUpdatedLabel.Text = string.Format("Last updated: {0}", Utils.convertFiletimeTimestampToDate(SelectedDependency.timestamp));
+                    SelectedDependency.timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
+                    ObjectLastUpdatedLabel.Text = string.Format("Last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedDependency.timestamp));
                 }
                 SelectedDependency.enabled = ObjectEnabledCheckBox.Checked;
                 SelectedDependency.appendExtraction = ObjectAppendExtractionCB.Checked;
@@ -308,8 +308,8 @@ namespace RelhaxModpack
                 {
                     SelectedLogicalDependency.dependencyZipCRC = "f";
                     SelectedLogicalDependency.dependencyZipFile = ObjectZipFileTB.Text;
-                    SelectedLogicalDependency.timestamp = Utils.getCurrentUniversalFiletimeTimestamp();
-                    ObjectLastUpdatedLabel.Text = string.Format("Last updated: {0}", Utils.convertFiletimeTimestampToDate(SelectedLogicalDependency.timestamp));
+                    SelectedLogicalDependency.timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
+                    ObjectLastUpdatedLabel.Text = string.Format("Last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedLogicalDependency.timestamp));
                 }
                 SelectedLogicalDependency.enabled = ObjectEnabledCheckBox.Checked;
                 LogicalDependencies[index] = SelectedLogicalDependency;
@@ -354,8 +354,8 @@ namespace RelhaxModpack
                     {
                         m.crc = "f";
                         m.zipFile = ObjectZipFileTB.Text;
-                        m.timestamp = Utils.getCurrentUniversalFiletimeTimestamp();
-                        ObjectLastUpdatedLabel.Text = string.Format("Last updated: {0}", Utils.convertFiletimeTimestampToDate(m.timestamp));
+                        m.timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
+                        ObjectLastUpdatedLabel.Text = string.Format("Last updated: {0}", Utils.ConvertFiletimeTimestampToDate(m.timestamp));
                     }
                     m.devURL = ObjectDevURLTB.Text;
                     m.version = ObjectVersionTB.Text;
@@ -387,8 +387,8 @@ namespace RelhaxModpack
                         {
                             cfg.crc = "f";
                             cfg.zipFile = ObjectZipFileTB.Text;
-                            cfg.timestamp = Utils.getCurrentUniversalFiletimeTimestamp();
-                            ObjectLastUpdatedLabel.Text = string.Format("Last updated: {0}", Utils.convertFiletimeTimestampToDate(cfg.timestamp));
+                            cfg.timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
+                            ObjectLastUpdatedLabel.Text = string.Format("Last updated: {0}", Utils.ConvertFiletimeTimestampToDate(cfg.timestamp));
                         }
                         cfg.devURL = ObjectDevURLTB.Text;
                         cfg.version = ObjectVersionTB.Text;
@@ -616,7 +616,7 @@ namespace RelhaxModpack
                     ObjectVersionTB.Enabled = false;
 
                     if (node.GlobalDependency.timestamp > 0)
-                        ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.convertFiletimeTimestampToDate(node.GlobalDependency.timestamp));
+                        ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(node.GlobalDependency.timestamp));
                     else
                         ObjectLastUpdatedLabel.Text = "last updated: (none)";
 
@@ -668,7 +668,7 @@ namespace RelhaxModpack
                     ObjectVersionTB.Enabled = false;
 
                     if (SelectedDependency.timestamp > 0)
-                        ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.convertFiletimeTimestampToDate(SelectedDependency.timestamp));
+                        ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedDependency.timestamp));
                     else
                         ObjectLastUpdatedLabel.Text = "last updated: (none)";
 
@@ -741,7 +741,7 @@ namespace RelhaxModpack
                     ObjectVersionTB.Enabled = false;
 
                     if (SelectedLogicalDependency.timestamp > 0)
-                        ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.convertFiletimeTimestampToDate(SelectedLogicalDependency.timestamp));
+                        ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedLogicalDependency.timestamp));
                     else
                         ObjectLastUpdatedLabel.Text = "last updated: (none)";
 
@@ -804,7 +804,7 @@ namespace RelhaxModpack
                     ObjectVersionTB.Text = SelectedDatabaseObject.version;
 
                     if (SelectedDatabaseObject.timestamp > 0)
-                        ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.convertFiletimeTimestampToDate(SelectedDatabaseObject.timestamp));
+                        ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedDatabaseObject.timestamp));
                     else
                         ObjectLastUpdatedLabel.Text = "last updated: (none)";
 
@@ -957,7 +957,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("DatabaseTreeView_NodeMouseClick", ex);
+                Utils.ExceptionLog("DatabaseTreeView_NodeMouseClick", ex);
                 MessageBox.Show("Exception at DatabaseTreeView_NodeMouseClick()", "CRITICAL", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
             }
@@ -1636,7 +1636,7 @@ namespace RelhaxModpack
         {
             if (MessageBox.Show("Confirm you wish to move picture in list", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
-            int index = Utils.parseInt(MovePictureTB.Text, -1);
+            int index = Utils.ParseInt(MovePictureTB.Text, -1);
             if (index == -1)
             {
                 MessageBox.Show("Invalid index in move to position");
@@ -1668,7 +1668,7 @@ namespace RelhaxModpack
                 MessageBox.Show("Invalid entry in Picture Type");
                 return;
             }
-            int index = Utils.parseInt(AddPictureTB.Text, -1);
+            int index = Utils.ParseInt(AddPictureTB.Text, -1);
             if (index == -1)
             {
                 MessageBox.Show("Invalid index in add at positon");
@@ -1829,7 +1829,7 @@ namespace RelhaxModpack
                 return;
             ShortCut sc = new ShortCut();
             sc.path = ObjectShortcutTB.Text;
-            sc.name = Utils.getValidFilename(ObjectShortcutNameTB.Text);
+            sc.name = Utils.GetValidFilename(ObjectShortcutNameTB.Text);
             sc.enabled = ObjectShortcutCB.Checked;
             ObjectShortcutList.DataSource = null;
             ObjectShortcutList.Items.Clear();
@@ -1874,7 +1874,7 @@ namespace RelhaxModpack
             if (MessageBox.Show("Confirm you wish to edit shortcut entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             sc.path = ObjectShortcutTB.Text;
-            sc.name = Utils.getValidFilename(ObjectShortcutNameTB.Text);
+            sc.name = Utils.GetValidFilename(ObjectShortcutNameTB.Text);
             sc.enabled = ObjectShortcutCB.Checked;
             ObjectShortcutList.DataSource = null;
             ObjectShortcutList.Items.Clear();

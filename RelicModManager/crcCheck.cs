@@ -34,7 +34,7 @@ namespace RelhaxModpack
 
         private void CRCCheck_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
+            Utils.AppendToLog("|------------------------------------------------------------------------------------------------|");
         }
     }
 }

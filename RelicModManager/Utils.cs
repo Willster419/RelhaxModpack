@@ -22,7 +22,7 @@ namespace RelhaxModpack
         private static int iTrimmedLogLength = -300000; // minimum of how much of the old log to leave
         private static object _locker = new object();
         //logs string info to the log output
-        public static void appendToLog(string info)
+        public static void AppendToLog(string info)
         {
             lock (_locker)              // avoid that 2 or more threads calling the Log function and writing lines in a mess
             {
@@ -34,11 +34,11 @@ namespace RelhaxModpack
                 }
                 //if the info text is containing any linefeed/carrieage return, intend the next line with 26 space char
                 info = info.Replace("\n", "\n" + string.Concat(Enumerable.Repeat(" ", 26)));
-                writeToFile(filePath, string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}   {1}", DateTime.Now, info));
+                WriteToFile(filePath, string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}   {1}", DateTime.Now, info));
             }
         }
         // https://stackoverflow.com/questions/4741037/keeping-log-files-under-a-certain-size
-        static public void writeToFile(string strFile, string strNewLogMessage)
+        static public void WriteToFile(string strFile, string strNewLogMessage)
         {
             try
             {
@@ -108,11 +108,11 @@ namespace RelhaxModpack
         /// </summary>
         /// <param objectName="option">only a Name of the object as an information at the logfile</param>
         /// <param n=object>the object itself that should be printed</param>
-        public static void dumpObjectToLog(string objectName, object n)
+        public static void DumpObjectToLog(string objectName, object n)
         {
             lock (_locker)              // avoid that 2 or more threads calling the Log function and writing lines in a mess
             {
-                Utils.appendToLog(String.Format("----- dump of object {0} ------", objectName));
+                Utils.AppendToLog(String.Format("----- dump of object {0} ------", objectName));
                 foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(n))
                 {
                     string name = descriptor.Name;
@@ -121,27 +121,27 @@ namespace RelhaxModpack
                         value = "(null)";
                     else if (value is string && value.ToString().Trim().Equals(""))
                         value = "(string with lenght 0)";
-                    Utils.appendToLog(string.Format("{0}={1}", name, value));
+                    Utils.AppendToLog(string.Format("{0}={1}", name, value));
                 }
-                Utils.appendToLog("----- end of dump ------");
+                Utils.AppendToLog("----- end of dump ------");
             }
         }
         /// <summary>
         /// default logging function of exception informations, possible to expand the cxception Group with his own needed informations of the specific exception
         /// </summary>
         /// <param e=Exception>the exception object that would be catched</param>
-        public static void exceptionLog(Exception e)
+        public static void ExceptionLog(Exception e)
         {
-            Utils.exceptionLog("", "", e);
+            Utils.ExceptionLog("", "", e);
         }
         /// <summary>
         /// default logging function of exception informations, possible to expand the cxception Group with his own needed informations of the specific exception
         /// </summary>
         /// <param msg=string>the name of the function or other unified informations to traceback the point of exception</param>
         /// <param e=Exception>the exception object that would be catched</param>
-        public static void exceptionLog(string msg, Exception e)
+        public static void ExceptionLog(string msg, Exception e)
         {
-            Utils.exceptionLog(msg, "", e);
+            Utils.ExceptionLog(msg, "", e);
         }
         /// <summary>
         /// default logging function of exception informations, possible to expand the cxception Group with his own needed informations of the specific exception              https://msdn.microsoft.com/de-de/library/system.exception.data(v=vs.110).aspx
@@ -149,7 +149,7 @@ namespace RelhaxModpack
         /// <param msg=string>the name of the function or other unified informations to traceback the point of exception</param>
         /// <param info=string>more informations of the function that throw the exception</param>
         /// <param e=Exception>the exception object that would be catched</param>
-        public static void exceptionLog(string msgString, string infoString, Exception e)
+        public static void ExceptionLog(string msgString, string infoString, Exception e)
         {
             // increase error Counter by every call of this function
             MainWindow.errorCounter++;
@@ -210,7 +210,7 @@ namespace RelhaxModpack
                 string msg = "";
                 try { msg += string.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}", msgHeader, info, type, exception, stackTrace, message, source, targetSite, innerException, data); } catch { };
                 try { msg += "----------------------------"; } catch { };
-                Utils.appendToLog(msg);
+                Utils.AppendToLog(msg);
             }
         }
         //returns the md5 hash of the file based on the input file string location
@@ -237,7 +237,7 @@ namespace RelhaxModpack
             return sBuilder.ToString();
         }
 
-        public static bool parseBool(string input, bool defaultValue)
+        public static bool ParseBool(string input, bool defaultValue)
         {
             bool returnVal;
             try
@@ -251,7 +251,7 @@ namespace RelhaxModpack
             return returnVal;
         }
 
-        public static int parseInt(string input, int defaultValue)
+        public static int ParseInt(string input, int defaultValue)
         {
             int returnVal;
             try
@@ -265,7 +265,7 @@ namespace RelhaxModpack
             return returnVal;
         }
 
-        public static float parseFloat(string input, float defaultValue)
+        public static float ParseFloat(string input, float defaultValue)
         {
             float returnVal;
             try
@@ -281,14 +281,14 @@ namespace RelhaxModpack
 
         public class CheckStorage
         {
-            public string packageName { get; set; }
-            public string zipFile { get; set; }
-            public bool dependency { get; set; }
+            public string PackageName { get; set; }
+            public string ZipFile { get; set; }
+            public bool Dependency { get; set; }
             public int CheckDatabaseListIndex { get; set; }
             public CheckStorage() { }
         }
 
-        public static void duplicatesPackageName_dependencyCheck(List<Dependency> dependencyList, List<CheckStorage> checkStorageList, ref int duplicatesCounter)
+        public static void DuplicatesPackageName_dependencyCheck(List<Dependency> dependencyList, List<CheckStorage> checkStorageList, ref int duplicatesCounter)
         {
             foreach (Dependency d in dependencyList)
             {
@@ -297,16 +297,16 @@ namespace RelhaxModpack
                     // if both s.CheckDatabaseListIndex AND m.CheckDatabaseListIndex are equal, it is checking his own entry, so SKIP EVERY check/test
                     // if the s.dependency is FALSE, it is a single mod/config and should only exists once, if not => error/duplicate message
                     // if the s.dependency is TRUE, it is a dependecy entry and packageName AND zipFile must be checken if equal, if not => error/duplicate message
-                    if (s.CheckDatabaseListIndex != d.CheckDatabaseListIndex && ((s.packageName.Equals(d.packageName) && !(s.dependency)) || (s.dependency && s.packageName.Equals(d.packageName) && !s.zipFile.Equals(d.dependencyZipFile))))
+                    if (s.CheckDatabaseListIndex != d.CheckDatabaseListIndex && ((s.PackageName.Equals(d.packageName) && !(s.Dependency)) || (s.Dependency && s.PackageName.Equals(d.packageName) && !s.ZipFile.Equals(d.dependencyZipFile))))
                     {
-                        Utils.appendToLog(string.Format("Error: duplicate packageName \"{0}\" found. zipFile: \"{1}\"", s.packageName, s.zipFile));
+                        Utils.AppendToLog(string.Format("Error: duplicate packageName \"{0}\" found. zipFile: \"{1}\"", s.PackageName, s.ZipFile));
                         duplicatesCounter++;
                     }
                 }
             }
         }
 
-        public static void duplicatesPackageName_RecursiveSubConfigCheck(List<Config> subConfigList, List<CheckStorage> checkStorageList, ref int duplicatesCounter)
+        public static void DuplicatesPackageName_RecursiveSubConfigCheck(List<Config> subConfigList, List<CheckStorage> checkStorageList, ref int duplicatesCounter)
         {
             foreach (Config c in subConfigList)
             {
@@ -315,47 +315,47 @@ namespace RelhaxModpack
                     // if both s.CheckDatabaseListIndex AND m.CheckDatabaseListIndex are equal, it is checking his own entry, so SKIP EVERY check/test
                     // if the s.dependency is FALSE, it is a single mod/config and should only exists once, if not => error/duplicate message
                     // if the s.dependency is TRUE, it is a dependecy entry and packageName AND zipFile must be checken if equal, if not => error/duplicate message
-                    if (s.CheckDatabaseListIndex != c.CheckDatabaseListIndex && ((s.packageName.Equals(c.packageName) && !(s.dependency)) || (s.dependency && s.packageName.Equals(c.packageName) && !s.zipFile.Equals(c.zipFile))))
+                    if (s.CheckDatabaseListIndex != c.CheckDatabaseListIndex && ((s.PackageName.Equals(c.packageName) && !(s.Dependency)) || (s.Dependency && s.PackageName.Equals(c.packageName) && !s.ZipFile.Equals(c.zipFile))))
                     {
-                        Utils.appendToLog(string.Format("Error: duplicate packageName \"{0}\" found. zipFile: \"{1}\"", s.packageName, s.zipFile));
+                        Utils.AppendToLog(string.Format("Error: duplicate packageName \"{0}\" found. zipFile: \"{1}\"", s.PackageName, s.ZipFile));
                         duplicatesCounter++;
                     }
                 }
                 if (c.configs.Count > 0)
                 {
-                    duplicatesPackageName_RecursiveSubConfigCheck(c.configs, checkStorageList, ref duplicatesCounter);
+                    DuplicatesPackageName_RecursiveSubConfigCheck(c.configs, checkStorageList, ref duplicatesCounter);
                 }
             }
         }
 
-        public static void duplicatesPackageName_dependencyRead(ref List<Dependency> dependencyList, ref List<CheckStorage> checkStorageList)
+        public static void DuplicatesPackageName_dependencyRead(ref List<Dependency> dependencyList, ref List<CheckStorage> checkStorageList)
         {
             foreach (Dependency d in dependencyList)
             {
                 CheckStorage cs = new CheckStorage();
-                cs.packageName = d.packageName;
-                cs.zipFile = d.dependencyZipFile;
-                cs.dependency = true;
+                cs.PackageName = d.packageName;
+                cs.ZipFile = d.dependencyZipFile;
+                cs.Dependency = true;
                 cs.CheckDatabaseListIndex = checkStorageList.Count;
                 d.CheckDatabaseListIndex = cs.CheckDatabaseListIndex;
                 checkStorageList.Add(cs);
             }
         }
 
-        public static void duplicatesPackageName_RecursiveSubConfigRead(ref List<Config> subConfigList, ref List<CheckStorage> checkStorageList)
+        public static void DuplicatesPackageName_RecursiveSubConfigRead(ref List<Config> subConfigList, ref List<CheckStorage> checkStorageList)
         {
             foreach (Config c in subConfigList)
             {
                 CheckStorage cs = new CheckStorage();
-                cs.packageName = c.packageName;
-                cs.zipFile = c.zipFile;
-                cs.dependency = false;
+                cs.PackageName = c.packageName;
+                cs.ZipFile = c.zipFile;
+                cs.Dependency = false;
                 cs.CheckDatabaseListIndex = checkStorageList.Count;
                 c.CheckDatabaseListIndex = cs.CheckDatabaseListIndex;
                 checkStorageList.Add(cs);
                 if (c.configs.Count > 0)
                 {
-                    duplicatesPackageName_RecursiveSubConfigRead(ref c.configs, ref checkStorageList);
+                    DuplicatesPackageName_RecursiveSubConfigRead(ref c.configs, ref checkStorageList);
                 }
                 if (c.dependencies.Count > 0)
                 {
@@ -364,7 +364,7 @@ namespace RelhaxModpack
             }
         }
         //checks for duplicate packageName
-        public static bool duplicatesPackageName(List<Category> parsedCatagoryList, ref int duplicatesCounter)
+        public static bool DuplicatesPackageName(List<Category> parsedCatagoryList, ref int duplicatesCounter)
         {
             //add every mod and config name to a new list
             var checkStorageList = new List<CheckStorage>();
@@ -377,15 +377,15 @@ namespace RelhaxModpack
                 foreach (Mod m in c.mods)
                 {
                     CheckStorage cs = new CheckStorage();
-                    cs.packageName = m.packageName;
-                    cs.zipFile = m.zipFile;
-                    cs.dependency = false;
+                    cs.PackageName = m.packageName;
+                    cs.ZipFile = m.zipFile;
+                    cs.Dependency = false;
                     cs.CheckDatabaseListIndex = checkStorageList.Count;
                     m.CheckDatabaseListIndex = cs.CheckDatabaseListIndex;
                     checkStorageList.Add(cs);
                     if (m.configs.Count > 0)
                     {
-                        duplicatesPackageName_RecursiveSubConfigRead(ref m.configs, ref checkStorageList);
+                        DuplicatesPackageName_RecursiveSubConfigRead(ref m.configs, ref checkStorageList);
                     }
                     if (m.dependencies.Count > 0)
                     {
@@ -403,15 +403,15 @@ namespace RelhaxModpack
                         // if both s.CheckDatabaseListIndex AND m.CheckDatabaseListIndex are equal, it is checking his own entry, so SKIP EVERY check/test
                         // if the s.dependency is FALSE, it is a single mod/config and should only exists once, if not => error/duplicate message
                         // if the s.dependency is TRUE, it is a dependecy entry and packageName AND zipFile must be checken if equal, if not => error/duplicate message
-                        if (s.CheckDatabaseListIndex != m.CheckDatabaseListIndex && ((s.packageName.Equals(m.packageName) && !(s.dependency)) || (s.dependency && s.packageName.Equals(m.packageName) && !(s.zipFile.Equals(m.zipFile)))))
+                        if (s.CheckDatabaseListIndex != m.CheckDatabaseListIndex && ((s.PackageName.Equals(m.packageName) && !(s.Dependency)) || (s.Dependency && s.PackageName.Equals(m.packageName) && !(s.ZipFile.Equals(m.zipFile)))))
                         {
-                            Utils.appendToLog(string.Format("Error: duplicate packageName \"{0}\" found. zipFile: \"{1}\".", s.packageName, s.zipFile));
+                            Utils.AppendToLog(string.Format("Error: duplicate packageName \"{0}\" found. zipFile: \"{1}\".", s.PackageName, s.ZipFile));
                             duplicatesCounter++;
                         }
                     }
                     if (m.configs.Count > 0)
                     {
-                        duplicatesPackageName_RecursiveSubConfigCheck(m.configs, checkStorageList, ref duplicatesCounter);
+                        DuplicatesPackageName_RecursiveSubConfigCheck(m.configs, checkStorageList, ref duplicatesCounter);
                     }
                     if (m.dependencies.Count > 0)
                     {
@@ -429,7 +429,7 @@ namespace RelhaxModpack
                 return false;
         }
         //checks for duplicates
-        public static bool duplicates(List<Category> parsedCatagoryList)
+        public static bool Duplicates(List<Category> parsedCatagoryList)
         {
             //add every mod name to a new list
             List<string> modNameList = new List<string>();
@@ -461,7 +461,7 @@ namespace RelhaxModpack
             return false;
         }
         //returns the mod based on catagory and mod name
-        public static Mod linkMod(string modName, string catagoryName, List<Category> parsedCatagoryList)
+        public static Mod LinkMod(string modName, string catagoryName, List<Category> parsedCatagoryList)
         {
             foreach (Category c in parsedCatagoryList)
             {
@@ -477,7 +477,7 @@ namespace RelhaxModpack
             return null;
         }
         //returns the mod based and mod name
-        public static Mod linkMod(string modName, List<Category> parsedCatagoryList)
+        public static Mod LinkMod(string modName, List<Category> parsedCatagoryList)
         {
             foreach (Category c in parsedCatagoryList)
             {
@@ -493,7 +493,7 @@ namespace RelhaxModpack
             return null;
         }
         //returns the catagory based on the catagory name
-        public static Category getCatagory(string catName, List<Category> parsedCatagoryList)
+        public static Category GetCatagory(string catName, List<Category> parsedCatagoryList)
         {
             foreach (Category c in parsedCatagoryList)
             {
@@ -502,7 +502,7 @@ namespace RelhaxModpack
             return null;
         }
         //gets the user mod based on it's name
-        public static Mod getUserMod(string modName, List<Mod> userMods)
+        public static Mod GetUserMod(string modName, List<Mod> userMods)
         {
             foreach (Mod m in userMods)
             {
@@ -514,27 +514,27 @@ namespace RelhaxModpack
             return null;
         }
         //sorts a list of mods alphabetaicaly
-        public static void sortModsList(List<Mod> modList)
+        public static void SortModsList(List<Mod> modList)
         {
             //sortModsList
             modList.Sort(Mod.CompareMods);
         }
         //sorte a list of catagoris alphabetaicaly
-        public static void sortCatagoryList(List<Category> catagoryList)
+        public static void SortCatagoryList(List<Category> catagoryList)
         {
             catagoryList.Sort(Category.CompareCatagories);
         }
         //sorts a list of pictures by mod or config, then name
-        public static List<Media> sortPictureList(List<Media> pictureList)
+        public static List<Media> SortPictureList(List<Media> pictureList)
         {
             //don't actually sort them anymore
             //they will not apprea in the order of which they were loaded from the xml file
             return pictureList;
         }
         //unchecks all mods from memory
-        public static void clearSelectionMemory(List<Category> parsedCatagoryList, List<Mod> UserMods)
+        public static void ClearSelectionMemory(List<Category> parsedCatagoryList, List<Mod> UserMods)
         {
-            Utils.appendToLog("Unchecking all mods");
+            Utils.AppendToLog("Unchecking all mods");
             foreach (Category c in parsedCatagoryList)
             {
                 foreach (Mod m in c.mods)
@@ -551,7 +551,7 @@ namespace RelhaxModpack
                         ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.modFormCheckBox;
                         mfCB2.IsChecked = false;
                     }
-                    Utils.uncheckProcessConfigs(m.configs);
+                    Utils.UncheckProcessConfigs(m.configs);
                 }
             }
             if (UserMods != null)
@@ -568,7 +568,7 @@ namespace RelhaxModpack
             }
         }
 
-        private static void uncheckProcessConfigs(List<Config> configList)
+        private static void UncheckProcessConfigs(List<Config> configList)
         {
             foreach (Config c in configList)
             {
@@ -606,11 +606,11 @@ namespace RelhaxModpack
                     ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.configUIComponent;
                     CBTemp.IsChecked = false;
                 }
-                Utils.uncheckProcessConfigs(c.configs);
+                Utils.UncheckProcessConfigs(c.configs);
             }
         }
 
-        public static List<string> createUsedFilesList(List<Category> parsedCatagoryList,
+        public static List<string> CreateUsedFilesList(List<Category> parsedCatagoryList,
             List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies)
         {
             List<string> currentZipFiles = new List<string>();
@@ -645,13 +645,13 @@ namespace RelhaxModpack
                         currentZipFiles.Add(m.zipFile);
                     }
                     if (m.configs.Count > 0)
-                        createUsedFilesListParseConfigs(m.configs, currentZipFiles, out currentZipFiles);
+                        CreateUsedFilesListParseConfigs(m.configs, currentZipFiles, out currentZipFiles);
                 }
             }
             return currentZipFiles;
         }
 
-        public static void createUsedFilesListParseConfigs(List<Config> configList, List<string> currentZipFiles, out List<string> currentZipFilesOut)
+        public static void CreateUsedFilesListParseConfigs(List<Config> configList, List<string> currentZipFiles, out List<string> currentZipFilesOut)
         {
             foreach (Config c in configList)
             {
@@ -661,12 +661,12 @@ namespace RelhaxModpack
                     currentZipFiles.Add(c.zipFile);
                 }
                 if (c.configs.Count > 0)
-                    createUsedFilesListParseConfigs(c.configs, currentZipFiles, out currentZipFiles);
+                    CreateUsedFilesListParseConfigs(c.configs, currentZipFiles, out currentZipFiles);
             }
             currentZipFilesOut = currentZipFiles;
         }
         //moved to ModSelectionList.cs
-        public static List<string> depricated_createDownloadedOldZipsList(List<string> currentZipFiles, List<Category> parsedCatagoryList,
+        public static List<string> Depricated_createDownloadedOldZipsList(List<string> currentZipFiles, List<Category> parsedCatagoryList,
             List<Dependency> globalDependencies, List<Dependency> currentDependencies, List<LogicalDependnecy> currentLogicalDependencies)
         {
             ParsedZips = new List<string>();
@@ -701,7 +701,7 @@ namespace RelhaxModpack
                         ParsedZips.Add(m.zipFile);
                     }
                     if (m.configs.Count > 0)
-                        depricated_parseZipFileConfigs(m.configs);
+                        depricated_ParseZipFileConfigs(m.configs);
                 }
             }
             //now parsedZips has every single possible zipFile in the database
@@ -714,7 +714,7 @@ namespace RelhaxModpack
             return currentZipFiles;
         }
 
-        public static void depricated_parseZipFileConfigs(List<Config> configList)
+        public static void depricated_ParseZipFileConfigs(List<Config> configList)
         {
             foreach (Config c in configList)
             {
@@ -724,20 +724,20 @@ namespace RelhaxModpack
                     ParsedZips.Add(c.zipFile);
                 }
                 if (c.configs.Count > 0)
-                    depricated_parseZipFileConfigs(c.configs);
+                    depricated_ParseZipFileConfigs(c.configs);
             }
         }
         //deletes all empty directories from a given start location
-        public static void processDirectory(string startLocation, bool reportToLog = true)
+        public static void ProcessDirectory(string startLocation, bool reportToLog = true)
         {
             foreach (var directory in Directory.GetDirectories(startLocation))
             {
-                processDirectory(directory);
+                ProcessDirectory(directory);
                 if (Directory.GetFiles(directory).Length == 0 &&
                     Directory.GetDirectories(directory).Length == 0)
                 {
                     if (reportToLog)
-                        Utils.appendToLog(string.Format("Deleting empty directory {0}", directory));
+                        Utils.AppendToLog(string.Format("Deleting empty directory {0}", directory));
                     Directory.Delete(directory, false);
                 }
             }
@@ -775,7 +775,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception e)
                 {
-                    Utils.exceptionLog("Tried to access one of the forum URL's", e);
+                    Utils.ExceptionLog("Tried to access one of the forum URL's", e);
                 }
             }
         }
@@ -808,9 +808,9 @@ namespace RelhaxModpack
                 return string.Format("{0:n" + decimalPlaces + "}", adjustedSize);
         }
 
-        public static string getValidFilename(String fileName)
+        public static string GetValidFilename(String fileName)
         {
-            foreach (char c in System.IO.Path.GetInvalidFileNameChars())
+            foreach (char c in Path.GetInvalidFileNameChars())
             {
                 fileName = fileName.Replace(c, '_');
             }
@@ -838,7 +838,7 @@ namespace RelhaxModpack
             dpiY = graphics.DpiY;
             if (dpiX != dpiY)
             {
-                Utils.appendToLog("WARNING: scale values do not equal, using x value");
+                Utils.AppendToLog("WARNING: scale values do not equal, using x value");
             }
             return dpiX / 96;
         }
@@ -852,7 +852,7 @@ namespace RelhaxModpack
             // http://pinvoke.net/default.aspx/gdi32/GetDeviceCaps.html
         }
 
-        public static float getScalingFactor()
+        public static float GetScalingFactor()
         {
             Graphics g = Graphics.FromHwnd(IntPtr.Zero);
             IntPtr desktop = g.GetHdc();
@@ -864,7 +864,7 @@ namespace RelhaxModpack
             return ScreenScalingFactor; // 1.25 = 125%
         }
         // https://social.msdn.microsoft.com/Forums/vstudio/en-US/92a36534-0f01-4425-ab63-c5f8830d64ae/help-please-with-dotnetzip-extracting-data-form-ziped-file?forum=csharpgeneral
-        public static string getStringFromZip(string zipFilename, string archivedFilename, string password = null)
+        public static string GetStringFromZip(string zipFilename, string archivedFilename, string password = null)
         {
             MemoryStream ms = new MemoryStream();
             string textStr = "";
@@ -888,12 +888,12 @@ namespace RelhaxModpack
             }
             else
             {
-                Utils.appendToLog(string.Format("ERROR: {0} not found", zipFilename));
+                Utils.AppendToLog(string.Format("ERROR: {0} not found", zipFilename));
             }
             return textStr;
         }
 
-        public static bool convertDateToLocalCultureFormat(string date, out string dateOut)
+        public static bool ConvertDateToLocalCultureFormat(string date, out string dateOut)
         {
             DateTimeFormatInfo myDTFI = new CultureInfo("en-US").DateTimeFormat;
             dateOut = date;
@@ -920,7 +920,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("DirectoryDelete", "Filename=" + file, ex);
+                    Utils.ExceptionLog("DirectoryDelete", "Filename=" + file, ex);
                 }
             }
 
@@ -934,7 +934,7 @@ namespace RelhaxModpack
                     }
                     catch (Exception ex)
                     {
-                        Utils.exceptionLog("DirectoryDelete", "Folder=" + dir, ex);
+                        Utils.ExceptionLog("DirectoryDelete", "Folder=" + dir, ex);
                     }
                 }
             }
@@ -945,7 +945,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("DirectoryDelete", "Folder=" + folderPath, ex);
+                Utils.ExceptionLog("DirectoryDelete", "Folder=" + folderPath, ex);
             }
         }
         // https://stackoverflow.com/questions/30494/compare-version-identifiers
@@ -973,12 +973,12 @@ namespace RelhaxModpack
             return vA.CompareTo(vB);
         }
 
-        public static long getCurrentUniversalFiletimeTimestamp()
+        public static long GetCurrentUniversalFiletimeTimestamp()
         {
             return DateTime.Now.ToUniversalTime().ToFileTime();
         }
 
-        public static string convertFiletimeTimestampToDate(long timestamp)
+        public static string ConvertFiletimeTimestampToDate(long timestamp)
         {
             return DateTime.FromFileTime(timestamp).ToString();
         }
@@ -1011,7 +1011,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("CreateShortcut", "create: " + modifiedName, ex);
+                    Utils.ExceptionLog("CreateShortcut", "create: " + modifiedName, ex);
                 }
             }
             else
@@ -1023,7 +1023,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("CreateShortcut", "delete: " + modifiedName, ex);
+                    Utils.ExceptionLog("CreateShortcut", "delete: " + modifiedName, ex);
                 }
             }
         }

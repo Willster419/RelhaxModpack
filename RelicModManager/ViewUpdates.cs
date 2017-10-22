@@ -50,7 +50,7 @@ namespace RelhaxModpack
                 difference = titleHeight - titleBar;
             }
 
-            string msgText = Utils.getStringFromZip(zipFilename, archivedFilename);
+            string msgText = Utils.GetStringFromZip(zipFilename, archivedFilename);
             if (msgText.Equals(""))
             {
                 richTextBox1.Text = "Error downloading data";

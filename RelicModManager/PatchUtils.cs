@@ -468,7 +468,7 @@ namespace RelhaxModpack
             }
             catch (JsonReaderException j)
             {
-                Utils.appendToLog(string.Format("ERROR: Failed to patch {0}", jsonFile));
+                Utils.AppendToLog(string.Format("ERROR: Failed to patch {0}", jsonFile));
                 if (Program.testMode)
                 {
                     //in test mode this is worthy of an EXCEPTION
@@ -486,7 +486,7 @@ namespace RelhaxModpack
                 //pull out if it failed to get the selection
                 if (newObject == null)
                 {
-                    Utils.appendToLog(string.Format("WARNING: path {0} not found for {1}", jsonPath, Path.GetFileName(jsonFile)));
+                    Utils.AppendToLog(string.Format("WARNING: path {0} not found for {1}", jsonPath, Path.GetFileName(jsonFile)));
                 }
                 else if (useBool)
                 {
@@ -523,7 +523,7 @@ namespace RelhaxModpack
             }
             else
             {
-                Utils.appendToLog(string.Format("ERROR: Unknown json patch mode, {0}", mode));
+                Utils.AppendToLog(string.Format("ERROR: Unknown json patch mode, {0}", mode));
             }
             StringBuilder rebuilder = new StringBuilder();
             string[] putBackDollas = root.ToString().Split('\n');
@@ -553,7 +553,7 @@ namespace RelhaxModpack
                 rebuilder.Append(putBackDollas[i] + "\n");
             }
             if (ssList.Count != 0)
-                Utils.appendToLog(string.Format("There was an error with patching the file {0}, with extra refrences", jsonFile));
+                Utils.AppendToLog(string.Format("There was an error with patching the file {0}, with extra refrences", jsonFile));
             File.WriteAllText(jsonFile, rebuilder.ToString());
         }
 
@@ -719,7 +719,7 @@ namespace RelhaxModpack
                 //read untill the value we want
                 if (ReadUntil(fileContents, sb, regex) == "null")
                 {
-                    Utils.appendToLog(string.Format("ERROR: Path not found: {0}", origXvmPath));
+                    Utils.AppendToLog(string.Format("ERROR: Path not found: {0}", origXvmPath));
                     return;
                 }
                 //determine if the this value is actually a file refrence
@@ -744,7 +744,7 @@ namespace RelhaxModpack
                     //split the array into an array lol
                     if (ReadUntil(fileContents, sb, @"\[") == "null")
                     {
-                        Utils.appendToLog(string.Format("ERROR: Path not found: {0}", origXvmPath));
+                        Utils.AppendToLog(string.Format("ERROR: Path not found: {0}", origXvmPath));
                         return;
                     }
                     string arrayContents = PeekUntil(fileContents, @"\]");
@@ -761,7 +761,7 @@ namespace RelhaxModpack
                         if (indexToReadTo < 0 || indexToReadTo >= carray.Count())
                         {
                             //error and abort
-                            Utils.appendToLog("invalid index: " + pathArray[0]);
+                            Utils.AppendToLog("invalid index: " + pathArray[0]);
                             return;
                         }
                     }
@@ -770,7 +770,7 @@ namespace RelhaxModpack
                         //-1 keyword for the add array method
                         if (!mode.Equals("array_add"))
                         {
-                            Utils.appendToLog("To use -1 keyword, must be in array_add mode!");
+                            Utils.AppendToLog("To use -1 keyword, must be in array_add mode!");
                             return;
                         }
                         //set the flag and reset the values
@@ -817,7 +817,7 @@ namespace RelhaxModpack
                         if (indexToReadTo < 0 || indexToReadTo >= carray.Count())
                         {
                             //error and abort
-                            Utils.appendToLog(string.Format("invalid index: {0}", pathArray[0]));
+                            Utils.AppendToLog(string.Format("invalid index: {0}", pathArray[0]));
                             return;
                         }
                     }
@@ -853,7 +853,7 @@ namespace RelhaxModpack
                 {
                     default:
                         //do nothing
-                        Utils.appendToLog(string.Format("Invalid mode: {0} for xvm patch {1}", mode, origXvmPath));
+                        Utils.AppendToLog(string.Format("Invalid mode: {0} for xvm patch {1}", mode, origXvmPath));
                         break;
                     case "edit":
                         XVMEdit(fileContents, sb, newFilePath, replaceValue, search);
@@ -885,7 +885,7 @@ namespace RelhaxModpack
             //it's a refrence, move it to the next file and readInsideEdit (yes recursion)
             if (ReadUntil(fileContents, sb, @"\${[ \t]*""") == "null")
             {
-                Utils.appendToLog(string.Format("ERROR: Path not found: {0}", origXvmPath));
+                Utils.AppendToLog(string.Format("ERROR: Path not found: {0}", origXvmPath));
                 return;
             }
             //now read untill the next quote for the temp path
@@ -940,7 +940,7 @@ namespace RelhaxModpack
             //ref style refrence
             if (ReadUntil(fileContents, sb, @"""\$ref"":") == "null")
             {
-                Utils.appendToLog(string.Format("ERROR: Path not found: {0}", origXvmPath));
+                Utils.AppendToLog(string.Format("ERROR: Path not found: {0}", origXvmPath));
                 return;
             }
             ReadUntil(fileContents, sb, ":");
@@ -1322,20 +1322,20 @@ namespace RelhaxModpack
             if (!File.Exists(bootFile))
             {
                 if (writeToLog)
-                    Utils.appendToLog(string.Format("ERROR: xvm config boot file does not exist at {0}, checking {1}", XVMBootFileLoc1, XVMBootFileLoc2));
+                    Utils.AppendToLog(string.Format("ERROR: xvm config boot file does not exist at {0}, checking {1}", XVMBootFileLoc1, XVMBootFileLoc2));
                 else
-                    Utils.appendToLog(string.Format("NOTICE: default run, xvm config boot file does not exist at {0}, checking {1}", XVMBootFileLoc1, XVMBootFileLoc2));
+                    Utils.AppendToLog(string.Format("NOTICE: default run, xvm config boot file does not exist at {0}, checking {1}", XVMBootFileLoc1, XVMBootFileLoc2));
                 bootFile = XVMBootFileLoc2;
                 if (!File.Exists(bootFile))
                 {
                     if (writeToLog)
-                        Utils.appendToLog(string.Format("ERROR: xvm config boot file does not exist at {0}, aborting patch", XVMBootFileLoc2));
+                        Utils.AppendToLog(string.Format("ERROR: xvm config boot file does not exist at {0}, aborting patch", XVMBootFileLoc2));
                     else
-                        Utils.appendToLog(string.Format("NOTICE: default run, xvm config boot file does not exist at {0}, user did not install xvm", XVMBootFileLoc2));
+                        Utils.AppendToLog(string.Format("NOTICE: default run, xvm config boot file does not exist at {0}, user did not install xvm", XVMBootFileLoc2));
                     return null;
                 }
             }
-            Utils.appendToLog("xvm boot file located to parse");
+            Utils.AppendToLog("xvm boot file located to parse");
             string fileContents = File.ReadAllText(bootFile);
             //patch block comments out
             fileContents = Regex.Replace(fileContents, @"\/\*.*\*\/", "", RegexOptions.Singleline);

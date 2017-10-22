@@ -342,7 +342,7 @@ namespace RelhaxModpack
 
         private void PatchTester_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
+            Utils.AppendToLog("|------------------------------------------------------------------------------------------------|");
         }
     }
 }

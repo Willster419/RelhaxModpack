@@ -82,7 +82,7 @@ namespace RelhaxModpack
         public static string compileTime()//if getting build error, check windows date and time format settings https://puu.sh/xgCqO/e97e2e4a34.png
         {
             string date = CiInfo.BuildTag;
-            if (Utils.convertDateToLocalCultureFormat(date, out date))
+            if (Utils.ConvertDateToLocalCultureFormat(date, out date))
                 return date;
             else
                 return "Error in dateTime format: " + date;
@@ -102,7 +102,7 @@ namespace RelhaxModpack
         //The constructur for the application
         public MainWindow()
         {
-            Utils.appendToLog("MainWindow Constructed");
+            Utils.AppendToLog("MainWindow Constructed");
             InitializeComponent();
             this.SetStyle(                                      /// add double buffering and possibly reduce flicker https://stackoverflow.com/questions/1550293/stopping-textbox-flicker-during-update
               ControlStyles.AllPaintingInWmPaint |
@@ -179,7 +179,7 @@ namespace RelhaxModpack
             if (e != null && e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
             {
                 //404
-                Utils.appendToLog(string.Format("ERROR: {0} failed to download", tempOldDownload));
+                Utils.AppendToLog(string.Format("ERROR: {0} failed to download", tempOldDownload));
                 MessageBox.Show(string.Format("{0}\n{1}\n\n{2}", Translations.getTranslatedString("failedToDownload_1"), tempOldDownload, Translations.getTranslatedString("failedToDownload_2")));
                 Application.Exit();
             }
@@ -206,7 +206,7 @@ namespace RelhaxModpack
                 sw.Start();
                 downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
                 tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
-                Utils.appendToLog("downloading " + tempOldDownload);
+                Utils.AppendToLog("downloading " + tempOldDownload);
                 currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile);
                 if (currentModDownloading.Length >= 200)
                 {
@@ -244,7 +244,7 @@ namespace RelhaxModpack
         //method to check for updates to the application on startup
         private void checkmanagerUpdates()
         {
-            Utils.appendToLog("Starting check for application updates");
+            Utils.AppendToLog("Starting check for application updates");
             //download the updates
             WebClient updater = new WebClient();
             updater.Proxy = null;
@@ -256,31 +256,31 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("checkmanagerUpdates", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", ex);
+                Utils.ExceptionLog("checkmanagerUpdates", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", ex);
                 MessageBox.Show(string.Format("{0} managerInfo.dat", Translations.getTranslatedString("failedToDownload_1")));
                 Application.Exit();
             }
 
             string version = "";
-            string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");  //xml doc name can change
+            string xmlString = Utils.GetStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");  //xml doc name can change
             if (!xmlString.Equals(""))
             {
                 XDocument doc = XDocument.Parse(xmlString);
                 var databaseVersion = doc.Descendants().Where(n => n.Name == "manager").FirstOrDefault();
                 if (databaseVersion != null)
                     version = databaseVersion.Value;
-                Utils.appendToLog(string.Format("Local application is {0}, current online is {1}", managerVersion(), version));
+                Utils.AppendToLog(string.Format("Local application is {0}, current online is {1}", managerVersion(), version));
 
                 if (!version.Equals(managerVersion()))
                 {
-                    Utils.appendToLog("exe is out of date. displaying user update window");
+                    Utils.AppendToLog("exe is out of date. displaying user update window");
                     //out of date
                     VersionInfo vi = new VersionInfo();
                     vi.ShowDialog();
                     DialogResult result = vi.result;
                     if (result.Equals(DialogResult.Yes))
                     {
-                        Utils.appendToLog("User accepted downloading new version");
+                        Utils.AppendToLog("User accepted downloading new version");
                         //download new version
                         sw.Reset();
                         sw.Start();
@@ -289,12 +289,12 @@ namespace RelhaxModpack
                         updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
                         if (File.Exists(newExeName)) File.Delete(newExeName);
                         updater.DownloadFileAsync(new Uri("http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe"), newExeName);
-                        Utils.appendToLog("New application download started");
+                        Utils.AppendToLog("New application download started");
                         currentModDownloading = "update ";
                     }
                     else
                     {
-                        Utils.appendToLog("User declined downlading new version");
+                        Utils.AppendToLog("User declined downlading new version");
                         //close the application
                         this.Close();
                     }
@@ -302,7 +302,7 @@ namespace RelhaxModpack
             }
             else
             {
-                Utils.appendToLog("ERROR. Failed to get 'manager_version.xml'");
+                Utils.AppendToLog("ERROR. Failed to get 'manager_version.xml'");
                 MessageBox.Show(Translations.getTranslatedString("failedManager_version"), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 //close the application
                 this.Close();
@@ -316,7 +316,7 @@ namespace RelhaxModpack
             if (e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
             {
                 //404
-                Utils.appendToLog("ERROR: unable to download new application version");
+                Utils.AppendToLog("ERROR: unable to download new application version");
                 MessageBox.Show(Translations.getTranslatedString("cantDownloadNewVersion"));
                 this.Close();
             }
@@ -339,7 +339,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("updater_DownloadFileCompleted", "create RelicCopyUpdate.bat failed", ex);
+                Utils.ExceptionLog("updater_DownloadFileCompleted", "create RelicCopyUpdate.bat failed", ex);
                 string msgTxt = string.Format(Translations.getTranslatedString("failedCreateUpdateBat"), Path.Combine(Application.StartupPath, "RelhaxModpack.exe"), "RelhaxModpack_update.exe", "RelhaxModpack.exe");
                 if (DialogResult.Yes == MessageBox.Show(msgTxt, Translations.getTranslatedString("critical"), MessageBoxButtons.YesNo, MessageBoxIcon.Stop))
                 {
@@ -366,7 +366,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception e2)
                 {
-                    Utils.exceptionLog("updater_DownloadFileCompleted", "failed to create howTo.txt", e2);
+                    Utils.ExceptionLog("updater_DownloadFileCompleted", "failed to create howTo.txt", e2);
                 }
                 Application.Exit();
             }
@@ -382,7 +382,7 @@ namespace RelhaxModpack
             }
             catch (Win32Exception e3)
             {
-                Utils.exceptionLog("updater_DownloadFileCompleted", "could not start new application version", e3);
+                Utils.ExceptionLog("updater_DownloadFileCompleted", "could not start new application version", e3);
                 MessageBox.Show(Translations.getTranslatedString("cantStartNewApp") + newExeName);
             }
             Application.Exit();
@@ -407,7 +407,7 @@ namespace RelhaxModpack
         private bool isClientVersionSupported(string detectedVersion)
         {
             supportedVersions.Clear();
-            string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "supported_clients.xml");  //xml doc name can change
+            string xmlString = Utils.GetStringFromZip(Settings.managerInfoDatFile, "supported_clients.xml");  //xml doc name can change
             XDocument doc = XDocument.Parse(xmlString);
             bool result = doc.Descendants("version")
                    .Where(arg => arg.Value.Equals(detectedVersion))
@@ -513,7 +513,7 @@ namespace RelhaxModpack
             {
                 if (File.Exists(path))
                 {
-                    Utils.appendToLog(string.Format("valid game path found: {0}", path));
+                    Utils.AppendToLog(string.Format("valid game path found: {0}", path));
                     // write the path to the central value holder
                     tanksLocation = path;
                     // return the path
@@ -554,12 +554,12 @@ namespace RelhaxModpack
                 using (downloader = new WebClient())
                 {
                     downloader.DownloadFile(urlPath, localDll);
-                    Utils.appendToLog(string.Format("successfully downloaded: {0}", resourcesFile));
+                    Utils.AppendToLog(string.Format("successfully downloaded: {0}", resourcesFile));
                 }
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("downloadResources", urlPath, ex);
+                Utils.ExceptionLog("downloadResources", urlPath, ex);
                 MessageBox.Show(string.Format("{0} {1}", Translations.getTranslatedString("failedToDownload_1"), resourcesFile));
                 Application.Exit();
             }
@@ -578,9 +578,9 @@ namespace RelhaxModpack
             wait.Show();
             WebRequest.DefaultWebProxy = null;
             Application.DoEvents();
-            Utils.appendToLog("|RelHax Modpack " + managerVersion());
-            Utils.appendToLog(string.Format("|Built on {0}", compileTime()));
-            Utils.appendToLog("|Running on " + System.Environment.OSVersion.ToString());
+            Utils.AppendToLog("|RelHax Modpack " + managerVersion());
+            Utils.AppendToLog(string.Format("|Built on {0}", compileTime()));
+            Utils.AppendToLog("|Running on " + System.Environment.OSVersion.ToString());
             /*
             //check for single instance
             Utils.appendToLog("Check for single instance");
@@ -604,7 +604,7 @@ namespace RelhaxModpack
             //create directory structures
             wait.loadingDescBox.Text = Translations.getTranslatedString("verDirStructure");
             Application.DoEvents();
-            Utils.appendToLog("Verifying Directory Structure");
+            Utils.AppendToLog("Verifying Directory Structure");
             if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxDownloads"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxDownloads"));
             if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxUserMods"));
             if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup"));
@@ -620,7 +620,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog(ex);
+                Utils.ExceptionLog(ex);
             }
 
             //add method to disable the modpack for during patch day
@@ -629,7 +629,7 @@ namespace RelhaxModpack
             //to enable for patch day (prevent users to use it), set it to true.
             if (false && !Program.patchDayTest)
             {
-                Utils.appendToLog("Patch day disable detected. Remember To override use /patchday");
+                Utils.AppendToLog("Patch day disable detected. Remember To override use /patchday");
                 MessageBox.Show(Translations.getTranslatedString("patchDayMessage"));
                 this.Close();
             }
@@ -639,7 +639,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             if (Program.skipUpdate)
             {
-                Utils.appendToLog("/skip-update switch detected, skipping application update");
+                Utils.AppendToLog("/skip-update switch detected, skipping application update");
                 if (!Program.testMode) MessageBox.Show(Translations.getTranslatedString("skipUpdateWarning"));
             }
             else
@@ -649,31 +649,31 @@ namespace RelhaxModpack
 
             //load settings
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
-            Utils.appendToLog("Loading settings");
+            Utils.AppendToLog("Loading settings");
             Settings.loadSettings();
             this.applySettings(true);
             if (Program.testMode)
             {
-                Utils.appendToLog("Test Mode is ON, loading local modInfo.xml");
+                Utils.AppendToLog("Test Mode is ON, loading local modInfo.xml");
             }
             if (Program.autoInstall)
             {
-                Utils.appendToLog("Auto Install is ON, checking for config pref xml at " + Path.Combine(Application.StartupPath, "RelHaxUserConfigs", Program.configName));
+                Utils.AppendToLog("Auto Install is ON, checking for config pref xml at " + Path.Combine(Application.StartupPath, "RelHaxUserConfigs", Program.configName));
                 if (!File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserConfigs", Program.configName)))
                 {
-                    Utils.appendToLog(string.Format("ERROR: {0} does NOT exist, loading in fontRegular mode", Program.configName));
+                    Utils.AppendToLog(string.Format("ERROR: {0} does NOT exist, loading in fontRegular mode", Program.configName));
                     MessageBox.Show(string.Format(Translations.getTranslatedString("configNotExist"), Program.configName));
                     Program.autoInstall = false;
                 }
                 if (!Settings.cleanInstallation)
                 {
-                    Utils.appendToLog("ERROR: clean installation is set to false. This must be set to true for auto install to work. Loading in fontRegular mode.");
+                    Utils.AppendToLog("ERROR: clean installation is set to false. This must be set to true for auto install to work. Loading in fontRegular mode.");
                     MessageBox.Show(Translations.getTranslatedString("autoAndClean"));
                     Program.autoInstall = false;
                 }
                 if (Settings.firstLoad)
                 {
-                    Utils.appendToLog("ERROR: First time loading cannot be an auto install mode, loading in fontRegular mode");
+                    Utils.AppendToLog("ERROR: First time loading cannot be an auto install mode, loading in fontRegular mode");
                     MessageBox.Show(Translations.getTranslatedString("autoAndFirst"));
                     Program.autoInstall = false;
                 }
@@ -681,7 +681,7 @@ namespace RelhaxModpack
             //check if it can still load in autoInstall config mode
             if (Program.autoInstall)
             {
-                Utils.appendToLog("Program.autoInstall still true, loading in auto install mode");
+                Utils.AppendToLog("Program.autoInstall still true, loading in auto install mode");
                 wait.Close();
                 this.installRelhaxMod_Click(null, null);
                 return;
@@ -714,10 +714,10 @@ namespace RelhaxModpack
             downloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads");
             //get the user appData folder
             appDataFolder = Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Wargaming.net", "WorldOfTanks");
-            Utils.appendToLog("appDataFolder parsed as " + appDataFolder);
+            Utils.AppendToLog("appDataFolder parsed as " + appDataFolder);
             if (!Directory.Exists(appDataFolder))
             {
-                Utils.appendToLog("ERROR: appDataFolder does not exist");
+                Utils.AppendToLog("ERROR: appDataFolder does not exist");
                 appDataFolder = "-1";
                 if (Settings.clearCache)
                 {
@@ -726,7 +726,7 @@ namespace RelhaxModpack
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (clearCacheFailResult == DialogResult.No)
                     {
-                        Utils.appendToLog("user stopped installation");
+                        Utils.AppendToLog("user stopped installation");
                         toggleUIButtons(true);
                         return;
                     }
@@ -740,15 +740,15 @@ namespace RelhaxModpack
             {
                 if (this.manuallyFindTanks() == null)
                 {
-                    Utils.appendToLog("user stopped installation");
+                    Utils.AppendToLog("user stopped installation");
                     toggleUIButtons(true);
                     return;
                 }
             }
             //parse all strings for installation
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
-            Utils.appendToLog("tanksLocation parsed as " + tanksLocation);
-            Utils.appendToLog("customUserMods parsed as " + Path.Combine(Application.StartupPath, "RelHaxUserMods"));
+            Utils.AppendToLog("tanksLocation parsed as " + tanksLocation);
+            Utils.AppendToLog("customUserMods parsed as " + Path.Combine(Application.StartupPath, "RelHaxUserMods"));
             // logfile moved from WoT root folder to logs subfolder after manager version 26.4.2
             try
             {
@@ -761,7 +761,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("installRelhaxMod_Click", "move/delete old log", ex);
+                Utils.ExceptionLog("installRelhaxMod_Click", "move/delete old log", ex);
             }
             if (tanksLocation.Equals(Application.StartupPath))
             {
@@ -772,13 +772,13 @@ namespace RelhaxModpack
             }
             tanksVersion = this.getFolderVersion();
             tanksVersionForInstaller = tanksVersion;
-            Utils.appendToLog("tanksVersion parsed as " + tanksVersion);
+            Utils.AppendToLog("tanksVersion parsed as " + tanksVersion);
             //determine if the tanks client version is supported
             if (!Program.testMode && !isClientVersionSupported(tanksVersion))
             {
                 //log and inform the user
-                Utils.appendToLog("WARNING: Detected client version is " + tanksVersion + ", not supported");
-                Utils.appendToLog("Supported versions are: " + string.Join(", ", supportedVersions));
+                Utils.AppendToLog("WARNING: Detected client version is " + tanksVersion + ", not supported");
+                Utils.AppendToLog("Supported versions are: " + string.Join(", ", supportedVersions));
                 // parse the string that we get from the server and delete all "Testserver" entries (Testserver entries are the version number with prefix "T")
                 string publicVersions = string.Join("\n", supportedVersions.Select(sValue => sValue.Trim()).ToArray().Where(s => !(s.Substring(0, 1) == "T")).ToArray());
                 MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}:\n{4}", Translations.getTranslatedString("detectedClientVersion"), tanksVersion, Translations.getTranslatedString("supportNotGuarnteed"), Translations.getTranslatedString("supportedClientVersions"), publicVersions), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -786,7 +786,7 @@ namespace RelhaxModpack
                 tanksVersion = publicVersions.Split('\n').Last();
                 // go to Client check again, because the online folder must be set correct
                 isClientVersionSupported(tanksVersion);
-                Utils.appendToLog(string.Format("Version selected: {0}  OnlineFolder: {1}", tanksVersion, Settings.tanksOnlineFolderVersion));
+                Utils.AppendToLog(string.Format("Version selected: {0}  OnlineFolder: {1}", tanksVersion, Settings.tanksOnlineFolderVersion));
             }
             //if the user wants to, check if the database has actually changed
             if (SameDatabaseVersions() && Settings.NotifyIfSameDatabase)        // the get the string databaseVersionString filles in any case, the function must be performed first!
@@ -817,7 +817,7 @@ namespace RelhaxModpack
                 }
                 catch
                 {
-                    Utils.appendToLog("INFO: Failed to dispose list");
+                    Utils.AppendToLog("INFO: Failed to dispose list");
                 }
                 list = null;
                 GC.Collect();
@@ -1145,7 +1145,7 @@ namespace RelhaxModpack
                 }
                 if (error)
                 {
-                    Utils.appendToLog(string.Format("ERROR: could not match packageName '{0}' from the list of dependencies", d.packageName));
+                    Utils.AppendToLog(string.Format("ERROR: could not match packageName '{0}' from the list of dependencies", d.packageName));
                     break;
                 }
                 //dependency has been found, if it's not in the list currently to install, add it
@@ -1356,7 +1356,7 @@ namespace RelhaxModpack
             }
             else
             {
-                Utils.appendToLog("Invalid state: " + e.InstalProgress);
+                Utils.AppendToLog("Invalid state: " + e.InstalProgress);
             }
             if (errorCounter > 0 && Program.testMode)
             {
@@ -1383,8 +1383,8 @@ namespace RelhaxModpack
             }
             //parse all strings
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
-            Utils.appendToLog(string.Format("tanksLocation parsed as {0}", tanksLocation));
-            Utils.appendToLog(string.Format("customUserMods parsed as {0}", Path.Combine(Application.StartupPath, "RelHaxUserMods")));
+            Utils.AppendToLog(string.Format("tanksLocation parsed as {0}", tanksLocation));
+            Utils.AppendToLog(string.Format("customUserMods parsed as {0}", Path.Combine(Application.StartupPath, "RelHaxUserMods")));
             tanksVersion = this.getFolderVersion();
             if (MessageBox.Show(string.Format("{0}\n\n{1}", Translations.getTranslatedString("confirmUninstallMessage"), tanksLocation), Translations.getTranslatedString("confirmUninstallHeader"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
@@ -1395,7 +1395,7 @@ namespace RelhaxModpack
                     TanksVersion = tanksVersion
                 };
                 unI.InstallProgressChanged += I_InstallProgressChanged;
-                Utils.appendToLog("Started Uninstallation process");
+                Utils.AppendToLog("Started Uninstallation process");
                 //run the recursive complete uninstaller
                 unI.StartCleanUninstallation();
             }
@@ -1560,7 +1560,7 @@ namespace RelhaxModpack
             }
             catch (Exception e)
             {
-                Utils.exceptionLog("checkForOldZipFiles", e);
+                Utils.ExceptionLog("checkForOldZipFiles", e);
                 MessageBox.Show(Translations.getTranslatedString("folderDeleteFailed") + " _readme");
             }
             if (fi != null)
@@ -1569,7 +1569,7 @@ namespace RelhaxModpack
                 {
                     zipFilesList.Add(f.Name);
                 }
-                List<string> filesToDelete = Utils.depricated_createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists, globalDependenciesToInstall, currentDependencies, currentLogicalDependencies);
+                List<string> filesToDelete = Utils.Depricated_createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists, globalDependenciesToInstall, currentDependencies, currentLogicalDependencies);
                 string listOfFiles = "";
                 foreach (string s in filesToDelete)
                     listOfFiles = listOfFiles + s + "\n";
@@ -1604,7 +1604,7 @@ namespace RelhaxModpack
                                 catch (Exception e)
                                 {
                                     retry = true;
-                                    Utils.exceptionLog("checkForOldZipFiles", "delete", e);
+                                    Utils.ExceptionLog("checkForOldZipFiles", "delete", e);
                                     DialogResult res = MessageBox.Show(string.Format("{0} {1}", Translations.getTranslatedString("fileDeleteFailed"), s), "", MessageBoxButtons.RetryCancel);
                                     if (res == System.Windows.Forms.DialogResult.Cancel)
                                     {
@@ -1702,7 +1702,7 @@ namespace RelhaxModpack
         {
             try
             {
-                string xmlString = Utils.getStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");  //xml doc name can change
+                string xmlString = Utils.GetStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");  //xml doc name can change
                 XDocument doc = XDocument.Parse(xmlString);
 
                 var databaseVersion = doc.CreateNavigator().SelectSingleNode("/version/database");
@@ -1720,7 +1720,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("SameDatabaseVersions", "ex", ex);
+                Utils.ExceptionLog("SameDatabaseVersions", "ex", ex);
                 return false;
             }
         }
@@ -1729,11 +1729,11 @@ namespace RelhaxModpack
         {
             //save settings
             if (Program.saveSettings) Settings.saveSettings();
-            Utils.appendToLog("cleaning \"RelHaxTemp\" folder");
+            Utils.AppendToLog("cleaning \"RelHaxTemp\" folder");
             Utils.DirectoryDelete(Path.Combine(Application.StartupPath, "RelHaxTemp"), true);
-            Utils.appendToLog(string.Format("Exception counted: {0}", errorCounter));
-            Utils.appendToLog("Application Closing");
-            Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
+            Utils.AppendToLog(string.Format("Exception counted: {0}", errorCounter));
+            Utils.AppendToLog("Application Closing");
+            Utils.AppendToLog("|------------------------------------------------------------------------------------------------|");
         }
 
         #region LinkClicked Events

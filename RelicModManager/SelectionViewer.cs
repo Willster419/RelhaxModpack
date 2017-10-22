@@ -76,7 +76,7 @@ namespace RelhaxModpack
                 rbToolTip.ShowAlways = true;
                 // create Date and Time with local syntax
                 string cultureDate = "";
-                Utils.convertDateToLocalCultureFormat(node.date, out cultureDate);
+                Utils.ConvertDateToLocalCultureFormat(node.date, out cultureDate);
                 // Set up the ToolTip text for the Button and Checkbox.
                 rbToolTip.SetToolTip(bb, string.Format(Translations.getTranslatedString("createdAt"), cultureDate));
                 SelectConfigPanel.Controls.Add(bb);
@@ -89,7 +89,7 @@ namespace RelhaxModpack
             if(SelectedDocument.Equals("-1"))
             {
                 //error
-                Utils.appendToLog("ERROR: Failed to parse XML File");
+                Utils.AppendToLog("ERROR: Failed to parse XML File");
                 SelectedXML = SelectedDocument;
             }
             else if (SelectedDocument.Equals("localFile"))

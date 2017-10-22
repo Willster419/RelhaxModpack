@@ -34,7 +34,7 @@ namespace RelhaxModpack
                             s = (string)german[componetName];
                             if (s.ToUpper().Equals("TODO"))
                             {
-                                Utils.appendToLog(string.Format("WARNING: german translation for \"{0}\" is missing.", componetName));
+                                Utils.AppendToLog(string.Format("WARNING: german translation for \"{0}\" is missing.", componetName));
                                 s = (string)english[componetName];
                             }
                             return s;
@@ -46,7 +46,7 @@ namespace RelhaxModpack
                             s = (string)polish[componetName];
                             if (s.ToUpper().Equals("TODO"))
                             {
-                                Utils.appendToLog(string.Format("WARNING: polish translation for \"{0}\" is missing.", componetName));
+                                Utils.AppendToLog(string.Format("WARNING: polish translation for \"{0}\" is missing.", componetName));
                                 s = (string)english[componetName];
                             }
                             return s;
@@ -58,19 +58,19 @@ namespace RelhaxModpack
                             s = (string)french[componetName];
                             if (s.ToUpper().Equals("TODO"))
                             {
-                                Utils.appendToLog(string.Format("WARNING: french translation for \"{0}\" is missing.", componetName));
+                                Utils.AppendToLog(string.Format("WARNING: french translation for \"{0}\" is missing.", componetName));
                                 s = (string)english[componetName];
                             }
                             return s;
                         }
                         break;
                 }
-                Utils.appendToLog(string.Format("ERROR: no value in language hash for key: {0}  Language: {1}", componetName, language));
+                Utils.AppendToLog(string.Format("ERROR: no value in language hash for key: {0}  Language: {1}", componetName, language));
                 return componetName;
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("getTranslatedString", string.Format("key: \"{0}\"  Language: english", componetName), ex);
+                Utils.ExceptionLog("getTranslatedString", string.Format("key: \"{0}\"  Language: english", componetName), ex);
                 return componetName;
             }
 

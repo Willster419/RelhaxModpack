@@ -58,7 +58,7 @@ namespace RelhaxModpack
             string onlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(databaseLocationTextBox.Text);
             // read gameVersion of the selected local modInfo.xml
             string gameVersion = XMLUtils.ReadVersionFromModInfo(databaseLocationTextBox.Text);
-            Utils.appendToLog("working with game version: " + onlineFolderVersion);
+            Utils.AppendToLog("working with game version: " + onlineFolderVersion);
             // download online database.xml
             try
             {
@@ -71,7 +71,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("loadZipFilesButton_Click", "http://wotmods.relhaxmodpack.com/WoT/" + onlineFolderVersion + "/database.xml", ex);
+                Utils.ExceptionLog("loadZipFilesButton_Click", "http://wotmods.relhaxmodpack.com/WoT/" + onlineFolderVersion + "/database.xml", ex);
                 MessageBox.Show("FAILED to download online file database");
                 Application.Exit();
             }
@@ -91,7 +91,7 @@ namespace RelhaxModpack
             XMLUtils.CreateModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             //check for duplicates
             int duplicatesCounter = 0;
-            if (Utils.duplicates(parsedCatagoryList) && Utils.duplicatesPackageName(parsedCatagoryList, ref duplicatesCounter ))
+            if (Utils.Duplicates(parsedCatagoryList) && Utils.DuplicatesPackageName(parsedCatagoryList, ref duplicatesCounter ))
             {
                 MessageBox.Show(string.Format("{0} duplicates found !!!",duplicatesCounter));
                 Program.databaseUpdateOnline = false;
@@ -258,7 +258,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("getFileSize", "read from onlineDatabaseXml: " + file, ex);
+                    Utils.ExceptionLog("getFileSize", "read from onlineDatabaseXml: " + file, ex);
                 }
             }
             else
@@ -270,7 +270,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("getFileSize", "FileInfo from local file: " + file, ex);
+                    Utils.ExceptionLog("getFileSize", "FileInfo from local file: " + file, ex);
                 }
             }
             try
@@ -279,7 +279,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("getFileSize", "building format", ex);
+                Utils.ExceptionLog("getFileSize", "building format", ex);
             }
             return 0;
         }
@@ -298,7 +298,7 @@ namespace RelhaxModpack
 
         private void CRCFileSizeUpdate_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
+            Utils.AppendToLog("|------------------------------------------------------------------------------------------------|");
         }
 
         private void updateDatabaseOffline_Click(object sender, EventArgs e)
@@ -323,7 +323,7 @@ namespace RelhaxModpack
             XMLUtils.CreateModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             int duplicatesCounter = 0;
             //check for duplicates
-            if (Utils.duplicates(parsedCatagoryList) && Utils.duplicatesPackageName(parsedCatagoryList, ref duplicatesCounter))
+            if (Utils.Duplicates(parsedCatagoryList) && Utils.DuplicatesPackageName(parsedCatagoryList, ref duplicatesCounter))
             {
                 MessageBox.Show(string.Format("{0} duplicates found !!!", duplicatesCounter));
                 return;

@@ -93,7 +93,7 @@ namespace RelhaxModpack
             if (!Directory.Exists(Path.Combine(TanksLocation, "mods", TanksVersion))) Directory.CreateDirectory(Path.Combine(TanksLocation, "mods", TanksVersion));
             args.InstalProgress = InstallerEventArgs.InstallProgress.UninstallDone;
             InstallWorker.ReportProgress(0);
-            Utils.appendToLog("Uninstallation process finished");
+            Utils.AppendToLog("Uninstallation process finished");
             MessageBox.Show(Translations.getTranslatedString("uninstallFinished"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -102,7 +102,7 @@ namespace RelhaxModpack
         {
             ResetArgs();
             //Step 1: do a backup if requested
-            Utils.appendToLog("Installation BackupMods");
+            Utils.AppendToLog("Installation BackupMods");
             if (Settings.backupModFolder)
             {
                 args.InstalProgress = InstallerEventArgs.InstallProgress.BackupMods;
@@ -110,7 +110,7 @@ namespace RelhaxModpack
             }
             ResetArgs();
             //Step 2: do a backup of user data
-            Utils.appendToLog("Installation BackupUserData");
+            Utils.AppendToLog("Installation BackupUserData");
             if (Settings.saveUserData)
             {
                 args.InstalProgress = InstallerEventArgs.InstallProgress.BackupUserData;
@@ -118,7 +118,7 @@ namespace RelhaxModpack
             }
             ResetArgs();
             //Step 3: Delete Mods
-            Utils.appendToLog("Installation UninstallMods");
+            Utils.AppendToLog("Installation UninstallMods");
             if (Settings.cleanInstallation)
             {
                 args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteMods;
@@ -127,10 +127,10 @@ namespace RelhaxModpack
             }
             ResetArgs();
             //Setp 3a: delete log files
-            Utils.appendToLog("Installation logFiles");
+            Utils.AppendToLog("Installation logFiles");
             if (Settings.deleteLogs)
             {
-                Utils.appendToLog("deleteLogs selected, deleting wot, xvm, and pmod logs");
+                Utils.AppendToLog("deleteLogs selected, deleting wot, xvm, and pmod logs");
                 try
                 {
                     if (File.Exists(Path.Combine(TanksLocation, "python.log")))
@@ -142,12 +142,12 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("ActuallyStartInstallation", "deleteLogs", ex);
+                    Utils.ExceptionLog("ActuallyStartInstallation", "deleteLogs", ex);
                 }
             }
             ResetArgs();
             //Step 4: Delete user appdata cache
-            Utils.appendToLog("Installation DeleteWoTCache");
+            Utils.AppendToLog("Installation DeleteWoTCache");
             if (Settings.clearCache)
             {
                 args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteWoTCache;
@@ -155,12 +155,12 @@ namespace RelhaxModpack
             }
             ResetArgs();
             //Step 5-9: Extracts Mods
-            Utils.appendToLog("Installation ExtractGlobalDependencies");
+            Utils.AppendToLog("Installation ExtractGlobalDependencies");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractGlobalDependencies;
             ExtractDatabaseObjects();
             ResetArgs();
             //Step 11: Restore User Data
-            Utils.appendToLog("Installation RestoreUserData");
+            Utils.AppendToLog("Installation RestoreUserData");
             if (Settings.saveUserData)
             {
                 args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreUserData;
@@ -168,7 +168,7 @@ namespace RelhaxModpack
             }
             ResetArgs();
             //Step 12: Patch Mods
-            Utils.appendToLog("Installation PatchMods");
+            Utils.AppendToLog("Installation PatchMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchMods;
             if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
                 PatchFiles();
@@ -176,30 +176,30 @@ namespace RelhaxModpack
             //Step 13: InstallFonts
 
             //Step 14: Extract User Mods
-            Utils.appendToLog("Installation ExtractUserMods");
+            Utils.AppendToLog("Installation ExtractUserMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractUserMods;
             if(UserMods.Count > 0)
                 ExtractUserMods();
             ResetArgs();
             //Step 15: Patch Mods if User Mods extracted patch files
-            Utils.appendToLog("Installation PatchUserMods");
+            Utils.AppendToLog("Installation PatchUserMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchUserMods;
             if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
                 PatchFiles();
             ResetArgs();
             //Step 16: Install Fonts
-            Utils.appendToLog("Installation InstallUserFonts");
+            Utils.AppendToLog("Installation InstallUserFonts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallUserFonts;
             if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
                 InstallFonts();
             ResetArgs();
             //Step 17: CheckDatabase and delete outdated or no more needed files
-            Utils.appendToLog("Installation CreateShortscuts");
+            Utils.AppendToLog("Installation CreateShortscuts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CreateShortCuts;
             CreateShortCuts();
             ResetArgs();
             //Step 18: CheckDatabase and delete outdated or no more needed files
-            Utils.appendToLog("Installation CheckDatabase");
+            Utils.AppendToLog("Installation CheckDatabase");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CheckDatabase;
             if (!Program.testMode)
             {
@@ -214,10 +214,10 @@ namespace RelhaxModpack
 
         public void WorkerReportComplete(object sender, AsyncCompletedEventArgs e)
         {
-            Utils.appendToLog("Installation CleanUp");
+            Utils.AppendToLog("Installation CleanUp");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CleanUp;
             OnInstallProgressChanged();
-            Utils.appendToLog("Installation Done");
+            Utils.AppendToLog("Installation Done");
             args.InstalProgress = InstallerEventArgs.InstallProgress.Done;
             OnInstallProgressChanged();
         }
@@ -258,7 +258,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("BackupMods", "ex", ex);
+                Utils.ExceptionLog("BackupMods", "ex", ex);
             }
         }
 
@@ -281,37 +281,37 @@ namespace RelhaxModpack
                                 string[] fileList = Directory.GetFiles(folderPath, Path.GetFileName(correctedPath));   // use the GetFileName(correctedPath) as a search pattern, to only get wanted files
                                 foreach (string startLoc in fileList)
                                 {
-                                    string destLoc = Path.Combine(Application.StartupPath, "RelHaxTemp", Utils.getValidFilename(dbo.name + "_") + Path.GetFileName(startLoc));
+                                    string destLoc = Path.Combine(Application.StartupPath, "RelHaxTemp", Utils.GetValidFilename(dbo.name + "_") + Path.GetFileName(startLoc));
                                     try
                                     {
                                         if (File.Exists(@startLoc))
                                         {
                                             File.Move(startLoc, destLoc);
-                                            Utils.appendToLog(string.Format("BackupUserData: {0} ({1})", Path.Combine(Path.GetDirectoryName(correctedPath), Path.GetFileName(startLoc)), Path.GetFileName(correctedPath)));
+                                            Utils.AppendToLog(string.Format("BackupUserData: {0} ({1})", Path.Combine(Path.GetDirectoryName(correctedPath), Path.GetFileName(startLoc)), Path.GetFileName(correctedPath)));
                                         }
                                     }
                                     catch
                                     {
                                         if (Program.testMode) { MessageBox.Show(string.Format("Error: can not move file.\nstartLoc: \"{0}\"\ndestLoc: \"{1}\"", startLoc, destLoc)); };
-                                        Utils.appendToLog(string.Format("Error: can not move file. startLoc: \"{0}\" destLoc: \"{1}\"", startLoc, destLoc));
+                                        Utils.AppendToLog(string.Format("Error: can not move file. startLoc: \"{0}\" destLoc: \"{1}\"", startLoc, destLoc));
                                     }
                                 }
                             }
                             catch (Exception exStartLoc)
                             {
-                                Utils.exceptionLog("BackupUserData", "exStartLoc", exStartLoc);
+                                Utils.ExceptionLog("BackupUserData", "exStartLoc", exStartLoc);
                             }
                         }
                     }
                     catch (Exception exS)
                     {
-                        Utils.exceptionLog("BackupUserData", "s", exS);
+                        Utils.ExceptionLog("BackupUserData", "s", exS);
                     }
                 }
             }
             catch (Exception exDbo)
             {
-                Utils.exceptionLog("BackupUserData", "dbo", exDbo);
+                Utils.ExceptionLog("BackupUserData", "dbo", exDbo);
             }
         }
 
@@ -353,7 +353,7 @@ namespace RelhaxModpack
                     }
                     catch (Exception ex)    // here is another problem, so logging it
                     {
-                        Utils.exceptionLog("DeleteFilesByList", "delete file: " + line, ex);
+                        Utils.ExceptionLog("DeleteFilesByList", "delete file: " + line, ex);
                     }
                 }
                 if (tw != null)
@@ -397,13 +397,13 @@ namespace RelhaxModpack
                     }
                     catch (Exception ex)
                     {
-                        Utils.exceptionLog("UninstallMods", string.Format("e\nChildProcessed: {0}\nChildTotalToProcess: {1}\nlines.Count(): {2}", args.ChildProcessed, args.ChildTotalToProcess, lines.Count()), ex);
+                        Utils.ExceptionLog("UninstallMods", string.Format("e\nChildProcessed: {0}\nChildTotalToProcess: {1}\nlines.Count(): {2}", args.ChildProcessed, args.ChildTotalToProcess, lines.Count()), ex);
                     }
                 }
                 InstallWorker.ReportProgress(0);
                 args.ChildProcessed = 0;
                 args.ChildTotalToProcess = lines.Count();
-                Utils.appendToLog(string.Format("Elements to delete (from logfile): {0}", lines.Count()));
+                Utils.AppendToLog(string.Format("Elements to delete (from logfile): {0}", lines.Count()));
                 try
                 {
                     string logFile = Path.Combine(TanksLocation, "logs", "uninstallRelhaxFiles.log");
@@ -425,7 +425,7 @@ namespace RelhaxModpack
                     }
                     catch (Exception ex)
                     {
-                        Utils.exceptionLog("UninstallMods", "DeletePass1", ex);
+                        Utils.ExceptionLog("UninstallMods", "DeletePass1", ex);
                     }
                     lines = NumFilesToProcess(Path.Combine(TanksLocation, "res_mods"));
                     lines.AddRange(NumFilesToProcess(Path.Combine(TanksLocation, "mods")));
@@ -436,7 +436,7 @@ namespace RelhaxModpack
                     InstallWorker.ReportProgress(0);
                     args.ChildProcessed = 0;
                     args.ChildTotalToProcess = lines.Count();
-                    Utils.appendToLog(string.Format("Elements to delete (from parsing): {0}", lines.Count()));
+                    Utils.AppendToLog(string.Format("Elements to delete (from parsing): {0}", lines.Count()));
                     try
                     {
                         DeleteFilesByList(lines, true, tw);
@@ -446,14 +446,14 @@ namespace RelhaxModpack
                     }
                     catch (Exception ex)
                     {
-                        Utils.exceptionLog("UninstallMods", "DeletePass2", ex);
+                        Utils.ExceptionLog("UninstallMods", "DeletePass2", ex);
                     }
                     if (tw != null)
                         tw.Close();
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("UninstallMods", "sw", ex);
+                    Utils.ExceptionLog("UninstallMods", "sw", ex);
                 }
                 try       // if the delete will raise an exception, it will be ignored
                 {
@@ -462,12 +462,12 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("UninstallMods", "Delete", ex);
+                    Utils.ExceptionLog("UninstallMods", "Delete", ex);
                 }
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("UninstallMods", "ex", ex);
+                Utils.ExceptionLog("UninstallMods", "ex", ex);
             }
         }
         
@@ -487,7 +487,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("DeleteMods", ex);
+                Utils.ExceptionLog("DeleteMods", ex);
             }
         }
         //Step 4: Clear WoT program cache
@@ -499,11 +499,11 @@ namespace RelhaxModpack
                 {
                     if (AppDataFolder == null) AppDataFolder = "(null)";
                     if (AppDataFolder.Equals("")) AppDataFolder = "(empty string)";
-                    Utils.appendToLog("ERROR: AppDataFolder not correct, value: " + AppDataFolder);
-                    Utils.appendToLog("Aborting ClearWoTCache()");
+                    Utils.AppendToLog("ERROR: AppDataFolder not correct, value: " + AppDataFolder);
+                    Utils.AppendToLog("Aborting ClearWoTCache()");
                     return;
                 }
-                Utils.appendToLog("Started clearing of WoT cache files");
+                Utils.AppendToLog("Started clearing of WoT cache files");
 
                 string[] fileFolderNames = { "preferences.xml", "preferences_ct.xml", "modsettings.dat", "xvm", "pmod" };
                 string AppPathTempFolder = Path.Combine(AppPath, "RelHaxTemp", "AppDataBackup");
@@ -527,7 +527,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("ClearWoTCache", "step 1", ex);
+                    Utils.ExceptionLog("ClearWoTCache", "step 1", ex);
                 }
 
                 //2 - recursivly delete entire WorldOfTanks folder
@@ -538,7 +538,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("ClearWoTCache", "step 2", ex);
+                    Utils.ExceptionLog("ClearWoTCache", "step 2", ex);
                 }
 
                 //3 - re-create WorldOfTanks folder and move back 3 above files and delete temp file
@@ -560,13 +560,13 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("ClearWoTCache, step 3", ex);
+                    Utils.ExceptionLog("ClearWoTCache, step 3", ex);
                 }
-                Utils.appendToLog("Finished clearing of WoT cache files");
+                Utils.AppendToLog("Finished clearing of WoT cache files");
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("ClearWoTCache", "ex", ex);
+                Utils.ExceptionLog("ClearWoTCache", "ex", ex);
             }
         }
         
@@ -585,7 +585,7 @@ namespace RelhaxModpack
                 File.WriteAllText(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), "Database Version: " + DatabaseVersion + "\n");
 
                 //extract RelHax Mods
-                Utils.appendToLog("Starting Relhax Modpack Extraction");
+                Utils.AppendToLog("Starting Relhax Modpack Extraction");
                 string downloadedFilesDir = Path.Combine(Application.StartupPath, "RelHaxDownloads");
                 //calculate the total number of zip files to install
                 foreach (Dependency d in GlobalDependencies)
@@ -612,7 +612,7 @@ namespace RelhaxModpack
                 //extract global dependencies
                 foreach (Dependency d in GlobalDependencies)
                 {
-                    Utils.appendToLog("Extracting Global Dependency " + d.dependencyZipFile);
+                    Utils.AppendToLog("Extracting Global Dependency " + d.dependencyZipFile);
                     if (!d.dependencyZipFile.Equals(""))
                     {
                         try
@@ -623,7 +623,7 @@ namespace RelhaxModpack
                         catch (Exception ex)
                         {
                             //append the exception to the log
-                            Utils.exceptionLog("ExtractDatabaseObjects", ex);
+                            Utils.ExceptionLog("ExtractDatabaseObjects", ex);
                             //show the error message
                             MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
@@ -637,7 +637,7 @@ namespace RelhaxModpack
                 InstallWorker.ReportProgress(0);
                 foreach (Dependency d in Dependencies)
                 {
-                    Utils.appendToLog("Extracting Dependency " + d.dependencyZipFile);
+                    Utils.AppendToLog("Extracting Dependency " + d.dependencyZipFile);
                     if (!d.dependencyZipFile.Equals(""))
                     {
                         try
@@ -648,7 +648,7 @@ namespace RelhaxModpack
                         catch (Exception ex)
                         {
                             //append the exception to the log
-                            Utils.exceptionLog("ExtractDatabaseObjects", ex);
+                            Utils.ExceptionLog("ExtractDatabaseObjects", ex);
                             //show the error message
                             MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
@@ -662,7 +662,7 @@ namespace RelhaxModpack
                 InstallWorker.ReportProgress(0);
                 foreach (LogicalDependnecy d in LogicalDependencies)
                 {
-                    Utils.appendToLog("Extracting Logical Dependency " + d.dependencyZipFile);
+                    Utils.AppendToLog("Extracting Logical Dependency " + d.dependencyZipFile);
                     if (!d.dependencyZipFile.Equals(""))
                     {
                         try
@@ -673,7 +673,7 @@ namespace RelhaxModpack
                         catch (Exception ex)
                         {
                             //append the exception to the log
-                            Utils.exceptionLog("ExtractDatabaseObjects", ex);
+                            Utils.ExceptionLog("ExtractDatabaseObjects", ex);
                             //show the error message
                             MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
@@ -689,7 +689,7 @@ namespace RelhaxModpack
                 InstallWorker.ReportProgress(0);
                 foreach (DatabaseObject dbo in ModsConfigsToInstall)
                 {
-                    Utils.appendToLog("Extracting Mod/Config " + dbo.zipFile);
+                    Utils.AppendToLog("Extracting Mod/Config " + dbo.zipFile);
                     if (!dbo.zipFile.Equals(""))
                     {
                         try
@@ -700,7 +700,7 @@ namespace RelhaxModpack
                         catch (Exception ex)
                         {
                             //append the exception to the log
-                            Utils.exceptionLog("ExtractDatabaseObjects", ex);
+                            Utils.ExceptionLog("ExtractDatabaseObjects", ex);
                             //show the error message
                             MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + dbo.zipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
@@ -714,7 +714,7 @@ namespace RelhaxModpack
                 InstallWorker.ReportProgress(0);
                 foreach (Dependency d in AppendedDependencies)
                 {
-                    Utils.appendToLog("Extracting Appended Dependency " + d.dependencyZipFile);
+                    Utils.AppendToLog("Extracting Appended Dependency " + d.dependencyZipFile);
                     if (!d.dependencyZipFile.Equals(""))
                     {
                         try
@@ -725,7 +725,7 @@ namespace RelhaxModpack
                         catch (Exception ex)
                         {
                             //append the exception to the log
-                            Utils.exceptionLog("ExtractDatabaseObjects", ex);
+                            Utils.ExceptionLog("ExtractDatabaseObjects", ex);
                             //show the error message
                             MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
@@ -741,7 +741,7 @@ namespace RelhaxModpack
                 string folderToMove = Path.Combine(TanksLocation, "WoTAppData");
                 if (Directory.Exists(folderToMove))
                 {
-                    Utils.appendToLog("WoTAppData folder detected, moving files to WoT cache folder");
+                    Utils.AppendToLog("WoTAppData folder detected, moving files to WoT cache folder");
                     //get each file and folder and move them
                     // Get the subdirectories for the specified directory
                     DirectoryInfo dir = new DirectoryInfo(folderToMove);
@@ -769,15 +769,15 @@ namespace RelhaxModpack
                         DirectoryMove(temppath, temppath2, true, true, false);
                     }
                     //call the process folders function to delete any leftover folders
-                    Utils.processDirectory(folderToMove, false);
+                    Utils.ProcessDirectory(folderToMove, false);
                     if (Directory.Exists(folderToMove))
                         Directory.Delete(folderToMove);
                 }
-                Utils.appendToLog("Finished Relhax Modpack Extraction");
+                Utils.AppendToLog("Finished Relhax Modpack Extraction");
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("ExtractDatabaseObjects", "ex", ex);
+                Utils.ExceptionLog("ExtractDatabaseObjects", "ex", ex);
             }
         }
 
@@ -801,7 +801,7 @@ namespace RelhaxModpack
                                 string targetDir = Path.GetDirectoryName(correctedUserFiles);
                                 args.currentFile = correctedUserFiles;
                                 InstallWorker.ReportProgress(0);
-                                string filenamePrefix = Utils.getValidFilename(dbo.name + "_");
+                                string filenamePrefix = Utils.GetValidFilename(dbo.name + "_");
                                 //find the files with the specified pattern
                                 string[] fileList = Directory.GetFiles(Path.Combine(Application.StartupPath, "RelHaxTemp"), filenamePrefix + Path.GetFileName(correctedUserFiles));
                                 //if no results, go on with the next entry
@@ -817,11 +817,11 @@ namespace RelhaxModpack
                                         if (File.Exists(Path.Combine(TanksLocation, targetDir, targetFilename)))
                                             File.Delete(Path.Combine(TanksLocation, targetDir, targetFilename));
                                         File.Move(Path.Combine(Application.StartupPath, "RelHaxTemp", Path.GetFileName(ss)), Path.Combine(TanksLocation, targetDir, targetFilename));
-                                        Utils.appendToLog(string.Format("RestoredUserData: {0}", Path.Combine(targetDir, targetFilename)));
+                                        Utils.AppendToLog(string.Format("RestoredUserData: {0}", Path.Combine(targetDir, targetFilename)));
                                     }
                                     catch (Exception p)
                                     {
-                                        Utils.exceptionLog("RestoreUserData", "p\n" + ss, p);
+                                        Utils.ExceptionLog("RestoreUserData", "p\n" + ss, p);
                                     }
                                 }
                                 args.ChildProcessed++;
@@ -829,7 +829,7 @@ namespace RelhaxModpack
                             }
                             catch (Exception fl)
                             {
-                                Utils.exceptionLog("RestoreUserData", "fl", fl);
+                                Utils.ExceptionLog("RestoreUserData", "fl", fl);
                             }
                         }
                         args.ParrentProcessed++;
@@ -837,14 +837,14 @@ namespace RelhaxModpack
                     }
                     catch (Exception uf)
                     {
-                        Utils.exceptionLog("RestoreUserData", "uf", uf);
+                        Utils.ExceptionLog("RestoreUserData", "uf", uf);
                     }
 
                 }
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("RestoreUserData", "ex", ex);
+                Utils.ExceptionLog("RestoreUserData", "ex", ex);
             }
         }
 
@@ -871,7 +871,7 @@ namespace RelhaxModpack
                     }
                     catch (UnauthorizedAccessException e)
                     {
-                        Utils.exceptionLog("PatchFiles", e);
+                        Utils.ExceptionLog("PatchFiles", e);
                         DialogResult res = MessageBox.Show(Translations.getTranslatedString("patchingSystemDeneidAccessMessage"), Translations.getTranslatedString("patchingSystemDeneidAccessHeader"), MessageBoxButtons.RetryCancel);
                         if (res == DialogResult.Cancel)
                         {
@@ -897,7 +897,7 @@ namespace RelhaxModpack
                     args.currentFile = p.file;
                     InstallWorker.ReportProgress(0);
                     //if nativeProcessingFile is not empty, it is the first entry of a new nativ xml processing file. Add a comment at the loglist, to be able to traceback the native Processing File
-                    if (p.nativeProcessingFile != "") { Utils.appendToLog(string.Format("nativeProcessingFile: {0}, originalName: {1}", p.nativeProcessingFile, p.actualPatchName)); }
+                    if (p.nativeProcessingFile != "") { Utils.AppendToLog(string.Format("nativeProcessingFile: {0}, originalName: {1}", p.nativeProcessingFile, p.actualPatchName)); }
                     string patchFileOutput = p.file;
                     int maxLength = 200;
                     if (p.file.Length > maxLength)
@@ -915,13 +915,13 @@ namespace RelhaxModpack
                         if (p.lines == null)
                         {
                             //perform regex patch on entire file, line by line
-                            Utils.appendToLog("Regex patch, all lines, line by line, " + p.file + ", " + p.search + ", " + p.replace);
+                            Utils.AppendToLog("Regex patch, all lines, line by line, " + p.file + ", " + p.search + ", " + p.replace);
                             PatchUtils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion);
                         }
                         else if (p.lines.Count() == 1 && tempp == -1)
                         {
                             //perform regex patch on entire file, as one whole string
-                            Utils.appendToLog("Regex patch, all lines, whole file, " + p.file + ", " + p.search + ", " + p.replace);
+                            Utils.AppendToLog("Regex patch, all lines, whole file, " + p.file + ", " + p.search + ", " + p.replace);
                             PatchUtils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion, -1);
                         }
                         else
@@ -930,7 +930,7 @@ namespace RelhaxModpack
                             {
                                 //perform regex patch on specific file lines
                                 //will need to be a standard for loop BTW
-                                Utils.appendToLog("Regex patch, line " + s + ", " + p.file + ", " + p.search + ", " + p.replace);
+                                Utils.AppendToLog("Regex patch, line " + s + ", " + p.file + ", " + p.search + ", " + p.replace);
                                 PatchUtils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion, int.Parse(s));
                             }
                         }
@@ -938,25 +938,25 @@ namespace RelhaxModpack
                     else if (p.type.Equals("xml"))
                     {
                         //perform xml patch
-                        Utils.appendToLog("Xml patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
+                        Utils.AppendToLog("Xml patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
                         PatchUtils.XMLPatch(p.file, p.path, p.mode, p.search, p.replace, TanksLocation, TanksVersion);
                     }
                     else if (p.type.Equals("json"))
                     {
                         //perform json patch
-                        Utils.appendToLog("Json patch, " + p.file + ", " + p.path + ", " + p.replace);
+                        Utils.AppendToLog("Json patch, " + p.file + ", " + p.path + ", " + p.replace);
                         PatchUtils.JSONPatch(p.file, p.path, p.replace, p.mode, TanksLocation, TanksVersion);
                     }
                     else if (p.type.Equals("xvm"))
                     {
                         //perform xvm style json patch
-                        Utils.appendToLog("XVM patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
+                        Utils.AppendToLog("XVM patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
                         PatchUtils.XVMPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
                     }
                     else if (p.type.Equals("pmod"))
                     {
                         //perform pmod/generic style json patch
-                        Utils.appendToLog("PMOD/Generic patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
+                        Utils.AppendToLog("PMOD/Generic patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
                         PatchUtils.PMODPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
                     }
                     args.ParrentProcessed++;
@@ -968,7 +968,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("PatchFiles","ex", ex);
+                Utils.ExceptionLog("PatchFiles","ex", ex);
             }
         }
 
@@ -977,10 +977,10 @@ namespace RelhaxModpack
         {
             try
             {
-                Utils.appendToLog("Checking for fonts to install");
+                Utils.AppendToLog("Checking for fonts to install");
                 if (!Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
                 {
-                    Utils.appendToLog("No fonts to install");
+                    Utils.AppendToLog("No fonts to install");
                     //no fonts to install, done display
                     return;
                 }
@@ -988,7 +988,7 @@ namespace RelhaxModpack
                 if (fonts.Count() == 0)
                 {
                     //done display
-                    Utils.appendToLog("No fonts to install");
+                    Utils.AppendToLog("No fonts to install");
                     return;
                 }
                 //load fonts and move names to a list
@@ -1024,11 +1024,11 @@ namespace RelhaxModpack
                     //re-check the fonts to install list
                     if (fontsList.Count == 0)
                     {
-                        Utils.appendToLog("No fonts to install");
+                        Utils.AppendToLog("No fonts to install");
                         //done display
                         return;
                     }
-                    Utils.appendToLog("Installing fonts: " + string.Join(", ", fontsList));
+                    Utils.AppendToLog("Installing fonts: " + string.Join(", ", fontsList));
                     DialogResult dr = DialogResult.No;
                     if (Program.autoInstall)
                     {
@@ -1063,7 +1063,7 @@ namespace RelhaxModpack
                                 }
                                 catch (WebException ex)
                                 {
-                                    Utils.exceptionLog("InstallFonts()", "download FontReg.exe", ex);
+                                    Utils.ExceptionLog("InstallFonts()", "download FontReg.exe", ex);
                                     MessageBox.Show(string.Format("{0} FontReg.exe", Translations.getTranslatedString("failedToDownload_1")));
                                 }
                             }
@@ -1080,21 +1080,21 @@ namespace RelhaxModpack
                         {
                             installFontss.Start();
                             installFontss.WaitForExit();
-                            Utils.appendToLog("FontReg.exe ExitCode: " + installFontss.ExitCode);
+                            Utils.AppendToLog("FontReg.exe ExitCode: " + installFontss.ExitCode);
                         }
                         catch (Exception e)
                         {
-                            Utils.exceptionLog("InstallFonts", "could not start font installer", e);
+                            Utils.ExceptionLog("InstallFonts", "could not start font installer", e);
                             MessageBox.Show(Translations.getTranslatedString("fontsPromptError_1") + TanksLocation + Translations.getTranslatedString("fontsPromptError_2"));
-                            Utils.appendToLog("Installation done, but fonts install failed");
+                            Utils.AppendToLog("Installation done, but fonts install failed");
                             return;
                         }
-                        Utils.appendToLog("Fonts Installed Successfully");
+                        Utils.AppendToLog("Fonts Installed Successfully");
                         return;
                     }
                     else
                     {
-                        Utils.appendToLog("Installation done, but fonts install failed");
+                        Utils.AppendToLog("Installation done, but fonts install failed");
                         return;
                     }
                 }
@@ -1107,7 +1107,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("InstallFonts()", ex);
+                Utils.ExceptionLog("InstallFonts()", ex);
             }
         }
 
@@ -1120,13 +1120,13 @@ namespace RelhaxModpack
                 if (xvmConfigDir == null || xvmConfigDir.Equals(""))
                     xvmConfigDir = PatchUtils.GetXVMBootLoc(TanksLocation);
                 //extract user mods
-                Utils.appendToLog("Starting Relhax Modpack User Mod Extraction");
+                Utils.AppendToLog("Starting Relhax Modpack User Mod Extraction");
                 string downloadedFilesDir = Path.Combine(Application.StartupPath, "RelHaxUserMods");
                 foreach (Mod m in UserMods)
                 {
                     if (m.Checked)
                     {
-                        Utils.appendToLog("Exracting " + Path.GetFileName(m.zipFile));
+                        Utils.AppendToLog("Exracting " + Path.GetFileName(m.zipFile));
                         this.Unzip(Path.Combine(downloadedFilesDir, Path.GetFileName(m.zipFile)), TanksLocation);
                         InstallWorker.ReportProgress(0);
                     }
@@ -1134,9 +1134,9 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("ExtractUserMods", "ex", ex);
+                Utils.ExceptionLog("ExtractUserMods", "ex", ex);
             }
-            Utils.appendToLog("Finished Relhax Modpack User Mod Extraction");
+            Utils.AppendToLog("Finished Relhax Modpack User Mod Extraction");
         }
 
         //Step 17: Extract User Mods
@@ -1159,7 +1159,7 @@ namespace RelhaxModpack
                                 {
 
                                     string fileTarget = Path.Combine(TanksLocation, sc.path);
-                                    Utils.appendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
+                                    Utils.AppendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
                                     if (File.Exists(fileTarget))
                                     {
                                         Utils.CreateShortcut(fileTarget, sc.name, true, true, sw);
@@ -1177,7 +1177,7 @@ namespace RelhaxModpack
                                 if (sc.enabled)
                                 {
                                     string fileTarget = Path.Combine(TanksLocation, sc.path);
-                                    Utils.appendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
+                                    Utils.AppendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
                                     if (File.Exists(fileTarget))
                                     {
                                         Utils.CreateShortcut(fileTarget, sc.name, true, true, sw);
@@ -1195,7 +1195,7 @@ namespace RelhaxModpack
                                 if (sc.enabled)
                                 {
                                     string fileTarget = Path.Combine(TanksLocation, sc.path);
-                                    Utils.appendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
+                                    Utils.AppendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
                                     if (File.Exists(fileTarget))
                                     {
                                         Utils.CreateShortcut(fileTarget, sc.name, true, true, sw);
@@ -1213,7 +1213,7 @@ namespace RelhaxModpack
                                 if (sc.enabled)
                                 {
                                     string fileTarget = Path.Combine(TanksLocation, sc.path);
-                                    Utils.appendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
+                                    Utils.AppendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
                                     if (File.Exists(fileTarget))
                                     {
                                         Utils.CreateShortcut(fileTarget, sc.name, true, true, sw);
@@ -1226,7 +1226,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("CreateShortCuts()", ex);
+                Utils.ExceptionLog("CreateShortCuts()", ex);
             }
         }
 
@@ -1248,7 +1248,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("checkForOldZipFiles", ex);
+                    Utils.ExceptionLog("checkForOldZipFiles", ex);
                     MessageBox.Show(string.Format(Translations.getTranslatedString("parseDownloadFolderFailed"), "RelHaxDownloads"));
                 }
                 args.ParrentProcessed = 2;
@@ -1300,7 +1300,7 @@ namespace RelhaxModpack
                                     catch (Exception e)
                                     {
                                         retry = true;
-                                        Utils.exceptionLog("checkForOldZipFiles", "delete", e);
+                                        Utils.ExceptionLog("checkForOldZipFiles", "delete", e);
                                         DialogResult res = MessageBox.Show(string.Format("{0} {1}", Translations.getTranslatedString("fileDeleteFailed"), s), "", MessageBoxButtons.RetryCancel);
                                         if (res == System.Windows.Forms.DialogResult.Cancel)
                                         {
@@ -1318,7 +1318,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("checkForOldZipFiles", "ex", ex);
+                Utils.ExceptionLog("checkForOldZipFiles", "ex", ex);
             }
         }
 
@@ -1382,7 +1382,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("createPatchList", "ex", ex);
+                Utils.ExceptionLog("createPatchList", "ex", ex);
             }
         }
         //gets the total number of files to process to eithor delete or copy
@@ -1433,7 +1433,7 @@ namespace RelhaxModpack
                     }
                     catch (Exception e)
                     {
-                        Utils.exceptionLog("DirectoryDelete", file.FullName, e);
+                        Utils.ExceptionLog("DirectoryDelete", file.FullName, e);
                         DialogResult res = MessageBox.Show(Translations.getTranslatedString("extractionErrorMessage"), Translations.getTranslatedString("extractionErrorHeader"), MessageBoxButtons.RetryCancel);
                         if (res == DialogResult.Retry)
                         {
@@ -1465,7 +1465,7 @@ namespace RelhaxModpack
                         }
                         catch (Exception ex)
                         {
-                            Utils.exceptionLog("DirectoryDelete","deleteSubDirs", ex);
+                            Utils.ExceptionLog("DirectoryDelete","deleteSubDirs", ex);
                             DialogResult result = MessageBox.Show(Translations.getTranslatedString("deleteErrorMessage"), Translations.getTranslatedString("deleteErrorHeader"), MessageBoxButtons.RetryCancel);
                             if (result == DialogResult.Cancel)
                                 Application.Exit();
@@ -1514,7 +1514,7 @@ namespace RelhaxModpack
             //call the recursive function to move
             _DirectoryMove(sourceDirName, destDirName, copySubDirs, overwrite, reportProgress);
             //call the process folders function to delete any leftover folders
-            Utils.processDirectory(sourceDirName, false);
+            Utils.ProcessDirectory(sourceDirName, false);
             if (Directory.Exists(sourceDirName))
                 Directory.Delete(sourceDirName);
         }
@@ -1585,7 +1585,7 @@ namespace RelhaxModpack
                                 }
                                 catch (Exception ex)
                                 {
-                                    Utils.exceptionLog("Unzip", ex);
+                                    Utils.ExceptionLog("Unzip", ex);
                                 }
                             }
                             if (Regex.IsMatch(zip[i].FileName, "configs/xvm/xvmConfigFolderName") && !xvmConfigDir.Equals(""))
@@ -1610,7 +1610,7 @@ namespace RelhaxModpack
                 catch (ZipException e)
                 {
                     //append the exception to the log
-                    Utils.exceptionLog("Unzip", e);
+                    Utils.ExceptionLog("Unzip", e);
                     //show the error message
                     MessageBox.Show(string.Format("{0}, {1} {2} {3}", Translations.getTranslatedString("zipReadingErrorMessage1"), Path.GetFileName(zipFile), Translations.getTranslatedString("zipReadingErrorMessage2"), Translations.getTranslatedString("zipReadingErrorHeader")));
                     //(try to)delete the file from the filesystem
@@ -1621,7 +1621,7 @@ namespace RelhaxModpack
                         }
                         catch (UnauthorizedAccessException ex)
                         {
-                            Utils.exceptionLog("Unzip", "tried to delete " + zipFile, ex);
+                            Utils.ExceptionLog("Unzip", "tried to delete " + zipFile, ex);
                         }
                     XMLUtils.DeleteMd5HashDatabase(zipFile);
                 }

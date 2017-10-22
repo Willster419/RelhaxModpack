@@ -226,7 +226,7 @@ namespace RelhaxModpack
 
         private void DatabaseListGenerater_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
+            Utils.AppendToLog("|------------------------------------------------------------------------------------------------|");
         }
     }
 }

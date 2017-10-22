@@ -23,8 +23,8 @@ namespace RelhaxModpack
         [STAThread]
         static void Main()
         {
-            Utils.appendToLog("|------------------------------------------------------------------------------------------------|");
-            Utils.appendToLog("Main Entry point launched");
+            Utils.AppendToLog("|------------------------------------------------------------------------------------------------|");
+            Utils.AppendToLog("Main Entry point launched");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //loading embeded dlls from the application
@@ -43,90 +43,90 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("Main", "delete RelicCopyUpdate.bat", ex);
+                Utils.ExceptionLog("Main", "delete RelicCopyUpdate.bat", ex);
             }
             //get the command line args for testing of auto install
             string[] commandArgs = Environment.GetCommandLineArgs();
             //log command line
-            Utils.appendToLog("command line: " + string.Join(" ", commandArgs));
+            Utils.AppendToLog("command line: " + string.Join(" ", commandArgs));
             for (int i = 0; i < commandArgs.Count(); i++)
             {
                 //check what type of arg each one is
                 if (Regex.IsMatch(commandArgs[i], @"test$"))
                 {
-                    Utils.appendToLog("/test detected, loading in test mode");
+                    Utils.AppendToLog("/test detected, loading in test mode");
                     testMode = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"skip-update$"))
                 {
-                    Utils.appendToLog("/skip-update detected, skipping update of application");
+                    Utils.AppendToLog("/skip-update detected, skipping update of application");
                     skipUpdate = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"patchday$"))
                 {
-                    Utils.appendToLog("/patchday detected, welcome database manager");
+                    Utils.AppendToLog("/patchday detected, welcome database manager");
                     patchDayTest = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"ignoreresourseversionfail$"))
                 {
-                    Utils.appendToLog("/ignoreResourseVersionFail detected, welcome developer");
+                    Utils.AppendToLog("/ignoreResourseVersionFail detected, welcome developer");
                     ignoreResourseVersionFail = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"auto-install$"))
                 {
-                    Utils.appendToLog("/auto-install detected");
+                    Utils.AppendToLog("/auto-install detected");
                     autoInstall = true;
                     //parse the config file and advance the counter
                     configName = commandArgs[++i];
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"crccheck2$"))
                 {
-                    Utils.appendToLog("(DEPRECATED) /crccheck2 detected, loading in crccheck2 mode");
+                    Utils.AppendToLog("(DEPRECATED) /crccheck2 detected, loading in crccheck2 mode");
                     Application.Run(new CRCCHECK2());
                     return;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"crccheck$"))
                 {
-                    Utils.appendToLog("(DEPRECATED) /crccheck detected, loading in crccheck mode");
+                    Utils.AppendToLog("(DEPRECATED) /crccheck detected, loading in crccheck mode");
                     Application.Run(new CRCCheck());
                     return;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"patchcheck$"))
                 {
-                    Utils.appendToLog("/patchcheck detected, loading in patch design mode");
+                    Utils.AppendToLog("/patchcheck detected, loading in patch design mode");
                     Application.Run(new PatchTester());
                     return;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"databaseupdate$"))
                 {
-                    Utils.appendToLog("/databaseupdate detected, loading in database update mode");
+                    Utils.AppendToLog("/databaseupdate detected, loading in database update mode");
                     Application.Run(new CRCFileSizeUpdate());
                     return;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"databaseoutput$"))
                 {
-                    Utils.appendToLog("/databaseoutput detected, loading in database output mode");
+                    Utils.AppendToLog("/databaseoutput detected, loading in database output mode");
                     Application.Run(new DatabaseListGenerater());
                     return;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"databaseedit$"))
                 {
-                    Utils.appendToLog("/databaseedit detected, loading in database edit mode");
+                    Utils.AppendToLog("/databaseedit detected, loading in database edit mode");
                     Application.Run(new DatabaseEditor());
                     return;
                 }
             }
             //load the translations
-            Utils.appendToLog("Loading translation hashes");
+            Utils.AppendToLog("Loading translation hashes");
             try
             {
                 Translations.loadHashes();
             }
             catch (Exception ex)
             {
-                Utils.exceptionLog("Main", "loadHashes", ex);
+                Utils.ExceptionLog("Main", "loadHashes", ex);
             }
-            Utils.appendToLog("Attempting to load MainWindow");
+            Utils.AppendToLog("Attempting to load MainWindow");
             Application.Run(new MainWindow());
         }
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)

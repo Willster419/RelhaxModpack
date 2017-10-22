@@ -23,7 +23,7 @@ namespace RelhaxModpack
             {
                 this.Scale(new SizeF(Settings.scaleSize, Settings.scaleSize));
             }
-            Utils.appendToLog("GifPreview: opening at x: " + x + ", y: " + y);
+            Utils.AppendToLog("GifPreview: opening at x: " + x + ", y: " + y);
             this.Location = new Point(x, y);
             Settings.setUIColor(this);
             this.Text = Translations.getTranslatedString("loadingGifpreview");
