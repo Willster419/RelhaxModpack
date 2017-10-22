@@ -683,7 +683,7 @@ namespace RelhaxModpack
                     InstallWorker.ReportProgress(0);
                 }
                 //set xvmConfigDir here because xvm is always a dependency, but don't log it
-                xvmConfigDir = PatchUtils.getXVMBootLoc(TanksLocation, null, false);
+                xvmConfigDir = PatchUtils.GetXVMBootLoc(TanksLocation, null, false);
                 //extract mods and configs
                 args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractMods;
                 InstallWorker.ReportProgress(0);
@@ -939,25 +939,25 @@ namespace RelhaxModpack
                     {
                         //perform xml patch
                         Utils.appendToLog("Xml patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
-                        PatchUtils.xmlPatch(p.file, p.path, p.mode, p.search, p.replace, TanksLocation, TanksVersion);
+                        PatchUtils.XMLPatch(p.file, p.path, p.mode, p.search, p.replace, TanksLocation, TanksVersion);
                     }
                     else if (p.type.Equals("json"))
                     {
                         //perform json patch
                         Utils.appendToLog("Json patch, " + p.file + ", " + p.path + ", " + p.replace);
-                        PatchUtils.jsonPatch(p.file, p.path, p.replace, p.mode, TanksLocation, TanksVersion);
+                        PatchUtils.JSONPatch(p.file, p.path, p.replace, p.mode, TanksLocation, TanksVersion);
                     }
                     else if (p.type.Equals("xvm"))
                     {
                         //perform xvm style json patch
                         Utils.appendToLog("XVM patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
-                        PatchUtils.xvmPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
+                        PatchUtils.XVMPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
                     }
                     else if (p.type.Equals("pmod"))
                     {
                         //perform pmod/generic style json patch
                         Utils.appendToLog("PMOD/Generic patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
-                        PatchUtils.pmodPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
+                        PatchUtils.PMODPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
                     }
                     args.ParrentProcessed++;
                     InstallWorker.ReportProgress(0);
@@ -1118,7 +1118,7 @@ namespace RelhaxModpack
             {
                 //set xvm dir location again in case it's just a user mod install
                 if (xvmConfigDir == null || xvmConfigDir.Equals(""))
-                    xvmConfigDir = PatchUtils.getXVMBootLoc(TanksLocation);
+                    xvmConfigDir = PatchUtils.GetXVMBootLoc(TanksLocation);
                 //extract user mods
                 Utils.appendToLog("Starting Relhax Modpack User Mod Extraction");
                 string downloadedFilesDir = Path.Combine(Application.StartupPath, "RelHaxUserMods");
@@ -1293,7 +1293,7 @@ namespace RelhaxModpack
                                         File.SetAttributes(file, FileAttributes.Normal);
                                         File.Delete(file);
                                         // remove file from database, too
-                                        XMLUtils.deleteMd5HashDatabase(file);
+                                        XMLUtils.DeleteMd5HashDatabase(file);
                                         retry = false;
                                         args.ChildProcessed++;
                                     }
@@ -1623,7 +1623,7 @@ namespace RelhaxModpack
                         {
                             Utils.exceptionLog("Unzip", "tried to delete " + zipFile, ex);
                         }
-                    XMLUtils.deleteMd5HashDatabase(zipFile);
+                    XMLUtils.DeleteMd5HashDatabase(zipFile);
                 }
             }
         }

@@ -17,13 +17,10 @@ namespace RelhaxModpack
     //a static utility class with usefull methods that all other forms can use if they need it
     public static class Utils
     {
-        private static List<string> parsedZips;
-        
+        private static List<string> ParsedZips;
         private static int iMaxLogLength = 1500000; // Probably should be bigger, say 2,000,000
         private static int iTrimmedLogLength = -300000; // minimum of how much of the old log to leave
-
         private static object _locker = new object();
-
         //logs string info to the log output
         public static void appendToLog(string info)
         {
@@ -40,7 +37,6 @@ namespace RelhaxModpack
                 writeToFile(filePath, string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}   {1}", DateTime.Now, info));
             }
         }
-
         // https://stackoverflow.com/questions/4741037/keeping-log-files-under-a-certain-size
         static public void writeToFile(string strFile, string strNewLogMessage)
         {
@@ -107,7 +103,6 @@ namespace RelhaxModpack
                   //writeEvent("writeToFile() Failed to write to logfile : " + ex.Message + "...", 5);
             }
         }
-
         /// <summary>
         /// print all information about the object to the logfile
         /// </summary>
@@ -131,7 +126,6 @@ namespace RelhaxModpack
                 Utils.appendToLog("----- end of dump ------");
             }
         }
-
         /// <summary>
         /// default logging function of exception informations, possible to expand the cxception Group with his own needed informations of the specific exception
         /// </summary>
@@ -140,7 +134,6 @@ namespace RelhaxModpack
         {
             Utils.exceptionLog("", "", e);
         }
-
         /// <summary>
         /// default logging function of exception informations, possible to expand the cxception Group with his own needed informations of the specific exception
         /// </summary>
@@ -150,7 +143,6 @@ namespace RelhaxModpack
         {
             Utils.exceptionLog(msg, "", e);
         }
-
         /// <summary>
         /// default logging function of exception informations, possible to expand the cxception Group with his own needed informations of the specific exception              https://msdn.microsoft.com/de-de/library/system.exception.data(v=vs.110).aspx
         /// </summary>
@@ -221,9 +213,8 @@ namespace RelhaxModpack
                 Utils.appendToLog(msg);
             }
         }
-
         //returns the md5 hash of the file based on the input file string location
-        public static string createMd5Hash(string inputFile)
+        public static string CreateMd5Hash(string inputFile)
         {
             //first, return if the file does not exist
             if (!System.IO.File.Exists(inputFile))
@@ -245,7 +236,7 @@ namespace RelhaxModpack
             // Return the hexadecimal string.
             return sBuilder.ToString();
         }
-        
+
         public static bool parseBool(string input, bool defaultValue)
         {
             bool returnVal;
@@ -259,6 +250,7 @@ namespace RelhaxModpack
             }
             return returnVal;
         }
+
         public static int parseInt(string input, int defaultValue)
         {
             int returnVal;
@@ -272,6 +264,7 @@ namespace RelhaxModpack
             }
             return returnVal;
         }
+
         public static float parseFloat(string input, float defaultValue)
         {
             float returnVal;
@@ -285,7 +278,7 @@ namespace RelhaxModpack
             }
             return returnVal;
         }
-        
+
         public class CheckStorage
         {
             public string packageName { get; set; }
@@ -370,7 +363,6 @@ namespace RelhaxModpack
                 }
             }
         }
-
         //checks for duplicate packageName
         public static bool duplicatesPackageName(List<Category> parsedCatagoryList, ref int duplicatesCounter)
         {
@@ -391,7 +383,7 @@ namespace RelhaxModpack
                     cs.CheckDatabaseListIndex = checkStorageList.Count;
                     m.CheckDatabaseListIndex = cs.CheckDatabaseListIndex;
                     checkStorageList.Add(cs);
-                     if (m.configs.Count > 0)
+                    if (m.configs.Count > 0)
                     {
                         duplicatesPackageName_RecursiveSubConfigRead(ref m.configs, ref checkStorageList);
                     }
@@ -412,7 +404,7 @@ namespace RelhaxModpack
                         // if the s.dependency is FALSE, it is a single mod/config and should only exists once, if not => error/duplicate message
                         // if the s.dependency is TRUE, it is a dependecy entry and packageName AND zipFile must be checken if equal, if not => error/duplicate message
                         if (s.CheckDatabaseListIndex != m.CheckDatabaseListIndex && ((s.packageName.Equals(m.packageName) && !(s.dependency)) || (s.dependency && s.packageName.Equals(m.packageName) && !(s.zipFile.Equals(m.zipFile)))))
-                        { 
+                        {
                             Utils.appendToLog(string.Format("Error: duplicate packageName \"{0}\" found. zipFile: \"{1}\".", s.packageName, s.zipFile));
                             duplicatesCounter++;
                         }
@@ -436,7 +428,6 @@ namespace RelhaxModpack
             else
                 return false;
         }
-
         //checks for duplicates
         public static bool duplicates(List<Category> parsedCatagoryList)
         {
@@ -501,8 +492,7 @@ namespace RelhaxModpack
             }
             return null;
         }
-        
-         //returns the catagory based on the catagory name
+        //returns the catagory based on the catagory name
         public static Category getCatagory(string catName, List<Category> parsedCatagoryList)
         {
             foreach (Category c in parsedCatagoryList)
@@ -619,8 +609,6 @@ namespace RelhaxModpack
                 Utils.uncheckProcessConfigs(c.configs);
             }
         }
-        
-        
 
         public static List<string> createUsedFilesList(List<Category> parsedCatagoryList,
             List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies)
@@ -677,41 +665,40 @@ namespace RelhaxModpack
             }
             currentZipFilesOut = currentZipFiles;
         }
-
         //moved to ModSelectionList.cs
         public static List<string> depricated_createDownloadedOldZipsList(List<string> currentZipFiles, List<Category> parsedCatagoryList,
-            List<Dependency> globalDependencies, List<Dependency> currentDependencies, List<LogicalDependnecy> currentLogicalDependencies)  
+            List<Dependency> globalDependencies, List<Dependency> currentDependencies, List<LogicalDependnecy> currentLogicalDependencies)
         {
-            parsedZips = new List<string>();
+            ParsedZips = new List<string>();
             foreach (Dependency d in globalDependencies)
             {
-                if (!d.dependencyZipFile.Equals("") && !parsedZips.Contains(d.dependencyZipFile))
+                if (!d.dependencyZipFile.Equals("") && !ParsedZips.Contains(d.dependencyZipFile))
                 {
-                    parsedZips.Add(d.dependencyZipFile);
+                    ParsedZips.Add(d.dependencyZipFile);
                 }
             }
             foreach (Dependency d in currentDependencies)
             {
-                if (!d.dependencyZipFile.Equals("") && !parsedZips.Contains(d.dependencyZipFile))
+                if (!d.dependencyZipFile.Equals("") && !ParsedZips.Contains(d.dependencyZipFile))
                 {
-                    parsedZips.Add(d.dependencyZipFile);
+                    ParsedZips.Add(d.dependencyZipFile);
                 }
             }
             foreach (LogicalDependnecy d in currentLogicalDependencies)
             {
-                if (!d.dependencyZipFile.Equals("") && !parsedZips.Contains(d.dependencyZipFile))
+                if (!d.dependencyZipFile.Equals("") && !ParsedZips.Contains(d.dependencyZipFile))
                 {
-                    parsedZips.Add(d.dependencyZipFile);
+                    ParsedZips.Add(d.dependencyZipFile);
                 }
             }
             foreach (Category cat in parsedCatagoryList)
             {
                 foreach (Mod m in cat.mods)
                 {
-                    
-                    if (!m.zipFile.Equals("") && !parsedZips.Contains(m.zipFile))
+
+                    if (!m.zipFile.Equals("") && !ParsedZips.Contains(m.zipFile))
                     {
-                        parsedZips.Add(m.zipFile);
+                        ParsedZips.Add(m.zipFile);
                     }
                     if (m.configs.Count > 0)
                         depricated_parseZipFileConfigs(m.configs);
@@ -719,9 +706,9 @@ namespace RelhaxModpack
             }
             //now parsedZips has every single possible zipFile in the database
             //for each zipfile in it, remove it in currentZipFiles if it exists
-            foreach (string s in parsedZips)
+            foreach (string s in ParsedZips)
             {
-                if(currentZipFiles.Contains(s))
+                if (currentZipFiles.Contains(s))
                     currentZipFiles.Remove(s);
             }
             return currentZipFiles;
@@ -731,16 +718,15 @@ namespace RelhaxModpack
         {
             foreach (Config c in configList)
             {
-                
-                if (!c.zipFile.Equals("") && !parsedZips.Contains(c.zipFile))
+
+                if (!c.zipFile.Equals("") && !ParsedZips.Contains(c.zipFile))
                 {
-                    parsedZips.Add(c.zipFile);
+                    ParsedZips.Add(c.zipFile);
                 }
                 if (c.configs.Count > 0)
                     depricated_parseZipFileConfigs(c.configs);
             }
         }
-
         //deletes all empty directories from a given start location
         public static void processDirectory(string startLocation, bool reportToLog = true)
         {
@@ -750,7 +736,7 @@ namespace RelhaxModpack
                 if (Directory.GetFiles(directory).Length == 0 &&
                     Directory.GetDirectories(directory).Length == 0)
                 {
-                    if(reportToLog)
+                    if (reportToLog)
                         Utils.appendToLog(string.Format("Deleting empty directory {0}", directory));
                     Directory.Delete(directory, false);
                 }
@@ -761,12 +747,11 @@ namespace RelhaxModpack
         {
             if (!File.Exists(localFile))
                 return false;
-            string crc = XMLUtils.getMd5Hash(localFile);
+            string crc = XMLUtils.GetMd5Hash(localFile);
             if (crc.Equals(remoteCRC))
                 return true;
             return false;
         }
-
         //Downloads the forum page. Totally not stat padding
         public static void TotallyNotStatPaddingForumPageViewCount()
         {
@@ -776,7 +761,6 @@ namespace RelhaxModpack
                 worker.RunWorkerAsync();
             }
         }
-
         //Downloads the forum page. Totally not stat padding
         public static void worker_TotallyNotStatPaddingForumPageViewCount(object sender, DoWorkEventArgs args)
         {
@@ -795,7 +779,6 @@ namespace RelhaxModpack
                 }
             }
         }
-
         // https://stackoverflow.com/questions/14488796/does-net-provide-an-easy-way-convert-bytes-to-kb-mb-gb-etc
         static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
         public static string SizeSuffix(Int64 value, int decimalPlaces = 1, bool sizeSuffix = false)
@@ -829,7 +812,7 @@ namespace RelhaxModpack
         {
             foreach (char c in System.IO.Path.GetInvalidFileNameChars())
             {
-               fileName = fileName.Replace(c, '_');
+                fileName = fileName.Replace(c, '_');
             }
             return fileName;
         }
@@ -846,9 +829,6 @@ namespace RelhaxModpack
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-
-        
-
         //https://stackoverflow.com/questions/5977445/how-to-get-windows-display-settings
         public static float GetDisplayScale(Graphics graphics)
         {
@@ -856,13 +836,12 @@ namespace RelhaxModpack
             float dpiX, dpiY;
             dpiX = graphics.DpiX;
             dpiY = graphics.DpiY;
-            if(dpiX != dpiY)
+            if (dpiX != dpiY)
             {
                 Utils.appendToLog("WARNING: scale values do not equal, using x value");
             }
             return dpiX / 96;
         }
-
         [DllImport("gdi32.dll")]
         static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
         public enum DeviceCap
@@ -884,7 +863,6 @@ namespace RelhaxModpack
 
             return ScreenScalingFactor; // 1.25 = 125%
         }
-
         // https://social.msdn.microsoft.com/Forums/vstudio/en-US/92a36534-0f01-4425-ab63-c5f8830d64ae/help-please-with-dotnetzip-extracting-data-form-ziped-file?forum=csharpgeneral
         public static string getStringFromZip(string zipFilename, string archivedFilename, string password = null)
         {
@@ -907,7 +885,7 @@ namespace RelhaxModpack
                     ms.Position = 0;
                     textStr = sr.ReadToEnd();
                 }
-            } 
+            }
             else
             {
                 Utils.appendToLog(string.Format("ERROR: {0} not found", zipFilename));
@@ -970,7 +948,6 @@ namespace RelhaxModpack
                 Utils.exceptionLog("DirectoryDelete", "Folder=" + folderPath, ex);
             }
         }
-
         // https://stackoverflow.com/questions/30494/compare-version-identifiers
         /// <summary>
         /// Compare versions of form "1,2,3,4" or "1.2.3.4". Throws FormatException
@@ -1005,7 +982,6 @@ namespace RelhaxModpack
         {
             return DateTime.FromFileTime(timestamp).ToString();
         }
-
         // https://stackoverflow.com/questions/4897655/create-shortcut-on-desktop-c-sharp
         /// <summary>Creates or removes a shortcut at the specified pathname.</summary> 
         /// <param name="shortcutTarget">The path where the original file is located.</param> 
@@ -1035,7 +1011,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.exceptionLog("CreateShortcut", "create: "+ modifiedName, ex);
+                    Utils.exceptionLog("CreateShortcut", "create: " + modifiedName, ex);
                 }
             }
             else
@@ -1052,14 +1028,12 @@ namespace RelhaxModpack
             }
         }
     }
-
     // needed for CreateShortcut
     [ComImport]
     [Guid("00021401-0000-0000-C000-000000000046")]
     internal class ShellLink
     {
     }
-
     // needed for CreateShortcut
     [ComImport]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

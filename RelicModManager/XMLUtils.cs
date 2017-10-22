@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -12,7 +11,8 @@ namespace RelhaxModpack
 {
     public static class XMLUtils
     {
-        public static int totalModConfigComponents = 0;
+        public static int TotalModConfigComponents = 0;
+
         public static bool IsValidXml(string xmlString)
         {
             XmlTextReader read = new XmlTextReader(xmlString);
@@ -30,7 +30,7 @@ namespace RelhaxModpack
             }
         }
 
-        public static string readVersionFromModInfo(string f)
+        public static string ReadVersionFromModInfo(string f)
         {
             XDocument doc = XDocument.Load(f);
             try
@@ -44,7 +44,7 @@ namespace RelhaxModpack
             }
         }
 
-        public static string readOnlineFolderFromModInfo(string f)
+        public static string ReadOnlineFolderFromModInfo(string f)
         {
             XDocument doc = XDocument.Load(f);
             try
@@ -57,16 +57,15 @@ namespace RelhaxModpack
                 return "error"; // catch the Exception if no entry is found
             }
         }
-
         //parses the xml mod info into the memory database (change XML reader from XMLDocument to XDocument)
         // https://www.google.de/search?q=c%23+xdocument+get+line+number&oq=c%23+xdocument+get+line+number&aqs=chrome..69i57j69i58.11773j0j7&sourceid=chrome&ie=UTF-8
         // public static void createModStructure(string databaseURL, List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies, List<Category> parsedCatagoryList, List<DeveloperSelections> developerSelections = null)
-        public static void createModStructure(string databaseURL, List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies, List<Category> parsedCatagoryList)
+        public static void CreateModStructure(string databaseURL, List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies, List<Category> parsedCatagoryList)
         {
             try
             {
                 MainWindow.developerSelections.Clear();
-                totalModConfigComponents = 0;
+                TotalModConfigComponents = 0;
                 XDocument doc = null;
                 try
                 {
@@ -76,7 +75,7 @@ namespace RelhaxModpack
                         string xmlString = Utils.getStringFromZip(Settings.modInfoDatFile, "modInfo.xml");
                         doc = XDocument.Parse(xmlString, LoadOptions.SetLineInfo);
                         // create new developerSelections NameList
-                        parseDeveloperSelections(doc);
+                        ParseDeveloperSelections(doc);
                     }
                     else
                     {
@@ -389,7 +388,7 @@ namespace RelhaxModpack
                                                 {
                                                     case "name":
                                                         m.name = modNode.Value;
-                                                        totalModConfigComponents++;
+                                                        TotalModConfigComponents++;
                                                         break;
                                                     case "version":
                                                         m.version = modNode.Value;
@@ -428,10 +427,10 @@ namespace RelhaxModpack
                                                         m.size = Utils.parseInt(modNode.Value, 0);
                                                         break;
                                                     case "description":
-                                                        m.description = convertFromXmlSaveFormat(modNode.Value);
+                                                        m.description = ConvertFromXmlSaveFormat(modNode.Value);
                                                         break;
                                                     case "updateComment":
-                                                        m.updateComment = convertFromXmlSaveFormat(modNode.Value);
+                                                        m.updateComment = ConvertFromXmlSaveFormat(modNode.Value);
                                                         break;
                                                     case "devURL":
                                                         m.devURL = modNode.Value;
@@ -606,7 +605,7 @@ namespace RelhaxModpack
                                                         break;
                                                     case "configs":
                                                         //run the process configs method
-                                                        XMLUtils.processConfigs(modNode, m, true);
+                                                        XMLUtils.ProcessConfigs(modNode, m, true);
                                                         break;
                                                     default:
                                                         Utils.appendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) (line {3})", modNode.Name.ToString(), m.name, m.zipFile, ((IXmlLineInfo)modNode).LineNumber));
@@ -680,9 +679,8 @@ namespace RelhaxModpack
                 Utils.exceptionLog("createModStructure", ex);
             }
         }
-
         //recursivly processes the configs
-        public static void processConfigs(XElement holder, Mod m, bool parentIsMod, Config con = null)
+        public static void ProcessConfigs(XElement holder, Mod m, bool parentIsMod, Config con = null)
         {
             try
             {
@@ -739,10 +737,10 @@ namespace RelhaxModpack
                                         c.size = Utils.parseInt(configNode.Value, 0);
                                         break;
                                     case "updateComment":
-                                        c.updateComment = convertFromXmlSaveFormat(configNode.Value);
+                                        c.updateComment = ConvertFromXmlSaveFormat(configNode.Value);
                                         break;
                                     case "description":
-                                        c.description = convertFromXmlSaveFormat(configNode.Value);
+                                        c.description = ConvertFromXmlSaveFormat(configNode.Value);
                                         break;
                                     case "devURL":
                                         c.devURL = configNode.Value;
@@ -751,7 +749,7 @@ namespace RelhaxModpack
                                         c.type = configNode.Value;
                                         break;
                                     case "configs":
-                                        XMLUtils.processConfigs(configNode, m, false, c);
+                                        XMLUtils.ProcessConfigs(configNode, m, false, c);
                                         break;
                                     case "userDatas":
                                         foreach (XElement userDataNode in configNode.Elements())
@@ -948,7 +946,7 @@ namespace RelhaxModpack
             }
         }
         //saves the currently checked configs and mods
-        public static void saveConfig(bool fromButton, string fileToConvert, List<Category> parsedCatagoryList, List<Mod> userMods)
+        public static void SaveConfig(bool fromButton, string fileToConvert, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
             //dialog box to ask where to save the config to
             System.Windows.Forms.SaveFileDialog saveLocation = new System.Windows.Forms.SaveFileDialog();
@@ -999,7 +997,7 @@ namespace RelhaxModpack
                         nodeRelhax.Add(new XElement("mod", m.packageName));
                         if (m.configs.Count > 0)
                         {
-                            XMLUtils.saveProcessConfigs(ref doc, m.configs);
+                            XMLUtils.SaveProcessConfigs(ref doc, m.configs);
                         }
                     }
                 }
@@ -1022,7 +1020,7 @@ namespace RelhaxModpack
             }
         }
 
-        private static void saveProcessConfigs(ref XDocument doc, List<Config> configList)
+        private static void SaveProcessConfigs(ref XDocument doc, List<Config> configList)
         {
             var node = doc.Descendants("relhaxMods").FirstOrDefault();
             foreach (Config cc in configList)
@@ -1033,13 +1031,13 @@ namespace RelhaxModpack
                     node.Add(new XElement("mod", cc.packageName));
                     if (cc.configs.Count > 0)
                     {
-                        XMLUtils.saveProcessConfigs(ref doc, cc.configs);
+                        XMLUtils.SaveProcessConfigs(ref doc, cc.configs);
                     }
                 }
             }
         }
 
-        public static void loadConfig(bool fromButton, string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
+        public static void LoadConfig(bool fromButton, string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
             //uncheck everythihng in memory first
             Utils.clearSelectionMemory(parsedCatagoryList, userMods);
@@ -1064,16 +1062,15 @@ namespace RelhaxModpack
             }
             if (ver.Equals("2.0"))      //the file is version v2.0, so go "loadConfigV2" (packageName depended)
             {
-                loadConfigV2(filePath, parsedCatagoryList, userMods);
+                LoadConfigV2(filePath, parsedCatagoryList, userMods);
             }
             else // file is still version v1.0 (name dependend)
             {
-                loadConfigV1(fromButton, filePath, parsedCatagoryList, userMods);
+                LoadConfigV1(fromButton, filePath, parsedCatagoryList, userMods);
             }
         }
-
         //loads a saved config from xml and parses it into the memory database
-        public static void loadConfigV1(bool fromButton, string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
+        public static void LoadConfigV1(bool fromButton, string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
@@ -1139,11 +1136,11 @@ namespace RelhaxModpack
                             }
                             break;
                         case "configs":
-                            XMLUtils.loadProcessConfigsV1(nn, m, true);
+                            XMLUtils.LoadProcessConfigsV1(nn, m, true);
                             break;
                         //compatibility in case it's a super legacy with subConfigs
                         case "subConfigs":
-                            XMLUtils.loadProcessConfigsV1(nn, m, true);
+                            XMLUtils.LoadProcessConfigsV1(nn, m, true);
                             break;
                     }
                 }
@@ -1163,7 +1160,7 @@ namespace RelhaxModpack
                             if (m != null)
                             {
                                 string filename = m.name + ".zip";
-                                if (System.IO.File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename)))
+                                if (File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename)))
                                 {
                                     m.Checked = true;
                                     if (m.modFormCheckBox != null)
@@ -1187,7 +1184,7 @@ namespace RelhaxModpack
                     // create Path to UserConfigs Backup
                     string backupFolder = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "Backup");
                     // create Backup folder at UserConfigs
-                    System.IO.Directory.CreateDirectory(backupFolder);
+                    Directory.CreateDirectory(backupFolder);
                     // exctrat filename to create a new filename with backup date and time
                     string filename = Path.GetFileNameWithoutExtension(filePath);
                     string fileextention = Path.GetExtension(filePath);
@@ -1196,20 +1193,19 @@ namespace RelhaxModpack
                     // move file to new location now
                     try
                     {
-                        System.IO.File.Move(filePath, targetFilePath);
+                        File.Move(filePath, targetFilePath);
                     }
                     catch (Exception ex)
                     {
                         Utils.exceptionLog("loadConfigV1", string.Format("sourceFile: {0}\ntargetFile: {1}", filePath, targetFilePath), ex);
                     }
                     // create saved config file with new format
-                    saveConfig(false, filePath, parsedCatagoryList, userMods);
+                    SaveConfig(false, filePath, parsedCatagoryList, userMods);
                 }
             }
         }
-
         //loads a saved config from xml and parses it into the memory database
-        public static void loadConfigV2(string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
+        public static void LoadConfigV2(string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
             Utils.appendToLog(string.Format("Loading mod selections v2.0 from {0}", filePath));
             List<string> savedConfigList = new List<string>();
@@ -1287,7 +1283,7 @@ namespace RelhaxModpack
                         }
                         if (m.configs.Count > 0)
                         {
-                            loadProcessConfigsV2(m.name, m.configs, ref savedConfigList);
+                            LoadProcessConfigsV2(m.name, m.configs, ref savedConfigList);
                         }
                     }
                 }
@@ -1302,7 +1298,7 @@ namespace RelhaxModpack
                 if (savedUserConfigList.Contains(um.name))
                 {
                     string filename = um.name + ".zip";
-                    if (System.IO.File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename)))
+                    if (File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename)))
                     {
                         //it will be done in the UI code
                         um.Checked = true;
@@ -1327,7 +1323,7 @@ namespace RelhaxModpack
             Utils.appendToLog("Finished loading mod selections v2.0");
         }
 
-        private static void loadProcessConfigsV1(XmlNode holder, Mod m, bool parentIsMod, Config con = null)
+        private static void LoadProcessConfigsV1(XmlNode holder, Mod m, bool parentIsMod, Config con = null)
         {
             foreach (XmlNode nnn in holder.ChildNodes)
             {
@@ -1474,17 +1470,17 @@ namespace RelhaxModpack
                             }
                             break;
                         case "configs":
-                            XMLUtils.loadProcessConfigsV1(nnnn, m, false, c);
+                            XMLUtils.LoadProcessConfigsV1(nnnn, m, false, c);
                             break;
                         case "subConfigs":
-                            XMLUtils.loadProcessConfigsV1(nnnn, m, false, c);
+                            XMLUtils.LoadProcessConfigsV1(nnnn, m, false, c);
                             break;
                     }
                 }
             }
         }
 
-        private static void loadProcessConfigsV2(string parentName, List<Config> configList, ref List<string> savedConfigList)
+        private static void LoadProcessConfigsV2(string parentName, List<Config> configList, ref List<string> savedConfigList)
         {
             bool shouldBeBA = false;
             Panel panelRef = null;
@@ -1608,7 +1604,7 @@ namespace RelhaxModpack
                     }
                     if (c.configs.Count > 0)
                     {
-                        loadProcessConfigsV2(c.name, c.configs, ref savedConfigList);
+                        LoadProcessConfigsV2(c.name, c.configs, ref savedConfigList);
                     }
                 }
             }
@@ -1619,17 +1615,15 @@ namespace RelhaxModpack
             }
         }
         //convert string with CR and/or LF from Xml save format
-        private static string convertFromXmlSaveFormat(string s)
+        private static string ConvertFromXmlSaveFormat(string s)
         {
             return s.TrimEnd().Replace("@", "\n").Replace(@"\r", "\r").Replace(@"\t", "\t").Replace(@"\n", "\n").Replace(@"&#92;", @"\");
         }
-
         //convert string with CR and/or LF to Xml save format
-        private static string convertToXmlSaveFormat(string s)
+        private static string ConvertToXmlSaveFormat(string s)
         {
             return s.TrimEnd().Replace(@"\", @"&#92;").Replace("\r", @"\r").Replace("\t", @"\t").Replace("\n", @"\n");
         }
-
         //saves the mod database
         public static void SaveDatabase(string saveLocation, string gameVersion, string onlineFolderVersion, List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies, List<Category> parsedCatagoryList)
         {
@@ -1917,11 +1911,11 @@ namespace RelhaxModpack
                     modRoot.AppendChild(modZipSize);
                     XmlElement modUpdateComment = doc.CreateElement("updateComment");
                     if (!m.updateComment.Trim().Equals(""))
-                        modUpdateComment.InnerText = convertToXmlSaveFormat(m.updateComment);
+                        modUpdateComment.InnerText = ConvertToXmlSaveFormat(m.updateComment);
                     modRoot.AppendChild(modUpdateComment);
                     XmlElement modDescription = doc.CreateElement("description");
                     if (!m.description.Trim().Equals(""))
-                        modDescription.InnerText = convertToXmlSaveFormat(m.description);
+                        modDescription.InnerText = ConvertToXmlSaveFormat(m.description);
                     modRoot.AppendChild(modDescription);
                     XmlElement modDevURL = doc.CreateElement("devURL");
                     if (!m.devURL.Trim().Equals(""))
@@ -1957,7 +1951,7 @@ namespace RelhaxModpack
                     XmlElement configsHolder = doc.CreateElement("configs");
                     //if statement here
                     if (m.configs.Count > 0)
-                        saveDatabaseConfigLevel(doc, configsHolder, m.configs);
+                        SaveDatabaseConfigLevel(doc, configsHolder, m.configs);
                     modRoot.AppendChild(configsHolder);
                     XmlElement modDependencies = doc.CreateElement("dependencies");
                     foreach (Dependency d in m.dependencies)
@@ -2034,7 +2028,8 @@ namespace RelhaxModpack
             // save database file
             doc.Save(saveLocation);
         }
-        private static void saveDatabaseConfigLevel(XmlDocument doc, XmlElement configsHolder, List<Config> configsList)
+
+        private static void SaveDatabaseConfigLevel(XmlDocument doc, XmlElement configsHolder, List<Config> configsList)
         {
             foreach (Config cc in configsList)
             {
@@ -2087,11 +2082,11 @@ namespace RelhaxModpack
                 configRoot.AppendChild(configSize);
                 XmlElement configComment = doc.CreateElement("updateComment");
                 if (!cc.updateComment.Trim().Equals(""))
-                    configComment.InnerText = convertToXmlSaveFormat(cc.updateComment);
+                    configComment.InnerText = ConvertToXmlSaveFormat(cc.updateComment);
                 configRoot.AppendChild(configComment);
                 XmlElement configDescription = doc.CreateElement("description");
                 if (!cc.description.Trim().Equals(""))
-                    configDescription.InnerText = convertToXmlSaveFormat(cc.description);
+                    configDescription.InnerText = ConvertToXmlSaveFormat(cc.description);
                 configRoot.AppendChild(configDescription);
                 XmlElement configDevURL = doc.CreateElement("devURL");
                 if (!cc.devURL.Trim().Equals(""))
@@ -2131,7 +2126,7 @@ namespace RelhaxModpack
                 XmlElement configsHolderSub = doc.CreateElement("configs");
                 //if statement here
                 if (cc.configs.Count > 0)
-                    saveDatabaseConfigLevel(doc, configsHolderSub, cc.configs);
+                    SaveDatabaseConfigLevel(doc, configsHolderSub, cc.configs);
                 configRoot.AppendChild(configsHolderSub);
                 //dependencies for the configs
                 XmlElement catDependencies = doc.CreateElement("dependencies");
@@ -2191,7 +2186,8 @@ namespace RelhaxModpack
                 configsHolder.AppendChild(configRoot);
             }
         }
-        private static void parseDeveloperSelections(XDocument doc)
+
+        private static void ParseDeveloperSelections(XDocument doc)
         {
             DeveloperSelections d;
             var xMembers = from members in doc.Descendants("selections").Elements() select members;
@@ -2205,7 +2201,7 @@ namespace RelhaxModpack
             }
         }
         //returns the md5 hash of the file based on the input file string location. It is searching in the database first. If not found in database or the filetime is not the same, it will create a new Hash and update the database
-        public static string getMd5Hash(string inputFile)
+        public static string GetMd5Hash(string inputFile)
         {
             if (Program.databaseUpdateOnline)
             {
@@ -2233,27 +2229,27 @@ namespace RelhaxModpack
             }
 
             // check if databse exists and if not, create it
-            XMLUtils.createMd5HashDatabase();
+            XMLUtils.CreateMd5HashDatabase();
             // get filetime from file, convert it to string with base 10
-            string tempFiletime = Convert.ToString(System.IO.File.GetLastWriteTime(inputFile).ToFileTime(), 10);
+            string tempFiletime = Convert.ToString(File.GetLastWriteTime(inputFile).ToFileTime(), 10);
             // extract filename with path
             string tempFilename = Path.GetFileName(inputFile);
             // check database for filename with filetime
-            string tempHash = XMLUtils.getMd5HashDatabase(tempFilename, tempFiletime);
+            string tempHash = XMLUtils.GetMd5HashDatabase(tempFilename, tempFiletime);
             if (tempHash == "-1")   // file not found in database
             {
                 // create Md5Hash from file
-                tempHash = Utils.createMd5Hash(inputFile);
+                tempHash = Utils.CreateMd5Hash(inputFile);
 
                 if (tempHash == "-1")
                 {
                     // no file found, then delete from database
-                    XMLUtils.deleteMd5HashDatabase(tempFilename);
+                    XMLUtils.DeleteMd5HashDatabase(tempFilename);
                 }
                 else
                 {
                     // file found. update the database with new values
-                    XMLUtils.updateMd5HashDatabase(tempFilename, tempHash, tempFiletime);
+                    XMLUtils.UpdateMd5HashDatabase(tempFilename, tempHash, tempFiletime);
                 }
                 // report back the created Hash
                 return tempHash;
@@ -2264,17 +2260,17 @@ namespace RelhaxModpack
                 return tempHash;
             }
         }
-        public static void createMd5HashDatabase()
+
+        public static void CreateMd5HashDatabase()
         {
-            if (!System.IO.File.Exists(MainWindow.md5HashDatabaseXmlFile))
+            if (!File.Exists(MainWindow.md5HashDatabaseXmlFile))
             {
                 XDocument doc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement("database"));
                 doc.Save(MainWindow.md5HashDatabaseXmlFile);
             }
         }
-
         // need filename and filetime to check the database
-        public static string getMd5HashDatabase(string inputFile, string inputFiletime)
+        public static string GetMd5HashDatabase(string inputFile, string inputFiletime)
         {
             try
             {
@@ -2293,13 +2289,13 @@ namespace RelhaxModpack
             catch (Exception e)
             {
                 Utils.exceptionLog("getMd5HashDatabase", e);
-                System.IO.File.Delete(MainWindow.md5HashDatabaseXmlFile);     // delete damaged XML database
-                createMd5HashDatabase();                            // create new XML database
+                File.Delete(MainWindow.md5HashDatabaseXmlFile);     // delete damaged XML database
+                CreateMd5HashDatabase();                            // create new XML database
             }
             return "-1";
         }
 
-        public static void updateMd5HashDatabase(string inputFile, string inputMd5Hash, string inputFiletime)
+        public static void UpdateMd5HashDatabase(string inputFile, string inputMd5Hash, string inputFiletime)
         {
             try
             {
@@ -2324,10 +2320,10 @@ namespace RelhaxModpack
             }
         }
 
-        public static void deleteMd5HashDatabase(string inputFile)
+        public static void DeleteMd5HashDatabase(string inputFile)
         {
             // only for caution
-            XMLUtils.createMd5HashDatabase();
+            XMLUtils.CreateMd5HashDatabase();
 
             // extract filename from path (if call with full path)
             string tempFilename = Path.GetFileName(inputFile);

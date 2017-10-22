@@ -95,7 +95,7 @@ namespace RelhaxModpack
             {
                 temp = "remove";
             }
-            PatchUtils.xmlPatch(xmlFilePathBox.Text, xmlPathBox.Text, temp, xmlSearchBox.Text, xmlReplaceBox.Text, "", "", true, xvmFilePathBox.Text);
+            PatchUtils.XMLPatch(xmlFilePathBox.Text, xmlPathBox.Text, temp, xmlSearchBox.Text, xmlReplaceBox.Text, "", "", true, xvmFilePathBox.Text);
         }
 
         private void jsonLoadFileButton_Click(object sender, EventArgs e)
@@ -108,7 +108,7 @@ namespace RelhaxModpack
 
         private void jsonPatchButton_Click(object sender, EventArgs e)
         {
-            PatchUtils.jsonPatch(jsonFilePathBox.Text, jsonPathBox.Text, jsonReplaceBox.Text, "edit", "", "", true, xvmFilePathBox.Text);
+            PatchUtils.JSONPatch(jsonFilePathBox.Text, jsonPathBox.Text, jsonReplaceBox.Text, "edit", "", "", true, xvmFilePathBox.Text);
         }
 
         private void regexMakePatchButton_Click(object sender, EventArgs e)
@@ -229,46 +229,46 @@ namespace RelhaxModpack
         private void button1_Click(object sender, EventArgs e)
         {
             //edit example
-            PatchUtils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.saveLastServer", ".*", "nope", "edit", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.saveLastServer", ".*", "nope", "edit", "", "", true);
             //advanced edit example
-            PatchUtils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.fields.flag.enabled", ".*", "nope", "edit", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.fields.flag.enabled", ".*", "nope", "edit", "", "", true);
             //very advnaced edit example
-            PatchUtils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.extraFields[2]endIndex.enabled", ".*", "nope", "edit", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.extraFields[2]endIndex.enabled", ".*", "nope", "edit", "", "", true);
             //very very advnaced edit example
-            PatchUtils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.extraFields[img://gui/maps/icons/library/proficiency/class_icons_{{v.mastery}}.png]endIndex.enabled", ".*", "nope", "edit", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.extraFields[img://gui/maps/icons/library/proficiency/class_icons_{{v.mastery}}.png]endIndex.enabled", ".*", "nope", "edit", "", "", true);
             //very very very advanced edit example
-            PatchUtils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "battleLabels.formats[totalHP]endIndex.enabled", ".*", "nope", "edit", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "battleLabels.formats[totalHP]endIndex.enabled", ".*", "nope", "edit", "", "", true);
 
             //add example
-            PatchUtils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.saveLastServer", "", "    \"isAwesome\": yup", "add", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.saveLastServer", "", "    \"isAwesome\": yup", "add", "", "", true);
             //advanced add example
-            PatchUtils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.pingServers", "", "      \"isAwesome\": yup", "add", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.pingServers", "", "      \"isAwesome\": yup", "add", "", "", true);
             //very advanced add example
-            PatchUtils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.pingServers.fontStyle.serverColor", "", "        \"isAwesome\": yup", "add", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.pingServers.fontStyle.serverColor", "", "        \"isAwesome\": yup", "add", "", "", true);
 
             //array clear example
-            PatchUtils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.sorting_criteria", "", "", "array_clear", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.sorting_criteria", "", "", "array_clear", "", "", true);
 
             //array add example
-            PatchUtils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[4]endIndex", "", " \"SCUMBAG\"", "array_add", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[4]endIndex", "", " \"SCUMBAG\"", "array_add", "", "", true);
             //advanced array add example
-            PatchUtils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "battleLabels.formats[0]endIndex", "", " \"SCUMBAG\"", "array_add", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "battleLabels.formats[0]endIndex", "", " \"SCUMBAG\"", "array_add", "", "", true);
             //very advanced array add example
-            PatchUtils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "battleLabels.formats[-1]endIndex", "", "  ${ \"battleLabelsTemplates.xc\":\"def.teamRating\"}", "array_add", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "battleLabels.formats[-1]endIndex", "", "  ${ \"battleLabelsTemplates.xc\":\"def.teamRating\"}", "array_add", "", "", true);
 
             //array edit example
-            PatchUtils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[2]endIndex", ".*", "\"MEMER\"", "array_edit", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[2]endIndex", ".*", "\"MEMER\"", "array_edit", "", "", true);
 
             //array remove example
-            PatchUtils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[0]endIndex", ".*", "", "array_remove", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[0]endIndex", ".*", "", "array_remove", "", "", true);
             //advanced array remove example 2
-            PatchUtils.xvmPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[mediumTank]endIndex", ".*", "", "array_remove", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.types_order[mediumTank]endIndex", ".*", "", "array_remove", "", "", true);
 
             //pmod test example
-            PatchUtils.pmodPatch(Application.StartupPath + "\\TempPatchWork\\pmod\\_multiple.json", "zoomIndicator.enable", ".*", "nope", "edit", "", "", true);
+            PatchUtils.PMODPatch(Application.StartupPath + "\\TempPatchWork\\pmod\\_multiple.json", "zoomIndicator.enable", ".*", "nope", "edit", "", "", true);
             
             //test xvm folder provider
-            string testXvmBootLoc = PatchUtils.getXVMBootLoc(null, Application.StartupPath + "\\TempPatchWork\\xvm.xc");
+            string testXvmBootLoc = PatchUtils.GetXVMBootLoc(null, Application.StartupPath + "\\TempPatchWork\\xvm.xc");
             MessageBox.Show(testXvmBootLoc);
         }
 
@@ -292,11 +292,11 @@ namespace RelhaxModpack
             string newReg = Regex.Replace(xvmReplaceBox.Text, @"\n", "newline");
             if (xvmPatchRB.Checked)
             {
-                PatchUtils.xvmPatch(xvmFilePathBox.Text, xvmPathBox.Text, xvmSearchBox.Text, newReg, xvmMode, "", "", true, xvmFilePathBox.Text);
+                PatchUtils.XVMPatch(xvmFilePathBox.Text, xvmPathBox.Text, xvmSearchBox.Text, newReg, xvmMode, "", "", true, xvmFilePathBox.Text);
             }
             else if (PMODPatchRB.Checked)
             {
-                PatchUtils.pmodPatch(xvmFilePathBox.Text, xvmPathBox.Text, xvmSearchBox.Text, newReg, xvmMode, "", "", true, xvmFilePathBox.Text);
+                PatchUtils.PMODPatch(xvmFilePathBox.Text, xvmPathBox.Text, xvmSearchBox.Text, newReg, xvmMode, "", "", true, xvmFilePathBox.Text);
             }
             else
             {

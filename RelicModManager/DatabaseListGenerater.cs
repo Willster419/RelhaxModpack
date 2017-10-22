@@ -53,7 +53,7 @@ namespace RelhaxModpack
             dependencies = new List<Dependency>();
             logicalDependencies = new List<LogicalDependnecy>();
             parsedCatagoryList = new List<Category>();
-            XMLUtils.createModStructure(LoadDatabaseFileDialog.FileName, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.CreateModStructure(LoadDatabaseFileDialog.FileName, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             if(!SpreadsheetLocation.Text.Equals(""))
                 SpreadsheetLocation.Text = "(old) " + SpreadsheetLocation.Text;
         }

@@ -1597,7 +1597,7 @@ namespace RelhaxModpack
                                     File.SetAttributes(file, FileAttributes.Normal);
                                     File.Delete(file);
                                     // remove file from database, too
-                                    XMLUtils.deleteMd5HashDatabase(file);
+                                    XMLUtils.DeleteMd5HashDatabase(file);
                                     childProgressBar.Value++;
                                     retry = false;
                                 }

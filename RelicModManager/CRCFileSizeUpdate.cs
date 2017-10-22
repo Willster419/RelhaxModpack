@@ -55,9 +55,9 @@ namespace RelhaxModpack
             if (databaseLocationTextBox.Text.Equals("-none-"))
                 return;
             // read onlineFolder of the selected local modInfo.xml to get the right online database.xml
-            string onlineFolderVersion = XMLUtils.readOnlineFolderFromModInfo(databaseLocationTextBox.Text);
+            string onlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(databaseLocationTextBox.Text);
             // read gameVersion of the selected local modInfo.xml
-            string gameVersion = XMLUtils.readVersionFromModInfo(databaseLocationTextBox.Text);
+            string gameVersion = XMLUtils.ReadVersionFromModInfo(databaseLocationTextBox.Text);
             Utils.appendToLog("working with game version: " + onlineFolderVersion);
             // download online database.xml
             try
@@ -88,7 +88,7 @@ namespace RelhaxModpack
             parsedCatagoryList = new List<Category>();
             dependencies = new List<Dependency>();
             logicalDependencies = new List<LogicalDependnecy>();
-            XMLUtils.createModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.CreateModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             //check for duplicates
             int duplicatesCounter = 0;
             if (Utils.duplicates(parsedCatagoryList) && Utils.duplicatesPackageName(parsedCatagoryList, ref duplicatesCounter ))
@@ -109,7 +109,7 @@ namespace RelhaxModpack
             //foreach zip file name
             foreach (Dependency d in globalDependencies)
             {
-                hash = XMLUtils.getMd5Hash(d.dependencyZipFile);
+                hash = XMLUtils.GetMd5Hash(d.dependencyZipFile);
                 if (!d.dependencyZipCRC.Equals(hash))
                 {
                     d.dependencyZipCRC = hash;
@@ -125,7 +125,7 @@ namespace RelhaxModpack
             }
             foreach (Dependency d in dependencies)
             {
-                hash = XMLUtils.getMd5Hash(d.dependencyZipFile);
+                hash = XMLUtils.GetMd5Hash(d.dependencyZipFile);
                 if (!d.dependencyZipCRC.Equals(hash))
                 {
                     d.dependencyZipCRC = hash;
@@ -141,7 +141,7 @@ namespace RelhaxModpack
             }
             foreach (LogicalDependnecy d in logicalDependencies)
             {
-                hash = XMLUtils.getMd5Hash(d.dependencyZipFile);
+                hash = XMLUtils.GetMd5Hash(d.dependencyZipFile);
                 if (!d.dependencyZipCRC.Equals(hash))
                 {
                     d.dependencyZipCRC = hash;
@@ -162,7 +162,7 @@ namespace RelhaxModpack
                     if (!m.zipFile.Equals(""))
                     {
                         m.size = this.getFileSize(m.zipFile);
-                        hash = XMLUtils.getMd5Hash(m.zipFile);
+                        hash = XMLUtils.GetMd5Hash(m.zipFile);
                         if (!m.crc.Equals(hash))
                         {
                             m.crc = hash;
@@ -201,7 +201,7 @@ namespace RelhaxModpack
             {
                 if (!cat.zipFile.Equals(""))
                 {
-                    hash = XMLUtils.getMd5Hash(cat.zipFile);
+                    hash = XMLUtils.GetMd5Hash(cat.zipFile);
                     cat.size = this.getFileSize(cat.zipFile);
                     if (cat.size != 0)
                     {
@@ -318,9 +318,9 @@ namespace RelhaxModpack
             parsedCatagoryList = new List<Category>();
             dependencies = new List<Dependency>();
             logicalDependencies = new List<LogicalDependnecy>();
-            string gameVersion = XMLUtils.readVersionFromModInfo(databaseLocationTextBox.Text);
-            string onlineFolderVersion = XMLUtils.readOnlineFolderFromModInfo(databaseLocationTextBox.Text);
-            XMLUtils.createModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            string gameVersion = XMLUtils.ReadVersionFromModInfo(databaseLocationTextBox.Text);
+            string onlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(databaseLocationTextBox.Text);
+            XMLUtils.CreateModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             int duplicatesCounter = 0;
             //check for duplicates
             if (Utils.duplicates(parsedCatagoryList) && Utils.duplicatesPackageName(parsedCatagoryList, ref duplicatesCounter))
@@ -344,7 +344,7 @@ namespace RelhaxModpack
                 }
                 if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
                 {
-                    d.dependencyZipCRC = Utils.createMd5Hash(addZipsDialog.FileNames[index]);
+                    d.dependencyZipCRC = Utils.CreateMd5Hash(addZipsDialog.FileNames[index]);
                     globalDepsSB.Append(d.dependencyZipFile + "\n");
                 }
             }
@@ -357,7 +357,7 @@ namespace RelhaxModpack
                 }
                 if (d.dependencyZipCRC == null || d.dependencyZipCRC.Equals("") || d.dependencyZipCRC.Equals("f"))
                 {
-                    d.dependencyZipCRC = Utils.createMd5Hash(addZipsDialog.FileNames[index]);
+                    d.dependencyZipCRC = Utils.CreateMd5Hash(addZipsDialog.FileNames[index]);
                     dependenciesSB.Append(d.dependencyZipFile + "\n");
                 }
             }
@@ -371,7 +371,7 @@ namespace RelhaxModpack
                         m.size = this.getFileSize(addZipsDialog.FileNames[index]);
                         if (m.crc == null || m.crc.Equals("") || m.crc.Equals("f"))
                         {
-                            m.crc = Utils.createMd5Hash(addZipsDialog.FileNames[index]);
+                            m.crc = Utils.CreateMd5Hash(addZipsDialog.FileNames[index]);
 
                             modsSB.Append(m.zipFile + "\n");
                         }
@@ -402,7 +402,7 @@ namespace RelhaxModpack
                     cat.size = this.getFileSize(addZipsDialog.FileNames[cindex]);
                     if (cat.crc == null || cat.crc.Equals("") || cat.crc.Equals("f"))
                     {
-                        cat.crc = Utils.createMd5Hash(addZipsDialog.FileNames[cindex]);
+                        cat.crc = Utils.CreateMd5Hash(addZipsDialog.FileNames[cindex]);
 
                         configsSB.Append(cat.zipFile + "\n");
                     }

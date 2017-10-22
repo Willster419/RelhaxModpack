@@ -17,7 +17,7 @@ namespace RelhaxModpack
             {
                 return;
             }
-            string crc = XMLUtils.getMd5Hash(openFileDialog1.FileName);
+            string crc = XMLUtils.GetMd5Hash(openFileDialog1.FileName);
             crcTB.Text = crc;
         }
 

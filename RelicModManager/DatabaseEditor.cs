@@ -198,13 +198,13 @@ namespace RelhaxModpack
             DatabaseLocation = OpenDatabaseDialog.FileName;
             if (!File.Exists(DatabaseLocation))
                 return;
-            GameVersion = XMLUtils.readVersionFromModInfo(DatabaseLocation);
-            OnlineFolderVersion = XMLUtils.readOnlineFolderFromModInfo(DatabaseLocation);
+            GameVersion = XMLUtils.ReadVersionFromModInfo(DatabaseLocation);
+            OnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(DatabaseLocation);
             GlobalDependencies = new List<Dependency>();
             Dependencies = new List<Dependency>();
             LogicalDependencies = new List<LogicalDependnecy>();
             ParsedCategoryList = new List<Category>();
-            XMLUtils.createModStructure(DatabaseLocation, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
+            XMLUtils.CreateModStructure(DatabaseLocation, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
             DatabaseEditorMode = EditorMode.GlobalDependnecy;
             this.DisplayDatabase();
         }
