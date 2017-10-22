@@ -750,8 +750,19 @@ namespace RelhaxModpack
             Utils.appendToLog("tanksLocation parsed as " + tanksLocation);
             Utils.appendToLog("customUserMods parsed as " + Path.Combine(Application.StartupPath, "RelHaxUserMods"));
             // logfile moved from WoT root folder to logs subfolder after manager version 26.4.2
+            try
+            {
             if (File.Exists(Path.Combine(tanksLocation, "installedRelhaxFiles.log")))
-                File.Move(Path.Combine(tanksLocation, "installedRelhaxFiles.log"), Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log"));
+            {   if (File.Exists(Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log")))
+                    Path.Combine(tanksLocation, "installedRelhaxFiles.log");
+                else
+                    File.Move(Path.Combine(tanksLocation, "installedRelhaxFiles.log"), Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log"));
+            }
+            }
+            catch (Exception ex)
+            {
+                Utils.exceptionLog("installRelhaxMod_Click", "move/delete old log", ex);
+            }
             if (tanksLocation.Equals(Application.StartupPath))
             {
                 //display error and abort
