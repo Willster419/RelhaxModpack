@@ -802,7 +802,7 @@ namespace RelhaxModpack
             //childProgressBar.Value = 0;
             //check to make sure that the md5hashdatabase is valid before using it
             string md5HashDatabaseLocation = Path.Combine(Application.StartupPath, "RelHaxDownloads", "MD5HashDatabase.xml");
-            if ((File.Exists(md5HashDatabaseLocation)) && (!Utils.IsValidXml(md5HashDatabaseLocation)))
+            if ((File.Exists(md5HashDatabaseLocation)) && (!XMLUtils.IsValidXml(md5HashDatabaseLocation)))
             {
                 File.Delete(md5HashDatabaseLocation);
             }
@@ -1597,7 +1597,7 @@ namespace RelhaxModpack
                                     File.SetAttributes(file, FileAttributes.Normal);
                                     File.Delete(file);
                                     // remove file from database, too
-                                    Utils.deleteMd5HashDatabase(file);
+                                    XMLUtils.deleteMd5HashDatabase(file);
                                     childProgressBar.Value++;
                                     retry = false;
                                 }

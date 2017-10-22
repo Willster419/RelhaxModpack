@@ -24,7 +24,7 @@ namespace RelhaxModpack
             foreach (string s in files)
             {
                 sb.Append(Path.GetFileName(s) + System.Environment.NewLine);
-                sb2.Append(Utils.getMd5Hash(s) + System.Environment.NewLine);
+                sb2.Append(XMLUtils.getMd5Hash(s) + System.Environment.NewLine);
             }
             richTextBox1.Text = sb.ToString();
             richTextBox2.Text = sb2.ToString();

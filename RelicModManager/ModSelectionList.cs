@@ -123,7 +123,7 @@ namespace RelhaxModpack
             parsedCatagoryList = new List<Category>();
             dependencies = new List<Dependency>();
             logicalDependencies = new List<LogicalDependnecy>();
-            Utils.createModStructure(databaseURL, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.createModStructure(databaseURL, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             if (Program.testMode)
             {
                 if (Utils.duplicates(parsedCatagoryList))
@@ -253,7 +253,7 @@ namespace RelhaxModpack
                 d.downloadFlag = false;
                 modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.dependencyZipFile);
                 //get the local md5 hash. a -1 indicates the file is not on the disk
-                string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
+                string oldCRC2 = XMLUtils.getMd5Hash(modDownloadFilePath);
                 if ((!d.dependencyZipFile.Equals("")) && (!d.dependencyZipCRC.Equals(oldCRC2)))
                 {
                     d.downloadFlag = true;
@@ -266,7 +266,7 @@ namespace RelhaxModpack
                 d.downloadFlag = false;
                 modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.dependencyZipFile);
                 //get the local md5 hash. a -1 indicates the file is not on the disk
-                string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
+                string oldCRC2 = XMLUtils.getMd5Hash(modDownloadFilePath);
                 if ((!d.dependencyZipFile.Equals("")) && (!d.dependencyZipCRC.Equals(oldCRC2)))
                 {
                     d.downloadFlag = true;
@@ -279,7 +279,7 @@ namespace RelhaxModpack
                 d.downloadFlag = false;
                 modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.dependencyZipFile);
                 //get the local md5 hash. a -1 indicates the file is not on the disk
-                string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
+                string oldCRC2 = XMLUtils.getMd5Hash(modDownloadFilePath);
                 if ((!d.dependencyZipFile.Equals("")) && (!d.dependencyZipCRC.Equals(oldCRC2)))
                 {
                     d.downloadFlag = true;
@@ -326,7 +326,7 @@ namespace RelhaxModpack
         {
             if (pw != null)
             {
-                pw.progres_max = Utils.totalModConfigComponents;
+                pw.progres_max = XMLUtils.totalModConfigComponents;
                 pw.SetProgress(0);
             }
             loadingConfig = true;
@@ -455,7 +455,7 @@ namespace RelhaxModpack
             if (firstLoad)
             {
                 //get the local md5 hash. a -1 indicates the file is not on the disk
-                string oldCRC2 = Utils.getMd5Hash(modDownloadFilePath);
+                string oldCRC2 = XMLUtils.getMd5Hash(modDownloadFilePath);
                 if ((!m.zipFile.Equals("")) && (!m.crc.Equals(oldCRC2)))
                 {
                     modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Translations.getTranslatedString("updated"));
@@ -583,7 +583,7 @@ namespace RelhaxModpack
                     configControlRB.Content = nameForModCB;
                     if (firstLoad)
                     {
-                        string oldCRC = Utils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
+                        string oldCRC = XMLUtils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
                             configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Translations.getTranslatedString("updated"));
@@ -637,7 +637,7 @@ namespace RelhaxModpack
                     //run the crc logics
                     if (firstLoad)
                     {
-                        string oldCRC = Utils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
+                        string oldCRC = XMLUtils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
                             toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
@@ -742,7 +742,7 @@ namespace RelhaxModpack
                     configControlCB.Content = nameForModCB;
                     if (firstLoad)
                     {
-                        string oldCRC = Utils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
+                        string oldCRC = XMLUtils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
                             configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Translations.getTranslatedString("updated"));
@@ -1249,7 +1249,7 @@ namespace RelhaxModpack
             string modDownloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads", m.zipFile);
             if (firstLoad)
             {
-                string oldCRC2 = Utils.getMd5Hash(modDownloadPath);
+                string oldCRC2 = XMLUtils.getMd5Hash(modDownloadPath);
                 //if the CRC's don't match and the mod actually has a zip file
                 if ((!m.zipFile.Equals("")) && (!m.crc.Equals(oldCRC2)))
                 {
@@ -1464,7 +1464,7 @@ namespace RelhaxModpack
                     configControlRB.Text = con.name;
                     if (firstLoad)
                     {
-                        string oldCRC = Utils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
+                        string oldCRC = XMLUtils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
                             configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
@@ -1513,7 +1513,7 @@ namespace RelhaxModpack
                     //run the checksum locics
                     if (firstLoad)
                     {
-                        string oldCRC = Utils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
+                        string oldCRC = XMLUtils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
                             con.downloadFlag = true;
@@ -1600,7 +1600,7 @@ namespace RelhaxModpack
                     configControlCB.Text = con.name;
                     if (firstLoad)
                     {
-                        string oldCRC = Utils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
+                        string oldCRC = XMLUtils.getMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
                         if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
                         {
                             con.downloadFlag = true;
@@ -2241,7 +2241,7 @@ namespace RelhaxModpack
             //save the last config if told to do so
             if (Settings.saveLastConfig)
             {
-                Utils.saveConfig(false, null, parsedCatagoryList, userMods);
+                XMLUtils.saveConfig(false, null, parsedCatagoryList, userMods);
             }
             this.Close();
         }
@@ -2259,7 +2259,7 @@ namespace RelhaxModpack
         //handler for when the "save config" button is pressed
         private void saveConfigButton_Click(object sender, EventArgs e)
         {
-            Utils.saveConfig(true, null, parsedCatagoryList, userMods);
+            XMLUtils.saveConfig(true, null, parsedCatagoryList, userMods);
         }
         //handler for when the close button is pressed
         private void ModSelectionList_FormClosing(object sender, FormClosingEventArgs e)
@@ -2348,7 +2348,7 @@ namespace RelhaxModpack
                     }
                 }
             }
-            Utils.loadConfig(loadMode == loadConfigMode.fromButton, filePath, parsedCatagoryList, userMods);
+            XMLUtils.loadConfig(loadMode == loadConfigMode.fromButton, filePath, parsedCatagoryList, userMods);
             if (loadMode == loadConfigMode.fromButton || loadMode == loadConfigMode.fromAutoInstall)
             {
                 if (loadMode == loadConfigMode.fromButton) MessageBox.Show(Translations.getTranslatedString("prefrencesSet"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);

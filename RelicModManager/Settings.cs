@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Runtime.InteropServices;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace RelhaxModpack

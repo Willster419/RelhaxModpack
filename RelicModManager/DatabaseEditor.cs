@@ -198,13 +198,13 @@ namespace RelhaxModpack
             DatabaseLocation = OpenDatabaseDialog.FileName;
             if (!File.Exists(DatabaseLocation))
                 return;
-            GameVersion = Utils.readVersionFromModInfo(DatabaseLocation);
-            OnlineFolderVersion = Utils.readOnlineFolderFromModInfo(DatabaseLocation);
+            GameVersion = XMLUtils.readVersionFromModInfo(DatabaseLocation);
+            OnlineFolderVersion = XMLUtils.readOnlineFolderFromModInfo(DatabaseLocation);
             GlobalDependencies = new List<Dependency>();
             Dependencies = new List<Dependency>();
             LogicalDependencies = new List<LogicalDependnecy>();
             ParsedCategoryList = new List<Category>();
-            Utils.createModStructure(DatabaseLocation, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
+            XMLUtils.createModStructure(DatabaseLocation, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
             DatabaseEditorMode = EditorMode.GlobalDependnecy;
             this.DisplayDatabase();
         }
@@ -219,7 +219,7 @@ namespace RelhaxModpack
             if (SaveDatabaseDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             DatabaseLocation = SaveDatabaseDialog.FileName;
-            Utils.SaveDatabase(DatabaseLocation, GameVersion, OnlineFolderVersion, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
+            XMLUtils.SaveDatabase(DatabaseLocation, GameVersion, OnlineFolderVersion, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
             UnsavedModifications = false;
         }
         //Apply all changes from the form

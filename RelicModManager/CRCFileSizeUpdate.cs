@@ -55,9 +55,9 @@ namespace RelhaxModpack
             if (databaseLocationTextBox.Text.Equals("-none-"))
                 return;
             // read onlineFolder of the selected local modInfo.xml to get the right online database.xml
-            string onlineFolderVersion = Utils.readOnlineFolderFromModInfo(databaseLocationTextBox.Text);
+            string onlineFolderVersion = XMLUtils.readOnlineFolderFromModInfo(databaseLocationTextBox.Text);
             // read gameVersion of the selected local modInfo.xml
-            string gameVersion = Utils.readVersionFromModInfo(databaseLocationTextBox.Text);
+            string gameVersion = XMLUtils.readVersionFromModInfo(databaseLocationTextBox.Text);
             Utils.appendToLog("working with game version: " + onlineFolderVersion);
             // download online database.xml
             try
@@ -88,7 +88,7 @@ namespace RelhaxModpack
             parsedCatagoryList = new List<Category>();
             dependencies = new List<Dependency>();
             logicalDependencies = new List<LogicalDependnecy>();
-            Utils.createModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.createModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             //check for duplicates
             int duplicatesCounter = 0;
             if (Utils.duplicates(parsedCatagoryList) && Utils.duplicatesPackageName(parsedCatagoryList, ref duplicatesCounter ))
@@ -109,7 +109,7 @@ namespace RelhaxModpack
             //foreach zip file name
             foreach (Dependency d in globalDependencies)
             {
-                hash = Utils.getMd5Hash(d.dependencyZipFile);
+                hash = XMLUtils.getMd5Hash(d.dependencyZipFile);
                 if (!d.dependencyZipCRC.Equals(hash))
                 {
                     d.dependencyZipCRC = hash;
@@ -125,7 +125,7 @@ namespace RelhaxModpack
             }
             foreach (Dependency d in dependencies)
             {
-                hash = Utils.getMd5Hash(d.dependencyZipFile);
+                hash = XMLUtils.getMd5Hash(d.dependencyZipFile);
                 if (!d.dependencyZipCRC.Equals(hash))
                 {
                     d.dependencyZipCRC = hash;
@@ -141,7 +141,7 @@ namespace RelhaxModpack
             }
             foreach (LogicalDependnecy d in logicalDependencies)
             {
-                hash = Utils.getMd5Hash(d.dependencyZipFile);
+                hash = XMLUtils.getMd5Hash(d.dependencyZipFile);
                 if (!d.dependencyZipCRC.Equals(hash))
                 {
                     d.dependencyZipCRC = hash;
@@ -162,7 +162,7 @@ namespace RelhaxModpack
                     if (!m.zipFile.Equals(""))
                     {
                         m.size = this.getFileSize(m.zipFile);
-                        hash = Utils.getMd5Hash(m.zipFile);
+                        hash = XMLUtils.getMd5Hash(m.zipFile);
                         if (!m.crc.Equals(hash))
                         {
                             m.crc = hash;
@@ -188,7 +188,7 @@ namespace RelhaxModpack
             //save config file
             // string newModInfo = databaseLocationTextBox.Text;
             //this.saveDatabase(databaseLocationTextBox.Text, gameVersion);
-            Utils.SaveDatabase(databaseLocationTextBox.Text, gameVersion, onlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.SaveDatabase(databaseLocationTextBox.Text, gameVersion, onlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             MessageBox.Show(filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
             //updatingLabel.Text = "Idle";
             Program.databaseUpdateOnline = false;
@@ -201,7 +201,7 @@ namespace RelhaxModpack
             {
                 if (!cat.zipFile.Equals(""))
                 {
-                    hash = Utils.getMd5Hash(cat.zipFile);
+                    hash = XMLUtils.getMd5Hash(cat.zipFile);
                     cat.size = this.getFileSize(cat.zipFile);
                     if (cat.size != 0)
                     {
@@ -318,9 +318,9 @@ namespace RelhaxModpack
             parsedCatagoryList = new List<Category>();
             dependencies = new List<Dependency>();
             logicalDependencies = new List<LogicalDependnecy>();
-            string gameVersion = Utils.readVersionFromModInfo(databaseLocationTextBox.Text);
-            string onlineFolderVersion = Utils.readOnlineFolderFromModInfo(databaseLocationTextBox.Text);
-            Utils.createModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            string gameVersion = XMLUtils.readVersionFromModInfo(databaseLocationTextBox.Text);
+            string onlineFolderVersion = XMLUtils.readOnlineFolderFromModInfo(databaseLocationTextBox.Text);
+            XMLUtils.createModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             int duplicatesCounter = 0;
             //check for duplicates
             if (Utils.duplicates(parsedCatagoryList) && Utils.duplicatesPackageName(parsedCatagoryList, ref duplicatesCounter))
@@ -387,7 +387,7 @@ namespace RelhaxModpack
             //save config file
             string newModInfo = databaseLocationTextBox.Text;
             //this.saveDatabase(databaseLocationTextBox.Text, gameVersion);
-            Utils.SaveDatabase(databaseLocationTextBox.Text, gameVersion, onlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.SaveDatabase(databaseLocationTextBox.Text, gameVersion, onlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
             //updatingLabel.Text = "Idle";
         }

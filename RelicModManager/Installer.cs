@@ -683,7 +683,7 @@ namespace RelhaxModpack
                     InstallWorker.ReportProgress(0);
                 }
                 //set xvmConfigDir here because xvm is always a dependency, but don't log it
-                xvmConfigDir = Utils.getXVMBootLoc(TanksLocation, null, false);
+                xvmConfigDir = PatchUtils.getXVMBootLoc(TanksLocation, null, false);
                 //extract mods and configs
                 args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractMods;
                 InstallWorker.ReportProgress(0);
@@ -916,13 +916,13 @@ namespace RelhaxModpack
                         {
                             //perform regex patch on entire file, line by line
                             Utils.appendToLog("Regex patch, all lines, line by line, " + p.file + ", " + p.search + ", " + p.replace);
-                            Utils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion);
+                            PatchUtils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion);
                         }
                         else if (p.lines.Count() == 1 && tempp == -1)
                         {
                             //perform regex patch on entire file, as one whole string
                             Utils.appendToLog("Regex patch, all lines, whole file, " + p.file + ", " + p.search + ", " + p.replace);
-                            Utils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion, -1);
+                            PatchUtils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion, -1);
                         }
                         else
                         {
@@ -931,7 +931,7 @@ namespace RelhaxModpack
                                 //perform regex patch on specific file lines
                                 //will need to be a standard for loop BTW
                                 Utils.appendToLog("Regex patch, line " + s + ", " + p.file + ", " + p.search + ", " + p.replace);
-                                Utils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion, int.Parse(s));
+                                PatchUtils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion, int.Parse(s));
                             }
                         }
                     }
@@ -939,25 +939,25 @@ namespace RelhaxModpack
                     {
                         //perform xml patch
                         Utils.appendToLog("Xml patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
-                        Utils.xmlPatch(p.file, p.path, p.mode, p.search, p.replace, TanksLocation, TanksVersion);
+                        PatchUtils.xmlPatch(p.file, p.path, p.mode, p.search, p.replace, TanksLocation, TanksVersion);
                     }
                     else if (p.type.Equals("json"))
                     {
                         //perform json patch
                         Utils.appendToLog("Json patch, " + p.file + ", " + p.path + ", " + p.replace);
-                        Utils.jsonPatch(p.file, p.path, p.replace, p.mode, TanksLocation, TanksVersion);
+                        PatchUtils.jsonPatch(p.file, p.path, p.replace, p.mode, TanksLocation, TanksVersion);
                     }
                     else if (p.type.Equals("xvm"))
                     {
                         //perform xvm style json patch
                         Utils.appendToLog("XVM patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
-                        Utils.xvmPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
+                        PatchUtils.xvmPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
                     }
                     else if (p.type.Equals("pmod"))
                     {
                         //perform pmod/generic style json patch
                         Utils.appendToLog("PMOD/Generic patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
-                        Utils.pmodPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
+                        PatchUtils.pmodPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
                     }
                     args.ParrentProcessed++;
                     InstallWorker.ReportProgress(0);
@@ -1118,7 +1118,7 @@ namespace RelhaxModpack
             {
                 //set xvm dir location again in case it's just a user mod install
                 if (xvmConfigDir == null || xvmConfigDir.Equals(""))
-                    xvmConfigDir = Utils.getXVMBootLoc(TanksLocation);
+                    xvmConfigDir = PatchUtils.getXVMBootLoc(TanksLocation);
                 //extract user mods
                 Utils.appendToLog("Starting Relhax Modpack User Mod Extraction");
                 string downloadedFilesDir = Path.Combine(Application.StartupPath, "RelHaxUserMods");
@@ -1293,7 +1293,7 @@ namespace RelhaxModpack
                                         File.SetAttributes(file, FileAttributes.Normal);
                                         File.Delete(file);
                                         // remove file from database, too
-                                        Utils.deleteMd5HashDatabase(file);
+                                        XMLUtils.deleteMd5HashDatabase(file);
                                         retry = false;
                                         args.ChildProcessed++;
                                     }
@@ -1623,7 +1623,7 @@ namespace RelhaxModpack
                         {
                             Utils.exceptionLog("Unzip", "tried to delete " + zipFile, ex);
                         }
-                    Utils.deleteMd5HashDatabase(zipFile);
+                    XMLUtils.deleteMd5HashDatabase(zipFile);
                 }
             }
         }

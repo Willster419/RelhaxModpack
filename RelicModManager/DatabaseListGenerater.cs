@@ -53,7 +53,7 @@ namespace RelhaxModpack
             dependencies = new List<Dependency>();
             logicalDependencies = new List<LogicalDependnecy>();
             parsedCatagoryList = new List<Category>();
-            Utils.createModStructure(LoadDatabaseFileDialog.FileName, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.createModStructure(LoadDatabaseFileDialog.FileName, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             if(!SpreadsheetLocation.Text.Equals(""))
                 SpreadsheetLocation.Text = "(old) " + SpreadsheetLocation.Text;
         }
@@ -116,7 +116,10 @@ namespace RelhaxModpack
                     configname = "N/A";
                     zipfile = m.zipFile;
                     enabled = m.enabled;
-                    devURL = "=HYPERLINK(\"" + m.devURL + "\",\"link\")";
+                    if (m.devURL.Equals(""))
+                        devURL = "";
+                    else
+                        devURL = "=HYPERLINK(\"" + m.devURL + "\",\"link\")";
                     //header = "Index,Category,Mod,Config,Level,Zip,Enabled";
                     sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
                     if (m.configs.Count > 0)
@@ -143,7 +146,10 @@ namespace RelhaxModpack
                 configname = con.name;
                 zipfile = con.zipFile;
                 enabled = con.enabled;
-                devURL = "=HYPERLINK(\"" + con.devURL + "\",\"link\")";
+                if (con.devURL.Equals(""))
+                    devURL = "";
+                else
+                    devURL = "=HYPERLINK(\"" + con.devURL + "\",\"link\")";
                 sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + newLevel + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
                 if (con.configs.Count > 0)
                     processConfigsSpreadsheetGenerate(con.configs, newLevel + 1);
@@ -176,7 +182,10 @@ namespace RelhaxModpack
                     //remove the old devURL value if there
                     devURL = "";
                     modName = m.name;
-                    devURL = "=HYPERLINK(\"" + m.devURL + "\",\"link\")";
+                    if (m.devURL.Equals(""))
+                        devURL = "";
+                    else
+                        devURL = "=HYPERLINK(\"" + m.devURL + "\",\"link\")";
                     sb.Append(category + "\t" + modName + "\t" + devURL + "\n");
                     if (m.configs.Count > 0)
                         processConfigsSpreadsheetGenerateUser(m.configs, level + 1);
@@ -205,7 +214,10 @@ namespace RelhaxModpack
                     configname = configname + "--";
                 }
                 configname = configname + con.name;
-                devURL = "=HYPERLINK(\"" + con.devURL + "\",\"link\")";
+                if (con.devURL.Equals(""))
+                    devURL = "";
+                else
+                    devURL = "=HYPERLINK(\"" + con.devURL + "\",\"link\")";
                 sb.Append(category + "\t" + configname + "\t" + devURL + "\n");
                 if (con.configs.Count > 0)
                     processConfigsSpreadsheetGenerateUser(con.configs, newLevel + 1);
