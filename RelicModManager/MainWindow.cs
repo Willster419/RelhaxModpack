@@ -752,12 +752,12 @@ namespace RelhaxModpack
             // logfile moved from WoT root folder to logs subfolder after manager version 26.4.2
             try
             {
-            if (File.Exists(Path.Combine(tanksLocation, "installedRelhaxFiles.log")))
-            {   if (File.Exists(Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log")))
-                    Path.Combine(tanksLocation, "installedRelhaxFiles.log");
-                else
-                    File.Move(Path.Combine(tanksLocation, "installedRelhaxFiles.log"), Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log"));
-            }
+                if (File.Exists(Path.Combine(tanksLocation, "installedRelhaxFiles.log")))
+                {   if (File.Exists(Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log")))
+                        Path.Combine(tanksLocation, "installedRelhaxFiles.log");
+                    else
+                        File.Move(Path.Combine(tanksLocation, "installedRelhaxFiles.log"), Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log"));
+                }
             }
             catch (Exception ex)
             {
@@ -869,139 +869,181 @@ namespace RelhaxModpack
             patchList = new List<Patch>();
             userMods = new List<Mod>();
 
-            //if mod/config is enabled and checked, add it to list of mods to extract/install
-            foreach (Category c in parsedCatagoryLists)
+            try
             {
-                //will itterate through every catagory once
-                foreach (Mod m in c.mods)
-                {
-                    //will itterate through every mod of every catagory once
-                    if (m.enabled && m.Checked)
-                    {
-                        //move each mod that is enalbed and checked to a new list of mods to install
-                        //also check that it actually has a zip file
-                        if (!m.zipFile.Equals(""))
-                            modsConfigsToInstall.Add(m);
-
-                        //since it is checked, regardless if it has a zipfile, check if it has userdata
-                        if (m.userFiles.Count > 0)
-                            modsConfigsWithData.Add(m);
-
-                        //check for configs
-                        if (m.configs.Count > 0)
-                            ProcessConfigs(m.configs);
-
-                        //at least one mod of this catagory is checked, add any dependenciesToInstall required
-                        if (c.dependencies.Count > 0)
-                            processDependencies(c.dependencies);
-
-                        //check dependency is enabled and has a zip file with it
-                        if (m.dependencies.Count > 0)
-                            processDependencies(m.dependencies);
-                    }
-                }
-            }
-
-            //build the list of mods and configs that use each logical dependency
-            foreach (LogicalDependnecy d in currentLogicalDependencies)
-            {
-                foreach (Dependency depD in currentDependencies)
-                {
-                    foreach (LogicalDependnecy ld in depD.logicalDependencies)
-                    {
-                        if (ld.packageName.Equals(d.packageName))
-                        {
-                            DatabaseLogic dbl = new DatabaseLogic()
-                            {
-                                PackageName = depD.packageName,
-                                Enabled = depD.enabled,
-                                Checked = dependenciesToInstall.Contains(depD),
-                                NotFlag = ld.negateFlag
-                            };
-                            d.DatabasePackageLogic.Add(dbl);
-                        }
-                    }
-                }
-                //itterate through every mod and config once for each dependency
-                //check each one's dependecy list, if packageName's match, add it to the dependency's list of mods/configs that use it
+                //if mod/config is enabled and checked, add it to list of mods to extract/install
                 foreach (Category c in parsedCatagoryLists)
                 {
                     //will itterate through every catagory once
                     foreach (Mod m in c.mods)
                     {
-                        foreach (LogicalDependnecy ld in m.logicalDependencies)
+                        //will itterate through every mod of every catagory once
+                        if (m.enabled && m.Checked)
+                        {
+                            //move each mod that is enalbed and checked to a new list of mods to install
+                            //also check that it actually has a zip file
+                            if (!m.zipFile.Equals(""))
+                                modsConfigsToInstall.Add(m);
+
+                            //since it is checked, regardless if it has a zipfile, check if it has userdata
+                            if (m.userFiles.Count > 0)
+                                modsConfigsWithData.Add(m);
+
+                            //check for configs
+                            if (m.configs.Count > 0)
+                                ProcessConfigs(m.configs);
+
+                            //at least one mod of this catagory is checked, add any dependenciesToInstall required
+                            if (c.dependencies.Count > 0)
+                                processDependencies(c.dependencies);
+
+                            //check dependency is enabled and has a zip file with it
+                            if (m.dependencies.Count > 0)
+                                processDependencies(m.dependencies);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("installRelhaxMod_Click", "if mod/config is enabled and checked, add it to list of mods to extract/install", ex);
+            }
+
+            try
+            {
+                //build the list of mods and configs that use each logical dependency
+                foreach (LogicalDependnecy d in currentLogicalDependencies)
+                {
+                    foreach (Dependency depD in currentDependencies)
+                    {
+                        foreach (LogicalDependnecy ld in depD.logicalDependencies)
                         {
                             if (ld.packageName.Equals(d.packageName))
                             {
                                 DatabaseLogic dbl = new DatabaseLogic()
                                 {
-                                    PackageName = m.packageName,
-                                    Enabled = m.enabled,
-                                    Checked = m.Checked,
+                                    PackageName = depD.packageName,
+                                    Enabled = depD.enabled,
+                                    Checked = dependenciesToInstall.Contains(depD),
                                     NotFlag = ld.negateFlag
                                 };
                                 d.DatabasePackageLogic.Add(dbl);
                             }
                         }
-                        if (m.configs.Count > 0)
-                            ProcessConfigsLogical(d, m.configs);
                     }
-                }
-            }
-
-            //now each logical dependency has a complete list of every dependency, mod, and config that uses it, and if it is enabled and checked
-            //indicate if the logical dependency will be installed
-            foreach (LogicalDependnecy ld in currentLogicalDependencies)
-            {
-                //idea is that if all mod/config/dependency are to be installed, then install the logical dependency
-                //and factor in the negate flag
-                bool addIt = true;
-                foreach (DatabaseLogic dl in ld.DatabasePackageLogic)
-                {
-                    if (dl.NotFlag)
+                    try
                     {
-                        //package must NOT be checked for it to be included
-                        //enabled must = true, checked must = false
-                        //otherwise break and don't add
-                        if (dl.Enabled && dl.Checked)
+                        //itterate through every mod and config once for each dependency
+                        //check each one's dependecy list, if packageName's match, add it to the dependency's list of mods/configs that use it
+                        foreach (Category c in parsedCatagoryLists)
                         {
-                            addIt = false;
-                            break;
+                            //will itterate through every catagory once
+                            foreach (Mod m in c.mods)
+                            {
+                                foreach (LogicalDependnecy ld in m.logicalDependencies)
+                                {
+                                    if (ld.packageName.Equals(d.packageName))
+                                    {
+                                        DatabaseLogic dbl = new DatabaseLogic()
+                                        {
+                                            PackageName = m.packageName,
+                                            Enabled = m.enabled,
+                                            Checked = m.Checked,
+                                            NotFlag = ld.negateFlag
+                                        };
+                                        d.DatabasePackageLogic.Add(dbl);
+                                    }
+                                }
+                                if (m.configs.Count > 0)
+                                    ProcessConfigsLogical(d, m.configs);
+                            }
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        //package MUST be checked for it to be included
-                        //enabled must = true, checked must = true
-                        //otherwise break and don't add
-                        if (dl.Enabled && !dl.Checked)
-                        {
-                            addIt = false;
-                            break;
-                        }
+                        Utils.ExceptionLog("installRelhaxMod_Click", "build the list of mods and configs that use each logical dependency", ex);
                     }
                 }
-                if (addIt && !logicalDependenciesToInstall.Contains(ld))
-                    logicalDependenciesToInstall.Add(ld);
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("installRelhaxMod_Click", "add package to dependency's list of mods/configs that use it", ex);
             }
 
-            //check for dependencies that actually need to be installed at the end
-            foreach (Dependency d in dependenciesToInstall)
+            try
             {
-                if (d.appendExtraction)
+                //now each logical dependency has a complete list of every dependency, mod, and config that uses it, and if it is enabled and checked
+                //indicate if the logical dependency will be installed
+                foreach (LogicalDependnecy ld in currentLogicalDependencies)
                 {
-                    appendedDependenciesToInstall.Add(d);
-                    dependenciesToInstall.Remove(d);
+                    //idea is that if all mod/config/dependency are to be installed, then install the logical dependency
+                    //and factor in the negate flag
+                    bool addIt = true;
+                    foreach (DatabaseLogic dl in ld.DatabasePackageLogic)
+                    {
+                        if (dl.NotFlag)
+                        {
+                            //package must NOT be checked for it to be included
+                            //enabled must = true, checked must = false
+                            //otherwise break and don't add
+                            if (dl.Enabled && dl.Checked)
+                            {
+                                addIt = false;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            //package MUST be checked for it to be included
+                            //enabled must = true, checked must = true
+                            //otherwise break and don't add
+                            if (dl.Enabled && !dl.Checked)
+                            {
+                                addIt = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (addIt && !logicalDependenciesToInstall.Contains(ld))
+                        logicalDependenciesToInstall.Add(ld);
                 }
             }
-
-            //check for any user mods to install
-            for (int i = 0; i < list.userMods.Count; i++)
+            catch (Exception ex)
             {
-                if (list.userMods[i].enabled && list.userMods[i].Checked)
+                Utils.ExceptionLog("installRelhaxMod_Click", "now each logical dependency has a complete list of every dependency ...", ex);
+            }
+
+            try
+            {
+                //check for dependencies that actually need to be installed at the end
+                foreach (Dependency d in dependenciesToInstall)
                 {
-                    this.userMods.Add(list.userMods[i]);
+                    if (d.appendExtraction)
+                    {
+                        appendedDependenciesToInstall.Add(d);
+                        dependenciesToInstall.Remove(d);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("installRelhaxMod_Click", "check for dependencies that actually need to be installed at the end", ex);
+            }
+
+            try
+            {
+                //check for any user mods to install
+                for (int i = 0; i < list.userMods.Count; i++)
+                {
+                    if (list.userMods[i].enabled && list.userMods[i].Checked)
+                    {
+                        this.userMods.Add(list.userMods[i]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("installRelhaxMod_Click", "check for any user mods to install", ex);
             }
 
             //create a new download queue. even if not downloading any
@@ -1021,7 +1063,7 @@ namespace RelhaxModpack
             //if the user did not select any relhax modpack mods to install
             if (modsConfigsToInstall.Count == 0)
             {
-                //clear any dependenciesand logicalDependencies since this is a user mod only installation
+                //clear any dependencies and logicalDependencies since this is a user mod only installation
                 dependenciesToInstall.Clear();
                 logicalDependenciesToInstall.Clear();
                 appendedDependenciesToInstall.Clear();
