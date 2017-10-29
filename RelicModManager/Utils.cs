@@ -178,8 +178,13 @@ namespace RelhaxModpack
 
                 if (e is WebException)
                 {
+                    WebException we = (WebException)e;
                     errorType = "WebException";
                     type = "";
+                    if (we.Status == WebExceptionStatus.ProtocolError)
+                    {
+                        try { type = string.Format("Code: {0}\nDescription: {1}", ((HttpWebResponse)we.Response).StatusCode.Equals("") ? "(empty)" : ((HttpWebResponse)we.Response).StatusCode.ToString(), ((HttpWebResponse)we.Response).StatusDescription == null ? "(null)" : ((HttpWebResponse)we.Response).StatusDescription.Equals("") ? "(empty)" : ((HttpWebResponse)we.Response).StatusDescription.ToString()); } catch { };
+                    }
                 }
                 else if (e is IOException)
                 {
