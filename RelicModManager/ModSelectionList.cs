@@ -98,6 +98,7 @@ namespace RelhaxModpack
                     MessageBox.Show(string.Format(Translations.getTranslatedString("testModeDatabaseNotFound"), databaseURL));
                     Application.Exit();
                 }
+                Settings.tanksOnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(databaseURL);
             }
             else
             {
