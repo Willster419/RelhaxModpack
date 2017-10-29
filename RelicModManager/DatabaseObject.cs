@@ -14,12 +14,12 @@ namespace RelhaxModpack
         //the start address of the zip file location. enabled us to use sites that
         //generate random filenames for ly shared files.
         public string startAddress { get; set; }
+        //the end address of the zip file location. enables us to use dropbox (?dl=1)
+        public string endAddress { get; set; }
         public List<LogicalDependnecy> logicalDependencies = new List<LogicalDependnecy>();
         public List<Dependency> dependencies = new List<Dependency>();
         public List<Media> pictureList = new List<Media>();
         public List<ShortCut> shortCuts = new List<ShortCut>();
-        //the end address of the zip file location. enables us to use dropbox (?dl=1)
-        public string endAddress { get; set; }
         public string crc { get; set; }
         public bool enabled { get; set; }
         //a flag to determine wether or not the mod should be shown
