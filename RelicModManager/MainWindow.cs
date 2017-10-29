@@ -56,7 +56,7 @@ namespace RelhaxModpack
         public static List<string> usedFilesList;
         //counter for Utils.exception calls
         public static int errorCounter = 0;
-        string tempOldDownload;
+        // string tempOldDownload; => using userToken at Async download
         private List<Mod> userMods;
         private FirstLoadHelper helper;
         string helperText;
@@ -176,11 +176,21 @@ namespace RelhaxModpack
                 return;
             }
             downloadTimer.Enabled = false;
+            // We must find a way for a localisation, e.g. message on a german system: Der Remoteserver hat einen Fehler zurückgegeben: (500) Interner Serverfehler.
             if (e != null && e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
             {
                 //404
-                Utils.AppendToLog(string.Format("ERROR: {0} failed to download", tempOldDownload));
-                MessageBox.Show(string.Format("{0}\n{1}\n\n{2}", Translations.getTranslatedString("failedToDownload_1"), tempOldDownload, Translations.getTranslatedString("failedToDownload_2")));
+                Utils.AppendToLog(string.Format("ERROR: {0} failed to download", Path.GetFileName(e.UserState.ToString())));
+                MessageBox.Show(string.Format("{0}\n{1}\n\n{2}", Translations.getTranslatedString("failedToDownload_1"), Path.GetFileName(e.UserState.ToString()), Translations.getTranslatedString("failedToDownload_2")));
+                Application.Exit();
+            }
+            if (e != null && e.Error != null)
+            {
+                if (Program.testMode)
+                    Utils.ExceptionLog("downloader_DownloadFileCompleted", "downloaded file: " + e.UserState.ToString(), e.Error);
+                else
+                    Utils.ExceptionLog("downloader_DownloadFileCompleted", "downloaded file: " + Path.GetFileName(e.UserState.ToString()), e.Error);
+                MessageBox.Show(string.Format("{0}\n{1}\n\n{2}", Translations.getTranslatedString("failedToDownload_1"), Path.GetFileName(e.UserState.ToString()), Translations.getTranslatedString("failedToDownload_2")));
                 Application.Exit();
             }
             if (downloadQueue.Count != 0)
@@ -204,9 +214,10 @@ namespace RelhaxModpack
                 actualTimeRemain = 0;
                 sw.Reset();
                 sw.Start();
-                downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
-                tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
-                Utils.AppendToLog("downloading " + tempOldDownload);
+                downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile, downloadQueue[0].URL);
+                // tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
+                // Utils.AppendToLog("downloading " + tempOldDownload);
+                Utils.AppendToLog("downloading " + Path.GetFileName(downloadQueue[0].zipFile));
                 currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile);
                 if (currentModDownloading.Length >= 200)
                 {
@@ -1074,28 +1085,28 @@ namespace RelhaxModpack
             {
                 if (d.downloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(d.startAddress + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress, "onlineFolder", Settings.tanksOnlineFolderVersion) + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
                 }
             }
             foreach (Dependency d in dependenciesToInstall)
             {
                 if (d.downloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(d.startAddress + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress, "onlineFolder", Settings.tanksOnlineFolderVersion) + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
                 }
             }
             foreach (Dependency d in appendedDependenciesToInstall)
             {
                 if (d.downloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(d.startAddress + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress, "onlineFolder", Settings.tanksOnlineFolderVersion) + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
                 }
             }
             foreach (LogicalDependnecy ld in logicalDependenciesToInstall)
             {
                 if (ld.downloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(ld.startAddress + ld.dependencyZipFile + ld.endAddress), Path.Combine(localFilesDir, ld.dependencyZipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(ld.startAddress, "onlineFolder", Settings.tanksOnlineFolderVersion) + ld.dependencyZipFile + ld.endAddress), Path.Combine(localFilesDir, ld.dependencyZipFile)));
                 }
             }
             foreach (DatabaseObject dbo in modsConfigsToInstall)
@@ -1103,7 +1114,7 @@ namespace RelhaxModpack
                 if (dbo.downloadFlag)
                 {
                     //crc's don't match, need to re-download
-                    downloadQueue.Add(new DownloadItem(new Uri(dbo.startAddress + dbo.zipFile + dbo.endAddress), Path.Combine(localFilesDir, dbo.zipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(dbo.startAddress, "onlineFolder", Settings.tanksOnlineFolderVersion) + dbo.zipFile + dbo.endAddress), Path.Combine(localFilesDir, dbo.zipFile)));
                 }
             }
 
@@ -1762,7 +1773,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.ExceptionLog("SameDatabaseVersions", "ex", ex);
+                Utils.ExceptionLog("SameDatabaseVersions", ex);
                 return false;
             }
         }
