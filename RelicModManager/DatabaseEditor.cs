@@ -2365,9 +2365,14 @@ namespace RelhaxModpack
             return c;
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void callTextBoxURL_DoubleClick(object sender, EventArgs e)
         {
-
+            if (sender is TextBox)
+            {
+                if ((TextBox)sender != null && !((TextBox)sender).Text.Equals(""))
+                    System.Diagnostics.Process.Start(((TextBox)sender).Text);
+            }
+            
         }
     }
 }
