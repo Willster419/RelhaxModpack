@@ -58,20 +58,20 @@ namespace RelhaxModpack
             string onlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(databaseLocationTextBox.Text);
             // read gameVersion of the selected local modInfo.xml
             string gameVersion = XMLUtils.ReadVersionFromModInfo(databaseLocationTextBox.Text);
-            Utils.AppendToLog("working with game version: " + onlineFolderVersion);
+            Utils.AppendToLog("working with game version: " + gameVersion + ", located at online Folder: " + onlineFolderVersion);
             // download online database.xml
             try
             {
                 using (downloader = new WebClient())
                 {
-                    string address = "http://wotmods.relhaxmodpack.com/WoT/" + onlineFolderVersion + "/database.xml";
+                    string address = string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", onlineFolderVersion);
                     string fileName = Path.Combine(Application.StartupPath, "RelHaxTemp", MainWindow.onlineDatabaseXmlFile);
                     downloader.DownloadFile(address, fileName);
                 }
             }
             catch (Exception ex)
             {
-                Utils.ExceptionLog("loadZipFilesButton_Click", "http://wotmods.relhaxmodpack.com/WoT/" + onlineFolderVersion + "/database.xml", ex);
+                Utils.ExceptionLog("loadZipFilesButton_Click", string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", onlineFolderVersion), ex);
                 MessageBox.Show("FAILED to download online file database");
                 Application.Exit();
             }
