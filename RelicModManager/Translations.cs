@@ -307,8 +307,8 @@ namespace RelhaxModpack
             //
             english.Add("createShortcutsCB", "Create Desktop Shortcuts");
             german.Add("createShortcutsCB", "TODO");
-            polish.Add("createShortcutsCB", "TODO");
-            french.Add("createShortcutsCB", "TODO");
+            polish.Add("createShortcutsCB", "Utwórz skróty pulpitu");
+            french.Add("createShortcutsCB", "Créer des raccourcis sur le bureau");
 
             //Section: FirstLoadHelper
 
@@ -986,8 +986,8 @@ namespace RelhaxModpack
             //
             english.Add("CreateShortcutsCBExplanation", "When selected, it will create shortcut icons on your desktop for mods that are exe files (like WWIIHA configuration)");
             german.Add("CreateShortcutsCBExplanation", "TODO");
-            polish.Add("CreateShortcutsCBExplanation", "TODO");
-            french.Add("CreateShortcutsCBExplanation", "TODO");
+            polish.Add("CreateShortcutsCBExplanation", "Gdy wybierzesz, utworzysz ikony skrótów na pulpicie dla modów, które są plikami exe (np. Konfiguracja WWIIHA)");
+            french.Add("CreateShortcutsCBExplanation", "Une fois sélectionné, L'installation créera des icônes de raccourci sur votre bureau pour les mods qui ont des fichiers .exe (comme la configuration WWIIHA)");
 
             //Section: Messages from ModSelectionList
 
