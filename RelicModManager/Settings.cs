@@ -91,6 +91,7 @@ namespace RelhaxModpack
         public static void LoadSettings()
         {
             //Settings declared here are set for what their default values should be, then later modified in the settings xml file
+            //i.e. when new features are added
             Settings.firstLoad = false;
             Settings.CreateShortcuts = true;
             Utils.AppendToLog("Loading application settings");
@@ -98,6 +99,7 @@ namespace RelhaxModpack
             {
                 Utils.AppendToLog("WARNING:Settings xml not found, loading defaults");
                 //could also use this to determine if first load or not
+                //default is to turn all features off
                 Settings.comicSans = false;
                 Settings.backupModFolder = false;
                 Settings.cleanInstallation = true;
@@ -110,7 +112,7 @@ namespace RelhaxModpack
                 Settings.clearCache = false;
                 Settings.disableBorders = false;
                 Settings.NotifyIfSameDatabase = false;
-                Settings.CreateShortcuts = true;
+                Settings.CreateShortcuts = false;
                 Utils.AppendToLog("Language: " + CultureInfo.CurrentCulture.DisplayName);
                 string lang = CultureInfo.InstalledUICulture.Name.Split('-')[0];
                 if (lang.ToLower().Equals("de"))

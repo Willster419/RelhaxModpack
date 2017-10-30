@@ -1,10 +1,19 @@
 Version 26.5.0:
-https://www.virustotal.com/#/file/63cef9049d62eabb5326ed5fbc7089796f35f3839d99ef7c3377bd6b0f04e0c3/detection
+https://www.virustotal.com/#/file/df2725c5b996b78277d7b83e480bd6f081dcbce0d2e958946fc0a1366105208c/detection
 -Fixed bugs with font install system
 -Added new feature. Application can now create desktop shortcuts for mods that are actually external programs
 -Fixed bug with OMC legacy view, when unchecking a mod, child configs would not be unchecked
 -Added feature for display scaling. If the new scaling would make the application larger than the screen size, it disables that option. It prevents you from accidentally setting a scale wayyy to large. Excludes DPI Auto option
--Fixed other bugs
+-Split Utils class into XMLUtils, PatchUtils, and Utils. Easier to find code now
+-Fixed a lot of code formatting
+-Optimized the downloader ETA and speed calculations. Also fixed the bug where at the start it would give a negative ETA
+-Completely rewrote the JSON patcher. Now you can achieve doing anything you might need to in json with the patcher.
+-Added [sl] as an escape character for the "/" character in the xml and json patching systems, for adding modes
+-Fixed annoying bug where the mouse wheel would select a mod in a dropDown option
+-Fixed behavior of the "skip-update" command switch
+-Fixed bugs with errors when downloading
+-Added section in loading settings where default values can be set within the application
+-Updated translations
 --------------------------------------------------------------------------------------------------------------------------------------------
 
 Version 26.4.2:
