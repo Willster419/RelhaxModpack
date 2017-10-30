@@ -103,28 +103,27 @@ namespace RelhaxModpack
             ResetArgs();
             //Step 1: do a backup if requested
             Utils.AppendToLog("Installation BackupMods");
+            args.InstalProgress = InstallerEventArgs.InstallProgress.BackupMods;
             if (Settings.backupModFolder)
-            {
-                args.InstalProgress = InstallerEventArgs.InstallProgress.BackupMods;
                 BackupMods();
-            }
+            else
+                Utils.AppendToLog("... skipped");
             ResetArgs();
             //Step 2: do a backup of user data
             Utils.AppendToLog("Installation BackupUserData");
+            args.InstalProgress = InstallerEventArgs.InstallProgress.BackupUserData;
             if (Settings.saveUserData)
-            {
-                args.InstalProgress = InstallerEventArgs.InstallProgress.BackupUserData;
                 BackupUserData();
-            }
+            else
+                Utils.AppendToLog("... skipped");
             ResetArgs();
             //Step 3: Delete Mods
             Utils.AppendToLog("Installation UninstallMods");
+            args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteMods;
             if (Settings.cleanInstallation)
-            {
-                args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteMods;
-                // DeleteMods();
                 UninstallMods();
-            }
+            else
+                Utils.AppendToLog("... skipped");
             ResetArgs();
             //Setp 3a: delete log files
             Utils.AppendToLog("Installation logFiles");
@@ -145,14 +144,16 @@ namespace RelhaxModpack
                     Utils.ExceptionLog("ActuallyStartInstallation", "deleteLogs", ex);
                 }
             }
+            else
+                Utils.AppendToLog("... skipped");
             ResetArgs();
             //Step 4: Delete user appdata cache
             Utils.AppendToLog("Installation DeleteWoTCache");
+            args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteWoTCache;
             if (Settings.clearCache)
-            {
-                args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteWoTCache;
                 ClearWoTCache();
-            }
+            else
+                Utils.AppendToLog("... skipped");
             ResetArgs();
             //Step 5-9: Extracts Mods
             Utils.AppendToLog("Installation ExtractGlobalDependencies");
@@ -161,50 +162,61 @@ namespace RelhaxModpack
             ResetArgs();
             //Step 11: Restore User Data
             Utils.AppendToLog("Installation RestoreUserData");
+            args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreUserData;
             if (Settings.saveUserData)
-            {
-                args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreUserData;
                 RestoreUserData();
-            }
+            else
+                Utils.AppendToLog("... skipped");
             ResetArgs();
             //Step 12: Patch Mods
             Utils.AppendToLog("Installation PatchMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchMods;
             if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
                 PatchFiles();
+            else
+                Utils.AppendToLog("... skipped");
             ResetArgs();
             //Step 13: InstallFonts
 
             //Step 14: Extract User Mods
             Utils.AppendToLog("Installation ExtractUserMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractUserMods;
-            if(UserMods.Count > 0)
+            if (UserMods.Count > 0)
                 ExtractUserMods();
+            else
+                Utils.AppendToLog("... skipped");
             ResetArgs();
             //Step 15: Patch Mods if User Mods extracted patch files
             Utils.AppendToLog("Installation PatchUserMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchUserMods;
             if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
                 PatchFiles();
+            else
+                Utils.AppendToLog("... skipped");
             ResetArgs();
             //Step 16: Install Fonts
             Utils.AppendToLog("Installation InstallUserFonts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallUserFonts;
             if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
                 InstallFonts();
+            else
+                Utils.AppendToLog("... skipped");
             ResetArgs();
-            //Step 17: CheckDatabase and delete outdated or no more needed files
+            //Step 17: create shortCuts
             Utils.AppendToLog("Installation CreateShortscuts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CreateShortCuts;
-            CreateShortCuts();
+            if (Settings.CreateShortcuts)
+                CreateShortCuts();
+            else
+                Utils.AppendToLog("... skipped");
             ResetArgs();
             //Step 18: CheckDatabase and delete outdated or no more needed files
             Utils.AppendToLog("Installation CheckDatabase");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CheckDatabase;
             if (!Program.testMode)
-            {
                 checkForOldZipFiles();
-            }
+            else
+                Utils.AppendToLog("... skipped");
         }
 
         public void WorkerReportProgress(object sender, ProgressChangedEventArgs e)
