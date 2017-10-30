@@ -78,6 +78,7 @@ namespace RelhaxModpack
         public static float originalMainWindowHeight { get; set; }
         public static float originalMainWindowWidth { get; set; }
 
+
         //  interpret the created CiInfo buildTag as an "us-US" or a "de-DE" timeformat and return it as a local time- and dateformat string
         public static string compileTime()//if getting build error, check windows date and time format settings https://puu.sh/xgCqO/e97e2e4a34.png
         {
@@ -183,12 +184,21 @@ namespace RelhaxModpack
             //i think a complete download means that error is null, if error is ever not null this will catch it and we can log it
             if (e != null && e.Error != null)
             {
+                AsyncDownloadArgs userToken = (AsyncDownloadArgs)e.UserState;
                 if (Program.testMode)
-                    Utils.ExceptionLog("downloader_DownloadFileCompleted", "downloaded file: " + e.UserState.ToString(), e.Error);
+                    Utils.ExceptionLog("downloader_DownloadFileCompleted", "downloaded file: " + userToken.url.ToString(), e.Error);
                 else
-                    Utils.ExceptionLog("downloader_DownloadFileCompleted", "downloaded file: " + Path.GetFileName(e.UserState.ToString()), e.Error);
-                MessageBox.Show(string.Format("{0}\n{1}\n\n{2}", Translations.getTranslatedString("failedToDownload_1"), Path.GetFileName(e.UserState.ToString()), Translations.getTranslatedString("failedToDownload_2")));
-                Application.Exit();
+                    Utils.ExceptionLog("downloader_DownloadFileCompleted", "downloaded file: " + Path.GetFileName(userToken.zipFile.ToString()), e.Error);
+                DialogResult result = MessageBox.Show(string.Format("{0}\n{1}\n\n{2}", Translations.getTranslatedString("failedToDownload_1"), Path.GetFileName(userToken.zipFile.ToString()), Translations.getTranslatedString("failedToDownload_2")),"critical",MessageBoxButtons.AbortRetryIgnore,MessageBoxIcon.Question);
+                if (result == DialogResult.Abort)
+                {
+                    Application.Exit();
+                }
+                else if (result == DialogResult.Retry)
+                {
+                    downloader.DownloadFileAsync(userToken.url, userToken.zipFile, e.UserState);
+                    return;
+                }
             }
             if (downloadQueue.Count != 0)
             {
@@ -211,14 +221,15 @@ namespace RelhaxModpack
                 actualTimeRemain = 0;
                 sw.Reset();
                 sw.Start();
-                downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile, downloadQueue[0].URL);
-                // tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
-                // Utils.AppendToLog("downloading " + tempOldDownload);
-                Utils.AppendToLog("downloading " + Path.GetFileName(downloadQueue[0].zipFile));
-                currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile);
+                AsyncDownloadArgs args = new AsyncDownloadArgs();
+                args.url = downloadQueue[0].URL;
+                args.zipFile = downloadQueue[0].zipFile;
+                downloader.DownloadFileAsync(args.url, args.zipFile, args);
+                Utils.AppendToLog("downloading " + Path.GetFileName(args.zipFile));
+                currentModDownloading = Path.GetFileNameWithoutExtension(args.zipFile);
                 if (currentModDownloading.Length >= 200)
                 {
-                    currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile).Substring(0, 23) + "...";
+                    currentModDownloading = Path.GetFileNameWithoutExtension(args.zipFile).Substring(0, 23) + "...";
                 }
                 downloadQueue.RemoveAt(0);
                 if ((parrentProgressBar.Value + 1) <= parrentProgressBar.Maximum)

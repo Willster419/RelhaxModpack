@@ -113,6 +113,7 @@
   <ItemGroup>
     <Compile Include="Category.cs" />
     <Compile Include="CiInfo.cs" />
+    <Compile Include="AsyncDownloadArgs.cs" />
     <Compile Include="XMLUtils.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="PatchUtils.cs" />
