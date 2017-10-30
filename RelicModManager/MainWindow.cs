@@ -191,7 +191,9 @@ namespace RelhaxModpack
                     Utils.ExceptionLog("downloader_DownloadFileCompleted", "downloaded file: " + Path.GetFileName(userToken.zipFile.ToString()), e.Error);
                 DialogResult result = MessageBox.Show(string.Format("{0}\n{1}\n\n{2}", Translations.getTranslatedString("failedToDownload_1"), Path.GetFileName(userToken.zipFile.ToString()), Translations.getTranslatedString("failedToDownload_2")),"critical",MessageBoxButtons.AbortRetryIgnore,MessageBoxIcon.Question);
                 if (result == DialogResult.Abort)
+                {
                     Application.Exit();
+                }
                 else if (result == DialogResult.Retry)
                 {
                     downloader.DownloadFileAsync(userToken.url, userToken.zipFile, e.UserState);
