@@ -119,18 +119,18 @@ namespace RelhaxModpack
 
             english.Add("abort", "Abort");
             german.Add("abort", "Abbrechen");
-            polish.Add("abort", "TODO");
-            french.Add("abort", "TODO");
+            polish.Add("abort", "Anulować");
+            french.Add("abort", "Annuler");
 
             english.Add("retry", "Retry");
             german.Add("retry", "Wiederholen");
-            polish.Add("retry", "TODO");
-            french.Add("retry", "TODO");
+            polish.Add("retry", "Spróbować ponownie");
+            french.Add("retry", "Reaissayer");
 
             english.Add("ignore", "Ignore");
             german.Add("ignore", "Ignorieren");
-            polish.Add("ignore", "TODO");
-            french.Add("ignore", "TODO");
+            polish.Add("ignore", "Ignorować");
+            french.Add("ignore", "Ignorer");
 
             //Section: MainWindow
 
@@ -321,9 +321,9 @@ namespace RelhaxModpack
             //Componet: createShortcutsCB
             //
             english.Add("createShortcutsCB", "Create Desktop Shortcuts");
-            german.Add("createShortcutsCB", "TODO");
-            polish.Add("createShortcutsCB", "TODO");
-            french.Add("createShortcutsCB", "TODO");
+            german.Add("createShortcutsCB", "Erstelle Desktop Verknüpfung");
+            polish.Add("createShortcutsCB", "Utwórz skróty pulpitu");
+            french.Add("createShortcutsCB", "Créer des raccourcis sur le bureau");
 
             //Section: FirstLoadHelper
 
@@ -1000,9 +1000,9 @@ namespace RelhaxModpack
             //Component: ShowInstallCompleteWindowCBExplanation
             //
             english.Add("CreateShortcutsCBExplanation", "When selected, it will create shortcut icons on your desktop for mods that are exe files (like WWIIHA configuration)");
-            german.Add("CreateShortcutsCBExplanation", "TODO");
-            polish.Add("CreateShortcutsCBExplanation", "TODO");
-            french.Add("CreateShortcutsCBExplanation", "TODO");
+            german.Add("CreateShortcutsCBExplanation", "Wenn diese Option aktiviert ist, werden bei der Installation die Verknüpfungen für \"World of Tanks\", \"World of Tanks launcher\" und, wenn bei der Installation aktiviert, auch andere Verknüpfungen zu Konfigurationsprogrammen erstellt (z.B. WWIIHA Konfiguration)");
+            polish.Add("CreateShortcutsCBExplanation", "Gdy wybierzesz, utworzysz ikony skrótów na pulpicie dla modów, które są plikami exe (np. Konfiguracja WWIIHA)");
+            french.Add("CreateShortcutsCBExplanation", "Une fois sélectionné, L'installation créera des icônes de raccourci sur votre bureau pour les mods qui ont des fichiers .exe (comme la configuration WWIIHA)");
 
             //Section: Messages from ModSelectionList
 
