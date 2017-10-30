@@ -378,7 +378,7 @@ namespace RelhaxModpack
                     if (Settings.sView == Settings.SelectionView.defaultt)
                     {
                         //use default UI
-                        this.addMod(m, t, i++, c);
+                        this.AddMod(m, t, i++, c);
                     }
                     else if (Settings.sView == Settings.SelectionView.legacy)
                     {
@@ -388,7 +388,7 @@ namespace RelhaxModpack
                     else
                     {
                         //default case, use default
-                        this.addMod(m, t, i++, c);
+                        this.AddMod(m, t, i++, c);
                     }
                 }
                 modTabGroups.TabPages.Add(t);
@@ -1224,7 +1224,7 @@ namespace RelhaxModpack
         }
 
         //adds a mod m to a tabpage t
-        private void addMod(Mod m, TabPage t, int panelCount, Category catagory)
+        private void AddMod(Mod m, TabPage t, int panelCount, Category catagory)
         {
             if (!m.visible)
                 return;
@@ -1306,7 +1306,7 @@ namespace RelhaxModpack
             //add to main panel
             mainPanel.Controls.Add(modCheckBox);
             if (m.configs.Count > 0)
-                processConfigsDefault(t, m, catagory, modCheckBox, mainPanel, true, m.configs, mainPanel);
+                ProcessConfigsDefault(t, m, catagory, modCheckBox, mainPanel, true, m.configs, mainPanel);
             //add to tab
             t.Controls.Add(mainPanel);
             //add the event handler before changing the checked state so the event
@@ -1321,7 +1321,7 @@ namespace RelhaxModpack
             }
             modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
         }
-        private void processConfigsDefault(TabPage t, Mod m, Category catagory, ModFormCheckBox modCheckBox, Panel mainPanel, bool parentIsMod, List<Config> configs, Panel topPanal, Config parentConfig = null)
+        private void ProcessConfigsDefault(TabPage t, Mod m, Category catagory, ModFormCheckBox modCheckBox, Panel mainPanel, bool parentIsMod, List<Config> configs, Panel topPanal, Config parentConfig = null)
         {
             //make config panel
             Panel configPanel = new Panel();
@@ -1383,6 +1383,8 @@ namespace RelhaxModpack
             configControlDD.TabStop = true;
             configControlDD.Enabled = false;
             configControlDD.SelectedIndexChanged += new EventHandler(configControlDD_SelectedIndexChanged);
+            //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
+            configControlDD.MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
             configControlDD.MouseDown += new MouseEventHandler(Generic_MouseDown);
             configControlDD.Name = t.Name + "_" + m.name + "_DropDown";
             configControlDD.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -1394,6 +1396,7 @@ namespace RelhaxModpack
             configControlDD2.TabStop = true;
             configControlDD2.Enabled = false;
             configControlDD2.SelectedIndexChanged += new EventHandler(configControlDD_SelectedIndexChanged);
+            configControlDD2.MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
             configControlDD2.MouseDown += new MouseEventHandler(Generic_MouseDown);
             configControlDD2.Name = t.Name + "_" + m.name + "_DropDown2";
             configControlDD2.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -1487,7 +1490,7 @@ namespace RelhaxModpack
                     configPanel.Controls.Add(configControlRB);
                     //process the subconfigs
                     if (con.configs.Count > 0)
-                        processConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
+                        ProcessConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
                 }
                 else if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1") || con.type.Equals("single_dropdown2"))
                 {
@@ -1623,7 +1626,7 @@ namespace RelhaxModpack
                     configPanel.Controls.Add(configControlCB);
                     //process subconfigs
                     if (con.configs.Count > 0)
-                        processConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
+                        ProcessConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
                 }
                 else
                 {
