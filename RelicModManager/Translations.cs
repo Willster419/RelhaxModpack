@@ -117,6 +117,21 @@ namespace RelhaxModpack
             polish.Add("select", "Wybierz");
             french.Add("select", "Sélectionner");
 
+            english.Add("abort", "Abort");
+            german.Add("abort", "Abbrechen");
+            polish.Add("abort", "TODO");
+            french.Add("abort", "TODO");
+
+            english.Add("retry", "Retry");
+            german.Add("retry", "Wiederholen");
+            polish.Add("retry", "TODO");
+            french.Add("retry", "TODO");
+
+            english.Add("ignore", "Ignore");
+            german.Add("ignore", "Ignorieren");
+            polish.Add("ignore", "TODO");
+            french.Add("ignore", "TODO");
+
             //Section: MainWindow
 
             //Componet: installRelhaxMod
