@@ -176,14 +176,7 @@ namespace RelhaxModpack
                 return;
             }
             downloadTimer.Enabled = false;
-            // We must find a way for a localisation, e.g. message on a german system: Der Remoteserver hat einen Fehler zurückgegeben: (500) Interner Serverfehler.
-            if (e != null && e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
-            {
-                //404
-                Utils.AppendToLog(string.Format("ERROR: {0} failed to download", Path.GetFileName(e.UserState.ToString())));
-                MessageBox.Show(string.Format("{0}\n{1}\n\n{2}", Translations.getTranslatedString("failedToDownload_1"), Path.GetFileName(e.UserState.ToString()), Translations.getTranslatedString("failedToDownload_2")));
-                Application.Exit();
-            }
+            //i think a complete download means that error is null, if error is ever not null this will catch it and we can log it
             if (e != null && e.Error != null)
             {
                 if (Program.testMode)
