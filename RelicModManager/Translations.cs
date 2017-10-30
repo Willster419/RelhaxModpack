@@ -322,7 +322,7 @@ namespace RelhaxModpack
             //
             english.Add("createShortcutsCB", "Create Desktop Shortcuts");
             german.Add("createShortcutsCB", "Erstelle Desktop Verknüpfung");
-            polish.Add("createShortcutsCB", "Utwórz skróty pulpitu");
+            polish.Add("createShortcutsCB", "Stwórz skróty na pulpicie");
             french.Add("createShortcutsCB", "Créer des raccourcis sur le bureau");
 
             //Section: FirstLoadHelper
@@ -1001,7 +1001,7 @@ namespace RelhaxModpack
             //
             english.Add("CreateShortcutsCBExplanation", "When selected, it will create shortcut icons on your desktop for mods that are exe files (like WWIIHA configuration)");
             german.Add("CreateShortcutsCBExplanation", "Wenn diese Option aktiviert ist, werden bei der Installation die Verknüpfungen für \"World of Tanks\", \"World of Tanks launcher\" und, wenn bei der Installation aktiviert, auch andere Verknüpfungen zu Konfigurationsprogrammen erstellt (z.B. WWIIHA Konfiguration)");
-            polish.Add("CreateShortcutsCBExplanation", "Gdy wybierzesz, utworzysz ikony skrótów na pulpicie dla modów, które są plikami exe (np. Konfiguracja WWIIHA)");
+            polish.Add("CreateShortcutsCBExplanation", "Kiedy zaznaczone, utworzone zostaną skróty na pulpicie do modyfikacji z plikami exe (np. konfiguracja WWIIHA)");
             french.Add("CreateShortcutsCBExplanation", "Une fois sélectionné, L'installation créera des icônes de raccourci sur votre bureau pour les mods qui ont des fichiers .exe (comme la configuration WWIIHA)");
 
             //Section: Messages from ModSelectionList
