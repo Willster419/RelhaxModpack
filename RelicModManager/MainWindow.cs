@@ -139,6 +139,10 @@ namespace RelhaxModpack
             //get the ETA for the download
             double totalTimeToDownload = MBytesTotal / (e.BytesReceived / MBDivisor / sw.Elapsed.TotalSeconds);
             double timeRemain = totalTimeToDownload - sw.Elapsed.TotalSeconds;
+            if (timeRemain < 0)
+            {
+                timeRemain = 0;
+            }
             if (timeRemainArray == null)
                 timeRemainArray = new List<double>();
             timeRemainArray.Add(timeRemain);
@@ -1509,6 +1513,7 @@ namespace RelhaxModpack
                 this.Font = Settings.appFont;
                 this.notifyIfSameDatabaseCB.Checked = Settings.NotifyIfSameDatabase;
                 this.ShowInstallCompleteWindowCB.Checked = Settings.ShowInstallCompleteWindow;
+                //TODO: ADD HERE
                 switch (Settings.gif)
                 {
                     case (Settings.LoadingGifs.standard):
@@ -1704,6 +1709,7 @@ namespace RelhaxModpack
             clearLogFilesCB.Enabled = enableToggle;
             notifyIfSameDatabaseCB.Enabled = enableToggle;
             ShowInstallCompleteWindowCB.Enabled = enableToggle;
+            createShortcutsCB.Enabled = enableToggle;
         }
 
         public void ToggleScaleRBs(bool enableToggle)
@@ -1960,6 +1966,12 @@ namespace RelhaxModpack
             if (helper != null)
                 helper.helperText.Text = Translations.getTranslatedString("ShowInstallCompleteWindowCBExplanation");
         }
+
+        private void CreateShortcutsCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (helper != null)
+                helper.helperText.Text = Translations.getTranslatedString("CreateShortcutsCBExplanation");
+        }
         #endregion
 
         #region MouseDown events
@@ -2179,6 +2191,17 @@ namespace RelhaxModpack
             using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
             {
                 newHelper.helperText.Text = Translations.getTranslatedString("ShowInstallCompleteWindowCBExplanation");
+                newHelper.ShowDialog();
+            }
+        }
+
+        private void CreateShortcutsCB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
+            {
+                newHelper.helperText.Text = Translations.getTranslatedString("CreateShortcutsCBExplanation");
                 newHelper.ShowDialog();
             }
         }
@@ -2540,6 +2563,11 @@ namespace RelhaxModpack
         private void ShowInstallCompleteWindow_CheckedChanged(object sender, EventArgs e)
         {
             Settings.ShowInstallCompleteWindow = ShowInstallCompleteWindowCB.Checked;
+        }
+
+        private void CreateShortcutsCB_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
         #endregion
 
