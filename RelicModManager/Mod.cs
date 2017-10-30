@@ -23,6 +23,7 @@ namespace RelhaxModpack
             enabled = false;
             Checked = false;
             downloadFlag = false;
+            visible = true;
         }
         //returns the config of the specified name
         //if it does not exist, it returns null

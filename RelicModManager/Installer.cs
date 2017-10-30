@@ -957,7 +957,7 @@ namespace RelhaxModpack
                     {
                         //perform json patch
                         Utils.AppendToLog("Json patch, " + p.file + ", " + p.path + ", " + p.replace);
-                        PatchUtils.JSONPatch(p.file, p.path, p.replace, p.mode, TanksLocation, TanksVersion);
+                        PatchUtils.JSONPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
                     }
                     else if (p.type.Equals("xvm"))
                     {
