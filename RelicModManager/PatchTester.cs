@@ -8,7 +8,8 @@ namespace RelhaxModpack
 {
     public partial class PatchTester : Form
     {
-        private string xvmMode = "";
+        private string XVMMode = "";
+        private string JSONMode = "edit";
         public PatchTester()
         {
             InitializeComponent();
@@ -46,6 +47,7 @@ namespace RelhaxModpack
             jsonFileDialog.InitialDirectory = Application.StartupPath;
             xvmFileDialog.InitialDirectory = Application.StartupPath;
             xmlAddModeButton.Checked = true;
+            JSONEditArrayEdit.Checked = true;
         }
 
         private void regexLoadFileButton_Click(object sender, EventArgs e)
@@ -108,7 +110,7 @@ namespace RelhaxModpack
 
         private void jsonPatchButton_Click(object sender, EventArgs e)
         {
-            PatchUtils.JSONPatch(jsonFilePathBox.Text, jsonPathBox.Text, jsonReplaceBox.Text, "edit", "", "", true, xvmFilePathBox.Text);
+            PatchUtils.JSONPatch(jsonFilePathBox.Text, jsonPathBox.Text, jsonSearchBox.Text, jsonReplaceBox.Text, JSONMode, "", "", true, xvmFilePathBox.Text);
         }
 
         private void regexMakePatchButton_Click(object sender, EventArgs e)
@@ -226,7 +228,7 @@ namespace RelhaxModpack
             doc.Save(fileName);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void xvmRegressionTesting_Click(object sender, EventArgs e)
         {
             //edit example
             PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.saveLastServer", ".*", "nope", "edit", "", "", true);
@@ -275,7 +277,7 @@ namespace RelhaxModpack
         private void xvm_modeToggle(object sender, EventArgs e)
         {
             RadioButton rb = (RadioButton)sender;
-            xvmMode = rb.Text;
+            XVMMode = rb.Text;
         }
 
         private void xvmLoadFileButton_Click(object sender, EventArgs e)
@@ -292,11 +294,11 @@ namespace RelhaxModpack
             string newReg = Regex.Replace(xvmReplaceBox.Text, @"\n", "newline");
             if (xvmPatchRB.Checked)
             {
-                PatchUtils.XVMPatch(xvmFilePathBox.Text, xvmPathBox.Text, xvmSearchBox.Text, newReg, xvmMode, "", "", true, xvmFilePathBox.Text);
+                PatchUtils.XVMPatch(xvmFilePathBox.Text, xvmPathBox.Text, xvmSearchBox.Text, newReg, XVMMode, "", "", true, xvmFilePathBox.Text);
             }
             else if (PMODPatchRB.Checked)
             {
-                PatchUtils.PMODPatch(xvmFilePathBox.Text, xvmPathBox.Text, xvmSearchBox.Text, newReg, xvmMode, "", "", true, xvmFilePathBox.Text);
+                PatchUtils.PMODPatch(xvmFilePathBox.Text, xvmPathBox.Text, xvmSearchBox.Text, newReg, XVMMode, "", "", true, xvmFilePathBox.Text);
             }
             else
             {
@@ -318,7 +320,7 @@ namespace RelhaxModpack
             patch.AppendChild(type);
 
             XmlElement mode = doc.CreateElement("mode");
-            mode.InnerText = xvmMode;
+            mode.InnerText = XVMMode;
             patch.AppendChild(mode);
 
             XmlElement file = doc.CreateElement("file");
@@ -343,6 +345,141 @@ namespace RelhaxModpack
         private void PatchTester_FormClosing(object sender, FormClosingEventArgs e)
         {
             Utils.AppendToLog("|------------------------------------------------------------------------------------------------|");
+        }
+
+        private void JSONMode_CheckedChanged(object sender, EventArgs e)
+        {
+            if(JSONEditArrayEdit.Checked)
+            {
+                JSONMode = "edit";
+            }
+            else if (JSONArrayAdd.Checked)
+            {
+                JSONMode = "arrayAdd";
+            }
+            else if (JSONArrayRemove.Checked)
+            {
+                JSONMode = "arrayRemove";
+            }
+            else if (JSONAdd.Checked)
+            {
+                JSONMode = "add";
+            }
+            else if (JSONRemove.Checked)
+            {
+                JSONMode = "remove";
+            }
+            else if (JSONArrayClear.Checked)
+            {
+                JSONMode = "arrayClear";
+            }
+        }
+
+        private void JSONRegressionTesting_Click(object sender, EventArgs e)
+        {
+            /*
+             * ALL REGRESSION TESTS PASSED AS OF 10/29/17
+             */
+            //file, path, search, replace, mode, "", "", true, xvmFilePathBox.Text
+
+            
+            //add test 1: basic add
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_add.json", "$","", "awesome/false", "add", "", "", true, xvmFilePathBox.Text);
+
+            //add test 2: repeat of basic add. should do nothing
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_add.json", "$", "", "awesome/false", "add", "", "", true, xvmFilePathBox.Text);
+
+            //add test 3: same path as basic add, but different falue to insert. should update the value
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_add.json", "$", "", "awesome/true", "add", "", "", true, xvmFilePathBox.Text);
+
+            //add test 4: add of a new object as well as the path. should create object paths to value
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_add.json", "$", "", "memes/awesome/true", "add", "", "", true, xvmFilePathBox.Text);
+
+            //add test 5: add of a new property to part object path that already exists. should add the value without overwriting the path
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_add.json", "$", "", "memes/dank/true", "add", "", "", true, xvmFilePathBox.Text);
+
+            //add test 6: add of a new blank object
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_add.json", "$", "", "memelist[array]", "add", "", "", true, xvmFilePathBox.Text);
+
+            //add test 7: add of a new blank array
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_add.json", "$", "", "objectname[object]", "add", "", "", true, xvmFilePathBox.Text);
+
+            //add test 8: add of new property with slash escape
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_add.json", "$.nations", "", "memeville/spaces[sl]hangar_premium_v2", "add", "", "", true, xvmFilePathBox.Text);
+            
+
+            
+            //edit test 1: edit attempt of path that does not exist. should note it log and abort
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_edit.json", "$.fakePath", "", "null", "edit", "", "", true, xvmFilePathBox.Text);
+
+            //edit test 2: edit attempt of object. should note in log and abort
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_edit.json", "$.nations", "", "null", "edit", "", "", true, xvmFilePathBox.Text);
+
+            //edit test 3: edit attempt of simple path. should change the one value
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_edit.json", "$.mode", "normal", "epic", "edit", "", "", true, xvmFilePathBox.Text);
+
+            //edit test 4: edit attempt of simple path. should change the one value
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_edit.json", "$.mode", "epic", "epic", "edit", "", "", true, xvmFilePathBox.Text);
+
+            //edit test 5: edit of array of values. should change the last value in the array
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_edit.json", @"$.ignorelist[*]", "ttest", "test", "edit", "", "", true, xvmFilePathBox.Text);
+
+            //edit test 6: edit of array of objects. should parse advaned jsonpath and edit the value of 421 or above to be 420
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_edit.json", @"$.screensavers..starttime", @"^[4-9][2-9][0-9]$", "420", "edit", "", "", true, xvmFilePathBox.Text);
+
+            //edit test 7: edit of array of objects. should parse advaned jsonpath and edit the value of 419 or below to be 420
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_edit.json", @"$.screensavers..starttime", @"^([0123]?[0-9]?[0-9]|4[01][0-9]|41[0-9])$", "420", "edit", "", "", true, xvmFilePathBox.Text);
+
+            //edit test 8: edit array of objects. should parse very advanced jsonpath and edit values less than 420 to be 420
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_edit.json", @"$.screensavers[?(@.starttime < 420)].starttime", @".*", "420", "edit", "", "", true, xvmFilePathBox.Text);
+            
+
+            //file, path, search, replace, mode, "", "", true, xvmFilePathBox.Text
+            //remove test 1: basic remove test with property
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_remove.json", @"$.game_greeting2", @".*", "", "remove", "", "", true, xvmFilePathBox.Text);
+
+            //remove test 2: basic remove test with property
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_remove.json", @"$.screensaver", @".*", "", "remove", "", "", true, xvmFilePathBox.Text);
+
+            //remove test 3: basic remove test with property
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_remove.json", @"$.ignorelist", @".*", "", "remove", "", "", true, xvmFilePathBox.Text);
+
+
+            //arrayAdd test 1: basic add of jValue at index 0
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_arrayAdd.json", @"$.ignorelist", @".*", "spaces[sl]urmom[index=0]", "arrayAdd", "", "", true, xvmFilePathBox.Text);
+
+            //arrayAdd test 2: basic add of jValue at index -1 (last)
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_arrayAdd.json", @"$.ignorelist", @".*", "spaces[sl]urmom2[index=-1]", "arrayAdd", "", "", true, xvmFilePathBox.Text);
+
+            //arrayAdd test 3: attempt add of object to array of JValue, should fail
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_arrayAdd.json", @"$.ignorelist", @".*", "enable/true[index=0]", "arrayAdd", "", "", true, xvmFilePathBox.Text);
+
+            //arrayAdd test 4: attempt add of jValue to array of object, should fail
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_arrayAdd.json", @"$.screensavers", @".*", "spaces[sl]urmom[index=0]", "arrayAdd", "", "", true, xvmFilePathBox.Text);
+
+            //arrayAdd test 5: basic add of object at end
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_arrayAdd.json", @"$.screensavers", @".*", "enable/true[index=0]", "arrayAdd", "", "", true, xvmFilePathBox.Text);
+
+            //file, path, search, replace, mode, "", "", true, xvmFilePathBox.Text
+            //arrayRemove test 1: basic remove of jValue "test"
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_arrayRemove.json", @"$.ignorelist", @"test", "", "arrayRemove", "", "", true, xvmFilePathBox.Text);
+
+            //arrayRemove test 2: basic remove of jValue "test3" (does not exist)
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_arrayRemove.json", @"$.ignorelist", @"test3", "", "arrayRemove", "", "", true, xvmFilePathBox.Text);
+
+            //arrayRemove test 3: basic remove of jObject "enable:true"
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_arrayRemove.json", @"$.screensavers", @".*", "", "arrayRemove", "", "", true, xvmFilePathBox.Text);
+
+
+            //arrayClear test 1: basic clear of jValue "test"
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_arrayClear.json", @"$.ignorelist", @"test", "", "arrayClear", "", "", true, xvmFilePathBox.Text);
+
+            //arrayClear test 2: basic clear of jValue "test" (does not exist)
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_arrayClear.json", @"$.ignorelist", @"test", "", "arrayClear", "", "", true, xvmFilePathBox.Text);
+
+            //arrayClear test 3: basic clear of object ".*" (all)
+            PatchUtils.JSONPatch(Application.StartupPath + "\\RelHaxUserMods\\HangMan_arrayClear.json", @"$.screensavers", @".*", "", "arrayClear", "", "", true, xvmFilePathBox.Text);
+
         }
     }
 }
