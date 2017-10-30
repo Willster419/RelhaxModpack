@@ -253,7 +253,7 @@ namespace RelhaxModpack
         }
 
         //method to check for updates to the application on startup
-        private void checkmanagerUpdates()
+        private void CheckmanagerUpdates()
         {
             Utils.AppendToLog("Starting check for application updates");
             //download the updates
@@ -312,7 +312,7 @@ namespace RelhaxModpack
                     {
                         Utils.AppendToLog("User declined downlading new version");
                         //close the application
-                        this.Close();
+                        Application.Exit();
                     }
                 }
             }
@@ -653,7 +653,7 @@ namespace RelhaxModpack
             //check for updates
             wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
             Application.DoEvents();
-            this.checkmanagerUpdates();
+            this.CheckmanagerUpdates();
 
             //load settings
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
@@ -1705,7 +1705,7 @@ namespace RelhaxModpack
             DPI225.Enabled = enableToggle;
             DPI275.Enabled = enableToggle;
             */
-            toggleScaleRBs(enableToggle);
+            ToggleScaleRBs(enableToggle);
             DPIAUTO.Enabled = enableToggle;
             clearCacheCB.Enabled = enableToggle;
             clearLogFilesCB.Enabled = enableToggle;
@@ -1713,7 +1713,7 @@ namespace RelhaxModpack
             ShowInstallCompleteWindowCB.Enabled = enableToggle;
         }
 
-        public void toggleScaleRBs(bool enableToggle)
+        public void ToggleScaleRBs(bool enableToggle)
         {
             float[] scales = new float[] { Settings.scale100, Settings.scale125, Settings.scale175, Settings.scale225, Settings.scale275 };
             RadioButton[,] radioButtons = new RadioButton[,] { { fontSize100, DPI100 }, { fontSize125, DPI125 }, { fontSize175, DPI175 }, { fontSize225, DPI225 }, { fontSize275, DPI275 } };
@@ -2305,7 +2305,7 @@ namespace RelhaxModpack
                 this.AutoScaleMode = Settings.appScalingMode;
                 //get new font
                 this.Font = Settings.appFont;
-                toggleScaleRBs(true);
+                ToggleScaleRBs(true);
             }
         }
 
@@ -2327,7 +2327,7 @@ namespace RelhaxModpack
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
                 this.Font = Settings.appFont;
-                toggleScaleRBs(true);
+                ToggleScaleRBs(true);
             }
         }
 
@@ -2349,7 +2349,7 @@ namespace RelhaxModpack
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
                 this.Font = Settings.appFont;
-                toggleScaleRBs(true);
+                ToggleScaleRBs(true);
             }
         }
 
@@ -2371,7 +2371,7 @@ namespace RelhaxModpack
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
                 this.Font = Settings.appFont;
-                toggleScaleRBs(true);
+                ToggleScaleRBs(true);
             }
         }
 
@@ -2393,7 +2393,7 @@ namespace RelhaxModpack
                 Settings.ApplyScalingProperties();
                 this.AutoScaleMode = Settings.appScalingMode;
                 this.Font = Settings.appFont;
-                toggleScaleRBs(true);
+                ToggleScaleRBs(true);
             }
         }
 
@@ -2415,7 +2415,7 @@ namespace RelhaxModpack
                 this.Scale(new SizeF(temp, temp));
                 scale = Settings.scale100;
                 this.Font = Settings.appFont;
-                toggleScaleRBs(true);
+                ToggleScaleRBs(true);
             }
         }
 
@@ -2437,7 +2437,7 @@ namespace RelhaxModpack
                 this.Scale(new SizeF(temp, temp));
                 scale = Settings.scale125;
                 this.Font = Settings.appFont;
-                toggleScaleRBs(true);
+                ToggleScaleRBs(true);
             }
         }
 
@@ -2459,7 +2459,7 @@ namespace RelhaxModpack
                 this.Scale(new SizeF(temp, temp));
                 scale = Settings.scale175;
                 this.Font = Settings.appFont;
-                toggleScaleRBs(true);
+                ToggleScaleRBs(true);
             }
         }
 
@@ -2481,7 +2481,7 @@ namespace RelhaxModpack
                 this.Scale(new SizeF(temp, temp));
                 scale = Settings.scale225;
                 this.Font = Settings.appFont;
-                toggleScaleRBs(true);
+                ToggleScaleRBs(true);
             }
         }
 
@@ -2503,7 +2503,7 @@ namespace RelhaxModpack
                 this.Scale(new SizeF(temp, temp));
                 scale = Settings.scale275;
                 this.Font = Settings.appFont;
-                toggleScaleRBs(true);
+                ToggleScaleRBs(true);
             }
         }
 
@@ -2525,7 +2525,7 @@ namespace RelhaxModpack
                 this.Scale(new SizeF(temp, temp));
                 scale = Settings.scaleSize;
                 this.Font = Settings.appFont;
-                toggleScaleRBs(true);
+                ToggleScaleRBs(true);
             }
         }
 
