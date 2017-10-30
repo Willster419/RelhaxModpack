@@ -260,7 +260,12 @@ namespace RelhaxModpack
                 MessageBox.Show(string.Format("{0} managerInfo.dat", Translations.getTranslatedString("failedToDownload_1")));
                 Application.Exit();
             }
-
+            if (Program.skipUpdate)
+            {
+                Utils.AppendToLog("/skip-update switch detected, skipping application update");
+                if (!Program.testMode) MessageBox.Show(Translations.getTranslatedString("skipUpdateWarning"));
+                return;
+            }
             string version = "";
             string xmlString = Utils.GetStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");  //xml doc name can change
             if (!xmlString.Equals(""))
@@ -637,15 +642,7 @@ namespace RelhaxModpack
             //check for updates
             wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
             Application.DoEvents();
-            if (Program.skipUpdate)
-            {
-                Utils.AppendToLog("/skip-update switch detected, skipping application update");
-                if (!Program.testMode) MessageBox.Show(Translations.getTranslatedString("skipUpdateWarning"));
-            }
-            else
-            {
-                this.checkmanagerUpdates();
-            }
+            this.checkmanagerUpdates();
 
             //load settings
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
