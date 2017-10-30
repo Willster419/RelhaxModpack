@@ -178,8 +178,13 @@ namespace RelhaxModpack
 
                 if (e is WebException)
                 {
+                    WebException we = (WebException)e;
                     errorType = "WebException";
                     type = "";
+                    if (we.Status == WebExceptionStatus.ProtocolError)
+                    {
+                        try { type = string.Format("Code: {0}\nDescription: {1}", ((HttpWebResponse)we.Response).StatusCode.Equals("") ? "(empty)" : ((HttpWebResponse)we.Response).StatusCode.ToString(), ((HttpWebResponse)we.Response).StatusDescription == null ? "(null)" : ((HttpWebResponse)we.Response).StatusDescription.Equals("") ? "(empty)" : ((HttpWebResponse)we.Response).StatusDescription.ToString()); } catch { };
+                    }
                 }
                 else if (e is IOException)
                 {
@@ -701,7 +706,7 @@ namespace RelhaxModpack
                         ParsedZips.Add(m.zipFile);
                     }
                     if (m.configs.Count > 0)
-                        depricated_ParseZipFileConfigs(m.configs);
+                        Depricated_ParseZipFileConfigs(m.configs);
                 }
             }
             //now parsedZips has every single possible zipFile in the database
@@ -714,7 +719,7 @@ namespace RelhaxModpack
             return currentZipFiles;
         }
 
-        public static void depricated_ParseZipFileConfigs(List<Config> configList)
+        public static void Depricated_ParseZipFileConfigs(List<Config> configList)
         {
             foreach (Config c in configList)
             {
@@ -724,7 +729,7 @@ namespace RelhaxModpack
                     ParsedZips.Add(c.zipFile);
                 }
                 if (c.configs.Count > 0)
-                    depricated_ParseZipFileConfigs(c.configs);
+                    Depricated_ParseZipFileConfigs(c.configs);
             }
         }
         //deletes all empty directories from a given start location
@@ -976,6 +981,24 @@ namespace RelhaxModpack
         public static long GetCurrentUniversalFiletimeTimestamp()
         {
             return DateTime.Now.ToUniversalTime().ToFileTime();
+        }
+
+        public static string ReplaceMacro(string text, string macro, string macrotext)
+        {
+            bool search = true;
+            while (search)
+            {
+                int index = text.ToLower().IndexOf("{"+ macro.ToLower() + "}");
+                if (index == -1)
+                {
+                    search = false;
+                }
+                else
+                {
+                    text = text.Replace(text.Substring(index, macro.Length + 2), macrotext);
+                }
+            }
+            return text;
         }
 
         public static string ConvertFiletimeTimestampToDate(long timestamp)

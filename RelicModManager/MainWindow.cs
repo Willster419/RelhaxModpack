@@ -56,7 +56,7 @@ namespace RelhaxModpack
         public static List<string> usedFilesList;
         //counter for Utils.exception calls
         public static int errorCounter = 0;
-        string tempOldDownload;
+        // string tempOldDownload; => using userToken at Async download
         private List<Mod> userMods;
         private FirstLoadHelper helper;
         string helperText;
@@ -176,11 +176,21 @@ namespace RelhaxModpack
                 return;
             }
             downloadTimer.Enabled = false;
+            // We must find a way for a localisation, e.g. message on a german system: Der Remoteserver hat einen Fehler zurückgegeben: (500) Interner Serverfehler.
             if (e != null && e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
             {
                 //404
-                Utils.AppendToLog(string.Format("ERROR: {0} failed to download", tempOldDownload));
-                MessageBox.Show(string.Format("{0}\n{1}\n\n{2}", Translations.getTranslatedString("failedToDownload_1"), tempOldDownload, Translations.getTranslatedString("failedToDownload_2")));
+                Utils.AppendToLog(string.Format("ERROR: {0} failed to download", Path.GetFileName(e.UserState.ToString())));
+                MessageBox.Show(string.Format("{0}\n{1}\n\n{2}", Translations.getTranslatedString("failedToDownload_1"), Path.GetFileName(e.UserState.ToString()), Translations.getTranslatedString("failedToDownload_2")));
+                Application.Exit();
+            }
+            if (e != null && e.Error != null)
+            {
+                if (Program.testMode)
+                    Utils.ExceptionLog("downloader_DownloadFileCompleted", "downloaded file: " + e.UserState.ToString(), e.Error);
+                else
+                    Utils.ExceptionLog("downloader_DownloadFileCompleted", "downloaded file: " + Path.GetFileName(e.UserState.ToString()), e.Error);
+                MessageBox.Show(string.Format("{0}\n{1}\n\n{2}", Translations.getTranslatedString("failedToDownload_1"), Path.GetFileName(e.UserState.ToString()), Translations.getTranslatedString("failedToDownload_2")));
                 Application.Exit();
             }
             if (downloadQueue.Count != 0)
@@ -204,9 +214,10 @@ namespace RelhaxModpack
                 actualTimeRemain = 0;
                 sw.Reset();
                 sw.Start();
-                downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile);
-                tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
-                Utils.AppendToLog("downloading " + tempOldDownload);
+                downloader.DownloadFileAsync(downloadQueue[0].URL, downloadQueue[0].zipFile, downloadQueue[0].URL);
+                // tempOldDownload = Path.GetFileName(downloadQueue[0].zipFile);
+                // Utils.AppendToLog("downloading " + tempOldDownload);
+                Utils.AppendToLog("downloading " + Path.GetFileName(downloadQueue[0].zipFile));
                 currentModDownloading = Path.GetFileNameWithoutExtension(downloadQueue[0].zipFile);
                 if (currentModDownloading.Length >= 200)
                 {
@@ -749,12 +760,12 @@ namespace RelhaxModpack
             // logfile moved from WoT root folder to logs subfolder after manager version 26.4.2
             try
             {
-            if (File.Exists(Path.Combine(tanksLocation, "installedRelhaxFiles.log")))
-            {   if (File.Exists(Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log")))
-                    Path.Combine(tanksLocation, "installedRelhaxFiles.log");
-                else
-                    File.Move(Path.Combine(tanksLocation, "installedRelhaxFiles.log"), Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log"));
-            }
+                if (File.Exists(Path.Combine(tanksLocation, "installedRelhaxFiles.log")))
+                {   if (File.Exists(Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log")))
+                        Path.Combine(tanksLocation, "installedRelhaxFiles.log");
+                    else
+                        File.Move(Path.Combine(tanksLocation, "installedRelhaxFiles.log"), Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log"));
+                }
             }
             catch (Exception ex)
             {
@@ -866,139 +877,181 @@ namespace RelhaxModpack
             patchList = new List<Patch>();
             userMods = new List<Mod>();
 
-            //if mod/config is enabled and checked, add it to list of mods to extract/install
-            foreach (Category c in parsedCatagoryLists)
+            try
             {
-                //will itterate through every catagory once
-                foreach (Mod m in c.mods)
-                {
-                    //will itterate through every mod of every catagory once
-                    if (m.enabled && m.Checked)
-                    {
-                        //move each mod that is enalbed and checked to a new list of mods to install
-                        //also check that it actually has a zip file
-                        if (!m.zipFile.Equals(""))
-                            modsConfigsToInstall.Add(m);
-
-                        //since it is checked, regardless if it has a zipfile, check if it has userdata
-                        if (m.userFiles.Count > 0)
-                            modsConfigsWithData.Add(m);
-
-                        //check for configs
-                        if (m.configs.Count > 0)
-                            ProcessConfigs(m.configs);
-
-                        //at least one mod of this catagory is checked, add any dependenciesToInstall required
-                        if (c.dependencies.Count > 0)
-                            processDependencies(c.dependencies);
-
-                        //check dependency is enabled and has a zip file with it
-                        if (m.dependencies.Count > 0)
-                            processDependencies(m.dependencies);
-                    }
-                }
-            }
-
-            //build the list of mods and configs that use each logical dependency
-            foreach (LogicalDependnecy d in currentLogicalDependencies)
-            {
-                foreach (Dependency depD in currentDependencies)
-                {
-                    foreach (LogicalDependnecy ld in depD.logicalDependencies)
-                    {
-                        if (ld.packageName.Equals(d.packageName))
-                        {
-                            DatabaseLogic dbl = new DatabaseLogic()
-                            {
-                                PackageName = depD.packageName,
-                                Enabled = depD.enabled,
-                                Checked = dependenciesToInstall.Contains(depD),
-                                NotFlag = ld.negateFlag
-                            };
-                            d.DatabasePackageLogic.Add(dbl);
-                        }
-                    }
-                }
-                //itterate through every mod and config once for each dependency
-                //check each one's dependecy list, if packageName's match, add it to the dependency's list of mods/configs that use it
+                //if mod/config is enabled and checked, add it to list of mods to extract/install
                 foreach (Category c in parsedCatagoryLists)
                 {
                     //will itterate through every catagory once
                     foreach (Mod m in c.mods)
                     {
-                        foreach (LogicalDependnecy ld in m.logicalDependencies)
+                        //will itterate through every mod of every catagory once
+                        if (m.enabled && m.Checked)
+                        {
+                            //move each mod that is enalbed and checked to a new list of mods to install
+                            //also check that it actually has a zip file
+                            if (!m.zipFile.Equals(""))
+                                modsConfigsToInstall.Add(m);
+
+                            //since it is checked, regardless if it has a zipfile, check if it has userdata
+                            if (m.userFiles.Count > 0)
+                                modsConfigsWithData.Add(m);
+
+                            //check for configs
+                            if (m.configs.Count > 0)
+                                ProcessConfigs(m.configs);
+
+                            //at least one mod of this catagory is checked, add any dependenciesToInstall required
+                            if (c.dependencies.Count > 0)
+                                processDependencies(c.dependencies);
+
+                            //check dependency is enabled and has a zip file with it
+                            if (m.dependencies.Count > 0)
+                                processDependencies(m.dependencies);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("installRelhaxMod_Click", "if mod/config is enabled and checked, add it to list of mods to extract/install", ex);
+            }
+
+            try
+            {
+                //build the list of mods and configs that use each logical dependency
+                foreach (LogicalDependnecy d in currentLogicalDependencies)
+                {
+                    foreach (Dependency depD in currentDependencies)
+                    {
+                        foreach (LogicalDependnecy ld in depD.logicalDependencies)
                         {
                             if (ld.packageName.Equals(d.packageName))
                             {
                                 DatabaseLogic dbl = new DatabaseLogic()
                                 {
-                                    PackageName = m.packageName,
-                                    Enabled = m.enabled,
-                                    Checked = m.Checked,
+                                    PackageName = depD.packageName,
+                                    Enabled = depD.enabled,
+                                    Checked = dependenciesToInstall.Contains(depD),
                                     NotFlag = ld.negateFlag
                                 };
                                 d.DatabasePackageLogic.Add(dbl);
                             }
                         }
-                        if (m.configs.Count > 0)
-                            ProcessConfigsLogical(d, m.configs);
                     }
-                }
-            }
-
-            //now each logical dependency has a complete list of every dependency, mod, and config that uses it, and if it is enabled and checked
-            //indicate if the logical dependency will be installed
-            foreach (LogicalDependnecy ld in currentLogicalDependencies)
-            {
-                //idea is that if all mod/config/dependency are to be installed, then install the logical dependency
-                //and factor in the negate flag
-                bool addIt = true;
-                foreach (DatabaseLogic dl in ld.DatabasePackageLogic)
-                {
-                    if (dl.NotFlag)
+                    try
                     {
-                        //package must NOT be checked for it to be included
-                        //enabled must = true, checked must = false
-                        //otherwise break and don't add
-                        if (dl.Enabled && dl.Checked)
+                        //itterate through every mod and config once for each dependency
+                        //check each one's dependecy list, if packageName's match, add it to the dependency's list of mods/configs that use it
+                        foreach (Category c in parsedCatagoryLists)
                         {
-                            addIt = false;
-                            break;
+                            //will itterate through every catagory once
+                            foreach (Mod m in c.mods)
+                            {
+                                foreach (LogicalDependnecy ld in m.logicalDependencies)
+                                {
+                                    if (ld.packageName.Equals(d.packageName))
+                                    {
+                                        DatabaseLogic dbl = new DatabaseLogic()
+                                        {
+                                            PackageName = m.packageName,
+                                            Enabled = m.enabled,
+                                            Checked = m.Checked,
+                                            NotFlag = ld.negateFlag
+                                        };
+                                        d.DatabasePackageLogic.Add(dbl);
+                                    }
+                                }
+                                if (m.configs.Count > 0)
+                                    ProcessConfigsLogical(d, m.configs);
+                            }
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        //package MUST be checked for it to be included
-                        //enabled must = true, checked must = true
-                        //otherwise break and don't add
-                        if (dl.Enabled && !dl.Checked)
-                        {
-                            addIt = false;
-                            break;
-                        }
+                        Utils.ExceptionLog("installRelhaxMod_Click", "build the list of mods and configs that use each logical dependency", ex);
                     }
                 }
-                if (addIt && !logicalDependenciesToInstall.Contains(ld))
-                    logicalDependenciesToInstall.Add(ld);
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("installRelhaxMod_Click", "add package to dependency's list of mods/configs that use it", ex);
             }
 
-            //check for dependencies that actually need to be installed at the end
-            foreach (Dependency d in dependenciesToInstall)
+            try
             {
-                if (d.appendExtraction)
+                //now each logical dependency has a complete list of every dependency, mod, and config that uses it, and if it is enabled and checked
+                //indicate if the logical dependency will be installed
+                foreach (LogicalDependnecy ld in currentLogicalDependencies)
                 {
-                    appendedDependenciesToInstall.Add(d);
-                    dependenciesToInstall.Remove(d);
+                    //idea is that if all mod/config/dependency are to be installed, then install the logical dependency
+                    //and factor in the negate flag
+                    bool addIt = true;
+                    foreach (DatabaseLogic dl in ld.DatabasePackageLogic)
+                    {
+                        if (dl.NotFlag)
+                        {
+                            //package must NOT be checked for it to be included
+                            //enabled must = true, checked must = false
+                            //otherwise break and don't add
+                            if (dl.Enabled && dl.Checked)
+                            {
+                                addIt = false;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            //package MUST be checked for it to be included
+                            //enabled must = true, checked must = true
+                            //otherwise break and don't add
+                            if (dl.Enabled && !dl.Checked)
+                            {
+                                addIt = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (addIt && !logicalDependenciesToInstall.Contains(ld))
+                        logicalDependenciesToInstall.Add(ld);
                 }
             }
-
-            //check for any user mods to install
-            for (int i = 0; i < list.userMods.Count; i++)
+            catch (Exception ex)
             {
-                if (list.userMods[i].enabled && list.userMods[i].Checked)
+                Utils.ExceptionLog("installRelhaxMod_Click", "now each logical dependency has a complete list of every dependency ...", ex);
+            }
+
+            try
+            {
+                //check for dependencies that actually need to be installed at the end
+                foreach (Dependency d in dependenciesToInstall)
                 {
-                    this.userMods.Add(list.userMods[i]);
+                    if (d.appendExtraction)
+                    {
+                        appendedDependenciesToInstall.Add(d);
+                        dependenciesToInstall.Remove(d);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("installRelhaxMod_Click", "check for dependencies that actually need to be installed at the end", ex);
+            }
+
+            try
+            {
+                //check for any user mods to install
+                for (int i = 0; i < list.userMods.Count; i++)
+                {
+                    if (list.userMods[i].enabled && list.userMods[i].Checked)
+                    {
+                        this.userMods.Add(list.userMods[i]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("installRelhaxMod_Click", "check for any user mods to install", ex);
             }
 
             //create a new download queue. even if not downloading any
@@ -1018,7 +1071,7 @@ namespace RelhaxModpack
             //if the user did not select any relhax modpack mods to install
             if (modsConfigsToInstall.Count == 0)
             {
-                //clear any dependenciesand logicalDependencies since this is a user mod only installation
+                //clear any dependencies and logicalDependencies since this is a user mod only installation
                 dependenciesToInstall.Clear();
                 logicalDependenciesToInstall.Clear();
                 appendedDependenciesToInstall.Clear();
@@ -1029,28 +1082,28 @@ namespace RelhaxModpack
             {
                 if (d.downloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(d.startAddress + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress, "onlineFolder", Settings.tanksOnlineFolderVersion) + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
                 }
             }
             foreach (Dependency d in dependenciesToInstall)
             {
                 if (d.downloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(d.startAddress + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress, "onlineFolder", Settings.tanksOnlineFolderVersion) + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
                 }
             }
             foreach (Dependency d in appendedDependenciesToInstall)
             {
                 if (d.downloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(d.startAddress + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress, "onlineFolder", Settings.tanksOnlineFolderVersion) + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
                 }
             }
             foreach (LogicalDependnecy ld in logicalDependenciesToInstall)
             {
                 if (ld.downloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(ld.startAddress + ld.dependencyZipFile + ld.endAddress), Path.Combine(localFilesDir, ld.dependencyZipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(ld.startAddress, "onlineFolder", Settings.tanksOnlineFolderVersion) + ld.dependencyZipFile + ld.endAddress), Path.Combine(localFilesDir, ld.dependencyZipFile)));
                 }
             }
             foreach (DatabaseObject dbo in modsConfigsToInstall)
@@ -1058,7 +1111,7 @@ namespace RelhaxModpack
                 if (dbo.downloadFlag)
                 {
                     //crc's don't match, need to re-download
-                    downloadQueue.Add(new DownloadItem(new Uri(dbo.startAddress + dbo.zipFile + dbo.endAddress), Path.Combine(localFilesDir, dbo.zipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(dbo.startAddress, "onlineFolder", Settings.tanksOnlineFolderVersion) + dbo.zipFile + dbo.endAddress), Path.Combine(localFilesDir, dbo.zipFile)));
                 }
             }
 
@@ -1717,7 +1770,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.ExceptionLog("SameDatabaseVersions", "ex", ex);
+                Utils.ExceptionLog("SameDatabaseVersions", ex);
                 return false;
             }
         }
