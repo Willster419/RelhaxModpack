@@ -124,7 +124,6 @@ namespace RelhaxModpack
             float bytesIn = float.Parse(e.BytesReceived.ToString());
             float totalBytes = float.Parse(e.TotalBytesToReceive.ToString());
             float MBytesIn = (float)bytesIn / MBDivisor;
-            float MBytesTotal = (float)totalBytes / MBDivisor;
             currentTotalBytesDownloaded = bytesIn;
             //create the download progress string
             string currentModDownloadingShort = currentModDownloading;
@@ -138,7 +137,7 @@ namespace RelhaxModpack
             sessionDownloadSpeed = (float)Math.Round(sessionDownloadSpeed, 2);
             totalSpeedLabel = "" + sessionDownloadSpeed + " MB/s";
             //get the ETA for the download
-            double totalTimeToDownload = MBytesTotal / (e.BytesReceived / MBDivisor / sw.Elapsed.TotalSeconds);
+            double totalTimeToDownload = totalBytes / (e.BytesReceived / sw.Elapsed.TotalSeconds);
             double timeRemain = totalTimeToDownload - sw.Elapsed.TotalSeconds;
             if (timeRemain < 0)
             {
@@ -164,7 +163,7 @@ namespace RelhaxModpack
             int actualTimeMins = (int)actualTimeRemain / 60;
             int actualTimeSecs = (int)actualTimeRemain % 60;
             string downloadStatus = string.Format("{0} {1} ({2} MB {3} {4} MB)\n{5} {6} mins {7} secs",
-                Translations.getTranslatedString("Downloading"), currentModDownloadingShort, Math.Round(MBytesIn, 1), Translations.getTranslatedString("of"), Math.Round(MBytesTotal, 1), totalSpeedLabel, actualTimeMins, actualTimeSecs);
+                Translations.getTranslatedString("Downloading"), currentModDownloadingShort, Math.Round(MBytesIn, 1), Translations.getTranslatedString("of"), Math.Round(totalBytes / MBDivisor, 1), totalSpeedLabel, actualTimeMins, actualTimeSecs);
             downloadProgress.Text = downloadStatus;
         }
         //handler for the mod download file complete event
