@@ -587,8 +587,15 @@ namespace RelhaxModpack
                 else if (c.configUIComponent is ConfigFormComboBox)
                 {
                     ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.configUIComponent;
-                    if (CBTemp.SelectedIndex != 0)
-                        CBTemp.SelectedIndex = 0;
+                    if (CBTemp.Items.Count == 0)
+                    {
+                        CBTemp.SelectedIndex = -1;
+                    }
+                    else
+                    {
+                        if (CBTemp.SelectedIndex != 0)
+                            CBTemp.SelectedIndex = 0;
+                    }
                     CBTemp.Parent.BackColor = Settings.getBackColor();
                 }
                 else if (c.configUIComponent is ConfigFormRadioButton)
@@ -605,6 +612,16 @@ namespace RelhaxModpack
                 else if (c.configUIComponent is ConfigWPFComboBox)
                 {
                     //do nothing...
+                    ConfigWPFComboBox CBTemp = (ConfigWPFComboBox)c.configUIComponent;
+                    if (CBTemp.Items.Count == 0)
+                    {
+                        CBTemp.SelectedIndex = -1;
+                    }
+                    else
+                    {
+                        if (CBTemp.SelectedIndex != 0)
+                            CBTemp.SelectedIndex = 0;
+                    }
                 }
                 else if (c.configUIComponent is ConfigWPFRadioButton)
                 {
