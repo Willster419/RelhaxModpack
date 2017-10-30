@@ -33,6 +33,8 @@ namespace RelhaxModpack
         public static bool clearCache { get; set; }
         public static bool deleteLogs { get; set; }
         public static bool disableColorChange { get; set; }
+        //toggle if the program will create desktop shortcuts
+        public static bool CreateShortcuts { get; set; }
         public static int modSelectionHeight { get; set; }
         public static int modSelectionWidth { get; set; }
         public static int loadingGif { get; set; }
@@ -86,9 +88,11 @@ namespace RelhaxModpack
         public static AutoScaleMode appScalingMode = AutoScaleMode.Font;
         public static Font appFont = new System.Drawing.Font(defaultFontType, fontSize100);
         //loads settings from xml file
-        public static void loadSettings()
+        public static void LoadSettings()
         {
+            //Settings declared here are set for what their default values should be, then later modified in the settings xml file
             Settings.firstLoad = false;
+            Settings.CreateShortcuts = true;
             Utils.AppendToLog("Loading application settings");
             if (!File.Exists(settingsXmlFile))
             {
@@ -106,6 +110,7 @@ namespace RelhaxModpack
                 Settings.clearCache = false;
                 Settings.disableBorders = false;
                 Settings.NotifyIfSameDatabase = false;
+                Settings.CreateShortcuts = true;
                 Utils.AppendToLog("Language: " + CultureInfo.CurrentCulture.DisplayName);
                 string lang = CultureInfo.InstalledUICulture.Name.Split('-')[0];
                 if (lang.ToLower().Equals("de"))
@@ -221,6 +226,9 @@ namespace RelhaxModpack
                             break;
                         case "FontSizeForum":
                             Settings.tempFontSizeForum = int.Parse(n.InnerText);
+                            break;
+                        case "CreateShortcuts":
+                            Settings.CreateShortcuts = bool.Parse(n.InnerText);
                             break;
                     }
                 }
@@ -406,6 +414,9 @@ namespace RelhaxModpack
             XmlElement xModSelectionFullscreen = doc.CreateElement("ModSelectionFullscreen");
             xModSelectionFullscreen.InnerText = "" + ModSelectionFullscreen;
             settingsHolder.AppendChild(xModSelectionFullscreen);
+            XmlElement xCreateShortcuts = doc.CreateElement("CreateShortcuts");
+            xCreateShortcuts.InnerText = "" + CreateShortcuts;
+            settingsHolder.AppendChild(xCreateShortcuts);
             XmlElement xpreviewX = doc.CreateElement("previewX");
             if (previewX < 0) { previewX = 0; };
             xpreviewX.InnerText = "" + previewX;

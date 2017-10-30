@@ -318,6 +318,13 @@ namespace RelhaxModpack
             polish.Add("clearLogFilesCB", "Wyczyść logi");
             french.Add("clearLogFilesCB", "Effacer les fichiers logs");
 
+            //Componet: createShortcutsCB
+            //
+            english.Add("createShortcutsCB", "Create Desktop Shortcuts");
+            german.Add("createShortcutsCB", "TODO");
+            polish.Add("createShortcutsCB", "TODO");
+            french.Add("createShortcutsCB", "TODO");
+
             //Section: FirstLoadHelper
 
             //Componet: helperText
@@ -989,6 +996,13 @@ namespace RelhaxModpack
             german.Add("ShowInstallCompleteWindowCBExplanation", "Zeigte am Ende der Installation ein Auswahlfenster mit nützlichen Befehlen an, wie: starte das Spiel, gehe zur XVM Webseite, usw ...");
             polish.Add("ShowInstallCompleteWindowCBExplanation", "Po zakończeniu instalacji otwórz okno dalszych akcji.");
             french.Add("ShowInstallCompleteWindowCBExplanation", "Afficher une fenêtre lors de l'achèvement de l'installation avec des opérations populaires à effectuer après l'installation de Modpack, telles que le lancement du jeu, le site Web de XVM, etc.");
+
+            //Component: ShowInstallCompleteWindowCBExplanation
+            //
+            english.Add("CreateShortcutsCBExplanation", "When selected, it will create shortcut icons on your desktop for mods that are exe files (like WWIIHA configuration)");
+            german.Add("CreateShortcutsCBExplanation", "TODO");
+            polish.Add("CreateShortcutsCBExplanation", "TODO");
+            french.Add("CreateShortcutsCBExplanation", "TODO");
 
             //Section: Messages from ModSelectionList
 

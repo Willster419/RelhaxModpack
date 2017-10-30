@@ -42,7 +42,7 @@ namespace RelhaxModpack
         public DatabaseEditor()
         {
             InitializeComponent();
-            Settings.loadSettings();
+            Settings.LoadSettings();
         }
 
         private void DatabaseEditor_FormClosing(object sender, FormClosingEventArgs e)
