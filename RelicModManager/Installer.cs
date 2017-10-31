@@ -592,9 +592,17 @@ namespace RelhaxModpack
                 if (Directory.Exists(Path.Combine(TanksLocation, "_fonts"))) Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true);
                 if (!Directory.Exists(Path.Combine(TanksLocation, "res_mods"))) Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods"));
                 if (!Directory.Exists(Path.Combine(TanksLocation, "mods"))) Directory.CreateDirectory(Path.Combine(TanksLocation, "mods"));
+                if (!Directory.Exists(Path.Combine(TanksLocation, "logs"))) Directory.CreateDirectory(Path.Combine(TanksLocation, "logs"));
 
                 //start the entry for the database version in installedRelhaxFiles.log
-                File.WriteAllText(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), "Database Version: " + DatabaseVersion + "\n");
+                try
+                {
+                    File.WriteAllText(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), "Database Version: " + DatabaseVersion + "\n");
+                }
+                catch (Exception ex)
+                {
+                    Utils.ExceptionLog("ExtractDatabaseObjects", "Database Version", ex);
+                };
 
                 //extract RelHax Mods
                 Utils.AppendToLog("Starting Relhax Modpack Extraction");
@@ -635,7 +643,7 @@ namespace RelhaxModpack
                         catch (Exception ex)
                         {
                             //append the exception to the log
-                            Utils.ExceptionLog("ExtractDatabaseObjects", ex);
+                            Utils.ExceptionLog("ExtractDatabaseObjects", "unzip GlobalDependencies", ex);
                             //show the error message
                             MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
@@ -660,7 +668,7 @@ namespace RelhaxModpack
                         catch (Exception ex)
                         {
                             //append the exception to the log
-                            Utils.ExceptionLog("ExtractDatabaseObjects", ex);
+                            Utils.ExceptionLog("ExtractDatabaseObjects", "unzip Dependencies", ex);
                             //show the error message
                             MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
@@ -685,7 +693,7 @@ namespace RelhaxModpack
                         catch (Exception ex)
                         {
                             //append the exception to the log
-                            Utils.ExceptionLog("ExtractDatabaseObjects", ex);
+                            Utils.ExceptionLog("ExtractDatabaseObjects", "unzip LogicalDependencies", ex);
                             //show the error message
                             MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
@@ -712,7 +720,7 @@ namespace RelhaxModpack
                         catch (Exception ex)
                         {
                             //append the exception to the log
-                            Utils.ExceptionLog("ExtractDatabaseObjects", ex);
+                            Utils.ExceptionLog("ExtractDatabaseObjects", "unzip dbo.zipFile", ex);
                             //show the error message
                             MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + dbo.zipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
@@ -737,7 +745,7 @@ namespace RelhaxModpack
                         catch (Exception ex)
                         {
                             //append the exception to the log
-                            Utils.ExceptionLog("ExtractDatabaseObjects", ex);
+                            Utils.ExceptionLog("ExtractDatabaseObjects", "unzip AppendedDependencies", ex);
                             //show the error message
                             MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.dependencyZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
@@ -789,7 +797,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.ExceptionLog("ExtractDatabaseObjects", "ex", ex);
+                Utils.ExceptionLog("ExtractDatabaseObjects", ex);
             }
         }
 
@@ -1146,7 +1154,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.ExceptionLog("ExtractUserMods", "ex", ex);
+                Utils.ExceptionLog("ExtractUserMods", ex);
             }
             Utils.AppendToLog("Finished Relhax Modpack User Mod Extraction");
         }
@@ -1568,13 +1576,29 @@ namespace RelhaxModpack
         private void Unzip(string zipFile, string extractFolder)
         {
             string thisVersion = TanksVersion;
-            //create a filestream to append installed files log data
-            using (FileStream fs = new FileStream(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), FileMode.Append, FileAccess.Write))
+            FileStream fs = null;
+            try
             {
+                //create a filestream to append installed files log data
+                try
+                {
+                     fs = new FileStream(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), FileMode.Append, FileAccess.Write);
+                }
+                catch (Exception ex)
+                {
+                    Utils.ExceptionLog("Unzip", "create FileStream", ex);
+                }
                 // create a comment with the name of the extracted and installed package, to better trace back the installation source
                 string commentLine = "/*  " + Path.GetFileNameWithoutExtension(zipFile) + "  */\n";
-                // write comment to logfile
-                fs.Write(Encoding.UTF8.GetBytes(commentLine), 0, Encoding.UTF8.GetByteCount(commentLine));
+                try
+                {
+                    // write comment to logfile
+                    fs.Write(Encoding.UTF8.GetBytes(commentLine), 0, Encoding.UTF8.GetByteCount(commentLine));
+                }
+                catch (Exception ex)
+                {
+                    Utils.ExceptionLog("Unzip", "Write commentLine", ex);
+                }
 
                 try
                 {
@@ -1622,7 +1646,7 @@ namespace RelhaxModpack
                 catch (ZipException e)
                 {
                     //append the exception to the log
-                    Utils.ExceptionLog("Unzip", e);
+                    Utils.ExceptionLog("Unzip", "ZipFile: " + zipFile, e);
                     //show the error message
                     MessageBox.Show(string.Format("{0}, {1} {2} {3}", Translations.getTranslatedString("zipReadingErrorMessage1"), Path.GetFileName(zipFile), Translations.getTranslatedString("zipReadingErrorMessage2"), Translations.getTranslatedString("zipReadingErrorHeader")));
                     //(try to)delete the file from the filesystem
@@ -1638,7 +1662,13 @@ namespace RelhaxModpack
                     XMLUtils.DeleteMd5HashDatabase(zipFile);
                 }
             }
+            finally
+            {
+                if (fs != null)
+                    ((IDisposable)fs).Dispose();
+            }
         }
+        
         //handler for when progress is made in extracting a zip file
         void Zip_ExtractProgress(object sender, ExtractProgressEventArgs e)
         {
