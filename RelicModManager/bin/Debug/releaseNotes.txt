@@ -1,3 +1,14 @@
+Version 26.6.0:
+https://www.virustotal.com/#/file/e5c0ddc4304252748e9744a112e800bdca95db5dcf37d14509a8a01912f4f074/detection
+-Added a new feature. At the bottom of the Main Window, it now displays the application and database versions. Now, you can know immediately what is the latest version of WoT we support! (Idea thanks to the user Nullmaruzero)
+-Rewrote the way the application explains settings. Now, instead of creating a new window with a text box, it will use the text box in the main application. (Idea thanks to the user Nullmaruzero)
+-Fixes to creating shortcuts
+-Added ability for GlobalDependencies to have shortcuts
+-Fixes in enabled dependency verification
+-Fixes in appended dependencies
+-Updated translations
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 26.5.0:
 https://www.virustotal.com/#/file/17dc82ace8dc3196853190e4fc9eafab0a74fe0caa12c3ec5024d36687d8a8a0/detection
 -Fixed bugs with font install system
