@@ -1,3 +1,9 @@
+Version 26.6.1:
+https://www.virustotal.com/#/file/10bd235a44e72adeee49908a85fefd3e10b8b96a2c861b8ad0eb819db6a0a008/detection
+-Removed debug statements from log
+-Moved divider of version table to actually fit the long version name of the database
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 26.6.0:
 https://www.virustotal.com/#/file/e5c0ddc4304252748e9744a112e800bdca95db5dcf37d14509a8a01912f4f074/detection
 -Added a new feature. At the bottom of the Main Window, it now displays the application and database versions. Now, you can know immediately what is the latest version of WoT we support! (Idea thanks to the user Nullmaruzero)
