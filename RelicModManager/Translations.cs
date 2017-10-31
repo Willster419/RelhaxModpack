@@ -321,7 +321,7 @@ namespace RelhaxModpack
             //Componet: createShortcutsCB
             //
             english.Add("createShortcutsCB", "Create Desktop Shortcuts");
-            german.Add("createShortcutsCB", "Erstelle Desktop Verknüpfung");
+            german.Add("createShortcutsCB", "Erstelle Desktop Verknüpfungen");
             polish.Add("createShortcutsCB", "Stwórz skróty na pulpicie");
             french.Add("createShortcutsCB", "Créer des raccourcis sur le bureau");
 
