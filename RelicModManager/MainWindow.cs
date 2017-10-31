@@ -1031,12 +1031,22 @@ namespace RelhaxModpack
             try
             {
                 //check for dependencies that actually need to be installed at the end
-                foreach (Dependency d in dependenciesToInstall)
+                for(int i = 0; i < globalDependenciesToInstall.Count; i++)
                 {
-                    if (d.appendExtraction)
+                    if(globalDependenciesToInstall[i].appendExtraction)
                     {
-                        appendedDependenciesToInstall.Add(d);
-                        dependenciesToInstall.Remove(d);
+                        appendedDependenciesToInstall.Add(globalDependenciesToInstall[i]);
+                        globalDependenciesToInstall.RemoveAt(i);
+                        i--;
+                    }
+                }
+                for (int i = 0; i < dependenciesToInstall.Count; i++)
+                {
+                    if (dependenciesToInstall[i].appendExtraction)
+                    {
+                        appendedDependenciesToInstall.Add(dependenciesToInstall[i]);
+                        dependenciesToInstall.RemoveAt(i);
+                        i--;
                     }
                 }
             }

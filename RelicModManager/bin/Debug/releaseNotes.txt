@@ -1,5 +1,5 @@
 Version 26.5.0:
-https://www.virustotal.com/#/file/df2725c5b996b78277d7b83e480bd6f081dcbce0d2e958946fc0a1366105208c/detection
+https://www.virustotal.com/#/file/17dc82ace8dc3196853190e4fc9eafab0a74fe0caa12c3ec5024d36687d8a8a0/detection
 -Fixed bugs with font install system
 -Added new feature. Application can now create desktop shortcuts for mods that are actually external programs
 -Fixed bug with OMC legacy view, when unchecking a mod, child configs would not be unchecked
