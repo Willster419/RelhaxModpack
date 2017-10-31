@@ -657,7 +657,7 @@ namespace RelhaxModpack
                     }
                     Jresults.Add((JValue)jt);
                 }
-                Utils.AppendToLog("DEBUG: number of Jvalues: " + Jresults.Count);
+                //Utils.AppendToLog("DEBUG: number of Jvalues: " + Jresults.Count);
                 if (Jresults.Count == 0)
                     return;
                 foreach(JValue jv in Jresults)
