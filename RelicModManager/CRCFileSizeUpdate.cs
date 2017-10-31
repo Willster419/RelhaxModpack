@@ -109,57 +109,82 @@ namespace RelhaxModpack
             //foreach zip file name
             foreach (Dependency d in globalDependencies)
             {
-                hash = XMLUtils.GetMd5Hash(d.dependencyZipFile);
-                if (!d.dependencyZipCRC.Equals(hash))
+                if (d.dependencyZipFile.Trim().Equals(""))
                 {
-                    d.dependencyZipCRC = hash;
-                    if (!hash.Equals("f"))
-                    {
-                        globalDepsSB.Append(d.dependencyZipFile + "\n");
-                    }
+                    d.dependencyZipCRC = "";
                 }
-                if (hash.Equals("f"))
+                else
                 {
-                    filesNotFoundSB.Append(d.dependencyZipFile + "\n");
+                    hash = XMLUtils.GetMd5Hash(d.dependencyZipFile);
+                    if (!d.dependencyZipCRC.Equals(hash))
+                    {
+                        d.dependencyZipCRC = hash;
+                        if (!hash.Equals("f"))
+                        {
+                            globalDepsSB.Append(d.dependencyZipFile + "\n");
+                        }
+                    }
+                    if (hash.Equals("f"))
+                    {
+                        filesNotFoundSB.Append(d.dependencyZipFile + "\n");
+                    }
                 }
             }
             foreach (Dependency d in dependencies)
             {
-                hash = XMLUtils.GetMd5Hash(d.dependencyZipFile);
-                if (!d.dependencyZipCRC.Equals(hash))
+                if (d.dependencyZipFile.Trim().Equals(""))
                 {
-                    d.dependencyZipCRC = hash;
-                    if (!hash.Equals("f"))
-                    {
-                        dependenciesSB.Append(d.dependencyZipFile + "\n");
-                    }
+                    d.dependencyZipCRC = "";
                 }
-                if (hash.Equals("f"))
+                else
                 {
-                    filesNotFoundSB.Append(d.dependencyZipFile + "\n");
+                    hash = XMLUtils.GetMd5Hash(d.dependencyZipFile);
+                    if (!d.dependencyZipCRC.Equals(hash))
+                    {
+                        d.dependencyZipCRC = hash;
+                        if (!hash.Equals("f"))
+                        {
+                            dependenciesSB.Append(d.dependencyZipFile + "\n");
+                        }
+                    }
+                    if (hash.Equals("f"))
+                    {
+                        filesNotFoundSB.Append(d.dependencyZipFile + "\n");
+                    }
                 }
             }
             foreach (LogicalDependnecy d in logicalDependencies)
             {
-                hash = XMLUtils.GetMd5Hash(d.dependencyZipFile);
-                if (!d.dependencyZipCRC.Equals(hash))
+                if (d.dependencyZipFile.Trim().Equals(""))
                 {
-                    d.dependencyZipCRC = hash;
-                    if (!hash.Equals("f"))
-                    {
-                        logicalDependenciesSB.Append(d.dependencyZipFile + "\n");
-                    }
+                    d.dependencyZipCRC = "";
                 }
-                if (hash.Equals("f"))
+                else
                 {
-                    filesNotFoundSB.Append(d.dependencyZipFile + "\n");
+                    hash = XMLUtils.GetMd5Hash(d.dependencyZipFile);
+                    if (!d.dependencyZipCRC.Equals(hash))
+                    {
+                        d.dependencyZipCRC = hash;
+                        if (!hash.Equals("f"))
+                        {
+                            logicalDependenciesSB.Append(d.dependencyZipFile + "\n");
+                        }
+                    }
+                    if (hash.Equals("f"))
+                    {
+                        filesNotFoundSB.Append(d.dependencyZipFile + "\n");
+                    }
                 }
             }
             foreach (Category c in parsedCatagoryList)
             {
                 foreach (Mod m in c.mods)
                 {
-                    if (!m.zipFile.Equals(""))
+                    if (m.zipFile.Trim().Equals(""))
+                    {
+                        m.crc = "";
+                    }
+                    else
                     {
                         m.size = this.getFileSize(m.zipFile);
                         hash = XMLUtils.GetMd5Hash(m.zipFile);
@@ -199,7 +224,11 @@ namespace RelhaxModpack
             string hash;
             foreach (Config cat in cfgList)
             {
-                if (!cat.zipFile.Equals(""))
+                if (cat.zipFile.Trim().Equals(""))
+                {
+                    cat.crc = "";
+                }
+                else
                 {
                     hash = XMLUtils.GetMd5Hash(cat.zipFile);
                     cat.size = this.getFileSize(cat.zipFile);
@@ -224,11 +253,6 @@ namespace RelhaxModpack
                     }
 
                 }
-                else
-                {
-                    cat.crc = "";
-                }
-
                 if (cat.configs.Count > 0)
                 {
                     this.processConfigsCRCUpdate(cat.configs);
