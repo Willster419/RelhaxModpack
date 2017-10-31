@@ -146,7 +146,7 @@ namespace RelhaxModpack
             if (timeRemainArray == null)
                 timeRemainArray = new List<double>();
             timeRemainArray.Add(timeRemain);
-            if (timeRemainArray.Count == 10)
+            if (timeRemainArray.Count >= 10)
             {
                 double timeAverageRemain = 0;
                 foreach (double d in timeRemainArray)
