@@ -132,6 +132,35 @@ namespace RelhaxModpack
                             case "appendExtraction":
                                 d.appendExtraction = Utils.ParseBool(globs.Value, false);
                                 break;
+                            case "shortCuts":
+                                //parse all shortCuts
+                                foreach (XElement shortCutHolder in globs.Elements())
+                                {
+                                    ShortCut sc = new ShortCut();
+                                    string[] depScNodeList = new string[] { "path", "name", "enabled" };
+                                    foreach (XElement shortCutNode in shortCutHolder.Elements())
+                                    {
+                                        depScNodeList = depScNodeList.Except(new string[] { shortCutNode.Name.ToString() }).ToArray();
+                                        switch (shortCutNode.Name.ToString())
+                                        {
+                                            case "path":
+                                                sc.path = shortCutNode.Value;
+                                                break;
+                                            case "name":
+                                                sc.name = shortCutNode.Value;
+                                                break;
+                                            case "enabled":
+                                                sc.enabled = Utils.ParseBool(shortCutNode.Value, false);
+                                                break;
+                                        }
+                                    }
+                                    if (sc != null)
+                                    {
+                                        if (depScNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globPend {1} (line {2})", string.Join(",", depScNodeList), d.dependencyZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
+                                        d.shortCuts.Add(sc);
+                                    }
+                                }
+                                break;
                             case "packageName":
                                 d.packageName = globs.Value.Trim();
                                 if (d.packageName.Equals(""))
@@ -1672,6 +1701,27 @@ namespace RelhaxModpack
                     globalDepEnabled.InnerText = "" + d.enabled;
                 globalDependencyRoot.AppendChild(globalDepEnabled);
                 XmlElement globalDepAppendExtraction = doc.CreateElement("appendExtraction");
+                XmlElement shortCuts = doc.CreateElement("shortCuts");
+                foreach (ShortCut sc in d.shortCuts)
+                {
+                    //declare ShortCut root
+                    XmlElement ShortCutRoot = doc.CreateElement("shortCut");
+                    //make ShortCut
+                    XmlElement ShortCutPath = doc.CreateElement("path");
+                    if (!sc.path.Trim().Equals(""))
+                        ShortCutPath.InnerText = sc.path.Trim();
+                    ShortCutRoot.AppendChild(ShortCutPath);
+                    XmlElement ShortCutName = doc.CreateElement("name");
+                    if (!sc.name.Trim().Equals(""))
+                        ShortCutName.InnerText = sc.name.Trim();
+                    ShortCutRoot.AppendChild(ShortCutName);
+                    XmlElement ShortCutEnabled = doc.CreateElement("enabled");
+                    ShortCutEnabled.InnerText = sc.enabled.ToString().Trim();
+                    ShortCutRoot.AppendChild(ShortCutEnabled);
+                    shortCuts.AppendChild(ShortCutRoot);
+                }
+                //attach ShortCuts to root
+                globalDependencyRoot.AppendChild(shortCuts);
                 if (!d.appendExtraction.ToString().Trim().Equals(""))
                     globalDepAppendExtraction.InnerText = "" + d.appendExtraction;
                 globalDependencyRoot.AppendChild(globalDepAppendExtraction);
