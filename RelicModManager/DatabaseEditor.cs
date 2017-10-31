@@ -642,6 +642,10 @@ namespace RelhaxModpack
                     ObjectDependenciesLabel.Text = "dependencies (click to edit)";
                     PictureTabPage.Enabled = false;
                     UserDatasTabPage.Enabled = false;
+                    ShortCutTabPage.Enabled = true;
+                    ObjectShortcutList.DataSource = null;
+                    ObjectShortcutList.Items.Clear();
+                    ObjectShortcutList.DataSource = SelectedGlobalDependency.shortCuts;
                 }
                 else if (node.Dependency != null)
                 {
@@ -1833,7 +1837,13 @@ namespace RelhaxModpack
             sc.enabled = ObjectShortcutCB.Checked;
             ObjectShortcutList.DataSource = null;
             ObjectShortcutList.Items.Clear();
-            if (DatabaseEditorMode == EditorMode.Dependency)
+            if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
+            {
+                SelectedGlobalDependency.shortCuts.Add(sc);
+                // SelectedGloDependency.shortCuts.Add(sc);
+                ObjectShortcutList.DataSource = SelectedGlobalDependency.shortCuts;
+            }
+            else if (DatabaseEditorMode == EditorMode.Dependency)
             {
                 SelectedDependency.shortCuts.Add(sc);
                 ObjectShortcutList.DataSource = SelectedDependency.shortCuts;
@@ -1878,7 +1888,11 @@ namespace RelhaxModpack
             sc.enabled = ObjectShortcutCB.Checked;
             ObjectShortcutList.DataSource = null;
             ObjectShortcutList.Items.Clear();
-            if (DatabaseEditorMode == EditorMode.Dependency)
+            if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
+            {
+                ObjectShortcutList.DataSource = SelectedGlobalDependency.shortCuts;
+            }
+            else if (DatabaseEditorMode == EditorMode.Dependency)
             {
                 ObjectShortcutList.DataSource = SelectedDependency.shortCuts;
             }
@@ -1912,7 +1926,12 @@ namespace RelhaxModpack
                 return;
             ObjectShortcutList.DataSource = null;
             ObjectShortcutList.Items.Clear();
-            if (DatabaseEditorMode == EditorMode.Dependency)
+            if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
+            {
+                SelectedGlobalDependency.shortCuts.Remove(sc);
+                ObjectShortcutList.DataSource = SelectedGlobalDependency.shortCuts;
+            }
+            else if (DatabaseEditorMode == EditorMode.Dependency)
             {
                 SelectedDependency.shortCuts.Remove(sc);
                 ObjectShortcutList.DataSource = SelectedDependency.shortCuts;
@@ -1935,6 +1954,9 @@ namespace RelhaxModpack
             sc.path = "";
             sc.name = "";
             sc.enabled = false;
+            ObjectShortcutTB.Text = sc.path;
+            ObjectShortcutTB.Text = sc.name;
+            ObjectShortcutCB.Checked = sc.enabled;
             UnsavedModifications = true;
         }
 
