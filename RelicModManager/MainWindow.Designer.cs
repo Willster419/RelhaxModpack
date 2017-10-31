@@ -158,7 +158,7 @@
             this.uninstallRelhaxMod.TabIndex = 20;
             this.uninstallRelhaxMod.Text = "Uninstall Relhax Modpack";
             this.uninstallRelhaxMod.UseVisualStyleBackColor = true;
-            this.uninstallRelhaxMod.Click += new System.EventHandler(this.uninstallRelhaxMod_Click);
+            this.uninstallRelhaxMod.Click += new System.EventHandler(this.UninstallRelhaxMod_Click);
             // 
             // cleanInstallCB
             // 

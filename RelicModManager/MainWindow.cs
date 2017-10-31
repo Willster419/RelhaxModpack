@@ -45,6 +45,8 @@ namespace RelhaxModpack
         private List<LogicalDependnecy> logicalDependenciesToInstall;
         private List<DatabaseObject> modsConfigsToInstall;
         private List<Dependency> appendedDependenciesToInstall;
+        private List<DatabaseObject> ModsWithShortcuts;
+        private List<ShortCut> Shortcuts;
         //list of all current dependencies
         private List<Dependency> currentDependencies;
         private List<LogicalDependnecy> currentLogicalDependencies;
@@ -173,7 +175,7 @@ namespace RelhaxModpack
             if (e != null && e.Cancelled)
             {
                 //update the UI and download state
-                toggleUIButtons(true);
+                ToggleUIButtons(true);
                 downloadProgress.Text = Translations.getTranslatedString("idle");
                 parrentProgressBar.Value = 0;
                 childProgressBar.Value = 0;
@@ -252,7 +254,8 @@ namespace RelhaxModpack
                     TanksVersion = this.tanksVersionForInstaller,
                     UserMods = this.userMods,
                     AppDataFolder = this.appDataFolder,
-                    DatabaseVersion = this.databaseVersionString
+                    DatabaseVersion = this.databaseVersionString,
+                    Shortcuts = this.Shortcuts
                 };
                 ins.InstallProgressChanged += I_InstallProgressChanged;
                 ins.StartInstallation();
@@ -709,7 +712,7 @@ namespace RelhaxModpack
                 Settings.firstLoad = false;
             }
             wait.Close();
-            toggleUIButtons(true);
+            ToggleUIButtons(true);
             Application.DoEvents();
             Program.saveSettings = true;
         }
@@ -725,7 +728,7 @@ namespace RelhaxModpack
         private void installRelhaxMod_Click(object sender, EventArgs e)
         {
             Utils.TotallyNotStatPaddingForumPageViewCount();
-            toggleUIButtons(false);
+            ToggleUIButtons(false);
             downloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads");
             //get the user appData folder
             appDataFolder = Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Wargaming.net", "WorldOfTanks");
@@ -742,7 +745,7 @@ namespace RelhaxModpack
                     if (clearCacheFailResult == DialogResult.No)
                     {
                         Utils.AppendToLog("user stopped installation");
-                        toggleUIButtons(true);
+                        ToggleUIButtons(true);
                         return;
                     }
                 }
@@ -756,7 +759,7 @@ namespace RelhaxModpack
                 if (this.manuallyFindTanks() == null)
                 {
                     Utils.AppendToLog("user stopped installation");
-                    toggleUIButtons(true);
+                    ToggleUIButtons(true);
                     return;
                 }
             }
@@ -782,7 +785,7 @@ namespace RelhaxModpack
             {
                 //display error and abort
                 MessageBox.Show(Translations.getTranslatedString("moveOutOfTanksLocation"));
-                toggleUIButtons(true);
+                ToggleUIButtons(true);
                 return;
             }
             tanksVersion = this.getFolderVersion();
@@ -808,7 +811,7 @@ namespace RelhaxModpack
             {
                 if (MessageBox.Show(Translations.getTranslatedString("DatabaseVersionsSameBody"), Translations.getTranslatedString("DatabaseVersionsSameHeader"), MessageBoxButtons.YesNo) == DialogResult.No)
                 {
-                    toggleUIButtons(true);
+                    ToggleUIButtons(true);
                     return;
                 }
             }
@@ -836,7 +839,7 @@ namespace RelhaxModpack
                 }
                 list = null;
                 GC.Collect();
-                toggleUIButtons(true);
+                ToggleUIButtons(true);
                 return;
             }
             //check to see if WoT is running
@@ -883,6 +886,8 @@ namespace RelhaxModpack
             modsConfigsWithData = new List<DatabaseObject>();
             patchList = new List<Patch>();
             userMods = new List<Mod>();
+            ModsWithShortcuts = new List<DatabaseObject>();
+            Shortcuts = new List<ShortCut>();
 
             try
             {
@@ -903,6 +908,10 @@ namespace RelhaxModpack
                             //since it is checked, regardless if it has a zipfile, check if it has userdata
                             if (m.userFiles.Count > 0)
                                 modsConfigsWithData.Add(m);
+
+                            //if it has shortcuts to create, add them to the list here
+                            if (m.shortCuts.Count > 0)
+                                ModsWithShortcuts.Add(m);
 
                             //check for configs
                             if (m.configs.Count > 0)
@@ -1028,12 +1037,106 @@ namespace RelhaxModpack
                 Utils.ExceptionLog("installRelhaxMod_Click", "now each logical dependency has a complete list of every dependency ...", ex);
             }
 
+            //verify that all global dependencies, depdnencies, and logicalDependencies are actually enabled
             try
             {
-                //check for dependencies that actually need to be installed at the end
                 for(int i = 0; i < globalDependenciesToInstall.Count; i++)
                 {
-                    if(globalDependenciesToInstall[i].appendExtraction)
+                    if(!globalDependenciesToInstall[i].enabled)
+                    {
+                        globalDependenciesToInstall.RemoveAt(i);
+                        i--;
+                    }
+                }
+                for (int i = 0; i < dependenciesToInstall.Count; i++)
+                {
+                    if (!dependenciesToInstall[i].enabled)
+                    {
+                        dependenciesToInstall.RemoveAt(i);
+                        i--;
+                    }
+                }
+                for (int i = 0; i < logicalDependenciesToInstall.Count; i++)
+                {
+                    if (!logicalDependenciesToInstall[i].enabled)
+                    {
+                        logicalDependenciesToInstall.RemoveAt(i);
+                        i--;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("installRelhaxMod_Click", "verify that all ... are actually enabled", ex);
+            }
+
+            //create the list of shortcuts
+            try
+            {
+                foreach (Dependency d in globalDependenciesToInstall)
+                {
+                    if (d.shortCuts.Count > 0)
+                    {
+                        foreach (ShortCut sc in d.shortCuts)
+                        {
+                            if (sc.enabled)
+                            {
+                                Shortcuts.Add(sc);
+                            }
+                        }
+                    }
+                }
+                foreach (Dependency d in dependenciesToInstall)
+                {
+                    if (d.shortCuts.Count > 0)
+                    {
+                        foreach (ShortCut sc in d.shortCuts)
+                        {
+                            if (sc.enabled)
+                            {
+                                Shortcuts.Add(sc);
+                            }
+                        }
+                    }
+                }
+                foreach (LogicalDependnecy ld in logicalDependenciesToInstall)
+                {
+                    if (ld.shortCuts.Count > 0)
+                    {
+                        foreach (ShortCut sc in ld.shortCuts)
+                        {
+                            if (sc.enabled)
+                            {
+                                Shortcuts.Add(sc);
+                            }
+                        }
+                    }
+                }
+                foreach (DatabaseObject dbo in modsConfigsToInstall)
+                {
+                    if (dbo.shortCuts.Count > 0)
+                    {
+                        foreach (ShortCut sc in dbo.shortCuts)
+                        {
+                            if (sc.enabled)
+                            {
+                                Shortcuts.Add(sc);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("CreateShortCuts()", ex);
+            }
+
+            //check for dependencies that actually need to be installed at the end
+            try
+            {
+                for (int i = 0; i < globalDependenciesToInstall.Count; i++)
+                {
+                    if (globalDependenciesToInstall[i].appendExtraction)
                     {
                         appendedDependenciesToInstall.Add(globalDependenciesToInstall[i]);
                         globalDependenciesToInstall.RemoveAt(i);
@@ -1079,7 +1182,7 @@ namespace RelhaxModpack
             {
                 //pull out because there are no mods to install
                 downloadProgress.Text = Translations.getTranslatedString("idle");
-                toggleUIButtons(true);
+                ToggleUIButtons(true);
                 list.Dispose();
                 list = null;
                 GC.Collect();
@@ -1157,6 +1260,10 @@ namespace RelhaxModpack
                     //check for userdata
                     if (config.userFiles.Count > 0)
                         modsConfigsWithData.Add(config);
+
+                    //check for shortcuts
+                    if (config.shortCuts.Count > 0)
+                        ModsWithShortcuts.Add(config);
 
                     //check for configs
                     if (config.configs.Count > 0)
@@ -1401,7 +1508,7 @@ namespace RelhaxModpack
                     helper = null;
                 }
                 modsConfigsWithData = null;
-                toggleUIButtons(true);
+                ToggleUIButtons(true);
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Uninstall)
             {
@@ -1434,9 +1541,9 @@ namespace RelhaxModpack
         }
 
         //Main method to uninstall the modpack
-        private void uninstallRelhaxMod_Click(object sender, EventArgs e)
+        private void UninstallRelhaxMod_Click(object sender, EventArgs e)
         {
-            toggleUIButtons(false);
+            ToggleUIButtons(false);
             //reset the interface
             this.downloadProgress.Text = "";
             //attempt to locate the tanks directory
@@ -1444,7 +1551,7 @@ namespace RelhaxModpack
             {
                 if (this.manuallyFindTanks() == null)
                 {
-                    toggleUIButtons(true);
+                    ToggleUIButtons(true);
                     return;
                 }
             }
@@ -1468,50 +1575,32 @@ namespace RelhaxModpack
             }
             else
             {
-                toggleUIButtons(true);
+                ToggleUIButtons(true);
             }
         }
         //applies all settings from static settings class to this form
         private void applySettings(bool init = false)
         {
+            //set tooltips
             string text = Translations.getTranslatedString("mainFormToolTip");
-            Control[] toolTipSetList = new Control[] { forceManuel, cleanInstallCB, backupModsCheckBox, backupModsCheckBox, cancerFontCB, saveLastInstallCB, saveUserDataCB, darkUICB, languageSelectionGB, fontSizeGB, selectionDefault, selectionLegacy, disableBordersCB, disableColorsCB, clearCacheCB, clearLogFilesCB, viewAppUpdates, ShowInstallCompleteWindowCB, notifyIfSameDatabaseCB, standardImageRB, thirdGuardsLoadingImageRB, languageENG, languageGER, languagePL, languageFR, fontSize100, DPI100 };
+            Control[] toolTipSetList = new Control[] { forceManuel, cleanInstallCB, backupModsCheckBox, cancerFontCB, saveLastInstallCB, saveUserDataCB, darkUICB,
+                languageSelectionGB, fontSizeGB, selectionDefault, selectionLegacy, disableBordersCB, disableColorsCB, clearCacheCB, clearLogFilesCB, viewAppUpdates, ShowInstallCompleteWindowCB,
+                notifyIfSameDatabaseCB, standardImageRB, thirdGuardsLoadingImageRB, languageENG, languageGER, languagePL, languageFR, fontSize100, DPI100 };
             foreach (var set in toolTipSetList)
             {
-                // this.toolTip.SetToolTip(forceManuel, Translations.getTranslatedString("mainFormToolTip"));
                 this.toolTip.SetToolTip(set, text);
+                set.Text = Translations.getTranslatedString(set.Name);
             }
-            this.forceManuel.Text = Translations.getTranslatedString(forceManuel.Name);
-            this.cleanInstallCB.Text = Translations.getTranslatedString(cleanInstallCB.Name);
-            this.backupModsCheckBox.Text = Translations.getTranslatedString(backupModsCheckBox.Name);
-            this.cancerFontCB.Text = Translations.getTranslatedString(cancerFontCB.Name);
-            this.saveLastInstallCB.Text = Translations.getTranslatedString(saveLastInstallCB.Name);
-            this.saveUserDataCB.Text = Translations.getTranslatedString(saveUserDataCB.Name);
-            this.darkUICB.Text = Translations.getTranslatedString(darkUICB.Name);
-            this.installRelhaxMod.Text = Translations.getTranslatedString(installRelhaxMod.Name);
-            this.uninstallRelhaxMod.Text = Translations.getTranslatedString(uninstallRelhaxMod.Name);
-            this.settingsGroupBox.Text = Translations.getTranslatedString(settingsGroupBox.Name);
-            this.loadingImageGroupBox.Text = Translations.getTranslatedString(loadingImageGroupBox.Name);
-            this.languageSelectionGB.Text = Translations.getTranslatedString(languageSelectionGB.Name);
-            this.findBugAddModLabel.Text = Translations.getTranslatedString(findBugAddModLabel.Name);
-            this.formPageLink.Text = Translations.getTranslatedString(formPageLink.Name);
-            this.viewTypeGB.Text = Translations.getTranslatedString("ModSelectionListViewSelection");
-            this.selectionDefault.Text = Translations.getTranslatedString(selectionDefault.Name);
-            this.selectionLegacy.Text = Translations.getTranslatedString(selectionLegacy.Name);
-            this.donateLabel.Text = Translations.getTranslatedString(donateLabel.Name);
-            this.cancelDownloadButton.Text = Translations.getTranslatedString(cancelDownloadButton.Name);
-            this.fontSizeGB.Text = Translations.getTranslatedString(fontSizeGB.Name);
-            this.expandNodesDefault.Text = Translations.getTranslatedString(expandNodesDefault.Name);
-            this.disableBordersCB.Text = Translations.getTranslatedString(disableBordersCB.Name);
-            this.clearCacheCB.Text = Translations.getTranslatedString(clearCacheCB.Name);
-            this.DiscordServerLink.Text = Translations.getTranslatedString(DiscordServerLink.Name);
-            this.viewAppUpdates.Text = Translations.getTranslatedString(viewAppUpdates.Name);
-            this.viewDBUpdates.Text = Translations.getTranslatedString(viewDBUpdates.Name);
-            this.disableColorsCB.Text = Translations.getTranslatedString(disableColorsCB.Name);
-            this.clearLogFilesCB.Text = Translations.getTranslatedString(clearLogFilesCB.Name);
-            this.notifyIfSameDatabaseCB.Text = Translations.getTranslatedString(notifyIfSameDatabaseCB.Name);
-            this.ShowInstallCompleteWindowCB.Text = Translations.getTranslatedString(ShowInstallCompleteWindowCB.Name);
-            this.createShortcutsCB.Text = Translations.getTranslatedString(createShortcutsCB.Name);
+            //set translation text
+            Control[] translationSetList = new Control[] { forceManuel, cleanInstallCB, backupModsCheckBox, cancerFontCB, saveLastInstallCB, saveUserDataCB, darkUICB,
+                installRelhaxMod, uninstallRelhaxMod, settingsGroupBox,loadingImageGroupBox, languageSelectionGB, findBugAddModLabel, formPageLink, selectionDefault, selectionLegacy, donateLabel,
+                cancelDownloadButton, fontSizeGB, expandNodesDefault, disableBordersCB, clearCacheCB, DiscordServerLink, viewAppUpdates, viewDBUpdates, disableColorsCB, clearLogFilesCB,
+                notifyIfSameDatabaseCB, ShowInstallCompleteWindowCB,  createShortcutsCB };
+            foreach (var set in translationSetList)
+            {
+                set.Text = Translations.getTranslatedString(set.Name);
+            }
+            viewTypeGB.Text = Translations.getTranslatedString("ModSelectionListViewSelection");
             if (helper != null)
             {
                 helper.helperText.Text = Translations.getTranslatedString("helperText");
@@ -1535,7 +1624,6 @@ namespace RelhaxModpack
                 this.notifyIfSameDatabaseCB.Checked = Settings.NotifyIfSameDatabase;
                 this.ShowInstallCompleteWindowCB.Checked = Settings.ShowInstallCompleteWindow;
                 this.createShortcutsCB.Checked = Settings.CreateShortcuts;
-                //TODO: ADD HERE
                 switch (Settings.gif)
                 {
                     case (Settings.LoadingGifs.standard):
@@ -1616,80 +1704,6 @@ namespace RelhaxModpack
                 }
             }
         }
-        //check for old zip files
-        private void depricated_checkForOldZipFiles()  // this process moved to Installer.cs
-        {
-            List<string> zipFilesList = new List<string>();
-            FileInfo[] fi = null;
-            try
-            {
-                File.SetAttributes(Path.Combine(Application.StartupPath, "RelHaxDownloads"), FileAttributes.Normal);
-                DirectoryInfo di = new DirectoryInfo(Path.Combine(Application.StartupPath, "RelHaxDownloads"));
-                //get every patch file in the folder
-                fi = di.GetFiles(@"*.zip", SearchOption.TopDirectoryOnly);
-            }
-            catch (Exception e)
-            {
-                Utils.ExceptionLog("checkForOldZipFiles", e);
-                MessageBox.Show(Translations.getTranslatedString("folderDeleteFailed") + " _readme");
-            }
-            if (fi != null)
-            {
-                foreach (FileInfo f in fi)
-                {
-                    zipFilesList.Add(f.Name);
-                }
-                List<string> filesToDelete = Utils.Depricated_createDownloadedOldZipsList(zipFilesList, parsedCatagoryLists, globalDependenciesToInstall, currentDependencies, currentLogicalDependencies);
-                string listOfFiles = "";
-                foreach (string s in filesToDelete)
-                    listOfFiles = listOfFiles + s + "\n";
-                using (OldFilesToDelete oftd = new OldFilesToDelete())
-                {
-                    oftd.filesList.Text = listOfFiles;
-                    if (listOfFiles.Count() == 0)
-                        return;
-                    oftd.ShowDialog();
-                    if (oftd.result)
-                    {
-                        childProgressBar.Minimum = 0;
-                        childProgressBar.Value = childProgressBar.Minimum;
-                        childProgressBar.Maximum = filesToDelete.Count;
-                        foreach (string s in filesToDelete)
-                        {
-                            bool retry = true;
-                            bool breakOut = false;
-                            while (retry)
-                            {
-                                //for each zip file, verify it exists, set properties to normal, delete it
-                                try
-                                {
-                                    string file = Path.Combine(Application.StartupPath, "RelHaxDownloads", s);
-                                    File.SetAttributes(file, FileAttributes.Normal);
-                                    File.Delete(file);
-                                    // remove file from database, too
-                                    XMLUtils.DeleteMd5HashDatabase(file);
-                                    childProgressBar.Value++;
-                                    retry = false;
-                                }
-                                catch (Exception e)
-                                {
-                                    retry = true;
-                                    Utils.ExceptionLog("checkForOldZipFiles", "delete", e);
-                                    DialogResult res = MessageBox.Show(string.Format("{0} {1}", Translations.getTranslatedString("fileDeleteFailed"), s), "", MessageBoxButtons.RetryCancel);
-                                    if (res == System.Windows.Forms.DialogResult.Cancel)
-                                    {
-                                        breakOut = true;
-                                        retry = false;
-                                    }
-                                }
-                            }
-                            if (breakOut)
-                                break;
-                        }
-                    }
-                }
-            }
-        }
 
         //for when downloads are started, a timer to keep track of the download speed and ETA
         private void downloadTimer_Tick(object sender, EventArgs e)
@@ -1702,7 +1716,7 @@ namespace RelhaxModpack
             previousTotalBytesDownloaded = currentTotalBytesDownloaded;
         }
         //toggle UI buttons to be enabled or disabled
-        private void toggleUIButtons(bool enableToggle)
+        private void ToggleUIButtons(bool enableToggle)
         {
             forceManuel.Enabled = enableToggle;
             installRelhaxMod.Enabled = enableToggle;
@@ -1747,7 +1761,8 @@ namespace RelhaxModpack
             }
         }
 
-        private bool CheckMainWindowSizeToMonitorSize(int intHeight, int intWidth)              // https://stackoverflow.com/questions/254197/how-can-i-get-the-active-screen-dimensions
+        // https://stackoverflow.com/questions/254197/how-can-i-get-the-active-screen-dimensions
+        private bool CheckMainWindowSizeToMonitorSize(int intHeight, int intWidth)              
         {
             var hwnd = this.Handle;
             var monitor = NativeMethods.MonitorFromWindow(hwnd, NativeMethods.MONITOR_DEFAULTTONEAREST);
@@ -1756,8 +1771,6 @@ namespace RelhaxModpack
             {
                 var monitorInfo = new NativeMethods.NativeMonitorInfo();
                 NativeMethods.GetMonitorInfo(monitor, monitorInfo);
-                // var left = monitorInfo.Monitor.Left;
-                // var top = monitorInfo.Monitor.Top;
                 var width = (monitorInfo.Monitor.Right - monitorInfo.Monitor.Left);
                 var height = (monitorInfo.Monitor.Bottom - monitorInfo.Monitor.Top);
                 return (intHeight < height && intWidth < width);
