@@ -291,7 +291,7 @@ namespace RelhaxModpack
                     SelectedDependency.dependencyZipCRC = "f";
                     SelectedDependency.dependencyZipFile = ObjectZipFileTB.Text;
                     SelectedDependency.timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
-                    ObjectLastUpdatedLabel.Text = string.Format("Last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedDependency.timestamp));
+                    ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedDependency.timestamp));
                 }
                 SelectedDependency.enabled = ObjectEnabledCheckBox.Checked;
                 SelectedDependency.appendExtraction = ObjectAppendExtractionCB.Checked;
@@ -309,7 +309,7 @@ namespace RelhaxModpack
                     SelectedLogicalDependency.dependencyZipCRC = "f";
                     SelectedLogicalDependency.dependencyZipFile = ObjectZipFileTB.Text;
                     SelectedLogicalDependency.timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
-                    ObjectLastUpdatedLabel.Text = string.Format("Last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedLogicalDependency.timestamp));
+                    ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedLogicalDependency.timestamp));
                 }
                 SelectedLogicalDependency.enabled = ObjectEnabledCheckBox.Checked;
                 LogicalDependencies[index] = SelectedLogicalDependency;
@@ -355,7 +355,7 @@ namespace RelhaxModpack
                         m.crc = "f";
                         m.zipFile = ObjectZipFileTB.Text;
                         m.timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
-                        ObjectLastUpdatedLabel.Text = string.Format("Last updated: {0}", Utils.ConvertFiletimeTimestampToDate(m.timestamp));
+                        ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(m.timestamp));
                     }
                     m.devURL = ObjectDevURLTB.Text;
                     m.version = ObjectVersionTB.Text;
@@ -388,7 +388,7 @@ namespace RelhaxModpack
                             cfg.crc = "f";
                             cfg.zipFile = ObjectZipFileTB.Text;
                             cfg.timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
-                            ObjectLastUpdatedLabel.Text = string.Format("Last updated: {0}", Utils.ConvertFiletimeTimestampToDate(cfg.timestamp));
+                            ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(cfg.timestamp));
                         }
                         cfg.devURL = ObjectDevURLTB.Text;
                         cfg.version = ObjectVersionTB.Text;
