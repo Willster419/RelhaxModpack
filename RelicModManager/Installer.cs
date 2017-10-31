@@ -36,6 +36,7 @@ namespace RelhaxModpack
         public List<DatabaseObject> ModsConfigsToInstall { get; set; }
         public List<DatabaseObject> ModsConfigsWithData { get; set; }
         public List<Mod> UserMods { get; set; }
+        public List<ShortCut> Shortcuts { get; set; }
         private List<Patch> patchList { get; set; }
         public string TanksVersion { get; set; }
         //the folder of the current user appdata
@@ -1159,94 +1160,25 @@ namespace RelhaxModpack
             Utils.AppendToLog("Finished Relhax Modpack User Mod Extraction");
         }
 
-        //Step 17: Extract User Mods
+        //Step 17: Create Shortcuts
         private void CreateShortCuts()
         {
-            try
+            string logFile = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
+            using (StreamWriter sw = File.AppendText(logFile))
             {
-                string logFile = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
-                List<ShortCut> scToDoList = new List<ShortCut>();
-                using (StreamWriter sw = File.AppendText(logFile))
+                sw.WriteLine(@"/*  Desktop shortcuts  */");
+                foreach (ShortCut sc in Shortcuts)
                 {
-                    sw.WriteLine(@"/*  Desktop shortcuts  */");
-                    foreach (Dependency d in Dependencies)
+                    if (sc.enabled)
                     {
-                        if (d.shortCuts.Count > 0)
+                        string fileTarget = Path.Combine(TanksLocation, sc.path);
+                        Utils.AppendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
+                        if (File.Exists(fileTarget))
                         {
-                            foreach (ShortCut sc in d.shortCuts)
-                            {
-                                if (sc.enabled)
-                                {
-
-                                    string fileTarget = Path.Combine(TanksLocation, sc.path);
-                                    Utils.AppendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
-                                    if (File.Exists(fileTarget))
-                                    {
-                                        Utils.CreateShortcut(fileTarget, sc.name, true, true, sw);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    foreach (LogicalDependnecy ld in LogicalDependencies)
-                    {
-                        if (ld.shortCuts.Count > 0)
-                        {
-                            foreach (ShortCut sc in ld.shortCuts)
-                            {
-                                if (sc.enabled)
-                                {
-                                    string fileTarget = Path.Combine(TanksLocation, sc.path);
-                                    Utils.AppendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
-                                    if (File.Exists(fileTarget))
-                                    {
-                                        Utils.CreateShortcut(fileTarget, sc.name, true, true, sw);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    foreach (Dependency ad in AppendedDependencies)
-                    {
-                        if (ad.shortCuts.Count > 0)
-                        {
-                            foreach (ShortCut sc in ad.shortCuts)
-                            {
-                                if (sc.enabled)
-                                {
-                                    string fileTarget = Path.Combine(TanksLocation, sc.path);
-                                    Utils.AppendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
-                                    if (File.Exists(fileTarget))
-                                    {
-                                        Utils.CreateShortcut(fileTarget, sc.name, true, true, sw);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    foreach (DatabaseObject dbo in ModsConfigsToInstall)
-                    {
-                        if (dbo.shortCuts.Count > 0)
-                        {
-                            foreach (ShortCut sc in dbo.shortCuts)
-                            {
-                                if (sc.enabled)
-                                {
-                                    string fileTarget = Path.Combine(TanksLocation, sc.path);
-                                    Utils.AppendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
-                                    if (File.Exists(fileTarget))
-                                    {
-                                        Utils.CreateShortcut(fileTarget, sc.name, true, true, sw);
-                                    }
-                                }
-                            }
+                            Utils.CreateShortcut(fileTarget, sc.name, true, true, sw);
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Utils.ExceptionLog("CreateShortCuts()", ex);
             }
         }
 
@@ -1699,6 +1631,9 @@ namespace RelhaxModpack
                     ModsConfigsToInstall = null;
                     AppendedDependencies = null;
                     ModsConfigsWithData = null;
+                    AppendedDependencies = null;
+                    Shortcuts = null;
+                    
                     UserMods = null;
                     patchList = null;
                     args = null;
