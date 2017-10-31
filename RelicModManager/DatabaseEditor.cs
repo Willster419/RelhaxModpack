@@ -1840,7 +1840,6 @@ namespace RelhaxModpack
             if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
             {
                 SelectedGlobalDependency.shortCuts.Add(sc);
-                // SelectedGloDependency.shortCuts.Add(sc);
                 ObjectShortcutList.DataSource = SelectedGlobalDependency.shortCuts;
             }
             else if (DatabaseEditorMode == EditorMode.Dependency)
