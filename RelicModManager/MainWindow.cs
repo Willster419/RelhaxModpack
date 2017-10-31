@@ -288,13 +288,19 @@ namespace RelhaxModpack
                 return;
             }
             string version = "";
-            string xmlString = Utils.GetStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");  //xml doc name can change
+            string xmlString = Utils.GetStringFromZip(Settings.managerInfoDatFile, "manager_version.xml");
             if (!xmlString.Equals(""))
             {
                 XDocument doc = XDocument.Parse(xmlString);
-                var databaseVersion = doc.Descendants().Where(n => n.Name == "manager").FirstOrDefault();
-                if (databaseVersion != null)
-                    version = databaseVersion.Value;
+
+                //parse the database version
+                var databaseVersion = doc.XPathSelectElement("//version/database");
+                DatabaseVersionLabel.Text = "Database v" + databaseVersion.Value;
+                //parse the manager version
+                
+                var applicationVersion = doc.Descendants().Where(n => n.Name == "manager").FirstOrDefault();
+                if (applicationVersion != null)
+                    version = applicationVersion.Value;
                 Utils.AppendToLog(string.Format("Local application is {0}, current online is {1}", managerVersion(), version));
 
                 if (!version.Equals(managerVersion()))
@@ -596,6 +602,7 @@ namespace RelhaxModpack
         {
             //set window header text to current version so user knows
             this.Text = this.Text + managerVersion();
+            ApplicationVersionLabel.Text = "Application v" + managerVersion();
             if (Program.testMode) this.Text = this.Text + " TEST MODE";
             //setup the gif preview loading window
             gp = new LoadingGifPreview(this.Location.X + this.Size.Width + 5, this.Location.Y);
@@ -664,6 +671,7 @@ namespace RelhaxModpack
             wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
             Application.DoEvents();
             this.CheckmanagerUpdates();
+
 
             //load settings
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");

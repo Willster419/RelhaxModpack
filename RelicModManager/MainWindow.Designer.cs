@@ -86,11 +86,15 @@
             this.viewDBUpdates = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.ErrorCounterLabel = new System.Windows.Forms.Label();
+            this.VersionTable = new System.Windows.Forms.TableLayoutPanel();
+            this.DatabaseVersionLabel = new System.Windows.Forms.Label();
+            this.ApplicationVersionLabel = new System.Windows.Forms.Label();
             this.settingsGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.viewTypeGB.SuspendLayout();
             this.fontSizeGB.SuspendLayout();
+            this.VersionTable.SuspendLayout();
             this.SuspendLayout();
             // 
             // childProgressBar
@@ -812,12 +816,48 @@
             this.ErrorCounterLabel.Text = "Error counter: 0";
             this.ErrorCounterLabel.Visible = false;
             // 
+            // VersionTable
+            // 
+            this.VersionTable.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.VersionTable.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
+            this.VersionTable.ColumnCount = 2;
+            this.VersionTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.VersionTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.VersionTable.Controls.Add(this.DatabaseVersionLabel, 1, 0);
+            this.VersionTable.Controls.Add(this.ApplicationVersionLabel, 0, 0);
+            this.VersionTable.Location = new System.Drawing.Point(9, 632);
+            this.VersionTable.Name = "VersionTable";
+            this.VersionTable.RowCount = 1;
+            this.VersionTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.VersionTable.Size = new System.Drawing.Size(420, 16);
+            this.VersionTable.TabIndex = 39;
+            // 
+            // DatabaseVersionLabel
+            // 
+            this.DatabaseVersionLabel.AutoSize = true;
+            this.DatabaseVersionLabel.Dock = System.Windows.Forms.DockStyle.Right;
+            this.DatabaseVersionLabel.Location = new System.Drawing.Point(312, 1);
+            this.DatabaseVersionLabel.Name = "DatabaseVersionLabel";
+            this.DatabaseVersionLabel.Size = new System.Drawing.Size(104, 14);
+            this.DatabaseVersionLabel.TabIndex = 0;
+            this.DatabaseVersionLabel.Text = "Database v{version}";
+            // 
+            // ApplicationVersionLabel
+            // 
+            this.ApplicationVersionLabel.AutoSize = true;
+            this.ApplicationVersionLabel.Location = new System.Drawing.Point(4, 1);
+            this.ApplicationVersionLabel.Name = "ApplicationVersionLabel";
+            this.ApplicationVersionLabel.Size = new System.Drawing.Size(109, 13);
+            this.ApplicationVersionLabel.TabIndex = 1;
+            this.ApplicationVersionLabel.Text = "Application v{version]";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(442, 632);
+            this.ClientSize = new System.Drawing.Size(440, 657);
+            this.Controls.Add(this.VersionTable);
             this.Controls.Add(this.ErrorCounterLabel);
             this.Controls.Add(this.viewDBUpdates);
             this.Controls.Add(this.viewAppUpdates);
@@ -855,6 +895,8 @@
             this.viewTypeGB.PerformLayout();
             this.fontSizeGB.ResumeLayout(false);
             this.fontSizeGB.PerformLayout();
+            this.VersionTable.ResumeLayout(false);
+            this.VersionTable.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -917,6 +959,9 @@
         private System.Windows.Forms.ToolTip toolTip;
         public System.Windows.Forms.Label ErrorCounterLabel;
         private System.Windows.Forms.CheckBox createShortcutsCB;
+        private System.Windows.Forms.TableLayoutPanel VersionTable;
+        private System.Windows.Forms.Label DatabaseVersionLabel;
+        private System.Windows.Forms.Label ApplicationVersionLabel;
     }
 }
 
