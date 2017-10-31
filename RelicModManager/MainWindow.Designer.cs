@@ -836,11 +836,11 @@
             // 
             this.DatabaseVersionLabel.AutoSize = true;
             this.DatabaseVersionLabel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.DatabaseVersionLabel.Location = new System.Drawing.Point(312, 1);
+            this.DatabaseVersionLabel.Location = new System.Drawing.Point(280, 1);
             this.DatabaseVersionLabel.Name = "DatabaseVersionLabel";
-            this.DatabaseVersionLabel.Size = new System.Drawing.Size(104, 14);
+            this.DatabaseVersionLabel.Size = new System.Drawing.Size(136, 14);
             this.DatabaseVersionLabel.TabIndex = 0;
-            this.DatabaseVersionLabel.Text = "Database v{version}";
+            this.DatabaseVersionLabel.Text = "Latest Database v{version}";
             // 
             // ApplicationVersionLabel
             // 

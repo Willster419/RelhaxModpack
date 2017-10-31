@@ -295,7 +295,7 @@ namespace RelhaxModpack
 
                 //parse the database version
                 var databaseVersion = doc.XPathSelectElement("//version/database");
-                DatabaseVersionLabel.Text = "Database v" + databaseVersion.Value;
+                DatabaseVersionLabel.Text = "Latest Database v" + databaseVersion.Value;
                 //parse the manager version
                 
                 var applicationVersion = doc.Descendants().Where(n => n.Name == "manager").FirstOrDefault();
