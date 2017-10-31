@@ -1164,21 +1164,28 @@ namespace RelhaxModpack
         private void CreateShortCuts()
         {
             string logFile = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
-            using (StreamWriter sw = File.AppendText(logFile))
+            try
             {
-                sw.WriteLine(@"/*  Desktop shortcuts  */");
-                foreach (ShortCut sc in Shortcuts)
+                using (StreamWriter sw = File.AppendText(logFile))
                 {
-                    if (sc.enabled)
+                    sw.WriteLine(@"/*  Desktop shortcuts  */");
+                    foreach (ShortCut sc in Shortcuts)
                     {
-                        string fileTarget = Path.Combine(TanksLocation, sc.path);
-                        Utils.AppendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
-                        if (File.Exists(fileTarget))
+                        if (sc.enabled)
                         {
-                            Utils.CreateShortcut(fileTarget, sc.name, true, true, sw);
+                            string fileTarget = Path.Combine(TanksLocation, sc.path);
+                            Utils.AppendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
+                            if (File.Exists(fileTarget))
+                            {
+                                Utils.CreateShortcut(fileTarget, sc.name, true, true, sw);
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("CreateShortCuts", ex);
             }
         }
 
