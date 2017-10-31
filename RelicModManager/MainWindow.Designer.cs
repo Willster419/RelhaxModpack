@@ -41,6 +41,7 @@
             this.cancerFontCB = new System.Windows.Forms.CheckBox();
             this.backupModsCheckBox = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
+            this.createShortcutsCB = new System.Windows.Forms.CheckBox();
             this.ShowInstallCompleteWindowCB = new System.Windows.Forms.CheckBox();
             this.notifyIfSameDatabaseCB = new System.Windows.Forms.CheckBox();
             this.clearLogFilesCB = new System.Windows.Forms.CheckBox();
@@ -85,7 +86,6 @@
             this.viewDBUpdates = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.ErrorCounterLabel = new System.Windows.Forms.Label();
-            this.createShortcutsCB = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
@@ -117,7 +117,6 @@
             this.toolTip.SetToolTip(this.forceManuel, "Right Click for extended description");
             this.forceManuel.UseVisualStyleBackColor = true;
             this.forceManuel.CheckedChanged += new System.EventHandler(this.forceManuel_CheckedChanged);
-            this.forceManuel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.forceManuel_MouseDown);
             this.forceManuel.MouseEnter += new System.EventHandler(this.forceManuel_MouseEnter);
             this.forceManuel.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -173,7 +172,6 @@
             this.toolTip.SetToolTip(this.cleanInstallCB, "Right Click for extended description");
             this.cleanInstallCB.UseVisualStyleBackColor = true;
             this.cleanInstallCB.CheckedChanged += new System.EventHandler(this.cleanInstallCB_CheckedChanged);
-            this.cleanInstallCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cleanInstallCB_MouseDown);
             this.cleanInstallCB.MouseEnter += new System.EventHandler(this.cleanInstallCB_MouseEnter);
             this.cleanInstallCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -188,7 +186,6 @@
             this.toolTip.SetToolTip(this.cancerFontCB, "Right Click for extended description");
             this.cancerFontCB.UseVisualStyleBackColor = true;
             this.cancerFontCB.CheckedChanged += new System.EventHandler(this.cancerFontCB_CheckedChanged);
-            this.cancerFontCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cancerFontCB_MouseDown);
             this.cancerFontCB.MouseEnter += new System.EventHandler(this.cancerFontCB_MouseEnter);
             this.cancerFontCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -203,7 +200,6 @@
             this.toolTip.SetToolTip(this.backupModsCheckBox, "Right Click for extended description");
             this.backupModsCheckBox.UseVisualStyleBackColor = true;
             this.backupModsCheckBox.CheckedChanged += new System.EventHandler(this.backupModsCheckBox_CheckedChanged);
-            this.backupModsCheckBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.backupModsCheckBox_MouseDown);
             this.backupModsCheckBox.MouseEnter += new System.EventHandler(this.backupModsCheckBox_MouseEnter);
             this.backupModsCheckBox.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -228,6 +224,19 @@
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "Modpack Settings (Right click for description)";
             // 
+            // createShortcutsCB
+            // 
+            this.createShortcutsCB.AutoSize = true;
+            this.createShortcutsCB.Location = new System.Drawing.Point(6, 201);
+            this.createShortcutsCB.Name = "createShortcutsCB";
+            this.createShortcutsCB.Size = new System.Drawing.Size(105, 17);
+            this.createShortcutsCB.TabIndex = 35;
+            this.createShortcutsCB.Text = "Create Shortcuts";
+            this.createShortcutsCB.UseVisualStyleBackColor = true;
+            this.createShortcutsCB.CheckedChanged += new System.EventHandler(this.CreateShortcutsCB_CheckedChanged);
+            this.createShortcutsCB.MouseEnter += new System.EventHandler(this.CreateShortcutsCB_MouseEnter);
+            this.createShortcutsCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
             // ShowInstallCompleteWindowCB
             // 
             this.ShowInstallCompleteWindowCB.AutoSize = true;
@@ -239,7 +248,6 @@
             this.toolTip.SetToolTip(this.ShowInstallCompleteWindowCB, "Right Click for extended description");
             this.ShowInstallCompleteWindowCB.UseVisualStyleBackColor = true;
             this.ShowInstallCompleteWindowCB.CheckedChanged += new System.EventHandler(this.ShowInstallCompleteWindow_CheckedChanged);
-            this.ShowInstallCompleteWindowCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ShowInstallCompleteWindowCB_MouseDown);
             this.ShowInstallCompleteWindowCB.MouseEnter += new System.EventHandler(this.ShowInstallCompleteWindowCB_MouseEnter);
             this.ShowInstallCompleteWindowCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -254,7 +262,6 @@
             this.toolTip.SetToolTip(this.notifyIfSameDatabaseCB, "Right Click for extended description");
             this.notifyIfSameDatabaseCB.UseVisualStyleBackColor = true;
             this.notifyIfSameDatabaseCB.CheckedChanged += new System.EventHandler(this.notifyIfSameDatabaseCB_CheckedChanged);
-            this.notifyIfSameDatabaseCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.notifyIfSameDatabaseCB_MouseDown);
             this.notifyIfSameDatabaseCB.MouseEnter += new System.EventHandler(this.notifyIfSameDatabaseCB_MouseEnter);
             this.notifyIfSameDatabaseCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -269,7 +276,6 @@
             this.toolTip.SetToolTip(this.clearLogFilesCB, "Right Click for extended description");
             this.clearLogFilesCB.UseVisualStyleBackColor = true;
             this.clearLogFilesCB.CheckedChanged += new System.EventHandler(this.clearLogFilesCB_CheckedChanged);
-            this.clearLogFilesCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.clearLogFilesCB_MouseDown);
             this.clearLogFilesCB.MouseEnter += new System.EventHandler(this.clearLogFilesCB_MouseEnter);
             this.clearLogFilesCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -284,7 +290,6 @@
             this.toolTip.SetToolTip(this.clearCacheCB, "Right Click for extended description");
             this.clearCacheCB.UseVisualStyleBackColor = true;
             this.clearCacheCB.CheckedChanged += new System.EventHandler(this.clearCacheCB_CheckedChanged);
-            this.clearCacheCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.clearCacheCB_MouseDown);
             this.clearCacheCB.MouseEnter += new System.EventHandler(this.clearCacheCB_MouseEnter);
             this.clearCacheCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -299,7 +304,6 @@
             this.toolTip.SetToolTip(this.darkUICB, "Right Click for extended description");
             this.darkUICB.UseVisualStyleBackColor = true;
             this.darkUICB.CheckedChanged += new System.EventHandler(this.darkUICB_CheckedChanged);
-            this.darkUICB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.darkUICB_MouseDown);
             this.darkUICB.MouseEnter += new System.EventHandler(this.darkUICB_MouseEnter);
             this.darkUICB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -314,7 +318,6 @@
             this.toolTip.SetToolTip(this.saveUserDataCB, "Right Click for extended description");
             this.saveUserDataCB.UseVisualStyleBackColor = true;
             this.saveUserDataCB.CheckedChanged += new System.EventHandler(this.saveUserDataCB_CheckedChanged);
-            this.saveUserDataCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.saveUserDataCB_MouseDown);
             this.saveUserDataCB.MouseEnter += new System.EventHandler(this.saveUserDataCB_MouseEnter);
             this.saveUserDataCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -329,7 +332,6 @@
             this.toolTip.SetToolTip(this.saveLastInstallCB, "Right Click for extended description");
             this.saveLastInstallCB.UseVisualStyleBackColor = true;
             this.saveLastInstallCB.CheckedChanged += new System.EventHandler(this.saveLastInstallCB_CheckedChanged);
-            this.saveLastInstallCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.saveLastInstallCB_MouseDown);
             this.saveLastInstallCB.MouseEnter += new System.EventHandler(this.saveLastInstallCB_MouseEnter);
             this.saveLastInstallCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -357,6 +359,8 @@
             this.languageFR.Text = "Français";
             this.languageFR.UseVisualStyleBackColor = true;
             this.languageFR.CheckedChanged += new System.EventHandler(this.languageFR_CheckedChanged);
+            this.languageFR.MouseEnter += new System.EventHandler(this.language_MouseEnter);
+            this.languageFR.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // languagePL
             // 
@@ -369,7 +373,6 @@
             this.languagePL.Text = "Polski";
             this.languagePL.UseVisualStyleBackColor = true;
             this.languagePL.CheckedChanged += new System.EventHandler(this.languagePL_CheckedChanged);
-            this.languagePL.MouseDown += new System.Windows.Forms.MouseEventHandler(this.language_MouseDown);
             this.languagePL.MouseEnter += new System.EventHandler(this.language_MouseEnter);
             this.languagePL.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -383,7 +386,6 @@
             this.languageGER.Text = "Deutsch";
             this.languageGER.UseVisualStyleBackColor = true;
             this.languageGER.CheckedChanged += new System.EventHandler(this.languageGER_CheckedChanged);
-            this.languageGER.MouseDown += new System.Windows.Forms.MouseEventHandler(this.language_MouseDown);
             this.languageGER.MouseEnter += new System.EventHandler(this.language_MouseEnter);
             this.languageGER.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -397,7 +399,6 @@
             this.languageENG.Text = "English";
             this.languageENG.UseVisualStyleBackColor = true;
             this.languageENG.CheckedChanged += new System.EventHandler(this.languageENG_CheckedChanged);
-            this.languageENG.MouseDown += new System.Windows.Forms.MouseEventHandler(this.language_MouseDown);
             this.languageENG.MouseEnter += new System.EventHandler(this.language_MouseEnter);
             this.languageENG.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -507,7 +508,6 @@
             this.toolTip.SetToolTip(this.disableColorsCB, "Right Click for extended description");
             this.disableColorsCB.UseVisualStyleBackColor = true;
             this.disableColorsCB.CheckedChanged += new System.EventHandler(this.disableColorsCB_CheckedChanged);
-            this.disableColorsCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.disableColorsCB_MouseDown);
             this.disableColorsCB.MouseEnter += new System.EventHandler(this.disableColorsCB_MouseEnter);
             this.disableColorsCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -523,7 +523,6 @@
             this.toolTip.SetToolTip(this.disableBordersCB, "Right Click for extended description");
             this.disableBordersCB.UseVisualStyleBackColor = true;
             this.disableBordersCB.CheckedChanged += new System.EventHandler(this.disableBordersCB_CheckedChanged);
-            this.disableBordersCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.disableBordersCB_MouseDown);
             this.disableBordersCB.MouseEnter += new System.EventHandler(this.disableBordersCB_MouseEnter);
             this.disableBordersCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -540,7 +539,6 @@
             this.toolTip.SetToolTip(this.expandNodesDefault, "Right Click for extended description");
             this.expandNodesDefault.UseVisualStyleBackColor = true;
             this.expandNodesDefault.CheckedChanged += new System.EventHandler(this.expandNodesDefault_CheckedChanged);
-            this.expandNodesDefault.MouseDown += new System.Windows.Forms.MouseEventHandler(this.expandNodesDefault_MouseDown);
             this.expandNodesDefault.MouseEnter += new System.EventHandler(this.expandNodesDefault_MouseEnter);
             this.expandNodesDefault.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -556,7 +554,6 @@
             this.toolTip.SetToolTip(this.selectionLegacy, "Right Click for extended description");
             this.selectionLegacy.UseVisualStyleBackColor = true;
             this.selectionLegacy.CheckedChanged += new System.EventHandler(this.selectionLegacy_CheckedChanged);
-            this.selectionLegacy.MouseDown += new System.Windows.Forms.MouseEventHandler(this.selectionLegacy_MouseDown);
             this.selectionLegacy.MouseEnter += new System.EventHandler(this.selectionView_MouseEnter);
             this.selectionLegacy.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -572,7 +569,6 @@
             this.toolTip.SetToolTip(this.selectionDefault, "Right Click for extended description");
             this.selectionDefault.UseVisualStyleBackColor = true;
             this.selectionDefault.CheckedChanged += new System.EventHandler(this.selectionDefault_CheckedChanged);
-            this.selectionDefault.MouseDown += new System.Windows.Forms.MouseEventHandler(this.selectionDefault_MouseDown);
             this.selectionDefault.MouseEnter += new System.EventHandler(this.selectionView_MouseEnter);
             this.selectionDefault.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -618,6 +614,8 @@
             this.DPI275.Text = "DPI 2.75x";
             this.DPI275.UseVisualStyleBackColor = true;
             this.DPI275.CheckedChanged += new System.EventHandler(this.DPI275_CheckedChanged);
+            this.DPI275.MouseEnter += new System.EventHandler(this.font_MouseEnter);
+            this.DPI275.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // DPI225
             // 
@@ -630,6 +628,8 @@
             this.DPI225.Text = "DPI 2.25x";
             this.DPI225.UseVisualStyleBackColor = true;
             this.DPI225.CheckedChanged += new System.EventHandler(this.DPI225_CheckedChanged);
+            this.DPI225.MouseEnter += new System.EventHandler(this.font_MouseEnter);
+            this.DPI225.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // fontSize275
             // 
@@ -642,6 +642,8 @@
             this.fontSize275.Text = "Font 2.75x";
             this.fontSize275.UseVisualStyleBackColor = true;
             this.fontSize275.CheckedChanged += new System.EventHandler(this.fontSize275_CheckedChanged);
+            this.fontSize275.MouseEnter += new System.EventHandler(this.font_MouseEnter);
+            this.fontSize275.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // fontSize225
             // 
@@ -654,6 +656,8 @@
             this.fontSize225.Text = "Font 2.25x";
             this.fontSize225.UseVisualStyleBackColor = true;
             this.fontSize225.CheckedChanged += new System.EventHandler(this.fontSize225_CheckedChanged);
+            this.fontSize225.MouseEnter += new System.EventHandler(this.font_MouseEnter);
+            this.fontSize225.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // DPIAUTO
             // 
@@ -666,6 +670,8 @@
             this.DPIAUTO.Text = "DPI AUTO";
             this.DPIAUTO.UseVisualStyleBackColor = true;
             this.DPIAUTO.CheckedChanged += new System.EventHandler(this.DPIAUTO_CheckedChanged);
+            this.DPIAUTO.MouseEnter += new System.EventHandler(this.font_MouseEnter);
+            this.DPIAUTO.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // DPI125
             // 
@@ -678,6 +684,8 @@
             this.DPI125.Text = "DPI 1.25x";
             this.DPI125.UseVisualStyleBackColor = true;
             this.DPI125.CheckedChanged += new System.EventHandler(this.DPI125_CheckedChanged);
+            this.DPI125.MouseEnter += new System.EventHandler(this.font_MouseEnter);
+            this.DPI125.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // DPI175
             // 
@@ -690,6 +698,8 @@
             this.DPI175.Text = "DPI 1.75x";
             this.DPI175.UseVisualStyleBackColor = true;
             this.DPI175.CheckedChanged += new System.EventHandler(this.DPI175_CheckedChanged);
+            this.DPI175.MouseEnter += new System.EventHandler(this.font_MouseEnter);
+            this.DPI175.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // DPI100
             // 
@@ -703,7 +713,6 @@
             this.toolTip.SetToolTip(this.DPI100, "Right Click for extended description");
             this.DPI100.UseVisualStyleBackColor = true;
             this.DPI100.CheckedChanged += new System.EventHandler(this.DPI100_CheckedChanged);
-            this.DPI100.MouseDown += new System.Windows.Forms.MouseEventHandler(this.font_MouseDown);
             this.DPI100.MouseEnter += new System.EventHandler(this.font_MouseEnter);
             this.DPI100.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -718,7 +727,6 @@
             this.fontSize175.Text = "Font 1.75x";
             this.fontSize175.UseVisualStyleBackColor = true;
             this.fontSize175.CheckedChanged += new System.EventHandler(this.fontSize175_CheckedChanged);
-            this.fontSize175.MouseDown += new System.Windows.Forms.MouseEventHandler(this.font_MouseDown);
             this.fontSize175.MouseEnter += new System.EventHandler(this.font_MouseEnter);
             this.fontSize175.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -733,7 +741,6 @@
             this.fontSize125.Text = "Font 1.25x";
             this.fontSize125.UseVisualStyleBackColor = true;
             this.fontSize125.CheckedChanged += new System.EventHandler(this.fontSize125_CheckedChanged);
-            this.fontSize125.MouseDown += new System.Windows.Forms.MouseEventHandler(this.font_MouseDown);
             this.fontSize125.MouseEnter += new System.EventHandler(this.font_MouseEnter);
             this.fontSize125.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -749,7 +756,6 @@
             this.toolTip.SetToolTip(this.fontSize100, "Right Click for extended description");
             this.fontSize100.UseVisualStyleBackColor = true;
             this.fontSize100.CheckedChanged += new System.EventHandler(this.fontSize100_CheckedChanged);
-            this.fontSize100.MouseDown += new System.Windows.Forms.MouseEventHandler(this.font_MouseDown);
             this.fontSize100.MouseEnter += new System.EventHandler(this.font_MouseEnter);
             this.fontSize100.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
@@ -792,6 +798,10 @@
             this.viewDBUpdates.UseVisualStyleBackColor = true;
             this.viewDBUpdates.Click += new System.EventHandler(this.viewDBUpdates_Click);
             // 
+            // toolTip
+            // 
+            this.toolTip.Active = false;
+            // 
             // ErrorCounterLabel
             // 
             this.ErrorCounterLabel.AutoSize = true;
@@ -801,20 +811,6 @@
             this.ErrorCounterLabel.TabIndex = 38;
             this.ErrorCounterLabel.Text = "Error counter: 0";
             this.ErrorCounterLabel.Visible = false;
-            // 
-            // createShortcutsCB
-            // 
-            this.createShortcutsCB.AutoSize = true;
-            this.createShortcutsCB.Location = new System.Drawing.Point(6, 201);
-            this.createShortcutsCB.Name = "createShortcutsCB";
-            this.createShortcutsCB.Size = new System.Drawing.Size(105, 17);
-            this.createShortcutsCB.TabIndex = 35;
-            this.createShortcutsCB.Text = "Create Shortcuts";
-            this.createShortcutsCB.UseVisualStyleBackColor = true;
-            this.createShortcutsCB.CheckedChanged += new System.EventHandler(this.CreateShortcutsCB_CheckedChanged);
-            this.createShortcutsCB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.CreateShortcutsCB_MouseDown);
-            this.createShortcutsCB.MouseEnter += new System.EventHandler(this.CreateShortcutsCB_MouseEnter);
-            this.createShortcutsCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // MainWindow
             // 

@@ -1274,10 +1274,10 @@ namespace RelhaxModpack
 
             //Componet: font_MouseEnter
             //
-            english.Add("font_MouseEnter", "Select a scale mode to use.\nFont is manual scaling, DPI is auto scaling.");
-            german.Add("font_MouseEnter", "Wähle einen Skalierungsgrad.\nFont ist manuelle Skalierung, DPI ist automatiche Skalierung");
-            polish.Add("font_MouseEnter", "Wybierz tryb skali, który ma zostać użyty.\nCzcionka jest ręcznym skalowaniem, DPI jest autoskalowanie.");
-            french.Add("font_MouseEnter", "Sélectionnez un mode d'échelle à utiliser. \nFont est une mise à l'échelle manuelle, DPI est une mise à l'échelle automatique.");
+            english.Add("font_MouseEnter", "Select a scale mode to use.");
+            german.Add("font_MouseEnter", "Wähle einen Skalierungsgrad.");
+            polish.Add("font_MouseEnter", "Wybierz tryb skali, który ma zostać użyty.");
+            french.Add("font_MouseEnter", "Sélectionnez un mode d'échelle à utiliser.");
 
             //Componet: selectionView_MouseEnter
             //

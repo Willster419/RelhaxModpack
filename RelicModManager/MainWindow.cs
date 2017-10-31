@@ -1128,7 +1128,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.ExceptionLog("CreateShortCuts()", ex);
+                Utils.ExceptionLog("create the list of shortcuts", ex);
             }
 
             //check for dependencies that actually need to be installed at the end
@@ -1508,6 +1508,8 @@ namespace RelhaxModpack
                     helper = null;
                 }
                 modsConfigsWithData = null;
+                if (Settings.firstLoad)
+                    Settings.firstLoad = false;
                 ToggleUIButtons(true);
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Uninstall)
@@ -1589,7 +1591,6 @@ namespace RelhaxModpack
             foreach (var set in toolTipSetList)
             {
                 this.toolTip.SetToolTip(set, text);
-                set.Text = Translations.getTranslatedString(set.Name);
             }
             //set translation text
             Control[] translationSetList = new Control[] { forceManuel, cleanInstallCB, backupModsCheckBox, cancerFontCB, saveLastInstallCB, saveUserDataCB, darkUICB,
@@ -1878,367 +1879,136 @@ namespace RelhaxModpack
         #region MouseEnter/MouseLeave events
         private void generic_MouseLeave(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("helperText");
+            if (installRelhaxMod.Enabled && Settings.firstLoad)
+                downloadProgress.Text = Translations.getTranslatedString("helperText");
+            else
+                downloadProgress.Text = "";
         }
 
         private void forceManuel_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("forceManuelDescription");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("forceManuelDescription");
         }
 
         private void cleanInstallCB_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("cleanInstallDescription");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("cleanInstallDescription");
         }
 
         private void backupModsCheckBox_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("backupModsDescription");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("backupModsDescription");
         }
 
         private void cancerFontCB_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("comicSansDescription");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("comicSansDescription");
         }
 
         private void largerFontButton_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("enlargeFontDescription");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("enlargeFontDescription");
         }
 
         private void standardImageRB_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("selectGifDesc");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("selectGifDesc");
         }
 
         private void saveLastInstallCB_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("saveLastConfigInstall");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("saveLastConfigInstall");
         }
 
         private void font_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("font_MouseEnter");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("font_MouseEnter");
         }
 
         private void selectionView_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("selectionView_MouseEnter");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("selectionView_MouseEnter");
         }
 
         private void expandNodesDefault_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("expandAllDesc");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("expandAllDesc");
         }
 
         private void language_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("language_MouseEnter");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("language_MouseEnter");
         }
 
         private void disableBordersCB_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("disableBordersDesc");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("disableBordersDesc");
 
         }
         private void clearCacheCB_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("clearCachCBExplanation");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("clearCachCBExplanation");
         }
 
         private void saveUserDataCB_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("saveUserDataDesc");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("saveUserDataDesc");
         }
 
         private void cleanUninstallCB_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("cleanUninstallDescription");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("cleanUninstallDescription");
         }
 
         private void disableColorsCB_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("disableColorsDescription");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("disableColorsDescription");
         }
 
         private void clearLogFilesCB_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("clearLogFilesDescription");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("clearLogFilesDescription");
         }
 
         private void darkUICB_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("darkUIDesc");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("darkUIDesc");
         }
 
         private void notifyIfSameDatabaseCB_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("notifyIfSameDatabaseCBExplanation");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("notifyIfSameDatabaseCBExplanation");
         }
 
         private void ShowInstallCompleteWindowCB_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("ShowInstallCompleteWindowCBExplanation");
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("ShowInstallCompleteWindowCBExplanation");
         }
 
         private void CreateShortcutsCB_MouseEnter(object sender, EventArgs e)
         {
-            if (helper != null)
-                helper.helperText.Text = Translations.getTranslatedString("CreateShortcutsCBExplanation");
-        }
-        #endregion
-
-        #region MouseDown events
-        private void font_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("font_MouseEnter");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void language_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("language_MouseEnter");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void forceManuel_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("forceManuelDescription");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void cleanInstallCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("cleanInstallDescription");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void backupModsCheckBox_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("backupModsDescription");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void cancerFontCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("comicSansDescription");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void largerFontButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("enlargeFontDescription");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void saveLastInstallCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("saveLastConfigInstall");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void saveUserDataCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("saveUserDataDesc");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void expandNodesDefault_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("expandAllDesc");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void cleanUninstallCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("cleanUninstallDescription");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void darkUICB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("darkUIDesc");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void selectionDefault_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("selectionViewMode");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void selectionLegacy_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("selectionViewMode");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void disableBordersCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("disableBordersDesc");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void clearCacheCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("clearCachCBExplanation");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void disableColorsCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("disableColorsCBExplanation");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void clearLogFilesCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("clearLogFilesCBExplanation");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void notifyIfSameDatabaseCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("notifyIfSameDatabaseCBExplanation");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void ShowInstallCompleteWindowCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("ShowInstallCompleteWindowCBExplanation");
-                newHelper.ShowDialog();
-            }
-        }
-
-        private void CreateShortcutsCB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-            using (FirstLoadHelper newHelper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y))
-            {
-                newHelper.helperText.Text = Translations.getTranslatedString("CreateShortcutsCBExplanation");
-                newHelper.ShowDialog();
-            }
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("CreateShortcutsCBExplanation");
         }
         #endregion
 
