@@ -1321,6 +1321,7 @@ namespace RelhaxModpack
             }
             modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
         }
+
         private void ProcessConfigsDefault(TabPage t, Mod m, Category catagory, ModFormCheckBox modCheckBox, Panel mainPanel, bool parentIsMod, List<Config> configs, Panel topPanal, Config parentConfig = null)
         {
             //make config panel
@@ -1634,6 +1635,7 @@ namespace RelhaxModpack
                 }
             }
         }
+        
         //method for finding the location of which to put a control
         private int getYLocation(System.Windows.Forms.Control.ControlCollection ctrl)
         {
@@ -1686,6 +1688,7 @@ namespace RelhaxModpack
             }
             return y;
         }
+        
         //handler for when a mod checkbox is changed
         void modCheckBox_CheckedChanged(object sender, EventArgs e)
         {

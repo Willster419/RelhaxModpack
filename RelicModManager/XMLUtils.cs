@@ -1240,7 +1240,7 @@ namespace RelhaxModpack
                             savedConfigList.Remove(m.packageName);
                             if (!m.enabled)
                             {
-                                MessageBox.Show(string.Format(Translations.getTranslatedString("modDeactivated"), m.name), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MessageBox.Show(string.Format(Translations.getTranslatedString("modDeactivated"), Utils.ReplaceMacro(m.name, "version", m.version)), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
                             else
                             {
@@ -1260,7 +1260,7 @@ namespace RelhaxModpack
                                         mfCB2.IsChecked = true;
                                     }
                                 }
-                                Utils.AppendToLog(string.Format("Checking mod {0}", m.name));
+                                Utils.AppendToLog(string.Format("Checking mod {0}", Utils.ReplaceMacro(m.name, "version", m.version)));
                             }
                         }
                         else
@@ -1429,7 +1429,7 @@ namespace RelhaxModpack
                                         CBTemp.IsChecked = true;
                                     }
                                 }
-                                Utils.AppendToLog(string.Format("Checking mod {0}", c.name));
+                                Utils.AppendToLog(string.Format("Checking mod {0}", Utils.ReplaceMacro(c.name, "version", c.version)));
                             }
                             else
                             {
@@ -1493,7 +1493,7 @@ namespace RelhaxModpack
                         savedConfigList.Remove(c.packageName);
                         if (!c.enabled)
                         {
-                            MessageBox.Show(string.Format(Translations.getTranslatedString("configDeactivated"), c.name, parentName), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(string.Format(Translations.getTranslatedString("configDeactivated"), Utils.ReplaceMacro(c.name, "version", c.version), parentName), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         else
                         {
@@ -1562,7 +1562,7 @@ namespace RelhaxModpack
                                     CBTemp.IsChecked = true;
                                 }
                             }
-                            Utils.AppendToLog(string.Format("Checking mod {0}", c.name));
+                            Utils.AppendToLog(string.Format("Checking mod {0}", Utils.ReplaceMacro(c.name, "version", c.version)));
                         }
                     }
                     else
@@ -1614,16 +1614,19 @@ namespace RelhaxModpack
                     panelRef.BackColor = System.Drawing.Color.BlanchedAlmond;
             }
         }
+        
         //convert string with CR and/or LF from Xml save format
         private static string ConvertFromXmlSaveFormat(string s)
         {
             return s.TrimEnd().Replace("@", "\n").Replace(@"\r", "\r").Replace(@"\t", "\t").Replace(@"\n", "\n").Replace(@"&#92;", @"\");
         }
+        
         //convert string with CR and/or LF to Xml save format
         private static string ConvertToXmlSaveFormat(string s)
         {
             return s.TrimEnd().Replace(@"\", @"&#92;").Replace("\r", @"\r").Replace("\t", @"\t").Replace("\n", @"\n");
         }
+        
         //saves the mod database
         public static void SaveDatabase(string saveLocation, string gameVersion, string onlineFolderVersion, List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies, List<Category> parsedCatagoryList)
         {
