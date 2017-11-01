@@ -2,12 +2,10 @@
 using System.IO;
 using System.Xml;
 
-// namespace Primitive_File_Reader
 namespace RelhaxModpack.XmlBinary
 {
     public class Primitive_File_Reader
     {
-
         public void ReadPrimitives(BinaryReader reader, XmlNode element, XmlDocument xDoc)
         {
             int len = (int)reader.BaseStream.Length;

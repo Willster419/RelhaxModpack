@@ -79,7 +79,6 @@ namespace RelhaxModpack
         public static float originalMainWindowHeight { get; set; }
         public static float originalMainWindowWidth { get; set; }
 
-
         //  interpret the created CiInfo buildTag as an "us-US" or a "de-DE" timeformat and return it as a local time- and dateformat string
         public static string compileTime()//if getting build error, check windows date and time format settings https://puu.sh/xgCqO/e97e2e4a34.png
         {
