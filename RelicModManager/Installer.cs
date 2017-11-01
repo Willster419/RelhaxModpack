@@ -157,7 +157,7 @@ namespace RelhaxModpack
                 Utils.AppendToLog("... skipped");
             ResetArgs();
             //Step 5-9: Extracts Mods
-            Utils.AppendToLog("Installation ExtractGlobalDependencies");
+            Utils.AppendToLog("Installation ExtractDatabaseObjects");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractGlobalDependencies;
             ExtractDatabaseObjects();
             ResetArgs();
