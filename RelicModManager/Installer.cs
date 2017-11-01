@@ -10,8 +10,7 @@ using Ionic.Zip;
 using System.Xml;
 using System.Diagnostics;
 using System.Net;
-using System.Drawing.Text;
-using System.Threading;
+using System.Xml.Linq;
 
 namespace RelhaxModpack
 {
@@ -38,6 +37,7 @@ namespace RelhaxModpack
         public List<Mod> UserMods { get; set; }
         public List<ShortCut> Shortcuts { get; set; }
         private List<Patch> patchList { get; set; }
+        private List<Patch> xmlUnpackList { get; set; }
         public string TanksVersion { get; set; }
         //the folder of the current user appdata
         public string AppDataFolder { get; set; }
@@ -156,7 +156,7 @@ namespace RelhaxModpack
             else
                 Utils.AppendToLog("... skipped");
             ResetArgs();
-            //Step 5-9: Extracts Mods
+            //Step 5-10: Extracts Mods
             Utils.AppendToLog("Installation ExtractDatabaseObjects");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractGlobalDependencies;
             ExtractDatabaseObjects();
@@ -169,7 +169,12 @@ namespace RelhaxModpack
             else
                 Utils.AppendToLog("... skipped");
             ResetArgs();
-            //Step 12: Patch Mods
+            //Step 12: unpack original game xml file
+            Utils.AppendToLog("Installation UnpackXmlFiles");
+            args.InstalProgress = InstallerEventArgs.InstallProgress.UnpackXmlFiles;
+            UnpackXmlFiles();
+            ResetArgs();
+            //Step 13: Patch Mods
             Utils.AppendToLog("Installation PatchMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchMods;
             if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
@@ -177,9 +182,9 @@ namespace RelhaxModpack
             else
                 Utils.AppendToLog("... skipped");
             ResetArgs();
-            //Step 13: InstallFonts
-
-            //Step 14: Extract User Mods
+            //Step 14: InstallFonts
+            // => only Step 17 for both now
+            //Step 15: Extract User Mods
             Utils.AppendToLog("Installation ExtractUserMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractUserMods;
             if (UserMods.Count > 0)
@@ -187,7 +192,7 @@ namespace RelhaxModpack
             else
                 Utils.AppendToLog("... skipped");
             ResetArgs();
-            //Step 15: Patch Mods if User Mods extracted patch files
+            //Step 16: Patch Mods if User Mods extracted patch files
             Utils.AppendToLog("Installation PatchUserMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchUserMods;
             if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
@@ -195,7 +200,7 @@ namespace RelhaxModpack
             else
                 Utils.AppendToLog("... skipped");
             ResetArgs();
-            //Step 16: Install Fonts
+            //Step 17: Install Fonts
             Utils.AppendToLog("Installation InstallUserFonts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallUserFonts;
             if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
@@ -203,7 +208,7 @@ namespace RelhaxModpack
             else
                 Utils.AppendToLog("... skipped");
             ResetArgs();
-            //Step 17: create shortCuts
+            //Step 18: create shortCuts
             Utils.AppendToLog("Installation CreateShortscuts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CreateShortCuts;
             if (Settings.CreateShortcuts)
@@ -211,7 +216,7 @@ namespace RelhaxModpack
             else
                 Utils.AppendToLog("... skipped");
             ResetArgs();
-            //Step 18: CheckDatabase and delete outdated or no more needed files
+            //Step 19: CheckDatabase and delete outdated or no more needed files
             Utils.AppendToLog("Installation CheckDatabase");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CheckDatabase;
             if (!Program.testMode)
@@ -583,7 +588,7 @@ namespace RelhaxModpack
             }
         }
         
-        //Step 5-9: Extract All DatabaseObjects
+        //Step 5-10: Extract All DatabaseObjects
         public void ExtractDatabaseObjects()
         {
             try
@@ -802,7 +807,7 @@ namespace RelhaxModpack
             }
         }
 
-        //Step 10: Restore User Data
+        //Step 11: Restore User Data
         public void RestoreUserData()
         {
             try
@@ -860,7 +865,6 @@ namespace RelhaxModpack
                     {
                         Utils.ExceptionLog("RestoreUserData", "uf", uf);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -869,7 +873,45 @@ namespace RelhaxModpack
             }
         }
 
-        //Step 11/13: Patch All files
+        //Step 12: Unpack Xml Files
+        private void UnpackXmlFiles()
+        {
+            try
+            {
+                DirectoryInfo di = null;
+                FileInfo[] diArr = null;
+                try
+                {
+                    File.SetAttributes(Path.Combine(TanksLocation, "_xmlUnPack"), FileAttributes.Normal);
+                    di = new DirectoryInfo(Path.Combine(TanksLocation, "_xmlUnPack"));
+                    //get every patch file in the folder
+                    diArr = di.GetFiles(@"*.xml", System.IO.SearchOption.TopDirectoryOnly);
+                }
+                catch (Exception ex)
+                {
+                    Utils.ExceptionLog("UnpackXmlFiles", "parse _xmlUnPack folder", ex);
+
+                }
+                //get any other old patches out of memory
+                xmlUnpackList = new List<Patch>();
+                for (int i = 0; i < diArr.Count(); i++)
+                {
+                    //set the attributes to normall
+                    File.SetAttributes(diArr[i].FullName, FileAttributes.Normal);
+                    //add patches to patchList
+                    CreateXmlUnpackList(diArr[i].FullName);
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("UnpackXmlFiles", ex);
+            }
+        }
+
+        //Step 13/16: Patch All files
         public void PatchFiles()
         {
             try
@@ -879,8 +921,8 @@ namespace RelhaxModpack
                 //set the folder properties to read write
                 DirectoryInfo di = null;
                 FileInfo[] diArr = null;
-                bool kontinue = false;
-                while (!kontinue)
+                bool loop = false;
+                while (!loop)
                 {
                     try
                     {
@@ -888,7 +930,7 @@ namespace RelhaxModpack
                         di = new DirectoryInfo(Path.Combine(TanksLocation, "_patch"));
                         //get every patch file in the folder
                         diArr = di.GetFiles(@"*.xml", System.IO.SearchOption.TopDirectoryOnly);
-                        kontinue = true;
+                        loop = true;
                     }
                     catch (UnauthorizedAccessException e)
                     {
@@ -993,7 +1035,7 @@ namespace RelhaxModpack
             }
         }
 
-        //Step 14: Install Fonts
+        //Step 17: Install Fonts
         public void InstallFonts()
         {
             try
@@ -1132,7 +1174,7 @@ namespace RelhaxModpack
             }
         }
 
-        //Step 12: Extract User Mods
+        //Step 15: Extract User Mods
         public void ExtractUserMods()
         {
             try
@@ -1160,7 +1202,7 @@ namespace RelhaxModpack
             Utils.AppendToLog("Finished Relhax Modpack User Mod Extraction");
         }
 
-        //Step 17: Create Shortcuts
+        //Step 18: Create Shortcuts
         private void CreateShortCuts()
         {
             string logFile = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
@@ -1189,7 +1231,7 @@ namespace RelhaxModpack
             }
         }
 
-        //Step 15: Check the Database for outdated or no more needed files
+        //Step 19: Check the Database for outdated or no more needed files
         private void checkForOldZipFiles()
         {
             try
@@ -1207,7 +1249,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.ExceptionLog("checkForOldZipFiles", ex);
+                    Utils.ExceptionLog("checkForOldZipFiles", "parse RelHaxDownloads folder", ex);
                     MessageBox.Show(string.Format(Translations.getTranslatedString("parseDownloadFolderFailed"), "RelHaxDownloads"));
                 }
                 args.ParrentProcessed = 2;
@@ -1278,6 +1320,37 @@ namespace RelhaxModpack
             catch (Exception ex)
             {
                 Utils.ExceptionLog("checkForOldZipFiles", "ex", ex);
+            }
+        }
+
+        // parses a xmlUnpackFile to the process queue
+        private void CreateXmlUnpackList(string xmlFile)
+        {
+            try
+            {
+                if (!File.Exists(xmlFile))
+                    return;
+                // XDocument doc = XDocument.Load(xmlFile);
+                // bool exists = doc.Descendants("files").Any();
+                // if (exists)
+                // {
+                var filesToUnpack = XDocument.Load(xmlFile).Root.Elements().Select(y => y.Elements().ToDictionary(x => x.Name, x => x.Value)).ToArray();
+
+                foreach (var r in filesToUnpack)
+                {
+                    File = 
+                    Utils.AppendToLog(string.Format("Test 1: {0}", r["pkg"]));
+                    Path 
+                    Utils.AppendToLog(string.Format("Test 2: {0}", r["subPath"]));
+                    replace Utils.AppendToLog(string.Format("Test 3: {0}", r["target"]));
+                }
+                    // string[] filesElement = doc.Descendants("files").Select(x => x.Value).ToArray();
+
+                    // }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("CreateXmlUnpackList", "File: " + xmlFile, ex);
             }
         }
 
