@@ -29,8 +29,8 @@ namespace RelhaxModpack
             Application.SetCompatibleTextRenderingDefault(false);
             //loading embeded dlls from the application
             //https://www.codeproject.com/articles/528178/load-dll-from-embedded-resource
-            string resource1 = "RelhaxModpack.DotNetZip.dll";
-            string resource2 = "RelhaxModpack.Newtonsoft.Json.dll";
+            string resource1 = "RelhaxModpack.Resources.DotNetZip.dll";
+            string resource2 = "RelhaxModpack.Resources.Newtonsoft.Json.dll";
             EmbeddedAssembly.Load(resource1, "DotNetZip.dll");
             EmbeddedAssembly.Load(resource2, "Newtonsoft.Json.dll");
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
