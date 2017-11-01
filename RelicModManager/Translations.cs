@@ -207,10 +207,10 @@ namespace RelhaxModpack
 
             //Componet: settingsGroupBox
             //
-            english.Add("settingsGroupBox", "Settings (Right-click for descriptions)");
-            german.Add("settingsGroupBox", "Einstellungen (Rechts-Klick für eine Beschreibung)");
-            polish.Add("settingsGroupBox", "Ustawienia (Opis pod PPM)");
-            french.Add("settingsGroupBox", "Paramètres (clic droit pour les descriptions)");
+            english.Add("settingsGroupBox", "Settings");
+            german.Add("settingsGroupBox", "Einstellungen");
+            polish.Add("settingsGroupBox", "Ustawienia");
+            french.Add("settingsGroupBox", "Paramètres");
 
             //Componet: darkUICB
             //
@@ -678,7 +678,7 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("cleanInstallDescription", "This recommended option will empty your res_mods folder before installing" +
-                    "your new mod selections. Unless you know what you are doing, it is recommended that you keep this on to avoid problems.");
+                    " your new mod selections. Unless you know what you are doing, it is recommended that you keep this on to avoid problems.");
             german.Add("cleanInstallDescription", "Diese empfohlene Option leert den Ordner res_mods vor der Installation" +
                     "Deiner neuen Mod-Auswahl. Bis du genau weißt, was du tust, empfohlen wir, dass du das weiter behältst, um Probleme zu vermeiden.");
             polish.Add("cleanInstallDescription", "To rekomendowane ustawienie usunie zawartość folderu res_mods przed instalacją" +

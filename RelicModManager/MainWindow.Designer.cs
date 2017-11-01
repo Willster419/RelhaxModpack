@@ -821,14 +821,14 @@
             this.VersionTable.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.VersionTable.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
             this.VersionTable.ColumnCount = 2;
-            this.VersionTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.VersionTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.VersionTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.VersionTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.VersionTable.Controls.Add(this.DatabaseVersionLabel, 1, 0);
             this.VersionTable.Controls.Add(this.ApplicationVersionLabel, 0, 0);
             this.VersionTable.Location = new System.Drawing.Point(9, 632);
             this.VersionTable.Name = "VersionTable";
             this.VersionTable.RowCount = 1;
-            this.VersionTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.VersionTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.VersionTable.Size = new System.Drawing.Size(420, 16);
             this.VersionTable.TabIndex = 39;
             // 
