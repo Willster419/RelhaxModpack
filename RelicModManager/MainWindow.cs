@@ -12,7 +12,6 @@ using System.Drawing;
 using System.Xml.XPath;
 using System.Xml.Linq;
 
-
 namespace RelhaxModpack
 {
     public partial class MainWindow : Form
@@ -113,7 +112,6 @@ namespace RelhaxModpack
               ControlStyles.DoubleBuffer, true);
             originalMainWindowHeight = this.Size.Height;
             originalMainWindowWidth = this.Size.Width;
-
         }
 
         //handler for the mod download file progress
@@ -319,6 +317,24 @@ namespace RelhaxModpack
                         string newExeName = Path.Combine(Application.StartupPath, "RelhaxModpack_update.exe");
                         updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
                         updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
+
+                        // check if manager instance is already running and ask user to close it
+                        bool loop = true;
+                        while (loop)
+                        {
+                            result = MessageBox.Show(Translations.getTranslatedString("closeInstanceRunningForUpdate"), Translations.getTranslatedString("critical"), MessageBoxButtons.RetryCancel, MessageBoxIcon.Stop);
+                            if (result == DialogResult.Cancel)
+                            {
+                                Utils.AppendToLog("User canceled update, because he does not want to end the parallel running Relhax instance.");
+                                Application.Exit();
+                            }
+                            else
+                            {
+                                loop = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1;
+                                System.Threading.Thread.Sleep(1000);
+                            }
+                        }
+
                         if (File.Exists(newExeName)) File.Delete(newExeName);
                         updater.DownloadFileAsync(new Uri("http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe"), newExeName);
                         Utils.AppendToLog("New application download started");
