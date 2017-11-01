@@ -824,11 +824,16 @@ namespace RelhaxModpack
 
             //Componet: MainWindow_Load
             //
-            english.Add("anotherInstanceRunning", "CRITICAL: Another Instance of the modpack is already running");
-            german.Add("anotherInstanceRunning", "KRITISCH: Eine weitere Instanz des modpack läuft bereits");
-            polish.Add("anotherInstanceRunning", "BŁĄD KRYTYCZNY: Inna instancja modpack jest uruchomiona");
-            french.Add("anotherInstanceRunning", "CRITIQUE: Une autre instance de modpack est en cours d`éxecution");
-      
+            english.Add("anotherInstanceRunning", "Another Instance of the Relhax Manager is already running");
+            german.Add("anotherInstanceRunning", "Eine weitere Instanz des Relhax Manager  läuft bereits");
+            polish.Add("anotherInstanceRunning", "Inna instancja Relhax Manager jest uruchomiona");
+            french.Add("anotherInstanceRunning", "Une autre instance de Relhax Directeur est en cours d`éxecution");
+
+            english.Add("closeInstanceRunningForUpdate", "Please close ALL running instances of the Relhax Manager before we can go on and update.");
+            german.Add("closeInstanceRunningForUpdate", "Bitte schließe ALLE laufenden Instanzen des Relhax Managers bevor wir fortfahren und aktualisieren können.");
+            polish.Add("closeInstanceRunningForUpdate", "TODO");
+            french.Add("closeInstanceRunningForUpdate", "TODO");
+
 
             //Componet: 
             //
