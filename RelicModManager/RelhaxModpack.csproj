@@ -114,6 +114,9 @@
     <Compile Include="Category.cs" />
     <Compile Include="CiInfo.cs" />
     <Compile Include="AsyncDownloadArgs.cs" />
+    <Compile Include="XmlBinary\Primitive_File.cs" />
+    <Compile Include="XmlBinary\Packed_Section.cs" />
+    <Compile Include="XmlBinary\XmlBinaryHandler.cs" />
     <Compile Include="XMLUtils.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="PatchUtils.cs" />
