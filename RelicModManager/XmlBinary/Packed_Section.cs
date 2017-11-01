@@ -4,7 +4,6 @@ using System.Text;
 using System.IO;
 using System.Xml;
 
-// namespace Packed_Section_Reader
 namespace RelhaxModpack.XmlBinary
 {
     public class Packed_Section_Reader
@@ -75,7 +74,6 @@ namespace RelhaxModpack.XmlBinary
                 c = reader.ReadChar();
             }
             return new string(work, 0, i);
-
         }
 
         public List<string> readDictionary(BinaryReader reader)
@@ -327,7 +325,7 @@ namespace RelhaxModpack.XmlBinary
             }
             else
             {
-                throw new System.ArgumentException("Unknown type of \"" + element.Name + ": " + dataDescriptor.ToString() + " " + readAndToHex(reader, lengthInBytes));
+                Utils.AppendToLog("ERROR: Unknown type of \"" + element.Name + ": " + dataDescriptor.ToString() + " " + readAndToHex(reader, lengthInBytes));
             }
 
             return dataDescriptor.end;
