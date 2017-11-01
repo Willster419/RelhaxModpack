@@ -300,8 +300,7 @@ namespace RelhaxModpack
                     version = applicationVersion.Value;
                 Utils.AppendToLog(string.Format("Local application is {0}, current online is {1}", managerVersion(), version));
 
-                // if (!version.Equals(managerVersion()))
-                if (true)
+                if (!version.Equals(managerVersion()))
                 {
                     Utils.AppendToLog("exe is out of date. displaying user update window");
                     //out of date
