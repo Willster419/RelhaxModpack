@@ -58,7 +58,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>relicbanner_for_ico.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\relicbanner_for_ico.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>RelhaxModpack.Program</StartupObject>
@@ -111,42 +111,42 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Category.cs" />
+    <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="CiInfo.cs" />
-    <Compile Include="AsyncDownloadArgs.cs" />
+    <Compile Include="InstallerComponents\AsyncDownloadArgs.cs" />
     <Compile Include="XmlBinary\Primitive_File.cs" />
     <Compile Include="XmlBinary\Packed_Section.cs" />
     <Compile Include="XmlBinary\XmlBinaryHandler.cs" />
-    <Compile Include="XMLUtils.cs" />
-    <Compile Include="NativeMethods.cs" />
-    <Compile Include="PatchUtils.cs" />
-    <Compile Include="ShortCut.cs" />
-    <Compile Include="DeveloperSelections.cs" />
-    <Compile Include="CompleteModSearchList.cs" />
-    <Compile Include="ComboBoxItem.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="ConfigFormCheckBox.cs">
+    <Compile Include="Utils\XMLUtils.cs" />
+    <Compile Include="Utils\NativeMethods.cs" />
+    <Compile Include="Utils\PatchUtils.cs" />
+    <Compile Include="InstallerComponents\ShortCut.cs" />
+    <Compile Include="UIComponents\DeveloperSelections.cs" />
+    <Compile Include="UIComponents\CompleteModSearchList.cs" />
+    <Compile Include="UIComponents\ComboBoxItem.cs" />
+    <Compile Include="DatabaseComponents\Config.cs" />
+    <Compile Include="UIComponents\ConfigFormCheckBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ConfigFormComboBox.cs">
+    <Compile Include="UIComponents\ConfigFormComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ConfigFormRadioButton.cs">
+    <Compile Include="UIComponents\ConfigFormRadioButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ConfigWPFCheckBox.cs" />
-    <Compile Include="ConfigWPFComboBox.cs" />
-    <Compile Include="ConfigWPFRadioButton.cs" />
-    <Compile Include="CRCCheck.cs">
+    <Compile Include="UIComponents\ConfigWPFCheckBox.cs" />
+    <Compile Include="UIComponents\ConfigWPFComboBox.cs" />
+    <Compile Include="UIComponents\ConfigWPFRadioButton.cs" />
+    <Compile Include="LegacyComponents\CRCCheck.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CRCCheck.Designer.cs">
+    <Compile Include="LegacyComponents\CRCCheck.Designer.cs">
       <DependentUpon>CRCCheck.cs</DependentUpon>
     </Compile>
-    <Compile Include="CRCCHECK2.cs">
+    <Compile Include="LegacyComponents\CRCCHECK2.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CRCCHECK2.Designer.cs">
+    <Compile Include="LegacyComponents\CRCCHECK2.Designer.cs">
       <DependentUpon>CRCCHECK2.cs</DependentUpon>
     </Compile>
     <Compile Include="CRCFileSizeUpdate.cs">
@@ -179,15 +179,15 @@
     <Compile Include="DatabaseListGenerater.Designer.cs">
       <DependentUpon>DatabaseListGenerater.cs</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseLogic.cs" />
-    <Compile Include="DatabaseObject.cs" />
-    <Compile Include="DatabaseTreeNode.cs" />
-    <Compile Include="Dependency.cs" />
-    <Compile Include="EmbeddedAssembly.cs" />
-    <Compile Include="FirstLoadHelper.cs">
+    <Compile Include="DatabaseComponents\DatabaseLogic.cs" />
+    <Compile Include="DatabaseComponents\DatabaseObject.cs" />
+    <Compile Include="UIComponents\DatabaseTreeNode.cs" />
+    <Compile Include="DatabaseComponents\Dependency.cs" />
+    <Compile Include="Utils\EmbeddedAssembly.cs" />
+    <Compile Include="LegacyComponents\FirstLoadHelper.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FirstLoadHelper.Designer.cs">
+    <Compile Include="LegacyComponents\FirstLoadHelper.Designer.cs">
       <DependentUpon>FirstLoadHelper.cs</DependentUpon>
     </Compile>
     <Compile Include="GifPreview.cs">
@@ -196,26 +196,26 @@
     <Compile Include="GifPreview.Designer.cs">
       <DependentUpon>GifPreview.cs</DependentUpon>
     </Compile>
-    <Compile Include="Installer.cs" />
-    <Compile Include="InstallerEventArgs.cs" />
+    <Compile Include="InstallerComponents\Installer.cs" />
+    <Compile Include="InstallerComponents\InstallerEventArgs.cs" />
     <Compile Include="InstallFinished.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="InstallFinished.Designer.cs">
       <DependentUpon>InstallFinished.cs</DependentUpon>
     </Compile>
-    <Compile Include="LegacySelectionList.xaml.cs">
+    <Compile Include="UIComponents\LegacySelectionList.xaml.cs">
       <DependentUpon>LegacySelectionList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LogicalDependnecy.cs" />
+    <Compile Include="DatabaseComponents\LogicalDependnecy.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Mod.cs" />
-    <Compile Include="ModFormCheckBox.cs">
+    <Compile Include="DatabaseComponents\Mod.cs" />
+    <Compile Include="UIComponents\ModFormCheckBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ModSelectionList.cs">
@@ -224,21 +224,21 @@
     <Compile Include="ModSelectionList.Designer.cs">
       <DependentUpon>ModSelectionList.cs</DependentUpon>
     </Compile>
-    <Compile Include="ModWPFCheckBox.cs" />
+    <Compile Include="UIComponents\ModWPFCheckBox.cs" />
     <Compile Include="OldFilesToDelete.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="OldFilesToDelete.Designer.cs">
       <DependentUpon>OldFilesToDelete.cs</DependentUpon>
     </Compile>
-    <Compile Include="Patch.cs" />
+    <Compile Include="InstallerComponents\Patch.cs" />
     <Compile Include="PatchTester.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PatchTester.Designer.cs">
       <DependentUpon>PatchTester.cs</DependentUpon>
     </Compile>
-    <Compile Include="Picture.cs" />
+    <Compile Include="DatabaseComponents\Picture.cs" />
     <Compile Include="PleaseWait.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -258,7 +258,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SelectionRadioButton.cs">
+    <Compile Include="UIComponents\SelectionRadioButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SelectionViewer.cs">
@@ -268,10 +268,10 @@
       <DependentUpon>SelectionViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="StringSave.cs" />
+    <Compile Include="InstallerComponents\StringSave.cs" />
     <Compile Include="Translations.cs" />
-    <Compile Include="UIComponent.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="UIComponents\UIComponent.cs" />
+    <Compile Include="Utils\Utils.cs" />
     <Compile Include="VersionInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -284,10 +284,10 @@
     <Compile Include="ViewUpdates.Designer.cs">
       <DependentUpon>ViewUpdates.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="CRCCheck.resx">
+    <EmbeddedResource Include="LegacyComponents\CRCCheck.resx">
       <DependentUpon>CRCCheck.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CRCCHECK2.resx">
+    <EmbeddedResource Include="LegacyComponents\CRCCHECK2.resx">
       <DependentUpon>CRCCHECK2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CRCFileSizeUpdate.resx">
@@ -305,7 +305,7 @@
     <EmbeddedResource Include="DatabaseListGenerater.resx">
       <DependentUpon>DatabaseListGenerater.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FirstLoadHelper.resx">
+    <EmbeddedResource Include="LegacyComponents\FirstLoadHelper.resx">
       <DependentUpon>FirstLoadHelper.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GifPreview.resx">
@@ -382,14 +382,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DotNetZip.dll" />
-    <Content Include="loading.gif" />
-    <Content Include="loading_3rdguards.gif" />
-    <EmbeddedResource Include="Newtonsoft.Json.dll" />
-    <Content Include="relicbanner_for_ico.ico" />
+    <EmbeddedResource Include="Resources\DotNetZip.dll" />
+    <Content Include="Resources\loading.gif" />
+    <Content Include="Resources\loading_3rdguards.gif" />
+    <EmbeddedResource Include="Resources\Newtonsoft.Json.dll" />
+    <Content Include="Resources\relicbanner_for_ico.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="LegacySelectionList.xaml">
+    <Page Include="UIComponents\LegacySelectionList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -397,6 +397,7 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF "%25COMPUTERNAME%25"=="IMOSDPC04" copy /Y $(TargetPath) "D:\RelHax Manager\"</PostBuildEvent>
