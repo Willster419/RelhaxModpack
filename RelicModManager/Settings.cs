@@ -43,7 +43,11 @@ namespace RelhaxModpack
         public static string settingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxSettings.xml");
         public static string managerInfoDatFile = Path.Combine(Application.StartupPath, "RelHaxTemp", "managerInfo.dat");
         public static string modInfoDatFile = Path.Combine(Application.StartupPath, "RelHaxTemp", "modInfo.dat");
+        //informations for macroList
+        public static string TanksLocation = "";
+        public static string TanksVersion = "";
         public static string tanksOnlineFolderVersion = "";
+        //
         public static string configFileVersion = "2.0";     // for later imports of this files, we need a better identification
         public enum LoadingGifs { standard = 0, thirdGuards = 1 };
         public static LoadingGifs gif;
