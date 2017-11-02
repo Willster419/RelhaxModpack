@@ -1229,28 +1229,28 @@ namespace RelhaxModpack
             {
                 if (d.downloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress, "onlineFolder", Settings.tanksOnlineFolderVersion) + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress) + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
                 }
             }
             foreach (Dependency d in dependenciesToInstall)
             {
                 if (d.downloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress, "onlineFolder", Settings.tanksOnlineFolderVersion) + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress) + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
                 }
             }
             foreach (Dependency d in appendedDependenciesToInstall)
             {
                 if (d.downloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress, "onlineFolder", Settings.tanksOnlineFolderVersion) + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress) + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
                 }
             }
             foreach (LogicalDependnecy ld in logicalDependenciesToInstall)
             {
                 if (ld.downloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(ld.startAddress, "onlineFolder", Settings.tanksOnlineFolderVersion) + ld.dependencyZipFile + ld.endAddress), Path.Combine(localFilesDir, ld.dependencyZipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(ld.startAddress) + ld.dependencyZipFile + ld.endAddress), Path.Combine(localFilesDir, ld.dependencyZipFile)));
                 }
             }
             foreach (DatabaseObject dbo in modsConfigsToInstall)
@@ -1258,7 +1258,7 @@ namespace RelhaxModpack
                 if (dbo.downloadFlag)
                 {
                     //crc's don't match, need to re-download
-                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(dbo.startAddress, "onlineFolder", Settings.tanksOnlineFolderVersion) + dbo.zipFile + dbo.endAddress), Path.Combine(localFilesDir, dbo.zipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(dbo.startAddress) + dbo.zipFile + dbo.endAddress), Path.Combine(localFilesDir, dbo.zipFile)));
                 }
             }
 
