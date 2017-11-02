@@ -37,7 +37,7 @@ namespace RelhaxModpack
         public List<Mod> UserMods { get; set; }
         public List<ShortCut> Shortcuts { get; set; }
         private List<Patch> patchList { get; set; }
-        private List<Patch> xmlUnpackList { get; set; }
+        private List<XmlUnpack> xmlUnpackList { get; set; }
         public string TanksVersion { get; set; }
         //the folder of the current user appdata
         public string AppDataFolder { get; set; }
@@ -172,7 +172,10 @@ namespace RelhaxModpack
             //Step 12: unpack original game xml file
             Utils.AppendToLog("Installation UnpackXmlFiles");
             args.InstalProgress = InstallerEventArgs.InstallProgress.UnpackXmlFiles;
-            UnpackXmlFiles();
+            if (Directory.Exists(Path.Combine(TanksLocation, "_xmlUnPack")))
+                UnpackXmlFiles();
+            else
+                Utils.AppendToLog("... skipped");
             ResetArgs();
             //Step 13: Patch Mods
             Utils.AppendToLog("Installation PatchMods");
@@ -223,6 +226,24 @@ namespace RelhaxModpack
                 checkForOldZipFiles();
             else
                 Utils.AppendToLog("... skipped");
+            ResetArgs();
+            //Step 20: Cleanup
+            Utils.AppendToLog("Intallation CleanUp");
+            args.InstalProgress = InstallerEventArgs.InstallProgress.CleanUp;
+            try
+            {
+            if (Directory.Exists(Path.Combine(TanksLocation, "_readme")))
+                Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
+            if (Directory.Exists(Path.Combine(TanksLocation, "_xmlUnPack")))
+                Directory.Delete(Path.Combine(TanksLocation, "_xmlUnPack"), true);
+            if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
+                Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("ActuallyStartInstallation", "Cleanup _folders", ex);
+            }
+            OnInstallProgressChanged();
         }
 
         public void WorkerReportProgress(object sender, ProgressChangedEventArgs e)
@@ -232,9 +253,6 @@ namespace RelhaxModpack
 
         public void WorkerReportComplete(object sender, AsyncCompletedEventArgs e)
         {
-            Utils.AppendToLog("Installation CleanUp");
-            args.InstalProgress = InstallerEventArgs.InstallProgress.CleanUp;
-            OnInstallProgressChanged();
             Utils.AppendToLog("Installation Done");
             args.InstalProgress = InstallerEventArgs.InstallProgress.Done;
             OnInstallProgressChanged();
@@ -638,9 +656,9 @@ namespace RelhaxModpack
                 //extract global dependencies
                 foreach (Dependency d in GlobalDependencies)
                 {
-                    Utils.AppendToLog("Extracting Global Dependency " + d.dependencyZipFile);
                     if (!d.dependencyZipFile.Equals(""))
                     {
+                        Utils.AppendToLog("Extracting Global Dependency " + d.dependencyZipFile);
                         try
                         {
                             this.Unzip(Path.Combine(downloadedFilesDir, d.dependencyZipFile), TanksLocation);
@@ -663,9 +681,9 @@ namespace RelhaxModpack
                 InstallWorker.ReportProgress(0);
                 foreach (Dependency d in Dependencies)
                 {
-                    Utils.AppendToLog("Extracting Dependency " + d.dependencyZipFile);
                     if (!d.dependencyZipFile.Equals(""))
                     {
+                        Utils.AppendToLog("Extracting Dependency " + d.dependencyZipFile);
                         try
                         {
                             this.Unzip(Path.Combine(downloadedFilesDir, d.dependencyZipFile), TanksLocation);
@@ -688,9 +706,9 @@ namespace RelhaxModpack
                 InstallWorker.ReportProgress(0);
                 foreach (LogicalDependnecy d in LogicalDependencies)
                 {
-                    Utils.AppendToLog("Extracting Logical Dependency " + d.dependencyZipFile);
                     if (!d.dependencyZipFile.Equals(""))
                     {
+                        Utils.AppendToLog("Extracting Logical Dependency " + d.dependencyZipFile);
                         try
                         {
                             this.Unzip(Path.Combine(downloadedFilesDir, d.dependencyZipFile), TanksLocation);
@@ -715,9 +733,9 @@ namespace RelhaxModpack
                 InstallWorker.ReportProgress(0);
                 foreach (DatabaseObject dbo in ModsConfigsToInstall)
                 {
-                    Utils.AppendToLog("Extracting Mod/Config " + dbo.zipFile);
                     if (!dbo.zipFile.Equals(""))
                     {
+                        Utils.AppendToLog("Extracting Mod/Config " + dbo.zipFile);
                         try
                         {
                             this.Unzip(Path.Combine(downloadedFilesDir, dbo.zipFile), TanksLocation);
@@ -740,9 +758,9 @@ namespace RelhaxModpack
                 InstallWorker.ReportProgress(0);
                 foreach (Dependency d in AppendedDependencies)
                 {
-                    Utils.AppendToLog("Extracting Appended Dependency " + d.dependencyZipFile);
                     if (!d.dependencyZipFile.Equals(""))
                     {
+                        Utils.AppendToLog("Extracting Appended Dependency " + d.dependencyZipFile);
                         try
                         {
                             this.Unzip(Path.Combine(downloadedFilesDir, d.dependencyZipFile), TanksLocation);
@@ -892,18 +910,65 @@ namespace RelhaxModpack
                     Utils.ExceptionLog("UnpackXmlFiles", "parse _xmlUnPack folder", ex);
 
                 }
-                //get any other old patches out of memory
-                xmlUnpackList = new List<Patch>();
+
+                xmlUnpackList = new List<XmlUnpack>();
                 for (int i = 0; i < diArr.Count(); i++)
                 {
-                    //set the attributes to normall
+                    //set the attributes to normal
                     File.SetAttributes(diArr[i].FullName, FileAttributes.Normal);
-                    //add patches to patchList
+                    //add jobs to xmlUnpackList
                     CreateXmlUnpackList(diArr[i].FullName);
                 }
 
-
-
+                foreach (XmlUnpack r in xmlUnpackList)
+                {
+                    try
+                    {
+                        if (!Directory.Exists(r.extractDirectory)) Directory.CreateDirectory(r.extractDirectory);
+                        if (r.pkg.Equals(""))
+                        {
+                            // if value of pkg is empty, it is not contained in an archive
+                            File.Copy(Path.Combine(r.directoryInArchive, r.fileName), Path.Combine(r.extractDirectory, r.newFileName.Equals("") ? r.fileName : r.newFileName), true);
+                        }
+                        else
+                        {
+                            //get file from the zip archive
+                            using (ZipFile zip = new ZipFile(r.pkg))
+                            {
+                                for (int i = 0; i < zip.Entries.Count; i++)
+                                {
+                                    if (Regex.IsMatch(zip[i].FileName, Path.Combine(r.directoryInArchive, r.fileName).Replace(@"\", @"/")))
+                                    {
+                                        try
+                                        {
+                                            zip[i].FileName = r.newFileName.Equals("") ? r.fileName : r.newFileName;
+                                            zip.ExtractSelectedEntries(zip[i].FileName, null, r.extractDirectory, ExtractExistingFileAction.OverwriteSilently);                    
+                                            break;
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Utils.ExceptionLog("Unzip", ex);
+                                        }
+                                    }
+                                }
+                                zip.Dispose(); 
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.ExceptionLog(string.Format("UnpackXmlFiles", "extract file from archive\ndirectoryInArchive: {0}\nfileName: {1}\nextractDirectory: {2}\nnewFileName: {3}", r.directoryInArchive, r.fileName, r.extractDirectory, r.newFileName), ex);
+                    }
+                    try
+                    {
+                        XmlBinary.XmlBinaryHandler xmlUnPack = new XmlBinary.XmlBinaryHandler();
+                        xmlUnPack.unPack(Path.Combine(r.extractDirectory, r.newFileName.Equals("") ? r.fileName : r.newFileName));
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.ExceptionLog(string.Format("UnpackXmlFiles", "xmlUnPack\nfileName: {0}", Path.Combine(r.extractDirectory, r.newFileName.Equals("") ? r.fileName : r.newFileName)), ex);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1330,23 +1395,37 @@ namespace RelhaxModpack
             {
                 if (!File.Exists(xmlFile))
                     return;
-                // XDocument doc = XDocument.Load(xmlFile);
-                // bool exists = doc.Descendants("files").Any();
-                // if (exists)
-                // {
                 var filesToUnpack = XDocument.Load(xmlFile).Root.Elements().Select(y => y.Elements().ToDictionary(x => x.Name, x => x.Value)).ToArray();
-
                 foreach (var r in filesToUnpack)
                 {
-                    File = 
-                    Utils.AppendToLog(string.Format("Test 1: {0}", r["pkg"]));
-                    Path 
-                    Utils.AppendToLog(string.Format("Test 2: {0}", r["subPath"]));
-                    replace Utils.AppendToLog(string.Format("Test 3: {0}", r["target"]));
+                    if (r.ContainsKey("pkg") && r.ContainsKey("directoryInArchive") && r.ContainsKey("fileName") && r.ContainsKey("extractDirectory") && r.ContainsKey("newFileName")) 
+                    {
+                        XmlUnpack xup = new XmlUnpack();
+                        xup.pkg = @r["pkg"];
+                        xup.directoryInArchive = @r["directoryInArchive"];
+                        xup.fileName = @r["fileName"];
+                        xup.extractDirectory = @r["extractDirectory"];
+                        xup.newFileName = @r["newFileName"];
+                        xup.actualPatchName = Path.GetFileName(xmlFile);
+                        if (r["directoryInArchive"].Equals("") || r["extractDirectory"].Equals("") || r["fileName"].Equals(""))
+                        {
+                            Utils.AppendToLog(string.Format("ERROR. XmlUnPackFile '{0}' has an empty but needed node ('fileName', 'directoryInArchive' and 'extractDirectory' MUST be set\n----- dump of object ------\n{1}\n----- end of dump ------", xup.actualPatchName.ToString(), xup.ToString()));
+                        }
+                        else
+                        {
+                            xup.pkg = Utils.ReplaceMacro(@xup.pkg);
+                            xup.directoryInArchive = Utils.ReplaceMacro(@xup.directoryInArchive);
+                            xup.fileName = Utils.ReplaceMacro(@xup.fileName);
+                            xup.extractDirectory = Utils.ReplaceMacro(@xup.extractDirectory);
+                            xup.newFileName = Utils.ReplaceMacro(@xup.newFileName);
+                            xmlUnpackList.Add(xup);
+                        }
+                    }
+                    else
+                    {
+                        Utils.DumbObjectToLog(string.Format("ERROR. XmlUnPackFile '{0}' missing node. Needed: pkg, directoryInArchive, fileName, extractDirectory, newFileName", Path.GetFileName(xmlFile)), "", r);
+                    }
                 }
-                    // string[] filesElement = doc.Descendants("files").Select(x => x.Value).ToArray();
-
-                    // }
             }
             catch (Exception ex)
             {
