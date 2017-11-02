@@ -1031,11 +1031,31 @@ namespace RelhaxModpack
             return text;
         }
 
-        public static string ReplaceMacro(string text)
+        public static string ReplaceMacro(object obj)
         {
             Hashtable macroList = new Hashtable();
+            string text = "";
             try
             {
+                if (obj is string)
+                {
+                    text = obj.ToString();
+                }
+                else if (obj is Config)
+                {
+                    text = ((Config)obj).name;
+                    macroList.Add("version", ((Config)obj).version);
+                }
+                else if (obj is Mod)
+                {
+                    text = ((Mod)obj).name;
+                    macroList.Add("version", ((Mod)obj).version);
+                }
+                else
+                {
+                    Utils.AppendToLog("Error: get ReplaceMacro() call with unknown object type");
+                    return "unknown object type at call ReplaceMacro()";
+                }
                 macroList.Add("app", Settings.TanksLocation);
                 macroList.Add("onlineFolder", Settings.tanksOnlineFolderVersion);
                 macroList.Add("versiondir", Settings.TanksVersion);
