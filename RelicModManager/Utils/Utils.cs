@@ -11,6 +11,8 @@ using System.Globalization;
 using Ionic.Zip;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using Newtonsoft.Json.Linq;
+using System.Collections;
 
 namespace RelhaxModpack
 {
@@ -108,7 +110,7 @@ namespace RelhaxModpack
         /// </summary>
         /// <param objectName="option">only a Name of the object as an information at the logfile</param>
         /// <param n=object>the object itself that should be printed</param>
-        public static void DumpObjectToLog(string objectName, object n)
+        public static void Depricated_DumpObjectToLog(string objectName, object n)
         {
             lock (_locker)              // avoid that 2 or more threads calling the Log function and writing lines in a mess
             {
@@ -126,6 +128,17 @@ namespace RelhaxModpack
                 Utils.AppendToLog("----- end of dump ------");
             }
         }
+
+        public static void DumbObjectToLog(string objectName, object n)
+        {
+            DumbObjectToLog("", objectName, n);
+        }
+
+        public static void DumbObjectToLog(string text, string objectName, object n)
+        {
+            Utils.AppendToLog(String.Format("{0}{1}----- dump of object {2}{3}------\n{4}\n----- end of dump ------", text, text.Equals("") ? "" : "\n", objectName, objectName.Equals("") ? "" : " ", JObject.FromObject(n).ToString()));
+        }
+        
         /// <summary>
         /// default logging function of exception informations, possible to expand the cxception Group with his own needed informations of the specific exception
         /// </summary>
@@ -1014,6 +1027,29 @@ namespace RelhaxModpack
                 {
                     text = text.Replace(text.Substring(index, macro.Length + 2), macrotext);
                 }
+            }
+            return text;
+        }
+
+        public static string ReplaceMacro(string text)
+        {
+            Hashtable macroList = new Hashtable();
+            try
+            {
+                macroList.Add("app", Settings.TanksLocation);
+                macroList.Add("onlineFolder", Settings.tanksOnlineFolderVersion);
+                macroList.Add("versiondir", Settings.TanksVersion);
+                macroList.Add("appData", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+                macroList.Add("relhax", Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+                foreach (DictionaryEntry macro in macroList)
+                {
+                    text = System.Text.RegularExpressions.Regex.Replace(text, @"{" + @macro.Key.ToString() + @"}", @macro.Value.ToString(), System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("ReplaceMacro", string.Format("Result string: {0}", text), ex);
+                Utils.DumbObjectToLog("macroList", macroList);
             }
             return text;
         }
