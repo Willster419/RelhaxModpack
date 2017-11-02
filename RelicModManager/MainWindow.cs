@@ -165,6 +165,7 @@ namespace RelhaxModpack
                 Translations.getTranslatedString("Downloading"), currentModDownloadingShort, Math.Round(MBytesIn, 1), Translations.getTranslatedString("of"), Math.Round(totalBytes / MBDivisor, 1), totalSpeedLabel, actualTimeMins, actualTimeSecs);
             downloadProgress.Text = downloadStatus;
         }
+
         //handler for the mod download file complete event
         void downloader_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
@@ -591,7 +592,7 @@ namespace RelhaxModpack
             return "all good";
         }
 
-        private void downloadResources(string resourcesFile, PleaseWait wait)
+        private void Depricated_downloadResources(string resourcesFile, PleaseWait wait)
         {
             string localDll = Path.Combine(Application.StartupPath, resourcesFile);
             string urlPath = string.Format("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/{0}", resourcesFile);
@@ -789,6 +790,7 @@ namespace RelhaxModpack
             }
             //parse all strings for installation
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
+            Settings.TanksLocation = tanksLocation;
             Utils.AppendToLog("tanksLocation parsed as " + tanksLocation);
             Utils.AppendToLog("customUserMods parsed as " + Path.Combine(Application.StartupPath, "RelHaxUserMods"));
             // logfile moved from WoT root folder to logs subfolder after manager version 26.4.2
@@ -814,6 +816,7 @@ namespace RelhaxModpack
             }
             tanksVersion = this.getFolderVersion();
             tanksVersionForInstaller = tanksVersion;
+            Settings.TanksVersion = tanksVersion;
             Utils.AppendToLog("tanksVersion parsed as " + tanksVersion);
             //determine if the tanks client version is supported
             if (!Program.testMode && !isClientVersionSupported(tanksVersion))
