@@ -114,6 +114,7 @@
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="CiInfo.cs" />
     <Compile Include="InstallerComponents\AsyncDownloadArgs.cs" />
+    <Compile Include="InstallerComponents\XmlUnpack.cs" />
     <Compile Include="XmlBinary\Primitive_File.cs" />
     <Compile Include="XmlBinary\Packed_Section.cs" />
     <Compile Include="XmlBinary\XmlBinaryHandler.cs" />
