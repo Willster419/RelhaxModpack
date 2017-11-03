@@ -360,7 +360,6 @@ namespace RelhaxModpack
                     args.currentFile = line;
                     InstallWorker.ReportProgress(args.ChildProcessed++);
                 }
-                // Utils.appendToLog(line);
                 
                 if (line.EndsWith("/") | line.EndsWith(@"\"))
                 {
@@ -443,17 +442,18 @@ namespace RelhaxModpack
                 try
                 {
                     string logFile = Path.Combine(TanksLocation, "logs", "uninstallRelhaxFiles.log");
-                    TextWriter tw = null;
-                    if (args.InstalProgress == InstallerEventArgs.InstallProgress.Uninstall)
+                    // backup the last uninstall logfile
+                    if (File.Exists(logFile))
                     {
-                        // back the last uninstall logfile
-                        if (File.Exists(logFile))
-                        {
-                            if (File.Exists(logFile + ".bak"))
-                                File.Delete(logFile + ".bak");
-                            File.Move(logFile, logFile + ".bak");
-                        }
-                        tw = new StreamWriter(logFile);
+                        if (File.Exists(logFile + ".bak"))
+                            File.Delete(logFile + ".bak");
+                        File.Move(logFile, logFile + ".bak");
+                    }
+                    TextWriter tw = new StreamWriter(logFile);
+                    if (tw != null)
+                    {
+                        tw.WriteLine(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss.fff}  */", DateTime.Now));
+                        tw.WriteLine(@"/*  files and folders deleted from logfile  */");
                     }
                     try
                     {
@@ -461,28 +461,31 @@ namespace RelhaxModpack
                     }
                     catch (Exception ex)
                     {
-                        Utils.ExceptionLog("UninstallMods", "DeletePass1", ex);
+                        Utils.ExceptionLog("UninstallMods", "delete from logfile", ex);
                     }
                     lines = NumFilesToProcess(Path.Combine(TanksLocation, "res_mods"));
                     lines.AddRange(NumFilesToProcess(Path.Combine(TanksLocation, "mods")));
                     // reverse the parsed list, to delete files and folders from the lowest to the highest folder level
                     lines.Reverse();
-                    if (tw != null)
-                        tw.WriteLine("/*  files and folders deleted after parsing  */");
                     InstallWorker.ReportProgress(0);
-                    args.ChildProcessed = 0;
-                    args.ChildTotalToProcess = lines.Count();
                     Utils.AppendToLog(string.Format("Elements to delete (from parsing): {0}", lines.Count()));
-                    try
+                    if (lines.Count()> 0)
                     {
-                        DeleteFilesByList(lines, true, tw);
-                        //don't forget to delete the readme files
-                        if (Directory.Exists(Path.Combine(TanksLocation, "_readme")))
-                            Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
-                    }
-                    catch (Exception ex)
-                    {
-                        Utils.ExceptionLog("UninstallMods", "DeletePass2", ex);
+                        args.ChildProcessed = 0;
+                        args.ChildTotalToProcess = lines.Count();
+                        try
+                        {
+                            if (tw != null)
+                                tw.WriteLine("/*  files and folders deleted after parsing  */");
+                            DeleteFilesByList(lines, true, tw);
+                            //don't forget to delete the readme files
+                            if (Directory.Exists(Path.Combine(TanksLocation, "_readme")))
+                               Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
+                        }
+                        catch (Exception ex)
+                        {
+                            Utils.ExceptionLog("UninstallMods", "delete from parsing", ex);
+                        }
                     }
                     if (tw != null)
                         tw.Close();
@@ -493,12 +496,14 @@ namespace RelhaxModpack
                 }
                 try       // if the delete will raise an exception, it will be ignored
                 {
+                    if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak")))
+                        File.Delete(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
                     if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log")))
-                        File.Delete(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"));
+                        File.Move(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
                 }
                 catch (Exception ex)
                 {
-                    Utils.ExceptionLog("UninstallMods", "Delete", ex);
+                    Utils.ExceptionLog("UninstallMods", "Delete installedRelhaxFiles.log.bak", ex);
                 }
             }
             catch (Exception ex)
@@ -614,6 +619,7 @@ namespace RelhaxModpack
                 //just a double-check to delete all patches
                 if (Directory.Exists(Path.Combine(TanksLocation, "_patch"))) Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
                 if (Directory.Exists(Path.Combine(TanksLocation, "_fonts"))) Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true);
+                if (Directory.Exists(Path.Combine(TanksLocation, "_xmlUnPack"))) Directory.Delete(Path.Combine(TanksLocation, "_xmlUnPack"), true);
                 if (!Directory.Exists(Path.Combine(TanksLocation, "res_mods"))) Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods"));
                 if (!Directory.Exists(Path.Combine(TanksLocation, "mods"))) Directory.CreateDirectory(Path.Combine(TanksLocation, "mods"));
                 if (!Directory.Exists(Path.Combine(TanksLocation, "logs"))) Directory.CreateDirectory(Path.Combine(TanksLocation, "logs"));
@@ -621,12 +627,16 @@ namespace RelhaxModpack
                 //start the entry for the database version in installedRelhaxFiles.log
                 try
                 {
-                    File.WriteAllText(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), "Database Version: " + DatabaseVersion + "\n");
+                    if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak")) && File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log")))
+                    {
+                        File.Delete(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
+                        File.Move(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Utils.ExceptionLog("ExtractDatabaseObjects", "Database Version", ex);
-                };
+                    Utils.ExceptionLog("ExtractDatabaseObjects", "move installedRelhaxFiles.log", ex);
+                }
 
                 //extract RelHax Mods
                 Utils.AppendToLog("Starting Relhax Modpack Extraction");
@@ -839,7 +849,6 @@ namespace RelhaxModpack
                         args.ChildTotalToProcess = dbo.userFiles.Count;
                         foreach (string s in dbo.userFiles)
                         {
-                            
                             try {
                                 string correctedUserFiles = s.TrimStart('\x005c').Replace(@"\\", @"\");
                                 string targetDir = Path.GetDirectoryName(correctedUserFiles);
@@ -919,7 +928,7 @@ namespace RelhaxModpack
                     //add jobs to xmlUnpackList
                     CreateXmlUnpackList(diArr[i].FullName);
                 }
-
+                if (xmlUnpackList.Count > 0) Utils.AppendToInstallLog(@"/*  unpacked XML files  */");
                 foreach (XmlUnpack r in xmlUnpackList)
                 {
                     string fn = r.newFileName.Equals("") ? r.fileName : r.newFileName;
@@ -932,6 +941,7 @@ namespace RelhaxModpack
                             {
                                 // if value of pkg is empty, it is not contained in an archive
                                 File.Copy(Path.Combine(r.directoryInArchive, r.fileName), Path.Combine(r.extractDirectory, fn), false);     // no overwrite of an exsisting file !!
+                                Utils.AppendToInstallLog(Path.Combine(r.extractDirectory, fn));
                             }
                             catch (Exception ex)
                             {
@@ -1278,22 +1288,18 @@ namespace RelhaxModpack
         //Step 18: Create Shortcuts
         private void CreateShortCuts()
         {
-            string logFile = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
             try
             {
-                using (StreamWriter sw = File.AppendText(logFile))
+                Utils.AppendToInstallLog(@"/*  Desktop shortcuts  */");
+                foreach (ShortCut sc in Shortcuts)
                 {
-                    sw.WriteLine(@"/*  Desktop shortcuts  */");
-                    foreach (ShortCut sc in Shortcuts)
+                    if (sc.enabled)
                     {
-                        if (sc.enabled)
+                        string fileTarget = Path.Combine(TanksLocation, sc.path);
+                        Utils.AppendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
+                        if (File.Exists(fileTarget))
                         {
-                            string fileTarget = Path.Combine(TanksLocation, sc.path);
-                            Utils.AppendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
-                            if (File.Exists(fileTarget))
-                            {
-                                Utils.CreateShortcut(fileTarget, sc.name, true, true, sw);
-                            }
+                            Utils.CreateShortcut(fileTarget, sc.name, true, true);
                         }
                     }
                 }
@@ -1675,96 +1681,67 @@ namespace RelhaxModpack
         private void Unzip(string zipFile, string extractFolder)
         {
             string thisVersion = TanksVersion;
-            FileStream fs = null;
+            Utils.AppendToInstallLog(string.Format(@"/*  {0}  */", Path.GetFileNameWithoutExtension(zipFile)));
             try
             {
-                //create a filestream to append installed files log data
-                try
+                using (ZipFile zip = new ZipFile(zipFile))
                 {
-                     fs = new FileStream(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), FileMode.Append, FileAccess.Write);
-                }
-                catch (Exception ex)
-                {
-                    Utils.ExceptionLog("Unzip", "create FileStream", ex);
-                }
-                // create a comment with the name of the extracted and installed package, to better trace back the installation source
-                string commentLine = "/*  " + Path.GetFileNameWithoutExtension(zipFile) + "  */\n";
-                try
-                {
-                    // write comment to logfile
-                    fs.Write(Encoding.UTF8.GetBytes(commentLine), 0, Encoding.UTF8.GetByteCount(commentLine));
-                }
-                catch (Exception ex)
-                {
-                    Utils.ExceptionLog("Unzip", "Write commentLine", ex);
-                }
-
-                try
-                {
-                    using (ZipFile zip = new ZipFile(zipFile))
+                    //hacks to get it to lag less possibly
+                    //zip.BufferSize = 65536*16; //1MB buffer
+                    //zip.CodecBufferSize = 65536*16; //1MB buffer
+                    //zip.ParallelDeflateThreshold = -1; //single threaded
+                    //for this zip file instance, for each entry in the zip file,
+                    //change the "versiondir" path to this version of tanks
+                    args.ChildTotalToProcess = zip.Entries.Count;
+                    for (int i = 0; i < zip.Entries.Count; i++)
                     {
-                        //hacks to get it to lag less possibly
-                        //zip.BufferSize = 65536*16; //1MB buffer
-                        //zip.CodecBufferSize = 65536*16; //1MB buffer
-                        //zip.ParallelDeflateThreshold = -1; //single threaded
-                        //for this zip file instance, for each entry in the zip file,
-                        //change the "versiondir" path to this version of tanks
-                        args.ChildTotalToProcess = zip.Entries.Count;
-                        for (int i = 0; i < zip.Entries.Count; i++)
+                        if (Regex.IsMatch(zip[i].FileName, "versiondir"))
                         {
-                            if (Regex.IsMatch(zip[i].FileName, "versiondir"))
+                            try
                             {
-                                try
-                                {
-                                    zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", thisVersion);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Utils.ExceptionLog("Unzip", ex);
-                                }
+                                zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", thisVersion);
                             }
-                            if (Regex.IsMatch(zip[i].FileName, "configs/xvm/xvmConfigFolderName") && !xvmConfigDir.Equals(""))
+                            catch (Exception ex)
                             {
-                                zip[i].FileName = Regex.Replace(zip[i].FileName, "configs/xvm/xvmConfigFolderName", "configs/xvm/" + xvmConfigDir);
+                                Utils.ExceptionLog("Unzip", ex);
                             }
-                            if(Regex.IsMatch(zip[i].FileName, @"_patch.*\.xml"))
-                            {
-                                string patchName = zip[i].FileName;
-                                zip[i].FileName = Regex.Replace(zip[i].FileName, @"_patch.*\.xml", "_patch/" + patchNum.ToString("D3") + ".xml");
-                                patchNum++;
-                                patchName = patchName.Substring(7);
-                                originalPatchNames.Add(patchName);
-                            }
-                            //put the entries on disk
-                            fs.Write(Encoding.UTF8.GetBytes(Path.Combine(extractFolder, zip[i].FileName) + "\n"), 0, Encoding.UTF8.GetByteCount(Path.Combine(extractFolder, zip[i].FileName) + "\n"));
                         }
-                        zip.ExtractProgress += Zip_ExtractProgress;
-                        zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
+                        if (Regex.IsMatch(zip[i].FileName, "configs/xvm/xvmConfigFolderName") && !xvmConfigDir.Equals(""))
+                        {
+                            zip[i].FileName = Regex.Replace(zip[i].FileName, "configs/xvm/xvmConfigFolderName", "configs/xvm/" + xvmConfigDir);
+                        }
+                        if(Regex.IsMatch(zip[i].FileName, @"_patch.*\.xml"))
+                        {
+                            string patchName = zip[i].FileName;
+                            zip[i].FileName = Regex.Replace(zip[i].FileName, @"_patch.*\.xml", "_patch/" + patchNum.ToString("D3") + ".xml");
+                            patchNum++;
+                            patchName = patchName.Substring(7);
+                            originalPatchNames.Add(patchName);
+                        }
+                        //put the entries on disk
+                        Utils.AppendToInstallLog(Path.Combine(extractFolder, zip[i].FileName));
                     }
-                }
-                catch (ZipException e)
-                {
-                    //append the exception to the log
-                    Utils.ExceptionLog("Unzip", "ZipFile: " + zipFile, e);
-                    //show the error message
-                    MessageBox.Show(string.Format("{0}, {1} {2} {3}", Translations.getTranslatedString("zipReadingErrorMessage1"), Path.GetFileName(zipFile), Translations.getTranslatedString("zipReadingErrorMessage2"), Translations.getTranslatedString("zipReadingErrorHeader")));
-                    //(try to)delete the file from the filesystem
-                    if (File.Exists(zipFile))
-                        try
-                        {
-                            File.Delete(zipFile);
-                        }
-                        catch (UnauthorizedAccessException ex)
-                        {
-                            Utils.ExceptionLog("Unzip", "tried to delete " + zipFile, ex);
-                        }
-                    XMLUtils.DeleteMd5HashDatabase(zipFile);
+                    zip.ExtractProgress += Zip_ExtractProgress;
+                    zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
                 }
             }
-            finally
+            catch (ZipException e)
             {
-                if (fs != null)
-                    ((IDisposable)fs).Dispose();
+                //append the exception to the log
+                Utils.ExceptionLog("Unzip", "ZipFile: " + zipFile, e);
+                //show the error message
+                MessageBox.Show(string.Format("{0}, {1} {2} {3}", Translations.getTranslatedString("zipReadingErrorMessage1"), Path.GetFileName(zipFile), Translations.getTranslatedString("zipReadingErrorMessage2"), Translations.getTranslatedString("zipReadingErrorHeader")));
+                //(try to)delete the file from the filesystem
+                if (File.Exists(zipFile))
+                    try
+                    {
+                        File.Delete(zipFile);
+                    }
+                    catch (UnauthorizedAccessException ex)
+                    {
+                        Utils.ExceptionLog("Unzip", "tried to delete " + zipFile, ex);
+                    }
+                XMLUtils.DeleteMd5HashDatabase(zipFile);
             }
         }
         
