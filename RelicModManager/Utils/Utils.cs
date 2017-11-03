@@ -1013,7 +1013,7 @@ namespace RelhaxModpack
             return DateTime.Now.ToUniversalTime().ToFileTime();
         }
 
-        public static string ReplaceMacro(string text, string macro, string macrotext)
+        public static string Depricated_ReplaceMacro(string text, string macro, string macrotext)
         {
             bool search = true;
             while (search)
