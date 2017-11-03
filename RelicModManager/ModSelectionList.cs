@@ -448,7 +448,7 @@ namespace RelhaxModpack
             //process configs
             if (m.configs.Count > 0)
                 processConfigs(c, m, m.configs, tvi, true);
-            string nameForModCB = Utils.ReplaceMacro(m.name, "version", m.version);
+            string nameForModCB = Utils.ReplaceMacro(m);
             //if there are underscores you need to actually display them #thanksWPF
             nameForModCB = Regex.Replace(nameForModCB, "_", "__");
             modCheckBox.Content = nameForModCB;
@@ -578,7 +578,7 @@ namespace RelhaxModpack
                         if (con.Checked)
                             configControlRB.IsChecked = true;
                     //run the checksum logix
-                    string nameForModCB = Utils.ReplaceMacro(con.name, "version", con.version);
+                    string nameForModCB = Utils.ReplaceMacro(con);
                     //if there are underscores you need to actually display them #thanksWPF
                     nameForModCB = Regex.Replace(nameForModCB, "_", "__");
                     configControlRB.Content = nameForModCB;
@@ -634,7 +634,7 @@ namespace RelhaxModpack
                     //make the dropdown selection list
                     configControlDDALL.MinWidth = 100;
                     ComboBoxItem cbi = null;
-                    string toAdd = Utils.ReplaceMacro(con.name, "version", con.version);
+                    string toAdd = Utils.ReplaceMacro(con);
                     //run the crc logics
                     if (firstLoad)
                     {
@@ -737,7 +737,7 @@ namespace RelhaxModpack
                         if (con.Checked)
                             configControlCB.IsChecked = true;
                     //run the checksum logix
-                    string nameForModCB = Utils.ReplaceMacro(con.name, "version", con.version);
+                    string nameForModCB = Utils.ReplaceMacro(con);
                     //if there are underscores you need to actually display them #thanksWPF
                     nameForModCB = Regex.Replace(nameForModCB, "_", "__");
                     configControlCB.Content = nameForModCB;
@@ -1237,7 +1237,7 @@ namespace RelhaxModpack
             modCheckBox.Location = new System.Drawing.Point(3, 3);
             modCheckBox.Size = new System.Drawing.Size(49, 15);
             modCheckBox.TabIndex = 1;
-            modCheckBox.Text = Utils.ReplaceMacro(m.name, "version", m.version);
+            modCheckBox.Text = Utils.ReplaceMacro(m);
             modCheckBox.Name = t.Name + "_" + m.name;
             modCheckBox.Font = Settings.appFont;
             modCheckBox.catagory = catagory;
@@ -1466,7 +1466,7 @@ namespace RelhaxModpack
                     configControlRB.MouseDown += new MouseEventHandler(Generic_MouseDown);
                     configControlRB.Name = t.Name + "_" + m.name + "_" + con.name;
                     //run checksum logic
-                    configControlRB.Text = Utils.ReplaceMacro(con.name, "version", con.version);
+                    configControlRB.Text = Utils.ReplaceMacro(con);
                     if (firstLoad)
                     {
                         string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
@@ -1514,7 +1514,7 @@ namespace RelhaxModpack
                         configPanel.Controls.Add(configControlDDALL);
                     }
                     ComboBoxItem cbi = null;
-                    string toAdd = Utils.ReplaceMacro(con.name, "version", con.version);
+                    string toAdd = Utils.ReplaceMacro(con);
                     //run the checksum locics
                     if (firstLoad)
                     {
@@ -1602,7 +1602,7 @@ namespace RelhaxModpack
                     configControlCB.MouseDown += new MouseEventHandler(Generic_MouseDown);
                     configControlCB.Name = t.Name + "_" + m.name + "_" + con.name;
                     //checksum logic
-                    configControlCB.Text = Utils.ReplaceMacro(con.name, "version", con.version);
+                    configControlCB.Text = Utils.ReplaceMacro(con);
                     if (firstLoad)
                     {
                         string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
