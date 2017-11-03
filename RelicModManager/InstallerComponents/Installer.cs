@@ -922,13 +922,21 @@ namespace RelhaxModpack
 
                 foreach (XmlUnpack r in xmlUnpackList)
                 {
+                    string fn = r.newFileName.Equals("") ? r.fileName : r.newFileName;
                     try
                     {
                         if (!Directory.Exists(r.extractDirectory)) Directory.CreateDirectory(r.extractDirectory);
                         if (r.pkg.Equals(""))
                         {
-                            // if value of pkg is empty, it is not contained in an archive
-                            File.Copy(Path.Combine(r.directoryInArchive, r.fileName), Path.Combine(r.extractDirectory, r.newFileName.Equals("") ? r.fileName : r.newFileName), true);
+                            try
+                            {
+                                // if value of pkg is empty, it is not contained in an archive
+                                File.Copy(Path.Combine(r.directoryInArchive, r.fileName), Path.Combine(r.extractDirectory, fn), false);     // no overwrite of an exsisting file !!
+                            }
+                            catch (Exception ex)
+                            {
+                                Utils.ExceptionLog("Unzip", string.Format("move: {0}", Path.Combine(r.extractDirectory, fn)), ex);
+                            }
                         }
                         else
                         {
@@ -941,13 +949,13 @@ namespace RelhaxModpack
                                     {
                                         try
                                         {
-                                            zip[i].FileName = r.newFileName.Equals("") ? r.fileName : r.newFileName;
-                                            zip.ExtractSelectedEntries(zip[i].FileName, null, r.extractDirectory, ExtractExistingFileAction.OverwriteSilently);                    
+                                            zip[i].FileName = fn;
+                                            zip.ExtractSelectedEntries(zip[i].FileName, null, r.extractDirectory, ExtractExistingFileAction.Throw);  // no overwrite of an exsisting file !!
                                             break;
                                         }
                                         catch (Exception ex)
                                         {
-                                            Utils.ExceptionLog("Unzip", ex);
+                                            Utils.ExceptionLog("Unzip", string.Format("extration: {0}", Path.Combine(r.extractDirectory, zip[i].FileName)), ex);
                                         }
                                     }
                                 }
@@ -962,11 +970,11 @@ namespace RelhaxModpack
                     try
                     {
                         XmlBinary.XmlBinaryHandler xmlUnPack = new XmlBinary.XmlBinaryHandler();
-                        xmlUnPack.unPack(Path.Combine(r.extractDirectory, r.newFileName.Equals("") ? r.fileName : r.newFileName));
+                        xmlUnPack.unPack(Path.Combine(r.extractDirectory, fn));
                     }
                     catch (Exception ex)
                     {
-                        Utils.ExceptionLog(string.Format("UnpackXmlFiles", "xmlUnPack\nfileName: {0}", Path.Combine(r.extractDirectory, r.newFileName.Equals("") ? r.fileName : r.newFileName)), ex);
+                        Utils.ExceptionLog(string.Format("UnpackXmlFiles", "xmlUnPack\nfileName: {0}", Path.Combine(r.extractDirectory, fn)), ex);
                     }
                 }
             }
