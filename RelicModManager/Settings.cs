@@ -47,6 +47,8 @@ namespace RelhaxModpack
         public static string TanksLocation = "";
         public static string TanksVersion = "";
         public static string tanksOnlineFolderVersion = "";
+        //needed to create to first line to installedRelhaxFiles.log
+        public static string DatabaseVersion = "";
         //
         public static string configFileVersion = "2.0";     // for later imports of this files, we need a better identification
         public enum LoadingGifs { standard = 0, thirdGuards = 1 };
