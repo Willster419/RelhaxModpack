@@ -841,7 +841,7 @@ namespace RelhaxModpack
                     }
                     catch (Exception e)
                     {
-                        Utils.ExceptionLog("Tried to access one of the forum URL's", e);
+                        Utils.ExceptionLog("Forum access", e);
                     }
                 }
             }
