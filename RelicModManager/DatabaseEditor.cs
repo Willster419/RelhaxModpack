@@ -30,8 +30,8 @@ namespace RelhaxModpack
         private DatabaseObject SelectedDatabaseObject;
         private Category SelectedCategory;
         private int currentSelectedIndex = -1;
-        string GameVersion = "";
-        string OnlineFolderVersion = "";
+        // string GameVersion = ""; => changed to Settings.TanksVersion => could be accessed from ANY place of code
+        // string OnlineFolderVersion = ""; => changed to Settings.tanksOnlineFolderVersion => could be accessed from ANY place of code
         private StringBuilder InUseSB;
         private List<Config> ListThatContainsConfig;
         private bool UnsavedModifications = false;
@@ -198,8 +198,8 @@ namespace RelhaxModpack
             DatabaseLocation = OpenDatabaseDialog.FileName;
             if (!File.Exists(DatabaseLocation))
                 return;
-            GameVersion = XMLUtils.ReadVersionFromModInfo(DatabaseLocation);
-            OnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(DatabaseLocation);
+            Settings.TanksVersion = XMLUtils.ReadVersionFromModInfo(DatabaseLocation);
+            Settings.tanksOnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(DatabaseLocation);
             GlobalDependencies = new List<Dependency>();
             Dependencies = new List<Dependency>();
             LogicalDependencies = new List<LogicalDependnecy>();
@@ -219,7 +219,7 @@ namespace RelhaxModpack
             if (SaveDatabaseDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             DatabaseLocation = SaveDatabaseDialog.FileName;
-            XMLUtils.SaveDatabase(DatabaseLocation, GameVersion, OnlineFolderVersion, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
+            XMLUtils.SaveDatabase(DatabaseLocation, Settings.TanksVersion, Settings.tanksOnlineFolderVersion, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
             UnsavedModifications = false;
         }
         //Apply all changes from the form
@@ -2264,7 +2264,7 @@ namespace RelhaxModpack
                 return;
             }
             string DownloadURL = ObjectStartAddressTB.Text + ObjectZipFileTB.Text + ObjectEndAddressTB.Text;
-            DatabaseDownloadEditor editor = new DatabaseDownloadEditor(DownloadURL, Path.GetFileName(ObjectZipFileTB.Text));
+            DatabaseDownloadEditor editor = new DatabaseDownloadEditor(Utils.ReplaceMacro(DownloadURL), Path.GetFileName(ObjectZipFileTB.Text));
             editor.Show();
         }
 
