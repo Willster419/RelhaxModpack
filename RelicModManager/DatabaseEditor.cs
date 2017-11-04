@@ -200,6 +200,7 @@ namespace RelhaxModpack
                 return;
             Settings.TanksVersion = XMLUtils.ReadVersionFromModInfo(DatabaseLocation);
             Settings.tanksOnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(DatabaseLocation);
+            this.Text = String.Format("DatabaseEditor      GameVersion: {0}    OnlineFolder: {1}", Settings.TanksVersion, Settings.tanksOnlineFolderVersion);
             GlobalDependencies = new List<Dependency>();
             Dependencies = new List<Dependency>();
             LogicalDependencies = new List<LogicalDependnecy>();
