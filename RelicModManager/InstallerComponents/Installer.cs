@@ -127,10 +127,10 @@ namespace RelhaxModpack
                 Utils.AppendToLog("... skipped");
             ResetArgs();
             //Setp 3a: delete log files
-            Utils.AppendToLog("Installation logFiles");
+            Utils.AppendToLog("Installation deleteLogs");
             if (Settings.deleteLogs)
             {
-                Utils.AppendToLog("deleteLogs selected, deleting wot, xvm, and pmod logs");
+                Utils.AppendToLog("deleteLogs selected: deleting wot, xvm, and pmod logs");
                 try
                 {
                     if (File.Exists(Path.Combine(TanksLocation, "python.log")))
@@ -139,6 +139,10 @@ namespace RelhaxModpack
                         File.Delete(Path.Combine(TanksLocation, "xvm.log"));
                     if (File.Exists(Path.Combine(TanksLocation, "pmod.log")))
                         File.Delete(Path.Combine(TanksLocation, "pmod.log"));
+                    if (File.Exists(Path.Combine(TanksLocation, "WoTLauncher.log")))
+                        File.Delete(Path.Combine(TanksLocation, "WoTLauncher.log"));
+                    if (File.Exists(Path.Combine(TanksLocation, "cef.log")))
+                        File.Delete(Path.Combine(TanksLocation, "cef.log"));
                 }
                 catch (Exception ex)
                 {
