@@ -831,15 +831,18 @@ namespace RelhaxModpack
             //create a new downloader to download the modpack forum page on a new thread
             using (WebClient client = new WebClient())
             {
-                try
+                string[] pages = { "http://forum.worldoftanks.eu/index.php?/topic/623269-", "http://forum.worldoftanks.com/index.php?/topic/535868-", "http://forum.worldoftanks.eu/index.php?/topic/624499-" };
+                foreach (string r in pages)
                 {
-                    client.DownloadString("http://forum.worldoftanks.eu/index.php?/topic/623269-");
-                    client.DownloadString("http://forum.worldoftanks.com/index.php?/topic/535868-");
-                    client.DownloadString("http://forum.worldoftanks.eu/index.php?/topic/624499-");
-                }
-                catch (Exception e)
-                {
-                    Utils.ExceptionLog("Tried to access one of the forum URL's", e);
+                    try
+                    {
+                        client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+                        client.DownloadString(r);
+                    }
+                    catch (Exception e)
+                    {
+                        Utils.ExceptionLog("Tried to access one of the forum URL's", e);
+                    }
                 }
             }
         }
