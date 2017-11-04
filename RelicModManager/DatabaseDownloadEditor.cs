@@ -22,8 +22,12 @@ namespace RelhaxModpack
             using (downloader = new WebClient())
             {
                 SaveDownloadDialog.FileName = ZipFileName;
+                SaveDownloadDialog.InitialDirectory = Path.Combine(Application.StartupPath, "RelHaxDownloads");
                 if (SaveDownloadDialog.ShowDialog() == DialogResult.Cancel)
+                {
+                    this.Close();
                     return;
+                }
                 downloader.DownloadFileCompleted += Downloader_DownloadFileCompleted;
                 downloader.DownloadProgressChanged += Downloader_DownloadProgressChanged;
                 SaveLocation = SaveDownloadDialog.FileName;
@@ -36,33 +40,40 @@ namespace RelhaxModpack
             DownloadProgressBar.Value = e.ProgressPercentage;
             string downloadStatus = "downloading " + ZipFileName + "...";
             DownloadingLabel.Text = downloadStatus;
-            downloadStatus = "" + e.BytesReceived / 1024 + " kb of " + e.TotalBytesToReceive / 1024 + "kb";
+            downloadStatus = string.Format("{0} kb of {1} kb", e.BytesReceived / 1024, e.TotalBytesToReceive / 1024);
             SizeToDownload.Text = downloadStatus;
         }
 
         private void Downloader_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
-            if (e.Error != null)
+            try
             {
-                if (e.Error.Message.Equals("The request was aborted: The request was canceled."))
+                if (e.Error != null)
                 {
-                    if (File.Exists(SaveLocation))
-                        File.Delete(SaveLocation);
-                    this.Close();
-                    return;
+                    if (e.Cancelled)
+                    {
+                        if (File.Exists(SaveLocation))
+                            File.Delete(SaveLocation);
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show(e.Error.ToString());
+                        this.Close();
+                    }
                 }
                 else
                 {
-                    MessageBox.Show(e.Error.ToString());
-                    return;
+                    DownloadingLabel.Text = "Download Complete";
+                    OpenFileButton.Enabled = true;
+                    OpenFolderButton.Enabled = true;
+                    CancelButtonn.Enabled = false;
                 }
             }
-            else
+            finally
             {
-                DownloadingLabel.Text = "Download Complete";
-                OpenFileButton.Enabled = true;
-                OpenFolderButton.Enabled = true;
-                CancelButtonn.Enabled = false;
+                downloader.DownloadFileCompleted -= Downloader_DownloadFileCompleted;
+                downloader.DownloadProgressChanged -= Downloader_DownloadProgressChanged;
             }
         }
 

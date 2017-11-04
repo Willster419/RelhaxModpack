@@ -95,9 +95,9 @@
             this.SizeToDownload.AutoSize = true;
             this.SizeToDownload.Location = new System.Drawing.Point(12, 99);
             this.SizeToDownload.Name = "SizeToDownload";
-            this.SizeToDownload.Size = new System.Drawing.Size(36, 13);
+            this.SizeToDownload.Size = new System.Drawing.Size(64, 13);
             this.SizeToDownload.TabIndex = 5;
-            this.SizeToDownload.Text = "X of Y";
+            this.SizeToDownload.Text = "0 kb of 0 kb";
             // 
             // DatabaseDownloadEditor
             // 
