@@ -39,8 +39,30 @@ namespace RelhaxModpack
                 WriteToFile(filePath, string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}   {1}", DateTime.Now, info));
             }
         }
+        public static void AppendToInstallLog(string info)
+        {
+            try
+            {
+                lock (_locker)              // avoid that 2 or more threads calling the Log function and writing lines in a mess
+                {
+                    //the method should automaticly make the file if it's not there
+                    string filePath = Path.Combine(Settings.TanksLocation, "logs", "installedRelhaxFiles.log");
+                    if (!System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.AppendAllText(filePath, "");
+                        WriteToFile(filePath, string.Format("Database Version: {0}", Settings.DatabaseVersion));
+                        WriteToFile(filePath, string.Format("/*  Date: {0:yyyy-MM-dd HH:mm:ss.fff}  */", DateTime.Now));
+                    }
+                    WriteToFile(filePath, info);
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("AppendToInstallLog", ex);
+            }
+        }
         // https://stackoverflow.com/questions/4741037/keeping-log-files-under-a-certain-size
-        static public void WriteToFile(string strFile, string strNewLogMessage)
+        private static void WriteToFile(string strFile, string strNewLogMessage, bool cutFile = true)
         {
             try
             {
@@ -52,7 +74,7 @@ namespace RelhaxModpack
 
                 Byte[] bytesSavedFromEndOfOldLog = null;
 
-                if (fi.Length > iMaxLogLength * multi) // if the log file length is already too long
+                if (cutFile && fi.Length > iMaxLogLength * multi) // if the log file length is already too long
                 {
                     using (BinaryReader br = new BinaryReader(System.IO.File.Open(strFile, FileMode.Open)))
                     {
@@ -67,36 +89,43 @@ namespace RelhaxModpack
                 byte[] newLine = System.Text.UTF8Encoding.UTF8.GetBytes(Environment.NewLine);
 
                 FileStream fs = null;
-                // If the log file is less than the max length, just open it at the end to write there
-                if (fi.Length < iMaxLogLength * multi)
-                    fs = new FileStream(strFile, FileMode.Append, FileAccess.Write, FileShare.Read);
-                else // If the log file is more than the max length, just open it empty
+                try
                 {
-                    fs = new FileStream(strFile, FileMode.Create, FileAccess.Write, FileShare.Read);
-                    // https://stackoverflow.com/questions/5266069/streamwriter-and-utf-8-byte-order-marks
-                    // Creates the UTF-8 encoding with parameter "encoderShouldEmitUTF8Identifier" set to true
-                    Encoding vUTF8Encoding = new UTF8Encoding(true);
-                    // Gets the preamble in order to attach the BOM
-                    var vPreambleByte = vUTF8Encoding.GetPreamble();
-                    // Writes the preamble first
-                    fs.Write(vPreambleByte, 0, vPreambleByte.Length);
-                }
-
-                using (fs)
-                {
-                    // If you are trimming the file length, write what you saved. 
-                    if (bytesSavedFromEndOfOldLog != null)
+                    // If the log file is less than the max length, just open it at the end to write there
+                    if (!cutFile || fi.Length < iMaxLogLength * multi)
+                        fs = new FileStream(strFile, FileMode.Append, FileAccess.Write, FileShare.Read);
+                    else // If the log file is more than the max length, just open it empty
                     {
-                        Byte[] lineBreak = Encoding.UTF8.GetBytes(string.Format("### {0:yyyy-MM-dd HH:mm:ss} *** *** *** Old Log Start Position *** *** *** *** ###", DateTime.Now));
-                        fs.Write(lineBreak, 0, lineBreak.Length);
-                        fs.Write(newLine, 0, newLine.Length);
-                        fs.Write(bytesSavedFromEndOfOldLog, 0, bytesSavedFromEndOfOldLog.Length);
+                        fs = new FileStream(strFile, FileMode.Create, FileAccess.Write, FileShare.Read);
+                        // https://stackoverflow.com/questions/5266069/streamwriter-and-utf-8-byte-order-marks
+                        // Creates the UTF-8 encoding with parameter "encoderShouldEmitUTF8Identifier" set to true
+                        Encoding vUTF8Encoding = new UTF8Encoding(true);
+                        // Gets the preamble in order to attach the BOM
+                        var vPreambleByte = vUTF8Encoding.GetPreamble();
+                        // Writes the preamble first
+                        fs.Write(vPreambleByte, 0, vPreambleByte.Length);
+                    }
+
+                    using (fs)
+                    {
+                        // If you are trimming the file length, write what you saved. 
+                        if (bytesSavedFromEndOfOldLog != null)
+                        {
+                            Byte[] lineBreak = Encoding.UTF8.GetBytes(string.Format("### {0:yyyy-MM-dd HH:mm:ss} *** *** *** Old Log Start Position *** *** *** *** ###", DateTime.Now));
+                            fs.Write(lineBreak, 0, lineBreak.Length);
+                            fs.Write(newLine, 0, newLine.Length);
+                            fs.Write(bytesSavedFromEndOfOldLog, 0, bytesSavedFromEndOfOldLog.Length);
+                            fs.Write(newLine, 0, newLine.Length);
+                        }
+                        Byte[] sendBytes = Encoding.UTF8.GetBytes(strNewLogMessage);
+                        // Append your last log message. 
+                        fs.Write(sendBytes, 0, sendBytes.Length);
                         fs.Write(newLine, 0, newLine.Length);
                     }
-                    Byte[] sendBytes = Encoding.UTF8.GetBytes(strNewLogMessage);
-                    // Append your last log message. 
-                    fs.Write(sendBytes, 0, sendBytes.Length);
-                    fs.Write(newLine, 0, newLine.Length);
+                }
+                finally
+                {
+                    fs.Dispose();
                 }
             }
             catch
@@ -1083,7 +1112,7 @@ namespace RelhaxModpack
         /// <param name="shortcutTarget">The path where the original file is located.</param> 
         /// <param name="shortcutName">The filename of the shortcut to be created or removed from desktop including the (.lnk) extension.</param>
         /// <param name="create">True to create a shortcut or False to remove the shortcut.</param> 
-        public static void CreateShortcut(string shortcutTarget, string shortcutName, bool create, bool log, StreamWriter sw)
+        public static void CreateShortcut(string shortcutTarget, string shortcutName, bool create, bool log)
         {
             string modifiedName = Path.GetFileNameWithoutExtension(shortcutName) + ".lnk";
             if (create)
@@ -1091,7 +1120,6 @@ namespace RelhaxModpack
                 try
                 {
                     IShellLink link = (IShellLink)new ShellLink();
-
                     // setup shortcut information
                     link.SetDescription("created by the Relhax Manager");
                     link.SetPath(@shortcutTarget);
@@ -1102,7 +1130,7 @@ namespace RelhaxModpack
                     System.Runtime.InteropServices.ComTypes.IPersistFile file = (System.Runtime.InteropServices.ComTypes.IPersistFile)link;
                     string desktopPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), modifiedName);
                     if (log)
-                        sw.WriteLine(desktopPath);
+                        Utils.AppendToInstallLog(desktopPath);
                     file.Save(desktopPath, false);
                 }
                 catch (Exception ex)
