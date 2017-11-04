@@ -797,8 +797,9 @@ namespace RelhaxModpack
             try
             {
                 if (File.Exists(Path.Combine(tanksLocation, "installedRelhaxFiles.log")))
-                {   if (File.Exists(Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log")))
-                        Path.Combine(tanksLocation, "installedRelhaxFiles.log");
+                {
+                    if (File.Exists(Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log")))
+                        File.Delete(Path.Combine(tanksLocation, "installedRelhaxFiles.log"));
                     else
                         File.Move(Path.Combine(tanksLocation, "installedRelhaxFiles.log"), Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log"));
                 }
@@ -1819,6 +1820,7 @@ namespace RelhaxModpack
 
                 var databaseVersion = doc.CreateNavigator().SelectSingleNode("/version/database");
                 databaseVersionString = databaseVersion.InnerXml;
+                Settings.DatabaseVersion = databaseVersionString;
                 string installedfilesLogPath = Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log");
                 if (!File.Exists(installedfilesLogPath))
                     return false;
