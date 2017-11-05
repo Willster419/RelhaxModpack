@@ -111,6 +111,24 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AtlasesCreator\AtlasesArgs.cs" />
+    <Compile Include="AtlasesCreator\Settings.cs" />
+    <Compile Include="AtlasesCreator\Constants.cs" />
+    <Compile Include="AtlasesCreator\Exporters\BmpImageExporter.cs" />
+    <Compile Include="AtlasesCreator\Exporters\Exporters.cs" />
+    <Compile Include="AtlasesCreator\Exporters\IImageExporter.cs" />
+    <Compile Include="AtlasesCreator\Exporters\IMapExporter.cs" />
+    <Compile Include="AtlasesCreator\Exporters\JpegImageExporter.cs" />
+    <Compile Include="AtlasesCreator\Exporters\PngImageExporter.cs" />
+    <Compile Include="AtlasesCreator\Exporters\TxtMapExporter.cs" />
+    <Compile Include="AtlasesCreator\Exporters\XmlMapExporter.cs" />
+    <Compile Include="AtlasesCreator\Packing\ArevaloRectanglePacker.cs" />
+    <Compile Include="AtlasesCreator\Packing\ImagePacker.cs" />
+    <Compile Include="AtlasesCreator\Packing\MiscHelper.cs" />
+    <Compile Include="AtlasesCreator\Packing\OutOfSpaceException.cs" />
+    <Compile Include="AtlasesCreator\Packing\RectanglePacker.cs" />
+    <Compile Include="AtlasesCreator\Program.cs" />
+    <Compile Include="AtlasesCreator\ProgramArguments.cs" />
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="CiInfo.cs" />
     <Compile Include="Diagnostics.cs">
