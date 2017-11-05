@@ -1615,7 +1615,7 @@ namespace RelhaxModpack
             string text = Translations.getTranslatedString("mainFormToolTip");
             Control[] toolTipSetList = new Control[] { forceManuel, cleanInstallCB, backupModsCheckBox, cancerFontCB, saveLastInstallCB, saveUserDataCB, darkUICB,
                 languageSelectionGB, fontSizeGB, selectionDefault, selectionLegacy, disableBordersCB, disableColorsCB, clearCacheCB, clearLogFilesCB, viewAppUpdates, ShowInstallCompleteWindowCB,
-                notifyIfSameDatabaseCB, standardImageRB, thirdGuardsLoadingImageRB, languageENG, languageGER, languagePL, languageFR, fontSize100, DPI100 };
+                notifyIfSameDatabaseCB, standardImageRB, thirdGuardsLoadingImageRB, fontSize100, DPI100 };
             foreach (var set in toolTipSetList)
             {
                 this.toolTip.SetToolTip(set, text);
@@ -1666,25 +1666,24 @@ namespace RelhaxModpack
                             break;
                         }
                 }
+                LanguageComboBox.SelectedIndexChanged -= LanguageComboBox_SelectedIndexChanged;
                 switch (Translations.language)
                 {
+                    //english = 0, polish = 1, german = 2, french = 3
                     case (Translations.Languages.English):
-                        //set english button
-                        languageENG.Checked = true;
+                        LanguageComboBox.SelectedIndex = 0;
                         break;
                     case (Translations.Languages.German):
-                        //set english button
-                        languageGER.Checked = true;
+                        LanguageComboBox.SelectedIndex = 2;
                         break;
                     case (Translations.Languages.Polish):
-                        //set polish translation
-                        languagePL.Checked = true;
+                        LanguageComboBox.SelectedIndex = 1;
                         break;
                     case (Translations.Languages.French):
-                        //set french translation
-                        languageFR.Checked = true;
+                        LanguageComboBox.SelectedIndex = 3;
                         break;
                 }
+                LanguageComboBox.SelectedIndexChanged += LanguageComboBox_SelectedIndexChanged;
                 switch (Settings.SView)
                 {
                     case (Settings.SelectionView.Default):
@@ -2433,6 +2432,26 @@ namespace RelhaxModpack
         }
 
         #endregion
+
+        private void LanguageComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch(LanguageComboBox.SelectedIndex)
+            {
+                case 0://english
+                    Translations.language = Translations.Languages.English;
+                    break;
+                case 1://polish
+                    Translations.language = Translations.Languages.Polish;
+                    break;
+                case 2://german
+                    Translations.language = Translations.Languages.German;
+                    break;
+                case 3://french
+                    Translations.language = Translations.Languages.French;
+                    break;
+            }
+            this.applySettings();
+        }
     }
     #region DownloadItem class definition
     //a class for the downloadQueue list, to make a queue of downloads
