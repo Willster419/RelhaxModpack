@@ -133,6 +133,9 @@
     <Compile Include="CiInfo.cs" />
     <Compile Include="InstallerComponents\AsyncDownloadArgs.cs" />
     <Compile Include="InstallerComponents\XmlUnpack.cs" />
+    <Compile Include="RelhaxForum.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="XmlBinary\Primitive_File.cs" />
     <Compile Include="XmlBinary\Packed_Section.cs" />
     <Compile Include="XmlBinary\XmlBinaryHandler.cs" />

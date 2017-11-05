@@ -50,10 +50,6 @@
             this.saveUserDataCB = new System.Windows.Forms.CheckBox();
             this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
             this.languageSelectionGB = new System.Windows.Forms.GroupBox();
-            this.languageFR = new System.Windows.Forms.RadioButton();
-            this.languagePL = new System.Windows.Forms.RadioButton();
-            this.languageGER = new System.Windows.Forms.RadioButton();
-            this.languageENG = new System.Windows.Forms.RadioButton();
             this.loadingImageGroupBox = new System.Windows.Forms.GroupBox();
             this.thirdGuardsLoadingImageRB = new System.Windows.Forms.RadioButton();
             this.standardImageRB = new System.Windows.Forms.RadioButton();
@@ -89,6 +85,8 @@
             this.VersionTable = new System.Windows.Forms.TableLayoutPanel();
             this.DatabaseVersionLabel = new System.Windows.Forms.Label();
             this.ApplicationVersionLabel = new System.Windows.Forms.Label();
+            this.LanguageComboBox = new System.Windows.Forms.ComboBox();
+            this.DiagnosticUtilitiesButton = new System.Windows.Forms.Button();
             this.settingsGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
@@ -341,78 +339,21 @@
             // 
             // languageSelectionGB
             // 
-            this.languageSelectionGB.Controls.Add(this.languageFR);
-            this.languageSelectionGB.Controls.Add(this.languagePL);
-            this.languageSelectionGB.Controls.Add(this.languageGER);
-            this.languageSelectionGB.Controls.Add(this.languageENG);
-            this.languageSelectionGB.Location = new System.Drawing.Point(326, 78);
+            this.languageSelectionGB.Controls.Add(this.LanguageComboBox);
+            this.languageSelectionGB.Location = new System.Drawing.Point(325, 131);
             this.languageSelectionGB.Name = "languageSelectionGB";
-            this.languageSelectionGB.Size = new System.Drawing.Size(104, 125);
+            this.languageSelectionGB.Size = new System.Drawing.Size(104, 47);
             this.languageSelectionGB.TabIndex = 30;
             this.languageSelectionGB.TabStop = false;
             this.languageSelectionGB.Text = "Language";
-            // 
-            // languageFR
-            // 
-            this.languageFR.AutoSize = true;
-            this.languageFR.Location = new System.Drawing.Point(6, 60);
-            this.languageFR.Name = "languageFR";
-            this.languageFR.Size = new System.Drawing.Size(65, 17);
-            this.languageFR.TabIndex = 3;
-            this.languageFR.TabStop = true;
-            this.languageFR.Text = "Français";
-            this.languageFR.UseVisualStyleBackColor = true;
-            this.languageFR.CheckedChanged += new System.EventHandler(this.languageFR_CheckedChanged);
-            this.languageFR.MouseEnter += new System.EventHandler(this.language_MouseEnter);
-            this.languageFR.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // languagePL
-            // 
-            this.languagePL.AutoSize = true;
-            this.languagePL.Location = new System.Drawing.Point(6, 30);
-            this.languagePL.Name = "languagePL";
-            this.languagePL.Size = new System.Drawing.Size(53, 17);
-            this.languagePL.TabIndex = 2;
-            this.languagePL.TabStop = true;
-            this.languagePL.Text = "Polski";
-            this.languagePL.UseVisualStyleBackColor = true;
-            this.languagePL.CheckedChanged += new System.EventHandler(this.languagePL_CheckedChanged);
-            this.languagePL.MouseEnter += new System.EventHandler(this.language_MouseEnter);
-            this.languagePL.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // languageGER
-            // 
-            this.languageGER.AutoSize = true;
-            this.languageGER.Location = new System.Drawing.Point(6, 45);
-            this.languageGER.Name = "languageGER";
-            this.languageGER.Size = new System.Drawing.Size(65, 17);
-            this.languageGER.TabIndex = 1;
-            this.languageGER.Text = "Deutsch";
-            this.languageGER.UseVisualStyleBackColor = true;
-            this.languageGER.CheckedChanged += new System.EventHandler(this.languageGER_CheckedChanged);
-            this.languageGER.MouseEnter += new System.EventHandler(this.language_MouseEnter);
-            this.languageGER.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // languageENG
-            // 
-            this.languageENG.AutoSize = true;
-            this.languageENG.Location = new System.Drawing.Point(6, 15);
-            this.languageENG.Name = "languageENG";
-            this.languageENG.Size = new System.Drawing.Size(59, 17);
-            this.languageENG.TabIndex = 0;
-            this.languageENG.Text = "English";
-            this.languageENG.UseVisualStyleBackColor = true;
-            this.languageENG.CheckedChanged += new System.EventHandler(this.languageENG_CheckedChanged);
-            this.languageENG.MouseEnter += new System.EventHandler(this.language_MouseEnter);
-            this.languageENG.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // loadingImageGroupBox
             // 
             this.loadingImageGroupBox.Controls.Add(this.thirdGuardsLoadingImageRB);
             this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(326, 209);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(325, 182);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
-            this.loadingImageGroupBox.Size = new System.Drawing.Size(103, 89);
+            this.loadingImageGroupBox.Size = new System.Drawing.Size(103, 62);
             this.loadingImageGroupBox.TabIndex = 26;
             this.loadingImageGroupBox.TabStop = false;
             this.loadingImageGroupBox.Text = "Loading Image";
@@ -851,12 +792,38 @@
             this.ApplicationVersionLabel.TabIndex = 1;
             this.ApplicationVersionLabel.Text = "Application v{version]";
             // 
+            // LanguageComboBox
+            // 
+            this.LanguageComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.LanguageComboBox.FormattingEnabled = true;
+            this.LanguageComboBox.Items.AddRange(new object[] {
+            "English",
+            "Polski",
+            "Deutsch",
+            "Francais"});
+            this.LanguageComboBox.Location = new System.Drawing.Point(6, 13);
+            this.LanguageComboBox.Name = "LanguageComboBox";
+            this.LanguageComboBox.Size = new System.Drawing.Size(92, 21);
+            this.LanguageComboBox.TabIndex = 4;
+            this.LanguageComboBox.SelectedIndexChanged += new System.EventHandler(this.LanguageComboBox_SelectedIndexChanged);
+            // 
+            // DiagnosticUtilitiesButton
+            // 
+            this.DiagnosticUtilitiesButton.Location = new System.Drawing.Point(326, 77);
+            this.DiagnosticUtilitiesButton.Name = "DiagnosticUtilitiesButton";
+            this.DiagnosticUtilitiesButton.Size = new System.Drawing.Size(103, 48);
+            this.DiagnosticUtilitiesButton.TabIndex = 40;
+            this.DiagnosticUtilitiesButton.Text = "Diagnostic Utilities";
+            this.DiagnosticUtilitiesButton.UseVisualStyleBackColor = true;
+            this.DiagnosticUtilitiesButton.Click += new System.EventHandler(this.DiagnosticUtilitiesButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(440, 657);
+            this.Controls.Add(this.DiagnosticUtilitiesButton);
             this.Controls.Add(this.VersionTable);
             this.Controls.Add(this.ErrorCounterLabel);
             this.Controls.Add(this.viewDBUpdates);
@@ -888,7 +855,6 @@
             this.settingsGroupBox.ResumeLayout(false);
             this.settingsGroupBox.PerformLayout();
             this.languageSelectionGB.ResumeLayout(false);
-            this.languageSelectionGB.PerformLayout();
             this.loadingImageGroupBox.ResumeLayout(false);
             this.loadingImageGroupBox.PerformLayout();
             this.viewTypeGB.ResumeLayout(false);
@@ -925,12 +891,9 @@
         private System.Windows.Forms.RichTextBox downloadProgress;
         private System.Windows.Forms.CheckBox darkUICB;
         private System.Windows.Forms.GroupBox languageSelectionGB;
-        private System.Windows.Forms.RadioButton languageGER;
-        private System.Windows.Forms.RadioButton languageENG;
         private System.Windows.Forms.GroupBox viewTypeGB;
         private System.Windows.Forms.RadioButton selectionLegacy;
         private System.Windows.Forms.RadioButton selectionDefault;
-        private System.Windows.Forms.RadioButton languagePL;
         private System.Windows.Forms.LinkLabel donateLabel;
         private System.Windows.Forms.CheckBox expandNodesDefault;
         private System.Windows.Forms.GroupBox fontSizeGB;
@@ -944,7 +907,6 @@
         private System.Windows.Forms.ProgressBar totalProgressBar;
         private System.Windows.Forms.LinkLabel DiscordServerLink;
         private System.Windows.Forms.CheckBox clearCacheCB;
-        private System.Windows.Forms.RadioButton languageFR;
         private System.Windows.Forms.Button viewAppUpdates;
         private System.Windows.Forms.Button viewDBUpdates;
         private System.Windows.Forms.CheckBox disableColorsCB;
@@ -962,6 +924,8 @@
         private System.Windows.Forms.TableLayoutPanel VersionTable;
         private System.Windows.Forms.Label DatabaseVersionLabel;
         private System.Windows.Forms.Label ApplicationVersionLabel;
+        private System.Windows.Forms.ComboBox LanguageComboBox;
+        private System.Windows.Forms.Button DiagnosticUtilitiesButton;
     }
 }
 

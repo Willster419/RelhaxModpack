@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<mods ver="2.0" date="2017-11-03 10:47:33">
+  <relhaxMods>
+    <mod>XVMPrebuiltConfigs_DefaultXVMConfig</mod>
+    <mod>XVMconfigBuilder_TankCarouselBaseModifications_Header</mod>
+    <mod>XVMconfigBuilder_TankCarouselBaseModifications_carousel_enable</mod>
+    <mod>XVMconfigBuilder_TankCarouselBaseModifications_carouselRow_2</mod>
+    <mod>Crosshairs_tank_sight_Header</mod>
+    <mod>Crosshairs_tank_sight_J1mB0</mod>
+    <mod>Crosshairs_tank_sight_J1mB0_2_aim_circle</mod>
+    <mod>Crosshairs_arty_sight_Header</mod>
+    <mod>Crosshairs_arty_sight_ProArty</mod>
+    <mod>Damage_Logs_GambitER_base</mod>
+    <mod>Damage_Logs_GambitER_damage_panel_XFT_Split</mod>
+    <mod>zoom_Base</mod>
+    <mod>zoom_pmod_zoomIn_2-48</mod>
+    <mod>zoom_pmod_td_brake_on</mod>
+    <mod>zoom_pmod_default_zoom_2x</mod>
+  </relhaxMods>
+  <userMods />
+</mods>

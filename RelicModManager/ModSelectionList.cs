@@ -33,6 +33,7 @@ namespace RelhaxModpack
         bool modHasRadioButtons = false;
         bool firstLoad = true;
         bool ignoreSelections = true;
+        private static string NoDescriptionAvailable = Translations.getTranslatedString("noDescription");
         //bool mouseCLick = false;
         int prog = 0;
         private enum loadConfigMode
@@ -75,48 +76,47 @@ namespace RelhaxModpack
             pw.Show();
             prog = 0;
             //font scaling
-            this.AutoScaleMode = Settings.appScalingMode;
-            this.Font = Settings.appFont;
-            if (Settings.appScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
+            this.AutoScaleMode = Settings.AppScalingMode;
+            this.Font = Settings.AppFont;
+            if (Settings.AppScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
             {
-                this.Scale(new System.Drawing.SizeF(Settings.scaleSize, Settings.scaleSize));
+                this.Scale(new System.Drawing.SizeF(Settings.ScaleSize, Settings.ScaleSize));
             }
-
             //apply the translations
             this.applyTranslations();
             pw.loadingDescBox.Text = Translations.getTranslatedString("readingDatabase");
             Application.DoEvents();
-            // string databaseURL = string.Format("http://wotmods.relhaxmodpack.com/RelhaxModpack/modInfo_{0}.xml", tanksVersion);
-            string databaseURL = Settings.modInfoDatFile;
+            string databaseURL = Settings.ModInfoDatFile;
             if (Program.testMode)
             {
                 // if customModInfoPath is empty, this creates a full valid path to the current manager location folder
-                databaseURL = Path.Combine(string.IsNullOrEmpty(Settings.customModInfoPath) ? Application.StartupPath : Settings.customModInfoPath, "modInfo.xml");
+                databaseURL = Path.Combine(string.IsNullOrEmpty(Settings.CustomModInfoPath) ? Application.StartupPath : Settings.CustomModInfoPath, "modInfo.xml");
                 if (!File.Exists(databaseURL))
                 {
                     Utils.AppendToLog("Databasefile not found: " + databaseURL);
                     MessageBox.Show(string.Format(Translations.getTranslatedString("testModeDatabaseNotFound"), databaseURL));
                     Application.Exit();
                 }
-                Settings.tanksOnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(databaseURL);
+                Settings.TanksOnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(databaseURL);
             }
             else
             {
                 //download the modInfo.dat
                 Utils.AppendToLog("downloading modInfo.dat");
-                WebClient downloader = new WebClient();
                 string dlURL = "";
-                downloader.Proxy = null;
-                try
+                using (WebClient downloader = new WebClient() { Proxy = null })
                 {
-                    dlURL = string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/modInfo.dat", Settings.tanksOnlineFolderVersion);
-                    downloader.DownloadFile(dlURL, Settings.modInfoDatFile);
-                }
-                catch (Exception ex)
-                {
-                    Utils.ExceptionLog(string.Format("ModSelectionList_Load", @"Tried to access {0}", dlURL), ex);
-                    MessageBox.Show(string.Format("{0} modInfo.dat", Translations.getTranslatedString("failedToDownload_1")));
-                    Application.Exit();
+                    try
+                    {
+                        dlURL = string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/modInfo.dat", Settings.TanksOnlineFolderVersion);
+                        downloader.DownloadFile(dlURL, Settings.ModInfoDatFile);
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.ExceptionLog(string.Format("ModSelectionList_Load", @"Tried to access {0}", dlURL), ex);
+                        MessageBox.Show(string.Format("{0} modInfo.dat", Translations.getTranslatedString("failedToDownload_1")));
+                        Application.Exit();
+                    }
                 }
             }
             //create new lists for memory database and serialize from xml->lists
@@ -129,7 +129,7 @@ namespace RelhaxModpack
             {
                 if (Utils.Duplicates(parsedCatagoryList))
                 {
-                    Utils.AppendToLog("CRITICAL: Duplicate mod name detected!!");
+                    Utils.AppendToLog("WARNING: Duplicate mod name detected!!");
                     MessageBox.Show(Translations.getTranslatedString("duplicateMods"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     Application.Exit();
                 }
@@ -148,7 +148,7 @@ namespace RelhaxModpack
             //the default loadConfig mode shold be from clicking the button
             loadMode = loadConfigMode.fromButton;
             //if the load config from last selection is checked, then set the mode to it
-            if (Settings.saveLastConfig)
+            if (Settings.SaveLastConfig)
             {
                 loadMode = loadConfigMode.fromSaveLastConfig;
             }
@@ -171,11 +171,29 @@ namespace RelhaxModpack
                 this.Close();
                 return;
             }
-            //actually build the UI display
+            //build the UI display
+            if (pw != null)
+            {
+                pw.progres_max = XMLUtils.TotalModConfigComponents;
+                pw.SetProgress(0);
+            }
+            loadingConfig = true;
+            Utils.AppendToLog("Loading ModSelectionList with view " + Settings.SView);
+            completeModSearchList = new List<DatabaseObject>();
+            if (modTabGroups.TabPages.Count > 0)
+                modTabGroups.TabPages.Clear();
+            modTabGroups.Font = Settings.AppFont;
             this.addAllMods();
+            this.FinishLoad();
+        }
+
+        private void FinishLoad()
+        {
             this.addUserMods(false);
+            loadingConfig = false;
+            firstLoad = false;
             //set the size to the last closed size
-            this.Size = new Size(Settings.modSelectionWidth, Settings.modSelectionHeight);
+            this.Size = new Size(Settings.ModSelectionWidth, Settings.ModSelectionHeight);
             //set the UI colors
             Settings.setUIColor(this);
             pw.Close();
@@ -192,7 +210,6 @@ namespace RelhaxModpack
                 Settings.SetTaskbarState(Settings.AppBarStates.AlwaysOnTop);
             }
             //get the maximum height of the screen
-            //this.MaximumSize = Screen.FromControl(this).WorkingArea.Size;
             //get the size of the title bar window
             Rectangle screenRektangle = RectangleToScreen(this.ClientRectangle);
             int titleHeight = screenRektangle.Top - this.Top;
@@ -208,7 +225,7 @@ namespace RelhaxModpack
             {
                 this.WindowState = FormWindowState.Maximized;
             }
-            if (Settings.sView == Settings.SelectionView.defaultt)
+            if (Settings.SView == Settings.SelectionView.Default)
             {
                 colapseAllButton.Enabled = false;
                 colapseAllButton.Visible = false;
@@ -300,7 +317,7 @@ namespace RelhaxModpack
                 ModFormCheckBox modCheckBox = new ModFormCheckBox();
                 userMods[i].modFormCheckBox = modCheckBox;
                 modCheckBox.mod = userMods[i];
-                modCheckBox.Font = Settings.appFont;
+                modCheckBox.Font = Settings.AppFont;
                 modCheckBox.AutoSize = true;
                 int yLocation = 3 + (modCheckBox.Size.Height * (i));
                 modCheckBox.Location = new System.Drawing.Point(3, yLocation);
@@ -325,35 +342,22 @@ namespace RelhaxModpack
         //must be only one catagory
         private void addAllMods()
         {
-            if (pw != null)
-            {
-                pw.progres_max = XMLUtils.TotalModConfigComponents;
-                pw.SetProgress(0);
-            }
-            loadingConfig = true;
-            Utils.AppendToLog("Loading ModSelectionList with view " + Settings.sView);
-            completeModSearchList = new List<DatabaseObject>();
-            if (modTabGroups.TabPages.Count > 0)
-                modTabGroups.TabPages.Clear();
-            modTabGroups.Font = Settings.appFont;
             foreach (Category c in parsedCatagoryList)
             {
-                TabPage t = new TabPage(c.name);
-                t.AutoScroll = true;
-                //link the names of catagory and tab so eithor can be searched for
-                t.Name = c.name;
-                //if the catagory selection type is only one mod allowed
-                if (c.selectionType.Equals("single"))
+                TabPage t = new TabPage(c.name)
                 {
-                    //append a star so the user knows
-                    t.Text = t.Text + "*";
-                }
+                    AutoScroll = true,
+                    //link the names of catagory and tab so eithor can be searched for
+                    Name = c.name,
+                    Text = c.selectionType.Equals("single") ? c.name + "*" : c.name
+                };
+                c.TabPage = t;
                 //matched the catagory to tab
                 //add to the ui every mod of that catagory
                 Utils.SortModsList(c.mods);
-                int i = 1;
+                
                 LegacySelectionList lsl = null;
-                if (Settings.sView == Settings.SelectionView.legacy)
+                if (Settings.SView == Settings.SelectionView.Legacy)
                 {
                     //create the WPF host for this tabPage
                     ElementHost host = new ElementHost();
@@ -366,8 +370,13 @@ namespace RelhaxModpack
                     lsl.legacyTreeView.Items.Clear();
                     t.Controls.Add(host);
                 }
+                modTabGroups.TabPages.Add(t);
+            }
+            foreach (Category c in parsedCatagoryList)
+            {
                 foreach (Mod m in c.mods)
                 {
+                    
                     if (pw != null)
                     {
                         pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.getTranslatedString("loading"), m.name);
@@ -375,33 +384,32 @@ namespace RelhaxModpack
                         pw.SetProgress(prog);
                         Application.DoEvents();
                     }
-                    if (Settings.sView == Settings.SelectionView.defaultt)
+                    
+                    if (Settings.SView == Settings.SelectionView.Default)
                     {
                         //use default UI
-                        this.AddMod(m, t, i++, c);
+                        this.AddModDefaultView(m, c.TabPage, c);
                     }
-                    else if (Settings.sView == Settings.SelectionView.legacy)
+                    else if (Settings.SView == Settings.SelectionView.Legacy)
                     {
                         //use legacy OMC UI
-                        this.addModTreeview(m, t, i++, lsl, c);
+                        ElementHost h = (ElementHost)c.TabPage.Controls[0];
+                        this.AddModOMCView(m, c.TabPage, (LegacySelectionList)h.Child, c);
                     }
                     else
                     {
-                        //default case, use default
-                        this.AddMod(m, t, i++, c);
+                        //default case, use default view
+                        this.AddModDefaultView(m, c.TabPage, c);
                     }
                 }
-                modTabGroups.TabPages.Add(t);
             }
-            loadingConfig = false;
-            firstLoad = false;
         }
         //adds a mod m to a tabpage t, OMC treeview style
-        private void addModTreeview(Mod m, TabPage t, int panelCount, LegacySelectionList lsl, Category c)
+        private void AddModOMCView(Mod m, TabPage t, LegacySelectionList lsl, Category c)
         {
             if (!m.visible)
                 return;
-            if (Settings.darkUI)
+            if (Settings.DarkUI)
                 lsl.legacyTreeView.Background = System.Windows.Media.Brushes.Gray;
             //helpfull stuff
             string modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", m.zipFile);
@@ -411,6 +419,9 @@ namespace RelhaxModpack
             m.parent = c;
             //create base mod checkbox
             ModWPFCheckBox modCheckBox = new ModWPFCheckBox();
+            //add the ToolTip description to the checkbox
+            //http://wpftutorial.net/ToolTip.html
+            modCheckBox.ToolTip = m.description.Equals("")? NoDescriptionAvailable : m.description;
             //use a custom datatype for the name
             modCheckBox.mod = m;
             modCheckBox.catagory = c;
@@ -419,35 +430,35 @@ namespace RelhaxModpack
             m.tabIndex = t;
             completeModSearchList.Add(m);
             // completeModSearchList_New.Add(m);
-            switch (Settings.fontSizeforum)
+            switch (Settings.FontSizeforum)
             {
-                case Settings.FontSize.font100:
+                case Settings.FontSize.Font100:
                     break;
-                case Settings.FontSize.font125:
+                case Settings.FontSize.Font125:
                     modCheckBox.FontSize = modCheckBox.FontSize + 4;
                     break;
-                case Settings.FontSize.font175:
+                case Settings.FontSize.Font175:
                     modCheckBox.FontSize = modCheckBox.FontSize + 8;
                     break;
-                case Settings.FontSize.font225:
+                case Settings.FontSize.Font225:
                     modCheckBox.FontSize = modCheckBox.FontSize + 12;
                     break;
-                case Settings.FontSize.font275:
+                case Settings.FontSize.Font275:
                     modCheckBox.FontSize = modCheckBox.FontSize + 16;
                     break;
             }
-            modCheckBox.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
-            if (Settings.darkUI)
+            modCheckBox.FontFamily = new System.Windows.Media.FontFamily(Settings.FontName);
+            if (Settings.DarkUI)
                 modCheckBox.FontWeight = System.Windows.FontWeights.Bold;
             modCheckBox.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
             modCheckBox.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
             //make the tree view item for the modCheckBox
             System.Windows.Controls.TreeViewItem tvi = new System.Windows.Controls.TreeViewItem();
-            if (Settings.expandAllLegacy)
+            if (Settings.ExpandAllLegacy)
                 tvi.IsExpanded = true;
             //process configs
             if (m.configs.Count > 0)
-                processConfigs(c, m, m.configs, tvi, true);
+                AddConfigsOMCView(c, m, m.configs, tvi, true);
             string nameForModCB = Utils.ReplaceMacro(m);
             //if there are underscores you need to actually display them #thanksWPF
             nameForModCB = Regex.Replace(nameForModCB, "_", "__");
@@ -490,7 +501,7 @@ namespace RelhaxModpack
             modCheckBox.Unchecked += modCheckBoxL_Click;
         }
 
-        void processConfigs(Category c, Mod m, List<Config> configs, System.Windows.Controls.TreeViewItem tvi, bool parentIsMod = false, Config parentConfig = null)
+        void AddConfigsOMCView(Category c, Mod m, List<Config> configs, System.Windows.Controls.TreeViewItem tvi, bool parentIsMod = false, Config parentConfig = null)
         {
             //create the twp possible drop down options, and the mod optional config check box i guess
             ConfigWPFComboBox configControlDD = new ConfigWPFComboBox();
@@ -527,19 +538,20 @@ namespace RelhaxModpack
                     modHasRadioButtons = true;
                     //make the radio button
                     ConfigWPFRadioButton configControlRB = new ConfigWPFRadioButton();
-                    switch (Settings.fontSizeforum)
+                    configControlRB.ToolTip = con.description.Equals("")? NoDescriptionAvailable : con.description;
+                    switch (Settings.FontSizeforum)
                     {
-                        case Settings.FontSize.font100:
+                        case Settings.FontSize.Font100:
                             break;
-                        case Settings.FontSize.font125:
+                        case Settings.FontSize.Font125:
                             configControlRB.FontSize = configControlRB.FontSize + 4;
                             break;
-                        case Settings.FontSize.font175:
+                        case Settings.FontSize.Font175:
                             configControlRB.FontSize = configControlRB.FontSize + 8;
                             break;
                     }
-                    configControlRB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
-                    if (Settings.darkUI)
+                    configControlRB.FontFamily = new System.Windows.Media.FontFamily(Settings.FontName);
+                    if (Settings.DarkUI)
                         configControlRB.FontWeight = System.Windows.FontWeights.Bold;
                     configControlRB.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
                     configControlRB.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
@@ -608,13 +620,13 @@ namespace RelhaxModpack
                     configControlRB.MouseDown += new System.Windows.Input.MouseButtonEventHandler(Generic_MouseDown);
                     //add it to the mod config list
                     System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
-                    if (Settings.expandAllLegacy)
+                    if (Settings.ExpandAllLegacy)
                         configControlTVI.IsExpanded = true;
                     configControlTVI.Header = configControlRB;
                     tvi.Items.Add(configControlTVI);
                     //process the subconfigs
                     if (con.configs.Count > 0)
-                        processConfigs(c, m, con.configs, configControlTVI, false, con);
+                        AddConfigsOMCView(c, m, con.configs, configControlTVI, false, con);
                 }
                 else if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1") || con.type.Equals("single_dropdown2"))
                 {
@@ -663,7 +675,10 @@ namespace RelhaxModpack
                         cbi = new ComboBoxItem(con, toAdd);
                         configControlDDALL.Items.Add(cbi);
                         if (con.Checked)
+                        {
                             configControlDDALL.SelectedItem = cbi;
+                            configControlDDALL.ToolTip = cbi.config.description.Equals("") ? NoDescriptionAvailable : cbi.config.description;
+                        }
                     }
                     //add the dropdown to the thing. it will only run this once
                     if (configControlDDALL.Name.Equals("notAddedYet"))
@@ -678,6 +693,7 @@ namespace RelhaxModpack
                         if (configControlDDALL.SelectedIndex == -1)
                             configControlDDALL.SelectedIndex = 0;
                         System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
+                        configControlDDALL.ToolTip = con.description.Equals("") ? NoDescriptionAvailable : con.description;
                         configControlTVI.Header = configControlDDALL;
                         tvi.Items.Add(configControlTVI);
                     }
@@ -686,19 +702,21 @@ namespace RelhaxModpack
                 {
                     //make the checkbox
                     ConfigWPFCheckBox configControlCB = new ConfigWPFCheckBox();
-                    switch (Settings.fontSizeforum)
+                    //add the tooltip
+                    configControlCB.ToolTip = con.description.Equals("") ? NoDescriptionAvailable : con.description;
+                    switch (Settings.FontSizeforum)
                     {
-                        case Settings.FontSize.font100:
+                        case Settings.FontSize.Font100:
                             break;
-                        case Settings.FontSize.font125:
+                        case Settings.FontSize.Font125:
                             configControlCB.FontSize = configControlCB.FontSize + 4;
                             break;
-                        case Settings.FontSize.font175:
+                        case Settings.FontSize.Font175:
                             configControlCB.FontSize = configControlCB.FontSize + 8;
                             break;
                     }
-                    configControlCB.FontFamily = new System.Windows.Media.FontFamily(Settings.fontName);
-                    if (Settings.darkUI)
+                    configControlCB.FontFamily = new System.Windows.Media.FontFamily(Settings.FontName);
+                    if (Settings.DarkUI)
                         configControlCB.FontWeight = System.Windows.FontWeights.Bold;
                     configControlCB.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
                     configControlCB.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
@@ -768,13 +786,13 @@ namespace RelhaxModpack
                     configControlCB.MouseDown += new System.Windows.Input.MouseButtonEventHandler(Generic_MouseDown);
                     //add it to the mod config list
                     System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
-                    if (Settings.expandAllLegacy)
+                    if (Settings.ExpandAllLegacy)
                         configControlTVI.IsExpanded = true;
                     configControlTVI.Header = configControlCB;
                     tvi.Items.Add(configControlTVI);
                     //process the subconfigs
                     if (con.configs.Count > 0)
-                        processConfigs(c, m, con.configs, configControlTVI, false, con);
+                        AddConfigsOMCView(c, m, con.configs, configControlTVI, false, con);
                 }
                 else
                 {
@@ -1109,6 +1127,8 @@ namespace RelhaxModpack
             }
             ComboBoxItem cbi2 = (ComboBoxItem)cb.SelectedItem;
             cbi2.config.Checked = true;
+            //set the new tooltip
+            cb.ToolTip = cbi2.config.description.Equals("") ? NoDescriptionAvailable : cbi2.config.description;
         }
         //when a radiobutton of the legacy view mode is clicked
         void configControlRB_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -1224,22 +1244,25 @@ namespace RelhaxModpack
         }
 
         //adds a mod m to a tabpage t
-        private void AddMod(Mod m, TabPage t, int panelCount, Category catagory)
+        private void AddModDefaultView(Mod m, TabPage t, Category catagory)
         {
             if (!m.visible)
                 return;
+            int newPanelCount = t.Controls.Count + 1;
             //bool for keeping track if a radioButton config has been selected
             hasRadioButtonConfigSelected = false;
             modHasRadioButtons = false;
             //make the mod check box
             ModFormCheckBox modCheckBox = new ModFormCheckBox();
+            //add the ToolTip description to the checkbox
+            DescriptionToolTip.SetToolTip(modCheckBox, m.description.Equals("")? NoDescriptionAvailable : m.description);
             modCheckBox.AutoSize = true;
             modCheckBox.Location = new System.Drawing.Point(3, 3);
             modCheckBox.Size = new System.Drawing.Size(49, 15);
             modCheckBox.TabIndex = 1;
             modCheckBox.Text = Utils.ReplaceMacro(m);
             modCheckBox.Name = t.Name + "_" + m.name;
-            modCheckBox.Font = Settings.appFont;
+            modCheckBox.Font = Settings.AppFont;
             modCheckBox.catagory = catagory;
             modCheckBox.mod = m;
             m.tabIndex = t;
@@ -1247,26 +1270,29 @@ namespace RelhaxModpack
             completeModSearchList.Add(m);
             // completeModSearchList_New.Add(m);
             //the mod checksum logic
-            string modDownloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads", m.zipFile);
-            if (firstLoad)
+            if (!m.zipFile.Equals(""))
             {
-                string oldCRC2 = XMLUtils.GetMd5Hash(modDownloadPath);
-                //if the CRC's don't match and the mod actually has a zip file
-                if ((!m.zipFile.Equals("")) && (!m.crc.Equals(oldCRC2)))
+                string modDownloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads", m.zipFile);
+                if (firstLoad)
                 {
-                    modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
-                    m.downloadFlag = true;
-                    if ((m.size > 0))
-                        modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
+                    string oldCRC2 = XMLUtils.GetMd5Hash(modDownloadPath);
+                    //if the CRC's don't match and the mod actually has a zip file
+                    if ((!m.crc.Equals(oldCRC2)))
+                    {
+                        modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
+                        m.downloadFlag = true;
+                        if ((m.size > 0))
+                            modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
+                    }
                 }
-            }
-            else
-            {
-                if (m.downloadFlag)
+                else
                 {
-                    modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
-                    if ((m.size > 0))
-                        modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
+                    if (m.downloadFlag)
+                    {
+                        modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
+                        if ((m.size > 0))
+                            modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
+                    }
                 }
             }
             modCheckBox.UseVisualStyleBackColor = true;
@@ -1277,19 +1303,19 @@ namespace RelhaxModpack
             //from user configs
             //make the main panel
             Panel mainPanel = new Panel();
-            mainPanel.BorderStyle = Settings.disableBorders ? BorderStyle.None : BorderStyle.FixedSingle;
+            mainPanel.BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle;
             mainPanel.TabIndex = 0;
             mainPanel.AutoSize = true;
             mainPanel.AutoSizeMode = AutoSizeMode.GrowOnly;
             mainPanel.Size = new System.Drawing.Size(t.Size.Width - 25, 20);
-            if (m.enabled && m.Checked && !Settings.disableColorChange)
+            if (m.enabled && m.Checked && !Settings.DisableColorChange)
                 mainPanel.BackColor = Color.BlanchedAlmond;
             else
                 mainPanel.BackColor = Settings.getBackColor();
-            int panelCountYLocation = 70 * (panelCount - 1);
+            int panelCountYLocation = 70 * (newPanelCount - 1);
             //if this is not the first mod being added to the panel
             int panelYLocation = 6; //tab plus delimiter
-            if (panelCount > 1)
+            if (newPanelCount > 1)
             {
                 //create a list of other controlls and put this one 6 pixels below the others
                 foreach (Control c in t.Controls)
@@ -1297,7 +1323,7 @@ namespace RelhaxModpack
                     panelYLocation += c.Size.Height;
                     panelYLocation += 6;
                 }
-                panelCountYLocation = (panelCount - 1) * (t.Controls[0].Size.Height);
+                panelCountYLocation = (newPanelCount - 1) * (t.Controls[0].Size.Height);
                 panelCountYLocation = panelCountYLocation + 5;
             }
             mainPanel.Location = new System.Drawing.Point(5, panelYLocation);
@@ -1306,7 +1332,7 @@ namespace RelhaxModpack
             //add to main panel
             mainPanel.Controls.Add(modCheckBox);
             if (m.configs.Count > 0)
-                ProcessConfigsDefault(t, m, catagory, modCheckBox, mainPanel, true, m.configs, mainPanel);
+                AddConfigsDefaultView(t, m, catagory, modCheckBox, mainPanel, true, m.configs, mainPanel);
             //add to tab
             t.Controls.Add(mainPanel);
             //add the event handler before changing the checked state so the event
@@ -1322,12 +1348,12 @@ namespace RelhaxModpack
             modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
         }
 
-        private void ProcessConfigsDefault(TabPage t, Mod m, Category catagory, ModFormCheckBox modCheckBox, Panel mainPanel, bool parentIsMod, List<Config> configs, Panel topPanal, Config parentConfig = null)
+        private void AddConfigsDefaultView(TabPage t, Mod m, Category catagory, ModFormCheckBox modCheckBox, Panel mainPanel, bool parentIsMod, List<Config> configs, Panel topPanal, Config parentConfig = null)
         {
             //make config panel
             Panel configPanel = new Panel();
             configPanel.Enabled = true;
-            configPanel.BorderStyle = Settings.disableBorders ? BorderStyle.None : BorderStyle.FixedSingle;
+            configPanel.BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle;
             configPanel.Location = new System.Drawing.Point(3, 10);
             configPanel.TabIndex = 2;
             configPanel.Size = new System.Drawing.Size(t.Size.Width - 35, 30);
@@ -1335,33 +1361,33 @@ namespace RelhaxModpack
             configPanel.AutoSize = true;
             if (parentIsMod)
             {
-                if (m.enabled && m.Checked && !Settings.disableColorChange)
+                if (m.enabled && m.Checked && !Settings.DisableColorChange)
                     configPanel.BackColor = Color.BlanchedAlmond;
                 else
                     configPanel.BackColor = Settings.getBackColor();
             }
             else
             {
-                if (parentConfig.enabled && parentConfig.Checked && !Settings.disableColorChange)
+                if (parentConfig.enabled && parentConfig.Checked && !Settings.DisableColorChange)
                     configPanel.BackColor = Color.BlanchedAlmond;
                 else
                     configPanel.BackColor = Settings.getBackColor();
             }
             int spacer = modCheckBox.Location.Y + modCheckBox.Size.Height + 5;
-            switch (Settings.fontSizeforum)
+            switch (Settings.FontSizeforum)
             {
-                case Settings.FontSize.font100:
+                case Settings.FontSize.Font100:
                     break;
-                case Settings.FontSize.font125:
+                case Settings.FontSize.Font125:
                     spacer += 3;
                     break;
-                case Settings.FontSize.font175:
+                case Settings.FontSize.Font175:
                     spacer += 6;
                     break;
-                case Settings.FontSize.font225:
+                case Settings.FontSize.Font225:
                     spacer += 9;
                     break;
-                case Settings.FontSize.font275:
+                case Settings.FontSize.Font275:
                     spacer += 12;
                     break;
             }
@@ -1422,12 +1448,14 @@ namespace RelhaxModpack
                     modHasRadioButtons = true;
                     //make default radioButton
                     ConfigFormRadioButton configControlRB = new ConfigFormRadioButton();
+                    //add the ToolTip description to the checkbox
+                    DescriptionToolTip.SetToolTip(configControlRB, con.description.Equals("")? NoDescriptionAvailable : con.description);
                     configControlRB.AutoSize = true;
                     configControlRB.Location = new Point(6, getYLocation(configPanel.Controls));
                     configControlRB.Size = new System.Drawing.Size(150, 15);
                     configControlRB.TabIndex = 1;
                     configControlRB.TabStop = true;
-                    configControlRB.Font = Settings.appFont;
+                    configControlRB.Font = Settings.AppFont;
                     configControlRB.catagory = catagory;
                     configControlRB.mod = m;
                     configControlRB.config = con;
@@ -1467,31 +1495,34 @@ namespace RelhaxModpack
                     configControlRB.Name = t.Name + "_" + m.name + "_" + con.name;
                     //run checksum logic
                     configControlRB.Text = Utils.ReplaceMacro(con);
-                    if (firstLoad)
+                    if (!con.zipFile.Equals(""))
                     {
-                        string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
-                        if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
+                        if (firstLoad)
                         {
-                            configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
-                            con.downloadFlag = true;
-                            if (con.size > 0)
-                                configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.size, 1, true));
+                            string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
+                            if ((!oldCRC.Equals(con.crc)))
+                            {
+                                configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
+                                con.downloadFlag = true;
+                                if (con.size > 0)
+                                    configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.size, 1, true));
+                            }
                         }
-                    }
-                    else
-                    {
-                        if (con.downloadFlag)
+                        else
                         {
-                            configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
-                            if (con.size > 0)
-                                configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.size, 1, true));
+                            if (con.downloadFlag)
+                            {
+                                configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
+                                if (con.size > 0)
+                                    configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.size, 1, true));
+                            }
                         }
                     }
                     //add the config to the form
                     configPanel.Controls.Add(configControlRB);
                     //process the subconfigs
                     if (con.configs.Count > 0)
-                        ProcessConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
+                        AddConfigsDefaultView(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
                 }
                 else if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1") || con.type.Equals("single_dropdown2"))
                 {
@@ -1545,25 +1576,34 @@ namespace RelhaxModpack
                         {
                             configControlDDALL.SelectedItem = cbi;
                             configControlDDALL.Enabled = true;
+                            //set the tooltip to the checked option
+                            DescriptionToolTip.SetToolTip(configControlDDALL, con.description.Equals("")? NoDescriptionAvailable : con.description);
                         }
                     }
                     if (configControlDDALL.Items.Count > 0)
                     {
                         configControlDDALL.Enabled = true;
                         if (configControlDDALL.SelectedIndex == -1)
+                        {
                             configControlDDALL.SelectedIndex = 0;
+                            //set the tooltip since nothing has been selected
+                            ComboBoxItem cbiTT = (ComboBoxItem)configControlDDALL.Items[0];
+                            DescriptionToolTip.SetToolTip(configControlDDALL, cbiTT.config.description.Equals("")? NoDescriptionAvailable : cbiTT.config.description);
+                        }
                     }
                 }
                 else if (con.type.Equals("multi"))
                 {
                     //make a checkBox
                     ConfigFormCheckBox configControlCB = new ConfigFormCheckBox();
+                    //add the ToolTip description to the checkbox
+                    DescriptionToolTip.SetToolTip(configControlCB, con.description.Equals("")? NoDescriptionAvailable : con.description);
                     configControlCB.AutoSize = true;
                     configControlCB.Location = new Point(6, getYLocation(configPanel.Controls));
                     configControlCB.Size = new System.Drawing.Size(150, 15);
                     configControlCB.TabIndex = 1;
                     configControlCB.TabStop = true;
-                    configControlCB.Font = Settings.appFont;
+                    configControlCB.Font = Settings.AppFont;
                     configControlCB.catagory = catagory;
                     configControlCB.mod = m;
                     configControlCB.config = con;
@@ -1627,7 +1667,7 @@ namespace RelhaxModpack
                     configPanel.Controls.Add(configControlCB);
                     //process subconfigs
                     if (con.configs.Count > 0)
-                        ProcessConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
+                        AddConfigsDefaultView(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
                 }
                 else
                 {
@@ -1653,20 +1693,20 @@ namespace RelhaxModpack
                 }
                 if (c is ConfigFormComboBox)
                 {
-                    switch (Settings.fontSizeforum)
+                    switch (Settings.FontSizeforum)
                     {
-                        case Settings.FontSize.font100:
+                        case Settings.FontSize.Font100:
                             break;
-                        case Settings.FontSize.font125:
+                        case Settings.FontSize.Font125:
                             y += 3;
                             break;
-                        case Settings.FontSize.font175:
+                        case Settings.FontSize.Font175:
                             y += 6;
                             break;
-                        case Settings.FontSize.font225:
+                        case Settings.FontSize.Font225:
                             y += 9;
                             break;
-                        case Settings.FontSize.font275:
+                        case Settings.FontSize.Font275:
                             y += 12;
                             break;
                         case Settings.FontSize.DPI100:
@@ -1769,7 +1809,7 @@ namespace RelhaxModpack
             //toggle the mod in memory, enabled or disabled
             m.Checked = cb.Checked;
             //toggle the mod panel color
-            if (cb.Checked && !Settings.disableColorChange)
+            if (cb.Checked && !Settings.DisableColorChange)
             {
                 modPanel.BackColor = Color.BlanchedAlmond;
             }
@@ -1783,7 +1823,7 @@ namespace RelhaxModpack
             //the first one is always the mod checkbox
             //the second one is always the config panel
             Panel configPanel = (Panel)modPanel.Controls[1];
-            if (cb.Checked && !Settings.disableColorChange)
+            if (cb.Checked && !Settings.DisableColorChange)
             {
                 configPanel.BackColor = Color.BlanchedAlmond;
             }
@@ -2019,7 +2059,7 @@ namespace RelhaxModpack
                 }
             }
             //trigger the panel color change
-            if (cb.Checked && !Settings.disableColorChange)
+            if (cb.Checked && !Settings.DisableColorChange)
                 configPanel.BackColor = Color.BlanchedAlmond;
             else
                 configPanel.BackColor = Settings.getBackColor();
@@ -2031,6 +2071,8 @@ namespace RelhaxModpack
                 return;
             //uncheck all other dorp down configs
             ConfigFormComboBox cb = (ConfigFormComboBox)sender;
+            //due to recursion, save the cbi up here
+            ComboBoxItem cbi2 = (ComboBoxItem)cb.SelectedItem;
             //propagate the check back up if required
             if (cb.SelectedIndex != -1)
             {
@@ -2071,10 +2113,12 @@ namespace RelhaxModpack
             {
                 cbi.config.Checked = false;
             }
-            ComboBoxItem cbi2 = (ComboBoxItem)cb.SelectedItem;
+            //ComboBoxItem cbi2 = (ComboBoxItem)cb.SelectedItem;
+            cb.SelectedItem = cbi2;
             cbi2.config.Checked = true;
+            DescriptionToolTip.SetToolTip(cb, cbi2.config.description.Equals("")? NoDescriptionAvailable : cbi2.config.description);
             Panel configPanel = (Panel)cb.Parent;
-            if (!Settings.disableColorChange)
+            if (!Settings.DisableColorChange)
                 configPanel.BackColor = Color.BlanchedAlmond;
         }
         //handler for when a config radioButton is pressed
@@ -2175,7 +2219,7 @@ namespace RelhaxModpack
                 }
             }
             //trigger the panel color change
-            if (rb.Checked && !Settings.disableColorChange)
+            if (rb.Checked && !Settings.DisableColorChange)
                 configPanel.BackColor = Color.BlanchedAlmond;
             else
                 configPanel.BackColor = Settings.getBackColor();
@@ -2246,7 +2290,7 @@ namespace RelhaxModpack
         {
             cancel = false;
             //save the last config if told to do so
-            if (Settings.saveLastConfig)
+            if (Settings.SaveLastConfig)
             {
                 XMLUtils.SaveConfig(false, null, parsedCatagoryList, userMods);
             }
@@ -2272,8 +2316,8 @@ namespace RelhaxModpack
         private void ModSelectionList_FormClosing(object sender, FormClosingEventArgs e)
         {
             //save the size of this window for later.
-            Settings.modSelectionHeight = this.Size.Height;
-            Settings.modSelectionWidth = this.Size.Width;
+            Settings.ModSelectionHeight = this.Size.Height;
+            Settings.ModSelectionWidth = this.Size.Width;
             if (taskBarHidden)
                 Settings.SetTaskbarState(Settings.AppBarStates.AutoHide);
             //save wether the window was in fullscreen mods before closing
@@ -2308,8 +2352,7 @@ namespace RelhaxModpack
             loadingConfig = true;
             OpenFileDialog loadLocation = new OpenFileDialog();
             string filePath = "";
-            // using (SelectionViewer sv = new SelectionViewer(this.Location.X + 100, this.Location.Y + 100, "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/developerSelections/selections.xml"))
-            using (SelectionViewer sv = new SelectionViewer(this.Location.X + 100, this.Location.Y + 100, Settings.modInfoDatFile))
+            using (SelectionViewer sv = new SelectionViewer(this.Location.X + 100, this.Location.Y + 100, Settings.ModInfoDatFile))
             {
                 if (loadMode == loadConfigMode.fromAutoInstall)
                 {
@@ -2545,7 +2588,7 @@ namespace RelhaxModpack
             {
                 return;
             }
-            if (Settings.sView == Settings.SelectionView.defaultt)
+            if (Settings.SView == Settings.SelectionView.Default)
             {
                 if (sendah.SelectedItem is Mod)
                 {
@@ -2587,7 +2630,7 @@ namespace RelhaxModpack
                     }
                 }
             }
-            else if (Settings.sView == Settings.SelectionView.legacy)
+            else if (Settings.SView == Settings.SelectionView.Legacy)
             {
                 if (sendah.SelectedItem is Mod)
                 {

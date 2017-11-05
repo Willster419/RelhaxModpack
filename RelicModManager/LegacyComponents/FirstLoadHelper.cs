@@ -26,12 +26,12 @@ namespace RelhaxModpack
             //setting UI color
             Settings.setUIColor(this);
             //font scaling
-            this.AutoScaleMode = Settings.appScalingMode;
-            helperText.Font = Settings.appFont;
-            this.Font = Settings.appFont;
-            if (Settings.appScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
+            this.AutoScaleMode = Settings.AppScalingMode;
+            helperText.Font = Settings.AppFont;
+            this.Font = Settings.AppFont;
+            if (Settings.AppScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
             {
-                this.Scale(new SizeF(Settings.scaleSize, Settings.scaleSize));
+                this.Scale(new SizeF(Settings.ScaleSize, Settings.ScaleSize));
             }
         }
     }

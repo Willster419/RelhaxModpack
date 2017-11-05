@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace RelhaxModpack
 {
@@ -28,6 +29,8 @@ namespace RelhaxModpack
             }
             return null;
         }
+        //the TabPage refrence for the UI
+        public TabPage @TabPage { get; set; }
         //sorts the catagories
         public static int CompareCatagories(Category x, Category y)
         {

@@ -160,18 +160,18 @@ namespace RelhaxModpack
             updateBox.Size = new Size(width, updateBox.Size.Height);
             descriptionBox.Size = new Size(width, descriptionBox.Size.Height);
             int scale = 0;
-            switch (Settings.fontSizeforum)
+            switch (Settings.FontSizeforum)
             {
-                case Settings.FontSize.font125:
+                case Settings.FontSize.Font125:
                     scale = 30;
                     break;
-                case Settings.FontSize.font175:
+                case Settings.FontSize.Font175:
                     scale = 75;
                     break;
-                case Settings.FontSize.font225:
+                case Settings.FontSize.Font225:
                     scale = 145;
                     break;
-                case Settings.FontSize.font275:
+                case Settings.FontSize.Font275:
                     scale = 200;
                     break;
                 case Settings.FontSize.DPI125:
@@ -187,7 +187,7 @@ namespace RelhaxModpack
                     scale = 200;
                     break;
                 case Settings.FontSize.DPIAUTO:
-                    int settingsScale = (int)Settings.scaleSize;
+                    int settingsScale = (int)Settings.ScaleSize;
                     scale = settingsScale * 45;
                     scale = scale + 30;
                     break;
@@ -224,11 +224,11 @@ namespace RelhaxModpack
             //update for translations
             this.applyTranslations();
             //font scaling
-            this.AutoScaleMode = Settings.appScalingMode;
-            this.Font = Settings.appFont;
-            if (Settings.appScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
+            this.AutoScaleMode = Settings.AppScalingMode;
+            this.Font = Settings.AppFont;
+            if (Settings.AppScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
             {
-                this.Scale(new System.Drawing.SizeF(Settings.scaleSize, Settings.scaleSize));
+                this.Scale(new System.Drawing.SizeF(Settings.ScaleSize, Settings.ScaleSize));
             }
             this.Text = modOrConfigName;
             for (int i = 0; i < medias.Count; i++)
@@ -267,7 +267,7 @@ namespace RelhaxModpack
             this.Size = new Size(450, 700);
             Settings.setUIColor(this);
             //specify the start location
-            this.Location = new Point(Settings.previewX, Settings.previewY);
+            this.Location = new Point(Settings.PreviewX, Settings.PreviewY);
         }
 
         private void descriptionBox_LinkClicked(object sender, LinkClickedEventArgs e)
@@ -293,8 +293,8 @@ namespace RelhaxModpack
             // if preview window is minimized and will be closed directly via the taskbar, windows send -32000 coordinate X and Y, so not storing it
             if (this.Location.X > 0 && this.Location.Y > 0)
             {
-                Settings.previewX = this.Location.X;
-                Settings.previewY = this.Location.Y;
+                Settings.PreviewX = this.Location.X;
+                Settings.PreviewY = this.Location.Y;
             }
         }
     }

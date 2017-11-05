@@ -1,0 +1,118 @@
+2017-11-04 19:52:52.956   |------------------------------------------------------------------------------------------------|
+2017-11-04 19:52:52.964   Main Entry point launched
+2017-11-04 19:52:52.972   command line: C:\wot.addons\RelhaxModpack.exe
+2017-11-04 19:52:52.976   Loading translation hashes
+2017-11-04 19:52:52.992   Attempting to load MainWindow
+2017-11-04 19:52:53.003   MainWindow Constructed
+2017-11-04 19:52:53.106   |RelHax Modpack 26.6.1
+2017-11-04 19:52:53.111   |Built on 31/10/2017 16:09:32
+2017-11-04 19:52:53.114   |Running on Microsoft Windows NT 6.2.9200.0
+2017-11-04 19:52:53.119   Verifying Directory Structure
+2017-11-04 19:52:53.126   Starting check for application updates
+2017-11-04 19:52:53.603   Local application is 26.6.1, current online is 26.6.1
+2017-11-04 19:52:53.607   Loading settings
+2017-11-04 19:52:53.614   Loading application settings
+2017-11-04 19:52:53.617   Loading xml file
+2017-11-04 19:52:53.624   Settings loaded sucessfully
+2017-11-04 19:52:55.625   appDataFolder parsed as C:\Users\cedric\AppData\Roaming\Wargaming.net\WorldOfTanks
+2017-11-04 19:52:55.632   valid game path found: E:\Jeux\World_of_Tanks\worldoftanks.exe
+2017-11-04 19:52:55.636   tanksLocation parsed as E:\Jeux\World_of_Tanks
+2017-11-04 19:52:55.639   customUserMods parsed as C:\wot.addons\RelHaxUserMods
+2017-11-04 19:52:55.653   tanksVersion parsed as 0.9.20.1.2
+2017-11-04 19:52:55.760   downloading modInfo.dat
+2017-11-04 19:52:56.630   loading dat config file
+2017-11-04 19:52:56.777   Loading ModSelectionList with view defaultt
+2017-11-04 19:53:10.226   Unchecking all mods
+2017-11-04 19:53:10.237   Loading mod selections v2.0 from C:\wot.addons\RelHaxUserConfigs\ced2.xml
+2017-11-04 19:53:10.241   parsing config file: C:\wot.addons\RelHaxUserConfigs\ced2.xml
+2017-11-04 19:53:10.257   Checking mod Default Config
+2017-11-04 19:53:10.261   Checking mod Tank Carousel base modifications (xvm)
+2017-11-04 19:53:10.268   Checking mod Enabled
+2017-11-04 19:53:10.272   Checking mod Rows - 2
+2017-11-04 19:53:10.276   Checking mod Arcade and Sniper
+2017-11-04 19:53:10.280   Checking mod J1mBOs Crosshair mod
+2017-11-04 19:53:10.284   Checking mod Arty
+2017-11-04 19:53:10.288   Checking mod Pro-Arty
+2017-11-04 19:53:10.294   Checking mod Damagelog by GambitER
+2017-11-04 19:53:10.298   Checking mod XFT config with hitlog on top (xvm needed for hitlog)
+2017-11-04 19:53:10.302   Checking mod Zoom modifications - zoom in (pmod)
+2017-11-04 19:53:10.306   Checking mod 2, 4, 8, 12, 16, 20, 26, 32, 40, 48
+2017-11-04 19:53:10.310   Checking mod td brake on
+2017-11-04 19:53:10.313   Checking mod starting zoom 2x (client default)
+2017-11-04 19:53:10.317   Finished loading mod selections v2.0
+2017-11-04 19:53:27.626   Installation BackupMods
+2017-11-04 19:53:27.630   ... skipped
+2017-11-04 19:53:27.634   Installation BackupUserData
+2017-11-04 19:53:27.639   ... skipped
+2017-11-04 19:53:27.643   Installation UninstallMods
+2017-11-04 19:53:27.650   Elements to delete (from logfile): 0
+2017-11-04 19:53:27.656   Elements to delete (from parsing): 2
+2017-11-04 19:53:27.661   Installation logFiles
+2017-11-04 19:53:27.665   ... skipped
+2017-11-04 19:53:27.669   Installation DeleteWoTCache
+2017-11-04 19:53:27.673   ... skipped
+2017-11-04 19:53:27.676   Installation ExtractGlobalDependencies
+2017-11-04 19:53:27.690   Starting Relhax Modpack Extraction
+2017-11-04 19:53:27.694   Extracting Global Dependency 
+2017-11-04 19:53:27.698   Extracting Global Dependency Dependency_global_basic_folders.zip
+2017-11-04 19:53:27.732   Extracting Global Dependency Dependency_global_fonts_2017-08-21.zip
+2017-11-04 19:53:27.930   Extracting Global Dependency Dependency_global_orig_xmls_0.9.20.1.2_2017-11-02.zip
+2017-11-04 19:53:27.982   Extracting Global Dependency Dependency_global_ScriptloaderPro_1.25.zip
+2017-11-04 19:53:28.024   Extracting Dependency Dependency_XVM_Base_7.2.2.zip
+2017-11-04 19:53:31.237   Extracting Dependency Dependency_Crosshair_Sight_0.9.20.1.1_2017-10-25.zip
+2017-11-04 19:53:31.258   Extracting Dependency XVM_config_builder_damage_log_disable.zip
+2017-11-04 19:53:31.275   Extracting Dependency Dependency_PMOD_29-2_2017-10-26.zip
+2017-11-04 19:53:32.495   xvm boot file located to parse
+2017-11-04 19:53:32.501   Extracting Mod/Config XVM_Prebuilt_Configs_Default_2017_03-24.zip
+2017-11-04 19:53:32.517   Extracting Mod/Config XVM_config_builder_carousel_enable.zip
+2017-11-04 19:53:32.535   Extracting Mod/Config XVM_config_builder_carousel_2_row.zip
+2017-11-04 19:53:32.552   Extracting Mod/Config Crosshairs_J1mB0_s_Crosshair_Mod_by_Grabaah_v1.19_0.9.20.1.1_tank.zip
+2017-11-04 19:53:32.590   Extracting Mod/Config Crosshairs_J1mB0_s_Crosshair_Mod_by_Grabaah_v1.19_0.9.20.1.1_tank_2_circle.zip
+2017-11-04 19:53:32.606   Extracting Mod/Config Crosshairs_ProArty_9.19.1.1_v1.14BETA_2017-07-27.zip
+2017-11-04 19:53:32.647   Extracting Mod/Config Damage_Logs_Damage_Log_by_GambitER_base_2017-10-26.zip
+2017-11-04 19:53:32.675   Extracting Mod/Config Damage_Logs_GambitER_Damage_Log_XFT_Split_configs_2017-08-30.zip
+2017-11-04 19:53:32.748   Extracting Mod/Config pmod_zoomin_config_3_2017-05-01.zip
+2017-11-04 19:53:32.766   Extracting Mod/Config pmod_td_brake_on_2017-05-01.zip
+2017-11-04 19:53:32.783   Extracting Mod/Config pmod_default_zoom_2x_2017-05-01.zip
+2017-11-04 19:53:32.799   Finished Relhax Modpack Extraction
+2017-11-04 19:53:32.803   Installation RestoreUserData
+2017-11-04 19:53:32.807   ... skipped
+2017-11-04 19:53:32.811   Installation PatchMods
+2017-11-04 19:53:32.923   nativeProcessingFile: 000, originalName: XVM_config_builder_damage_log_disable.xml
+2017-11-04 19:53:32.928   Json patch, \\res_mods\\configs\\xvm\\default\\battleLabelsTemplates.xc, $.def.damageLog.enabled, false
+2017-11-04 19:53:33.042   nativeProcessingFile: 001, originalName: XVM_config_builder_carousel_enable.xml
+2017-11-04 19:53:33.046   Json patch, \\res_mods\\configs\\xvm\\default\\carousel.xc, $.carousel.enabled, true
+2017-11-04 19:53:33.054   nativeProcessingFile: 002, originalName: XVM_config_builder_carousel_2_row.xml
+2017-11-04 19:53:33.059   Json patch, \\res_mods\\configs\\xvm\\default\\carousel.xc, $.carousel.rows, 2
+2017-11-04 19:53:33.067   nativeProcessingFile: 003, originalName: XFT_disable_xvm_damagelog.xml
+2017-11-04 19:53:33.071   Json patch, \\res_mods\\configs\\xvm\\default\\battleLabelsTemplates.xc, $.def.damageLog.enabled, false
+2017-11-04 19:53:33.081   nativeProcessingFile: 004, originalName: XFT_disable_xvm_lasthit.xml
+2017-11-04 19:53:33.084   Json patch, \\res_mods\\configs\\xvm\\default\\battleLabelsTemplates.xc, $.def.lastHit.enabled, false
+2017-11-04 19:53:33.095   nativeProcessingFile: 005, originalName: pmod_zoomin_config_3_patch.xml
+2017-11-04 19:53:33.099   Regex patch, all lines, line by line, \\mods\\configs\\pmod\\zoomX.json, \"zoomXSteps\":.*\[.*\], "zoomXSteps": [2, 4, 8, 12, 16, 20, 26, 32, 40, 48]
+2017-11-04 19:53:33.109   Json patch, \\mods\\configs\\pmod\\zoomX.json, $.enable, true
+2017-11-04 19:53:33.117   nativeProcessingFile: 006, originalName: pmod_td_brake_on.xml
+2017-11-04 19:53:33.121   Json patch, \\mods\\configs\\pmod\\tdBrakeRemover.json, $.enable, true
+2017-11-04 19:53:33.128   Json patch, \\mods\\configs\\pmod\\tdBrakeRemover.json, $.TDSniperMovementMode, custom
+2017-11-04 19:53:33.134   nativeProcessingFile: 007, originalName: pmod_default_zoom_2x_patch.xml
+2017-11-04 19:53:33.138   Json patch, \\mods\\configs\\pmod\\defaultZoom.json, $.enable, true
+2017-11-04 19:53:33.145   Json patch, \\mods\\configs\\pmod\\defaultZoom.json, $.defaultZoomValue, 2
+2017-11-04 19:53:33.154   Installation ExtractUserMods
+2017-11-04 19:53:33.158   ... skipped
+2017-11-04 19:53:33.163   Installation PatchUserMods
+2017-11-04 19:53:33.166   ... skipped
+2017-11-04 19:53:33.170   Installation InstallUserFonts
+2017-11-04 19:53:33.177   Checking for fonts to install
+2017-11-04 19:53:33.191   No fonts to install
+2017-11-04 19:53:33.398   Installation CreateShortscuts
+2017-11-04 19:53:33.404   creating desktop ShortCut: WorldOfTanks.exe (World of Tanks)
+2017-11-04 19:53:33.441   creating desktop ShortCut: WoTLauncher.exe (World of Tanks Launcher)
+2017-11-04 19:53:33.651   Installation CheckDatabase
+2017-11-04 19:53:33.661   Installation CleanUp
+2017-11-04 19:53:35.720   Installation Done
+2017-11-04 19:53:37.256   Saving application settings
+2017-11-04 19:53:37.265   Settings saved sucessfully
+2017-11-04 19:53:37.270   cleaning "RelHaxTemp" folder
+2017-11-04 19:53:37.276   Exception counted: 0
+2017-11-04 19:53:37.281   Application Closing
+2017-11-04 19:53:37.285   |------------------------------------------------------------------------------------------------|

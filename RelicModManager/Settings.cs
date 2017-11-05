@@ -1,10 +1,10 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Globalization;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Xml;
-using System.Runtime.InteropServices;
-using System;
-using System.Globalization;
 
 namespace RelhaxModpack
 {
@@ -16,140 +16,140 @@ namespace RelhaxModpack
         //toggle if the program should notify the user if the database version is the same as the last installed version
         public static bool NotifyIfSameDatabase { get; set; }
         //toggle if the program will backup the current mod installation
-        public static bool backupModFolder { get; set; }
+        public static bool BackupModFolder { get; set; }
         //toggle if the program will clean the mods and res_mods folders before installation
-        public static bool cleanInstallation { get; set; }
-        public static bool forceManuel { get; set; }
-        public static bool expandAllLegacy { get; set; }
-        public static bool comicSans { get; set; }
-        public static bool firstLoad { get; set; }
-        public static bool saveLastConfig { get; set; }
-        public static bool saveUserData { get; set; }
-        public static bool darkUI { get; set; }
-        public static bool disableBorders { get; set; }
+        public static bool CleanInstallation { get; set; }
+        public static bool ForceManuel { get; set; }
+        public static bool ExpandAllLegacy { get; set; }
+        public static bool ComicSans { get; set; }
+        public static bool FirstLoad { get; set; }
+        public static bool SaveLastConfig { get; set; }
+        public static bool SaveUserData { get; set; }
+        public static bool DarkUI { get; set; }
+        public static bool DisableBorders { get; set; }
         //toggle if the installation complete window will be shown
         public static bool ShowInstallCompleteWindow { get; set; }
         //toggle if the program will delete the WoT appdata cache
-        public static bool clearCache { get; set; }
-        public static bool deleteLogs { get; set; }
-        public static bool disableColorChange { get; set; }
+        public static bool ClearCache { get; set; }
+        public static bool DeleteLogs { get; set; }
+        public static bool DisableColorChange { get; set; }
         //toggle if the program will create desktop shortcuts
         public static bool CreateShortcuts { get; set; }
-        public static int modSelectionHeight { get; set; }
-        public static int modSelectionWidth { get; set; }
-        public static int loadingGif { get; set; }
-        public static string fontName { get; set; }
-        public static float scaleSize { get; set; }
-        public static string settingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxSettings.xml");
-        public static string managerInfoDatFile = Path.Combine(Application.StartupPath, "RelHaxTemp", "managerInfo.dat");
-        public static string modInfoDatFile = Path.Combine(Application.StartupPath, "RelHaxTemp", "modInfo.dat");
+        public static int ModSelectionHeight { get; set; }
+        public static int ModSelectionWidth { get; set; }
+        public static int LoadingGif { get; set; }
+        public static string FontName { get; set; }
+        public static float ScaleSize { get; set; }
+        public static string SettingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxSettings.xml");
+        public static string ManagerInfoDatFile = Path.Combine(Application.StartupPath, "RelHaxTemp", "managerInfo.dat");
+        public static string ModInfoDatFile = Path.Combine(Application.StartupPath, "RelHaxTemp", "modInfo.dat");
         //informations for macroList
         public static string TanksLocation = "";
         public static string TanksVersion = "";
-        public static string tanksOnlineFolderVersion = "";
+        public static string TanksOnlineFolderVersion = "";
         //needed to create to first line to installedRelhaxFiles.log
         public static string DatabaseVersion = "";
         //
-        public static string configFileVersion = "2.0";     // for later imports of this files, we need a better identification
-        public enum LoadingGifs { standard = 0, thirdGuards = 1 };
-        public static LoadingGifs gif;
+        public static string ConfigFileVersion = "2.0";     // for later imports of this files, we need a better identification
+        public enum LoadingGifs { Standard = 0, ThirdGuards = 1 };
+        public static LoadingGifs GIF;
         //font settings
-        public const float fontSize100 = 8.25F;//1.0 font scaling
-        public const float fontSize125 = 10.25F;//1.25 font scaling
-        public const float fontSize175 = 14.25F;//1.75 font scaling
-        public const float fontSize225 = 18.5F;//2.25 font scaling
-        public const float fontSize275 = 22.5F;//2.75 font scaling
-        public const float scale100 = 1.0f;//1.0 font scaling
-        public const float scale125 = 1.25f;//1.25 font scaing
-        public const float scale175 = 1.75f;//1.75 font scaling
-        public const float scale225 = 2.25f;//2.25 font scaling
-        public const float scale275 = 2.75f;//2.75 font scaling
-        public const string defaultFontType = "Microsoft Sance Serif";
-        public const string comicSansFontType = "Comic Sans MS";
-        private static int tempLoadedLanguage = -1;
+        public const float FontSize100 = 8.25F;//1.0 font scaling
+        public const float FontSize125 = 10.25F;//1.25 font scaling
+        public const float FontSize175 = 14.25F;//1.75 font scaling
+        public const float FontSize225 = 18.5F;//2.25 font scaling
+        public const float FontSize275 = 22.5F;//2.75 font scaling
+        public const float Scale100 = 1.0f;//1.0 font scaling
+        public const float Scale125 = 1.25f;//1.25 font scaing
+        public const float Scale175 = 1.75f;//1.75 font scaling
+        public const float Scale225 = 2.25f;//2.25 font scaling
+        public const float Scale275 = 2.75f;//2.75 font scaling
+        public const string DefaultFontType = "Microsoft Sance Serif";
+        public const string ComicSansFontType = "Comic Sans MS";
+        private static int TempLoadedLanguage = -1;
         public static bool ModSelectionFullscreen = false;
-        public static int previewX = 0;
-        public static int previewY = 0;
-        public static string customModInfoPath = "";
+        public static int PreviewX = 0;
+        public static int PreviewY = 0;
+        public static string CustomModInfoPath = "";
         //enumeration for the type of mod selection list view
-        public enum SelectionView { defaultt = 0, legacy = 1 };
-        public static SelectionView sView = SelectionView.defaultt;
-        public static int tempLoadedView = 0;
+        public enum SelectionView { Default = 0, Legacy = 1 };
+        public static SelectionView SView = SelectionView.Default;
+        public static int TempLoadedView = 0;
         public enum FontSize
         {
-            font100 = 0,
-            font125 = 1,
-            font175 = 2,
+            Font100 = 0,
+            Font125 = 1,
+            Font175 = 2,
             DPI100 = 3,
             DPI125 = 4,
             DPI175 = 5,
-            font225 = 6,
-            font275 = 7,
+            Font225 = 6,
+            Font275 = 7,
             DPI225 = 8,
             DPI275 = 9,
             DPIAUTO = 10
         };
-        public static FontSize fontSizeforum = FontSize.font100;
-        public static int tempFontSizeForum = 0;//default to font scale, regular
-        public static AutoScaleMode appScalingMode = AutoScaleMode.Font;
-        public static Font appFont = new System.Drawing.Font(defaultFontType, fontSize100);
+        public static FontSize FontSizeforum = FontSize.Font100;
+        public static int TempFontSizeForum = 0;//default to font scale, regular
+        public static AutoScaleMode AppScalingMode = AutoScaleMode.Font;
+        public static Font AppFont = new System.Drawing.Font(DefaultFontType, FontSize100);
         //loads settings from xml file
         public static void LoadSettings()
         {
             //Settings declared here are set for what their default values should be, then later modified in the settings xml file
             //i.e. when new features are added
-            Settings.firstLoad = false;
+            Settings.FirstLoad = false;
             Settings.CreateShortcuts = true;
             Utils.AppendToLog("Loading application settings");
-            if (!File.Exists(settingsXmlFile))
+            if (!File.Exists(SettingsXmlFile))
             {
                 Utils.AppendToLog("WARNING:Settings xml not found, loading defaults");
                 //could also use this to determine if first load or not
                 //default is to turn all features off
-                Settings.comicSans = false;
-                Settings.backupModFolder = false;
-                Settings.cleanInstallation = true;
-                Settings.loadingGif = (int)LoadingGifs.standard;
-                Settings.forceManuel = false;
-                Settings.gif = Settings.LoadingGifs.standard;
-                Settings.firstLoad = true;
-                Settings.saveLastConfig = false;
-                Settings.saveUserData = false;
-                Settings.clearCache = false;
-                Settings.disableBorders = false;
+                Settings.ComicSans = false;
+                Settings.BackupModFolder = false;
+                Settings.CleanInstallation = true;
+                Settings.LoadingGif = (int)LoadingGifs.Standard;
+                Settings.ForceManuel = false;
+                Settings.GIF = Settings.LoadingGifs.Standard;
+                Settings.FirstLoad = true;
+                Settings.SaveLastConfig = false;
+                Settings.SaveUserData = false;
+                Settings.ClearCache = false;
+                Settings.DisableBorders = false;
                 Settings.NotifyIfSameDatabase = false;
                 Settings.CreateShortcuts = false;
                 Utils.AppendToLog("Language: " + CultureInfo.CurrentCulture.DisplayName);
                 string lang = CultureInfo.InstalledUICulture.Name.Split('-')[0];
                 if (lang.ToLower().Equals("de"))
                 {
-                    Settings.tempLoadedLanguage = 1;
+                    Settings.TempLoadedLanguage = 1;
                 }
                 else if (lang.ToLower().Equals("pl"))
                 {
-                    Settings.tempLoadedLanguage = 2;
+                    Settings.TempLoadedLanguage = 2;
                 }
                 else if (lang.ToLower().Equals("fr"))
                 {
-                    Settings.tempLoadedLanguage = 3;
+                    Settings.TempLoadedLanguage = 3;
                 }
                 else
                 {
-                    Settings.tempLoadedLanguage = 0;
+                    Settings.TempLoadedLanguage = 0;
                 }
-                Settings.modSelectionHeight = 480;
-                Settings.modSelectionWidth = 800;
-                Settings.fontSizeforum = Settings.FontSize.font100;
-                Settings.expandAllLegacy = false;
+                Settings.ModSelectionHeight = 480;
+                Settings.ModSelectionWidth = 800;
+                Settings.FontSizeforum = Settings.FontSize.Font100;
+                Settings.ExpandAllLegacy = false;
                 Settings.ModSelectionFullscreen = false;
-                Settings.disableColorChange = false;
-                Settings.deleteLogs = false;
-                Settings.previewX = 0;
-                Settings.previewY = 0;
-                Settings.customModInfoPath = "";
-                Settings.tempFontSizeForum = 0;
-                Settings.fontSizeforum = FontSize.font100;
-                Settings.sView = SelectionView.defaultt;
+                Settings.DisableColorChange = false;
+                Settings.DeleteLogs = false;
+                Settings.PreviewX = 0;
+                Settings.PreviewY = 0;
+                Settings.CustomModInfoPath = "";
+                Settings.TempFontSizeForum = 0;
+                Settings.FontSizeforum = FontSize.Font100;
+                Settings.SView = SelectionView.Default;
                 Settings.ShowInstallCompleteWindow = false;
                 Settings.applyInternalSettings();
             }
@@ -157,59 +157,59 @@ namespace RelhaxModpack
             {
                 Utils.AppendToLog("Loading xml file");
                 XmlDocument doc = new XmlDocument();
-                doc.Load(settingsXmlFile);
+                doc.Load(SettingsXmlFile);
                 XmlNodeList settingsList = doc.ChildNodes[0].ChildNodes;
                 foreach (XmlNode n in settingsList)
                 {
                     switch (n.Name)
                     {
                         case "comicSans":
-                            Settings.comicSans = bool.Parse(n.InnerText);
+                            Settings.ComicSans = bool.Parse(n.InnerText);
                             break;
                         case "backupModFolder":
-                            Settings.backupModFolder = bool.Parse(n.InnerText);
+                            Settings.BackupModFolder = bool.Parse(n.InnerText);
                             break;
                         case "cleanInstallation":
-                            Settings.cleanInstallation = bool.Parse(n.InnerText);
+                            Settings.CleanInstallation = bool.Parse(n.InnerText);
                             break;
                         case "loadingGif":
-                            Settings.loadingGif = int.Parse(n.InnerText);
+                            Settings.LoadingGif = int.Parse(n.InnerText);
                             break;
                         case "forceManuel":
-                            Settings.forceManuel = bool.Parse(n.InnerText);
+                            Settings.ForceManuel = bool.Parse(n.InnerText);
                             break;
                         case "modSelectionHeight":
-                            Settings.modSelectionHeight = int.Parse(n.InnerText);
+                            Settings.ModSelectionHeight = int.Parse(n.InnerText);
                             break;
                         case "modSelectionWidth":
-                            Settings.modSelectionWidth = int.Parse(n.InnerText);
+                            Settings.ModSelectionWidth = int.Parse(n.InnerText);
                             break;
                         case "saveLastConfig":
-                            Settings.saveLastConfig = bool.Parse(n.InnerText);
+                            Settings.SaveLastConfig = bool.Parse(n.InnerText);
                             break;
                         case "saveUserData":
-                            Settings.saveUserData = bool.Parse(n.InnerText);
+                            Settings.SaveUserData = bool.Parse(n.InnerText);
                             break;
                         case "clearCache":
-                            Settings.clearCache = bool.Parse(n.InnerText);
+                            Settings.ClearCache = bool.Parse(n.InnerText);
                             break;
                         case "darkUI":
-                            Settings.darkUI = bool.Parse(n.InnerText);
+                            Settings.DarkUI = bool.Parse(n.InnerText);
                             break;
                         case "expandAllLegacy":
-                            Settings.expandAllLegacy = bool.Parse(n.InnerText);
+                            Settings.ExpandAllLegacy = bool.Parse(n.InnerText);
                             break;
                         case "disableBorders":
-                            Settings.disableBorders = bool.Parse(n.InnerText);
+                            Settings.DisableBorders = bool.Parse(n.InnerText);
                             break;
                         case "disableColorChange":
-                            Settings.disableColorChange = bool.Parse(n.InnerText);
+                            Settings.DisableColorChange = bool.Parse(n.InnerText);
                             break;
                         case "deleteLogs":
-                            Settings.deleteLogs = bool.Parse(n.InnerText);
+                            Settings.DeleteLogs = bool.Parse(n.InnerText);
                             break;
                         case "language":
-                            Settings.tempLoadedLanguage = int.Parse(n.InnerText);
+                            Settings.TempLoadedLanguage = int.Parse(n.InnerText);
                             break;
                         case "ModSelectionFullscreen":
                             Settings.ModSelectionFullscreen = bool.Parse(n.InnerText);
@@ -221,19 +221,19 @@ namespace RelhaxModpack
                             Settings.ShowInstallCompleteWindow = bool.Parse(n.InnerText);
                             break;
                         case "previewX":
-                            Settings.previewX = int.Parse(n.InnerText);
+                            Settings.PreviewX = int.Parse(n.InnerText);
                             break;
                         case "previewY":
-                            Settings.previewY = int.Parse(n.InnerText);
+                            Settings.PreviewY = int.Parse(n.InnerText);
                             break;
                         case "customModInfoPath":
-                            Settings.customModInfoPath = n.InnerText;
+                            Settings.CustomModInfoPath = n.InnerText;
                             break; 
                         case "SelectionView":
-                            Settings.tempLoadedView = int.Parse(n.InnerText);
+                            Settings.TempLoadedView = int.Parse(n.InnerText);
                             break;
                         case "FontSizeForum":
-                            Settings.tempFontSizeForum = int.Parse(n.InnerText);
+                            Settings.TempFontSizeForum = int.Parse(n.InnerText);
                             break;
                         case "CreateShortcuts":
                             Settings.CreateShortcuts = bool.Parse(n.InnerText);
@@ -248,63 +248,63 @@ namespace RelhaxModpack
         //based on the boolean settings from above
         public static void applyInternalSettings()
         {
-            switch (Settings.tempFontSizeForum)
+            switch (Settings.TempFontSizeForum)
             {
                 default:
-                    Settings.fontSizeforum = FontSize.font100;
+                    Settings.FontSizeforum = FontSize.Font100;
                     break;
                 case 0:
-                    Settings.fontSizeforum = FontSize.font100;
+                    Settings.FontSizeforum = FontSize.Font100;
                     break;
                 case 1:
-                    Settings.fontSizeforum = FontSize.font125;
+                    Settings.FontSizeforum = FontSize.Font125;
                     break;
                 case 2:
-                    Settings.fontSizeforum = FontSize.font175;
+                    Settings.FontSizeforum = FontSize.Font175;
                     break;
                 case 3:
-                    Settings.fontSizeforum = FontSize.DPI100;
+                    Settings.FontSizeforum = FontSize.DPI100;
                     break;
                 case 4:
-                    Settings.fontSizeforum = FontSize.DPI125;
+                    Settings.FontSizeforum = FontSize.DPI125;
                     break;
                 case 5:
-                    Settings.fontSizeforum = FontSize.DPI175;
+                    Settings.FontSizeforum = FontSize.DPI175;
                     break;
                 case 6:
-                    Settings.fontSizeforum = FontSize.font225;
+                    Settings.FontSizeforum = FontSize.Font225;
                     break;
                 case 7:
-                    Settings.fontSizeforum = FontSize.font275;
+                    Settings.FontSizeforum = FontSize.Font275;
                     break;
                 case 8:
-                    Settings.fontSizeforum = FontSize.DPI225;
+                    Settings.FontSizeforum = FontSize.DPI225;
                     break;
                 case 9:
-                    Settings.fontSizeforum = FontSize.DPI275;
+                    Settings.FontSizeforum = FontSize.DPI275;
                     break;
                 case 10:
-                    Settings.fontSizeforum = FontSize.DPIAUTO;
+                    Settings.FontSizeforum = FontSize.DPIAUTO;
                     break;
             }
-            if (Settings.comicSans)
+            if (Settings.ComicSans)
             {
-                Settings.fontName = Settings.comicSansFontType;
+                Settings.FontName = Settings.ComicSansFontType;
             }
             else
             {
-                Settings.fontName = Settings.defaultFontType;
+                Settings.FontName = Settings.DefaultFontType;
             }
-            switch (Settings.loadingGif)
+            switch (Settings.LoadingGif)
             {
                 case 0:
-                    Settings.gif = Settings.LoadingGifs.standard;
+                    Settings.GIF = Settings.LoadingGifs.Standard;
                     break;
                 case 1:
-                    Settings.gif = Settings.LoadingGifs.thirdGuards;
+                    Settings.GIF = Settings.LoadingGifs.ThirdGuards;
                     break;
             }
-            switch (Settings.tempLoadedLanguage)
+            switch (Settings.TempLoadedLanguage)
             {
                 case 0:
                     //english
@@ -324,15 +324,15 @@ namespace RelhaxModpack
                     break;
             }
             //apply the internal setting of the view selection
-            switch (Settings.tempLoadedView)
+            switch (Settings.TempLoadedView)
             {
                 case 0:
                     //default (relhax)
-                    Settings.sView = SelectionView.defaultt;
+                    Settings.SView = SelectionView.Default;
                     break;
                 case 1:
                     //legacy (OMC)
-                    Settings.sView = SelectionView.legacy;
+                    Settings.SView = SelectionView.Legacy;
                     break;
             }
             //apply scaling settings
@@ -342,45 +342,45 @@ namespace RelhaxModpack
         public static void saveSettings()
         {
             Utils.AppendToLog("Saving application settings");
-            if (File.Exists(settingsXmlFile)) File.Delete(settingsXmlFile);
+            if (File.Exists(SettingsXmlFile)) File.Delete(SettingsXmlFile);
             XmlDocument doc = new XmlDocument();
             XmlElement settingsHolder = doc.CreateElement("settings");
             doc.AppendChild(settingsHolder);
             XmlElement xcomicSans = doc.CreateElement("comicSans");
-            xcomicSans.InnerText = "" + comicSans;
+            xcomicSans.InnerText = "" + ComicSans;
             settingsHolder.AppendChild(xcomicSans);
             XmlElement xfontSizeForum = doc.CreateElement("FontSizeForum");
-            xfontSizeForum.InnerText = "" + (int)fontSizeforum;
+            xfontSizeForum.InnerText = "" + (int)FontSizeforum;
             settingsHolder.AppendChild(xfontSizeForum);
             XmlElement xbackupModFolder = doc.CreateElement("backupModFolder");
-            xbackupModFolder.InnerText = "" + backupModFolder;
+            xbackupModFolder.InnerText = "" + BackupModFolder;
             settingsHolder.AppendChild(xbackupModFolder);
             XmlElement xcleanInstallation = doc.CreateElement("cleanInstallation");
-            xcleanInstallation.InnerText = "" + cleanInstallation;
+            xcleanInstallation.InnerText = "" + CleanInstallation;
             settingsHolder.AppendChild(xcleanInstallation);
             XmlElement xsaveLastConfig = doc.CreateElement("saveLastConfig");
-            xsaveLastConfig.InnerText = "" + Settings.saveLastConfig;
+            xsaveLastConfig.InnerText = "" + Settings.SaveLastConfig;
             settingsHolder.AppendChild(xsaveLastConfig);
             XmlElement xsaveUserData = doc.CreateElement("saveUserData");
-            xsaveUserData.InnerText = "" + Settings.saveUserData;
+            xsaveUserData.InnerText = "" + Settings.SaveUserData;
             settingsHolder.AppendChild(xsaveUserData);
             XmlElement xclearCache = doc.CreateElement("clearCache");
-            xclearCache.InnerText = "" + Settings.clearCache;
+            xclearCache.InnerText = "" + Settings.ClearCache;
             settingsHolder.AppendChild(xclearCache);
             XmlElement xdarkUI = doc.CreateElement("darkUI");
-            xdarkUI.InnerText = "" + Settings.darkUI;
+            xdarkUI.InnerText = "" + Settings.DarkUI;
             settingsHolder.AppendChild(xdarkUI);
             XmlElement xexpandAllLegacy = doc.CreateElement("expandAllLegacy");
-            xexpandAllLegacy.InnerText = "" + Settings.expandAllLegacy;
+            xexpandAllLegacy.InnerText = "" + Settings.ExpandAllLegacy;
             settingsHolder.AppendChild(xexpandAllLegacy);
             XmlElement xdisableBorders = doc.CreateElement("disableBorders");
-            xdisableBorders.InnerText = "" + Settings.disableBorders;
+            xdisableBorders.InnerText = "" + Settings.DisableBorders;
             settingsHolder.AppendChild(xdisableBorders);
             XmlElement xdisableColorChange = doc.CreateElement("disableColorChange");
-            xdisableColorChange.InnerText = "" + Settings.disableColorChange;
+            xdisableColorChange.InnerText = "" + Settings.DisableColorChange;
             settingsHolder.AppendChild(xdisableColorChange);
             XmlElement xdeleteLogs = doc.CreateElement("deleteLogs");
-            xdeleteLogs.InnerText = "" + Settings.deleteLogs;
+            xdeleteLogs.InnerText = "" + Settings.DeleteLogs;
             settingsHolder.AppendChild(xdeleteLogs);
             XmlElement xNotifyIfSameDatabase = doc.CreateElement("NotifyIfSameDatabase");
             xNotifyIfSameDatabase.InnerText = "" + Settings.NotifyIfSameDatabase;
@@ -392,32 +392,32 @@ namespace RelhaxModpack
             xlanguage.InnerText = "" + (int)Translations.language;
             settingsHolder.AppendChild(xlanguage);
             XmlElement xSelectionView = doc.CreateElement("SelectionView");
-            xSelectionView.InnerText = "" + (int)Settings.sView;
+            xSelectionView.InnerText = "" + (int)Settings.SView;
             settingsHolder.AppendChild(xSelectionView);
-            switch (Settings.gif)
+            switch (Settings.GIF)
             {
-                case (Settings.LoadingGifs.standard):
+                case (Settings.LoadingGifs.Standard):
                     {
-                        Settings.loadingGif = 0;
+                        Settings.LoadingGif = 0;
                         break;
                     }
-                case (Settings.LoadingGifs.thirdGuards):
+                case (Settings.LoadingGifs.ThirdGuards):
                     {
-                        Settings.loadingGif = 1;
+                        Settings.LoadingGif = 1;
                         break;
                     }
             }
             XmlElement xloadingGif = doc.CreateElement("loadingGif");
-            xloadingGif.InnerText = "" + loadingGif;
+            xloadingGif.InnerText = "" + LoadingGif;
             settingsHolder.AppendChild(xloadingGif);
             XmlElement xforceManuel = doc.CreateElement("forceManuel");
-            xforceManuel.InnerText = "" + forceManuel;
+            xforceManuel.InnerText = "" + ForceManuel;
             settingsHolder.AppendChild(xforceManuel);
             XmlElement xmodSelectionHeight = doc.CreateElement("modSelectionHeight");
-            xmodSelectionHeight.InnerText = "" + modSelectionHeight;
+            xmodSelectionHeight.InnerText = "" + ModSelectionHeight;
             settingsHolder.AppendChild(xmodSelectionHeight);
             XmlElement xmodSelectionWidth = doc.CreateElement("modSelectionWidth");
-            xmodSelectionWidth.InnerText = "" + modSelectionWidth;
+            xmodSelectionWidth.InnerText = "" + ModSelectionWidth;
             settingsHolder.AppendChild(xmodSelectionWidth);
             XmlElement xModSelectionFullscreen = doc.CreateElement("ModSelectionFullscreen");
             xModSelectionFullscreen.InnerText = "" + ModSelectionFullscreen;
@@ -426,31 +426,31 @@ namespace RelhaxModpack
             xCreateShortcuts.InnerText = "" + CreateShortcuts;
             settingsHolder.AppendChild(xCreateShortcuts);
             XmlElement xpreviewX = doc.CreateElement("previewX");
-            if (previewX < 0) { previewX = 0; };
-            xpreviewX.InnerText = "" + previewX;
+            if (PreviewX < 0) { PreviewX = 0; };
+            xpreviewX.InnerText = "" + PreviewX;
             settingsHolder.AppendChild(xpreviewX);
             XmlElement xpreviewY = doc.CreateElement("previewY");
-            if (previewY < 0) { previewY = 0; };
-            xpreviewY.InnerText = "" + previewY;
+            if (PreviewY < 0) { PreviewY = 0; };
+            xpreviewY.InnerText = "" + PreviewY;
             settingsHolder.AppendChild(xpreviewY);
             XmlElement customModInfoPath = doc.CreateElement("customModInfoPath");
-            if (Settings.customModInfoPath != "") { customModInfoPath.InnerText = Settings.customModInfoPath; }
+            if (Settings.CustomModInfoPath != "") { customModInfoPath.InnerText = Settings.CustomModInfoPath; }
             settingsHolder.AppendChild(customModInfoPath); 
 
-            doc.Save(settingsXmlFile);
+            doc.Save(SettingsXmlFile);
             Utils.AppendToLog("Settings saved sucessfully");
         }
         //returns the loading image for the picture viewer, based on
         //which loading image the user specified
         public static Image getLoadingImage()
         {
-            switch (Settings.gif)
+            switch (Settings.GIF)
             {
-                case (LoadingGifs.standard):
+                case (LoadingGifs.Standard):
                     {
                         return RelhaxModpack.Properties.Resources.loading;
                     }
-                case (LoadingGifs.thirdGuards):
+                case (LoadingGifs.ThirdGuards):
                     {
                         return RelhaxModpack.Properties.Resources.loading_3rdguards;
                     }
@@ -459,80 +459,80 @@ namespace RelhaxModpack
         }
         public static void ApplyScalingProperties()
         {
-            if (Settings.comicSans)
+            if (Settings.ComicSans)
             {
-                Settings.fontName = Settings.comicSansFontType;
+                Settings.FontName = Settings.ComicSansFontType;
             }
             else
             {
-                Settings.fontName = Settings.defaultFontType;
+                Settings.FontName = Settings.DefaultFontType;
             }
-            switch (fontSizeforum)
+            switch (FontSizeforum)
             {
                 default:
                     //set the autoscale mode
-                    appScalingMode = AutoScaleMode.Font;
+                    AppScalingMode = AutoScaleMode.Font;
                     //set the scale amount
-                    scaleSize = scale100;
+                    ScaleSize = Scale100;
                     //set the font
-                    appFont = new Font(defaultFontType, fontSize100);
+                    AppFont = new Font(DefaultFontType, FontSize100);
                     break;
-                case FontSize.font100:
-                    scaleSize = scale100;
-                    appScalingMode = AutoScaleMode.Font;
-                    appFont = new Font(fontName, fontSize100);
+                case FontSize.Font100:
+                    ScaleSize = Scale100;
+                    AppScalingMode = AutoScaleMode.Font;
+                    AppFont = new Font(FontName, FontSize100);
                     break;
-                case FontSize.font125:
-                    scaleSize = scale125;
-                    appScalingMode = AutoScaleMode.Font;
-                    appFont = new Font(fontName, fontSize125);
+                case FontSize.Font125:
+                    ScaleSize = Scale125;
+                    AppScalingMode = AutoScaleMode.Font;
+                    AppFont = new Font(FontName, FontSize125);
                     break;
-                case FontSize.font175:
-                    scaleSize = scale175;
-                    appScalingMode = AutoScaleMode.Font;
-                    appFont = new Font(fontName, fontSize175);
+                case FontSize.Font175:
+                    ScaleSize = Scale175;
+                    AppScalingMode = AutoScaleMode.Font;
+                    AppFont = new Font(FontName, FontSize175);
                     break;
-                case FontSize.font225:
-                    scaleSize = scale225;
-                    appScalingMode = AutoScaleMode.Font;
-                    appFont = new Font(fontName, fontSize225);
+                case FontSize.Font225:
+                    ScaleSize = Scale225;
+                    AppScalingMode = AutoScaleMode.Font;
+                    AppFont = new Font(FontName, FontSize225);
                     break;
-                case FontSize.font275:
-                    scaleSize = scale275;
-                    appScalingMode = AutoScaleMode.Font;
-                    appFont = new Font(fontName, fontSize275);
+                case FontSize.Font275:
+                    ScaleSize = Scale275;
+                    AppScalingMode = AutoScaleMode.Font;
+                    AppFont = new Font(FontName, FontSize275);
                     break;
                 case FontSize.DPI100:
-                    scaleSize = scale100;
-                    appScalingMode = AutoScaleMode.Dpi;
-                    appFont = new Font(fontName, fontSize100);
+                    ScaleSize = Scale100;
+                    AppScalingMode = AutoScaleMode.Dpi;
+                    AppFont = new Font(FontName, FontSize100);
                     break;
                 case FontSize.DPI125:
-                    scaleSize = scale125;
-                    appScalingMode = AutoScaleMode.Dpi;
-                    appFont = new Font(fontName, fontSize125);
+                    ScaleSize = Scale125;
+                    AppScalingMode = AutoScaleMode.Dpi;
+                    AppFont = new Font(FontName, FontSize125);
                     break;
                 case FontSize.DPI175:
-                    scaleSize = scale175;
-                    appScalingMode = AutoScaleMode.Dpi;
-                    appFont = new Font(fontName, fontSize175);
+                    ScaleSize = Scale175;
+                    AppScalingMode = AutoScaleMode.Dpi;
+                    AppFont = new Font(FontName, FontSize175);
                     break;
                 case FontSize.DPI225:
-                    scaleSize = scale225;
-                    appScalingMode = AutoScaleMode.Dpi;
-                    appFont = new Font(fontName, fontSize225);
+                    ScaleSize = Scale225;
+                    AppScalingMode = AutoScaleMode.Dpi;
+                    AppFont = new Font(FontName, FontSize225);
                     break;
                 case FontSize.DPI275:
-                    scaleSize = scale275;
-                    appScalingMode = AutoScaleMode.Dpi;
-                    appFont = new Font(fontName, fontSize275);
+                    ScaleSize = Scale275;
+                    AppScalingMode = AutoScaleMode.Dpi;
+                    AppFont = new Font(FontName, FontSize275);
                     break;
                 case FontSize.DPIAUTO:
-                    scaleSize = Utils.GetScalingFactor();
-                    appScalingMode = AutoScaleMode.Dpi;
-                    float nweFontSize = fontSize100 * scaleSize;
+                    ScaleSize = Utils.GetScalingFactor();
+                    AppScalingMode = AutoScaleMode.Dpi;
+                    float nweFontSize = FontSize100 * ScaleSize;
                     float roundedanswer = (float)Math.Round(nweFontSize * 4, MidpointRounding.ToEven) / 4;
-                    appFont = new Font(fontName, roundedanswer);
+                    AppFont = new Font(FontName, roundedanswer);
                     break;
             }
         }
@@ -541,7 +541,7 @@ namespace RelhaxModpack
         {
             Color backColor;
             Color textColor;
-            if (Settings.darkUI)
+            if (Settings.DarkUI)
             {
                 backColor = SystemColors.ControlDarkDark;
                 textColor = Color.White;
@@ -620,7 +620,7 @@ namespace RelhaxModpack
         }
         public static Color getTextColor()
         {
-            if (Settings.darkUI)
+            if (Settings.DarkUI)
                 return Color.White;
 
             else
@@ -628,7 +628,7 @@ namespace RelhaxModpack
         }
         public static Color getBackColor()
         {
-            if (Settings.darkUI)
+            if (Settings.DarkUI)
                 return SystemColors.ControlDark;
 
             else

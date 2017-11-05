@@ -55,23 +55,23 @@ namespace RelhaxModpack
             if (databaseLocationTextBox.Text.Equals("-none-"))
                 return;
             // read onlineFolder of the selected local modInfo.xml to get the right online database.xml
-            Settings.tanksOnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(databaseLocationTextBox.Text);
+            Settings.TanksOnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(databaseLocationTextBox.Text);
             // read gameVersion of the selected local modInfo.xml
             Settings.TanksVersion = XMLUtils.ReadVersionFromModInfo(databaseLocationTextBox.Text);
-            Utils.AppendToLog(String.Format("working with game version: {0}, located at online Folder: {1}", Settings.TanksVersion, Settings.tanksOnlineFolderVersion));
+            Utils.AppendToLog(String.Format("working with game version: {0}, located at online Folder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion));
             // download online database.xml
             try
             {
                 using (downloader = new WebClient())
                 {
-                    string address = string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.tanksOnlineFolderVersion);
+                    string address = string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.TanksOnlineFolderVersion);
                     string fileName = Path.Combine(Application.StartupPath, "RelHaxTemp", MainWindow.onlineDatabaseXmlFile);
                     downloader.DownloadFile(address, fileName);
                 }
             }
             catch (Exception ex)
             {
-                Utils.ExceptionLog("loadZipFilesButton_Click", string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.tanksOnlineFolderVersion), ex);
+                Utils.ExceptionLog("loadZipFilesButton_Click", string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.TanksOnlineFolderVersion), ex);
                 MessageBox.Show("FAILED to download online file database");
                 Application.Exit();
             }
@@ -211,7 +211,7 @@ namespace RelhaxModpack
             //update the crc value
             //update the file size
             //save config file
-            XMLUtils.SaveDatabase(databaseLocationTextBox.Text, Settings.TanksVersion, Settings.tanksOnlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.SaveDatabase(databaseLocationTextBox.Text, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             MessageBox.Show(filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
             Program.databaseUpdateOnline = false;
         }
@@ -308,11 +308,11 @@ namespace RelhaxModpack
         private void CRCFileSizeUpdate_Load(object sender, EventArgs e)
         {
             //font scaling
-            this.AutoScaleMode = Settings.appScalingMode;
-            this.Font = Settings.appFont;
-            if (Settings.appScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
+            this.AutoScaleMode = Settings.AppScalingMode;
+            this.Font = Settings.AppFont;
+            if (Settings.AppScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
             {
-                this.Scale(new System.Drawing.SizeF(Settings.scaleSize, Settings.scaleSize));
+                this.Scale(new System.Drawing.SizeF(Settings.ScaleSize, Settings.ScaleSize));
             }
             loadDatabaseDialog.InitialDirectory = Application.StartupPath;
         }
@@ -340,7 +340,7 @@ namespace RelhaxModpack
             dependencies = new List<Dependency>();
             logicalDependencies = new List<LogicalDependnecy>();
             Settings.TanksVersion = XMLUtils.ReadVersionFromModInfo(databaseLocationTextBox.Text);
-            Settings.tanksOnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(databaseLocationTextBox.Text);
+            Settings.TanksOnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(databaseLocationTextBox.Text);
             XMLUtils.CreateModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             int duplicatesCounter = 0;
             //check for duplicates
@@ -406,7 +406,7 @@ namespace RelhaxModpack
             //update the crc value
             //update the file size
             //save config file
-            XMLUtils.SaveDatabase(databaseLocationTextBox.Text, Settings.TanksVersion, Settings.tanksOnlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.SaveDatabase(databaseLocationTextBox.Text, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
         }
 
