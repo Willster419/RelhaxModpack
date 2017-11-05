@@ -1569,7 +1569,7 @@ namespace RelhaxModpack
 
             //Component: CollectLogInfo
             //
-            english.Add("CollectLogInfo", "Collect all file logs to report a problem");
+            english.Add("CollectLogInfo", "Collect all log files into a zip file to report a problem");
             german.Add("CollectLogInfo", "TODO");
             polish.Add("CollectLogInfo", "TODO");
             french.Add("CollectLogInfo", "TODO");
@@ -1629,6 +1629,13 @@ namespace RelhaxModpack
             german.Add("ChangeInstallation", "TODO");
             polish.Add("ChangeInstallation", "TODO");
             french.Add("ChangeInstallation", "TODO");
+
+            //Component: zipSavedTo
+            //
+            english.Add("zipSavedTo", "Zip file saved to: ");
+            german.Add("zipSavedTo", "TODO");
+            polish.Add("zipSavedTo", "TODO");
+            french.Add("zipSavedTo", "TODO");
         }
     }
 }

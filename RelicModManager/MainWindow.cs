@@ -2455,7 +2455,8 @@ namespace RelhaxModpack
         {
             using (Diagnostics d = new Diagnostics()
             {
-                TanksLocation = this.tanksLocation
+                TanksLocation = this.tanksLocation,
+                AppStartupPath = Application.StartupPath
             })
             {
                 d.ShowDialog();

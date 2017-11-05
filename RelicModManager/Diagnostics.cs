@@ -2,6 +2,8 @@
 using System.IO;
 using System.Windows;
 using System.Diagnostics;
+using Ionic.Zip;
+using System.Windows.Forms;
 
 namespace RelhaxModpack
 {
@@ -9,6 +11,7 @@ namespace RelhaxModpack
     {
         private string MainWindowHeader = Translations.getTranslatedString("MainTextBox");
         public string TanksLocation { get; set; }
+        public string AppStartupPath { get; set; }
 
         public Diagnostics()
         {
@@ -42,7 +45,7 @@ namespace RelhaxModpack
             catch(Exception ex)
             {
                 Utils.ExceptionLog("LaunchWoTLauncher_Click", ex);
-                MessageBox.Show(Translations.getTranslatedString("failedStartLauncherRepairMode"));
+                System.Windows.Forms.MessageBox.Show(Translations.getTranslatedString("failedStartLauncherRepairMode"));
                 StartWoTLauncherResult.Text = "";
                 return;
             }
@@ -51,9 +54,62 @@ namespace RelhaxModpack
 
         private void CollectLogInfo_Click(object sender, System.EventArgs e)
         {
+            if (TanksLocation.Equals("none"))
+                return;
             Utils.AppendToLog("Collecting log files...");
             CollectLogInfoResult.Text = Translations.getTranslatedString("collectionLogInfo");
-
+            using (ZipFile zip = new ZipFile())
+            {
+                string newZipFileName = "";
+                try
+                {
+                    string RelHaxLogPath = Path.Combine(AppStartupPath, "RelHaxLog.txt");
+                    string InstalledRelhaxFiles = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
+                    string PythonLog = Path.Combine(TanksLocation, "python.log");
+                    string SelectionXMlFile = "";
+                    using (OpenFileDialog findSelectionXMLFile = new OpenFileDialog()
+                    {
+                        AddExtension = true,
+                        CheckFileExists = true,
+                        CheckPathExists = true,
+                        DefaultExt = ".xml",
+                        Filter = @" *.xml | *.xml",
+                        InitialDirectory = Path.Combine(AppStartupPath, "RelHaxUserConfigs"),
+                        Title = Translations.getTranslatedString("selectConfigFile")
+                    })
+                    {
+                        if(!(findSelectionXMLFile.ShowDialog() == DialogResult.Cancel))
+                        {
+                            SelectionXMlFile = findSelectionXMLFile.FileName;
+                        }
+                    }
+                    string[] filesToCollect = new string[] { RelHaxLogPath, InstalledRelhaxFiles, PythonLog, SelectionXMlFile };
+                    foreach(string s in filesToCollect)
+                    {
+                        if (s.Equals(""))
+                            continue;
+                        if(File.Exists(s))
+                        {
+                            ZipEntry entry = zip.AddFile(s);
+                            entry.FileName = Path.GetFileName(s);
+                        }
+                        else
+                        {
+                            Utils.AppendToLog("WARNING: file " + Path.GetFileName(s) + "does not exist!");
+                        }
+                    }
+                    newZipFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "RelhaxModpackLogs_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".zip");
+                    zip.Save(newZipFileName);
+                }
+                catch (Exception ex)
+                {
+                    Utils.ExceptionLog(ex);
+                    CollectLogInfoResult.Text = Translations.getTranslatedString("failedCreateZipfile");
+                    return;
+                }
+                Utils.AppendToLog("Zip file saved to" + newZipFileName);
+                CollectLogInfoResult.Text = Translations.getTranslatedString("zipSavedTo") + newZipFileName;
+            }
         }
 
         private void ChangeInstallation_Click(object sender, EventArgs e)
