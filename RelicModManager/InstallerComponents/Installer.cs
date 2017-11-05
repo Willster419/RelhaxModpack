@@ -105,7 +105,7 @@ namespace RelhaxModpack
             //Step 1: do a backup if requested
             Utils.AppendToLog("Installation BackupMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.BackupMods;
-            if (Settings.backupModFolder)
+            if (Settings.BackupModFolder)
                 BackupMods();
             else
                 Utils.AppendToLog("... skipped");
@@ -113,7 +113,7 @@ namespace RelhaxModpack
             //Step 2: do a backup of user data
             Utils.AppendToLog("Installation BackupUserData");
             args.InstalProgress = InstallerEventArgs.InstallProgress.BackupUserData;
-            if (Settings.saveUserData)
+            if (Settings.SaveUserData)
                 BackupUserData();
             else
                 Utils.AppendToLog("... skipped");
@@ -121,14 +121,14 @@ namespace RelhaxModpack
             //Step 3: Delete Mods
             Utils.AppendToLog("Installation UninstallMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteMods;
-            if (Settings.cleanInstallation)
+            if (Settings.CleanInstallation)
                 UninstallMods();
             else
                 Utils.AppendToLog("... skipped");
             ResetArgs();
             //Setp 3a: delete log files
             Utils.AppendToLog("Installation deleteLogs");
-            if (Settings.deleteLogs)
+            if (Settings.DeleteLogs)
             {
                 Utils.AppendToLog("deleteLogs selected: deleting wot, xvm, and pmod logs");
                 try
@@ -155,7 +155,7 @@ namespace RelhaxModpack
             //Step 4: Delete user appdata cache
             Utils.AppendToLog("Installation DeleteWoTCache");
             args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteWoTCache;
-            if (Settings.clearCache)
+            if (Settings.ClearCache)
                 ClearWoTCache();
             else
                 Utils.AppendToLog("... skipped");
@@ -168,7 +168,7 @@ namespace RelhaxModpack
             //Step 11: Restore User Data
             Utils.AppendToLog("Installation RestoreUserData");
             args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreUserData;
-            if (Settings.saveUserData)
+            if (Settings.SaveUserData)
                 RestoreUserData();
             else
                 Utils.AppendToLog("... skipped");
@@ -1198,7 +1198,7 @@ namespace RelhaxModpack
                             if (!Program.testMode)                  // if not in testMode, the managerInfoDatFile was downloaded
                             {
                                 //get fontreg from the zip file
-                                using (ZipFile zip = new ZipFile(Settings.managerInfoDatFile))
+                                using (ZipFile zip = new ZipFile(Settings.ManagerInfoDatFile))
                                 {
                                     zip.ExtractSelectedEntries("FontReg.exe", null, Path.GetDirectoryName(fontRegPath));
                                 }

@@ -36,11 +36,11 @@ namespace RelhaxModpack
         private void PatchTester_Load(object sender, EventArgs e)
         {
             //font scaling
-            this.AutoScaleMode = Settings.appScalingMode;
-            this.Font = Settings.appFont;
-            if (Settings.appScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
+            this.AutoScaleMode = Settings.AppScalingMode;
+            this.Font = Settings.AppFont;
+            if (Settings.AppScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
             {
-                this.Scale(new System.Drawing.SizeF(Settings.scaleSize, Settings.scaleSize));
+                this.Scale(new System.Drawing.SizeF(Settings.ScaleSize, Settings.ScaleSize));
             }
             regexFileDialog.InitialDirectory = Application.StartupPath;
             xmlFileDialog.InitialDirectory = Application.StartupPath;

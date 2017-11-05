@@ -1089,7 +1089,7 @@ namespace RelhaxModpack
                     return "unknown object type at call ReplaceMacro()";
                 }
                 macroList.Add("app", Settings.TanksLocation);
-                macroList.Add("onlineFolder", Settings.tanksOnlineFolderVersion);
+                macroList.Add("onlineFolder", Settings.TanksOnlineFolderVersion);
                 macroList.Add("versiondir", Settings.TanksVersion);
                 macroList.Add("appData", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
                 macroList.Add("relhax", Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));

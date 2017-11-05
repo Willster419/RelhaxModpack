@@ -188,7 +188,7 @@ namespace RelhaxModpack
         //show the load database dialog and load the database
         private void LoadDatabaseButton_Click(object sender, EventArgs e)
         {
-            string workingDirectory = Path.Combine(string.IsNullOrEmpty(Settings.customModInfoPath) ? Application.StartupPath : Settings.customModInfoPath);
+            string workingDirectory = Path.Combine(string.IsNullOrEmpty(Settings.CcustomModInfoPath) ? Application.StartupPath : Settings.CcustomModInfoPath);
             if (Directory.Exists(workingDirectory))
             {
                 OpenDatabaseDialog.InitialDirectory = workingDirectory;
@@ -199,8 +199,8 @@ namespace RelhaxModpack
             if (!File.Exists(DatabaseLocation))
                 return;
             Settings.TanksVersion = XMLUtils.ReadVersionFromModInfo(DatabaseLocation);
-            Settings.tanksOnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(DatabaseLocation);
-            this.Text = String.Format("DatabaseEditor      GameVersion: {0}    OnlineFolder: {1}", Settings.TanksVersion, Settings.tanksOnlineFolderVersion);
+            Settings.TanksOnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(DatabaseLocation);
+            this.Text = String.Format("DatabaseEditor      GameVersion: {0}    OnlineFolder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion);
             GlobalDependencies = new List<Dependency>();
             Dependencies = new List<Dependency>();
             LogicalDependencies = new List<LogicalDependnecy>();
@@ -220,7 +220,7 @@ namespace RelhaxModpack
             if (SaveDatabaseDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             DatabaseLocation = SaveDatabaseDialog.FileName;
-            XMLUtils.SaveDatabase(DatabaseLocation, Settings.TanksVersion, Settings.tanksOnlineFolderVersion, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
+            XMLUtils.SaveDatabase(DatabaseLocation, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
             UnsavedModifications = false;
         }
         //Apply all changes from the form

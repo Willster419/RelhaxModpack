@@ -29,11 +29,11 @@ namespace RelhaxModpack
             //setting UI color
             Settings.setUIColor(this);
             //font scaling
-            this.AutoScaleMode = Settings.appScalingMode;
-            this.Font = Settings.appFont;
-            if (Settings.appScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
+            this.AutoScaleMode = Settings.AppScalingMode;
+            this.Font = Settings.AppFont;
+            if (Settings.AppScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
             {
-                this.Scale(new SizeF(Settings.scaleSize, Settings.scaleSize));
+                this.Scale(new SizeF(Settings.ScaleSize, Settings.ScaleSize));
             }
             //title bar height
             //get the size of the title bar window
@@ -100,7 +100,7 @@ namespace RelhaxModpack
             }
             else
             {
-                SelectedXML = string.Format("{0},{1}", Settings.modInfoDatFile, SelectedDocument);
+                SelectedXML = string.Format("{0},{1}", Settings.ModInfoDatFile, SelectedDocument);
                 this.DialogResult = DialogResult.OK;
             }
             this.Close();

@@ -69,10 +69,10 @@ namespace RelhaxModpack
                 XDocument doc = null;
                 try
                 {
-                    if (databaseURL.ToLower().Equals(Settings.modInfoDatFile.ToLower()))
+                    if (databaseURL.ToLower().Equals(Settings.ModInfoDatFile.ToLower()))
                     {
                         Utils.AppendToLog("loading dat config file");
-                        string xmlString = Utils.GetStringFromZip(Settings.modInfoDatFile, "modInfo.xml");
+                        string xmlString = Utils.GetStringFromZip(Settings.ModInfoDatFile, "modInfo.xml");
                         doc = XDocument.Parse(xmlString, LoadOptions.SetLineInfo);
                         // create new developerSelections NameList
                         ParseDeveloperSelections(doc);
@@ -993,7 +993,7 @@ namespace RelhaxModpack
                 }
             }
             string savePath = saveLocation.FileName;
-            if (Settings.saveLastConfig && !fromButton && fileToConvert == null)
+            if (Settings.SaveLastConfig && !fromButton && fileToConvert == null)
             {
                 savePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml");
                 Utils.AppendToLog(string.Format("Save last config checked, saving to {0}", savePath));
@@ -1001,13 +1001,13 @@ namespace RelhaxModpack
             else if (!fromButton && !(fileToConvert == null))
             {
                 savePath = fileToConvert;
-                Utils.AppendToLog(string.Format("convert saved config file \"{0}\" to format {1}", savePath, Settings.configFileVersion));
+                Utils.AppendToLog(string.Format("convert saved config file \"{0}\" to format {1}", savePath, Settings.ConfigFileVersion));
             }
 
             //create saved config xml layout
             XDocument doc = new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
-                new XElement("mods", new XAttribute("ver", Settings.configFileVersion), new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))));
+                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion), new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))));
 
             //relhax mods root
             doc.Element("mods").Add(new XElement("relhaxMods"));
@@ -1134,7 +1134,7 @@ namespace RelhaxModpack
                                     {
                                         ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
                                         mfcb.Checked = true;
-                                        if (!Settings.disableColorChange)
+                                        if (!Settings.DisableColorChange)
                                             mfcb.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
                                     else if (m.modFormCheckBox is ModWPFCheckBox)
@@ -1280,7 +1280,7 @@ namespace RelhaxModpack
                                     {
                                         ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
                                         mfcb.Checked = true;
-                                        if (!Settings.disableColorChange)
+                                        if (!Settings.DisableColorChange)
                                             mfcb.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
                                     else if (m.modFormCheckBox is ModWPFCheckBox)
@@ -1403,7 +1403,7 @@ namespace RelhaxModpack
                                     {
                                         ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
                                         CBTemp.Checked = true;
-                                        if (!Settings.disableColorChange)
+                                        if (!Settings.DisableColorChange)
                                             CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
                                     else if (c.configUIComponent is ConfigFormComboBox)
@@ -1421,14 +1421,14 @@ namespace RelhaxModpack
                                                 }
                                             }
                                         }
-                                        if (!Settings.disableColorChange)
+                                        if (!Settings.DisableColorChange)
                                             CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
                                     else if (c.configUIComponent is ConfigFormRadioButton)
                                     {
                                         ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
                                         CBTemp.Checked = true;
-                                        if (!Settings.disableColorChange)
+                                        if (!Settings.DisableColorChange)
                                             CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
                                     else if (c.configUIComponent is ConfigWPFCheckBox)
@@ -1639,7 +1639,7 @@ namespace RelhaxModpack
             }
             if (shouldBeBA && panelRef != null)
             {
-                if (!Settings.disableColorChange)
+                if (!Settings.DisableColorChange)
                     panelRef.BackColor = System.Drawing.Color.BlanchedAlmond;
             }
         }
