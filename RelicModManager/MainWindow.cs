@@ -2006,7 +2006,7 @@ namespace RelhaxModpack
         private void disableColorsCB_MouseEnter(object sender, EventArgs e)
         {
             if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("disableColorsDescription");
+                downloadProgress.Text = Translations.getTranslatedString("disableColorsCBExplanation");
         }
 
         private void clearLogFilesCB_MouseEnter(object sender, EventArgs e)
@@ -2040,7 +2040,27 @@ namespace RelhaxModpack
         }
         #endregion
 
-        #region CheckChanged events
+        #region CheckChanged/SelectedIndexChanged events
+        //handler for selection the new language from the combobox
+        private void LanguageComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (LanguageComboBox.SelectedIndex)
+            {
+                case 0://english
+                    Translations.language = Translations.Languages.English;
+                    break;
+                case 1://polish
+                    Translations.language = Translations.Languages.Polish;
+                    break;
+                case 2://german
+                    Translations.language = Translations.Languages.German;
+                    break;
+                case 3://french
+                    Translations.language = Translations.Languages.French;
+                    break;
+            }
+            this.applySettings();
+        }
         //handler for what happends when the check box "clean install" is checked or not
         private void cleanInstallCB_CheckedChanged(object sender, EventArgs e)
         {
@@ -2431,27 +2451,14 @@ namespace RelhaxModpack
             }
         }
 
+        private void DiagnosticUtilitiesButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
         #endregion
 
-        private void LanguageComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            switch(LanguageComboBox.SelectedIndex)
-            {
-                case 0://english
-                    Translations.language = Translations.Languages.English;
-                    break;
-                case 1://polish
-                    Translations.language = Translations.Languages.Polish;
-                    break;
-                case 2://german
-                    Translations.language = Translations.Languages.German;
-                    break;
-                case 3://french
-                    Translations.language = Translations.Languages.French;
-                    break;
-            }
-            this.applySettings();
-        }
+
     }
     #region DownloadItem class definition
     //a class for the downloadQueue list, to make a queue of downloads

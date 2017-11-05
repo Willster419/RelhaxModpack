@@ -86,6 +86,7 @@
             this.DatabaseVersionLabel = new System.Windows.Forms.Label();
             this.ApplicationVersionLabel = new System.Windows.Forms.Label();
             this.LanguageComboBox = new System.Windows.Forms.ComboBox();
+            this.DiagnosticUtilitiesButton = new System.Windows.Forms.Button();
             this.settingsGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
@@ -339,7 +340,7 @@
             // languageSelectionGB
             // 
             this.languageSelectionGB.Controls.Add(this.LanguageComboBox);
-            this.languageSelectionGB.Location = new System.Drawing.Point(326, 78);
+            this.languageSelectionGB.Location = new System.Drawing.Point(325, 131);
             this.languageSelectionGB.Name = "languageSelectionGB";
             this.languageSelectionGB.Size = new System.Drawing.Size(104, 47);
             this.languageSelectionGB.TabIndex = 30;
@@ -350,7 +351,7 @@
             // 
             this.loadingImageGroupBox.Controls.Add(this.thirdGuardsLoadingImageRB);
             this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(326, 131);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(325, 182);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
             this.loadingImageGroupBox.Size = new System.Drawing.Size(103, 62);
             this.loadingImageGroupBox.TabIndex = 26;
@@ -806,12 +807,23 @@
             this.LanguageComboBox.TabIndex = 4;
             this.LanguageComboBox.SelectedIndexChanged += new System.EventHandler(this.LanguageComboBox_SelectedIndexChanged);
             // 
+            // DiagnosticUtilitiesButton
+            // 
+            this.DiagnosticUtilitiesButton.Location = new System.Drawing.Point(326, 77);
+            this.DiagnosticUtilitiesButton.Name = "DiagnosticUtilitiesButton";
+            this.DiagnosticUtilitiesButton.Size = new System.Drawing.Size(103, 48);
+            this.DiagnosticUtilitiesButton.TabIndex = 40;
+            this.DiagnosticUtilitiesButton.Text = "Diagnostic Utilities";
+            this.DiagnosticUtilitiesButton.UseVisualStyleBackColor = true;
+            this.DiagnosticUtilitiesButton.Click += new System.EventHandler(this.DiagnosticUtilitiesButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(440, 657);
+            this.Controls.Add(this.DiagnosticUtilitiesButton);
             this.Controls.Add(this.VersionTable);
             this.Controls.Add(this.ErrorCounterLabel);
             this.Controls.Add(this.viewDBUpdates);
@@ -913,6 +925,7 @@
         private System.Windows.Forms.Label DatabaseVersionLabel;
         private System.Windows.Forms.Label ApplicationVersionLabel;
         private System.Windows.Forms.ComboBox LanguageComboBox;
+        private System.Windows.Forms.Button DiagnosticUtilitiesButton;
     }
 }
 
