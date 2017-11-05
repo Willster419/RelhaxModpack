@@ -207,7 +207,17 @@ namespace RelhaxModpack
             else
                 Utils.AppendToLog("... skipped");
             ResetArgs();
-            //Step 17: Install Fonts
+
+
+
+            //Step 18: Install Fonts
+            Utils.AppendToLog("Installation CreateAtlases");
+            args.InstalProgress = InstallerEventArgs.InstallProgress.CreateAtlases;
+            if (Directory.Exists(Path.Combine(TanksLocation, "_atlases")))
+                CreateAtlases();
+            else
+                Utils.AppendToLog("... skipped");
+            //Step 19: Install Fonts
             Utils.AppendToLog("Installation InstallUserFonts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallUserFonts;
             if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
@@ -215,7 +225,7 @@ namespace RelhaxModpack
             else
                 Utils.AppendToLog("... skipped");
             ResetArgs();
-            //Step 18: create shortCuts
+            //Step 20: create shortCuts
             Utils.AppendToLog("Installation CreateShortscuts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CreateShortCuts;
             if (Settings.CreateShortcuts)
@@ -223,7 +233,7 @@ namespace RelhaxModpack
             else
                 Utils.AppendToLog("... skipped");
             ResetArgs();
-            //Step 19: CheckDatabase and delete outdated or no more needed files
+            //Step 21: CheckDatabase and delete outdated or no more needed files
             Utils.AppendToLog("Installation CheckDatabase");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CheckDatabase;
             if (!Program.testMode)
@@ -231,7 +241,7 @@ namespace RelhaxModpack
             else
                 Utils.AppendToLog("... skipped");
             ResetArgs();
-            //Step 20: Cleanup
+            //Step 22: Cleanup
             Utils.AppendToLog("Intallation CleanUp");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CleanUp;
             try
@@ -1122,7 +1132,20 @@ namespace RelhaxModpack
             }
         }
 
-        //Step 17: Install Fonts
+        //Step 18: Install Fonts
+        private static void CreateAtlases()
+        {
+            AtlasesCreator.AtlasesArgs atlasesArgs = new AtlasesCreator.AtlasesArgs();
+            atlasesArgs.MaxHeight = 2048;
+            atlasesArgs.ImageFile = @"C:\Users\Dennis\Desktop\Test Atlases\Text.png";
+            atlasesArgs.MapFile = @"C:\Users\Dennis\Desktop\Test Atlases\Text.xml";
+            atlasesArgs.PowOf2 = true;
+            atlasesArgs.Square = false;
+            atlasesArgs.Images = addFilesToAtlasList(new[] { @"C:\Users\Dennis\Desktop\Test Atlases\battleAtlas\battleAtlas", @"D:\Spiele\World_of_Tanks\res_mods\0.9.20.1.2\gui\maps\icons\vehicle\contour" });
+            AtlasesCreator.Program.Main(atlasesArgs);
+        }
+        
+        //Step 19: Install Fonts
         public void InstallFonts()
         {
             try
@@ -1514,6 +1537,53 @@ namespace RelhaxModpack
                 Utils.ExceptionLog("createPatchList", "ex", ex);
             }
         }
+
+        public static List<string> addFilesToAtlasList(string[] folders)
+        {
+            // System.Collections.Hashtable fileList = new System.Collections.Hashtable();
+            List<string> collectiveList = new List<string>();
+            List<string> shortNameList = new List<string>();
+            foreach (string r in folders)
+            {
+                if (Directory.Exists(r))
+                {
+                    try
+                    {
+                        File.SetAttributes(r, FileAttributes.Normal);
+                        //get every png file in the folder
+                        FileInfo[] fi = new DirectoryInfo(r).GetFiles(@"*.png", SearchOption.TopDirectoryOnly);
+                        foreach (FileInfo f in fi)
+                        {
+                            collectiveList.Add(Path.Combine(r, f.Name));
+                            shortNameList.Add(Path.GetFileName(Path.GetFileNameWithoutExtension(f.Name)));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.ExceptionLog("addFilesToAtlasList", "GetFiles of folder: " + r, ex);
+                    }
+                }
+                else
+                    Utils.AppendToLog(string.Format("Directory {0} is not existing", r));
+            }
+            Utils.AppendToLog("files collected: " + shortNameList.Count);
+            int i = collectiveList.Count - 1;
+            while (i > 0)
+            {
+                while (shortNameList.IndexOf(shortNameList[i]) != i)
+                {
+                    int r = shortNameList.IndexOf(shortNameList[i]);
+                    shortNameList.RemoveAt(r);
+                    collectiveList.RemoveAt(r);
+                    i--;
+                }
+                i--;
+            }
+            // files finally adding, after deleting needless base files (last file added is winning): 
+            Utils.AppendToLog("files finally adding: " + collectiveList.Count);
+            return collectiveList;
+        }
+
         //gets the total number of files to process to eithor delete or copy
         private List<string> NumFilesToProcess(string folder)
         {
@@ -1540,6 +1610,7 @@ namespace RelhaxModpack
             catch { }
             return list;
         }
+
         //recursivly deletes every file from one place to another
         private void DirectoryDelete(string sourceDirName, bool deleteSubDirs)
         {
@@ -1576,6 +1647,7 @@ namespace RelhaxModpack
                 }
                 InstallWorker.ReportProgress(args.ChildProcessed++);
             }
+
             // If copying subdirectories, copy them and their contents to new location.
             if (deleteSubDirs)
             {
@@ -1637,6 +1709,7 @@ namespace RelhaxModpack
                 }
             }
         }
+
         //main method for moving every file from one place to another. solves the issue of Directory.move() does not support moving across volumes
         private void DirectoryMove(string sourceDirName, string destDirName, bool copySubDirs, bool overwrite, bool reportProgress = true)
         {
@@ -1647,6 +1720,7 @@ namespace RelhaxModpack
             if (Directory.Exists(sourceDirName))
                 Directory.Delete(sourceDirName);
         }
+
         //recursivly moves every file from one place to another
         private void _DirectoryMove(string sourceDirName, string destDirName, bool copySubDirs, bool overwrite, bool reportProgress = true)
         {
@@ -1681,6 +1755,7 @@ namespace RelhaxModpack
                 }
             }
         }
+
         //main unzip worker method
         private void Unzip(string zipFile, string extractFolder)
         {
