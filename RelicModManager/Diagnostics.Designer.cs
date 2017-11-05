@@ -36,6 +36,7 @@
             this.StartWoTLauncherResult = new System.Windows.Forms.Label();
             this.CollectLogInfoResult = new System.Windows.Forms.Label();
             this.SelectedInstallation = new System.Windows.Forms.Label();
+            this.ChangeInstall = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,7 +58,7 @@
             this.tableLayoutPanel1.Controls.Add(this.CollectLogInfo, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.StartWoTLauncherResult, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.CollectLogInfoResult, 1, 1);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 68);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 109);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -116,11 +117,22 @@
             this.SelectedInstallation.TabIndex = 2;
             this.SelectedInstallation.Text = "WoT Install Location";
             // 
+            // ChangeInstall
+            // 
+            this.ChangeInstall.Location = new System.Drawing.Point(15, 68);
+            this.ChangeInstall.Name = "ChangeInstall";
+            this.ChangeInstall.Size = new System.Drawing.Size(212, 38);
+            this.ChangeInstall.TabIndex = 3;
+            this.ChangeInstall.Text = "Change Installation Directory";
+            this.ChangeInstall.UseVisualStyleBackColor = true;
+            this.ChangeInstall.Click += new System.EventHandler(this.ChangeInstallation_Click);
+            // 
             // Diagnostics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(570, 307);
+            this.Controls.Add(this.ChangeInstall);
             this.Controls.Add(this.SelectedInstallation);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.MainTextBox);
@@ -147,5 +159,6 @@
         private System.Windows.Forms.Label StartWoTLauncherResult;
         private System.Windows.Forms.Label CollectLogInfoResult;
         private System.Windows.Forms.Label SelectedInstallation;
+        private System.Windows.Forms.Button ChangeInstall;
     }
 }

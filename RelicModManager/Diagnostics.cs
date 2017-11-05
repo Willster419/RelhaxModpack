@@ -12,6 +12,7 @@ namespace RelhaxModpack
         private string MainWindowHeader = Translations.getTranslatedString("MainTextBox");
         public string TanksLocation { get; set; }
         public string AppStartupPath { get; set; }
+        public MainWindow ParentWindow { get; set; }
 
         public Diagnostics()
         {
@@ -26,7 +27,7 @@ namespace RelhaxModpack
             SelectedInstallation.Text = Translations.getTranslatedString(SelectedInstallation.Name) + TanksLocation;
             LaunchWoTLauncher.Text = Translations.getTranslatedString(LaunchWoTLauncher.Name);
             CollectLogInfo.Text = Translations.getTranslatedString(CollectLogInfo.Name);
-            //ChangeInstallation.Text = Translations.getTranslatedString(ChangeInstallation.Name);
+            ChangeInstall.Text = Translations.getTranslatedString(ChangeInstall.Name);
         }
 
         private void LaunchWoTLauncher_Click(object sender, System.EventArgs e)
@@ -65,6 +66,7 @@ namespace RelhaxModpack
                 {
                     string RelHaxLogPath = Path.Combine(AppStartupPath, "RelHaxLog.txt");
                     string InstalledRelhaxFiles = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
+                    string UninstalledRelhaxFiles = Path.Combine(TanksLocation, "logs", "uninstall.log");
                     string PythonLog = Path.Combine(TanksLocation, "python.log");
                     string SelectionXMlFile = "";
                     using (OpenFileDialog findSelectionXMLFile = new OpenFileDialog()
@@ -83,7 +85,7 @@ namespace RelhaxModpack
                             SelectionXMlFile = findSelectionXMLFile.FileName;
                         }
                     }
-                    string[] filesToCollect = new string[] { RelHaxLogPath, InstalledRelhaxFiles, PythonLog, SelectionXMlFile };
+                    string[] filesToCollect = new string[] { RelHaxLogPath, InstalledRelhaxFiles, UninstalledRelhaxFiles, PythonLog, SelectionXMlFile };
                     foreach(string s in filesToCollect)
                     {
                         if (s.Equals(""))
@@ -114,7 +116,17 @@ namespace RelhaxModpack
 
         private void ChangeInstallation_Click(object sender, EventArgs e)
         {
-
+            //attempt to locate the tanks directory
+            if (ParentWindow.manuallyFindTanks() == null)
+            {
+                ParentWindow.ToggleUIButtons(true);
+                return;
+            }
+            //parse all strings
+            ParentWindow.tanksLocation = ParentWindow.tanksLocation.Substring(0, ParentWindow.tanksLocation.Length - 17);
+            TanksLocation = ParentWindow.tanksLocation;
+            SelectedInstallation.Text = Translations.getTranslatedString(SelectedInstallation.Name) + TanksLocation;
+            Utils.AppendToLog(string.Format("tanksLocation parsed as {0}", ParentWindow.tanksLocation));
         }
     }
 }

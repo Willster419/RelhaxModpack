@@ -1623,12 +1623,12 @@ namespace RelhaxModpack
             polish.Add("launcherRepairModeStarted", "TODO");
             french.Add("launcherRepairModeStarted", "TODO");
 
-            //Component: ChangeInstallation
+            //Component: ChangeInstall
             //
-            english.Add("ChangeInstallation", "Change selected WoT install");
-            german.Add("ChangeInstallation", "TODO");
-            polish.Add("ChangeInstallation", "TODO");
-            french.Add("ChangeInstallation", "TODO");
+            english.Add("ChangeInstall", "Change selected WoT install");
+            german.Add("ChangeInstall", "TODO");
+            polish.Add("ChangeInstall", "TODO");
+            french.Add("ChangeInstall", "TODO");
 
             //Component: zipSavedTo
             //
