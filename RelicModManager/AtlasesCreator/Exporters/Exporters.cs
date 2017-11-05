@@ -56,7 +56,7 @@ namespace RelhaxModpack.AtlasesCreator
             foreach (string file in dlls)
             {
                 try { FindExporters(Assembly.LoadFile(file)); }
-                catch { /* don't care */ }
+                catch {  }
             }
         }
 

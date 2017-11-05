@@ -112,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AtlasesCreator\AtlasesArgs.cs" />
+    <Compile Include="AtlasesCreator\Exporters\XmlWGMapExporter.cs" />
     <Compile Include="AtlasesCreator\Settings.cs" />
     <Compile Include="AtlasesCreator\Constants.cs" />
     <Compile Include="AtlasesCreator\Exporters\BmpImageExporter.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="AtlasesCreator\Packing\RectanglePacker.cs" />
     <Compile Include="AtlasesCreator\Program.cs" />
     <Compile Include="AtlasesCreator\ProgramArguments.cs" />
+    <Compile Include="AtlasesExtrator\Program.cs" />
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="CiInfo.cs" />
     <Compile Include="InstallerComponents\AsyncDownloadArgs.cs" />
