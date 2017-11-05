@@ -111,6 +111,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddPicturesZip.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddPicturesZip.Designer.cs">
+      <DependentUpon>AddPicturesZip.cs</DependentUpon>
+    </Compile>
     <Compile Include="AtlasesCreator\AtlasesArgs.cs" />
     <Compile Include="AtlasesCreator\Settings.cs" />
     <Compile Include="AtlasesCreator\Constants.cs" />
@@ -312,6 +318,9 @@
     <Compile Include="ViewUpdates.Designer.cs">
       <DependentUpon>ViewUpdates.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AddPicturesZip.resx">
+      <DependentUpon>AddPicturesZip.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Diagnostics.resx">
       <DependentUpon>Diagnostics.cs</DependentUpon>
     </EmbeddedResource>
