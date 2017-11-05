@@ -177,7 +177,10 @@ namespace RelhaxModpack
             Utils.AppendToLog("Installation UnpackXmlFiles");
             args.InstalProgress = InstallerEventArgs.InstallProgress.UnpackXmlFiles;
             if (Directory.Exists(Path.Combine(TanksLocation, "_xmlUnPack")))
+            {
                 UnpackXmlFiles();
+                Directory.Delete(Path.Combine(TanksLocation, "_xmlUnPack"), true);
+            }
             else
                 Utils.AppendToLog("... skipped");
             ResetArgs();
@@ -207,16 +210,26 @@ namespace RelhaxModpack
             else
                 Utils.AppendToLog("... skipped");
             ResetArgs();
-
-
-
-            //Step 18: Install Fonts
+            //Step 17: Extract Atlases
+            Utils.AppendToLog("Installation ExtractAtlases");
+            args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractAtlases;
+            if (Directory.Exists(Path.Combine(TanksLocation, "_atlases")))
+            {
+                // to do
+            }
+            else
+                Utils.AppendToLog("... skipped");
+            //Step 18: Create Atlases
             Utils.AppendToLog("Installation CreateAtlases");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CreateAtlases;
             if (Directory.Exists(Path.Combine(TanksLocation, "_atlases")))
+            {
                 CreateAtlases();
+                Directory.Delete(Path.Combine(TanksLocation, "_atlases"), true);
+            }
             else
                 Utils.AppendToLog("... skipped");
+            ResetArgs();
             //Step 19: Install Fonts
             Utils.AppendToLog("Installation InstallUserFonts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallUserFonts;
@@ -246,12 +259,10 @@ namespace RelhaxModpack
             args.InstalProgress = InstallerEventArgs.InstallProgress.CleanUp;
             try
             {
-            if (Directory.Exists(Path.Combine(TanksLocation, "_readme")))
-                Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
-            if (Directory.Exists(Path.Combine(TanksLocation, "_xmlUnPack")))
-                Directory.Delete(Path.Combine(TanksLocation, "_xmlUnPack"), true);
-            if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
-                Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
+                if (Directory.Exists(Path.Combine(TanksLocation, "_readme")))
+                    Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
+                if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
+                    Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
             }
             catch (Exception ex)
             {
@@ -1538,7 +1549,7 @@ namespace RelhaxModpack
             }
         }
 
-        public static List<string> addFilesToAtlasList(string[] folders)
+        private static List<string> addFilesToAtlasList(string[] folders)
         {
             // System.Collections.Hashtable fileList = new System.Collections.Hashtable();
             List<string> collectiveList = new List<string>();
