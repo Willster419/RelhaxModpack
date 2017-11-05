@@ -2453,7 +2453,28 @@ namespace RelhaxModpack
 
         private void DiagnosticUtilitiesButton_Click(object sender, EventArgs e)
         {
-
+            ToggleUIButtons(false);
+            //attempt to locate the tanks directory
+            if (Settings.ForceManuel || this.autoFindTanks() == null)
+            {
+                if (this.manuallyFindTanks() == null)
+                {
+                    ToggleUIButtons(true);
+                    return;
+                }
+            }
+            //parse all strings
+            tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
+            Utils.AppendToLog(string.Format("tanksLocation parsed as {0}", tanksLocation));
+            using (Diagnostics d = new Diagnostics()
+            {
+                TanksLocation = this.tanksLocation,
+                AppStartupPath = Application.StartupPath
+            })
+            {
+                d.ShowDialog();
+            }
+            ToggleUIButtons(true);
         }
 
         #endregion

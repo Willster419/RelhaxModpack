@@ -50,6 +50,7 @@
             this.saveUserDataCB = new System.Windows.Forms.CheckBox();
             this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
             this.languageSelectionGB = new System.Windows.Forms.GroupBox();
+            this.LanguageComboBox = new System.Windows.Forms.ComboBox();
             this.loadingImageGroupBox = new System.Windows.Forms.GroupBox();
             this.thirdGuardsLoadingImageRB = new System.Windows.Forms.RadioButton();
             this.standardImageRB = new System.Windows.Forms.RadioButton();
@@ -85,7 +86,6 @@
             this.VersionTable = new System.Windows.Forms.TableLayoutPanel();
             this.DatabaseVersionLabel = new System.Windows.Forms.Label();
             this.ApplicationVersionLabel = new System.Windows.Forms.Label();
-            this.LanguageComboBox = new System.Windows.Forms.ComboBox();
             this.DiagnosticUtilitiesButton = new System.Windows.Forms.Button();
             this.settingsGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
@@ -340,18 +340,33 @@
             // languageSelectionGB
             // 
             this.languageSelectionGB.Controls.Add(this.LanguageComboBox);
-            this.languageSelectionGB.Location = new System.Drawing.Point(325, 131);
+            this.languageSelectionGB.Location = new System.Drawing.Point(325, 137);
             this.languageSelectionGB.Name = "languageSelectionGB";
             this.languageSelectionGB.Size = new System.Drawing.Size(104, 47);
             this.languageSelectionGB.TabIndex = 30;
             this.languageSelectionGB.TabStop = false;
             this.languageSelectionGB.Text = "Language";
             // 
+            // LanguageComboBox
+            // 
+            this.LanguageComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.LanguageComboBox.FormattingEnabled = true;
+            this.LanguageComboBox.Items.AddRange(new object[] {
+            "English",
+            "Polski",
+            "Deutsch",
+            "Francais"});
+            this.LanguageComboBox.Location = new System.Drawing.Point(6, 13);
+            this.LanguageComboBox.Name = "LanguageComboBox";
+            this.LanguageComboBox.Size = new System.Drawing.Size(92, 21);
+            this.LanguageComboBox.TabIndex = 4;
+            this.LanguageComboBox.SelectedIndexChanged += new System.EventHandler(this.LanguageComboBox_SelectedIndexChanged);
+            // 
             // loadingImageGroupBox
             // 
             this.loadingImageGroupBox.Controls.Add(this.thirdGuardsLoadingImageRB);
             this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(325, 182);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(325, 190);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
             this.loadingImageGroupBox.Size = new System.Drawing.Size(103, 62);
             this.loadingImageGroupBox.TabIndex = 26;
@@ -792,24 +807,9 @@
             this.ApplicationVersionLabel.TabIndex = 1;
             this.ApplicationVersionLabel.Text = "Application v{version]";
             // 
-            // LanguageComboBox
-            // 
-            this.LanguageComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.LanguageComboBox.FormattingEnabled = true;
-            this.LanguageComboBox.Items.AddRange(new object[] {
-            "English",
-            "Polski",
-            "Deutsch",
-            "Francais"});
-            this.LanguageComboBox.Location = new System.Drawing.Point(6, 13);
-            this.LanguageComboBox.Name = "LanguageComboBox";
-            this.LanguageComboBox.Size = new System.Drawing.Size(92, 21);
-            this.LanguageComboBox.TabIndex = 4;
-            this.LanguageComboBox.SelectedIndexChanged += new System.EventHandler(this.LanguageComboBox_SelectedIndexChanged);
-            // 
             // DiagnosticUtilitiesButton
             // 
-            this.DiagnosticUtilitiesButton.Location = new System.Drawing.Point(326, 77);
+            this.DiagnosticUtilitiesButton.Location = new System.Drawing.Point(326, 83);
             this.DiagnosticUtilitiesButton.Name = "DiagnosticUtilitiesButton";
             this.DiagnosticUtilitiesButton.Size = new System.Drawing.Size(103, 48);
             this.DiagnosticUtilitiesButton.TabIndex = 40;
