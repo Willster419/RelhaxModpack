@@ -70,7 +70,7 @@ namespace RelhaxModpack
         public static bool ModSelectionFullscreen = false;
         public static int PreviewX = 0;
         public static int PreviewY = 0;
-        public static string CcustomModInfoPath = "";
+        public static string CustomModInfoPath = "";
         //enumeration for the type of mod selection list view
         public enum SelectionView { Default = 0, Legacy = 1 };
         public static SelectionView SView = SelectionView.Default;
@@ -146,7 +146,7 @@ namespace RelhaxModpack
                 Settings.DeleteLogs = false;
                 Settings.PreviewX = 0;
                 Settings.PreviewY = 0;
-                Settings.CcustomModInfoPath = "";
+                Settings.CustomModInfoPath = "";
                 Settings.TempFontSizeForum = 0;
                 Settings.FontSizeforum = FontSize.Font100;
                 Settings.SView = SelectionView.Default;
@@ -227,7 +227,7 @@ namespace RelhaxModpack
                             Settings.PreviewY = int.Parse(n.InnerText);
                             break;
                         case "customModInfoPath":
-                            Settings.CcustomModInfoPath = n.InnerText;
+                            Settings.CustomModInfoPath = n.InnerText;
                             break; 
                         case "SelectionView":
                             Settings.TempLoadedView = int.Parse(n.InnerText);
@@ -434,7 +434,7 @@ namespace RelhaxModpack
             xpreviewY.InnerText = "" + PreviewY;
             settingsHolder.AppendChild(xpreviewY);
             XmlElement customModInfoPath = doc.CreateElement("customModInfoPath");
-            if (Settings.CcustomModInfoPath != "") { customModInfoPath.InnerText = Settings.CcustomModInfoPath; }
+            if (Settings.CustomModInfoPath != "") { customModInfoPath.InnerText = Settings.CustomModInfoPath; }
             settingsHolder.AppendChild(customModInfoPath); 
 
             doc.Save(SettingsXmlFile);

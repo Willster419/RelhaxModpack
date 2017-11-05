@@ -46,7 +46,7 @@ namespace RelhaxModpack
                 difference = titleHeight - titleBar;
             }
             //this.DialogResult = DialogResult.Cancel;
-            SelectConfigLabel.Text = Translations.getTranslatedString("loading");
+            SelectConfigLabel.Text = Translations.getTranslatedString(SelectConfigLabel.Name);
             SelectButton.Text = Translations.getTranslatedString("select");
             CancelCloseButton.Text = Translations.getTranslatedString("cancel");
 

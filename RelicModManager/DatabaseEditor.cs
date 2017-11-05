@@ -188,7 +188,7 @@ namespace RelhaxModpack
         //show the load database dialog and load the database
         private void LoadDatabaseButton_Click(object sender, EventArgs e)
         {
-            string workingDirectory = Path.Combine(string.IsNullOrEmpty(Settings.CcustomModInfoPath) ? Application.StartupPath : Settings.CcustomModInfoPath);
+            string workingDirectory = Path.Combine(string.IsNullOrEmpty(Settings.CustomModInfoPath) ? Application.StartupPath : Settings.CustomModInfoPath);
             if (Directory.Exists(workingDirectory))
             {
                 OpenDatabaseDialog.InitialDirectory = workingDirectory;

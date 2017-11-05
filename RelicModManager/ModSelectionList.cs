@@ -81,17 +81,15 @@ namespace RelhaxModpack
             {
                 this.Scale(new System.Drawing.SizeF(Settings.ScaleSize, Settings.ScaleSize));
             }
-
             //apply the translations
             this.applyTranslations();
             pw.loadingDescBox.Text = Translations.getTranslatedString("readingDatabase");
             Application.DoEvents();
-            // string databaseURL = string.Format("http://wotmods.relhaxmodpack.com/RelhaxModpack/modInfo_{0}.xml", tanksVersion);
             string databaseURL = Settings.ModInfoDatFile;
             if (Program.testMode)
             {
                 // if customModInfoPath is empty, this creates a full valid path to the current manager location folder
-                databaseURL = Path.Combine(string.IsNullOrEmpty(Settings.CcustomModInfoPath) ? Application.StartupPath : Settings.CcustomModInfoPath, "modInfo.xml");
+                databaseURL = Path.Combine(string.IsNullOrEmpty(Settings.CustomModInfoPath) ? Application.StartupPath : Settings.CustomModInfoPath, "modInfo.xml");
                 if (!File.Exists(databaseURL))
                 {
                     Utils.AppendToLog("Databasefile not found: " + databaseURL);
@@ -104,19 +102,20 @@ namespace RelhaxModpack
             {
                 //download the modInfo.dat
                 Utils.AppendToLog("downloading modInfo.dat");
-                WebClient downloader = new WebClient();
                 string dlURL = "";
-                downloader.Proxy = null;
-                try
+                using (WebClient downloader = new WebClient() { Proxy = null })
                 {
-                    dlURL = string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/modInfo.dat", Settings.TanksOnlineFolderVersion);
-                    downloader.DownloadFile(dlURL, Settings.ModInfoDatFile);
-                }
-                catch (Exception ex)
-                {
-                    Utils.ExceptionLog(string.Format("ModSelectionList_Load", @"Tried to access {0}", dlURL), ex);
-                    MessageBox.Show(string.Format("{0} modInfo.dat", Translations.getTranslatedString("failedToDownload_1")));
-                    Application.Exit();
+                    try
+                    {
+                        dlURL = string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/modInfo.dat", Settings.TanksOnlineFolderVersion);
+                        downloader.DownloadFile(dlURL, Settings.ModInfoDatFile);
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.ExceptionLog(string.Format("ModSelectionList_Load", @"Tried to access {0}", dlURL), ex);
+                        MessageBox.Show(string.Format("{0} modInfo.dat", Translations.getTranslatedString("failedToDownload_1")));
+                        Application.Exit();
+                    }
                 }
             }
             //create new lists for memory database and serialize from xml->lists
@@ -129,7 +128,7 @@ namespace RelhaxModpack
             {
                 if (Utils.Duplicates(parsedCatagoryList))
                 {
-                    Utils.AppendToLog("CRITICAL: Duplicate mod name detected!!");
+                    Utils.AppendToLog("WARNING: Duplicate mod name detected!!");
                     MessageBox.Show(Translations.getTranslatedString("duplicateMods"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     Application.Exit();
                 }
@@ -171,9 +170,27 @@ namespace RelhaxModpack
                 this.Close();
                 return;
             }
-            //actually build the UI display
+            //build the UI display
+            if (pw != null)
+            {
+                pw.progres_max = XMLUtils.TotalModConfigComponents;
+                pw.SetProgress(0);
+            }
+            loadingConfig = true;
+            Utils.AppendToLog("Loading ModSelectionList with view " + Settings.SView);
+            completeModSearchList = new List<DatabaseObject>();
+            if (modTabGroups.TabPages.Count > 0)
+                modTabGroups.TabPages.Clear();
+            modTabGroups.Font = Settings.AppFont;
             this.addAllMods();
+            this.FinishLoad();
+        }
+
+        private void FinishLoad()
+        {
             this.addUserMods(false);
+            loadingConfig = false;
+            firstLoad = false;
             //set the size to the last closed size
             this.Size = new Size(Settings.ModSelectionWidth, Settings.ModSelectionHeight);
             //set the UI colors
@@ -192,7 +209,6 @@ namespace RelhaxModpack
                 Settings.SetTaskbarState(Settings.AppBarStates.AlwaysOnTop);
             }
             //get the maximum height of the screen
-            //this.MaximumSize = Screen.FromControl(this).WorkingArea.Size;
             //get the size of the title bar window
             Rectangle screenRektangle = RectangleToScreen(this.ClientRectangle);
             int titleHeight = screenRektangle.Top - this.Top;
@@ -325,33 +341,20 @@ namespace RelhaxModpack
         //must be only one catagory
         private void addAllMods()
         {
-            if (pw != null)
-            {
-                pw.progres_max = XMLUtils.TotalModConfigComponents;
-                pw.SetProgress(0);
-            }
-            loadingConfig = true;
-            Utils.AppendToLog("Loading ModSelectionList with view " + Settings.SView);
-            completeModSearchList = new List<DatabaseObject>();
-            if (modTabGroups.TabPages.Count > 0)
-                modTabGroups.TabPages.Clear();
-            modTabGroups.Font = Settings.AppFont;
             foreach (Category c in parsedCatagoryList)
             {
-                TabPage t = new TabPage(c.name);
-                t.AutoScroll = true;
-                //link the names of catagory and tab so eithor can be searched for
-                t.Name = c.name;
-                //if the catagory selection type is only one mod allowed
-                if (c.selectionType.Equals("single"))
+                TabPage t = new TabPage(c.name)
                 {
-                    //append a star so the user knows
-                    t.Text = t.Text + "*";
-                }
+                    AutoScroll = true,
+                    //link the names of catagory and tab so eithor can be searched for
+                    Name = c.name,
+                    Text = c.selectionType.Equals("single") ? c.name + "*" : c.name
+                };
+                c.TabPage = t;
                 //matched the catagory to tab
                 //add to the ui every mod of that catagory
                 Utils.SortModsList(c.mods);
-                int i = 1;
+                
                 LegacySelectionList lsl = null;
                 if (Settings.SView == Settings.SelectionView.Legacy)
                 {
@@ -366,8 +369,13 @@ namespace RelhaxModpack
                     lsl.legacyTreeView.Items.Clear();
                     t.Controls.Add(host);
                 }
+                modTabGroups.TabPages.Add(t);
+            }
+            foreach (Category c in parsedCatagoryList)
+            {
                 foreach (Mod m in c.mods)
                 {
+                    
                     if (pw != null)
                     {
                         pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.getTranslatedString("loading"), m.name);
@@ -375,29 +383,28 @@ namespace RelhaxModpack
                         pw.SetProgress(prog);
                         Application.DoEvents();
                     }
+                    
                     if (Settings.SView == Settings.SelectionView.Default)
                     {
                         //use default UI
-                        this.AddMod(m, t, i++, c);
+                        this.AddMod(m, c.TabPage, c);
                     }
                     else if (Settings.SView == Settings.SelectionView.Legacy)
                     {
                         //use legacy OMC UI
-                        this.addModTreeview(m, t, i++, lsl, c);
+                        ElementHost h = (ElementHost)c.TabPage.Controls[0];
+                        this.AddModTreeview(m, c.TabPage, (LegacySelectionList)h.Child, c);
                     }
                     else
                     {
-                        //default case, use default
-                        this.AddMod(m, t, i++, c);
+                        //default case, use default view
+                        this.AddMod(m, c.TabPage, c);
                     }
                 }
-                modTabGroups.TabPages.Add(t);
             }
-            loadingConfig = false;
-            firstLoad = false;
         }
         //adds a mod m to a tabpage t, OMC treeview style
-        private void addModTreeview(Mod m, TabPage t, int panelCount, LegacySelectionList lsl, Category c)
+        private void AddModTreeview(Mod m, TabPage t, LegacySelectionList lsl, Category c)
         {
             if (!m.visible)
                 return;
@@ -1224,10 +1231,11 @@ namespace RelhaxModpack
         }
 
         //adds a mod m to a tabpage t
-        private void AddMod(Mod m, TabPage t, int panelCount, Category catagory)
+        private void AddMod(Mod m, TabPage t, Category catagory)
         {
             if (!m.visible)
                 return;
+            int newPanelCount = t.Controls.Count + 1;
             //bool for keeping track if a radioButton config has been selected
             hasRadioButtonConfigSelected = false;
             modHasRadioButtons = false;
@@ -1247,26 +1255,29 @@ namespace RelhaxModpack
             completeModSearchList.Add(m);
             // completeModSearchList_New.Add(m);
             //the mod checksum logic
-            string modDownloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads", m.zipFile);
-            if (firstLoad)
+            if (!m.zipFile.Equals(""))
             {
-                string oldCRC2 = XMLUtils.GetMd5Hash(modDownloadPath);
-                //if the CRC's don't match and the mod actually has a zip file
-                if ((!m.zipFile.Equals("")) && (!m.crc.Equals(oldCRC2)))
+                string modDownloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads", m.zipFile);
+                if (firstLoad)
                 {
-                    modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
-                    m.downloadFlag = true;
-                    if ((m.size > 0))
-                        modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
+                    string oldCRC2 = XMLUtils.GetMd5Hash(modDownloadPath);
+                    //if the CRC's don't match and the mod actually has a zip file
+                    if ((!m.crc.Equals(oldCRC2)))
+                    {
+                        modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
+                        m.downloadFlag = true;
+                        if ((m.size > 0))
+                            modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
+                    }
                 }
-            }
-            else
-            {
-                if (m.downloadFlag)
+                else
                 {
-                    modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
-                    if ((m.size > 0))
-                        modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
+                    if (m.downloadFlag)
+                    {
+                        modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
+                        if ((m.size > 0))
+                            modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
+                    }
                 }
             }
             modCheckBox.UseVisualStyleBackColor = true;
@@ -1286,10 +1297,10 @@ namespace RelhaxModpack
                 mainPanel.BackColor = Color.BlanchedAlmond;
             else
                 mainPanel.BackColor = Settings.getBackColor();
-            int panelCountYLocation = 70 * (panelCount - 1);
+            int panelCountYLocation = 70 * (newPanelCount - 1);
             //if this is not the first mod being added to the panel
             int panelYLocation = 6; //tab plus delimiter
-            if (panelCount > 1)
+            if (newPanelCount > 1)
             {
                 //create a list of other controlls and put this one 6 pixels below the others
                 foreach (Control c in t.Controls)
@@ -1297,7 +1308,7 @@ namespace RelhaxModpack
                     panelYLocation += c.Size.Height;
                     panelYLocation += 6;
                 }
-                panelCountYLocation = (panelCount - 1) * (t.Controls[0].Size.Height);
+                panelCountYLocation = (newPanelCount - 1) * (t.Controls[0].Size.Height);
                 panelCountYLocation = panelCountYLocation + 5;
             }
             mainPanel.Location = new System.Drawing.Point(5, panelYLocation);
@@ -1467,24 +1478,27 @@ namespace RelhaxModpack
                     configControlRB.Name = t.Name + "_" + m.name + "_" + con.name;
                     //run checksum logic
                     configControlRB.Text = Utils.ReplaceMacro(con);
-                    if (firstLoad)
+                    if (!con.zipFile.Equals(""))
                     {
-                        string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
-                        if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
+                        if (firstLoad)
                         {
-                            configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
-                            con.downloadFlag = true;
-                            if (con.size > 0)
-                                configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.size, 1, true));
+                            string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
+                            if ((!oldCRC.Equals(con.crc)))
+                            {
+                                configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
+                                con.downloadFlag = true;
+                                if (con.size > 0)
+                                    configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.size, 1, true));
+                            }
                         }
-                    }
-                    else
-                    {
-                        if (con.downloadFlag)
+                        else
                         {
-                            configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
-                            if (con.size > 0)
-                                configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.size, 1, true));
+                            if (con.downloadFlag)
+                            {
+                                configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
+                                if (con.size > 0)
+                                    configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.size, 1, true));
+                            }
                         }
                     }
                     //add the config to the form
@@ -2308,7 +2322,6 @@ namespace RelhaxModpack
             loadingConfig = true;
             OpenFileDialog loadLocation = new OpenFileDialog();
             string filePath = "";
-            // using (SelectionViewer sv = new SelectionViewer(this.Location.X + 100, this.Location.Y + 100, "http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/developerSelections/selections.xml"))
             using (SelectionViewer sv = new SelectionViewer(this.Location.X + 100, this.Location.Y + 100, Settings.ModInfoDatFile))
             {
                 if (loadMode == loadConfigMode.fromAutoInstall)
