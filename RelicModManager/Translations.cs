@@ -1550,6 +1550,85 @@ namespace RelhaxModpack
             german.Add("loadingGifpreview", "Ladebild Vorschau");
             polish.Add("loadingGifpreview", "TODO");
             french.Add("loadingGifpreview", "TODO");
+
+            //Section: Diagnostics
+
+            //Component: MainTextBox
+            //
+            english.Add("MainTextBox", "You can use the options below to try to diagnose or solve the issues you are having.");
+            german.Add("MainTextBox", "TODO");
+            polish.Add("MainTextBox", "TODO");
+            french.Add("MainTextBox", "TODO");
+
+            //Component: LaunchWoTLauncher
+            //
+            english.Add("LaunchWoTLauncher", "Start the World of Tanks launcher in integrity validation mode");
+            german.Add("LaunchWoTLauncher", "TODO");
+            polish.Add("LaunchWoTLauncher", "TODO");
+            french.Add("LaunchWoTLauncher", "TODO");
+
+            //Component: CollectLogInfo
+            //
+            english.Add("CollectLogInfo", "Collect all file logs to report a problem");
+            german.Add("CollectLogInfo", "TODO");
+            polish.Add("CollectLogInfo", "TODO");
+            french.Add("CollectLogInfo", "TODO");
+
+            //Component: SelectedInstallation
+            //
+            english.Add("SelectedInstallation", "Currently Selected Installation: ");
+            german.Add("SelectedInstallation", "TODO");
+            polish.Add("SelectedInstallation", "TODO");
+            french.Add("SelectedInstallation", "TODO");
+
+            //Component: collectionLogInfo
+            //
+            english.Add("collectionLogInfo", "Collecting log files...");
+            german.Add("collectionLogInfo", "TODO");
+            polish.Add("collectionLogInfo", "TODO");
+            french.Add("collectionLogInfo", "TODO");
+
+            //Component: startingLauncherRepairMode
+            //
+            english.Add("startingLauncherRepairMode", "Starting WoTLauncher in integrity validation mode...");
+            german.Add("startingLauncherRepairMode", "TODO");
+            polish.Add("startingLauncherRepairMode", "TODO");
+            french.Add("startingLauncherRepairMode", "TODO");
+
+            //Component: failedStartLauncherRepairMode
+            //
+            english.Add("failedStartLauncherRepairMode", "Failed to start WoT Launcher in Repair mode");
+            german.Add("failedStartLauncherRepairMode", "TODO");
+            polish.Add("failedStartLauncherRepairMode", "TODO");
+            french.Add("failedStartLauncherRepairMode", "TODO");
+
+            //Component: failedCollectFile
+            //
+            english.Add("failedCollectFile", "Failed to collect the file ");
+            german.Add("failedCollectFile", "TODO");
+            polish.Add("failedCollectFile", "TODO");
+            french.Add("failedCollectFile", "TODO");
+
+            //Component: failedCreateZipfile
+            //
+            english.Add("failedCreateZipfile", "Failed to creatle the zip file ");
+            german.Add("failedCreateZipfile", "TODO");
+            polish.Add("failedCreateZipfile", "TODO");
+            french.Add("failedCreateZipfile", "TODO");
+
+            //Component: launcherRepairModeStarted
+            //
+            english.Add("launcherRepairModeStarted", "Repair mode sucessfully started");
+            german.Add("launcherRepairModeStarted", "TODO");
+            polish.Add("launcherRepairModeStarted", "TODO");
+            french.Add("launcherRepairModeStarted", "TODO");
+
+            //Component: ChangeInstallation
+            //
+            english.Add("ChangeInstallation", "Change selected WoT install");
+            german.Add("ChangeInstallation", "TODO");
+            polish.Add("ChangeInstallation", "TODO");
+            french.Add("ChangeInstallation", "TODO");
         }
     }
 }

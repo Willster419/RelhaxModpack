@@ -2453,7 +2453,13 @@ namespace RelhaxModpack
 
         private void DiagnosticUtilitiesButton_Click(object sender, EventArgs e)
         {
-
+            using (Diagnostics d = new Diagnostics()
+            {
+                TanksLocation = this.tanksLocation
+            })
+            {
+                d.ShowDialog();
+            }
         }
 
         #endregion

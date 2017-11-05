@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace RelhaxModpack
 {
-    class RelhaxForum : Form
+    public class RelhaxForum : Form
     {
         private const int TitleBar = 23;//set origionaly for 23
         private int TitleBarDifference = 0;
@@ -25,6 +25,7 @@ namespace RelhaxModpack
             {
                 TitleBarDifference = TitleHeight - TitleBar;
             }
+            Settings.setUIColor(this);
             base.OnLoad(e);
         }
     }
