@@ -33,6 +33,7 @@ namespace RelhaxModpack
         bool modHasRadioButtons = false;
         bool firstLoad = true;
         bool ignoreSelections = true;
+        private static string NoDescriptionAvailable = Translations.getTranslatedString("noDescription");
         //bool mouseCLick = false;
         int prog = 0;
         private enum loadConfigMode
@@ -387,24 +388,24 @@ namespace RelhaxModpack
                     if (Settings.SView == Settings.SelectionView.Default)
                     {
                         //use default UI
-                        this.AddMod(m, c.TabPage, c);
+                        this.AddModDefaultView(m, c.TabPage, c);
                     }
                     else if (Settings.SView == Settings.SelectionView.Legacy)
                     {
                         //use legacy OMC UI
                         ElementHost h = (ElementHost)c.TabPage.Controls[0];
-                        this.AddModTreeview(m, c.TabPage, (LegacySelectionList)h.Child, c);
+                        this.AddModOMCView(m, c.TabPage, (LegacySelectionList)h.Child, c);
                     }
                     else
                     {
                         //default case, use default view
-                        this.AddMod(m, c.TabPage, c);
+                        this.AddModDefaultView(m, c.TabPage, c);
                     }
                 }
             }
         }
         //adds a mod m to a tabpage t, OMC treeview style
-        private void AddModTreeview(Mod m, TabPage t, LegacySelectionList lsl, Category c)
+        private void AddModOMCView(Mod m, TabPage t, LegacySelectionList lsl, Category c)
         {
             if (!m.visible)
                 return;
@@ -418,6 +419,9 @@ namespace RelhaxModpack
             m.parent = c;
             //create base mod checkbox
             ModWPFCheckBox modCheckBox = new ModWPFCheckBox();
+            //add the ToolTip description to the checkbox
+            //http://wpftutorial.net/ToolTip.html
+            modCheckBox.ToolTip = m.description.Equals("")? NoDescriptionAvailable : m.description;
             //use a custom datatype for the name
             modCheckBox.mod = m;
             modCheckBox.catagory = c;
@@ -454,7 +458,7 @@ namespace RelhaxModpack
                 tvi.IsExpanded = true;
             //process configs
             if (m.configs.Count > 0)
-                processConfigs(c, m, m.configs, tvi, true);
+                AddConfigsOMCView(c, m, m.configs, tvi, true);
             string nameForModCB = Utils.ReplaceMacro(m);
             //if there are underscores you need to actually display them #thanksWPF
             nameForModCB = Regex.Replace(nameForModCB, "_", "__");
@@ -497,7 +501,7 @@ namespace RelhaxModpack
             modCheckBox.Unchecked += modCheckBoxL_Click;
         }
 
-        void processConfigs(Category c, Mod m, List<Config> configs, System.Windows.Controls.TreeViewItem tvi, bool parentIsMod = false, Config parentConfig = null)
+        void AddConfigsOMCView(Category c, Mod m, List<Config> configs, System.Windows.Controls.TreeViewItem tvi, bool parentIsMod = false, Config parentConfig = null)
         {
             //create the twp possible drop down options, and the mod optional config check box i guess
             ConfigWPFComboBox configControlDD = new ConfigWPFComboBox();
@@ -534,6 +538,7 @@ namespace RelhaxModpack
                     modHasRadioButtons = true;
                     //make the radio button
                     ConfigWPFRadioButton configControlRB = new ConfigWPFRadioButton();
+                    configControlRB.ToolTip = con.description.Equals("")? NoDescriptionAvailable : con.description;
                     switch (Settings.FontSizeforum)
                     {
                         case Settings.FontSize.Font100:
@@ -621,7 +626,7 @@ namespace RelhaxModpack
                     tvi.Items.Add(configControlTVI);
                     //process the subconfigs
                     if (con.configs.Count > 0)
-                        processConfigs(c, m, con.configs, configControlTVI, false, con);
+                        AddConfigsOMCView(c, m, con.configs, configControlTVI, false, con);
                 }
                 else if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1") || con.type.Equals("single_dropdown2"))
                 {
@@ -670,7 +675,10 @@ namespace RelhaxModpack
                         cbi = new ComboBoxItem(con, toAdd);
                         configControlDDALL.Items.Add(cbi);
                         if (con.Checked)
+                        {
                             configControlDDALL.SelectedItem = cbi;
+                            configControlDDALL.ToolTip = cbi.config.description.Equals("") ? NoDescriptionAvailable : cbi.config.description;
+                        }
                     }
                     //add the dropdown to the thing. it will only run this once
                     if (configControlDDALL.Name.Equals("notAddedYet"))
@@ -685,6 +693,7 @@ namespace RelhaxModpack
                         if (configControlDDALL.SelectedIndex == -1)
                             configControlDDALL.SelectedIndex = 0;
                         System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
+                        configControlDDALL.ToolTip = con.description.Equals("") ? NoDescriptionAvailable : con.description;
                         configControlTVI.Header = configControlDDALL;
                         tvi.Items.Add(configControlTVI);
                     }
@@ -693,6 +702,8 @@ namespace RelhaxModpack
                 {
                     //make the checkbox
                     ConfigWPFCheckBox configControlCB = new ConfigWPFCheckBox();
+                    //add the tooltip
+                    configControlCB.ToolTip = con.description.Equals("") ? NoDescriptionAvailable : con.description;
                     switch (Settings.FontSizeforum)
                     {
                         case Settings.FontSize.Font100:
@@ -781,7 +792,7 @@ namespace RelhaxModpack
                     tvi.Items.Add(configControlTVI);
                     //process the subconfigs
                     if (con.configs.Count > 0)
-                        processConfigs(c, m, con.configs, configControlTVI, false, con);
+                        AddConfigsOMCView(c, m, con.configs, configControlTVI, false, con);
                 }
                 else
                 {
@@ -1116,6 +1127,8 @@ namespace RelhaxModpack
             }
             ComboBoxItem cbi2 = (ComboBoxItem)cb.SelectedItem;
             cbi2.config.Checked = true;
+            //set the new tooltip
+            cb.ToolTip = cbi2.config.description.Equals("") ? NoDescriptionAvailable : cbi2.config.description;
         }
         //when a radiobutton of the legacy view mode is clicked
         void configControlRB_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -1231,7 +1244,7 @@ namespace RelhaxModpack
         }
 
         //adds a mod m to a tabpage t
-        private void AddMod(Mod m, TabPage t, Category catagory)
+        private void AddModDefaultView(Mod m, TabPage t, Category catagory)
         {
             if (!m.visible)
                 return;
@@ -1241,6 +1254,8 @@ namespace RelhaxModpack
             modHasRadioButtons = false;
             //make the mod check box
             ModFormCheckBox modCheckBox = new ModFormCheckBox();
+            //add the ToolTip description to the checkbox
+            DescriptionToolTip.SetToolTip(modCheckBox, m.description.Equals("")? NoDescriptionAvailable : m.description);
             modCheckBox.AutoSize = true;
             modCheckBox.Location = new System.Drawing.Point(3, 3);
             modCheckBox.Size = new System.Drawing.Size(49, 15);
@@ -1317,7 +1332,7 @@ namespace RelhaxModpack
             //add to main panel
             mainPanel.Controls.Add(modCheckBox);
             if (m.configs.Count > 0)
-                ProcessConfigsDefault(t, m, catagory, modCheckBox, mainPanel, true, m.configs, mainPanel);
+                AddConfigsDefaultView(t, m, catagory, modCheckBox, mainPanel, true, m.configs, mainPanel);
             //add to tab
             t.Controls.Add(mainPanel);
             //add the event handler before changing the checked state so the event
@@ -1333,7 +1348,7 @@ namespace RelhaxModpack
             modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
         }
 
-        private void ProcessConfigsDefault(TabPage t, Mod m, Category catagory, ModFormCheckBox modCheckBox, Panel mainPanel, bool parentIsMod, List<Config> configs, Panel topPanal, Config parentConfig = null)
+        private void AddConfigsDefaultView(TabPage t, Mod m, Category catagory, ModFormCheckBox modCheckBox, Panel mainPanel, bool parentIsMod, List<Config> configs, Panel topPanal, Config parentConfig = null)
         {
             //make config panel
             Panel configPanel = new Panel();
@@ -1433,6 +1448,8 @@ namespace RelhaxModpack
                     modHasRadioButtons = true;
                     //make default radioButton
                     ConfigFormRadioButton configControlRB = new ConfigFormRadioButton();
+                    //add the ToolTip description to the checkbox
+                    DescriptionToolTip.SetToolTip(configControlRB, con.description.Equals("")? NoDescriptionAvailable : con.description);
                     configControlRB.AutoSize = true;
                     configControlRB.Location = new Point(6, getYLocation(configPanel.Controls));
                     configControlRB.Size = new System.Drawing.Size(150, 15);
@@ -1505,7 +1522,7 @@ namespace RelhaxModpack
                     configPanel.Controls.Add(configControlRB);
                     //process the subconfigs
                     if (con.configs.Count > 0)
-                        ProcessConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
+                        AddConfigsDefaultView(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
                 }
                 else if (con.type.Equals("single_dropdown") || con.type.Equals("single_dropdown1") || con.type.Equals("single_dropdown2"))
                 {
@@ -1559,19 +1576,28 @@ namespace RelhaxModpack
                         {
                             configControlDDALL.SelectedItem = cbi;
                             configControlDDALL.Enabled = true;
+                            //set the tooltip to the checked option
+                            DescriptionToolTip.SetToolTip(configControlDDALL, con.description.Equals("")? NoDescriptionAvailable : con.description);
                         }
                     }
                     if (configControlDDALL.Items.Count > 0)
                     {
                         configControlDDALL.Enabled = true;
                         if (configControlDDALL.SelectedIndex == -1)
+                        {
                             configControlDDALL.SelectedIndex = 0;
+                            //set the tooltip since nothing has been selected
+                            ComboBoxItem cbiTT = (ComboBoxItem)configControlDDALL.Items[0];
+                            DescriptionToolTip.SetToolTip(configControlDDALL, cbiTT.config.description.Equals("")? NoDescriptionAvailable : cbiTT.config.description);
+                        }
                     }
                 }
                 else if (con.type.Equals("multi"))
                 {
                     //make a checkBox
                     ConfigFormCheckBox configControlCB = new ConfigFormCheckBox();
+                    //add the ToolTip description to the checkbox
+                    DescriptionToolTip.SetToolTip(configControlCB, con.description.Equals("")? NoDescriptionAvailable : con.description);
                     configControlCB.AutoSize = true;
                     configControlCB.Location = new Point(6, getYLocation(configPanel.Controls));
                     configControlCB.Size = new System.Drawing.Size(150, 15);
@@ -1641,7 +1667,7 @@ namespace RelhaxModpack
                     configPanel.Controls.Add(configControlCB);
                     //process subconfigs
                     if (con.configs.Count > 0)
-                        ProcessConfigsDefault(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
+                        AddConfigsDefaultView(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
                 }
                 else
                 {
@@ -2045,6 +2071,8 @@ namespace RelhaxModpack
                 return;
             //uncheck all other dorp down configs
             ConfigFormComboBox cb = (ConfigFormComboBox)sender;
+            //due to recursion, save the cbi up here
+            ComboBoxItem cbi2 = (ComboBoxItem)cb.SelectedItem;
             //propagate the check back up if required
             if (cb.SelectedIndex != -1)
             {
@@ -2085,8 +2113,10 @@ namespace RelhaxModpack
             {
                 cbi.config.Checked = false;
             }
-            ComboBoxItem cbi2 = (ComboBoxItem)cb.SelectedItem;
+            //ComboBoxItem cbi2 = (ComboBoxItem)cb.SelectedItem;
+            cb.SelectedItem = cbi2;
             cbi2.config.Checked = true;
+            DescriptionToolTip.SetToolTip(cb, cbi2.config.description.Equals("")? NoDescriptionAvailable : cbi2.config.description);
             Panel configPanel = (Panel)cb.Parent;
             if (!Settings.DisableColorChange)
                 configPanel.BackColor = Color.BlanchedAlmond;

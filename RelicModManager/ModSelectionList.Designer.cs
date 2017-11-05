@@ -82,6 +82,7 @@ namespace RelhaxModpack
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ModSelectionList));
             this.continueButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
@@ -97,6 +98,7 @@ namespace RelhaxModpack
             this.expandAllButton = new System.Windows.Forms.Button();
             this.colapseAllButton = new System.Windows.Forms.Button();
             this.searchCB = new System.Windows.Forms.ComboBox();
+            this.DescriptionToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // continueButton
@@ -284,5 +286,6 @@ namespace RelhaxModpack
         private System.Windows.Forms.Button expandAllButton;
         private System.Windows.Forms.Button colapseAllButton;
         private System.Windows.Forms.ComboBox searchCB;
+        private ToolTip DescriptionToolTip;
     }
 }
