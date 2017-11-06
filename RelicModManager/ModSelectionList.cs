@@ -101,7 +101,7 @@ namespace RelhaxModpack
                 }
                 Settings.TanksOnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(databaseURL);
             }
-            else if(Program.betaDatabase)
+            else if (Program.betaDatabase)
             {
                 Utils.AppendToLog("downloading modInfo.dat (betaDatabase url)");
                 string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
@@ -121,7 +121,7 @@ namespace RelhaxModpack
                     }
                     catch (Exception ex)
                     {
-                        Utils.ExceptionLog(string.Format("ModSelectionList_Load", @"Tried to access {0}", databaseURL), ex);
+                        Utils.ExceptionLog("ModSelectionList_Load", string.Format(@"Tried to access {0}", databaseURL), ex);
                         MessageBox.Show(string.Format("{0} modInfo.dat", Translations.getTranslatedString("failedToDownload_1")));
                         Application.Exit();
                     }
