@@ -21,7 +21,7 @@ namespace RelhaxModpack
         private WebClient downloader;
         private const int MBDivisor = 1048576;
         //sample:  c:/games/World_of_Tanks
-        private string tanksLocation;
+        public string tanksLocation;
         //the location to pass into the installer
         private string tanksVersionForInstaller;
         //the folder where the user's app data is stored (C:\Users\username\AppData)
@@ -575,7 +575,7 @@ namespace RelhaxModpack
 
         //prompts the user to specify where the "WorldOfTanks.exe" file is
         //return the file path and name of "WorldOfTanks.exe"
-        private string manuallyFindTanks()
+        public string manuallyFindTanks()
         {
             // try to give an untrained user a littlebit support
             if (autoFindTanks() != null)
@@ -1744,7 +1744,7 @@ namespace RelhaxModpack
             previousTotalBytesDownloaded = currentTotalBytesDownloaded;
         }
         //toggle UI buttons to be enabled or disabled
-        private void ToggleUIButtons(bool enableToggle)
+        public void ToggleUIButtons(bool enableToggle)
         {
             forceManuel.Enabled = enableToggle;
             installRelhaxMod.Enabled = enableToggle;
@@ -2469,7 +2469,8 @@ namespace RelhaxModpack
             using (Diagnostics d = new Diagnostics()
             {
                 TanksLocation = this.tanksLocation,
-                AppStartupPath = Application.StartupPath
+                AppStartupPath = Application.StartupPath,
+                ParentWindow = this
             })
             {
                 d.ShowDialog();
