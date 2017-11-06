@@ -51,7 +51,7 @@ namespace RelhaxModpack
                     {
                         System.IO.File.AppendAllText(filePath, "");
                         WriteToFile(filePath, string.Format("Database Version: {0}", Settings.DatabaseVersion));
-                        WriteToFile(filePath, string.Format("/*  Date: {0:yyyy-MM-dd HH:mm:ss.fff}  */", DateTime.Now));
+                        WriteToFile(filePath, string.Format("/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now));
                     }
                     WriteToFile(filePath, info);
                 }

@@ -215,7 +215,7 @@ namespace RelhaxModpack
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractAtlases;
             if (Directory.Exists(Path.Combine(TanksLocation, "_atlases")))
             {
-                // to do
+                AtlasesExtrator.Program.Main();
             }
             else
                 Utils.AppendToLog("... skipped");
@@ -477,7 +477,7 @@ namespace RelhaxModpack
                     TextWriter tw = new StreamWriter(logFile);
                     if (tw != null)
                     {
-                        tw.WriteLine(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss.fff}  */", DateTime.Now));
+                        tw.WriteLine(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now));
                         tw.WriteLine(@"/*  files and folders deleted from logfile  */");
                     }
                     try
