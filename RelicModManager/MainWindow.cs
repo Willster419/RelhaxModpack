@@ -592,28 +592,6 @@ namespace RelhaxModpack
             return "all good";
         }
 
-        private void Depricated_downloadResources(string resourcesFile, PleaseWait wait)
-        {
-            string localDll = Path.Combine(Application.StartupPath, resourcesFile);
-            string urlPath = string.Format("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/{0}", resourcesFile);
-            try
-            {
-                wait.loadingDescBox.Text = string.Format("{0} {1} ... ", Translations.getTranslatedString("Downloading"), resourcesFile);
-                Application.DoEvents();
-                using (downloader = new WebClient())
-                {
-                    downloader.DownloadFile(urlPath, localDll);
-                    Utils.AppendToLog(string.Format("successfully downloaded: {0}", resourcesFile));
-                }
-            }
-            catch (Exception ex)
-            {
-                Utils.ExceptionLog("downloadResources", urlPath, ex);
-                MessageBox.Show(string.Format("{0} {1}", Translations.getTranslatedString("failedToDownload_1"), resourcesFile));
-                Application.Exit();
-            }
-        }
-
         //handler for before the window is displayed
         private void MainWindow_Load(object sender, EventArgs e)
         {
@@ -621,6 +599,7 @@ namespace RelhaxModpack
             this.Text = this.Text + managerVersion();
             ApplicationVersionLabel.Text = "Application v" + managerVersion();
             if (Program.testMode) this.Text = this.Text + " TEST MODE";
+            if (Program.betaDatabase) this.Text = this.Text + " BETA DB";
             //setup the gif preview loading window
             gp = new LoadingGifPreview(this.Location.X + this.Size.Width + 5, this.Location.Y);
             //show the wait screen

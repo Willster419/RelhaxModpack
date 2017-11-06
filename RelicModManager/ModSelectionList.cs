@@ -6,6 +6,8 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Text.RegularExpressions;
 using System.Net;
+using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace RelhaxModpack
 {
@@ -98,6 +100,32 @@ namespace RelhaxModpack
                     Application.Exit();
                 }
                 Settings.TanksOnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(databaseURL);
+            }
+            else if(Program.betaDatabase)
+            {
+                Utils.AppendToLog("downloading modInfo.dat (betaDatabase url)");
+                string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
+                XDocument doc = XDocument.Parse(xmlString);
+                //parse the database version
+                databaseURL = doc.XPathSelectElement("//version/database_beta_url").Value;
+                string localDest = Path.Combine(Application.StartupPath, "RelHaxTemp", "modInfo_beta.xml");
+                //always delete the file before redownloading
+                if (File.Exists(localDest))
+                    File.Delete(localDest);
+                using (WebClient downloader = new WebClient() { Proxy = null })
+                {
+                    try
+                    {
+                        downloader.DownloadFile(databaseURL, localDest);
+                        databaseURL = localDest;
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.ExceptionLog(string.Format("ModSelectionList_Load", @"Tried to access {0}", databaseURL), ex);
+                        MessageBox.Show(string.Format("{0} modInfo.dat", Translations.getTranslatedString("failedToDownload_1")));
+                        Application.Exit();
+                    }
+                }
             }
             else
             {

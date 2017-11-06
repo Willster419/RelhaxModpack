@@ -19,6 +19,7 @@ namespace RelhaxModpack
         public static bool ignoreResourseVersionFail = false;
         public static bool saveSettings = false;
         public static bool databaseUpdateOnline = false;
+        public static bool betaDatabase = false;
         public static string configName = "";
         [STAThread]
         static void Main()
@@ -71,6 +72,11 @@ namespace RelhaxModpack
                 {
                     Utils.AppendToLog("/ignoreResourseVersionFail detected, welcome developer");
                     ignoreResourseVersionFail = true;
+                }
+                else if (Regex.IsMatch(commandArgs[i], @"beta-database$"))
+                {
+                    Utils.AppendToLog("/beta-database detected, welcome beta tester");
+                    betaDatabase = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"auto-install$"))
                 {
