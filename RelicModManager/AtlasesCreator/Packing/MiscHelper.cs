@@ -30,6 +30,7 @@ namespace RelhaxModpack.AtlasesCreator
 {
     public static class MiscHelper
     {
+        /*
         // the valid extensions for images
         public static readonly string[] AllowedImageExtensions = new[] { "png", "jpg", "bmp", "gif" };
 
@@ -47,7 +48,7 @@ namespace RelhaxModpack.AtlasesCreator
                 if (fileLower.EndsWith(ext))
                     return true;
             return false;
-        }
+        }*/
 
         // stolen from http://en.wikipedia.org/wiki/Power_of_two#Algorithm_to_find_the_next-highest_power_of_two
         public static int FindNextPowerOfTwo(int k)

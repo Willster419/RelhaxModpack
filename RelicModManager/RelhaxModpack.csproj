@@ -130,6 +130,7 @@
     <Compile Include="AtlasesCreator\Packing\RectanglePacker.cs" />
     <Compile Include="AtlasesCreator\Program.cs" />
     <Compile Include="AtlasesCreator\ProgramArguments.cs" />
+    <Compile Include="AtlasesExtrator\Texture.cs" />
     <Compile Include="AtlasesExtrator\Program.cs" />
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="CiInfo.cs" />
