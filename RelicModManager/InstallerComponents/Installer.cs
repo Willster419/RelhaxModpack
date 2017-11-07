@@ -1877,13 +1877,12 @@ namespace RelhaxModpack
                 Utils.AppendToLog("Parsed Textures: " + textureList.Count);
 
                 Installer.args.ChildTotalToProcess = textureList.Count;
-                Installer.args.
                 PixelFormat pixelFormat = atlasImage.PixelFormat;
                 int c = 0;
                 foreach (Texture t in textureList)
                 {
                     c++;
-                    Installer.args.currentFileSizeProcessed = c;
+                    Installer.args.ChildProcessed = c;
                     Installer.args.currentFile = t.name;
                     Installer.InstallWorker.ReportProgress(0);
                     CroppedImage = new Bitmap(t.width, t.height, pixelFormat);
