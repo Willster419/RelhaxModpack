@@ -1479,10 +1479,10 @@ namespace RelhaxModpack
             french.Add("AtlasExtraction", "TODO");
 
             //Component: ExtractAtlases
-            english.Add("AtlasTextur", "Texture");
-            german.Add("AtlasTextur", "Textur");
-            polish.Add("AtlasTextur", "TODO");
-            french.Add("AtlasTextur", "TODO");
+            english.Add("AtlasTexture", "Texture");
+            german.Add("AtlasTexture", "Textur");
+            polish.Add("AtlasTexture", "TODO");
+            french.Add("AtlasTexture", "TODO");
 
             //Component: CreatingAtlases
             english.Add("AtlasCreating", "Creating Atlas file");
@@ -1491,28 +1491,10 @@ namespace RelhaxModpack
             french.Add("AtlasCreating", "TODO");
 
             //Component: CreatingAtlases
-            english.Add("AtlasGetImageInformation", "get Image informations");
-            german.Add("AtlasGetImageInformation", "hole Bildinformationen");
-            polish.Add("AtlasGetImageInformation", "TODO");
-            french.Add("AtlasGetImageInformation", "TODO");
-            
-            //Component: CreatingAtlases
-            english.Add("AtlasCalculatePositions", "calculate Image positions");
-            german.Add("AtlasCalculatePositions", "berechne Bild Positionen");
-            polish.Add("AtlasCalculatePositions", "TODO");
-            french.Add("AtlasCalculatePositions", "TODO");
-
-            //Component: CreatingAtlases
-            english.Add("AtlasGeneratingImageFile", "generating Atlas Image file");
-            german.Add("AtlasGeneratingImageFile", "erstelle Atlas Bilddatei");
-            polish.Add("AtlasGeneratingImageFile", "TODO");
-            french.Add("AtlasGeneratingImageFile", "TODO");
-
-            //Component: CreatingAtlases
-            english.Add("AtlasGeneratingMapFile", "generating Atlas Map file");
-            german.Add("AtlasGeneratingMapFile", "erstelle Atlas Positionsdatei");
-            polish.Add("AtlasGeneratingMapFile", "TODO");
-            french.Add("AtlasGeneratingMapFile", "TODO");
+            english.Add("AtlasOptimations", "optimizations");
+            german.Add("AtlasOptimations", "Optimierungen");
+            polish.Add("AtlasOptimations", "TODO");
+            french.Add("AtlasOptimations", "TODO");
 
             //Componet: installingUserFonts
             //
@@ -1653,7 +1635,7 @@ namespace RelhaxModpack
 
             //Component: failedCreateZipfile
             //
-            english.Add("failedCreateZipfile", "Failed to creatle the zip file ");
+            english.Add("failedCreateZipfile", "Failed to create the zip file ");
             german.Add("failedCreateZipfile", "TODO");
             polish.Add("failedCreateZipfile", "TODO");
             french.Add("failedCreateZipfile", "TODO");
