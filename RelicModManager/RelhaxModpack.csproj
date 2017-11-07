@@ -137,7 +137,6 @@
     <Compile Include="AtlasesCreator\Packing\OutOfSpaceException.cs" />
     <Compile Include="AtlasesCreator\Packing\RectanglePacker.cs" />
     <Compile Include="AtlasesCreator\Program.cs" />
-    <Compile Include="AtlasesCreator\ProgramArguments.cs" />
     <Compile Include="InstallerComponents\Texture.cs" />
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="CiInfo.cs" />
