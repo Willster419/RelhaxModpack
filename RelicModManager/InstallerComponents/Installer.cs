@@ -11,6 +11,9 @@ using System.Xml;
 using System.Diagnostics;
 using System.Net;
 using System.Xml.Linq;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Xml.XPath;
 
 namespace RelhaxModpack
 {
@@ -38,16 +41,19 @@ namespace RelhaxModpack
         public List<ShortCut> Shortcuts { get; set; }
         private List<Patch> patchList { get; set; }
         private List<XmlUnpack> xmlUnpackList { get; set; }
+        private List<Atlases> atlasesList { get; set; }
         public string TanksVersion { get; set; }
         //the folder of the current user appdata
         public string AppDataFolder { get; set; }
         public string DatabaseVersion { get; set; }
         //properties relevent to the handler and install
-        private BackgroundWorker InstallWorker;
-        private InstallerEventArgs args;
+        public static BackgroundWorker InstallWorker;
+        public static InstallerEventArgs args;
         private string xvmConfigDir = "";
         private int patchNum = 0;
         private List<string> originalPatchNames;
+
+        private static readonly Stopwatch stopWatch = new Stopwatch();
 
         //the event that it can hook into
         public event InstallChangedEventHandler InstallProgressChanged;
@@ -215,18 +221,17 @@ namespace RelhaxModpack
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractAtlases;
             if (Directory.Exists(Path.Combine(TanksLocation, "_atlases")))
             {
-                AtlasesExtrator.Program.Main();
+                ExtractAtlases();
+                Directory.Delete(Path.Combine(TanksLocation, "_atlases"), true);
             }
             else
                 Utils.AppendToLog("... skipped");
+            ResetArgs();
             //Step 18: Create Atlases
             Utils.AppendToLog("Installation CreateAtlases");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CreateAtlases;
-            if (Directory.Exists(Path.Combine(TanksLocation, "_atlases")))
-            {
+            if (atlasesList.Count > 0)
                 CreateAtlases();
-                Directory.Delete(Path.Combine(TanksLocation, "_atlases"), true);
-            }
             else
                 Utils.AppendToLog("... skipped");
             ResetArgs();
@@ -290,6 +295,7 @@ namespace RelhaxModpack
             args.ChildProcessed = 0;
             args.ChildTotalToProcess = 0;
             args.currentFile = "";
+            args.information = "";
             args.currentFileSizeProcessed = 0;
             args.ParrentProcessed = 0;
             args.ParrentTotalToProcess = 0;
@@ -401,7 +407,11 @@ namespace RelhaxModpack
                     try
                     {
                         File.SetAttributes(line, FileAttributes.Normal);
-                        File.Delete(line);
+                        FileAttributes attr = File.GetAttributes(line);
+                        if (attr.HasFlag(FileAttributes.Directory))
+                            Directory.Delete(line);
+                        else
+                            File.Delete(line);
                     }
                     catch (DirectoryNotFoundException)
                     {
@@ -1143,17 +1153,113 @@ namespace RelhaxModpack
             }
         }
 
-        //Step 18: Install Fonts
-        private static void CreateAtlases()
+        //Step 17: Extract Atlases
+        private void ExtractAtlases()
         {
-            AtlasesCreator.AtlasesArgs atlasesArgs = new AtlasesCreator.AtlasesArgs();
-            atlasesArgs.MaxHeight = 2048;
-            atlasesArgs.ImageFile = @"C:\Users\Dennis\Desktop\Test Atlases\Text.png";
-            atlasesArgs.MapFile = @"C:\Users\Dennis\Desktop\Test Atlases\Text.xml";
-            atlasesArgs.PowOf2 = true;
-            atlasesArgs.Square = false;
-            atlasesArgs.Images = addFilesToAtlasList(new[] { @"C:\Users\Dennis\Desktop\Test Atlases\battleAtlas\battleAtlas", @"D:\Spiele\World_of_Tanks\res_mods\0.9.20.1.2\gui\maps\icons\vehicle\contour" });
-            AtlasesCreator.Program.Main(atlasesArgs);
+            try
+            {
+                DirectoryInfo di = null;
+                FileInfo[] diArr = null;
+                try
+                {
+                    File.SetAttributes(Path.Combine(TanksLocation, "_atlases"), FileAttributes.Normal);
+                    di = new DirectoryInfo(Path.Combine(TanksLocation, "_atlases"));
+                    //get every patch file in the folder
+                    diArr = di.GetFiles(@"*.xml", SearchOption.TopDirectoryOnly);
+                }
+                catch (Exception ex)
+                {
+                    Utils.ExceptionLog("ExtractAtlases", "parse _atlases folder", ex);
+                }
+
+                atlasesList = new List<Atlases>();
+                for (int i = 0; i < diArr.Count(); i++)
+                {
+                    //set the attributes to normal
+                    File.SetAttributes(diArr[i].FullName, FileAttributes.Normal);
+                    //add jobs to CreateAtlasesList
+                    CreateAtlasesList(diArr[i].FullName);
+                }
+                
+                foreach (Atlases a in atlasesList)
+                {
+                    try
+                    {
+                        if (!Directory.Exists(a.atlasSaveDirectory)) Directory.CreateDirectory(a.atlasSaveDirectory);
+                        Utils.AppendToInstallLog(Path.Combine(a.atlasSaveDirectory));
+                        if (!Directory.Exists(a.workingFolder)) Directory.CreateDirectory(a.workingFolder); 
+
+                        if (!a.pkg.Equals(""))
+                        {
+                            //get file from the zip archive
+                            using (ZipFile zip = new ZipFile(a.pkg))
+                            {
+                                for (int i = 0; i < zip.Entries.Count; i++)
+                                {
+                                    string[] fileList = new string[] { a.atlasFile, a.mapFile };
+                                    foreach (string fl in fileList)
+                                    {
+                                        if (Regex.IsMatch(zip[i].FileName, Path.Combine(a.directoryInArchive, fl).Replace(@"\", @"/")))
+                                        {
+                                            try
+                                            {
+                                                zip[i].FileName = fl;
+                                                zip.ExtractSelectedEntries(zip[i].FileName, null, Path.Combine(Application.StartupPath, "RelHaxTemp"), ExtractExistingFileAction.Throw);  // no overwrite of an exsisting file !!
+                                                break;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Utils.ExceptionLog("ExtractAtlases", string.Format("extration: {0}", Path.Combine(Application.StartupPath, "RelHaxTemp", zip[i].FileName)), ex);
+                                            }
+                                        }
+                                    }
+                                }
+                                zip.Dispose();
+                            }
+                            a.directoryInArchive = Path.Combine(Application.StartupPath, "RelHaxTemp");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.ExceptionLog(string.Format("ExtractAtlases", "extract file from archive\ndirectoryInArchive: {0}\natlasFile: {1}\nmapFile: {2}\natlasSaveDirectory: {3}", a.directoryInArchive, a.atlasFile, a.mapFile, a.atlasSaveDirectory), ex);
+                    }
+                    if (atlasesList.Count > 0)
+                    {
+                        try
+                        {
+                            ExtractAtlases_run(a);
+                        }
+                        catch (Exception ex)
+                        {
+                            Utils.ExceptionLog(string.Format("ExtractAtlases", "atlasFile: {0}", Path.Combine(a.atlasSaveDirectory, a.atlasFile)), ex);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("ExtractAtlases", ex);
+            }
+        }
+
+        //Step 18: Create Atlases
+        private void CreateAtlases()
+        {
+            foreach (Atlases a in atlasesList)
+            {
+                AtlasesCreator.AtlasesArgs atlasesArgs = new AtlasesCreator.AtlasesArgs();
+                atlasesArgs.MaxHeight = 2048;
+                atlasesArgs.ImageFile = Path.Combine(a.atlasSaveDirectory, a.atlasFile);
+                atlasesArgs.MapFile = Path.Combine(a.atlasSaveDirectory, a.mapFile);
+                atlasesArgs.PowOf2 = true;
+                atlasesArgs.Square = false;
+                atlasesArgs.GenerateMap = true;
+                List<string> fl = new List<string>();
+                fl.Add(a.workingFolder);
+                fl.AddRange(a.imageFolderList);
+                atlasesArgs.Images = addFilesToAtlasList(fl.ToArray());
+                AtlasesCreator.Program.Run(atlasesArgs);
+            }
         }
         
         //Step 19: Install Fonts
@@ -1485,6 +1591,92 @@ namespace RelhaxModpack
             }
         }
 
+        // parses a xmlAtlasesFile to the process queue
+        private void CreateAtlasesList(string xmlFile)
+        {
+            try
+            {
+                if (!File.Exists(xmlFile))
+                    return;
+                XDocument doc = XDocument.Load(xmlFile, LoadOptions.SetLineInfo);
+                foreach (XElement atlas in doc.XPathSelectElements("/atlases/atlas"))
+                {
+                    try
+                    {
+                        Atlases atlases = new Atlases();
+                        atlases.actualPatchName = Path.GetFileName(xmlFile);
+                        foreach (XElement item in atlas.Elements())
+                        {
+                            try
+                            {
+                                switch (item.Name.ToString())
+                                {
+                                    case "pkg":
+                                        atlases.pkg = Utils.ReplaceMacro(item.Value.ToString().Trim());
+                                        break;
+                                    case "directoryInArchive":
+                                        atlases.directoryInArchive = Utils.ReplaceMacro(Utils.RemoveLeadingSlash(item.Value.ToString().Trim()));
+                                        break;
+                                    case "atlasFile":
+                                        atlases.atlasFile = Utils.ReplaceMacro(item.Value.ToString().Trim());
+                                        break;
+                                    case "mapFile":
+                                        atlases.mapFile = Utils.ReplaceMacro(item.Value.ToString().Trim());
+                                        break;
+                                    case "atlasSaveDirectory":
+                                        atlases.atlasSaveDirectory = Utils.ReplaceMacro(item.Value.ToString().Trim());
+                                        break;
+                                    case "imageFolders":
+                                        foreach (XElement image in item.Elements())
+                                        {
+                                            switch (image.Name.ToString())
+                                            {
+                                                case "imageFolder":
+                                                    if (!image.Value.ToString().Trim().Equals(""))
+                                                        atlases.imageFolderList.Add(Utils.ReplaceMacro(image.Value.ToString().Trim()));
+                                                    break;
+                                                default:
+                                                    Utils.AppendToLog(string.Format("unexpected Node found. Name: {0}  Value: {1}", item.Name.ToString(), item.Value));
+                                                    break;
+                                            }
+                                        }
+                                        break;
+                                    default:
+                                        Utils.AppendToLog(string.Format("unexpected Item found. Name: {0}  Value: {1}", item.Name.ToString(), item.Value));
+                                        break;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Utils.ExceptionLog("CreateAtlasesList", "switch", ex);
+                            }
+                        }
+                        if (atlases.imageFolderList.Count == 0)
+                        {
+                            Utils.AppendToLog(string.Format("ERROR. Missing imageFolders in File: {0} => file will be skipped", atlases.actualPatchName));
+                            break;
+                        }
+                        if (atlases.directoryInArchive.Equals("") || atlases.atlasFile.Equals("") || atlases.atlasSaveDirectory.Equals(""))
+                        {
+                            Utils.AppendToLog(string.Format("ERROR. xmlAtlases file {0} is not valid and has empty (but important) nodes", atlases.actualPatchName));
+                            break;
+                        }
+                        atlases.workingFolder = Path.Combine(Application.StartupPath, "RelHaxTemp", Path.GetFileNameWithoutExtension(atlases.atlasFile));
+                        if (atlases.mapFile.Equals("")) atlases.mapFile = Path.GetFileNameWithoutExtension(atlases.atlasFile) + ".xml";
+                        atlasesList.Add(atlases);
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.ExceptionLog("CreateAtlasesList", "foreach item / File: " + xmlFile, ex);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("CreateAtlasesList", "File: " + xmlFile, ex);
+            }
+        }
+
         //parses a patch xml file into an xml patch instance in memory to be enqueued
         private void createPatchList(string xmlFile)
         {
@@ -1593,6 +1785,121 @@ namespace RelhaxModpack
             // files finally adding, after deleting needless base files (last file added is winning): 
             Utils.AppendToLog("files finally adding: " + collectiveList.Count);
             return collectiveList;
+        }
+
+        private unsafe void ExtractAtlases_run(Atlases args)
+        {
+            Utils.AppendToLog("extracting Atlas: " + args.atlasFile);
+
+            stopWatch.Reset();
+            stopWatch.Start();
+
+            string ImageFile = Path.Combine(args.directoryInArchive, args.atlasFile);
+            string workingFolder = Path.Combine(Application.StartupPath, "RelHaxTemp", Path.GetFileNameWithoutExtension(ImageFile));
+
+            if (!File.Exists(ImageFile))
+            {
+                Utils.AppendToLog("ERROR. Atlas file not found: " + ImageFile);
+                return;
+            }
+
+            string MapFile = Path.Combine(args.directoryInArchive, args.mapFile);
+            Installer.args.information = Path.GetFileNameWithoutExtension(args.atlasFile);
+
+            if (!File.Exists(MapFile))
+            {
+                Utils.AppendToLog("ERROR. Map file not found: " + MapFile);
+                return;
+            }
+
+            if (Directory.Exists(workingFolder))
+                Directory.Delete(workingFolder, true);
+            Directory.CreateDirectory(workingFolder);
+
+            Bitmap atlasImage = new Bitmap(ImageFile);
+            Bitmap CroppedImage = null;
+            List<Texture> textureList = new List<Texture>();
+
+            try
+            {
+                try
+                {
+                    XDocument doc = null;
+                    Texture t = null;
+                    doc = XDocument.Load(MapFile, LoadOptions.SetLineInfo);
+                    foreach (XElement texture in doc.XPathSelectElements("/root/SubTexture"))
+                    {
+                        try
+                        {
+                            t = new Texture();
+                            foreach (XElement item in texture.Elements())
+                            {
+                                try
+                                {
+                                    switch (item.Name.ToString().ToLower())
+                                    {
+                                        case "name":
+                                            t.name = item.Value.ToString().Trim();
+                                            break;
+                                        case "x":
+                                            t.x = int.Parse("0" + item.Value.ToString().Trim());
+                                            break;
+                                        case "y":
+                                            t.y = int.Parse("0" + item.Value.ToString().Trim());
+                                            break;
+                                        case "width":
+                                            t.width = int.Parse("0" + item.Value.ToString().Trim());
+                                            break;
+                                        case "height":
+                                            t.height = int.Parse("0" + item.Value.ToString().Trim());
+                                            break;
+                                        default:
+                                            Utils.AppendToLog(string.Format("unexpected Item found. Name: {0}  Value: {1}", item.Name.ToString(), item.Value));
+                                            break;
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Utils.ExceptionLog("ExtractAtlases_run", "switch", ex);
+                                }
+                            }
+                            textureList.Add(t);
+                        }
+                        catch (Exception ex)
+                        {
+                            Utils.ExceptionLog("ExtractAtlases_run", "foreach item", ex);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Utils.ExceptionLog("ExtractAtlases_run", "foreach root", ex);
+                }
+                Utils.AppendToLog("Parsed Textures: " + textureList.Count);
+
+                Installer.args.ChildTotalToProcess = textureList.Count;
+                int c = 0;
+                foreach (Texture t in textureList)
+                {
+                    c++;
+                    Installer.args.ChildProcessed = c;
+                    Installer.args.currentFile = t.name;
+                    Installer.InstallWorker.ReportProgress(0);
+                    CroppedImage = new Bitmap(atlasImage.Clone(new Rectangle(t.x, t.y, t.width, t.height), atlasImage.PixelFormat));
+                    CroppedImage.Save(Path.Combine(workingFolder, t.name + ".png"), ImageFormat.Png);
+                }
+                Utils.AppendToLog(string.Format("Extracted Textures: {0}  {1}", c, c == textureList.Count ? "(all successfully done)" : "(missed some, why?)"));
+            }
+            finally
+            {
+                ImageFile = null;
+                MapFile = null;
+                textureList = null;
+                atlasImage.Dispose();
+                CroppedImage.Dispose();
+                stopWatch.Stop();
+            }
+            Utils.AppendToLog("Extraction completed in " + stopWatch.Elapsed.TotalSeconds + " seconds.");
         }
 
         //gets the total number of files to process to eithor delete or copy

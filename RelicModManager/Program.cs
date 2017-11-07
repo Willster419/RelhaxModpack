@@ -135,6 +135,7 @@ namespace RelhaxModpack
             Utils.AppendToLog("Attempting to load MainWindow");
             Application.Run(new MainWindow());
         }
+
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             return EmbeddedAssembly.Get(args.Name);
