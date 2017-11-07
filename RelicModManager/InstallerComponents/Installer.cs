@@ -1787,8 +1787,8 @@ namespace RelhaxModpack
                 }
                 i--;
             }
-            // files finally adding, after deleting needless base files (last file added is winning): 
-            Utils.AppendToLog("files finally adding: " + collectiveList.Count);
+            // files to be added, after deleting needless base files (last file added is winning): 
+            Utils.AppendToLog("files to be added: " + collectiveList.Count);
             return collectiveList;
         }
 
