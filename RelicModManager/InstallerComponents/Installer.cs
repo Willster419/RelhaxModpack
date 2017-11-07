@@ -421,6 +421,10 @@ namespace RelhaxModpack
                     {
                         // 
                     }
+                    catch (UnauthorizedAccessException)
+                    {
+                        //
+                    }
                     catch (Exception ex)    // here is another problem, so logging it
                     {
                         Utils.ExceptionLog("DeleteFilesByList", "delete file: " + line, ex);
@@ -1882,19 +1886,26 @@ namespace RelhaxModpack
                 int c = 0;
                 foreach (Texture t in textureList)
                 {
-                    c++;
-                    Installer.args.ChildProcessed = c;
-                    Installer.args.currentSubFile = t.name;
-                    Installer.InstallWorker.ReportProgress(0);
-                    CroppedImage = new Bitmap(t.width, t.height, pixelFormat);
-                    // copy pixels over to avoid antialiasing or any other side effects of drawing
-                    // the subimages to the output image using Graphics
-                    for (int x = 0; x < t.width; x++)
-                        for (int y = 0; y < t.height; y++)
-                            CroppedImage.SetPixel(x, y, atlasImage.GetPixel(t.x + x, t.y + y));
-                    CroppedImage.Save(Path.Combine(workingFolder, t.name + ".png"), ImageFormat.Png);
+                    try
+                    {
+                        CroppedImage = new Bitmap(t.width, t.height, pixelFormat);
+                        // copy pixels over to avoid antialiasing or any other side effects of drawing
+                        // the subimages to the output image using Graphics
+                        for (int x = 0; x < t.width; x++)
+                            for (int y = 0; y < t.height; y++)
+                                CroppedImage.SetPixel(x, y, atlasImage.GetPixel(t.x + x, t.y + y));
+                        CroppedImage.Save(Path.Combine(workingFolder, t.name + ".png"), ImageFormat.Png);
+                        c++;
+                        Installer.args.ChildProcessed = c;
+                        Installer.args.currentSubFile = t.name;
+                        Installer.InstallWorker.ReportProgress(0);
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.ExceptionLog("ExtractAtlases_run", "CroppedImage: " + Path.Combine(workingFolder, t.name + ".png"), ex);
+                    }
                 }
-                Utils.AppendToLog(string.Format("Extracted Textures: {0}  {1}", c, c == textureList.Count ? "(all successfully done)" : "(missed some, why?)"));
+                Utils.AppendToLog(string.Format("Extracted Textures: {0} {1}", c, c == textureList.Count ? "(all successfully done)" : "(missed some, why?)"));
             }
             finally
             {
