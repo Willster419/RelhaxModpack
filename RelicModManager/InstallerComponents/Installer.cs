@@ -1238,7 +1238,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.ExceptionLog("ExtractAtlases", ex);
+                Utils.ExceptionLog("ExtractAtlases", "root", ex);
             }
         }
 
@@ -1819,7 +1819,6 @@ namespace RelhaxModpack
             Bitmap atlasImage = new Bitmap(ImageFile);
             Bitmap CroppedImage = null;
             List<Texture> textureList = new List<Texture>();
-
             try
             {
                 try
@@ -1878,14 +1877,21 @@ namespace RelhaxModpack
                 Utils.AppendToLog("Parsed Textures: " + textureList.Count);
 
                 Installer.args.ChildTotalToProcess = textureList.Count;
+                Installer.args.
+                PixelFormat pixelFormat = atlasImage.PixelFormat;
                 int c = 0;
                 foreach (Texture t in textureList)
                 {
                     c++;
-                    Installer.args.ChildProcessed = c;
+                    Installer.args.currentFileSizeProcessed = c;
                     Installer.args.currentFile = t.name;
                     Installer.InstallWorker.ReportProgress(0);
-                    CroppedImage = new Bitmap(atlasImage.Clone(new Rectangle(t.x, t.y, t.width, t.height), atlasImage.PixelFormat));
+                    CroppedImage = new Bitmap(t.width, t.height, pixelFormat);
+                    // copy pixels over to avoid antialiasing or any other side effects of drawing
+                    // the subimages to the output image using Graphics
+                    for (int x = 0; x < t.width; x++)
+                        for (int y = 0; y < t.height; y++)
+                            CroppedImage.SetPixel(x, y, atlasImage.GetPixel(t.x + x, t.y + y));
                     CroppedImage.Save(Path.Combine(workingFolder, t.name + ".png"), ImageFormat.Png);
                 }
                 Utils.AppendToLog(string.Format("Extracted Textures: {0}  {1}", c, c == textureList.Count ? "(all successfully done)" : "(missed some, why?)"));
