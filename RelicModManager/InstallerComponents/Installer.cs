@@ -236,7 +236,7 @@ namespace RelhaxModpack
                 Utils.AppendToLog("... skipped");
             ResetArgs();
             //Step 19: Install Fonts
-            Utils.AppendToLog("Installation InstallUserFonts");
+            Utils.AppendToLog("Installation UserFonts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallUserFonts;
             if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
                 InstallFonts();
