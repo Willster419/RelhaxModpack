@@ -47,7 +47,9 @@ namespace RelhaxModpack
         public int ChildTotalToProcess;
         //the current file being processed
         public string currentFile;
-        //the sixe of the current file being processed
+        //additional information string
+        public string information;
+        //the size of the current file being processed
         public float currentFileSizeProcessed;
     }
 }
