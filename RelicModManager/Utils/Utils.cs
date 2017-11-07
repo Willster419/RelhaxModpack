@@ -1045,7 +1045,7 @@ namespace RelhaxModpack
             return DateTime.Now.ToUniversalTime().ToFileTime();
         }
 
-        public static string Depricated_ReplaceMacro(string text, string macro, string macrotext)
+        public static string ReplaceMacro(string text, string macro, string macrotext)
         {
             bool search = true;
             while (search)
@@ -1104,6 +1104,11 @@ namespace RelhaxModpack
                 Utils.DumbObjectToLog("macroList", macroList);
             }
             return text;
+        }
+
+        public static string RemoveLeadingSlash(string s)
+        {
+            return s.TrimStart('/').TrimStart('\\');
         }
 
         public static string ConvertFiletimeTimestampToDate(long timestamp)
