@@ -33,7 +33,7 @@ namespace RelhaxModpack
         public string AppPath { get; set; }
         public List<Dependency> GlobalDependencies { get; set; }
         public List<Dependency> Dependencies { get; set; }
-        public List<LogicalDependnecy> LogicalDependencies { get; set; }
+        public List<LogicalDependency> LogicalDependencies { get; set; }
         public List<Dependency> AppendedDependencies { get; set; }
         public List<SelectableDatabasePackage> ModsConfigsToInstall { get; set; }
         public List<SelectableDatabasePackage> ModsConfigsWithData { get; set; }
@@ -678,35 +678,35 @@ namespace RelhaxModpack
                 string downloadedFilesDir = Path.Combine(Application.StartupPath, "RelHaxDownloads");
                 //calculate the total number of zip files to install
                 foreach (Dependency d in GlobalDependencies)
-                    if (!d.zipFile.Equals(""))
+                    if (!d.ZipFile.Equals(""))
                         args.ParrentTotalToProcess++;
 
                 foreach (Dependency d in Dependencies)
-                    if (!d.zipFile.Equals(""))
+                    if (!d.ZipFile.Equals(""))
                         args.ParrentTotalToProcess++;
 
-                foreach (LogicalDependnecy d in LogicalDependencies)
-                    if (!d.zipFile.Equals(""))
+                foreach (LogicalDependency d in LogicalDependencies)
+                    if (!d.ZipFile.Equals(""))
                         args.ParrentTotalToProcess++;
 
                 foreach (SelectableDatabasePackage dbo in ModsConfigsToInstall)
-                    if (!dbo.zipFile.Equals(""))
+                    if (!dbo.ZipFile.Equals(""))
                         args.ParrentTotalToProcess++;
 
                 foreach (Dependency d in AppendedDependencies)
-                    if (!d.zipFile.Equals(""))
+                    if (!d.ZipFile.Equals(""))
                         args.ParrentTotalToProcess++;
 
                 InstallWorker.ReportProgress(0);
                 //extract global dependencies
                 foreach (Dependency d in GlobalDependencies)
                 {
-                    if (!d.zipFile.Equals(""))
+                    if (!d.ZipFile.Equals(""))
                     {
-                        Utils.AppendToLog("Extracting Global Dependency " + d.zipFile);
+                        Utils.AppendToLog("Extracting Global Dependency " + d.ZipFile);
                         try
                         {
-                            this.Unzip(Path.Combine(downloadedFilesDir, d.zipFile), TanksLocation);
+                            this.Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), TanksLocation);
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -714,7 +714,7 @@ namespace RelhaxModpack
                             //append the exception to the log
                             Utils.ExceptionLog("ExtractDatabaseObjects", "unzip GlobalDependencies", ex);
                             //show the error message
-                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.zipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.ZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
                             Application.Exit();
                         }
@@ -726,12 +726,12 @@ namespace RelhaxModpack
                 InstallWorker.ReportProgress(0);
                 foreach (Dependency d in Dependencies)
                 {
-                    if (!d.zipFile.Equals(""))
+                    if (!d.ZipFile.Equals(""))
                     {
-                        Utils.AppendToLog("Extracting Dependency " + d.zipFile);
+                        Utils.AppendToLog("Extracting Dependency " + d.ZipFile);
                         try
                         {
-                            this.Unzip(Path.Combine(downloadedFilesDir, d.zipFile), TanksLocation);
+                            this.Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), TanksLocation);
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -739,7 +739,7 @@ namespace RelhaxModpack
                             //append the exception to the log
                             Utils.ExceptionLog("ExtractDatabaseObjects", "unzip Dependencies", ex);
                             //show the error message
-                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.zipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.ZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
                             Application.Exit();
                         }
@@ -749,14 +749,14 @@ namespace RelhaxModpack
                 //extract logical dependencies
                 args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractLogicalDependencies;
                 InstallWorker.ReportProgress(0);
-                foreach (LogicalDependnecy d in LogicalDependencies)
+                foreach (LogicalDependency d in LogicalDependencies)
                 {
-                    if (!d.zipFile.Equals(""))
+                    if (!d.ZipFile.Equals(""))
                     {
-                        Utils.AppendToLog("Extracting Logical Dependency " + d.zipFile);
+                        Utils.AppendToLog("Extracting Logical Dependency " + d.ZipFile);
                         try
                         {
-                            this.Unzip(Path.Combine(downloadedFilesDir, d.zipFile), TanksLocation);
+                            this.Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), TanksLocation);
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -764,7 +764,7 @@ namespace RelhaxModpack
                             //append the exception to the log
                             Utils.ExceptionLog("ExtractDatabaseObjects", "unzip LogicalDependencies", ex);
                             //show the error message
-                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.zipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.ZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
                             Application.Exit();
                         }
@@ -778,20 +778,20 @@ namespace RelhaxModpack
                 InstallWorker.ReportProgress(0);
                 foreach (SelectableDatabasePackage dbo in ModsConfigsToInstall)
                 {
-                    if (!dbo.zipFile.Equals(""))
+                    if (!dbo.ZipFile.Equals(""))
                     {
-                        Utils.AppendToLog("Extracting Mod/Config " + dbo.zipFile);
+                        Utils.AppendToLog("Extracting Mod/Config " + dbo.ZipFile);
                         try
                         {
-                            this.Unzip(Path.Combine(downloadedFilesDir, dbo.zipFile), TanksLocation);
+                            this.Unzip(Path.Combine(downloadedFilesDir, dbo.ZipFile), TanksLocation);
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
                         {
                             //append the exception to the log
-                            Utils.ExceptionLog("ExtractDatabaseObjects", "unzip dbo.zipFile", ex);
+                            Utils.ExceptionLog("ExtractDatabaseObjects", "unzip dbo.ZipFile", ex);
                             //show the error message
-                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + dbo.zipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + dbo.ZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
                             Application.Exit();
                         }
@@ -803,12 +803,12 @@ namespace RelhaxModpack
                 InstallWorker.ReportProgress(0);
                 foreach (Dependency d in AppendedDependencies)
                 {
-                    if (!d.zipFile.Equals(""))
+                    if (!d.ZipFile.Equals(""))
                     {
-                        Utils.AppendToLog("Extracting Appended Dependency " + d.zipFile);
+                        Utils.AppendToLog("Extracting Appended Dependency " + d.ZipFile);
                         try
                         {
-                            this.Unzip(Path.Combine(downloadedFilesDir, d.zipFile), TanksLocation);
+                            this.Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), TanksLocation);
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -816,7 +816,7 @@ namespace RelhaxModpack
                             //append the exception to the log
                             Utils.ExceptionLog("ExtractDatabaseObjects", "unzip AppendedDependencies", ex);
                             //show the error message
-                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.zipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.ZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
                             Application.Exit();
                         }
@@ -1417,8 +1417,8 @@ namespace RelhaxModpack
                 {
                     if (m.Checked)
                     {
-                        Utils.AppendToLog("Exracting " + Path.GetFileName(m.zipFile));
-                        this.Unzip(Path.Combine(downloadedFilesDir, Path.GetFileName(m.zipFile)), TanksLocation);
+                        Utils.AppendToLog("Exracting " + Path.GetFileName(m.ZipFile));
+                        this.Unzip(Path.Combine(downloadedFilesDir, Path.GetFileName(m.ZipFile)), TanksLocation);
                         InstallWorker.ReportProgress(0);
                     }
                 }
@@ -1483,7 +1483,7 @@ namespace RelhaxModpack
                     {
                         zipFilesList.Add(f.Name);
                     }
-                    //MainWindow.usedFilesList has every single possible zipFile of the modInfo database
+                    //MainWindow.usedFilesList has every single possible ZipFile of the modInfo database
                     //for each zipfile in it, remove it in zipFilesList if it exists
                     foreach (string s in MainWindow.usedFilesList)
                     {

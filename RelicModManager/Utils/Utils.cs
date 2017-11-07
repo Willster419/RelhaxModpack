@@ -343,10 +343,10 @@ namespace RelhaxModpack
                 {
                     // if both s.CheckDatabaseListIndex AND m.CheckDatabaseListIndex are equal, it is checking his own entry, so SKIP EVERY check/test
                     // if the s.dependency is FALSE, it is a single mod/config and should only exists once, if not => error/duplicate message
-                    // if the s.dependency is TRUE, it is a dependecy entry and packageName AND zipFile must be checken if equal, if not => error/duplicate message
-                    if (s.CheckDatabaseListIndex != d.CheckDatabaseListIndex && ((s.PackageName.Equals(d.packageName) && !(s.Dependency)) || (s.Dependency && s.PackageName.Equals(d.packageName) && !s.ZipFile.Equals(d.zipFile))))
+                    // if the s.dependency is TRUE, it is a dependecy entry and PackageName AND ZipFile must be checken if equal, if not => error/duplicate message
+                    if (s.CheckDatabaseListIndex != d.CheckDatabaseListIndex && ((s.PackageName.Equals(d.PackageName) && !(s.Dependency)) || (s.Dependency && s.PackageName.Equals(d.PackageName) && !s.ZipFile.Equals(d.ZipFile))))
                     {
-                        Utils.AppendToLog(string.Format("Error: duplicate packageName \"{0}\" found. zipFile: \"{1}\"", s.PackageName, s.ZipFile));
+                        Utils.AppendToLog(string.Format("Error: duplicate PackageName \"{0}\" found. ZipFile: \"{1}\"", s.PackageName, s.ZipFile));
                         duplicatesCounter++;
                     }
                 }
@@ -361,10 +361,10 @@ namespace RelhaxModpack
                 {
                     // if both s.CheckDatabaseListIndex AND m.CheckDatabaseListIndex are equal, it is checking his own entry, so SKIP EVERY check/test
                     // if the s.dependency is FALSE, it is a single mod/config and should only exists once, if not => error/duplicate message
-                    // if the s.dependency is TRUE, it is a dependecy entry and packageName AND zipFile must be checken if equal, if not => error/duplicate message
-                    if (s.CheckDatabaseListIndex != c.CheckDatabaseListIndex && ((s.PackageName.Equals(c.packageName) && !(s.Dependency)) || (s.Dependency && s.PackageName.Equals(c.packageName) && !s.ZipFile.Equals(c.zipFile))))
+                    // if the s.dependency is TRUE, it is a dependecy entry and PackageName AND ZipFile must be checken if equal, if not => error/duplicate message
+                    if (s.CheckDatabaseListIndex != c.CheckDatabaseListIndex && ((s.PackageName.Equals(c.PackageName) && !(s.Dependency)) || (s.Dependency && s.PackageName.Equals(c.PackageName) && !s.ZipFile.Equals(c.ZipFile))))
                     {
-                        Utils.AppendToLog(string.Format("Error: duplicate packageName \"{0}\" found. zipFile: \"{1}\"", s.PackageName, s.ZipFile));
+                        Utils.AppendToLog(string.Format("Error: duplicate PackageName \"{0}\" found. ZipFile: \"{1}\"", s.PackageName, s.ZipFile));
                         duplicatesCounter++;
                     }
                 }
@@ -380,8 +380,8 @@ namespace RelhaxModpack
             foreach (Dependency d in dependencyList)
             {
                 CheckStorage cs = new CheckStorage();
-                cs.PackageName = d.packageName;
-                cs.ZipFile = d.zipFile;
+                cs.PackageName = d.PackageName;
+                cs.ZipFile = d.ZipFile;
                 cs.Dependency = true;
                 cs.CheckDatabaseListIndex = checkStorageList.Count;
                 d.CheckDatabaseListIndex = cs.CheckDatabaseListIndex;
@@ -394,8 +394,8 @@ namespace RelhaxModpack
             foreach (Config c in subConfigList)
             {
                 CheckStorage cs = new CheckStorage();
-                cs.PackageName = c.packageName;
-                cs.ZipFile = c.zipFile;
+                cs.PackageName = c.PackageName;
+                cs.ZipFile = c.ZipFile;
                 cs.Dependency = false;
                 cs.CheckDatabaseListIndex = checkStorageList.Count;
                 c.CheckDatabaseListIndex = cs.CheckDatabaseListIndex;
@@ -410,7 +410,7 @@ namespace RelhaxModpack
                 }
             }
         }
-        //checks for duplicate packageName
+        //checks for duplicate PackageName
         public static bool DuplicatesPackageName(List<Category> parsedCatagoryList, ref int duplicatesCounter)
         {
             //add every mod and config name to a new list
@@ -424,8 +424,8 @@ namespace RelhaxModpack
                 foreach (Mod m in c.mods)
                 {
                     CheckStorage cs = new CheckStorage();
-                    cs.PackageName = m.packageName;
-                    cs.ZipFile = m.zipFile;
+                    cs.PackageName = m.PackageName;
+                    cs.ZipFile = m.ZipFile;
                     cs.Dependency = false;
                     cs.CheckDatabaseListIndex = checkStorageList.Count;
                     m.CheckDatabaseListIndex = cs.CheckDatabaseListIndex;
@@ -449,10 +449,10 @@ namespace RelhaxModpack
                     {
                         // if both s.CheckDatabaseListIndex AND m.CheckDatabaseListIndex are equal, it is checking his own entry, so SKIP EVERY check/test
                         // if the s.dependency is FALSE, it is a single mod/config and should only exists once, if not => error/duplicate message
-                        // if the s.dependency is TRUE, it is a dependecy entry and packageName AND zipFile must be checken if equal, if not => error/duplicate message
-                        if (s.CheckDatabaseListIndex != m.CheckDatabaseListIndex && ((s.PackageName.Equals(m.packageName) && !(s.Dependency)) || (s.Dependency && s.PackageName.Equals(m.packageName) && !(s.ZipFile.Equals(m.zipFile)))))
+                        // if the s.dependency is TRUE, it is a dependecy entry and PackageName AND ZipFile must be checken if equal, if not => error/duplicate message
+                        if (s.CheckDatabaseListIndex != m.CheckDatabaseListIndex && ((s.PackageName.Equals(m.PackageName) && !(s.Dependency)) || (s.Dependency && s.PackageName.Equals(m.PackageName) && !(s.ZipFile.Equals(m.ZipFile)))))
                         {
-                            Utils.AppendToLog(string.Format("Error: duplicate packageName \"{0}\" found. zipFile: \"{1}\".", s.PackageName, s.ZipFile));
+                            Utils.AppendToLog(string.Format("Error: duplicate PackageName \"{0}\" found. ZipFile: \"{1}\".", s.PackageName, s.ZipFile));
                             duplicatesCounter++;
                         }
                     }
@@ -675,28 +675,28 @@ namespace RelhaxModpack
         }
 
         public static List<string> CreateUsedFilesList(List<Category> parsedCatagoryList,
-            List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependnecy> logicalDependencies)
+            List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependency> logicalDependencies)
         {
             List<string> currentZipFiles = new List<string>();
             foreach (Dependency d in globalDependencies)
             {
-                if (!d.zipFile.Equals("") && !currentZipFiles.Contains(d.zipFile))
+                if (!d.ZipFile.Equals("") && !currentZipFiles.Contains(d.ZipFile))
                 {
-                    currentZipFiles.Add(d.zipFile);
+                    currentZipFiles.Add(d.ZipFile);
                 }
             }
             foreach (Dependency d in dependencies)
             {
-                if (!d.zipFile.Equals("") && !currentZipFiles.Contains(d.zipFile))
+                if (!d.ZipFile.Equals("") && !currentZipFiles.Contains(d.ZipFile))
                 {
-                    currentZipFiles.Add(d.zipFile);
+                    currentZipFiles.Add(d.ZipFile);
                 }
             }
-            foreach (LogicalDependnecy d in logicalDependencies)
+            foreach (LogicalDependency d in logicalDependencies)
             {
-                if (!d.zipFile.Equals("") && !currentZipFiles.Contains(d.zipFile))
+                if (!d.ZipFile.Equals("") && !currentZipFiles.Contains(d.ZipFile))
                 {
-                    currentZipFiles.Add(d.zipFile);
+                    currentZipFiles.Add(d.ZipFile);
                 }
             }
             foreach (Category cat in parsedCatagoryList)
@@ -704,9 +704,9 @@ namespace RelhaxModpack
                 foreach (Mod m in cat.mods)
                 {
 
-                    if (!m.zipFile.Equals("") && !currentZipFiles.Contains(m.zipFile))
+                    if (!m.ZipFile.Equals("") && !currentZipFiles.Contains(m.ZipFile))
                     {
-                        currentZipFiles.Add(m.zipFile);
+                        currentZipFiles.Add(m.ZipFile);
                     }
                     if (m.configs.Count > 0)
                         CreateUsedFilesListParseConfigs(m.configs, currentZipFiles, out currentZipFiles);
@@ -720,9 +720,9 @@ namespace RelhaxModpack
             foreach (Config c in configList)
             {
 
-                if (!c.zipFile.Equals("") && !currentZipFiles.Contains(c.zipFile))
+                if (!c.ZipFile.Equals("") && !currentZipFiles.Contains(c.ZipFile))
                 {
-                    currentZipFiles.Add(c.zipFile);
+                    currentZipFiles.Add(c.ZipFile);
                 }
                 if (c.configs.Count > 0)
                     CreateUsedFilesListParseConfigs(c.configs, currentZipFiles, out currentZipFiles);
@@ -731,28 +731,28 @@ namespace RelhaxModpack
         }
         //moved to ModSelectionList.cs
         public static List<string> Depricated_createDownloadedOldZipsList(List<string> currentZipFiles, List<Category> parsedCatagoryList,
-            List<Dependency> globalDependencies, List<Dependency> currentDependencies, List<LogicalDependnecy> currentLogicalDependencies)
+            List<Dependency> globalDependencies, List<Dependency> currentDependencies, List<LogicalDependency> currentLogicalDependencies)
         {
             ParsedZips = new List<string>();
             foreach (Dependency d in globalDependencies)
             {
-                if (!d.zipFile.Equals("") && !ParsedZips.Contains(d.zipFile))
+                if (!d.ZipFile.Equals("") && !ParsedZips.Contains(d.ZipFile))
                 {
-                    ParsedZips.Add(d.zipFile);
+                    ParsedZips.Add(d.ZipFile);
                 }
             }
             foreach (Dependency d in currentDependencies)
             {
-                if (!d.zipFile.Equals("") && !ParsedZips.Contains(d.zipFile))
+                if (!d.ZipFile.Equals("") && !ParsedZips.Contains(d.ZipFile))
                 {
-                    ParsedZips.Add(d.zipFile);
+                    ParsedZips.Add(d.ZipFile);
                 }
             }
-            foreach (LogicalDependnecy d in currentLogicalDependencies)
+            foreach (LogicalDependency d in currentLogicalDependencies)
             {
-                if (!d.zipFile.Equals("") && !ParsedZips.Contains(d.zipFile))
+                if (!d.ZipFile.Equals("") && !ParsedZips.Contains(d.ZipFile))
                 {
-                    ParsedZips.Add(d.zipFile);
+                    ParsedZips.Add(d.ZipFile);
                 }
             }
             foreach (Category cat in parsedCatagoryList)
@@ -760,15 +760,15 @@ namespace RelhaxModpack
                 foreach (Mod m in cat.mods)
                 {
 
-                    if (!m.zipFile.Equals("") && !ParsedZips.Contains(m.zipFile))
+                    if (!m.ZipFile.Equals("") && !ParsedZips.Contains(m.ZipFile))
                     {
-                        ParsedZips.Add(m.zipFile);
+                        ParsedZips.Add(m.ZipFile);
                     }
                     if (m.configs.Count > 0)
                         Depricated_ParseZipFileConfigs(m.configs);
                 }
             }
-            //now parsedZips has every single possible zipFile in the database
+            //now parsedZips has every single possible ZipFile in the database
             //for each zipfile in it, remove it in currentZipFiles if it exists
             foreach (string s in ParsedZips)
             {
@@ -783,9 +783,9 @@ namespace RelhaxModpack
             foreach (Config c in configList)
             {
 
-                if (!c.zipFile.Equals("") && !ParsedZips.Contains(c.zipFile))
+                if (!c.ZipFile.Equals("") && !ParsedZips.Contains(c.ZipFile))
                 {
-                    ParsedZips.Add(c.zipFile);
+                    ParsedZips.Add(c.ZipFile);
                 }
                 if (c.configs.Count > 0)
                     Depricated_ParseZipFileConfigs(c.configs);

@@ -368,7 +368,7 @@
             this.LogicalDependencyPackageNameLabel.Name = "LogicalDependencyPackageNameLabel";
             this.LogicalDependencyPackageNameLabel.Size = new System.Drawing.Size(77, 13);
             this.LogicalDependencyPackageNameLabel.TabIndex = 28;
-            this.LogicalDependencyPackageNameLabel.Text = "packageName";
+            this.LogicalDependencyPackageNameLabel.Text = "PackageName";
             // 
             // LogicalDependnecyNegateFlagCB
             // 
@@ -459,7 +459,7 @@
             this.DependencyPackageNameLabel.Name = "DependencyPackageNameLabel";
             this.DependencyPackageNameLabel.Size = new System.Drawing.Size(77, 13);
             this.DependencyPackageNameLabel.TabIndex = 35;
-            this.DependencyPackageNameLabel.Text = "packageName";
+            this.DependencyPackageNameLabel.Text = "PackageName";
             // 
             // PictureTabPage
             // 
@@ -742,7 +742,7 @@
             this.ObjectShortcutCB.Name = "ObjectShortcutCB";
             this.ObjectShortcutCB.Size = new System.Drawing.Size(64, 17);
             this.ObjectShortcutCB.TabIndex = 50;
-            this.ObjectShortcutCB.Text = "enabled";
+            this.ObjectShortcutCB.Text = "Enabled";
             this.ObjectShortcutCB.UseVisualStyleBackColor = true;
             // 
             // ObjectShortcutNameTB
@@ -855,7 +855,7 @@
             this.ObjectEnabledCheckBox.Name = "ObjectEnabledCheckBox";
             this.ObjectEnabledCheckBox.Size = new System.Drawing.Size(64, 17);
             this.ObjectEnabledCheckBox.TabIndex = 12;
-            this.ObjectEnabledCheckBox.Text = "enabled";
+            this.ObjectEnabledCheckBox.Text = "Enabled";
             this.ObjectEnabledCheckBox.UseVisualStyleBackColor = true;
             // 
             // ObjectZipFileTB
@@ -920,7 +920,7 @@
             this.ObjectPackageName.Name = "ObjectPackageName";
             this.ObjectPackageName.Size = new System.Drawing.Size(77, 13);
             this.ObjectPackageName.TabIndex = 3;
-            this.ObjectPackageName.Text = "packageName";
+            this.ObjectPackageName.Text = "PackageName";
             // 
             // SaveDatabaseButton
             // 

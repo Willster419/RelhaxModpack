@@ -1,28 +1,27 @@
 ﻿using RelhaxModpack.DatabaseComponents;
-using System;
 using System.Collections.Generic;
 
 namespace RelhaxModpack
 {
-    public class LogicalDependnecy : IDatabasePackage
+    public class LogicalDependency : IDatabasePackage
     {
         //the zip file of the dependency
-        public string zipFile { get; set; }
-        //the timestamp of last change of zipfile name 
-        public long timestamp { get; set; }
-        //the crc of the dependency
-        public string crc { get; set; }
+        public string ZipFile { get; set; }
+        //the Timestamp of last change of zipfile name 
+        public long Timestamp { get; set; }
+        //the CRC of the dependency
+        public string CRC { get; set; }
         //flag to set to disable the dependency from being installed
-        public bool enabled { get; set; }
-        //the start address of the zip file location. enabled us to use sites that
+        public bool Enabled { get; set; }
+        //the start address of the zip file location. Enabled us to use sites that
         //generate random filenames for publicly shared files.
-        public string startAddress { get; set; }
+        public string StartAddress { get; set; }
         //the end address of the zip file location. enables us to use dropbox (?dl=1)
-        public string endAddress { get; set; }
+        public string EndAddress { get; set; }
         //later a unique name of the config entry
-        public string packageName { get; set; }
+        public string PackageName { get; set; }
         //used to determine at install time if the zip file needs to be downloaded
-        public bool downloadFlag { get; set; }
+        public bool DownloadFlag { get; set; }
         //acts as a NOT flag
         public bool negateFlag { get; set; }
         //needed to excatly identify double packageNames and its position
@@ -31,11 +30,11 @@ namespace RelhaxModpack
         public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
         public string devURL { get; set; }
         public List<ShortCut> shortCuts = new List<ShortCut>();
-        public LogicalDependnecy() { }
+        public LogicalDependency() { }
         //for the tostring thing
         public override string ToString()
         {
-            return negateFlag? "(Not) " + packageName : "" + packageName;
+            return negateFlag? "(Not) " + PackageName : "" + PackageName;
         }
     }
 }

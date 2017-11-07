@@ -10,7 +10,7 @@ namespace RelhaxModpack
     {
         public Dependency GlobalDependency { get; set; }
         public Dependency Dependency { get; set; }
-        public LogicalDependnecy LogicalDependency { get; set; }
+        public LogicalDependency LogicalDependency { get; set; }
         public SelectableDatabasePackage DatabaseObject { get; set; }
         public Category Category { get; set; }
         public DatabaseTreeNode(Object o, int mode)
@@ -28,7 +28,7 @@ namespace RelhaxModpack
                     LogicalDependency = null;
                     DatabaseObject = null;
                     Category = null;
-                    this.Text = GlobalDependency.packageName;
+                    this.Text = GlobalDependency.PackageName;
                     break;
                 case 1:
                     GlobalDependency = null;
@@ -36,15 +36,15 @@ namespace RelhaxModpack
                     LogicalDependency = null;
                     DatabaseObject = null;
                     Category = null;
-                    this.Text = Dependency.packageName;
+                    this.Text = Dependency.PackageName;
                     break;
                 case 2:
                     GlobalDependency = null;
                     Dependency = null;
-                    LogicalDependency = (LogicalDependnecy)o;
+                    LogicalDependency = (LogicalDependency)o;
                     DatabaseObject = null;
                     Category = null;
-                    this.Text = LogicalDependency.packageName;
+                    this.Text = LogicalDependency.PackageName;
                     break;
                 case 3:
                     GlobalDependency = null;
@@ -52,7 +52,7 @@ namespace RelhaxModpack
                     LogicalDependency = null;
                     DatabaseObject = (SelectableDatabasePackage)o;
                     Category = null;
-                    this.Text = DatabaseObject.packageName;
+                    this.Text = DatabaseObject.PackageName;
                     break;
                 case 4:
                     GlobalDependency = null;

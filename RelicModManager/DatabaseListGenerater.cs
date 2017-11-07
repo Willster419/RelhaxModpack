@@ -21,7 +21,7 @@ namespace RelhaxModpack
         private List<Dependency> globalDependencies;
         private List<Category> parsedCatagoryList;
         private List<Dependency> dependencies;
-        private List<LogicalDependnecy> logicalDependencies;
+        private List<LogicalDependency> logicalDependencies;
         private string header;
 
         public DatabaseListGenerater()
@@ -51,7 +51,7 @@ namespace RelhaxModpack
             //load database
             globalDependencies = new List<Dependency>();
             dependencies = new List<Dependency>();
-            logicalDependencies = new List<LogicalDependnecy>();
+            logicalDependencies = new List<LogicalDependency>();
             parsedCatagoryList = new List<Category>();
             XMLUtils.CreateModStructure(LoadDatabaseFileDialog.FileName, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             if(!SpreadsheetLocation.Text.Equals(""))
@@ -61,7 +61,7 @@ namespace RelhaxModpack
         private void GenretateInternalSpreadsheetButton_Click(object sender, EventArgs e)
         {
             //reset everything
-            header = "packageName\tCategory\tMod\tConfig\tLevel\tZip\tDevURL\tEnabled";
+            header = "PackageName\tCategory\tMod\tConfig\tLevel\tZip\tDevURL\tEnabled";
             sb = new StringBuilder();
             packageName = "";
             category = "";
@@ -80,27 +80,27 @@ namespace RelhaxModpack
             category = "globalDependencies";
             foreach(Dependency d in globalDependencies)
             {
-                packageName = d.packageName;
-                zipfile = d.zipFile;
-                enabled = d.enabled;
+                packageName = d.PackageName;
+                zipfile = d.ZipFile;
+                enabled = d.Enabled;
                 sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
             }
             //next save depenedneices
             category = "dependencies";
             foreach (Dependency d in dependencies)
             {
-                packageName = d.packageName;
-                zipfile = d.zipFile;
-                enabled = d.enabled;
+                packageName = d.PackageName;
+                zipfile = d.ZipFile;
+                enabled = d.Enabled;
                 sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
             }
             //next save logicaldepenedneices
             category = "logicalDependencies";
-            foreach (LogicalDependnecy d in logicalDependencies)
+            foreach (LogicalDependency d in logicalDependencies)
             {
-                packageName = d.packageName;
-                zipfile = d.zipFile;
-                enabled = d.enabled;
+                packageName = d.PackageName;
+                zipfile = d.ZipFile;
+                enabled = d.Enabled;
                 sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
             }
             foreach (Category cat in parsedCatagoryList)
@@ -110,12 +110,12 @@ namespace RelhaxModpack
                 {
                     //remove the old devURL value if there
                     devURL = "";
-                    packageName = m.packageName;
+                    packageName = m.PackageName;
                     level = 1;
                     modName = m.name;
                     configname = "N/A";
-                    zipfile = m.zipFile;
-                    enabled = m.enabled;
+                    zipfile = m.ZipFile;
+                    enabled = m.Enabled;
                     if (m.devURL.Equals(""))
                         devURL = "";
                     else
@@ -142,10 +142,10 @@ namespace RelhaxModpack
             {
                 //remove the old devURL value if there
                 devURL = "";
-                packageName = con.packageName;
+                packageName = con.PackageName;
                 configname = con.name;
-                zipfile = con.zipFile;
-                enabled = con.enabled;
+                zipfile = con.ZipFile;
+                enabled = con.Enabled;
                 if (con.devURL.Equals(""))
                     devURL = "";
                 else

@@ -9,7 +9,7 @@ namespace RelhaxModpack
         {
             InitializeComponent();
         }
-        //handler to get the crc of the file
+        //handler to get the CRC of the file
         private void button1_Click(object sender, EventArgs e)
         {
             //unable to find it in the registry, so ask for it

@@ -9,12 +9,12 @@ namespace RelhaxModpack
         private EditorMode Mode;
         public Dependency SelectedGlobalDependency;
         public Dependency SelectedDependency;
-        public LogicalDependnecy SelectedLogicalDependency;
+        public LogicalDependency SelectedLogicalDependency;
         public SelectableDatabasePackage SelectedDatabaseObject;
         private List<Config> configList;
         private bool ignoreResult = true;
         public bool sublist = false;
-        public DatabaseAdder(EditorMode mode, List<Dependency> GlobalDependency, List<Dependency> Dependencies, List<LogicalDependnecy> LogicalDepdnedncies, List<Category> ParsedCatList, bool moveMode)
+        public DatabaseAdder(EditorMode mode, List<Dependency> GlobalDependency, List<Dependency> Dependencies, List<LogicalDependency> LogicalDepdnedncies, List<Category> ParsedCatList, bool moveMode)
         {
             InitializeComponent();
             Mode = mode;
@@ -79,7 +79,7 @@ namespace RelhaxModpack
             }
             else if (Mode == EditorMode.LogicalDependency)
             {
-                SelectedLogicalDependency = (LogicalDependnecy)cb.SelectedItem;
+                SelectedLogicalDependency = (LogicalDependency)cb.SelectedItem;
             }
         }
 

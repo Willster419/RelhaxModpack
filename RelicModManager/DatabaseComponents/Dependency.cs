@@ -1,5 +1,4 @@
 ﻿using RelhaxModpack.DatabaseComponents;
-using System;
 using System.Collections.Generic;
 
 namespace RelhaxModpack
@@ -9,34 +8,34 @@ namespace RelhaxModpack
     public class Dependency : IDatabasePackage
     {
         //the zip file of the dependency
-        public string zipFile { get; set; }
-        //the timestamp of last change of zipfile name 
-        public long timestamp { get; set; }
-        //the crc of the dependency
-        public string crc { get; set; }
+        public string ZipFile { get; set; }
+        //the Timestamp of last change of zipfile name 
+        public long Timestamp { get; set; }
+        //the CRC of the dependency
+        public string CRC { get; set; }
         //flag to set to disable the dependency from being installed
-        public bool enabled { get; set; }
-        //the start address of the zip file location. enabled us to use sites that
+        public bool Enabled { get; set; }
+        //the start address of the zip file location. Enabled us to use sites that
         //generate random filenames for publicly shared files.
-        public string startAddress { get; set; }
+        public string StartAddress { get; set; }
         //the end address of the zip file location. enables us to use dropbox (?dl=1)
-        public string endAddress { get; set; }
+        public string EndAddress { get; set; }
         //later a unique name of the config entry
-        public string packageName { get; set; }
+        public string PackageName { get; set; }
         //used to determine at install time if the zip file needs to be downloaded
-        public bool downloadFlag { get; set; }
+        public bool DownloadFlag { get; set; }
         //needed to excatly identify double packageNames and its position
         public int CheckDatabaseListIndex { get; set; }
         //property to determine if it will be installed in the beginning or in the end
         public bool appendExtraction;
-        public List<LogicalDependnecy> logicalDependencies = new List<LogicalDependnecy>();
+        public List<LogicalDependency> logicalDependencies = new List<LogicalDependency>();
         public string devURL { get; set; }
         public List<ShortCut> shortCuts = new List<ShortCut>();
         public Dependency() { }
         //for the tostring thing
         public override string ToString()
         {
-            return packageName;
+            return PackageName;
         }
     }
 }

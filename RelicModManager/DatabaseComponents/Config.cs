@@ -23,9 +23,9 @@ namespace RelhaxModpack
         public Config()
         {
             //by default make these false
-            enabled = false;
+            Enabled = false;
             Checked = false;
-            downloadFlag = false;
+            DownloadFlag = false;
             visible = true;
         }
         public Config getSubConfig(string subConfigName)

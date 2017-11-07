@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace RelhaxModpack.DatabaseComponents
+﻿namespace RelhaxModpack.DatabaseComponents
 {
     /*
      * A database component is an interface for all Components within the database. A DatabaseComponent MUST have the following properties:
@@ -20,13 +15,13 @@ namespace RelhaxModpack.DatabaseComponents
      */
     public interface IDatabasePackage
     {
-        string packageName { get; set; }
-        long timestamp { get; set; }
-        string zipFile { get; set; }
-        bool enabled { get; set; }
-        string crc { get; set; }
-        string startAddress { get; set; }
-        string endAddress { get; set; }
-        bool downloadFlag { get; set; }
+        string PackageName { get; set; }
+        long Timestamp { get; set; }
+        string ZipFile { get; set; }
+        bool Enabled { get; set; }
+        string CRC { get; set; }
+        string StartAddress { get; set; }
+        string EndAddress { get; set; }
+        bool DownloadFlag { get; set; }
     }
 }

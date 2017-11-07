@@ -21,7 +21,7 @@ namespace RelhaxModpack
         private PleaseWait pw;
         public List<Dependency> globalDependencies;
         public List<Dependency> dependencies;
-        public List<LogicalDependnecy> logicalDependencies;
+        public List<LogicalDependency> logicalDependencies;
         public List<SelectableDatabasePackage> completeModSearchList;
         private bool loadingConfig = false;
         private bool taskBarHidden = false;
@@ -151,7 +151,7 @@ namespace RelhaxModpack
             globalDependencies = new List<Dependency>();
             parsedCatagoryList = new List<Category>();
             dependencies = new List<Dependency>();
-            logicalDependencies = new List<LogicalDependnecy>();
+            logicalDependencies = new List<LogicalDependency>();
             XMLUtils.CreateModStructure(databaseURL, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             if (Program.testMode)
             {
@@ -164,8 +164,8 @@ namespace RelhaxModpack
                 int duplicatesCounter = 0;
                 if (Utils.DuplicatesPackageName(parsedCatagoryList, ref duplicatesCounter))
                 {
-                    Utils.AppendToLog(string.Format("ERROR: {0} duplicate packageName's detected", duplicatesCounter));
-                    MessageBox.Show(string.Format("ERROR: {0} duplicate packageName's detected!\n\nmore information, see Logfile ...", duplicatesCounter), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Utils.AppendToLog(string.Format("ERROR: {0} duplicate PackageName's detected", duplicatesCounter));
+                    MessageBox.Show(string.Format("ERROR: {0} duplicate PackageName's detected!\n\nmore information, see Logfile ...", duplicatesCounter), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     Application.Exit();
                 }
             }
@@ -281,9 +281,9 @@ namespace RelhaxModpack
                 if (Path.GetExtension(s).Equals(".zip"))
                 {
                     Mod m = new Mod();
-                    m.zipFile = s;
+                    m.ZipFile = s;
                     m.name = Path.GetFileNameWithoutExtension(s);
-                    m.enabled = true;
+                    m.Enabled = true;
                     userMods.Add(m);
                 }
             }
@@ -296,39 +296,39 @@ namespace RelhaxModpack
             foreach (Dependency d in globalDependencies)
             {
                 //default to false, then check if it can be true
-                d.downloadFlag = false;
-                modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.zipFile);
+                d.DownloadFlag = false;
+                modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.ZipFile);
                 //get the local md5 hash. a -1 indicates the file is not on the disk
                 string oldCRC2 = XMLUtils.GetMd5Hash(modDownloadFilePath);
-                if ((!d.zipFile.Equals("")) && (!d.crc.Equals(oldCRC2)))
+                if ((!d.ZipFile.Equals("")) && (!d.CRC.Equals(oldCRC2)))
                 {
-                    d.downloadFlag = true;
+                    d.DownloadFlag = true;
                 }
             }
             //init the dependencies
             foreach (Dependency d in dependencies)
             {
                 //default to false, then check if it can be true
-                d.downloadFlag = false;
-                modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.zipFile);
+                d.DownloadFlag = false;
+                modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.ZipFile);
                 //get the local md5 hash. a -1 indicates the file is not on the disk
                 string oldCRC2 = XMLUtils.GetMd5Hash(modDownloadFilePath);
-                if ((!d.zipFile.Equals("")) && (!d.crc.Equals(oldCRC2)))
+                if ((!d.ZipFile.Equals("")) && (!d.CRC.Equals(oldCRC2)))
                 {
-                    d.downloadFlag = true;
+                    d.DownloadFlag = true;
                 }
             }
             //init the logicalDependencies
-            foreach (LogicalDependnecy d in logicalDependencies)
+            foreach (LogicalDependency d in logicalDependencies)
             {
                 //default to false, then check if it can be true
-                d.downloadFlag = false;
-                modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.zipFile);
+                d.DownloadFlag = false;
+                modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.ZipFile);
                 //get the local md5 hash. a -1 indicates the file is not on the disk
                 string oldCRC2 = XMLUtils.GetMd5Hash(modDownloadFilePath);
-                if ((!d.zipFile.Equals("")) && (!d.crc.Equals(oldCRC2)))
+                if ((!d.ZipFile.Equals("")) && (!d.CRC.Equals(oldCRC2)))
                 {
-                    d.downloadFlag = true;
+                    d.DownloadFlag = true;
                 }
             }
         }
@@ -440,7 +440,7 @@ namespace RelhaxModpack
             if (Settings.DarkUI)
                 lsl.legacyTreeView.Background = System.Windows.Media.Brushes.Gray;
             //helpfull stuff
-            string modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", m.zipFile);
+            string modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", m.ZipFile);
             hasRadioButtonConfigSelected = false;
             modHasRadioButtons = false;
             //link the catagory and mod in memory
@@ -496,27 +496,27 @@ namespace RelhaxModpack
             {
                 //get the local md5 hash. a -1 indicates the file is not on the disk
                 string oldCRC2 = XMLUtils.GetMd5Hash(modDownloadFilePath);
-                if ((!m.zipFile.Equals("")) && (!m.crc.Equals(oldCRC2)))
+                if ((!m.ZipFile.Equals("")) && (!m.CRC.Equals(oldCRC2)))
                 {
                     modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Translations.getTranslatedString("updated"));
-                    m.downloadFlag = true;
+                    m.DownloadFlag = true;
                     if ((m.size > 0))
                         modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Utils.SizeSuffix(m.size, 1, true));
                 }
             }
             else
             {
-                if (m.downloadFlag)
+                if (m.DownloadFlag)
                 {
                     modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Translations.getTranslatedString("updated"));
                     if ((m.size > 0))
                         modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Utils.SizeSuffix(m.size, 1, true));
                 }
             }
-            //set mod's enabled status
-            modCheckBox.IsEnabled = m.enabled;
+            //set mod's Enabled status
+            modCheckBox.IsEnabled = m.Enabled;
             //set the mods checked status
-            if (m.enabled && m.Checked)
+            if (m.Enabled && m.Checked)
                 modCheckBox.IsChecked = true;
 
             tvi.Header = modCheckBox;
@@ -588,7 +588,7 @@ namespace RelhaxModpack
                     configControlRB.config = con;
                     //add the UI component to the config item in memory database
                     con.configUIComponent = configControlRB;
-                    //logic for determining if it can be enabled
+                    //logic for determining if it can be Enabled
                     configControlRB.IsEnabled = false;
                     configControlRB.IsChecked = false;
                     //get all levels up to the mod, then deal with the mod
@@ -599,7 +599,7 @@ namespace RelhaxModpack
                         Config parentConfig2 = (Config)con.parent;
                         while (parentConfig2 is Config)
                         {
-                            if (!parentConfig2.enabled)
+                            if (!parentConfig2.Enabled)
                                 canBeEnabled = false;
                             if (parentConfig2.parent is Mod)
                                 break;
@@ -607,10 +607,10 @@ namespace RelhaxModpack
                         }
                     }
                     //check the parent mod
-                    if (!con.parentMod.enabled)
+                    if (!con.parentMod.Enabled)
                         canBeEnabled = false;
                     //check itself (before it reks itself)
-                    if (!con.enabled)
+                    if (!con.Enabled)
                         canBeEnabled = false;
                     if (canBeEnabled)
                         configControlRB.IsEnabled = true;
@@ -624,18 +624,18 @@ namespace RelhaxModpack
                     configControlRB.Content = nameForModCB;
                     if (firstLoad)
                     {
-                        string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
-                        if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
+                        string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.ZipFile));
+                        if ((!con.CRC.Equals("")) && (!oldCRC.Equals(con.CRC)))
                         {
                             configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Translations.getTranslatedString("updated"));
-                            con.downloadFlag = true;
+                            con.DownloadFlag = true;
                             if (con.size > 0)
                                 configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Utils.SizeSuffix(con.size, 1, true));
                         }
                     }
                     else
                     {
-                        if (con.downloadFlag)
+                        if (con.DownloadFlag)
                         {
                             configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Translations.getTranslatedString("updated"));
                             if (con.size > 0)
@@ -675,30 +675,30 @@ namespace RelhaxModpack
                     configControlDDALL.MinWidth = 100;
                     ComboBoxItem cbi = null;
                     string toAdd = Utils.ReplaceMacro(con);
-                    //run the crc logics
+                    //run the CRC logics
                     if (firstLoad)
                     {
-                        string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
-                        if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
+                        string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.ZipFile));
+                        if ((!con.CRC.Equals("")) && (!oldCRC.Equals(con.CRC)))
                         {
                             toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
-                            con.downloadFlag = true;
+                            con.DownloadFlag = true;
                             if (con.size > 0)
                                 toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.size, 1, true));
                         }
                     }
                     else
                     {
-                        if (con.downloadFlag)
+                        if (con.DownloadFlag)
                         {
                             toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
-                            con.downloadFlag = true;
+                            con.DownloadFlag = true;
                             if (con.size > 0)
                                 toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.size, 1, true));
                         }
                     }
                     //add it
-                    if (con.enabled)
+                    if (con.Enabled)
                     {
                         cbi = new ComboBoxItem(con, toAdd);
                         configControlDDALL.Items.Add(cbi);
@@ -753,7 +753,7 @@ namespace RelhaxModpack
                     configControlCB.config = con;
                     //add the UI component to the config item in memory database
                     con.configUIComponent = configControlCB;
-                    //logic for determining if it can be enabled
+                    //logic for determining if it can be Enabled
                     configControlCB.IsEnabled = false;
                     configControlCB.IsChecked = false;
                     //get all levels up to the mod, then deal with the mod
@@ -764,7 +764,7 @@ namespace RelhaxModpack
                         Config parentConfig2 = (Config)con.parent;
                         while (parentConfig2 is Config)
                         {
-                            if (!parentConfig2.enabled)
+                            if (!parentConfig2.Enabled)
                                 canBeEnabled = false;
                             if (parentConfig2.parent is Mod)
                                 break;
@@ -772,10 +772,10 @@ namespace RelhaxModpack
                         }
                     }
                     //check the parent mod
-                    if (!con.parentMod.enabled)
+                    if (!con.parentMod.Enabled)
                         canBeEnabled = false;
                     //check itself (before it reks itself)
-                    if (!con.enabled)
+                    if (!con.Enabled)
                         canBeEnabled = false;
                     if (canBeEnabled)
                         configControlCB.IsEnabled = true;
@@ -789,21 +789,21 @@ namespace RelhaxModpack
                     configControlCB.Content = nameForModCB;
                     if (firstLoad)
                     {
-                        string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
-                        if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
+                        string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.ZipFile));
+                        if ((!con.CRC.Equals("")) && (!oldCRC.Equals(con.CRC)))
                         {
                             configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Translations.getTranslatedString("updated"));
-                            con.downloadFlag = true;
+                            con.DownloadFlag = true;
                             if (con.size > 0)
                                 configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Utils.SizeSuffix(con.size, 1, true));
                         }
                     }
                     else
                     {
-                        if (con.downloadFlag)
+                        if (con.DownloadFlag)
                         {
                             configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Translations.getTranslatedString("updated"));
-                            con.downloadFlag = true;
+                            con.DownloadFlag = true;
                             if (con.size > 0)
                                 configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Utils.SizeSuffix(con.size, 1, true));
                         }
@@ -887,7 +887,7 @@ namespace RelhaxModpack
                 bool configSelected = false;
                 foreach (Config con in m.configs)
                 {
-                    if ((!con.visible) || (!con.enabled))
+                    if ((!con.visible) || (!con.Enabled))
                         continue;
                     if ((con.type.Equals("single")) || (con.type.Equals("single1")))
                     {
@@ -899,7 +899,7 @@ namespace RelhaxModpack
                 {
                     foreach (Config con in m.configs)
                     {
-                        if ((!con.visible) || (!con.enabled))
+                        if ((!con.visible) || (!con.Enabled))
                             continue;
                         if ((con.type.Equals("single")) || (con.type.Equals("single1")))
                         {
@@ -914,7 +914,7 @@ namespace RelhaxModpack
                 configSelected = false;
                 foreach (Config con in m.configs)
                 {
-                    if ((!con.visible) || (!con.enabled))
+                    if ((!con.visible) || (!con.Enabled))
                         continue;
                     if ((con.type.Equals("single_dropdown")) || (con.type.Equals("single_dropdown1")))
                     {
@@ -926,7 +926,7 @@ namespace RelhaxModpack
                 {
                     foreach (Config con in m.configs)
                     {
-                        if ((!con.visible) || (!con.enabled))
+                        if ((!con.visible) || (!con.Enabled))
                             continue;
                         if ((con.type.Equals("single_dropdown")) || (con.type.Equals("single_dropdown1")))
                         {
@@ -953,7 +953,7 @@ namespace RelhaxModpack
                 configSelected = false;
                 foreach (Config con in m.configs)
                 {
-                    if ((!con.visible) || (!con.enabled) || (!con.type.Equals("single_dropdown2")))
+                    if ((!con.visible) || (!con.Enabled) || (!con.type.Equals("single_dropdown2")))
                         continue;
                     if (con.Checked)
                         configSelected = true;
@@ -962,7 +962,7 @@ namespace RelhaxModpack
                 {
                     foreach (Config con in m.configs)
                     {
-                        if ((!con.visible) || (!con.enabled) || (!con.type.Equals("single_dropdown2")))
+                        if ((!con.visible) || (!con.Enabled) || (!con.type.Equals("single_dropdown2")))
                             continue;
                         con.Checked = true;
                         ConfigWPFComboBox cwpfcb = (ConfigWPFComboBox)con.configUIComponent;
@@ -988,7 +988,7 @@ namespace RelhaxModpack
                 //mod not checked, uncheck all the configs
                 foreach (Config cfg in m.configs)
                 {
-                    if (cfg.enabled)
+                    if (cfg.Enabled)
                     {
                         cfg.Checked = false;
                         // if (cfg.configUIComponent is ConfigFormCheckBox)
@@ -1068,7 +1068,7 @@ namespace RelhaxModpack
                         Config subc = subRB.config;
                         if ((bool)subRB.IsEnabled && (bool)subRB.IsChecked)
                         {
-                            //getting here means cb is enabled
+                            //getting here means cb is Enabled
                             subRB.IsEnabled = true;
                             //this needs to be changed
                             if (subc.Checked)
@@ -1084,7 +1084,7 @@ namespace RelhaxModpack
                         {
                             ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
                             Config subc = subRB.config;
-                            if ((bool)subRB.IsEnabled && subc.enabled)
+                            if ((bool)subRB.IsEnabled && subc.Enabled)
                             {
                                 subc.Checked = true;
                                 subRB.IsChecked = true;
@@ -1144,7 +1144,7 @@ namespace RelhaxModpack
                     }
                 }
             }
-            //first check if this is init, meaning first time enabled
+            //first check if this is init, meaning first time Enabled
             //but now this should never have to run
             //getting here means that an item is confirmed to be selected
             //itterate through the items, get each config, disable it
@@ -1223,7 +1223,7 @@ namespace RelhaxModpack
                         Config subc = subRB.config;
                         if ((bool)subRB.IsEnabled && (bool)subRB.IsChecked)
                         {
-                            //getting here means cb is enabled
+                            //getting here means cb is Enabled
                             subRB.IsEnabled = true;
                             //this needs to be changed
                             if (subc.Checked)
@@ -1239,7 +1239,7 @@ namespace RelhaxModpack
                         {
                             ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
                             Config subc = subRB.config;
-                            if ((bool)subRB.IsEnabled && subc.enabled)
+                            if ((bool)subRB.IsEnabled && subc.Enabled)
                             {
                                 subc.Checked = true;
                                 subRB.IsChecked = true;
@@ -1298,24 +1298,24 @@ namespace RelhaxModpack
             completeModSearchList.Add(m);
             // completeModSearchList_New.Add(m);
             //the mod checksum logic
-            if (!m.zipFile.Equals(""))
+            if (!m.ZipFile.Equals(""))
             {
-                string modDownloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads", m.zipFile);
+                string modDownloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads", m.ZipFile);
                 if (firstLoad)
                 {
                     string oldCRC2 = XMLUtils.GetMd5Hash(modDownloadPath);
                     //if the CRC's don't match and the mod actually has a zip file
-                    if ((!m.crc.Equals(oldCRC2)))
+                    if ((!m.CRC.Equals(oldCRC2)))
                     {
                         modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
-                        m.downloadFlag = true;
+                        m.DownloadFlag = true;
                         if ((m.size > 0))
                             modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.size, 1, true));
                     }
                 }
                 else
                 {
-                    if (m.downloadFlag)
+                    if (m.DownloadFlag)
                     {
                         modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
                         if ((m.size > 0))
@@ -1324,10 +1324,10 @@ namespace RelhaxModpack
                 }
             }
             modCheckBox.UseVisualStyleBackColor = true;
-            modCheckBox.Enabled = m.enabled;
+            modCheckBox.Enabled = m.Enabled;
             modCheckBox.MouseDown += new MouseEventHandler(Generic_MouseDown);
             //in theory it should trigger the handler for checked
-            //when initially made it should be false, if enabled from
+            //when initially made it should be false, if Enabled from
             //from user configs
             //make the main panel
             Panel mainPanel = new Panel();
@@ -1336,7 +1336,7 @@ namespace RelhaxModpack
             mainPanel.AutoSize = true;
             mainPanel.AutoSizeMode = AutoSizeMode.GrowOnly;
             mainPanel.Size = new System.Drawing.Size(t.Size.Width - 25, 20);
-            if (m.enabled && m.Checked && !Settings.DisableColorChange)
+            if (m.Enabled && m.Checked && !Settings.DisableColorChange)
                 mainPanel.BackColor = Color.BlanchedAlmond;
             else
                 mainPanel.BackColor = Settings.getBackColor();
@@ -1389,14 +1389,14 @@ namespace RelhaxModpack
             configPanel.AutoSize = true;
             if (parentIsMod)
             {
-                if (m.enabled && m.Checked && !Settings.DisableColorChange)
+                if (m.Enabled && m.Checked && !Settings.DisableColorChange)
                     configPanel.BackColor = Color.BlanchedAlmond;
                 else
                     configPanel.BackColor = Settings.getBackColor();
             }
             else
             {
-                if (parentConfig.enabled && parentConfig.Checked && !Settings.DisableColorChange)
+                if (parentConfig.Enabled && parentConfig.Checked && !Settings.DisableColorChange)
                     configPanel.BackColor = Color.BlanchedAlmond;
                 else
                     configPanel.BackColor = Settings.getBackColor();
@@ -1488,7 +1488,7 @@ namespace RelhaxModpack
                     configControlRB.mod = m;
                     configControlRB.config = con;
                     con.configUIComponent = configControlRB;
-                    //logic for determining if it can be enabled
+                    //logic for determining if it can be Enabled
                     configControlRB.Enabled = false;
                     configControlRB.Checked = false;
                     //get all levels up to the mod, then deal with the mod
@@ -1499,7 +1499,7 @@ namespace RelhaxModpack
                         Config parentConfig2 = (Config)con.parent;
                         while (parentConfig2 is Config)
                         {
-                            if (!parentConfig2.enabled)
+                            if (!parentConfig2.Enabled)
                                 canBeEnabled = false;
                             if (parentConfig2.parent is Mod)
                                 break;
@@ -1507,10 +1507,10 @@ namespace RelhaxModpack
                         }
                     }
                     //check the parent mod
-                    if (!con.parentMod.enabled)
+                    if (!con.parentMod.Enabled)
                         canBeEnabled = false;
                     //check itself (before it reks itself)
-                    if (!con.enabled)
+                    if (!con.Enabled)
                         canBeEnabled = false;
                     if (canBeEnabled)
                         configControlRB.Enabled = true;
@@ -1523,22 +1523,22 @@ namespace RelhaxModpack
                     configControlRB.Name = t.Name + "_" + m.name + "_" + con.name;
                     //run checksum logic
                     configControlRB.Text = Utils.ReplaceMacro(con);
-                    if (!con.zipFile.Equals(""))
+                    if (!con.ZipFile.Equals(""))
                     {
                         if (firstLoad)
                         {
-                            string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
-                            if ((!oldCRC.Equals(con.crc)))
+                            string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.ZipFile));
+                            if ((!oldCRC.Equals(con.CRC)))
                             {
                                 configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
-                                con.downloadFlag = true;
+                                con.DownloadFlag = true;
                                 if (con.size > 0)
                                     configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.size, 1, true));
                             }
                         }
                         else
                         {
-                            if (con.downloadFlag)
+                            if (con.DownloadFlag)
                             {
                                 configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
                                 if (con.size > 0)
@@ -1577,10 +1577,10 @@ namespace RelhaxModpack
                     //run the checksum locics
                     if (firstLoad)
                     {
-                        string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
-                        if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
+                        string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.ZipFile));
+                        if ((!con.CRC.Equals("")) && (!oldCRC.Equals(con.CRC)))
                         {
-                            con.downloadFlag = true;
+                            con.DownloadFlag = true;
                             toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
                             if (con.size > 0)
                                 toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.size, 1, true));
@@ -1588,7 +1588,7 @@ namespace RelhaxModpack
                     }
                     else
                     {
-                        if (con.downloadFlag)
+                        if (con.DownloadFlag)
                         {
                             toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
                             if (con.size > 0)
@@ -1596,7 +1596,7 @@ namespace RelhaxModpack
                         }
                     }
                     //add it
-                    if (con.enabled)
+                    if (con.Enabled)
                     {
                         cbi = new ComboBoxItem(con, toAdd);
                         configControlDDALL.Items.Add(cbi);
@@ -1636,7 +1636,7 @@ namespace RelhaxModpack
                     configControlCB.mod = m;
                     configControlCB.config = con;
                     con.configUIComponent = configControlCB;
-                    //logic for determining if it can be enabled
+                    //logic for determining if it can be Enabled
                     configControlCB.Enabled = false;
                     configControlCB.Checked = false;
                     //get all levels up to the mod, then deal with the mod
@@ -1647,7 +1647,7 @@ namespace RelhaxModpack
                         Config parentConfig2 = (Config)con.parent;
                         while (parentConfig2 is Config)
                         {
-                            if (!parentConfig2.enabled)
+                            if (!parentConfig2.Enabled)
                                 canBeEnabled = false;
                             if (parentConfig2.parent is Mod)
                                 break;
@@ -1655,10 +1655,10 @@ namespace RelhaxModpack
                         }
                     }
                     //check the parent mod
-                    if (!con.parentMod.enabled)
+                    if (!con.parentMod.Enabled)
                         canBeEnabled = false;
                     //check itself (before it reks itself)
-                    if (!con.enabled)
+                    if (!con.Enabled)
                         canBeEnabled = false;
                     if (canBeEnabled)
                         configControlCB.Enabled = true;
@@ -1673,10 +1673,10 @@ namespace RelhaxModpack
                     configControlCB.Text = Utils.ReplaceMacro(con);
                     if (firstLoad)
                     {
-                        string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.zipFile));
-                        if ((!con.crc.Equals("")) && (!oldCRC.Equals(con.crc)))
+                        string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.ZipFile));
+                        if ((!con.CRC.Equals("")) && (!oldCRC.Equals(con.CRC)))
                         {
-                            con.downloadFlag = true;
+                            con.DownloadFlag = true;
                             configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Translations.getTranslatedString("updated"));
                             if (con.size > 0)
                                 configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Utils.SizeSuffix(con.size, 1, true));
@@ -1684,7 +1684,7 @@ namespace RelhaxModpack
                     }
                     else
                     {
-                        if (con.downloadFlag)
+                        if (con.DownloadFlag)
                         {
                             configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Translations.getTranslatedString("updated"));
                             if (con.size > 0)
@@ -1834,7 +1834,7 @@ namespace RelhaxModpack
                 }
 
             }
-            //toggle the mod in memory, enabled or disabled
+            //toggle the mod in memory, Enabled or disabled
             m.Checked = cb.Checked;
             //toggle the mod panel color
             if (cb.Checked && !Settings.DisableColorChange)
@@ -1866,7 +1866,7 @@ namespace RelhaxModpack
                 bool configSelected = false;
                 foreach (Config con in m.configs)
                 {
-                    if ((!con.visible) || (!con.enabled))
+                    if ((!con.visible) || (!con.Enabled))
                         continue;
                     if ((con.type.Equals("single")) || (con.type.Equals("single1")))
                     {
@@ -1878,7 +1878,7 @@ namespace RelhaxModpack
                 {
                     foreach (Config con in m.configs)
                     {
-                        if ((!con.visible) || (!con.enabled))
+                        if ((!con.visible) || (!con.Enabled))
                             continue;
                         if ((con.type.Equals("single")) || (con.type.Equals("single1")))
                         {
@@ -1893,7 +1893,7 @@ namespace RelhaxModpack
                 configSelected = false;
                 foreach (Config con in m.configs)
                 {
-                    if ((!con.visible) || (!con.enabled))
+                    if ((!con.visible) || (!con.Enabled))
                         continue;
                     if ((con.type.Equals("single_dropdown")) || (con.type.Equals("single_dropdown1")))
                     {
@@ -1905,7 +1905,7 @@ namespace RelhaxModpack
                 {
                     foreach (Config con in m.configs)
                     {
-                        if ((!con.visible) || (!con.enabled))
+                        if ((!con.visible) || (!con.Enabled))
                             continue;
                         if ((con.type.Equals("single_dropdown")) || (con.type.Equals("single_dropdown1")))
                         {
@@ -1932,7 +1932,7 @@ namespace RelhaxModpack
                 configSelected = false;
                 foreach (Config con in m.configs)
                 {
-                    if ((!con.visible) || (!con.enabled) || (!con.type.Equals("single_dropdown2")))
+                    if ((!con.visible) || (!con.Enabled) || (!con.type.Equals("single_dropdown2")))
                         continue;
                     if (con.Checked)
                         configSelected = true;
@@ -1941,7 +1941,7 @@ namespace RelhaxModpack
                 {
                     foreach (Config con in m.configs)
                     {
-                        if ((!con.visible) || (!con.enabled) || (!con.type.Equals("single_dropdown2")))
+                        if ((!con.visible) || (!con.Enabled) || (!con.type.Equals("single_dropdown2")))
                             continue;
                         con.Checked = true;
                         ConfigFormComboBox cfcb = (ConfigFormComboBox)con.configUIComponent;
@@ -1967,7 +1967,7 @@ namespace RelhaxModpack
                 //mod not checked, uncheck all the configs
                 foreach (Config cfg in m.configs)
                 {
-                    if (cfg.enabled)
+                    if (cfg.Enabled)
                     {
                         cfg.Checked = false;
                         if (cfg.configUIComponent is ConfigFormCheckBox)
@@ -2003,7 +2003,7 @@ namespace RelhaxModpack
             Config cfg = cb.config;
             Category cat = cb.catagory;
             Panel configPanel = (Panel)cb.Parent;
-            //checkbox is enabled, toggle checked and checked
+            //checkbox is Enabled, toggle checked and checked
             cfg.Checked = cb.Checked;
             //propagate the check back up if required
             if (cfg.Checked)
@@ -2056,7 +2056,7 @@ namespace RelhaxModpack
                     //select the first one and leave
                     foreach (Config c in cfg.configs)
                     {
-                        if ((c.type.Equals("single") || c.type.Equals("single1")) && c.enabled)
+                        if ((c.type.Equals("single") || c.type.Equals("single1")) && c.Enabled)
                         {
                             c.Checked = true;
                             ConfigFormRadioButton subRB = (ConfigFormRadioButton)c.configUIComponent;
@@ -2214,7 +2214,7 @@ namespace RelhaxModpack
                     //select the first one and leave
                     foreach (Config c in cfg.configs)
                     {
-                        if ((c.type.Equals("single") || c.type.Equals("single1")) && c.enabled)
+                        if ((c.type.Equals("single") || c.type.Equals("single1")) && c.Enabled)
                         {
                             c.Checked = true;
                             ConfigFormRadioButton subRB = (ConfigFormRadioButton)c.configUIComponent;

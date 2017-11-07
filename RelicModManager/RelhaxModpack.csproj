@@ -137,6 +137,7 @@
     <Compile Include="AtlasesCreator\Packing\RectanglePacker.cs" />
     <Compile Include="AtlasesCreator\Program.cs" />
     <Compile Include="DatabaseComponents\IDatabasePackage.cs" />
+    <Compile Include="DatabaseComponents\LogicalDependency.cs" />
     <Compile Include="InstallerComponents\Texture.cs" />
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="CiInfo.cs" />
@@ -245,7 +246,6 @@
     <Compile Include="UIComponents\LegacySelectionList.xaml.cs">
       <DependentUpon>LegacySelectionList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseComponents\LogicalDependnecy.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

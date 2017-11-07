@@ -20,9 +20,9 @@ namespace RelhaxModpack
         public Mod()
         {
             //by default make these false
-            enabled = false;
+            Enabled = false;
             Checked = false;
-            downloadFlag = false;
+            DownloadFlag = false;
             visible = true;
         }
         //returns the config of the specified name

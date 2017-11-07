@@ -233,13 +233,13 @@ namespace RelhaxModpack
             //edit example
             PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.saveLastServer", ".*", "nope", "edit", "", "", true);
             //advanced edit example
-            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.fields.flag.enabled", ".*", "nope", "edit", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.fields.flag.Enabled", ".*", "nope", "edit", "", "", true);
             //very advnaced edit example
-            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.extraFields[2]endIndex.enabled", ".*", "nope", "edit", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.extraFields[2]endIndex.Enabled", ".*", "nope", "edit", "", "", true);
             //very very advnaced edit example
-            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.extraFields[img://gui/maps/icons/library/proficiency/class_icons_{{v.mastery}}.png]endIndex.enabled", ".*", "nope", "edit", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "hangar.carousel.normal.extraFields[img://gui/maps/icons/library/proficiency/class_icons_{{v.mastery}}.png]endIndex.Enabled", ".*", "nope", "edit", "", "", true);
             //very very very advanced edit example
-            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "battleLabels.formats[totalHP]endIndex.enabled", ".*", "nope", "edit", "", "", true);
+            PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "battleLabels.formats[totalHP]endIndex.Enabled", ".*", "nope", "edit", "", "", true);
 
             //add example
             PatchUtils.XVMPatch(Application.StartupPath + "\\TempPatchWork\\xvm.xc", "login.saveLastServer", "", "    \"isAwesome\": yup", "add", "", "", true);
