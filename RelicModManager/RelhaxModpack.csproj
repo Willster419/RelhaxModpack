@@ -133,7 +133,6 @@
     <Compile Include="AtlasesCreator\Exporters\XmlMapExporter.cs" />
     <Compile Include="AtlasesCreator\Packing\ArevaloRectanglePacker.cs" />
     <Compile Include="AtlasesCreator\Packing\ImagePacker.cs" />
-    <Compile Include="AtlasesCreator\Packing\MiscHelper.cs" />
     <Compile Include="AtlasesCreator\Packing\OutOfSpaceException.cs" />
     <Compile Include="AtlasesCreator\Packing\RectanglePacker.cs" />
     <Compile Include="AtlasesCreator\Program.cs" />
