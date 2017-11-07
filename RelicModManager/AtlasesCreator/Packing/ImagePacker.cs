@@ -28,6 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 
 namespace RelhaxModpack.AtlasesCreator
 {
@@ -83,13 +84,16 @@ namespace RelhaxModpack.AtlasesCreator
             imageSizes.Clear();
             imagePlacement.Clear();
 
-            Installer.args.ChildProcessed++;
-            Installer.args.information = Translations.getTranslatedString("AtlasGetImageInformation");
-            Installer.InstallWorker.ReportProgress(0);
+            Installer.args.ParrentProcessed++;
+            Installer.args.ChildTotalToProcess = files.Count;
+            Installer.args.ChildProcessed = 0;
 
             // get the sizes of all the images
             foreach (var image in files)
             {
+                Installer.args.ChildProcessed++;
+                Installer.args.currentSubFile = Path.GetFileNameWithoutExtension(image);
+                Installer.InstallWorker.ReportProgress(0);
                 Bitmap bitmap = Bitmap.FromFile(image) as Bitmap;
                 if (bitmap == null)
                     return (int)FailCode.FailedToLoadImage;
@@ -115,15 +119,15 @@ namespace RelhaxModpack.AtlasesCreator
                 });
 
             // try to pack the images
-            Installer.args.ChildProcessed++;
-            Installer.args.information = Translations.getTranslatedString("AtlasCalculatePositions");
+            Installer.args.ParrentProcessed++;
+            Installer.args.ChildProcessed = 0;
             Installer.InstallWorker.ReportProgress(0);
             if (!PackImageRectangles())
                 return (int)FailCode.FailedToPackImage;
 
             // make our output image
-            Installer.args.ChildProcessed++;
-            Installer.args.information = Translations.getTranslatedString("AtlasGeneratingImageFile");
+            Installer.args.ParrentProcessed++;
+            Installer.args.ChildProcessed = 0;
             Installer.InstallWorker.ReportProgress(0);
             outputImage = CreateOutputImage();
             if (outputImage == null)
@@ -131,15 +135,18 @@ namespace RelhaxModpack.AtlasesCreator
 
             if (generateMap)
             {
-                Installer.args.ChildProcessed++;
-                Installer.args.information = Translations.getTranslatedString("AtlasGeneratingMapFile");
-                Installer.InstallWorker.ReportProgress(0);
                 // go through our image placements and replace the width/height found in there with
                 // each image's actual width/height (since the ones in imagePlacement will have padding)
                 string[] keys = new string[imagePlacement.Keys.Count];
                 imagePlacement.Keys.CopyTo(keys, 0);
+                Installer.args.ParrentProcessed++;
+                Installer.args.ChildTotalToProcess = keys.Length;
+                Installer.args.ChildProcessed = 0;
                 foreach (var k in keys)
                 {
+                    Installer.args.ChildProcessed++;
+                    Installer.args.currentFile = k;
+                    Installer.InstallWorker.ReportProgress(0);
                     // get the actual size
                     Size s = imageSizes[k];
 
@@ -190,10 +197,13 @@ namespace RelhaxModpack.AtlasesCreator
             int testHeight = outputHeight;
 
             bool shrinkVertical = false;
-
+            Installer.args.ChildTotalToProcess = -1;
+            Installer.args.ChildProcessed = 0;
             // just keep looping...
             while (true)
             {
+                Installer.args.ChildProcessed++;
+                Installer.InstallWorker.ReportProgress(0);
                 // make sure our test dictionary is empty
                 testImagePlacement.Clear();
 
@@ -278,6 +288,10 @@ namespace RelhaxModpack.AtlasesCreator
 
             foreach (var image in files)
             {
+                Installer.args.ChildProcessed++;
+                Installer.args.currentSubFile = image;
+                Installer.InstallWorker.ReportProgress(0);
+
                 // get the bitmap for this file
                 Size size = imageSizes[image];
 
@@ -300,10 +314,15 @@ namespace RelhaxModpack.AtlasesCreator
             try
             {
                 Bitmap outputImage = new Bitmap(outputWidth, outputHeight, PixelFormat.Format32bppArgb);
-
+                Installer.args.ChildTotalToProcess = files.Count;
+                Installer.args.ChildProcessed = 0;
                 // draw all the images into the output image
                 foreach (var image in files)
                 {
+                    Installer.args.ChildProcessed++;
+                    Installer.args.currentSubFile = Path.GetFileNameWithoutExtension(image);
+                    Installer.InstallWorker.ReportProgress(0);
+
                     Rectangle location = imagePlacement[image];
                     Bitmap bitmap = Bitmap.FromFile(image) as Bitmap;
                     if (bitmap == null)
