@@ -136,6 +136,7 @@
     <Compile Include="AtlasesCreator\Packing\OutOfSpaceException.cs" />
     <Compile Include="AtlasesCreator\Packing\RectanglePacker.cs" />
     <Compile Include="AtlasesCreator\Program.cs" />
+    <Compile Include="DatabaseComponents\IDatabasePackage.cs" />
     <Compile Include="InstallerComponents\Texture.cs" />
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="CiInfo.cs" />
@@ -217,7 +218,7 @@
       <DependentUpon>DatabaseListGenerater.cs</DependentUpon>
     </Compile>
     <Compile Include="DatabaseComponents\DatabaseLogic.cs" />
-    <Compile Include="DatabaseComponents\DatabaseObject.cs" />
+    <Compile Include="DatabaseComponents\SelectableDatabasePackage.cs" />
     <Compile Include="UIComponents\DatabaseTreeNode.cs" />
     <Compile Include="DatabaseComponents\Dependency.cs" />
     <Compile Include="Utils\EmbeddedAssembly.cs" />

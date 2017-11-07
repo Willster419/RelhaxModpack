@@ -42,9 +42,9 @@ namespace RelhaxModpack
         private List<Dependency> globalDependenciesToInstall;
         private List<Dependency> dependenciesToInstall;
         private List<LogicalDependnecy> logicalDependenciesToInstall;
-        private List<DatabaseObject> modsConfigsToInstall;
+        private List<SelectableDatabasePackage> modsConfigsToInstall;
         private List<Dependency> appendedDependenciesToInstall;
-        private List<DatabaseObject> ModsWithShortcuts;
+        private List<SelectableDatabasePackage> ModsWithShortcuts;
         private List<ShortCut> Shortcuts;
         //list of all current dependencies
         private List<Dependency> currentDependencies;
@@ -74,7 +74,7 @@ namespace RelhaxModpack
         float sessionDownloadSpeed = 0;
         private LoadingGifPreview gp;
         List<string> supportedVersions = new List<string>();
-        List<DatabaseObject> modsConfigsWithData;
+        List<SelectableDatabasePackage> modsConfigsWithData;
         private float scale = 1.0f;
         public static float originalMainWindowHeight { get; set; }
         public static float originalMainWindowWidth { get; set; }
@@ -887,12 +887,12 @@ namespace RelhaxModpack
             globalDependenciesToInstall = new List<Dependency>(list.globalDependencies);
             dependenciesToInstall = new List<Dependency>();
             logicalDependenciesToInstall = new List<LogicalDependnecy>();
-            modsConfigsToInstall = new List<DatabaseObject>();
+            modsConfigsToInstall = new List<SelectableDatabasePackage>();
             appendedDependenciesToInstall = new List<Dependency>();
-            modsConfigsWithData = new List<DatabaseObject>();
+            modsConfigsWithData = new List<SelectableDatabasePackage>();
             patchList = new List<Patch>();
             userMods = new List<Mod>();
-            ModsWithShortcuts = new List<DatabaseObject>();
+            ModsWithShortcuts = new List<SelectableDatabasePackage>();
             Shortcuts = new List<ShortCut>();
 
             try
@@ -1118,7 +1118,7 @@ namespace RelhaxModpack
                         }
                     }
                 }
-                foreach (DatabaseObject dbo in modsConfigsToInstall)
+                foreach (SelectableDatabasePackage dbo in modsConfigsToInstall)
                 {
                     if (dbo.shortCuts.Count > 0)
                     {
@@ -1208,31 +1208,31 @@ namespace RelhaxModpack
             {
                 if (d.downloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress) + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress) + d.zipFile + d.endAddress), Path.Combine(localFilesDir, d.zipFile)));
                 }
             }
             foreach (Dependency d in dependenciesToInstall)
             {
                 if (d.downloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress) + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress) + d.zipFile + d.endAddress), Path.Combine(localFilesDir, d.zipFile)));
                 }
             }
             foreach (Dependency d in appendedDependenciesToInstall)
             {
                 if (d.downloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress) + d.dependencyZipFile + d.endAddress), Path.Combine(localFilesDir, d.dependencyZipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.startAddress) + d.zipFile + d.endAddress), Path.Combine(localFilesDir, d.zipFile)));
                 }
             }
             foreach (LogicalDependnecy ld in logicalDependenciesToInstall)
             {
                 if (ld.downloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(ld.startAddress) + ld.dependencyZipFile + ld.endAddress), Path.Combine(localFilesDir, ld.dependencyZipFile)));
+                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(ld.startAddress) + ld.zipFile + ld.endAddress), Path.Combine(localFilesDir, ld.zipFile)));
                 }
             }
-            foreach (DatabaseObject dbo in modsConfigsToInstall)
+            foreach (SelectableDatabasePackage dbo in modsConfigsToInstall)
             {
                 if (dbo.downloadFlag)
                 {

@@ -1,16 +1,17 @@
-﻿using System;
+﻿using RelhaxModpack.DatabaseComponents;
+using System;
 using System.Collections.Generic;
 
 namespace RelhaxModpack
 {
-    public class LogicalDependnecy
+    public class LogicalDependnecy : IDatabasePackage
     {
         //the zip file of the dependency
-        public string dependencyZipFile { get; set; }
+        public string zipFile { get; set; }
         //the timestamp of last change of zipfile name 
         public long timestamp { get; set; }
         //the crc of the dependency
-        public string dependencyZipCRC { get; set; }
+        public string crc { get; set; }
         //flag to set to disable the dependency from being installed
         public bool enabled { get; set; }
         //the start address of the zip file location. enabled us to use sites that

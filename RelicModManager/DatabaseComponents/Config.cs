@@ -4,7 +4,7 @@ namespace RelhaxModpack
 {
     //a config is a configuration for a mod to make the mod function if a certain way
     //in some scenarios, the config is the mod itself
-    public class Config : DatabaseObject
+    public class Config : SelectableDatabasePackage
     {
         //can the user select multiple configs or one only?
         public string type { get; set; }
@@ -12,7 +12,7 @@ namespace RelhaxModpack
         //public List<Config> configs = new List<Config>();
         //the list of dependencies for this catagory
         //the parent of a config is a mod OR another config
-        public DatabaseObject parent { get; set; }
+        public SelectableDatabasePackage parent { get; set; }
         //the absolute top of the config levels, the parent mod
         public Mod parentMod { get; set; }
         //needed to excatly identify double packageNames and its position

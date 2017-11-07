@@ -22,7 +22,7 @@ namespace RelhaxModpack
         public List<Dependency> globalDependencies;
         public List<Dependency> dependencies;
         public List<LogicalDependnecy> logicalDependencies;
-        public List<DatabaseObject> completeModSearchList;
+        public List<SelectableDatabasePackage> completeModSearchList;
         private bool loadingConfig = false;
         private bool taskBarHidden = false;
         private const int titleBar = 23;//set origionally for 23
@@ -207,7 +207,7 @@ namespace RelhaxModpack
             }
             loadingConfig = true;
             Utils.AppendToLog("Loading ModSelectionList with view " + Settings.SView);
-            completeModSearchList = new List<DatabaseObject>();
+            completeModSearchList = new List<SelectableDatabasePackage>();
             if (modTabGroups.TabPages.Count > 0)
                 modTabGroups.TabPages.Clear();
             modTabGroups.Font = Settings.AppFont;
@@ -297,10 +297,10 @@ namespace RelhaxModpack
             {
                 //default to false, then check if it can be true
                 d.downloadFlag = false;
-                modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.dependencyZipFile);
+                modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.zipFile);
                 //get the local md5 hash. a -1 indicates the file is not on the disk
                 string oldCRC2 = XMLUtils.GetMd5Hash(modDownloadFilePath);
-                if ((!d.dependencyZipFile.Equals("")) && (!d.dependencyZipCRC.Equals(oldCRC2)))
+                if ((!d.zipFile.Equals("")) && (!d.crc.Equals(oldCRC2)))
                 {
                     d.downloadFlag = true;
                 }
@@ -310,10 +310,10 @@ namespace RelhaxModpack
             {
                 //default to false, then check if it can be true
                 d.downloadFlag = false;
-                modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.dependencyZipFile);
+                modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.zipFile);
                 //get the local md5 hash. a -1 indicates the file is not on the disk
                 string oldCRC2 = XMLUtils.GetMd5Hash(modDownloadFilePath);
-                if ((!d.dependencyZipFile.Equals("")) && (!d.dependencyZipCRC.Equals(oldCRC2)))
+                if ((!d.zipFile.Equals("")) && (!d.crc.Equals(oldCRC2)))
                 {
                     d.downloadFlag = true;
                 }
@@ -323,10 +323,10 @@ namespace RelhaxModpack
             {
                 //default to false, then check if it can be true
                 d.downloadFlag = false;
-                modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.dependencyZipFile);
+                modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.zipFile);
                 //get the local md5 hash. a -1 indicates the file is not on the disk
                 string oldCRC2 = XMLUtils.GetMd5Hash(modDownloadFilePath);
-                if ((!d.dependencyZipFile.Equals("")) && (!d.dependencyZipCRC.Equals(oldCRC2)))
+                if ((!d.zipFile.Equals("")) && (!d.crc.Equals(oldCRC2)))
                 {
                     d.downloadFlag = true;
                 }
@@ -2008,7 +2008,7 @@ namespace RelhaxModpack
             //propagate the check back up if required
             if (cfg.Checked)
             {
-                DatabaseObject obj = cfg.parent;
+                SelectableDatabasePackage obj = cfg.parent;
                 if (obj is Mod)
                 {
                     Mod parentM = (Mod)obj;
@@ -2105,7 +2105,7 @@ namespace RelhaxModpack
             if (cb.SelectedIndex != -1)
             {
                 ComboBoxItem cbi22 = (ComboBoxItem)cb.SelectedItem;
-                DatabaseObject obj = cbi22.config.parent;
+                SelectableDatabasePackage obj = cbi22.config.parent;
                 if (obj is Mod)
                 {
                     Mod parentM = (Mod)obj;
@@ -2164,7 +2164,7 @@ namespace RelhaxModpack
             //propagate the check back up if required
             if (cfg.Checked)
             {
-                DatabaseObject obj = cfg.parent;
+                SelectableDatabasePackage obj = cfg.parent;
                 if (obj is Mod)
                 {
                     Mod parentM = (Mod)obj;
@@ -2273,7 +2273,7 @@ namespace RelhaxModpack
             if (sender is UIComponent)
             {
                 UIComponent UIC = (UIComponent)sender;
-                DatabaseObject DBO = null;
+                SelectableDatabasePackage DBO = null;
                 //check if comboBox before mod or config
                 //check config before checking mod
                 if (sender is ConfigFormComboBox)
@@ -2574,12 +2574,12 @@ namespace RelhaxModpack
         {
             ComboBox searchComboBox = (ComboBox)sender;
             string filter_param = searchComboBox.Text;
-            List<DatabaseObject> filteredItems = null;
+            List<SelectableDatabasePackage> filteredItems = null;
             if (!String.IsNullOrWhiteSpace(filter_param))
             {
                 String[] filtered_parts = filter_param.Split('*');
                 //force filteredItems to be mod or first level config
-                filteredItems = new List<DatabaseObject>(completeModSearchList);
+                filteredItems = new List<SelectableDatabasePackage>(completeModSearchList);
                 foreach (var f in filtered_parts)
                 {
                     filteredItems = filteredItems.FindAll(x => x.nameFormated.ToLower().Contains(f.ToLower()));

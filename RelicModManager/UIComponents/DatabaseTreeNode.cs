@@ -11,7 +11,7 @@ namespace RelhaxModpack
         public Dependency GlobalDependency { get; set; }
         public Dependency Dependency { get; set; }
         public LogicalDependnecy LogicalDependency { get; set; }
-        public DatabaseObject DatabaseObject { get; set; }
+        public SelectableDatabasePackage DatabaseObject { get; set; }
         public Category Category { get; set; }
         public DatabaseTreeNode(Object o, int mode)
         {
@@ -50,7 +50,7 @@ namespace RelhaxModpack
                     GlobalDependency = null;
                     Dependency = null;
                     LogicalDependency = null;
-                    DatabaseObject = (DatabaseObject)o;
+                    DatabaseObject = (SelectableDatabasePackage)o;
                     Category = null;
                     this.Text = DatabaseObject.packageName;
                     break;

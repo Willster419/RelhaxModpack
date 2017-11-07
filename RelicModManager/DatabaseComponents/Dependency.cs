@@ -1,18 +1,19 @@
-﻿using System;
+﻿using RelhaxModpack.DatabaseComponents;
+using System;
 using System.Collections.Generic;
 
 namespace RelhaxModpack
 {
     //a dependency is a zip file like mod that is required for any of the mods to work
     //i.e. and sound mods require the sound memory to be increased
-    public class Dependency
+    public class Dependency : IDatabasePackage
     {
         //the zip file of the dependency
-        public string dependencyZipFile { get; set; }
+        public string zipFile { get; set; }
         //the timestamp of last change of zipfile name 
         public long timestamp { get; set; }
         //the crc of the dependency
-        public string dependencyZipCRC { get; set; }
+        public string crc { get; set; }
         //flag to set to disable the dependency from being installed
         public bool enabled { get; set; }
         //the start address of the zip file location. enabled us to use sites that

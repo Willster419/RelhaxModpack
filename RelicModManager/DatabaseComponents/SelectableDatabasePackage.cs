@@ -1,9 +1,10 @@
-﻿using System;
+﻿using RelhaxModpack.DatabaseComponents;
+using System;
 using System.Collections.Generic;
 
 namespace RelhaxModpack
 {
-    public abstract class DatabaseObject
+    public abstract class SelectableDatabasePackage : IDatabasePackage
     {
         public string name { get; set; }
         public string nameFormated

@@ -27,7 +27,7 @@ namespace RelhaxModpack
         private Dependency SelectedGlobalDependency;
         private Dependency SelectedDependency;
         private LogicalDependnecy SelectedLogicalDependency;
-        private DatabaseObject SelectedDatabaseObject;
+        private SelectableDatabasePackage SelectedDatabaseObject;
         private Category SelectedCategory;
         private int currentSelectedIndex = -1;
         // string GameVersion = ""; => changed to Settings.TanksVersion => could be accessed from ANY place of code
@@ -269,10 +269,10 @@ namespace RelhaxModpack
                 SelectedGlobalDependency.startAddress = ObjectStartAddressTB.Text;
                 SelectedGlobalDependency.endAddress = ObjectEndAddressTB.Text;
                 SelectedGlobalDependency.devURL = ObjectDevURLTB.Text;
-                if (!SelectedGlobalDependency.dependencyZipFile.Equals(ObjectZipFileTB.Text))
+                if (!SelectedGlobalDependency.zipFile.Equals(ObjectZipFileTB.Text))
                 {
-                    SelectedGlobalDependency.dependencyZipCRC = "f";
-                    SelectedGlobalDependency.dependencyZipFile = ObjectZipFileTB.Text;
+                    SelectedGlobalDependency.crc = "f";
+                    SelectedGlobalDependency.zipFile = ObjectZipFileTB.Text;
                     SelectedGlobalDependency.timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
                     ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedGlobalDependency.timestamp));
                 }
@@ -287,10 +287,10 @@ namespace RelhaxModpack
                 SelectedDependency.startAddress = ObjectStartAddressTB.Text;
                 SelectedDependency.endAddress = ObjectEndAddressTB.Text;
                 SelectedDependency.devURL = ObjectDevURLTB.Text;
-                if (!SelectedDependency.dependencyZipFile.Equals(ObjectZipFileTB.Text))
+                if (!SelectedDependency.zipFile.Equals(ObjectZipFileTB.Text))
                 {
-                    SelectedDependency.dependencyZipCRC = "f";
-                    SelectedDependency.dependencyZipFile = ObjectZipFileTB.Text;
+                    SelectedDependency.crc = "f";
+                    SelectedDependency.zipFile = ObjectZipFileTB.Text;
                     SelectedDependency.timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
                     ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedDependency.timestamp));
                 }
@@ -305,10 +305,10 @@ namespace RelhaxModpack
                 SelectedLogicalDependency.startAddress = ObjectStartAddressTB.Text;
                 SelectedLogicalDependency.endAddress = ObjectEndAddressTB.Text;
                 SelectedLogicalDependency.devURL = ObjectDevURLTB.Text;
-                if (!SelectedLogicalDependency.dependencyZipFile.Equals(ObjectZipFileTB.Text))
+                if (!SelectedLogicalDependency.zipFile.Equals(ObjectZipFileTB.Text))
                 {
-                    SelectedLogicalDependency.dependencyZipCRC = "f";
-                    SelectedLogicalDependency.dependencyZipFile = ObjectZipFileTB.Text;
+                    SelectedLogicalDependency.crc = "f";
+                    SelectedLogicalDependency.zipFile = ObjectZipFileTB.Text;
                     SelectedLogicalDependency.timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
                     ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedLogicalDependency.timestamp));
                 }
@@ -612,7 +612,7 @@ namespace RelhaxModpack
                     ObjectEndAddressTB.Text = node.GlobalDependency.endAddress;
 
                     ObjectZipFileTB.Enabled = true;
-                    ObjectZipFileTB.Text = node.GlobalDependency.dependencyZipFile;
+                    ObjectZipFileTB.Text = node.GlobalDependency.zipFile;
 
                     ObjectVersionTB.Enabled = false;
 
@@ -668,7 +668,7 @@ namespace RelhaxModpack
                     ObjectEndAddressTB.Text = SelectedDependency.endAddress;
 
                     ObjectZipFileTB.Enabled = true;
-                    ObjectZipFileTB.Text = SelectedDependency.dependencyZipFile;
+                    ObjectZipFileTB.Text = SelectedDependency.zipFile;
 
                     ObjectVersionTB.Enabled = false;
 
@@ -741,7 +741,7 @@ namespace RelhaxModpack
                     ObjectEndAddressTB.Text = SelectedLogicalDependency.endAddress;
 
                     ObjectZipFileTB.Enabled = true;
-                    ObjectZipFileTB.Text = SelectedLogicalDependency.dependencyZipFile;
+                    ObjectZipFileTB.Text = SelectedLogicalDependency.zipFile;
 
                     ObjectVersionTB.Enabled = false;
 
@@ -1123,13 +1123,13 @@ namespace RelhaxModpack
                         newDep.packageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
                         newDep.startAddress = ObjectStartAddressTB.Text;
                         newDep.endAddress = ObjectEndAddressTB.Text;
-                        newDep.dependencyZipFile = ObjectZipFileTB.Text;
+                        newDep.zipFile = ObjectZipFileTB.Text;
                         newDep.enabled = ObjectEnabledCheckBox.Checked;
                         newDep.appendExtraction = ObjectAppendExtractionCB.Checked;
                         newDep.devURL = ObjectDevURLTB.Text;
-                        newDep.dependencyZipCRC = "";
+                        newDep.crc = "";
                         if (!ObjectZipFileTB.Text.Equals(""))
-                            newDep.dependencyZipCRC = "f";
+                            newDep.crc = "f";
                         int index = GlobalDependencies.IndexOf(dba.SelectedGlobalDependency);
                         GlobalDependencies.Insert(index, newDep);
                         DisplayDatabase();
@@ -1142,13 +1142,13 @@ namespace RelhaxModpack
                         newDep.packageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
                         newDep.startAddress = ObjectStartAddressTB.Text;
                         newDep.endAddress = ObjectEndAddressTB.Text;
-                        newDep.dependencyZipFile = ObjectZipFileTB.Text;
+                        newDep.zipFile = ObjectZipFileTB.Text;
                         newDep.enabled = ObjectEnabledCheckBox.Checked;
                         newDep.appendExtraction = ObjectAppendExtractionCB.Checked;
                         newDep.devURL = ObjectDevURLTB.Text;
-                        newDep.dependencyZipCRC = "";
+                        newDep.crc = "";
                         if (!ObjectZipFileTB.Text.Equals(""))
-                            newDep.dependencyZipCRC = "f";
+                            newDep.crc = "f";
                         List<LogicalDependnecy> logicalDeps = (List<LogicalDependnecy>)ObjectLogicalDependenciesList.DataSource;
                         int index = Dependencies.IndexOf(dba.SelectedDependency);
                         Dependencies.Insert(index, newDep);
@@ -1162,12 +1162,12 @@ namespace RelhaxModpack
                         newDep.packageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
                         newDep.startAddress = ObjectStartAddressTB.Text;
                         newDep.endAddress = ObjectEndAddressTB.Text;
-                        newDep.dependencyZipFile = ObjectZipFileTB.Text;
+                        newDep.zipFile = ObjectZipFileTB.Text;
                         newDep.enabled = ObjectEnabledCheckBox.Checked;
                         newDep.devURL = ObjectDevURLTB.Text;
-                        newDep.dependencyZipCRC = "";
+                        newDep.crc = "";
                         if (!ObjectZipFileTB.Text.Equals(""))
-                            newDep.dependencyZipCRC = "f";
+                            newDep.crc = "f";
                         int index = LogicalDependencies.IndexOf(dba.SelectedLogicalDependency);
                         LogicalDependencies.Insert(index, newDep);
                         DisplayDatabase();

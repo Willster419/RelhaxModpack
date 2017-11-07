@@ -10,7 +10,7 @@ namespace RelhaxModpack
         public Dependency SelectedGlobalDependency;
         public Dependency SelectedDependency;
         public LogicalDependnecy SelectedLogicalDependency;
-        public DatabaseObject SelectedDatabaseObject;
+        public SelectableDatabasePackage SelectedDatabaseObject;
         private List<Config> configList;
         private bool ignoreResult = true;
         public bool sublist = false;

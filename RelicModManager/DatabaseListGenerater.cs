@@ -81,7 +81,7 @@ namespace RelhaxModpack
             foreach(Dependency d in globalDependencies)
             {
                 packageName = d.packageName;
-                zipfile = d.dependencyZipFile;
+                zipfile = d.zipFile;
                 enabled = d.enabled;
                 sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
             }
@@ -90,7 +90,7 @@ namespace RelhaxModpack
             foreach (Dependency d in dependencies)
             {
                 packageName = d.packageName;
-                zipfile = d.dependencyZipFile;
+                zipfile = d.zipFile;
                 enabled = d.enabled;
                 sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
             }
@@ -99,7 +99,7 @@ namespace RelhaxModpack
             foreach (LogicalDependnecy d in logicalDependencies)
             {
                 packageName = d.packageName;
-                zipfile = d.dependencyZipFile;
+                zipfile = d.zipFile;
                 enabled = d.enabled;
                 sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
             }

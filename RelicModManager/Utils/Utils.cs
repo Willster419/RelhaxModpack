@@ -344,7 +344,7 @@ namespace RelhaxModpack
                     // if both s.CheckDatabaseListIndex AND m.CheckDatabaseListIndex are equal, it is checking his own entry, so SKIP EVERY check/test
                     // if the s.dependency is FALSE, it is a single mod/config and should only exists once, if not => error/duplicate message
                     // if the s.dependency is TRUE, it is a dependecy entry and packageName AND zipFile must be checken if equal, if not => error/duplicate message
-                    if (s.CheckDatabaseListIndex != d.CheckDatabaseListIndex && ((s.PackageName.Equals(d.packageName) && !(s.Dependency)) || (s.Dependency && s.PackageName.Equals(d.packageName) && !s.ZipFile.Equals(d.dependencyZipFile))))
+                    if (s.CheckDatabaseListIndex != d.CheckDatabaseListIndex && ((s.PackageName.Equals(d.packageName) && !(s.Dependency)) || (s.Dependency && s.PackageName.Equals(d.packageName) && !s.ZipFile.Equals(d.zipFile))))
                     {
                         Utils.AppendToLog(string.Format("Error: duplicate packageName \"{0}\" found. zipFile: \"{1}\"", s.PackageName, s.ZipFile));
                         duplicatesCounter++;
@@ -381,7 +381,7 @@ namespace RelhaxModpack
             {
                 CheckStorage cs = new CheckStorage();
                 cs.PackageName = d.packageName;
-                cs.ZipFile = d.dependencyZipFile;
+                cs.ZipFile = d.zipFile;
                 cs.Dependency = true;
                 cs.CheckDatabaseListIndex = checkStorageList.Count;
                 d.CheckDatabaseListIndex = cs.CheckDatabaseListIndex;
@@ -680,23 +680,23 @@ namespace RelhaxModpack
             List<string> currentZipFiles = new List<string>();
             foreach (Dependency d in globalDependencies)
             {
-                if (!d.dependencyZipFile.Equals("") && !currentZipFiles.Contains(d.dependencyZipFile))
+                if (!d.zipFile.Equals("") && !currentZipFiles.Contains(d.zipFile))
                 {
-                    currentZipFiles.Add(d.dependencyZipFile);
+                    currentZipFiles.Add(d.zipFile);
                 }
             }
             foreach (Dependency d in dependencies)
             {
-                if (!d.dependencyZipFile.Equals("") && !currentZipFiles.Contains(d.dependencyZipFile))
+                if (!d.zipFile.Equals("") && !currentZipFiles.Contains(d.zipFile))
                 {
-                    currentZipFiles.Add(d.dependencyZipFile);
+                    currentZipFiles.Add(d.zipFile);
                 }
             }
             foreach (LogicalDependnecy d in logicalDependencies)
             {
-                if (!d.dependencyZipFile.Equals("") && !currentZipFiles.Contains(d.dependencyZipFile))
+                if (!d.zipFile.Equals("") && !currentZipFiles.Contains(d.zipFile))
                 {
-                    currentZipFiles.Add(d.dependencyZipFile);
+                    currentZipFiles.Add(d.zipFile);
                 }
             }
             foreach (Category cat in parsedCatagoryList)
@@ -736,23 +736,23 @@ namespace RelhaxModpack
             ParsedZips = new List<string>();
             foreach (Dependency d in globalDependencies)
             {
-                if (!d.dependencyZipFile.Equals("") && !ParsedZips.Contains(d.dependencyZipFile))
+                if (!d.zipFile.Equals("") && !ParsedZips.Contains(d.zipFile))
                 {
-                    ParsedZips.Add(d.dependencyZipFile);
+                    ParsedZips.Add(d.zipFile);
                 }
             }
             foreach (Dependency d in currentDependencies)
             {
-                if (!d.dependencyZipFile.Equals("") && !ParsedZips.Contains(d.dependencyZipFile))
+                if (!d.zipFile.Equals("") && !ParsedZips.Contains(d.zipFile))
                 {
-                    ParsedZips.Add(d.dependencyZipFile);
+                    ParsedZips.Add(d.zipFile);
                 }
             }
             foreach (LogicalDependnecy d in currentLogicalDependencies)
             {
-                if (!d.dependencyZipFile.Equals("") && !ParsedZips.Contains(d.dependencyZipFile))
+                if (!d.zipFile.Equals("") && !ParsedZips.Contains(d.zipFile))
                 {
-                    ParsedZips.Add(d.dependencyZipFile);
+                    ParsedZips.Add(d.zipFile);
                 }
             }
             foreach (Category cat in parsedCatagoryList)
