@@ -1472,6 +1472,48 @@ namespace RelhaxModpack
             polish.Add("userPatchingFile", "Aktualizowanie plików użytkownika");
             french.Add("userPatchingFile", "Fichier utilisateur patch");
 
+            //Component: ExtractAtlases
+            english.Add("AtlasExtraction", "Extracting Atlas file");
+            german.Add("AtlasExtraction", "Entpacke Atlas Datei");
+            polish.Add("AtlasExtraction", "TODO");
+            french.Add("AtlasExtraction", "TODO");
+
+            //Component: ExtractAtlases
+            english.Add("AtlasTextur", "Texture");
+            german.Add("AtlasTextur", "Textur");
+            polish.Add("AtlasTextur", "TODO");
+            french.Add("AtlasTextur", "TODO");
+
+            //Component: CreatingAtlases
+            english.Add("AtlasCreating", "Creating Atlas file");
+            german.Add("AtlasCreating", "Erstelle Atlas Datei");
+            polish.Add("AtlasCreating", "TODO");
+            french.Add("AtlasCreating", "TODO");
+
+            //Component: CreatingAtlases
+            english.Add("AtlasGetImageInformation", "get Image informations");
+            german.Add("AtlasGetImageInformation", "hole Bildinformationen");
+            polish.Add("AtlasGetImageInformation", "TODO");
+            french.Add("AtlasGetImageInformation", "TODO");
+            
+            //Component: CreatingAtlases
+            english.Add("AtlasCalculatePositions", "calculate Image positions");
+            german.Add("AtlasCalculatePositions", "berechne Bild Positionen");
+            polish.Add("AtlasCalculatePositions", "TODO");
+            french.Add("AtlasCalculatePositions", "TODO");
+
+            //Component: CreatingAtlases
+            english.Add("AtlasGeneratingImageFile", "generating Atlas Image file");
+            german.Add("AtlasGeneratingImageFile", "erstelle Atlas Bilddatei");
+            polish.Add("AtlasGeneratingImageFile", "TODO");
+            french.Add("AtlasGeneratingImageFile", "TODO");
+
+            //Component: CreatingAtlases
+            english.Add("AtlasGeneratingMapFile", "generating Atlas Map file");
+            german.Add("AtlasGeneratingMapFile", "erstelle Atlas Positionsdatei");
+            polish.Add("AtlasGeneratingMapFile", "TODO");
+            french.Add("AtlasGeneratingMapFile", "TODO");
+
             //Componet: installingUserFonts
             //
             english.Add("installingUserFonts", "Installing user fonts");
@@ -1556,7 +1598,7 @@ namespace RelhaxModpack
             //Component: MainTextBox
             //
             english.Add("MainTextBox", "You can use the options below to try to diagnose or solve the issues you are having.");
-            german.Add("MainTextBox", "TODO");
+            german.Add("MainTextBox", "Du kannst mit den untenstehenden Optionen Probleme mit dem Spiel zu diagnostizieren und ggf. zu beheben.");
             polish.Add("MainTextBox", "TODO");
             french.Add("MainTextBox", "TODO");
 
