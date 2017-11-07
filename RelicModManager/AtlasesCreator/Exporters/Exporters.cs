@@ -55,16 +55,18 @@ namespace RelhaxModpack.AtlasesCreator
             string[] dlls = Directory.GetFiles(dir, "*.dll", SearchOption.TopDirectoryOnly);
             foreach (string file in dlls)
             {
-                try { FindExporters(Assembly.LoadFile(file)); }
+            try { FindExporters(Assembly.LoadFile(file)); }
                 catch {  }
             }
         }
 
         private static void FindExporters(Assembly assembly)
         {
+            string Namespace = MethodBase.GetCurrentMethod().DeclaringType.Namespace;
+            
             foreach (Type type in assembly.GetTypes())
             {
-                if (!type.IsAbstract && type.IsClass)
+                if (!type.IsAbstract && type.IsClass && type.Namespace != null && type.Namespace.ToString().Equals(Namespace))
                 {
                     try
                     {

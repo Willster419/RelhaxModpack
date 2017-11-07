@@ -42,16 +42,16 @@ namespace RelhaxModpack.AtlasesCreator
         {
             using (StreamWriter writer = new StreamWriter(filename))
             {
-                writer.WriteLine("<root createdBy=\"Relhax ModPack Manager\" date=\"{0:yyyy-MM-dd HH:mm:ss.fff}\"", System.DateTime.Now);
+                writer.WriteLine("<root createdBy=\"Relhax ModPack Manager\" date=\"{0:yyyy-MM-dd HH:mm:ss.fff}\">", System.DateTime.Now);
                 foreach (var entry in map)
                 {
                     Rectangle r = entry.Value;
                     writer.WriteLine(string.Format("\t<SubTexture>"));
                     writer.WriteLine(string.Format("\t\t<name> {0} </name>", Path.GetFileNameWithoutExtension(entry.Key)));
-                    writer.WriteLine(string.Format("\t\t<x> {0} </x>", Path.GetFileNameWithoutExtension(entry.Key)));
-                    writer.WriteLine(string.Format("\t\t<y> {0} </y>", Path.GetFileNameWithoutExtension(entry.Key)));
-                    writer.WriteLine(string.Format("\t\t<width> {0} </width>", Path.GetFileNameWithoutExtension(entry.Key)));
-                    writer.WriteLine(string.Format("\t\t<height> {0} </height>", Path.GetFileNameWithoutExtension(entry.Key)));
+                    writer.WriteLine(string.Format("\t\t<x> {0} </x>", r.X));
+                    writer.WriteLine(string.Format("\t\t<y> {0} </y>", r.Y));
+                    writer.WriteLine(string.Format("\t\t<width> {0} </width>", r.Width));
+                    writer.WriteLine(string.Format("\t\t<height> {0} </height>", r.Height));
                     writer.WriteLine(string.Format("\t</SubTexture>"));
                 }
                 writer.WriteLine("</root>");
