@@ -1180,11 +1180,12 @@ namespace RelhaxModpack
                     //add jobs to CreateAtlasesList
                     CreateAtlasesList(diArr[i].FullName);
                 }
-                
+                Installer.args.ParrentTotalToProcess = atlasesList.Count;
                 foreach (Atlases a in atlasesList)
                 {
                     try
                     {
+                        Installer.args.ParrentProcessed++;
                         if (!Directory.Exists(a.atlasSaveDirectory)) Directory.CreateDirectory(a.atlasSaveDirectory);
                         Utils.AppendToInstallLog(Path.Combine(a.atlasSaveDirectory));
                         if (!Directory.Exists(a.workingFolder)) Directory.CreateDirectory(a.workingFolder); 

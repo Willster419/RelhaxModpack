@@ -1453,19 +1453,23 @@ namespace RelhaxModpack
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractAtlases)
             {
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractAtlases;
-                childProgressBar.Value = 0;
-                parrentProgressBar.Maximum = e.ChildTotalToProcess;
-                if ((parrentProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= parrentProgressBar.Maximum))
-                    parrentProgressBar.Value = e.ChildProcessed;
+                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
+                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
+                    parrentProgressBar.Value = e.ParrentProcessed;
+                childProgressBar.Maximum = e.ChildTotalToProcess;
+                if (e.ChildProcessed > 0)
+                    childProgressBar.Value = e.ChildProcessed;
                 message = string.Format("{0}: {1}\n{2}: {3}\n{4} {5} {6}", Translations.getTranslatedString("AtlasExtraction"), e.information, Translations.getTranslatedString("AtlasTextur"), e.currentFile, e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.CreateAtlases)
             {
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.CreateAtlases;
-                childProgressBar.Value = 0;
-                parrentProgressBar.Maximum = e.ChildTotalToProcess;
-                if ((parrentProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= parrentProgressBar.Maximum))
-                    parrentProgressBar.Value = e.ChildProcessed;
+                parrentProgressBar.Maximum = e.ParrentTotalToProcess;
+                if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
+                    parrentProgressBar.Value = e.ParrentProcessed;
+                childProgressBar.Maximum = e.ChildTotalToProcess;
+                if (e.ChildProcessed > 0)
+                    childProgressBar.Value = e.ChildProcessed;
                 message = string.Format("{0}: {1}\n{2}", Translations.getTranslatedString("AtlasCreating"), e.currentFile, e.information);
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.InstallUserFonts)
