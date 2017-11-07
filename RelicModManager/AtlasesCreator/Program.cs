@@ -30,7 +30,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Diagnostics;
 
 namespace RelhaxModpack.AtlasesCreator
@@ -54,7 +53,7 @@ namespace RelhaxModpack.AtlasesCreator
     {
         private static readonly Stopwatch stopWatch = new Stopwatch();
 
-        public static void Main(AtlasesArgs args)
+        public static void Run(AtlasesArgs args)
         {
             stopWatch.Reset();
             stopWatch.Start();
@@ -62,11 +61,10 @@ namespace RelhaxModpack.AtlasesCreator
             try
             {
                 result = Launch(args);
-
             }
             catch (Exception ex)
             {
-                Utils.ExceptionLog("Main", "Launch", ex);
+                Utils.ExceptionLog("AtlasesCreator.Run", "Launch", ex);
             }
             stopWatch.Stop();
             
@@ -79,15 +77,17 @@ namespace RelhaxModpack.AtlasesCreator
 
         private static int Launch(AtlasesArgs args)
         {
-
-            // ProgramArguments arguments = ProgramArguments.Parse(args);
-
             if (args.ImageFile.Equals(""))
             {
                 return (int)FailCode.FailedParsingArguments;
             }
             else
             {
+                Installer.args.currentFile = Path.GetFileNameWithoutExtension(args.ImageFile);
+                Installer.args.ChildTotalToProcess = args.GenerateMap ? 4 : 3;
+                Installer.args.ChildProcessed = 0;
+                Installer.args.information = "";
+                Installer.InstallWorker.ReportProgress(0);
                 // make sure we have our list of exporters
                 Exporters.Load();
 
@@ -129,22 +129,6 @@ namespace RelhaxModpack.AtlasesCreator
                         return (int)FailCode.MapExporter;
                     }
                 }
-
-                /*
-                // compile a list of images
-                List<string> images = new List<string>();
-                FindImages(arguments, images);*/
-
-                /*
-                foreach (var str in inputFiles)
-                {
-                    if (MiscHelper.IsImageFile(str))
-                    {
-                        images.Add(str);
-                    }
-                } */
-
-
 
                 // make sure we found some images
                 if (args.Images.Count == 0)
@@ -192,6 +176,7 @@ namespace RelhaxModpack.AtlasesCreator
                     if (File.Exists(args.ImageFile))
                         File.Delete(args.ImageFile);
                     imageExporter.Save(args.ImageFile, outputImage);
+                    Utils.AppendToInstallLog(args.ImageFile);
                 }
                 catch (Exception e)
                 {
@@ -206,6 +191,7 @@ namespace RelhaxModpack.AtlasesCreator
                         if (File.Exists(args.MapFile))
                             File.Delete(args.MapFile);
                         mapExporter.Save(args.MapFile, outputMap);
+                        Utils.AppendToInstallLog(args.MapFile);
                     }
                     catch (Exception e)
                     {
@@ -238,35 +224,5 @@ namespace RelhaxModpack.AtlasesCreator
         {
             Utils.AppendToLog("AtlasesCreator: " + error);
         }
-
-        /*
-        private static void FindImages(ProgramArguments arguments, List<string> images)
-        {
-            List<string> inputFiles = new List<string>();
-
-            if (!string.IsNullOrEmpty(arguments.il))
-            {
-                using (StreamReader reader = new StreamReader(arguments.il))
-                {
-                    while (!reader.EndOfStream)
-                    {
-                        inputFiles.Add(reader.ReadLine());
-                    }
-                }
-            }
-
-            if (arguments.input != null)
-            {
-                inputFiles.AddRange(arguments.input);
-            }
-
-            foreach (var str in inputFiles)
-            {
-                if (MiscHelper.IsImageFile(str))
-                {
-                    images.Add(str);
-                }
-            }
-        }*/
     }
 }

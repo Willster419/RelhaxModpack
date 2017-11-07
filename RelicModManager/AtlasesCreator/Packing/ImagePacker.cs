@@ -83,6 +83,10 @@ namespace RelhaxModpack.AtlasesCreator
             imageSizes.Clear();
             imagePlacement.Clear();
 
+            Installer.args.ChildProcessed++;
+            Installer.args.information = Translations.getTranslatedString("AtlasGetImageInformation");
+            Installer.InstallWorker.ReportProgress(0);
+
             // get the sizes of all the images
             foreach (var image in files)
             {
@@ -111,16 +115,25 @@ namespace RelhaxModpack.AtlasesCreator
                 });
 
             // try to pack the images
+            Installer.args.ChildProcessed++;
+            Installer.args.information = Translations.getTranslatedString("AtlasCalculatePositions");
+            Installer.InstallWorker.ReportProgress(0);
             if (!PackImageRectangles())
                 return (int)FailCode.FailedToPackImage;
 
             // make our output image
+            Installer.args.ChildProcessed++;
+            Installer.args.information = Translations.getTranslatedString("AtlasGeneratingImageFile");
+            Installer.InstallWorker.ReportProgress(0);
             outputImage = CreateOutputImage();
             if (outputImage == null)
                 return (int)FailCode.FailedToSaveImage;
 
             if (generateMap)
             {
+                Installer.args.ChildProcessed++;
+                Installer.args.information = Translations.getTranslatedString("AtlasGeneratingMapFile");
+                Installer.InstallWorker.ReportProgress(0);
                 // go through our image placements and replace the width/height found in there with
                 // each image's actual width/height (since the ones in imagePlacement will have padding)
                 string[] keys = new string[imagePlacement.Keys.Count];
