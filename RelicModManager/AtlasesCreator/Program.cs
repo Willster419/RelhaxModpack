@@ -176,6 +176,7 @@ namespace RelhaxModpack.AtlasesCreator
                     if (File.Exists(args.ImageFile))
                         File.Delete(args.ImageFile);
                     imageExporter.Save(args.ImageFile, outputImage);
+                    Utils.AppendToInstallLog(@"/*  created Atlases  */");
                     Utils.AppendToInstallLog(args.ImageFile);
                 }
                 catch (Exception e)
