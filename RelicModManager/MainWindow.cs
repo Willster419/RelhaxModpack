@@ -11,6 +11,7 @@ using Microsoft.Win32;
 using System.Drawing;
 using System.Xml.XPath;
 using System.Xml.Linq;
+using RelhaxModpack.DatabaseComponents;
 
 namespace RelhaxModpack
 {
@@ -28,8 +29,7 @@ namespace RelhaxModpack
         private string appDataFolder;
         //the string representation from the xml document manager_version.xml. also passed into the installer for logging the version of the database installed at that time
         private string databaseVersionString;
-        //queue for downloading mods
-        private List<DownloadItem> downloadQueue;
+        
         //where all the downloaded mods are placed
         public static string downloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads");
         public static string md5HashDatabaseXmlFile = Path.Combine(downloadPath, "MD5HashDatabase.xml");
@@ -38,6 +38,8 @@ namespace RelhaxModpack
         Stopwatch sw = new Stopwatch();
         //The list of all mods
         private List<Category> parsedCatagoryLists;
+        //queue for downloading mods
+        private List<IDatabasePackage> DatabasePackagesToDownload;
         //The ordered lists to install
         private List<Dependency> globalDependenciesToInstall;
         private List<Dependency> dependenciesToInstall;
@@ -45,7 +47,7 @@ namespace RelhaxModpack
         private List<SelectableDatabasePackage> modsConfigsToInstall;
         private List<Dependency> appendedDependenciesToInstall;
         private List<SelectableDatabasePackage> ModsWithShortcuts;
-        private List<ShortCut> Shortcuts;
+        private List<Shortcut> Shortcuts;
         //list of all current dependencies
         private List<Dependency> currentDependencies;
         private List<LogicalDependency> currentLogicalDependencies;
@@ -199,14 +201,17 @@ namespace RelhaxModpack
                     return;
                 }
             }
-            if (downloadQueue.Count != 0)
+            if (DatabasePackagesToDownload.Count != 0)
             {
+                AsyncDownloadArgs args = new AsyncDownloadArgs();
+                args.url = new Uri(Utils.ReplaceMacro(DatabasePackagesToDownload[0].StartAddress) + DatabasePackagesToDownload[0].ZipFile + DatabasePackagesToDownload[0].EndAddress);
+                args.zipFile = Path.Combine(downloadPath,DatabasePackagesToDownload[0].ZipFile);
                 totalProgressBar.Maximum = (int)InstallerEventArgs.InstallProgress.Done;
                 totalProgressBar.Value = 1;
                 cancelDownloadButton.Enabled = true;
                 cancelDownloadButton.Visible = true;
                 //for the next file in the queue, delete it.
-                if (File.Exists(downloadQueue[0].zipFile)) File.Delete(downloadQueue[0].zipFile);
+                if (File.Exists(args.zipFile)) File.Delete(args.zipFile);
                 //download new zip file
                 if (downloader != null)
                     downloader.Dispose();
@@ -220,22 +225,15 @@ namespace RelhaxModpack
                 actualTimeRemain = 0;
                 sw.Reset();
                 sw.Start();
-                AsyncDownloadArgs args = new AsyncDownloadArgs();
-                args.url = downloadQueue[0].URL;
-                args.zipFile = downloadQueue[0].zipFile;
                 downloader.DownloadFileAsync(args.url, args.zipFile, args);
                 Utils.AppendToLog("downloading " + Path.GetFileName(args.zipFile));
                 currentModDownloading = Path.GetFileNameWithoutExtension(args.zipFile);
-                if (currentModDownloading.Length >= 200)
-                {
-                    currentModDownloading = Path.GetFileNameWithoutExtension(args.zipFile).Substring(0, 23) + "...";
-                }
-                downloadQueue.RemoveAt(0);
+                DatabasePackagesToDownload.RemoveAt(0);
                 if ((parrentProgressBar.Value + 1) <= parrentProgressBar.Maximum)
                     parrentProgressBar.Value++;
                 return;
             }
-            if (downloadQueue.Count == 0)
+            if (DatabasePackagesToDownload.Count == 0)
             {
                 cancelDownloadButton.Enabled = false;
                 cancelDownloadButton.Visible = false;
@@ -893,7 +891,8 @@ namespace RelhaxModpack
             patchList = new List<Patch>();
             userMods = new List<Mod>();
             ModsWithShortcuts = new List<SelectableDatabasePackage>();
-            Shortcuts = new List<ShortCut>();
+            Shortcuts = new List<Shortcut>();
+            DatabasePackagesToDownload = new List<IDatabasePackage>();
 
             try
             {
@@ -901,7 +900,7 @@ namespace RelhaxModpack
                 foreach (Category c in parsedCatagoryLists)
                 {
                     //will itterate through every catagory once
-                    foreach (Mod m in c.mods)
+                    foreach (Mod m in c.Mods)
                     {
                         //will itterate through every mod of every catagory once
                         if (m.Enabled && m.Checked)
@@ -912,11 +911,11 @@ namespace RelhaxModpack
                                 modsConfigsToInstall.Add(m);
 
                             //since it is checked, regardless if it has a zipfile, check if it has userdata
-                            if (m.userFiles.Count > 0)
+                            if (m.UserFiles.Count > 0)
                                 modsConfigsWithData.Add(m);
 
                             //if it has shortcuts to create, add them to the list here
-                            if (m.shortCuts.Count > 0)
+                            if (m.ShortCuts.Count > 0)
                                 ModsWithShortcuts.Add(m);
 
                             //check for configs
@@ -924,12 +923,12 @@ namespace RelhaxModpack
                                 ProcessConfigs(m.configs);
 
                             //at least one mod of this catagory is checked, add any dependenciesToInstall required
-                            if (c.dependencies.Count > 0)
-                                processDependencies(c.dependencies);
+                            if (c.Dependencies.Count > 0)
+                                processDependencies(c.Dependencies);
 
                             //check dependency is Enabled and has a zip file with it
-                            if (m.dependencies.Count > 0)
-                                processDependencies(m.dependencies);
+                            if (m.Dependencies.Count > 0)
+                                processDependencies(m.Dependencies);
                         }
                     }
                 }
@@ -946,7 +945,7 @@ namespace RelhaxModpack
                 {
                     foreach (Dependency depD in currentDependencies)
                     {
-                        foreach (LogicalDependency ld in depD.logicalDependencies)
+                        foreach (LogicalDependency ld in depD.LogicalDependencies)
                         {
                             if (ld.PackageName.Equals(d.PackageName))
                             {
@@ -955,7 +954,7 @@ namespace RelhaxModpack
                                     PackageName = depD.PackageName,
                                     Enabled = depD.Enabled,
                                     Checked = dependenciesToInstall.Contains(depD),
-                                    NotFlag = ld.negateFlag
+                                    NotFlag = ld.NegateFlag
                                 };
                                 d.DatabasePackageLogic.Add(dbl);
                             }
@@ -968,9 +967,9 @@ namespace RelhaxModpack
                         foreach (Category c in parsedCatagoryLists)
                         {
                             //will itterate through every catagory once
-                            foreach (Mod m in c.mods)
+                            foreach (Mod m in c.Mods)
                             {
-                                foreach (LogicalDependency ld in m.logicalDependencies)
+                                foreach (LogicalDependency ld in m.LogicalDependencies)
                                 {
                                     if (ld.PackageName.Equals(d.PackageName))
                                     {
@@ -979,7 +978,7 @@ namespace RelhaxModpack
                                             PackageName = m.PackageName,
                                             Enabled = m.Enabled,
                                             Checked = m.Checked,
-                                            NotFlag = ld.negateFlag
+                                            NotFlag = ld.NegateFlag
                                         };
                                         d.DatabasePackageLogic.Add(dbl);
                                     }
@@ -1083,9 +1082,9 @@ namespace RelhaxModpack
                 {
                     if (d.shortCuts.Count > 0)
                     {
-                        foreach (ShortCut sc in d.shortCuts)
+                        foreach (Shortcut sc in d.shortCuts)
                         {
-                            if (sc.enabled)
+                            if (sc.Enabled)
                             {
                                 Shortcuts.Add(sc);
                             }
@@ -1096,9 +1095,9 @@ namespace RelhaxModpack
                 {
                     if (d.shortCuts.Count > 0)
                     {
-                        foreach (ShortCut sc in d.shortCuts)
+                        foreach (Shortcut sc in d.shortCuts)
                         {
-                            if (sc.enabled)
+                            if (sc.Enabled)
                             {
                                 Shortcuts.Add(sc);
                             }
@@ -1107,11 +1106,11 @@ namespace RelhaxModpack
                 }
                 foreach (LogicalDependency ld in logicalDependenciesToInstall)
                 {
-                    if (ld.shortCuts.Count > 0)
+                    if (ld.Shortcuts.Count > 0)
                     {
-                        foreach (ShortCut sc in ld.shortCuts)
+                        foreach (Shortcut sc in ld.Shortcuts)
                         {
-                            if (sc.enabled)
+                            if (sc.Enabled)
                             {
                                 Shortcuts.Add(sc);
                             }
@@ -1120,11 +1119,11 @@ namespace RelhaxModpack
                 }
                 foreach (SelectableDatabasePackage dbo in modsConfigsToInstall)
                 {
-                    if (dbo.shortCuts.Count > 0)
+                    if (dbo.ShortCuts.Count > 0)
                     {
-                        foreach (ShortCut sc in dbo.shortCuts)
+                        foreach (Shortcut sc in dbo.ShortCuts)
                         {
-                            if (sc.enabled)
+                            if (sc.Enabled)
                             {
                                 Shortcuts.Add(sc);
                             }
@@ -1142,7 +1141,7 @@ namespace RelhaxModpack
             {
                 for (int i = 0; i < globalDependenciesToInstall.Count; i++)
                 {
-                    if (globalDependenciesToInstall[i].appendExtraction)
+                    if (globalDependenciesToInstall[i].AppendExtraction)
                     {
                         appendedDependenciesToInstall.Add(globalDependenciesToInstall[i]);
                         globalDependenciesToInstall.RemoveAt(i);
@@ -1151,7 +1150,7 @@ namespace RelhaxModpack
                 }
                 for (int i = 0; i < dependenciesToInstall.Count; i++)
                 {
-                    if (dependenciesToInstall[i].appendExtraction)
+                    if (dependenciesToInstall[i].AppendExtraction)
                     {
                         appendedDependenciesToInstall.Add(dependenciesToInstall[i]);
                         dependenciesToInstall.RemoveAt(i);
@@ -1180,9 +1179,6 @@ namespace RelhaxModpack
                 Utils.ExceptionLog("installRelhaxMod_Click", "check for any user mods to install", ex);
             }
 
-            //create a new download queue. even if not downloading any
-            //relhax modpack mods, still used in downloader code
-            downloadQueue = new List<DownloadItem>();
             //check that we will actually install something
             if (modsConfigsToInstall.Count == 0 && userMods.Count == 0)
             {
@@ -1202,34 +1198,32 @@ namespace RelhaxModpack
                 logicalDependenciesToInstall.Clear();
                 appendedDependenciesToInstall.Clear();
             }
-            //foreach mod and config and dependnecy, if the CRC's don't match, add it to the downloadQueue
-            string localFilesDir = Path.Combine(Application.StartupPath, "RelHaxDownloads");
             foreach (Dependency d in globalDependenciesToInstall)
             {
                 if (d.DownloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.StartAddress) + d.ZipFile + d.EndAddress), Path.Combine(localFilesDir, d.ZipFile)));
+                    DatabasePackagesToDownload.Add(d);
                 }
             }
             foreach (Dependency d in dependenciesToInstall)
             {
                 if (d.DownloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.StartAddress) + d.ZipFile + d.EndAddress), Path.Combine(localFilesDir, d.ZipFile)));
+                    DatabasePackagesToDownload.Add(d);
                 }
             }
             foreach (Dependency d in appendedDependenciesToInstall)
             {
                 if (d.DownloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(d.StartAddress) + d.ZipFile + d.EndAddress), Path.Combine(localFilesDir, d.ZipFile)));
+                    DatabasePackagesToDownload.Add(d);
                 }
             }
             foreach (LogicalDependency ld in logicalDependenciesToInstall)
             {
                 if (ld.DownloadFlag)
                 {
-                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(ld.StartAddress) + ld.ZipFile + ld.EndAddress), Path.Combine(localFilesDir, ld.ZipFile)));
+                    DatabasePackagesToDownload.Add(ld);
                 }
             }
             foreach (SelectableDatabasePackage dbo in modsConfigsToInstall)
@@ -1237,13 +1231,11 @@ namespace RelhaxModpack
                 if (dbo.DownloadFlag)
                 {
                     //CRC's don't match, need to re-download
-                    downloadQueue.Add(new DownloadItem(new Uri(Utils.ReplaceMacro(dbo.StartAddress) + dbo.ZipFile + dbo.EndAddress), Path.Combine(localFilesDir, dbo.ZipFile)));
+                    DatabasePackagesToDownload.Add(dbo);
                 }
             }
-
-            //reset the progress bars
-            parrentProgressBar.Maximum = downloadQueue.Count;
-            childProgressBar.Maximum = 100;
+            //upadte the parrentProgressPar
+            parrentProgressBar.Maximum = DatabasePackagesToDownload.Count;
             //at this point, there may be user mods selected,
             //and there is at least one mod to extract
             downloader_DownloadFileCompleted(null, null);
@@ -1264,11 +1256,11 @@ namespace RelhaxModpack
                         modsConfigsToInstall.Add(config);
 
                     //check for userdata
-                    if (config.userFiles.Count > 0)
+                    if (config.UserFiles.Count > 0)
                         modsConfigsWithData.Add(config);
 
                     //check for shortcuts
-                    if (config.shortCuts.Count > 0)
+                    if (config.ShortCuts.Count > 0)
                         ModsWithShortcuts.Add(config);
 
                     //check for configs
@@ -1276,8 +1268,8 @@ namespace RelhaxModpack
                         ProcessConfigs(config.configs);
 
                     //check for dependencies
-                    if (config.dependencies.Count > 0)
-                        processDependencies(config.dependencies);
+                    if (config.Dependencies.Count > 0)
+                        processDependencies(config.Dependencies);
                 }
             }
         }
@@ -1286,7 +1278,7 @@ namespace RelhaxModpack
         {
             foreach (Config config in configList)
             {
-                foreach (LogicalDependency ld in config.logicalDependencies)
+                foreach (LogicalDependency ld in config.LogicalDependencies)
                 {
                     if (ld.PackageName.Equals(d.PackageName))
                     {
@@ -1295,7 +1287,7 @@ namespace RelhaxModpack
                             PackageName = config.PackageName,
                             Enabled = config.Enabled,
                             Checked = config.Checked,
-                            NotFlag = ld.negateFlag
+                            NotFlag = ld.NegateFlag
                         };
                         d.DatabasePackageLogic.Add(dl);
                     }
@@ -1527,7 +1519,7 @@ namespace RelhaxModpack
                 logicalDependenciesToInstall = null;
                 appendedDependenciesToInstall = null;
                 modsConfigsToInstall = null;
-                downloadQueue = null;
+                DatabasePackagesToDownload = null;
                 parsedCatagoryLists = null;
                 patchList = null;
                 userMods = null;
@@ -1612,15 +1604,6 @@ namespace RelhaxModpack
         //applies all settings from static settings class to this form
         private void applySettings(bool init = false)
         {
-            //set tooltips
-            string text = Translations.getTranslatedString("mainFormToolTip");
-            Control[] toolTipSetList = new Control[] { forceManuel, cleanInstallCB, backupModsCheckBox, cancerFontCB, saveLastInstallCB, saveUserDataCB, darkUICB,
-                languageSelectionGB, fontSizeGB, selectionDefault, selectionLegacy, disableBordersCB, disableColorsCB, clearCacheCB, clearLogFilesCB, viewAppUpdates, ShowInstallCompleteWindowCB,
-                notifyIfSameDatabaseCB, standardImageRB, thirdGuardsLoadingImageRB, fontSize100, DPI100 };
-            foreach (var set in toolTipSetList)
-            {
-                this.toolTip.SetToolTip(set, text);
-            }
             //set translation text
             Control[] translationSetList = new Control[] { forceManuel, cleanInstallCB, backupModsCheckBox, cancerFontCB, saveLastInstallCB, saveUserDataCB, darkUICB,
                 installRelhaxMod, uninstallRelhaxMod, settingsGroupBox,loadingImageGroupBox, languageSelectionGB, findBugAddModLabel, formPageLink, selectionDefault, selectionLegacy, donateLabel,
@@ -1756,18 +1739,6 @@ namespace RelhaxModpack
             darkUICB.Enabled = enableToggle;
             saveUserDataCB.Enabled = enableToggle;
             saveLastInstallCB.Enabled = enableToggle;
-            /*
-            fontSize100.Enabled = enableToggle;
-            fontSize125.Enabled = enableToggle;
-            fontSize175.Enabled = enableToggle;
-            fontSize225.Enabled = enableToggle;
-            fontSize275.Enabled = enableToggle;
-            DPI100.Enabled = enableToggle;
-            DPI125.Enabled = enableToggle;
-            DPI175.Enabled = enableToggle;
-            DPI225.Enabled = enableToggle;
-            DPI275.Enabled = enableToggle;
-            */
             ToggleScaleRBs(enableToggle);
             DPIAUTO.Enabled = enableToggle;
             clearCacheCB.Enabled = enableToggle;
@@ -2483,18 +2454,4 @@ namespace RelhaxModpack
 
 
     }
-    #region DownloadItem class definition
-    //a class for the downloadQueue list, to make a queue of downloads
-    class DownloadItem
-    {
-        public Uri URL { get; set; }
-        public string zipFile { get; set; }
-        //create a DownloadItem with the 2 properties set
-        public DownloadItem(Uri newURL, String newZipFile)
-        {
-            URL = newURL;
-            zipFile = newZipFile;
-        }
-    }
-    #endregion
 }

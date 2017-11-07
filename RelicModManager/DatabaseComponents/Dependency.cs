@@ -27,10 +27,10 @@ namespace RelhaxModpack
         //needed to excatly identify double packageNames and its position
         public int CheckDatabaseListIndex { get; set; }
         //property to determine if it will be installed in the beginning or in the end
-        public bool appendExtraction;
-        public List<LogicalDependency> logicalDependencies = new List<LogicalDependency>();
-        public string devURL { get; set; }
-        public List<ShortCut> shortCuts = new List<ShortCut>();
+        public bool AppendExtraction;
+        public List<LogicalDependency> LogicalDependencies = new List<LogicalDependency>();
+        public string DevURL { get; set; }
+        public List<Shortcut> shortCuts = new List<Shortcut>();
         public Dependency() { }
         //for the tostring thing
         public override string ToString()

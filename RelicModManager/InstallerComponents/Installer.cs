@@ -38,7 +38,7 @@ namespace RelhaxModpack
         public List<SelectableDatabasePackage> ModsConfigsToInstall { get; set; }
         public List<SelectableDatabasePackage> ModsConfigsWithData { get; set; }
         public List<Mod> UserMods { get; set; }
-        public List<ShortCut> Shortcuts { get; set; }
+        public List<Shortcut> Shortcuts { get; set; }
         private List<Patch> patchList { get; set; }
         private List<XmlUnpack> xmlUnpackList { get; set; }
         private List<Atlases> atlasesList { get; set; }
@@ -338,7 +338,7 @@ namespace RelhaxModpack
                 {
                     try
                     {
-                        foreach (string s in dbo.userFiles)
+                        foreach (string s in dbo.UserFiles)
                         {
                             try
                             {
@@ -348,7 +348,7 @@ namespace RelhaxModpack
                                 string[] fileList = Directory.GetFiles(folderPath, Path.GetFileName(correctedPath));   // use the GetFileName(correctedPath) as a search pattern, to only get wanted files
                                 foreach (string startLoc in fileList)
                                 {
-                                    string destLoc = Path.Combine(Application.StartupPath, "RelHaxTemp", Utils.GetValidFilename(dbo.name + "_") + Path.GetFileName(startLoc));
+                                    string destLoc = Path.Combine(Application.StartupPath, "RelHaxTemp", Utils.GetValidFilename(dbo.Name + "_") + Path.GetFileName(startLoc));
                                     try
                                     {
                                         if (File.Exists(@startLoc))
@@ -881,15 +881,15 @@ namespace RelhaxModpack
                 {
                     try
                     {
-                        args.ChildTotalToProcess = dbo.userFiles.Count;
-                        foreach (string s in dbo.userFiles)
+                        args.ChildTotalToProcess = dbo.UserFiles.Count;
+                        foreach (string s in dbo.UserFiles)
                         {
                             try {
                                 string correctedUserFiles = s.TrimStart('\x005c').Replace(@"\\", @"\");
                                 string targetDir = Path.GetDirectoryName(correctedUserFiles);
                                 args.currentFile = correctedUserFiles;
                                 InstallWorker.ReportProgress(0);
-                                string filenamePrefix = Utils.GetValidFilename(dbo.name + "_");
+                                string filenamePrefix = Utils.GetValidFilename(dbo.Name + "_");
                                 //find the files with the specified pattern
                                 string[] fileList = Directory.GetFiles(Path.Combine(Application.StartupPath, "RelHaxTemp"), filenamePrefix + Path.GetFileName(correctedUserFiles));
                                 //if no results, go on with the next entry
@@ -1436,15 +1436,15 @@ namespace RelhaxModpack
             try
             {
                 Utils.AppendToInstallLog(@"/*  Desktop shortcuts  */");
-                foreach (ShortCut sc in Shortcuts)
+                foreach (Shortcut sc in Shortcuts)
                 {
-                    if (sc.enabled)
+                    if (sc.Enabled)
                     {
-                        string fileTarget = Path.Combine(TanksLocation, sc.path);
-                        Utils.AppendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.path, sc.name));
+                        string fileTarget = Path.Combine(TanksLocation, sc.Path);
+                        Utils.AppendToLog(string.Format("creating desktop ShortCut: {0} ({1})", sc.Path, sc.Name));
                         if (File.Exists(fileTarget))
                         {
-                            Utils.CreateShortcut(fileTarget, sc.name, true, true);
+                            Utils.CreateShortcut(fileTarget, sc.Name, true, true);
                         }
                     }
                 }

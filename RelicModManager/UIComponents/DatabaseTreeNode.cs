@@ -60,7 +60,7 @@ namespace RelhaxModpack
                     LogicalDependency = null;
                     DatabaseObject = null;
                     Category = (Category)o;
-                    this.Text = Category.name;
+                    this.Text = Category.Name;
                     break;
             }
 

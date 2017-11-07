@@ -3,26 +3,26 @@ namespace RelhaxModpack
 {
     public enum MediaType
     {
-        picture = 1,
-        youtube = 2
+        Picture = 1,
+        Youtube = 2
     }
     public class Media
     {
         //two-part variable. specifies wether it's part of a mod, or a mod's config
         //and the mod/config name
-        public string name { get; set; }
+        public string Name { get; set; }
         //SAMPLE YOUTUBE URL: https://www.youtube.com/v/ZwY2E0hjGuU?version=3&autoplay=1
         //http and https both work
         public string URL { get; set; }
         //media type, 1 = picture (default), 2 = youtube video
-        public MediaType mediaType { get; set; }
+        public MediaType MediaType { get; set; }
         //constructor to setup the picture with the "name" and
         //the URL where the picture is located
         public Media(string newName, string newURL)
         {
-            name = newName;
+            Name = newName;
             URL = newURL;
-            mediaType = MediaType.picture;
+            MediaType = MediaType.Picture;
         }
         //sorts the mods
         public static int ComparePictures(Media x, Media y)
@@ -31,10 +31,10 @@ namespace RelhaxModpack
             //Mod:name
             //Config:name
             //seperate all 4 things
-            string xType = x.name.Split(':')[0];
-            string yType = y.name.Split(':')[0];
-            string xName = x.name.Split(':')[1];
-            string yName = y.name.Split(':')[1];
+            string xType = x.Name.Split(':')[0];
+            string yType = y.Name.Split(':')[0];
+            string xName = x.Name.Split(':')[1];
+            string yName = y.Name.Split(':')[1];
             //check the mod vs config first
             int typeResult = xType.CompareTo(yType);
             if (typeResult == 0)
@@ -49,9 +49,9 @@ namespace RelhaxModpack
         public override string ToString()
         {
             if(URL.Length > 79)
-                return "Type: " + (int)mediaType + " - " + URL.Substring(0, 80) + "...";
+                return "Type: " + (int)MediaType + " - " + URL.Substring(0, 80) + "...";
             else
-                return "Type: " + (int)mediaType + " - " + URL;
+                return "Type: " + (int)MediaType + " - " + URL;
         }
     }
 }

@@ -81,7 +81,6 @@
             this.DiscordServerLink = new System.Windows.Forms.LinkLabel();
             this.viewAppUpdates = new System.Windows.Forms.Button();
             this.viewDBUpdates = new System.Windows.Forms.Button();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.ErrorCounterLabel = new System.Windows.Forms.Label();
             this.VersionTable = new System.Windows.Forms.TableLayoutPanel();
             this.DatabaseVersionLabel = new System.Windows.Forms.Label();
@@ -116,7 +115,6 @@
             this.forceManuel.Size = new System.Drawing.Size(166, 17);
             this.forceManuel.TabIndex = 13;
             this.forceManuel.Text = "Force manual game detection";
-            this.toolTip.SetToolTip(this.forceManuel, "Right Click for extended description");
             this.forceManuel.UseVisualStyleBackColor = true;
             this.forceManuel.CheckedChanged += new System.EventHandler(this.forceManuel_CheckedChanged);
             this.forceManuel.MouseEnter += new System.EventHandler(this.forceManuel_MouseEnter);
@@ -171,7 +169,6 @@
             this.cleanInstallCB.Size = new System.Drawing.Size(187, 17);
             this.cleanInstallCB.TabIndex = 21;
             this.cleanInstallCB.Text = "Clean Installation (Recommended)";
-            this.toolTip.SetToolTip(this.cleanInstallCB, "Right Click for extended description");
             this.cleanInstallCB.UseVisualStyleBackColor = true;
             this.cleanInstallCB.CheckedChanged += new System.EventHandler(this.cleanInstallCB_CheckedChanged);
             this.cleanInstallCB.MouseEnter += new System.EventHandler(this.cleanInstallCB_MouseEnter);
@@ -185,7 +182,6 @@
             this.cancerFontCB.Size = new System.Drawing.Size(81, 17);
             this.cancerFontCB.TabIndex = 23;
             this.cancerFontCB.Text = "Cancer font";
-            this.toolTip.SetToolTip(this.cancerFontCB, "Right Click for extended description");
             this.cancerFontCB.UseVisualStyleBackColor = true;
             this.cancerFontCB.CheckedChanged += new System.EventHandler(this.cancerFontCB_CheckedChanged);
             this.cancerFontCB.MouseEnter += new System.EventHandler(this.cancerFontCB_MouseEnter);
@@ -199,7 +195,6 @@
             this.backupModsCheckBox.Size = new System.Drawing.Size(156, 17);
             this.backupModsCheckBox.TabIndex = 24;
             this.backupModsCheckBox.Text = "Backup current mods folder";
-            this.toolTip.SetToolTip(this.backupModsCheckBox, "Right Click for extended description");
             this.backupModsCheckBox.UseVisualStyleBackColor = true;
             this.backupModsCheckBox.CheckedChanged += new System.EventHandler(this.backupModsCheckBox_CheckedChanged);
             this.backupModsCheckBox.MouseEnter += new System.EventHandler(this.backupModsCheckBox_MouseEnter);
@@ -247,7 +242,6 @@
             this.ShowInstallCompleteWindowCB.Size = new System.Drawing.Size(168, 17);
             this.ShowInstallCompleteWindowCB.TabIndex = 34;
             this.ShowInstallCompleteWindowCB.Text = "Show Install complete window";
-            this.toolTip.SetToolTip(this.ShowInstallCompleteWindowCB, "Right Click for extended description");
             this.ShowInstallCompleteWindowCB.UseVisualStyleBackColor = true;
             this.ShowInstallCompleteWindowCB.CheckedChanged += new System.EventHandler(this.ShowInstallCompleteWindow_CheckedChanged);
             this.ShowInstallCompleteWindowCB.MouseEnter += new System.EventHandler(this.ShowInstallCompleteWindowCB_MouseEnter);
@@ -261,7 +255,6 @@
             this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(193, 17);
             this.notifyIfSameDatabaseCB.TabIndex = 33;
             this.notifyIfSameDatabaseCB.Text = "Inform if no new database available";
-            this.toolTip.SetToolTip(this.notifyIfSameDatabaseCB, "Right Click for extended description");
             this.notifyIfSameDatabaseCB.UseVisualStyleBackColor = true;
             this.notifyIfSameDatabaseCB.CheckedChanged += new System.EventHandler(this.notifyIfSameDatabaseCB_CheckedChanged);
             this.notifyIfSameDatabaseCB.MouseEnter += new System.EventHandler(this.notifyIfSameDatabaseCB_MouseEnter);
@@ -275,7 +268,6 @@
             this.clearLogFilesCB.Size = new System.Drawing.Size(88, 17);
             this.clearLogFilesCB.TabIndex = 32;
             this.clearLogFilesCB.Text = "Clear log files";
-            this.toolTip.SetToolTip(this.clearLogFilesCB, "Right Click for extended description");
             this.clearLogFilesCB.UseVisualStyleBackColor = true;
             this.clearLogFilesCB.CheckedChanged += new System.EventHandler(this.clearLogFilesCB_CheckedChanged);
             this.clearLogFilesCB.MouseEnter += new System.EventHandler(this.clearLogFilesCB_MouseEnter);
@@ -289,7 +281,6 @@
             this.clearCacheCB.Size = new System.Drawing.Size(137, 17);
             this.clearCacheCB.TabIndex = 31;
             this.clearCacheCB.Text = "Clear WoT Cache Data";
-            this.toolTip.SetToolTip(this.clearCacheCB, "Right Click for extended description");
             this.clearCacheCB.UseVisualStyleBackColor = true;
             this.clearCacheCB.CheckedChanged += new System.EventHandler(this.clearCacheCB_CheckedChanged);
             this.clearCacheCB.MouseEnter += new System.EventHandler(this.clearCacheCB_MouseEnter);
@@ -303,7 +294,6 @@
             this.darkUICB.Size = new System.Drawing.Size(63, 17);
             this.darkUICB.TabIndex = 30;
             this.darkUICB.Text = "Dark UI";
-            this.toolTip.SetToolTip(this.darkUICB, "Right Click for extended description");
             this.darkUICB.UseVisualStyleBackColor = true;
             this.darkUICB.CheckedChanged += new System.EventHandler(this.darkUICB_CheckedChanged);
             this.darkUICB.MouseEnter += new System.EventHandler(this.darkUICB_MouseEnter);
@@ -317,7 +307,6 @@
             this.saveUserDataCB.Size = new System.Drawing.Size(139, 17);
             this.saveUserDataCB.TabIndex = 27;
             this.saveUserDataCB.Text = "Save User created data";
-            this.toolTip.SetToolTip(this.saveUserDataCB, "Right Click for extended description");
             this.saveUserDataCB.UseVisualStyleBackColor = true;
             this.saveUserDataCB.CheckedChanged += new System.EventHandler(this.saveUserDataCB_CheckedChanged);
             this.saveUserDataCB.MouseEnter += new System.EventHandler(this.saveUserDataCB_MouseEnter);
@@ -331,7 +320,6 @@
             this.saveLastInstallCB.Size = new System.Drawing.Size(138, 17);
             this.saveLastInstallCB.TabIndex = 26;
             this.saveLastInstallCB.Text = "Save last install\'s config";
-            this.toolTip.SetToolTip(this.saveLastInstallCB, "Right Click for extended description");
             this.saveLastInstallCB.UseVisualStyleBackColor = true;
             this.saveLastInstallCB.CheckedChanged += new System.EventHandler(this.saveLastInstallCB_CheckedChanged);
             this.saveLastInstallCB.MouseEnter += new System.EventHandler(this.saveLastInstallCB_MouseEnter);
@@ -382,7 +370,6 @@
             this.thirdGuardsLoadingImageRB.TabIndex = 1;
             this.thirdGuardsLoadingImageRB.TabStop = true;
             this.thirdGuardsLoadingImageRB.Text = "3rdguards";
-            this.toolTip.SetToolTip(this.thirdGuardsLoadingImageRB, "Right Click for extended description");
             this.thirdGuardsLoadingImageRB.UseVisualStyleBackColor = true;
             this.thirdGuardsLoadingImageRB.CheckedChanged += new System.EventHandler(this.standardImageRB_CheckedChanged);
             this.thirdGuardsLoadingImageRB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.standardImageRB_MouseDown);
@@ -398,7 +385,6 @@
             this.standardImageRB.TabIndex = 0;
             this.standardImageRB.TabStop = true;
             this.standardImageRB.Text = "Standard";
-            this.toolTip.SetToolTip(this.standardImageRB, "Right Click for extended description");
             this.standardImageRB.UseVisualStyleBackColor = true;
             this.standardImageRB.CheckedChanged += new System.EventHandler(this.standardImageRB_CheckedChanged);
             this.standardImageRB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.standardImageRB_MouseDown);
@@ -465,7 +451,6 @@
             this.disableColorsCB.Size = new System.Drawing.Size(116, 47);
             this.disableColorsCB.TabIndex = 4;
             this.disableColorsCB.Text = "Disable color change";
-            this.toolTip.SetToolTip(this.disableColorsCB, "Right Click for extended description");
             this.disableColorsCB.UseVisualStyleBackColor = true;
             this.disableColorsCB.CheckedChanged += new System.EventHandler(this.disableColorsCB_CheckedChanged);
             this.disableColorsCB.MouseEnter += new System.EventHandler(this.disableColorsCB_MouseEnter);
@@ -480,7 +465,6 @@
             this.disableBordersCB.Size = new System.Drawing.Size(100, 32);
             this.disableBordersCB.TabIndex = 3;
             this.disableBordersCB.Text = "Disable borders";
-            this.toolTip.SetToolTip(this.disableBordersCB, "Right Click for extended description");
             this.disableBordersCB.UseVisualStyleBackColor = true;
             this.disableBordersCB.CheckedChanged += new System.EventHandler(this.disableBordersCB_CheckedChanged);
             this.disableBordersCB.MouseEnter += new System.EventHandler(this.disableBordersCB_MouseEnter);
@@ -496,7 +480,6 @@
             this.expandNodesDefault.Size = new System.Drawing.Size(75, 20);
             this.expandNodesDefault.TabIndex = 2;
             this.expandNodesDefault.Text = "Expand all";
-            this.toolTip.SetToolTip(this.expandNodesDefault, "Right Click for extended description");
             this.expandNodesDefault.UseVisualStyleBackColor = true;
             this.expandNodesDefault.CheckedChanged += new System.EventHandler(this.expandNodesDefault_CheckedChanged);
             this.expandNodesDefault.MouseEnter += new System.EventHandler(this.expandNodesDefault_MouseEnter);
@@ -511,7 +494,6 @@
             this.selectionLegacy.TabIndex = 1;
             this.selectionLegacy.TabStop = true;
             this.selectionLegacy.Text = "Legacy";
-            this.toolTip.SetToolTip(this.selectionLegacy, "Right Click for extended description");
             this.selectionLegacy.UseVisualStyleBackColor = true;
             this.selectionLegacy.CheckedChanged += new System.EventHandler(this.selectionLegacy_CheckedChanged);
             this.selectionLegacy.MouseEnter += new System.EventHandler(this.selectionView_MouseEnter);
@@ -526,7 +508,6 @@
             this.selectionDefault.TabIndex = 0;
             this.selectionDefault.TabStop = true;
             this.selectionDefault.Text = "Default";
-            this.toolTip.SetToolTip(this.selectionDefault, "Right Click for extended description");
             this.selectionDefault.UseVisualStyleBackColor = true;
             this.selectionDefault.CheckedChanged += new System.EventHandler(this.selectionDefault_CheckedChanged);
             this.selectionDefault.MouseEnter += new System.EventHandler(this.selectionView_MouseEnter);
@@ -670,7 +651,6 @@
             this.DPI100.TabIndex = 3;
             this.DPI100.TabStop = true;
             this.DPI100.Text = "DPI 1x";
-            this.toolTip.SetToolTip(this.DPI100, "Right Click for extended description");
             this.DPI100.UseVisualStyleBackColor = true;
             this.DPI100.CheckedChanged += new System.EventHandler(this.DPI100_CheckedChanged);
             this.DPI100.MouseEnter += new System.EventHandler(this.font_MouseEnter);
@@ -713,7 +693,6 @@
             this.fontSize100.TabIndex = 0;
             this.fontSize100.TabStop = true;
             this.fontSize100.Text = "Font 1x";
-            this.toolTip.SetToolTip(this.fontSize100, "Right Click for extended description");
             this.fontSize100.UseVisualStyleBackColor = true;
             this.fontSize100.CheckedChanged += new System.EventHandler(this.fontSize100_CheckedChanged);
             this.fontSize100.MouseEnter += new System.EventHandler(this.font_MouseEnter);
@@ -757,10 +736,6 @@
             this.viewDBUpdates.Text = "View latest database updates";
             this.viewDBUpdates.UseVisualStyleBackColor = true;
             this.viewDBUpdates.Click += new System.EventHandler(this.viewDBUpdates_Click);
-            // 
-            // toolTip
-            // 
-            this.toolTip.Active = false;
             // 
             // ErrorCounterLabel
             // 
@@ -918,7 +893,6 @@
         private System.Windows.Forms.RadioButton fontSize225;
         private System.Windows.Forms.CheckBox notifyIfSameDatabaseCB;
         private System.Windows.Forms.CheckBox ShowInstallCompleteWindowCB;
-        private System.Windows.Forms.ToolTip toolTip;
         public System.Windows.Forms.Label ErrorCounterLabel;
         private System.Windows.Forms.CheckBox createShortcutsCB;
         private System.Windows.Forms.TableLayoutPanel VersionTable;

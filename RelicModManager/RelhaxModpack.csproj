@@ -40,7 +40,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -138,6 +138,7 @@
     <Compile Include="AtlasesCreator\Program.cs" />
     <Compile Include="DatabaseComponents\IDatabasePackage.cs" />
     <Compile Include="DatabaseComponents\LogicalDependency.cs" />
+    <Compile Include="InstallerComponents\Shortcut.cs" />
     <Compile Include="InstallerComponents\Texture.cs" />
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="CiInfo.cs" />
@@ -159,7 +160,6 @@
     <Compile Include="Utils\XMLUtils.cs" />
     <Compile Include="Utils\NativeMethods.cs" />
     <Compile Include="Utils\PatchUtils.cs" />
-    <Compile Include="InstallerComponents\ShortCut.cs" />
     <Compile Include="UIComponents\DeveloperSelections.cs" />
     <Compile Include="UIComponents\CompleteModSearchList.cs" />
     <Compile Include="UIComponents\ComboBoxItem.cs" />

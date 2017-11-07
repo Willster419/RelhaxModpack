@@ -404,7 +404,7 @@ namespace RelhaxModpack
                 {
                     DuplicatesPackageName_RecursiveSubConfigRead(ref c.configs, ref checkStorageList);
                 }
-                if (c.dependencies.Count > 0)
+                if (c.Dependencies.Count > 0)
                 {
                     //duplicatesPackageName_dependencyRead(ref c.dependencies, ref checkStorageList);
                 }
@@ -417,11 +417,11 @@ namespace RelhaxModpack
             var checkStorageList = new List<CheckStorage>();
             foreach (Category c in parsedCatagoryList)
             {
-                if (c.dependencies.Count > 0)
+                if (c.Dependencies.Count > 0)
                 {
                     //duplicatesPackageName_dependencyRead(ref c.dependencies, ref checkStorageList);
                 }
-                foreach (Mod m in c.mods)
+                foreach (Mod m in c.Mods)
                 {
                     CheckStorage cs = new CheckStorage();
                     cs.PackageName = m.PackageName;
@@ -434,7 +434,7 @@ namespace RelhaxModpack
                     {
                         DuplicatesPackageName_RecursiveSubConfigRead(ref m.configs, ref checkStorageList);
                     }
-                    if (m.dependencies.Count > 0)
+                    if (m.Dependencies.Count > 0)
                     {
                         //duplicatesPackageName_dependencyRead(ref m.dependencies, ref checkStorageList);
                     }
@@ -443,7 +443,7 @@ namespace RelhaxModpack
             //itterate through every mod name again
             foreach (Category c in parsedCatagoryList)
             {
-                foreach (Mod m in c.mods)
+                foreach (Mod m in c.Mods)
                 {
                     foreach (var s in checkStorageList)
                     {
@@ -460,12 +460,12 @@ namespace RelhaxModpack
                     {
                         DuplicatesPackageName_RecursiveSubConfigCheck(m.configs, checkStorageList, ref duplicatesCounter);
                     }
-                    if (m.dependencies.Count > 0)
+                    if (m.Dependencies.Count > 0)
                     {
                         //duplicatesPackageName_dependencyCheck(m.dependencies, checkStorageList, ref duplicatesCounter);
                     }
                 }
-                if (c.dependencies.Count > 0)
+                if (c.Dependencies.Count > 0)
                 {
                     //duplicatesPackageName_dependencyCheck(c.dependencies, checkStorageList, ref duplicatesCounter);
                 }
@@ -482,22 +482,22 @@ namespace RelhaxModpack
             List<string> modNameList = new List<string>();
             foreach (Category c in parsedCatagoryList)
             {
-                foreach (Mod m in c.mods)
+                foreach (Mod m in c.Mods)
                 {
-                    modNameList.Add(m.name);
+                    modNameList.Add(m.Name);
                 }
             }
             //itterate through every mod name again
             foreach (Category c in parsedCatagoryList)
             {
-                foreach (Mod m in c.mods)
+                foreach (Mod m in c.Mods)
                 {
                     //in theory, there should only be one matching mod name
                     //between the two lists. more indicates a duplicates
                     int i = 0;
                     foreach (string s in modNameList)
                     {
-                        if (s.Equals(m.name))
+                        if (s.Equals(m.Name))
                             i++;
                     }
                     if (i > 1)//if there are 2 or more matching mods
@@ -512,9 +512,9 @@ namespace RelhaxModpack
         {
             foreach (Category c in parsedCatagoryList)
             {
-                foreach (Mod m in c.mods)
+                foreach (Mod m in c.Mods)
                 {
-                    if (c.name.Equals(catagoryName) && m.name.Equals(modName))
+                    if (c.Name.Equals(catagoryName) && m.Name.Equals(modName))
                     {
                         //found it
                         return m;
@@ -528,9 +528,9 @@ namespace RelhaxModpack
         {
             foreach (Category c in parsedCatagoryList)
             {
-                foreach (Mod m in c.mods)
+                foreach (Mod m in c.Mods)
                 {
-                    if (m.name.Equals(modName))
+                    if (m.Name.Equals(modName))
                     {
                         //found it
                         return m;
@@ -544,7 +544,7 @@ namespace RelhaxModpack
         {
             foreach (Category c in parsedCatagoryList)
             {
-                if (c.name.Equals(catName)) return c;
+                if (c.Name.Equals(catName)) return c;
             }
             return null;
         }
@@ -553,7 +553,7 @@ namespace RelhaxModpack
         {
             foreach (Mod m in userMods)
             {
-                if (m.name.Equals(modName))
+                if (m.Name.Equals(modName))
                 {
                     return m;
                 }
@@ -584,18 +584,18 @@ namespace RelhaxModpack
             Utils.AppendToLog("Unchecking all mods");
             foreach (Category c in parsedCatagoryList)
             {
-                foreach (Mod m in c.mods)
+                foreach (Mod m in c.Mods)
                 {
                     m.Checked = false;
-                    if (m.modFormCheckBox is ModFormCheckBox)
+                    if (m.ModFormCheckBox is ModFormCheckBox)
                     {
-                        ModFormCheckBox mfcb = (ModFormCheckBox)m.modFormCheckBox;
+                        ModFormCheckBox mfcb = (ModFormCheckBox)m.ModFormCheckBox;
                         mfcb.Checked = false;
                         mfcb.Parent.BackColor = Settings.getBackColor();
                     }
-                    else if (m.modFormCheckBox is ModWPFCheckBox)
+                    else if (m.ModFormCheckBox is ModWPFCheckBox)
                     {
-                        ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.modFormCheckBox;
+                        ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.ModFormCheckBox;
                         mfCB2.IsChecked = false;
                     }
                     Utils.UncheckProcessConfigs(m.configs);
@@ -606,9 +606,9 @@ namespace RelhaxModpack
                 foreach (Mod um in UserMods)
                 {
                     um.Checked = false;
-                    if (um.modFormCheckBox != null)
+                    if (um.ModFormCheckBox != null)
                     {
-                        ModFormCheckBox mfcb = (ModFormCheckBox)um.modFormCheckBox;
+                        ModFormCheckBox mfcb = (ModFormCheckBox)um.ModFormCheckBox;
                         mfcb.Checked = false;
                     }
                 }
@@ -620,15 +620,15 @@ namespace RelhaxModpack
             foreach (Config c in configList)
             {
                 c.Checked = false;
-                if (c.configUIComponent is ConfigFormCheckBox)
+                if (c.ConfigUIComponent is ConfigFormCheckBox)
                 {
-                    ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.configUIComponent;
+                    ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.ConfigUIComponent;
                     CBTemp.Checked = false;
                     CBTemp.Parent.BackColor = Settings.getBackColor();
                 }
-                else if (c.configUIComponent is ConfigFormComboBox)
+                else if (c.ConfigUIComponent is ConfigFormComboBox)
                 {
-                    ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.configUIComponent;
+                    ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.ConfigUIComponent;
                     if (CBTemp.Items.Count == 0)
                     {
                         CBTemp.SelectedIndex = -1;
@@ -640,21 +640,21 @@ namespace RelhaxModpack
                     }
                     CBTemp.Parent.BackColor = Settings.getBackColor();
                 }
-                else if (c.configUIComponent is ConfigFormRadioButton)
+                else if (c.ConfigUIComponent is ConfigFormRadioButton)
                 {
-                    ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.configUIComponent;
+                    ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.ConfigUIComponent;
                     CBTemp.Checked = false;
                     CBTemp.Parent.BackColor = Settings.getBackColor();
                 }
-                else if (c.configUIComponent is ConfigWPFCheckBox)
+                else if (c.ConfigUIComponent is ConfigWPFCheckBox)
                 {
-                    ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.configUIComponent;
+                    ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.ConfigUIComponent;
                     CBTemp.IsChecked = false;
                 }
-                else if (c.configUIComponent is ConfigWPFComboBox)
+                else if (c.ConfigUIComponent is ConfigWPFComboBox)
                 {
                     //do nothing...
-                    ConfigWPFComboBox CBTemp = (ConfigWPFComboBox)c.configUIComponent;
+                    ConfigWPFComboBox CBTemp = (ConfigWPFComboBox)c.ConfigUIComponent;
                     if (CBTemp.Items.Count == 0)
                     {
                         CBTemp.SelectedIndex = -1;
@@ -665,9 +665,9 @@ namespace RelhaxModpack
                             CBTemp.SelectedIndex = 0;
                     }
                 }
-                else if (c.configUIComponent is ConfigWPFRadioButton)
+                else if (c.ConfigUIComponent is ConfigWPFRadioButton)
                 {
-                    ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.configUIComponent;
+                    ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.ConfigUIComponent;
                     CBTemp.IsChecked = false;
                 }
                 Utils.UncheckProcessConfigs(c.configs);
@@ -701,7 +701,7 @@ namespace RelhaxModpack
             }
             foreach (Category cat in parsedCatagoryList)
             {
-                foreach (Mod m in cat.mods)
+                foreach (Mod m in cat.Mods)
                 {
 
                     if (!m.ZipFile.Equals("") && !currentZipFiles.Contains(m.ZipFile))
@@ -757,7 +757,7 @@ namespace RelhaxModpack
             }
             foreach (Category cat in parsedCatagoryList)
             {
-                foreach (Mod m in cat.mods)
+                foreach (Mod m in cat.Mods)
                 {
 
                     if (!m.ZipFile.Equals("") && !ParsedZips.Contains(m.ZipFile))
@@ -1075,13 +1075,13 @@ namespace RelhaxModpack
                 }
                 else if (obj is Config)
                 {
-                    text = ((Config)obj).name;
-                    macroList.Add("version", ((Config)obj).version);
+                    text = ((Config)obj).Name;
+                    macroList.Add("version", ((Config)obj).Version);
                 }
                 else if (obj is Mod)
                 {
-                    text = ((Mod)obj).name;
-                    macroList.Add("version", ((Mod)obj).version);
+                    text = ((Mod)obj).Name;
+                    macroList.Add("version", ((Mod)obj).Version);
                 }
                 else
                 {

@@ -103,11 +103,11 @@ namespace RelhaxModpack
                 DatabaseTreeView.Nodes.Clear();
                 foreach (Category cat in ParsedCategoryList)
                 {
-                    SearchBox.Items.Add(cat.name);
-                    allPackageNames.Add(cat.name);
+                    SearchBox.Items.Add(cat.Name);
+                    allPackageNames.Add(cat.Name);
                     DatabaseTreeNode catNode = new DatabaseTreeNode(cat, 4);
                     DatabaseTreeView.Nodes.Add(catNode);
-                    foreach (Mod m in cat.mods)
+                    foreach (Mod m in cat.Mods)
                     {
                         SearchBox.Items.Add(m.PackageName);
                         allPackageNames.Add(m.PackageName);
@@ -268,7 +268,7 @@ namespace RelhaxModpack
                 SelectedGlobalDependency.PackageName = ObjectPackageNameTB.Text;
                 SelectedGlobalDependency.StartAddress = ObjectStartAddressTB.Text;
                 SelectedGlobalDependency.EndAddress = ObjectEndAddressTB.Text;
-                SelectedGlobalDependency.devURL = ObjectDevURLTB.Text;
+                SelectedGlobalDependency.DevURL = ObjectDevURLTB.Text;
                 if (!SelectedGlobalDependency.ZipFile.Equals(ObjectZipFileTB.Text))
                 {
                     SelectedGlobalDependency.CRC = "f";
@@ -277,7 +277,7 @@ namespace RelhaxModpack
                     ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedGlobalDependency.Timestamp));
                 }
                 SelectedGlobalDependency.Enabled = ObjectEnabledCheckBox.Checked;
-                SelectedGlobalDependency.appendExtraction = ObjectAppendExtractionCB.Checked;
+                SelectedGlobalDependency.AppendExtraction = ObjectAppendExtractionCB.Checked;
                 GlobalDependencies[index] = SelectedGlobalDependency;
             }
             else if (DatabaseEditorMode == EditorMode.Dependency)
@@ -286,7 +286,7 @@ namespace RelhaxModpack
                 SelectedDependency.PackageName = ObjectPackageNameTB.Text;
                 SelectedDependency.StartAddress = ObjectStartAddressTB.Text;
                 SelectedDependency.EndAddress = ObjectEndAddressTB.Text;
-                SelectedDependency.devURL = ObjectDevURLTB.Text;
+                SelectedDependency.DevURL = ObjectDevURLTB.Text;
                 if (!SelectedDependency.ZipFile.Equals(ObjectZipFileTB.Text))
                 {
                     SelectedDependency.CRC = "f";
@@ -295,7 +295,7 @@ namespace RelhaxModpack
                     ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedDependency.Timestamp));
                 }
                 SelectedDependency.Enabled = ObjectEnabledCheckBox.Checked;
-                SelectedDependency.appendExtraction = ObjectAppendExtractionCB.Checked;
+                SelectedDependency.AppendExtraction = ObjectAppendExtractionCB.Checked;
                 Dependencies[index] = SelectedDependency;
             }
             else if (DatabaseEditorMode == EditorMode.LogicalDependency)
@@ -304,7 +304,7 @@ namespace RelhaxModpack
                 SelectedLogicalDependency.PackageName = ObjectPackageNameTB.Text;
                 SelectedLogicalDependency.StartAddress = ObjectStartAddressTB.Text;
                 SelectedLogicalDependency.EndAddress = ObjectEndAddressTB.Text;
-                SelectedLogicalDependency.devURL = ObjectDevURLTB.Text;
+                SelectedLogicalDependency.DevURL = ObjectDevURLTB.Text;
                 if (!SelectedLogicalDependency.ZipFile.Equals(ObjectZipFileTB.Text))
                 {
                     SelectedLogicalDependency.CRC = "f";
@@ -318,23 +318,23 @@ namespace RelhaxModpack
             else if (SelectedCategory != null)
             {
                 int index = ParsedCategoryList.IndexOf(SelectedCategory);
-                SelectedCategory.name = ObjectNameTB.Text;
+                SelectedCategory.Name = ObjectNameTB.Text;
                 switch (ObjectTypeComboBox.SelectedIndex)
                 {
                     case 1:
-                        SelectedCategory.selectionType = "single1";
+                        SelectedCategory.SelectionType = "single1";
                         break;
                     case 2:
-                        SelectedCategory.selectionType = "single1";
+                        SelectedCategory.SelectionType = "single1";
                         break;
                     case 3:
-                        SelectedCategory.selectionType = "single1";
+                        SelectedCategory.SelectionType = "single1";
                         break;
                     case 4:
-                        SelectedCategory.selectionType = "multi";
+                        SelectedCategory.SelectionType = "multi";
                         break;
                     default:
-                        SelectedCategory.selectionType = "multi";
+                        SelectedCategory.SelectionType = "multi";
                         break;
                 }
                 ParsedCategoryList[index] = SelectedCategory;
@@ -347,7 +347,7 @@ namespace RelhaxModpack
                     List<Mod> ModList = ListContainsMod(m);
                     int index = ModList.IndexOf(m);
                     //make changes
-                    m.name = ObjectNameTB.Text;
+                    m.Name = ObjectNameTB.Text;
                     m.PackageName = ObjectPackageNameTB.Text;
                     m.StartAddress = ObjectStartAddressTB.Text;
                     m.EndAddress = ObjectEndAddressTB.Text;
@@ -358,12 +358,12 @@ namespace RelhaxModpack
                         m.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
                         ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(m.Timestamp));
                     }
-                    m.devURL = ObjectDevURLTB.Text;
-                    m.version = ObjectVersionTB.Text;
+                    m.DevURL = ObjectDevURLTB.Text;
+                    m.Version = ObjectVersionTB.Text;
                     m.Enabled = ObjectEnabledCheckBox.Checked;
-                    m.visible = ObjectVisibleCheckBox.Checked;
-                    m.description = ObjectDescTB.Text;
-                    m.updateComment = ObjectUpdateNotesTB.Text;
+                    m.Visible = ObjectVisibleCheckBox.Checked;
+                    m.Description = ObjectDescTB.Text;
+                    m.UpdateComment = ObjectUpdateNotesTB.Text;
                     ModList[index] = m;
                 }
                 else if (SelectedDatabaseObject is Config)
@@ -380,7 +380,7 @@ namespace RelhaxModpack
                     {
                         int index = ListThatContainsConfig.IndexOf(cfg);
                         //make changes
-                        cfg.name = ObjectNameTB.Text;
+                        cfg.Name = ObjectNameTB.Text;
                         cfg.PackageName = ObjectPackageNameTB.Text;
                         cfg.StartAddress = ObjectStartAddressTB.Text;
                         cfg.EndAddress = ObjectEndAddressTB.Text;
@@ -391,27 +391,27 @@ namespace RelhaxModpack
                             cfg.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
                             ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(cfg.Timestamp));
                         }
-                        cfg.devURL = ObjectDevURLTB.Text;
-                        cfg.version = ObjectVersionTB.Text;
+                        cfg.DevURL = ObjectDevURLTB.Text;
+                        cfg.Version = ObjectVersionTB.Text;
                         switch (ObjectTypeComboBox.SelectedIndex)
                         {
                             case 1:
-                                cfg.type = "single1";
+                                cfg.Type = "single1";
                                 break;
                             case 2:
-                                cfg.type = "single_dropdown1";
+                                cfg.Type = "single_dropdown1";
                                 break;
                             case 3:
-                                cfg.type = "single_dropdown2";
+                                cfg.Type = "single_dropdown2";
                                 break;
                             case 4:
-                                cfg.type = "multi";
+                                cfg.Type = "multi";
                                 break;
                         }
                         cfg.Enabled = ObjectEnabledCheckBox.Checked;
-                        cfg.visible = ObjectVisibleCheckBox.Checked;
-                        cfg.description = ObjectDescTB.Text;
-                        cfg.updateComment = ObjectUpdateNotesTB.Text;
+                        cfg.Visible = ObjectVisibleCheckBox.Checked;
+                        cfg.Description = ObjectDescTB.Text;
+                        cfg.UpdateComment = ObjectUpdateNotesTB.Text;
                         ListThatContainsConfig[index] = cfg;
                     }
                 }
@@ -423,8 +423,8 @@ namespace RelhaxModpack
         {
             foreach (Category cat in ParsedCategoryList)
             {
-                if (cat.mods.Contains(mod))
-                    return cat.mods;
+                if (cat.Mods.Contains(mod))
+                    return cat.Mods;
             }
             return null;
         }
@@ -432,7 +432,7 @@ namespace RelhaxModpack
         {
             foreach (Category cat in ParsedCategoryList)
             {
-                foreach (Mod m in cat.mods)
+                foreach (Mod m in cat.Mods)
                 {
                     if (m.configs.Contains(cfg) && ListThatContainsConfig == null)
                     {
@@ -622,7 +622,7 @@ namespace RelhaxModpack
                         ObjectLastUpdatedLabel.Text = "last updated: (none)";
 
                     ObjectDevURLTB.Enabled = true;
-                    ObjectDevURLTB.Text = SelectedGlobalDependency.devURL;
+                    ObjectDevURLTB.Text = SelectedGlobalDependency.DevURL;
 
                     ObjectTypeComboBox.Enabled = false;
                     ObjectTypeComboBox.SelectedIndex = 0;
@@ -633,7 +633,7 @@ namespace RelhaxModpack
                     ObjectVisibleCheckBox.Enabled = false;
 
                     ObjectAppendExtractionCB.Enabled = true;
-                    ObjectAppendExtractionCB.Checked = node.GlobalDependency.appendExtraction;
+                    ObjectAppendExtractionCB.Checked = node.GlobalDependency.AppendExtraction;
 
                     DownloadZipfileButton.Enabled = true;
 
@@ -678,7 +678,7 @@ namespace RelhaxModpack
                         ObjectLastUpdatedLabel.Text = "last updated: (none)";
 
                     ObjectDevURLTB.Enabled = true;
-                    ObjectDevURLTB.Text = SelectedDependency.devURL;
+                    ObjectDevURLTB.Text = SelectedDependency.DevURL;
 
                     ObjectTypeComboBox.Enabled = false;
                     ObjectTypeComboBox.SelectedIndex = 0;
@@ -689,7 +689,7 @@ namespace RelhaxModpack
                     ObjectVisibleCheckBox.Enabled = false;
 
                     ObjectAppendExtractionCB.Enabled = true;
-                    ObjectAppendExtractionCB.Checked = SelectedDependency.appendExtraction;
+                    ObjectAppendExtractionCB.Checked = SelectedDependency.AppendExtraction;
 
                     DownloadZipfileButton.Enabled = true;
 
@@ -705,7 +705,7 @@ namespace RelhaxModpack
                     LogicalDependencyPanel.Enabled = true;
                     ObjectLogicalDependenciesList.DataSource = null;
                     ObjectLogicalDependenciesList.Items.Clear();
-                    ObjectLogicalDependenciesList.DataSource = SelectedDependency.logicalDependencies;
+                    ObjectLogicalDependenciesList.DataSource = SelectedDependency.LogicalDependencies;
                     CurrentLogicalDependenciesCB.DataSource = null;
                     CurrentLogicalDependenciesCB.Items.Clear();
                     CurrentLogicalDependenciesCB.DataSource = LogicalDependencies;
@@ -751,7 +751,7 @@ namespace RelhaxModpack
                         ObjectLastUpdatedLabel.Text = "last updated: (none)";
 
                     ObjectDevURLTB.Enabled = true;
-                    ObjectDevURLTB.Text = SelectedLogicalDependency.devURL;
+                    ObjectDevURLTB.Text = SelectedLogicalDependency.DevURL;
 
                     ObjectTypeComboBox.Enabled = false;
                     ObjectTypeComboBox.SelectedIndex = 0;
@@ -780,7 +780,7 @@ namespace RelhaxModpack
                     ShortCutTabPage.Enabled = true;
                     ObjectShortcutList.DataSource = null;
                     ObjectShortcutList.Items.Clear();
-                    ObjectShortcutList.DataSource = SelectedLogicalDependency.shortCuts;
+                    ObjectShortcutList.DataSource = SelectedLogicalDependency.Shortcuts;
                 }
                 else if (node.DatabaseObject != null)
                 {
@@ -791,7 +791,7 @@ namespace RelhaxModpack
                     SelectedCategory = null;
 
                     ObjectNameTB.Enabled = true;
-                    ObjectNameTB.Text = SelectedDatabaseObject.name;
+                    ObjectNameTB.Text = SelectedDatabaseObject.Name;
 
                     ObjectPackageNameTB.Enabled = true;
                     ObjectPackageNameTB.Text = SelectedDatabaseObject.PackageName;
@@ -806,7 +806,7 @@ namespace RelhaxModpack
                     ObjectZipFileTB.Text = SelectedDatabaseObject.ZipFile;
 
                     ObjectVersionTB.Enabled = true;
-                    ObjectVersionTB.Text = SelectedDatabaseObject.version;
+                    ObjectVersionTB.Text = SelectedDatabaseObject.Version;
 
                     if (SelectedDatabaseObject.Timestamp > 0)
                         ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedDatabaseObject.Timestamp));
@@ -814,13 +814,13 @@ namespace RelhaxModpack
                         ObjectLastUpdatedLabel.Text = "last updated: (none)";
 
                     ObjectDevURLTB.Enabled = true;
-                    ObjectDevURLTB.Text = SelectedDatabaseObject.devURL;
+                    ObjectDevURLTB.Text = SelectedDatabaseObject.DevURL;
 
                     if (SelectedDatabaseObject is Config)
                     {
                         ObjectTypeComboBox.Enabled = true;
                         Config cfg = (Config)SelectedDatabaseObject;
-                        switch (cfg.type)
+                        switch (cfg.Type)
                         {
                             case "single":
                                 ObjectTypeComboBox.SelectedIndex = 1;
@@ -852,17 +852,17 @@ namespace RelhaxModpack
                     ObjectEnabledCheckBox.Checked = SelectedDatabaseObject.Enabled;
 
                     ObjectVisibleCheckBox.Enabled = true;
-                    ObjectVisibleCheckBox.Checked = SelectedDatabaseObject.visible;
+                    ObjectVisibleCheckBox.Checked = SelectedDatabaseObject.Visible;
 
                     ObjectAppendExtractionCB.Enabled = false;
 
                     DescriptionTabPage.Enabled = true;
 
                     ObjectDescTB.Enabled = true;
-                    ObjectDescTB.Text = SelectedDatabaseObject.description;
+                    ObjectDescTB.Text = SelectedDatabaseObject.Description;
 
                     ObjectUpdateNotesTB.Enabled = true;
-                    ObjectUpdateNotesTB.Text = SelectedDatabaseObject.updateComment;
+                    ObjectUpdateNotesTB.Text = SelectedDatabaseObject.UpdateComment;
 
                     DownloadZipfileButton.Enabled = true;
 
@@ -874,27 +874,27 @@ namespace RelhaxModpack
                     ShortCutTabPage.Enabled = true;
 
                     //logicalDependencies
-                    ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.logicalDependencies;
+                    ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.LogicalDependencies;
                     CurrentLogicalDependenciesCB.DataSource = LogicalDependencies;
                     CurrentLogicalDependenciesCB.SelectedIndex = -1;
 
                     //dependencies
                     ObjectDependenciesLabel.Text = "dependencies (click to edit)";
-                    ObjectDependenciesList.DataSource = SelectedDatabaseObject.dependencies;
+                    ObjectDependenciesList.DataSource = SelectedDatabaseObject.Dependencies;
                     CurrentDependenciesCB.DataSource = Dependencies;
                     CurrentDependenciesCB.SelectedIndex = -1;
 
                     //pictures
-                    ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
-                    if (SelectedDatabaseObject.pictureList.Count == 0)
+                    ObjectPicturesList.DataSource = SelectedDatabaseObject.PictureList;
+                    if (SelectedDatabaseObject.PictureList.Count == 0)
                         PictureURLTB.Text = "";
 
                     //userdatas
-                    ObjectUserdatasList.DataSource = SelectedDatabaseObject.userFiles;
+                    ObjectUserdatasList.DataSource = SelectedDatabaseObject.UserFiles;
 
                     //shortcuts
-                    ObjectShortcutList.DataSource = SelectedDatabaseObject.shortCuts;
-                    if (SelectedDatabaseObject.shortCuts.Count == 0)
+                    ObjectShortcutList.DataSource = SelectedDatabaseObject.ShortCuts;
+                    if (SelectedDatabaseObject.ShortCuts.Count == 0)
                     {
                         ObjectShortcutTB.Text = "";
                         ObjectShortcutNameTB.Text = "";
@@ -910,7 +910,7 @@ namespace RelhaxModpack
                     SelectedCategory = node.Category;
 
                     ObjectNameTB.Enabled = true;
-                    ObjectNameTB.Text = SelectedCategory.name;
+                    ObjectNameTB.Text = SelectedCategory.Name;
 
                     ObjectPackageNameTB.Enabled = false;
 
@@ -927,9 +927,9 @@ namespace RelhaxModpack
                     ObjectDevURLTB.Enabled = false;
 
                     ObjectTypeComboBox.Enabled = true;
-                    if (SelectedCategory.selectionType.Substring(0, 5).Equals("multi"))
+                    if (SelectedCategory.SelectionType.Substring(0, 5).Equals("multi"))
                         ObjectTypeComboBox.SelectedIndex = 4;
-                    else if (SelectedCategory.selectionType.Substring(0, 6).Equals("single"))
+                    else if (SelectedCategory.SelectionType.Substring(0, 6).Equals("single"))
                         ObjectTypeComboBox.SelectedIndex = 1;
                     else
                         ObjectTypeComboBox.SelectedIndex = 4;
@@ -951,7 +951,7 @@ namespace RelhaxModpack
                     LogicalDependencyPanel.Enabled = false;
 
                     ObjectDependenciesLabel.Text = "dependencies (click to edit)";
-                    ObjectDependenciesList.DataSource = SelectedCategory.dependencies;
+                    ObjectDependenciesList.DataSource = SelectedCategory.Dependencies;
                     CurrentDependenciesCB.DataSource = Dependencies;
                     CurrentDependenciesCB.SelectedIndex = -1;
 
@@ -1125,8 +1125,8 @@ namespace RelhaxModpack
                         newDep.EndAddress = ObjectEndAddressTB.Text;
                         newDep.ZipFile = ObjectZipFileTB.Text;
                         newDep.Enabled = ObjectEnabledCheckBox.Checked;
-                        newDep.appendExtraction = ObjectAppendExtractionCB.Checked;
-                        newDep.devURL = ObjectDevURLTB.Text;
+                        newDep.AppendExtraction = ObjectAppendExtractionCB.Checked;
+                        newDep.DevURL = ObjectDevURLTB.Text;
                         newDep.CRC = "";
                         if (!ObjectZipFileTB.Text.Equals(""))
                             newDep.CRC = "f";
@@ -1144,8 +1144,8 @@ namespace RelhaxModpack
                         newDep.EndAddress = ObjectEndAddressTB.Text;
                         newDep.ZipFile = ObjectZipFileTB.Text;
                         newDep.Enabled = ObjectEnabledCheckBox.Checked;
-                        newDep.appendExtraction = ObjectAppendExtractionCB.Checked;
-                        newDep.devURL = ObjectDevURLTB.Text;
+                        newDep.AppendExtraction = ObjectAppendExtractionCB.Checked;
+                        newDep.DevURL = ObjectDevURLTB.Text;
                         newDep.CRC = "";
                         if (!ObjectZipFileTB.Text.Equals(""))
                             newDep.CRC = "f";
@@ -1164,7 +1164,7 @@ namespace RelhaxModpack
                         newDep.EndAddress = ObjectEndAddressTB.Text;
                         newDep.ZipFile = ObjectZipFileTB.Text;
                         newDep.Enabled = ObjectEnabledCheckBox.Checked;
-                        newDep.devURL = ObjectDevURLTB.Text;
+                        newDep.DevURL = ObjectDevURLTB.Text;
                         newDep.CRC = "";
                         if (!ObjectZipFileTB.Text.Equals(""))
                             newDep.CRC = "f";
@@ -1179,32 +1179,32 @@ namespace RelhaxModpack
                             if (dba.sublist)
                             {
                                 Config cfg = new Config();
-                                cfg.name = ObjectNameTB.Text;
+                                cfg.Name = ObjectNameTB.Text;
                                 cfg.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
                                 cfg.StartAddress = ObjectStartAddressTB.Text;
                                 cfg.EndAddress = ObjectEndAddressTB.Text;
                                 cfg.ZipFile = ObjectZipFileTB.Text;
-                                cfg.devURL = ObjectDevURLTB.Text;
-                                cfg.version = ObjectVersionTB.Text;
+                                cfg.DevURL = ObjectDevURLTB.Text;
+                                cfg.Version = ObjectVersionTB.Text;
                                 switch (ObjectTypeComboBox.SelectedIndex)
                                 {
                                     case 1:
-                                        cfg.type = "single1";
+                                        cfg.Type = "single1";
                                         break;
                                     case 2:
-                                        cfg.type = "single_dropdown1";
+                                        cfg.Type = "single_dropdown1";
                                         break;
                                     case 3:
-                                        cfg.type = "single_dropdown2";
+                                        cfg.Type = "single_dropdown2";
                                         break;
                                     case 4:
-                                        cfg.type = "multi";
+                                        cfg.Type = "multi";
                                         break;
                                 }
                                 cfg.Enabled = ObjectEnabledCheckBox.Checked;
-                                cfg.visible = ObjectVisibleCheckBox.Checked;
-                                cfg.description = ObjectDescTB.Text;
-                                cfg.updateComment = ObjectUpdateNotesTB.Text;
+                                cfg.Visible = ObjectVisibleCheckBox.Checked;
+                                cfg.Description = ObjectDescTB.Text;
+                                cfg.UpdateComment = ObjectUpdateNotesTB.Text;
                                 cfg.CRC = "";
                                 if (!ObjectZipFileTB.Text.Equals(""))
                                     cfg.CRC = "f";
@@ -1220,17 +1220,17 @@ namespace RelhaxModpack
                                     int index = ModList.IndexOf(mm);
                                     //make changes
                                     Mod m = new Mod();
-                                    m.name = ObjectNameTB.Text;
+                                    m.Name = ObjectNameTB.Text;
                                     m.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
                                     m.StartAddress = ObjectStartAddressTB.Text;
                                     m.EndAddress = ObjectEndAddressTB.Text;
                                     m.ZipFile = ObjectZipFileTB.Text;
-                                    m.devURL = ObjectDevURLTB.Text;
-                                    m.version = ObjectVersionTB.Text;
+                                    m.DevURL = ObjectDevURLTB.Text;
+                                    m.Version = ObjectVersionTB.Text;
                                     m.Enabled = ObjectEnabledCheckBox.Checked;
-                                    m.visible = ObjectVisibleCheckBox.Checked;
-                                    m.description = ObjectDescTB.Text;
-                                    m.updateComment = ObjectUpdateNotesTB.Text;
+                                    m.Visible = ObjectVisibleCheckBox.Checked;
+                                    m.Description = ObjectDescTB.Text;
+                                    m.UpdateComment = ObjectUpdateNotesTB.Text;
                                     m.CRC = "";
                                     if (!ObjectZipFileTB.Text.Equals(""))
                                         m.CRC = "f";
@@ -1247,32 +1247,32 @@ namespace RelhaxModpack
                                         int index = ListThatContainsConfig.IndexOf(cfgg);
                                         //make changes
                                         Config cfg = new Config();
-                                        cfg.name = ObjectNameTB.Text;
+                                        cfg.Name = ObjectNameTB.Text;
                                         cfg.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
                                         cfg.StartAddress = ObjectStartAddressTB.Text;
                                         cfg.EndAddress = ObjectEndAddressTB.Text;
                                         cfg.ZipFile = ObjectZipFileTB.Text;
-                                        cfg.devURL = ObjectDevURLTB.Text;
-                                        cfg.version = ObjectVersionTB.Text;
+                                        cfg.DevURL = ObjectDevURLTB.Text;
+                                        cfg.Version = ObjectVersionTB.Text;
                                         switch (ObjectTypeComboBox.SelectedIndex)
                                         {
                                             case 1:
-                                                cfg.type = "single1";
+                                                cfg.Type = "single1";
                                                 break;
                                             case 2:
-                                                cfg.type = "single_dropdown1";
+                                                cfg.Type = "single_dropdown1";
                                                 break;
                                             case 3:
-                                                cfg.type = "single_dropdown2";
+                                                cfg.Type = "single_dropdown2";
                                                 break;
                                             case 4:
-                                                cfg.type = "multi";
+                                                cfg.Type = "multi";
                                                 break;
                                         }
                                         cfg.Enabled = ObjectEnabledCheckBox.Checked;
-                                        cfg.visible = ObjectVisibleCheckBox.Checked;
-                                        cfg.description = ObjectDescTB.Text;
-                                        cfg.updateComment = ObjectUpdateNotesTB.Text;
+                                        cfg.Visible = ObjectVisibleCheckBox.Checked;
+                                        cfg.Description = ObjectDescTB.Text;
+                                        cfg.UpdateComment = ObjectUpdateNotesTB.Text;
                                         cfg.CRC = "";
                                         if (!ObjectZipFileTB.Text.Equals(""))
                                             cfg.CRC = "f";
@@ -1291,32 +1291,32 @@ namespace RelhaxModpack
                             if (dba.sublist)
                             {
                                 Config cfg = new Config();
-                                cfg.name = ObjectNameTB.Text;
+                                cfg.Name = ObjectNameTB.Text;
                                 cfg.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
                                 cfg.StartAddress = ObjectStartAddressTB.Text;
                                 cfg.EndAddress = ObjectEndAddressTB.Text;
                                 cfg.ZipFile = ObjectZipFileTB.Text;
-                                cfg.devURL = ObjectDevURLTB.Text;
-                                cfg.version = ObjectVersionTB.Text;
+                                cfg.DevURL = ObjectDevURLTB.Text;
+                                cfg.Version = ObjectVersionTB.Text;
                                 switch (ObjectTypeComboBox.SelectedIndex)
                                 {
                                     case 1:
-                                        cfg.type = "single1";
+                                        cfg.Type = "single1";
                                         break;
                                     case 2:
-                                        cfg.type = "single_dropdown1";
+                                        cfg.Type = "single_dropdown1";
                                         break;
                                     case 3:
-                                        cfg.type = "single_dropdown2";
+                                        cfg.Type = "single_dropdown2";
                                         break;
                                     case 4:
-                                        cfg.type = "multi";
+                                        cfg.Type = "multi";
                                         break;
                                 }
                                 cfg.Enabled = ObjectEnabledCheckBox.Checked;
-                                cfg.visible = ObjectVisibleCheckBox.Checked;
-                                cfg.description = ObjectDescTB.Text;
-                                cfg.updateComment = ObjectUpdateNotesTB.Text;
+                                cfg.Visible = ObjectVisibleCheckBox.Checked;
+                                cfg.Description = ObjectDescTB.Text;
+                                cfg.UpdateComment = ObjectUpdateNotesTB.Text;
                                 cfg.CRC = "";
                                 if (!ObjectZipFileTB.Text.Equals(""))
                                     cfg.CRC = "f";
@@ -1335,32 +1335,32 @@ namespace RelhaxModpack
                                         int index = ListThatContainsConfig.IndexOf(cfgg);
                                         //make changes
                                         Config cfg = new Config();
-                                        cfg.name = ObjectNameTB.Text;
+                                        cfg.Name = ObjectNameTB.Text;
                                         cfg.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
                                         cfg.StartAddress = ObjectStartAddressTB.Text;
                                         cfg.EndAddress = ObjectEndAddressTB.Text;
                                         cfg.ZipFile = ObjectZipFileTB.Text;
-                                        cfg.devURL = ObjectDevURLTB.Text;
-                                        cfg.version = ObjectVersionTB.Text;
+                                        cfg.DevURL = ObjectDevURLTB.Text;
+                                        cfg.Version = ObjectVersionTB.Text;
                                         switch (ObjectTypeComboBox.SelectedIndex)
                                         {
                                             case 1:
-                                                cfg.type = "single1";
+                                                cfg.Type = "single1";
                                                 break;
                                             case 2:
-                                                cfg.type = "single_dropdown1";
+                                                cfg.Type = "single_dropdown1";
                                                 break;
                                             case 3:
-                                                cfg.type = "single_dropdown2";
+                                                cfg.Type = "single_dropdown2";
                                                 break;
                                             case 4:
-                                                cfg.type = "multi";
+                                                cfg.Type = "multi";
                                                 break;
                                         }
                                         cfg.Enabled = ObjectEnabledCheckBox.Checked;
-                                        cfg.visible = ObjectVisibleCheckBox.Checked;
-                                        cfg.description = ObjectDescTB.Text;
-                                        cfg.updateComment = ObjectUpdateNotesTB.Text;
+                                        cfg.Visible = ObjectVisibleCheckBox.Checked;
+                                        cfg.Description = ObjectDescTB.Text;
+                                        cfg.UpdateComment = ObjectUpdateNotesTB.Text;
                                         cfg.CRC = "";
                                         if (!ObjectZipFileTB.Text.Equals(""))
                                             cfg.CRC = "f";
@@ -1375,17 +1375,17 @@ namespace RelhaxModpack
                                     int index = ModList.IndexOf(mm);
                                     //make changes
                                     Mod m = new Mod();
-                                    m.name = ObjectNameTB.Text;
+                                    m.Name = ObjectNameTB.Text;
                                     m.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
                                     m.StartAddress = ObjectStartAddressTB.Text;
                                     m.EndAddress = ObjectEndAddressTB.Text;
                                     m.ZipFile = ObjectZipFileTB.Text;
-                                    m.devURL = ObjectDevURLTB.Text;
-                                    m.version = ObjectVersionTB.Text;
+                                    m.DevURL = ObjectDevURLTB.Text;
+                                    m.Version = ObjectVersionTB.Text;
                                     m.Enabled = ObjectEnabledCheckBox.Checked;
-                                    m.visible = ObjectVisibleCheckBox.Checked;
-                                    m.description = ObjectDescTB.Text;
-                                    m.updateComment = ObjectUpdateNotesTB.Text;
+                                    m.Visible = ObjectVisibleCheckBox.Checked;
+                                    m.Description = ObjectDescTB.Text;
+                                    m.UpdateComment = ObjectUpdateNotesTB.Text;
                                     m.CRC = "";
                                     if (!ObjectZipFileTB.Text.Equals(""))
                                         m.CRC = "f";
@@ -1484,17 +1484,17 @@ namespace RelhaxModpack
             }
             foreach (Category c in ParsedCategoryList)
             {
-                foreach (Dependency d in c.dependencies)
+                foreach (Dependency d in c.Dependencies)
                 {
                     if (d.PackageName.Equals(packageName))
                     {
                         InUse = true;
-                        InUseSB.Append(string.Format("Category: {0}", c.name));
+                        InUseSB.Append(string.Format("Category: {0}", c.Name));
                     }
                 }
-                foreach (Mod m in c.mods)
+                foreach (Mod m in c.Mods)
                 {
-                    foreach (Dependency d in m.dependencies)
+                    foreach (Dependency d in m.Dependencies)
                     {
                         if (d.PackageName.Equals(packageName))
                         {
@@ -1502,7 +1502,7 @@ namespace RelhaxModpack
                             InUseSB.Append(string.Format("Mod: {0}\n", m.PackageName));
                         }
                     }
-                    foreach (LogicalDependency d in m.logicalDependencies)
+                    foreach (LogicalDependency d in m.LogicalDependencies)
                     {
                         if (d.PackageName.Equals(packageName))
                         {
@@ -1519,7 +1519,7 @@ namespace RelhaxModpack
         {
             foreach (Config c in configs)
             {
-                foreach (Dependency d in c.dependencies)
+                foreach (Dependency d in c.Dependencies)
                 {
                     if (d.PackageName.Equals(packageName))
                     {
@@ -1527,7 +1527,7 @@ namespace RelhaxModpack
                         InUseSB.Append(string.Format("Config: {0}\n", c.PackageName));
                     }
                 }
-                foreach (LogicalDependency d in c.logicalDependencies)
+                foreach (LogicalDependency d in c.LogicalDependencies)
                 {
                     if (d.PackageName.Equals(packageName))
                     {
@@ -1548,20 +1548,20 @@ namespace RelhaxModpack
                 Dependency ld = new Dependency();
                 Dependency ld2 = (Dependency)CurrentDependenciesCB.SelectedItem;
                 ld.PackageName = ld2.PackageName;
-                SelectedCategory.dependencies.Add(ld);
+                SelectedCategory.Dependencies.Add(ld);
                 ObjectDependenciesList.DataSource = null;
                 ObjectDependenciesList.Items.Clear();
-                ObjectDependenciesList.DataSource = SelectedCategory.dependencies;
+                ObjectDependenciesList.DataSource = SelectedCategory.Dependencies;
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
                 Dependency ld = new Dependency();
                 Dependency ld2 = (Dependency)CurrentDependenciesCB.SelectedItem;
                 ld.PackageName = ld2.PackageName;
-                SelectedDatabaseObject.dependencies.Add(ld);
+                SelectedDatabaseObject.Dependencies.Add(ld);
                 ObjectDependenciesList.DataSource = null;
                 ObjectDependenciesList.Items.Clear();
-                ObjectDependenciesList.DataSource = SelectedDatabaseObject.dependencies;
+                ObjectDependenciesList.DataSource = SelectedDatabaseObject.Dependencies;
             }
             UnsavedModifications = true;
         }
@@ -1572,17 +1572,17 @@ namespace RelhaxModpack
                 return;
             if (SelectedCategory != null)
             {
-                SelectedCategory.dependencies.Remove((Dependency)ObjectDependenciesList.SelectedItem);
+                SelectedCategory.Dependencies.Remove((Dependency)ObjectDependenciesList.SelectedItem);
                 ObjectDependenciesList.DataSource = null;
                 ObjectDependenciesList.Items.Clear();
-                ObjectDependenciesList.DataSource = SelectedCategory.dependencies;
+                ObjectDependenciesList.DataSource = SelectedCategory.Dependencies;
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-                SelectedDatabaseObject.dependencies.Remove((Dependency)ObjectDependenciesList.SelectedItem);
+                SelectedDatabaseObject.Dependencies.Remove((Dependency)ObjectDependenciesList.SelectedItem);
                 ObjectDependenciesList.DataSource = null;
                 ObjectDependenciesList.Items.Clear();
-                ObjectDependenciesList.DataSource = SelectedDatabaseObject.dependencies;
+                ObjectDependenciesList.DataSource = SelectedDatabaseObject.Dependencies;
             }
             UnsavedModifications = true;
         }
@@ -1596,22 +1596,22 @@ namespace RelhaxModpack
                 LogicalDependency ld = new LogicalDependency();
                 LogicalDependency ld2 = (LogicalDependency)CurrentLogicalDependenciesCB.SelectedItem;
                 ld.PackageName = ld2.PackageName;
-                ld.negateFlag = LogicalDependnecyNegateFlagCB.Checked;
-                SelectedDependency.logicalDependencies.Add(ld);
+                ld.NegateFlag = LogicalDependnecyNegateFlagCB.Checked;
+                SelectedDependency.LogicalDependencies.Add(ld);
                 ObjectLogicalDependenciesList.DataSource = null;
                 ObjectLogicalDependenciesList.Items.Clear();
-                ObjectLogicalDependenciesList.DataSource = SelectedDependency.logicalDependencies;
+                ObjectLogicalDependenciesList.DataSource = SelectedDependency.LogicalDependencies;
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
                 LogicalDependency ld = new LogicalDependency();
                 LogicalDependency ld2 = (LogicalDependency)CurrentLogicalDependenciesCB.SelectedItem;
                 ld.PackageName = ld2.PackageName;
-                ld.negateFlag = LogicalDependnecyNegateFlagCB.Checked;
-                SelectedDatabaseObject.logicalDependencies.Add(ld);
+                ld.NegateFlag = LogicalDependnecyNegateFlagCB.Checked;
+                SelectedDatabaseObject.LogicalDependencies.Add(ld);
                 ObjectLogicalDependenciesList.DataSource = null;
                 ObjectLogicalDependenciesList.Items.Clear();
-                ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.logicalDependencies;
+                ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.LogicalDependencies;
             }
             UnsavedModifications = true;
         }
@@ -1622,17 +1622,17 @@ namespace RelhaxModpack
                 return;
             if (DatabaseEditorMode == EditorMode.Dependency)
             {
-                SelectedDependency.logicalDependencies.Remove((LogicalDependency)ObjectLogicalDependenciesList.SelectedItem);
+                SelectedDependency.LogicalDependencies.Remove((LogicalDependency)ObjectLogicalDependenciesList.SelectedItem);
                 ObjectLogicalDependenciesList.DataSource = null;
                 ObjectLogicalDependenciesList.Items.Clear();
-                ObjectLogicalDependenciesList.DataSource = SelectedDependency.logicalDependencies;
+                ObjectLogicalDependenciesList.DataSource = SelectedDependency.LogicalDependencies;
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-                SelectedDatabaseObject.logicalDependencies.Remove((LogicalDependency)ObjectLogicalDependenciesList.SelectedItem);
+                SelectedDatabaseObject.LogicalDependencies.Remove((LogicalDependency)ObjectLogicalDependenciesList.SelectedItem);
                 ObjectLogicalDependenciesList.DataSource = null;
                 ObjectLogicalDependenciesList.Items.Clear();
-                ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.logicalDependencies;
+                ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.LogicalDependencies;
             }
             UnsavedModifications = true;
         }
@@ -1647,20 +1647,20 @@ namespace RelhaxModpack
                 MessageBox.Show("Invalid index in move to position");
                 return;
             }
-            if (index > SelectedDatabaseObject.pictureList.Count)
+            if (index > SelectedDatabaseObject.PictureList.Count)
             {
                 MessageBox.Show("Invalid index in move to position");
                 return;
             }
             Media media = (Media)ObjectPicturesList.SelectedItem;
-            SelectedDatabaseObject.pictureList.Remove(media);
+            SelectedDatabaseObject.PictureList.Remove(media);
             //if the index is now out of range, just put it in the bottom
-            if (index > SelectedDatabaseObject.pictureList.Count)
-                index = SelectedDatabaseObject.pictureList.Count;
-            SelectedDatabaseObject.pictureList.Insert(index, media);
+            if (index > SelectedDatabaseObject.PictureList.Count)
+                index = SelectedDatabaseObject.PictureList.Count;
+            SelectedDatabaseObject.PictureList.Insert(index, media);
             ObjectPicturesList.DataSource = null;
             ObjectPicturesList.Items.Clear();
-            ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
+            ObjectPicturesList.DataSource = SelectedDatabaseObject.PictureList;
             UnsavedModifications = true;
         }
 
@@ -1679,24 +1679,24 @@ namespace RelhaxModpack
                 MessageBox.Show("Invalid index in add at positon");
                 return;
             }
-            if (index > SelectedDatabaseObject.pictureList.Count)
+            if (index > SelectedDatabaseObject.PictureList.Count)
             {
                 MessageBox.Show("Invalid index in add at positon");
                 return;
             }
-            Media media = new Media(SelectedDatabaseObject.name, PictureURLTB.Text);
+            Media media = new Media(SelectedDatabaseObject.Name, PictureURLTB.Text);
             if (PicturesTypeCBox.SelectedIndex == 1)
             {
-                media.mediaType = MediaType.picture;
+                media.MediaType = MediaType.Picture;
             }
             else if (PicturesTypeCBox.SelectedIndex == 2)
             {
-                media.mediaType = MediaType.youtube;
+                media.MediaType = MediaType.Youtube;
             }
-            SelectedDatabaseObject.pictureList.Insert(index, media);
+            SelectedDatabaseObject.PictureList.Insert(index, media);
             ObjectPicturesList.DataSource = null;
             ObjectPicturesList.Items.Clear();
-            ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
+            ObjectPicturesList.DataSource = SelectedDatabaseObject.PictureList;
             UnsavedModifications = true;
         }
 
@@ -1705,10 +1705,10 @@ namespace RelhaxModpack
             if (MessageBox.Show("Confirm you wish to remove picture", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
             Media media = (Media)ObjectPicturesList.SelectedItem;
-            SelectedDatabaseObject.pictureList.Remove(media);
+            SelectedDatabaseObject.PictureList.Remove(media);
             ObjectPicturesList.DataSource = null;
             ObjectPicturesList.Items.Clear();
-            ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
+            ObjectPicturesList.DataSource = SelectedDatabaseObject.PictureList;
             UnsavedModifications = true;
         }
 
@@ -1725,16 +1725,16 @@ namespace RelhaxModpack
                 return;
             if (PicturesTypeCBox.SelectedIndex == 1)
             {
-                media.mediaType = MediaType.picture;
+                media.MediaType = MediaType.Picture;
             }
             else if (PicturesTypeCBox.SelectedIndex == 2)
             {
-                media.mediaType = MediaType.youtube;
+                media.MediaType = MediaType.Youtube;
             }
             media.URL = PictureURLTB.Text;
             ObjectPicturesList.DataSource = null;
             ObjectPicturesList.Items.Clear();
-            ObjectPicturesList.DataSource = SelectedDatabaseObject.pictureList;
+            ObjectPicturesList.DataSource = SelectedDatabaseObject.PictureList;
             UnsavedModifications = true;
         }
 
@@ -1753,7 +1753,7 @@ namespace RelhaxModpack
                 }
             }
             LogicalDependnecyNegateFlagCB.CheckedChanged -= LogicalDependnecyNegateFlagCB_CheckedChanged;
-            LogicalDependnecyNegateFlagCB.Checked = ld.negateFlag;
+            LogicalDependnecyNegateFlagCB.Checked = ld.NegateFlag;
             LogicalDependnecyNegateFlagCB.CheckedChanged += LogicalDependnecyNegateFlagCB_CheckedChanged;
         }
 
@@ -1764,18 +1764,18 @@ namespace RelhaxModpack
             if (DatabaseEditorMode == EditorMode.Dependency)
             {
                 LogicalDependency ld = (LogicalDependency)ObjectLogicalDependenciesList.SelectedItem;
-                ld.negateFlag = LogicalDependnecyNegateFlagCB.Checked;
+                ld.NegateFlag = LogicalDependnecyNegateFlagCB.Checked;
                 ObjectLogicalDependenciesList.DataSource = null;
                 ObjectLogicalDependenciesList.Items.Clear();
-                ObjectLogicalDependenciesList.DataSource = SelectedDependency.logicalDependencies;
+                ObjectLogicalDependenciesList.DataSource = SelectedDependency.LogicalDependencies;
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
                 LogicalDependency ld = (LogicalDependency)ObjectLogicalDependenciesList.SelectedItem;
-                ld.negateFlag = LogicalDependnecyNegateFlagCB.Checked;
+                ld.NegateFlag = LogicalDependnecyNegateFlagCB.Checked;
                 ObjectLogicalDependenciesList.DataSource = null;
                 ObjectLogicalDependenciesList.Items.Clear();
-                ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.logicalDependencies;
+                ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.LogicalDependencies;
             }
             UnsavedModifications = true;
         }
@@ -1809,18 +1809,18 @@ namespace RelhaxModpack
             if (lb.DataSource == null)
                 return;
             Media med = (Media)lb.SelectedItem;
-            switch (med.mediaType)
+            switch (med.MediaType)
             {
-                case MediaType.picture:
+                case MediaType.Picture:
                     PicturesTypeCBox.SelectedIndex = 1;
                     break;
-                case MediaType.youtube:
+                case MediaType.Youtube:
                     PicturesTypeCBox.SelectedIndex = 2;
                     break;
             }
             PictureURLTB.Text = med.URL;
-            MovePictureTB.Text = "" + SelectedDatabaseObject.pictureList.IndexOf(med);
-            AddPictureTB.Text = "" + SelectedDatabaseObject.pictureList.IndexOf(med);
+            MovePictureTB.Text = "" + SelectedDatabaseObject.PictureList.IndexOf(med);
+            AddPictureTB.Text = "" + SelectedDatabaseObject.PictureList.IndexOf(med);
         }
 
         private void AddShortcutsButton_Click(object sender, EventArgs e)
@@ -1832,10 +1832,10 @@ namespace RelhaxModpack
             }
             if (MessageBox.Show("Confirm you wish to add shortcut entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
-            ShortCut sc = new ShortCut();
-            sc.path = ObjectShortcutTB.Text;
-            sc.name = Utils.GetValidFilename(ObjectShortcutNameTB.Text);
-            sc.enabled = ObjectShortcutCB.Checked;
+            Shortcut sc = new Shortcut();
+            sc.Path = ObjectShortcutTB.Text;
+            sc.Name = Utils.GetValidFilename(ObjectShortcutNameTB.Text);
+            sc.Enabled = ObjectShortcutCB.Checked;
             ObjectShortcutList.DataSource = null;
             ObjectShortcutList.Items.Clear();
             if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
@@ -1850,13 +1850,13 @@ namespace RelhaxModpack
             }
             else if (DatabaseEditorMode == EditorMode.LogicalDependency)
             {
-                SelectedLogicalDependency.shortCuts.Add(sc);
-                ObjectShortcutList.DataSource = SelectedLogicalDependency.shortCuts;
+                SelectedLogicalDependency.Shortcuts.Add(sc);
+                ObjectShortcutList.DataSource = SelectedLogicalDependency.Shortcuts;
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-                SelectedDatabaseObject.shortCuts.Add(sc);
-                ObjectShortcutList.DataSource = SelectedDatabaseObject.shortCuts;
+                SelectedDatabaseObject.ShortCuts.Add(sc);
+                ObjectShortcutList.DataSource = SelectedDatabaseObject.ShortCuts;
             }
             else
             {
@@ -1875,7 +1875,7 @@ namespace RelhaxModpack
                 return;
             }
             var tmpSelectedItem = ObjectShortcutList.SelectedItem;
-            ShortCut sc = (ShortCut)ObjectShortcutList.SelectedItem;
+            Shortcut sc = (Shortcut)ObjectShortcutList.SelectedItem;
             if (sc is null)
             {
                 MessageBox.Show("No entry selected to modify", "confirm", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1883,9 +1883,9 @@ namespace RelhaxModpack
             }
             if (MessageBox.Show("Confirm you wish to edit shortcut entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
-            sc.path = ObjectShortcutTB.Text;
-            sc.name = Utils.GetValidFilename(ObjectShortcutNameTB.Text);
-            sc.enabled = ObjectShortcutCB.Checked;
+            sc.Path = ObjectShortcutTB.Text;
+            sc.Name = Utils.GetValidFilename(ObjectShortcutNameTB.Text);
+            sc.Enabled = ObjectShortcutCB.Checked;
             ObjectShortcutList.DataSource = null;
             ObjectShortcutList.Items.Clear();
             if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
@@ -1898,11 +1898,11 @@ namespace RelhaxModpack
             }
             else if (DatabaseEditorMode == EditorMode.LogicalDependency)
             {
-                ObjectShortcutList.DataSource = SelectedLogicalDependency.shortCuts;
+                ObjectShortcutList.DataSource = SelectedLogicalDependency.Shortcuts;
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-                ObjectShortcutList.DataSource = SelectedDatabaseObject.shortCuts;
+                ObjectShortcutList.DataSource = SelectedDatabaseObject.ShortCuts;
             }
             else
             {
@@ -1916,7 +1916,7 @@ namespace RelhaxModpack
         private void RemoveShortcutsButton_Click(object sender, EventArgs e)
         {
             if (ObjectShortcutList.Items.Count == 0) return;
-            ShortCut sc = (ShortCut)ObjectShortcutList.SelectedItem;
+            Shortcut sc = (Shortcut)ObjectShortcutList.SelectedItem;
             if (sc is null)
             {
                 MessageBox.Show("No entry selected to modify", "confirm", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1938,25 +1938,25 @@ namespace RelhaxModpack
             }
             else if (DatabaseEditorMode == EditorMode.LogicalDependency)
             {
-                SelectedLogicalDependency.shortCuts.Remove(sc);
-                ObjectShortcutList.DataSource = SelectedLogicalDependency.shortCuts;
+                SelectedLogicalDependency.Shortcuts.Remove(sc);
+                ObjectShortcutList.DataSource = SelectedLogicalDependency.Shortcuts;
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-                SelectedDatabaseObject.shortCuts.Remove(sc);
-                ObjectShortcutList.DataSource = SelectedDatabaseObject.shortCuts;
+                SelectedDatabaseObject.ShortCuts.Remove(sc);
+                ObjectShortcutList.DataSource = SelectedDatabaseObject.ShortCuts;
             }
             else
             {
                 MessageBox.Show("Unexpected DatabaseEditorMode at AddShortcutsButton_Click()", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            sc.path = "";
-            sc.name = "";
-            sc.enabled = false;
-            ObjectShortcutTB.Text = sc.path;
-            ObjectShortcutTB.Text = sc.name;
-            ObjectShortcutCB.Checked = sc.enabled;
+            sc.Path = "";
+            sc.Name = "";
+            sc.Enabled = false;
+            ObjectShortcutTB.Text = sc.Path;
+            ObjectShortcutTB.Text = sc.Name;
+            ObjectShortcutCB.Checked = sc.Enabled;
             UnsavedModifications = true;
         }
 
@@ -1965,20 +1965,20 @@ namespace RelhaxModpack
             ListBox lb = (ListBox)sender;
             if (lb.DataSource == null)
                 return;
-            ShortCut shortcut = (ShortCut)lb.SelectedItem;
-            ObjectShortcutTB.Text = shortcut.path;
-            ObjectShortcutNameTB.Text = shortcut.name;
-            ObjectShortcutCB.Checked = shortcut.enabled;
+            Shortcut shortcut = (Shortcut)lb.SelectedItem;
+            ObjectShortcutTB.Text = shortcut.Path;
+            ObjectShortcutNameTB.Text = shortcut.Name;
+            ObjectShortcutCB.Checked = shortcut.Enabled;
         }
 
         private void AddUserdatasButton_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Confirm you wish to add userdata entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
-            SelectedDatabaseObject.userFiles.Add(ObjectUserdatasTB.Text);
+            SelectedDatabaseObject.UserFiles.Add(ObjectUserdatasTB.Text);
             ObjectUserdatasList.DataSource = null;
             ObjectUserdatasList.Items.Clear();
-            ObjectUserdatasList.DataSource = SelectedDatabaseObject.userFiles;
+            ObjectUserdatasList.DataSource = SelectedDatabaseObject.UserFiles;
             UnsavedModifications = true;
         }
 
@@ -1986,11 +1986,11 @@ namespace RelhaxModpack
         {
             if (MessageBox.Show("Confirm you wish to remove userdata entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
-            int index = SelectedDatabaseObject.userFiles.IndexOf((string)ObjectUserdatasList.SelectedItem);
-            SelectedDatabaseObject.userFiles.RemoveAt(index);
+            int index = SelectedDatabaseObject.UserFiles.IndexOf((string)ObjectUserdatasList.SelectedItem);
+            SelectedDatabaseObject.UserFiles.RemoveAt(index);
             ObjectUserdatasList.DataSource = null;
             ObjectUserdatasList.Items.Clear();
-            ObjectUserdatasList.DataSource = SelectedDatabaseObject.userFiles;
+            ObjectUserdatasList.DataSource = SelectedDatabaseObject.UserFiles;
             UnsavedModifications = true;
         }
 
@@ -2005,11 +2005,11 @@ namespace RelhaxModpack
         {
             if (MessageBox.Show("Confirm you wish to edit userdata entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
-            int index = SelectedDatabaseObject.userFiles.IndexOf((string)ObjectUserdatasList.SelectedItem);
-            SelectedDatabaseObject.userFiles[index] = ObjectUserdatasTB.Text;
+            int index = SelectedDatabaseObject.UserFiles.IndexOf((string)ObjectUserdatasList.SelectedItem);
+            SelectedDatabaseObject.UserFiles[index] = ObjectUserdatasTB.Text;
             ObjectUserdatasList.DataSource = null;
             ObjectUserdatasList.Items.Clear();
-            ObjectUserdatasList.DataSource = SelectedDatabaseObject.userFiles;
+            ObjectUserdatasList.DataSource = SelectedDatabaseObject.UserFiles;
             UnsavedModifications = true;
         }
 
@@ -2062,7 +2062,7 @@ namespace RelhaxModpack
         {
             foreach (Dependency depD in Dependencies)
             {
-                foreach (LogicalDependency ld in depD.logicalDependencies)
+                foreach (LogicalDependency ld in depD.LogicalDependencies)
                 {
                     if (ld.PackageName.Equals(d.PackageName))
                     {
@@ -2071,7 +2071,7 @@ namespace RelhaxModpack
                             PackageName = depD.PackageName,
                             Enabled = false,
                             Checked = false,
-                            NotFlag = ld.negateFlag
+                            NotFlag = ld.NegateFlag
                         };
                         d.DatabasePackageLogic.Add(dbl);
                     }
@@ -2080,9 +2080,9 @@ namespace RelhaxModpack
             foreach (Category c in ParsedCategoryList)
             {
                 //will itterate through every catagory once
-                foreach (Mod m in c.mods)
+                foreach (Mod m in c.Mods)
                 {
-                    foreach (LogicalDependency ld in m.logicalDependencies)
+                    foreach (LogicalDependency ld in m.LogicalDependencies)
                     {
                         if (ld.PackageName.Equals(d.PackageName))
                         {
@@ -2091,7 +2091,7 @@ namespace RelhaxModpack
                                 PackageName = m.PackageName,
                                 Enabled = false,
                                 Checked = false,
-                                NotFlag = ld.negateFlag
+                                NotFlag = ld.NegateFlag
                             };
                             d.DatabasePackageLogic.Add(dbl);
                         }
@@ -2106,7 +2106,7 @@ namespace RelhaxModpack
         {
             foreach (Config config in configList)
             {
-                foreach (LogicalDependency ld in config.logicalDependencies)
+                foreach (LogicalDependency ld in config.LogicalDependencies)
                 {
                     if (ld.PackageName.Equals(d.PackageName))
                     {
@@ -2115,7 +2115,7 @@ namespace RelhaxModpack
                             PackageName = config.PackageName,
                             Enabled = false,
                             Checked = false,
-                            NotFlag = ld.negateFlag
+                            NotFlag = ld.NegateFlag
                         };
                         d.DatabasePackageLogic.Add(dl);
                     }
@@ -2131,9 +2131,9 @@ namespace RelhaxModpack
             foreach (Category c in ParsedCategoryList)
             {
                 //will itterate through every catagory once
-                foreach (Mod m in c.mods)
+                foreach (Mod m in c.Mods)
                 {
-                    foreach (Dependency dep in m.dependencies)
+                    foreach (Dependency dep in m.Dependencies)
                     {
                         if (dep.PackageName.Equals(d.PackageName))
                         {
@@ -2151,7 +2151,7 @@ namespace RelhaxModpack
         {
             foreach (Config config in configList)
             {
-                foreach (Dependency dep in config.dependencies)
+                foreach (Dependency dep in config.Dependencies)
                 {
                     if (dep.PackageName.Equals(d.PackageName))
                     {
@@ -2225,7 +2225,7 @@ namespace RelhaxModpack
                 }
                 else if (node.Category != null)
                 {
-                    if (node.Category.name.Equals(packageNameSearch))
+                    if (node.Category.Name.Equals(packageNameSearch))
                     {
                         DatabaseTreeView_NodeMouseClick(DatabaseTreeView, new TreeNodeMouseClickEventArgs(node, MouseButtons.Left, 0, 0, 0));
                     }
@@ -2295,7 +2295,7 @@ namespace RelhaxModpack
             }
             foreach (Category c in ParsedCategoryList)
             {
-                foreach (Mod m in c.mods)
+                foreach (Mod m in c.Mods)
                 {
                     if (m.PackageName.Equals(PackageName))
                     {
@@ -2338,24 +2338,24 @@ namespace RelhaxModpack
         {
             Mod m = new Mod()
             {
-                name = cfgToMove.name,
-                version = cfgToMove.version,
+                Name = cfgToMove.Name,
+                Version = cfgToMove.Version,
                 ZipFile = cfgToMove.ZipFile,
                 configs = cfgToMove.configs,
                 StartAddress = cfgToMove.StartAddress,
-                logicalDependencies = cfgToMove.logicalDependencies,
-                dependencies = cfgToMove.dependencies,
-                pictureList = cfgToMove.pictureList,
+                LogicalDependencies = cfgToMove.LogicalDependencies,
+                Dependencies = cfgToMove.Dependencies,
+                PictureList = cfgToMove.PictureList,
                 EndAddress = cfgToMove.EndAddress,
                 CRC = cfgToMove.CRC,
                 Enabled = cfgToMove.Enabled,
-                visible = cfgToMove.visible,
+                Visible = cfgToMove.Visible,
                 PackageName = cfgToMove.PackageName,
-                size = cfgToMove.size,
-                updateComment = cfgToMove.updateComment,
-                description = cfgToMove.description,
-                devURL = cfgToMove.devURL,
-                userFiles = cfgToMove.userFiles
+                Size = cfgToMove.Size,
+                UpdateComment = cfgToMove.UpdateComment,
+                Description = cfgToMove.Description,
+                DevURL = cfgToMove.DevURL,
+                UserFiles = cfgToMove.UserFiles
             };
             return m;
         }
@@ -2364,25 +2364,25 @@ namespace RelhaxModpack
         {
             Config c = new Config()
             {
-                name = modToMove.name,
-                version = modToMove.version,
+                Name = modToMove.Name,
+                Version = modToMove.Version,
                 ZipFile = modToMove.ZipFile,
                 configs = modToMove.configs,
                 StartAddress = modToMove.StartAddress,
-                logicalDependencies = modToMove.logicalDependencies,
-                dependencies = modToMove.dependencies,
-                pictureList = modToMove.pictureList,
+                LogicalDependencies = modToMove.LogicalDependencies,
+                Dependencies = modToMove.Dependencies,
+                PictureList = modToMove.PictureList,
                 EndAddress = modToMove.EndAddress,
                 CRC = modToMove.CRC,
                 Enabled = modToMove.Enabled,
-                visible = modToMove.visible,
+                Visible = modToMove.Visible,
                 PackageName = modToMove.PackageName,
-                size = modToMove.size,
-                updateComment = modToMove.updateComment,
-                description = modToMove.description,
-                devURL = modToMove.devURL,
-                userFiles = modToMove.userFiles,
-                type = "multi"
+                Size = modToMove.Size,
+                UpdateComment = modToMove.UpdateComment,
+                Description = modToMove.Description,
+                DevURL = modToMove.DevURL,
+                UserFiles = modToMove.UserFiles,
+                Type = "multi"
             };
             return c;
         }

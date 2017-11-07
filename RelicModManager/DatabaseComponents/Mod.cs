@@ -8,14 +8,14 @@ namespace RelhaxModpack
     public class Mod : SelectableDatabasePackage
     {
         //the tab index in the modpack 
-        public TabPage tabIndex { get; set; }
+        public TabPage TabIndex { get; set; }
         
         //the parent of a mod is a category
-        public Category parent { get; set; }
+        public Category ParentCategory { get; set; }
         //needed to excatly identify double packageNames and its position
         public int CheckDatabaseListIndex { get; set; }
         //public bool Checked { get; set; }
-        public UIComponent modFormCheckBox { get; set; }
+        public UIComponent ModFormCheckBox { get; set; }
         //default constructor
         public Mod()
         {
@@ -23,17 +23,17 @@ namespace RelhaxModpack
             Enabled = false;
             Checked = false;
             DownloadFlag = false;
-            visible = true;
+            Visible = true;
         }
         //returns the config of the specified name
         //if it does not exist, it returns null
-        public Config getConfig(string configName)
+        public Config GetConfig(string configName)
         {
             if (configs == null || configs.Count == 0)
                 return null;
             foreach (Config cfg in configs)
             {
-                if (cfg.name.Equals(configName))
+                if (cfg.Name.Equals(configName))
                     return cfg;
             }
             return null;
@@ -41,12 +41,12 @@ namespace RelhaxModpack
         //sorts the mods
         public static int CompareMods(Mod x, Mod y)
         {
-            return x.name.CompareTo(y.name);
+            return x.Name.CompareTo(y.Name);
         }
         //for the tostring thing
         public override string ToString()
         {
-            return nameFormated;
+            return NameFormatted;
         }
     }
 }

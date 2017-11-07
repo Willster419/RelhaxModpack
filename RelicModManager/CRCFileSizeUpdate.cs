@@ -178,7 +178,7 @@ namespace RelhaxModpack
             }
             foreach (Category c in parsedCatagoryList)
             {
-                foreach (Mod m in c.mods)
+                foreach (Mod m in c.Mods)
                 {
                     if (m.ZipFile.Trim().Equals(""))
                     {
@@ -186,7 +186,7 @@ namespace RelhaxModpack
                     }
                     else
                     {
-                        m.size = this.getFileSize(m.ZipFile);
+                        m.Size = this.getFileSize(m.ZipFile);
                         hash = XMLUtils.GetMd5Hash(m.ZipFile);
                         if (!m.CRC.Equals(hash))
                         {
@@ -228,8 +228,8 @@ namespace RelhaxModpack
                 else
                 {
                     hash = XMLUtils.GetMd5Hash(cat.ZipFile);
-                    cat.size = this.getFileSize(cat.ZipFile);
-                    if (cat.size != 0)
+                    cat.Size = this.getFileSize(cat.ZipFile);
+                    if (cat.Size != 0)
                     {
                         if (!cat.CRC.Equals(hash))
                         {
@@ -384,12 +384,12 @@ namespace RelhaxModpack
             }
             foreach (Category c in parsedCatagoryList)
             {
-                foreach (Mod m in c.mods)
+                foreach (Mod m in c.Mods)
                 {
                     int index = this.getZipIndex(m.ZipFile);
                     if (index != -1)
                     {
-                        m.size = this.getFileSize(addZipsDialog.FileNames[index]);
+                        m.Size = this.getFileSize(addZipsDialog.FileNames[index]);
                         if (m.CRC == null || m.CRC.Equals("") || m.CRC.Equals("f"))
                         {
                             m.CRC = Utils.CreateMd5Hash(addZipsDialog.FileNames[index]);
@@ -417,7 +417,7 @@ namespace RelhaxModpack
                 int cindex = this.getZipIndex(cat.ZipFile);
                 if (cindex != -1)
                 {
-                    cat.size = this.getFileSize(addZipsDialog.FileNames[cindex]);
+                    cat.Size = this.getFileSize(addZipsDialog.FileNames[cindex]);
                     if (cat.CRC == null || cat.CRC.Equals("") || cat.CRC.Equals("f"))
                     {
                         cat.CRC = Utils.CreateMd5Hash(addZipsDialog.FileNames[cindex]);

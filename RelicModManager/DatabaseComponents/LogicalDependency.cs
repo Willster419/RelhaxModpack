@@ -23,18 +23,18 @@ namespace RelhaxModpack
         //used to determine at install time if the zip file needs to be downloaded
         public bool DownloadFlag { get; set; }
         //acts as a NOT flag
-        public bool negateFlag { get; set; }
+        public bool NegateFlag { get; set; }
         //needed to excatly identify double packageNames and its position
         public int CheckDatabaseListIndex { get; set; }
         //list of linked mods and configs that use 
         public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
-        public string devURL { get; set; }
-        public List<ShortCut> shortCuts = new List<ShortCut>();
+        public string DevURL { get; set; }
+        public List<Shortcut> Shortcuts = new List<Shortcut>();
         public LogicalDependency() { }
         //for the tostring thing
         public override string ToString()
         {
-            return negateFlag? "(Not) " + PackageName : "" + PackageName;
+            return NegateFlag? "(Not) " + PackageName : "" + PackageName;
         }
     }
 }

@@ -7,24 +7,24 @@ namespace RelhaxModpack
     //the mod selection dislpay window
     public class Category
     {
-        public string name { get; set; }
+        public string Name { get; set; }
         //the selection type of the catagory. can a user select
         //multiple mods of this catagory, or just one?
-        public string selectionType { get; set; }
-        public List<Mod> mods = new List<Mod>();
+        public string SelectionType { get; set; }
+        public List<Mod> Mods = new List<Mod>();
         //list of dependencies required if anything is
         //selected from this catagory
-        public List<Dependency> dependencies = new List<Dependency>();
+        public List<Dependency> Dependencies = new List<Dependency>();
         public Category() { }
         //returns the mod with the specified name
         //if it does not exist, it returns null
-        public Mod getMod(string modName)
+        public Mod GetMod(string modName)
         {
-            if (mods == null || mods.Count == 0)
+            if (Mods == null || Mods.Count == 0)
                 return null;
-            foreach (Mod m in mods)
+            foreach (Mod m in Mods)
             {
-                if (m.name.Equals(modName))
+                if (m.Name.Equals(modName))
                     return m;
             }
             return null;
@@ -34,12 +34,12 @@ namespace RelhaxModpack
         //sorts the catagories
         public static int CompareCatagories(Category x, Category y)
         {
-            return x.name.CompareTo(y.name);
+            return x.Name.CompareTo(y.Name);
         }
         //for the tostring thing
         public override string ToString()
         {
-            return name;
+            return Name;
         }
     }
 }

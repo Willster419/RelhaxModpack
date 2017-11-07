@@ -67,7 +67,7 @@ namespace RelhaxModpack
             {
                 Category selectedCat = (Category)cb.SelectedItem;
                 ModPanel.Enabled = true;
-                ModCB.DataSource = selectedCat.mods;
+                ModCB.DataSource = selectedCat.Mods;
             }
             else if (Mode == EditorMode.GlobalDependnecy)
             {
