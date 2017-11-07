@@ -6,6 +6,10 @@ namespace RelhaxModpack
     public abstract class DatabaseObject
     {
         public string name { get; set; }
+        public string nameFormated
+        {
+            get { return Utils.ReplaceMacro(name,"version",version); }
+        }
         //the developer's version of the mod
         public string version { get; set; }
         public string zipFile { get; set; }

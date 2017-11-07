@@ -46,7 +46,7 @@ namespace RelhaxModpack
         //for the tostring thing
         public override string ToString()
         {
-            return name;
+            return nameFormated;
         }
     }
 }

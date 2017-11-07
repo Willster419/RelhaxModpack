@@ -2582,7 +2582,7 @@ namespace RelhaxModpack
                 filteredItems = new List<DatabaseObject>(completeModSearchList);
                 foreach (var f in filtered_parts)
                 {
-                    filteredItems = filteredItems.FindAll(x => x.name.ToLower().Contains(f.ToLower()));
+                    filteredItems = filteredItems.FindAll(x => x.nameFormated.ToLower().Contains(f.ToLower()));
                 }
             }
             if (filteredItems == null)

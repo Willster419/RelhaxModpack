@@ -34,7 +34,7 @@ namespace RelhaxModpack
         //for the tostring thing
         public override string ToString()
         {
-            return negateFlag? "(Not)" + packageName:"" + packageName;
+            return negateFlag? "(Not) " + packageName : "" + packageName;
         }
     }
 }
