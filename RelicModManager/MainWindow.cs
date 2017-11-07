@@ -668,7 +668,6 @@ namespace RelhaxModpack
             Application.DoEvents();
             this.CheckmanagerUpdates();
 
-
             //load settings
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
             Utils.AppendToLog("Loading settings");
@@ -1345,7 +1344,7 @@ namespace RelhaxModpack
                     Translations.getTranslatedString("file"),
                     s[2],
                     Translations.getTranslatedString("size"),
-                    s[3]);
+                    s[3].Equals("0") ? "0.01" : s[3]);
         }
 
         private void I_InstallProgressChanged(object sender, InstallerEventArgs e)
@@ -1449,6 +1448,31 @@ namespace RelhaxModpack
                     parrentProgressBar.Value = e.ChildProcessed;
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.PatchMods;
                 childProgressBar.Value = 0;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractAtlases)
+            {
+                message = string.Format("{0}: {1}\n{2}: {3}\n{4} {5} {6}", Translations.getTranslatedString("AtlasExtraction"),e.information, Translations.getTranslatedString("AtlasTextur"), e.currentFile, e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
+                parrentProgressBar.Maximum = e.ChildTotalToProcess;
+                if ((parrentProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= parrentProgressBar.Maximum))
+                    parrentProgressBar.Value = e.ChildProcessed;
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.ExtractAtlases;
+                childProgressBar.Value = 0;
+            }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.CreateAtlases)
+            {
+                try
+                {
+                    message = string.Format("{0}: {1}\n{2}", Translations.getTranslatedString("AtlasCreating"), e.currentFile, e.information);
+                    parrentProgressBar.Maximum = e.ChildTotalToProcess;
+                    if ((parrentProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= parrentProgressBar.Maximum))
+                        parrentProgressBar.Value = e.ChildProcessed;
+                    totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.CreateAtlases;
+                    childProgressBar.Value = 0;
+                }
+                catch (Exception ex)
+                {
+                    Utils.ExceptionLog("I_InstallProgressChanged", "CreateAtlases", ex);
+                }
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.InstallUserFonts)
             {
