@@ -103,7 +103,7 @@ namespace RelhaxModpack
                         }
                         else
                         {
-                            Utils.AppendToLog("WARNING: file " + Path.GetFileName(s) + "does not exist!");
+                            Utils.AppendToLog("WARNING: file " + s + " does not exist!");
                         }
                     }
                     newZipFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "RelhaxModpackLogs_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".zip");
