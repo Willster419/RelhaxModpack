@@ -52,6 +52,8 @@ namespace RelhaxModpack
         private string xvmConfigDir = "";
         private int patchNum = 0;
         private List<string> originalPatchNames;
+        private FileStream fs;
+        private string InstalledFilesLogPath = "";
 
         private static readonly Stopwatch stopWatch = new Stopwatch();
 
@@ -74,7 +76,7 @@ namespace RelhaxModpack
             InstallWorker.RunWorkerCompleted += WorkerReportComplete;
             args = new InstallerEventArgs();
             ResetArgs();
-            originalPatchNames = new List<string>();
+            originalPatchNames = new List<string>();            
         }
 
         //Start installation on the UI thread
@@ -108,6 +110,7 @@ namespace RelhaxModpack
         public void ActuallyStartInstallation(object sender, DoWorkEventArgs e)
         {
             ResetArgs();
+            InstalledFilesLogPath = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
             //Step 1: do a backup if requested
             Utils.AppendToLog("Installation BackupMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.BackupMods;
@@ -273,7 +276,7 @@ namespace RelhaxModpack
             {
                 Utils.ExceptionLog("ActuallyStartInstallation", "Cleanup _folders", ex);
             }
-            OnInstallProgressChanged();
+            InstallWorker.ReportProgress(0);
         }
 
         public void WorkerReportProgress(object sender, ProgressChangedEventArgs e)
@@ -666,9 +669,17 @@ namespace RelhaxModpack
                 //start the entry for the database version in installedRelhaxFiles.log
                 try
                 {
+                    //if a current log and backup log exist
                     if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak")) && File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log")))
                     {
+                        //current becomes backup, backup is deleted
                         File.Delete(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
+                        File.Move(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
+                    }
+                    //only log exists
+                    else if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log")))
+                    {
+                        //move it to be a backup
                         File.Move(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
                     }
                 }
@@ -676,6 +687,12 @@ namespace RelhaxModpack
                 {
                     Utils.ExceptionLog("ExtractDatabaseObjects", "move installedRelhaxFiles.log", ex);
                 }
+                //start the entry for the files log
+                fs = new FileStream(InstalledFilesLogPath, FileMode.Append, FileAccess.Write);
+                string databaseHeader = string.Format("Database Version: {0}", Settings.DatabaseVersion);
+                string dateTimeHeader = string.Format("/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now);
+                fs.Write(Encoding.UTF8.GetBytes(databaseHeader), 0, Encoding.UTF8.GetByteCount(databaseHeader));
+                fs.Write(Encoding.UTF8.GetBytes(dateTimeHeader), 0, Encoding.UTF8.GetByteCount(dateTimeHeader));
 
                 //extract RelHax Mods
                 Utils.AppendToLog("Starting Relhax Modpack Extraction");
@@ -826,6 +843,12 @@ namespace RelhaxModpack
                         }
                     }
                     InstallWorker.ReportProgress(0);
+                }
+                //done with the filestream
+                if(fs != null)
+                {
+                    fs.Dispose();
+                    fs = null;
                 }
                 //finish by moving WoTAppData folder contents into application data folder
                 //folder name is "WoTAppData"
@@ -2094,8 +2117,8 @@ namespace RelhaxModpack
         //main unzip worker method
         private void Unzip(string zipFile, string extractFolder)
         {
-            string thisVersion = TanksVersion;
-            Utils.AppendToInstallLog(string.Format(@"/*  {0}  */", Path.GetFileNameWithoutExtension(zipFile)));
+            string zipFileHeader = string.Format(@"/*  {0}  */", Path.GetFileNameWithoutExtension(zipFile));
+            fs.Write(Encoding.UTF8.GetBytes(zipFileHeader), 0, Encoding.UTF8.GetByteCount(zipFileHeader));
             try
             {
                 using (ZipFile zip = new ZipFile(zipFile))
@@ -2109,37 +2132,28 @@ namespace RelhaxModpack
                     args.ChildTotalToProcess = zip.Entries.Count;
                     for (int i = 0; i < zip.Entries.Count; i++)
                     {
-                        if (Regex.IsMatch(zip[i].FileName, "versiondir"))
+                        //grab the entry name for modifications
+                        string zipEntryName = zip[i].FileName;
+                        zipEntryName = zipEntryName.Contains("versiondir") ? zipEntryName.Replace("versiondir", TanksVersion) : zipEntryName;
+                        zipEntryName = zipEntryName.Contains("configs/xvm/xvmConfigFolderName") ? zipEntryName.Replace("configs/xvm/xvmConfigFolderName", "configs/xvm/" + xvmConfigDir) : zipEntryName;
+                        if(Regex.IsMatch(zipEntryName, @"_patch.*\.xml"))
                         {
-                            try
-                            {
-                                zip[i].FileName = Regex.Replace(zip[i].FileName, "versiondir", thisVersion);
-                            }
-                            catch (Exception ex)
-                            {
-                                Utils.ExceptionLog("Unzip", ex);
-                            }
-                        }
-                        if (Regex.IsMatch(zip[i].FileName, "configs/xvm/xvmConfigFolderName") && !xvmConfigDir.Equals(""))
-                        {
-                            zip[i].FileName = Regex.Replace(zip[i].FileName, "configs/xvm/xvmConfigFolderName", "configs/xvm/" + xvmConfigDir);
-                        }
-                        if(Regex.IsMatch(zip[i].FileName, @"_patch.*\.xml"))
-                        {
-                            string patchName = zip[i].FileName;
-                            zip[i].FileName = Regex.Replace(zip[i].FileName, @"_patch.*\.xml", "_patch/" + patchNum.ToString("D3") + ".xml");
+                            string patchName = zipEntryName;
+                            zipEntryName = Regex.Replace(zipEntryName, @"_patch.*\.xml", "_patch/" + patchNum.ToString("D3") + ".xml");
                             patchNum++;
                             patchName = patchName.Substring(7);
                             originalPatchNames.Add(patchName);
                         }
+                        //finish entry name modifications
+                        zip[i].FileName = zipEntryName;
                         //put the entries on disk
-                        Utils.AppendToInstallLog(Path.Combine(extractFolder, zip[i].FileName));
+                        fs.Write(Encoding.UTF8.GetBytes(Path.Combine(extractFolder, zip[i].FileName) + "\n"), 0, Encoding.UTF8.GetByteCount(Path.Combine(extractFolder, zip[i].FileName) + "\n"));
                     }
                     zip.ExtractProgress += Zip_ExtractProgress;
                     zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
                 }
             }
-            catch (ZipException e)
+            catch (Exception e)
             {
                 //append the exception to the log
                 Utils.ExceptionLog("Unzip", "ZipFile: " + zipFile, e);
@@ -2147,6 +2161,7 @@ namespace RelhaxModpack
                 MessageBox.Show(string.Format("{0}, {1} {2} {3}", Translations.getTranslatedString("zipReadingErrorMessage1"), Path.GetFileName(zipFile), Translations.getTranslatedString("zipReadingErrorMessage2"), Translations.getTranslatedString("zipReadingErrorHeader")));
                 //(try to)delete the file from the filesystem
                 if (File.Exists(zipFile))
+                {
                     try
                     {
                         File.Delete(zipFile);
@@ -2155,6 +2170,7 @@ namespace RelhaxModpack
                     {
                         Utils.ExceptionLog("Unzip", "tried to delete " + zipFile, ex);
                     }
+                }
                 XMLUtils.DeleteMd5HashDatabase(zipFile);
             }
         }
