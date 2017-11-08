@@ -69,23 +69,23 @@ namespace RelhaxModpack
                     string UninstalledRelhaxFiles = Path.Combine(TanksLocation, "logs", "uninstall.log");
                     string PythonLog = Path.Combine(TanksLocation, "python.log");
                     string SelectionXMlFile = "";
-                    using (OpenFileDialog findSelectionXMLFile = new OpenFileDialog()
+                    string[] filesToCollect = new string[] { RelHaxLogPath, InstalledRelhaxFiles, UninstalledRelhaxFiles, PythonLog, SelectionXMlFile };
+                    int i = filesToCollect.Length;
+                    using (AddPicturesZip apz = new AddPicturesZip()
                     {
-                        AddExtension = true,
-                        CheckFileExists = true,
-                        CheckPathExists = true,
-                        DefaultExt = ".xml",
-                        Filter = @" *.xml | *.xml",
-                        InitialDirectory = Path.Combine(AppStartupPath, "RelHaxUserConfigs"),
-                        Title = Translations.getTranslatedString("selectConfigFile")
+                        AppStartupPath = this.AppStartupPath
                     })
                     {
-                        if(!(findSelectionXMLFile.ShowDialog() == DialogResult.Cancel))
+                        apz.ShowDialog();
+                        if (!(apz.DialogResult == DialogResult.OK))
+                            return;
+                        foreach(object o in apz.listBox1.Items)
                         {
-                            SelectionXMlFile = findSelectionXMLFile.FileName;
+                            string s = (string)o;
+                            filesToCollect[i] = s;
+                            i++;
                         }
                     }
-                    string[] filesToCollect = new string[] { RelHaxLogPath, InstalledRelhaxFiles, UninstalledRelhaxFiles, PythonLog, SelectionXMlFile };
                     foreach(string s in filesToCollect)
                     {
                         if (s.Equals(""))

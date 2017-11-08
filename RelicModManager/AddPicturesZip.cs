@@ -12,22 +12,62 @@ namespace RelhaxModpack
 {
     public partial class AddPicturesZip : RelhaxForum
     {
+
+        private string[] AcceptableImageExtensions = new string[] { "*.bmp;", "*.jpg;", "*.jpeg;", "*.png;", "*.gif;" };
+
+        public string AppStartupPath { get; set; }
+
         public AddPicturesZip()
         {
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void AddSelectons_Click(object sender, EventArgs e)
         {
-            if(listBox1.SelectedItem != null && listBox1.SelectedIndex != -1)
+            SelectionPictureDialog.DefaultExt = ".xml";
+            SelectionPictureDialog.Filter = @" *.xml|*.xml";
+            SelectionPictureDialog.InitialDirectory = Path.Combine(AppStartupPath, "RelHaxUserConfigs");
+            SelectionPictureDialog.Title = "Select selection file(s) to include";
+            if (SelectionPictureDialog.ShowDialog() == DialogResult.Cancel)
+                return;
+            foreach (string s in SelectionPictureDialog.FileNames)
+                listBox1.Items.Add(s);
+        }
+
+        private void listBox1_DragDrop(object sender, DragEventArgs e)
+        {
+            string temp = e.Data.ToString();
+        }
+
+        private void AddPictures_Click(object sender, EventArgs e)
+        {
+            SelectionPictureDialog.DefaultExt = "";
+            string allPictureTypes = @" Picture files|";
+            foreach(string s in AcceptableImageExtensions)
             {
-                listBox1.Items.Remove(listBox1.SelectedItem);
-                if (listBox1.Items.Count > 0)
-                    listBox1.SelectedIndex = 0;
-                else
-                    listBox1.SelectedIndex = -1;
+                allPictureTypes = allPictureTypes + s.ToLower();
+                allPictureTypes = allPictureTypes + s.ToUpper();
+            }
+            SelectionPictureDialog.Filter = allPictureTypes;
+            SelectionPictureDialog.InitialDirectory = Path.Combine(AppStartupPath, "RelHaxUserConfigs");
+            SelectionPictureDialog.Title = "Select Picture(s) to include";
+            if (SelectionPictureDialog.ShowDialog() == DialogResult.Cancel)
+                return;
+            foreach (string s in SelectionPictureDialog.FileNames)
+                listBox1.Items.Add(s);
+        }
+
+        private void RemoveElements_Click(object sender, EventArgs e)
+        {
+            for(int i = 0; i < listBox1.SelectedItems.Count; i++)
+            {
+                listBox1.Items.Remove(listBox1.SelectedItems[i]);
             }
         }
-        
+
+        private void Continue_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+        }
     }
 }
