@@ -230,7 +230,7 @@ namespace RelhaxModpack
             //Step 18: Create Atlases
             Utils.AppendToLog("Installation CreateAtlases");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CreateAtlases;
-            if (atlasesList.Count > 0)
+            if (atlasesList != null && atlasesList.Count > 0)
                 CreateAtlases();
             else
                 Utils.AppendToLog("... skipped");
