@@ -14,13 +14,13 @@ namespace RelhaxModpack
             //font scaling
             AutoScaleMode = Settings.AppScalingMode;
             Font = Settings.AppFont;
-            if (Settings.AppScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
+            if (Settings.AppScalingMode == AutoScaleMode.Dpi)
             {
-                this.Scale(new System.Drawing.SizeF(Settings.ScaleSize, Settings.ScaleSize));
+                this.Scale(new SizeF(Settings.ScaleSize, Settings.ScaleSize));
             }
             //title bar calculation
-            Rectangle screenRektangle = RectangleToScreen(this.ClientRectangle);
-            TitleHeight = screenRektangle.Top - this.Top;
+            Rectangle screenRektangle = RectangleToScreen(ClientRectangle);
+            TitleHeight = screenRektangle.Top - Top;
             if (TitleHeight > TitleBar)
             {
                 TitleBarDifference = TitleHeight - TitleBar;
