@@ -554,39 +554,8 @@ namespace RelhaxModpack
         void AddConfigsOMCView(Category c, Mod m, List<Config> configs, System.Windows.Controls.TreeViewItem tvi, bool parentIsMod = false, Config parentConfig = null)
         {
             //create the twp possible drop down options, and the mod optional config check box i guess
-            ConfigWPFComboBox configControlDD = new ConfigWPFComboBox()
-            {
-                IsEditable = false,
-                Name = "notAddedYet",
-                IsEnabled = false
-            };
-            ConfigWPFComboBox configControlDD2 = new ConfigWPFComboBox()
-            {
-                IsEditable = false,
-                Name = "notAddedYet",
-                IsEnabled = false
-            };
-            switch (Settings.FontSizeforum)
-            {
-                case Settings.FontSize.Font100:
-                    break;
-                case Settings.FontSize.Font125:
-                    configControlDD.FontSize = configControlDD.FontSize + 4;
-                    configControlDD2.FontSize = configControlDD.FontSize + 4;
-                    break;
-                case Settings.FontSize.Font175:
-                    configControlDD.FontSize = configControlDD.FontSize + 8;
-                    configControlDD2.FontSize = configControlDD.FontSize + 8;
-                    break;
-                case Settings.FontSize.Font225:
-                    configControlDD.FontSize = configControlDD.FontSize + 12;
-                    configControlDD2.FontSize = configControlDD.FontSize + 12;
-                    break;
-                case Settings.FontSize.Font275:
-                    configControlDD.FontSize = configControlDD.FontSize + 16;
-                    configControlDD2.FontSize = configControlDD.FontSize + 16;
-                    break;
-            }
+            ConfigWPFComboBox configControlDD = null;
+            ConfigWPFComboBox configControlDD2 = null;
             //process the configs
             foreach (Config con in configs)
             {
@@ -707,12 +676,68 @@ namespace RelhaxModpack
                     //set the all to whichever one it actually is
                     if (con.Type.Equals("single_dropdown") || con.Type.Equals("single_dropdown1"))
                     {
+                        if(configControlDD == null)
+                        {
+                            configControlDD = new ConfigWPFComboBox()
+                            {
+                                IsEditable = false,
+                                Name = "notAddedYet",
+                                IsEnabled = false,
+                                FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
+                                FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal
+                            };
+                            switch (Settings.FontSizeforum)
+                            {
+                                case Settings.FontSize.Font100:
+                                    break;
+                                case Settings.FontSize.Font125:
+                                    configControlDD.FontSize = configControlDD.FontSize + 4;
+                                    break;
+                                case Settings.FontSize.Font175:
+                                    configControlDD.FontSize = configControlDD.FontSize + 8;
+                                    break;
+                                case Settings.FontSize.Font225:
+                                    configControlDD.FontSize = configControlDD.FontSize + 12;
+                                    break;
+                                case Settings.FontSize.Font275:
+                                    configControlDD.FontSize = configControlDD.FontSize + 16;
+                                    break;
+                            }
+                        }
                         configControlDDALL = configControlDD;
                         //add the UI component to the config item in memory database
                         con.ConfigUIComponent = configControlDD;
                     }
                     else if (con.Type.Equals("single_dropdown2"))
                     {
+                        if (configControlDD2 == null)
+                        {
+                            configControlDD2 = new ConfigWPFComboBox()
+                            {
+                                IsEditable = false,
+                                Name = "notAddedYet",
+                                IsEnabled = false,
+                                FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
+                                FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal
+                            };
+                            switch (Settings.FontSizeforum)
+                            {
+                                case Settings.FontSize.Font100:
+                                    break;
+                                case Settings.FontSize.Font125:
+                                    configControlDD2.FontSize = configControlDD2.FontSize + 4;
+                                    break;
+                                case Settings.FontSize.Font175:
+                                    configControlDD2.FontSize = configControlDD2.FontSize + 8;
+                                    break;
+                                case Settings.FontSize.Font225:
+                                    configControlDD2.FontSize = configControlDD2.FontSize + 12;
+                                    break;
+                                case Settings.FontSize.Font275:
+                                    configControlDD2.FontSize = configControlDD2.FontSize + 16;
+                                    break;
+                            }
+                        }
                         configControlDDALL = configControlDD2;
                         //add the UI component to the config item in memory database
                         con.ConfigUIComponent = configControlDD2;
@@ -1472,32 +1497,8 @@ namespace RelhaxModpack
                 configPanel.Location = new Point(configPanel.Location.X + 10, getYLocation(mainPanel.Controls));
             }
             mainPanel.Controls.Add(configPanel);
-            //create the comboBox outside of the loop
-            //later add it if the items count is above 0
-            ConfigFormComboBox configControlDD = new ConfigFormComboBox()
-            {
-                AutoSize = true,
-                Location = new Point(0, 0),
-                Size = new Size(225, 15),
-                Enabled = false,
-                DropDownStyle = ComboBoxStyle.DropDownList
-            };
-            configControlDD.SelectedIndexChanged += configControlDD_SelectedIndexChanged;
-            //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
-            configControlDD.MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
-            configControlDD.MouseDown += Generic_MouseDown;
-
-            ConfigFormComboBox configControlDD2 = new ConfigFormComboBox()
-            {
-                AutoSize = true,
-                Location = new Point(0, 0),
-                Size = new Size(225, 15),
-                Enabled = false,
-                DropDownStyle = ComboBoxStyle.DropDownList
-            };
-            configControlDD2.SelectedIndexChanged += configControlDD_SelectedIndexChanged;
-            configControlDD2.MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
-            configControlDD2.MouseDown += Generic_MouseDown;
+            ConfigFormComboBox configControlDD = null;
+            ConfigFormComboBox configControlDD2 = null;
             foreach (Config con in configs)
             {
                 if (!con.Visible)
@@ -1597,14 +1598,47 @@ namespace RelhaxModpack
                     //set the all one to the version is actually is
                     if (con.Type.Equals("single_dropdown") || con.Type.Equals("single_dropdown1"))
                     {
+                        //create it if it's null
+                        if (configControlDD == null)
+                        {
+                            configControlDD = new ConfigFormComboBox()
+                            {
+                                AutoSize = true,
+                                Location = new Point(0, 0),
+                                Size = new Size(225, 15),
+                                Enabled = false,
+                                DropDownStyle = ComboBoxStyle.DropDownList
+                            };
+                            configControlDD.SelectedIndexChanged += configControlDD_SelectedIndexChanged;
+                            //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
+                            configControlDD.MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
+                            configControlDD.MouseDown += Generic_MouseDown;
+                        }
                         configControlDDALL = configControlDD;
                         con.ConfigUIComponent = configControlDD;
                     }
                     else if (con.Type.Equals("single_dropdown2"))
                     {
+                        //create it if it's null
+                        if (configControlDD2 == null)
+                        {
+                            configControlDD2 = new ConfigFormComboBox()
+                            {
+                                AutoSize = true,
+                                Location = new Point(0, 0),
+                                Size = new Size(225, 15),
+                                Enabled = false,
+                                DropDownStyle = ComboBoxStyle.DropDownList
+                            };
+                            configControlDD2.SelectedIndexChanged += configControlDD_SelectedIndexChanged;
+                            //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
+                            configControlDD2.MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
+                            configControlDD2.MouseDown += Generic_MouseDown;
+                        }
                         configControlDDALL = configControlDD2;
                         con.ConfigUIComponent = configControlDD2;
                     }
+                    
                     //make a dropDown selection box
                     if (configControlDDALL.Location.X == 0 && configControlDDALL.Location.Y == 0)
                     {
