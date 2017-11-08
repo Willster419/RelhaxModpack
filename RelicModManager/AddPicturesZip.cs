@@ -86,18 +86,18 @@ namespace RelhaxModpack
 
         private bool IsAcceptableExtantion(string extension)
         {
-            extension = extension.ToUpper().ToLower();
+            extension = extension.ToLower();
             foreach (string s in AcceptableSelectionExtensions)
             {
                 string ext = s.Substring(1, s.Length - 2);
-                if (ext.ToUpper().ToLower().Equals(extension))
+                if (ext.ToLower().Equals(extension))
                     return true;
             }
             foreach (string s in AcceptableImageExtensions)
             {
                 //"*.bmp;"
                 string ext = s.Substring(1, s.Length - 2);
-                if (ext.ToUpper().ToLower().Equals(extension))
+                if (ext.ToLower().Equals(extension))
                     return true;
             }
             return false;
