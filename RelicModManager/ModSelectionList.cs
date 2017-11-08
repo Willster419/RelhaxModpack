@@ -76,14 +76,14 @@ namespace RelhaxModpack
             pw.loadingDescBox.Text = Translations.getTranslatedString("readingDatabase");
             Application.DoEvents();
             //init the database
-            InitDatabase(Settings.ModInfoDatFile);
+            string databaseLocation = InitDatabase(Settings.ModInfoDatFile);
             //create new lists for memory database and serialize from xml->lists
             globalDependencies = new List<Dependency>();
             parsedCatagoryList = new List<Category>();
             dependencies = new List<Dependency>();
             logicalDependencies = new List<LogicalDependency>();
             //actually parse the mod structure
-            XMLUtils.CreateModStructure(Settings.ModInfoDatFile, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.CreateModStructure(databaseLocation, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             if (Program.testMode)
             {
                 if (Utils.Duplicates(parsedCatagoryList))
@@ -148,7 +148,7 @@ namespace RelhaxModpack
             expandAllButton.Text = Translations.getTranslatedString(expandAllButton.Name);
         }
 
-        private void InitDatabase(string databaseURL)
+        private string InitDatabase(string databaseURL)
         {
             if (Program.testMode)
             {
@@ -208,6 +208,7 @@ namespace RelhaxModpack
                     }
                 }
             }
+            return databaseURL;
         }
         //initializes the userMods list. This should only be run once
         private void InitUserMods()
