@@ -14,6 +14,7 @@ namespace RelhaxModpack
     {
 
         private string[] AcceptableImageExtensions = new string[] { "*.bmp;", "*.jpg;", "*.jpeg;", "*.png;", "*.gif;" };
+        private string[] AcceptableSelectionExtensions = new string[] { "*.xml;" };
 
         public string AppStartupPath { get; set; }
 
@@ -32,11 +33,6 @@ namespace RelhaxModpack
                 return;
             foreach (string s in SelectionPictureDialog.FileNames)
                 listBox1.Items.Add(s);
-        }
-
-        private void listBox1_DragDrop(object sender, DragEventArgs e)
-        {
-            string temp = e.Data.ToString();
         }
 
         private void AddPictures_Click(object sender, EventArgs e)
@@ -62,12 +58,49 @@ namespace RelhaxModpack
             for(int i = 0; i < listBox1.SelectedItems.Count; i++)
             {
                 listBox1.Items.Remove(listBox1.SelectedItems[i]);
+                i--;
             }
         }
 
         private void Continue_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
+        }
+        //https://stackoverflow.com/questions/21706747/drag-and-drop-files-into-my-listbox
+        private void listBox1_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (string file in files)
+            {
+                string extension = Path.GetExtension(file);
+                if(IsAcceptableExtantion(extension) && !(listBox1.Items.Contains(file)))
+                    listBox1.Items.Add(file);
+            }
+        }
+
+        private void listBox1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
+        }
+
+        private bool IsAcceptableExtantion(string extension)
+        {
+            extension = extension.ToUpper().ToLower();
+            foreach (string s in AcceptableSelectionExtensions)
+            {
+                string ext = s.Substring(1, s.Length - 2);
+                if (ext.ToUpper().ToLower().Equals(extension))
+                    return true;
+            }
+            foreach (string s in AcceptableImageExtensions)
+            {
+                //"*.bmp;"
+                string ext = s.Substring(1, s.Length - 2);
+                if (ext.ToUpper().ToLower().Equals(extension))
+                    return true;
+            }
+            return false;
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Windows;
 using System.Diagnostics;
 using Ionic.Zip;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace RelhaxModpack
 {
@@ -69,8 +69,7 @@ namespace RelhaxModpack
                     string UninstalledRelhaxFiles = Path.Combine(TanksLocation, "logs", "uninstall.log");
                     string PythonLog = Path.Combine(TanksLocation, "python.log");
                     string SelectionXMlFile = "";
-                    string[] filesToCollect = new string[] { RelHaxLogPath, InstalledRelhaxFiles, UninstalledRelhaxFiles, PythonLog, SelectionXMlFile };
-                    int i = filesToCollect.Length;
+                    List<string> filesToCollect = new List<string>(){ RelHaxLogPath, InstalledRelhaxFiles, UninstalledRelhaxFiles, PythonLog, SelectionXMlFile };
                     using (AddPicturesZip apz = new AddPicturesZip()
                     {
                         AppStartupPath = this.AppStartupPath
@@ -82,18 +81,25 @@ namespace RelhaxModpack
                         foreach(object o in apz.listBox1.Items)
                         {
                             string s = (string)o;
-                            filesToCollect[i] = s;
-                            i++;
+                            filesToCollect.Add(s);
                         }
                     }
                     foreach(string s in filesToCollect)
                     {
                         if (s.Equals(""))
                             continue;
+                        //verify that it's not already in there but from a different folder
+                        int dupCunter = 0;
+                        string nameInZipFile = Path.GetFileName(s);
+                        foreach(ZipEntry ze in zip)
+                        {
+                            while (ze.FileName.Equals(nameInZipFile))
+                                nameInZipFile = Path.GetFileName(s) + dupCunter++;
+                        }
                         if(File.Exists(s))
                         {
                             ZipEntry entry = zip.AddFile(s);
-                            entry.FileName = Path.GetFileName(s);
+                            entry.FileName = nameInZipFile;
                         }
                         else
                         {
