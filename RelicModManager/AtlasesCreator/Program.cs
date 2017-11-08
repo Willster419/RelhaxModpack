@@ -86,7 +86,6 @@ namespace RelhaxModpack.AtlasesCreator
                 Installer.args.currentFile = Path.GetFileNameWithoutExtension(args.ImageFile);
                 Installer.args.ChildTotalToProcess = args.GenerateMap ? 4 : 3;
                 Installer.args.ChildProcessed = 0;
-                Installer.args.information = "";
                 Installer.InstallWorker.ReportProgress(0);
                 // make sure we have our list of exporters
                 Exporters.Load();
