@@ -100,7 +100,7 @@ namespace RelhaxModpack
         {
             //Settings declared here are set for what their default values should be, then later modified in the settings xml file
             //i.e. when new features are added
-            Settings.InstantExtraction = true;
+            Settings.InstantExtraction = false;
             Settings.FirstLoad = false;
             Settings.CreateShortcuts = true;
             Utils.AppendToLog("Loading application settings");

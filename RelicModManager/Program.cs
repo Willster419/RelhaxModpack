@@ -20,6 +20,7 @@ namespace RelhaxModpack
         public static bool saveSettings = false;
         public static bool databaseUpdateOnline = false;
         public static bool betaDatabase = false;
+        public static bool betaApplication = false;
         public static string configName = "";
         [STAThread]
         static void Main()
@@ -77,6 +78,11 @@ namespace RelhaxModpack
                 {
                     Utils.AppendToLog("/beta-database detected, welcome beta tester");
                     betaDatabase = true;
+                }
+                else if (Regex.IsMatch(commandArgs[i], @"beta-application"))
+                {
+                    Utils.AppendToLog("/beta-application detected, welcome beta tester");
+                    betaApplication = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"auto-install$"))
                 {

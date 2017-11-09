@@ -325,10 +325,10 @@ namespace RelhaxModpack
                 var databaseVersion = doc.XPathSelectElement("//version/database");
                 DatabaseVersionLabel.Text = "Latest Database v" + databaseVersion.Value;
                 //parse the manager version
-                
-                var applicationVersion = doc.Descendants().Where(n => n.Name == "manager").FirstOrDefault();
-                if (applicationVersion != null)
-                    version = applicationVersion.Value;
+
+                //var applicationVersion = doc.XPathSelectElement("//version/database");
+                var applicationVersion = Program.betaApplication ? doc.XPathSelectElement("//version/manager_beta") : doc.XPathSelectElement("//version/manager");
+                version = applicationVersion.Value;
                 Utils.AppendToLog(string.Format("Local application is {0}, current online is {1}", managerVersion(), version));
 
                 if (!version.Equals(managerVersion()))
@@ -367,7 +367,8 @@ namespace RelhaxModpack
                         }
 
                         if (File.Exists(newExeName)) File.Delete(newExeName);
-                        updater.DownloadFileAsync(new Uri("http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe"), newExeName);
+                        string modpackExeURL = Program.betaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
+                        updater.DownloadFileAsync(new Uri(modpackExeURL), newExeName);
                         Utils.AppendToLog("New application download started");
                         currentModDownloading = "update ";
                     }
