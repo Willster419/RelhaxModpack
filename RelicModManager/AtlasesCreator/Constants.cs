@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace RelhaxModpack.AtlasesCreator
 {
     public static class Constants
