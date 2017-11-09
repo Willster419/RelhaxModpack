@@ -71,7 +71,7 @@ namespace RelhaxModpack.AtlasesCreator
             if (result != 0)
                 ShowBuildError("Error packing images: " + SpaceErrorCode((FailCode)result));
             else
-                Utils.AppendToLog("Build completed in " + stopWatch.Elapsed.TotalSeconds + " seconds.");
+                Utils.AppendToLog("Build completed in " + stopWatch.Elapsed.TotalSeconds.ToString("N3", System.Globalization.CultureInfo.InvariantCulture) + " seconds.");
             return;
         }
 

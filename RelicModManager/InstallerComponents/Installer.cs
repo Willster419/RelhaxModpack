@@ -1939,7 +1939,7 @@ namespace RelhaxModpack
                 CroppedImage.Dispose();
                 stopWatch.Stop();
             }
-            Utils.AppendToLog("Extraction completed in " + stopWatch.Elapsed.TotalSeconds + " seconds.");
+            Utils.AppendToLog("Extraction completed in " + stopWatch.Elapsed.TotalSeconds.ToString("N3", System.Globalization.CultureInfo.InvariantCulture) + " seconds.");
         }
 
         //gets the total number of files to process to eithor delete or copy
