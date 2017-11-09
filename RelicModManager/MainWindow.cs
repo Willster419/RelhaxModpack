@@ -811,7 +811,7 @@ namespace RelhaxModpack
                 Utils.AppendToLog(string.Format("Version selected: {0}  OnlineFolder: {1}", tanksVersion, Settings.TanksOnlineFolderVersion));
             }
             //if the user wants to, check if the database has actually changed
-            if (SameDatabaseVersions() && Settings.NotifyIfSameDatabase)        // the get the string databaseVersionString filles in any case, the function must be performed first!
+            if (Settings.NotifyIfSameDatabase && SameDatabaseVersions())        // the get the string databaseVersionString filles in any case, the function must be performed first!
             {
                 if (MessageBox.Show(Translations.getTranslatedString("DatabaseVersionsSameBody"), Translations.getTranslatedString("DatabaseVersionsSameHeader"), MessageBoxButtons.YesNo) == DialogResult.No)
                 {
@@ -860,17 +860,6 @@ namespace RelhaxModpack
                     break;
                 MessageBox.Show(Translations.getTranslatedString("WoTRunningMessage"), Translations.getTranslatedString("WoTRunningHeader"));
             }
-            // if the delete will raise an exception, it will be ignored
-            /*
-            try // moved it BEHIND INstaller.UninstallMods() function, cause this file is needed for this function
-            {
-                if (File.Exists(Path.Combine(tanksLocation, "installedRelhaxFiles.log")))
-                    File.Delete(Path.Combine(tanksLocation, "installedRelhaxFiles.log"));
-            }
-            catch (Exception ex)
-            {
-                Utils.exceptionLog(ex);
-            } */
             //have the application display that it is loading. it is actually doing installation calculations
             downloadProgress.Text = Translations.getTranslatedString("loading");
             Application.DoEvents();
@@ -1541,6 +1530,8 @@ namespace RelhaxModpack
                 modsConfigsWithData = null;
                 if (Settings.FirstLoad)
                     Settings.FirstLoad = false;
+                if (Program.autoInstall)
+                    Program.autoInstall = false;
                 ToggleUIButtons(true);
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.Uninstall)
