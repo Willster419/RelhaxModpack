@@ -122,6 +122,7 @@ namespace RelhaxModpack
                 Settings.DisableBorders = false;
                 Settings.NotifyIfSameDatabase = false;
                 Settings.CreateShortcuts = false;
+                Settings.InstantExtraction = false;
                 Utils.AppendToLog("Language: " + CultureInfo.CurrentCulture.DisplayName);
                 string lang = CultureInfo.InstalledUICulture.Name.Split('-')[0];
                 if (lang.ToLower().Equals("de"))
@@ -240,6 +241,9 @@ namespace RelhaxModpack
                             break;
                         case "CreateShortcuts":
                             Settings.CreateShortcuts = bool.Parse(n.InnerText);
+                            break;
+                        case "InstantExtraction":
+                            Settings.InstantExtraction = bool.Parse(n.InnerText);
                             break;
                     }
                 }
@@ -428,6 +432,9 @@ namespace RelhaxModpack
             XmlElement xCreateShortcuts = doc.CreateElement("CreateShortcuts");
             xCreateShortcuts.InnerText = "" + CreateShortcuts;
             settingsHolder.AppendChild(xCreateShortcuts);
+            XmlElement xInstantExtraction = doc.CreateElement("InstantExtraction");
+            xInstantExtraction.InnerText = "" + InstantExtraction;
+            settingsHolder.AppendChild(xInstantExtraction);
             XmlElement xpreviewX = doc.CreateElement("previewX");
             if (PreviewX < 0) { PreviewX = 0; };
             xpreviewX.InnerText = "" + PreviewX;

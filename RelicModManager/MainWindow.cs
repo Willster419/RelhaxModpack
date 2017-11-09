@@ -740,10 +740,11 @@ namespace RelhaxModpack
             }
             if (Settings.FirstLoad)
             {
-                helper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-                helperText = helper.helperText.Text;
-                helper.Show();
-                Settings.FirstLoad = false;
+                //helper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+                //helperText = helper.helperText.Text;
+                //helper.Show();
+                //Settings.FirstLoad = false;
+                generic_MouseLeave(null, null);
             }
             wait.Close();
             ToggleUIButtons(true);
@@ -1665,7 +1666,7 @@ namespace RelhaxModpack
             Control[] translationSetList = new Control[] { forceManuel, cleanInstallCB, backupModsCheckBox, cancerFontCB, saveLastInstallCB, saveUserDataCB, darkUICB,
                 installRelhaxMod, uninstallRelhaxMod, settingsGroupBox,loadingImageGroupBox, languageSelectionGB, findBugAddModLabel, formPageLink, selectionDefault, selectionLegacy, donateLabel,
                 cancelDownloadButton, fontSizeGB, expandNodesDefault, disableBordersCB, clearCacheCB, DiscordServerLink, viewAppUpdates, viewDBUpdates, disableColorsCB, clearLogFilesCB,
-                notifyIfSameDatabaseCB, ShowInstallCompleteWindowCB,  createShortcutsCB };
+                notifyIfSameDatabaseCB, ShowInstallCompleteWindowCB,  createShortcutsCB, InstantExtractionCB };
             foreach (var set in translationSetList)
             {
                 set.Text = Translations.getTranslatedString(set.Name);
@@ -1694,6 +1695,7 @@ namespace RelhaxModpack
                 this.notifyIfSameDatabaseCB.Checked = Settings.NotifyIfSameDatabase;
                 this.ShowInstallCompleteWindowCB.Checked = Settings.ShowInstallCompleteWindow;
                 this.createShortcutsCB.Checked = Settings.CreateShortcuts;
+                this.InstantExtractionCB.Checked = Settings.InstantExtraction;
                 switch (Settings.GIF)
                 {
                     case (Settings.LoadingGifs.Standard):
@@ -2066,6 +2068,12 @@ namespace RelhaxModpack
         {
             if (installRelhaxMod.Enabled)
                 downloadProgress.Text = Translations.getTranslatedString("CreateShortcutsCBExplanation");
+        }
+
+        private void InstantExtractionCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("InstantExtractionCBExplanation");
         }
         #endregion
 
@@ -2451,6 +2459,11 @@ namespace RelhaxModpack
         {
             Settings.CreateShortcuts = createShortcutsCB.Checked;
         }
+
+        private void InstantExtractionCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.InstantExtraction = InstantExtractionCB.Checked;
+        }
         #endregion
 
         #region Click events
@@ -2507,8 +2520,7 @@ namespace RelhaxModpack
             ToggleUIButtons(true);
         }
 
+
         #endregion
-
-
     }
 }

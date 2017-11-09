@@ -325,6 +325,13 @@ namespace RelhaxModpack
             polish.Add("createShortcutsCB", "Stwórz skróty na pulpicie");
             french.Add("createShortcutsCB", "Créer des raccourcis sur le bureau");
 
+            //Componet: InstantExtractionCB
+            //
+            english.Add("InstantExtractionCB", "Instant Extraction mode (experimental)");
+            german.Add("InstantExtractionCB", "TODO");
+            polish.Add("InstantExtractionCB", "TODO");
+            french.Add("InstantExtractionCB", "TODO");
+
             //Section: FirstLoadHelper
 
             //Componet: helperText
@@ -1008,6 +1015,13 @@ namespace RelhaxModpack
             german.Add("CreateShortcutsCBExplanation", "Wenn diese Option aktiviert ist, werden bei der Installation die Verknüpfungen für \"World of Tanks\", \"World of Tanks launcher\" und, wenn bei der Installation aktiviert, auch andere Verknüpfungen zu Konfigurationsprogrammen erstellt (z.B. WWIIHA Konfiguration)");
             polish.Add("CreateShortcutsCBExplanation", "Kiedy zaznaczone, utworzone zostaną skróty na pulpicie do modyfikacji z plikami exe (np. konfiguracja WWIIHA)");
             french.Add("CreateShortcutsCBExplanation", "Une fois sélectionné, L'installation créera des icônes de raccourci sur votre bureau pour les mods qui ont des fichiers .exe (comme la configuration WWIIHA)");
+
+            //Component: InstantExtractionCBExplanation
+            //
+            english.Add("InstantExtractionCBExplanation", "When enabled, the installer will extract a zip file as soon as it is downloaded, rather than waiting for every zip file to be downloaded before extraction.");
+            german.Add("InstantExtractionCBExplanation", "TODO");
+            polish.Add("InstantExtractionCBExplanation", "TODO");
+            french.Add("InstantExtractionCBExplanation", "TODO");
 
             //Section: Messages from ModSelectionList
 

@@ -42,13 +42,13 @@
             this.backupModsCheckBox = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
             this.createShortcutsCB = new System.Windows.Forms.CheckBox();
+            this.saveUserDataCB = new System.Windows.Forms.CheckBox();
+            this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
             this.ShowInstallCompleteWindowCB = new System.Windows.Forms.CheckBox();
             this.notifyIfSameDatabaseCB = new System.Windows.Forms.CheckBox();
             this.clearLogFilesCB = new System.Windows.Forms.CheckBox();
-            this.clearCacheCB = new System.Windows.Forms.CheckBox();
             this.darkUICB = new System.Windows.Forms.CheckBox();
-            this.saveUserDataCB = new System.Windows.Forms.CheckBox();
-            this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
+            this.clearCacheCB = new System.Windows.Forms.CheckBox();
             this.languageSelectionGB = new System.Windows.Forms.GroupBox();
             this.LanguageComboBox = new System.Windows.Forms.ComboBox();
             this.loadingImageGroupBox = new System.Windows.Forms.GroupBox();
@@ -86,6 +86,7 @@
             this.DatabaseVersionLabel = new System.Windows.Forms.Label();
             this.ApplicationVersionLabel = new System.Windows.Forms.Label();
             this.DiagnosticUtilitiesButton = new System.Windows.Forms.Button();
+            this.InstantExtractionCB = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
@@ -96,7 +97,7 @@
             // 
             // childProgressBar
             // 
-            this.childProgressBar.Location = new System.Drawing.Point(13, 504);
+            this.childProgressBar.Location = new System.Drawing.Point(13, 524);
             this.childProgressBar.Name = "childProgressBar";
             this.childProgressBar.Size = new System.Drawing.Size(464, 16);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -122,7 +123,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(10, 545);
+            this.formPageLink.Location = new System.Drawing.Point(10, 565);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -132,7 +133,7 @@
             // 
             // parrentProgressBar
             // 
-            this.parrentProgressBar.Location = new System.Drawing.Point(13, 482);
+            this.parrentProgressBar.Location = new System.Drawing.Point(13, 502);
             this.parrentProgressBar.Name = "parrentProgressBar";
             this.parrentProgressBar.Size = new System.Drawing.Size(464, 16);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -198,6 +199,7 @@
             // 
             // settingsGroupBox
             // 
+            this.settingsGroupBox.Controls.Add(this.InstantExtractionCB);
             this.settingsGroupBox.Controls.Add(this.createShortcutsCB);
             this.settingsGroupBox.Controls.Add(this.saveUserDataCB);
             this.settingsGroupBox.Controls.Add(this.saveLastInstallCB);
@@ -212,10 +214,10 @@
             this.settingsGroupBox.Controls.Add(this.clearCacheCB);
             this.settingsGroupBox.Location = new System.Drawing.Point(13, 99);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(464, 159);
+            this.settingsGroupBox.Size = new System.Drawing.Size(464, 179);
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
-            this.settingsGroupBox.Text = "Modpack Settings (Right click for description)";
+            this.settingsGroupBox.Text = "Modpack Settings";
             // 
             // createShortcutsCB
             // 
@@ -228,6 +230,30 @@
             this.createShortcutsCB.CheckedChanged += new System.EventHandler(this.CreateShortcutsCB_CheckedChanged);
             this.createShortcutsCB.MouseEnter += new System.EventHandler(this.CreateShortcutsCB_MouseEnter);
             this.createShortcutsCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
+            // saveUserDataCB
+            // 
+            this.saveUserDataCB.Location = new System.Drawing.Point(6, 83);
+            this.saveUserDataCB.Name = "saveUserDataCB";
+            this.saveUserDataCB.Size = new System.Drawing.Size(220, 17);
+            this.saveUserDataCB.TabIndex = 27;
+            this.saveUserDataCB.Text = "Save User created data";
+            this.saveUserDataCB.UseVisualStyleBackColor = true;
+            this.saveUserDataCB.CheckedChanged += new System.EventHandler(this.saveUserDataCB_CheckedChanged);
+            this.saveUserDataCB.MouseEnter += new System.EventHandler(this.saveUserDataCB_MouseEnter);
+            this.saveUserDataCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
+            // saveLastInstallCB
+            // 
+            this.saveLastInstallCB.Location = new System.Drawing.Point(6, 66);
+            this.saveLastInstallCB.Name = "saveLastInstallCB";
+            this.saveLastInstallCB.Size = new System.Drawing.Size(220, 17);
+            this.saveLastInstallCB.TabIndex = 26;
+            this.saveLastInstallCB.Text = "Save last install\'s config";
+            this.saveLastInstallCB.UseVisualStyleBackColor = true;
+            this.saveLastInstallCB.CheckedChanged += new System.EventHandler(this.saveLastInstallCB_CheckedChanged);
+            this.saveLastInstallCB.MouseEnter += new System.EventHandler(this.saveLastInstallCB_MouseEnter);
+            this.saveLastInstallCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // ShowInstallCompleteWindowCB
             // 
@@ -265,18 +291,6 @@
             this.clearLogFilesCB.MouseEnter += new System.EventHandler(this.clearLogFilesCB_MouseEnter);
             this.clearLogFilesCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
-            // clearCacheCB
-            // 
-            this.clearCacheCB.Location = new System.Drawing.Point(232, 32);
-            this.clearCacheCB.Name = "clearCacheCB";
-            this.clearCacheCB.Size = new System.Drawing.Size(220, 17);
-            this.clearCacheCB.TabIndex = 31;
-            this.clearCacheCB.Text = "Clear WoT Cache Data";
-            this.clearCacheCB.UseVisualStyleBackColor = true;
-            this.clearCacheCB.CheckedChanged += new System.EventHandler(this.clearCacheCB_CheckedChanged);
-            this.clearCacheCB.MouseEnter += new System.EventHandler(this.clearCacheCB_MouseEnter);
-            this.clearCacheCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
             // darkUICB
             // 
             this.darkUICB.Location = new System.Drawing.Point(232, 15);
@@ -289,34 +303,22 @@
             this.darkUICB.MouseEnter += new System.EventHandler(this.darkUICB_MouseEnter);
             this.darkUICB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
-            // saveUserDataCB
+            // clearCacheCB
             // 
-            this.saveUserDataCB.Location = new System.Drawing.Point(6, 83);
-            this.saveUserDataCB.Name = "saveUserDataCB";
-            this.saveUserDataCB.Size = new System.Drawing.Size(220, 17);
-            this.saveUserDataCB.TabIndex = 27;
-            this.saveUserDataCB.Text = "Save User created data";
-            this.saveUserDataCB.UseVisualStyleBackColor = true;
-            this.saveUserDataCB.CheckedChanged += new System.EventHandler(this.saveUserDataCB_CheckedChanged);
-            this.saveUserDataCB.MouseEnter += new System.EventHandler(this.saveUserDataCB_MouseEnter);
-            this.saveUserDataCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // saveLastInstallCB
-            // 
-            this.saveLastInstallCB.Location = new System.Drawing.Point(6, 66);
-            this.saveLastInstallCB.Name = "saveLastInstallCB";
-            this.saveLastInstallCB.Size = new System.Drawing.Size(220, 17);
-            this.saveLastInstallCB.TabIndex = 26;
-            this.saveLastInstallCB.Text = "Save last install\'s config";
-            this.saveLastInstallCB.UseVisualStyleBackColor = true;
-            this.saveLastInstallCB.CheckedChanged += new System.EventHandler(this.saveLastInstallCB_CheckedChanged);
-            this.saveLastInstallCB.MouseEnter += new System.EventHandler(this.saveLastInstallCB_MouseEnter);
-            this.saveLastInstallCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            this.clearCacheCB.Location = new System.Drawing.Point(232, 32);
+            this.clearCacheCB.Name = "clearCacheCB";
+            this.clearCacheCB.Size = new System.Drawing.Size(220, 17);
+            this.clearCacheCB.TabIndex = 31;
+            this.clearCacheCB.Text = "Clear WoT Cache Data";
+            this.clearCacheCB.UseVisualStyleBackColor = true;
+            this.clearCacheCB.CheckedChanged += new System.EventHandler(this.clearCacheCB_CheckedChanged);
+            this.clearCacheCB.MouseEnter += new System.EventHandler(this.clearCacheCB_MouseEnter);
+            this.clearCacheCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // languageSelectionGB
             // 
             this.languageSelectionGB.Controls.Add(this.LanguageComboBox);
-            this.languageSelectionGB.Location = new System.Drawing.Point(353, 325);
+            this.languageSelectionGB.Location = new System.Drawing.Point(353, 345);
             this.languageSelectionGB.Name = "languageSelectionGB";
             this.languageSelectionGB.Size = new System.Drawing.Size(124, 63);
             this.languageSelectionGB.TabIndex = 30;
@@ -342,7 +344,7 @@
             // 
             this.loadingImageGroupBox.Controls.Add(this.thirdGuardsLoadingImageRB);
             this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(353, 264);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(353, 284);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
             this.loadingImageGroupBox.Size = new System.Drawing.Size(124, 62);
             this.loadingImageGroupBox.TabIndex = 26;
@@ -382,7 +384,7 @@
             // findBugAddModLabel
             // 
             this.findBugAddModLabel.AutoSize = true;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(10, 526);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(10, 546);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
             this.findBugAddModLabel.TabIndex = 27;
@@ -393,7 +395,7 @@
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(374, 526);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(374, 546);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
             this.cancelDownloadButton.Size = new System.Drawing.Size(103, 60);
             this.cancelDownloadButton.TabIndex = 28;
@@ -410,7 +412,7 @@
             // downloadProgress
             // 
             this.downloadProgress.DetectUrls = false;
-            this.downloadProgress.Location = new System.Drawing.Point(13, 394);
+            this.downloadProgress.Location = new System.Drawing.Point(13, 414);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
             this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
@@ -425,7 +427,7 @@
             this.viewTypeGB.Controls.Add(this.expandNodesDefault);
             this.viewTypeGB.Controls.Add(this.selectionLegacy);
             this.viewTypeGB.Controls.Add(this.selectionDefault);
-            this.viewTypeGB.Location = new System.Drawing.Point(176, 264);
+            this.viewTypeGB.Location = new System.Drawing.Point(176, 284);
             this.viewTypeGB.Name = "viewTypeGB";
             this.viewTypeGB.Size = new System.Drawing.Size(174, 124);
             this.viewTypeGB.TabIndex = 31;
@@ -502,7 +504,7 @@
             // donateLabel
             // 
             this.donateLabel.AutoSize = true;
-            this.donateLabel.Location = new System.Drawing.Point(10, 565);
+            this.donateLabel.Location = new System.Drawing.Point(10, 585);
             this.donateLabel.Name = "donateLabel";
             this.donateLabel.Size = new System.Drawing.Size(162, 13);
             this.donateLabel.TabIndex = 32;
@@ -523,7 +525,7 @@
             this.fontSizeGB.Controls.Add(this.fontSize175);
             this.fontSizeGB.Controls.Add(this.fontSize125);
             this.fontSizeGB.Controls.Add(this.fontSize100);
-            this.fontSizeGB.Location = new System.Drawing.Point(13, 264);
+            this.fontSizeGB.Location = new System.Drawing.Point(13, 284);
             this.fontSizeGB.Name = "fontSizeGB";
             this.fontSizeGB.Size = new System.Drawing.Size(159, 124);
             this.fontSizeGB.TabIndex = 33;
@@ -686,7 +688,7 @@
             // 
             // totalProgressBar
             // 
-            this.totalProgressBar.Location = new System.Drawing.Point(13, 460);
+            this.totalProgressBar.Location = new System.Drawing.Point(13, 480);
             this.totalProgressBar.Name = "totalProgressBar";
             this.totalProgressBar.Size = new System.Drawing.Size(464, 16);
             this.totalProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -695,7 +697,7 @@
             // DiscordServerLink
             // 
             this.DiscordServerLink.AutoSize = true;
-            this.DiscordServerLink.Location = new System.Drawing.Point(10, 584);
+            this.DiscordServerLink.Location = new System.Drawing.Point(10, 604);
             this.DiscordServerLink.Name = "DiscordServerLink";
             this.DiscordServerLink.Size = new System.Drawing.Size(77, 13);
             this.DiscordServerLink.TabIndex = 35;
@@ -726,7 +728,7 @@
             // ErrorCounterLabel
             // 
             this.ErrorCounterLabel.AutoSize = true;
-            this.ErrorCounterLabel.Location = new System.Drawing.Point(288, 561);
+            this.ErrorCounterLabel.Location = new System.Drawing.Point(288, 581);
             this.ErrorCounterLabel.Name = "ErrorCounterLabel";
             this.ErrorCounterLabel.Size = new System.Drawing.Size(80, 13);
             this.ErrorCounterLabel.TabIndex = 38;
@@ -742,18 +744,18 @@
             this.VersionTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.VersionTable.Controls.Add(this.DatabaseVersionLabel, 1, 0);
             this.VersionTable.Controls.Add(this.ApplicationVersionLabel, 0, 0);
-            this.VersionTable.Location = new System.Drawing.Point(13, 600);
+            this.VersionTable.Location = new System.Drawing.Point(12, 621);
             this.VersionTable.Name = "VersionTable";
             this.VersionTable.RowCount = 1;
             this.VersionTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.VersionTable.Size = new System.Drawing.Size(464, 16);
+            this.VersionTable.Size = new System.Drawing.Size(465, 16);
             this.VersionTable.TabIndex = 39;
             // 
             // DatabaseVersionLabel
             // 
             this.DatabaseVersionLabel.AutoSize = true;
             this.DatabaseVersionLabel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.DatabaseVersionLabel.Location = new System.Drawing.Point(324, 1);
+            this.DatabaseVersionLabel.Location = new System.Drawing.Point(325, 1);
             this.DatabaseVersionLabel.Name = "DatabaseVersionLabel";
             this.DatabaseVersionLabel.Size = new System.Drawing.Size(136, 14);
             this.DatabaseVersionLabel.TabIndex = 0;
@@ -778,12 +780,24 @@
             this.DiagnosticUtilitiesButton.UseVisualStyleBackColor = true;
             this.DiagnosticUtilitiesButton.Click += new System.EventHandler(this.DiagnosticUtilitiesButton_Click);
             // 
+            // InstantExtractionCB
+            // 
+            this.InstantExtractionCB.Location = new System.Drawing.Point(6, 130);
+            this.InstantExtractionCB.Name = "InstantExtractionCB";
+            this.InstantExtractionCB.Size = new System.Drawing.Size(220, 30);
+            this.InstantExtractionCB.TabIndex = 36;
+            this.InstantExtractionCB.Text = "Instant Extraction mode (experimental)";
+            this.InstantExtractionCB.UseVisualStyleBackColor = true;
+            this.InstantExtractionCB.CheckedChanged += new System.EventHandler(this.InstantExtractionCB_CheckedChanged);
+            this.InstantExtractionCB.MouseEnter += new System.EventHandler(this.InstantExtractionCB_MouseEnter);
+            this.InstantExtractionCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(489, 624);
+            this.ClientSize = new System.Drawing.Size(489, 649);
             this.Controls.Add(this.DiagnosticUtilitiesButton);
             this.Controls.Add(this.VersionTable);
             this.Controls.Add(this.ErrorCounterLabel);
@@ -885,6 +899,7 @@
         private System.Windows.Forms.Label ApplicationVersionLabel;
         private System.Windows.Forms.ComboBox LanguageComboBox;
         private System.Windows.Forms.Button DiagnosticUtilitiesButton;
+        private System.Windows.Forms.CheckBox InstantExtractionCB;
     }
 }
 
