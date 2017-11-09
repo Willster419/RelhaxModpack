@@ -61,8 +61,6 @@ namespace RelhaxModpack
         public static int errorCounter = 0;
         // string tempOldDownload; => using userToken at Async download
         private List<Mod> userMods;
-        private FirstLoadHelper helper;
-        string helperText;
         string currentModDownloading;
         private Installer ins;
         private Installer unI;
@@ -352,17 +350,16 @@ namespace RelhaxModpack
                         bool loop = true;
                         while (loop)
                         {
+                            System.Threading.Thread.Sleep(500);
+                            loop = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1;
+                            if (!loop)
+                                break;
                             result = MessageBox.Show(Translations.getTranslatedString("closeInstanceRunningForUpdate"), Translations.getTranslatedString("critical"), MessageBoxButtons.RetryCancel, MessageBoxIcon.Stop);
                             if (result == DialogResult.Cancel)
                             {
                                 Utils.AppendToLog("User canceled update, because he does not want to end the parallel running Relhax instance.");
                                 Application.Exit();
                                 break;
-                            }
-                            else
-                            {
-                                loop = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1;
-                                System.Threading.Thread.Sleep(1000);
                             }
                         }
 
@@ -405,17 +402,10 @@ namespace RelhaxModpack
             string newExeName = Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat");
             try
             {
-                File.WriteAllText(newExeName, @"@ECHO OFF
-                ECHO Updating Application...
-                ping 127.0.0.1 -n 3 > nul
-                del  /Q RelhaxModpack.exe 2> nul
-                copy /Y RelhaxModpack_update.exe RelhaxModpack.exe 2> nul
-                del /Q RelicModManager_update.exe 2> nul
-                del /Q RelhaxModpack_update.exe 2> nul
-                del /Q RelicModManager.exe 2> nul
-                ECHO Starting Application...
-                start """" ""RelhaxModpack.exe"" %1 %2 %3 %4 %5 %6 %7 %8 %9 2> nul
-                ".Replace("                ", ""));
+                //Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "supported_clients.xml");
+                string updateScript = "";
+                updateScript = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "RelicCopyUpdate.txt");
+                File.WriteAllText(newExeName, updateScript);
             }
             catch (Exception ex)
             {
@@ -1579,11 +1569,6 @@ namespace RelhaxModpack
                 parsedCatagoryLists = null;
                 patchList = null;
                 userMods = null;
-                if (helper != null)
-                {
-                    helper.Dispose();
-                    helper = null;
-                }
                 modsConfigsWithData = null;
                 if (Settings.FirstLoad)
                     Settings.FirstLoad = false;
@@ -1672,10 +1657,6 @@ namespace RelhaxModpack
                 set.Text = Translations.getTranslatedString(set.Name);
             }
             viewTypeGB.Text = Translations.getTranslatedString("ModSelectionListViewSelection");
-            if (helper != null)
-            {
-                helper.helperText.Text = Translations.getTranslatedString("helperText");
-            }
             if (init)
             {
                 //apply all checkmarks
