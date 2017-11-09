@@ -24,6 +24,7 @@ namespace RelhaxModpack
             Checked = false;
             DownloadFlag = false;
             Visible = true;
+            ReadyForInstall = false;
         }
         //returns the config of the specified name
         //if it does not exist, it returns null

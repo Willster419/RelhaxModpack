@@ -74,6 +74,8 @@ namespace RelhaxModpack
         float currentTotalBytesDownloaded = 0;
         float differenceTotalBytesDownloaded = 0;
         float sessionDownloadSpeed = 0;
+        private int downloadCounter = -1;
+        private object lockerMain = new object();
         private LoadingGifPreview gp;
         List<string> supportedVersions = new List<string>();
         List<SelectableDatabasePackage> modsConfigsWithData;
@@ -118,6 +120,8 @@ namespace RelhaxModpack
         //handler for the mod download file progress
         void downloader_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
+            if (Settings.InstantExtraction)
+                return;
             if (!downloadTimer.Enabled)
                 downloadTimer.Enabled = true;
             string totalSpeedLabel = "";
@@ -171,6 +175,7 @@ namespace RelhaxModpack
         //handler for the mod download file complete event
         void downloader_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
+            downloadTimer.Enabled = false;
             //check to see if the user cancled the download
             if (e != null && e.Cancelled)
             {
@@ -181,9 +186,8 @@ namespace RelhaxModpack
                 childProgressBar.Value = 0;
                 return;
             }
-            downloadTimer.Enabled = false;
             //i think a complete download means that error is null, if error is ever not null this will catch it and we can log it
-            if (e != null && e.Error != null)
+            else if (e != null && e.Error != null)
             {
                 AsyncDownloadArgs userToken = (AsyncDownloadArgs)e.UserState;
                 if (Program.testMode)
@@ -201,60 +205,88 @@ namespace RelhaxModpack
                     return;
                 }
             }
-            if (DatabasePackagesToDownload.Count != 0)
+            //at this point we're here for NOT an error and NOT a cancel
+            downloadCounter++;
+            if (DatabasePackagesToDownload.Count != downloadCounter)
             {
+                //downloader components
                 AsyncDownloadArgs args = new AsyncDownloadArgs();
-                args.url = new Uri(Utils.ReplaceMacro(DatabasePackagesToDownload[0].StartAddress) + DatabasePackagesToDownload[0].ZipFile + DatabasePackagesToDownload[0].EndAddress);
-                args.zipFile = Path.Combine(downloadPath,DatabasePackagesToDownload[0].ZipFile);
-                totalProgressBar.Maximum = (int)InstallerEventArgs.InstallProgress.Done;
-                totalProgressBar.Value = 1;
-                cancelDownloadButton.Enabled = true;
-                cancelDownloadButton.Visible = true;
+                args.url = new Uri(Utils.ReplaceMacro(DatabasePackagesToDownload[downloadCounter].StartAddress) + DatabasePackagesToDownload[downloadCounter].ZipFile + DatabasePackagesToDownload[downloadCounter].EndAddress);
+                args.zipFile = Path.Combine(downloadPath,DatabasePackagesToDownload[downloadCounter].ZipFile);
                 //for the next file in the queue, delete it.
                 if (File.Exists(args.zipFile)) File.Delete(args.zipFile);
                 //download new zip file
                 if (downloader != null)
                     downloader.Dispose();
                 downloader = new WebClient();
-                downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
-                downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
+                downloader.DownloadProgressChanged += downloader_DownloadProgressChanged;
+                downloader.DownloadFileCompleted += downloader_DownloadFileCompleted;
                 downloader.Proxy = null;
-                if (timeRemainArray == null)
-                    timeRemainArray = new List<double>();
-                timeRemainArray.Clear();
-                actualTimeRemain = 0;
-                sw.Reset();
-                sw.Start();
                 downloader.DownloadFileAsync(args.url, args.zipFile, args);
                 Utils.AppendToLog("downloading " + Path.GetFileName(args.zipFile));
-                currentModDownloading = Path.GetFileNameWithoutExtension(args.zipFile);
-                DatabasePackagesToDownload.RemoveAt(0);
-                if ((parrentProgressBar.Value + 1) <= parrentProgressBar.Maximum)
-                    parrentProgressBar.Value++;
-                return;
+                //UI components
+                if(!Settings.InstantExtraction)
+                {
+                    totalProgressBar.Maximum = (int)InstallerEventArgs.InstallProgress.Done;
+                    totalProgressBar.Value = 1;//backup technically, but don't worry about it (for now)
+                    cancelDownloadButton.Enabled = true;
+                    cancelDownloadButton.Visible = true;
+                    downloadTimer.Enabled = true;
+                    if (timeRemainArray == null)
+                        timeRemainArray = new List<double>();
+                    timeRemainArray.Clear();
+                    actualTimeRemain = 0;
+                    sw.Reset();
+                    sw.Start();
+                    currentModDownloading = Path.GetFileNameWithoutExtension(args.zipFile);
+                    if ((parrentProgressBar.Value + 1) <= parrentProgressBar.Maximum)
+                        parrentProgressBar.Value++;
+                }
+                //locking system for stopping data and access races
+                if (downloadCounter!=0)
+                {
+                    lock (lockerMain)
+                    {
+                        DatabasePackagesToDownload[downloadCounter - 1].ReadyForInstall = true;
+                    }
+                }
             }
-            if (DatabasePackagesToDownload.Count == 0)
+            if (DatabasePackagesToDownload.Count == downloadCounter || Settings.InstantExtraction)
             {
                 cancelDownloadButton.Enabled = false;
                 cancelDownloadButton.Visible = false;
-                ins = new Installer()
+                if (ins == null)
                 {
-                    AppPath = Application.StartupPath,
-                    GlobalDependencies = this.globalDependenciesToInstall,
-                    Dependencies = this.dependenciesToInstall,
-                    LogicalDependencies = this.logicalDependenciesToInstall,
-                    AppendedDependencies = this.appendedDependenciesToInstall,
-                    ModsConfigsToInstall = this.modsConfigsToInstall,
-                    ModsConfigsWithData = this.modsConfigsWithData,
-                    TanksLocation = this.tanksLocation,
-                    TanksVersion = this.tanksVersionForInstaller,
-                    UserMods = this.userMods,
-                    AppDataFolder = this.appDataFolder,
-                    DatabaseVersion = this.databaseVersionString,
-                    Shortcuts = this.Shortcuts
-                };
-                ins.InstallProgressChanged += I_InstallProgressChanged;
-                ins.StartInstallation();
+                    ins = new Installer()
+                    {
+                        AppPath = Application.StartupPath,
+                        GlobalDependencies = this.globalDependenciesToInstall,
+                        Dependencies = this.dependenciesToInstall,
+                        LogicalDependencies = this.logicalDependenciesToInstall,
+                        AppendedDependencies = this.appendedDependenciesToInstall,
+                        ModsConfigsToInstall = this.modsConfigsToInstall,
+                        ModsConfigsWithData = this.modsConfigsWithData,
+                        TanksLocation = this.tanksLocation,
+                        TanksVersion = this.tanksVersionForInstaller,
+                        UserMods = this.userMods,
+                        AppDataFolder = this.appDataFolder,
+                        DatabaseVersion = this.databaseVersionString,
+                        Shortcuts = this.Shortcuts
+                    };
+                    ins.InstallProgressChanged += I_InstallProgressChanged;
+                    ins.StartInstallation();
+                }
+                if(DatabasePackagesToDownload.Count == downloadCounter && Settings.InstantExtraction)
+                {
+                    //locking system for stopping data and access races
+                    if (downloadCounter != 0)
+                    {
+                        lock (lockerMain)
+                        {
+                            DatabasePackagesToDownload[downloadCounter - 1].ReadyForInstall = true;
+                        }
+                    }
+                }
             }
         }
 
@@ -1192,41 +1224,59 @@ namespace RelhaxModpack
                 logicalDependenciesToInstall.Clear();
                 appendedDependenciesToInstall.Clear();
             }
+            //reset the download counter
+            downloadCounter = -1;
+            //create the download list
             foreach (Dependency d in globalDependenciesToInstall)
             {
                 if (d.DownloadFlag)
                 {
+                    d.ReadyForInstall = false;
                     DatabasePackagesToDownload.Add(d);
                 }
+                else
+                    d.ReadyForInstall = true;
             }
             foreach (Dependency d in dependenciesToInstall)
             {
                 if (d.DownloadFlag)
                 {
+                    d.ReadyForInstall = false;
                     DatabasePackagesToDownload.Add(d);
                 }
+                else
+                    d.ReadyForInstall = true;
             }
             foreach (Dependency d in appendedDependenciesToInstall)
             {
                 if (d.DownloadFlag)
                 {
+                    d.ReadyForInstall = false;
                     DatabasePackagesToDownload.Add(d);
                 }
+                else
+                    d.ReadyForInstall = true;
             }
             foreach (LogicalDependency ld in logicalDependenciesToInstall)
             {
                 if (ld.DownloadFlag)
                 {
+                    ld.ReadyForInstall = false;
                     DatabasePackagesToDownload.Add(ld);
                 }
+                else
+                    ld.ReadyForInstall = true;
             }
             foreach (SelectableDatabasePackage dbo in modsConfigsToInstall)
             {
                 if (dbo.DownloadFlag)
                 {
                     //CRC's don't match, need to re-download
+                    dbo.ReadyForInstall = false;
                     DatabasePackagesToDownload.Add(dbo);
                 }
+                else
+                    dbo.ReadyForInstall = true;
             }
             //upadte the parrentProgressPar
             parrentProgressBar.Maximum = DatabasePackagesToDownload.Count;

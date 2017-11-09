@@ -23,5 +23,6 @@
         string StartAddress { get; set; }
         string EndAddress { get; set; }
         bool DownloadFlag { get; set; }
+        bool ReadyForInstall { get; set; }
     }
 }

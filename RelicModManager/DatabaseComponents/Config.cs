@@ -27,6 +27,7 @@ namespace RelhaxModpack
             Checked = false;
             DownloadFlag = false;
             Visible = true;
+            ReadyForInstall = false;
         }
         public Config GetSubConfig(string subConfigName)
         {

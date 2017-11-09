@@ -974,12 +974,12 @@ namespace RelhaxModpack
             polish.Add("clearCachCBExplanation", "Usuń dane aplikacji z lokacji WoT cache. Działa na podobnej zasadzie, jak kiedyś opcja z paczki OMC.");
             french.Add("clearCachCBExplanation", "Nettoyer le dossier cache WoT. Effectue la même tâche que l'option similaire qui était dans OMC.");
 
-            //Component: clearLogFilesCBExplanation
+            //Component: clearLogFilesDescription
             //
-            english.Add("clearLogFilesCBExplanation", "Clear the WoT log files, (python.log), as well as xvm log files (xvm.log) and pmod log files (pmod.log)");
-            german.Add("clearLogFilesCBExplanation", "Löschen der WoT Protokolldatei, sowie XVM und PMOD Protokolldatei");
-            polish.Add("clearLogFilesCBExplanation", "Wyczyść logi WoTa (python.log), XVM'a (xvm.log) i pmod'ów (pmod.log).");
-            french.Add("clearLogFilesCBExplanation", "Effacez les fichiers logs WoT (python.log), ainsi que les fichiers logs xvm (xvm.log) et les fichiers logs pmod (pmod.log)");
+            english.Add("clearLogFilesDescription", "Clear the WoT log files, (python.log), as well as xvm log files (xvm.log) and pmod log files (pmod.log)");
+            german.Add("clearLogFilesDescription", "Löschen der WoT Protokolldatei, sowie XVM und PMOD Protokolldatei");
+            polish.Add("clearLogFilesDescription", "Wyczyść logi WoTa (python.log), XVM'a (xvm.log) i pmod'ów (pmod.log).");
+            french.Add("clearLogFilesDescription", "Effacez les fichiers logs WoT (python.log), ainsi que les fichiers logs xvm (xvm.log) et les fichiers logs pmod (pmod.log)");
 
             //Component: disableColorsCBExplanation
             //

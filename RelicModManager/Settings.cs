@@ -35,6 +35,8 @@ namespace RelhaxModpack
         public static bool DisableColorChange { get; set; }
         //toggle if the program will create desktop shortcuts
         public static bool CreateShortcuts { get; set; }
+        //toggle instant extraction
+        public static bool InstantExtraction { get; set; }
         public static int ModSelectionHeight { get; set; }
         public static int ModSelectionWidth { get; set; }
         public static int LoadingGif { get; set; }
@@ -98,6 +100,7 @@ namespace RelhaxModpack
         {
             //Settings declared here are set for what their default values should be, then later modified in the settings xml file
             //i.e. when new features are added
+            Settings.InstantExtraction = true;
             Settings.FirstLoad = false;
             Settings.CreateShortcuts = true;
             Utils.AppendToLog("Loading application settings");
