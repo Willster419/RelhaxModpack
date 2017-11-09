@@ -1269,13 +1269,15 @@ namespace RelhaxModpack
         {
             foreach (Atlases a in atlasesList)
             {
-                AtlasesCreator.AtlasesArgs atlasesArgs = new AtlasesCreator.AtlasesArgs();
-                atlasesArgs.MaxHeight = 2048;
-                atlasesArgs.ImageFile = Path.Combine(a.atlasSaveDirectory, a.atlasFile);
-                atlasesArgs.MapFile = Path.Combine(a.atlasSaveDirectory, a.mapFile);
-                atlasesArgs.PowOf2 = true;
-                atlasesArgs.Square = false;
-                atlasesArgs.GenerateMap = true;
+                AtlasesCreator.AtlasesArgs atlasesArgs = new AtlasesCreator.AtlasesArgs
+                {
+                    MaxHeight = 2048,
+                    ImageFile = Path.Combine(a.atlasSaveDirectory, a.atlasFile),
+                    MapFile = Path.Combine(a.atlasSaveDirectory, a.mapFile),
+                    PowOf2 = true,
+                    Square = false,
+                    GenerateMap = true
+                };
                 List<string> fl = new List<string>();
                 fl.Add(a.workingFolder);
                 fl.AddRange(a.imageFolderList);
@@ -1380,16 +1382,18 @@ namespace RelhaxModpack
                                 }
                             }
                         }
-                        ProcessStartInfo info = new ProcessStartInfo();
-                        info.FileName = fontRegPath;
-                        info.UseShellExecute = true;
-                        info.Verb = "runas"; // Provides Run as Administrator
-                        info.Arguments = "/copy";
-                        info.WorkingDirectory = Path.Combine(TanksLocation, "_fonts");
-                        Process installFontss = new Process();
-                        installFontss.StartInfo = info;
+                        ProcessStartInfo info = new ProcessStartInfo
+                        {
+                            FileName = fontRegPath,
+                            UseShellExecute = true,
+                            Verb = "runas", // Provides Run as Administrator
+                            Arguments = "/copy",
+                            WorkingDirectory = Path.Combine(TanksLocation, "_fonts")
+                        };
                         try
                         {
+                            Process installFontss = new Process();
+                            installFontss.StartInfo = info;
                             installFontss.Start();
                             installFontss.WaitForExit();
                             Utils.AppendToLog("FontReg.exe ExitCode: " + installFontss.ExitCode);
@@ -1586,24 +1590,26 @@ namespace RelhaxModpack
                 {
                     if (r.ContainsKey("pkg") && r.ContainsKey("directoryInArchive") && r.ContainsKey("fileName") && r.ContainsKey("extractDirectory") && r.ContainsKey("newFileName")) 
                     {
-                        XmlUnpack xup = new XmlUnpack();
-                        xup.pkg = @r["pkg"];
-                        xup.directoryInArchive = @r["directoryInArchive"];
-                        xup.fileName = @r["fileName"];
-                        xup.extractDirectory = @r["extractDirectory"];
-                        xup.newFileName = @r["newFileName"];
-                        xup.actualPatchName = Path.GetFileName(xmlFile);
+                        XmlUnpack xup = new XmlUnpack
+                        {
+                            pkg = @r["pkg"],
+                            directoryInArchive = @r["directoryInArchive"],
+                            fileName = @r["fileName"],
+                            extractDirectory = @r["extractDirectory"],
+                            newFileName = @r["newFileName"],
+                            actualPatchName = Path.GetFileName(xmlFile)
+                        };
                         if (r["directoryInArchive"].Equals("") || r["extractDirectory"].Equals("") || r["fileName"].Equals(""))
                         {
                             Utils.AppendToLog(string.Format("ERROR. XmlUnPackFile '{0}' has an empty but needed node ('fileName', 'directoryInArchive' and 'extractDirectory' MUST be set\n----- dump of object ------\n{1}\n----- end of dump ------", xup.actualPatchName.ToString(), xup.ToString()));
                         }
                         else
                         {
-                            xup.pkg = Utils.ReplaceMacro(@xup.pkg);
-                            xup.directoryInArchive = Utils.ReplaceMacro(@xup.directoryInArchive);
-                            xup.fileName = Utils.ReplaceMacro(@xup.fileName);
-                            xup.extractDirectory = Utils.ReplaceMacro(@xup.extractDirectory);
-                            xup.newFileName = Utils.ReplaceMacro(@xup.newFileName);
+                            xup.pkg = Utils.ReplaceMacro(xup.pkg);
+                            xup.directoryInArchive = Utils.ReplaceMacro(xup.directoryInArchive);
+                            xup.fileName = Utils.ReplaceMacro(xup.fileName);
+                            xup.extractDirectory = Utils.ReplaceMacro(xup.extractDirectory);
+                            xup.newFileName = Utils.ReplaceMacro(xup.newFileName);
                             xmlUnpackList.Add(xup);
                         }
                     }

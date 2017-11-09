@@ -158,11 +158,10 @@ namespace RelhaxModpack.AtlasesCreator
 
                 // generate our output
                 ImagePacker imagePacker = new ImagePacker();
-                Bitmap outputImage;
                 Dictionary<string, Rectangle> outputMap;
 
                 // pack the image, generating a map only if desired
-                int result = imagePacker.PackImage(args.Images, args.PowOf2, args.Square, args.MaxWidth, args.MaxHeight, args.Padding, mapExporter != null, out outputImage, out outputMap);
+                int result = imagePacker.PackImage(args.Images, args.PowOf2, args.Square, args.MaxWidth, args.MaxHeight, args.Padding, mapExporter != null, out Bitmap outputImage, out outputMap);
                 if (result != 0)
                 {
                     Utils.AppendToLog("There was an error making the image sheet.");
