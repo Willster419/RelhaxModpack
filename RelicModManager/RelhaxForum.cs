@@ -6,9 +6,9 @@ namespace RelhaxModpack
 {
     public class RelhaxForum : Form
     {
-        private const int TitleBar = 23;//set origionaly for 23
-        private int TitleBarDifference = 0;
-        private int TitleHeight = 0;
+        public const int TitleBar = 23;//set origionaly for 23
+        public int TitleBarDifference = 0;
+        public int TitleHeight = 0;
         protected override void OnLoad(EventArgs e)
         {
             //font scaling
@@ -25,6 +25,7 @@ namespace RelhaxModpack
             {
                 TitleBarDifference = TitleHeight - TitleBar;
             }
+            //set the UI colors
             Settings.setUIColor(this);
             base.OnLoad(e);
         }

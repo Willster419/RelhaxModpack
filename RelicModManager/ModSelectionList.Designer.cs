@@ -57,9 +57,9 @@ namespace RelhaxModpack
                 }
                 if(this.Controls.Count > 0)
                     this.Controls.Clear();
-                parsedCatagoryList = null;
-                userMods = null;
-                globalDependencies = null;
+                ParsedCatagoryList = null;
+                UserMods = null;
+                GlobalDependencies = null;
                 if (p != null)
                 {
                     p.Dispose();

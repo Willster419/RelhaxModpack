@@ -829,9 +829,14 @@ namespace RelhaxModpack
                 File.Delete(md5HashDatabaseLocation);
             }
             //show the mod selection window
-            ModSelectionList list = new ModSelectionList(tanksVersion, tanksLocation, this.Location.X + this.Size.Width, this.Location.Y);
-            list.ShowDialog();
-            if (list.cancel)
+            ModSelectionList list = new ModSelectionList()
+            {
+                TanksVersion = this.tanksVersion,
+                TanksLocation = this.tanksLocation,
+                MainWindowStartX = this.Location.X + this.Size.Width,
+                MainWindowStartY = this.Location.Y
+            };
+            if (list.ShowDialog() != DialogResult.OK)
             {
                 try
                 {
@@ -868,10 +873,10 @@ namespace RelhaxModpack
              * like mods/configs to install, mods/configs with data, and others
             */
             //copies it instead
-            currentDependencies = new List<Dependency>(list.dependencies);
-            currentLogicalDependencies = new List<LogicalDependency>(list.logicalDependencies);
-            parsedCatagoryLists = new List<Category>(list.parsedCatagoryList);
-            globalDependenciesToInstall = new List<Dependency>(list.globalDependencies);
+            currentDependencies = new List<Dependency>(list.Dependencies);
+            currentLogicalDependencies = new List<LogicalDependency>(list.LogicalDependencies);
+            parsedCatagoryLists = new List<Category>(list.ParsedCatagoryList);
+            globalDependenciesToInstall = new List<Dependency>(list.GlobalDependencies);
             dependenciesToInstall = new List<Dependency>();
             logicalDependenciesToInstall = new List<LogicalDependency>();
             modsConfigsToInstall = new List<SelectableDatabasePackage>();
@@ -1155,11 +1160,11 @@ namespace RelhaxModpack
             try
             {
                 //check for any user mods to install
-                for (int i = 0; i < list.userMods.Count; i++)
+                for (int i = 0; i < list.UserMods.Count; i++)
                 {
-                    if (list.userMods[i].Enabled && list.userMods[i].Checked)
+                    if (list.UserMods[i].Enabled && list.UserMods[i].Checked)
                     {
-                        this.userMods.Add(list.userMods[i]);
+                        this.userMods.Add(list.UserMods[i]);
                     }
                 }
             }
