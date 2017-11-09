@@ -5,7 +5,7 @@ using System.Windows.Forms;
 namespace RelhaxModpack
 {
     //window that is displayed when an update to the application is detected
-    public partial class VersionInfo : Form
+    public partial class VersionInfo : RelhaxForum
     {
         //the result returned form this window
         public DialogResult result;
@@ -31,13 +31,6 @@ namespace RelhaxModpack
         //handler for before the window is displayed
         private void VersionInfo_Load(object sender, EventArgs e)
         {
-            //font scaling
-            this.AutoScaleMode = Settings.AppScalingMode;
-            this.Font = Settings.AppFont;
-            if (Settings.AppScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
-            {
-                this.Scale(new System.Drawing.SizeF(Settings.ScaleSize, Settings.ScaleSize));
-            }
             updateAcceptButton.Text = Translations.getTranslatedString(updateAcceptButton.Name);
             updateDeclineButton.Text = Translations.getTranslatedString(updateDeclineButton.Name);
             newVersionAvailableLabel.Text = Translations.getTranslatedString(newVersionAvailableLabel.Name);
@@ -57,7 +50,6 @@ namespace RelhaxModpack
                 MessageBox.Show(string.Format("{0} releaseNotes.txt", Translations.getTranslatedString("failedToDownload_1")));
                 Application.Exit();
             }
-            Settings.setUIColor(this);
             VersionInfo_SizeChanged(null, null);
             Application.DoEvents();
         }

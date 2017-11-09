@@ -4,7 +4,7 @@ using System.Windows.Forms;
 namespace RelhaxModpack
 {
     //the loading window to show on startup
-    public partial class PleaseWait : Form
+    public partial class PleaseWait : RelhaxForum
     {
         private int startX = -1;
         private int startY = -1;
@@ -22,17 +22,9 @@ namespace RelhaxModpack
         }
         private void PleaseWait_Load(object sender, EventArgs e)
         {
-            //font scaling
-            this.AutoScaleMode = Settings.AppScalingMode;
-            this.Font = Settings.AppFont;
-            if (Settings.AppScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
-            {
-                this.Scale(new System.Drawing.SizeF(Settings.ScaleSize, Settings.ScaleSize));
-            }
             if (startY != -1 && startX != -1)
                 this.Location = new System.Drawing.Point(startX + 10, startY);
             label1.Text = Translations.getTranslatedString(label1.Name);
-            Settings.setUIColor(this);
             //align the text box to the middle of the forum
             label1.Location = new System.Drawing.Point((this.Size.Width / 2) - (label1.Size.Width/2), label1.Location.Y);
             PGMAX = forgroundPanel.Size.Width;

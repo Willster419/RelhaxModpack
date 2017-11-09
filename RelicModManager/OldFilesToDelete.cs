@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace RelhaxModpack
 {
-    public partial class OldFilesToDelete : Form
+    public partial class OldFilesToDelete : RelhaxForum
     {
         public bool result;
         private bool resultChosen = false;
@@ -15,13 +15,6 @@ namespace RelhaxModpack
 
         private void OldFilesToDelete_Load(object sender, EventArgs e)
         {
-            //font scaling
-            this.AutoScaleMode = Settings.AppScalingMode;
-            this.Font = Settings.AppFont;
-            if (Settings.AppScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
-            {
-                this.Scale(new System.Drawing.SizeF(Settings.ScaleSize, Settings.ScaleSize));
-            }
             deleteFilesHeader.Text = Translations.getTranslatedString("foundOldFilesDelete1");
             deleteFilesQuestion.Text = Translations.getTranslatedString("foundOldFilesDelete2");
             noDeleteButton.Text = Translations.getTranslatedString("no");
@@ -53,9 +46,9 @@ namespace RelhaxModpack
 
         private void OldFilesToDelete_SizeChanged(object sender, EventArgs e)
         {
-            filesList.Size = new System.Drawing.Size(this.Size.Width - filesList.Location.X - 20, this.Size.Height - filesList.Location.Y - 40 - yesDeleteButton.Size.Height - 6);
-            noDeleteButton.Location = new System.Drawing.Point(filesList.Location.X, filesList.Location.Y + filesList.Size.Height + 6);
-            yesDeleteButton.Location = new System.Drawing.Point(this.Size.Width - yesDeleteButton.Size.Width - 20, filesList.Location.Y + filesList.Size.Height + 6);
+            filesList.Size = new System.Drawing.Size(this.Size.Width - filesList.Location.X - 20, this.Size.Height - filesList.Location.Y - 40 - yesDeleteButton.Size.Height - 6 -TitleBarDifference);
+            noDeleteButton.Location = new System.Drawing.Point(filesList.Location.X, filesList.Location.Y + filesList.Size.Height + 6 - TitleBarDifference);
+            yesDeleteButton.Location = new System.Drawing.Point(this.Size.Width - yesDeleteButton.Size.Width - 20, filesList.Location.Y + filesList.Size.Height + 6 - TitleBarDifference);
             deleteFilesQuestion.Location = new System.Drawing.Point((this.Size.Width/2) - (deleteFilesQuestion.Size.Width/2) , filesList.Location.Y + filesList.Size.Height + 6);
         }
     }

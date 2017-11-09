@@ -7,7 +7,7 @@ namespace RelhaxModpack
 {
     //the preview window to preview a mod. will show the mod name,
     //ro config name, pictures, description, and any update comments
-    public partial class Preview : Form
+    public partial class Preview : RelhaxForum
     {
         private Size previewComponentSize = new Size(418, 309);
         private Point previewComponentLocation = new Point(12, 12);
@@ -20,8 +20,6 @@ namespace RelhaxModpack
         private Image loadingImage;
         public string devURL { get; set; }
         private int currentlySelected = 0;
-        private const int titleBar = 23;//set origionally for 23
-        private int difference = 0;
         private WebBrowser youtubedisplay;
         //Preview constructor that sets all the required values
         public Preview(string title, List<Media> pictureList, string desc, string update = "", string dev = "")
@@ -195,12 +193,12 @@ namespace RelhaxModpack
             Size tempSize = new Size(0, 0);
             if (previewPicture != null)
             {
-                previewPicture.Size = new Size(width, applicationHeight - 265 - difference - scale);
+                previewPicture.Size = new Size(width, applicationHeight - 265 - TitleBarDifference - scale);
                 tempSize = previewPicture.Size;
             }
             if (youtubedisplay != null)
             {
-                youtubedisplay.Size = new Size(width, applicationHeight - 265 - difference - scale);
+                youtubedisplay.Size = new Size(width, applicationHeight - 265 - TitleBarDifference - scale);
                 tempSize = youtubedisplay.Size;
             }
             updateBox.Location = new Point(12, 12 + tempSize.Height + 6 + nextPicButton.Size.Height + 6 + descriptionBox.Size.Height + 6);
@@ -209,7 +207,7 @@ namespace RelhaxModpack
             previousPicButton.Location = new Point(12, 12 + tempSize.Height + 6);
             pictureCountPanel.Location = new Point(12 + previousPicButton.Size.Width + 12, 12 + tempSize.Height + 6);
             pictureCountPanel.Size = new Size(width - pictureCountPanel.Location.X - nextPicButton.Size.Width - 4, pictureCountPanel.Size.Height);
-            devLinkLabel.Location = new Point(this.Size.Width - 12 - devLinkLabel.Size.Width - 4, applicationHeight - 49 - difference - 5);
+            devLinkLabel.Location = new Point(this.Size.Width - 12 - devLinkLabel.Size.Width - 4, applicationHeight - 49 - TitleBarDifference - 5);
         }
         //applies translations
         private void applyTranslations()
@@ -223,13 +221,6 @@ namespace RelhaxModpack
         {
             //update for translations
             this.applyTranslations();
-            //font scaling
-            this.AutoScaleMode = Settings.AppScalingMode;
-            this.Font = Settings.AppFont;
-            if (Settings.AppScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
-            {
-                this.Scale(new System.Drawing.SizeF(Settings.ScaleSize, Settings.ScaleSize));
-            }
             this.Text = modOrConfigName;
             for (int i = 0; i < medias.Count; i++)
             {
@@ -253,19 +244,8 @@ namespace RelhaxModpack
                 updateComments = Translations.getTranslatedString("noUpdateInfo");
             descriptionBox.Text = description;
             updateBox.Text = updateComments;
-            //get the size of the title bar window
-            Rectangle screenRektangle = RectangleToScreen(this.ClientRectangle);
-            int titleHeight = screenRektangle.Top - this.Top;
-            //largest possible is 46
-            //mine (programmed for) is 23
-            if (titleHeight > titleBar)
-            {
-                difference = titleHeight - titleBar;
-            }
-            //idk why it's dones twice
             this.Preview_SizeChanged(null, null);
             this.Size = new Size(450, 700);
-            Settings.setUIColor(this);
             //specify the start location
             this.Location = new Point(Settings.PreviewX, Settings.PreviewY);
         }

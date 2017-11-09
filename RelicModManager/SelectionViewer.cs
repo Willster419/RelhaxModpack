@@ -6,15 +6,13 @@ using System.Xml;
 
 namespace RelhaxModpack
 {
-    public partial class SelectionViewer : Form
+    public partial class SelectionViewer : RelhaxForum
     {
         private int x, y;
         private WebClient client = new WebClient();
         private string url = "";
-        private int difference;
         public string SelectedXML = "";
         private string SelectedDocument = "";
-        private const int titleBar = 23;//set origionally for 23
         public SelectionViewer(int xx, int yy, string urll)
         {
             InitializeComponent();
@@ -26,26 +24,6 @@ namespace RelhaxModpack
         private void SelectionViewer_Load(object sender, EventArgs e)
         {
             this.Location = new Point(x, y);
-            //setting UI color
-            Settings.setUIColor(this);
-            //font scaling
-            this.AutoScaleMode = Settings.AppScalingMode;
-            this.Font = Settings.AppFont;
-            if (Settings.AppScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
-            {
-                this.Scale(new SizeF(Settings.ScaleSize, Settings.ScaleSize));
-            }
-            //title bar height
-            //get the size of the title bar window
-            Rectangle screenRektangle = RectangleToScreen(this.ClientRectangle);
-            int titleHeight = screenRektangle.Top - this.Top;
-            //largest possible is 46
-            //mine (programmed for) is 23
-            if (titleHeight > titleBar)
-            {
-                difference = titleHeight - titleBar;
-            }
-            //this.DialogResult = DialogResult.Cancel;
             SelectConfigLabel.Text = Translations.getTranslatedString(SelectConfigLabel.Name);
             SelectButton.Text = Translations.getTranslatedString("select");
             CancelCloseButton.Text = Translations.getTranslatedString("cancel");
