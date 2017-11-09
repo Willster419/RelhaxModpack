@@ -1111,6 +1111,11 @@ namespace RelhaxModpack
             return s.TrimStart('/').TrimStart('\\');
         }
 
+        public static string ReplaceDirectorySeparatorChar(string s)
+        {
+            return s.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+        }
+
         public static string ConvertFiletimeTimestampToDate(long timestamp)
         {
             return DateTime.FromFileTime(timestamp).ToString();
