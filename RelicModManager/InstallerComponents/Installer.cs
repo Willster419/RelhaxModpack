@@ -1170,7 +1170,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.ExceptionLog("PatchFiles","ex", ex);
+                Utils.ExceptionLog("PatchFiles", "ex", ex);
             }
         }
 
@@ -1213,6 +1213,7 @@ namespace RelhaxModpack
 
                         if (!a.pkg.Equals(""))
                         {
+                            a.tempAltasPresentDirectory = Path.Combine(Application.StartupPath, "RelHaxTemp");
                             //get file from the zip archive
                             using (ZipFile zip = new ZipFile(a.pkg))
                             {
@@ -1226,19 +1227,19 @@ namespace RelhaxModpack
                                             try
                                             {
                                                 zip[i].FileName = fl;
-                                                zip.ExtractSelectedEntries(zip[i].FileName, null, Path.Combine(Application.StartupPath, "RelHaxTemp"), ExtractExistingFileAction.Throw);  // no overwrite of an exsisting file !!
+                                                zip.ExtractSelectedEntries(zip[i].FileName, null, a.tempAltasPresentDirectory, ExtractExistingFileAction.Throw);  // never overwrite of an exsisting file !!
                                                 break;
                                             }
                                             catch (Exception ex)
                                             {
-                                                Utils.ExceptionLog("ExtractAtlases", string.Format("extration: {0}", Path.Combine(Application.StartupPath, "RelHaxTemp", zip[i].FileName)), ex);
+                                                Utils.ExceptionLog("ExtractAtlases", string.Format("extration: {0}", Path.Combine(a.tempAltasPresentDirectory, zip[i].FileName)), ex);
                                             }
                                         }
                                     }
                                 }
                                 zip.Dispose();
                             }
-                            a.directoryInArchive = Path.Combine(Application.StartupPath, "RelHaxTemp");
+                            
                         }
                     }
                     catch (Exception ex)
@@ -1558,7 +1559,7 @@ namespace RelhaxModpack
                                         retry = true;
                                         Utils.ExceptionLog("checkForOldZipFiles", "delete", e);
                                         DialogResult res = MessageBox.Show(string.Format("{0} {1}", Translations.getTranslatedString("fileDeleteFailed"), s), "", MessageBoxButtons.RetryCancel);
-                                        if (res == System.Windows.Forms.DialogResult.Cancel)
+                                        if (res == DialogResult.Cancel)
                                         {
                                             breakOut = true;
                                             retry = false;
@@ -1828,7 +1829,7 @@ namespace RelhaxModpack
             stopWatch.Reset();
             stopWatch.Start();
 
-            string ImageFile = Path.Combine(args.directoryInArchive, args.atlasFile);
+            string ImageFile = Path.Combine(args.tempAltasPresentDirectory, args.atlasFile);
             string workingFolder = Path.Combine(Application.StartupPath, "RelHaxTemp", Path.GetFileNameWithoutExtension(ImageFile));
 
             if (!File.Exists(ImageFile))
@@ -1837,7 +1838,7 @@ namespace RelhaxModpack
                 return;
             }
 
-            string MapFile = Path.Combine(args.directoryInArchive, args.mapFile);
+            string MapFile = Path.Combine(args.tempAltasPresentDirectory, args.mapFile);
             Installer.args.currentFile = Path.GetFileNameWithoutExtension(args.atlasFile);
 
             if (!File.Exists(MapFile))
