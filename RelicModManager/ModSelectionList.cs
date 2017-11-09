@@ -102,6 +102,15 @@ namespace RelhaxModpack
             }
             pw.loadingDescBox.Text = Translations.getTranslatedString("buildingUI");
             Application.DoEvents();
+            //check if databse exists and if not, create it
+            if (!File.Exists(md5DatabaseFile))
+            {
+                ModInfoDocument = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement("database"));
+            }
+            else
+            {
+                ModInfoDocument = XDocument.Load(md5DatabaseFile);
+            }
             InitUserMods();
             InitDependencies();
             //build the UI display
@@ -114,15 +123,6 @@ namespace RelhaxModpack
             if (modTabGroups.TabPages.Count > 0)
                 modTabGroups.TabPages.Clear();
             modTabGroups.Font = Settings.AppFont;
-            //check if databse exists and if not, create it
-            if (!File.Exists(md5DatabaseFile))
-            {
-                ModInfoDocument = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement("database"));
-            }
-            else
-            {
-                ModInfoDocument = XDocument.Load(md5DatabaseFile);
-            }
             AddAllMods();
             AddUserMods(false);
             FinishLoad();
@@ -234,7 +234,7 @@ namespace RelhaxModpack
                 d.DownloadFlag = false;
                 modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.ZipFile);
                 //get the local md5 hash. a -1 indicates the file is not on the disk
-                string oldCRC2 = XMLUtils.GetMd5Hash(modDownloadFilePath);
+                string oldCRC2 = GetMD5Hash(modDownloadFilePath);
                 if ((!d.ZipFile.Equals("")) && (!d.CRC.Equals(oldCRC2)))
                 {
                     d.DownloadFlag = true;
@@ -247,7 +247,7 @@ namespace RelhaxModpack
                 d.DownloadFlag = false;
                 modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.ZipFile);
                 //get the local md5 hash. a -1 indicates the file is not on the disk
-                string oldCRC2 = XMLUtils.GetMd5Hash(modDownloadFilePath);
+                string oldCRC2 = GetMD5Hash(modDownloadFilePath);
                 if ((!d.ZipFile.Equals("")) && (!d.CRC.Equals(oldCRC2)))
                 {
                     d.DownloadFlag = true;
@@ -260,43 +260,12 @@ namespace RelhaxModpack
                 d.DownloadFlag = false;
                 modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", d.ZipFile);
                 //get the local md5 hash. a -1 indicates the file is not on the disk
-                string oldCRC2 = XMLUtils.GetMd5Hash(modDownloadFilePath);
+                string oldCRC2 = GetMD5Hash(modDownloadFilePath);
                 if ((!d.ZipFile.Equals("")) && (!d.CRC.Equals(oldCRC2)))
                 {
                     d.DownloadFlag = true;
                 }
             }
-        }
-
-        private bool ParseLoadMode()
-        {
-            //the default loadConfig mode shold be from clicking the button
-            loadMode = loadConfigMode.fromButton;
-            //if the load config from last selection is checked, then set the mode to it
-            if (Settings.SaveLastConfig)
-            {
-                loadMode = loadConfigMode.fromSaveLastConfig;
-            }
-            //if this is in auto install mode, then it takes precedence
-            if (Program.autoInstall)
-            {
-                loadMode = loadConfigMode.fromAutoInstall;
-            }
-            //check which mode the load config is in and act accordingly. it should only load the config in one of the following scenarios
-            if (loadMode == loadConfigMode.fromSaveLastConfig)
-            {
-                this.parseLoadConfig();
-            }
-            else if (loadMode == loadConfigMode.fromAutoInstall)
-            {
-                this.parseLoadConfig();
-                this.cancel = false;
-                pw.Close();
-                pw.Dispose();
-                this.Close();
-                return false;
-            }
-            return true;
         }
         //adds all the tab pages for each catagory
         //must be only one catagory
