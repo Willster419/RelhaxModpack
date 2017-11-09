@@ -104,34 +104,28 @@ namespace RelhaxModpack
             Application.DoEvents();
             InitUserMods();
             InitDependencies();
-            bool buildUI = ParseLoadMode();
-            if(buildUI)
+            //build the UI display
+            pw.progres_max = XMLUtils.TotalModConfigComponents;
+            pw.SetProgress(0);
+            //setting loadingConfig to true will disable all UI interaction
+            loadingConfig = true;
+            Utils.AppendToLog("Loading ModSelectionList with view " + Settings.SView);
+            completeModSearchList = new List<SelectableDatabasePackage>();
+            if (modTabGroups.TabPages.Count > 0)
+                modTabGroups.TabPages.Clear();
+            modTabGroups.Font = Settings.AppFont;
+            //check if databse exists and if not, create it
+            if (!File.Exists(md5DatabaseFile))
             {
-                //build the UI display
-                if (pw != null)
-                {
-                    pw.progres_max = XMLUtils.TotalModConfigComponents;
-                    pw.SetProgress(0);
-                }
-                loadingConfig = true;
-                Utils.AppendToLog("Loading ModSelectionList with view " + Settings.SView);
-                completeModSearchList = new List<SelectableDatabasePackage>();
-                if (modTabGroups.TabPages.Count > 0)
-                    modTabGroups.TabPages.Clear();
-                modTabGroups.Font = Settings.AppFont;
-                //check if databse exists and if not, create it
-                if (!File.Exists(md5DatabaseFile))
-                {
-                    ModInfoDocument = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement("database"));
-                }
-                else
-                {
-                    ModInfoDocument = XDocument.Load(md5DatabaseFile);
-                }
-                AddAllMods();
-                AddUserMods(false);
-                FinishLoad();
+                ModInfoDocument = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement("database"));
             }
+            else
+            {
+                ModInfoDocument = XDocument.Load(md5DatabaseFile);
+            }
+            AddAllMods();
+            AddUserMods(false);
+            FinishLoad();
         }
         #region Loading Methods
 
@@ -413,7 +407,7 @@ namespace RelhaxModpack
             loadingConfig = false;
             firstLoad = false;
             //set the size to the last closed size
-            this.Size = new Size(Settings.ModSelectionWidth, Settings.ModSelectionHeight);
+            Size = new Size(Settings.ModSelectionWidth, Settings.ModSelectionHeight);
             //set the UI colors
             Settings.setUIColor(this);
             pw.Close();
@@ -462,6 +456,32 @@ namespace RelhaxModpack
             MainWindow.usedFilesList = Utils.CreateUsedFilesList(parsedCatagoryList, globalDependencies, dependencies, logicalDependencies);
             //save the database file
             ModInfoDocument.Save(md5DatabaseFile);
+            //parse the load information (set the loadMode)
+            loadMode = loadConfigMode.fromButton;
+            if (Settings.SaveLastConfig)
+            {
+                loadMode = loadConfigMode.fromSaveLastConfig;
+            }
+            //if this is in auto install mode, then it takes precedence
+            if (Program.autoInstall)
+            {
+                loadMode = loadConfigMode.fromAutoInstall;
+            }
+            if (loadMode == loadConfigMode.fromAutoInstall || loadMode == loadConfigMode.fromSaveLastConfig)
+            {
+                this.parseLoadConfig();
+                if (loadMode == loadConfigMode.fromAutoInstall)
+                {
+                    this.cancel = false;
+                    if(pw != null)
+                    {
+                        pw.Close();
+                        pw.Dispose();
+                    }
+                    this.Close();
+                    return;
+                }
+            }
         }
 #endregion
         //adds a mod m to a tabpage t, OMC treeview style
@@ -2452,13 +2472,13 @@ namespace RelhaxModpack
 
         private void parseLoadConfig()
         {
+            //disable any possible UI interaction that would not be desired
             loadingConfig = true;
-            OpenFileDialog loadLocation = new OpenFileDialog();
             string filePath = "";
-            using (SelectionViewer sv = new SelectionViewer(this.Location.X + 100, this.Location.Y + 100, Settings.ModInfoDatFile))
+            //get the filePath of the selection file based on the mode of loading it
+            switch(loadMode)
             {
-                if (loadMode == loadConfigMode.fromAutoInstall)
-                {
+                case loadConfigMode.fromAutoInstall:
                     filePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", Program.configName);
                     if (!File.Exists(filePath))
                     {
@@ -2466,48 +2486,58 @@ namespace RelhaxModpack
                         MessageBox.Show(Translations.getTranslatedString("configLoadFailed"), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Stop);
                         return;
                     }
-                }
-                else if (loadMode == loadConfigMode.fromSaveLastConfig)
-                {
+                    break;
+                case loadConfigMode.fromSaveLastConfig:
                     filePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml");
                     if (!File.Exists(filePath))
                     {
                         Utils.AppendToLog(string.Format("ERROR: {0} not found, not loading configs", filePath));
                         return;
                     }
-                }
-                else
-                {
-                    DialogResult res = sv.ShowDialog();
-                    if (res == DialogResult.OK)
+                    break;
+                default:
+                    //use a selection viewer for selecting a dev config or a user config (local file)
+                    using (SelectionViewer sv = new SelectionViewer(this.Location.X + 100, this.Location.Y + 100, Settings.ModInfoDatFile))
                     {
-                        filePath = sv.SelectedXML;
-                    }
-                    else
-                    { return; }
-                    if (filePath.Equals("localFile"))
-                    {
-                        loadLocation.AddExtension = true;
-                        loadLocation.DefaultExt = ".xml";
-                        loadLocation.Filter = "*.xml|*.xml";
-                        loadLocation.InitialDirectory = Path.Combine(Application.StartupPath, "RelHaxUserConfigs");
-                        loadLocation.Title = Translations.getTranslatedString("selectConfigFile");
-                        if (loadLocation.ShowDialog().Equals(DialogResult.Cancel))
+                        if (!(sv.ShowDialog() == DialogResult.OK))
                         {
-                            //quit
                             return;
                         }
-                        filePath = loadLocation.FileName;
+                        filePath = sv.SelectedXML;
+                        if (filePath.Equals("localFile"))
+                        {
+                            //user wants to load a personal custom config from file
+                            using (OpenFileDialog loadLocation = new OpenFileDialog()
+                            {
+                                AddExtension = true,
+                                DefaultExt = ".xml",
+                                Filter = "*.xml|*.xml",
+                                InitialDirectory = Path.Combine(Application.StartupPath, "RelHaxUserConfigs"),
+                                Title = Translations.getTranslatedString("selectConfigFile")
+                            })
+                            {
+                                if (!(loadLocation.ShowDialog().Equals(DialogResult.OK)))
+                                {
+                                    //quit
+                                    return;
+                                }
+                                filePath = loadLocation.FileName;
+                            }
+                        }
                     }
-                }
+                    break;
             }
+            //actually load the config
             XMLUtils.LoadConfig(loadMode == loadConfigMode.fromButton, filePath, parsedCatagoryList, userMods);
-            if (loadMode == loadConfigMode.fromButton || loadMode == loadConfigMode.fromAutoInstall)
+            //if it was from a button, tell the user it loaded the config sucessfully
+            if (loadMode == loadConfigMode.fromButton)
             {
                 if (loadMode == loadConfigMode.fromButton) MessageBox.Show(Translations.getTranslatedString("prefrencesSet"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 loadingConfig = false;
                 ModSelectionList_SizeChanged(null, null);
             }
+            //set this back to false so the user can interact
+            loadingConfig = false;
         }
         #region UI event handlers (resize, expand toggling)
         //resizing handler for the window
