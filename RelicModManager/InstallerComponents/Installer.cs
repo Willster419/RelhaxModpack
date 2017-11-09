@@ -844,12 +844,6 @@ namespace RelhaxModpack
                     }
                     InstallWorker.ReportProgress(0);
                 }
-                //done with the filestream
-                if(fs != null)
-                {
-                    fs.Dispose();
-                    fs = null;
-                }
                 //finish by moving WoTAppData folder contents into application data folder
                 //folder name is "WoTAppData"
                 args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractConfigs;
@@ -1442,12 +1436,18 @@ namespace RelhaxModpack
                 string downloadedFilesDir = Path.Combine(Application.StartupPath, "RelHaxUserMods");
                 foreach (Mod m in UserMods)
                 {
-                    if (m.Checked)
+                    if (m.Enabled && m.Checked)
                     {
                         Utils.AppendToLog("Exracting " + Path.GetFileName(m.ZipFile));
                         this.Unzip(Path.Combine(downloadedFilesDir, Path.GetFileName(m.ZipFile)), TanksLocation);
                         InstallWorker.ReportProgress(0);
                     }
+                }
+                //done with the filestream
+                if (fs != null)
+                {
+                    fs.Dispose();
+                    fs = null;
                 }
             }
             catch (Exception ex)
