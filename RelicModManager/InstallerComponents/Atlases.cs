@@ -19,6 +19,8 @@ namespace RelhaxModpack
         public string mapFile { get; set; } = "";
         // path inside the pkg file to the filename to process
         public string directoryInArchive { get; set; } = "";
+        // path to atlas file outside the archive (after extraction located here)
+        public string tempAltasPresentDirectory { get; set; } = "";
         // path to place the finished file
         public string atlasSaveDirectory { get; set; } = "";
         // maybe new fileName
