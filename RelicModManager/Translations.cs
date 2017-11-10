@@ -446,26 +446,26 @@ namespace RelhaxModpack
             french.Add("noUpdateInfo", "Aucune information mise à jour fournie");
             
 
-            //Componet: nextPicButton
+            //Componet: NextPicButton
             //
-            english.Add("nextPicButton", "next");
-            german.Add("nextPicButton", "weiter");
-            polish.Add("nextPicButton", "Dalej");
-            french.Add("nextPicButton", "Suivant");
+            english.Add("NextPicButton", "next");
+            german.Add("NextPicButton", "weiter");
+            polish.Add("NextPicButton", "Dalej");
+            french.Add("NextPicButton", "Suivant");
 
-            //Componet: previousPicButton
+            //Componet: PreviousPicButton
             //
-            english.Add("previousPicButton", "previous");
-            german.Add("previousPicButton", "zurück");
-            polish.Add("previousPicButton", "Wstecz");
-            french.Add("previousPicButton", "Précedent");
+            english.Add("PreviousPicButton", "previous");
+            german.Add("PreviousPicButton", "zurück");
+            polish.Add("PreviousPicButton", "Wstecz");
+            french.Add("PreviousPicButton", "Précedent");
 
-            //Componet: devLinkLabel
+            //Componet: DevLinkLabel
             //
-            english.Add("devLinkLabel", "Developer Website");
-            german.Add("devLinkLabel", "Entwickler Webseite");
-            polish.Add("devLinkLabel", "Strona Dewelopera");
-            french.Add("devLinkLabel", "Site web du développeur");
+            english.Add("DevLinkLabel", "Developer Website");
+            german.Add("DevLinkLabel", "Entwickler Webseite");
+            polish.Add("DevLinkLabel", "Strona Dewelopera");
+            french.Add("DevLinkLabel", "Site web du développeur");
 
             //Section: VersionInfo
             //Componet: updateAcceptButton

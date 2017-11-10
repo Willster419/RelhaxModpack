@@ -2373,7 +2373,7 @@ namespace RelhaxModpack
                     {
                         LastUpdated = this.LastUpdated,
                         DBO = DBO,
-                        PictureList = DBO.PictureList
+                        Medias = DBO.PictureList
                     };
                     p.Show();
                 }
