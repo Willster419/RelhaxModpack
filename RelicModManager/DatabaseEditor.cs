@@ -2435,6 +2435,7 @@ namespace RelhaxModpack
 
         private void ObjectPicturesList_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            return;
             int index = ((ListBox)sender).IndexFromPoint(e.Location);
             if (index != System.Windows.Forms.ListBox.NoMatches)
             {
