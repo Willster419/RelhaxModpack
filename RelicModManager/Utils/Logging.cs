@@ -28,7 +28,7 @@ namespace RelhaxModpack
             // create fielstream if not exists
             // - and write "fileheader"
             // - check once if the file exceeds a certain size
-            // bei default, write the given string to file
+            // by default, write the given string to file
         }
 
         public static void Manager(string s)
@@ -64,7 +64,7 @@ namespace RelhaxModpack
             // backup old install.logs
             // create filestream
             // - and write "fileheader"
-            // bei default, write the given string to file
+            // by default, write the given string to file
         }
 
         public static void Installer(string s)
