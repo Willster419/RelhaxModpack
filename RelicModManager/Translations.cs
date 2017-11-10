@@ -1023,7 +1023,7 @@ namespace RelhaxModpack
 
             //Component: InstantExtractionCBExplanation
             //
-            english.Add("InstantExtractionCBExplanation", "When enabled, the installer will extract a zip file as soon as it is downloaded, rather than waiting for every zip file to be downloaded before extraction.");
+            english.Add("InstantExtractionCBExplanation", "When enabled, the installer will extract a zip file as soon as it is downloaded, rather than waiting for every zip file to be downloaded before extraction. Recommended for those with Solid State Drives (SSD) only.");
             german.Add("InstantExtractionCBExplanation", "TODO");
             polish.Add("InstantExtractionCBExplanation", "TODO");
             french.Add("InstantExtractionCBExplanation", "TODO");
@@ -1510,7 +1510,7 @@ namespace RelhaxModpack
             french.Add("AtlasCreating", "TODO");
 
             //Component: CreatingAtlases
-            english.Add("AtlasOptimations", "optimizations");
+            english.Add("AtlasOptimations", "Optimizations");
             german.Add("AtlasOptimations", "Optimierungen");
             polish.Add("AtlasOptimations", "TODO");
             french.Add("AtlasOptimations", "TODO");
@@ -1661,7 +1661,7 @@ namespace RelhaxModpack
 
             //Component: launcherRepairModeStarted
             //
-            english.Add("launcherRepairModeStarted", "Repair mode sucessfully started");
+            english.Add("launcherRepairModeStarted", "Repair mode successfully started");
             german.Add("launcherRepairModeStarted", "TODO");
             polish.Add("launcherRepairModeStarted", "TODO");
             french.Add("launcherRepairModeStarted", "TODO");
