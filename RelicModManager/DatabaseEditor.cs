@@ -693,7 +693,7 @@ namespace RelhaxModpack
                     ObjectDevURLTB.Text = SelectedDependency.DevURL;
 
                     ObjExtractPathTB.Enabled = true;
-                    ObjExtractPathTB.Text = SelectedDependency.DevURL;
+                    ObjExtractPathTB.Text = SelectedDependency.ExtractPath;
 
                     ObjectTypeComboBox.Enabled = false;
                     ObjectTypeComboBox.SelectedIndex = 0;
