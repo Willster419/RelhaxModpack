@@ -39,5 +39,7 @@ namespace RelhaxModpack
         public List<string> UserFiles = new List<string>();
         public bool Checked { get; set; }
         public bool DownloadFlag { get; set; }
+        public bool ReadyForInstall { get; set; }
+        public string ExtractPath { get; set; }
     }
 }

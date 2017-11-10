@@ -26,11 +26,16 @@ namespace RelhaxModpack
         public bool NegateFlag { get; set; }
         //needed to excatly identify double packageNames and its position
         public int CheckDatabaseListIndex { get; set; }
+        public bool ReadyForInstall { get; set; }
         //list of linked mods and configs that use 
         public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
         public string DevURL { get; set; }
+        public string ExtractPath { get; set; }
         public List<Shortcut> Shortcuts = new List<Shortcut>();
-        public LogicalDependency() { }
+        public LogicalDependency() {
+            ReadyForInstall = false;
+            ExtractPath = "";
+        }
         //for the tostring thing
         public override string ToString()
         {

@@ -54,6 +54,7 @@ namespace RelhaxModpack
         private List<string> originalPatchNames;
         private FileStream fs;
         private string InstalledFilesLogPath = "";
+        private object lockerInstaller = new object();
 
         private static readonly Stopwatch stopWatch = new Stopwatch();
 
@@ -399,8 +400,11 @@ namespace RelhaxModpack
                 {
                     try
                     {
-                        File.SetAttributes(line, FileAttributes.Normal);
-                        Directory.Delete(line);
+                        if(Directory.Exists(line))
+                        {
+                            File.SetAttributes(line, FileAttributes.Normal);
+                            Directory.Delete(line);
+                        }
                     }
                     catch       // catch exception if folder is not empty
                     { }
@@ -409,12 +413,21 @@ namespace RelhaxModpack
                 {
                     try
                     {
-                        File.SetAttributes(line, FileAttributes.Normal);
-                        FileAttributes attr = File.GetAttributes(line);
-                        if (attr.HasFlag(FileAttributes.Directory))
-                            Directory.Delete(line);
-                        else
-                            File.Delete(line);
+                        //always try to solve the problem without throwing exceptions
+                        //https://stackoverflow.com/questions/1395205/better-way-to-check-if-a-path-is-a-file-or-a-directory
+                        if ((File.Exists(line)) || (Directory.Exists(line)))
+                        {
+                            File.SetAttributes(line, FileAttributes.Normal);
+                            FileAttributes attr = File.GetAttributes(line);
+                            if (attr.HasFlag(FileAttributes.Directory))
+                            {
+                                Directory.Delete(line);
+                            }
+                            else
+                            {
+                                File.Delete(line);
+                            }
+                        }
                     }
                     catch (DirectoryNotFoundException)
                     {
@@ -689,8 +702,8 @@ namespace RelhaxModpack
                 }
                 //start the entry for the files log
                 fs = new FileStream(InstalledFilesLogPath, FileMode.Append, FileAccess.Write);
-                string databaseHeader = string.Format("Database Version: {0}", Settings.DatabaseVersion);
-                string dateTimeHeader = string.Format("/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now);
+                string databaseHeader = string.Format("Database Version: {0}\n", Settings.DatabaseVersion);
+                string dateTimeHeader = string.Format("/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */\n", DateTime.Now);
                 fs.Write(Encoding.UTF8.GetBytes(databaseHeader), 0, Encoding.UTF8.GetByteCount(databaseHeader));
                 fs.Write(Encoding.UTF8.GetBytes(dateTimeHeader), 0, Encoding.UTF8.GetByteCount(dateTimeHeader));
 
@@ -727,7 +740,15 @@ namespace RelhaxModpack
                         Utils.AppendToLog("Extracting Global Dependency " + d.ZipFile);
                         try
                         {
-                            this.Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), TanksLocation);
+                            if(Settings.InstantExtraction)
+                            {
+                                lock (lockerInstaller)
+                                {
+                                    while (!d.ReadyForInstall)
+                                        System.Threading.Thread.Sleep(50);
+                                }
+                            }
+                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath);
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -752,7 +773,15 @@ namespace RelhaxModpack
                         Utils.AppendToLog("Extracting Dependency " + d.ZipFile);
                         try
                         {
-                            this.Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), TanksLocation);
+                            if (Settings.InstantExtraction)
+                            {
+                                lock (lockerInstaller)
+                                {
+                                    while (!d.ReadyForInstall)
+                                        System.Threading.Thread.Sleep(50);
+                                }
+                            }
+                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath);
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -777,7 +806,15 @@ namespace RelhaxModpack
                         Utils.AppendToLog("Extracting Logical Dependency " + d.ZipFile);
                         try
                         {
-                            this.Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), TanksLocation);
+                            if (Settings.InstantExtraction)
+                            {
+                                lock (lockerInstaller)
+                                {
+                                    while (!d.ReadyForInstall)
+                                        System.Threading.Thread.Sleep(50);
+                                }
+                            }
+                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath);
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -804,7 +841,15 @@ namespace RelhaxModpack
                         Utils.AppendToLog("Extracting Mod/Config " + dbo.ZipFile);
                         try
                         {
-                            this.Unzip(Path.Combine(downloadedFilesDir, dbo.ZipFile), TanksLocation);
+                            if (Settings.InstantExtraction)
+                            {
+                                lock (lockerInstaller)
+                                {
+                                    while (!dbo.ReadyForInstall)
+                                        System.Threading.Thread.Sleep(50);
+                                }
+                            }
+                            Unzip(Path.Combine(downloadedFilesDir, dbo.ZipFile), dbo.ExtractPath);
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -829,7 +874,15 @@ namespace RelhaxModpack
                         Utils.AppendToLog("Extracting Appended Dependency " + d.ZipFile);
                         try
                         {
-                            this.Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), TanksLocation);
+                            if (Settings.InstantExtraction)
+                            {
+                                lock (lockerInstaller)
+                                {
+                                    while (!d.ReadyForInstall)
+                                        System.Threading.Thread.Sleep(50);
+                                }
+                            }
+                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath);
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -2134,7 +2187,7 @@ namespace RelhaxModpack
         //main unzip worker method
         private void Unzip(string zipFile, string extractFolder)
         {
-            string zipFileHeader = string.Format(@"/*  {0}  */", Path.GetFileNameWithoutExtension(zipFile));
+            string zipFileHeader = string.Format(@"/*  {0}  */\n", Path.GetFileNameWithoutExtension(zipFile));
             fs.Write(Encoding.UTF8.GetBytes(zipFileHeader), 0, Encoding.UTF8.GetByteCount(zipFileHeader));
             try
             {

@@ -16,18 +16,20 @@ namespace RelhaxModpack
         public string modOrConfigName { get; set; }
         public string description { get; set; }
         public string updateComments { get; set; }
+        public string lastUpdatedString { get; set; }
         List<Media> medias = new List<Media>();
         private Image loadingImage;
         public string devURL { get; set; }
         private int currentlySelected = 0;
         private WebBrowser youtubedisplay;
         //Preview constructor that sets all the required values
-        public Preview(string title, List<Media> pictureList, string desc, string update = "", string dev = "")
+        public Preview(string title, List<Media> pictureList, string desc, string update = "", string dev = "", string lastUpdated = "")
         {
             InitializeComponent();
             modOrConfigName = title;
             medias = pictureList;
             updateComments = update;
+            lastUpdatedString = lastUpdated;
             description = desc;
             devURL = dev;
             if (devURL == null || devURL.Equals(""))
@@ -243,7 +245,7 @@ namespace RelhaxModpack
             else if (updateComments.Equals(""))
                 updateComments = Translations.getTranslatedString("noUpdateInfo");
             descriptionBox.Text = description;
-            updateBox.Text = updateComments;
+            updateBox.Text = updateComments + "\n" + lastUpdatedString;
             this.Preview_SizeChanged(null, null);
             this.Size = new Size(450, 700);
             //specify the start location

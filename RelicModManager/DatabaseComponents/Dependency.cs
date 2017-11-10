@@ -28,10 +28,15 @@ namespace RelhaxModpack
         public int CheckDatabaseListIndex { get; set; }
         //property to determine if it will be installed in the beginning or in the end
         public bool AppendExtraction;
+        public bool ReadyForInstall { get; set; }
         public List<LogicalDependency> LogicalDependencies = new List<LogicalDependency>();
         public string DevURL { get; set; }
+        public string ExtractPath { get; set; }
         public List<Shortcut> shortCuts = new List<Shortcut>();
-        public Dependency() { }
+        public Dependency() {
+            ReadyForInstall = false;
+            ExtractPath = "";
+        }
         //for the tostring thing
         public override string ToString()
         {

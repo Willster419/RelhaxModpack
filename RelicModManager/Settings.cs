@@ -35,6 +35,8 @@ namespace RelhaxModpack
         public static bool DisableColorChange { get; set; }
         //toggle if the program will create desktop shortcuts
         public static bool CreateShortcuts { get; set; }
+        //toggle instant extraction
+        public static bool InstantExtraction { get; set; }
         public static int ModSelectionHeight { get; set; }
         public static int ModSelectionWidth { get; set; }
         public static int LoadingGif { get; set; }
@@ -47,6 +49,7 @@ namespace RelhaxModpack
         public static string TanksLocation = "";
         public static string TanksVersion = "";
         public static string TanksOnlineFolderVersion = "";
+        public static string RelhaxTempFolder = Path.Combine(Application.StartupPath, "RelHaxTemp");
         //needed to create to first line to installedRelhaxFiles.log
         public static string DatabaseVersion = "";
         //
@@ -98,6 +101,7 @@ namespace RelhaxModpack
         {
             //Settings declared here are set for what their default values should be, then later modified in the settings xml file
             //i.e. when new features are added
+            Settings.InstantExtraction = false;
             Settings.FirstLoad = false;
             Settings.CreateShortcuts = true;
             Utils.AppendToLog("Loading application settings");
@@ -119,6 +123,7 @@ namespace RelhaxModpack
                 Settings.DisableBorders = false;
                 Settings.NotifyIfSameDatabase = false;
                 Settings.CreateShortcuts = false;
+                Settings.InstantExtraction = false;
                 Utils.AppendToLog("Language: " + CultureInfo.CurrentCulture.DisplayName);
                 string lang = CultureInfo.InstalledUICulture.Name.Split('-')[0];
                 if (lang.ToLower().Equals("de"))
@@ -237,6 +242,9 @@ namespace RelhaxModpack
                             break;
                         case "CreateShortcuts":
                             Settings.CreateShortcuts = bool.Parse(n.InnerText);
+                            break;
+                        case "InstantExtraction":
+                            Settings.InstantExtraction = bool.Parse(n.InnerText);
                             break;
                     }
                 }
@@ -425,6 +433,9 @@ namespace RelhaxModpack
             XmlElement xCreateShortcuts = doc.CreateElement("CreateShortcuts");
             xCreateShortcuts.InnerText = "" + CreateShortcuts;
             settingsHolder.AppendChild(xCreateShortcuts);
+            XmlElement xInstantExtraction = doc.CreateElement("InstantExtraction");
+            xInstantExtraction.InnerText = "" + InstantExtraction;
+            settingsHolder.AppendChild(xInstantExtraction);
             XmlElement xpreviewX = doc.CreateElement("previewX");
             if (PreviewX < 0) { PreviewX = 0; };
             xpreviewX.InnerText = "" + PreviewX;

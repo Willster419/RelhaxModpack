@@ -132,6 +132,11 @@ namespace RelhaxModpack
             polish.Add("ignore", "Ignorować");
             french.Add("ignore", "Ignorer");
 
+            english.Add("lastUpdated", "Last Updated: ");
+            german.Add("lastUpdated", "TODO");
+            polish.Add("lastUpdated", "TODO");
+            french.Add("lastUpdated", "TODO");
+
             //Section: MainWindow
 
             //Componet: installRelhaxMod
@@ -324,6 +329,13 @@ namespace RelhaxModpack
             german.Add("createShortcutsCB", "Erstelle Desktop Verknüpfungen");
             polish.Add("createShortcutsCB", "Stwórz skróty na pulpicie");
             french.Add("createShortcutsCB", "Créer des raccourcis sur le bureau");
+
+            //Componet: InstantExtractionCB
+            //
+            english.Add("InstantExtractionCB", "Instant Extraction mode (experimental)");
+            german.Add("InstantExtractionCB", "TODO");
+            polish.Add("InstantExtractionCB", "TODO");
+            french.Add("InstantExtractionCB", "TODO");
 
             //Section: FirstLoadHelper
 
@@ -974,12 +986,12 @@ namespace RelhaxModpack
             polish.Add("clearCachCBExplanation", "Usuń dane aplikacji z lokacji WoT cache. Działa na podobnej zasadzie, jak kiedyś opcja z paczki OMC.");
             french.Add("clearCachCBExplanation", "Nettoyer le dossier cache WoT. Effectue la même tâche que l'option similaire qui était dans OMC.");
 
-            //Component: clearLogFilesCBExplanation
+            //Component: clearLogFilesDescription
             //
-            english.Add("clearLogFilesCBExplanation", "Clear the WoT log files, (python.log), as well as xvm log files (xvm.log) and pmod log files (pmod.log)");
-            german.Add("clearLogFilesCBExplanation", "Löschen der WoT Protokolldatei, sowie XVM und PMOD Protokolldatei");
-            polish.Add("clearLogFilesCBExplanation", "Wyczyść logi WoTa (python.log), XVM'a (xvm.log) i pmod'ów (pmod.log).");
-            french.Add("clearLogFilesCBExplanation", "Effacez les fichiers logs WoT (python.log), ainsi que les fichiers logs xvm (xvm.log) et les fichiers logs pmod (pmod.log)");
+            english.Add("clearLogFilesDescription", "Clear the WoT log files, (python.log), as well as xvm log files (xvm.log) and pmod log files (pmod.log)");
+            german.Add("clearLogFilesDescription", "Löschen der WoT Protokolldatei, sowie XVM und PMOD Protokolldatei");
+            polish.Add("clearLogFilesDescription", "Wyczyść logi WoTa (python.log), XVM'a (xvm.log) i pmod'ów (pmod.log).");
+            french.Add("clearLogFilesDescription", "Effacez les fichiers logs WoT (python.log), ainsi que les fichiers logs xvm (xvm.log) et les fichiers logs pmod (pmod.log)");
 
             //Component: disableColorsCBExplanation
             //
@@ -1008,6 +1020,13 @@ namespace RelhaxModpack
             german.Add("CreateShortcutsCBExplanation", "Wenn diese Option aktiviert ist, werden bei der Installation die Verknüpfungen für \"World of Tanks\", \"World of Tanks launcher\" und, wenn bei der Installation aktiviert, auch andere Verknüpfungen zu Konfigurationsprogrammen erstellt (z.B. WWIIHA Konfiguration)");
             polish.Add("CreateShortcutsCBExplanation", "Kiedy zaznaczone, utworzone zostaną skróty na pulpicie do modyfikacji z plikami exe (np. konfiguracja WWIIHA)");
             french.Add("CreateShortcutsCBExplanation", "Une fois sélectionné, L'installation créera des icônes de raccourci sur votre bureau pour les mods qui ont des fichiers .exe (comme la configuration WWIIHA)");
+
+            //Component: InstantExtractionCBExplanation
+            //
+            english.Add("InstantExtractionCBExplanation", "When enabled, the installer will extract a zip file as soon as it is downloaded, rather than waiting for every zip file to be downloaded before extraction. Recommended for those with Solid State Drives (SSD) only.");
+            german.Add("InstantExtractionCBExplanation", "TODO");
+            polish.Add("InstantExtractionCBExplanation", "TODO");
+            french.Add("InstantExtractionCBExplanation", "TODO");
 
             //Section: Messages from ModSelectionList
 
@@ -1491,7 +1510,7 @@ namespace RelhaxModpack
             french.Add("AtlasCreating", "TODO");
 
             //Component: CreatingAtlases
-            english.Add("AtlasOptimations", "optimizations");
+            english.Add("AtlasOptimations", "Optimizations");
             german.Add("AtlasOptimations", "Optimierungen");
             polish.Add("AtlasOptimations", "TODO");
             french.Add("AtlasOptimations", "TODO");
@@ -1642,7 +1661,7 @@ namespace RelhaxModpack
 
             //Component: launcherRepairModeStarted
             //
-            english.Add("launcherRepairModeStarted", "Repair mode sucessfully started");
+            english.Add("launcherRepairModeStarted", "Repair mode successfully started");
             german.Add("launcherRepairModeStarted", "TODO");
             polish.Add("launcherRepairModeStarted", "TODO");
             french.Add("launcherRepairModeStarted", "TODO");

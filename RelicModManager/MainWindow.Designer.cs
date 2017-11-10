@@ -42,13 +42,13 @@
             this.backupModsCheckBox = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
             this.createShortcutsCB = new System.Windows.Forms.CheckBox();
+            this.saveUserDataCB = new System.Windows.Forms.CheckBox();
+            this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
             this.ShowInstallCompleteWindowCB = new System.Windows.Forms.CheckBox();
             this.notifyIfSameDatabaseCB = new System.Windows.Forms.CheckBox();
             this.clearLogFilesCB = new System.Windows.Forms.CheckBox();
-            this.clearCacheCB = new System.Windows.Forms.CheckBox();
             this.darkUICB = new System.Windows.Forms.CheckBox();
-            this.saveUserDataCB = new System.Windows.Forms.CheckBox();
-            this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
+            this.clearCacheCB = new System.Windows.Forms.CheckBox();
             this.languageSelectionGB = new System.Windows.Forms.GroupBox();
             this.LanguageComboBox = new System.Windows.Forms.ComboBox();
             this.loadingImageGroupBox = new System.Windows.Forms.GroupBox();
@@ -86,6 +86,7 @@
             this.DatabaseVersionLabel = new System.Windows.Forms.Label();
             this.ApplicationVersionLabel = new System.Windows.Forms.Label();
             this.DiagnosticUtilitiesButton = new System.Windows.Forms.Button();
+            this.InstantExtractionCB = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
@@ -96,9 +97,9 @@
             // 
             // childProgressBar
             // 
-            this.childProgressBar.Location = new System.Drawing.Point(13, 534);
+            this.childProgressBar.Location = new System.Drawing.Point(13, 524);
             this.childProgressBar.Name = "childProgressBar";
-            this.childProgressBar.Size = new System.Drawing.Size(418, 16);
+            this.childProgressBar.Size = new System.Drawing.Size(464, 16);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.childProgressBar.TabIndex = 11;
             // 
@@ -109,10 +110,9 @@
             // 
             // forceManuel
             // 
-            this.forceManuel.AutoSize = true;
-            this.forceManuel.Location = new System.Drawing.Point(6, 14);
+            this.forceManuel.Location = new System.Drawing.Point(6, 15);
             this.forceManuel.Name = "forceManuel";
-            this.forceManuel.Size = new System.Drawing.Size(166, 17);
+            this.forceManuel.Size = new System.Drawing.Size(220, 17);
             this.forceManuel.TabIndex = 13;
             this.forceManuel.Text = "Force manual game detection";
             this.forceManuel.UseVisualStyleBackColor = true;
@@ -123,7 +123,7 @@
             // formPageLink
             // 
             this.formPageLink.AutoSize = true;
-            this.formPageLink.Location = new System.Drawing.Point(10, 575);
+            this.formPageLink.Location = new System.Drawing.Point(10, 565);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(132, 13);
             this.formPageLink.TabIndex = 16;
@@ -133,17 +133,17 @@
             // 
             // parrentProgressBar
             // 
-            this.parrentProgressBar.Location = new System.Drawing.Point(13, 512);
+            this.parrentProgressBar.Location = new System.Drawing.Point(13, 502);
             this.parrentProgressBar.Name = "parrentProgressBar";
-            this.parrentProgressBar.Size = new System.Drawing.Size(418, 16);
+            this.parrentProgressBar.Size = new System.Drawing.Size(464, 16);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.parrentProgressBar.TabIndex = 17;
             // 
             // installRelhaxMod
             // 
-            this.installRelhaxMod.Location = new System.Drawing.Point(224, 12);
+            this.installRelhaxMod.Location = new System.Drawing.Point(245, 12);
             this.installRelhaxMod.Name = "installRelhaxMod";
-            this.installRelhaxMod.Size = new System.Drawing.Size(205, 30);
+            this.installRelhaxMod.Size = new System.Drawing.Size(232, 38);
             this.installRelhaxMod.TabIndex = 19;
             this.installRelhaxMod.Text = "Install Relhax Modpack";
             this.installRelhaxMod.UseVisualStyleBackColor = true;
@@ -151,9 +151,9 @@
             // 
             // uninstallRelhaxMod
             // 
-            this.uninstallRelhaxMod.Location = new System.Drawing.Point(11, 12);
+            this.uninstallRelhaxMod.Location = new System.Drawing.Point(245, 56);
             this.uninstallRelhaxMod.Name = "uninstallRelhaxMod";
-            this.uninstallRelhaxMod.Size = new System.Drawing.Size(205, 30);
+            this.uninstallRelhaxMod.Size = new System.Drawing.Size(232, 37);
             this.uninstallRelhaxMod.TabIndex = 20;
             this.uninstallRelhaxMod.Text = "Uninstall Relhax Modpack";
             this.uninstallRelhaxMod.UseVisualStyleBackColor = true;
@@ -161,12 +161,11 @@
             // 
             // cleanInstallCB
             // 
-            this.cleanInstallCB.AutoSize = true;
             this.cleanInstallCB.Checked = true;
             this.cleanInstallCB.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cleanInstallCB.Location = new System.Drawing.Point(6, 31);
+            this.cleanInstallCB.Location = new System.Drawing.Point(6, 32);
             this.cleanInstallCB.Name = "cleanInstallCB";
-            this.cleanInstallCB.Size = new System.Drawing.Size(187, 17);
+            this.cleanInstallCB.Size = new System.Drawing.Size(220, 17);
             this.cleanInstallCB.TabIndex = 21;
             this.cleanInstallCB.Text = "Clean Installation (Recommended)";
             this.cleanInstallCB.UseVisualStyleBackColor = true;
@@ -176,10 +175,9 @@
             // 
             // cancerFontCB
             // 
-            this.cancerFontCB.AutoSize = true;
-            this.cancerFontCB.Location = new System.Drawing.Point(6, 65);
+            this.cancerFontCB.Location = new System.Drawing.Point(6, 49);
             this.cancerFontCB.Name = "cancerFontCB";
-            this.cancerFontCB.Size = new System.Drawing.Size(81, 17);
+            this.cancerFontCB.Size = new System.Drawing.Size(220, 17);
             this.cancerFontCB.TabIndex = 23;
             this.cancerFontCB.Text = "Cancer font";
             this.cancerFontCB.UseVisualStyleBackColor = true;
@@ -189,10 +187,9 @@
             // 
             // backupModsCheckBox
             // 
-            this.backupModsCheckBox.AutoSize = true;
-            this.backupModsCheckBox.Location = new System.Drawing.Point(6, 48);
+            this.backupModsCheckBox.Location = new System.Drawing.Point(6, 100);
             this.backupModsCheckBox.Name = "backupModsCheckBox";
-            this.backupModsCheckBox.Size = new System.Drawing.Size(156, 17);
+            this.backupModsCheckBox.Size = new System.Drawing.Size(220, 30);
             this.backupModsCheckBox.TabIndex = 24;
             this.backupModsCheckBox.Text = "Backup current mods folder";
             this.backupModsCheckBox.UseVisualStyleBackColor = true;
@@ -202,31 +199,31 @@
             // 
             // settingsGroupBox
             // 
+            this.settingsGroupBox.Controls.Add(this.InstantExtractionCB);
             this.settingsGroupBox.Controls.Add(this.createShortcutsCB);
-            this.settingsGroupBox.Controls.Add(this.ShowInstallCompleteWindowCB);
-            this.settingsGroupBox.Controls.Add(this.notifyIfSameDatabaseCB);
-            this.settingsGroupBox.Controls.Add(this.clearLogFilesCB);
-            this.settingsGroupBox.Controls.Add(this.clearCacheCB);
-            this.settingsGroupBox.Controls.Add(this.darkUICB);
             this.settingsGroupBox.Controls.Add(this.saveUserDataCB);
             this.settingsGroupBox.Controls.Add(this.saveLastInstallCB);
+            this.settingsGroupBox.Controls.Add(this.ShowInstallCompleteWindowCB);
             this.settingsGroupBox.Controls.Add(this.forceManuel);
             this.settingsGroupBox.Controls.Add(this.cancerFontCB);
+            this.settingsGroupBox.Controls.Add(this.notifyIfSameDatabaseCB);
             this.settingsGroupBox.Controls.Add(this.backupModsCheckBox);
             this.settingsGroupBox.Controls.Add(this.cleanInstallCB);
-            this.settingsGroupBox.Location = new System.Drawing.Point(12, 77);
+            this.settingsGroupBox.Controls.Add(this.clearLogFilesCB);
+            this.settingsGroupBox.Controls.Add(this.darkUICB);
+            this.settingsGroupBox.Controls.Add(this.clearCacheCB);
+            this.settingsGroupBox.Location = new System.Drawing.Point(13, 99);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(308, 221);
+            this.settingsGroupBox.Size = new System.Drawing.Size(464, 179);
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
-            this.settingsGroupBox.Text = "Modpack Settings (Right click for description)";
+            this.settingsGroupBox.Text = "Modpack Settings";
             // 
             // createShortcutsCB
             // 
-            this.createShortcutsCB.AutoSize = true;
-            this.createShortcutsCB.Location = new System.Drawing.Point(6, 201);
+            this.createShortcutsCB.Location = new System.Drawing.Point(232, 83);
             this.createShortcutsCB.Name = "createShortcutsCB";
-            this.createShortcutsCB.Size = new System.Drawing.Size(105, 17);
+            this.createShortcutsCB.Size = new System.Drawing.Size(220, 17);
             this.createShortcutsCB.TabIndex = 35;
             this.createShortcutsCB.Text = "Create Shortcuts";
             this.createShortcutsCB.UseVisualStyleBackColor = true;
@@ -234,77 +231,11 @@
             this.createShortcutsCB.MouseEnter += new System.EventHandler(this.CreateShortcutsCB_MouseEnter);
             this.createShortcutsCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
-            // ShowInstallCompleteWindowCB
-            // 
-            this.ShowInstallCompleteWindowCB.AutoSize = true;
-            this.ShowInstallCompleteWindowCB.Location = new System.Drawing.Point(6, 184);
-            this.ShowInstallCompleteWindowCB.Name = "ShowInstallCompleteWindowCB";
-            this.ShowInstallCompleteWindowCB.Size = new System.Drawing.Size(168, 17);
-            this.ShowInstallCompleteWindowCB.TabIndex = 34;
-            this.ShowInstallCompleteWindowCB.Text = "Show Install complete window";
-            this.ShowInstallCompleteWindowCB.UseVisualStyleBackColor = true;
-            this.ShowInstallCompleteWindowCB.CheckedChanged += new System.EventHandler(this.ShowInstallCompleteWindow_CheckedChanged);
-            this.ShowInstallCompleteWindowCB.MouseEnter += new System.EventHandler(this.ShowInstallCompleteWindowCB_MouseEnter);
-            this.ShowInstallCompleteWindowCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // notifyIfSameDatabaseCB
-            // 
-            this.notifyIfSameDatabaseCB.AutoSize = true;
-            this.notifyIfSameDatabaseCB.Location = new System.Drawing.Point(6, 167);
-            this.notifyIfSameDatabaseCB.Name = "notifyIfSameDatabaseCB";
-            this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(193, 17);
-            this.notifyIfSameDatabaseCB.TabIndex = 33;
-            this.notifyIfSameDatabaseCB.Text = "Inform if no new database available";
-            this.notifyIfSameDatabaseCB.UseVisualStyleBackColor = true;
-            this.notifyIfSameDatabaseCB.CheckedChanged += new System.EventHandler(this.notifyIfSameDatabaseCB_CheckedChanged);
-            this.notifyIfSameDatabaseCB.MouseEnter += new System.EventHandler(this.notifyIfSameDatabaseCB_MouseEnter);
-            this.notifyIfSameDatabaseCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // clearLogFilesCB
-            // 
-            this.clearLogFilesCB.AutoSize = true;
-            this.clearLogFilesCB.Location = new System.Drawing.Point(6, 150);
-            this.clearLogFilesCB.Name = "clearLogFilesCB";
-            this.clearLogFilesCB.Size = new System.Drawing.Size(88, 17);
-            this.clearLogFilesCB.TabIndex = 32;
-            this.clearLogFilesCB.Text = "Clear log files";
-            this.clearLogFilesCB.UseVisualStyleBackColor = true;
-            this.clearLogFilesCB.CheckedChanged += new System.EventHandler(this.clearLogFilesCB_CheckedChanged);
-            this.clearLogFilesCB.MouseEnter += new System.EventHandler(this.clearLogFilesCB_MouseEnter);
-            this.clearLogFilesCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // clearCacheCB
-            // 
-            this.clearCacheCB.AutoSize = true;
-            this.clearCacheCB.Location = new System.Drawing.Point(6, 133);
-            this.clearCacheCB.Name = "clearCacheCB";
-            this.clearCacheCB.Size = new System.Drawing.Size(137, 17);
-            this.clearCacheCB.TabIndex = 31;
-            this.clearCacheCB.Text = "Clear WoT Cache Data";
-            this.clearCacheCB.UseVisualStyleBackColor = true;
-            this.clearCacheCB.CheckedChanged += new System.EventHandler(this.clearCacheCB_CheckedChanged);
-            this.clearCacheCB.MouseEnter += new System.EventHandler(this.clearCacheCB_MouseEnter);
-            this.clearCacheCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // darkUICB
-            // 
-            this.darkUICB.AutoSize = true;
-            this.darkUICB.Location = new System.Drawing.Point(6, 116);
-            this.darkUICB.Name = "darkUICB";
-            this.darkUICB.Size = new System.Drawing.Size(63, 17);
-            this.darkUICB.TabIndex = 30;
-            this.darkUICB.Text = "Dark UI";
-            this.darkUICB.UseVisualStyleBackColor = true;
-            this.darkUICB.CheckedChanged += new System.EventHandler(this.darkUICB_CheckedChanged);
-            this.darkUICB.MouseEnter += new System.EventHandler(this.darkUICB_MouseEnter);
-            this.darkUICB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
             // saveUserDataCB
             // 
-            this.saveUserDataCB.AutoSize = true;
-            this.saveUserDataCB.Location = new System.Drawing.Point(6, 99);
+            this.saveUserDataCB.Location = new System.Drawing.Point(6, 83);
             this.saveUserDataCB.Name = "saveUserDataCB";
-            this.saveUserDataCB.Size = new System.Drawing.Size(139, 17);
+            this.saveUserDataCB.Size = new System.Drawing.Size(220, 17);
             this.saveUserDataCB.TabIndex = 27;
             this.saveUserDataCB.Text = "Save User created data";
             this.saveUserDataCB.UseVisualStyleBackColor = true;
@@ -314,10 +245,9 @@
             // 
             // saveLastInstallCB
             // 
-            this.saveLastInstallCB.AutoSize = true;
-            this.saveLastInstallCB.Location = new System.Drawing.Point(6, 82);
+            this.saveLastInstallCB.Location = new System.Drawing.Point(6, 66);
             this.saveLastInstallCB.Name = "saveLastInstallCB";
-            this.saveLastInstallCB.Size = new System.Drawing.Size(138, 17);
+            this.saveLastInstallCB.Size = new System.Drawing.Size(220, 17);
             this.saveLastInstallCB.TabIndex = 26;
             this.saveLastInstallCB.Text = "Save last install\'s config";
             this.saveLastInstallCB.UseVisualStyleBackColor = true;
@@ -325,12 +255,72 @@
             this.saveLastInstallCB.MouseEnter += new System.EventHandler(this.saveLastInstallCB_MouseEnter);
             this.saveLastInstallCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
+            // ShowInstallCompleteWindowCB
+            // 
+            this.ShowInstallCompleteWindowCB.Location = new System.Drawing.Point(232, 66);
+            this.ShowInstallCompleteWindowCB.Name = "ShowInstallCompleteWindowCB";
+            this.ShowInstallCompleteWindowCB.Size = new System.Drawing.Size(220, 17);
+            this.ShowInstallCompleteWindowCB.TabIndex = 34;
+            this.ShowInstallCompleteWindowCB.Text = "Show Install complete window";
+            this.ShowInstallCompleteWindowCB.UseVisualStyleBackColor = true;
+            this.ShowInstallCompleteWindowCB.CheckedChanged += new System.EventHandler(this.ShowInstallCompleteWindow_CheckedChanged);
+            this.ShowInstallCompleteWindowCB.MouseEnter += new System.EventHandler(this.ShowInstallCompleteWindowCB_MouseEnter);
+            this.ShowInstallCompleteWindowCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
+            // notifyIfSameDatabaseCB
+            // 
+            this.notifyIfSameDatabaseCB.Location = new System.Drawing.Point(232, 100);
+            this.notifyIfSameDatabaseCB.Name = "notifyIfSameDatabaseCB";
+            this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(220, 30);
+            this.notifyIfSameDatabaseCB.TabIndex = 33;
+            this.notifyIfSameDatabaseCB.Text = "Inform if no new database available";
+            this.notifyIfSameDatabaseCB.UseVisualStyleBackColor = true;
+            this.notifyIfSameDatabaseCB.CheckedChanged += new System.EventHandler(this.notifyIfSameDatabaseCB_CheckedChanged);
+            this.notifyIfSameDatabaseCB.MouseEnter += new System.EventHandler(this.notifyIfSameDatabaseCB_MouseEnter);
+            this.notifyIfSameDatabaseCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
+            // clearLogFilesCB
+            // 
+            this.clearLogFilesCB.Location = new System.Drawing.Point(232, 49);
+            this.clearLogFilesCB.Name = "clearLogFilesCB";
+            this.clearLogFilesCB.Size = new System.Drawing.Size(220, 17);
+            this.clearLogFilesCB.TabIndex = 32;
+            this.clearLogFilesCB.Text = "Clear log files";
+            this.clearLogFilesCB.UseVisualStyleBackColor = true;
+            this.clearLogFilesCB.CheckedChanged += new System.EventHandler(this.clearLogFilesCB_CheckedChanged);
+            this.clearLogFilesCB.MouseEnter += new System.EventHandler(this.clearLogFilesCB_MouseEnter);
+            this.clearLogFilesCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
+            // darkUICB
+            // 
+            this.darkUICB.Location = new System.Drawing.Point(232, 15);
+            this.darkUICB.Name = "darkUICB";
+            this.darkUICB.Size = new System.Drawing.Size(220, 17);
+            this.darkUICB.TabIndex = 30;
+            this.darkUICB.Text = "Dark UI";
+            this.darkUICB.UseVisualStyleBackColor = true;
+            this.darkUICB.CheckedChanged += new System.EventHandler(this.darkUICB_CheckedChanged);
+            this.darkUICB.MouseEnter += new System.EventHandler(this.darkUICB_MouseEnter);
+            this.darkUICB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
+            // clearCacheCB
+            // 
+            this.clearCacheCB.Location = new System.Drawing.Point(232, 32);
+            this.clearCacheCB.Name = "clearCacheCB";
+            this.clearCacheCB.Size = new System.Drawing.Size(220, 17);
+            this.clearCacheCB.TabIndex = 31;
+            this.clearCacheCB.Text = "Clear WoT Cache Data";
+            this.clearCacheCB.UseVisualStyleBackColor = true;
+            this.clearCacheCB.CheckedChanged += new System.EventHandler(this.clearCacheCB_CheckedChanged);
+            this.clearCacheCB.MouseEnter += new System.EventHandler(this.clearCacheCB_MouseEnter);
+            this.clearCacheCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
             // languageSelectionGB
             // 
             this.languageSelectionGB.Controls.Add(this.LanguageComboBox);
-            this.languageSelectionGB.Location = new System.Drawing.Point(325, 137);
+            this.languageSelectionGB.Location = new System.Drawing.Point(353, 345);
             this.languageSelectionGB.Name = "languageSelectionGB";
-            this.languageSelectionGB.Size = new System.Drawing.Size(104, 47);
+            this.languageSelectionGB.Size = new System.Drawing.Size(124, 63);
             this.languageSelectionGB.TabIndex = 30;
             this.languageSelectionGB.TabStop = false;
             this.languageSelectionGB.Text = "Language";
@@ -346,7 +336,7 @@
             "Francais"});
             this.LanguageComboBox.Location = new System.Drawing.Point(6, 13);
             this.LanguageComboBox.Name = "LanguageComboBox";
-            this.LanguageComboBox.Size = new System.Drawing.Size(92, 21);
+            this.LanguageComboBox.Size = new System.Drawing.Size(112, 21);
             this.LanguageComboBox.TabIndex = 4;
             this.LanguageComboBox.SelectedIndexChanged += new System.EventHandler(this.LanguageComboBox_SelectedIndexChanged);
             // 
@@ -354,9 +344,9 @@
             // 
             this.loadingImageGroupBox.Controls.Add(this.thirdGuardsLoadingImageRB);
             this.loadingImageGroupBox.Controls.Add(this.standardImageRB);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(325, 190);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(353, 284);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
-            this.loadingImageGroupBox.Size = new System.Drawing.Size(103, 62);
+            this.loadingImageGroupBox.Size = new System.Drawing.Size(124, 62);
             this.loadingImageGroupBox.TabIndex = 26;
             this.loadingImageGroupBox.TabStop = false;
             this.loadingImageGroupBox.Text = "Loading Image";
@@ -394,7 +384,7 @@
             // findBugAddModLabel
             // 
             this.findBugAddModLabel.AutoSize = true;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(10, 556);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(10, 546);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(163, 13);
             this.findBugAddModLabel.TabIndex = 27;
@@ -405,7 +395,7 @@
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(328, 556);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(374, 546);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
             this.cancelDownloadButton.Size = new System.Drawing.Size(103, 60);
             this.cancelDownloadButton.TabIndex = 28;
@@ -422,11 +412,11 @@
             // downloadProgress
             // 
             this.downloadProgress.DetectUrls = false;
-            this.downloadProgress.Location = new System.Drawing.Point(13, 424);
+            this.downloadProgress.Location = new System.Drawing.Point(13, 414);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
             this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.downloadProgress.Size = new System.Drawing.Size(418, 60);
+            this.downloadProgress.Size = new System.Drawing.Size(464, 60);
             this.downloadProgress.TabIndex = 29;
             this.downloadProgress.Text = "";
             // 
@@ -437,18 +427,18 @@
             this.viewTypeGB.Controls.Add(this.expandNodesDefault);
             this.viewTypeGB.Controls.Add(this.selectionLegacy);
             this.viewTypeGB.Controls.Add(this.selectionDefault);
-            this.viewTypeGB.Location = new System.Drawing.Point(178, 304);
+            this.viewTypeGB.Location = new System.Drawing.Point(176, 284);
             this.viewTypeGB.Name = "viewTypeGB";
-            this.viewTypeGB.Size = new System.Drawing.Size(252, 114);
+            this.viewTypeGB.Size = new System.Drawing.Size(174, 124);
             this.viewTypeGB.TabIndex = 31;
             this.viewTypeGB.TabStop = false;
             this.viewTypeGB.Text = "Selection View";
             // 
             // disableColorsCB
             // 
-            this.disableColorsCB.Location = new System.Drawing.Point(18, 61);
+            this.disableColorsCB.Location = new System.Drawing.Point(18, 47);
             this.disableColorsCB.Name = "disableColorsCB";
-            this.disableColorsCB.Size = new System.Drawing.Size(116, 47);
+            this.disableColorsCB.Size = new System.Drawing.Size(151, 31);
             this.disableColorsCB.TabIndex = 4;
             this.disableColorsCB.Text = "Disable color change";
             this.disableColorsCB.UseVisualStyleBackColor = true;
@@ -459,10 +449,8 @@
             // disableBordersCB
             // 
             this.disableBordersCB.Location = new System.Drawing.Point(18, 30);
-            this.disableBordersCB.MaximumSize = new System.Drawing.Size(100, 40);
-            this.disableBordersCB.MinimumSize = new System.Drawing.Size(50, 20);
             this.disableBordersCB.Name = "disableBordersCB";
-            this.disableBordersCB.Size = new System.Drawing.Size(100, 32);
+            this.disableBordersCB.Size = new System.Drawing.Size(151, 20);
             this.disableBordersCB.TabIndex = 3;
             this.disableBordersCB.Text = "Disable borders";
             this.disableBordersCB.UseVisualStyleBackColor = true;
@@ -473,7 +461,7 @@
             // expandNodesDefault
             // 
             this.expandNodesDefault.AutoSize = true;
-            this.expandNodesDefault.Location = new System.Drawing.Point(133, 35);
+            this.expandNodesDefault.Location = new System.Drawing.Point(18, 100);
             this.expandNodesDefault.MaximumSize = new System.Drawing.Size(100, 40);
             this.expandNodesDefault.MinimumSize = new System.Drawing.Size(50, 20);
             this.expandNodesDefault.Name = "expandNodesDefault";
@@ -488,7 +476,7 @@
             // selectionLegacy
             // 
             this.selectionLegacy.AutoSize = true;
-            this.selectionLegacy.Location = new System.Drawing.Point(124, 13);
+            this.selectionLegacy.Location = new System.Drawing.Point(3, 77);
             this.selectionLegacy.Name = "selectionLegacy";
             this.selectionLegacy.Size = new System.Drawing.Size(60, 17);
             this.selectionLegacy.TabIndex = 1;
@@ -516,7 +504,7 @@
             // donateLabel
             // 
             this.donateLabel.AutoSize = true;
-            this.donateLabel.Location = new System.Drawing.Point(10, 595);
+            this.donateLabel.Location = new System.Drawing.Point(10, 585);
             this.donateLabel.Name = "donateLabel";
             this.donateLabel.Size = new System.Drawing.Size(162, 13);
             this.donateLabel.TabIndex = 32;
@@ -537,9 +525,9 @@
             this.fontSizeGB.Controls.Add(this.fontSize175);
             this.fontSizeGB.Controls.Add(this.fontSize125);
             this.fontSizeGB.Controls.Add(this.fontSize100);
-            this.fontSizeGB.Location = new System.Drawing.Point(12, 304);
+            this.fontSizeGB.Location = new System.Drawing.Point(13, 284);
             this.fontSizeGB.Name = "fontSizeGB";
-            this.fontSizeGB.Size = new System.Drawing.Size(160, 114);
+            this.fontSizeGB.Size = new System.Drawing.Size(159, 124);
             this.fontSizeGB.TabIndex = 33;
             this.fontSizeGB.TabStop = false;
             this.fontSizeGB.Text = "Scaling Mode";
@@ -700,16 +688,16 @@
             // 
             // totalProgressBar
             // 
-            this.totalProgressBar.Location = new System.Drawing.Point(13, 490);
+            this.totalProgressBar.Location = new System.Drawing.Point(13, 480);
             this.totalProgressBar.Name = "totalProgressBar";
-            this.totalProgressBar.Size = new System.Drawing.Size(418, 16);
+            this.totalProgressBar.Size = new System.Drawing.Size(464, 16);
             this.totalProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.totalProgressBar.TabIndex = 34;
             // 
             // DiscordServerLink
             // 
             this.DiscordServerLink.AutoSize = true;
-            this.DiscordServerLink.Location = new System.Drawing.Point(10, 614);
+            this.DiscordServerLink.Location = new System.Drawing.Point(10, 604);
             this.DiscordServerLink.Name = "DiscordServerLink";
             this.DiscordServerLink.Size = new System.Drawing.Size(77, 13);
             this.DiscordServerLink.TabIndex = 35;
@@ -719,9 +707,9 @@
             // 
             // viewAppUpdates
             // 
-            this.viewAppUpdates.Location = new System.Drawing.Point(12, 48);
+            this.viewAppUpdates.Location = new System.Drawing.Point(13, 12);
             this.viewAppUpdates.Name = "viewAppUpdates";
-            this.viewAppUpdates.Size = new System.Drawing.Size(204, 23);
+            this.viewAppUpdates.Size = new System.Drawing.Size(226, 23);
             this.viewAppUpdates.TabIndex = 36;
             this.viewAppUpdates.Text = "View latest application updates";
             this.viewAppUpdates.UseVisualStyleBackColor = true;
@@ -729,9 +717,9 @@
             // 
             // viewDBUpdates
             // 
-            this.viewDBUpdates.Location = new System.Drawing.Point(224, 48);
+            this.viewDBUpdates.Location = new System.Drawing.Point(13, 41);
             this.viewDBUpdates.Name = "viewDBUpdates";
-            this.viewDBUpdates.Size = new System.Drawing.Size(205, 23);
+            this.viewDBUpdates.Size = new System.Drawing.Size(226, 23);
             this.viewDBUpdates.TabIndex = 37;
             this.viewDBUpdates.Text = "View latest database updates";
             this.viewDBUpdates.UseVisualStyleBackColor = true;
@@ -740,7 +728,7 @@
             // ErrorCounterLabel
             // 
             this.ErrorCounterLabel.AutoSize = true;
-            this.ErrorCounterLabel.Location = new System.Drawing.Point(330, 615);
+            this.ErrorCounterLabel.Location = new System.Drawing.Point(288, 581);
             this.ErrorCounterLabel.Name = "ErrorCounterLabel";
             this.ErrorCounterLabel.Size = new System.Drawing.Size(80, 13);
             this.ErrorCounterLabel.TabIndex = 38;
@@ -756,18 +744,18 @@
             this.VersionTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.VersionTable.Controls.Add(this.DatabaseVersionLabel, 1, 0);
             this.VersionTable.Controls.Add(this.ApplicationVersionLabel, 0, 0);
-            this.VersionTable.Location = new System.Drawing.Point(9, 632);
+            this.VersionTable.Location = new System.Drawing.Point(12, 621);
             this.VersionTable.Name = "VersionTable";
             this.VersionTable.RowCount = 1;
             this.VersionTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.VersionTable.Size = new System.Drawing.Size(420, 16);
+            this.VersionTable.Size = new System.Drawing.Size(465, 16);
             this.VersionTable.TabIndex = 39;
             // 
             // DatabaseVersionLabel
             // 
             this.DatabaseVersionLabel.AutoSize = true;
             this.DatabaseVersionLabel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.DatabaseVersionLabel.Location = new System.Drawing.Point(280, 1);
+            this.DatabaseVersionLabel.Location = new System.Drawing.Point(325, 1);
             this.DatabaseVersionLabel.Name = "DatabaseVersionLabel";
             this.DatabaseVersionLabel.Size = new System.Drawing.Size(136, 14);
             this.DatabaseVersionLabel.TabIndex = 0;
@@ -784,20 +772,32 @@
             // 
             // DiagnosticUtilitiesButton
             // 
-            this.DiagnosticUtilitiesButton.Location = new System.Drawing.Point(326, 83);
+            this.DiagnosticUtilitiesButton.Location = new System.Drawing.Point(13, 70);
             this.DiagnosticUtilitiesButton.Name = "DiagnosticUtilitiesButton";
-            this.DiagnosticUtilitiesButton.Size = new System.Drawing.Size(103, 48);
+            this.DiagnosticUtilitiesButton.Size = new System.Drawing.Size(226, 23);
             this.DiagnosticUtilitiesButton.TabIndex = 40;
             this.DiagnosticUtilitiesButton.Text = "Diagnostic Utilities";
             this.DiagnosticUtilitiesButton.UseVisualStyleBackColor = true;
             this.DiagnosticUtilitiesButton.Click += new System.EventHandler(this.DiagnosticUtilitiesButton_Click);
+            // 
+            // InstantExtractionCB
+            // 
+            this.InstantExtractionCB.Location = new System.Drawing.Point(6, 130);
+            this.InstantExtractionCB.Name = "InstantExtractionCB";
+            this.InstantExtractionCB.Size = new System.Drawing.Size(220, 30);
+            this.InstantExtractionCB.TabIndex = 36;
+            this.InstantExtractionCB.Text = "Instant Extraction mode (experimental)";
+            this.InstantExtractionCB.UseVisualStyleBackColor = true;
+            this.InstantExtractionCB.CheckedChanged += new System.EventHandler(this.InstantExtractionCB_CheckedChanged);
+            this.InstantExtractionCB.MouseEnter += new System.EventHandler(this.InstantExtractionCB_MouseEnter);
+            this.InstantExtractionCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(440, 657);
+            this.ClientSize = new System.Drawing.Size(489, 649);
             this.Controls.Add(this.DiagnosticUtilitiesButton);
             this.Controls.Add(this.VersionTable);
             this.Controls.Add(this.ErrorCounterLabel);
@@ -828,7 +828,6 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.settingsGroupBox.ResumeLayout(false);
-            this.settingsGroupBox.PerformLayout();
             this.languageSelectionGB.ResumeLayout(false);
             this.loadingImageGroupBox.ResumeLayout(false);
             this.loadingImageGroupBox.PerformLayout();
@@ -900,6 +899,7 @@
         private System.Windows.Forms.Label ApplicationVersionLabel;
         private System.Windows.Forms.ComboBox LanguageComboBox;
         private System.Windows.Forms.Button DiagnosticUtilitiesButton;
+        private System.Windows.Forms.CheckBox InstantExtractionCB;
     }
 }
 

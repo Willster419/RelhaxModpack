@@ -61,8 +61,6 @@ namespace RelhaxModpack
         public static int errorCounter = 0;
         // string tempOldDownload; => using userToken at Async download
         private List<Mod> userMods;
-        private FirstLoadHelper helper;
-        string helperText;
         string currentModDownloading;
         private Installer ins;
         private Installer unI;
@@ -74,6 +72,8 @@ namespace RelhaxModpack
         float currentTotalBytesDownloaded = 0;
         float differenceTotalBytesDownloaded = 0;
         float sessionDownloadSpeed = 0;
+        private int downloadCounter = -1;
+        private object lockerMain = new object();
         private LoadingGifPreview gp;
         List<string> supportedVersions = new List<string>();
         List<SelectableDatabasePackage> modsConfigsWithData;
@@ -118,6 +118,8 @@ namespace RelhaxModpack
         //handler for the mod download file progress
         void downloader_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
+            if (Settings.InstantExtraction)
+                return;
             if (!downloadTimer.Enabled)
                 downloadTimer.Enabled = true;
             string totalSpeedLabel = "";
@@ -171,6 +173,7 @@ namespace RelhaxModpack
         //handler for the mod download file complete event
         void downloader_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
+            downloadTimer.Enabled = false;
             //check to see if the user cancled the download
             if (e != null && e.Cancelled)
             {
@@ -181,9 +184,8 @@ namespace RelhaxModpack
                 childProgressBar.Value = 0;
                 return;
             }
-            downloadTimer.Enabled = false;
             //i think a complete download means that error is null, if error is ever not null this will catch it and we can log it
-            if (e != null && e.Error != null)
+            else if (e != null && e.Error != null)
             {
                 AsyncDownloadArgs userToken = (AsyncDownloadArgs)e.UserState;
                 if (Program.testMode)
@@ -201,60 +203,88 @@ namespace RelhaxModpack
                     return;
                 }
             }
-            if (DatabasePackagesToDownload.Count != 0)
+            //at this point we're here for NOT an error and NOT a cancel
+            downloadCounter++;
+            if (DatabasePackagesToDownload.Count != downloadCounter)
             {
+                //downloader components
                 AsyncDownloadArgs args = new AsyncDownloadArgs();
-                args.url = new Uri(Utils.ReplaceMacro(DatabasePackagesToDownload[0].StartAddress) + DatabasePackagesToDownload[0].ZipFile + DatabasePackagesToDownload[0].EndAddress);
-                args.zipFile = Path.Combine(downloadPath,DatabasePackagesToDownload[0].ZipFile);
-                totalProgressBar.Maximum = (int)InstallerEventArgs.InstallProgress.Done;
-                totalProgressBar.Value = 1;
-                cancelDownloadButton.Enabled = true;
-                cancelDownloadButton.Visible = true;
+                args.url = new Uri(Utils.ReplaceMacro(DatabasePackagesToDownload[downloadCounter].StartAddress) + DatabasePackagesToDownload[downloadCounter].ZipFile + DatabasePackagesToDownload[downloadCounter].EndAddress);
+                args.zipFile = Path.Combine(downloadPath,DatabasePackagesToDownload[downloadCounter].ZipFile);
                 //for the next file in the queue, delete it.
                 if (File.Exists(args.zipFile)) File.Delete(args.zipFile);
                 //download new zip file
                 if (downloader != null)
                     downloader.Dispose();
                 downloader = new WebClient();
-                downloader.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
-                downloader.DownloadFileCompleted += new AsyncCompletedEventHandler(downloader_DownloadFileCompleted);
+                downloader.DownloadProgressChanged += downloader_DownloadProgressChanged;
+                downloader.DownloadFileCompleted += downloader_DownloadFileCompleted;
                 downloader.Proxy = null;
-                if (timeRemainArray == null)
-                    timeRemainArray = new List<double>();
-                timeRemainArray.Clear();
-                actualTimeRemain = 0;
-                sw.Reset();
-                sw.Start();
                 downloader.DownloadFileAsync(args.url, args.zipFile, args);
                 Utils.AppendToLog("downloading " + Path.GetFileName(args.zipFile));
-                currentModDownloading = Path.GetFileNameWithoutExtension(args.zipFile);
-                DatabasePackagesToDownload.RemoveAt(0);
-                if ((parrentProgressBar.Value + 1) <= parrentProgressBar.Maximum)
-                    parrentProgressBar.Value++;
-                return;
+                //UI components
+                if(!Settings.InstantExtraction)
+                {
+                    totalProgressBar.Maximum = (int)InstallerEventArgs.InstallProgress.Done;
+                    totalProgressBar.Value = 1;//backup technically, but don't worry about it (for now)
+                    cancelDownloadButton.Enabled = true;
+                    cancelDownloadButton.Visible = true;
+                    downloadTimer.Enabled = true;
+                    if (timeRemainArray == null)
+                        timeRemainArray = new List<double>();
+                    timeRemainArray.Clear();
+                    actualTimeRemain = 0;
+                    sw.Reset();
+                    sw.Start();
+                    currentModDownloading = Path.GetFileNameWithoutExtension(args.zipFile);
+                    if ((parrentProgressBar.Value + 1) <= parrentProgressBar.Maximum)
+                        parrentProgressBar.Value++;
+                }
+                //locking system for stopping data and access races
+                if (downloadCounter!=0)
+                {
+                    lock (lockerMain)
+                    {
+                        DatabasePackagesToDownload[downloadCounter - 1].ReadyForInstall = true;
+                    }
+                }
             }
-            if (DatabasePackagesToDownload.Count == 0)
+            if (DatabasePackagesToDownload.Count == downloadCounter || Settings.InstantExtraction)
             {
                 cancelDownloadButton.Enabled = false;
                 cancelDownloadButton.Visible = false;
-                ins = new Installer()
+                if (ins == null)
                 {
-                    AppPath = Application.StartupPath,
-                    GlobalDependencies = this.globalDependenciesToInstall,
-                    Dependencies = this.dependenciesToInstall,
-                    LogicalDependencies = this.logicalDependenciesToInstall,
-                    AppendedDependencies = this.appendedDependenciesToInstall,
-                    ModsConfigsToInstall = this.modsConfigsToInstall,
-                    ModsConfigsWithData = this.modsConfigsWithData,
-                    TanksLocation = this.tanksLocation,
-                    TanksVersion = this.tanksVersionForInstaller,
-                    UserMods = this.userMods,
-                    AppDataFolder = this.appDataFolder,
-                    DatabaseVersion = this.databaseVersionString,
-                    Shortcuts = this.Shortcuts
-                };
-                ins.InstallProgressChanged += I_InstallProgressChanged;
-                ins.StartInstallation();
+                    ins = new Installer()
+                    {
+                        AppPath = Application.StartupPath,
+                        GlobalDependencies = this.globalDependenciesToInstall,
+                        Dependencies = this.dependenciesToInstall,
+                        LogicalDependencies = this.logicalDependenciesToInstall,
+                        AppendedDependencies = this.appendedDependenciesToInstall,
+                        ModsConfigsToInstall = this.modsConfigsToInstall,
+                        ModsConfigsWithData = this.modsConfigsWithData,
+                        TanksLocation = this.tanksLocation,
+                        TanksVersion = this.tanksVersionForInstaller,
+                        UserMods = this.userMods,
+                        AppDataFolder = this.appDataFolder,
+                        DatabaseVersion = this.databaseVersionString,
+                        Shortcuts = this.Shortcuts
+                    };
+                    ins.InstallProgressChanged += I_InstallProgressChanged;
+                    ins.StartInstallation();
+                }
+                if(DatabasePackagesToDownload.Count == downloadCounter && Settings.InstantExtraction)
+                {
+                    //locking system for stopping data and access races
+                    if (downloadCounter != 0)
+                    {
+                        lock (lockerMain)
+                        {
+                            DatabasePackagesToDownload[downloadCounter - 1].ReadyForInstall = true;
+                        }
+                    }
+                }
             }
         }
 
@@ -292,11 +322,11 @@ namespace RelhaxModpack
                 //parse the database version
                 var databaseVersion = doc.XPathSelectElement("//version/database");
                 DatabaseVersionLabel.Text = "Latest Database v" + databaseVersion.Value;
+                Settings.DatabaseVersion = databaseVersion.Value;
                 //parse the manager version
                 
-                var applicationVersion = doc.Descendants().Where(n => n.Name == "manager").FirstOrDefault();
-                if (applicationVersion != null)
-                    version = applicationVersion.Value;
+                var applicationVersion = Program.betaApplication ? doc.XPathSelectElement("//version/manager_beta") : doc.XPathSelectElement("//version/manager");
+                version = applicationVersion.Value;
                 Utils.AppendToLog(string.Format("Local application is {0}, current online is {1}", managerVersion(), version));
 
                 if (!version.Equals(managerVersion()))
@@ -320,6 +350,10 @@ namespace RelhaxModpack
                         bool loop = true;
                         while (loop)
                         {
+                            System.Threading.Thread.Sleep(500);
+                            loop = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1;
+                            if (!loop)
+                                break;
                             result = MessageBox.Show(Translations.getTranslatedString("closeInstanceRunningForUpdate"), Translations.getTranslatedString("critical"), MessageBoxButtons.RetryCancel, MessageBoxIcon.Stop);
                             if (result == DialogResult.Cancel)
                             {
@@ -327,15 +361,11 @@ namespace RelhaxModpack
                                 Application.Exit();
                                 break;
                             }
-                            else
-                            {
-                                loop = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1;
-                                System.Threading.Thread.Sleep(1000);
-                            }
                         }
 
                         if (File.Exists(newExeName)) File.Delete(newExeName);
-                        updater.DownloadFileAsync(new Uri("http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe"), newExeName);
+                        string modpackExeURL = Program.betaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
+                        updater.DownloadFileAsync(new Uri(modpackExeURL), newExeName);
                         Utils.AppendToLog("New application download started");
                         currentModDownloading = "update ";
                     }
@@ -372,17 +402,10 @@ namespace RelhaxModpack
             string newExeName = Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat");
             try
             {
-                File.WriteAllText(newExeName, @"@ECHO OFF
-                ECHO Updating Application...
-                ping 127.0.0.1 -n 3 > nul
-                del  /Q RelhaxModpack.exe 2> nul
-                copy /Y RelhaxModpack_update.exe RelhaxModpack.exe 2> nul
-                del /Q RelicModManager_update.exe 2> nul
-                del /Q RelhaxModpack_update.exe 2> nul
-                del /Q RelicModManager.exe 2> nul
-                ECHO Starting Application...
-                start """" ""RelhaxModpack.exe"" %1 %2 %3 %4 %5 %6 %7 %8 %9 2> nul
-                ".Replace("                ", ""));
+                //Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "supported_clients.xml");
+                string updateScript = "";
+                updateScript = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "RelicCopyUpdate.txt");
+                File.WriteAllText(newExeName, updateScript);
             }
             catch (Exception ex)
             {
@@ -707,10 +730,11 @@ namespace RelhaxModpack
             }
             if (Settings.FirstLoad)
             {
-                helper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-                helperText = helper.helperText.Text;
-                helper.Show();
-                Settings.FirstLoad = false;
+                //helper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
+                //helperText = helper.helperText.Text;
+                //helper.Show();
+                //Settings.FirstLoad = false;
+                generic_MouseLeave(null, null);
             }
             wait.Close();
             ToggleUIButtons(true);
@@ -902,7 +926,10 @@ namespace RelhaxModpack
                             //move each mod that is enalbed and checked to a new list of mods to install
                             //also check that it actually has a zip file
                             if (!m.ZipFile.Equals(""))
+                            {
+                                m.ExtractPath = m.ExtractPath.Equals("")? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(m.ExtractPath);
                                 modsConfigsToInstall.Add(m);
+                            }
 
                             //since it is checked, regardless if it has a zipfile, check if it has userdata
                             if (m.UserFiles.Count > 0)
@@ -1036,31 +1063,43 @@ namespace RelhaxModpack
                 Utils.ExceptionLog("installRelhaxMod_Click", "now each logical dependency has a complete list of every dependency ...", ex);
             }
 
-            //verify that all global dependencies, depdnencies, and logicalDependencies are actually Enabled
+            //verify that all global dependencies, depdnencies, and logicalDependencies are actually Enabled and have valid zip files
+            //if they don't, remove them. if they do, macro the ExtractPath
             try
             {
                 for(int i = 0; i < globalDependenciesToInstall.Count; i++)
                 {
-                    if(!globalDependenciesToInstall[i].Enabled)
+                    if((!globalDependenciesToInstall[i].Enabled) || globalDependenciesToInstall[i].ZipFile.Equals(""))
                     {
                         globalDependenciesToInstall.RemoveAt(i);
                         i--;
                     }
+                    else
+                    {
+                        globalDependenciesToInstall[i].ExtractPath = globalDependenciesToInstall[i].ExtractPath.Equals("")? Utils.ReplaceMacro(@"{app}"): Utils.ReplaceMacro(globalDependenciesToInstall[i].ExtractPath);
+                    }
                 }
                 for (int i = 0; i < dependenciesToInstall.Count; i++)
                 {
-                    if (!dependenciesToInstall[i].Enabled)
+                    if ((!dependenciesToInstall[i].Enabled) || dependenciesToInstall[i].ZipFile.Equals(""))
                     {
                         dependenciesToInstall.RemoveAt(i);
                         i--;
                     }
+                    else
+                    {
+                        dependenciesToInstall[i].ExtractPath = dependenciesToInstall[i].ExtractPath.Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(dependenciesToInstall[i].ExtractPath);
+                    }
                 }
                 for (int i = 0; i < logicalDependenciesToInstall.Count; i++)
                 {
-                    if (!logicalDependenciesToInstall[i].Enabled)
+                    if ((!logicalDependenciesToInstall[i].Enabled) || logicalDependenciesToInstall[i].ZipFile.Equals(""))
                     {
                         logicalDependenciesToInstall.RemoveAt(i);
                         i--;
+                    }
+                    {
+                        logicalDependenciesToInstall[i].ExtractPath = logicalDependenciesToInstall[i].ExtractPath.Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(logicalDependenciesToInstall[i].ExtractPath);
                     }
                 }
             }
@@ -1192,41 +1231,61 @@ namespace RelhaxModpack
                 logicalDependenciesToInstall.Clear();
                 appendedDependenciesToInstall.Clear();
             }
+            //macro replacements
+
+            //reset the download counter
+            downloadCounter = -1;
+            //create the download list
             foreach (Dependency d in globalDependenciesToInstall)
             {
                 if (d.DownloadFlag)
                 {
+                    d.ReadyForInstall = false;
                     DatabasePackagesToDownload.Add(d);
                 }
+                else
+                    d.ReadyForInstall = true;
             }
             foreach (Dependency d in dependenciesToInstall)
             {
                 if (d.DownloadFlag)
                 {
+                    d.ReadyForInstall = false;
                     DatabasePackagesToDownload.Add(d);
                 }
+                else
+                    d.ReadyForInstall = true;
             }
             foreach (Dependency d in appendedDependenciesToInstall)
             {
                 if (d.DownloadFlag)
                 {
+                    d.ReadyForInstall = false;
                     DatabasePackagesToDownload.Add(d);
                 }
+                else
+                    d.ReadyForInstall = true;
             }
             foreach (LogicalDependency ld in logicalDependenciesToInstall)
             {
                 if (ld.DownloadFlag)
                 {
+                    ld.ReadyForInstall = false;
                     DatabasePackagesToDownload.Add(ld);
                 }
+                else
+                    ld.ReadyForInstall = true;
             }
             foreach (SelectableDatabasePackage dbo in modsConfigsToInstall)
             {
                 if (dbo.DownloadFlag)
                 {
                     //CRC's don't match, need to re-download
+                    dbo.ReadyForInstall = false;
                     DatabasePackagesToDownload.Add(dbo);
                 }
+                else
+                    dbo.ReadyForInstall = true;
             }
             //upadte the parrentProgressPar
             parrentProgressBar.Maximum = DatabasePackagesToDownload.Count;
@@ -1247,7 +1306,10 @@ namespace RelhaxModpack
                 if (config.Enabled && config.Checked)
                 {
                     if (!config.ZipFile.Equals(""))
+                    {
+                        config.ExtractPath = config.ExtractPath.Equals("")? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(config.ExtractPath);
                         modsConfigsToInstall.Add(config);
+                    }
 
                     //check for userdata
                     if (config.UserFiles.Count > 0)
@@ -1527,11 +1589,6 @@ namespace RelhaxModpack
                 parsedCatagoryLists = null;
                 patchList = null;
                 userMods = null;
-                if (helper != null)
-                {
-                    helper.Dispose();
-                    helper = null;
-                }
                 modsConfigsWithData = null;
                 if (Settings.FirstLoad)
                     Settings.FirstLoad = false;
@@ -1614,16 +1671,12 @@ namespace RelhaxModpack
             Control[] translationSetList = new Control[] { forceManuel, cleanInstallCB, backupModsCheckBox, cancerFontCB, saveLastInstallCB, saveUserDataCB, darkUICB,
                 installRelhaxMod, uninstallRelhaxMod, settingsGroupBox,loadingImageGroupBox, languageSelectionGB, findBugAddModLabel, formPageLink, selectionDefault, selectionLegacy, donateLabel,
                 cancelDownloadButton, fontSizeGB, expandNodesDefault, disableBordersCB, clearCacheCB, DiscordServerLink, viewAppUpdates, viewDBUpdates, disableColorsCB, clearLogFilesCB,
-                notifyIfSameDatabaseCB, ShowInstallCompleteWindowCB,  createShortcutsCB };
+                notifyIfSameDatabaseCB, ShowInstallCompleteWindowCB,  createShortcutsCB, InstantExtractionCB };
             foreach (var set in translationSetList)
             {
                 set.Text = Translations.getTranslatedString(set.Name);
             }
             viewTypeGB.Text = Translations.getTranslatedString("ModSelectionListViewSelection");
-            if (helper != null)
-            {
-                helper.helperText.Text = Translations.getTranslatedString("helperText");
-            }
             if (init)
             {
                 //apply all checkmarks
@@ -1643,6 +1696,7 @@ namespace RelhaxModpack
                 this.notifyIfSameDatabaseCB.Checked = Settings.NotifyIfSameDatabase;
                 this.ShowInstallCompleteWindowCB.Checked = Settings.ShowInstallCompleteWindow;
                 this.createShortcutsCB.Checked = Settings.CreateShortcuts;
+                this.InstantExtractionCB.Checked = Settings.InstantExtraction;
                 switch (Settings.GIF)
                 {
                     case (Settings.LoadingGifs.Standard):
@@ -1752,6 +1806,7 @@ namespace RelhaxModpack
             notifyIfSameDatabaseCB.Enabled = enableToggle;
             ShowInstallCompleteWindowCB.Enabled = enableToggle;
             createShortcutsCB.Enabled = enableToggle;
+            InstantExtractionCB.Enabled = enableToggle;
         }
 
         public void ToggleScaleRBs(bool enableToggle)
@@ -2015,6 +2070,12 @@ namespace RelhaxModpack
         {
             if (installRelhaxMod.Enabled)
                 downloadProgress.Text = Translations.getTranslatedString("CreateShortcutsCBExplanation");
+        }
+
+        private void InstantExtractionCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("InstantExtractionCBExplanation");
         }
         #endregion
 
@@ -2400,6 +2461,11 @@ namespace RelhaxModpack
         {
             Settings.CreateShortcuts = createShortcutsCB.Checked;
         }
+
+        private void InstantExtractionCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.InstantExtraction = InstantExtractionCB.Checked;
+        }
         #endregion
 
         #region Click events
@@ -2456,8 +2522,7 @@ namespace RelhaxModpack
             ToggleUIButtons(true);
         }
 
+
         #endregion
-
-
     }
 }
