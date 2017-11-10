@@ -35,6 +35,8 @@
             this.ObjectNameTB = new System.Windows.Forms.TextBox();
             this.DatabasePanelTree = new System.Windows.Forms.Panel();
             this.DatabaseEditPanel = new System.Windows.Forms.Panel();
+            this.ObjExtractPathTB = new System.Windows.Forms.TextBox();
+            this.ObjExtractPath = new System.Windows.Forms.Label();
             this.ObjectLastUpdatedLabel = new System.Windows.Forms.Label();
             this.DownloadZipfileButton = new System.Windows.Forms.Button();
             this.ObjectVersionTB = new System.Windows.Forms.TextBox();
@@ -121,8 +123,6 @@
             this.MoveButton = new System.Windows.Forms.Button();
             this.SearchBox = new System.Windows.Forms.ComboBox();
             this.ObjectUserdatasToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.ObjExtractPathTB = new System.Windows.Forms.TextBox();
-            this.ObjExtractPath = new System.Windows.Forms.Label();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.ObjectPropertiesTabControl.SuspendLayout();
@@ -203,6 +203,22 @@
             this.DatabaseEditPanel.Name = "DatabaseEditPanel";
             this.DatabaseEditPanel.Size = new System.Drawing.Size(547, 600);
             this.DatabaseEditPanel.TabIndex = 4;
+            // 
+            // ObjExtractPathTB
+            // 
+            this.ObjExtractPathTB.Location = new System.Drawing.Point(91, 184);
+            this.ObjExtractPathTB.Name = "ObjExtractPathTB";
+            this.ObjExtractPathTB.Size = new System.Drawing.Size(447, 20);
+            this.ObjExtractPathTB.TabIndex = 35;
+            // 
+            // ObjExtractPath
+            // 
+            this.ObjExtractPath.AutoSize = true;
+            this.ObjExtractPath.Location = new System.Drawing.Point(8, 187);
+            this.ObjExtractPath.Name = "ObjExtractPath";
+            this.ObjExtractPath.Size = new System.Drawing.Size(62, 13);
+            this.ObjExtractPath.TabIndex = 34;
+            this.ObjExtractPath.Text = "ExtractPath";
             // 
             // ObjectLastUpdatedLabel
             // 
@@ -567,6 +583,7 @@
             this.ObjectPicturesList.Size = new System.Drawing.Size(509, 82);
             this.ObjectPicturesList.TabIndex = 46;
             this.ObjectPicturesList.SelectedIndexChanged += new System.EventHandler(this.ObjectPicturesList_SelectedIndexChanged);
+            this.ObjectPicturesList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ObjectPicturesList_MouseDoubleClick);
             // 
             // PicturesURLLabel
             // 
@@ -1041,22 +1058,6 @@
             this.SearchBox.TabIndex = 29;
             this.SearchBox.SelectionChangeCommitted += new System.EventHandler(this.SearchBox_SelectionChangeCommitted);
             this.SearchBox.TextUpdate += new System.EventHandler(this.SearchBox_TextUpdate);
-            // 
-            // ObjExtractPathTB
-            // 
-            this.ObjExtractPathTB.Location = new System.Drawing.Point(91, 184);
-            this.ObjExtractPathTB.Name = "ObjExtractPathTB";
-            this.ObjExtractPathTB.Size = new System.Drawing.Size(447, 20);
-            this.ObjExtractPathTB.TabIndex = 35;
-            // 
-            // ObjExtractPath
-            // 
-            this.ObjExtractPath.AutoSize = true;
-            this.ObjExtractPath.Location = new System.Drawing.Point(8, 187);
-            this.ObjExtractPath.Name = "ObjExtractPath";
-            this.ObjExtractPath.Size = new System.Drawing.Size(62, 13);
-            this.ObjExtractPath.TabIndex = 34;
-            this.ObjExtractPath.Text = "ExtractPath";
             // 
             // DatabaseEditor
             // 
