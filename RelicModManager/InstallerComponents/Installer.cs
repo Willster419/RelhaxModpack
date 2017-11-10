@@ -702,8 +702,8 @@ namespace RelhaxModpack
                 }
                 //start the entry for the files log
                 fs = new FileStream(InstalledFilesLogPath, FileMode.Append, FileAccess.Write);
-                string databaseHeader = string.Format("Database Version: {0}", Settings.DatabaseVersion);
-                string dateTimeHeader = string.Format("/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now);
+                string databaseHeader = string.Format("Database Version: {0}\n", Settings.DatabaseVersion);
+                string dateTimeHeader = string.Format("/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */\n", DateTime.Now);
                 fs.Write(Encoding.UTF8.GetBytes(databaseHeader), 0, Encoding.UTF8.GetByteCount(databaseHeader));
                 fs.Write(Encoding.UTF8.GetBytes(dateTimeHeader), 0, Encoding.UTF8.GetByteCount(dateTimeHeader));
 
@@ -748,7 +748,7 @@ namespace RelhaxModpack
                                         System.Threading.Thread.Sleep(50);
                                 }
                             }
-                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), TanksLocation);
+                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath);
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -781,7 +781,7 @@ namespace RelhaxModpack
                                         System.Threading.Thread.Sleep(50);
                                 }
                             }
-                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), TanksLocation);
+                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath);
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -814,7 +814,7 @@ namespace RelhaxModpack
                                         System.Threading.Thread.Sleep(50);
                                 }
                             }
-                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), TanksLocation);
+                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath);
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -849,7 +849,7 @@ namespace RelhaxModpack
                                         System.Threading.Thread.Sleep(50);
                                 }
                             }
-                            Unzip(Path.Combine(downloadedFilesDir, dbo.ZipFile), TanksLocation);
+                            Unzip(Path.Combine(downloadedFilesDir, dbo.ZipFile), dbo.ExtractPath);
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -882,7 +882,7 @@ namespace RelhaxModpack
                                         System.Threading.Thread.Sleep(50);
                                 }
                             }
-                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), TanksLocation);
+                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath);
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -2170,7 +2170,7 @@ namespace RelhaxModpack
         //main unzip worker method
         private void Unzip(string zipFile, string extractFolder)
         {
-            string zipFileHeader = string.Format(@"/*  {0}  */", Path.GetFileNameWithoutExtension(zipFile));
+            string zipFileHeader = string.Format(@"/*  {0}  */\n", Path.GetFileNameWithoutExtension(zipFile));
             fs.Write(Encoding.UTF8.GetBytes(zipFileHeader), 0, Encoding.UTF8.GetByteCount(zipFileHeader));
             try
             {

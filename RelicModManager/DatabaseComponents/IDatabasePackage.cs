@@ -12,6 +12,8 @@
      * EndAddress (the end address of the url)
      * Size (the size of the file)
      * DownloadFlag (an internal logic property used to determine at install time if the package needs to be downloaded)
+     * ReadyForInstall (a bool to determine if the mod has been downloaded and is ready for installation)
+     * ExtractPath (saves the extraction path for where the zip file should be extracted to)
      */
     public interface IDatabasePackage
     {
@@ -24,5 +26,6 @@
         string EndAddress { get; set; }
         bool DownloadFlag { get; set; }
         bool ReadyForInstall { get; set; }
+        string ExtractPath { get; set; }
     }
 }

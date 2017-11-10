@@ -100,7 +100,8 @@ namespace RelhaxModpack
                 //add the global dependencies
                 foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency"))
                 {
-                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction", "packageName", "devURL", "timestamp", "shortCuts" };
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled",
+                        "appendExtraction", "packageName", "devURL", "timestamp", "shortCuts", "extractPath" };
                     Dependency d = new Dependency();
                     d.PackageName = "";
                     foreach (XElement globs in dependencyNode.Elements())
@@ -125,6 +126,9 @@ namespace RelhaxModpack
                                 break;
                             case "devURL":
                                 d.DevURL = globs.Value;
+                                break;
+                            case "extractPath":
+                                d.ExtractPath = globs.Value;
                                 break;
                             case "dependencyenabled":
                                 d.Enabled = Utils.ParseBool(globs.Value, false);
@@ -185,7 +189,8 @@ namespace RelhaxModpack
                 //add the dependencies
                 foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/dependencies/dependency"))
                 {
-                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction", "packageName", "logicalDependencies", "devURL", "timestamp", "shortCuts" };
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction",
+                        "packageName", "logicalDependencies", "devURL", "timestamp", "shortCuts", "extractPath" };
                     Dependency d = new Dependency();
                     d.PackageName = "";
                     foreach (XElement globs in dependencyNode.Elements())
@@ -210,6 +215,9 @@ namespace RelhaxModpack
                                 break;
                             case "devURL":
                                 d.DevURL = globs.Value;
+                                break;
+                            case "extractPath":
+                                d.ExtractPath = globs.Value;
                                 break;
                             case "dependencyenabled":
                                 d.Enabled = Utils.ParseBool(globs.Value, false);
@@ -307,7 +315,7 @@ namespace RelhaxModpack
                 //add the logicalDependencies (TODO)
                 foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/logicalDependencies/logicalDependency"))
                 {
-                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName", "devURL", "timestamp" };
+                    string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName", "devURL", "timestamp", "extractPath" };
                     LogicalDependency d = new LogicalDependency();
                     d.PackageName = "";
                     foreach (XElement globs in dependencyNode.Elements())
@@ -332,6 +340,9 @@ namespace RelhaxModpack
                                 break;
                             case "devURL":
                                 d.DevURL = globs.Value;
+                                break;
+                            case "extractPath":
+                                d.ExtractPath = globs.Value;
                                 break;
                             case "dependencyenabled":
                                 d.Enabled = Utils.ParseBool(globs.Value, false);
@@ -407,7 +418,9 @@ namespace RelhaxModpack
                                     switch (modHolder.Name.ToString())
                                     {
                                         case "mod":
-                                            string[] modNodeList = new string[] { "name", "version", "zipFile", "timestamp", "startAddress", "endAddress", "crc", "enabled", "visible", "packageName", "size", "description", "updateComment", "devURL", "userDatas", "pictures", "dependencies", "logicalDependencies", "configs" };
+                                            string[] modNodeList = new string[] { "name", "version", "zipFile", "timestamp", "startAddress", "endAddress", "crc", "enabled",
+                                                "visible", "packageName", "size", "description", "updateComment", "devURL", "userDatas", "pictures", "dependencies",
+                                                "logicalDependencies", "configs", "extractPath" };
                                             Mod m = new Mod();
                                             m.PackageName = "";
                                             foreach (XElement modNode in modHolder.Elements())
@@ -463,6 +476,9 @@ namespace RelhaxModpack
                                                         break;
                                                     case "devURL":
                                                         m.DevURL = modNode.Value;
+                                                        break;
+                                                    case "extractPath":
+                                                        m.ExtractPath = modNode.Value;
                                                         break;
                                                     case "userDatas":
                                                         foreach (XElement userDataNode in modNode.Elements())
@@ -719,7 +735,9 @@ namespace RelhaxModpack
                     switch (configHolder.Name.ToString())
                     {
                         case "config":
-                            string[] confNodeList = new string[] { "name", "version", "zipFile", "timestamp", "startAddress", "endAddress", "crc", "enabled", "visible", "packageName", "size", "updateComment", "description", "devURL", "type", "configs", "userDatas", "pictures", "dependencies", "logicalDependencies" };
+                            string[] confNodeList = new string[] { "name", "version", "zipFile", "timestamp", "startAddress", "endAddress", "crc",
+                                "enabled", "visible", "packageName", "size", "updateComment", "description", "devURL", "type", "configs", "userDatas",
+                                "pictures", "dependencies", "logicalDependencies", "extractPath" };
                             Config c = new Config();
                             c.PackageName = "";
                             foreach (XElement configNode in configHolder.Elements())
@@ -773,6 +791,9 @@ namespace RelhaxModpack
                                         break;
                                     case "devURL":
                                         c.DevURL = configNode.Value;
+                                        break;
+                                    case "extractPath":
+                                        c.ExtractPath = configNode.Value;
                                         break;
                                     case "type":
                                         c.Type = configNode.Value;
@@ -1692,6 +1713,10 @@ namespace RelhaxModpack
                 if (!d.DevURL.Trim().Equals(""))
                     globalDepURL.InnerText = d.DevURL.Trim();
                 globalDependencyRoot.AppendChild(globalDepURL);
+                XmlElement globalDepExtractPath = doc.CreateElement("extractPath");
+                if (!d.ExtractPath.Trim().Equals(""))
+                    globalDepExtractPath.InnerText = d.ExtractPath.Trim();
+                globalDependencyRoot.AppendChild(globalDepExtractPath);
                 XmlElement globalDepCRC = doc.CreateElement("dependencyZipCRC");
                 if (!d.CRC.Trim().Equals(""))
                     globalDepCRC.InnerText = d.CRC.Trim();
@@ -1760,6 +1785,10 @@ namespace RelhaxModpack
                 if (!d.DevURL.Trim().Equals(""))
                     depdevURL.InnerText = d.DevURL.Trim();
                 dependencyRoot.AppendChild(depdevURL);
+                XmlElement depExtractPath = doc.CreateElement("extractPath");
+                if (!d.ExtractPath.Trim().Equals(""))
+                    depExtractPath.InnerText = d.ExtractPath.Trim();
+                dependencyRoot.AppendChild(depExtractPath);
                 XmlElement depCRC = doc.CreateElement("dependencyZipCRC");
                 if (!d.CRC.Trim().Equals(""))
                     depCRC.InnerText = d.CRC.Trim();
@@ -1846,6 +1875,10 @@ namespace RelhaxModpack
                 if (!d.DevURL.Trim().Equals(""))
                     logicalDepdevURL.InnerText = d.DevURL.Trim();
                 logicalDependencyRoot.AppendChild(logicalDepdevURL);
+                XmlElement logicalDepExtractPath = doc.CreateElement("extractPath");
+                if (!d.ExtractPath.Trim().Equals(""))
+                    logicalDepExtractPath.InnerText = d.ExtractPath.Trim();
+                logicalDependencyRoot.AppendChild(logicalDepExtractPath);
                 XmlElement logicalDepCRC = doc.CreateElement("dependencyZipCRC");
                 if (!d.CRC.Trim().Equals(""))
                     logicalDepCRC.InnerText = d.CRC.Trim();
@@ -1974,6 +2007,10 @@ namespace RelhaxModpack
                     if (!m.DevURL.Trim().Equals(""))
                         modDevURL.InnerText = m.DevURL.Trim();
                     modRoot.AppendChild(modDevURL);
+                    XmlElement modExtractPath = doc.CreateElement("extractPath");
+                    if (!m.ExtractPath.Trim().Equals(""))
+                        modExtractPath.InnerText = m.ExtractPath.Trim();
+                    modRoot.AppendChild(modExtractPath);
                     //datas for the mods
                     XmlElement modDatas = doc.CreateElement("userDatas");
                     foreach (string s in m.UserFiles)
@@ -2145,6 +2182,10 @@ namespace RelhaxModpack
                 if (!cc.DevURL.Trim().Equals(""))
                     configDevURL.InnerText = cc.DevURL.Trim();
                 configRoot.AppendChild(configDevURL);
+                XmlElement configExtractPath = doc.CreateElement("extractPath");
+                if (!cc.ExtractPath.Trim().Equals(""))
+                    configExtractPath.InnerText = cc.ExtractPath.Trim();
+                configRoot.AppendChild(configExtractPath);
                 XmlElement configType = doc.CreateElement("type");
                 if (!cc.Type.ToString().Trim().Equals(""))
                     configType.InnerText = cc.Type;

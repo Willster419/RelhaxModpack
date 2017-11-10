@@ -322,9 +322,9 @@ namespace RelhaxModpack
                 //parse the database version
                 var databaseVersion = doc.XPathSelectElement("//version/database");
                 DatabaseVersionLabel.Text = "Latest Database v" + databaseVersion.Value;
+                Settings.DatabaseVersion = databaseVersion.Value;
                 //parse the manager version
-
-                //var applicationVersion = doc.XPathSelectElement("//version/database");
+                
                 var applicationVersion = Program.betaApplication ? doc.XPathSelectElement("//version/manager_beta") : doc.XPathSelectElement("//version/manager");
                 version = applicationVersion.Value;
                 Utils.AppendToLog(string.Format("Local application is {0}, current online is {1}", managerVersion(), version));
@@ -926,7 +926,10 @@ namespace RelhaxModpack
                             //move each mod that is enalbed and checked to a new list of mods to install
                             //also check that it actually has a zip file
                             if (!m.ZipFile.Equals(""))
+                            {
+                                m.ExtractPath = m.ExtractPath.Equals("")? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(m.ExtractPath);
                                 modsConfigsToInstall.Add(m);
+                            }
 
                             //since it is checked, regardless if it has a zipfile, check if it has userdata
                             if (m.UserFiles.Count > 0)
@@ -1060,31 +1063,43 @@ namespace RelhaxModpack
                 Utils.ExceptionLog("installRelhaxMod_Click", "now each logical dependency has a complete list of every dependency ...", ex);
             }
 
-            //verify that all global dependencies, depdnencies, and logicalDependencies are actually Enabled
+            //verify that all global dependencies, depdnencies, and logicalDependencies are actually Enabled and have valid zip files
+            //if they don't, remove them. if they do, macro the ExtractPath
             try
             {
                 for(int i = 0; i < globalDependenciesToInstall.Count; i++)
                 {
-                    if(!globalDependenciesToInstall[i].Enabled)
+                    if((!globalDependenciesToInstall[i].Enabled) || globalDependenciesToInstall[i].ZipFile.Equals(""))
                     {
                         globalDependenciesToInstall.RemoveAt(i);
                         i--;
                     }
+                    else
+                    {
+                        globalDependenciesToInstall[i].ExtractPath = globalDependenciesToInstall[i].ExtractPath.Equals("")? Utils.ReplaceMacro(@"{app}"): Utils.ReplaceMacro(globalDependenciesToInstall[i].ExtractPath);
+                    }
                 }
                 for (int i = 0; i < dependenciesToInstall.Count; i++)
                 {
-                    if (!dependenciesToInstall[i].Enabled)
+                    if ((!dependenciesToInstall[i].Enabled) || dependenciesToInstall[i].ZipFile.Equals(""))
                     {
                         dependenciesToInstall.RemoveAt(i);
                         i--;
                     }
+                    else
+                    {
+                        dependenciesToInstall[i].ExtractPath = dependenciesToInstall[i].ExtractPath.Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(dependenciesToInstall[i].ExtractPath);
+                    }
                 }
                 for (int i = 0; i < logicalDependenciesToInstall.Count; i++)
                 {
-                    if (!logicalDependenciesToInstall[i].Enabled)
+                    if ((!logicalDependenciesToInstall[i].Enabled) || logicalDependenciesToInstall[i].ZipFile.Equals(""))
                     {
                         logicalDependenciesToInstall.RemoveAt(i);
                         i--;
+                    }
+                    {
+                        logicalDependenciesToInstall[i].ExtractPath = logicalDependenciesToInstall[i].ExtractPath.Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(logicalDependenciesToInstall[i].ExtractPath);
                     }
                 }
             }
@@ -1216,6 +1231,8 @@ namespace RelhaxModpack
                 logicalDependenciesToInstall.Clear();
                 appendedDependenciesToInstall.Clear();
             }
+            //macro replacements
+
             //reset the download counter
             downloadCounter = -1;
             //create the download list
@@ -1289,7 +1306,10 @@ namespace RelhaxModpack
                 if (config.Enabled && config.Checked)
                 {
                     if (!config.ZipFile.Equals(""))
+                    {
+                        config.ExtractPath = config.ExtractPath.Equals("")? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(config.ExtractPath);
                         modsConfigsToInstall.Add(config);
+                    }
 
                     //check for userdata
                     if (config.UserFiles.Count > 0)

@@ -121,6 +121,8 @@
             this.MoveButton = new System.Windows.Forms.Button();
             this.SearchBox = new System.Windows.Forms.ComboBox();
             this.ObjectUserdatasToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.ObjExtractPathTB = new System.Windows.Forms.TextBox();
+            this.ObjExtractPath = new System.Windows.Forms.Label();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.ObjectPropertiesTabControl.SuspendLayout();
@@ -172,6 +174,8 @@
             // DatabaseEditPanel
             // 
             this.DatabaseEditPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.DatabaseEditPanel.Controls.Add(this.ObjExtractPathTB);
+            this.DatabaseEditPanel.Controls.Add(this.ObjExtractPath);
             this.DatabaseEditPanel.Controls.Add(this.ObjectLastUpdatedLabel);
             this.DatabaseEditPanel.Controls.Add(this.DownloadZipfileButton);
             this.DatabaseEditPanel.Controls.Add(this.ObjectVersionTB);
@@ -212,7 +216,7 @@
             // DownloadZipfileButton
             // 
             this.DownloadZipfileButton.Enabled = false;
-            this.DownloadZipfileButton.Location = new System.Drawing.Point(202, 209);
+            this.DownloadZipfileButton.Location = new System.Drawing.Point(202, 235);
             this.DownloadZipfileButton.Name = "DownloadZipfileButton";
             this.DownloadZipfileButton.Size = new System.Drawing.Size(83, 27);
             this.DownloadZipfileButton.TabIndex = 32;
@@ -243,10 +247,10 @@
             this.ObjectPropertiesTabControl.Controls.Add(this.PictureTabPage);
             this.ObjectPropertiesTabControl.Controls.Add(this.UserDatasTabPage);
             this.ObjectPropertiesTabControl.Controls.Add(this.ShortCutTabPage);
-            this.ObjectPropertiesTabControl.Location = new System.Drawing.Point(3, 238);
+            this.ObjectPropertiesTabControl.Location = new System.Drawing.Point(3, 268);
             this.ObjectPropertiesTabControl.Name = "ObjectPropertiesTabControl";
             this.ObjectPropertiesTabControl.SelectedIndex = 0;
-            this.ObjectPropertiesTabControl.Size = new System.Drawing.Size(539, 357);
+            this.ObjectPropertiesTabControl.Size = new System.Drawing.Size(539, 327);
             this.ObjectPropertiesTabControl.TabIndex = 29;
             // 
             // DescriptionTabPage
@@ -258,7 +262,7 @@
             this.DescriptionTabPage.Location = new System.Drawing.Point(4, 22);
             this.DescriptionTabPage.Name = "DescriptionTabPage";
             this.DescriptionTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.DescriptionTabPage.Size = new System.Drawing.Size(531, 331);
+            this.DescriptionTabPage.Size = new System.Drawing.Size(531, 301);
             this.DescriptionTabPage.TabIndex = 1;
             this.DescriptionTabPage.Text = "Description";
             this.DescriptionTabPage.UseVisualStyleBackColor = true;
@@ -276,13 +280,13 @@
             // 
             this.ObjectDescTB.Location = new System.Drawing.Point(6, 19);
             this.ObjectDescTB.Name = "ObjectDescTB";
-            this.ObjectDescTB.Size = new System.Drawing.Size(519, 198);
+            this.ObjectDescTB.Size = new System.Drawing.Size(519, 164);
             this.ObjectDescTB.TabIndex = 16;
             this.ObjectDescTB.Text = "";
             // 
             // ObjectUpdateNotesTB
             // 
-            this.ObjectUpdateNotesTB.Location = new System.Drawing.Point(4, 236);
+            this.ObjectUpdateNotesTB.Location = new System.Drawing.Point(6, 206);
             this.ObjectUpdateNotesTB.Name = "ObjectUpdateNotesTB";
             this.ObjectUpdateNotesTB.Size = new System.Drawing.Size(521, 89);
             this.ObjectUpdateNotesTB.TabIndex = 17;
@@ -291,7 +295,7 @@
             // ObjectUpdateNotes
             // 
             this.ObjectUpdateNotes.AutoSize = true;
-            this.ObjectUpdateNotes.Location = new System.Drawing.Point(3, 220);
+            this.ObjectUpdateNotes.Location = new System.Drawing.Point(5, 190);
             this.ObjectUpdateNotes.Name = "ObjectUpdateNotes";
             this.ObjectUpdateNotes.Size = new System.Drawing.Size(91, 13);
             this.ObjectUpdateNotes.TabIndex = 19;
@@ -304,7 +308,7 @@
             this.DependenciesTabPage.Location = new System.Drawing.Point(4, 22);
             this.DependenciesTabPage.Name = "DependenciesTabPage";
             this.DependenciesTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.DependenciesTabPage.Size = new System.Drawing.Size(531, 331);
+            this.DependenciesTabPage.Size = new System.Drawing.Size(531, 301);
             this.DependenciesTabPage.TabIndex = 2;
             this.DependenciesTabPage.Text = "Dependencies";
             this.DependenciesTabPage.UseVisualStyleBackColor = true;
@@ -319,14 +323,14 @@
             this.LogicalDependencyPanel.Controls.Add(this.LogicalDependencyPackageNameLabel);
             this.LogicalDependencyPanel.Controls.Add(this.LogicalDependnecyNegateFlagCB);
             this.LogicalDependencyPanel.Controls.Add(this.ObjectLogicalDependenciesList);
-            this.LogicalDependencyPanel.Location = new System.Drawing.Point(6, 175);
+            this.LogicalDependencyPanel.Location = new System.Drawing.Point(6, 162);
             this.LogicalDependencyPanel.Name = "LogicalDependencyPanel";
-            this.LogicalDependencyPanel.Size = new System.Drawing.Size(519, 150);
+            this.LogicalDependencyPanel.Size = new System.Drawing.Size(519, 136);
             this.LogicalDependencyPanel.TabIndex = 28;
             // 
             // AddLogicalDependencyButton
             // 
-            this.AddLogicalDependencyButton.Location = new System.Drawing.Point(401, 124);
+            this.AddLogicalDependencyButton.Location = new System.Drawing.Point(401, 109);
             this.AddLogicalDependencyButton.Name = "AddLogicalDependencyButton";
             this.AddLogicalDependencyButton.Size = new System.Drawing.Size(48, 23);
             this.AddLogicalDependencyButton.TabIndex = 40;
@@ -337,7 +341,7 @@
             // CurrentLogicalDependenciesCB
             // 
             this.CurrentLogicalDependenciesCB.FormattingEnabled = true;
-            this.CurrentLogicalDependenciesCB.Location = new System.Drawing.Point(3, 97);
+            this.CurrentLogicalDependenciesCB.Location = new System.Drawing.Point(3, 84);
             this.CurrentLogicalDependenciesCB.Name = "CurrentLogicalDependenciesCB";
             this.CurrentLogicalDependenciesCB.Size = new System.Drawing.Size(511, 21);
             this.CurrentLogicalDependenciesCB.TabIndex = 39;
@@ -353,7 +357,7 @@
             // 
             // RemoveLogicalDependencyButton
             // 
-            this.RemoveLogicalDependencyButton.Location = new System.Drawing.Point(455, 124);
+            this.RemoveLogicalDependencyButton.Location = new System.Drawing.Point(455, 109);
             this.RemoveLogicalDependencyButton.Name = "RemoveLogicalDependencyButton";
             this.RemoveLogicalDependencyButton.Size = new System.Drawing.Size(59, 23);
             this.RemoveLogicalDependencyButton.TabIndex = 38;
@@ -364,16 +368,16 @@
             // LogicalDependencyPackageNameLabel
             // 
             this.LogicalDependencyPackageNameLabel.AutoSize = true;
-            this.LogicalDependencyPackageNameLabel.Location = new System.Drawing.Point(3, 79);
+            this.LogicalDependencyPackageNameLabel.Location = new System.Drawing.Point(3, 66);
             this.LogicalDependencyPackageNameLabel.Name = "LogicalDependencyPackageNameLabel";
-            this.LogicalDependencyPackageNameLabel.Size = new System.Drawing.Size(77, 13);
+            this.LogicalDependencyPackageNameLabel.Size = new System.Drawing.Size(78, 13);
             this.LogicalDependencyPackageNameLabel.TabIndex = 28;
             this.LogicalDependencyPackageNameLabel.Text = "PackageName";
             // 
             // LogicalDependnecyNegateFlagCB
             // 
             this.LogicalDependnecyNegateFlagCB.AutoSize = true;
-            this.LogicalDependnecyNegateFlagCB.Location = new System.Drawing.Point(314, 128);
+            this.LogicalDependnecyNegateFlagCB.Location = new System.Drawing.Point(314, 113);
             this.LogicalDependnecyNegateFlagCB.Name = "LogicalDependnecyNegateFlagCB";
             this.LogicalDependnecyNegateFlagCB.Size = new System.Drawing.Size(81, 17);
             this.LogicalDependnecyNegateFlagCB.TabIndex = 34;
@@ -386,7 +390,7 @@
             this.ObjectLogicalDependenciesList.FormattingEnabled = true;
             this.ObjectLogicalDependenciesList.Location = new System.Drawing.Point(3, 20);
             this.ObjectLogicalDependenciesList.Name = "ObjectLogicalDependenciesList";
-            this.ObjectLogicalDependenciesList.Size = new System.Drawing.Size(511, 56);
+            this.ObjectLogicalDependenciesList.Size = new System.Drawing.Size(511, 43);
             this.ObjectLogicalDependenciesList.TabIndex = 26;
             this.ObjectLogicalDependenciesList.SelectedIndexChanged += new System.EventHandler(this.ObjectLogicalDependenciesList_SelectedIndexChanged);
             this.ObjectLogicalDependenciesList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ObjectLogicalDependenciesList_MouseDoubleClick);
@@ -402,12 +406,12 @@
             this.DependencyPanel.Controls.Add(this.DependencyPackageNameLabel);
             this.DependencyPanel.Location = new System.Drawing.Point(6, 6);
             this.DependencyPanel.Name = "DependencyPanel";
-            this.DependencyPanel.Size = new System.Drawing.Size(519, 163);
+            this.DependencyPanel.Size = new System.Drawing.Size(519, 150);
             this.DependencyPanel.TabIndex = 28;
             // 
             // AddDependencyButton
             // 
-            this.AddDependencyButton.Location = new System.Drawing.Point(401, 133);
+            this.AddDependencyButton.Location = new System.Drawing.Point(401, 120);
             this.AddDependencyButton.Name = "AddDependencyButton";
             this.AddDependencyButton.Size = new System.Drawing.Size(48, 23);
             this.AddDependencyButton.TabIndex = 39;
@@ -418,7 +422,7 @@
             // CurrentDependenciesCB
             // 
             this.CurrentDependenciesCB.FormattingEnabled = true;
-            this.CurrentDependenciesCB.Location = new System.Drawing.Point(3, 106);
+            this.CurrentDependenciesCB.Location = new System.Drawing.Point(3, 93);
             this.CurrentDependenciesCB.Name = "CurrentDependenciesCB";
             this.CurrentDependenciesCB.Size = new System.Drawing.Size(511, 21);
             this.CurrentDependenciesCB.TabIndex = 38;
@@ -428,7 +432,7 @@
             this.ObjectDependenciesList.FormattingEnabled = true;
             this.ObjectDependenciesList.Location = new System.Drawing.Point(3, 18);
             this.ObjectDependenciesList.Name = "ObjectDependenciesList";
-            this.ObjectDependenciesList.Size = new System.Drawing.Size(511, 69);
+            this.ObjectDependenciesList.Size = new System.Drawing.Size(511, 56);
             this.ObjectDependenciesList.TabIndex = 23;
             this.ObjectDependenciesList.SelectedIndexChanged += new System.EventHandler(this.ObjectDependenciesList_SelectedIndexChanged);
             this.ObjectDependenciesList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ObjectDependenciesList_MouseDoubleClick);
@@ -444,7 +448,7 @@
             // 
             // RemoveDependencyButton
             // 
-            this.RemoveDependencyButton.Location = new System.Drawing.Point(455, 133);
+            this.RemoveDependencyButton.Location = new System.Drawing.Point(455, 120);
             this.RemoveDependencyButton.Name = "RemoveDependencyButton";
             this.RemoveDependencyButton.Size = new System.Drawing.Size(59, 23);
             this.RemoveDependencyButton.TabIndex = 37;
@@ -455,9 +459,9 @@
             // DependencyPackageNameLabel
             // 
             this.DependencyPackageNameLabel.AutoSize = true;
-            this.DependencyPackageNameLabel.Location = new System.Drawing.Point(3, 90);
+            this.DependencyPackageNameLabel.Location = new System.Drawing.Point(3, 77);
             this.DependencyPackageNameLabel.Name = "DependencyPackageNameLabel";
-            this.DependencyPackageNameLabel.Size = new System.Drawing.Size(77, 13);
+            this.DependencyPackageNameLabel.Size = new System.Drawing.Size(78, 13);
             this.DependencyPackageNameLabel.TabIndex = 35;
             this.DependencyPackageNameLabel.Text = "PackageName";
             // 
@@ -478,28 +482,28 @@
             this.PictureTabPage.Location = new System.Drawing.Point(4, 22);
             this.PictureTabPage.Name = "PictureTabPage";
             this.PictureTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.PictureTabPage.Size = new System.Drawing.Size(531, 331);
+            this.PictureTabPage.Size = new System.Drawing.Size(531, 301);
             this.PictureTabPage.TabIndex = 3;
             this.PictureTabPage.Text = "Pictures";
             this.PictureTabPage.UseVisualStyleBackColor = true;
             // 
             // AddPictureTB
             // 
-            this.AddPictureTB.Location = new System.Drawing.Point(111, 294);
+            this.AddPictureTB.Location = new System.Drawing.Point(111, 266);
             this.AddPictureTB.Name = "AddPictureTB";
             this.AddPictureTB.Size = new System.Drawing.Size(31, 20);
             this.AddPictureTB.TabIndex = 56;
             // 
             // MovePictureTB
             // 
-            this.MovePictureTB.Location = new System.Drawing.Point(246, 291);
+            this.MovePictureTB.Location = new System.Drawing.Point(246, 266);
             this.MovePictureTB.Name = "MovePictureTB";
             this.MovePictureTB.Size = new System.Drawing.Size(31, 20);
             this.MovePictureTB.TabIndex = 55;
             // 
             // AddPictureButton
             // 
-            this.AddPictureButton.Location = new System.Drawing.Point(13, 284);
+            this.AddPictureButton.Location = new System.Drawing.Point(13, 256);
             this.AddPictureButton.Name = "AddPictureButton";
             this.AddPictureButton.Size = new System.Drawing.Size(92, 39);
             this.AddPictureButton.TabIndex = 54;
@@ -509,7 +513,7 @@
             // 
             // ApplyPictureEditButton
             // 
-            this.ApplyPictureEditButton.Location = new System.Drawing.Point(455, 282);
+            this.ApplyPictureEditButton.Location = new System.Drawing.Point(457, 256);
             this.ApplyPictureEditButton.Name = "ApplyPictureEditButton";
             this.ApplyPictureEditButton.Size = new System.Drawing.Size(64, 23);
             this.ApplyPictureEditButton.TabIndex = 53;
@@ -519,7 +523,7 @@
             // 
             // RemovePictureButton
             // 
-            this.RemovePictureButton.Location = new System.Drawing.Point(385, 282);
+            this.RemovePictureButton.Location = new System.Drawing.Point(385, 256);
             this.RemovePictureButton.Name = "RemovePictureButton";
             this.RemovePictureButton.Size = new System.Drawing.Size(64, 23);
             this.RemovePictureButton.TabIndex = 52;
@@ -529,7 +533,7 @@
             // 
             // MovePictureButton
             // 
-            this.MovePictureButton.Location = new System.Drawing.Point(148, 282);
+            this.MovePictureButton.Location = new System.Drawing.Point(148, 255);
             this.MovePictureButton.Name = "MovePictureButton";
             this.MovePictureButton.Size = new System.Drawing.Size(92, 41);
             this.MovePictureButton.TabIndex = 51;
@@ -551,7 +555,7 @@
             this.PictureURLTB.DetectUrls = false;
             this.PictureURLTB.Location = new System.Drawing.Point(13, 156);
             this.PictureURLTB.Name = "PictureURLTB";
-            this.PictureURLTB.Size = new System.Drawing.Size(508, 120);
+            this.PictureURLTB.Size = new System.Drawing.Size(508, 94);
             this.PictureURLTB.TabIndex = 50;
             this.PictureURLTB.Text = "";
             // 
@@ -605,7 +609,7 @@
             this.UserDatasTabPage.Location = new System.Drawing.Point(4, 22);
             this.UserDatasTabPage.Name = "UserDatasTabPage";
             this.UserDatasTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.UserDatasTabPage.Size = new System.Drawing.Size(531, 331);
+            this.UserDatasTabPage.Size = new System.Drawing.Size(531, 301);
             this.UserDatasTabPage.TabIndex = 4;
             this.UserDatasTabPage.Text = "Userdatas";
             this.UserDatasTabPage.UseVisualStyleBackColor = true;
@@ -682,7 +686,7 @@
             this.ShortCutTabPage.Location = new System.Drawing.Point(4, 22);
             this.ShortCutTabPage.Name = "ShortCutTabPage";
             this.ShortCutTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.ShortCutTabPage.Size = new System.Drawing.Size(531, 331);
+            this.ShortCutTabPage.Size = new System.Drawing.Size(531, 301);
             this.ShortCutTabPage.TabIndex = 5;
             this.ShortCutTabPage.Text = "Shortcuts";
             this.ShortCutTabPage.UseVisualStyleBackColor = true;
@@ -740,7 +744,7 @@
             this.ObjectShortcutCB.AutoSize = true;
             this.ObjectShortcutCB.Location = new System.Drawing.Point(456, 123);
             this.ObjectShortcutCB.Name = "ObjectShortcutCB";
-            this.ObjectShortcutCB.Size = new System.Drawing.Size(64, 17);
+            this.ObjectShortcutCB.Size = new System.Drawing.Size(65, 17);
             this.ObjectShortcutCB.TabIndex = 50;
             this.ObjectShortcutCB.Text = "Enabled";
             this.ObjectShortcutCB.UseVisualStyleBackColor = true;
@@ -781,7 +785,7 @@
             // ObjectAppendExtractionCB
             // 
             this.ObjectAppendExtractionCB.AutoSize = true;
-            this.ObjectAppendExtractionCB.Location = new System.Drawing.Point(243, 186);
+            this.ObjectAppendExtractionCB.Location = new System.Drawing.Point(243, 212);
             this.ObjectAppendExtractionCB.Name = "ObjectAppendExtractionCB";
             this.ObjectAppendExtractionCB.Size = new System.Drawing.Size(109, 17);
             this.ObjectAppendExtractionCB.TabIndex = 25;
@@ -791,7 +795,7 @@
             // ObjectVisibleCheckBox
             // 
             this.ObjectVisibleCheckBox.AutoSize = true;
-            this.ObjectVisibleCheckBox.Location = new System.Drawing.Point(358, 186);
+            this.ObjectVisibleCheckBox.Location = new System.Drawing.Point(358, 212);
             this.ObjectVisibleCheckBox.Name = "ObjectVisibleCheckBox";
             this.ObjectVisibleCheckBox.Size = new System.Drawing.Size(55, 17);
             this.ObjectVisibleCheckBox.TabIndex = 23;
@@ -807,7 +811,7 @@
             "single_dropDown1",
             "single_dropDown2",
             "multi"});
-            this.ObjectTypeComboBox.Location = new System.Drawing.Point(91, 184);
+            this.ObjectTypeComboBox.Location = new System.Drawing.Point(91, 210);
             this.ObjectTypeComboBox.Name = "ObjectTypeComboBox";
             this.ObjectTypeComboBox.Size = new System.Drawing.Size(146, 21);
             this.ObjectTypeComboBox.TabIndex = 21;
@@ -815,7 +819,7 @@
             // ObjectType
             // 
             this.ObjectType.AutoSize = true;
-            this.ObjectType.Location = new System.Drawing.Point(8, 187);
+            this.ObjectType.Location = new System.Drawing.Point(8, 213);
             this.ObjectType.Name = "ObjectType";
             this.ObjectType.Size = new System.Drawing.Size(27, 13);
             this.ObjectType.TabIndex = 20;
@@ -840,7 +844,7 @@
             // 
             // ApplyChangesButton
             // 
-            this.ApplyChangesButton.Location = new System.Drawing.Point(291, 209);
+            this.ApplyChangesButton.Location = new System.Drawing.Point(291, 235);
             this.ApplyChangesButton.Name = "ApplyChangesButton";
             this.ApplyChangesButton.Size = new System.Drawing.Size(244, 27);
             this.ApplyChangesButton.TabIndex = 13;
@@ -851,9 +855,9 @@
             // ObjectEnabledCheckBox
             // 
             this.ObjectEnabledCheckBox.AutoSize = true;
-            this.ObjectEnabledCheckBox.Location = new System.Drawing.Point(423, 186);
+            this.ObjectEnabledCheckBox.Location = new System.Drawing.Point(423, 212);
             this.ObjectEnabledCheckBox.Name = "ObjectEnabledCheckBox";
-            this.ObjectEnabledCheckBox.Size = new System.Drawing.Size(64, 17);
+            this.ObjectEnabledCheckBox.Size = new System.Drawing.Size(65, 17);
             this.ObjectEnabledCheckBox.TabIndex = 12;
             this.ObjectEnabledCheckBox.Text = "Enabled";
             this.ObjectEnabledCheckBox.UseVisualStyleBackColor = true;
@@ -918,7 +922,7 @@
             this.ObjectPackageName.AutoSize = true;
             this.ObjectPackageName.Location = new System.Drawing.Point(8, 32);
             this.ObjectPackageName.Name = "ObjectPackageName";
-            this.ObjectPackageName.Size = new System.Drawing.Size(77, 13);
+            this.ObjectPackageName.Size = new System.Drawing.Size(78, 13);
             this.ObjectPackageName.TabIndex = 3;
             this.ObjectPackageName.Text = "PackageName";
             // 
@@ -1037,6 +1041,22 @@
             this.SearchBox.TabIndex = 29;
             this.SearchBox.SelectionChangeCommitted += new System.EventHandler(this.SearchBox_SelectionChangeCommitted);
             this.SearchBox.TextUpdate += new System.EventHandler(this.SearchBox_TextUpdate);
+            // 
+            // ObjExtractPathTB
+            // 
+            this.ObjExtractPathTB.Location = new System.Drawing.Point(91, 184);
+            this.ObjExtractPathTB.Name = "ObjExtractPathTB";
+            this.ObjExtractPathTB.Size = new System.Drawing.Size(447, 20);
+            this.ObjExtractPathTB.TabIndex = 35;
+            // 
+            // ObjExtractPath
+            // 
+            this.ObjExtractPath.AutoSize = true;
+            this.ObjExtractPath.Location = new System.Drawing.Point(8, 187);
+            this.ObjExtractPath.Name = "ObjExtractPath";
+            this.ObjExtractPath.Size = new System.Drawing.Size(62, 13);
+            this.ObjExtractPath.TabIndex = 34;
+            this.ObjExtractPath.Text = "ExtractPath";
             // 
             // DatabaseEditor
             // 
@@ -1177,5 +1197,7 @@
         private System.Windows.Forms.TextBox ObjectShortcutNameTB;
         private System.Windows.Forms.TextBox ObjectShortcutTB;
         private System.Windows.Forms.Label ObjectShortCutsNameLabel;
+        private System.Windows.Forms.TextBox ObjExtractPathTB;
+        private System.Windows.Forms.Label ObjExtractPath;
     }
 }
