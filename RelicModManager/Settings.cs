@@ -49,6 +49,7 @@ namespace RelhaxModpack
         public static string TanksLocation = "";
         public static string TanksVersion = "";
         public static string TanksOnlineFolderVersion = "";
+        public static string RelhaxTempFolder = Path.Combine(Application.StartupPath, "RelHaxTemp");
         //needed to create to first line to installedRelhaxFiles.log
         public static string DatabaseVersion = "";
         //

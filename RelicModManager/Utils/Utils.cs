@@ -1093,6 +1093,7 @@ namespace RelhaxModpack
                 macroList.Add("versiondir", Settings.TanksVersion);
                 macroList.Add("appData", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
                 macroList.Add("relhax", Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+                macroList.Add("temp", Settings.RelhaxTempFolder);
                 foreach (DictionaryEntry macro in macroList)
                 {
                     text = System.Text.RegularExpressions.Regex.Replace(text, @"{" + @macro.Key.ToString() + @"}", @macro.Value.ToString(), System.Text.RegularExpressions.RegexOptions.IgnoreCase);
