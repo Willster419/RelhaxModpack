@@ -176,6 +176,8 @@ namespace RelhaxModpack.AtlasesCreator
                     imageExporter.Save(args.ImageFile, outputImage);
                     Utils.AppendToInstallLog(@"/*  created Atlases  */");
                     Utils.AppendToInstallLog(args.ImageFile);
+                    Logging.stubsInstallerGroup("created Atlases");         // write comment
+                    Logging.stubsInstaller(args.ImageFile);                 // write created filename with path
                 }
                 catch (Exception e)
                 {
@@ -191,6 +193,7 @@ namespace RelhaxModpack.AtlasesCreator
                             File.Delete(args.MapFile);
                         mapExporter.Save(args.MapFile, outputMap);
                         Utils.AppendToInstallLog(args.MapFile);
+                        Logging.stubsInstaller(args.MapFile);                 // write created filename with path
                     }
                     catch (Exception e)
                     {

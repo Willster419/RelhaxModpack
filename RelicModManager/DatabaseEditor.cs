@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace RelhaxModpack
 {
@@ -2430,6 +2431,25 @@ namespace RelhaxModpack
                     System.Diagnostics.Process.Start(((TextBox)sender).Text);
             }
             
+        }
+
+        private void ObjectPicturesList_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            int index = ((ListBox)sender).IndexFromPoint(e.Location);
+            if (index != System.Windows.Forms.ListBox.NoMatches)
+            {
+                string entry = ((ListBox)sender).SelectedItem.ToString();
+                string[] searchList = new string[] { "http://", "https://" };
+                foreach (string r in searchList)
+                {
+                    int pos = entry.IndexOf(r, StringComparison.OrdinalIgnoreCase);
+                    if (pos >= 0)
+                    {
+                        Utils.AppendToLog("Test: " + entry.Substring(pos));
+                        System.Diagnostics.Process.Start(entry.Substring(pos));
+                    }
+                }
+            }
         }
     }
 }

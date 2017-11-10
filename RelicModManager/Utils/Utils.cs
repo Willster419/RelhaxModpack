@@ -1149,7 +1149,10 @@ namespace RelhaxModpack
                     System.Runtime.InteropServices.ComTypes.IPersistFile file = (System.Runtime.InteropServices.ComTypes.IPersistFile)link;
                     string desktopPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), modifiedName);
                     if (log)
+                    {
                         Utils.AppendToInstallLog(desktopPath);
+                        Logging.stubsInstaller(desktopPath);                     // write created file with path
+                    }
                     file.Save(desktopPath, false);
                 }
                 catch (Exception ex)

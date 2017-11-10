@@ -265,6 +265,7 @@ namespace RelhaxModpack
             ResetArgs();
             //Step 22: Cleanup
             Utils.AppendToLog("Intallation CleanUp");
+            Logging.stubsInstallerFinished();                                       // installation is finished. logfile will be flushed and filestream will be disposed
             args.InstalProgress = InstallerEventArgs.InstallProgress.CleanUp;
             try
             {
@@ -1037,7 +1038,11 @@ namespace RelhaxModpack
                     //add jobs to xmlUnpackList
                     CreateXmlUnpackList(diArr[i].FullName);
                 }
-                if (xmlUnpackList.Count > 0) Utils.AppendToInstallLog(@"/*  unpacked XML files  */");
+                if (xmlUnpackList.Count > 0)
+                {
+                    Utils.AppendToInstallLog(@"/*  unpacked XML files  */");
+                    Logging.stubsInstallerGroup("unpacked XML files");            // write comment line
+                }
                 foreach (XmlUnpack r in xmlUnpackList)
                 {
                     string fn = r.newFileName.Equals("") ? r.fileName : r.newFileName;
@@ -1051,6 +1056,7 @@ namespace RelhaxModpack
                                 // if value of pkg is empty, it is not contained in an archive
                                 File.Copy(Path.Combine(r.directoryInArchive, r.fileName), Path.Combine(r.extractDirectory, fn), false);     // no overwrite of an exsisting file !!
                                 Utils.AppendToInstallLog(Path.Combine(r.extractDirectory, fn));
+                                Logging.stubsInstallerGroup(Path.Combine(r.extractDirectory, fn));            // write created file with path
                             }
                             catch (Exception ex)
                             {
@@ -1262,6 +1268,7 @@ namespace RelhaxModpack
                         Installer.args.ParrentProcessed++;
                         if (!Directory.Exists(a.atlasSaveDirectory)) Directory.CreateDirectory(a.atlasSaveDirectory);
                         Utils.AppendToInstallLog(Path.Combine(a.atlasSaveDirectory));
+                        Logging.stubsInstaller(Path.Combine(a.atlasSaveDirectory));                      // write used folder 
                         if (!Directory.Exists(a.workingFolder)) Directory.CreateDirectory(a.workingFolder); 
 
                         if (!a.pkg.Equals(""))
@@ -1520,6 +1527,7 @@ namespace RelhaxModpack
             try
             {
                 Utils.AppendToInstallLog(@"/*  Desktop shortcuts  */");
+                Logging.stubsInstallerGroup("Desktop shortcuts");                     // write comment line
                 foreach (Shortcut sc in Shortcuts)
                 {
                     if (sc.Enabled)
@@ -2189,6 +2197,7 @@ namespace RelhaxModpack
         {
             string zipFileHeader = string.Format(@"/*  {0}  */\n", Path.GetFileNameWithoutExtension(zipFile));
             fs.Write(Encoding.UTF8.GetBytes(zipFileHeader), 0, Encoding.UTF8.GetByteCount(zipFileHeader));
+            Logging.stubsInstallerGroup(Path.GetFileNameWithoutExtension(zipFile));         // write a formated comment line
             try
             {
                 using (ZipFile zip = new ZipFile(zipFile))
@@ -2218,6 +2227,7 @@ namespace RelhaxModpack
                         zip[i].FileName = zipEntryName;
                         //put the entries on disk
                         fs.Write(Encoding.UTF8.GetBytes(Path.Combine(extractFolder, zip[i].FileName) + "\n"), 0, Encoding.UTF8.GetByteCount(Path.Combine(extractFolder, zip[i].FileName) + "\n"));
+                        Logging.stubsInstaller(Path.Combine(extractFolder, zip[i].FileName));           // write the the file entry / with the first call at the installation process, the logfile will be created including headline, ....
                     }
                     zip.ExtractProgress += Zip_ExtractProgress;
                     zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
