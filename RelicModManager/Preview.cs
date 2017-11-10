@@ -13,13 +13,12 @@ namespace RelhaxModpack
         private Point PreviewComponentLocation = new Point(12, 12);
         private Color PreviewComponentBackColor = SystemColors.ControlDarkDark;
         private PictureBoxSizeMode PreviewComponentSizeMode = PictureBoxSizeMode.Zoom;
-        private List<Media> Medias = new List<Media>();
+        public List<Media> Medias { get; set; }
         private Image LoadingImage;
         private int CurrentlySelected = 0;
         private WebBrowser Youtubedisplay;
         private string DateFormat;
         public SelectableDatabasePackage DBO { get; set; }
-        public List<Media> PictureList { get; set; }
         public string LastUpdated { get; set; }
         
         public Preview()
@@ -29,6 +28,8 @@ namespace RelhaxModpack
 
         private void Preview_Load(object sender, EventArgs e)
         {
+            if (Medias == null)
+                Medias = new List<Media>();
             //update for translations
             NextPicButton.Text = Translations.getTranslatedString(NextPicButton.Name);
             PreviousPicButton.Text = Translations.getTranslatedString(PreviousPicButton.Name);
