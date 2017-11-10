@@ -2369,7 +2369,7 @@ namespace RelhaxModpack
                         p = null;
                         GC.Collect();
                     }
-                    p = new Preview(DBO.Name, DBO.PictureList, DBO.Description, DBO.UpdateComment, DBO.DevURL);
+                    p = new Preview(DBO.Name, DBO.PictureList, DBO.Description, DBO.UpdateComment, DBO.DevURL, LastUpdated + Utils.ConvertFiletimeTimestampToDate(DBO.Timestamp));
                     p.Show();
                 }
             }
