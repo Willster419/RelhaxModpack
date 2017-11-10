@@ -34,6 +34,7 @@ namespace RelhaxModpack
         public List<Shortcut> Shortcuts = new List<Shortcut>();
         public LogicalDependency() {
             ReadyForInstall = false;
+            ExtractPath = "";
         }
         //for the tostring thing
         public override string ToString()

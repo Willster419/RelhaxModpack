@@ -35,6 +35,7 @@ namespace RelhaxModpack
         public List<Shortcut> shortCuts = new List<Shortcut>();
         public Dependency() {
             ReadyForInstall = false;
+            ExtractPath = "";
         }
         //for the tostring thing
         public override string ToString()
