@@ -504,7 +504,7 @@ namespace RelhaxModpack
                                                         //parse every picture
                                                         foreach (XElement pictureHolder in modNode.Elements())
                                                         {
-                                                            Media med = new Media(null, null);
+                                                            Media med = new Media();
                                                             switch (pictureHolder.Name.ToString())
                                                             {
                                                                 case "picture":
@@ -518,7 +518,6 @@ namespace RelhaxModpack
                                                                                     continue;
                                                                                 if (innerText.Equals(""))
                                                                                     continue;
-                                                                                med.Name = m.Name;
                                                                                 med.URL = innerText;
                                                                                 break;
                                                                             case "type":
@@ -825,7 +824,7 @@ namespace RelhaxModpack
                                         //parse every picture
                                         foreach (XElement pictureHolder in configNode.Elements())
                                         {
-                                            Media med = new Media(null, null);
+                                            Media med = new Media();
                                             switch (pictureHolder.Name.ToString())
                                             {
                                                 case "picture":
@@ -839,7 +838,6 @@ namespace RelhaxModpack
                                                                     continue;
                                                                 if (innerText.Equals(""))
                                                                     continue;
-                                                                med.Name = c.Name;
                                                                 med.URL = innerText;
                                                                 break;
                                                             case "type":

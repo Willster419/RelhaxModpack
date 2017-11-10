@@ -1714,7 +1714,10 @@ namespace RelhaxModpack
                 MessageBox.Show("Invalid index in add at positon");
                 return;
             }
-            Media media = new Media(SelectedDatabaseObject.Name, PictureURLTB.Text);
+            Media media = new Media()
+            {
+                URL = PictureURLTB.Text
+            };
             if (PicturesTypeCBox.SelectedIndex == 1)
             {
                 media.MediaType = MediaType.Picture;

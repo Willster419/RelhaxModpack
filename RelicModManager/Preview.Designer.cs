@@ -22,15 +22,15 @@
                 }
 
                 // Dispose stuff here
-                if (youtubedisplay != null)
+                if (Youtubedisplay != null)
                 {
-                    youtubedisplay.Dispose();
-                    youtubedisplay = null;
+                    Youtubedisplay.Dispose();
+                    Youtubedisplay = null;
                 }
-                if (previewPicture != null)
+                if (PreviewPicture != null)
                 {
-                    previewPicture.Dispose();
-                    previewPicture = null;
+                    PreviewPicture.Dispose();
+                    PreviewPicture = null;
                 }
                 for(int i = 0; i < this.Controls.Count; i++)
                 {
@@ -54,102 +54,103 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Preview));
-            this.descriptionBox = new System.Windows.Forms.RichTextBox();
-            this.previewPicture = new System.Windows.Forms.PictureBox();
-            this.nextPicButton = new System.Windows.Forms.Button();
-            this.previousPicButton = new System.Windows.Forms.Button();
-            this.pictureCountPanel = new System.Windows.Forms.Panel();
-            this.devLinkLabel = new System.Windows.Forms.LinkLabel();
-            this.updateBox = new System.Windows.Forms.RichTextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.previewPicture)).BeginInit();
+            this.DescriptionBox = new System.Windows.Forms.RichTextBox();
+            this.PreviewPicture = new System.Windows.Forms.PictureBox();
+            this.NextPicButton = new System.Windows.Forms.Button();
+            this.PreviousPicButton = new System.Windows.Forms.Button();
+            this.PictureCountPanel = new System.Windows.Forms.Panel();
+            this.DevLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.UpdateBox = new System.Windows.Forms.RichTextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.PreviewPicture)).BeginInit();
             this.SuspendLayout();
             // 
-            // descriptionBox
+            // DescriptionBox
             // 
-            this.descriptionBox.Location = new System.Drawing.Point(12, 356);
-            this.descriptionBox.Name = "descriptionBox";
-            this.descriptionBox.ReadOnly = true;
-            this.descriptionBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.descriptionBox.Size = new System.Drawing.Size(418, 75);
-            this.descriptionBox.TabIndex = 0;
-            this.descriptionBox.Text = "";
-            this.descriptionBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.descriptionBox_LinkClicked);
+            this.DescriptionBox.Location = new System.Drawing.Point(12, 356);
+            this.DescriptionBox.Name = "DescriptionBox";
+            this.DescriptionBox.ReadOnly = true;
+            this.DescriptionBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.DescriptionBox.Size = new System.Drawing.Size(418, 75);
+            this.DescriptionBox.TabIndex = 0;
+            this.DescriptionBox.Text = "";
+            this.DescriptionBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.DescriptionBox_LinkClicked);
             // 
-            // previewPicture
+            // PreviewPicture
             // 
-            this.previewPicture.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.previewPicture.Location = new System.Drawing.Point(12, 12);
-            this.previewPicture.Name = "previewPicture";
-            this.previewPicture.Size = new System.Drawing.Size(418, 309);
-            this.previewPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.previewPicture.TabIndex = 1;
-            this.previewPicture.TabStop = false;
-            this.previewPicture.Click += new System.EventHandler(this.previewPicture_Click);
+            this.PreviewPicture.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.PreviewPicture.Location = new System.Drawing.Point(12, 12);
+            this.PreviewPicture.Name = "PreviewPicture";
+            this.PreviewPicture.Size = new System.Drawing.Size(418, 309);
+            this.PreviewPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.PreviewPicture.TabIndex = 1;
+            this.PreviewPicture.TabStop = false;
+            this.PreviewPicture.Click += new System.EventHandler(this.PreviewPicture_Click);
             // 
-            // nextPicButton
+            // NextPicButton
             // 
-            this.nextPicButton.Location = new System.Drawing.Point(355, 327);
-            this.nextPicButton.Name = "nextPicButton";
-            this.nextPicButton.Size = new System.Drawing.Size(75, 23);
-            this.nextPicButton.TabIndex = 2;
-            this.nextPicButton.Text = "next";
-            this.nextPicButton.UseVisualStyleBackColor = true;
-            this.nextPicButton.Click += new System.EventHandler(this.nextPicButton_Click);
+            this.NextPicButton.Location = new System.Drawing.Point(355, 327);
+            this.NextPicButton.Name = "NextPicButton";
+            this.NextPicButton.Size = new System.Drawing.Size(75, 23);
+            this.NextPicButton.TabIndex = 2;
+            this.NextPicButton.Text = "next";
+            this.NextPicButton.UseVisualStyleBackColor = true;
+            this.NextPicButton.Click += new System.EventHandler(this.NextPicButton_Click);
             // 
-            // previousPicButton
+            // PreviousPicButton
             // 
-            this.previousPicButton.Location = new System.Drawing.Point(12, 327);
-            this.previousPicButton.Name = "previousPicButton";
-            this.previousPicButton.Size = new System.Drawing.Size(75, 23);
-            this.previousPicButton.TabIndex = 3;
-            this.previousPicButton.Text = "previous";
-            this.previousPicButton.UseVisualStyleBackColor = true;
-            this.previousPicButton.Click += new System.EventHandler(this.previousPicButton_Click);
+            this.PreviousPicButton.Location = new System.Drawing.Point(12, 327);
+            this.PreviousPicButton.Name = "PreviousPicButton";
+            this.PreviousPicButton.Size = new System.Drawing.Size(75, 23);
+            this.PreviousPicButton.TabIndex = 3;
+            this.PreviousPicButton.Text = "previous";
+            this.PreviousPicButton.UseVisualStyleBackColor = true;
+            this.PreviousPicButton.Click += new System.EventHandler(this.PreviousPicButton_Click);
             // 
-            // pictureCountPanel
+            // PictureCountPanel
             // 
-            this.pictureCountPanel.AutoScroll = true;
-            this.pictureCountPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureCountPanel.Location = new System.Drawing.Point(93, 327);
-            this.pictureCountPanel.Name = "pictureCountPanel";
-            this.pictureCountPanel.Size = new System.Drawing.Size(256, 23);
-            this.pictureCountPanel.TabIndex = 5;
+            this.PictureCountPanel.AutoScroll = true;
+            this.PictureCountPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PictureCountPanel.Location = new System.Drawing.Point(93, 327);
+            this.PictureCountPanel.Name = "PictureCountPanel";
+            this.PictureCountPanel.Size = new System.Drawing.Size(256, 23);
+            this.PictureCountPanel.TabIndex = 5;
             // 
-            // devLinkLabel
+            // DevLinkLabel
             // 
-            this.devLinkLabel.AutoSize = true;
-            this.devLinkLabel.Location = new System.Drawing.Point(332, 496);
-            this.devLinkLabel.Name = "devLinkLabel";
-            this.devLinkLabel.Size = new System.Drawing.Size(98, 13);
-            this.devLinkLabel.TabIndex = 7;
-            this.devLinkLabel.TabStop = true;
-            this.devLinkLabel.Text = "Developer Website";
-            this.devLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.devLinkLabel_LinkClicked);
+            this.DevLinkLabel.AutoSize = true;
+            this.DevLinkLabel.Location = new System.Drawing.Point(332, 496);
+            this.DevLinkLabel.Name = "DevLinkLabel";
+            this.DevLinkLabel.Size = new System.Drawing.Size(98, 13);
+            this.DevLinkLabel.TabIndex = 7;
+            this.DevLinkLabel.TabStop = true;
+            this.DevLinkLabel.Text = "Developer Website";
+            this.DevLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.DevLinkLabel_LinkClicked);
             // 
-            // updateBox
+            // UpdateBox
             // 
-            this.updateBox.Location = new System.Drawing.Point(12, 437);
-            this.updateBox.Name = "updateBox";
-            this.updateBox.ReadOnly = true;
-            this.updateBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.updateBox.Size = new System.Drawing.Size(418, 56);
-            this.updateBox.TabIndex = 8;
-            this.updateBox.Text = "";
-            this.updateBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.updateBox_LinkClicked);
+            this.UpdateBox.Location = new System.Drawing.Point(12, 437);
+            this.UpdateBox.Name = "UpdateBox";
+            this.UpdateBox.ReadOnly = true;
+            this.UpdateBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.UpdateBox.Size = new System.Drawing.Size(418, 56);
+            this.UpdateBox.TabIndex = 8;
+            this.UpdateBox.Text = "";
+            this.UpdateBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.UpdateBox_LinkClicked);
             // 
             // Preview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(442, 667);
-            this.Controls.Add(this.updateBox);
-            this.Controls.Add(this.devLinkLabel);
-            this.Controls.Add(this.pictureCountPanel);
-            this.Controls.Add(this.previousPicButton);
-            this.Controls.Add(this.nextPicButton);
-            this.Controls.Add(this.previewPicture);
-            this.Controls.Add(this.descriptionBox);
+            this.Controls.Add(this.UpdateBox);
+            this.Controls.Add(this.DevLinkLabel);
+            this.Controls.Add(this.PictureCountPanel);
+            this.Controls.Add(this.PreviousPicButton);
+            this.Controls.Add(this.NextPicButton);
+            this.Controls.Add(this.PreviewPicture);
+            this.Controls.Add(this.DescriptionBox);
             this.DoubleBuffered = true;
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(450, 700);
             this.Name = "Preview";
@@ -157,7 +158,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Preview_FormClosing);
             this.Load += new System.EventHandler(this.Preview_Load);
             this.SizeChanged += new System.EventHandler(this.Preview_SizeChanged);
-            ((System.ComponentModel.ISupportInitialize)(this.previewPicture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PreviewPicture)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -165,12 +166,12 @@
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox descriptionBox;
-        private System.Windows.Forms.PictureBox previewPicture;
-        private System.Windows.Forms.Button nextPicButton;
-        private System.Windows.Forms.Button previousPicButton;
-        private System.Windows.Forms.Panel pictureCountPanel;
-        private System.Windows.Forms.LinkLabel devLinkLabel;
-        private System.Windows.Forms.RichTextBox updateBox;
+        private System.Windows.Forms.RichTextBox DescriptionBox;
+        private System.Windows.Forms.PictureBox PreviewPicture;
+        private System.Windows.Forms.Button NextPicButton;
+        private System.Windows.Forms.Button PreviousPicButton;
+        private System.Windows.Forms.Panel PictureCountPanel;
+        private System.Windows.Forms.LinkLabel DevLinkLabel;
+        private System.Windows.Forms.RichTextBox UpdateBox;
     }
 }
