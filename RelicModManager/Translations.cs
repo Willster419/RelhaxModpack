@@ -132,6 +132,11 @@ namespace RelhaxModpack
             polish.Add("ignore", "Ignorować");
             french.Add("ignore", "Ignorer");
 
+            english.Add("lastUpdated", "Last Updated: ");
+            german.Add("lastUpdated", "TODO");
+            polish.Add("lastUpdated", "TODO");
+            french.Add("lastUpdated", "TODO");
+
             //Section: MainWindow
 
             //Componet: installRelhaxMod
