@@ -1239,7 +1239,6 @@ namespace RelhaxModpack
                                 }
                                 zip.Dispose();
                             }
-                            
                         }
                     }
                     catch (Exception ex)
@@ -1698,7 +1697,18 @@ namespace RelhaxModpack
                         }
                         atlases.workingFolder = Path.Combine(Application.StartupPath, "RelHaxTemp", Path.GetFileNameWithoutExtension(atlases.atlasFile));
                         if (atlases.mapFile.Equals("")) atlases.mapFile = Path.GetFileNameWithoutExtension(atlases.atlasFile) + ".xml";
-                        atlasesList.Add(atlases);
+                        bool duplicateFound = false;
+                        foreach (Atlases check in atlasesList)
+                        {
+                            if (check.pkg.ToLower().Equals(atlases.pkg.ToLower()) && check.directoryInArchive.Replace(@"\", "").Replace(@"/","").ToLower().Equals(atlases.directoryInArchive.Replace(@"\", "").Replace(@"/", "").ToLower()) && check.atlasFile.ToLower().Equals(atlases.atlasFile.ToLower()) && check.atlasSaveDirectory.ToLower().Equals(atlases.atlasSaveDirectory.ToLower()))
+                            {
+                                // if the parameters abouve are matching, then a user added maybe additional files to add in a different folder
+                                check.imageFolderList.AddRange(atlases.imageFolderList);
+                                duplicateFound = true;
+                            }
+                        }
+                        if (!duplicateFound)
+                            atlasesList.Add(atlases);
                     }
                     catch (Exception ex)
                     {
