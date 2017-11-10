@@ -9,85 +9,109 @@ namespace RelhaxModpack
     //ro config name, pictures, description, and any update comments
     public partial class Preview : RelhaxForum
     {
-        private Size previewComponentSize = new Size(418, 309);
-        private Point previewComponentLocation = new Point(12, 12);
-        private Color previewComponentBackColor = SystemColors.ControlDarkDark;
-        private PictureBoxSizeMode previewComponentSizeMode = PictureBoxSizeMode.Zoom;
-        public string modOrConfigName { get; set; }
-        public string description { get; set; }
-        public string updateComments { get; set; }
-        public string lastUpdatedString { get; set; }
-        List<Media> medias = new List<Media>();
-        private Image loadingImage;
-        public string devURL { get; set; }
-        private int currentlySelected = 0;
-        private WebBrowser youtubedisplay;
-        //Preview constructor that sets all the required values
-        public Preview(string title, List<Media> pictureList, string desc, string update = "", string dev = "", string lastUpdated = "")
+        private Size PreviewComponentSize = new Size(418, 309);
+        private Point PreviewComponentLocation = new Point(12, 12);
+        private Color PreviewComponentBackColor = SystemColors.ControlDarkDark;
+        private PictureBoxSizeMode PreviewComponentSizeMode = PictureBoxSizeMode.Zoom;
+        private List<Media> Medias = new List<Media>();
+        private Image LoadingImage;
+        private int CurrentlySelected = 0;
+        private WebBrowser Youtubedisplay;
+        private string DateFormat;
+        public SelectableDatabasePackage DBO { get; set; }
+        public List<Media> PictureList { get; set; }
+        public string LastUpdated { get; set; }
+        
+        public Preview()
         {
             InitializeComponent();
-            modOrConfigName = title;
-            medias = pictureList;
-            updateComments = update;
-            lastUpdatedString = lastUpdated;
-            description = desc;
-            devURL = dev;
-            if (devURL == null || devURL.Equals(""))
+        }
+
+        private void Preview_Load(object sender, EventArgs e)
+        {
+            //update for translations
+            NextPicButton.Text = Translations.getTranslatedString(NextPicButton.Name);
+            PreviousPicButton.Text = Translations.getTranslatedString(PreviousPicButton.Name);
+            DevLinkLabel.Text = Translations.getTranslatedString(DevLinkLabel.Name);
+            //check if devURL should be visable or not
+            if (DBO.DevURL == null || DBO.DevURL.Equals(""))
             {
-                devLinkLabel.Enabled = false;
-                devLinkLabel.Visible = false;
+                DevLinkLabel.Enabled = false;
+                DevLinkLabel.Visible = false;
             }
-            loadingImage = RelhaxModpack.Properties.Resources.loading;
+            //set default loading images and image properties
+            LoadingImage = RelhaxModpack.Properties.Resources.loading;
+            PreviewPicture.WaitOnLoad = false;
+            PreviewPicture.InitialImage = Settings.getLoadingImage();
+            Text = DBO.NameFormatted;
+            for (int i = 0; i < Medias.Count; i++)
+            {
+                MakeLinkedLabel(i);
+            }
+            if (Medias != null)
+            {
+                CurrentlySelected = 0;
+                if (Medias.Count > 0)
+                    DisplayMedia(Medias[CurrentlySelected]);
+            }
+            DescriptionBox.Text = (DBO.Description == null || DBO.Description.Equals(""))? Translations.getTranslatedString("noDescription"): DBO.Description;
+            DateFormat = DBO.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(DBO.Timestamp);
+            UpdateBox.Text = (DBO.UpdateComment == null || DBO.UpdateComment.Equals("")) ? Translations.getTranslatedString("noUpdateInfo") : DBO.UpdateComment;
+            UpdateBox.Text = UpdateBox.Text + "\n" + LastUpdated + DateFormat;
+            Size = new Size(450, 700);
+            Preview_SizeChanged(null, null);
+            //specify the start location
+            Location = new Point(Settings.PreviewX, Settings.PreviewY);
         }
         //sets the window title to reflect the new picture, and
         //begine the async process of loading the new picture
-        public void displayMedia(Media m)
+        public void DisplayMedia(Media m)
         {
-            previewPicture.Image = null;
-            if (medias.Count == 0)
+            PreviewPicture.Image = null;
+            if (Medias.Count == 0)
                 return;
             if (m.URL.Equals(""))
                 return;
-            if (this.Controls.Contains(previewPicture))
+            if (Controls.Contains(PreviewPicture))
             {
-                this.Controls.Remove(previewPicture);
-                previewPicture.Dispose();
-                previewPicture = null;
+                Controls.Remove(PreviewPicture);
+                PreviewPicture.Dispose();
+                PreviewPicture = null;
             }
-            if (this.Contains(youtubedisplay))
+            if (Contains(Youtubedisplay))
             {
-                this.Controls.Remove(youtubedisplay);
-                youtubedisplay.Dispose();
-                youtubedisplay = null;
+                Controls.Remove(Youtubedisplay);
+                Youtubedisplay.Dispose();
+                Youtubedisplay = null;
             }
             if (m.MediaType == MediaType.Picture)
             {
-                previewPicture = new PictureBox()
+                PreviewPicture = new PictureBox()
                 {
-                    Size = previewComponentSize,
-                    BackColor = previewComponentBackColor,
-                    Location = previewComponentLocation,
-                    SizeMode = previewComponentSizeMode
+                    Size = PreviewComponentSize,
+                    BackColor = PreviewComponentBackColor,
+                    Location = PreviewComponentLocation,
+                    SizeMode = PreviewComponentSizeMode
                 };
-                previewPicture.Click += previewPicture_Click;
-                this.Controls.Add(previewPicture);
-                previewPicture.Image = Settings.getLoadingImage();
-                previewPicture.LoadAsync(m.URL);
-                this.Text = m.Name + " - " + currentlySelected;
-                Utils.AppendToLog("Preview: started loading of picture '" + m.Name + "' at URL '" + m.URL + "'");
+                PreviewPicture.Click += PreviewPicture_Click;
+                Controls.Add(PreviewPicture);
+                PreviewPicture.Image = Settings.getLoadingImage();
+                PreviewPicture.LoadAsync(m.URL);
+                Text = DBO.NameFormatted + " - " + CurrentlySelected;
+                Utils.AppendToLog("Preview: started loading of picture '" + DBO.NameFormatted + "' at URL '" + m.URL + "'");
             }
             else if (m.MediaType == MediaType.Youtube)
             {
-                youtubedisplay = new WebBrowser()
+                Youtubedisplay = new WebBrowser()
                 {
-                    Size = previewComponentSize,
-                    Location = previewComponentLocation,
+                    Size = PreviewComponentSize,
+                    Location = PreviewComponentLocation,
                     ScriptErrorsSuppressed = true
                 };
-                this.Controls.Add(youtubedisplay);
-                youtubedisplay.Navigate(m.URL);
-                this.Text = m.Name + " - " + currentlySelected;
-                Utils.AppendToLog("Preview: started loading of youtube video '" + m.Name + "' at URL '" + m.URL + "'");
+                Controls.Add(Youtubedisplay);
+                Youtubedisplay.Navigate(m.URL);
+                Text = DBO.NameFormatted + " - " + CurrentlySelected;
+                Utils.AppendToLog("Preview: started loading of youtube video '" + DBO.NameFormatted + "' at URL '" + m.URL + "'");
             }
             else
             {
@@ -96,69 +120,69 @@ namespace RelhaxModpack
         }
         //make the linked labels for each picture in the picturesList
         //so a user can navagate easily through the pictures
-        private void makeLinkedLabel(int i)
+        private void MakeLinkedLabel(int i)
         {
             LinkLabel label = new LinkLabel();
             label.Name = "" + i;
             label.Text = "" + i;
-            label.LinkClicked += new LinkLabelLinkClickedEventHandler(label_LinkClicked);
+            label.LinkClicked += new LinkLabelLinkClickedEventHandler(Label_LinkClicked);
             label.AutoSize = true;
             int xLocation = 0;
-            foreach (Control c in pictureCountPanel.Controls)
+            foreach (Control c in PictureCountPanel.Controls)
                 xLocation += c.Size.Width;
             label.Location = new Point(xLocation, 5);
             label.TabStop = true;
-            pictureCountPanel.Controls.Add(label);
+            PictureCountPanel.Controls.Add(label);
         }
         //handler for when a link label is clicked in the panel picture selection panel
-        void label_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        void Label_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             LinkLabel lb = (LinkLabel)sender;
             int i = int.Parse(lb.Text);
             //i--;
-            currentlySelected = i;
-            this.displayMedia(medias[i]);
+            CurrentlySelected = i;
+            DisplayMedia(Medias[i]);
             Preview_SizeChanged(null, null);
         }
         //show the suplied dev url thread
-        private void devLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void DevLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (!devURL.Equals(""))
-                System.Diagnostics.Process.Start(devURL);
+            if (!DBO.DevURL.Equals(""))
+                System.Diagnostics.Process.Start(DBO.DevURL);
         }
         //load the next picture in the list
-        private void nextPicButton_Click(object sender, EventArgs e)
+        private void NextPicButton_Click(object sender, EventArgs e)
         {
-            currentlySelected++;
-            if (currentlySelected >= medias.Count)
+            CurrentlySelected++;
+            if (CurrentlySelected >= Medias.Count)
             {
-                currentlySelected--;
+                CurrentlySelected--;
                 return;
             }
-            this.displayMedia(medias[currentlySelected]);
+            DisplayMedia(Medias[CurrentlySelected]);
             Preview_SizeChanged(null, null);
         }
         //load the previous picture in the list
-        private void previousPicButton_Click(object sender, EventArgs e)
+        private void PreviousPicButton_Click(object sender, EventArgs e)
         {
-            currentlySelected--;
-            if (currentlySelected < 0)
+            CurrentlySelected--;
+            if (CurrentlySelected < 0)
             {
-                currentlySelected++;
+                CurrentlySelected++;
                 return;
             }
-            this.displayMedia(medias[currentlySelected]);
+            DisplayMedia(Medias[CurrentlySelected]);
             Preview_SizeChanged(null, null);
         }
         //handler for if the user changes the size of the window
         private void Preview_SizeChanged(object sender, EventArgs e)
         {
             //previewPicture, descriptionBox, nextPicButton and updateBox should all have the same size width.
-            int width = this.Size.Width - 32;
-            int applicationHeight = this.Size.Height;
+            int width = Size.Width - 32;
+            int applicationHeight = Size.Height;
             //do this from bottom to top
-            updateBox.Size = new Size(width, updateBox.Size.Height);
-            descriptionBox.Size = new Size(width, descriptionBox.Size.Height);
+            UpdateBox.Size = new Size(width, UpdateBox.Size.Height);
+            DescriptionBox.Size = new Size(width, DescriptionBox.Size.Height);
             int scale = 0;
             switch (Settings.FontSizeforum)
             {
@@ -193,90 +217,50 @@ namespace RelhaxModpack
                     break;
             }
             Size tempSize = new Size(0, 0);
-            if (previewPicture != null)
+            if (PreviewPicture != null)
             {
-                previewPicture.Size = new Size(width, applicationHeight - 265 - TitleBarDifference - scale);
-                tempSize = previewPicture.Size;
+                PreviewPicture.Size = new Size(width, applicationHeight - 265 - TitleBarDifference - scale);
+                tempSize = PreviewPicture.Size;
             }
-            if (youtubedisplay != null)
+            if (Youtubedisplay != null)
             {
-                youtubedisplay.Size = new Size(width, applicationHeight - 265 - TitleBarDifference - scale);
-                tempSize = youtubedisplay.Size;
+                Youtubedisplay.Size = new Size(width, applicationHeight - 265 - TitleBarDifference - scale);
+                tempSize = Youtubedisplay.Size;
             }
-            updateBox.Location = new Point(12, 12 + tempSize.Height + 6 + nextPicButton.Size.Height + 6 + descriptionBox.Size.Height + 6);
-            descriptionBox.Location = new Point(12, 12 + tempSize.Height + 6 + nextPicButton.Size.Height + 6);
-            nextPicButton.Location = new Point(this.Size.Width - 21 - nextPicButton.Size.Width, 12 + tempSize.Height + 6);
-            previousPicButton.Location = new Point(12, 12 + tempSize.Height + 6);
-            pictureCountPanel.Location = new Point(12 + previousPicButton.Size.Width + 12, 12 + tempSize.Height + 6);
-            pictureCountPanel.Size = new Size(width - pictureCountPanel.Location.X - nextPicButton.Size.Width - 4, pictureCountPanel.Size.Height);
-            devLinkLabel.Location = new Point(this.Size.Width - 12 - devLinkLabel.Size.Width - 4, applicationHeight - 49 - TitleBarDifference - 5);
-        }
-        //applies translations
-        private void applyTranslations()
-        {
-            nextPicButton.Text = Translations.getTranslatedString(nextPicButton.Name);
-            previousPicButton.Text = Translations.getTranslatedString(previousPicButton.Name);
-            devLinkLabel.Text = Translations.getTranslatedString(devLinkLabel.Name);
-        }
-        //handler that triggeres right before the window is shown
-        private void Preview_Load(object sender, EventArgs e)
-        {
-            //update for translations
-            this.applyTranslations();
-            this.Text = modOrConfigName;
-            for (int i = 0; i < medias.Count; i++)
-            {
-                this.makeLinkedLabel(i);
-            }
-            previewPicture.WaitOnLoad = false;
-            previewPicture.InitialImage = Settings.getLoadingImage();
-            if (medias != null)
-            {
-                currentlySelected = 0;
-                if (medias.Count > 0)
-                    this.displayMedia(medias[currentlySelected]);
-            }
-            if (description == null)
-                description = Translations.getTranslatedString("noDescription");
-            else if (description.Equals(""))
-                description = Translations.getTranslatedString("noDescription");
-            if (updateComments == null)
-                updateComments = Translations.getTranslatedString("noUpdateInfo");
-            else if (updateComments.Equals(""))
-                updateComments = Translations.getTranslatedString("noUpdateInfo");
-            descriptionBox.Text = description;
-            updateBox.Text = updateComments + "\n" + lastUpdatedString;
-            this.Preview_SizeChanged(null, null);
-            this.Size = new Size(450, 700);
-            //specify the start location
-            this.Location = new Point(Settings.PreviewX, Settings.PreviewY);
+            UpdateBox.Location = new Point(12, 12 + tempSize.Height + 6 + NextPicButton.Size.Height + 6 + DescriptionBox.Size.Height + 6);
+            DescriptionBox.Location = new Point(12, 12 + tempSize.Height + 6 + NextPicButton.Size.Height + 6);
+            NextPicButton.Location = new Point(Size.Width - 21 - NextPicButton.Size.Width, 12 + tempSize.Height + 6);
+            PreviousPicButton.Location = new Point(12, 12 + tempSize.Height + 6);
+            PictureCountPanel.Location = new Point(12 + PreviousPicButton.Size.Width + 12, 12 + tempSize.Height + 6);
+            PictureCountPanel.Size = new Size(width - PictureCountPanel.Location.X - NextPicButton.Size.Width - 4, PictureCountPanel.Size.Height);
+            DevLinkLabel.Location = new Point(Size.Width - 12 - DevLinkLabel.Size.Width - 4, applicationHeight - 49 - TitleBarDifference - 5);
         }
 
-        private void descriptionBox_LinkClicked(object sender, LinkClickedEventArgs e)
+        private void DescriptionBox_LinkClicked(object sender, LinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start(e.LinkText);
         }
 
-        private void updateBox_LinkClicked(object sender, LinkClickedEventArgs e)
+        private void UpdateBox_LinkClicked(object sender, LinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start(e.LinkText);
         }
 
-        private void previewPicture_Click(object sender, EventArgs e)
+        private void PreviewPicture_Click(object sender, EventArgs e)
         {
-            if (this.WindowState != FormWindowState.Maximized)
-                this.WindowState = FormWindowState.Maximized;
+            if (WindowState != FormWindowState.Maximized)
+                WindowState = FormWindowState.Maximized;
             else
-                this.WindowState = FormWindowState.Normal;
+                WindowState = FormWindowState.Normal;
         }
 
         private void Preview_FormClosing(object sender, FormClosingEventArgs e)
         {
             // if preview window is minimized and will be closed directly via the taskbar, windows send -32000 coordinate X and Y, so not storing it
-            if (this.Location.X > 0 && this.Location.Y > 0)
+            if (Location.X > 0 && Location.Y > 0)
             {
-                Settings.PreviewX = this.Location.X;
-                Settings.PreviewY = this.Location.Y;
+                Settings.PreviewX = Location.X;
+                Settings.PreviewY = Location.Y;
             }
         }
     }

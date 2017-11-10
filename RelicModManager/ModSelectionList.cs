@@ -30,8 +30,8 @@ namespace RelhaxModpack
         public int MainWindowStartY { get; set; }
         bool FirstLoad = true;
         bool IgnoreSelections = true;
-        private static string NoDescriptionAvailable = Translations.getTranslatedString("noDescription");
-        private static string LastUpdated = Translations.getTranslatedString("lastUpdated");
+        private string NoDescriptionAvailable = Translations.getTranslatedString("noDescription");
+        private string LastUpdated = Translations.getTranslatedString("lastUpdated");
         private string Md5DatabaseFile = "";
         private XDocument ModInfoDocument;
         int Prog = 0;
@@ -2369,7 +2369,12 @@ namespace RelhaxModpack
                         p = null;
                         GC.Collect();
                     }
-                    p = new Preview(DBO.Name, DBO.PictureList, DBO.Description, DBO.UpdateComment, DBO.DevURL, LastUpdated + Utils.ConvertFiletimeTimestampToDate(DBO.Timestamp));
+                    p = new Preview()
+                    {
+                        LastUpdated = this.LastUpdated,
+                        DBO = DBO,
+                        PictureList = DBO.PictureList
+                    };
                     p.Show();
                 }
             }
