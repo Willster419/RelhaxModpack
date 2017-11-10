@@ -1806,6 +1806,7 @@ namespace RelhaxModpack
             notifyIfSameDatabaseCB.Enabled = enableToggle;
             ShowInstallCompleteWindowCB.Enabled = enableToggle;
             createShortcutsCB.Enabled = enableToggle;
+            InstantExtractionCB.Enabled = enableToggle;
         }
 
         public void ToggleScaleRBs(bool enableToggle)
