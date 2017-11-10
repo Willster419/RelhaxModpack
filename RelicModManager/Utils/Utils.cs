@@ -23,7 +23,12 @@ namespace RelhaxModpack
         private static int iMaxLogLength = 1500000; // Probably should be bigger, say 2,000,000
         private static int iTrimmedLogLength = -300000; // minimum of how much of the old log to leave
         private static object _locker = new object();
+        
         //logs string info to the log output
+        // public static void AppendToLog(string info)
+        // {
+        //     Logging.Manager(info);
+        // }
         public static void AppendToLog(string info)
         {
             lock (_locker)              // avoid that 2 or more threads calling the Log function and writing lines in a mess
