@@ -33,7 +33,7 @@ namespace RelhaxModpack
                     if (mfs == null)
                     {
                         if (ManagerLogPath == null) DefineManagerLogFile();
-                        // CutLogfile(ManagerLogPath);
+                        CutLogfile(ManagerLogPath);
                         mfs = new FileStream(ManagerLogPath, FileMode.Append, FileAccess.Write);
                     }
                     //if the info text is containing any linefeed/carrieage return, intend the next line with 26 space char
@@ -43,30 +43,37 @@ namespace RelhaxModpack
                     mfs.Flush();        // to get every entry directly is important
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                Utils.ExceptionLog("Manager", ex);
+                // no target to write to .... create a window?
             }
         }
 
         public static void Installer(string s)
         {
-            lock (_locker)              // avoid that 2 or more threads calling the Log function and writing lines in a mess
+            try
             {
-                if (ifs == null)
+                lock (_locker)              // avoid that 2 or more threads calling the Log function and writing lines in a mess
                 {
-                    if (InstalledFilesLogPath == null) DefineInstallerLogFile();
-                    //start the entry for the files log
-                    ifs = new FileStream(InstalledFilesLogPath, FileMode.Append, FileAccess.Write);
-                    string databaseHeader = string.Format("Database Version: {0}\n", Settings.DatabaseVersion);
-                    string dateTimeHeader = string.Format("/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */\n", DateTime.Now);
-                    ifs.Write(Encoding.UTF8.GetBytes(databaseHeader), 0, Encoding.UTF8.GetByteCount(databaseHeader));
-                    ifs.Write(Encoding.UTF8.GetBytes(dateTimeHeader), 0, Encoding.UTF8.GetByteCount(dateTimeHeader));
+                    if (ifs == null)
+                    {
+                        if (InstalledFilesLogPath == null) DefineInstallerLogFile();
+                        //start the entry for the files log
+                        ifs = new FileStream(InstalledFilesLogPath, FileMode.Append, FileAccess.Write);
+                        string databaseHeader = string.Format("Database Version: {0}\n", Settings.DatabaseVersion);
+                        string dateTimeHeader = string.Format("/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */\n", DateTime.Now);
+                        ifs.Write(Encoding.UTF8.GetBytes(databaseHeader), 0, Encoding.UTF8.GetByteCount(databaseHeader));
+                        ifs.Write(Encoding.UTF8.GetBytes(dateTimeHeader), 0, Encoding.UTF8.GetByteCount(dateTimeHeader));
+                    }
+                    s = string.Format("{0}\n", s);
+                    ifs.Write(Encoding.UTF8.GetBytes(s), 0, Encoding.UTF8.GetByteCount(s));
                 }
-                s = string.Format("{0}\n", s);
-                ifs.Write(Encoding.UTF8.GetBytes(s), 0, Encoding.UTF8.GetByteCount(s));
             }
-        }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("Installer", ex);
+            }
+}
 
         public static void InstallerStop()
         {
@@ -81,12 +88,12 @@ namespace RelhaxModpack
 
         private static void DefineManagerLogFile()
         {
-            ManagerLogPath = Path.Combine(Application.StartupPath, "RelHaxLog2.txt");
+            ManagerLogPath = Path.Combine(Application.StartupPath, "RelHaxLog.txt");
         }
 
         private static void DefineInstallerLogFile()
         {
-            InstalledFilesLogPath = Path.Combine(Settings.TanksLocation, "logs", "installedRelhaxFiles2.log");
+            InstalledFilesLogPath = Path.Combine(Settings.TanksLocation, "logs", "installedRelhaxFiles.log");
             InstallerBackup();
         }
 
@@ -112,7 +119,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.ExceptionLog("ExtractDatabaseObjects", "move installedRelhaxFiles.log", ex);
+                Utils.ExceptionLog("InstallerBackup", ex);
             }
         }
 
