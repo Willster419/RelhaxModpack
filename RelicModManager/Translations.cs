@@ -334,8 +334,8 @@ namespace RelhaxModpack
             //
             english.Add("InstantExtractionCB", "Instant Extraction mode (experimental)");
             german.Add("InstantExtractionCB", "TODO");
-            polish.Add("InstantExtractionCB", "TODO");
-            french.Add("InstantExtractionCB", "TODO");
+            polish.Add("InstantExtractionCB", "Tryb szybkiego wypakowywania (eksperymentalny)");
+            french.Add("InstantExtractionCB", "Mode d'extraction instantané (expérimental)");
 
             //Section: FirstLoadHelper
 
@@ -843,8 +843,8 @@ namespace RelhaxModpack
 
             english.Add("closeInstanceRunningForUpdate", "Please close ALL running instances of the Relhax Manager before we can go on and update.");
             german.Add("closeInstanceRunningForUpdate", "Bitte schließe ALLE laufenden Instanzen des Relhax Managers bevor wir fortfahren und aktualisieren können.");
-            polish.Add("closeInstanceRunningForUpdate", "TODO");
-            french.Add("closeInstanceRunningForUpdate", "TODO");
+            polish.Add("closeInstanceRunningForUpdate", "Proszę zamknąć WSZYSTKIE działające instancje Relhax Modpack przed dalszym procesem aktualizacji.");
+            french.Add("closeInstanceRunningForUpdate", "Merci de fermé toutes les instances du modpack relhax avant que nous puissions procéder à la mise à jour");
 
 
             //Componet: 
@@ -1025,8 +1025,8 @@ namespace RelhaxModpack
             //
             english.Add("InstantExtractionCBExplanation", "When enabled, the installer will extract a zip file as soon as it is downloaded, rather than waiting for every zip file to be downloaded before extraction. Recommended for those with Solid State Drives (SSD) only.");
             german.Add("InstantExtractionCBExplanation", "TODO");
-            polish.Add("InstantExtractionCBExplanation", "TODO");
-            french.Add("InstantExtractionCBExplanation", "TODO");
+            polish.Add("InstantExtractionCBExplanation", "Wypakowywanie pobranych plików zip w tle podczas procesu ściągania paczek. Rekomendowany jedynie dla dysków SSD.");
+            french.Add("InstantExtractionCBExplanation", "Quand activé , l'installateur vas extraire un fichier zip dès qu'il est télécharger , au lieu d'attendre que chaque fichier zip soit télécharger pour l'extraction . Recommandé pour les processeurs de SSD seulement.");
 
             //Section: Messages from ModSelectionList
 
@@ -1494,26 +1494,26 @@ namespace RelhaxModpack
             //Component: ExtractAtlases
             english.Add("AtlasExtraction", "Extracting Atlas file");
             german.Add("AtlasExtraction", "Entpacke Atlas Datei");
-            polish.Add("AtlasExtraction", "TODO");
-            french.Add("AtlasExtraction", "TODO");
+            polish.Add("AtlasExtraction", "Wypakuj plik Atlas");
+            french.Add("AtlasExtraction", "Extraction des fichiers Atlas");
 
             //Component: ExtractAtlases
             english.Add("AtlasTexture", "Texture");
             german.Add("AtlasTexture", "Textur");
-            polish.Add("AtlasTexture", "TODO");
-            french.Add("AtlasTexture", "TODO");
+            polish.Add("AtlasTexture", "Tekstury");
+            french.Add("AtlasTexture", "Texture");
 
             //Component: CreatingAtlases
             english.Add("AtlasCreating", "Creating Atlas file");
             german.Add("AtlasCreating", "Erstelle Atlas Datei");
-            polish.Add("AtlasCreating", "TODO");
-            french.Add("AtlasCreating", "TODO");
+            polish.Add("AtlasCreating", "Tworzenie pliku Atlas");
+            french.Add("AtlasCreating", "Creations des fichiers Atlas");
 
             //Component: CreatingAtlases
             english.Add("AtlasOptimations", "Optimizations");
             german.Add("AtlasOptimations", "Optimierungen");
-            polish.Add("AtlasOptimations", "TODO");
-            french.Add("AtlasOptimations", "TODO");
+            polish.Add("AtlasOptimations", "Optymalizacje");
+            french.Add("AtlasOptimations", "Optimisation");
 
             //Componet: installingUserFonts
             //
@@ -1591,8 +1591,8 @@ namespace RelhaxModpack
             //GifPreview.cs
             english.Add("loadingGifpreview", "Loading Picture Preview");
             german.Add("loadingGifpreview", "Ladebild Vorschau");
-            polish.Add("loadingGifpreview", "TODO");
-            french.Add("loadingGifpreview", "TODO");
+            polish.Add("loadingGifpreview", "Ładowanie Podglądu");
+            french.Add("loadingGifpreview", "Chargement de l'image de prévisualisation");
 
             //Section: Diagnostics
 
@@ -1600,85 +1600,85 @@ namespace RelhaxModpack
             //
             english.Add("MainTextBox", "You can use the options below to try to diagnose or solve the issues you are having.");
             german.Add("MainTextBox", "Du kannst mit den untenstehenden Optionen Probleme mit dem Spiel zu diagnostizieren und ggf. zu beheben.");
-            polish.Add("MainTextBox", "TODO");
-            french.Add("MainTextBox", "TODO");
+            polish.Add("MainTextBox", "Opcje diagnostyczne i rozwiązywanie problemów");
+            french.Add("MainTextBox", "Vous pouvez utiliser les options ci dessous pour essayer de diagnostiqué ou résoudre les soucis que vous avez");
 
             //Component: LaunchWoTLauncher
             //
             english.Add("LaunchWoTLauncher", "Start the World of Tanks launcher in integrity validation mode");
             german.Add("LaunchWoTLauncher", "TODO");
-            polish.Add("LaunchWoTLauncher", "TODO");
-            french.Add("LaunchWoTLauncher", "TODO");
+            polish.Add("LaunchWoTLauncher", "Uruchom launcher World of Tanks w trybie sprawdzania integralności.");
+            french.Add("LaunchWoTLauncher", "Lancé le launcher world of tanks en mode vérification d'intégrité");
 
             //Component: CollectLogInfo
             //
             english.Add("CollectLogInfo", "Collect all log files into a zip file to report a problem");
             german.Add("CollectLogInfo", "TODO");
-            polish.Add("CollectLogInfo", "TODO");
-            french.Add("CollectLogInfo", "TODO");
+            polish.Add("CollectLogInfo", "Zbierz pliki logów w plik zip, by zgłosić problem");
+            french.Add("CollectLogInfo", "Collecté tous les fichiers log dans un fichier zip pour reporter un problème");
 
             //Component: SelectedInstallation
             //
             english.Add("SelectedInstallation", "Currently Selected Installation: ");
             german.Add("SelectedInstallation", "TODO");
-            polish.Add("SelectedInstallation", "TODO");
-            french.Add("SelectedInstallation", "TODO");
+            polish.Add("SelectedInstallation", "Obecnie Wybrana Instalacja: ");
+            french.Add("SelectedInstallation", "Installation actuellement sélectionner: ");
 
             //Component: collectionLogInfo
             //
             english.Add("collectionLogInfo", "Collecting log files...");
             german.Add("collectionLogInfo", "TODO");
-            polish.Add("collectionLogInfo", "TODO");
-            french.Add("collectionLogInfo", "TODO");
+            polish.Add("collectionLogInfo", "Zbieranie logów");
+            french.Add("collectionLogInfo", "Collection des fichiers log...");
 
             //Component: startingLauncherRepairMode
             //
             english.Add("startingLauncherRepairMode", "Starting WoTLauncher in integrity validation mode...");
             german.Add("startingLauncherRepairMode", "TODO");
             polish.Add("startingLauncherRepairMode", "TODO");
-            french.Add("startingLauncherRepairMode", "TODO");
+            french.Add("startingLauncherRepairMode", "Lancement de WoTLauncher and mode the validation d'intégrité");
 
             //Component: failedStartLauncherRepairMode
             //
             english.Add("failedStartLauncherRepairMode", "Failed to start WoT Launcher in Repair mode");
             german.Add("failedStartLauncherRepairMode", "TODO");
-            polish.Add("failedStartLauncherRepairMode", "TODO");
-            french.Add("failedStartLauncherRepairMode", "TODO");
+            polish.Add("failedStartLauncherRepairMode", "Nie udało się uruchomić launchera WoT w trybie naprawy.");
+            french.Add("failedStartLauncherRepairMode", "Erreur lors du lancement de WoTLauncher en mode de réparation");
 
             //Component: failedCollectFile
             //
             english.Add("failedCollectFile", "Failed to collect the file ");
             german.Add("failedCollectFile", "TODO");
-            polish.Add("failedCollectFile", "TODO");
-            french.Add("failedCollectFile", "TODO");
+            polish.Add("failedCollectFile", "Nie udało się zebrać plików ");
+            french.Add("failedCollectFile", "Erreur lors de la collecte du fichier");
 
             //Component: failedCreateZipfile
             //
             english.Add("failedCreateZipfile", "Failed to create the zip file ");
             german.Add("failedCreateZipfile", "TODO");
-            polish.Add("failedCreateZipfile", "TODO");
-            french.Add("failedCreateZipfile", "TODO");
+            polish.Add("failedCreateZipfile", "Nie udało się stworzyć pliku zip");
+            french.Add("failedCreateZipfile", "Erreur lors de la création du fichier zip");
 
             //Component: launcherRepairModeStarted
             //
             english.Add("launcherRepairModeStarted", "Repair mode successfully started");
             german.Add("launcherRepairModeStarted", "TODO");
-            polish.Add("launcherRepairModeStarted", "TODO");
-            french.Add("launcherRepairModeStarted", "TODO");
+            polish.Add("launcherRepairModeStarted", "Uruchomiono tryb naprawy");
+            french.Add("launcherRepairModeStarted", "Mode de réparation démarrer avec succès");
 
             //Component: ChangeInstall
             //
             english.Add("ChangeInstall", "Change selected WoT install");
             german.Add("ChangeInstall", "TODO");
-            polish.Add("ChangeInstall", "TODO");
+            polish.Add("ChangeInstall", "Zmień zaznaczoną instalację WoT");
             french.Add("ChangeInstall", "TODO");
 
             //Component: zipSavedTo
             //
             english.Add("zipSavedTo", "Zip file saved to: ");
             german.Add("zipSavedTo", "TODO");
-            polish.Add("zipSavedTo", "TODO");
-            french.Add("zipSavedTo", "TODO");
+            polish.Add("zipSavedTo", "Plik zip zapisano do: ");
+            french.Add("zipSavedTo", "Fichier zip sauvegarder à: ");
         }
     }
 }
