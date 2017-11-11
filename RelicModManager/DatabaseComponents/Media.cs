@@ -1,5 +1,4 @@
-﻿
-namespace RelhaxModpack
+﻿namespace RelhaxModpack
 {
     public enum MediaType
     {

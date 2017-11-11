@@ -50,7 +50,7 @@ namespace RelhaxModpack
         {
             if (UnsavedModifications)
             {
-                if (MessageBox.Show("You have unsaved changes, return to editor?", "unsaved changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show("You have unsaved changes, return to editor?", "unsaved changes", MessageBoxButtons.YesNo, MessageBoxIcon.Stop) == DialogResult.Yes)
                 {
                     e.Cancel = true;
                     return;
@@ -2435,20 +2435,17 @@ namespace RelhaxModpack
 
         private void ObjectPicturesList_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            return;
-            int index = ((ListBox)sender).IndexFromPoint(e.Location);
-            if (index != System.Windows.Forms.ListBox.NoMatches)
+            ListBox lb = (ListBox)sender;
+            if (lb.DataSource == null)
+                return;
+            Media med = (Media)lb.SelectedItem;
+            string[] searchList = new string[] { "http://", "https://" };
+            foreach (string r in searchList)
             {
-                string entry = ((ListBox)sender).SelectedItem.ToString();
-                string[] searchList = new string[] { "http://", "https://" };
-                foreach (string r in searchList)
+                int pos = med.URL.IndexOf(r, StringComparison.OrdinalIgnoreCase);
+                if (pos >= 0)
                 {
-                    int pos = entry.IndexOf(r, StringComparison.OrdinalIgnoreCase);
-                    if (pos >= 0)
-                    {
-                        Utils.AppendToLog("Test: " + entry.Substring(pos));
-                        System.Diagnostics.Process.Start(entry.Substring(pos));
-                    }
+                    System.Diagnostics.Process.Start(med.URL.Substring(pos));
                 }
             }
         }
