@@ -1063,51 +1063,6 @@ namespace RelhaxModpack
                 Utils.ExceptionLog("installRelhaxMod_Click", "now each logical dependency has a complete list of every dependency ...", ex);
             }
 
-            //verify that all global dependencies, dependencies, and logicalDependencies are actually Enabled and have valid zip files
-            //if they don't, remove them. if they do, macro the ExtractPath
-            try
-            {
-                for(int i = 0; i < globalDependenciesToInstall.Count; i++)
-                {
-                    if((!globalDependenciesToInstall[i].Enabled) || globalDependenciesToInstall[i].ZipFile.Equals(""))
-                    {
-                        globalDependenciesToInstall.RemoveAt(i);
-                        i--;
-                    }
-                    else
-                    {
-                        globalDependenciesToInstall[i].ExtractPath = globalDependenciesToInstall[i].ExtractPath.Trim().Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(globalDependenciesToInstall[i].ExtractPath.Trim());
-                    }
-                }
-                for (int i = 0; i < dependenciesToInstall.Count; i++)
-                {
-                    if ((!dependenciesToInstall[i].Enabled) || dependenciesToInstall[i].ZipFile.Equals(""))
-                    {
-                        dependenciesToInstall.RemoveAt(i);
-                        i--;
-                    }
-                    else
-                    {
-                        dependenciesToInstall[i].ExtractPath = dependenciesToInstall[i].ExtractPath.Trim().Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(dependenciesToInstall[i].ExtractPath.Trim());
-                    }
-                }
-                for (int i = 0; i < logicalDependenciesToInstall.Count; i++)
-                {
-                    if ((!logicalDependenciesToInstall[i].Enabled) || logicalDependenciesToInstall[i].ZipFile.Equals(""))
-                    {
-                        logicalDependenciesToInstall.RemoveAt(i);
-                        i--;
-                    }
-                    {
-                        logicalDependenciesToInstall[i].ExtractPath = logicalDependenciesToInstall[i].ExtractPath.Trim().Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(logicalDependenciesToInstall[i].ExtractPath.Trim());
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Utils.ExceptionLog("installRelhaxMod_Click", "verify that all ... are actually Enabled", ex);
-            }
-
             //create the list of shortcuts
             try
             {
@@ -1168,6 +1123,53 @@ namespace RelhaxModpack
             {
                 Utils.ExceptionLog("create the list of shortcuts", ex);
             }
+
+            //verify that all global dependencies, dependencies, and logicalDependencies are actually Enabled and have valid zip files
+            //if they don't, remove them. if they do, macro the ExtractPath
+            try
+            {
+                for(int i = 0; i < globalDependenciesToInstall.Count; i++)
+                {
+                    if((!globalDependenciesToInstall[i].Enabled) || globalDependenciesToInstall[i].ZipFile.Equals(""))
+                    {
+                        globalDependenciesToInstall.RemoveAt(i);
+                        i--;
+                    }
+                    else
+                    {
+                        globalDependenciesToInstall[i].ExtractPath = globalDependenciesToInstall[i].ExtractPath.Trim().Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(globalDependenciesToInstall[i].ExtractPath.Trim());
+                    }
+                }
+                for (int i = 0; i < dependenciesToInstall.Count; i++)
+                {
+                    if ((!dependenciesToInstall[i].Enabled) || dependenciesToInstall[i].ZipFile.Equals(""))
+                    {
+                        dependenciesToInstall.RemoveAt(i);
+                        i--;
+                    }
+                    else
+                    {
+                        dependenciesToInstall[i].ExtractPath = dependenciesToInstall[i].ExtractPath.Trim().Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(dependenciesToInstall[i].ExtractPath.Trim());
+                    }
+                }
+                for (int i = 0; i < logicalDependenciesToInstall.Count; i++)
+                {
+                    if ((!logicalDependenciesToInstall[i].Enabled) || logicalDependenciesToInstall[i].ZipFile.Equals(""))
+                    {
+                        logicalDependenciesToInstall.RemoveAt(i);
+                        i--;
+                    }
+                    {
+                        logicalDependenciesToInstall[i].ExtractPath = logicalDependenciesToInstall[i].ExtractPath.Trim().Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(logicalDependenciesToInstall[i].ExtractPath.Trim());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("installRelhaxMod_Click", "verify that all ... are actually Enabled", ex);
+            }
+
+            
 
             //check for dependencies that actually need to be installed at the end
             try
