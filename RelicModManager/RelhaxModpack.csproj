@@ -156,8 +156,8 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Utils\Logging.cs" />
-    <Compile Include="XmlBinary\Primitive_File.cs" />
-    <Compile Include="XmlBinary\Packed_Section.cs" />
+    <Compile Include="XmlBinary\PackedSectionReader.cs" />
+    <Compile Include="XmlBinary\PrimitiveFileReader.cs" />
     <Compile Include="XmlBinary\XmlBinaryHandler.cs" />
     <Compile Include="Utils\XMLUtils.cs" />
     <Compile Include="Utils\NativeMethods.cs" />

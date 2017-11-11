@@ -8,8 +8,8 @@ namespace RelhaxModpack.XmlBinary
 {
     public partial class XmlBinaryHandler
     {
-        private Packed_Section_Reader PS = new Packed_Section_Reader();
-        private Primitive_File_Reader PF = new Primitive_File_Reader();
+        private PackedSectionReader PS = new PackedSectionReader();
+        private PrimitiveFileReader PF = new PrimitiveFileReader();
         private StringBuilder DecodedXML = new StringBuilder();
 
         private static readonly Int32 Binary_Header = 0x42a14e65;
@@ -128,7 +128,7 @@ namespace RelhaxModpack.XmlBinary
             Int32 head = reader.ReadInt32();
             try
             {
-                if (head == Packed_Section_Reader.Packed_Header)
+                if (head == PackedSectionReader.Packed_Header)
                 {
                     result = DecodePackedFile(reader, Path.GetFileName(filename));
                 }

@@ -4,7 +4,7 @@ using System.Xml;
 
 namespace RelhaxModpack.XmlBinary
 {
-    public class Primitive_File_Reader
+    public class PrimitiveFileReader
     {
         public void ReadPrimitives(BinaryReader reader, XmlNode element, XmlDocument xDoc)
         {
