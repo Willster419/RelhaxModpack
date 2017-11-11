@@ -71,7 +71,7 @@ namespace RelhaxModpack
                 {
                     if (databaseURL.ToLower().Equals(Settings.ModInfoDatFile.ToLower()))
                     {
-                        Utils.AppendToLog("loading dat config file");
+                        Logging.Manager("loading dat config file");
                         string xmlString = Utils.GetStringFromZip(Settings.ModInfoDatFile, "modInfo.xml");
                         doc = XDocument.Parse(xmlString, LoadOptions.SetLineInfo);
                         // create new developerSelections NameList
@@ -79,13 +79,13 @@ namespace RelhaxModpack
                     }
                     else
                     {
-                        Utils.AppendToLog("loading local config file");
+                        Logging.Manager("loading local config file");
                         doc = XDocument.Load(databaseURL, LoadOptions.SetLineInfo);
                     }
                 }
                 catch (XmlException ex)
                 {
-                    Utils.AppendToLog(string.Format("CRITICAL: Failed to read database: {0}\nMessage: {1}", databaseURL, ex.Message));
+                    Logging.Manager(string.Format("CRITICAL: Failed to read database: {0}\nMessage: {1}", databaseURL, ex.Message));
                     MessageBox.Show(Translations.getTranslatedString("databaseReadFailed"));
                     Application.Exit();
                     return;
@@ -160,7 +160,7 @@ namespace RelhaxModpack
                                     }
                                     if (sc != null)
                                     {
-                                        if (depScNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globPend {1} (line {2})", string.Join(",", depScNodeList), d.ZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
+                                        if (depScNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => globPend {1} (line {2})", string.Join(",", depScNodeList), d.ZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
                                         d.shortCuts.Add(sc);
                                     }
                                 }
@@ -169,20 +169,20 @@ namespace RelhaxModpack
                                 d.PackageName = globs.Value.Trim();
                                 if (d.PackageName.Equals(""))
                                 {
-                                    Utils.AppendToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.ZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                    Logging.Manager(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.ZipFile, ((IXmlLineInfo)globs).LineNumber));
                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => globsPend {1}\n\nmore informations, see logfile", globs.Name.ToString(), d.ZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                 }
                                 break;
                             default:
-                                Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.ZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.ZipFile, ((IXmlLineInfo)globs).LineNumber));
                                 if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: ZipFile, CRC, StartAddress, EndAddress, dependencyenabled, PackageName\n\nNode found: {0}\n\nmore informations, see logfile", globs.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                 break;
                         }
                     }
                     if (d != null)
                     {
-                        if (depNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber)); };
-                        if (d.PackageName.Equals("")) { string rad = Utils.RandomString(30); d.PackageName = rad; Utils.AppendToLog("PackageName is random generated: " + rad); };              // to avoid exceptions
+                        if (depNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber)); };
+                        if (d.PackageName.Equals("")) { string rad = Utils.RandomString(30); d.PackageName = rad; Logging.Manager("PackageName is random generated: " + rad); };              // to avoid exceptions
                         globalDependencies.Add(d);
                     };
                 }
@@ -229,7 +229,7 @@ namespace RelhaxModpack
                                 d.PackageName = globs.Value.Trim();
                                 if (d.PackageName.Equals(""))
                                 {
-                                    Utils.AppendToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.ZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                    Logging.Manager(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.ZipFile, ((IXmlLineInfo)globs).LineNumber));
                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => globsPend {1}\n\nmore informations, see logfile", globs.Name.ToString(), d.ZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                 }
                                 break;
@@ -257,7 +257,7 @@ namespace RelhaxModpack
                                     }
                                     if (sc != null)
                                     {
-                                        if (depScNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => Dep {1} (line {2})", string.Join(",", depScNodeList), d.ZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
+                                        if (depScNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => Dep {1} (line {2})", string.Join(",", depScNodeList), d.ZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
                                         d.shortCuts.Add(sc);
                                     }
                                 }
@@ -278,7 +278,7 @@ namespace RelhaxModpack
                                                 ld.PackageName = logDependencyNode.Value.Trim();
                                                 if (ld.PackageName.Equals(""))
                                                 {
-                                                    Utils.AppendToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => logDep {1} (line {2})", logDependencyNode.Name.ToString(), d.ZipFile, ((IXmlLineInfo)logDependencyNode).LineNumber));
+                                                    Logging.Manager(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => logDep {1} (line {2})", logDependencyNode.Name.ToString(), d.ZipFile, ((IXmlLineInfo)logDependencyNode).LineNumber));
                                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\"  => dep {1}", logDependencyNode.Name.ToString(), d.ZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                 }
                                                 break;
@@ -286,29 +286,29 @@ namespace RelhaxModpack
                                                 ld.NegateFlag = Utils.ParseBool(logDependencyNode.Value, true);
                                                 break;
                                             default:
-                                                Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => logDep {1} (line {2})", logDependencyNode.Name.ToString(), d.ZipFile, ((IXmlLineInfo)logDependencyNode).LineNumber));
+                                                Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => logDep {1} (line {2})", logDependencyNode.Name.ToString(), d.ZipFile, ((IXmlLineInfo)logDependencyNode).LineNumber));
                                                 if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: PackageName\n\nNode found: {0}\n\nmore informations, see logfile", logDependencyNode.Name.ToString())); };
                                                 break;
                                         }
                                     }
                                     if (ld != null)
                                     {
-                                        if (logDepNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => logDep {1} (line {2})", string.Join(",", logDepNodeList), ld.ZipFile, ((IXmlLineInfo)logDependencyHolder).LineNumber)); };
-                                        if (ld.PackageName.Equals("")) { string rad = Utils.RandomString(30); ld.PackageName = rad; Utils.AppendToLog("PackageName is random generated: " + rad); };              // to avoid exceptions
+                                        if (logDepNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => logDep {1} (line {2})", string.Join(",", logDepNodeList), ld.ZipFile, ((IXmlLineInfo)logDependencyHolder).LineNumber)); };
+                                        if (ld.PackageName.Equals("")) { string rad = Utils.RandomString(30); ld.PackageName = rad; Logging.Manager("PackageName is random generated: " + rad); };              // to avoid exceptions
                                         d.LogicalDependencies.Add(ld);
                                     };
                                 }
                                 break;
                             default:
-                                Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.ZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.ZipFile, ((IXmlLineInfo)globs).LineNumber));
                                 if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: ZipFile, CRC, StartAddress, EndAddress, dependencyenabled, PackageName\n\nNode found: {0}\n\nmore informations, see logfile", globs.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                 break;
                         }
                     }
                     if (d != null)
                     {
-                        if (depNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber)); };
-                        if (d.PackageName.Equals("")) { string rad = Utils.RandomString(30); d.PackageName = rad; Utils.AppendToLog("PackageName is random generated: " + rad); };              // to avoid exceptions
+                        if (depNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber)); };
+                        if (d.PackageName.Equals("")) { string rad = Utils.RandomString(30); d.PackageName = rad; Logging.Manager("PackageName is random generated: " + rad); };              // to avoid exceptions
                         dependencies.Add(d);
                     };
                 }
@@ -371,7 +371,7 @@ namespace RelhaxModpack
                                     }
                                     if (sc != null)
                                     {
-                                        if (logDepScNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => logDep {1} (line {2})", string.Join(",", logDepScNodeList), d.ZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
+                                        if (logDepScNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => logDep {1} (line {2})", string.Join(",", logDepScNodeList), d.ZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
                                         d.Shortcuts.Add(sc);
                                     }
                                 }
@@ -380,20 +380,20 @@ namespace RelhaxModpack
                                 d.PackageName = globs.Value.Trim();
                                 if (d.PackageName.Equals(""))
                                 {
-                                    Utils.AppendToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => logDep {1} (line {2})", globs.Name.ToString(), d.ZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                    Logging.Manager(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => logDep {1} (line {2})", globs.Name.ToString(), d.ZipFile, ((IXmlLineInfo)globs).LineNumber));
                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => logDep {1}\n\nmore informations, see logfile", globs.Name.ToString(), d.ZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                 }
                                 break;
                             default:
-                                Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => logDep {1} (line {2})", globs.Name.ToString(), d.ZipFile, ((IXmlLineInfo)globs).LineNumber));
+                                Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => logDep {1} (line {2})", globs.Name.ToString(), d.ZipFile, ((IXmlLineInfo)globs).LineNumber));
                                 if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: ZipFile, CRC, StartAddress, EndAddress, dependencyenabled, PackageName\n\nNode found: {0}\n\nmore informations, see logfile", globs.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                 break;
                         }
                     }
                     if (d != null)
                     {
-                        if (depNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber)); };
-                        if (d.PackageName.Equals("")) { string rad = Utils.RandomString(30); d.PackageName = rad; Utils.AppendToLog("PackageName is random generated: " + rad); };              // to avoid exceptions
+                        if (depNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})", string.Join(",", depNodeList), d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber)); };
+                        if (d.PackageName.Equals("")) { string rad = Utils.RandomString(30); d.PackageName = rad; Logging.Manager("PackageName is random generated: " + rad); };              // to avoid exceptions
                         logicalDependencies.Add(d);
                     };
                 }
@@ -460,7 +460,7 @@ namespace RelhaxModpack
                                                         m.PackageName = modNode.Value.Trim();
                                                         if (m.PackageName.Equals(""))
                                                         {
-                                                            Utils.AppendToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => mod {1} ({2}) (line {3})", modNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)modNode).LineNumber));
+                                                            Logging.Manager(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => mod {1} ({2}) (line {3})", modNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)modNode).LineNumber));
                                                             if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => mod {1} ({2})", modNode.Name.ToString(), m.Name, m.ZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                         }
                                                         break;
@@ -494,7 +494,7 @@ namespace RelhaxModpack
                                                                     m.UserFiles.Add(innerText);
                                                                     break;
                                                                 default:
-                                                                    Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => userDatas => expected node: userData (line {3})", userDataNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)userDataNode).LineNumber));
+                                                                    Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => userDatas => expected node: userData (line {3})", userDataNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)userDataNode).LineNumber));
                                                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected node: userData\n\nNode found: {0}\n\nmore informations, see logfile", userDataNode.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                                     break;
                                                             }
@@ -533,14 +533,14 @@ namespace RelhaxModpack
                                                                                 }
                                                                                 break;
                                                                             default:
-                                                                                Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => picture =>expected nodes: URL (line {3})", pictureNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)pictureNode).LineNumber));
+                                                                                Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => picture =>expected nodes: URL (line {3})", pictureNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)pictureNode).LineNumber));
                                                                                 if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: URL\n\nNode found: {0}\n\nmore informations, see logfile", pictureNode.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                                                 break;
                                                                         }
                                                                     }
                                                                     break;
                                                                 default:
-                                                                    Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => expected node: picture (line {3})", pictureHolder.Name, m.Name, m.ZipFile, ((IXmlLineInfo)pictureHolder).LineNumber));
+                                                                    Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => expected node: picture (line {3})", pictureHolder.Name, m.Name, m.ZipFile, ((IXmlLineInfo)pictureHolder).LineNumber));
                                                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected node: picture\n\nNode found: {0}\n\nmore informations, see logfile", pictureHolder.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                                     break;
                                                             }
@@ -571,7 +571,7 @@ namespace RelhaxModpack
                                                             }
                                                             if (sc != null)
                                                             {
-                                                                if (depScNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => mod {1} (line {2})", string.Join(",", depScNodeList), m.ZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
+                                                                if (depScNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => mod {1} (line {2})", string.Join(",", depScNodeList), m.ZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
                                                                 m.ShortCuts.Add(sc);
                                                             }
                                                         }
@@ -592,20 +592,20 @@ namespace RelhaxModpack
                                                                         d.PackageName = dependencyNode.Value.Trim();
                                                                         if (d.PackageName.Equals(""))
                                                                         {
-                                                                            Utils.AppendToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => mod {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), m.Name, m.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
+                                                                            Logging.Manager(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => mod {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), m.Name, m.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                                             if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => mod {1} ({2}) => dep {3}", dependencyNode.Name.ToString(), m.Name, m.ZipFile, d.ZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                                         }
                                                                         break;
                                                                     default:
-                                                                        Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), m.Name, m.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
+                                                                        Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), m.Name, m.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: PackageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                                         break;
                                                                 }
                                                             }
                                                             if (d != null)
                                                             {
-                                                                if (depNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => mod {1} ({2}) => dep {3} (line {4})", string.Join(",", depNodeList), m.Name, m.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber)); };
-                                                                if (d.PackageName.Equals("")) { string rad = Utils.RandomString(30); d.PackageName = rad; Utils.AppendToLog("PackageName is random generated: " + rad); };              // to avoid exceptions
+                                                                if (depNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => mod {1} ({2}) => dep {3} (line {4})", string.Join(",", depNodeList), m.Name, m.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber)); };
+                                                                if (d.PackageName.Equals("")) { string rad = Utils.RandomString(30); d.PackageName = rad; Logging.Manager("PackageName is random generated: " + rad); };              // to avoid exceptions
                                                                 m.Dependencies.Add(d);
                                                             };
                                                         }
@@ -626,7 +626,7 @@ namespace RelhaxModpack
                                                                         d.PackageName = dependencyNode.Value.Trim();
                                                                         if (d.PackageName.Equals(""))
                                                                         {
-                                                                            Utils.AppendToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => config {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), m.Name, m.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
+                                                                            Logging.Manager(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => config {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), m.Name, m.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                                             if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => config {1} ({2}) => dep {3}", dependencyNode.Name.ToString(), m.Name, m.ZipFile, d.ZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                                         }
                                                                         break;
@@ -634,15 +634,15 @@ namespace RelhaxModpack
                                                                         d.NegateFlag = Utils.ParseBool(dependencyNode.Value, true);
                                                                         break;
                                                                     default:
-                                                                        Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), m.Name, m.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
+                                                                        Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), m.Name, m.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: PackageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name.ToString())); };
                                                                         break;
                                                                 }
                                                             }
                                                             if (d != null)
                                                             {
-                                                                if (depNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => config {1} ({2}) => dep {3} (line {4})", string.Join(",", depNodeList), m.Name, m.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber)); };
-                                                                if (d.PackageName.Equals("")) { string rad = Utils.RandomString(30); d.PackageName = rad; Utils.AppendToLog("PackageName is random generated: " + rad); };              // to avoid exceptions
+                                                                if (depNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => config {1} ({2}) => dep {3} (line {4})", string.Join(",", depNodeList), m.Name, m.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber)); };
+                                                                if (d.PackageName.Equals("")) { string rad = Utils.RandomString(30); d.PackageName = rad; Logging.Manager("PackageName is random generated: " + rad); };              // to avoid exceptions
                                                                 m.LogicalDependencies.Add(d);
                                                             };
                                                         }
@@ -652,20 +652,20 @@ namespace RelhaxModpack
                                                         XMLUtils.ProcessConfigs(modNode, m, true);
                                                         break;
                                                     default:
-                                                        Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) (line {3})", modNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)modNode).LineNumber));
+                                                        Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) (line {3})", modNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)modNode).LineNumber));
                                                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: name, version, ZipFile, StartAddress, EndAddress, CRC, Enabled, PackageName, size, description, updateComment, devURL, userDatas, pictures, dependencies, configs\n\nNode found: {0}\n\nmore informations, see logfile", modNode.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                         break;
                                                 }
                                             }
                                             if (m != null)
                                             {
-                                                if (modNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => mod {1} ({2}) (line {3})", string.Join(",", modNodeList), m.Name, m.ZipFile, ((IXmlLineInfo)modHolder).LineNumber)); };
-                                                if (m.PackageName.Equals("")) { string rad = Utils.RandomString(30); m.PackageName = rad; Utils.AppendToLog("PackageName is random generated: " + rad); };              // to avoid exceptions
+                                                if (modNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => mod {1} ({2}) (line {3})", string.Join(",", modNodeList), m.Name, m.ZipFile, ((IXmlLineInfo)modHolder).LineNumber)); };
+                                                if (m.PackageName.Equals("")) { string rad = Utils.RandomString(30); m.PackageName = rad; Logging.Manager("PackageName is random generated: " + rad); };              // to avoid exceptions
                                                 cat.Mods.Add(m);
                                             };
                                             break;
                                         default:
-                                            Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1} (line {2})", modHolder.Name.ToString(), cat.Name, ((IXmlLineInfo)modHolder).LineNumber));
+                                            Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1} (line {2})", modHolder.Name.ToString(), cat.Name, ((IXmlLineInfo)modHolder).LineNumber));
                                             if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: mod\n\nNode found: {0}\n\nmore informations, see logfile", modHolder.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                             break;
                                     }
@@ -687,33 +687,33 @@ namespace RelhaxModpack
                                                 d.PackageName = dependencyNode.Value.Trim();
                                                 if (d.PackageName.Equals(""))
                                                 {
-                                                    Utils.AppendToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => cat {1} => dep {2} (line {3})", dependencyNode.Name.ToString(), cat.Name, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
+                                                    Logging.Manager(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => cat {1} => dep {2} (line {3})", dependencyNode.Name.ToString(), cat.Name, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => cat {1} => dep {2}", dependencyNode.Name.ToString(), cat.Name, d.ZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                 }
                                                 break;
                                             default:
-                                                Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1} => dep {2} (line {3})", dependencyNode.Name, cat.Name, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
+                                                Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1} => dep {2} (line {3})", dependencyNode.Name, cat.Name, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                 if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: PackageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                 break;
                                         }
                                     }
                                     if (d != null)
                                     {
-                                        if (depNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => cat {1} => dep {2} (line {3})", string.Join(",", depNodeList), cat.Name, d.ZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber)); };
-                                        if (d.PackageName.Equals("")) { string rad = Utils.RandomString(30); d.PackageName = rad; Utils.AppendToLog("PackageName is random generated: " + rad); };              // to avoid exceptions
+                                        if (depNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => cat {1} => dep {2} (line {3})", string.Join(",", depNodeList), cat.Name, d.ZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber)); };
+                                        if (d.PackageName.Equals("")) { string rad = Utils.RandomString(30); d.PackageName = rad; Logging.Manager("PackageName is random generated: " + rad); };              // to avoid exceptions
                                         cat.Dependencies.Add(d);
                                     };
                                 }
                                 break;
                             default:
-                                Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1} (line {2})", catagoryNode.Name.ToString(), cat.Name, ((IXmlLineInfo)catagoryNode).LineNumber));
+                                Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1} (line {2})", catagoryNode.Name.ToString(), cat.Name, ((IXmlLineInfo)catagoryNode).LineNumber));
                                 if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: name, selectionType, mods, dependencies\n\nNode found: {0}\n\nmore informations, see logfile", catagoryNode.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                 break;
                         }
                     }
                     if (cat != null)
                     {
-                        if (catNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => cat {1} (line {2})", string.Join(",", catNodeList), cat.Name, ((IXmlLineInfo)catagoryHolder).LineNumber)); };
+                        if (catNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => cat {1} (line {2})", string.Join(",", catNodeList), cat.Name, ((IXmlLineInfo)catagoryHolder).LineNumber)); };
                         parsedCatagoryList.Add(cat);
                     };
                 }
@@ -775,7 +775,7 @@ namespace RelhaxModpack
                                         c.PackageName = configNode.Value.Trim();
                                         if (c.PackageName.Equals(""))
                                         {
-                                            Utils.AppendToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => config {1} ({2}) (line {3})", configNode.Name.ToString(), c.Name, c.ZipFile, ((IXmlLineInfo)configNode).LineNumber));
+                                            Logging.Manager(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => config {1} ({2}) (line {3})", configNode.Name.ToString(), c.Name, c.ZipFile, ((IXmlLineInfo)configNode).LineNumber));
                                             if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => config {1} ({2})", configNode.Name.ToString(), c.Name, c.ZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                         }
                                         break;
@@ -814,7 +814,7 @@ namespace RelhaxModpack
                                                     c.UserFiles.Add(innerText);
                                                     break;
                                                 default:
-                                                    Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => userDatas => expected nodes: userData (line {3})", userDataNode.Name.ToString(), c.Name, c.ZipFile, ((IXmlLineInfo)configNode).LineNumber));
+                                                    Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => userDatas => expected nodes: userData (line {3})", userDataNode.Name.ToString(), c.Name, c.ZipFile, ((IXmlLineInfo)configNode).LineNumber));
                                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: userData\n\nNode found: {0}\n\nmore informations, see logfile", userDataNode.Name.ToString())); };
                                                     break;
                                             }
@@ -853,14 +853,14 @@ namespace RelhaxModpack
                                                                 }
                                                                 break;
                                                             default:
-                                                                Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => picture =>expected nodes: URL (line {3})", pictureNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)pictureNode).LineNumber));
+                                                                Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => picture =>expected nodes: URL (line {3})", pictureNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)pictureNode).LineNumber));
                                                                 if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: URL\n\nNode found: {0}\n\nmore informations, see logfile", pictureNode.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                                 break;
                                                         }
                                                     }
                                                     break;
                                                 default:
-                                                    Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => expected node: picture (line {3})", pictureHolder.Name, m.Name, m.ZipFile, ((IXmlLineInfo)pictureHolder).LineNumber));
+                                                    Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => expected node: picture (line {3})", pictureHolder.Name, m.Name, m.ZipFile, ((IXmlLineInfo)pictureHolder).LineNumber));
                                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected node: picture\n\nNode found: {0}\n\nmore informations, see logfile", pictureHolder.Name.ToString()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                     break;
                                             }
@@ -891,7 +891,7 @@ namespace RelhaxModpack
                                             }
                                             if (sc != null)
                                             {
-                                                if (cScNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => mod {1} (line {2})", string.Join(",", cScNodeList), c.ZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
+                                                if (cScNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => mod {1} (line {2})", string.Join(",", cScNodeList), c.ZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
                                                 c.ShortCuts.Add(sc);
                                             }
                                         }
@@ -912,20 +912,20 @@ namespace RelhaxModpack
                                                         d.PackageName = dependencyNode.Value.Trim();
                                                         if (d.PackageName.Equals(""))
                                                         {
-                                                            Utils.AppendToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => config {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), c.Name, c.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
+                                                            Logging.Manager(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => config {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), c.Name, c.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                             if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => config {1} ({2}) => dep {3}", dependencyNode.Name.ToString(), c.Name, c.ZipFile, d.ZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                         }
                                                         break;
                                                     default:
-                                                        Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), c.Name, c.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
+                                                        Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), c.Name, c.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: PackageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name.ToString())); };
                                                         break;
                                                 }
                                             }
                                             if (d != null)
                                             {
-                                                if (depNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => config {1} ({2}) => dep {3} (line {4})", string.Join(",", depNodeList), c.Name, c.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber)); };
-                                                if (d.PackageName.Equals("")) { string rad = Utils.RandomString(30); d.PackageName = rad; Utils.AppendToLog("PackageName is random generated: " + rad); };              // to avoid exceptions
+                                                if (depNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => config {1} ({2}) => dep {3} (line {4})", string.Join(",", depNodeList), c.Name, c.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber)); };
+                                                if (d.PackageName.Equals("")) { string rad = Utils.RandomString(30); d.PackageName = rad; Logging.Manager("PackageName is random generated: " + rad); };              // to avoid exceptions
                                                 c.Dependencies.Add(d);
                                             };
                                         }
@@ -946,7 +946,7 @@ namespace RelhaxModpack
                                                         d.PackageName = dependencyNode.Value.Trim();
                                                         if (d.PackageName.Equals(""))
                                                         {
-                                                            Utils.AppendToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => config {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), c.Name, c.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
+                                                            Logging.Manager(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => config {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), c.Name, c.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                             if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => config {1} ({2}) => dep {3}", dependencyNode.Name.ToString(), c.Name, c.ZipFile, d.ZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
                                                         }
                                                         break;
@@ -954,27 +954,27 @@ namespace RelhaxModpack
                                                         d.NegateFlag = Utils.ParseBool(dependencyNode.Value, true);
                                                         break;
                                                     default:
-                                                        Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), c.Name, c.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
+                                                        Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => dep {3} (line {4})", dependencyNode.Name.ToString(), c.Name, c.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: PackageName\n\nNode found: {0}\n\nmore informations, see logfile", dependencyNode.Name.ToString())); };
                                                         break;
                                                 }
                                             }
                                             if (d != null)
                                             {
-                                                if (depNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => config {1} ({2}) => dep {3} (line {4})", string.Join(",", depNodeList), c.Name, c.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber)); };
-                                                if (d.PackageName.Equals("")) { string rad = Utils.RandomString(30); d.PackageName = rad; Utils.AppendToLog("PackageName is random generated: " + rad); };              // to avoid exceptions
+                                                if (depNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => config {1} ({2}) => dep {3} (line {4})", string.Join(",", depNodeList), c.Name, c.ZipFile, d.ZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber)); };
+                                                if (d.PackageName.Equals("")) { string rad = Utils.RandomString(30); d.PackageName = rad; Logging.Manager("PackageName is random generated: " + rad); };              // to avoid exceptions
                                                 c.LogicalDependencies.Add(d);
                                             };
                                         }
                                         break;
                                     default:
-                                        Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) (line {3})", configNode.Name.ToString(), c.Name, c.ZipFile, ((IXmlLineInfo)configNode).LineNumber));
+                                        Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) (line {3})", configNode.Name.ToString(), c.Name, c.ZipFile, ((IXmlLineInfo)configNode).LineNumber));
                                         if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: name, version, ZipFile, StartAddress, EndAddress, CRC, Enabled, PackageName, size, updateComment, description, devURL, type, configs, userDatas, pictures, dependencies\n\nNode found: {0}\n\nmore informations, see logfile", configNode.Name.ToString())); };
                                         break;
                                 }
                             }
-                            if (c != null && confNodeList.Length > 0) { Utils.AppendToLog(string.Format("Error: modInfo.xml nodes not used: {0} => config {1} ({2}) (line {3})", string.Join(",", confNodeList), c.Name, c.ZipFile, ((IXmlLineInfo)configHolder).LineNumber)); };
-                            if (c.PackageName.Equals("")) { string rad = Utils.RandomString(30); c.PackageName = rad; Utils.AppendToLog("PackageName is random generated: " + rad); };              // to avoid exceptions
+                            if (c != null && confNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => config {1} ({2}) (line {3})", string.Join(",", confNodeList), c.Name, c.ZipFile, ((IXmlLineInfo)configHolder).LineNumber)); };
+                            if (c.PackageName.Equals("")) { string rad = Utils.RandomString(30); c.PackageName = rad; Logging.Manager("PackageName is random generated: " + rad); };              // to avoid exceptions
                             //attach it to eithor the config of correct level or the mod
                             if (parentIsMod)
                                 m.configs.Add(c);
@@ -982,7 +982,7 @@ namespace RelhaxModpack
                                 con.configs.Add(c);
                             break;
                         default:
-                            Utils.AppendToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => expected nodes: config (line {3})", configHolder.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)configHolder).LineNumber));
+                            Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => expected nodes: config (line {3})", configHolder.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)configHolder).LineNumber));
                             if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: config\n\nNode found: {0}\n\nmore informations, see logfile", configHolder.Name)); };
                             break;
                     }
@@ -1015,12 +1015,12 @@ namespace RelhaxModpack
             if (Settings.SaveLastConfig && !fromButton && fileToConvert == null)
             {
                 savePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml");
-                Utils.AppendToLog(string.Format("Save last config checked, saving to {0}", savePath));
+                Logging.Manager(string.Format("Save last config checked, saving to {0}", savePath));
             }
             else if (!fromButton && !(fileToConvert == null))
             {
                 savePath = fileToConvert;
-                Utils.AppendToLog(string.Format("convert saved config file \"{0}\" to format {1}", savePath, Settings.ConfigFileVersion));
+                Logging.Manager(string.Format("convert saved config file \"{0}\" to format {1}", savePath, Settings.ConfigFileVersion));
             }
 
             //create saved config xml layout
@@ -1122,7 +1122,7 @@ namespace RelhaxModpack
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
-            Utils.AppendToLog("Loading mod selections v1.0 from " + filePath);
+            Logging.Manager("Loading mod selections v1.0 from " + filePath);
             //get a list of mods
             XmlNodeList xmlModList = doc.SelectNodes("//mods/relhaxMods/mod");
             foreach (XmlNode n in xmlModList)
@@ -1140,7 +1140,7 @@ namespace RelhaxModpack
                                 return;
                             if (m == null)
                             {
-                                Utils.AppendToLog(string.Format("WARNING: mod \"{0}\" not found", nn.InnerText));
+                                Logging.Manager(string.Format("WARNING: mod \"{0}\" not found", nn.InnerText));
                                 MessageBox.Show(string.Format(Translations.getTranslatedString("modNotFound"), nn.InnerText));
                                 continue;
                             }
@@ -1162,7 +1162,7 @@ namespace RelhaxModpack
                                         mfCB2.IsChecked = true;
                                     }
                                 }
-                                Utils.AppendToLog(string.Format("Checking mod {0}", m.Name));
+                                Logging.Manager(string.Format("Checking mod {0}", m.Name));
                             }
                             else
                             {
@@ -1216,14 +1216,14 @@ namespace RelhaxModpack
                                         ModFormCheckBox mfcb = (ModFormCheckBox)m.ModFormCheckBox;
                                         mfcb.Checked = true;
                                     }
-                                    Utils.AppendToLog(string.Format("checking user mod {0}", m.ZipFile));
+                                    Logging.Manager(string.Format("checking user mod {0}", m.ZipFile));
                                 }
                             }
                             break;
                     }
                 }
             }
-            Utils.AppendToLog("Finished loading mod selections v1.0");
+            Logging.Manager("Finished loading mod selections v1.0");
             if (fromButton)
             {
                 DialogResult result = MessageBox.Show(Translations.getTranslatedString("oldSavedConfigFile"), Translations.getTranslatedString("information"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -1255,21 +1255,21 @@ namespace RelhaxModpack
         //loads a saved config from xml and parses it into the memory database
         public static void LoadConfigV2(string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
-            Utils.AppendToLog(string.Format("Loading mod selections v2.0 from {0}", filePath));
+            Logging.Manager(string.Format("Loading mod selections v2.0 from {0}", filePath));
             List<string> savedConfigList = new List<string>();
             XPathDocument doc;
             string[] filePathSplit = filePath.Split(',');
             if (filePathSplit.Count() > 1)
             {
                 // go here, if the config file selected is a developerSelection config and stored at the modInfo.dat file
-                Utils.AppendToLog("parsing developerSelection file: " + filePath);
+                Logging.Manager("parsing developerSelection file: " + filePath);
                 string xmlString = Utils.GetStringFromZip(filePathSplit[0], filePathSplit[1]);
                 StringReader rdr = new StringReader(xmlString);
                 doc = new XPathDocument(rdr);
             }
             else
             {
-                Utils.AppendToLog("parsing config file: " + filePath);
+                Logging.Manager("parsing config file: " + filePath);
                 doc = new XPathDocument(filePath);
             }
 
@@ -1308,7 +1308,7 @@ namespace RelhaxModpack
                                         mfCB2.IsChecked = true;
                                     }
                                 }
-                                Utils.AppendToLog(string.Format("Checking mod {0}", Utils.ReplaceMacro(m)));
+                                Logging.Manager(string.Format("Checking mod {0}", Utils.ReplaceMacro(m)));
                             }
                         }
                         else
@@ -1355,7 +1355,7 @@ namespace RelhaxModpack
                             ModFormCheckBox mfcb = (ModFormCheckBox)um.ModFormCheckBox;
                             mfcb.Checked = true;
                         }
-                        Utils.AppendToLog(string.Format("Checking user mod {0}", um.ZipFile));
+                        Logging.Manager(string.Format("Checking user mod {0}", um.ZipFile));
                     }
                 }
             }
@@ -1368,7 +1368,7 @@ namespace RelhaxModpack
                 }
                 MessageBox.Show(string.Format(Translations.getTranslatedString("modsNotFoundTechnical"), modsNotFoundList), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            Utils.AppendToLog("Finished loading mod selections v2.0");
+            Logging.Manager("Finished loading mod selections v2.0");
         }
 
         private static void LoadProcessConfigsV1(XmlNode holder, Mod m, bool parentIsMod, Config con = null)
@@ -1409,7 +1409,7 @@ namespace RelhaxModpack
                             }
                             if (c == null)
                             {
-                                Utils.AppendToLog(string.Format("WARNING: config \"{0}\" not found for mod/config \"{1}\"", nnnn.InnerText, holder.InnerText));
+                                Logging.Manager(string.Format("WARNING: config \"{0}\" not found for mod/config \"{1}\"", nnnn.InnerText, holder.InnerText));
                                 MessageBox.Show(string.Format(Translations.getTranslatedString("configNotFound"), nnnn.InnerText, holder.InnerText));
                                 continue;
                             }
@@ -1477,7 +1477,7 @@ namespace RelhaxModpack
                                         CBTemp.IsChecked = true;
                                     }
                                 }
-                                Utils.AppendToLog(string.Format("Checking mod {0}", Utils.ReplaceMacro(c)));
+                                Logging.Manager(string.Format("Checking mod {0}", Utils.ReplaceMacro(c)));
                             }
                             else
                             {
@@ -1610,7 +1610,7 @@ namespace RelhaxModpack
                                     CBTemp.IsChecked = true;
                                 }
                             }
-                            Utils.AppendToLog(string.Format("Checking mod {0}", Utils.ReplaceMacro(c)));
+                            Logging.Manager(string.Format("Checking mod {0}", Utils.ReplaceMacro(c)));
                         }
                     }
                     else

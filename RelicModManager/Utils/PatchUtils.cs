@@ -485,7 +485,7 @@ namespace RelhaxModpack
             }
             catch (JsonReaderException j)
             {
-                Utils.AppendToLog(string.Format("ERROR: Failed to patch {0}", jsonFile));
+                Logging.Manager(string.Format("ERROR: Failed to patch {0}", jsonFile));
                 if (Program.testMode)
                 {
                     //in test mode this is worthy of an EXCEPTION
@@ -495,7 +495,7 @@ namespace RelhaxModpack
             //if it failed to parse show the message (above) and pull out
             if (root == null)
             {
-                Utils.AppendToLog(string.Format("ERROR: Failed to patch {0}", jsonFile));
+                Logging.Manager(string.Format("ERROR: Failed to patch {0}", jsonFile));
                 return;
             }
             if (jsonMode.Equals("add"))
@@ -515,7 +515,7 @@ namespace RelhaxModpack
                     result = (JContainer)root.SelectToken(jsonPath + "." + propName);
                     if(result != null)
                     {
-                        Utils.AppendToLog("ERROR: cannot add blank array when object already exists");
+                        Logging.Manager("ERROR: cannot add blank array when object already exists");
                         return;
                     }
                     JContainer pathForArray = (JContainer)root.SelectToken(jsonPath);
@@ -531,7 +531,7 @@ namespace RelhaxModpack
                     result = (JContainer)root.SelectToken(jsonPath + "." + propName);
                     if (result != null)
                     {
-                        Utils.AppendToLog("ERROR: cannot add blank array when object already exists");
+                        Logging.Manager("ERROR: cannot add blank array when object already exists");
                         return;
                     }
                     JContainer pathForArray = (JContainer)root.SelectToken(jsonPath);
@@ -556,7 +556,7 @@ namespace RelhaxModpack
                     {
                         if (!(val is JValue))
                         {
-                            Utils.AppendToLog(string.Format("ERROR: JToken found at {0}, but is not JValue", fullJSONPath));
+                            Logging.Manager(string.Format("ERROR: JToken found at {0}, but is not JValue", fullJSONPath));
                             return;
                         }
                         //path is valid, but is the value what we want?
@@ -590,7 +590,7 @@ namespace RelhaxModpack
                         JObject newJobject = (JObject)root.SelectToken(jsonPath);
                         if (newJobject == null)//error
                         {
-                            Utils.AppendToLog("jsonPath does not exist in the file");
+                            Logging.Manager("jsonPath does not exist in the file");
                             return;
                         }
                         JObject jobjectPlaceholder = newJobject;
@@ -644,7 +644,7 @@ namespace RelhaxModpack
                 IEnumerable<JToken> results = root.SelectTokens(jsonPath);
                 if(results == null || results.Count() == 0)
                 {
-                    Utils.AppendToLog("WARNING: jsonPath not found");
+                    Logging.Manager("WARNING: jsonPath not found");
                     return;
                 }
                 List<JValue> Jresults = new List<JValue>();
@@ -652,12 +652,12 @@ namespace RelhaxModpack
                 {
                     if(!(jt is JValue))
                     {
-                        Utils.AppendToLog("ERROR: returned token for jsonPath is not a JValue, aborting patch");
+                        Logging.Manager("ERROR: returned token for jsonPath is not a JValue, aborting patch");
                         return;
                     }
                     Jresults.Add((JValue)jt);
                 }
-                //Utils.AppendToLog("DEBUG: number of Jvalues: " + Jresults.Count);
+                //Logging.Manager("DEBUG: number of Jvalues: " + Jresults.Count);
                 if (Jresults.Count == 0)
                     return;
                 foreach(JValue jv in Jresults)
@@ -691,14 +691,14 @@ namespace RelhaxModpack
                 JToken cont = root.SelectToken(jsonPath);
                 if (cont == null)
                 {
-                    Utils.AppendToLog(string.Format("ERROR: path \"{0}\" returns null", jsonPath));
+                    Logging.Manager(string.Format("ERROR: path \"{0}\" returns null", jsonPath));
                     return;
                 }
                 if(cont is JValue)
                 {
                     if(cont.Parent is JArray)
                     {
-                        Utils.AppendToLog("ERROR: Selected from jsonpath is JValue and parent is JArray. Use arrayRemove for this function");
+                        Logging.Manager("ERROR: Selected from jsonpath is JValue and parent is JArray. Use arrayRemove for this function");
                         return;
                     }
                 }
@@ -720,19 +720,19 @@ namespace RelhaxModpack
 
                 if(addPathArray.Count() > 2)
                 {
-                    Utils.AppendToLog("ERROR: invalid syntax of jsonReplace (more than 2 items detected)");
+                    Logging.Manager("ERROR: invalid syntax of jsonReplace (more than 2 items detected)");
                     return;
                 }
                 JToken newObject = root.SelectToken(jsonPath);
                 //pull out if it failed to get the selection
                 if (newObject == null)
                 {
-                    Utils.AppendToLog(string.Format("WARNING: path {0} not found for {1}", jsonPath, Path.GetFileName(jsonFile)));
+                    Logging.Manager(string.Format("WARNING: path {0} not found for {1}", jsonPath, Path.GetFileName(jsonFile)));
                     return;
                 }
                 if (!(newObject is JArray))
                 {
-                    Utils.AppendToLog(string.Format("ERROR: the path \"{0}\" does not lead to a Jarray", jsonPath));
+                    Logging.Manager(string.Format("ERROR: the path \"{0}\" does not lead to a Jarray", jsonPath));
                     return;
                 }
                 JArray newObjectArray = (JArray)newObject;
@@ -740,19 +740,19 @@ namespace RelhaxModpack
                 int index = Utils.ParseInt(jsonReplace.Split(new string[] { @"[index=" }, StringSplitOptions.None)[1].Replace(@"]", ""), -1);
                 if(index >= newObjectArray.Count)
                 {
-                    Utils.AppendToLog("WARNING: index value is greator than array count, putting at end of the array");
+                    Logging.Manager("WARNING: index value is greator than array count, putting at end of the array");
                     index = -1;
                 }
                 if (newObjectArray.Count > 0)
                 {
                     if ((newObjectArray[0] is JValue) && (addPathArray.Count() == 2))
                     {
-                        Utils.AppendToLog("ERROR: array is of JValues and 2 replace arguemnts given");
+                        Logging.Manager("ERROR: array is of JValues and 2 replace arguemnts given");
                         return;
                     }
                     else if (!(newObjectArray[0] is JValue) && (addPathArray.Count() == 1))
                     {
-                        Utils.AppendToLog("ERROR: array is not of JValues and only 1 replace arguemnt given");
+                        Logging.Manager("ERROR: array is not of JValues and only 1 replace arguemnt given");
                         return;
                     }
                 }
@@ -804,19 +804,19 @@ namespace RelhaxModpack
                 //pull out if it failed to get the selection
                 if (newObject == null)
                 {
-                    Utils.AppendToLog(string.Format("WARNING: path {0} not found for {1}", jsonPath, Path.GetFileName(jsonFile)));
+                    Logging.Manager(string.Format("WARNING: path {0} not found for {1}", jsonPath, Path.GetFileName(jsonFile)));
                     return;
                 }
                 if (!(newObject is JArray))
                 {
-                    Utils.AppendToLog(string.Format("ERROR: the path \"{0}\" does not lead to a JSON array", jsonPath));
+                    Logging.Manager(string.Format("ERROR: the path \"{0}\" does not lead to a JSON array", jsonPath));
                     return;
                 }
                 JArray newObjectArray = (JArray)newObject;
                 if(newObjectArray.Count == 0)
                 {
                     //can't remove from an array if it's empty #rollSafe
-                    Utils.AppendToLog("WARNING: array is already empty");
+                    Logging.Manager("WARNING: array is already empty");
                     return;
                 }
                 bool found = false;
@@ -831,7 +831,7 @@ namespace RelhaxModpack
                 }
                 if (!found)
                 {
-                    Utils.AppendToLog(string.Format("WARNING: no results found for search \"{0}\", with path \"{1}\"", jsonSearch, jsonPath));
+                    Logging.Manager(string.Format("WARNING: no results found for search \"{0}\", with path \"{1}\"", jsonSearch, jsonPath));
                     return;
                 }
             }
@@ -844,19 +844,19 @@ namespace RelhaxModpack
                 //pull out if it failed to get the selection
                 if (newObject == null)
                 {
-                    Utils.AppendToLog(string.Format("WARNING: path {0} not found for {1}", jsonPath, Path.GetFileName(jsonFile)));
+                    Logging.Manager(string.Format("WARNING: path {0} not found for {1}", jsonPath, Path.GetFileName(jsonFile)));
                     return;
                 }
                 if (!(newObject is JArray))
                 {
-                    Utils.AppendToLog(string.Format("ERROR: the path \"{0}\" does not lead to a JSON array", jsonPath));
+                    Logging.Manager(string.Format("ERROR: the path \"{0}\" does not lead to a JSON array", jsonPath));
                     return;
                 }
                 JArray newObjectArray = (JArray)newObject;
                 if (newObjectArray.Count == 0)
                 {
                     //can't remove from an array if it's empty #rollSafe
-                    Utils.AppendToLog("WARNING: array is already empty");
+                    Logging.Manager("WARNING: array is already empty");
                     return;
                 }
                 bool found = false;
@@ -872,13 +872,13 @@ namespace RelhaxModpack
                 }
                 if (!found)
                 {
-                    Utils.AppendToLog(string.Format("WARNING: no results found for search \"{0}\", with path \"{1}\"", jsonSearch, jsonPath));
+                    Logging.Manager(string.Format("WARNING: no results found for search \"{0}\", with path \"{1}\"", jsonSearch, jsonPath));
                     return;
                 }
             }
             else
             {
-                Utils.AppendToLog(string.Format("ERROR: Unknown json patch mode, {0}", jsonMode));
+                Logging.Manager(string.Format("ERROR: Unknown json patch mode, {0}", jsonMode));
             }
             StringBuilder rebuilder = new StringBuilder();
             string[] putBackDollas = root.ToString().Split('\n');
@@ -909,7 +909,7 @@ namespace RelhaxModpack
             }
             if (ssList.Count != 0)
             {
-                Utils.AppendToLog(string.Format("There was an error with patching the file {0}, with extra refrences. aborting patch", jsonFile));
+                Logging.Manager(string.Format("There was an error with patching the file {0}, with extra refrences. aborting patch", jsonFile));
                 return;
             }
             File.WriteAllText(jsonFile, rebuilder.ToString());
@@ -1077,7 +1077,7 @@ namespace RelhaxModpack
                 //read untill the value we want
                 if (ReadUntil(fileContents, sb, regex) == "null")
                 {
-                    Utils.AppendToLog(string.Format("ERROR: Path not found: {0}", origXvmPath));
+                    Logging.Manager(string.Format("ERROR: Path not found: {0}", origXvmPath));
                     return;
                 }
                 //determine if the this value is actually a file refrence
@@ -1102,7 +1102,7 @@ namespace RelhaxModpack
                     //split the array into an array lol
                     if (ReadUntil(fileContents, sb, @"\[") == "null")
                     {
-                        Utils.AppendToLog(string.Format("ERROR: Path not found: {0}", origXvmPath));
+                        Logging.Manager(string.Format("ERROR: Path not found: {0}", origXvmPath));
                         return;
                     }
                     string arrayContents = PeekUntil(fileContents, @"\]");
@@ -1119,7 +1119,7 @@ namespace RelhaxModpack
                         if (indexToReadTo < 0 || indexToReadTo >= carray.Count())
                         {
                             //error and abort
-                            Utils.AppendToLog("invalid index: " + pathArray[0]);
+                            Logging.Manager("invalid index: " + pathArray[0]);
                             return;
                         }
                     }
@@ -1128,7 +1128,7 @@ namespace RelhaxModpack
                         //-1 keyword for the add array method
                         if (!mode.Equals("array_add"))
                         {
-                            Utils.AppendToLog("To use -1 keyword, must be in array_add mode!");
+                            Logging.Manager("To use -1 keyword, must be in array_add mode!");
                             return;
                         }
                         //set the flag and reset the values
@@ -1175,7 +1175,7 @@ namespace RelhaxModpack
                         if (indexToReadTo < 0 || indexToReadTo >= carray.Count())
                         {
                             //error and abort
-                            Utils.AppendToLog(string.Format("invalid index: {0}", pathArray[0]));
+                            Logging.Manager(string.Format("invalid index: {0}", pathArray[0]));
                             return;
                         }
                     }
@@ -1211,7 +1211,7 @@ namespace RelhaxModpack
                 {
                     default:
                         //do nothing
-                        Utils.AppendToLog(string.Format("Invalid mode: {0} for xvm patch {1}", mode, origXvmPath));
+                        Logging.Manager(string.Format("Invalid mode: {0} for xvm patch {1}", mode, origXvmPath));
                         break;
                     case "edit":
                         XVMEdit(fileContents, sb, newFilePath, replaceValue, search);
@@ -1243,7 +1243,7 @@ namespace RelhaxModpack
             //it's a refrence, move it to the next file and readInsideEdit (yes recursion)
             if (ReadUntil(fileContents, sb, @"\${[ \t]*""") == "null")
             {
-                Utils.AppendToLog(string.Format("ERROR: Path not found: {0}", origXvmPath));
+                Logging.Manager(string.Format("ERROR: Path not found: {0}", origXvmPath));
                 return;
             }
             //now read untill the next quote for the temp path
@@ -1298,7 +1298,7 @@ namespace RelhaxModpack
             //ref style refrence
             if (ReadUntil(fileContents, sb, @"""\$ref"":") == "null")
             {
-                Utils.AppendToLog(string.Format("ERROR: Path not found: {0}", origXvmPath));
+                Logging.Manager(string.Format("ERROR: Path not found: {0}", origXvmPath));
                 return;
             }
             ReadUntil(fileContents, sb, ":");
@@ -1680,20 +1680,20 @@ namespace RelhaxModpack
             if (!File.Exists(bootFile))
             {
                 if (writeToLog)
-                    Utils.AppendToLog(string.Format("ERROR: xvm config boot file does not exist at {0}, checking {1}", XVMBootFileLoc1, XVMBootFileLoc2));
+                    Logging.Manager(string.Format("ERROR: xvm config boot file does not exist at {0}, checking {1}", XVMBootFileLoc1, XVMBootFileLoc2));
                 else
-                    Utils.AppendToLog(string.Format("NOTICE: default run, xvm config boot file does not exist at {0}, checking {1}", XVMBootFileLoc1, XVMBootFileLoc2));
+                    Logging.Manager(string.Format("NOTICE: default run, xvm config boot file does not exist at {0}, checking {1}", XVMBootFileLoc1, XVMBootFileLoc2));
                 bootFile = XVMBootFileLoc2;
                 if (!File.Exists(bootFile))
                 {
                     if (writeToLog)
-                        Utils.AppendToLog(string.Format("ERROR: xvm config boot file does not exist at {0}, aborting patch", XVMBootFileLoc2));
+                        Logging.Manager(string.Format("ERROR: xvm config boot file does not exist at {0}, aborting patch", XVMBootFileLoc2));
                     else
-                        Utils.AppendToLog(string.Format("NOTICE: default run, xvm config boot file does not exist at {0}, user did not install xvm", XVMBootFileLoc2));
+                        Logging.Manager(string.Format("NOTICE: default run, xvm config boot file does not exist at {0}, user did not install xvm", XVMBootFileLoc2));
                     return null;
                 }
             }
-            Utils.AppendToLog("xvm boot file located to parse");
+            Logging.Manager("xvm boot file located to parse");
             string fileContents = File.ReadAllText(bootFile);
             //patch block comments out
             fileContents = Regex.Replace(fileContents, @"\/\*.*\*\/", "", RegexOptions.Singleline);

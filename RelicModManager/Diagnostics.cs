@@ -34,11 +34,11 @@ namespace RelhaxModpack
         {
             if (TanksLocation.Equals("none"))
                 return;
-            Utils.AppendToLog("Starting WoTLauncher with argument \"-integrity_default_client\"");
+            Logging.Manager("Starting WoTLauncher with argument \"-integrity_default_client\"");
             StartWoTLauncherResult.Text = Translations.getTranslatedString("startingLauncherRepairMode");
             string filename = Path.Combine(TanksLocation, "WoTLauncher.exe");
             string formattedArguement = "-integrity_default_client";
-            Utils.AppendToLog("Complete Command line: " + filename + " " + formattedArguement);
+            Logging.Manager("Complete Command line: " + filename + " " + formattedArguement);
             try
             {
                 Process.Start(filename, formattedArguement);
@@ -57,7 +57,7 @@ namespace RelhaxModpack
         {
             if (TanksLocation.Equals("none"))
                 return;
-            Utils.AppendToLog("Collecting log files...");
+            Logging.Manager("Collecting log files...");
             CollectLogInfoResult.Text = Translations.getTranslatedString("collectionLogInfo");
             using (ZipFile zip = new ZipFile())
             {
@@ -103,7 +103,7 @@ namespace RelhaxModpack
                         }
                         else
                         {
-                            Utils.AppendToLog("WARNING: file " + s + " does not exist!");
+                            Logging.Manager("WARNING: file " + s + " does not exist!");
                         }
                     }
                     newZipFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "RelhaxModpackLogs_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".zip");
@@ -115,7 +115,7 @@ namespace RelhaxModpack
                     CollectLogInfoResult.Text = Translations.getTranslatedString("failedCreateZipfile");
                     return;
                 }
-                Utils.AppendToLog("Zip file saved to" + newZipFileName);
+                Logging.Manager("Zip file saved to" + newZipFileName);
                 CollectLogInfoResult.Text = Translations.getTranslatedString("zipSavedTo") + newZipFileName;
             }
         }
@@ -132,7 +132,7 @@ namespace RelhaxModpack
             ParentWindow.tanksLocation = ParentWindow.tanksLocation.Substring(0, ParentWindow.tanksLocation.Length - 17);
             TanksLocation = ParentWindow.tanksLocation;
             SelectedInstallation.Text = Translations.getTranslatedString(SelectedInstallation.Name) + TanksLocation;
-            Utils.AppendToLog(string.Format("tanksLocation parsed as {0}", ParentWindow.tanksLocation));
+            Logging.Manager(string.Format("tanksLocation parsed as {0}", ParentWindow.tanksLocation));
         }
     }
 }

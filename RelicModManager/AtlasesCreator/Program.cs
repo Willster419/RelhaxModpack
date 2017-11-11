@@ -71,7 +71,7 @@ namespace RelhaxModpack.AtlasesCreator
             if (result != 0)
                 ShowBuildError("Error packing images: " + SpaceErrorCode((FailCode)result));
             else
-                Utils.AppendToLog("Build completed in " + stopWatch.Elapsed.TotalSeconds.ToString("N3", System.Globalization.CultureInfo.InvariantCulture) + " seconds.");
+                Logging.Manager("Build completed in " + stopWatch.Elapsed.TotalSeconds.ToString("N3", System.Globalization.CultureInfo.InvariantCulture) + " seconds.");
             return;
         }
 
@@ -106,7 +106,7 @@ namespace RelhaxModpack.AtlasesCreator
 
                 if (imageExporter == null)
                 {
-                    Utils.AppendToLog("Failed to find exporters for specified image type.");
+                    Logging.Manager("Failed to find exporters for specified image type.");
                     return (int)FailCode.ImageExporter;
                 }
 
@@ -124,7 +124,7 @@ namespace RelhaxModpack.AtlasesCreator
 
                     if (mapExporter == null)
                     {
-                        Utils.AppendToLog("Failed to find exporters for specified map type.");
+                        Logging.Manager("Failed to find exporters for specified map type.");
                         return (int)FailCode.MapExporter;
                     }
                 }
@@ -132,7 +132,7 @@ namespace RelhaxModpack.AtlasesCreator
                 // make sure we found some images
                 if (args.Images.Count == 0)
                 {
-                    Utils.AppendToLog("No images to pack.");
+                    Logging.Manager("No images to pack.");
                     return (int)FailCode.NoImages;
                 }
 
@@ -149,7 +149,7 @@ namespace RelhaxModpack.AtlasesCreator
 
                             if (str1 == str2)
                             {
-                                Utils.AppendToLog(string.Format("Two images have the same name: {0} = {1}", args.Images[i], args.Images[j]));
+                                Logging.Manager(string.Format("Two images have the same name: {0} = {1}", args.Images[i], args.Images[j]));
                                 return (int)FailCode.ImageNameCollision;
                             }
                         }
@@ -164,7 +164,7 @@ namespace RelhaxModpack.AtlasesCreator
                 int result = imagePacker.PackImage(args.Images, args.PowOf2, args.Square, args.MaxWidth, args.MaxHeight, args.Padding, mapExporter != null, out Bitmap outputImage, out outputMap);
                 if (result != 0)
                 {
-                    Utils.AppendToLog("There was an error making the image sheet.");
+                    Logging.Manager("There was an error making the image sheet.");
                     return result;
                 }
 
@@ -174,14 +174,14 @@ namespace RelhaxModpack.AtlasesCreator
                     if (File.Exists(args.ImageFile))
                         File.Delete(args.ImageFile);
                     imageExporter.Save(args.ImageFile, outputImage);
-                    Utils.AppendToInstallLog(@"/*  created Atlases  */");
-                    Utils.AppendToInstallLog(args.ImageFile);
-                    Logging.stubsInstallerGroup("created Atlases");         // write comment
-                    Logging.stubsInstaller(args.ImageFile);                 // write created filename with path
+                    // Utils.AppendToInstallLog(@"/*  created Atlases  */");
+                    // Utils.AppendToInstallLog(args.ImageFile);
+                    Logging.InstallerGroup("created Atlases");         // write comment
+                    Logging.Installer(Utils.ReplaceDirectorySeparatorChar(args.ImageFile));                 // write created filename with path
                 }
                 catch (Exception e)
                 {
-                    Utils.AppendToLog("Error saving file: " + e.Message);
+                    Logging.Manager("Error saving file: " + e.Message);
                     return (int)FailCode.FailedToSaveImage;
                 }
 
@@ -192,12 +192,12 @@ namespace RelhaxModpack.AtlasesCreator
                         if (File.Exists(args.MapFile))
                             File.Delete(args.MapFile);
                         mapExporter.Save(args.MapFile, outputMap);
-                        Utils.AppendToInstallLog(args.MapFile);
-                        Logging.stubsInstaller(args.MapFile);                 // write created filename with path
+                        // Utils.AppendToInstallLog(args.MapFile);
+                        Logging.Installer(Utils.ReplaceDirectorySeparatorChar(args.MapFile));                 // write created filename with path
                     }
                     catch (Exception e)
                     {
-                        Utils.AppendToLog("Error saving file: " + e.Message);
+                        Logging.Manager("Error saving file: " + e.Message);
                         return (int)FailCode.FailedToSaveMap;
                     }
                 }
@@ -224,7 +224,7 @@ namespace RelhaxModpack.AtlasesCreator
 
         private static void ShowBuildError(string error)
         {
-            Utils.AppendToLog("AtlasesCreator: " + error);
+            Logging.Manager("AtlasesCreator: " + error);
         }
     }
 }

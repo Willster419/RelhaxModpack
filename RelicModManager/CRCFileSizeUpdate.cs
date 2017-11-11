@@ -58,7 +58,7 @@ namespace RelhaxModpack
             Settings.TanksOnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(databaseLocationTextBox.Text);
             // read gameVersion of the selected local modInfo.xml
             Settings.TanksVersion = XMLUtils.ReadVersionFromModInfo(databaseLocationTextBox.Text);
-            Utils.AppendToLog(String.Format("working with game version: {0}, located at online Folder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion));
+            Logging.Manager(String.Format("working with game version: {0}, located at online Folder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion));
             // download online database.xml
             try
             {
@@ -319,7 +319,7 @@ namespace RelhaxModpack
 
         private void CRCFileSizeUpdate_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Utils.AppendToLog("|------------------------------------------------------------------------------------------------|");
+            Logging.Manager("|------------------------------------------------------------------------------------------------|");
         }
 
         private void updateDatabaseOffline_Click(object sender, EventArgs e)

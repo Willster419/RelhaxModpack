@@ -74,14 +74,14 @@ namespace RelhaxModpack
             {
                 if (Utils.Duplicates(ParsedCatagoryList))
                 {
-                    Utils.AppendToLog("WARNING: Duplicate mod name detected!!");
+                    Logging.Manager("WARNING: Duplicate mod name detected!!");
                     MessageBox.Show(Translations.getTranslatedString("duplicateMods"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     Application.Exit();
                 }
                 int duplicatesCounter = 0;
                 if (Utils.DuplicatesPackageName(ParsedCatagoryList, ref duplicatesCounter))
                 {
-                    Utils.AppendToLog(string.Format("ERROR: {0} duplicate PackageName's detected", duplicatesCounter));
+                    Logging.Manager(string.Format("ERROR: {0} duplicate PackageName's detected", duplicatesCounter));
                     MessageBox.Show(string.Format("ERROR: {0} duplicate PackageName's detected!\n\nmore information, see Logfile ...", duplicatesCounter), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     Application.Exit();
                 }
@@ -104,7 +104,7 @@ namespace RelhaxModpack
             pw.SetProgress(0);
             //setting loadingConfig to true will disable all UI interaction
             LoadingConfig = true;
-            Utils.AppendToLog("Loading ModSelectionList with view " + Settings.SView);
+            Logging.Manager("Loading ModSelectionList with view " + Settings.SView);
             CompleteModSearchList = new List<SelectableDatabasePackage>();
             if (modTabGroups.TabPages.Count > 0)
                 modTabGroups.TabPages.Clear();
@@ -136,7 +136,7 @@ namespace RelhaxModpack
                 databaseURL = Path.Combine(string.IsNullOrEmpty(Settings.CustomModInfoPath) ? Application.StartupPath : Settings.CustomModInfoPath, "modInfo.xml");
                 if (!File.Exists(databaseURL))
                 {
-                    Utils.AppendToLog("Databasefile not found: " + databaseURL);
+                    Logging.Manager("Databasefile not found: " + databaseURL);
                     MessageBox.Show(string.Format(Translations.getTranslatedString("testModeDatabaseNotFound"), databaseURL));
                     Application.Exit();
                 }
@@ -144,7 +144,7 @@ namespace RelhaxModpack
             }
             else if (Program.betaDatabase)
             {
-                Utils.AppendToLog("downloading modInfo.dat (betaDatabase url)");
+                Logging.Manager("downloading modInfo.dat (betaDatabase url)");
                 string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
                 XDocument doc = XDocument.Parse(xmlString);
                 //parse the database version
@@ -171,7 +171,7 @@ namespace RelhaxModpack
             else
             {
                 //download the modInfo.dat
-                Utils.AppendToLog("downloading modInfo.dat");
+                Logging.Manager("downloading modInfo.dat");
                 string dlURL = "";
                 using (WebClient downloader = new WebClient() { Proxy = null })
                 {
@@ -873,7 +873,7 @@ namespace RelhaxModpack
                 }
                 else
                 {
-                    Utils.AppendToLog(string.Format("WARNING: Unknown config type for {0}: {1}", con.Name, con.Type));
+                    Logging.Manager(string.Format("WARNING: Unknown config type for {0}: {1}", con.Name, con.Type));
                 }
 
             }
@@ -1759,7 +1759,7 @@ namespace RelhaxModpack
                 }
                 else
                 {
-                    Utils.AppendToLog(string.Format("WARNING: Unknown config type for {0}: {1}", con.Name, con.Type));
+                    Logging.Manager(string.Format("WARNING: Unknown config type for {0}: {1}", con.Name, con.Type));
                 }
             }
         }
@@ -2432,7 +2432,7 @@ namespace RelhaxModpack
         {
             //not actually *loading* a config, but want to disable the handlers anyways
             LoadingConfig = true;
-            Utils.AppendToLog("clearSelectionsButton pressed, clearing selections");
+            Logging.Manager("clearSelectionsButton pressed, clearing selections");
             Utils.ClearSelectionMemory(ParsedCatagoryList, UserMods);
             //dispose of not needed stuff and reload the UI
 
@@ -2453,7 +2453,7 @@ namespace RelhaxModpack
                     filePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", Program.configName);
                     if (!File.Exists(filePath))
                     {
-                        Utils.AppendToLog(string.Format("ERROR: {0} not found, not loading configs", filePath));
+                        Logging.Manager(string.Format("ERROR: {0} not found, not loading configs", filePath));
                         MessageBox.Show(Translations.getTranslatedString("configLoadFailed"), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Stop);
                         return;
                     }
@@ -2462,7 +2462,7 @@ namespace RelhaxModpack
                     filePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml");
                     if (!File.Exists(filePath))
                     {
-                        Utils.AppendToLog(string.Format("ERROR: {0} not found, not loading configs", filePath));
+                        Logging.Manager(string.Format("ERROR: {0} not found, not loading configs", filePath));
                         return;
                     }
                     break;

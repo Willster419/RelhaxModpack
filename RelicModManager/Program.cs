@@ -25,8 +25,8 @@ namespace RelhaxModpack
         [STAThread]
         static void Main()
         {
-            Utils.AppendToLog("|------------------------------------------------------------------------------------------------|");
-            Utils.AppendToLog("Main Entry point launched");
+            Logging.Manager("|------------------------------------------------------------------------------------------------|");
+            Logging.Manager("Main Entry point launched");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //loading embeded dlls from the application
@@ -50,86 +50,86 @@ namespace RelhaxModpack
             //get the command line args for testing of auto install
             string[] commandArgs = Environment.GetCommandLineArgs();
             //log command line
-            Utils.AppendToLog("command line: " + string.Join(" ", commandArgs));
+            Logging.Manager("command line: " + string.Join(" ", commandArgs));
             for (int i = 0; i < commandArgs.Count(); i++)
             {
                 //check what type of arg each one is
                 if (Regex.IsMatch(commandArgs[i], @"test$"))
                 {
-                    Utils.AppendToLog("/test detected, loading in test mode");
+                    Logging.Manager("/test detected, loading in test mode");
                     testMode = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"skip-update$"))
                 {
-                    Utils.AppendToLog("/skip-update detected, skipping update of application");
+                    Logging.Manager("/skip-update detected, skipping update of application");
                     skipUpdate = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"patchday$"))
                 {
-                    Utils.AppendToLog("/patchday detected, welcome database manager");
+                    Logging.Manager("/patchday detected, welcome database manager");
                     patchDayTest = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"ignoreresourseversionfail$"))
                 {
-                    Utils.AppendToLog("/ignoreResourseVersionFail detected, welcome developer");
+                    Logging.Manager("/ignoreResourseVersionFail detected, welcome developer");
                     ignoreResourseVersionFail = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"beta-database$"))
                 {
-                    Utils.AppendToLog("/beta-database detected, welcome beta tester");
+                    Logging.Manager("/beta-database detected, welcome beta tester");
                     betaDatabase = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"beta-application"))
                 {
-                    Utils.AppendToLog("/beta-application detected, welcome beta tester");
+                    Logging.Manager("/beta-application detected, welcome beta tester");
                     betaApplication = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"auto-install$"))
                 {
-                    Utils.AppendToLog("/auto-install detected");
+                    Logging.Manager("/auto-install detected");
                     autoInstall = true;
                     //parse the config file and advance the counter
                     configName = commandArgs[++i];
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"crccheck2$"))
                 {
-                    Utils.AppendToLog("(DEPRECATED) /crccheck2 detected, loading in crccheck2 mode");
+                    Logging.Manager("(DEPRECATED) /crccheck2 detected, loading in crccheck2 mode");
                     Application.Run(new CRCCHECK2());
                     return;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"crccheck$"))
                 {
-                    Utils.AppendToLog("(DEPRECATED) /crccheck detected, loading in crccheck mode");
+                    Logging.Manager("(DEPRECATED) /crccheck detected, loading in crccheck mode");
                     Application.Run(new CRCCheck());
                     return;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"patchcheck$"))
                 {
-                    Utils.AppendToLog("/patchcheck detected, loading in patch design mode");
+                    Logging.Manager("/patchcheck detected, loading in patch design mode");
                     Application.Run(new PatchTester());
                     return;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"databaseupdate$"))
                 {
-                    Utils.AppendToLog("/databaseupdate detected, loading in database update mode");
+                    Logging.Manager("/databaseupdate detected, loading in database update mode");
                     Application.Run(new CRCFileSizeUpdate());
                     return;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"databaseoutput$"))
                 {
-                    Utils.AppendToLog("/databaseoutput detected, loading in database output mode");
+                    Logging.Manager("/databaseoutput detected, loading in database output mode");
                     Application.Run(new DatabaseListGenerater());
                     return;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"databaseedit$"))
                 {
-                    Utils.AppendToLog("/databaseedit detected, loading in database edit mode");
+                    Logging.Manager("/databaseedit detected, loading in database edit mode");
                     Application.Run(new DatabaseEditor());
                     return;
                 }
             }
             //load the translations
-            Utils.AppendToLog("Loading translation hashes");
+            Logging.Manager("Loading translation hashes");
             try
             {
                 Translations.loadHashes();
@@ -138,7 +138,7 @@ namespace RelhaxModpack
             {
                 Utils.ExceptionLog("Main", "loadHashes", ex);
             }
-            Utils.AppendToLog("Attempting to load MainWindow");
+            Logging.Manager("Attempting to load MainWindow");
             Application.Run(new MainWindow());
         }
 

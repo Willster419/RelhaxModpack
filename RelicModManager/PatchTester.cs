@@ -344,7 +344,7 @@ namespace RelhaxModpack
 
         private void PatchTester_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Utils.AppendToLog("|------------------------------------------------------------------------------------------------|");
+            Logging.Manager("|------------------------------------------------------------------------------------------------|");
         }
 
         private void JSONMode_CheckedChanged(object sender, EventArgs e)

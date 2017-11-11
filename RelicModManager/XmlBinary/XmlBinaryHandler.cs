@@ -25,12 +25,12 @@ namespace RelhaxModpack.XmlBinary
                     if (FileNameSave.Length == 0)
                         FileNameSave = FileNameLoad;
                     saveFile(FileNameSave);
-                    Utils.AppendToLog(string.Format("Saved processed file: {0} ({1})", FileNameSave, Path.GetFileName(FileNameLoad)));
+                    Logging.Manager(string.Format("Saved processed file: {0} ({1})", FileNameSave, Path.GetFileName(FileNameLoad)));
                 }
             }
             else
             {
-                Utils.AppendToLog(string.Format("Failed to process file: {0} (not existing)", FileNameLoad));
+                Logging.Manager(string.Format("Failed to process file: {0} (not existing)", FileNameLoad));
             }
             Dispose();
         }
@@ -140,11 +140,11 @@ namespace RelhaxModpack.XmlBinary
                 {
                     if (PackedFileName.Contains(".xml") || PackedFileName.Contains(".def") || PackedFileName.Contains(".visual") || PackedFileName.Contains(".chunk") || PackedFileName.Contains(".settings") || PackedFileName.Contains(".model"))
                     {
-                        Utils.AppendToLog(string.Format("Warning: File {0} seams to be a plain text file (no binary), so no processing!", filename));
+                        Logging.Manager(string.Format("Warning: File {0} seams to be a plain text file (no binary), so no processing!", filename));
                     }
                     else
                     {
-                        Utils.AppendToLog(string.Format("ERROR: File {0} with Invalid header. No processing!", filename));
+                        Logging.Manager(string.Format("ERROR: File {0} with Invalid header. No processing!", filename));
                     }
                 }
             }

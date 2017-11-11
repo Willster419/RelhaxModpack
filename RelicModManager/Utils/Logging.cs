@@ -23,14 +23,6 @@ namespace RelhaxModpack
 
         private static object _locker = new object();
 
-        public static void stubsManager(string s)
-        {
-            // create fielstream if not exists
-            // - and write "fileheader"
-            // - check once if the file exceeds a certain size
-            // by default, write the given string to file
-        }
-
         public static void Manager(string s)
         {
             try
@@ -57,16 +49,6 @@ namespace RelhaxModpack
             }
         }
 
-        public static void stubsInstaller(string s)
-        {
-            // if no filestream exists
-            // create the filename to write with path
-            // backup old install.logs
-            // create filestream
-            // - and write "fileheader"
-            // by default, write the given string to file
-        }
-
         public static void Installer(string s)
         {
             try
@@ -91,23 +73,12 @@ namespace RelhaxModpack
             {
                 Utils.ExceptionLog("Installer", ex);
             }
-}
-
-        public static void stubsInstallerFinished()
-        {
-            // clear buffer and write all left data to file
-            // dispose filestream
         }
 
         public static void InstallerFinished()
         {
             mfs.Flush();
             Dispose(installer);
-        }
-
-        public static void stubsInstallerGroup(string s)
-        {
-            // add group comment to the string and write it to file
         }
 
         public static void InstallerGroup(string s)
@@ -224,13 +195,14 @@ namespace RelhaxModpack
             }
         }
 
-        public static void Dispose(int i = 0)
+        public static void Dispose(int i = all)
         {
             if (ifs != null || mfs != null)
             {
                 //done with the installer filestream
                 if (ifs != null && (i == installer || i == all))
                 {
+                    ifs.Flush();
                     ifs.Dispose();
                     ifs = null;
                     InstalledFilesLogPath = null;
@@ -239,13 +211,11 @@ namespace RelhaxModpack
                 //done with the manager filestream
                 if (mfs != null && (i == installer || i == all))
                 {
+                    mfs.Flush();
                     mfs.Dispose();
                     mfs = null;
                     ManagerLogPath = null;
-
                 }
-
-                if (ifs != null || mfs != null) _locker = null;
 
                 GC.Collect();
             }

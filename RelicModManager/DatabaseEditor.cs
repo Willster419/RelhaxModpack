@@ -56,7 +56,7 @@ namespace RelhaxModpack
                     return;
                 }
             }
-            Utils.AppendToLog("|------------------------------------------------------------------------------------------------|");
+            Logging.Manager("|------------------------------------------------------------------------------------------------|");
         }
         //hook into the database editor loading
         private void DatabaseEditor_Load(object sender, EventArgs e)

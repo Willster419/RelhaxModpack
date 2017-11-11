@@ -21,7 +21,7 @@ namespace RelhaxModpack
         private void FirstLoadHelper_Load(object sender, EventArgs e)
         {
             //log info
-            Utils.AppendToLog("FirstLoadHelper: startup location is x: " + x + ", y: " + y);
+            Logging.Manager("FirstLoadHelper: startup location is x: " + x + ", y: " + y);
             this.Location = new Point(x, y);
             //setting UI color
             Settings.setUIColor(this);

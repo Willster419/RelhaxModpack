@@ -104,10 +104,10 @@ namespace RelhaxModpack
             Settings.InstantExtraction = false;
             Settings.FirstLoad = false;
             Settings.CreateShortcuts = true;
-            Utils.AppendToLog("Loading application settings");
+            Logging.Manager("Loading application settings");
             if (!File.Exists(SettingsXmlFile))
             {
-                Utils.AppendToLog("WARNING:Settings xml not found, loading defaults");
+                Logging.Manager("WARNING:Settings xml not found, loading defaults");
                 //could also use this to determine if first load or not
                 //default is to turn all features off
                 Settings.ComicSans = false;
@@ -124,7 +124,7 @@ namespace RelhaxModpack
                 Settings.NotifyIfSameDatabase = false;
                 Settings.CreateShortcuts = false;
                 Settings.InstantExtraction = false;
-                Utils.AppendToLog("Language: " + CultureInfo.CurrentCulture.DisplayName);
+                Logging.Manager("Language: " + CultureInfo.CurrentCulture.DisplayName);
                 string lang = CultureInfo.InstalledUICulture.Name.Split('-')[0];
                 if (lang.ToLower().Equals("de"))
                 {
@@ -160,7 +160,7 @@ namespace RelhaxModpack
             }
             else
             {
-                Utils.AppendToLog("Loading xml file");
+                Logging.Manager("Loading xml file");
                 XmlDocument doc = new XmlDocument();
                 doc.Load(SettingsXmlFile);
                 XmlNodeList settingsList = doc.ChildNodes[0].ChildNodes;
@@ -250,7 +250,7 @@ namespace RelhaxModpack
                 }
             }
             Settings.applyInternalSettings();
-            Utils.AppendToLog("Settings loaded sucessfully");
+            Logging.Manager("Settings loaded sucessfully");
         }
         //apply internal settings (font name, size, loading gif)
         //based on the boolean settings from above
@@ -349,7 +349,7 @@ namespace RelhaxModpack
         //saves settings to xml file
         public static void saveSettings()
         {
-            Utils.AppendToLog("Saving application settings");
+            Logging.Manager("Saving application settings");
             if (File.Exists(SettingsXmlFile)) File.Delete(SettingsXmlFile);
             XmlDocument doc = new XmlDocument();
             XmlElement settingsHolder = doc.CreateElement("settings");
@@ -449,7 +449,7 @@ namespace RelhaxModpack
             settingsHolder.AppendChild(customModInfoPath); 
 
             doc.Save(SettingsXmlFile);
-            Utils.AppendToLog("Settings saved sucessfully");
+            Logging.Manager("Settings saved sucessfully");
         }
         //returns the loading image for the picture viewer, based on
         //which loading image the user specified

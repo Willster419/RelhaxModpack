@@ -23,13 +23,13 @@ namespace RelhaxModpack
         private static int iMaxLogLength = 1500000; // Probably should be bigger, say 2,000,000
         private static int iTrimmedLogLength = -300000; // minimum of how much of the old log to leave
         private static object _locker = new object();
-        
+
         //logs string info to the log output
         // public static void AppendToLog(string info)
         // {
-        //     Logging.Manager(info);
+        // Logging.Manager(info);
         // }
-        public static void AppendToLog(string info)
+        public static void Depricated_AppendToLog(string info)
         {
             lock (_locker)              // avoid that 2 or more threads calling the Log function and writing lines in a mess
             {
@@ -41,7 +41,7 @@ namespace RelhaxModpack
                 }
                 //if the info text is containing any linefeed/carrieage return, intend the next line with 26 space char
                 info = info.Replace("\n", "\n" + string.Concat(Enumerable.Repeat(" ", 26)));
-                WriteToFile(filePath, string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}   {1}", DateTime.Now, info));
+                Depricated_WriteToFile(filePath, string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}   {1}", DateTime.Now, info));
             }
         }
         public static void AppendToInstallLog(string info)
@@ -55,10 +55,10 @@ namespace RelhaxModpack
                     if (!System.IO.File.Exists(filePath))
                     {
                         System.IO.File.AppendAllText(filePath, "");
-                        WriteToFile(filePath, string.Format("Database Version: {0}", Settings.DatabaseVersion));
-                        WriteToFile(filePath, string.Format("/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now));
+                        Depricated_WriteToFile(filePath, string.Format("Database Version: {0}", Settings.DatabaseVersion));
+                        Depricated_WriteToFile(filePath, string.Format("/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now));
                     }
-                    WriteToFile(filePath, info);
+                    Depricated_WriteToFile(filePath, info);
                 }
             }
             catch (Exception ex)
@@ -67,7 +67,7 @@ namespace RelhaxModpack
             }
         }
         // https://stackoverflow.com/questions/4741037/keeping-log-files-under-a-certain-size
-        private static void WriteToFile(string strFile, string strNewLogMessage, bool cutFile = true)
+        private static void Depricated_WriteToFile(string strFile, string strNewLogMessage, bool cutFile = true)
         {
             try
             {
@@ -148,7 +148,7 @@ namespace RelhaxModpack
         {
             lock (_locker)              // avoid that 2 or more threads calling the Log function and writing lines in a mess
             {
-                Utils.AppendToLog(String.Format("----- dump of object {0} ------", objectName));
+                Logging.Manager(String.Format("----- dump of object {0} ------", objectName));
                 foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(n))
                 {
                     string name = descriptor.Name;
@@ -157,9 +157,9 @@ namespace RelhaxModpack
                         value = "(null)";
                     else if (value is string && value.ToString().Trim().Equals(""))
                         value = "(string with lenght 0)";
-                    Utils.AppendToLog(string.Format("{0}={1}", name, value));
+                    Logging.Manager(string.Format("{0}={1}", name, value));
                 }
-                Utils.AppendToLog("----- end of dump ------");
+                Logging.Manager("----- end of dump ------");
             }
         }
 
@@ -170,7 +170,7 @@ namespace RelhaxModpack
 
         public static void DumbObjectToLog(string text, string objectName, object n)
         {
-            Utils.AppendToLog(String.Format("{0}{1}----- dump of object {2}{3}------\n{4}\n----- end of dump ------", text, text.Equals("") ? "" : "\n", objectName, objectName.Equals("") ? "" : " ", JObject.FromObject(n).ToString()));
+            Logging.Manager(String.Format("{0}{1}----- dump of object {2}{3}------\n{4}\n----- end of dump ------", text, text.Equals("") ? "" : "\n", objectName, objectName.Equals("") ? "" : " ", JObject.FromObject(n).ToString()));
         }
         
         /// <summary>
@@ -262,7 +262,7 @@ namespace RelhaxModpack
                 string msg = "";
                 try { msg += string.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}", msgHeader, info, type, exception, stackTrace, message, source, targetSite, innerException, data); } catch { };
                 try { msg += "----------------------------"; } catch { };
-                Utils.AppendToLog(msg);
+                Logging.Manager(msg);
             }
         }
         //returns the md5 hash of the file based on the input file string location
@@ -351,7 +351,7 @@ namespace RelhaxModpack
                     // if the s.dependency is TRUE, it is a dependecy entry and PackageName AND ZipFile must be checken if equal, if not => error/duplicate message
                     if (s.CheckDatabaseListIndex != d.CheckDatabaseListIndex && ((s.PackageName.Equals(d.PackageName) && !(s.Dependency)) || (s.Dependency && s.PackageName.Equals(d.PackageName) && !s.ZipFile.Equals(d.ZipFile))))
                     {
-                        Utils.AppendToLog(string.Format("Error: duplicate PackageName \"{0}\" found. ZipFile: \"{1}\"", s.PackageName, s.ZipFile));
+                        Logging.Manager(string.Format("Error: duplicate PackageName \"{0}\" found. ZipFile: \"{1}\"", s.PackageName, s.ZipFile));
                         duplicatesCounter++;
                     }
                 }
@@ -369,7 +369,7 @@ namespace RelhaxModpack
                     // if the s.dependency is TRUE, it is a dependecy entry and PackageName AND ZipFile must be checken if equal, if not => error/duplicate message
                     if (s.CheckDatabaseListIndex != c.CheckDatabaseListIndex && ((s.PackageName.Equals(c.PackageName) && !(s.Dependency)) || (s.Dependency && s.PackageName.Equals(c.PackageName) && !s.ZipFile.Equals(c.ZipFile))))
                     {
-                        Utils.AppendToLog(string.Format("Error: duplicate PackageName \"{0}\" found. ZipFile: \"{1}\"", s.PackageName, s.ZipFile));
+                        Logging.Manager(string.Format("Error: duplicate PackageName \"{0}\" found. ZipFile: \"{1}\"", s.PackageName, s.ZipFile));
                         duplicatesCounter++;
                     }
                 }
@@ -457,7 +457,7 @@ namespace RelhaxModpack
                         // if the s.dependency is TRUE, it is a dependecy entry and PackageName AND ZipFile must be checken if equal, if not => error/duplicate message
                         if (s.CheckDatabaseListIndex != m.CheckDatabaseListIndex && ((s.PackageName.Equals(m.PackageName) && !(s.Dependency)) || (s.Dependency && s.PackageName.Equals(m.PackageName) && !(s.ZipFile.Equals(m.ZipFile)))))
                         {
-                            Utils.AppendToLog(string.Format("Error: duplicate PackageName \"{0}\" found. ZipFile: \"{1}\".", s.PackageName, s.ZipFile));
+                            Logging.Manager(string.Format("Error: duplicate PackageName \"{0}\" found. ZipFile: \"{1}\".", s.PackageName, s.ZipFile));
                             duplicatesCounter++;
                         }
                     }
@@ -586,7 +586,7 @@ namespace RelhaxModpack
         //unchecks all mods from memory
         public static void ClearSelectionMemory(List<Category> parsedCatagoryList, List<Mod> UserMods)
         {
-            Utils.AppendToLog("Unchecking all mods");
+            Logging.Manager("Unchecking all mods");
             foreach (Category c in parsedCatagoryList)
             {
                 foreach (Mod m in c.Mods)
@@ -806,7 +806,7 @@ namespace RelhaxModpack
                     Directory.GetDirectories(directory).Length == 0)
                 {
                     if (reportToLog)
-                        Utils.AppendToLog(string.Format("Deleting empty directory {0}", directory));
+                        Logging.Manager(string.Format("Deleting empty directory {0}", directory));
                     Directory.Delete(directory, false);
                 }
             }
@@ -910,7 +910,7 @@ namespace RelhaxModpack
             dpiY = graphics.DpiY;
             if (dpiX != dpiY)
             {
-                Utils.AppendToLog("WARNING: scale values do not equal, using x value");
+                Logging.Manager("WARNING: scale values do not equal, using x value");
             }
             return dpiX / 96;
         }
@@ -960,7 +960,7 @@ namespace RelhaxModpack
             }
             else
             {
-                Utils.AppendToLog(string.Format("ERROR: {0} not found", zipFilename));
+                Logging.Manager(string.Format("ERROR: {0} not found", zipFilename));
             }
             return textStr;
         }
@@ -1090,7 +1090,7 @@ namespace RelhaxModpack
                 }
                 else
                 {
-                    Utils.AppendToLog("Error: get ReplaceMacro() call with unknown object type");
+                    Logging.Manager("Error: get ReplaceMacro() call with unknown object type");
                     return "unknown object type at call ReplaceMacro()";
                 }
                 macroList.Add("app", Settings.TanksLocation);
@@ -1099,6 +1099,7 @@ namespace RelhaxModpack
                 macroList.Add("appData", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
                 macroList.Add("relhax", Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
                 macroList.Add("temp", Settings.RelhaxTempFolder);
+                macroList.Add("desktop", Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
                 foreach (DictionaryEntry macro in macroList)
                 {
                     text = System.Text.RegularExpressions.Regex.Replace(text, @"{" + @macro.Key.ToString() + @"}", @macro.Value.ToString(), System.Text.RegularExpressions.RegexOptions.IgnoreCase);
@@ -1120,6 +1121,11 @@ namespace RelhaxModpack
         public static string ReplaceDirectorySeparatorChar(string s)
         {
             return s.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+        }
+
+        public static string AddTrailingBackslashChar(string s)
+        {
+            return !s.Last().ToString().Equals(@"\") || !s.Last().ToString().Equals(@"/") ? s + @"\" : s;
         }
 
         public static string ConvertFiletimeTimestampToDate(long timestamp)
@@ -1147,11 +1153,11 @@ namespace RelhaxModpack
                     link.SetArguments(""); //The arguments used when executing the exe
                     // save it
                     System.Runtime.InteropServices.ComTypes.IPersistFile file = (System.Runtime.InteropServices.ComTypes.IPersistFile)link;
-                    string desktopPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), modifiedName);
+                    string desktopPath = Utils.ReplaceDirectorySeparatorChar(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), modifiedName));
                     if (log)
                     {
-                        Utils.AppendToInstallLog(desktopPath);
-                        Logging.stubsInstaller(desktopPath);                     // write created file with path
+                        // Utils.AppendToInstallLog(desktopPath);
+                        Logging.Installer(desktopPath);                     // write created file with path
                     }
                     file.Save(desktopPath, false);
                 }

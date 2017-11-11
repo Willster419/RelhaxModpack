@@ -99,7 +99,7 @@ namespace RelhaxModpack
                 PreviewPicture.Image = Settings.getLoadingImage();
                 PreviewPicture.LoadAsync(m.URL);
                 Text = DBO.NameFormatted + " - " + CurrentlySelected;
-                Utils.AppendToLog("Preview: started loading of picture '" + DBO.NameFormatted + "' at URL '" + m.URL + "'");
+                Logging.Manager("Preview: started loading of picture '" + DBO.NameFormatted + "' at URL '" + m.URL + "'");
             }
             else if (m.MediaType == MediaType.Youtube)
             {
@@ -112,11 +112,11 @@ namespace RelhaxModpack
                 Controls.Add(Youtubedisplay);
                 Youtubedisplay.Navigate(m.URL);
                 Text = DBO.NameFormatted + " - " + CurrentlySelected;
-                Utils.AppendToLog("Preview: started loading of youtube video '" + DBO.NameFormatted + "' at URL '" + m.URL + "'");
+                Logging.Manager("Preview: started loading of youtube video '" + DBO.NameFormatted + "' at URL '" + m.URL + "'");
             }
             else
             {
-                Utils.AppendToLog("ERROR: Unknown media type: " + m.MediaType);
+                Logging.Manager("ERROR: Unknown media type: " + m.MediaType);
             }
         }
         //make the linked labels for each picture in the picturesList

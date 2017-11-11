@@ -325,7 +325,7 @@ namespace RelhaxModpack.XmlBinary
             }
             else
             {
-                Utils.AppendToLog("ERROR: Unknown type of \"" + element.Name + ": " + dataDescriptor.ToString() + " " + readAndToHex(reader, lengthInBytes));
+                Logging.Manager("ERROR: Unknown type of \"" + element.Name + ": " + dataDescriptor.ToString() + " " + readAndToHex(reader, lengthInBytes));
             }
 
             return dataDescriptor.end;

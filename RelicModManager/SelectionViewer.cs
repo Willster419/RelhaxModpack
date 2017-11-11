@@ -67,7 +67,7 @@ namespace RelhaxModpack
             if(SelectedDocument.Equals("-1"))
             {
                 //error
-                Utils.AppendToLog("ERROR: Failed to parse XML File");
+                Logging.Manager("ERROR: Failed to parse XML File");
                 SelectedXML = SelectedDocument;
             }
             else if (SelectedDocument.Equals("localFile"))

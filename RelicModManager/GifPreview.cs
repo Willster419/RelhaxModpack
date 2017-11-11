@@ -16,7 +16,7 @@ namespace RelhaxModpack
         //use load to move the location of the form
         private void GifPreview_Load(object sender, EventArgs e)
         {
-            Utils.AppendToLog("GifPreview: opening at x: " + x + ", y: " + y);
+            Logging.Manager("GifPreview: opening at x: " + x + ", y: " + y);
             this.Location = new Point(x, y);
             this.Text = Translations.getTranslatedString("loadingGifpreview");
             SetLoadingImage();
