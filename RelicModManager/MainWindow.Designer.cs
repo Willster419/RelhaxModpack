@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.childProgressBar = new System.Windows.Forms.ProgressBar();
-            this.findWotExe = new System.Windows.Forms.OpenFileDialog();
+            this.FindWotExe = new System.Windows.Forms.OpenFileDialog();
             this.forceManuel = new System.Windows.Forms.CheckBox();
             this.formPageLink = new System.Windows.Forms.LinkLabel();
             this.parrentProgressBar = new System.Windows.Forms.ProgressBar();
@@ -41,6 +41,7 @@
             this.cancerFontCB = new System.Windows.Forms.CheckBox();
             this.backupModsCheckBox = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
+            this.InstantExtractionCB = new System.Windows.Forms.CheckBox();
             this.createShortcutsCB = new System.Windows.Forms.CheckBox();
             this.saveUserDataCB = new System.Windows.Forms.CheckBox();
             this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
@@ -56,7 +57,7 @@
             this.standardImageRB = new System.Windows.Forms.RadioButton();
             this.findBugAddModLabel = new System.Windows.Forms.LinkLabel();
             this.cancelDownloadButton = new System.Windows.Forms.Button();
-            this.downloadTimer = new System.Windows.Forms.Timer(this.components);
+            this.DownloadTimer = new System.Windows.Forms.Timer(this.components);
             this.downloadProgress = new System.Windows.Forms.RichTextBox();
             this.viewTypeGB = new System.Windows.Forms.GroupBox();
             this.disableColorsCB = new System.Windows.Forms.CheckBox();
@@ -86,7 +87,6 @@
             this.DatabaseVersionLabel = new System.Windows.Forms.Label();
             this.ApplicationVersionLabel = new System.Windows.Forms.Label();
             this.DiagnosticUtilitiesButton = new System.Windows.Forms.Button();
-            this.InstantExtractionCB = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
@@ -103,10 +103,10 @@
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.childProgressBar.TabIndex = 11;
             // 
-            // findWotExe
+            // FindWotExe
             // 
-            this.findWotExe.Filter = "WorldOfTanks.exe|WorldOfTanks.exe";
-            this.findWotExe.Title = "Find WorldOfTanks.exe";
+            this.FindWotExe.Filter = "WorldOfTanks.exe|WorldOfTanks.exe";
+            this.FindWotExe.Title = "Find WorldOfTanks.exe";
             // 
             // forceManuel
             // 
@@ -218,6 +218,18 @@
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "Modpack Settings";
+            // 
+            // InstantExtractionCB
+            // 
+            this.InstantExtractionCB.Location = new System.Drawing.Point(6, 130);
+            this.InstantExtractionCB.Name = "InstantExtractionCB";
+            this.InstantExtractionCB.Size = new System.Drawing.Size(220, 30);
+            this.InstantExtractionCB.TabIndex = 36;
+            this.InstantExtractionCB.Text = "Instant Extraction mode (experimental)";
+            this.InstantExtractionCB.UseVisualStyleBackColor = true;
+            this.InstantExtractionCB.CheckedChanged += new System.EventHandler(this.InstantExtractionCB_CheckedChanged);
+            this.InstantExtractionCB.MouseEnter += new System.EventHandler(this.InstantExtractionCB_MouseEnter);
+            this.InstantExtractionCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // createShortcutsCB
             // 
@@ -404,10 +416,10 @@
             this.cancelDownloadButton.Visible = false;
             this.cancelDownloadButton.Click += new System.EventHandler(this.cancelDownloadButton_Click);
             // 
-            // downloadTimer
+            // DownloadTimer
             // 
-            this.downloadTimer.Interval = 1000;
-            this.downloadTimer.Tick += new System.EventHandler(this.downloadTimer_Tick);
+            this.DownloadTimer.Interval = 1000;
+            this.DownloadTimer.Tick += new System.EventHandler(this.DownloadTimer_Tick);
             // 
             // downloadProgress
             // 
@@ -780,18 +792,6 @@
             this.DiagnosticUtilitiesButton.UseVisualStyleBackColor = true;
             this.DiagnosticUtilitiesButton.Click += new System.EventHandler(this.DiagnosticUtilitiesButton_Click);
             // 
-            // InstantExtractionCB
-            // 
-            this.InstantExtractionCB.Location = new System.Drawing.Point(6, 130);
-            this.InstantExtractionCB.Name = "InstantExtractionCB";
-            this.InstantExtractionCB.Size = new System.Drawing.Size(220, 30);
-            this.InstantExtractionCB.TabIndex = 36;
-            this.InstantExtractionCB.Text = "Instant Extraction mode (experimental)";
-            this.InstantExtractionCB.UseVisualStyleBackColor = true;
-            this.InstantExtractionCB.CheckedChanged += new System.EventHandler(this.InstantExtractionCB_CheckedChanged);
-            this.InstantExtractionCB.MouseEnter += new System.EventHandler(this.InstantExtractionCB_MouseEnter);
-            this.InstantExtractionCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -844,7 +844,7 @@
 
         #endregion
         private System.Windows.Forms.ProgressBar childProgressBar;
-        private System.Windows.Forms.OpenFileDialog findWotExe;
+        private System.Windows.Forms.OpenFileDialog FindWotExe;
         private System.Windows.Forms.CheckBox forceManuel;
         private System.Windows.Forms.LinkLabel formPageLink;
         private System.Windows.Forms.ProgressBar parrentProgressBar;
@@ -861,7 +861,7 @@
         private System.Windows.Forms.CheckBox saveLastInstallCB;
         private System.Windows.Forms.Button cancelDownloadButton;
         private System.Windows.Forms.CheckBox saveUserDataCB;
-        private System.Windows.Forms.Timer downloadTimer;
+        private System.Windows.Forms.Timer DownloadTimer;
         private System.Windows.Forms.RichTextBox downloadProgress;
         private System.Windows.Forms.CheckBox darkUICB;
         private System.Windows.Forms.GroupBox languageSelectionGB;

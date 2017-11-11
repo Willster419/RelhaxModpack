@@ -42,14 +42,18 @@ namespace RelhaxModpack
         public static int LoadingGif { get; set; }
         public static string FontName { get; set; }
         public static float ScaleSize { get; set; }
+        //file locations
         public static string SettingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxSettings.xml");
-        public static string ManagerInfoDatFile = Path.Combine(Application.StartupPath, "RelHaxTemp", "managerInfo.dat");
-        public static string ModInfoDatFile = Path.Combine(Application.StartupPath, "RelHaxTemp", "modInfo.dat");
+        public static string RelhaxTempFolder = Path.Combine(Application.StartupPath, "RelHaxTemp");
+        public static string RelhaxDownloadsFolder = Path.Combine(Application.StartupPath, "RelHaxDownloads");
+        public static string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
+        public static string OnlineDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "onlineDatabase.xml");
+        public static string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
+        public static string ModInfoDatFile = Path.Combine(RelhaxTempFolder, "modInfo.dat");
         //informations for macroList
         public static string TanksLocation = "";
         public static string TanksVersion = "";
         public static string TanksOnlineFolderVersion = "";
-        public static string RelhaxTempFolder = Path.Combine(Application.StartupPath, "RelHaxTemp");
         //needed to create to first line to installedRelhaxFiles.log
         public static string DatabaseVersion = "";
         //

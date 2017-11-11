@@ -2300,7 +2300,7 @@ namespace RelhaxModpack
                 // if in databaseupdate mode, the online databse is downloader to get the informations of all accessable online files of this gameVersion
                 try
                 {
-                    XDocument doc = XDocument.Load(MainWindow.onlineDatabaseXmlFile);
+                    XDocument doc = XDocument.Load(Settings.OnlineDatabaseXmlFile);
                     try
                     {
                         XElement element = doc.Descendants("file")
@@ -2355,10 +2355,10 @@ namespace RelhaxModpack
 
         public static void CreateMd5HashDatabase()
         {
-            if (!File.Exists(MainWindow.md5HashDatabaseXmlFile))
+            if (!File.Exists(Settings.MD5HashDatabaseXmlFile))
             {
                 XDocument doc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement("database"));
-                doc.Save(MainWindow.md5HashDatabaseXmlFile);
+                doc.Save(Settings.MD5HashDatabaseXmlFile);
             }
         }
         // need filename and filetime to check the database
@@ -2366,7 +2366,7 @@ namespace RelhaxModpack
         {
             try
             {
-                XDocument doc = XDocument.Load(MainWindow.md5HashDatabaseXmlFile);
+                XDocument doc = XDocument.Load(Settings.MD5HashDatabaseXmlFile);
                 bool exists = doc.Descendants("file")
                        .Where(arg => arg.Attribute("filename").Value == inputFile && arg.Attribute("filetime").Value == inputFiletime)
                        .Any();
@@ -2381,7 +2381,7 @@ namespace RelhaxModpack
             catch (Exception e)
             {
                 Utils.ExceptionLog("getMd5HashDatabase", e);
-                File.Delete(MainWindow.md5HashDatabaseXmlFile);     // delete damaged XML database
+                File.Delete(Settings.MD5HashDatabaseXmlFile);     // delete damaged XML database
                 CreateMd5HashDatabase();                            // create new XML database
             }
             return "-1";
@@ -2391,7 +2391,7 @@ namespace RelhaxModpack
         {
             try
             {
-                XDocument doc = XDocument.Load(MainWindow.md5HashDatabaseXmlFile);
+                XDocument doc = XDocument.Load(Settings.MD5HashDatabaseXmlFile);
                 try
                 {
                     XElement element = doc.Descendants("file")
@@ -2404,7 +2404,7 @@ namespace RelhaxModpack
                 {
                     doc.Element("database").Add(new XElement("file", new XAttribute("filename", inputFile), new XAttribute("filetime", inputFiletime), new XAttribute("md5", inputMd5Hash)));
                 }
-                doc.Save(MainWindow.md5HashDatabaseXmlFile);
+                doc.Save(Settings.MD5HashDatabaseXmlFile);
             }
             catch (Exception ex)
             {
@@ -2420,11 +2420,11 @@ namespace RelhaxModpack
             // extract filename from path (if call with full path)
             string tempFilename = Path.GetFileName(inputFile);
 
-            XDocument doc = XDocument.Load(MainWindow.md5HashDatabaseXmlFile);
+            XDocument doc = XDocument.Load(Settings.MD5HashDatabaseXmlFile);
             try
             {
                 doc.Descendants("file").Where(arg => arg.Attribute("filename").Value == tempFilename).Remove();
-                doc.Save(MainWindow.md5HashDatabaseXmlFile);
+                doc.Save(Settings.MD5HashDatabaseXmlFile);
             }
             catch (InvalidOperationException)
             {

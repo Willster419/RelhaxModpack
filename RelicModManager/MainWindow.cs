@@ -29,11 +29,6 @@ namespace RelhaxModpack
         private string appDataFolder;
         //the string representation from the xml document manager_version.xml. also passed into the installer for logging the version of the database installed at that time
         private string databaseVersionString;
-        
-        //where all the downloaded mods are placed
-        public static string downloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads");
-        public static string md5HashDatabaseXmlFile = Path.Combine(downloadPath, "MD5HashDatabase.xml");
-        public static string onlineDatabaseXmlFile = Path.Combine(downloadPath, "onlineDatabase.xml");
         //timer to measure download speed
         Stopwatch sw = new Stopwatch();
         //The list of all mods
@@ -120,8 +115,8 @@ namespace RelhaxModpack
         {
             if (Settings.InstantExtraction)
                 return;
-            if (!downloadTimer.Enabled)
-                downloadTimer.Enabled = true;
+            if (!DownloadTimer.Enabled)
+                DownloadTimer.Enabled = true;
             string totalSpeedLabel = "";
             //get the download information into numeric classes
             float bytesIn = float.Parse(e.BytesReceived.ToString());
@@ -173,7 +168,7 @@ namespace RelhaxModpack
         //handler for the mod download file complete event
         void downloader_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            downloadTimer.Enabled = false;
+            DownloadTimer.Enabled = false;
             //check to see if the user cancled the download
             if (e != null && e.Cancelled)
             {
@@ -210,7 +205,7 @@ namespace RelhaxModpack
                 //downloader components
                 AsyncDownloadArgs args = new AsyncDownloadArgs();
                 args.url = new Uri(Utils.ReplaceMacro(DatabasePackagesToDownload[downloadCounter].StartAddress) + DatabasePackagesToDownload[downloadCounter].ZipFile + DatabasePackagesToDownload[downloadCounter].EndAddress);
-                args.zipFile = Path.Combine(downloadPath,DatabasePackagesToDownload[downloadCounter].ZipFile);
+                args.zipFile = Path.Combine(Settings.RelhaxDownloadsFolder,DatabasePackagesToDownload[downloadCounter].ZipFile);
                 //for the next file in the queue, delete it.
                 if (File.Exists(args.zipFile)) File.Delete(args.zipFile);
                 //download new zip file
@@ -229,7 +224,7 @@ namespace RelhaxModpack
                     totalProgressBar.Value = 1;//backup technically, but don't worry about it (for now)
                     cancelDownloadButton.Enabled = true;
                     cancelDownloadButton.Visible = true;
-                    downloadTimer.Enabled = true;
+                    DownloadTimer.Enabled = true;
                     if (timeRemainArray == null)
                         timeRemainArray = new List<double>();
                     timeRemainArray.Clear();
@@ -389,7 +384,7 @@ namespace RelhaxModpack
         //handler for when the update download is complete
         void updater_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            downloadTimer.Enabled = false;
+            DownloadTimer.Enabled = false;
             if (e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
             {
                 //404
@@ -601,15 +596,15 @@ namespace RelhaxModpack
             // try to give an untrained user a littlebit support
             if (autoFindTanks() != null)
             {
-                findWotExe.InitialDirectory = Path.GetDirectoryName(tanksLocation);
+                FindWotExe.InitialDirectory = Path.GetDirectoryName(tanksLocation);
             }
             //unable to find it in the registry (or user activated manually selection), so ask for it
-            if (findWotExe.ShowDialog().Equals(DialogResult.Cancel))
+            if (FindWotExe.ShowDialog().Equals(DialogResult.Cancel))
             {
                 downloadProgress.Text = Translations.getTranslatedString("canceled");
                 return null;
             }
-            tanksLocation = findWotExe.FileName;
+            tanksLocation = FindWotExe.FileName;
             return "all good";
         }
 
@@ -693,7 +688,7 @@ namespace RelhaxModpack
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
             Logging.Manager("Loading settings");
             Settings.LoadSettings();
-            this.applySettings(true);
+            this.ApplySettings(true);
             if (Program.testMode)
             {
                 Logging.Manager("Test Mode is ON, loading local modInfo.xml");
@@ -754,11 +749,11 @@ namespace RelhaxModpack
         {
             Utils.TotallyNotStatPaddingForumPageViewCount();
             ToggleUIButtons(false);
-            downloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads");
             //get the user appData folder
-            appDataFolder = Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Wargaming.net", "WorldOfTanks");
+            appDataFolder = "";
+            appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Wargaming.net", "WorldOfTanks");
             Logging.Manager("appDataFolder parsed as " + appDataFolder);
-            if (!Directory.Exists(appDataFolder))
+            if (appDataFolder.Equals("") || !Directory.Exists(appDataFolder))
             {
                 Logging.Manager("ERROR: appDataFolder does not exist");
                 appDataFolder = "-1";
@@ -847,10 +842,9 @@ namespace RelhaxModpack
             childProgressBar.Maximum = 100;
             //childProgressBar.Value = 0;
             //check to make sure that the md5hashdatabase is valid before using it
-            string md5HashDatabaseLocation = Path.Combine(Application.StartupPath, "RelHaxDownloads", "MD5HashDatabase.xml");
-            if ((File.Exists(md5HashDatabaseLocation)) && (!XMLUtils.IsValidXml(md5HashDatabaseLocation)))
+            if ((File.Exists(Settings.MD5HashDatabaseXmlFile)) && (!XMLUtils.IsValidXml(Settings.MD5HashDatabaseXmlFile)))
             {
-                File.Delete(md5HashDatabaseLocation);
+                File.Delete(Settings.MD5HashDatabaseXmlFile);
             }
             //show the mod selection window
             ModSelectionList list = new ModSelectionList()
@@ -892,6 +886,13 @@ namespace RelhaxModpack
             //have the application display that it is loading. it is actually doing installation calculations
             downloadProgress.Text = Translations.getTranslatedString("loading");
             Application.DoEvents();
+            //run the installer calculations
+            ProcessInstallCalculations(list);
+        }
+
+        private void ProcessInstallCalculations(ModSelectionList list)
+        {
+
             /*
              * parses all the mods and configs into seperate lists for many types op options
              * like mods/configs to install, mods/configs with data, and others
@@ -927,7 +928,7 @@ namespace RelhaxModpack
                             //also check that it actually has a zip file
                             if (!m.ZipFile.Equals(""))
                             {
-                                m.ExtractPath = m.ExtractPath.Equals("")? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(m.ExtractPath);
+                                m.ExtractPath = m.ExtractPath.Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(m.ExtractPath);
                                 modsConfigsToInstall.Add(m);
                             }
 
@@ -1128,9 +1129,9 @@ namespace RelhaxModpack
             //if they don't, remove them. if they do, macro the ExtractPath
             try
             {
-                for(int i = 0; i < globalDependenciesToInstall.Count; i++)
+                for (int i = 0; i < globalDependenciesToInstall.Count; i++)
                 {
-                    if((!globalDependenciesToInstall[i].Enabled) || globalDependenciesToInstall[i].ZipFile.Equals(""))
+                    if ((!globalDependenciesToInstall[i].Enabled) || globalDependenciesToInstall[i].ZipFile.Equals(""))
                     {
                         globalDependenciesToInstall.RemoveAt(i);
                         i--;
@@ -1168,8 +1169,6 @@ namespace RelhaxModpack
             {
                 Utils.ExceptionLog("installRelhaxMod_Click", "verify that all ... are actually Enabled", ex);
             }
-
-            
 
             //check for dependencies that actually need to be installed at the end
             try
@@ -1298,7 +1297,6 @@ namespace RelhaxModpack
             list.Dispose();
             list = null;
             GC.Collect();
-            return;
         }
 
         private void ProcessConfigs(List<Config> configList)
@@ -1383,6 +1381,37 @@ namespace RelhaxModpack
                     dependenciesToInstall.Add(temp);
             }
         }
+        
+        //Checks if the current database version is the same as the database version last installed into the selected World_of_Tanks directory
+        private bool SameDatabaseVersions()
+        {
+            try
+            {
+                string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");  //xml doc name can change
+                XDocument doc = XDocument.Parse(xmlString);
+
+                var databaseVersion = doc.CreateNavigator().SelectSingleNode("/version/database");
+                databaseVersionString = databaseVersion.InnerXml;
+                Settings.DatabaseVersion = databaseVersionString;
+                string installedfilesLogPath = Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log");
+                if (!File.Exists(installedfilesLogPath))
+                    return false;
+                string[] lastInstalledDatabaseVersionString = File.ReadAllText(installedfilesLogPath).Split('\n');
+                //use index 0 of array, index 18 of string array
+                string theDatabaseVersion = lastInstalledDatabaseVersionString[0].Substring(18).Trim();
+                if (databaseVersionString.Equals(theDatabaseVersion))
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("SameDatabaseVersions", ex);
+                return false;
+            }
+        }
+
+#region progress reporting
 
         private string createExtractionMsgBoxProgressOutput(string[] s)
         {
@@ -1627,6 +1656,7 @@ namespace RelhaxModpack
             }
             downloadProgress.Text = message;
         }
+#endregion
 
         //Main method to uninstall the modpack
         private void UninstallRelhaxMod_Click(object sender, EventArgs e)
@@ -1667,7 +1697,7 @@ namespace RelhaxModpack
             }
         }
         //applies all settings from static settings class to this form
-        private void applySettings(bool init = false)
+        private void ApplySettings(bool init = false)
         {
             //set translation text
             Control[] translationSetList = new Control[] { forceManuel, cleanInstallCB, backupModsCheckBox, cancerFontCB, saveLastInstallCB, saveUserDataCB, darkUICB,
@@ -1780,10 +1810,10 @@ namespace RelhaxModpack
         }
 
         //for when downloads are started, a timer to keep track of the download speed and ETA
-        private void downloadTimer_Tick(object sender, EventArgs e)
+        private void DownloadTimer_Tick(object sender, EventArgs e)
         {
             differenceTotalBytesDownloaded = currentTotalBytesDownloaded - previousTotalBytesDownloaded;
-            float intervalInSeconds = (float)downloadTimer.Interval / 1000;
+            float intervalInSeconds = (float)DownloadTimer.Interval / 1000;
             float sessionMBytesDownloaded = differenceTotalBytesDownloaded / MBDivisor;
             sessionDownloadSpeed = sessionMBytesDownloaded / intervalInSeconds;
             //set the previous for the last amount of bytes downloaded
@@ -1844,34 +1874,6 @@ namespace RelhaxModpack
             }
         }
 
-        //Checks if the current database version is the same as the database version last installed into the selected World_of_Tanks directory
-        private bool SameDatabaseVersions()
-        {
-            try
-            {
-                string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");  //xml doc name can change
-                XDocument doc = XDocument.Parse(xmlString);
-
-                var databaseVersion = doc.CreateNavigator().SelectSingleNode("/version/database");
-                databaseVersionString = databaseVersion.InnerXml;
-                Settings.DatabaseVersion = databaseVersionString;
-                string installedfilesLogPath = Path.Combine(tanksLocation, "logs", "installedRelhaxFiles.log");
-                if (!File.Exists(installedfilesLogPath))
-                    return false;
-                string[] lastInstalledDatabaseVersionString = File.ReadAllText(installedfilesLogPath).Split('\n');
-                //use index 0 of array, index 18 of string array
-                string theDatabaseVersion = lastInstalledDatabaseVersionString[0].Substring(18).Trim();
-                if (databaseVersionString.Equals(theDatabaseVersion))
-                    return true;
-                else
-                    return false;
-            }
-            catch (Exception ex)
-            {
-                Utils.ExceptionLog("SameDatabaseVersions", ex);
-                return false;
-            }
-        }
         //handler for when the window is goingto be closed
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -2101,7 +2103,7 @@ namespace RelhaxModpack
                     Translations.language = Translations.Languages.French;
                     break;
             }
-            this.applySettings();
+            this.ApplySettings();
         }
         //handler for what happends when the check box "clean install" is checked or not
         private void cleanInstallCB_CheckedChanged(object sender, EventArgs e)
@@ -2146,37 +2148,37 @@ namespace RelhaxModpack
         private void languageENG_CheckedChanged(object sender, EventArgs e)
         {
             Translations.language = Translations.Languages.English;
-            this.applySettings();
+            this.ApplySettings();
         }
 
         private void languageGER_CheckedChanged(object sender, EventArgs e)
         {
             Translations.language = Translations.Languages.German;
-            this.applySettings();
+            this.ApplySettings();
         }
 
         private void selectionDefault_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SView = Settings.SelectionView.Default;
-            this.applySettings();
+            this.ApplySettings();
         }
 
         private void selectionLegacy_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SView = Settings.SelectionView.Legacy;
-            this.applySettings();
+            this.ApplySettings();
         }
 
         private void languagePL_CheckedChanged(object sender, EventArgs e)
         {
             Translations.language = Translations.Languages.Polish;
-            this.applySettings();
+            this.ApplySettings();
         }
 
         private void languageFR_CheckedChanged(object sender, EventArgs e)
         {
             Translations.language = Translations.Languages.French;
-            this.applySettings();
+            this.ApplySettings();
         }
 
         private void expandNodesDefault_CheckedChanged(object sender, EventArgs e)

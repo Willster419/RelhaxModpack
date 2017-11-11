@@ -1,138 +1,25 @@
-Version 26.6.1:
-https://www.virustotal.com/#/file/10bd235a44e72adeee49908a85fefd3e10b8b96a2c861b8ad0eb819db6a0a008/detection
--Removed debug statements from log
--Moved divider of version table to actually fit the long version name of the database
---------------------------------------------------------------------------------------------------------------------------------------------
+May I present to you, the latest full new release, version 27!!!
+  This is the biggest performance update yet!
 
-Version 26.6.0:
-https://www.virustotal.com/#/file/e5c0ddc4304252748e9744a112e800bdca95db5dcf37d14509a8a01912f4f074/detection
--Added a new feature. At the bottom of the Main Window, it now displays the application and database versions. Now, you can know immediately what is the latest version of WoT we support! (Idea thanks to the user Nullmaruzero)
--Rewrote the way the application explains settings. Now, instead of creating a new window with a text box, it will use the text box in the main application. (Idea thanks to the user Nullmaruzero)
--Fixes to creating shortcuts
--Added ability for GlobalDependencies to have shortcuts
--Fixes in enabled dependency verification
--Fixes in appended dependencies
+https://www.virustotal.com/#/file/fbeb42a8646ea84c18728aeb7280ba09c96a623d315c8550e403c1345927f88c/detection
+"We are done adding new features." - Me 1 month ago. Very much false.
+
+-The process for building the Mod Selection list had been completly re-written. Before, it would take 5 seconds on a hard drive, and 2 seconds on an SSD. After the re-write, it takes 2 seconds on a hard drive and 0.8 seconds on an SSD. Much faster!
+-The unzipping process has been improved as well. It uses less regex overhead and more native string replacement for changing variables like the WoT version (0.9.x.y). The logging for zip files was also improved. SSD users will see a small extraction speed increase, but hard drive users will see a significant extraction speed increase!
+-The unzipping process has been further improved by using macros for the destination path. Now, we can have packages extract directly to the WoT folder, the application data folder, the Relhax base folder, and the relhax temp folder.
+-The download process can now be integrated into the extraction process with the "Instant Extraction" setting. Before, like all other modpacks, downloading and installing were two seperate syncronous processes that happened one after another. Because of our asyncronous approach to installation, we said, "Why not extract a package as soon as it is downloaded?" Here is an image to explain the change. The top part is the syncronous approach, the bottom is the asyncronous approach. https://i.imgur.com/6BcgLRf.png
+This is the first and only modpack to have this ability!
+-We now have a menu of diagnostic utilities for WoT. You can select an installation, run a client integrity check on it, and also create a zip file with all the logs, pictures, and selection files we need to diagnose issues!
+-In the mod selection list, hovering over a mod or config will show its description and last updated property. If you only want to read the description, you no longer have to right click each time. As far as I know we are the first modpack to use toolTips!
+-We had added two command arguements to the installer: /beta-database and /beta-application. They allow you to used the latest database and application that the modpack team is working with. Please note that beta applications are NOT digitally signed. You can switch back to normal database and application at any time by starting the modpack without the respective arguements.
+-The update notes text box in the previews now has the last modified entry date
+-Started the process of converting all varaibles to a single macro format
+-Moved all Windows other than the main window to a RelhaxForm derived class, so now every window will have proper scaling and resizing.
+-The internal class structure for database components has changed: https://i.imgur.com/Qw6GIFk.png
+-Fixed bugs with the /auto-install arguement where it would not properly save checksum information or download new mod updates.
+-Fixed missing translations entries
+-Improved exception handling throughtout the application
+-Other improvements and optimizations
 -Updated translations
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Version 26.5.0:
-https://www.virustotal.com/#/file/17dc82ace8dc3196853190e4fc9eafab0a74fe0caa12c3ec5024d36687d8a8a0/detection
--Fixed bugs with font install system
--Added new feature. Application can now create desktop shortcuts for mods that are actually external programs
--Fixed bug with OMC legacy view, when unchecking a mod, child configs would not be unchecked
--Added feature for display scaling. If the new scaling would make the application larger than the screen size, it disables that option. It prevents you from accidentally setting a scale wayyy to large. Excludes DPI Auto option
--Split Utils class into XMLUtils, PatchUtils, and Utils. Easier to find code now
--Fixed a lot of code formatting
--Optimized the downloader ETA and speed calculations. Also fixed the bug where at the start it would give a negative ETA
--Completely rewrote the JSON patcher. Now you can achieve doing anything you might need to in json with the patcher.
--Added [sl] as an escape character for the "/" character in the xml and json patching systems, for adding modes
--Fixed annoying bug where the mouse wheel would select a mod in a dropDown option
--Fixed behavior of the "skip-update" command switch
--Fixed bugs with errors when downloading
--Added section in loading settings where default values can be set within the application
--Updated translations
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Version 26.4.2:
-https://www.virustotal.com/#/file/7c29738759b4a0701a9fc9eff88b18ab4e1ed8c14d507f6c389bb8cf494dde8f/detection
--Fixed bug in ModSelectionList where either an incorrect or no preview would be shown for items of dropDown type
--Fixed bugs in database editor
--Fixed severity of some messages in the log file
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Version 26.4.1:
-https://www.virustotal.com/#/file/8c1a2d90282aab592958d69acb5d31455c78cd50fd57c2463325ba3c15587dbc/detection
--Fixed bugs with database editor
--Fixed bugs with installing fonts
--Updated translations
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Version 26.4.0:
-https://www.virustotal.com/#/file/ff7eda52f4e37a1d8debbccb25c9a3e157195987f33b40eeec4648ca838ba009/detection
--Added tooltips to the main window (hover over checkbox to view)
--Added translations to loading preview
--Changed more string paths to Path.Combine() systax
--Removed unused code
--Fixes to database editor
--Improvements to xml database generation
--Added button (with translations) to the install finished window, to close the application
--Added wildcard (*) syntax to userdata file entries
--Updated translations (for the 999th time ;) )
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Version 26.3.1:
-https://www.virustotal.com/#/file/2bc65255e4e0c0cfd6bd8951aa23cf05ef0b616de340fe6a24e0238fcdf6442a/detection
--Alligned Components in the main window
--Fixed german and polish translations
--Fixed bugs with the database editor
--Fixed other bugs in the main window
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Version 26.3.0:
-https://www.virustotal.com/#/file/93e20f2643e0e0a64d6ec3da6c6998d47d76842271dd1c0e09c8be19692dbdfc/detection
--Updated update system to use xml for keeping track of updates. (Try to say that 3 times fast)
--Added a new feature for database updates. If the database hasn't been updated since your last installation, it will inform you. Then, if you are only checking for mod updates, you don't have to waste your time reinstalling.
--Updated string formatting to string.format method
--Updated file path formatting to path.combine method
--Updates to the database manager that you won't notice
--Memory optimizations in the Mod Selection List
--Added more logging at command line level
--Moved the update (.bat) script to be internal, only written to disk when needed
--Moved the two dll files to be embeded inside the application
--Fixed bugs with the button display scaling in the main window
--Moved the font registration system to be inside a zip file downloaded at install time
--And what update would be complete without updating translations??
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Version 26.1.4:
-https://www.virustotal.com/#/file/f2bf375a87c1cebd962e5c43644168eebc29bbef3ff1926678daaa7074bcbfdd/detection
--Fixed CRC handling of the database editor
--Improved database interfacing with previews
--Updated translations
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Version 26.1.3:
-https://www.virustotal.com/#/file/24d9d86c6e5629929069ce1a99b70f627ef788d04605600414197cabb19f1626/detection
--Optimized the searching in the mod selection list
--Added configs of first level to the search-able fields in the mod selection list
--Fixed bugs with the database editor
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Version 26.1.0:
-https://www.virustotal.com/#/file/1dbcf807c5028f919a29b03254b3281ff71f7a6c81fef300f5603e74090c4ac6/detection
--Fixed bug where dependencies and logicalDependencies would always show up as old files to delete if not installed
--Fixed bug with the dropdown selection in the default view, it would not install the config if only selected from the mod checkbox
--Fixed bugs with the database editor
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Version 26.0.4:
-https://www.virustotal.com/#/file/68b74f57c23441bf1155ea26a9fe7478790734e0725e5e3004923368769dd4d2/detection
--Fixed bug with database editor for adding entries of same or different level
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Version 26.0.3:
-https://www.virustotal.com/#/file/bc36592fbe4a2a472ccae2b9dfe369a562e4317c88494fa5c28488c5fd8c3c55/detection
--Fixed bug with updater, downloading "RelicCopyUpdate.bat"
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Version 26.0.2:
-https://www.virustotal.com/#/file/8791b8814ab7104439e55e925e6866a5f5577cfe065f0cfdde397de1e9229116/detection
--Fixed bug with selection "local file" from the load preference window
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Hello everyone, we have a full new release, version 26!!!
-  This is the biggest and most significant update yet!
-https://www.virustotal.com/#/file/e968183097438e69602cc50b79cdcf08111fc7ee32afe4f3ab04a6803c74e2f8/detection
--The application is now signed with a trusted certificate from the StarCom signing authority! say goodbye to virus and certificate warnings!
--Un-checking all options in the selection list no longer rebuilds the UI, where it does that weird "collapsing" of the window
--The size information of each mod and config is now displayed in the most accurate size (kb, mb, etc), and shown with the local method of display (US decimal is ".", EU is ",")
--Added translations to the installation steps
--Many users missed from OMC the option to load a config from one of the developer team members. That feature is back
--The dependency system has be updated again, so now it can use boolean logic to determine if a package should be installed. For example, you no longer have to specify if you want to "xvm" or "non xvm" version of mirroring the contour icons
--Added the first level of configs to the search bar
--(For database managers) we have now added a GUI for editing the database!
-
-At this time, all OMC and other features have been implemented. We can now focus more on the database and application bug fixes. We hope you enjoy this latest build!
--The Relhax Modpack Team
 
 --------------------------------------------------------------------------------------------------------------------------------------------

@@ -65,7 +65,7 @@ namespace RelhaxModpack
                 using (downloader = new WebClient())
                 {
                     string address = string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.TanksOnlineFolderVersion);
-                    string fileName = Path.Combine(Application.StartupPath, "RelHaxTemp", MainWindow.onlineDatabaseXmlFile);
+                    string fileName = Path.Combine(Application.StartupPath, "RelHaxTemp", Settings.OnlineDatabaseXmlFile);
                     downloader.DownloadFile(address, fileName);
                 }
             }
@@ -264,7 +264,7 @@ namespace RelhaxModpack
             {
                 try
                 {
-                    XDocument doc = XDocument.Load(MainWindow.onlineDatabaseXmlFile);
+                    XDocument doc = XDocument.Load(Settings.OnlineDatabaseXmlFile);
                     try
                     {
                         XElement element = doc.Descendants("file")
