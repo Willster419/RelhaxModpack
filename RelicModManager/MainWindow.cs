@@ -18,8 +18,7 @@ namespace RelhaxModpack
     public partial class MainWindow : Form
     {
         //all instance variables required to be up here
-        private FolderBrowserDialog selectWotFolder = new FolderBrowserDialog();
-        private WebClient downloader;
+        private WebClient Downloader;
         private const int MBDivisor = 1048576;
         //sample:  c:/games/World_of_Tanks
         public string tanksLocation;
@@ -92,7 +91,7 @@ namespace RelhaxModpack
         /// https://www.mikrocontroller.net/topic/140764
         /// </summary>
         /// <returns></returns>
-        public string managerVersion()
+        public string ManagerVersion()
         {
             return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().IndexOf('.') + 1);
         }
@@ -194,7 +193,7 @@ namespace RelhaxModpack
                 }
                 else if (result == DialogResult.Retry)
                 {
-                    downloader.DownloadFileAsync(userToken.url, userToken.zipFile, e.UserState);
+                    Downloader.DownloadFileAsync(userToken.url, userToken.zipFile, e.UserState);
                     return;
                 }
             }
@@ -209,13 +208,13 @@ namespace RelhaxModpack
                 //for the next file in the queue, delete it.
                 if (File.Exists(args.zipFile)) File.Delete(args.zipFile);
                 //download new zip file
-                if (downloader != null)
-                    downloader.Dispose();
-                downloader = new WebClient();
-                downloader.DownloadProgressChanged += downloader_DownloadProgressChanged;
-                downloader.DownloadFileCompleted += downloader_DownloadFileCompleted;
-                downloader.Proxy = null;
-                downloader.DownloadFileAsync(args.url, args.zipFile, args);
+                if (Downloader != null)
+                    Downloader.Dispose();
+                Downloader = new WebClient();
+                Downloader.DownloadProgressChanged += downloader_DownloadProgressChanged;
+                Downloader.DownloadFileCompleted += downloader_DownloadFileCompleted;
+                Downloader.Proxy = null;
+                Downloader.DownloadFileAsync(args.url, args.zipFile, args);
                 Logging.Manager("downloading " + Path.GetFileName(args.zipFile));
                 //UI components
                 if(!Settings.InstantExtraction)
@@ -322,9 +321,9 @@ namespace RelhaxModpack
                 
                 var applicationVersion = Program.betaApplication ? doc.XPathSelectElement("//version/manager_beta") : doc.XPathSelectElement("//version/manager");
                 version = applicationVersion.Value;
-                Logging.Manager(string.Format("Local application is {0}, current online is {1}", managerVersion(), version));
+                Logging.Manager(string.Format("Local application is {0}, current online is {1}", ManagerVersion(), version));
 
-                if (!version.Equals(managerVersion()))
+                if (!version.Equals(ManagerVersion()))
                 {
                     Logging.Manager("exe is out of date. displaying user update window");
                     //out of date
@@ -500,6 +499,7 @@ namespace RelhaxModpack
             return result;
         }
 
+        #region Tanks Install Auto/Manuel Search Code
         //checks the registry to get the location of where WoT is installed
         private string autoFindTanks()
         {
@@ -607,13 +607,14 @@ namespace RelhaxModpack
             tanksLocation = FindWotExe.FileName;
             return "all good";
         }
+        #endregion
 
         //handler for before the window is displayed
         private void MainWindow_Load(object sender, EventArgs e)
         {
             //set window header text to current version so user knows
-            this.Text = this.Text + managerVersion();
-            ApplicationVersionLabel.Text = "Application v" + managerVersion();
+            this.Text = this.Text + ManagerVersion();
+            ApplicationVersionLabel.Text = "Application v" + ManagerVersion();
             if (Program.testMode) this.Text = this.Text + " TEST MODE";
             if (Program.betaDatabase) this.Text = this.Text + " BETA DB";
             //setup the gif preview loading window
@@ -623,7 +624,7 @@ namespace RelhaxModpack
             wait.Show();
             WebRequest.DefaultWebProxy = null;
             Application.DoEvents();
-            Logging.Manager("|RelHax Modpack " + managerVersion());
+            Logging.Manager("|RelHax Modpack " + ManagerVersion());
             Logging.Manager(string.Format("|Built on {0}", compileTime()));
             Logging.Manager("|Running on " + System.Environment.OSVersion.ToString());
             /*
@@ -735,12 +736,6 @@ namespace RelhaxModpack
             ToggleUIButtons(true);
             Application.DoEvents();
             Program.saveSettings = true;
-        }
-
-        //when the "visit form page" link is clicked. the link clicked handler
-        private void formPageLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
 
         //handler for when the install relhax modpack button is pressed
@@ -890,6 +885,7 @@ namespace RelhaxModpack
             ProcessInstallCalculations(list);
         }
 
+        #region Installer calculations
         private void ProcessInstallCalculations(ModSelectionList list)
         {
 
@@ -946,11 +942,11 @@ namespace RelhaxModpack
 
                             //at least one mod of this catagory is checked, add any dependenciesToInstall required
                             if (c.Dependencies.Count > 0)
-                                processDependencies(c.Dependencies);
+                                ProcessDependencies(c.Dependencies);
 
                             //check dependency is Enabled and has a zip file with it
                             if (m.Dependencies.Count > 0)
-                                processDependencies(m.Dependencies);
+                                ProcessDependencies(m.Dependencies);
                         }
                     }
                 }
@@ -1325,7 +1321,7 @@ namespace RelhaxModpack
 
                     //check for dependencies
                     if (config.Dependencies.Count > 0)
-                        processDependencies(config.Dependencies);
+                        ProcessDependencies(config.Dependencies);
                 }
             }
         }
@@ -1352,7 +1348,7 @@ namespace RelhaxModpack
         }
 
         //processes a list of dependencies to add them (if needed) to the list of dependencies to install
-        private void processDependencies(List<Dependency> dependencies)
+        private void ProcessDependencies(List<Dependency> dependencies)
         {
             //every dependency is only a PackageName, and each must be added if they are not there already
             //but first need to find it
@@ -1410,8 +1406,9 @@ namespace RelhaxModpack
                 return false;
             }
         }
+        #endregion
 
-#region progress reporting
+        #region progress reporting
 
         private string createExtractionMsgBoxProgressOutput(string[] s)
         {
@@ -1901,6 +1898,11 @@ namespace RelhaxModpack
         private void DiscordServerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://discord.gg/58fdPvK");
+        }
+        //when the "visit form page" link is clicked. the link clicked handler
+        private void formPageLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
         #endregion
 
@@ -2477,7 +2479,7 @@ namespace RelhaxModpack
 
         private void cancelDownloadButton_Click(object sender, EventArgs e)
         {
-            downloader.CancelAsync();
+            Downloader.CancelAsync();
         }
 
         private void viewAppUpdates_Click(object sender, EventArgs e)

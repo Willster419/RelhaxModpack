@@ -1117,7 +1117,7 @@ namespace RelhaxModpack
             try
             {
                 //Give the OS time to process the folder change...
-                System.Threading.Thread.Sleep(100);
+                System.Threading.Thread.Sleep(20);
                 //set the folder properties to read write
                 DirectoryInfo di = null;
                 FileInfo[] diArr = null;
@@ -1478,7 +1478,7 @@ namespace RelhaxModpack
                 }
                 finally
                 {
-                    System.Threading.Thread.Sleep(200);
+                    System.Threading.Thread.Sleep(20);
                     if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
                         Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true);
                 }
