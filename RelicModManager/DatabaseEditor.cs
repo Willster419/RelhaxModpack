@@ -2430,7 +2430,6 @@ namespace RelhaxModpack
                 if ((TextBox)sender != null && !((TextBox)sender).Text.Equals(""))
                     System.Diagnostics.Process.Start(((TextBox)sender).Text);
             }
-            
         }
 
         private void ObjectPicturesList_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -2447,6 +2446,14 @@ namespace RelhaxModpack
                 {
                     System.Diagnostics.Process.Start(med.URL.Substring(pos));
                 }
+            }
+        }
+
+        private void DatabaseTreeView_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (e.Action != TreeViewAction.Unknown)
+            {
+                DatabaseTreeView_NodeMouseClick(null, new TreeNodeMouseClickEventArgs(e.Node, MouseButtons.Left, 0, 0, 0));
             }
         }
     }

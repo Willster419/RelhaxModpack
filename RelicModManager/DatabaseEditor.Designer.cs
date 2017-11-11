@@ -144,6 +144,7 @@
             this.DatabaseTreeView.Name = "DatabaseTreeView";
             this.DatabaseTreeView.Size = new System.Drawing.Size(497, 592);
             this.DatabaseTreeView.TabIndex = 0;
+            this.DatabaseTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.DatabaseTreeView_AfterSelect);
             this.DatabaseTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.DatabaseTreeView_NodeMouseClick);
             // 
             // ObjectName
