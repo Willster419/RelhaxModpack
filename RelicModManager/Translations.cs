@@ -134,7 +134,7 @@ namespace RelhaxModpack
 
             english.Add("lastUpdated", "Last Updated: ");
             german.Add("lastUpdated", "Letzte Aktualisierung: ");
-            polish.Add("lastUpdated", "TODO");
+            polish.Add("lastUpdated", "Ostatnio Zaktualizowano: ");
             french.Add("lastUpdated", "Dernière mise à jour: ");
 
             //Section: MainWindow
@@ -333,7 +333,7 @@ namespace RelhaxModpack
             //Componet: InstantExtractionCB
             //
             english.Add("InstantExtractionCB", "Instant Extraction mode (experimental)");
-            german.Add("InstantExtractionCB", "TODO");
+            german.Add("InstantExtractionCB", "Direkter Entpack-Modus (experimentell)");
             polish.Add("InstantExtractionCB", "Tryb szybkiego wypakowywania (eksperymentalny)");
             french.Add("InstantExtractionCB", "Mode d'extraction instantané (expérimental)");
 
@@ -1024,7 +1024,7 @@ namespace RelhaxModpack
             //Component: InstantExtractionCBExplanation
             //
             english.Add("InstantExtractionCBExplanation", "When enabled, the installer will extract a zip file as soon as it is downloaded, rather than waiting for every zip file to be downloaded before extraction. Recommended for those with Solid State Drives (SSD) only.");
-            german.Add("InstantExtractionCBExplanation", "TODO");
+            german.Add("InstantExtractionCBExplanation", "Wenn aktiviert, der Installer wird die Zip-Dateien sofort nach dem Download entpacken und nicht erst auf das Herunterladen aller Dateien warten bevor mit dem Entpacken begonnen wird. Nur empfohlen für Besitzer von SSD Festplatten (Solid State Drives).");
             polish.Add("InstantExtractionCBExplanation", "Wypakowywanie pobranych plików zip w tle podczas procesu ściągania paczek. Rekomendowany jedynie dla dysków SSD.");
             french.Add("InstantExtractionCBExplanation", "Quand activé , l'installateur vas extraire un fichier zip dès qu'il est télécharger , au lieu d'attendre que chaque fichier zip soit télécharger pour l'extraction . Recommandé pour les processeurs de SSD seulement.");
 
@@ -1606,77 +1606,77 @@ namespace RelhaxModpack
             //Component: LaunchWoTLauncher
             //
             english.Add("LaunchWoTLauncher", "Start the World of Tanks launcher in integrity validation mode");
-            german.Add("LaunchWoTLauncher", "TODO");
+            german.Add("LaunchWoTLauncher", "Starte den \"World of Tanks Launcher\" im Integritätsvalidierungsmodus");
             polish.Add("LaunchWoTLauncher", "Uruchom launcher World of Tanks w trybie sprawdzania integralności.");
             french.Add("LaunchWoTLauncher", "Lancé le launcher world of tanks en mode vérification d'intégrité");
 
             //Component: CollectLogInfo
             //
             english.Add("CollectLogInfo", "Collect all log files into a zip file to report a problem");
-            german.Add("CollectLogInfo", "TODO");
+            german.Add("CollectLogInfo", "Erstelle eine Zip Datei mit allen Protokolldateien um ein Problem zu melden.");
             polish.Add("CollectLogInfo", "Zbierz pliki logów w plik zip, by zgłosić problem");
             french.Add("CollectLogInfo", "Collecté tous les fichiers log dans un fichier zip pour reporter un problème");
 
             //Component: SelectedInstallation
             //
             english.Add("SelectedInstallation", "Currently Selected Installation: ");
-            german.Add("SelectedInstallation", "TODO");
+            german.Add("SelectedInstallation", "Aktuell gewählte Installation");
             polish.Add("SelectedInstallation", "Obecnie Wybrana Instalacja: ");
             french.Add("SelectedInstallation", "Installation actuellement sélectionner: ");
 
             //Component: collectionLogInfo
             //
             english.Add("collectionLogInfo", "Collecting log files...");
-            german.Add("collectionLogInfo", "TODO");
-            polish.Add("collectionLogInfo", "Zbieranie logów");
+            german.Add("collectionLogInfo", "Sammeln der Protokolldateien...");
+            polish.Add("collectionLogInfo", "Zbieranie logów...");
             french.Add("collectionLogInfo", "Collection des fichiers log...");
 
             //Component: startingLauncherRepairMode
             //
             english.Add("startingLauncherRepairMode", "Starting WoTLauncher in integrity validation mode...");
-            german.Add("startingLauncherRepairMode", "TODO");
+            german.Add("startingLauncherRepairMode", "Starte den WoT Launcher im Integritätsvalidierungsmodus...");
             polish.Add("startingLauncherRepairMode", "TODO");
             french.Add("startingLauncherRepairMode", "Lancement de WoTLauncher and mode the validation d'intégrité");
 
             //Component: failedStartLauncherRepairMode
             //
             english.Add("failedStartLauncherRepairMode", "Failed to start WoT Launcher in Repair mode");
-            german.Add("failedStartLauncherRepairMode", "TODO");
-            polish.Add("failedStartLauncherRepairMode", "Nie udało się uruchomić launchera WoT w trybie naprawy.");
+            german.Add("failedStartLauncherRepairMode", "Der WoT Launcher konnte nicht im Reparaturmodus gestartet werden");
+            polish.Add("failedStartLauncherRepairMode", "Nie udało się uruchomić launchera WoT w trybie naprawy");
             french.Add("failedStartLauncherRepairMode", "Erreur lors du lancement de WoTLauncher en mode de réparation");
 
             //Component: failedCollectFile
             //
             english.Add("failedCollectFile", "Failed to collect the file ");
-            german.Add("failedCollectFile", "TODO");
+            german.Add("failedCollectFile", "Fehler beim Sammeln der Datei ");
             polish.Add("failedCollectFile", "Nie udało się zebrać plików ");
             french.Add("failedCollectFile", "Erreur lors de la collecte du fichier");
 
             //Component: failedCreateZipfile
             //
             english.Add("failedCreateZipfile", "Failed to create the zip file ");
-            german.Add("failedCreateZipfile", "TODO");
-            polish.Add("failedCreateZipfile", "Nie udało się stworzyć pliku zip");
-            french.Add("failedCreateZipfile", "Erreur lors de la création du fichier zip");
+            german.Add("failedCreateZipfile", "Fehler beim Erstellen der Zip-Datei ");
+            polish.Add("failedCreateZipfile", "Nie udało się stworzyć pliku zip ");
+            french.Add("failedCreateZipfile", "Erreur lors de la création du fichier zip ");
 
             //Component: launcherRepairModeStarted
             //
             english.Add("launcherRepairModeStarted", "Repair mode successfully started");
-            german.Add("launcherRepairModeStarted", "TODO");
+            german.Add("launcherRepairModeStarted", "Reparaturmodus wurde erfolgreich gestartet");
             polish.Add("launcherRepairModeStarted", "Uruchomiono tryb naprawy");
             french.Add("launcherRepairModeStarted", "Mode de réparation démarrer avec succès");
 
             //Component: ChangeInstall
             //
             english.Add("ChangeInstall", "Change selected WoT install");
-            german.Add("ChangeInstall", "TODO");
+            german.Add("ChangeInstall", "Ändere aktuelle WoT Installation");
             polish.Add("ChangeInstall", "Zmień zaznaczoną instalację WoT");
             french.Add("ChangeInstall", "Changer le dossier d'installation WoT");
 
             //Component: zipSavedTo
             //
             english.Add("zipSavedTo", "Zip file saved to: ");
-            german.Add("zipSavedTo", "TODO");
+            german.Add("zipSavedTo", "Zip-Datei gespeichert in: ");
             polish.Add("zipSavedTo", "Plik zip zapisano do: ");
             french.Add("zipSavedTo", "Fichier zip sauvegarder à: ");
 
