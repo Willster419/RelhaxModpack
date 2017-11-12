@@ -615,7 +615,8 @@ namespace RelhaxModpack
             ApplicationVersionLabel.Text = "Application v" + ManagerVersion();
             if (Program.testMode) this.Text = this.Text + " TEST MODE";
             if (Program.betaDatabase) this.Text = this.Text + " (BETA DB)";
-            if (Program.betaApplication) this.Text = this.Text + " (BETA APP)";
+            if (Program.Version == Program.ProgramVersion.Beta) this.Text = this.Text + " (BETA APP)";
+            if (Program.Version == Program.ProgramVersion.Alpha) this.Text = this.Text + " (ALPHA APP)";
             //setup the gif preview loading window
             gp = new LoadingGifPreview(this.Location.X + this.Size.Width + 5, this.Location.Y);
             //show the wait screen
@@ -623,7 +624,7 @@ namespace RelhaxModpack
             wait.Show();
             WebRequest.DefaultWebProxy = null;
             Application.DoEvents();
-            Logging.Manager(string.Format("|RelHax Modpack {0}", ManagerVersion()));
+            Logging.Manager(string.Format("|RelHax Modpack {0} ({1})", ManagerVersion(), Program.Version == Program.ProgramVersion.Beta ? "beta" : Program.Version == Program.ProgramVersion.Alpha ? "alpha" : "stable"));
             Logging.Manager(string.Format("|Built on {0}", compileTime()));
             Logging.Manager(string.Format("|Running on {0}", System.Environment.OSVersion.ToString()));
             /*

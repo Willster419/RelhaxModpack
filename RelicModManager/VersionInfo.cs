@@ -37,7 +37,7 @@ namespace RelhaxModpack
             updateQuestionLabel.Text = Translations.getTranslatedString(updateQuestionLabel.Name);
             problemsUpdatingLabel.Text = Translations.getTranslatedString(problemsUpdatingLabel.Name);
             clickHereUpdateLabel.Text = Translations.getTranslatedString(clickHereUpdateLabel.Name);
-            downloadedVersionInfo.Text = Program.betaApplication ? Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "releaseNotes_beta.txt") : Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "releaseNotes.txt");
+            downloadedVersionInfo.Text = Program.Version == Program.ProgramVersion.Beta ? Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "releaseNotes_beta.txt") : Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "releaseNotes.txt");
             VersionInfo_SizeChanged(null, null);
         }
 
