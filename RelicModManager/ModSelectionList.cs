@@ -443,8 +443,8 @@ namespace RelhaxModpack
             nameForModCB = nameForModCB.Replace(@"_", @"__");
             //create base mod checkbox
             //http://wpftutorial.net/ToolTip.html
-            string dateFormat = m.Timestamp==0? "": Utils.ConvertFiletimeTimestampToDate(m.Timestamp);
-            string tooltipString = m.Description.Equals("") ? NoDescriptionAvailable : m.Description + "\n" + LastUpdated + dateFormat;
+            string dateFormat = m.Timestamp == 0 ? "": Utils.ConvertFiletimeTimestampToDate(m.Timestamp);
+            string tooltipString = m.Description.Equals("") ? NoDescriptionAvailable : m.Description + (m.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
             ModWPFCheckBox modCheckBox = new ModWPFCheckBox()
             {
                 ToolTip = tooltipString,
@@ -545,7 +545,7 @@ namespace RelhaxModpack
                     nameForModCB = nameForModCB.Replace(@"_", @"__");
                     //make the radio button
                     string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
-                    string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + "\n" + LastUpdated + dateFormat;
+                    string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + (con.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
                     ConfigWPFRadioButton configControlRB = new ConfigWPFRadioButton()
                     {
                         ToolTip = tooltipString,
@@ -745,7 +745,7 @@ namespace RelhaxModpack
                         {
                             configControlDDALL.SelectedItem = cbi;
                             string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
-                            string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + "\n" + LastUpdated + dateFormat;
+                            string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + (con.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
                             configControlDDALL.ToolTip = tooltipString;
                         }
                     }
@@ -763,7 +763,7 @@ namespace RelhaxModpack
                             configControlDDALL.SelectedIndex = 0;
                         System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
                         string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
-                        string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + "\n" + LastUpdated + dateFormat;
+                        string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + (con.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
                         configControlDDALL.ToolTip = tooltipString;
                         configControlTVI.Header = configControlDDALL;
                         tvi.Items.Add(configControlTVI);
@@ -776,7 +776,7 @@ namespace RelhaxModpack
                     nameForModCB = nameForModCB.Replace(@"_", @"__");
                     //make the checkbox and add the tooltip
                     string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
-                    string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + "\n" + LastUpdated + dateFormat;
+                    string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + (con.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
                     ConfigWPFCheckBox configControlCB = new ConfigWPFCheckBox()
                     {
                         ToolTip = tooltipString,
@@ -1206,7 +1206,7 @@ namespace RelhaxModpack
             cbi2.config.Checked = true;
             //set the new tooltip
             string dateFormat = cbi2.config.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(cbi2.config.Timestamp);
-            string tooltipString = cbi2.config.Description.Equals("") ? NoDescriptionAvailable : cbi2.config.Description + "\n" + LastUpdated + dateFormat;
+            string tooltipString = cbi2.config.Description.Equals("") ? NoDescriptionAvailable : cbi2.config.Description + (cbi2.config.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
             cb.ToolTip = tooltipString;
         }
         //when a radiobutton of the legacy view mode is clicked
@@ -1345,7 +1345,7 @@ namespace RelhaxModpack
             modCheckBox.MouseDown += Generic_MouseDown;
             //add the ToolTip description to the checkbox
             string dateFormat = m.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(m.Timestamp);
-            string tooltipString = m.Description.Equals("") ? NoDescriptionAvailable : m.Description + "\n" + LastUpdated + dateFormat;
+            string tooltipString = m.Description.Equals("") ? NoDescriptionAvailable : m.Description + (m.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
             DescriptionToolTip.SetToolTip(modCheckBox, tooltipString);
             //link the mod components to the UI
             m.TabIndex = t;
@@ -1512,7 +1512,7 @@ namespace RelhaxModpack
                     configControlRB.MouseDown += Generic_MouseDown;
                     //add the ToolTip description to the checkbox
                     string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
-                    string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + "\n" + LastUpdated + dateFormat;
+                    string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + (con.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
                     DescriptionToolTip.SetToolTip(configControlRB, tooltipString);
                     //link the UI to the package
                     con.ConfigUIComponent = configControlRB;
@@ -1660,7 +1660,7 @@ namespace RelhaxModpack
                             configControlDDALL.Enabled = true;
                             //set the tooltip to the checked option
                             string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
-                            string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + "\n" + LastUpdated + dateFormat;
+                            string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + (con.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
                             DescriptionToolTip.SetToolTip(configControlDDALL, tooltipString);
                         }
                     }
@@ -1673,7 +1673,7 @@ namespace RelhaxModpack
                             //set the tooltip since nothing has been selected
                             ComboBoxItem cbiTT = (ComboBoxItem)configControlDDALL.Items[0];
                             string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
-                            string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + "\n" + LastUpdated + dateFormat;
+                            string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + (con.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
                             DescriptionToolTip.SetToolTip(configControlDDALL, tooltipString);
                         }
                     }
@@ -1695,7 +1695,7 @@ namespace RelhaxModpack
                     };
                     //add the ToolTip description to the checkbox
                     string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
-                    string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + "\n" + LastUpdated + dateFormat;
+                    string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + (con.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
                     DescriptionToolTip.SetToolTip(configControlCB, tooltipString);
                     //link the Ui to the config
                     con.ConfigUIComponent = configControlCB;
@@ -2205,7 +2205,7 @@ namespace RelhaxModpack
             cb.SelectedItem = cbi2;
             cbi2.config.Checked = true;
             string dateFormat = cbi2.config.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(cbi2.config.Timestamp);
-            string tooltipString = cbi2.config.Description.Equals("") ? NoDescriptionAvailable : cbi2.config.Description + "\n" + LastUpdated + dateFormat;
+            string tooltipString = cbi2.config.Description.Equals("") ? NoDescriptionAvailable : cbi2.config.Description + (cbi2.config.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
             DescriptionToolTip.SetToolTip(cb, tooltipString);
             Panel configPanel = (Panel)cb.Parent;
             if (!Settings.DisableColorChange)

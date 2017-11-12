@@ -133,7 +133,7 @@ namespace RelhaxModpack
             french.Add("ignore", "Ignorer");
 
             english.Add("lastUpdated", "Last Updated: ");
-            german.Add("lastUpdated", "TODO");
+            german.Add("lastUpdated", "Letzte Aktualisierung: ");
             polish.Add("lastUpdated", "TODO");
             french.Add("lastUpdated", "Dernière mise à jour: ");
 
