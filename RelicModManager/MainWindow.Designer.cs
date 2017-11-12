@@ -448,9 +448,9 @@
             // 
             // disableColorsCB
             // 
-            this.disableColorsCB.Location = new System.Drawing.Point(18, 47);
+            this.disableColorsCB.Location = new System.Drawing.Point(18, 48);
             this.disableColorsCB.Name = "disableColorsCB";
-            this.disableColorsCB.Size = new System.Drawing.Size(151, 32);
+            this.disableColorsCB.Size = new System.Drawing.Size(151, 17);
             this.disableColorsCB.TabIndex = 4;
             this.disableColorsCB.Text = "Disable color change";
             this.disableColorsCB.UseVisualStyleBackColor = true;
@@ -473,7 +473,7 @@
             // expandNodesDefault
             // 
             this.expandNodesDefault.AutoSize = true;
-            this.expandNodesDefault.Location = new System.Drawing.Point(18, 100);
+            this.expandNodesDefault.Location = new System.Drawing.Point(18, 94);
             this.expandNodesDefault.MaximumSize = new System.Drawing.Size(100, 40);
             this.expandNodesDefault.MinimumSize = new System.Drawing.Size(50, 20);
             this.expandNodesDefault.Name = "expandNodesDefault";
