@@ -22,6 +22,13 @@ namespace RelhaxModpack
         public static bool betaDatabase = false;
         public static bool betaApplication = false;
         public static string configName = "";
+        public enum ProgramVersion
+        {
+            Stable = 0,
+            Beta = 1,
+            Alpha = 2
+        }
+        public static ProgramVersion Version = ProgramVersion.Stable;
         [STAThread]
         static void Main()
         {
