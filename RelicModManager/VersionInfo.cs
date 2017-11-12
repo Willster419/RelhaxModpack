@@ -37,21 +37,8 @@ namespace RelhaxModpack
             updateQuestionLabel.Text = Translations.getTranslatedString(updateQuestionLabel.Name);
             problemsUpdatingLabel.Text = Translations.getTranslatedString(problemsUpdatingLabel.Name);
             clickHereUpdateLabel.Text = Translations.getTranslatedString(clickHereUpdateLabel.Name);
-            //download the latest release notes
-            Application.DoEvents();
-            WebClient wc = new WebClient();
-            try
-            {
-                downloadedVersionInfo.Text = wc.DownloadString("http://wotmods.relhaxmodpack.com/RelhaxModpack/releaseNotes.txt");
-            }
-            catch (Exception ex)
-            {
-                Utils.ExceptionLog("VersionInfo_Load", "http://wotmods.relhaxmodpack.com/RelhaxModpack/releaseNotes.txt", ex);
-                MessageBox.Show(string.Format("{0} releaseNotes.txt", Translations.getTranslatedString("failedToDownload_1")));
-                Application.Exit();
-            }
+            downloadedVersionInfo.Text = Program.betaApplication ? Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "releaseNotes_beta.txt") : Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "releaseNotes.txt");
             VersionInfo_SizeChanged(null, null);
-            Application.DoEvents();
         }
 
         private void clickHereUpdateLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

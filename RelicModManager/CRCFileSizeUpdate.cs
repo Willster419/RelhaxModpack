@@ -29,7 +29,8 @@ namespace RelhaxModpack
             "supported_clients.xml\n" +
             "supported_clients.txt (will be deprecated)\n" +
             "databaseUpdate.txt\n" +
-            "releaseNotes.txt\n";
+            "releaseNotes.txt\n" +
+            "releaseNotes_beta.txt";
         string database = "creating the database.xml file at every online version folder of WoT, containing the filename, size and MD5Hash of " +
             "the current folder, the script \"CreateMD5List.php\" is a needed subscript of CreateDatabase.php, \"relhax_db.sqlite\" is the needed sqlite database to " +
             "be fast on parsing all files and only working on new or changed files";
