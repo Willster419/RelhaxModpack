@@ -404,10 +404,10 @@ namespace RelhaxModpack
 
             //Componet: label2
             //
-            english.Add("label2", "\"*\" tab indicates single selection tab");
-            german.Add("label2", "Ein Tab mit einem\"*\" kann nur eins der Mods ausgewählt werden.");
-            polish.Add("label2", "\"*\" wskazuje pojedynczą kartę wyboru");
-            french.Add("label2", "Onglet \"*\" indique un onglet a sélection unique");
+            english.Add("TabIndicatesTB", "\"*\" (asterisk) tab indicates single selection tab");
+            german.Add("TabIndicatesTB", "Bei einem Tab mit einem\"*\" (Sternchen), kann nur eins der primären Mods ausgewählt werden.");
+            polish.Add("TabIndicatesTB", "\"*\" wskazuje pojedynczą kartę wyboru");
+            french.Add("TabIndicatesTB", "Onglet \"*\" indique un onglet a sélection unique");
 
             //Componet: clearSelectionsButton
             //
@@ -1679,6 +1679,21 @@ namespace RelhaxModpack
             german.Add("zipSavedTo", "TODO");
             polish.Add("zipSavedTo", "Plik zip zapisano do: ");
             french.Add("zipSavedTo", "Fichier zip sauvegarder à: ");
+
+            //Component: ModSelectionList
+            //Component: seachCB ToolTip
+            english.Add("searchToolTip", "You can also search for multiple name parts, separated by a * (asterisk).\nFor example: config*willster419 will display as search result: Willster419\'s Config");
+            german.Add("searchToolTip", "Du kannst auch nach mehreren Namensteilen suchen, getrennt durch ein * (Sternchen).\nZum Beispiel: config*willster419  wird als Suchergebnis anzeigen: Willster419\'s Config");
+            polish.Add("searchToolTip", "TODO");
+            french.Add("searchToolTip", "TODO");
+
+            //Component: ModSelectionList
+            //Component: seachTB
+            english.Add("searchTB", "Search Mod Name:");
+            german.Add("searchTB", "Suche Mod Namen:");
+            polish.Add("searchTB", "TODO");
+            french.Add("searchTB", "TODO");
+
         }
     }
 }
