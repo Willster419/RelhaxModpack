@@ -615,6 +615,7 @@ namespace RelhaxModpack
             ApplicationVersionLabel.Text = "Application v" + ManagerVersion();
             if (Program.testMode) this.Text = this.Text + " TEST MODE";
             if (Program.betaDatabase) this.Text = this.Text + " (BETA DB)";
+            if (Program.betaApplication) this.Text = this.Text + " (BETA APP)";
             //setup the gif preview loading window
             gp = new LoadingGifPreview(this.Location.X + this.Size.Width + 5, this.Location.Y);
             //show the wait screen
