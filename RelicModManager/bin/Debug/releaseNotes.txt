@@ -1,23 +1,26 @@
 May I present to you, the latest full new release, version 27!!!
   This is the biggest performance update yet!
 
-https://www.virustotal.com/#/file/fbeb42a8646ea84c18728aeb7280ba09c96a623d315c8550e403c1345927f88c/detection
+https://www.virustotal.com/#/file/4b65c4317d6eb219862134e0fa19f972ba0177376444655bfdd967398e14a13f/detection
+
 "We are done adding new features." - Me 1 month ago. Very much false.
 
--The process for building the Mod Selection list had been completly re-written. Before, it would take 5 seconds on a hard drive, and 2 seconds on an SSD. After the re-write, it takes 2 seconds on a hard drive and 0.8 seconds on an SSD. Much faster!
+-The process for building the Mod Selection list had been completely re-written. Before, it would take 5 seconds on a hard drive, and 2 seconds on an SSD. After the re-write, it takes 2 seconds on a hard drive and 0.8 seconds on an SSD. Much faster!
 -The unzipping process has been improved as well. It uses less regex overhead and more native string replacement for changing variables like the WoT version (0.9.x.y). The logging for zip files was also improved. SSD users will see a small extraction speed increase, but hard drive users will see a significant extraction speed increase!
 -The unzipping process has been further improved by using macros for the destination path. Now, we can have packages extract directly to the WoT folder, the application data folder, the Relhax base folder, and the relhax temp folder.
--The download process can now be integrated into the extraction process with the "Instant Extraction" setting. Before, like all other modpacks, downloading and installing were two seperate syncronous processes that happened one after another. Because of our asyncronous approach to installation, we said, "Why not extract a package as soon as it is downloaded?" Here is an image to explain the change. The top part is the syncronous approach, the bottom is the asyncronous approach. https://i.imgur.com/6BcgLRf.png This is the first and only modpack to have this ability!
+-The download process can now be integrated into the extraction process with the "Instant Extraction" setting. Before, like all other modpacks, downloading and installing were two separate synchronous processes that happened one after another. Because of our asynchronous approach to installation, we said, "Why not extract a package as soon as it is downloaded?" Here is an image to explain the change. The top part is the synchronous approach, the bottom is the asynchronous approach. https://i.imgur.com/6BcgLRf.png This is the first and only modpack to have this ability!
+-Have you ever had issues with the damage panel? Or missing contour icons? Both if these issues will be gone with this update! Thanks to our engine, C#, we have been able to replicate the process of building the contour icon bitmap based on any contour icon mod you install. Translation: we can automatically fill in any missing contour icons with the stock ones, and it will stop your game from crashing. Now old contour icons can be used immediately until the new version is ready, or if the modder forgot a couple contour icons themselves. This is the first and only modpack to have this ability!
 -We now have a menu of diagnostic utilities for WoT. You can select an installation, run a client integrity check on it, and also create a zip file with all the logs, pictures, and selection files we need to diagnose issues!
 -In the mod selection list, hovering over a mod or config will show its description and last updated property. If you only want to read the description, you no longer have to right click each time. As far as I know we are the first modpack to use toolTips!
--We had added two command arguements to the installer: /beta-database and /beta-application. They allow you to used the latest database and application that the modpack team is working with. Please note that beta applications are NOT digitally signed. You can switch back to normal database and application at any time by starting the modpack without the respective arguements.
+-We had added two command arguments to the installer: /beta-database and /beta-application. They allow you to used the latest database and application that the modpack team is working with. Please note that beta applications are NOT digitally signed. You can switch back to normal database and application at any time by starting the modpack without the respective arguments.
 -The update notes text box in the previews now has the last modified entry date
--Started the process of converting all varaibles to a single macro format
--Moved all Windows other than the main window to a RelhaxForm derived class, so now every window will have proper scaling and resizing.
+-Started the process of converting all variables to a single macro format
+-Moved all Windows other than the main window to a RelhaxForm derived class, so now every window will have proper scaling and resizing
 -The internal class structure for database components has changed: https://i.imgur.com/Qw6GIFk.png
--Fixed bugs with the /auto-install arguement where it would not properly save checksum information or download new mod updates.
+-Fixed bugs with the /auto-install argument where it would not properly save checksum information or download new mod updates
+-Added label and tool tip information to the Search box in the mod selection list
 -Fixed missing translations entries
--Improved exception handling throughtout the application
+-Improved exception handling throughout the application
 -Other improvements and optimizations
 -Updated translations
 
