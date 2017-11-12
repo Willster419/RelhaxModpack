@@ -86,11 +86,11 @@ namespace RelhaxModpack
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ModSelectionList));
             this.continueButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.WindowSizeTB = new System.Windows.Forms.Label();
             this.helpLabel = new System.Windows.Forms.Label();
             this.loadConfigButton = new System.Windows.Forms.Button();
             this.saveConfigButton = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
+            this.TabIndicatesTB = new System.Windows.Forms.Label();
             this.clearSelectionsButton = new System.Windows.Forms.Button();
             this.TanksPath = new System.Windows.Forms.Label();
             this.TanksVersionLabel = new System.Windows.Forms.Label();
@@ -99,6 +99,8 @@ namespace RelhaxModpack
             this.colapseAllButton = new System.Windows.Forms.Button();
             this.searchCB = new System.Windows.Forms.ComboBox();
             this.DescriptionToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.SearchToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.searchTB = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // continueButton
@@ -121,14 +123,14 @@ namespace RelhaxModpack
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
-            // label1
+            // WindowSizeTB
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 60);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "label1";
+            this.WindowSizeTB.AutoSize = true;
+            this.WindowSizeTB.Location = new System.Drawing.Point(13, 60);
+            this.WindowSizeTB.Name = "WindowSizeTB";
+            this.WindowSizeTB.Size = new System.Drawing.Size(80, 13);
+            this.WindowSizeTB.TabIndex = 7;
+            this.WindowSizeTB.Text = "WindowSizeTB";
             // 
             // helpLabel
             // 
@@ -159,14 +161,14 @@ namespace RelhaxModpack
             this.saveConfigButton.UseVisualStyleBackColor = true;
             this.saveConfigButton.Click += new System.EventHandler(this.saveConfigButton_Click);
             // 
-            // label2
+            // TabIndicatesTB
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 20);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(177, 13);
-            this.label2.TabIndex = 12;
-            this.label2.Text = "\"*\" tab indicates single selection tab";
+            this.TabIndicatesTB.AutoSize = true;
+            this.TabIndicatesTB.Location = new System.Drawing.Point(13, 20);
+            this.TabIndicatesTB.Name = "TabIndicatesTB";
+            this.TabIndicatesTB.Size = new System.Drawing.Size(177, 13);
+            this.TabIndicatesTB.TabIndex = 12;
+            this.TabIndicatesTB.Text = "\"*\" tab indicates single selection tab";
             // 
             // clearSelectionsButton
             // 
@@ -234,30 +236,43 @@ namespace RelhaxModpack
             this.searchCB.Name = "searchCB";
             this.searchCB.Size = new System.Drawing.Size(304, 21);
             this.searchCB.TabIndex = 18;
+            this.SearchToolTip.SetToolTip(this.searchCB, "custom ToolTip Text");
             this.searchCB.SelectionChangeCommitted += new System.EventHandler(this.searchCB_SelectionChangeCommitted);
             this.searchCB.TextUpdate += new System.EventHandler(this.searchComboBox_TextUpdate);
             this.searchCB.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchCB_KeyDown);
+            // 
+            // searchTB
+            // 
+            this.searchTB.Location = new System.Drawing.Point(524, 53);
+            this.searchTB.Name = "searchTB";
+            this.searchTB.Size = new System.Drawing.Size(150, 18);
+            this.searchTB.TabIndex = 19;
+            this.searchTB.Text = "Search Mod Name:";
+            this.searchTB.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.SearchToolTip.SetToolTip(this.searchTB, "custom ToolTip Text");
             // 
             // ModSelectionList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(992, 473);
+            this.Controls.Add(this.searchTB);
             this.Controls.Add(this.searchCB);
             this.Controls.Add(this.colapseAllButton);
             this.Controls.Add(this.expandAllButton);
             this.Controls.Add(this.TanksVersionLabel);
             this.Controls.Add(this.TanksPath);
             this.Controls.Add(this.clearSelectionsButton);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.TabIndicatesTB);
             this.Controls.Add(this.saveConfigButton);
             this.Controls.Add(this.loadConfigButton);
             this.Controls.Add(this.helpLabel);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.WindowSizeTB);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.continueButton);
             this.Controls.Add(this.modTabGroups);
             this.DoubleBuffered = true;
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(800, 480);
             this.Name = "ModSelectionList";
@@ -274,11 +289,11 @@ namespace RelhaxModpack
 
         private System.Windows.Forms.Button continueButton;
         private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label WindowSizeTB;
         private System.Windows.Forms.Label helpLabel;
         private System.Windows.Forms.Button loadConfigButton;
         private System.Windows.Forms.Button saveConfigButton;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label TabIndicatesTB;
         private System.Windows.Forms.Button clearSelectionsButton;
         private System.Windows.Forms.Label TanksPath;
         private System.Windows.Forms.Label TanksVersionLabel;
@@ -287,5 +302,7 @@ namespace RelhaxModpack
         private System.Windows.Forms.Button colapseAllButton;
         private System.Windows.Forms.ComboBox searchCB;
         private ToolTip DescriptionToolTip;
+        private ToolTip SearchToolTip;
+        private Label searchTB;
     }
 }

@@ -122,10 +122,13 @@ namespace RelhaxModpack
             helpLabel.Text = Translations.getTranslatedString(helpLabel.Name);
             loadConfigButton.Text = Translations.getTranslatedString(loadConfigButton.Name);
             saveConfigButton.Text = Translations.getTranslatedString(saveConfigButton.Name);
-            label2.Text = Translations.getTranslatedString(label2.Name);
+            TabIndicatesTB.Text = Translations.getTranslatedString(TabIndicatesTB.Name);
             clearSelectionsButton.Text = Translations.getTranslatedString(clearSelectionsButton.Name);
             colapseAllButton.Text = Translations.getTranslatedString(colapseAllButton.Name);
             expandAllButton.Text = Translations.getTranslatedString(expandAllButton.Name);
+            searchTB.Text = Translations.getTranslatedString(searchTB.Name);
+            SearchToolTip.SetToolTip(searchCB, Translations.getTranslatedString("searchToolTip"));
+            SearchToolTip.SetToolTip(searchTB, Translations.getTranslatedString("searchToolTip"));
         }
 
         private string InitDatabase(string databaseURL)
@@ -2521,10 +2524,11 @@ namespace RelhaxModpack
             colapseAllButton.Location = new Point(this.Size.Width - 20 - colapseAllButton.Size.Width - 6 - expandAllButton.Size.Width, colapseAllButton.Location.Y);
             expandAllButton.Location = new Point(this.Size.Width - 20 - expandAllButton.Size.Width, expandAllButton.Location.Y);
             searchCB.Location = new Point(this.Size.Width - 20 - searchCB.Size.Width, searchCB.Location.Y);
+            searchTB.Location = new Point(this.searchCB.Location.X - 5 - searchTB.Size.Width, searchTB.Location.Y);
             continueButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - TitleBarDifference);
             cancelButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - TitleBarDifference);
             modTabGroups.Size = new Size(this.Size.Width - 20 - modTabGroups.Location.X, this.Size.Height - modTabGroups.Location.Y - 39 - continueButton.Size.Height - 6 - TitleBarDifference);
-            label1.Text = "" + this.Size.Width + " x " + this.Size.Height;
+            WindowSizeTB.Text = "" + this.Size.Width + " x " + this.Size.Height;
             loadConfigButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width - 6 - loadConfigButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - TitleBarDifference);
             saveConfigButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - TitleBarDifference);
             clearSelectionsButton.Location = new Point(this.Size.Width - 20 - continueButton.Size.Width - 6 - cancelButton.Size.Width - 6 - saveConfigButton.Size.Width - 6 - loadConfigButton.Size.Width - 6 - clearSelectionsButton.Size.Width, this.Size.Height - 39 - continueButton.Size.Height - TitleBarDifference);
