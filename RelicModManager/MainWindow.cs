@@ -301,11 +301,9 @@ namespace RelhaxModpack
                 MessageBox.Show(string.Format("{0} managerInfo.dat", Translations.getTranslatedString("failedToDownload_1")));
                 Application.Exit();
             }
-            if (Program.skipUpdate)
+            if (Program.skipUpdate && !Program.testMode)
             {
-                Logging.Manager("/skip-update switch detected, skipping application update");
-                if (!Program.testMode) MessageBox.Show(Translations.getTranslatedString("skipUpdateWarning"));
-                return;
+                MessageBox.Show(Translations.getTranslatedString("skipUpdateWarning"));
             }
             string version = "";
             string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
@@ -323,7 +321,7 @@ namespace RelhaxModpack
                 version = applicationVersion.Value;
                 Logging.Manager(string.Format("Local application is {0}, current online is {1}", ManagerVersion(), version));
 
-                if (!version.Equals(ManagerVersion()))
+                if (!Program.skipUpdate && !version.Equals(ManagerVersion()))
                 {
                     Logging.Manager("exe is out of date. displaying user update window");
                     //out of date
