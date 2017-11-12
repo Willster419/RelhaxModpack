@@ -135,7 +135,7 @@ namespace RelhaxModpack
             english.Add("lastUpdated", "Last Updated: ");
             german.Add("lastUpdated", "TODO");
             polish.Add("lastUpdated", "TODO");
-            french.Add("lastUpdated", "TODO");
+            french.Add("lastUpdated", "Dernière mise à jour: ");
 
             //Section: MainWindow
 
@@ -1671,7 +1671,7 @@ namespace RelhaxModpack
             english.Add("ChangeInstall", "Change selected WoT install");
             german.Add("ChangeInstall", "TODO");
             polish.Add("ChangeInstall", "Zmień zaznaczoną instalację WoT");
-            french.Add("ChangeInstall", "TODO");
+            french.Add("ChangeInstall", "Changer le dossier d'installation WoT");
 
             //Component: zipSavedTo
             //
