@@ -13,9 +13,6 @@ namespace RelhaxModpack
         private const int manager = 1;
         private const int installer = 2;
 
-        private const int iMaxLogLength = 1500000; // Probably should be bigger, say 2,000,000
-        private const int iTrimmedLogLength = -300000; // minimum of how much of the old log to leave
-
         private static FileStream mfs;             // Manager stream
         private static FileStream ifs;             // Installer stream
         private static string InstalledFilesLogPath = null;
@@ -23,6 +20,10 @@ namespace RelhaxModpack
 
         private static object _locker = new object();
 
+        // create filestream if not exists 
+        // - and write "fileheader" 
+        // - check once if the file exceeds a certain size 
+        // by default, write the given string to file 
         public static void Manager(string s)
         {
             try
@@ -49,6 +50,12 @@ namespace RelhaxModpack
             }
         }
 
+        // if no filestream exists 
+        // create the filename to write with path 
+        // backup old install.logs 
+        // create filestream 
+        // - and write "fileheader" 
+        // by default, write the given string to file 
         public static void Installer(string s)
         {
             try
@@ -75,12 +82,15 @@ namespace RelhaxModpack
             }
         }
 
+        // clear buffer and write all left data to file 
+        // dispose filestream 
         public static void InstallerFinished()
         {
             mfs.Flush();
             Dispose(installer);
         }
 
+        // add group comment to the string and write it to file 
         public static void InstallerGroup(string s)
         {
             Installer(string.Format(@"/*  {0}  */", s));
@@ -123,6 +133,10 @@ namespace RelhaxModpack
             }
         }
 
+        private const int iMaxLogLength = 1500000; // Probably should be bigger, say 2,000,000
+        private const int iTrimmedLogLength = -300000; // minimum of how much of the old log to leave
+
+        // check if the file is bigger then a certain size: if yes, cut is down to iTrimmedLogLength size
         private static void CutLogfile(string strFile)
         {
             try
