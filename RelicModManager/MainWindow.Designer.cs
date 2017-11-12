@@ -189,7 +189,7 @@
             // 
             this.backupModsCheckBox.Location = new System.Drawing.Point(6, 100);
             this.backupModsCheckBox.Name = "backupModsCheckBox";
-            this.backupModsCheckBox.Size = new System.Drawing.Size(220, 30);
+            this.backupModsCheckBox.Size = new System.Drawing.Size(220, 32);
             this.backupModsCheckBox.TabIndex = 24;
             this.backupModsCheckBox.Text = "Backup current mods folder";
             this.backupModsCheckBox.UseVisualStyleBackColor = true;
@@ -221,9 +221,9 @@
             // 
             // InstantExtractionCB
             // 
-            this.InstantExtractionCB.Location = new System.Drawing.Point(6, 130);
+            this.InstantExtractionCB.Location = new System.Drawing.Point(6, 132);
             this.InstantExtractionCB.Name = "InstantExtractionCB";
-            this.InstantExtractionCB.Size = new System.Drawing.Size(220, 30);
+            this.InstantExtractionCB.Size = new System.Drawing.Size(220, 32);
             this.InstantExtractionCB.TabIndex = 36;
             this.InstantExtractionCB.Text = "Instant Extraction mode (experimental)";
             this.InstantExtractionCB.UseVisualStyleBackColor = true;
@@ -283,7 +283,7 @@
             // 
             this.notifyIfSameDatabaseCB.Location = new System.Drawing.Point(232, 100);
             this.notifyIfSameDatabaseCB.Name = "notifyIfSameDatabaseCB";
-            this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(220, 30);
+            this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(220, 32);
             this.notifyIfSameDatabaseCB.TabIndex = 33;
             this.notifyIfSameDatabaseCB.Text = "Inform if no new database available";
             this.notifyIfSameDatabaseCB.UseVisualStyleBackColor = true;
@@ -450,7 +450,7 @@
             // 
             this.disableColorsCB.Location = new System.Drawing.Point(18, 47);
             this.disableColorsCB.Name = "disableColorsCB";
-            this.disableColorsCB.Size = new System.Drawing.Size(151, 31);
+            this.disableColorsCB.Size = new System.Drawing.Size(151, 32);
             this.disableColorsCB.TabIndex = 4;
             this.disableColorsCB.Text = "Disable color change";
             this.disableColorsCB.UseVisualStyleBackColor = true;
