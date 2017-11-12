@@ -622,9 +622,9 @@ namespace RelhaxModpack
             wait.Show();
             WebRequest.DefaultWebProxy = null;
             Application.DoEvents();
-            Logging.Manager("|RelHax Modpack " + ManagerVersion());
+            Logging.Manager(string.Format("|RelHax Modpack {0}{1}", ManagerVersion(), Program.betaDatabase ? " (beta)" : ""));
             Logging.Manager(string.Format("|Built on {0}", compileTime()));
-            Logging.Manager("|Running on " + System.Environment.OSVersion.ToString());
+            Logging.Manager(string.Format("|Running on {0}", System.Environment.OSVersion.ToString()));
             /*
             //check for single instance
             Logging.Manager("Check for single instance");
