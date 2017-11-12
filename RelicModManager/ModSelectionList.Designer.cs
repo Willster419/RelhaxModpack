@@ -105,9 +105,9 @@ namespace RelhaxModpack
             // 
             // continueButton
             // 
-            this.continueButton.Location = new System.Drawing.Point(907, 420);
+            this.continueButton.Location = new System.Drawing.Point(900, 420);
             this.continueButton.Name = "continueButton";
-            this.continueButton.Size = new System.Drawing.Size(73, 41);
+            this.continueButton.Size = new System.Drawing.Size(80, 41);
             this.continueButton.TabIndex = 5;
             this.continueButton.Text = "Continue";
             this.continueButton.UseVisualStyleBackColor = true;
@@ -115,9 +115,9 @@ namespace RelhaxModpack
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(831, 420);
+            this.cancelButton.Location = new System.Drawing.Point(812, 420);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(70, 41);
+            this.cancelButton.Size = new System.Drawing.Size(82, 41);
             this.cancelButton.TabIndex = 6;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
@@ -143,7 +143,7 @@ namespace RelhaxModpack
             // 
             // loadConfigButton
             // 
-            this.loadConfigButton.Location = new System.Drawing.Point(577, 420);
+            this.loadConfigButton.Location = new System.Drawing.Point(561, 420);
             this.loadConfigButton.Name = "loadConfigButton";
             this.loadConfigButton.Size = new System.Drawing.Size(113, 41);
             this.loadConfigButton.TabIndex = 9;
@@ -153,7 +153,7 @@ namespace RelhaxModpack
             // 
             // saveConfigButton
             // 
-            this.saveConfigButton.Location = new System.Drawing.Point(696, 420);
+            this.saveConfigButton.Location = new System.Drawing.Point(677, 420);
             this.saveConfigButton.Name = "saveConfigButton";
             this.saveConfigButton.Size = new System.Drawing.Size(129, 41);
             this.saveConfigButton.TabIndex = 10;
@@ -172,7 +172,7 @@ namespace RelhaxModpack
             // 
             // clearSelectionsButton
             // 
-            this.clearSelectionsButton.Location = new System.Drawing.Point(467, 420);
+            this.clearSelectionsButton.Location = new System.Drawing.Point(451, 420);
             this.clearSelectionsButton.Name = "clearSelectionsButton";
             this.clearSelectionsButton.Size = new System.Drawing.Size(104, 41);
             this.clearSelectionsButton.TabIndex = 13;
@@ -214,7 +214,7 @@ namespace RelhaxModpack
             // 
             this.expandAllButton.Location = new System.Drawing.Point(831, 12);
             this.expandAllButton.Name = "expandAllButton";
-            this.expandAllButton.Size = new System.Drawing.Size(149, 40);
+            this.expandAllButton.Size = new System.Drawing.Size(149, 34);
             this.expandAllButton.TabIndex = 16;
             this.expandAllButton.Text = "Expand Current Tab";
             this.expandAllButton.UseVisualStyleBackColor = true;
@@ -224,7 +224,7 @@ namespace RelhaxModpack
             // 
             this.colapseAllButton.Location = new System.Drawing.Point(676, 12);
             this.colapseAllButton.Name = "colapseAllButton";
-            this.colapseAllButton.Size = new System.Drawing.Size(149, 40);
+            this.colapseAllButton.Size = new System.Drawing.Size(149, 34);
             this.colapseAllButton.TabIndex = 17;
             this.colapseAllButton.Text = "Collapse Current Tab";
             this.colapseAllButton.UseVisualStyleBackColor = true;
