@@ -351,7 +351,6 @@ namespace RelhaxModpack
                                 string folderPath = Path.Combine(TanksLocation, Path.GetDirectoryName(correctedPath));
                                 if (!Directory.Exists(folderPath)) continue;
                                 string[] fileList = Directory.GetFiles(folderPath, Path.GetFileName(correctedPath));   // use the GetFileName(correctedPath) as a search pattern, to only get wanted files
-                                if (fileList.Count() > 0) Logging.InstallerGroup("BackupUserData");
                                 foreach (string startLoc in fileList)
                                 {
                                     string destLoc = Path.Combine(Application.StartupPath, "RelHaxTemp", Utils.GetValidFilename(dbo.Name + "_") + Path.GetFileName(startLoc));
@@ -360,7 +359,6 @@ namespace RelhaxModpack
                                         if (File.Exists(@startLoc))
                                         {
                                             File.Move(startLoc, destLoc);
-                                            Logging.Installer(destLoc);
                                             Logging.Manager(string.Format("BackupUserData: {0} ({1})", Path.Combine(Path.GetDirectoryName(correctedPath), Path.GetFileName(startLoc)), Path.GetFileName(correctedPath)));
                                         }
                                     }
@@ -1044,6 +1042,7 @@ namespace RelhaxModpack
                 }
                 if (xmlUnpackList.Count > 0)
                 {
+                    // Utils.AppendToInstallLog(@"/*  unpacked XML files  */");
                     Logging.InstallerGroup("unpacked XML files");            // write comment line
                 }
                 foreach (XmlUnpack r in xmlUnpackList)
