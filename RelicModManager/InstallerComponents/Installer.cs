@@ -680,36 +680,6 @@ namespace RelhaxModpack
                 if (!Directory.Exists(Path.Combine(TanksLocation, "mods"))) Directory.CreateDirectory(Path.Combine(TanksLocation, "mods"));
                 if (!Directory.Exists(Path.Combine(TanksLocation, "logs"))) Directory.CreateDirectory(Path.Combine(TanksLocation, "logs"));
 
-                //start the entry for the database version in installedRelhaxFiles.log
-                // moved to Logging class
-                /*
-                try
-                {
-                    //if a current log and backup log exist
-                    if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak")) && File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log")))
-                    {
-                        //current becomes backup, backup is deleted
-                        File.Delete(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
-                        File.Move(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
-                    }
-                    //only log exists
-                    else if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log")))
-                    {
-                        //move it to be a backup
-                        File.Move(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Utils.ExceptionLog("ExtractDatabaseObjects", "move installedRelhaxFiles.log", ex);
-                }*/
-                //start the entry for the files log
-                // fs = new FileStream(InstalledFilesLogPath, FileMode.Append, FileAccess.Write);
-                // string databaseHeader = string.Format("Database Version: {0}\n", Settings.DatabaseVersion);
-                // string dateTimeHeader = string.Format("/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */\n", DateTime.Now);
-                // fs.Write(Encoding.UTF8.GetBytes(databaseHeader), 0, Encoding.UTF8.GetByteCount(databaseHeader));
-                // fs.Write(Encoding.UTF8.GetBytes(dateTimeHeader), 0, Encoding.UTF8.GetByteCount(dateTimeHeader));
-
                 //extract RelHax Mods
                 Logging.Manager("Starting Relhax Modpack Extraction");
                 string downloadedFilesDir = Path.Combine(Application.StartupPath, "RelHaxDownloads");
