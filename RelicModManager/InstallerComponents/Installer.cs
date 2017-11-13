@@ -971,6 +971,7 @@ namespace RelhaxModpack
                                 string[] fileList = Directory.GetFiles(Path.Combine(Application.StartupPath, "RelHaxTemp"), filenamePrefix + Path.GetFileName(correctedUserFiles));
                                 //if no results, go on with the next entry
                                 if (fileList.Length == 0) continue;
+                                Logging.InstallerGroup("RestoreUserData");
                                 foreach (string ss in fileList)
                                 {
                                     string targetFilename = Path.GetFileName(ss).Replace(filenamePrefix, "");
@@ -978,10 +979,14 @@ namespace RelhaxModpack
                                     {
                                         //the file has been found in the temp directory
                                         if (!Directory.Exists(Path.Combine(TanksLocation, targetDir)))
+                                        {
                                             Directory.CreateDirectory(Path.Combine(TanksLocation, targetDir));
+                                            Logging.Installer(Path.Combine(TanksLocation, targetDir));
+                                        }
                                         if (File.Exists(Path.Combine(TanksLocation, targetDir, targetFilename)))
                                             File.Delete(Path.Combine(TanksLocation, targetDir, targetFilename));
                                         File.Move(Path.Combine(Application.StartupPath, "RelHaxTemp", Path.GetFileName(ss)), Path.Combine(TanksLocation, targetDir, targetFilename));
+                                        Logging.Installer(Path.Combine(TanksLocation, targetDir, targetFilename));
                                         Logging.Manager(string.Format("RestoredUserData: {0}", Path.Combine(targetDir, targetFilename)));
                                     }
                                     catch (Exception p)
@@ -1042,7 +1047,6 @@ namespace RelhaxModpack
                 }
                 if (xmlUnpackList.Count > 0)
                 {
-                    // Utils.AppendToInstallLog(@"/*  unpacked XML files  */");
                     Logging.InstallerGroup("unpacked XML files");            // write comment line
                 }
                 foreach (XmlUnpack r in xmlUnpackList)
