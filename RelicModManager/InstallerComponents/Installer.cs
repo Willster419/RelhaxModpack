@@ -1058,7 +1058,8 @@ namespace RelhaxModpack
                                 // if value of pkg is empty, it is not contained in an archive
                                 File.Copy(Path.Combine(r.directoryInArchive, r.fileName), Path.Combine(r.extractDirectory, fn), false);     // no overwrite of an exsisting file !!
                                 // Utils.AppendToInstallLog(Path.Combine(r.extractDirectory, fn));
-                                Logging.InstallerGroup(Path.Combine(r.extractDirectory, fn));            // write created file with path
+                                Logging.Installer(Path.Combine(r.extractDirectory, fn));            // write created file with path
+                                Logging.Manager(string.Format("{0} moved", r.fileName));
                             }
                             catch (Exception ex)
                             {
@@ -1078,6 +1079,8 @@ namespace RelhaxModpack
                                         {
                                             zip[i].FileName = fn;
                                             zip.ExtractSelectedEntries(zip[i].FileName, null, r.extractDirectory, ExtractExistingFileAction.Throw);  // no overwrite of an exsisting file !!
+                                            Logging.Installer(Path.Combine(r.extractDirectory, fn));
+                                            Logging.Manager(string.Format("{0} extracted", zip[i].FileName));
                                             break;
                                         }
                                         catch (Exception ex)
@@ -1509,13 +1512,6 @@ namespace RelhaxModpack
                         InstallWorker.ReportProgress(0);
                     }
                 }
-                /*
-                //done with the filestream
-                if (fs != null)
-                {
-                    fs.Dispose();
-                    fs = null;
-                }*/
             }
             catch (Exception ex)
             {
@@ -1529,7 +1525,6 @@ namespace RelhaxModpack
         {
             try
             {
-                // Utils.AppendToInstallLog(@"/*  Desktop shortcuts  */");
                 Logging.InstallerGroup("Desktop shortcuts");                     // write comment line
                 foreach (Shortcut sc in Shortcuts)
                 {
@@ -1538,7 +1533,7 @@ namespace RelhaxModpack
                         string fileTarget = Utils.ReplaceDirectorySeparatorChar(Utils.ReplaceMacro(sc.Path));
                         if (File.Exists(fileTarget))
                         {
-                            Logging.Manager(string.Format("creating desktop ShortCut: {0} ({1})", sc.Path, sc.Name));
+                            Logging.Manager(string.Format("creating desktop ShortCut: {0} ({1})", fileTarget, sc.Name));
                             Utils.CreateShortcut(fileTarget, sc.Name, true, true);
                         }
                     }
