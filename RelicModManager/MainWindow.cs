@@ -1474,6 +1474,11 @@ namespace RelhaxModpack
                     childProgressBar.Value = e.ChildProcessed;
                 message = string.Format("{0} {1} {2} {3}", Translations.getTranslatedString("restoringUserData"), e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
             }
+            else if (e.InstalProgress == InstallerEventArgs.InstallProgress.UnpackXmlFiles)
+            {
+                // no message here .... nobody will see (to fast over)
+                message = "";
+            }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.PatchMods)
             {
                 totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.PatchMods;
