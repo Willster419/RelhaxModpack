@@ -113,6 +113,16 @@ namespace RelhaxModpack
             try
             {
                 if (InstalledFilesLogPath == null) DefineInstallerLogFile();
+                
+                // logfile moved from WoT root folder to logs subfolder after manager version 26.4.2
+                if (File.Exists(Path.Combine(Settings.TanksLocation, "installedRelhaxFiles.log")))
+                {
+                    if (File.Exists(InstalledFilesLogPath))
+                        File.Delete(Path.Combine(Settings.TanksLocation, "installedRelhaxFiles.log"));
+                    else
+                        File.Move(Path.Combine(Settings.TanksLocation, "installedRelhaxFiles.log"), InstalledFilesLogPath);
+                }
+
                 //if a current log and backup log exist
                 if (File.Exists(InstalledFilesLogPath + ".bak") && File.Exists(InstalledFilesLogPath))
                 {
