@@ -952,6 +952,7 @@ namespace RelhaxModpack
         {
             try
             {
+                Logging.InstallerGroup("RestoreUserData");
                 args.ParrentTotalToProcess = ModsConfigsWithData.Count;
                 InstallWorker.ReportProgress(0);
                 foreach (SelectableDatabasePackage dbo in ModsConfigsWithData)
@@ -971,7 +972,6 @@ namespace RelhaxModpack
                                 string[] fileList = Directory.GetFiles(Path.Combine(Application.StartupPath, "RelHaxTemp"), filenamePrefix + Path.GetFileName(correctedUserFiles));
                                 //if no results, go on with the next entry
                                 if (fileList.Length == 0) continue;
-                                Logging.InstallerGroup("RestoreUserData");
                                 foreach (string ss in fileList)
                                 {
                                     string targetFilename = Path.GetFileName(ss).Replace(filenamePrefix, "");
