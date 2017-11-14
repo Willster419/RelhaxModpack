@@ -387,7 +387,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void DeleteFilesByList(List<string> list, bool reportProgress = false, TextWriter tw = null)
+        private void DeleteFilesByList(List<string> list, bool reportProgress = false, TextWriter tw = null, bool suppressException = false)
         {
             foreach (string line in list)
             {
@@ -430,21 +430,10 @@ namespace RelhaxModpack
                             }
                         }
                     }
-                    catch (DirectoryNotFoundException)
-                    {
-                        // 
-                    }
-                    catch (FileNotFoundException)
-                    {
-                        // 
-                    }
-                    catch (UnauthorizedAccessException)
-                    {
-                        //
-                    }
                     catch (Exception ex)    // here is another problem, so logging it
                     {
-                        Utils.ExceptionLog("DeleteFilesByList", "delete file: " + line, ex);
+                        if (!suppressException)
+                            Utils.ExceptionLog("DeleteFilesByList", "delete file: " + line, ex);
                     }
                 }
                 if (tw != null)
@@ -513,7 +502,7 @@ namespace RelhaxModpack
                     }
                     try
                     {
-                        DeleteFilesByList(lines, true, tw);
+                        DeleteFilesByList(lines, true, tw, true);
                     }
                     catch (Exception ex)
                     {
