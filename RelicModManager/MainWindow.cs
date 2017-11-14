@@ -1397,13 +1397,12 @@ namespace RelhaxModpack
 
         private string createExtractionMsgBoxProgressOutput(string[] s)
         {
-            return string.Format("{0} {1} {2} {3}\n{4}: {5}\n{6}: {7} MB",
+            return string.Format("{0} {1} {2} {3}\n{4}\n{5}: {6} MB",
                 Translations.getTranslatedString("extractingPackage"),
                     s[0],
                     Translations.getTranslatedString("of"),
                     s[1],
-                    Translations.getTranslatedString("file"),
-                    s[2],
+                    Utils.Truncate(string.Format("{0}: {1}", Translations.getTranslatedString("file"), s[2]), downloadProgress.Font, downloadProgress.Width, 2),
                     Translations.getTranslatedString("size"),
                     s[3].Equals("0") ? "0.01" : s[3]);
         }

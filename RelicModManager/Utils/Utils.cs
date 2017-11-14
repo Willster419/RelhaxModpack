@@ -1179,6 +1179,56 @@ namespace RelhaxModpack
                 }
             }
         }
+
+
+        public static string Truncate(TextBox text)
+        {
+            return Truncate(text.Text, text.Font, text.Width);
+        }
+
+        // https://stackoverflow.com/questions/17654231/how-to-truncate-a-string-to-fit-in-a-container
+        public static string Truncate(string text, Font font, int maxWidth, int direction = 0)
+        {
+            // Determine direction of truncation:
+            // 0 = right
+            // 1 = left
+            // 2 = 1/2 of the Box width the first part of the string and 2/3 of the "left" "free" side, fill with [...] and the last part of the string
+            if (text.Length == 0) return text;
+            int i = text.Length;
+            int l = 0;
+            bool firstPass = false;
+            string preText = "";
+            string trailingText = "";
+            string midText = text;
+            if (direction == 0)
+                trailingText = "...";
+            else if (direction == 1)
+                preText = "...";
+            else if (direction == 2)
+            {
+                firstPass = true;   // only set to true, if direction typ 2 is selected
+                l = text.Length / 3;
+            }
+            else
+            {
+                Logging.Manager("ERROR. Wrong Trim method called. String: " + text + " with direction: " + direction.ToString());
+                return text;
+            }
+            while (TextRenderer.MeasureText(preText + midText + trailingText, font).Width > maxWidth)
+            {
+                if (firstPass)
+                {
+                    preText = text.Substring(0, l) + "...";
+                    midText = text.Substring(l);
+                    firstPass = false;
+                }
+                midText = text.Substring(0, --i);
+                if (i == 0) break;
+            }
+            return preText + midText + trailingText;
+        }
+        //You can implement more methods such as receiving a string with font,... and returning the truncated/trimmed version.
+        
     }
     // needed for CreateShortcut
     [ComImport]

@@ -427,7 +427,7 @@
             this.downloadProgress.Location = new System.Drawing.Point(13, 414);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
-            this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.downloadProgress.Size = new System.Drawing.Size(464, 60);
             this.downloadProgress.TabIndex = 29;
             this.downloadProgress.Text = "";
