@@ -1657,6 +1657,10 @@ namespace RelhaxModpack
         private void UninstallRelhaxMod_Click(object sender, EventArgs e)
         {
             ToggleUIButtons(false);
+            //reset progress bars
+            parrentProgressBar.Value = parrentProgressBar.Minimum;
+            totalProgressBar.Value = totalProgressBar.Minimum;
+            childProgressBar.Value = childProgressBar.Minimum;
             //reset the interface
             this.downloadProgress.Text = "";
             //attempt to locate the tanks directory
