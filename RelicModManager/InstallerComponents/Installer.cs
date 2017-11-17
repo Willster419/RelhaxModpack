@@ -1041,10 +1041,17 @@ namespace RelhaxModpack
                                         try
                                         {
                                             zip[i].FileName = fn;
-                                            zip.ExtractSelectedEntries(zip[i].FileName, null, r.extractDirectory, ExtractExistingFileAction.Throw);  // no overwrite of an exsisting file !!
-                                            Logging.Installer(Path.Combine(r.extractDirectory, fn));
-                                            Logging.Manager(string.Format("{0} extracted", zip[i].FileName));
-                                            break;
+                                            if (File.Exists(Path.Combine(r.extractDirectory, zip[i].FileName)))
+                                            {
+                                                Logging.Manager(string.Format("File {0} already exists, so no extraction/overwrite", Path.Combine(r.extractDirectory, zip[i].FileName)));
+                                            }
+                                            else
+                                            {
+                                                zip.ExtractSelectedEntries(zip[i].FileName, null, r.extractDirectory, ExtractExistingFileAction.Throw);  // no overwrite of an exsisting file !!
+                                                Logging.Installer(Path.Combine(r.extractDirectory, fn));
+                                                Logging.Manager(string.Format("{0} extracted", zip[i].FileName));
+                                                // break;
+                                            }
                                         }
                                         catch (Exception ex)
                                         {
