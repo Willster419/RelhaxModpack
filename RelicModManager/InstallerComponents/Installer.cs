@@ -1218,6 +1218,30 @@ namespace RelhaxModpack
         //Step 17: Extract Atlases
         private void ExtractAtlases()
         {
+            //before extracting atlases, check if files exist. if they do, delete them
+            try
+            {
+                string[] atlasFolders = new string[] {Path.Combine(Settings.RelhaxTempFolder, "battleAtlas"), Path.Combine(Settings.RelhaxTempFolder, "vehicleMarkerAtlas") };
+                string[] atlasFiles = new string[] {
+                    Path.Combine(Settings.RelhaxTempFolder, "battleAtlas.png"),
+                    Path.Combine(Settings.RelhaxTempFolder, "battleAtlas.xml"),
+                    Path.Combine(Settings.RelhaxTempFolder, "vehicleMarkerAtlas.png"),
+                    Path.Combine(Settings.RelhaxTempFolder, "vehicleMarkerAtlas.xml")
+                };
+
+                foreach(string s in atlasFolders)
+                if (Directory.Exists(s))
+                        Directory.Delete(s,true);
+                
+                foreach (string s in atlasFiles)
+                    if (File.Exists(s))
+                        File.Delete(s);
+
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("ExtractAtlases", "delete previus altas files in temp folder", ex);
+            }
             try
             {
                 DirectoryInfo di = null;

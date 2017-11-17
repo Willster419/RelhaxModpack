@@ -1651,7 +1651,7 @@ namespace RelhaxModpack
             }
             downloadProgress.Text = message;
         }
-#endregion
+        #endregion
 
         //Main method to uninstall the modpack
         private void UninstallRelhaxMod_Click(object sender, EventArgs e)
