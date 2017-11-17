@@ -2458,6 +2458,7 @@ namespace RelhaxModpack
                     {
                         Logging.Manager(string.Format("ERROR: {0} not found, not loading configs", filePath));
                         MessageBox.Show(Translations.getTranslatedString("configLoadFailed"), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        LoadingConfig = false;
                         return;
                     }
                     break;
@@ -2466,6 +2467,7 @@ namespace RelhaxModpack
                     if (!File.Exists(filePath))
                     {
                         Logging.Manager(string.Format("ERROR: {0} not found, not loading configs", filePath));
+                        LoadingConfig = false;
                         return;
                     }
                     break;
@@ -2475,6 +2477,7 @@ namespace RelhaxModpack
                     {
                         if (!(sv.ShowDialog() == DialogResult.OK))
                         {
+                            LoadingConfig = false;
                             return;
                         }
                         filePath = sv.SelectedXML;
@@ -2493,6 +2496,7 @@ namespace RelhaxModpack
                                 if (!(loadLocation.ShowDialog().Equals(DialogResult.OK)))
                                 {
                                     //quit
+                                    LoadingConfig = false;
                                     return;
                                 }
                                 filePath = loadLocation.FileName;
