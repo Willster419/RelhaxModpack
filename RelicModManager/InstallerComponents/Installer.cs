@@ -2166,61 +2166,74 @@ namespace RelhaxModpack
             // string zipFileHeader = string.Format(@"/*  {0}  */\n", Path.GetFileNameWithoutExtension(zipFile));
             // fs.Write(Encoding.UTF8.GetBytes(zipFileHeader), 0, Encoding.UTF8.GetByteCount(zipFileHeader));
             Logging.InstallerGroup(Path.GetFileNameWithoutExtension(zipFile));         // write a formated comment line
-            try
+            //create a retry counter to verify that any exception caught was not a one-off error
+            for(int j = 3; j > 0; j--)
             {
-                using (ZipFile zip = new ZipFile(zipFile))
+                try
                 {
-                    //hacks to get it to lag less possibly
-                    //zip.BufferSize = 65536*16; //1MB buffer
-                    //zip.CodecBufferSize = 65536*16; //1MB buffer
-                    //zip.ParallelDeflateThreshold = -1; //single threaded
-                    //for this zip file instance, for each entry in the zip file,
-                    //change the "versiondir" path to this version of tanks
-                    args.ChildTotalToProcess = zip.Entries.Count;
-                    for (int i = 0; i < zip.Entries.Count; i++)
+                    using (ZipFile zip = new ZipFile(zipFile))
                     {
-                        //grab the entry name for modifications
-                        string zipEntryName = zip[i].FileName;
-                        zipEntryName = zipEntryName.Contains("versiondir") ? zipEntryName.Replace("versiondir", TanksVersion) : zipEntryName;
-                        zipEntryName = zipEntryName.Contains("configs/xvm/xvmConfigFolderName") ? zipEntryName.Replace("configs/xvm/xvmConfigFolderName", "configs/xvm/" + xvmConfigDir) : zipEntryName;
-                        if(Regex.IsMatch(zipEntryName, @"_patch.*\.xml"))
+                        //hacks to get it to lag less possibly
+                        //zip.BufferSize = 65536*16; //1MB buffer
+                        //zip.CodecBufferSize = 65536*16; //1MB buffer
+                        //zip.ParallelDeflateThreshold = -1; //single threaded
+                        //for this zip file instance, for each entry in the zip file,
+                        //change the "versiondir" path to this version of tanks
+                        args.ChildTotalToProcess = zip.Entries.Count;
+                        for (int i = 0; i < zip.Entries.Count; i++)
                         {
-                            string patchName = zipEntryName;
-                            zipEntryName = Regex.Replace(zipEntryName, @"_patch.*\.xml", "_patch/" + patchNum.ToString("D3") + ".xml");
-                            patchNum++;
-                            patchName = patchName.Substring(7);
-                            originalPatchNames.Add(patchName);
+                            //grab the entry name for modifications
+                            string zipEntryName = zip[i].FileName;
+                            zipEntryName = zipEntryName.Contains("versiondir") ? zipEntryName.Replace("versiondir", TanksVersion) : zipEntryName;
+                            zipEntryName = zipEntryName.Contains("configs/xvm/xvmConfigFolderName") ? zipEntryName.Replace("configs/xvm/xvmConfigFolderName", "configs/xvm/" + xvmConfigDir) : zipEntryName;
+                            if (Regex.IsMatch(zipEntryName, @"_patch.*\.xml"))
+                            {
+                                string patchName = zipEntryName;
+                                zipEntryName = Regex.Replace(zipEntryName, @"_patch.*\.xml", "_patch/" + patchNum.ToString("D3") + ".xml");
+                                patchNum++;
+                                patchName = patchName.Substring(7);
+                                originalPatchNames.Add(patchName);
+                            }
+                            //finish entry name modifications
+                            zip[i].FileName = zipEntryName;
+                            //put the entries on disk
+                            // fs.Write(Encoding.UTF8.GetBytes(Path.Combine(extractFolder, zip[i].FileName) + "\n"), 0, Encoding.UTF8.GetByteCount(Path.Combine(extractFolder, zip[i].FileName) + "\n"));
+                            Logging.Installer(Utils.ReplaceDirectorySeparatorChar(Path.Combine(extractFolder, zip[i].FileName)));           // write the the file entry / with the first call at the installation process, the logfile will be created including headline, ....
                         }
-                        //finish entry name modifications
-                        zip[i].FileName = zipEntryName;
-                        //put the entries on disk
-                        // fs.Write(Encoding.UTF8.GetBytes(Path.Combine(extractFolder, zip[i].FileName) + "\n"), 0, Encoding.UTF8.GetByteCount(Path.Combine(extractFolder, zip[i].FileName) + "\n"));
-                        Logging.Installer(Utils.ReplaceDirectorySeparatorChar(Path.Combine(extractFolder, zip[i].FileName)));           // write the the file entry / with the first call at the installation process, the logfile will be created including headline, ....
+                        zip.ExtractProgress += Zip_ExtractProgress;
+                        zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
+                        j = 1;
                     }
-                    zip.ExtractProgress += Zip_ExtractProgress;
-                    zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
                 }
-            }
-            catch (Exception e)
-            {
-                //append the exception to the log
-                Utils.ExceptionLog("Unzip", "ZipFile: " + zipFile, e);
-                //show the error message
-                MessageBox.Show(string.Format("{0}, {1} {2} {3}", Translations.getTranslatedString("zipReadingErrorMessage1"), Path.GetFileName(zipFile), Translations.getTranslatedString("zipReadingErrorMessage2"), Translations.getTranslatedString("zipReadingErrorHeader")));
-                //(try to)delete the file from the filesystem
-                if (File.Exists(zipFile))
+                catch (Exception e)
                 {
-                    try
+                    if(j <= 1)
                     {
-                        File.Delete(zipFile);
+                        //append the exception to the log
+                        Utils.ExceptionLog("Unzip", "ZipFile: " + zipFile, e);
+                        //show the error message
+                        MessageBox.Show(string.Format("{0}, {1} {2} {3}", Translations.getTranslatedString("zipReadingErrorMessage1"), Path.GetFileName(zipFile), Translations.getTranslatedString("zipReadingErrorMessage2"), Translations.getTranslatedString("zipReadingErrorHeader")));
+                        //(try to)delete the file from the filesystem
+                        if (File.Exists(zipFile))
+                        {
+                            try
+                            {
+                                File.Delete(zipFile);
+                            }
+                            catch (UnauthorizedAccessException ex)
+                            {
+                                Utils.ExceptionLog("Unzip", "tried to delete " + zipFile, ex);
+                            }
+                        }
+                        XMLUtils.DeleteMd5HashDatabase(zipFile);
                     }
-                    catch (UnauthorizedAccessException ex)
+                    else
                     {
-                        Utils.ExceptionLog("Unzip", "tried to delete " + zipFile, ex);
+                        Utils.AppendToInstallLog("WARNING: exception caught, retrying number " + j);
                     }
                 }
-                XMLUtils.DeleteMd5HashDatabase(zipFile);
             }
+            
         }
         
         //handler for when progress is made in extracting a zip file
