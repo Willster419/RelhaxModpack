@@ -988,7 +988,7 @@ namespace RelhaxModpack
                     File.SetAttributes(Path.Combine(TanksLocation, "_xmlUnPack"), FileAttributes.Normal);
                     di = new DirectoryInfo(Path.Combine(TanksLocation, "_xmlUnPack"));
                     //get every patch file in the folder
-                    diArr = di.GetFiles(@"*.xml", System.IO.SearchOption.TopDirectoryOnly);
+                    diArr = di.GetFiles(@"*.xml", SearchOption.TopDirectoryOnly);
                 }
                 catch (Exception ex)
                 {
@@ -1008,9 +1008,12 @@ namespace RelhaxModpack
                 {
                     Logging.InstallerGroup("unpacked XML files");            // write comment line
                 }
+                args.ChildTotalToProcess = xmlUnpackList.Count;
+                args.ChildProcessed = 0;
                 foreach (XmlUnpack r in xmlUnpackList)
                 {
                     string fn = r.newFileName.Equals("") ? r.fileName : r.newFileName;
+                    args.currentFile = fn;
                     try
                     {
                         if (!Directory.Exists(r.extractDirectory)) Directory.CreateDirectory(r.extractDirectory);
@@ -1047,7 +1050,8 @@ namespace RelhaxModpack
                                             }
                                             else
                                             {
-                                                zip.ExtractSelectedEntries(zip[i].FileName, null, r.extractDirectory, ExtractExistingFileAction.Throw);  // no overwrite of an exsisting file !!
+                                                //when possible please use other methods than throwing exceptions
+                                                zip.ExtractSelectedEntries(zip[i].FileName, null, r.extractDirectory, ExtractExistingFileAction.DoNotOverwrite);  // no overwrite of an exsisting file !!
                                                 Logging.Installer(Path.Combine(r.extractDirectory, fn));
                                                 Logging.Manager(string.Format("{0} extracted", zip[i].FileName));
                                                 // break;
@@ -1059,7 +1063,8 @@ namespace RelhaxModpack
                                         }
                                     }
                                 }
-                                zip.Dispose(); 
+                                //the point of the using statement is to remove the need for that
+                                //zip.Dispose(); 
                             }
                         }
                     }
@@ -1076,6 +1081,8 @@ namespace RelhaxModpack
                     {
                         Utils.ExceptionLog(string.Format("UnpackXmlFiles", "xmlUnPack\nfileName: {0}", Path.Combine(r.extractDirectory, fn)), ex);
                     }
+                    args.ChildProcessed++;
+                    InstallWorker.ReportProgress(0);
                 }
             }
             catch (Exception ex)
@@ -1090,7 +1097,7 @@ namespace RelhaxModpack
             try
             {
                 //Give the OS time to process the folder change...
-                System.Threading.Thread.Sleep(20);
+                System.Threading.Thread.Sleep(5);
                 //set the folder properties to read write
                 DirectoryInfo di = null;
                 FileInfo[] diArr = null;
@@ -1272,7 +1279,6 @@ namespace RelhaxModpack
                                         }
                                     }
                                 }
-                                zip.Dispose();
                             }
                         }
                     }

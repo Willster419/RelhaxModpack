@@ -1470,6 +1470,13 @@ namespace RelhaxModpack
             polish.Add("restoringUserData", "Przywracanie danych użytkownika");
             french.Add("restoringUserData", "Restoration des données utilisateur");
 
+            //Componet: unpackingXMLFiles
+            //
+            english.Add("unpackingXMLFiles", "Unpacking local XML file");
+            german.Add("unpackingXMLFiles", "TODO");
+            polish.Add("unpackingXMLFiles", "TODO");
+            french.Add("unpackingXMLFiles", "TODO");
+
             //Componet: patchingFile
             //
             english.Add("patchingFile", "Patching file");

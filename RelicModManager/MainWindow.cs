@@ -744,6 +744,10 @@ namespace RelhaxModpack
         {
             Utils.TotallyNotStatPaddingForumPageViewCount();
             ToggleUIButtons(false);
+            //reset progress bars
+            parrentProgressBar.Value = parrentProgressBar.Minimum;
+            totalProgressBar.Value = totalProgressBar.Minimum;
+            childProgressBar.Value = childProgressBar.Minimum;
             //get the user appData folder
             appDataFolder = "";
             appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Wargaming.net", "WorldOfTanks");
@@ -1475,8 +1479,13 @@ namespace RelhaxModpack
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.UnpackXmlFiles)
             {
-                // no message here .... nobody will see (to fast over)
-                message = "";
+                totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.UnpackXmlFiles;
+                childProgressBar.Minimum = 0;
+                parrentProgressBar.Minimum = 0;
+                parrentProgressBar.Value = 0;
+                if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                    childProgressBar.Value = e.ChildProcessed;
+                message = string.Format("{0} {1} {2} {3}\n{4}", Translations.getTranslatedString("unpackingXMLFiles"), e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess,e.currentFile);
             }
             else if (e.InstalProgress == InstallerEventArgs.InstallProgress.PatchMods)
             {
