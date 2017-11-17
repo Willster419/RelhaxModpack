@@ -1,3 +1,11 @@
+Version 27.0.1:
+https://www.virustotal.com/#/file/78920f00186ba031baddc31b7cf0468e194ecfbc1cdfc43e8891dae1aafff4c6/detection
+-Fixed bugs with xml unpacker
+-Fixed bugs with shortcut creation
+-Improved logging for Restoring and backup userdata
+-removed unused code
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 May I present to you, the latest full new release, version 27!!!
   This is the biggest performance update yet!
 
