@@ -90,18 +90,26 @@ namespace RelhaxModpack
             InstallWorker.RunWorkerAsync();
         }
 
-        public void StartCleanUninstallation()
+        public void StartUninstallation()
         {
-            InstallWorker.DoWork += ActuallyStartCleanUnInstallation;
+            InstallWorker.DoWork += ActuallyStartUninstallation;
             InstallWorker.RunWorkerAsync();
         }
 
-        public void ActuallyStartCleanUnInstallation(object sender, DoWorkEventArgs e)
+        public void ActuallyStartUninstallation(object sender, DoWorkEventArgs e)
         {
             ResetArgs();
             args.InstalProgress = InstallerEventArgs.InstallProgress.Uninstall;
-            UninstallMods();
-            //put them back when done
+            switch(Settings.UninstallMode)
+            {
+                case Settings.UninstallModes.Smart:
+                    UninstallMods();
+                    break;
+                case Settings.UninstallModes.Clean:
+                    DeleteMods();
+                    break;
+            }
+            //put back the folders when done
             if (!Directory.Exists(Path.Combine(TanksLocation, "res_mods", TanksVersion))) Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods", TanksVersion));
             if (!Directory.Exists(Path.Combine(TanksLocation, "mods", TanksVersion))) Directory.CreateDirectory(Path.Combine(TanksLocation, "mods", TanksVersion));
             args.InstalProgress = InstallerEventArgs.InstallProgress.UninstallDone;
@@ -135,7 +143,17 @@ namespace RelhaxModpack
             Logging.Manager("Installation UninstallMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteMods;
             if (Settings.CleanInstallation)
-                UninstallMods();
+            {
+                switch (Settings.UninstallMode)
+                {
+                    case Settings.UninstallModes.Smart:
+                        UninstallMods();
+                        break;
+                    case Settings.UninstallModes.Clean:
+                        DeleteMods();
+                        break;
+                }
+            }
             else
                 Logging.Manager("... skipped");
             ResetArgs();

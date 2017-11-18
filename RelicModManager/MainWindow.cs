@@ -1715,7 +1715,7 @@ namespace RelhaxModpack
                 unI.InstallProgressChanged += I_InstallProgressChanged;
                 Logging.Manager("Started Uninstallation process");
                 //run the recursive complete uninstaller
-                unI.StartCleanUninstallation();
+                unI.StartUninstallation();
             }
             else
             {
