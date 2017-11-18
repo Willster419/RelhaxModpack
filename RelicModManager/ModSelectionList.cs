@@ -1353,6 +1353,7 @@ namespace RelhaxModpack
             //link the mod components to the UI
             m.TabIndex = t;
             m.ModFormCheckBox = modCheckBox;
+            m.ParentCategory = catagory;
             //add it to the search list
             CompleteModSearchList.Add(m);
             //the mod checksum logic

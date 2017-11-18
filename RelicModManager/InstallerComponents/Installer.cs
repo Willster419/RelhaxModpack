@@ -999,7 +999,7 @@ namespace RelhaxModpack
                                         System.Threading.Thread.Sleep(20);
                                 }
                             }
-                            Unzip(Path.Combine(downloadedFilesDir, m.ZipFile), m.ExtractPath, sb);
+                            Unzip(Path.Combine(downloadedFilesDir, m.ZipFile), m.ExtractPath, sb, m.ParentCategory.InstallGroup);
                         }
                         if(m.configs.Count > 0)
                         {
@@ -1029,7 +1029,7 @@ namespace RelhaxModpack
                                     System.Threading.Thread.Sleep(20);
                             }
                         }
-                        Unzip(Path.Combine(downloadedFilesDir, config.ZipFile), config.ExtractPath, sb);
+                        Unzip(Path.Combine(downloadedFilesDir, config.ZipFile), config.ExtractPath, sb, config.ParentMod.ParentCategory.InstallGroup);
                     }
                     if(config.configs.Count > 0)
                     {
@@ -2323,7 +2323,7 @@ namespace RelhaxModpack
         }
 
         //main unzip worker method
-        private void Unzip(string zipFile, string extractFolder, StringBuilder sb = null)
+        private void Unzip(string zipFile, string extractFolder, StringBuilder sb = null, int categoryGroup = -1)
         {
             //write a formated comment line if in regular extraction mode
             if(sb==null)
@@ -2347,7 +2347,11 @@ namespace RelhaxModpack
                             if (Regex.IsMatch(zipEntryName, @"_patch.*\.xml"))
                             {
                                 string patchName = zipEntryName;
-                                zipEntryName = Regex.Replace(zipEntryName, @"_patch.*\.xml", "_patch/" + patchNum.ToString("D3") + ".xml");
+                                if(!Settings.SuperExtraction)//regular patch name
+                                    //Int.ToString("D3") means to string of 3 decimal places, leading
+                                    zipEntryName = Regex.Replace(zipEntryName, @"_patch.*\.xml", "_patch/" + patchNum.ToString("D3") + ".xml");
+                                else//super mode, patch name must include installer group
+                                    zipEntryName = Regex.Replace(zipEntryName, @"_patch.*\.xml", "_patch/" + (categoryGroup+1).ToString("D2") + "_" + patchNum.ToString("D3") + ".xml");
                                 patchNum++;
                                 patchName = patchName.Substring(7);
                                 originalPatchNames.Add(patchName);
