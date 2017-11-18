@@ -11,11 +11,16 @@ namespace RelhaxModpack
         //the selection type of the catagory. can a user select
         //multiple mods of this catagory, or just one?
         public string SelectionType { get; set; }
+        //for super extraction, the group that should be used for the category
+        public int InstallGroup { get; set; }
         public List<Mod> Mods = new List<Mod>();
         //list of dependencies required if anything is
         //selected from this catagory
         public List<Dependency> Dependencies = new List<Dependency>();
-        public Category() { }
+        public Category()
+        {
+            InstallGroup = 0;
+        }
         //returns the mod with the specified name
         //if it does not exist, it returns null
         public Mod GetMod(string modName)

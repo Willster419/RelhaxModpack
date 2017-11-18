@@ -400,7 +400,7 @@ namespace RelhaxModpack
                 foreach (XElement catagoryHolder in doc.XPathSelectElements("/modInfoAlpha.xml/catagories/catagory"))
                 {
                     Category cat = new Category();
-                    string[] catNodeList = new string[] { "name", "selectionType", "mods", "dependencies" };
+                    string[] catNodeList = new string[] { "name", "selectionType", "installGroup", "mods", "dependencies" };
                     foreach (XElement catagoryNode in catagoryHolder.Elements())
                     {
                         catNodeList = catNodeList.Except(new string[] { catagoryNode.Name.ToString() }).ToArray();
@@ -411,6 +411,9 @@ namespace RelhaxModpack
                                 break;
                             case "selectionType":
                                 cat.SelectionType = catagoryNode.Value;
+                                break;
+                            case "installGroup":
+                                cat.InstallGroup = Utils.ParseInt(catagoryNode.Value,0);
                                 break;
                             case "mods":
                                 foreach (XElement modHolder in catagoryNode.Elements())
@@ -1929,6 +1932,9 @@ namespace RelhaxModpack
                 if (!c.SelectionType.Trim().Equals(""))
                     catagorySelectionType.InnerText = c.SelectionType;
                 catagoryRoot.AppendChild(catagorySelectionType);
+                XmlElement catagoryInstallGroup = doc.CreateElement("installGroup");
+                catagoryInstallGroup.InnerText = "" + c.InstallGroup;
+                catagoryRoot.AppendChild(catagoryInstallGroup);
                 //dependencies for catagory
                 XmlElement catagoryDependencies = doc.CreateElement("dependencies");
                 foreach (Dependency d in c.Dependencies)

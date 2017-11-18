@@ -337,6 +337,27 @@ namespace RelhaxModpack
             polish.Add("InstantExtractionCB", "Tryb szybkiego wypakowywania (eksperymentalny)");
             french.Add("InstantExtractionCB", "Mode d'extraction instantané (expérimental)");
 
+            //Componet: SuperExtractionCB
+            //
+            english.Add("SuperExtractionCB", "Super extraction mode");
+            german.Add("SuperExtractionCB", "TODO");
+            polish.Add("SuperExtractionCB", "TODO");
+            french.Add("SuperExtractionCB", "TODO");
+
+            //Componet: SmartUninstallModeRB
+            //
+            english.Add("SmartUninstallModeRB", "Smart");
+            german.Add("SmartUninstallModeRB", "TODO");
+            polish.Add("SmartUninstallModeRB", "TODO");
+            french.Add("SmartUninstallModeRB", "TODO");
+
+            //Componet: CleanUninstallModeRB
+            //
+            english.Add("CleanUninstallModeRB", "Clean");
+            german.Add("CleanUninstallModeRB", "TODO");
+            polish.Add("CleanUninstallModeRB", "TODO");
+            french.Add("CleanUninstallModeRB", "TODO");
+
             //Section: FirstLoadHelper
 
             //Componet: helperText
@@ -1027,6 +1048,27 @@ namespace RelhaxModpack
             german.Add("InstantExtractionCBExplanation", "Wenn aktiviert, der Installer wird die Zip-Dateien sofort nach dem Download entpacken und nicht erst auf das Herunterladen aller Dateien warten bevor mit dem Entpacken begonnen wird. Nur empfohlen für Besitzer von SSD Festplatten (Solid State Drives).");
             polish.Add("InstantExtractionCBExplanation", "Wypakowywanie pobranych plików zip w tle podczas procesu ściągania paczek. Rekomendowany jedynie dla dysków SSD.");
             french.Add("InstantExtractionCBExplanation", "Quand activé , l'installateur vas extraire un fichier zip dès qu'il est télécharger , au lieu d'attendre que chaque fichier zip soit télécharger pour l'extraction . Recommandé pour les processeurs de SSD seulement.");
+
+            //Component: SuperExtractionCBExplanation
+            //
+            english.Add("SuperExtractionCBExplanation", "When enabled, the installer will use a parallel extraction method. It will extract multiple zip files at the same time, reducing install time. For SSD drives ONLY");
+            german.Add("SuperExtractionCBExplanation", "TODO");
+            polish.Add("SuperExtractionCBExplanation", "TODO");
+            french.Add("SuperExtractionCBExplanation", "TODO");
+
+            //Component: SmartUninstallModeRBExplanation
+            //
+            english.Add("SmartUninstallModeRBExplanation", "Smart Uninstall will remove files installed only by the relhax modpack. Use this is you have files you installed other than just this modpack.");
+            german.Add("SmartUninstallModeRBExplanation", "TODO");
+            polish.Add("SmartUninstallModeRBExplanation", "TODO");
+            french.Add("SmartUninstallModeRBExplanation", "TODO");
+
+            //Component: CleanUninstallModeRBExplanation
+            //
+            english.Add("CleanUninstallModeRBExplanation", "Clean Uninstall will remove all mod files in your installation. It is faster. Use this if your mods are only installed by the relhax modpack.");
+            german.Add("CleanUninstallModeRBExplanation", "TODO");
+            polish.Add("CleanUninstallModeRBExplanation", "TODO");
+            french.Add("CleanUninstallModeRBExplanation", "TODO");
 
             //Section: Messages from ModSelectionList
 

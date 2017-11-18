@@ -37,13 +37,14 @@ namespace RelhaxModpack
         public static bool CreateShortcuts { get; set; }
         //toggle instant extraction
         public static bool InstantExtraction { get; set; }
+        //toggle super extraction
+        public static bool SuperExtraction { get; set; }
         public static int ModSelectionHeight { get; set; }
         public static int ModSelectionWidth { get; set; }
-        public static int LoadingGif { get; set; }
         public static string FontName { get; set; }
         public static float ScaleSize { get; set; }
         //file locations
-        public static string SettingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxSettings.xml");
+        public static string SettingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxxml");
         public static string RelhaxTempFolder = Path.Combine(Application.StartupPath, "RelHaxTemp");
         public static string RelhaxDownloadsFolder = Path.Combine(Application.StartupPath, "RelHaxDownloads");
         public static string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
@@ -71,17 +72,22 @@ namespace RelhaxModpack
         public const float Scale175 = 1.75f;//1.75 font scaling
         public const float Scale225 = 2.25f;//2.25 font scaling
         public const float Scale275 = 2.75f;//2.75 font scaling
-        public const string DefaultFontType = "Microsoft Sance Serif";
+        public const string DefaultFontType = "Microsoft Sans Serif";
         public const string ComicSansFontType = "Comic Sans MS";
-        private static int TempLoadedLanguage = -1;
         public static bool ModSelectionFullscreen = false;
         public static int PreviewX = 0;
         public static int PreviewY = 0;
         public static string CustomModInfoPath = "";
+        //enumeration for the type of uninstall mode
+        public enum UninstallModes
+        {
+            Smart = 0,
+            Clean = 1
+        }
+        public static UninstallModes UninstallMode = UninstallModes.Smart;
         //enumeration for the type of mod selection list view
         public enum SelectionView { Default = 0, Legacy = 1 };
         public static SelectionView SView = SelectionView.Default;
-        public static int TempLoadedView = 0;
         public enum FontSize
         {
             Font100 = 0,
@@ -97,70 +103,68 @@ namespace RelhaxModpack
             DPIAUTO = 10
         };
         public static FontSize FontSizeforum = FontSize.Font100;
-        public static int TempFontSizeForum = 0;//default to font scale, regular
         public static AutoScaleMode AppScalingMode = AutoScaleMode.Font;
-        public static Font AppFont = new System.Drawing.Font(DefaultFontType, FontSize100);
+        public static Font AppFont = new Font(DefaultFontType, FontSize100);
         //loads settings from xml file
         public static void LoadSettings()
         {
             //Settings declared here are set for what their default values should be, then later modified in the settings xml file
             //i.e. when new features are added
-            Settings.InstantExtraction = false;
-            Settings.FirstLoad = false;
-            Settings.CreateShortcuts = true;
+            InstantExtraction = false;
+            FirstLoad = false;
+            CreateShortcuts = true;
+            CleanInstallation = true;
+            SuperExtraction = false;
             Logging.Manager("Loading application settings");
             if (!File.Exists(SettingsXmlFile))
             {
                 Logging.Manager("WARNING:Settings xml not found, loading defaults");
                 //could also use this to determine if first load or not
                 //default is to turn all features off
-                Settings.ComicSans = false;
-                Settings.BackupModFolder = false;
-                Settings.CleanInstallation = true;
-                Settings.LoadingGif = (int)LoadingGifs.Standard;
-                Settings.ForceManuel = false;
-                Settings.GIF = Settings.LoadingGifs.Standard;
-                Settings.FirstLoad = true;
-                Settings.SaveLastConfig = false;
-                Settings.SaveUserData = false;
-                Settings.ClearCache = false;
-                Settings.DisableBorders = false;
-                Settings.NotifyIfSameDatabase = false;
-                Settings.CreateShortcuts = false;
-                Settings.InstantExtraction = false;
+                ComicSans = false;
+                BackupModFolder = false;
+                CleanInstallation = true;
+                ForceManuel = false;
+                GIF = LoadingGifs.Standard;
+                FirstLoad = true;
+                SaveLastConfig = false;
+                SaveUserData = false;
+                ClearCache = false;
+                DisableBorders = false;
+                NotifyIfSameDatabase = false;
+                CreateShortcuts = false;
+                InstantExtraction = false;
                 Logging.Manager("Language: " + CultureInfo.CurrentCulture.DisplayName);
-                string lang = CultureInfo.InstalledUICulture.Name.Split('-')[0];
-                if (lang.ToLower().Equals("de"))
+                string lang = CultureInfo.InstalledUICulture.Name.Split('-')[0].ToLower();
+                switch (lang)
                 {
-                    Settings.TempLoadedLanguage = 1;
+                    case "de":
+                        Translations.language = Translations.Languages.German;
+                        break;
+                    case "pl":
+                        Translations.language = Translations.Languages.Polish;
+                        break;
+                    case "fr":
+                        Translations.language = Translations.Languages.French;
+                        break;
+                    default:
+                        Translations.language = Translations.Languages.English;
+                        break;
                 }
-                else if (lang.ToLower().Equals("pl"))
-                {
-                    Settings.TempLoadedLanguage = 2;
-                }
-                else if (lang.ToLower().Equals("fr"))
-                {
-                    Settings.TempLoadedLanguage = 3;
-                }
-                else
-                {
-                    Settings.TempLoadedLanguage = 0;
-                }
-                Settings.ModSelectionHeight = 480;
-                Settings.ModSelectionWidth = 800;
-                Settings.FontSizeforum = Settings.FontSize.Font100;
-                Settings.ExpandAllLegacy = false;
-                Settings.ModSelectionFullscreen = false;
-                Settings.DisableColorChange = false;
-                Settings.DeleteLogs = false;
-                Settings.PreviewX = 0;
-                Settings.PreviewY = 0;
-                Settings.CustomModInfoPath = "";
-                Settings.TempFontSizeForum = 0;
-                Settings.FontSizeforum = FontSize.Font100;
-                Settings.SView = SelectionView.Default;
-                Settings.ShowInstallCompleteWindow = false;
-                Settings.applyInternalSettings();
+                ModSelectionHeight = 480;
+                ModSelectionWidth = 800;
+                FontSizeforum = FontSize.Font100;
+                UninstallMode = UninstallModes.Smart;
+                ExpandAllLegacy = false;
+                ModSelectionFullscreen = false;
+                DisableColorChange = false;
+                DeleteLogs = false;
+                PreviewX = 0;
+                PreviewY = 0;
+                CustomModInfoPath = "";
+                FontSizeforum = FontSize.Font100;
+                SView = SelectionView.Default;
+                ShowInstallCompleteWindow = false;
             }
             else
             {
@@ -173,182 +177,94 @@ namespace RelhaxModpack
                     switch (n.Name)
                     {
                         case "comicSans":
-                            Settings.ComicSans = bool.Parse(n.InnerText);
+                            ComicSans = bool.Parse(n.InnerText);
                             break;
                         case "backupModFolder":
-                            Settings.BackupModFolder = bool.Parse(n.InnerText);
+                            BackupModFolder = bool.Parse(n.InnerText);
                             break;
                         case "cleanInstallation":
-                            Settings.CleanInstallation = bool.Parse(n.InnerText);
+                            CleanInstallation = bool.Parse(n.InnerText);
                             break;
                         case "loadingGif":
-                            Settings.LoadingGif = int.Parse(n.InnerText);
+                            GIF = (LoadingGifs)int.Parse(n.InnerText);
                             break;
                         case "forceManuel":
-                            Settings.ForceManuel = bool.Parse(n.InnerText);
+                            ForceManuel = bool.Parse(n.InnerText);
                             break;
                         case "modSelectionHeight":
-                            Settings.ModSelectionHeight = int.Parse(n.InnerText);
+                            ModSelectionHeight = int.Parse(n.InnerText);
                             break;
                         case "modSelectionWidth":
-                            Settings.ModSelectionWidth = int.Parse(n.InnerText);
+                            ModSelectionWidth = int.Parse(n.InnerText);
                             break;
                         case "saveLastConfig":
-                            Settings.SaveLastConfig = bool.Parse(n.InnerText);
+                            SaveLastConfig = bool.Parse(n.InnerText);
                             break;
                         case "saveUserData":
-                            Settings.SaveUserData = bool.Parse(n.InnerText);
+                            SaveUserData = bool.Parse(n.InnerText);
                             break;
                         case "clearCache":
-                            Settings.ClearCache = bool.Parse(n.InnerText);
+                            ClearCache = bool.Parse(n.InnerText);
                             break;
                         case "darkUI":
-                            Settings.DarkUI = bool.Parse(n.InnerText);
+                            DarkUI = bool.Parse(n.InnerText);
                             break;
                         case "expandAllLegacy":
-                            Settings.ExpandAllLegacy = bool.Parse(n.InnerText);
+                            ExpandAllLegacy = bool.Parse(n.InnerText);
                             break;
                         case "disableBorders":
-                            Settings.DisableBorders = bool.Parse(n.InnerText);
+                            DisableBorders = bool.Parse(n.InnerText);
                             break;
                         case "disableColorChange":
-                            Settings.DisableColorChange = bool.Parse(n.InnerText);
+                            DisableColorChange = bool.Parse(n.InnerText);
                             break;
                         case "deleteLogs":
-                            Settings.DeleteLogs = bool.Parse(n.InnerText);
+                            DeleteLogs = bool.Parse(n.InnerText);
                             break;
                         case "language":
-                            Settings.TempLoadedLanguage = int.Parse(n.InnerText);
+                            Translations.language = (Translations.Languages)int.Parse(n.InnerText);
                             break;
                         case "ModSelectionFullscreen":
-                            Settings.ModSelectionFullscreen = bool.Parse(n.InnerText);
+                            ModSelectionFullscreen = bool.Parse(n.InnerText);
                             break;
                         case "NotifyIfSameDatabase":
-                            Settings.NotifyIfSameDatabase = bool.Parse(n.InnerText);
+                            NotifyIfSameDatabase = bool.Parse(n.InnerText);
                             break;
                         case "ShowInstallCompleteWindow":
-                            Settings.ShowInstallCompleteWindow = bool.Parse(n.InnerText);
+                            ShowInstallCompleteWindow = bool.Parse(n.InnerText);
                             break;
                         case "previewX":
-                            Settings.PreviewX = int.Parse(n.InnerText);
+                            PreviewX = int.Parse(n.InnerText);
                             break;
                         case "previewY":
-                            Settings.PreviewY = int.Parse(n.InnerText);
+                            PreviewY = int.Parse(n.InnerText);
                             break;
                         case "customModInfoPath":
-                            Settings.CustomModInfoPath = n.InnerText;
+                            CustomModInfoPath = n.InnerText;
                             break; 
                         case "SelectionView":
-                            Settings.TempLoadedView = int.Parse(n.InnerText);
+                            SView = (SelectionView)int.Parse(n.InnerText);
                             break;
                         case "FontSizeForum":
-                            Settings.TempFontSizeForum = int.Parse(n.InnerText);
+                            FontSizeforum = (FontSize)int.Parse(n.InnerText);
                             break;
                         case "CreateShortcuts":
-                            Settings.CreateShortcuts = bool.Parse(n.InnerText);
+                            CreateShortcuts = bool.Parse(n.InnerText);
                             break;
                         case "InstantExtraction":
-                            Settings.InstantExtraction = bool.Parse(n.InnerText);
+                            InstantExtraction = bool.Parse(n.InnerText);
+                            break;
+                        case "UninstallMode":
+                            UninstallMode = (UninstallModes)int.Parse(n.InnerText);
+                            break;
+                        case "SuperExtraction":
+                            SuperExtraction = bool.Parse(n.InnerText);
                             break;
                     }
                 }
             }
-            Settings.applyInternalSettings();
+            ApplInternalProperties();
             Logging.Manager("Settings loaded sucessfully");
-        }
-        //apply internal settings (font name, size, loading gif)
-        //based on the boolean settings from above
-        public static void applyInternalSettings()
-        {
-            switch (Settings.TempFontSizeForum)
-            {
-                default:
-                    Settings.FontSizeforum = FontSize.Font100;
-                    break;
-                case 0:
-                    Settings.FontSizeforum = FontSize.Font100;
-                    break;
-                case 1:
-                    Settings.FontSizeforum = FontSize.Font125;
-                    break;
-                case 2:
-                    Settings.FontSizeforum = FontSize.Font175;
-                    break;
-                case 3:
-                    Settings.FontSizeforum = FontSize.DPI100;
-                    break;
-                case 4:
-                    Settings.FontSizeforum = FontSize.DPI125;
-                    break;
-                case 5:
-                    Settings.FontSizeforum = FontSize.DPI175;
-                    break;
-                case 6:
-                    Settings.FontSizeforum = FontSize.Font225;
-                    break;
-                case 7:
-                    Settings.FontSizeforum = FontSize.Font275;
-                    break;
-                case 8:
-                    Settings.FontSizeforum = FontSize.DPI225;
-                    break;
-                case 9:
-                    Settings.FontSizeforum = FontSize.DPI275;
-                    break;
-                case 10:
-                    Settings.FontSizeforum = FontSize.DPIAUTO;
-                    break;
-            }
-            if (Settings.ComicSans)
-            {
-                Settings.FontName = Settings.ComicSansFontType;
-            }
-            else
-            {
-                Settings.FontName = Settings.DefaultFontType;
-            }
-            switch (Settings.LoadingGif)
-            {
-                case 0:
-                    Settings.GIF = Settings.LoadingGifs.Standard;
-                    break;
-                case 1:
-                    Settings.GIF = Settings.LoadingGifs.ThirdGuards;
-                    break;
-            }
-            switch (Settings.TempLoadedLanguage)
-            {
-                case 0:
-                    //english
-                    Translations.language = Translations.Languages.English;
-                    break;
-                case 1:
-                    //german
-                    Translations.language = Translations.Languages.German;
-                    break;
-                case 2:
-                    //polish
-                    Translations.language = Translations.Languages.Polish;
-                    break;
-                case 3:
-                    //french
-                    Translations.language = Translations.Languages.French;
-                    break;
-            }
-            //apply the internal setting of the view selection
-            switch (Settings.TempLoadedView)
-            {
-                case 0:
-                    //default (relhax)
-                    Settings.SView = SelectionView.Default;
-                    break;
-                case 1:
-                    //legacy (OMC)
-                    Settings.SView = SelectionView.Legacy;
-                    break;
-            }
-            //apply scaling settings
-            Settings.ApplyScalingProperties();
         }
         //saves settings to xml file
         public static void saveSettings()
@@ -371,57 +287,47 @@ namespace RelhaxModpack
             xcleanInstallation.InnerText = "" + CleanInstallation;
             settingsHolder.AppendChild(xcleanInstallation);
             XmlElement xsaveLastConfig = doc.CreateElement("saveLastConfig");
-            xsaveLastConfig.InnerText = "" + Settings.SaveLastConfig;
+            xsaveLastConfig.InnerText = "" + SaveLastConfig;
             settingsHolder.AppendChild(xsaveLastConfig);
             XmlElement xsaveUserData = doc.CreateElement("saveUserData");
-            xsaveUserData.InnerText = "" + Settings.SaveUserData;
+            xsaveUserData.InnerText = "" + SaveUserData;
             settingsHolder.AppendChild(xsaveUserData);
             XmlElement xclearCache = doc.CreateElement("clearCache");
-            xclearCache.InnerText = "" + Settings.ClearCache;
+            xclearCache.InnerText = "" + ClearCache;
             settingsHolder.AppendChild(xclearCache);
             XmlElement xdarkUI = doc.CreateElement("darkUI");
-            xdarkUI.InnerText = "" + Settings.DarkUI;
+            xdarkUI.InnerText = "" + DarkUI;
             settingsHolder.AppendChild(xdarkUI);
             XmlElement xexpandAllLegacy = doc.CreateElement("expandAllLegacy");
-            xexpandAllLegacy.InnerText = "" + Settings.ExpandAllLegacy;
+            xexpandAllLegacy.InnerText = "" + ExpandAllLegacy;
             settingsHolder.AppendChild(xexpandAllLegacy);
             XmlElement xdisableBorders = doc.CreateElement("disableBorders");
-            xdisableBorders.InnerText = "" + Settings.DisableBorders;
+            xdisableBorders.InnerText = "" + DisableBorders;
             settingsHolder.AppendChild(xdisableBorders);
             XmlElement xdisableColorChange = doc.CreateElement("disableColorChange");
-            xdisableColorChange.InnerText = "" + Settings.DisableColorChange;
+            xdisableColorChange.InnerText = "" + DisableColorChange;
             settingsHolder.AppendChild(xdisableColorChange);
             XmlElement xdeleteLogs = doc.CreateElement("deleteLogs");
-            xdeleteLogs.InnerText = "" + Settings.DeleteLogs;
+            xdeleteLogs.InnerText = "" + DeleteLogs;
             settingsHolder.AppendChild(xdeleteLogs);
             XmlElement xNotifyIfSameDatabase = doc.CreateElement("NotifyIfSameDatabase");
-            xNotifyIfSameDatabase.InnerText = "" + Settings.NotifyIfSameDatabase;
+            xNotifyIfSameDatabase.InnerText = "" + NotifyIfSameDatabase;
             settingsHolder.AppendChild(xNotifyIfSameDatabase);
             XmlElement xShowInstallCompleteWindow = doc.CreateElement("ShowInstallCompleteWindow");
-            xShowInstallCompleteWindow.InnerText = "" + Settings.ShowInstallCompleteWindow;
+            xShowInstallCompleteWindow.InnerText = "" + ShowInstallCompleteWindow;
             settingsHolder.AppendChild(xShowInstallCompleteWindow);
             XmlElement xlanguage = doc.CreateElement("language");
             xlanguage.InnerText = "" + (int)Translations.language;
             settingsHolder.AppendChild(xlanguage);
             XmlElement xSelectionView = doc.CreateElement("SelectionView");
-            xSelectionView.InnerText = "" + (int)Settings.SView;
+            xSelectionView.InnerText = "" + (int)SView;
             settingsHolder.AppendChild(xSelectionView);
-            switch (Settings.GIF)
-            {
-                case (Settings.LoadingGifs.Standard):
-                    {
-                        Settings.LoadingGif = 0;
-                        break;
-                    }
-                case (Settings.LoadingGifs.ThirdGuards):
-                    {
-                        Settings.LoadingGif = 1;
-                        break;
-                    }
-            }
             XmlElement xloadingGif = doc.CreateElement("loadingGif");
-            xloadingGif.InnerText = "" + LoadingGif;
+            xloadingGif.InnerText = "" + (int)GIF;
             settingsHolder.AppendChild(xloadingGif);
+            XmlElement xUninstallMode = doc.CreateElement("UninstallMode");
+            xUninstallMode.InnerText = "" + (int)UninstallMode;
+            settingsHolder.AppendChild(xUninstallMode);
             XmlElement xforceManuel = doc.CreateElement("forceManuel");
             xforceManuel.InnerText = "" + ForceManuel;
             settingsHolder.AppendChild(xforceManuel);
@@ -437,6 +343,9 @@ namespace RelhaxModpack
             XmlElement xCreateShortcuts = doc.CreateElement("CreateShortcuts");
             xCreateShortcuts.InnerText = "" + CreateShortcuts;
             settingsHolder.AppendChild(xCreateShortcuts);
+            XmlElement xSuperExtraction = doc.CreateElement("SuperExtraction");
+            xSuperExtraction.InnerText = "" + SuperExtraction;
+            settingsHolder.AppendChild(xSuperExtraction);
             XmlElement xInstantExtraction = doc.CreateElement("InstantExtraction");
             xInstantExtraction.InnerText = "" + InstantExtraction;
             settingsHolder.AppendChild(xInstantExtraction);
@@ -449,7 +358,7 @@ namespace RelhaxModpack
             xpreviewY.InnerText = "" + PreviewY;
             settingsHolder.AppendChild(xpreviewY);
             XmlElement customModInfoPath = doc.CreateElement("customModInfoPath");
-            if (Settings.CustomModInfoPath != "") { customModInfoPath.InnerText = Settings.CustomModInfoPath; }
+            if (CustomModInfoPath != "") { customModInfoPath.InnerText = CustomModInfoPath; }
             settingsHolder.AppendChild(customModInfoPath); 
 
             doc.Save(SettingsXmlFile);
@@ -459,7 +368,7 @@ namespace RelhaxModpack
         //which loading image the user specified
         public static Image getLoadingImage()
         {
-            switch (Settings.GIF)
+            switch (GIF)
             {
                 case (LoadingGifs.Standard):
                     {
@@ -472,15 +381,15 @@ namespace RelhaxModpack
             }
             return null;
         }
-        public static void ApplyScalingProperties()
+        public static void ApplInternalProperties()
         {
-            if (Settings.ComicSans)
+            if (ComicSans)
             {
-                Settings.FontName = Settings.ComicSansFontType;
+                FontName = ComicSansFontType;
             }
             else
             {
-                Settings.FontName = Settings.DefaultFontType;
+                FontName = DefaultFontType;
             }
             switch (FontSizeforum)
             {
@@ -552,11 +461,11 @@ namespace RelhaxModpack
             }
         }
         //sets a form to have a dark UI
-        public static void setUIColor(System.Windows.Forms.Form window)
+        public static void setUIColor(Form window)
         {
             Color backColor;
             Color textColor;
-            if (Settings.DarkUI)
+            if (DarkUI)
             {
                 backColor = SystemColors.ControlDarkDark;
                 textColor = Color.White;
@@ -635,7 +544,7 @@ namespace RelhaxModpack
         }
         public static Color getTextColor()
         {
-            if (Settings.DarkUI)
+            if (DarkUI)
                 return Color.White;
 
             else
@@ -643,7 +552,7 @@ namespace RelhaxModpack
         }
         public static Color getBackColor()
         {
-            if (Settings.DarkUI)
+            if (DarkUI)
                 return SystemColors.ControlDark;
 
             else

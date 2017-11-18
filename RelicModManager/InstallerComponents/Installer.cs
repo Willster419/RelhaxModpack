@@ -14,6 +14,7 @@ using System.Xml.Linq;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Xml.XPath;
+using RelhaxModpack.InstallerComponents;
 
 namespace RelhaxModpack
 {
@@ -43,6 +44,7 @@ namespace RelhaxModpack
         private List<XmlUnpack> xmlUnpackList { get; set; }
         private List<Atlases> atlasesList { get; set; }
         public string TanksVersion { get; set; }
+        public List<InstallGroup> InstallGroups { get; set; }
         //the folder of the current user appdata
         public string AppDataFolder { get; set; }
         public string DatabaseVersion { get; set; }
@@ -51,6 +53,7 @@ namespace RelhaxModpack
         public static InstallerEventArgs args;
         private string xvmConfigDir = "";
         private int patchNum = 0;
+        private int NumExtractorsCompleted = 0;
         private List<string> originalPatchNames;
         // private FileStream fs;
         private string InstalledFilesLogPath = "";
@@ -793,39 +796,69 @@ namespace RelhaxModpack
                 }
                 //set xvmConfigDir here because xvm is always a dependency, but don't log it
                 xvmConfigDir = PatchUtils.GetXVMBootLoc(TanksLocation, null, false);
-                //extract mods and configs
-                args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractMods;
-                InstallWorker.ReportProgress(0);
-                foreach (SelectableDatabasePackage dbo in ModsConfigsToInstall)
+                Stopwatch sw = new Stopwatch();
+                sw.Reset();
+                sw.Start();
+                if(Settings.SuperExtraction)
                 {
-                    if (!dbo.ZipFile.Equals(""))
+                    //extract mods and configs parallel
+                    args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractMods;
+                    InstallWorker.ReportProgress(0);
+                    foreach(InstallGroup ig in InstallGroups)
                     {
-                        Logging.Manager("Extracting Mod/Config " + dbo.ZipFile);
-                        try
+                        using (BackgroundWorker bg = new BackgroundWorker())
                         {
-                            if (Settings.InstantExtraction)
-                            {
-                                lock (lockerInstaller)
-                                {
-                                    while (!dbo.ReadyForInstall)
-                                        System.Threading.Thread.Sleep(50);
-                                }
-                            }
-                            Unzip(Path.Combine(downloadedFilesDir, dbo.ZipFile), dbo.ExtractPath);
-                            args.ParrentProcessed++;
-                        }
-                        catch (Exception ex)
-                        {
-                            //append the exception to the log
-                            Utils.ExceptionLog("ExtractDatabaseObjects", "unzip dbo.ZipFile", ex);
-                            //show the error message
-                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + dbo.ZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
-                            //exit the application
-                            Application.Exit();
+                            bg.DoWork += SuperExtract;
+                            bg.RunWorkerCompleted += Bg_RunWorkerCompleted;
+                            bg.RunWorkerAsync(ig.Categories);
                         }
                     }
-                    InstallWorker.ReportProgress(0);
+                    lock (lockerInstaller)
+                    {
+                        while (NumExtractorsCompleted != InstallGroups.Count)
+                        {
+                            System.Threading.Thread.Sleep(10);
+                        }
+                    }
                 }
+                else
+                {
+                    //extract mods and configs
+                    args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractMods;
+                    InstallWorker.ReportProgress(0);
+                    foreach (SelectableDatabasePackage dbo in ModsConfigsToInstall)
+                    {
+                        if (!dbo.ZipFile.Equals(""))
+                        {
+                            Logging.Manager("Extracting Mod/Config " + dbo.ZipFile);
+                            try
+                            {
+                                if (Settings.InstantExtraction)
+                                {
+                                    lock (lockerInstaller)
+                                    {
+                                        while (!dbo.ReadyForInstall)
+                                            System.Threading.Thread.Sleep(50);
+                                    }
+                                }
+                                Unzip(Path.Combine(downloadedFilesDir, dbo.ZipFile), dbo.ExtractPath);
+                                args.ParrentProcessed++;
+                            }
+                            catch (Exception ex)
+                            {
+                                //append the exception to the log
+                                Utils.ExceptionLog("ExtractDatabaseObjects", "unzip dbo.ZipFile", ex);
+                                //show the error message
+                                MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + dbo.ZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                                //exit the application
+                                Application.Exit();
+                            }
+                        }
+                        InstallWorker.ReportProgress(0);
+                    }
+                }
+                sw.Stop();
+                Logging.Manager("DEBUG: Recorded Install Time (msec): " + sw.ElapsedMilliseconds);
                 //extract dependencies
                 args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractAppendedDependencies;
                 InstallWorker.ReportProgress(0);
@@ -903,6 +936,56 @@ namespace RelhaxModpack
             catch (Exception ex)
             {
                 Utils.ExceptionLog("ExtractDatabaseObjects", ex);
+            }
+        }
+
+        private void Bg_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            lock(sender)
+            {
+                NumExtractorsCompleted++;
+            }
+        }
+
+        private void SuperExtract(object sender, DoWorkEventArgs e)
+        {
+            string downloadedFilesDir = Path.Combine(Application.StartupPath, "RelHaxDownloads");
+            List<Category> categoriesToExtract = (List<Category>)e.Argument;
+            foreach(Category c in categoriesToExtract)
+            {
+                foreach(Mod m in c.Mods)
+                {
+                    if(m.Enabled && m.Checked)
+                    {
+                        if(!m.ZipFile.Equals(""))
+                        {
+                            m.ExtractPath = m.ExtractPath.Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(m.ExtractPath);
+                            Unzip(Path.Combine(downloadedFilesDir, m.ZipFile), m.ExtractPath);
+                        }
+                        if(m.configs.Count > 0)
+                        {
+                            SuperExtractConfigs(m.configs,downloadedFilesDir);
+                        }
+                    }
+                }
+            }
+        }
+        private void SuperExtractConfigs(List<Config> configsToExtract, string downloadedFilesDir)
+        {
+            foreach (Config config in configsToExtract)
+            {
+                if (config.Enabled && config.Checked)
+                {
+                    if (!config.ZipFile.Equals(""))
+                    {
+                        config.ExtractPath = config.ExtractPath.Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(config.ExtractPath);
+                        Unzip(Path.Combine(downloadedFilesDir, config.ZipFile), config.ExtractPath);
+                    }
+                    if(config.configs.Count > 0)
+                    {
+                        SuperExtractConfigs(config.configs,downloadedFilesDir);
+                    }
+                }
             }
         }
 
@@ -1847,7 +1930,6 @@ namespace RelhaxModpack
 
         private static List<string> addFilesToAtlasList(string[] folders)
         {
-            // System.Collections.Hashtable fileList = new System.Collections.Hashtable();
             List<string> collectiveList = new List<string>();
             List<string> shortNameList = new List<string>();
             foreach (string r in folders)
@@ -2193,8 +2275,6 @@ namespace RelhaxModpack
         //main unzip worker method
         private void Unzip(string zipFile, string extractFolder)
         {
-            // string zipFileHeader = string.Format(@"/*  {0}  */\n", Path.GetFileNameWithoutExtension(zipFile));
-            // fs.Write(Encoding.UTF8.GetBytes(zipFileHeader), 0, Encoding.UTF8.GetByteCount(zipFileHeader));
             Logging.InstallerGroup(Path.GetFileNameWithoutExtension(zipFile));         // write a formated comment line
             //create a retry counter to verify that any exception caught was not a one-off error
             for(int j = 3; j > 0; j--)
@@ -2203,10 +2283,6 @@ namespace RelhaxModpack
                 {
                     using (ZipFile zip = new ZipFile(zipFile))
                     {
-                        //hacks to get it to lag less possibly
-                        //zip.BufferSize = 65536*16; //1MB buffer
-                        //zip.CodecBufferSize = 65536*16; //1MB buffer
-                        //zip.ParallelDeflateThreshold = -1; //single threaded
                         //for this zip file instance, for each entry in the zip file,
                         //change the "versiondir" path to this version of tanks
                         args.ChildTotalToProcess = zip.Entries.Count;
@@ -2224,10 +2300,9 @@ namespace RelhaxModpack
                                 patchName = patchName.Substring(7);
                                 originalPatchNames.Add(patchName);
                             }
-                            //finish entry name modifications
+                            //save entry name modifications
                             zip[i].FileName = zipEntryName;
                             //put the entries on disk
-                            // fs.Write(Encoding.UTF8.GetBytes(Path.Combine(extractFolder, zip[i].FileName) + "\n"), 0, Encoding.UTF8.GetByteCount(Path.Combine(extractFolder, zip[i].FileName) + "\n"));
                             Logging.Installer(Utils.ReplaceDirectorySeparatorChar(Path.Combine(extractFolder, zip[i].FileName)));           // write the the file entry / with the first call at the installation process, the logfile will be created including headline, ....
                         }
                         zip.ExtractProgress += Zip_ExtractProgress;
@@ -2259,7 +2334,7 @@ namespace RelhaxModpack
                     }
                     else
                     {
-                        Utils.AppendToInstallLog("WARNING: exception caught, retrying number " + j);
+                        Logging.Manager("WARNING: exception caught, retrying number " + j);
                     }
                 }
             }

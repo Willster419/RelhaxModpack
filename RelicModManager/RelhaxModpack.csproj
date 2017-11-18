@@ -139,6 +139,7 @@
     <Compile Include="DatabaseComponents\IDatabasePackage.cs" />
     <Compile Include="DatabaseComponents\LogicalDependency.cs" />
     <Compile Include="DatabaseComponents\Media.cs" />
+    <Compile Include="InstallerComponents\InstallGroup.cs" />
     <Compile Include="InstallerComponents\Shortcut.cs" />
     <Compile Include="InstallerComponents\Texture.cs" />
     <Compile Include="DatabaseComponents\Category.cs" />

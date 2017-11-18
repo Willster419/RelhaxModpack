@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Xml.XPath;
 using System.Xml.Linq;
 using RelhaxModpack.DatabaseComponents;
+using RelhaxModpack.InstallerComponents;
 
 namespace RelhaxModpack
 {
@@ -42,6 +43,7 @@ namespace RelhaxModpack
         private List<Dependency> appendedDependenciesToInstall;
         private List<SelectableDatabasePackage> ModsWithShortcuts;
         private List<Shortcut> Shortcuts;
+        private List<InstallGroup> InstallGroups;
         //list of all current dependencies
         private List<Dependency> currentDependencies;
         private List<LogicalDependency> currentLogicalDependencies;
@@ -263,7 +265,8 @@ namespace RelhaxModpack
                         UserMods = this.userMods,
                         AppDataFolder = this.appDataFolder,
                         DatabaseVersion = this.databaseVersionString,
-                        Shortcuts = this.Shortcuts
+                        Shortcuts = this.Shortcuts,
+                        InstallGroups = this.InstallGroups
                     };
                     ins.InstallProgressChanged += I_InstallProgressChanged;
                     ins.StartInstallation();
@@ -897,6 +900,30 @@ namespace RelhaxModpack
             ModsWithShortcuts = new List<SelectableDatabasePackage>();
             Shortcuts = new List<Shortcut>();
             DatabasePackagesToDownload = new List<IDatabasePackage>();
+            InstallGroups = new List<InstallGroup>();
+
+            //code for super extraction mode. seperates the categories into installer groups.
+            int installGroupCounter = 0;
+            if(Settings.SuperExtraction)
+            {
+                foreach(Category c in parsedCatagoryLists)
+                {
+                    if(c.InstallGroup == installGroupCounter)
+                    {
+                        if (InstallGroups.Count == installGroupCounter)
+                            InstallGroups.Add(new InstallGroup());
+                        InstallGroups[installGroupCounter].Categories.Add(c);
+                    }
+                    else
+                    {
+                        while (installGroupCounter != c.InstallGroup)
+                            installGroupCounter++;
+                        if (InstallGroups.Count == installGroupCounter)
+                            InstallGroups.Add(new InstallGroup());
+                        InstallGroups[installGroupCounter].Categories.Add(c);
+                    }
+                }
+            }
 
             try
             {
@@ -1728,6 +1755,16 @@ namespace RelhaxModpack
                 this.ShowInstallCompleteWindowCB.Checked = Settings.ShowInstallCompleteWindow;
                 this.createShortcutsCB.Checked = Settings.CreateShortcuts;
                 this.InstantExtractionCB.Checked = Settings.InstantExtraction;
+                this.SuperExtractionCB.Checked = Settings.SuperExtraction;
+                switch (Settings.UninstallMode)
+                {
+                    case (Settings.UninstallModes.Smart):
+                        SmartUninstallModeRB.Checked = true;
+                        break;
+                    case (Settings.UninstallModes.Clean):
+                        CleanUninstallModeRB.Checked = true;
+                        break;
+                }
                 switch (Settings.GIF)
                 {
                     case (Settings.LoadingGifs.Standard):
@@ -2086,6 +2123,24 @@ namespace RelhaxModpack
             if (installRelhaxMod.Enabled)
                 downloadProgress.Text = Translations.getTranslatedString("InstantExtractionCBExplanation");
         }
+
+        private void SuperExtractionCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("SuperExtractionCBExplanation");
+        }
+
+        private void SmartUninstallModeRB_MouseEnter(object sender, EventArgs e)
+        {
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("SmartUninstallModeRBExplanation");
+        }
+
+        private void CleanUninstallModeRB_MouseEnter(object sender, EventArgs e)
+        {
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("CleanUninstallModeRBExplanation");
+        }
         #endregion
 
         #region CheckChanged/SelectedIndexChanged events
@@ -2118,7 +2173,7 @@ namespace RelhaxModpack
         private void cancerFontCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.ComicSans = cancerFontCB.Checked;
-            Settings.ApplyScalingProperties();
+            Settings.ApplInternalProperties();
             this.Font = Settings.AppFont;
         }
         //handler for when the "force manuel" checkbox is checked
@@ -2207,7 +2262,7 @@ namespace RelhaxModpack
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
                     Settings.FontSizeforum = Settings.FontSize.DPI100;
-                    Settings.ApplyScalingProperties();
+                    Settings.ApplInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     float temp = 1.0f / scale;
                     this.Scale(new SizeF(temp, temp));
@@ -2217,7 +2272,7 @@ namespace RelhaxModpack
                 //change settings enum
                 Settings.FontSizeforum = Settings.FontSize.Font100;
                 //apply change of settings enum
-                Settings.ApplyScalingProperties();
+                Settings.ApplInternalProperties();
                 //get new scalingMode (or no change, get it anyway)
                 this.AutoScaleMode = Settings.AppScalingMode;
                 //get new font
@@ -2233,7 +2288,7 @@ namespace RelhaxModpack
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
                     Settings.FontSizeforum = Settings.FontSize.DPI100;
-                    Settings.ApplyScalingProperties();
+                    Settings.ApplInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     float temp = 1.0f / scale;
                     this.Scale(new SizeF(temp, temp));
@@ -2241,7 +2296,7 @@ namespace RelhaxModpack
                     this.Font = Settings.AppFont;
                 }
                 Settings.FontSizeforum = Settings.FontSize.Font125;
-                Settings.ApplyScalingProperties();
+                Settings.ApplInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 this.Font = Settings.AppFont;
                 ToggleScaleRBs(true);
@@ -2255,7 +2310,7 @@ namespace RelhaxModpack
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
                     Settings.FontSizeforum = Settings.FontSize.DPI100;
-                    Settings.ApplyScalingProperties();
+                    Settings.ApplInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     float temp = 1.0f / scale;
                     this.Scale(new SizeF(temp, temp));
@@ -2263,7 +2318,7 @@ namespace RelhaxModpack
                     this.Font = Settings.AppFont;
                 }
                 Settings.FontSizeforum = Settings.FontSize.Font175;
-                Settings.ApplyScalingProperties();
+                Settings.ApplInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 this.Font = Settings.AppFont;
                 ToggleScaleRBs(true);
@@ -2277,7 +2332,7 @@ namespace RelhaxModpack
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
                     Settings.FontSizeforum = Settings.FontSize.DPI100;
-                    Settings.ApplyScalingProperties();
+                    Settings.ApplInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     float temp = 1.0f / scale;
                     this.Scale(new SizeF(temp, temp));
@@ -2285,7 +2340,7 @@ namespace RelhaxModpack
                     this.Font = Settings.AppFont;
                 }
                 Settings.FontSizeforum = Settings.FontSize.Font225;
-                Settings.ApplyScalingProperties();
+                Settings.ApplInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 this.Font = Settings.AppFont;
                 ToggleScaleRBs(true);
@@ -2299,7 +2354,7 @@ namespace RelhaxModpack
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
                     Settings.FontSizeforum = Settings.FontSize.DPI100;
-                    Settings.ApplyScalingProperties();
+                    Settings.ApplInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     float temp = 1.0f / scale;
                     this.Scale(new SizeF(temp, temp));
@@ -2307,7 +2362,7 @@ namespace RelhaxModpack
                     this.Font = Settings.AppFont;
                 }
                 Settings.FontSizeforum = Settings.FontSize.Font275;
-                Settings.ApplyScalingProperties();
+                Settings.ApplInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 this.Font = Settings.AppFont;
                 ToggleScaleRBs(true);
@@ -2321,12 +2376,12 @@ namespace RelhaxModpack
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
                     Settings.FontSizeforum = Settings.FontSize.Font100;
-                    Settings.ApplyScalingProperties();
+                    Settings.ApplInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     this.Font = Settings.AppFont;
                 }
                 Settings.FontSizeforum = Settings.FontSize.DPI100;
-                Settings.ApplyScalingProperties();
+                Settings.ApplInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 float temp = Settings.Scale100 / scale;
                 this.Scale(new SizeF(temp, temp));
@@ -2343,12 +2398,12 @@ namespace RelhaxModpack
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
                     Settings.FontSizeforum = Settings.FontSize.Font100;
-                    Settings.ApplyScalingProperties();
+                    Settings.ApplInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     this.Font = Settings.AppFont;
                 }
                 Settings.FontSizeforum = Settings.FontSize.DPI125;
-                Settings.ApplyScalingProperties();
+                Settings.ApplInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 float temp = Settings.Scale125 / scale;
                 this.Scale(new SizeF(temp, temp));
@@ -2365,12 +2420,12 @@ namespace RelhaxModpack
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
                     Settings.FontSizeforum = Settings.FontSize.Font100;
-                    Settings.ApplyScalingProperties();
+                    Settings.ApplInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     this.Font = Settings.AppFont;
                 }
                 Settings.FontSizeforum = Settings.FontSize.DPI175;
-                Settings.ApplyScalingProperties();
+                Settings.ApplInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 float temp = Settings.Scale175 / scale;
                 this.Scale(new SizeF(temp, temp));
@@ -2387,12 +2442,12 @@ namespace RelhaxModpack
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
                     Settings.FontSizeforum = Settings.FontSize.Font100;
-                    Settings.ApplyScalingProperties();
+                    Settings.ApplInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     this.Font = Settings.AppFont;
                 }
                 Settings.FontSizeforum = Settings.FontSize.DPI225;
-                Settings.ApplyScalingProperties();
+                Settings.ApplInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 float temp = Settings.Scale225 / scale;
                 this.Scale(new SizeF(temp, temp));
@@ -2409,12 +2464,12 @@ namespace RelhaxModpack
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
                     Settings.FontSizeforum = Settings.FontSize.Font100;
-                    Settings.ApplyScalingProperties();
+                    Settings.ApplInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     this.Font = Settings.AppFont;
                 }
                 Settings.FontSizeforum = Settings.FontSize.DPI275;
-                Settings.ApplyScalingProperties();
+                Settings.ApplInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 float temp = Settings.Scale275 / scale;
                 this.Scale(new SizeF(temp, temp));
@@ -2431,12 +2486,12 @@ namespace RelhaxModpack
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
                     Settings.FontSizeforum = Settings.FontSize.Font100;
-                    Settings.ApplyScalingProperties();
+                    Settings.ApplInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     this.Font = Settings.AppFont;
                 }
                 Settings.FontSizeforum = Settings.FontSize.DPIAUTO;
-                Settings.ApplyScalingProperties();
+                Settings.ApplInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 float temp = Settings.ScaleSize / scale;
                 this.Scale(new SizeF(temp, temp));
@@ -2474,6 +2529,23 @@ namespace RelhaxModpack
         private void InstantExtractionCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.InstantExtraction = InstantExtractionCB.Checked;
+        }
+
+        private void SmartUninstallModeRB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (SmartUninstallModeRB.Checked)
+                Settings.UninstallMode = Settings.UninstallModes.Smart;
+        }
+
+        private void SuperExtractionCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.SuperExtraction = SuperExtractionCB.Checked;
+        }
+
+        private void CleanUninstallModeRB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CleanUninstallModeRB.Checked)
+                Settings.UninstallMode = Settings.UninstallModes.Clean;
         }
         #endregion
 
@@ -2530,8 +2602,6 @@ namespace RelhaxModpack
             }
             ToggleUIButtons(true);
         }
-
-
         #endregion
     }
 }
