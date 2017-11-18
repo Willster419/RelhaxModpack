@@ -1485,12 +1485,21 @@ namespace RelhaxModpack
                     parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                     if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                         parrentProgressBar.Value = e.ParrentProcessed;
-                    childProgressBar.Maximum = e.ChildTotalToProcess;
-                    if (e.ChildProcessed > 0)
-                        if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                            childProgressBar.Value = e.ChildProcessed;
-                    message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(),
+                    if (Settings.SuperExtraction)
+                    {
+                        childProgressBar.Value = childProgressBar.Minimum;
+                        message = string.Format("{0} {1} {2} {3}\n{4} {5}\n{6} MB", Translations.getTranslatedString("parallelExtraction"), e.ParrentProcessed, Translations.getTranslatedString("of"),
+                            e.ParrentTotalToProcess, Translations.getTranslatedString("file"), e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString());
+                    }
+                    else
+                    {
+                        childProgressBar.Maximum = e.ChildTotalToProcess;
+                        if (e.ChildProcessed > 0)
+                            if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                                childProgressBar.Value = e.ChildProcessed;
+                        message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(),
                         e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
+                    }
                     break;
                 case InstallerEventArgs.InstallProgress.RestoreUserData:
                     totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.RestoreUserData;
@@ -1860,6 +1869,9 @@ namespace RelhaxModpack
             ShowInstallCompleteWindowCB.Enabled = enableToggle;
             createShortcutsCB.Enabled = enableToggle;
             InstantExtractionCB.Enabled = enableToggle;
+            SuperExtractionCB.Enabled = enableToggle;
+            SmartUninstallModeRB.Enabled = enableToggle;
+            CleanUninstallModeRB.Enabled = enableToggle;
         }
 
         public void ToggleScaleRBs(bool enableToggle)

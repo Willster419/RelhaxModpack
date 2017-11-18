@@ -1463,6 +1463,13 @@ namespace RelhaxModpack
             polish.Add("extractingPackage", "Wypakowywanie paczki");
             french.Add("extractingPackage", "Extraction du package");
 
+            //Componet: parallelExtraction
+            //
+            english.Add("parallelExtraction", "Completed parallel extraction threads:");
+            german.Add("parallelExtraction", "TODO");
+            polish.Add("parallelExtraction", "TODO");
+            french.Add("parallelExtraction", "TODO");
+
             //Componet: extractingPackage
             //
             english.Add("file", "File");
