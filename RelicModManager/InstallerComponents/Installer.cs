@@ -728,7 +728,7 @@ namespace RelhaxModpack
                                 lock (lockerInstaller)
                                 {
                                     while (!d.ReadyForInstall)
-                                        System.Threading.Thread.Sleep(50);
+                                        System.Threading.Thread.Sleep(20);
                                 }
                             }
                             Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath);
@@ -761,7 +761,7 @@ namespace RelhaxModpack
                                 lock (lockerInstaller)
                                 {
                                     while (!d.ReadyForInstall)
-                                        System.Threading.Thread.Sleep(50);
+                                        System.Threading.Thread.Sleep(20);
                                 }
                             }
                             Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath);
@@ -794,7 +794,7 @@ namespace RelhaxModpack
                                 lock (lockerInstaller)
                                 {
                                     while (!d.ReadyForInstall)
-                                        System.Threading.Thread.Sleep(50);
+                                        System.Threading.Thread.Sleep(20);
                                 }
                             }
                             Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath);
@@ -821,6 +821,10 @@ namespace RelhaxModpack
                 {
                     //extract mods and configs parallel
                     args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractMods;
+                    args.ParrentTotalToProcess = InstallGroups.Count;
+                    args.ParrentProcessed = 0;
+                    args.currentFile = "";
+                    args.currentFileSizeProcessed = 0;
                     InstallWorker.ReportProgress(0);
                     foreach(InstallGroup ig in InstallGroups)
                     {
@@ -828,9 +832,12 @@ namespace RelhaxModpack
                         {
                             bg.DoWork += SuperExtract;
                             bg.RunWorkerCompleted += Bg_RunWorkerCompleted;
-                            bg.RunWorkerAsync(ig.Categories);
+                            StringBuilder sb = new StringBuilder();
+                            object[] args = new object[] { sb, ig.Categories };
+                            bg.RunWorkerAsync(args);
                         }
                     }
+                    //lock to make the installer wait for all threads to complete
                     lock (lockerInstaller)
                     {
                         while (NumExtractorsCompleted != InstallGroups.Count)
@@ -856,7 +863,7 @@ namespace RelhaxModpack
                                     lock (lockerInstaller)
                                     {
                                         while (!dbo.ReadyForInstall)
-                                            System.Threading.Thread.Sleep(50);
+                                            System.Threading.Thread.Sleep(20);
                                     }
                                 }
                                 Unzip(Path.Combine(downloadedFilesDir, dbo.ZipFile), dbo.ExtractPath);
@@ -892,7 +899,7 @@ namespace RelhaxModpack
                                 lock (lockerInstaller)
                                 {
                                     while (!d.ReadyForInstall)
-                                        System.Threading.Thread.Sleep(50);
+                                        System.Threading.Thread.Sleep(20);
                                 }
                             }
                             Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath);
@@ -962,33 +969,49 @@ namespace RelhaxModpack
             lock(sender)
             {
                 NumExtractorsCompleted++;
+                args.ParrentProcessed++;
+                InstallWorker.ReportProgress(0);
             }
         }
 
         private void SuperExtract(object sender, DoWorkEventArgs e)
         {
-            string downloadedFilesDir = Path.Combine(Application.StartupPath, "RelHaxDownloads");
-            List<Category> categoriesToExtract = (List<Category>)e.Argument;
+            string downloadedFilesDir = Settings.RelhaxDownloadsFolder;
+            object[] args = (object[])e.Argument;
+            StringBuilder sb = (StringBuilder)args[0];
+            List<Category> categoriesToExtract = (List<Category>)args[1];
             foreach(Category c in categoriesToExtract)
             {
+                sb.Append("/*  Category: " + c.Name + "  */\n");
                 foreach(Mod m in c.Mods)
                 {
                     if(m.Enabled && m.Checked)
                     {
                         if(!m.ZipFile.Equals(""))
                         {
+                            sb.Append("/*  " + m.ZipFile + "  */\n");
                             m.ExtractPath = m.ExtractPath.Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(m.ExtractPath);
-                            Unzip(Path.Combine(downloadedFilesDir, m.ZipFile), m.ExtractPath);
+                            if (Settings.InstantExtraction)
+                            {
+                                lock (sender)
+                                {
+                                    while (!m.ReadyForInstall)
+                                        System.Threading.Thread.Sleep(20);
+                                }
+                            }
+                            Unzip(Path.Combine(downloadedFilesDir, m.ZipFile), m.ExtractPath, sb);
                         }
                         if(m.configs.Count > 0)
                         {
-                            SuperExtractConfigs(m.configs,downloadedFilesDir);
+                            SuperExtractConfigs(m.configs,downloadedFilesDir, sender, sb);
                         }
                     }
                 }
+                Logging.Installer(sb.ToString().Substring(0, sb.ToString().Length - 1));
+                sb.Clear();
             }
         }
-        private void SuperExtractConfigs(List<Config> configsToExtract, string downloadedFilesDir)
+        private void SuperExtractConfigs(List<Config> configsToExtract, string downloadedFilesDir, object sender, StringBuilder sb)
         {
             foreach (Config config in configsToExtract)
             {
@@ -996,12 +1019,21 @@ namespace RelhaxModpack
                 {
                     if (!config.ZipFile.Equals(""))
                     {
+                        sb.Append("/*  " + config.ZipFile + "  */\n");
                         config.ExtractPath = config.ExtractPath.Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(config.ExtractPath);
-                        Unzip(Path.Combine(downloadedFilesDir, config.ZipFile), config.ExtractPath);
+                        if (Settings.InstantExtraction)
+                        {
+                            lock (sender)
+                            {
+                                while (!config.ReadyForInstall)
+                                    System.Threading.Thread.Sleep(20);
+                            }
+                        }
+                        Unzip(Path.Combine(downloadedFilesDir, config.ZipFile), config.ExtractPath, sb);
                     }
                     if(config.configs.Count > 0)
                     {
-                        SuperExtractConfigs(config.configs,downloadedFilesDir);
+                        SuperExtractConfigs(config.configs,downloadedFilesDir, sender, sb);
                     }
                 }
             }
@@ -2291,9 +2323,11 @@ namespace RelhaxModpack
         }
 
         //main unzip worker method
-        private void Unzip(string zipFile, string extractFolder)
+        private void Unzip(string zipFile, string extractFolder, StringBuilder sb = null)
         {
-            Logging.InstallerGroup(Path.GetFileNameWithoutExtension(zipFile));         // write a formated comment line
+            //write a formated comment line if in regular extraction mode
+            if(sb==null)
+                Logging.InstallerGroup(Path.GetFileNameWithoutExtension(zipFile));
             //create a retry counter to verify that any exception caught was not a one-off error
             for(int j = 3; j > 0; j--)
             {
@@ -2321,7 +2355,10 @@ namespace RelhaxModpack
                             //save entry name modifications
                             zip[i].FileName = zipEntryName;
                             //put the entries on disk
-                            Logging.Installer(Utils.ReplaceDirectorySeparatorChar(Path.Combine(extractFolder, zip[i].FileName)));           // write the the file entry / with the first call at the installation process, the logfile will be created including headline, ....
+                            if (sb == null)// write the the file entry / with the first call at the installation process, the logfile will be created including headline, ....
+                                Logging.Installer(Utils.ReplaceDirectorySeparatorChar(Path.Combine(extractFolder, zip[i].FileName)));
+                            else
+                                sb.Append(Utils.ReplaceDirectorySeparatorChar(Path.Combine(extractFolder, zip[i].FileName)) + "\n");
                         }
                         zip.ExtractProgress += Zip_ExtractProgress;
                         zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
