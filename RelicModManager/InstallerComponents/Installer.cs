@@ -1021,6 +1021,8 @@ namespace RelhaxModpack
                                 }
                             }
                             Logging.Manager("DEBUG: Extraction started  of file " + m.ZipFile + ", superPatchNum=" + superPatchNum);
+                            //https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/ref
+                            //because multi-threading and recursion wern't hard enough...
                             Unzip(Path.Combine(downloadedFilesDir, m.ZipFile), m.ExtractPath, sb, m.ParentCategory.InstallGroup, ref superPatchNum);
                             Logging.Manager("DEBUG: Extraction finished of file " + m.ZipFile + ", superPatchNum=" + superPatchNum);
                         }
