@@ -44,7 +44,7 @@ namespace RelhaxModpack
         public static string FontName { get; set; }
         public static float ScaleSize { get; set; }
         //file locations
-        public static string SettingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxxml");
+        public static string SettingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxSettings.xml");
         public static string RelhaxTempFolder = Path.Combine(Application.StartupPath, "RelHaxTemp");
         public static string RelhaxDownloadsFolder = Path.Combine(Application.StartupPath, "RelHaxDownloads");
         public static string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
