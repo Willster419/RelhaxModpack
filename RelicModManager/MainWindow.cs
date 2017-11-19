@@ -266,7 +266,8 @@ namespace RelhaxModpack
                         AppDataFolder = this.appDataFolder,
                         DatabaseVersion = this.databaseVersionString,
                         Shortcuts = this.Shortcuts,
-                        InstallGroups = this.InstallGroups
+                        InstallGroups = this.InstallGroups,
+                        TotalCategories = this.parsedCatagoryLists.Count
                     };
                     ins.InstallProgressChanged += I_InstallProgressChanged;
                     ins.StartInstallation();
@@ -1485,7 +1486,7 @@ namespace RelhaxModpack
                     parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                     if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                         parrentProgressBar.Value = e.ParrentProcessed;
-                    if (Settings.SuperExtraction)
+                    if (Settings.SuperExtraction && e.InstalProgress == InstallerEventArgs.InstallProgress.ExtractMods)
                     {
                         childProgressBar.Value = childProgressBar.Minimum;
                         message = string.Format("{0} {1} {2} {3}\n{4} {5}\n{6} MB", Translations.getTranslatedString("parallelExtraction"), e.ParrentProcessed, Translations.getTranslatedString("of"),

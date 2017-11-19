@@ -15,6 +15,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Xml.XPath;
 using RelhaxModpack.InstallerComponents;
+using System.Collections;
 
 namespace RelhaxModpack
 {
@@ -45,6 +46,7 @@ namespace RelhaxModpack
         private List<Atlases> atlasesList { get; set; }
         public string TanksVersion { get; set; }
         public List<InstallGroup> InstallGroups { get; set; }
+        public int TotalCategories = 0;
         //the folder of the current user appdata
         public string AppDataFolder { get; set; }
         public string DatabaseVersion { get; set; }
@@ -54,7 +56,9 @@ namespace RelhaxModpack
         private string xvmConfigDir = "";
         private int patchNum = 0;
         private int NumExtractorsCompleted = 0;
-        private List<string> originalPatchNames;
+        //private List<string> originalPatchNames;
+        //https://stackoverflow.com/questions/9280054/c-sharp-hashtable-sorted-by-keys
+        private SortedDictionary<string, string> originalSortedPatchNames;
         // private FileStream fs;
         private string InstalledFilesLogPath = "";
         private object lockerInstaller = new object();
@@ -80,7 +84,8 @@ namespace RelhaxModpack
             InstallWorker.RunWorkerCompleted += WorkerReportComplete;
             args = new InstallerEventArgs();
             ResetArgs();
-            originalPatchNames = new List<string>();            
+            //originalPatchNames = new List<string>();
+            originalSortedPatchNames = new SortedDictionary<string, string>();
         }
 
         //Start installation on the UI thread
@@ -716,6 +721,7 @@ namespace RelhaxModpack
 
                 InstallWorker.ReportProgress(0);
                 //extract global dependencies
+                int patchCounter = 0;
                 foreach (Dependency d in GlobalDependencies)
                 {
                     if (!d.ZipFile.Equals(""))
@@ -731,7 +737,8 @@ namespace RelhaxModpack
                                         System.Threading.Thread.Sleep(20);
                                 }
                             }
-                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath);
+                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath,null,-3,ref patchCounter);
+                            patchCounter++;
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -749,6 +756,7 @@ namespace RelhaxModpack
                 //extract dependencies
                 args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractDependencies;
                 InstallWorker.ReportProgress(0);
+                patchCounter = 0;
                 foreach (Dependency d in Dependencies)
                 {
                     if (!d.ZipFile.Equals(""))
@@ -764,7 +772,8 @@ namespace RelhaxModpack
                                         System.Threading.Thread.Sleep(20);
                                 }
                             }
-                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath);
+                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath,null,-2,ref patchCounter);
+                            patchCounter++;
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -782,6 +791,7 @@ namespace RelhaxModpack
                 //extract logical dependencies
                 args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractLogicalDependencies;
                 InstallWorker.ReportProgress(0);
+                patchCounter = 0;
                 foreach (LogicalDependency d in LogicalDependencies)
                 {
                     if (!d.ZipFile.Equals(""))
@@ -797,7 +807,8 @@ namespace RelhaxModpack
                                         System.Threading.Thread.Sleep(20);
                                 }
                             }
-                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath);
+                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath, null,-1,ref patchCounter);
+                            patchCounter++;
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -826,6 +837,7 @@ namespace RelhaxModpack
                     args.currentFile = "";
                     args.currentFileSizeProcessed = 0;
                     InstallWorker.ReportProgress(0);
+                    int igCounter = 0;
                     foreach(InstallGroup ig in InstallGroups)
                     {
                         using (BackgroundWorker bg = new BackgroundWorker())
@@ -835,6 +847,7 @@ namespace RelhaxModpack
                             StringBuilder sb = new StringBuilder();
                             object[] args = new object[] { sb, ig.Categories };
                             bg.RunWorkerAsync(args);
+                            Logging.Manager("DEBUG: BackgroundWorker started for Installgroup. Number=" + igCounter++);
                         }
                     }
                     //lock to make the installer wait for all threads to complete
@@ -866,7 +879,8 @@ namespace RelhaxModpack
                                             System.Threading.Thread.Sleep(20);
                                     }
                                 }
-                                Unzip(Path.Combine(downloadedFilesDir, dbo.ZipFile), dbo.ExtractPath);
+                                int wtf = 0;
+                                Unzip(Path.Combine(downloadedFilesDir, dbo.ZipFile), dbo.ExtractPath,null,0, ref wtf);
                                 args.ParrentProcessed++;
                             }
                             catch (Exception ex)
@@ -887,6 +901,7 @@ namespace RelhaxModpack
                 //extract dependencies
                 args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractAppendedDependencies;
                 InstallWorker.ReportProgress(0);
+                patchCounter = 0;
                 foreach (Dependency d in AppendedDependencies)
                 {
                     if (!d.ZipFile.Equals(""))
@@ -902,7 +917,8 @@ namespace RelhaxModpack
                                         System.Threading.Thread.Sleep(20);
                                 }
                             }
-                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath);
+                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), d.ExtractPath,null,TotalCategories,ref patchCounter);
+                            patchCounter++;
                             args.ParrentProcessed++;
                         }
                         catch (Exception ex)
@@ -982,7 +998,12 @@ namespace RelhaxModpack
             List<Category> categoriesToExtract = (List<Category>)args[1];
             foreach(Category c in categoriesToExtract)
             {
+                //create the category entry so that we know which category it is
                 sb.Append("/*  Category: " + c.Name + "  */\n");
+                //reset the patch numbering as well for each cagetory for super mode
+                //single mode: all one name
+                //parallel mode: catagory_patchNum-of-category
+                int superPatchNum = 0;
                 foreach(Mod m in c.Mods)
                 {
                     if(m.Enabled && m.Checked)
@@ -999,11 +1020,13 @@ namespace RelhaxModpack
                                         System.Threading.Thread.Sleep(20);
                                 }
                             }
-                            Unzip(Path.Combine(downloadedFilesDir, m.ZipFile), m.ExtractPath, sb, m.ParentCategory.InstallGroup);
+                            Logging.Manager("DEBUG: Extraction started  of file " + m.ZipFile + ", superPatchNum=" + superPatchNum);
+                            Unzip(Path.Combine(downloadedFilesDir, m.ZipFile), m.ExtractPath, sb, m.ParentCategory.InstallGroup, ref superPatchNum);
+                            Logging.Manager("DEBUG: Extraction finished of file " + m.ZipFile + ", superPatchNum=" + superPatchNum);
                         }
                         if(m.configs.Count > 0)
                         {
-                            SuperExtractConfigs(m.configs,downloadedFilesDir, sender, sb);
+                            SuperExtractConfigs(m.configs,downloadedFilesDir, sender, sb, ref superPatchNum);
                         }
                     }
                 }
@@ -1011,7 +1034,7 @@ namespace RelhaxModpack
                 sb.Clear();
             }
         }
-        private void SuperExtractConfigs(List<Config> configsToExtract, string downloadedFilesDir, object sender, StringBuilder sb)
+        private void SuperExtractConfigs(List<Config> configsToExtract, string downloadedFilesDir, object sender, StringBuilder sb, ref int superPatchNum)
         {
             foreach (Config config in configsToExtract)
             {
@@ -1029,11 +1052,13 @@ namespace RelhaxModpack
                                     System.Threading.Thread.Sleep(20);
                             }
                         }
-                        Unzip(Path.Combine(downloadedFilesDir, config.ZipFile), config.ExtractPath, sb, config.ParentMod.ParentCategory.InstallGroup);
+                        Logging.Manager("DEBUG: Extraction started  of file " + config.ZipFile + ", superPatchNum=" + superPatchNum);
+                        Unzip(Path.Combine(downloadedFilesDir, config.ZipFile), config.ExtractPath, sb, config.ParentMod.ParentCategory.InstallGroup, ref superPatchNum);
+                        Logging.Manager("DEBUG: Extraction finished of file " + config.ZipFile + ", superPatchNum=" + superPatchNum);
                     }
                     if(config.configs.Count > 0)
                     {
-                        SuperExtractConfigs(config.configs,downloadedFilesDir, sender, sb);
+                        SuperExtractConfigs(config.configs,downloadedFilesDir, sender, sb, ref superPatchNum);
                     }
                 }
             }
@@ -1628,6 +1653,7 @@ namespace RelhaxModpack
         //Step 15: Extract User Mods
         public void ExtractUserMods()
         {
+            int tempPatchNum = 0;
             try
             {
                 //set xvm dir location again in case it's just a user mod install
@@ -1641,7 +1667,8 @@ namespace RelhaxModpack
                     if (m.Enabled && m.Checked)
                     {
                         Logging.Manager("Exracting " + Path.GetFileName(m.ZipFile));
-                        this.Unzip(Path.Combine(downloadedFilesDir, Path.GetFileName(m.ZipFile)), TanksLocation);
+                        this.Unzip(Path.Combine(downloadedFilesDir, Path.GetFileName(m.ZipFile)), TanksLocation,null,99,ref tempPatchNum);
+                        tempPatchNum++;
                         InstallWorker.ReportProgress(0);
                     }
                 }
@@ -1926,14 +1953,16 @@ namespace RelhaxModpack
                 //loaded the xml file into memory, create an xml list of patchs
                 XmlNodeList patchesList = doc.SelectNodes("//patchs/patch");
                 // modify the xml filename for logging purpose
-                string tmpXmlFilename = Path.GetFileNameWithoutExtension(xmlFile);
+                string nativeProcessingFile = Path.GetFileNameWithoutExtension(xmlFile);
+                string actualPatchName = originalSortedPatchNames[nativeProcessingFile];
                 //foreach "patch" node in the "patchs" node of the xml file
                 foreach (XmlNode n in patchesList)
                 {
                     //create a patch instance to take the patch information
                     Patch p = new Patch();
-                    p.actualPatchName = originalPatchNames[0];
-                    p.nativeProcessingFile = tmpXmlFilename;
+                    //p.actualPatchName = originalPatchNames[0];
+                    p.actualPatchName = actualPatchName;
+                    p.nativeProcessingFile = nativeProcessingFile;
                     //foreach node in this specific "patch" node
                     foreach (XmlNode nn in n.ChildNodes)
                     {
@@ -1967,10 +1996,9 @@ namespace RelhaxModpack
                         }
                     }
                     // filename only record once needed
-                    tmpXmlFilename = "";
                     patchList.Add(p);
                 }
-                originalPatchNames.RemoveAt(0);
+                //originalPatchNames.RemoveAt(0);
             }
             catch (Exception ex)
             {
@@ -2323,7 +2351,7 @@ namespace RelhaxModpack
         }
 
         //main unzip worker method
-        private void Unzip(string zipFile, string extractFolder, StringBuilder sb = null, int categoryGroup = -1)
+        private void Unzip(string zipFile, string extractFolder, StringBuilder sb, int categoryGroup, ref int superPatchNum)
         {
             //write a formated comment line if in regular extraction mode
             if(sb==null)
@@ -2347,14 +2375,31 @@ namespace RelhaxModpack
                             if (Regex.IsMatch(zipEntryName, @"_patch.*\.xml"))
                             {
                                 string patchName = zipEntryName;
-                                if(!Settings.SuperExtraction)//regular patch name
+                                string newPatchname = "";
+                                if(Settings.SuperExtraction)
+                                {
+                                    //super extraction mode
+                                    //install part that is parallel
+                                    //use category number
+                                    //note that if from global dependency, dependency, etc. it will be different
+                                    //use a +2 offset because global dependency and dependency before it
+                                    newPatchname = (categoryGroup + 3).ToString("D2") + "_" + superPatchNum++.ToString("D3");
+                                    zipEntryName = Regex.Replace(zipEntryName, @"_patch.*\.xml", "_patch/" + newPatchname + ".xml");
+                                }
+                                else
+                                {
+                                    //regular
                                     //Int.ToString("D3") means to string of 3 decimal places, leading
-                                    zipEntryName = Regex.Replace(zipEntryName, @"_patch.*\.xml", "_patch/" + patchNum.ToString("D3") + ".xml");
-                                else//super mode, patch name must include installer group
-                                    zipEntryName = Regex.Replace(zipEntryName, @"_patch.*\.xml", "_patch/" + (categoryGroup+1).ToString("D2") + "_" + patchNum.ToString("D3") + ".xml");
-                                patchNum++;
+                                    newPatchname = patchNum++.ToString("D3");
+                                    zipEntryName = Regex.Replace(zipEntryName, @"_patch.*\.xml", "_patch/" + newPatchname + ".xml");
+                                }
                                 patchName = patchName.Substring(7);
-                                originalPatchNames.Add(patchName);
+                                //hash. key index is the new name
+                                //originalPatchNames.Add(patchName);
+                                lock(zip)
+                                {
+                                    originalSortedPatchNames.Add(newPatchname, patchName);
+                                }
                             }
                             //save entry name modifications
                             zip[i].FileName = zipEntryName;
@@ -2393,7 +2438,7 @@ namespace RelhaxModpack
                     }
                     else
                     {
-                        Logging.Manager("WARNING: exception caught, retrying number " + j);
+                        Logging.Manager("WARNING: " + e.GetType().Name + " caught, retrying number " + j + ". File=" + Path.GetFileName(zipFile)+ "\nmessage=" + e.Message);
                     }
                 }
             }
@@ -2436,7 +2481,8 @@ namespace RelhaxModpack
                     UserMods = null;
                     patchList = null;
                     args = null;
-                    originalPatchNames = null;
+                    //originalPatchNames = null;
+                    originalSortedPatchNames = null;
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
