@@ -126,6 +126,12 @@ namespace RelhaxModpack
         //Start the installation on the Wokrer thread
         public void ActuallyStartInstallation(object sender, DoWorkEventArgs e)
         {
+            Stopwatch installTimer = new Stopwatch();
+            installTimer.Start();
+            Logging.Manager("---Starting an installation---");
+            long beforeExtraction = 0;
+            long duringExtraction = 0;
+            long afterExtraction = 0;
             ResetArgs();
             InstalledFilesLogPath = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
             //Step 1: do a backup if requested
@@ -196,11 +202,15 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
+            beforeExtraction = installTimer.ElapsedMilliseconds;
+            Logging.Manager("Recorded Install time before extraction (msec): " + beforeExtraction);
             //Step 5-10: Extracts Mods
             Logging.Manager("Installation ExtractDatabaseObjects");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractGlobalDependencies;
             ExtractDatabaseObjects();
             ResetArgs();
+            duringExtraction = installTimer.ElapsedMilliseconds - beforeExtraction;
+            Logging.Manager("Recorded Install time during extraction (msec): " + duringExtraction);
             //Step 11: Restore User Data
             Logging.Manager("Installation RestoreUserData");
             args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreUserData;
@@ -305,6 +315,8 @@ namespace RelhaxModpack
             }
             InstallWorker.ReportProgress(0);
             Logging.InstallerFinished();                                      // installation is finished. logfile will be flushed and filestream will be disposed
+            afterExtraction = installTimer.ElapsedMilliseconds - duringExtraction - beforeExtraction;
+            Logging.Manager("Recorded time after extraction (msec): " + afterExtraction);
         }
 
         public void WorkerReportProgress(object sender, ProgressChangedEventArgs e)
@@ -897,7 +909,7 @@ namespace RelhaxModpack
                     }
                 }
                 sw.Stop();
-                Logging.Manager("DEBUG: Recorded Install Time (msec): " + sw.ElapsedMilliseconds);
+                Logging.Manager("DEBUG: Recorded Install Time for MOD/CONFIG extraction (msec): " + sw.ElapsedMilliseconds);
                 //extract dependencies
                 args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractAppendedDependencies;
                 InstallWorker.ReportProgress(0);
@@ -1295,12 +1307,16 @@ namespace RelhaxModpack
                 args.ParrentTotalToProcess = patchList.Count;
                 args.ParrentProcessed = 0;
                 //the actual patch method
+                string oldNativeProcessingFile = "";
                 foreach (Patch p in patchList)
                 {
                     args.currentFile = p.file;
                     InstallWorker.ReportProgress(0);
-                    //if nativeProcessingFile is not empty, it is the first entry of a new nativ xml processing file. Add a comment at the loglist, to be able to traceback the native Processing File
-                    if (p.nativeProcessingFile != "") { Logging.Manager(string.Format("nativeProcessingFile: {0}, originalName: {1}", p.nativeProcessingFile, p.actualPatchName)); }
+                    if (!oldNativeProcessingFile.Equals(p.nativeProcessingFile))
+                    {
+                        Logging.Manager(string.Format("nativeProcessingFile: {0}, originalName: {1}", p.nativeProcessingFile, p.actualPatchName));
+                        oldNativeProcessingFile = p.nativeProcessingFile;
+                    }
                     string patchFileOutput = p.file;
                     int maxLength = 200;
                     if (p.file.Length > maxLength)
