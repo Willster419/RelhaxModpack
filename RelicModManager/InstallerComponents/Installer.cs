@@ -317,6 +317,8 @@ namespace RelhaxModpack
             Logging.InstallerFinished();                                      // installation is finished. logfile will be flushed and filestream will be disposed
             afterExtraction = installTimer.ElapsedMilliseconds - duringExtraction - beforeExtraction;
             Logging.Manager("Recorded time after extraction (msec): " + afterExtraction);
+            long totalExtraction = beforeExtraction + duringExtraction + afterExtraction;
+            Logging.Manager("Total recorded install time (msec): " + totalExtraction);
         }
 
         public void WorkerReportProgress(object sender, ProgressChangedEventArgs e)
