@@ -615,7 +615,7 @@ namespace RelhaxModpack
         private void MainWindow_Load(object sender, EventArgs e)
         {
             //set window header text to current version so user knows
-            this.Text = this.Text + ManagerVersion();
+            //this.Text = this.Text +  " " + ManagerVersion();
             ApplicationVersionLabel.Text = "Application v" + ManagerVersion();
             if (Program.testMode) this.Text = this.Text + " TEST MODE";
             if (Program.betaDatabase) this.Text = this.Text + " (BETA DB)";
