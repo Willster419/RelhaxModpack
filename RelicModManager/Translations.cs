@@ -353,7 +353,7 @@ namespace RelhaxModpack
 
             //Componet: CleanUninstallModeRB
             //
-            english.Add("CleanUninstallModeRB", "Clean");
+            english.Add("CleanUninstallModeRB", "Quick");
             german.Add("CleanUninstallModeRB", "TODO");
             polish.Add("CleanUninstallModeRB", "TODO");
             french.Add("CleanUninstallModeRB", "TODO");
@@ -1051,7 +1051,7 @@ namespace RelhaxModpack
 
             //Component: SuperExtractionCBExplanation
             //
-            english.Add("SuperExtractionCBExplanation", "When enabled, the installer will use a parallel extraction method. It will extract multiple zip files at the same time, reducing install time. For SSD drives ONLY");
+            english.Add("SuperExtractionCBExplanation", "When enabled, the installer will use a parallel extraction method. It will extract multiple zip files at the same time, reducing install time. For SSD drives ONLY.");
             german.Add("SuperExtractionCBExplanation", "TODO");
             polish.Add("SuperExtractionCBExplanation", "TODO");
             french.Add("SuperExtractionCBExplanation", "TODO");
@@ -1065,7 +1065,7 @@ namespace RelhaxModpack
 
             //Component: CleanUninstallModeRBExplanation
             //
-            english.Add("CleanUninstallModeRBExplanation", "Clean Uninstall will remove all mod files in your installation. It is faster. Use this if your mods are only installed by the relhax modpack.");
+            english.Add("CleanUninstallModeRBExplanation", "Quick Uninstall will remove all mod files in your installation. Use this if your mods are only installed by the relhax modpack.");
             german.Add("CleanUninstallModeRBExplanation", "TODO");
             polish.Add("CleanUninstallModeRBExplanation", "TODO");
             french.Add("CleanUninstallModeRBExplanation", "TODO");
