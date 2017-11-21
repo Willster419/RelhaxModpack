@@ -868,7 +868,7 @@ namespace RelhaxModpack
                             StringBuilder sb = new StringBuilder();
                             object[] args = new object[] { sb, ig.Categories };
                             bg.RunWorkerAsync(args);
-                            Logging.Manager("DEBUG: BackgroundWorker started for Installgroup. Number=" + igCounter++);
+                            Logging.Manager("BackgroundWorker started for Installgroup. Number=" + igCounter++);
                         }
                     }
                     //lock to make the installer wait for all threads to complete
@@ -918,7 +918,7 @@ namespace RelhaxModpack
                     }
                 }
                 sw.Stop();
-                Logging.Manager("DEBUG: Recorded Install Time for MOD/CONFIG extraction (msec): " + sw.ElapsedMilliseconds);
+                Logging.Manager("Recorded Install Time for MOD/CONFIG extraction (msec): " + sw.ElapsedMilliseconds);
                 //extract dependencies
                 args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractAppendedDependencies;
                 InstallWorker.ReportProgress(0);
@@ -1041,11 +1041,11 @@ namespace RelhaxModpack
                                         System.Threading.Thread.Sleep(20);
                                 }
                             }
-                            Logging.Manager("DEBUG: Extraction started  of file " + m.ZipFile + ", superPatchNum=" + superPatchNum);
+                            Logging.Manager("Extraction started  of file " + m.ZipFile + ", superPatchNum=" + superPatchNum);
                             //https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/ref
                             //because multi-threading and recursion wern't hard enough...
                             Unzip(Path.Combine(downloadedFilesDir, m.ZipFile), m.ExtractPath, sb, m.ParentCategory.InstallGroup, ref superPatchNum);
-                            Logging.Manager("DEBUG: Extraction finished of file " + m.ZipFile + ", superPatchNum=" + superPatchNum);
+                            Logging.Manager("Extraction finished of file " + m.ZipFile + ", superPatchNum=" + superPatchNum);
                         }
                         if(m.configs.Count > 0)
                         {
@@ -1075,9 +1075,9 @@ namespace RelhaxModpack
                                     System.Threading.Thread.Sleep(20);
                             }
                         }
-                        Logging.Manager("DEBUG: Extraction started  of file " + config.ZipFile + ", superPatchNum=" + superPatchNum);
+                        Logging.Manager("Extraction started  of file " + config.ZipFile + ", superPatchNum=" + superPatchNum);
                         Unzip(Path.Combine(downloadedFilesDir, config.ZipFile), config.ExtractPath, sb, config.ParentMod.ParentCategory.InstallGroup, ref superPatchNum);
-                        Logging.Manager("DEBUG: Extraction finished of file " + config.ZipFile + ", superPatchNum=" + superPatchNum);
+                        Logging.Manager("Extraction finished of file " + config.ZipFile + ", superPatchNum=" + superPatchNum);
                     }
                     if(config.configs.Count > 0)
                     {

@@ -1573,7 +1573,8 @@ namespace RelhaxModpack
                     childProgressBar.Maximum = e.ChildTotalToProcess;
                     if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
                         childProgressBar.Value = e.ChildProcessed;
-                    message = string.Format("{0} {1} {2} {3}\n {4} {5} {6} {7}", "Creating atlas files", e.ParrentProcessed, "of", e.ParrentTotalToProcess, e.ChildProcessed, "of", e.ChildTotalToProcess, "steps complete");
+                    message = string.Format("{0} {1} {2} {3}\n {4} {5} {6} {7}", Translations.getTranslatedString("AtlasCreating"), e.ParrentProcessed, Translations.getTranslatedString("of"), e.ParrentTotalToProcess, e.ChildProcessed,
+                        Translations.getTranslatedString("of"), e.ChildTotalToProcess, Translations.getTranslatedString("stepsComplete"));//AtlasCreating, stepsComplete
                     /*
                     if (e.ChildTotalToProcess == -1)
                     {
