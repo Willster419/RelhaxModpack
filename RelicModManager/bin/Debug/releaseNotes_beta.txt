@@ -1,3 +1,14 @@
+Version 27.2.5
+https://www.virustotal.com/#/file/89a2cafc7faca1cfa0445ca87549f42111ecfeefaf1e2aab426bdf789e9e8d48/detection
+-Added parallel extraction for mods/configs of cateogries. Application now uses up to 13 threads. Hard drive users should not use. SSD users will see about a %200-%350 speed boost
+-Optimized atlas fils building and extraction. Also moved it to parallel multithreading. SSD users will see about a %120 speed boost. Hard drive users will see about a %400 speed boost
+-Added progress to XML unpacking process.
+-Moved several if-else statemetns to switch-case statements (faster)
+-Added logging of the install process. If you are interested, you can now look at the log file to see the precise (down to milliseconds) time it takes to install mods.
+-General optimizations
+-Updated translations
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 27.0.1:
 https://www.virustotal.com/#/file/78920f00186ba031baddc31b7cf0468e194ecfbc1cdfc43e8891dae1aafff4c6/detection
 -Fixed bugs with xml unpacker
