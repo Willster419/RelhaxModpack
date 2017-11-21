@@ -1565,9 +1565,16 @@ namespace RelhaxModpack
                     break;
                 case InstallerEventArgs.InstallProgress.CreateAtlases:
                     totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.CreateAtlases;
+                    parrentProgressBar.Minimum = 0;
                     parrentProgressBar.Maximum = e.ParrentTotalToProcess;
                     if ((parrentProgressBar.Minimum <= e.ParrentProcessed) && (e.ParrentProcessed <= parrentProgressBar.Maximum))
                         parrentProgressBar.Value = e.ParrentProcessed;
+                    childProgressBar.Minimum = 0;
+                    childProgressBar.Maximum = e.ChildTotalToProcess;
+                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                        childProgressBar.Value = e.ChildProcessed;
+                    message = string.Format("{0} {1} {2} {3}\n {4} {5} {6} {7}", "Creating atlas files", e.ParrentProcessed, "of", e.ParrentTotalToProcess, e.ChildProcessed, "of", e.ChildTotalToProcess, "steps complete");
+                    /*
                     if (e.ChildTotalToProcess == -1)
                     {
                         childProgressBar.Value = childProgressBar.Minimum;
@@ -1580,6 +1587,7 @@ namespace RelhaxModpack
                             childProgressBar.Value = e.ChildProcessed;
                         message = string.Format("{0}: {1}\n{2}: {3}\n{4} {5} {6}", Translations.getTranslatedString("AtlasCreating"), e.currentFile, Translations.getTranslatedString("AtlasTexture"), e.currentSubFile, e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
                     }
+                    */
                     break;
                 case InstallerEventArgs.InstallProgress.InstallUserFonts:
                     totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.InstallFonts;
@@ -1634,6 +1642,12 @@ namespace RelhaxModpack
                     modsConfigsToInstall = null;
                     DatabasePackagesToDownload = null;
                     parsedCatagoryLists = null;
+                    ModsWithShortcuts = null;
+                    Shortcuts = null;
+                    InstallGroups = null;
+                    currentDependencies = null;
+                    currentLogicalDependencies = null;
+                    usedFilesList = null;
                     patchList = null;
                     userMods = null;
                     modsConfigsWithData = null;

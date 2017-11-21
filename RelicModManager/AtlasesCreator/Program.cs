@@ -55,8 +55,9 @@ namespace RelhaxModpack.AtlasesCreator
 
         public static void Run(AtlasesArgs args)
         {
-            stopWatch.Reset();
-            stopWatch.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Reset();
+            sw.Start();
             int result = 0;
             try
             {
@@ -66,12 +67,12 @@ namespace RelhaxModpack.AtlasesCreator
             {
                 Utils.ExceptionLog("AtlasesCreator.Run", "Launch", ex);
             }
-            stopWatch.Stop();
+            sw.Stop();
             
             if (result != 0)
                 ShowBuildError("Error packing images: " + SpaceErrorCode((FailCode)result));
             else
-                Logging.Manager("Build completed in " + stopWatch.Elapsed.TotalSeconds.ToString("N3", System.Globalization.CultureInfo.InvariantCulture) + " seconds.");
+                Logging.Manager("Build for " + Path.GetFileName(args.ImageFile) + " completed in " + sw.Elapsed.TotalSeconds.ToString("N3", System.Globalization.CultureInfo.InvariantCulture) + " seconds.");
             return;
         }
 
@@ -83,10 +84,10 @@ namespace RelhaxModpack.AtlasesCreator
             }
             else
             {
-                Installer.args.currentFile = Path.GetFileNameWithoutExtension(args.ImageFile);
-                Installer.args.ChildTotalToProcess = args.GenerateMap ? 4 : 3;
-                Installer.args.ChildProcessed = 0;
-                Installer.InstallWorker.ReportProgress(0);
+                //Installer.args.currentFile = Path.GetFileNameWithoutExtension(args.ImageFile);
+                //Installer.args.ChildTotalToProcess = args.GenerateMap ? 4 : 3;
+                //Installer.args.ChildProcessed = 0;
+                //Installer.InstallWorker.ReportProgress(0);
                 // make sure we have our list of exporters
                 Exporters.Load();
 

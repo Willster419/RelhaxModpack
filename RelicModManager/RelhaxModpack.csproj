@@ -139,6 +139,7 @@
     <Compile Include="DatabaseComponents\IDatabasePackage.cs" />
     <Compile Include="DatabaseComponents\LogicalDependency.cs" />
     <Compile Include="DatabaseComponents\Media.cs" />
+    <Compile Include="InstallerComponents\Atlas.cs" />
     <Compile Include="InstallerComponents\InstallGroup.cs" />
     <Compile Include="InstallerComponents\Shortcut.cs" />
     <Compile Include="InstallerComponents\Texture.cs" />
@@ -151,7 +152,6 @@
       <DependentUpon>Diagnostics.cs</DependentUpon>
     </Compile>
     <Compile Include="InstallerComponents\AsyncDownloadArgs.cs" />
-    <Compile Include="InstallerComponents\Atlases.cs" />
     <Compile Include="InstallerComponents\XmlUnpack.cs" />
     <Compile Include="RelhaxForum.cs">
       <SubType>Form</SubType>

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RelhaxModpack
 {
-    public class Atlases
+    public class Atlas
     {
         //a single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
         public string nativeProcessingFile { get; set; } = "";
