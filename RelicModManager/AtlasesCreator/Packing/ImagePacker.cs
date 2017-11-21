@@ -40,11 +40,11 @@ namespace RelhaxModpack.AtlasesCreator
         private int outputWidth, outputHeight;
 
         // the input list of image files
-        private List<string> files;
+        private List<Texture> files;
 
         // some dictionaries to hold the image sizes and destination rectangles
-        private readonly Dictionary<string, Size> imageSizes = new Dictionary<string, Size>();
-        private readonly Dictionary<string, Rectangle> imagePlacement = new Dictionary<string, Rectangle>();
+        private readonly Dictionary<Texture, Size> imageSizes = new Dictionary<Texture, Size>();
+        private readonly Dictionary<Texture, Rectangle> imagePlacement = new Dictionary<Texture, Rectangle>();
 
         /// <summary>
         /// Packs a collection of images into a single image.
@@ -60,7 +60,7 @@ namespace RelhaxModpack.AtlasesCreator
         /// <param name="outputMap">The resulting output map of placement rectangles for the images.</param>
         /// <returns>0 if the packing was successful, error code otherwise.</returns>
         public int PackImage(
-            IEnumerable<string> imageFiles,
+            IEnumerable<Texture> imageFiles,
             bool requirePowerOfTwo,
             bool requireSquareImage,
             int maximumWidth,
@@ -70,7 +70,7 @@ namespace RelhaxModpack.AtlasesCreator
             out Bitmap outputImage,
             out Dictionary<string, Rectangle> outputMap)
         {
-            files = new List<string>(imageFiles);
+            files = new List<Texture>(imageFiles);
             requirePow2 = requirePowerOfTwo;
             requireSquare = requireSquareImage;
             outputWidth = maximumWidth;
@@ -89,15 +89,17 @@ namespace RelhaxModpack.AtlasesCreator
             Installer.args.ChildProcessed = 0;
 
             // get the sizes of all the images
+            int i = 0;
             foreach (var image in files)
             {
                 Installer.args.ChildProcessed++;
-                Installer.args.currentSubFile = Path.GetFileNameWithoutExtension(image);
+                //Installer.args.currentSubFile = Path.GetFileNameWithoutExtension(image);
                 Installer.InstallWorker.ReportProgress(0);
-                Bitmap bitmap = Bitmap.FromFile(image) as Bitmap;
-                if (bitmap == null)
-                    return (int)FailCode.FailedToLoadImage;
-                imageSizes.Add(image, bitmap.Size);
+                //Bitmap bitmap = Bitmap.FromFile(image) as Bitmap;
+                //if (bitmap == null)
+                //return (int)FailCode.FailedToLoadImage;
+                imageSizes.Add(image, image.AtlasImage.Size);
+                i++;
             }
 
             // sort our files by file size so we place large sprites first
@@ -107,6 +109,7 @@ namespace RelhaxModpack.AtlasesCreator
                     Size b1 = imageSizes[f1];
                     Size b2 = imageSizes[f2];
 
+                    //check sizes first
                     int c = -b1.Width.CompareTo(b2.Width);
                     if (c != 0)
                         return c;
@@ -115,7 +118,26 @@ namespace RelhaxModpack.AtlasesCreator
                     if (c != 0)
                         return c;
 
-                    return f1.CompareTo(f2);
+                    //same size? go alphabetical i guess
+                    //return f1.CompareTo(f2);
+
+                    return f1.name.CompareTo(f2.name);
+                     
+
+                     /*
+                    int c = 0;
+
+                    int b1Area = b1.Height * b1.Width;
+                    int b2Area = b2.Height * b2.Width;
+
+                    if (b2Area > b1Area)
+                        c = 1;
+
+                    if (b2Area < b1Area)
+                        c = -1;
+
+                    return c;
+                    */
                 });
 
             // try to pack the images
@@ -137,7 +159,7 @@ namespace RelhaxModpack.AtlasesCreator
             {
                 // go through our image placements and replace the width/height found in there with
                 // each image's actual width/height (since the ones in imagePlacement will have padding)
-                string[] keys = new string[imagePlacement.Keys.Count];
+                Texture[] keys = new Texture[imagePlacement.Keys.Count];
                 imagePlacement.Keys.CopyTo(keys, 0);
                 Installer.args.ParrentProcessed++;
                 Installer.args.ChildTotalToProcess = keys.Length;
@@ -145,7 +167,7 @@ namespace RelhaxModpack.AtlasesCreator
                 foreach (var k in keys)
                 {
                     Installer.args.ChildProcessed++;
-                    Installer.args.currentFile = k;
+                    //Installer.args.currentFile = k;
                     Installer.InstallWorker.ReportProgress(0);
                     // get the actual size
                     Size s = imageSizes[k];
@@ -165,7 +187,7 @@ namespace RelhaxModpack.AtlasesCreator
                 outputMap = new Dictionary<string, Rectangle>();
                 foreach (var pair in imagePlacement)
                 {
-                    outputMap.Add(pair.Key, pair.Value);
+                    outputMap.Add(pair.Key.name, pair.Value);
                 }
             }
 
@@ -181,7 +203,7 @@ namespace RelhaxModpack.AtlasesCreator
         private bool PackImageRectangles()
         {
             // create a dictionary for our test image placements
-            Dictionary<string, Rectangle> testImagePlacement = new Dictionary<string, Rectangle>();
+            Dictionary<Texture, Rectangle> testImagePlacement = new Dictionary<Texture, Rectangle>();
 
             // get the size of our smallest image
             int smallestWidth = int.MaxValue;
@@ -281,7 +303,7 @@ namespace RelhaxModpack.AtlasesCreator
             }
         }
 
-        private bool TestPackingImages(int testWidth, int testHeight, Dictionary<string, Rectangle> testImagePlacement)
+        private bool TestPackingImages(int testWidth, int testHeight, Dictionary<Texture, Rectangle> testImagePlacement)
         {
             // create the rectangle packer
             ArevaloRectanglePacker rectanglePacker = new ArevaloRectanglePacker(testWidth, testHeight);
@@ -289,7 +311,7 @@ namespace RelhaxModpack.AtlasesCreator
             foreach (var image in files)
             {
                 Installer.args.ChildProcessed++;
-                Installer.args.currentSubFile = image;
+                //Installer.args.currentSubFile = image;
                 Installer.InstallWorker.ReportProgress(0);
 
                 // get the bitmap for this file
@@ -320,19 +342,19 @@ namespace RelhaxModpack.AtlasesCreator
                 foreach (var image in files)
                 {
                     Installer.args.ChildProcessed++;
-                    Installer.args.currentSubFile = Path.GetFileNameWithoutExtension(image);
+                    //Installer.args.currentSubFile = Path.GetFileNameWithoutExtension(image);
                     Installer.InstallWorker.ReportProgress(0);
 
                     Rectangle location = imagePlacement[image];
-                    Bitmap bitmap = Bitmap.FromFile(image) as Bitmap;
-                    if (bitmap == null)
-                        return null;
+                    //Bitmap bitmap = Bitmap.FromFile(image) as Bitmap;
+                    //if (bitmap == null)
+                        //return null;
 
                     // copy pixels over to avoid antialiasing or any other side effects of drawing
                     // the subimages to the output image using Graphics
-                    for (int x = 0; x < bitmap.Width; x++)
-                        for (int y = 0; y < bitmap.Height; y++)
-                            outputImage.SetPixel(location.X + x, location.Y + y, bitmap.GetPixel(x, y));
+                    for (int x = 0; x < image.AtlasImage.Width; x++)
+                        for (int y = 0; y < image.AtlasImage.Height; y++)
+                            outputImage.SetPixel(location.X + x, location.Y + y, image.AtlasImage.GetPixel(x, y));
                 }
 
                 return outputImage;

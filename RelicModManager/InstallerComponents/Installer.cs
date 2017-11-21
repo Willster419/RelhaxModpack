@@ -56,6 +56,7 @@ namespace RelhaxModpack
         private string xvmConfigDir = "";
         private int patchNum = 0;
         private int NumExtractorsCompleted = 0;
+        private List<Bitmap> SavedBitmapsFromAtlas = new List<Bitmap>();
         //private List<string> originalPatchNames;
         //https://stackoverflow.com/questions/9280054/c-sharp-hashtable-sorted-by-keys
         private SortedDictionary<string, string> originalSortedPatchNames;
@@ -1521,10 +1522,17 @@ namespace RelhaxModpack
                     Square = false,
                     GenerateMap = true
                 };
+
                 List<string> fl = new List<string>();
-                fl.Add(a.workingFolder);
+                //fl.Add(a.workingFolder);
                 fl.AddRange(a.imageFolderList);
-                atlasesArgs.Images = addFilesToAtlasList(fl.ToArray());
+
+                //temp to get working proof of concept
+                //only pass in the same bitmaps
+
+                //CHANGE THIS TO LIST OF TEXTURES WITH MODS
+                atlasesArgs.Images = ParseFilesForAtlasList(a.TextureList, fl.ToArray());
+                //atlasesArgs.Images = a.TextureList;
                 AtlasesCreator.Program.Run(atlasesArgs);
             }
         }
@@ -2026,11 +2034,13 @@ namespace RelhaxModpack
             }
         }
 
-        private static List<string> addFilesToAtlasList(string[] folders)
+        private static List<Texture> ParseFilesForAtlasList(List<Texture> originalTextures, string[] foldersWithModTextures)
         {
-            List<string> collectiveList = new List<string>();
-            List<string> shortNameList = new List<string>();
-            foreach (string r in folders)
+            //List<string> collectiveList = new List<string>();
+            //List<string> shortNameList = new List<string>();
+            List<Texture> textureList = new List<Texture>(originalTextures);
+            List<Texture> modTextures = new List<Texture>();
+            foreach (string r in foldersWithModTextures)
             {
                 if (Directory.Exists(r))
                 {
@@ -2041,8 +2051,21 @@ namespace RelhaxModpack
                         FileInfo[] fi = new DirectoryInfo(r).GetFiles(@"*.png", SearchOption.TopDirectoryOnly);
                         foreach (FileInfo f in fi)
                         {
-                            collectiveList.Add(Path.Combine(r, f.Name));
-                            shortNameList.Add(Path.GetFileName(Path.GetFileNameWithoutExtension(f.Name)));
+                            //collectiveList.Add(Path.Combine(r, f.Name));
+                            //shortNameList.Add(Path.GetFileName(Path.GetFileNameWithoutExtension(f.Name)));
+                            //Bitmap bitmap = Bitmap.FromFile(image) as Bitmap;
+                            string fileName = Path.GetFileNameWithoutExtension(f.Name);
+                            Bitmap newImage = Bitmap.FromFile(f.FullName) as Bitmap;
+                            //don't care about the x an y for the mod textures
+                            modTextures.Add(new Texture()
+                            {
+                                name = fileName,
+                                height = newImage.Height,
+                                width = newImage.Width,
+                                x = 0,
+                                y = 0,
+                                AtlasImage = newImage
+                            });
                         }
                     }
                     catch (Exception ex)
@@ -2053,7 +2076,27 @@ namespace RelhaxModpack
                 else
                     Logging.Manager(string.Format("Directory {0} is not existing", r));
             }
-            Logging.Manager("files collected: " + shortNameList.Count);
+            Logging.Manager("mod textures collected: " + modTextures.Count);
+            //for every mod texture
+            for(int i = 0; i < modTextures.Count; i++)
+            {
+                //check the entire list of original textures for the same name
+                //if same, replace the bitmap image, sizes and location
+                for(int j = 0; j < textureList.Count; j++)
+                {
+                    if(modTextures[i].name.Equals(textureList[j].name))
+                    {
+                        textureList[j].AtlasImage = new Bitmap(modTextures[i].AtlasImage);
+                        textureList[j].x = 0;
+                        textureList[j].y = 0;
+                        textureList[j].height = textureList[j].AtlasImage.Height;
+                        textureList[j].width = textureList[j].AtlasImage.Width;
+                        //break out of the inner loop to quicker continue into the outer loop
+                        break;
+                    }
+                }
+            }
+            /*
             int i = collectiveList.Count - 1;
             while (i > 0)
             {
@@ -2066,9 +2109,11 @@ namespace RelhaxModpack
                 }
                 i--;
             }
+            */
+
             // files to be added, after deleting needless base files (last file added is winning): 
-            Logging.Manager("files to be added: " + collectiveList.Count);
-            return collectiveList;
+            Logging.Manager("total files to be added: " + textureList.Count);
+            return textureList;
         }
 
         private void ExtractAtlases_run(Atlases args)
@@ -2102,11 +2147,13 @@ namespace RelhaxModpack
 
             Bitmap atlasImage = new Bitmap(ImageFile);
             Bitmap CroppedImage = null;
-            List<Texture> textureList = new List<Texture>();
+            //List<Texture> textureList = new List<Texture>();
             try
             {
                 try
                 {
+                    //just in case
+                    args.TextureList.Clear();
                     XDocument doc = null;
                     Texture t = null;
                     doc = XDocument.Load(MapFile, LoadOptions.SetLineInfo);
@@ -2146,7 +2193,8 @@ namespace RelhaxModpack
                                     Utils.ExceptionLog("ExtractAtlases_run", "switch", ex);
                                 }
                             }
-                            textureList.Add(t);
+                            //textureList.Add(t);
+                            args.TextureList.Add(t);
                         }
                         catch (Exception ex)
                         {
@@ -2158,12 +2206,12 @@ namespace RelhaxModpack
                 {
                     Utils.ExceptionLog("ExtractAtlases_run", "foreach root", ex);
                 }
-                Logging.Manager("Parsed Textures: " + textureList.Count);
+                Logging.Manager("Parsed Textures: " + args.TextureList.Count);
 
-                Installer.args.ChildTotalToProcess = textureList.Count;
+                Installer.args.ChildTotalToProcess = args.TextureList.Count;
                 PixelFormat pixelFormat = atlasImage.PixelFormat;
                 int c = 0;
-                foreach (Texture t in textureList)
+                foreach (Texture t in args.TextureList)
                 {
                     try
                     {
@@ -2173,24 +2221,25 @@ namespace RelhaxModpack
                         for (int x = 0; x < t.width; x++)
                             for (int y = 0; y < t.height; y++)
                                 CroppedImage.SetPixel(x, y, atlasImage.GetPixel(t.x + x, t.y + y));
-                        CroppedImage.Save(Path.Combine(workingFolder, t.name + ".png"), ImageFormat.Png);
-                        c++;
-                        Installer.args.ChildProcessed = c;
+                        //why save to disk when you can save to memory?
+                        //CroppedImage.Save(Path.Combine(workingFolder, t.name + ".png"), ImageFormat.Png);
+                        t.AtlasImage = new Bitmap(CroppedImage);
+                        Installer.args.ChildProcessed = c++;
                         Installer.args.currentSubFile = t.name;
-                        Installer.InstallWorker.ReportProgress(0);
+                        InstallWorker.ReportProgress(0);
                     }
                     catch (Exception ex)
                     {
                         Utils.ExceptionLog("ExtractAtlases_run", "CroppedImage: " + Path.Combine(workingFolder, t.name + ".png"), ex);
                     }
                 }
-                Logging.Manager(string.Format("Extracted Textures: {0} {1}", c, c == textureList.Count ? "(all successfully done)" : "(missed some, why?)"));
+                Logging.Manager(string.Format("Extracted Textures: {0} {1}", c, c == args.TextureList.Count ? "(all successfully done)" : "(missed some, why?)"));
             }
             finally
             {
                 ImageFile = null;
                 MapFile = null;
-                textureList = null;
+                //textureList = null;
                 atlasImage.Dispose();
                 CroppedImage.Dispose();
                 stopWatch.Stop();

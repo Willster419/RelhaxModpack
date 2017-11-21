@@ -136,6 +136,7 @@ namespace RelhaxModpack.AtlasesCreator
                     return (int)FailCode.NoImages;
                 }
 
+                /*
                 // make sure no images have the same name if we're building a map
                 if (mapExporter != null)
                 {
@@ -155,6 +156,7 @@ namespace RelhaxModpack.AtlasesCreator
                         }
                     }
                 }
+                */
 
                 // generate our output
                 ImagePacker imagePacker = new ImagePacker();

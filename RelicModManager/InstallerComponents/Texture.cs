@@ -1,4 +1,6 @@
-﻿namespace RelhaxModpack
+﻿using System.Drawing;
+
+namespace RelhaxModpack
 {
     public class Texture
     {
@@ -12,5 +14,7 @@
         public int width { get; set; }
         //height of the texture in the atlas image
         public int height { get; set; }
+        //the actual bitmap in memory of the image
+        public Bitmap AtlasImage { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace RelhaxModpack.AtlasesCreator
 {
@@ -15,6 +16,6 @@ namespace RelhaxModpack.AtlasesCreator
         // the atlas image file
         public string ImageFile = "";
         // the images list
-        public List<string> Images { get; set; } = null;
+        public List<Texture> Images { get; set; } = null;
     }
 }

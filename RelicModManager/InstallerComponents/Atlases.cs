@@ -27,6 +27,8 @@ namespace RelhaxModpack
         public List<string> imageFolderList { get; set; } = new List<string>();
         // temp workingFolder
         public string workingFolder { get; set; } = "";
+        //the list of textures in each atlas
+        public List<Texture> TextureList { get; set; } = new List<Texture>();
         //for the tostring thing
         public override string ToString()
         {
