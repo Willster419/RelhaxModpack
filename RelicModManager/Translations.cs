@@ -137,6 +137,11 @@ namespace RelhaxModpack
             polish.Add("lastUpdated", "Ostatnio Zaktualizowano: ");
             french.Add("lastUpdated", "Dernière mise à jour: ");
 
+            english.Add("stepsComplete", "steps complete");
+            german.Add("stepsComplete", "TODO");
+            polish.Add("stepsComplete", "TODO");
+            french.Add("stepsComplete", "TODO");
+
             //Section: MainWindow
 
             //Componet: installRelhaxMod
@@ -340,22 +345,22 @@ namespace RelhaxModpack
             //Componet: SuperExtractionCB
             //
             english.Add("SuperExtractionCB", "Super extraction mode");
-            german.Add("SuperExtractionCB", "TODO");
-            polish.Add("SuperExtractionCB", "TODO");
+            german.Add("SuperExtractionCB", "Schneller Entpack-Modus");
+            polish.Add("SuperExtractionCB", "Tryb przyspieszonego wypakowywania");
             french.Add("SuperExtractionCB", "TODO");
 
             //Componet: SmartUninstallModeRB
             //
             english.Add("SmartUninstallModeRB", "Smart");
-            german.Add("SmartUninstallModeRB", "TODO");
-            polish.Add("SmartUninstallModeRB", "TODO");
+            german.Add("SmartUninstallModeRB", "Intelligentes");
+            polish.Add("SmartUninstallModeRB", "Sprytna");
             french.Add("SmartUninstallModeRB", "TODO");
 
             //Componet: CleanUninstallModeRB
             //
             english.Add("CleanUninstallModeRB", "Quick");
-            german.Add("CleanUninstallModeRB", "TODO");
-            polish.Add("CleanUninstallModeRB", "TODO");
+            german.Add("CleanUninstallModeRB", "Schnell");
+            polish.Add("CleanUninstallModeRB", "Szybka");
             french.Add("CleanUninstallModeRB", "TODO");
 
             //Section: FirstLoadHelper
@@ -1052,22 +1057,22 @@ namespace RelhaxModpack
             //Component: SuperExtractionCBExplanation
             //
             english.Add("SuperExtractionCBExplanation", "When enabled, the installer will use a parallel extraction method. It will extract multiple zip files at the same time, reducing install time. For SSD drives ONLY.");
-            german.Add("SuperExtractionCBExplanation", "TODO");
-            polish.Add("SuperExtractionCBExplanation", "TODO");
+            german.Add("SuperExtractionCBExplanation", "Wenn aktiviert, der Installer wird ein parallelen Entpack-Modus verwenden. Er wird mehrere Zip-Dateien gleichzeitig Entpacken, das die Installationszeit reduziert. Nur für SSD Festplatten.");
+            polish.Add("SuperExtractionCBExplanation", "Metoda wypakowywania równoległego. Nastąpi wypakowywanie wielu plików zip jednocześnie, by skrócić czas instalacji. Jedynie dla dysków SSD.");// I always skip 'When enabled'...
             french.Add("SuperExtractionCBExplanation", "TODO");
 
             //Component: SmartUninstallModeRBExplanation
             //
-            english.Add("SmartUninstallModeRBExplanation", "Smart Uninstall will remove files installed only by the relhax modpack. Use this is you have files you installed other than just this modpack.");
-            german.Add("SmartUninstallModeRBExplanation", "TODO");
-            polish.Add("SmartUninstallModeRBExplanation", "TODO");
+            english.Add("SmartUninstallModeRBExplanation", "Smart Uninstall will remove files installed only by the relhax modpack, including user mods. Use this is you have files you installed other than just this modpack.");
+            german.Add("SmartUninstallModeRBExplanation", "Intelligentes Deinstallieren entfernt NUR die Dateien, die durch Relhax Modpack installiert wurden. Verwende dies, wenn du noch zusätzliche  Dateien installiert hast.");
+            polish.Add("SmartUninstallModeRBExplanation", "Sprytna deinstalacja usunie tylko pliki zainstalowan przez RelHax Modpack. Użyj tego trybu, jeśli zainstalowałeś również inne paczki.");
             french.Add("SmartUninstallModeRBExplanation", "TODO");
 
             //Component: CleanUninstallModeRBExplanation
             //
             english.Add("CleanUninstallModeRBExplanation", "Quick Uninstall will remove all mod files in your installation. Use this if your mods are only installed by the relhax modpack.");
-            german.Add("CleanUninstallModeRBExplanation", "TODO");
-            polish.Add("CleanUninstallModeRBExplanation", "TODO");
+            german.Add("CleanUninstallModeRBExplanation", "Schnelldeinstallation entfernt ALLE Mod-Dateien. Verwende dies, wenn du nur mit Relhax Modpack installiert hast.");
+            polish.Add("CleanUninstallModeRBExplanation", "Szybka deinstalacja usunie wszystkie pliki modyfikacji. Użyj tego trybu, jeśli instalowałeś tylko paczkę RelHax Modpack.");
             french.Add("CleanUninstallModeRBExplanation", "TODO");
 
             //Section: Messages from ModSelectionList
@@ -1466,8 +1471,8 @@ namespace RelhaxModpack
             //Componet: parallelExtraction
             //
             english.Add("parallelExtraction", "Completed parallel extraction threads:");
-            german.Add("parallelExtraction", "TODO");
-            polish.Add("parallelExtraction", "TODO");
+            german.Add("parallelExtraction", "Parallelen Entpack-Modus beendet");
+            polish.Add("parallelExtraction", "Zakończono jednoczesne wypakowywanie:");// IMHO Thread is a word that IT guys understand in this case, so i skipped it. The meaning is still the same.
             french.Add("parallelExtraction", "TODO");
 
             //Componet: extractingPackage
@@ -1522,8 +1527,8 @@ namespace RelhaxModpack
             //Componet: unpackingXMLFiles
             //
             english.Add("unpackingXMLFiles", "Unpacking local XML file");
-            german.Add("unpackingXMLFiles", "TODO");
-            polish.Add("unpackingXMLFiles", "TODO");
+            german.Add("unpackingXMLFiles", "Entpacke lokale XML Dateien");
+            polish.Add("unpackingXMLFiles", "Rozpakowywanie lokalnego pliku XML");
             french.Add("unpackingXMLFiles", "TODO");
 
             //Componet: patchingFile
