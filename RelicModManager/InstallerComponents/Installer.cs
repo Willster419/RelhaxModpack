@@ -1520,7 +1520,8 @@ namespace RelhaxModpack
                     MapFile = Path.Combine(a.atlasSaveDirectory, a.mapFile),
                     PowOf2 = true,
                     Square = false,
-                    GenerateMap = true
+                    GenerateMap = true,
+                    Padding = 1
                 };
 
                 List<string> fl = new List<string>();

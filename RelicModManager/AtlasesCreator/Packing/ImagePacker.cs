@@ -49,7 +49,7 @@ namespace RelhaxModpack.AtlasesCreator
         /// <summary>
         /// Packs a collection of images into a single image.
         /// </summary>
-        /// <param name="imageFiles">The list of file paths of the images to be combined.</param>
+        /// <param name="imageFiles">The list of Textures of the images to be combined.</param>
         /// <param name="requirePowerOfTwo">Whether or not the output image must have a power of two size.</param>
         /// <param name="requireSquareImage">Whether or not the output image must be a square.</param>
         /// <param name="maximumWidth">The maximum width of the output image.</param>
@@ -219,6 +219,7 @@ namespace RelhaxModpack.AtlasesCreator
             int testHeight = outputHeight;
 
             bool shrinkVertical = false;
+            //used for detection of the optimization phase
             Installer.args.ChildTotalToProcess = -1;
             Installer.args.ChildProcessed = 0;
             // just keep looping...

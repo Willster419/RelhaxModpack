@@ -136,6 +136,7 @@ namespace RelhaxModpack.AtlasesCreator
                     return (int)FailCode.NoImages;
                 }
 
+                //NOT NEEDED
                 /*
                 // make sure no images have the same name if we're building a map
                 if (mapExporter != null)
