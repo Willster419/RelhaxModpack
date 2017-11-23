@@ -1,3 +1,10 @@
+Version 27.2.7
+https://www.virustotal.com/#/file/dcecd7499ba0773bbe2c472075d7fad8755c2872ab4b1c7d3b69dcc4da2b35d4/detection
+-Fixed bug where main window buttons become enabled if user canceled the change installation in diagnostic menu
+-improved code for atlas checking and deleting or temporary directory
+-Updated install procedures so that patching is done after modpack and user mods extracted
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 27.2.5
 https://www.virustotal.com/#/file/89a2cafc7faca1cfa0445ca87549f42111ecfeefaf1e2aab426bdf789e9e8d48/detection
 -Added parallel extraction for mods/configs of cateogries. Application now uses up to 13 threads. Hard drive users should not use. SSD users will see about a %200-%350 speed boost
