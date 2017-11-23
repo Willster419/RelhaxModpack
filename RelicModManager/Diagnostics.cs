@@ -125,7 +125,7 @@ namespace RelhaxModpack
             //attempt to locate the tanks directory
             if (ParentWindow.manuallyFindTanks() == null)
             {
-                ParentWindow.ToggleUIButtons(true);
+                //ParentWindow.ToggleUIButtons(true);
                 return;
             }
             //parse all strings
