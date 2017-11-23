@@ -1392,33 +1392,6 @@ namespace RelhaxModpack
             Stopwatch sw = new Stopwatch();
             sw.Reset();
             sw.Start();
-            //before extracting atlases, check if temp atlas files exist. if they do, delete them
-            try
-            {
-                string[] atlasFolders = new string[] {
-                    Path.Combine(Settings.RelhaxTempFolder, "battleAtlas"),
-                    Path.Combine(Settings.RelhaxTempFolder, "vehicleMarkerAtlas")
-                };
-                string[] atlasFiles = new string[] {
-                    Path.Combine(Settings.RelhaxTempFolder, "battleAtlas.png"),
-                    Path.Combine(Settings.RelhaxTempFolder, "battleAtlas.xml"),
-                    Path.Combine(Settings.RelhaxTempFolder, "vehicleMarkerAtlas.png"),
-                    Path.Combine(Settings.RelhaxTempFolder, "vehicleMarkerAtlas.xml")
-                };
-
-                foreach(string s in atlasFolders)
-                if (Directory.Exists(s))
-                        Directory.Delete(s,true);
-                
-                foreach (string s in atlasFiles)
-                    if (File.Exists(s))
-                        File.Delete(s);
-
-            }
-            catch (Exception ex)
-            {
-                Utils.ExceptionLog("ExtractAtlases", "delete previus altas files in temp folder", ex);
-            }
             try
             {
                 DirectoryInfo di = null;
@@ -1445,6 +1418,26 @@ namespace RelhaxModpack
                 }
                 Installer.args.ParrentTotalToProcess = atlasesList.Count;
                 //extract the atlas image and map to the temp directory
+                //but clean it first
+                //before extracting atlases, check if temp atlas files exist. if they do, delete them
+                try
+                {
+                    foreach (Atlas a in atlasesList)
+                    {
+                        string atlasPictures = Path.Combine(a.workingFolder, a.atlasFile);
+                        string atlasMap = Path.Combine(a.workingFolder, a.mapFile);
+                        if (Directory.Exists(a.workingFolder))
+                            Directory.Delete(a.workingFolder, true);
+                        if (File.Exists(atlasPictures))
+                            File.Delete(atlasPictures);
+                        if (File.Exists(atlasMap))
+                            File.Delete(atlasMap);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Utils.ExceptionLog("ExtractAtlases", "before extracting atlases, check if temp atlas files exist. if they do, delete them", ex);
+                }
                 foreach (Atlas a in atlasesList)
                 {
                     try
