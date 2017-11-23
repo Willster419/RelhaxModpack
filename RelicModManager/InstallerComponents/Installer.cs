@@ -235,13 +235,7 @@ namespace RelhaxModpack
                 Logging.Manager("... skipped");
             ResetArgs();
             //Step 13: Patch Mods
-            Logging.Manager("Installation PatchMods");
-            args.InstalProgress = InstallerEventArgs.InstallProgress.PatchMods;
-            if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
-                PatchFiles();
-            else
-                Logging.Manager("... skipped");
-            ResetArgs();
+            //only step 16 now
             //Step 14: InstallFonts
             // => only Step 17 for both now
             //Step 15: Extract User Mods
@@ -253,7 +247,7 @@ namespace RelhaxModpack
                 Logging.Manager("... skipped");
             ResetArgs();
             //Step 16: Patch Mods if User Mods extracted patch files
-            Logging.Manager("Installation PatchUserMods");
+            Logging.Manager("Installation PatchMods (previously patchUserMods)");
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchUserMods;
             if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
                 PatchFiles();
@@ -271,16 +265,8 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            /*
             //Step 18: Create Atlases
-            Logging.Manager("Installation CreateAtlases");
-            args.InstalProgress = InstallerEventArgs.InstallProgress.CreateAtlases;
-            if (atlasesList != null && atlasesList.Count > 0)
-                CreateAtlases();
-            else
-                Logging.Manager("... skipped");
-            ResetArgs();
-            */
+            //combined with step 17
             //Step 19: Install Fonts
             Logging.Manager("Installation UserFonts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallUserFonts;

@@ -21,12 +21,12 @@ namespace RelhaxModpack
             ExtractAppendedDependencies = 10,
             RestoreUserData = 11,
             UnpackXmlFiles = 12,
-            PatchMods = 13,
-            InstallFonts = 14,
+            PatchMods = 13,//no longer used
+            InstallFonts = 14,//no longer used
             ExtractUserMods = 15,
             PatchUserMods = 16,
             ExtractAtlases = 17,
-            CreateAtlases = 18,
+            CreateAtlases = 18,//no longer used
             InstallUserFonts = 19,
             CreateShortCuts = 20,
             CheckDatabase = 21,
