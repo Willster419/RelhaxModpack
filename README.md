@@ -3,7 +3,7 @@ The fastest WoT modpack installer in the world. A refresh of OMC modpack
 
 **[Skip to download link](https://github.com/Willster419/RelhaxModpack#download)**
 
-**[Virustotal scan](https://www.virustotal.com/en/file/15c959ac79c5f3935c792b8bc5e0c72d1974ab5bab4fa0a75d0c3a9860aa206a/analysis/1489435329/)**
+**[Virustotal scan](https://www.virustotal.com/#/file/d169477dc460b03ba89b519ec5ee091738c9357ffc90d0321fa1b518eda3c57f/detection)**
 
 [Visit our new Website!](http://relhaxmodpack.com/)
 
@@ -31,7 +31,7 @@ Support Teamspeak Server: tna.dyndns.org
   - Like omc, you can save and load your mod selections to and from a file.
   - You can even use this file to automate the install process (See "Automation Section")
 - Performance:
-  - The loading and installation times of this modpack vs. other major modpacks have been reduced by up to **86%** and **60%** respectively(1), on a standard hard drive, and make finding the configurations you like much quicker.
+  - The loading and installation times of this modpack vs. other major modpacks have been reduced by up to **86%** and **60%** respectively(1), on a standard hard drive, and make finding the configurations you like much quicker. The times are even further reduced for those with WoT installed on an SSD.
 - Automation:
   - The modpack and be set at command line with a "/auto-install config_file_name.xml" switch to automatically install the modpack, with your preference of mods selected. In this situation, you could install without any interaction, and update all your mods in seconds.
   
@@ -50,21 +50,15 @@ The modpack is currently in alpha, proof of concept. I am still adding minor fea
 - Record it here:
 https://docs.google.com/spreadsheets/d/1LmPCMAx0RajW4lVYAnguHjjd8jArtWuZIGciFN76AI4/edit?usp=sharing (quickest)
 - (if you're in relic gaming community) send me a slack message (quickest)
-- Send me a form message
-- Reply to this thread
+- (If you have a github account) open an issue.
 
-**When you do, please attach two files:**
-- a screenshot of the error (if applicable)
-- your RelHaxLog.txt file
+**When you do, please attach the diagnostic zip file you create by clicking diagnostic utilities->create zip file**
 
 Fell free to leave feedback, tell me what you think, what should change, etc.
 
 If you want to help develop the modpack, I would be glad for the help and will help set you up with an environment.
 
 Latest release notes can be found here:
-https://github.com/Willster419/RelicModManager/blob/master/RelicModManager/bin/Debug/releaseNotes.txt
-
-And Here:
 https://github.com/Willster419/RelhaxModpack/commits/master
 
 ## Download
@@ -78,8 +72,10 @@ If you can spare a few dollars and like the Modpack, please consider donating:
 https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2
 
 ## Credits
- - OMC Modpack for giving me an internal structure to mirror and improve upon, along with premade zip files to start with.
+ - OMC Modpack for giving me an internal structure to start with and improve upon, along with several premade zip files to start with.
  - Rkk1945 For helping with code edits and resource support, along with helping with the closed alpha test.
+ - All the Modpack team members for helping to add mods as quickly as possible.
+ - Those who helped provide feedback during open alpha and beta testing.
 
 ## FAQ
 
@@ -123,6 +119,12 @@ Mod Selection: Zoom 100m patch, Relhax Sound Mod (or equivalent)
   Aslains: 9 seconds
   
   Relhax: 4 seconds - **Time reduced by 60% from OMC and 56% from Aslains
+  
+##### Time from program execution to mod selection on an SSD:
+TODO
+
+##### Time from mod selection to install completion (installing the same number or similar mods) on an SSD:
+TODO
   
 ---
 This puts a whole new meaning to your quote in my form sig ScoutCub, <3 you plz don`t kick me from REL2
