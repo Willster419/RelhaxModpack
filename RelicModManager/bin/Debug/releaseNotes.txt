@@ -1,3 +1,8 @@
+Version 27.2.8
+https://www.virustotal.com/#/file/d169477dc460b03ba89b519ec5ee091738c9357ffc90d0321fa1b518eda3c57f/detection
+-Updated translations. That's it. That's literally it.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 27.2.7
 https://www.virustotal.com/#/file/dcecd7499ba0773bbe2c472075d7fad8755c2872ab4b1c7d3b69dcc4da2b35d4/detection
 -Fixed bug where main window buttons become enabled if user canceled the change installation in diagnostic menu
