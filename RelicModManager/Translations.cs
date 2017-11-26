@@ -137,10 +137,10 @@ namespace RelhaxModpack
             polish.Add("lastUpdated", "Ostatnio Zaktualizowano: ");
             french.Add("lastUpdated", "Dernière mise à jour: ");
 
-            english.Add("stepsComplete", "steps complete");
-            german.Add("stepsComplete", "TODO");
-            polish.Add("stepsComplete", "TODO");
-            french.Add("stepsComplete", "TODO");
+            english.Add("stepsComplete", "tasks completed");
+            german.Add("stepsComplete", "erledigte Aufgaben");
+            polish.Add("stepsComplete", "zadania zakończone");
+            french.Add("stepsComplete", "tâches terminées");
 
             //Section: MainWindow
 
@@ -345,23 +345,23 @@ namespace RelhaxModpack
             //Componet: SuperExtractionCB
             //
             english.Add("SuperExtractionCB", "Super extraction mode");
-            german.Add("SuperExtractionCB", "Schneller Entpack-Modus");
+            german.Add("SuperExtractionCB", "Erweiterter Entpack-Modus");
             polish.Add("SuperExtractionCB", "Tryb przyspieszonego wypakowywania");
-            french.Add("SuperExtractionCB", "TODO");
+            french.Add("SuperExtractionCB", "Super mode d'extraction");
 
             //Componet: SmartUninstallModeRB
             //
             english.Add("SmartUninstallModeRB", "Smart");
-            german.Add("SmartUninstallModeRB", "Intelligentes");
+            german.Add("SmartUninstallModeRB", "Intelligent");
             polish.Add("SmartUninstallModeRB", "Sprytna");
-            french.Add("SmartUninstallModeRB", "TODO");
+            french.Add("SmartUninstallModeRB", "Intelligent");
 
             //Componet: CleanUninstallModeRB
             //
             english.Add("CleanUninstallModeRB", "Quick");
             german.Add("CleanUninstallModeRB", "Schnell");
             polish.Add("CleanUninstallModeRB", "Szybka");
-            french.Add("CleanUninstallModeRB", "TODO");
+            french.Add("CleanUninstallModeRB", "Rapide");
 
             //Section: FirstLoadHelper
 
@@ -1057,23 +1057,23 @@ namespace RelhaxModpack
             //Component: SuperExtractionCBExplanation
             //
             english.Add("SuperExtractionCBExplanation", "When enabled, the installer will use a parallel extraction method. It will extract multiple zip files at the same time, reducing install time. For SSD drives ONLY.");
-            german.Add("SuperExtractionCBExplanation", "Wenn aktiviert, der Installer wird ein parallelen Entpack-Modus verwenden. Er wird mehrere Zip-Dateien gleichzeitig Entpacken, das die Installationszeit reduziert. Nur für SSD Festplatten.");
+            german.Add("SuperExtractionCBExplanation", "Wenn aktiviert, wird der Installer den parallelen Entpack-Modus verwenden. Er wird mehrere Zip-Dateien gleichzeitig entpacken und dadurch die Installationszeit reduziert. Nur für SSD Festplatten.");
             polish.Add("SuperExtractionCBExplanation", "Metoda wypakowywania równoległego. Nastąpi wypakowywanie wielu plików zip jednocześnie, by skrócić czas instalacji. Jedynie dla dysków SSD.");// I always skip 'When enabled'...
-            french.Add("SuperExtractionCBExplanation", "TODO");
+            french.Add("SuperExtractionCBExplanation", "Lorsqu'il est activé, le programme d'installation utilise une méthode d'extraction parallèle. Il va extraire plusieurs fichiers zip en même temps, réduisant ainsi le temps d'installation. Pour les disques SSD SEULEMENT.");
 
             //Component: SmartUninstallModeRBExplanation
             //
             english.Add("SmartUninstallModeRBExplanation", "Smart Uninstall will remove files installed only by the relhax modpack, including user mods. Use this is you have files you installed other than just this modpack.");
-            german.Add("SmartUninstallModeRBExplanation", "Intelligentes Deinstallieren entfernt NUR die Dateien, die durch Relhax Modpack installiert wurden. Verwende dies, wenn du noch zusätzliche  Dateien installiert hast.");
+            german.Add("SmartUninstallModeRBExplanation", "Intelligentes Deinstallieren entfernt NUR die Dateien, die durch Relhax Modpack installiert wurden. Verwende dies, wenn du noch zusätzliche Dateien installiert hast und diese erhalten willst.");
             polish.Add("SmartUninstallModeRBExplanation", "Sprytna deinstalacja usunie tylko pliki zainstalowan przez RelHax Modpack. Użyj tego trybu, jeśli zainstalowałeś również inne paczki.");
-            french.Add("SmartUninstallModeRBExplanation", "TODO");
+            french.Add("SmartUninstallModeRBExplanation", "Smart Uninstall supprimera les fichiers installés uniquement par le modpack relhax, y compris les mods utilisateur. Utilisez ceci est vous avez des fichiers que vous avez installés autre que juste ce modpack.");
 
             //Component: CleanUninstallModeRBExplanation
             //
             english.Add("CleanUninstallModeRBExplanation", "Quick Uninstall will remove all mod files in your installation. Use this if your mods are only installed by the relhax modpack.");
-            german.Add("CleanUninstallModeRBExplanation", "Schnelldeinstallation entfernt ALLE Mod-Dateien. Verwende dies, wenn du nur mit Relhax Modpack installiert hast.");
+            german.Add("CleanUninstallModeRBExplanation", "Schnelldeinstallation entfernt ALLE Mod-Dateien. Verwende dies, wenn du nur mit dem Relhax Modpack installiert hast und ggf. alle zusätzlich installierten Mods entfernen möchtest.");
             polish.Add("CleanUninstallModeRBExplanation", "Szybka deinstalacja usunie wszystkie pliki modyfikacji. Użyj tego trybu, jeśli instalowałeś tylko paczkę RelHax Modpack.");
-            french.Add("CleanUninstallModeRBExplanation", "TODO");
+            french.Add("CleanUninstallModeRBExplanation", "La désinstallation rapide supprimera tous les fichiers mod de votre installation. Utilisez-le si vos mods sont uniquement installés par le modpack relhax.");
 
             //Section: Messages from ModSelectionList
 
@@ -1471,9 +1471,9 @@ namespace RelhaxModpack
             //Componet: parallelExtraction
             //
             english.Add("parallelExtraction", "Completed parallel extraction threads:");
-            german.Add("parallelExtraction", "Parallelen Entpack-Modus beendet");
+            german.Add("parallelExtraction", "Parallele Entpack-Prozeduren beendet:");
             polish.Add("parallelExtraction", "Zakończono jednoczesne wypakowywanie:");// IMHO Thread is a word that IT guys understand in this case, so i skipped it. The meaning is still the same.
-            french.Add("parallelExtraction", "TODO");
+            french.Add("parallelExtraction", "Threads d'extraction parallèles terminés:");
 
             //Componet: extractingPackage
             //
@@ -1529,7 +1529,7 @@ namespace RelhaxModpack
             english.Add("unpackingXMLFiles", "Unpacking local XML file");
             german.Add("unpackingXMLFiles", "Entpacke lokale XML Dateien");
             polish.Add("unpackingXMLFiles", "Rozpakowywanie lokalnego pliku XML");
-            french.Add("unpackingXMLFiles", "TODO");
+            french.Add("unpackingXMLFiles", "Décompresser le fichier XML local");
 
             //Componet: patchingFile
             //
@@ -1696,8 +1696,8 @@ namespace RelhaxModpack
             //
             english.Add("startingLauncherRepairMode", "Starting WoTLauncher in integrity validation mode...");
             german.Add("startingLauncherRepairMode", "Starte den WoT Launcher im Integritätsvalidierungsmodus...");
-            polish.Add("startingLauncherRepairMode", "TODO");
-            french.Add("startingLauncherRepairMode", "Lancement de WoTLauncher and mode the validation d'intégrité");
+            polish.Add("startingLauncherRepairMode", "Uruchamianie WoTLaunchera w trybie sprawdzania integralności...");
+            french.Add("startingLauncherRepairMode", "Lancement de WoTLauncher and mode the validation d'intégrité...");
 
             //Component: failedStartLauncherRepairMode
             //
@@ -1745,15 +1745,15 @@ namespace RelhaxModpack
             //Component: seachCB ToolTip
             english.Add("searchToolTip", "You can also search for multiple name parts, separated by a * (asterisk).\nFor example: config*willster419 will display as search result: Willster419\'s Config");
             german.Add("searchToolTip", "Du kannst auch nach mehreren Namensteilen suchen, getrennt durch ein * (Sternchen).\nZum Beispiel: config*willster419  wird als Suchergebnis anzeigen: Willster419\'s Config");
-            polish.Add("searchToolTip", "TODO");
-            french.Add("searchToolTip", "TODO");
+            polish.Add("searchToolTip", "Można również wyszukiwać wiele części nazw oddzielonych gwiazdką (*).\nNa przykład: config * willster419 wyświetli się jako wynik wyszukiwania: Willster419's Config");
+            french.Add("searchToolTip", "Vous pouvez également rechercher plusieurs parties de nom, séparées par un * (astérisque).\nPar exemple: config * willster419 affichera comme résultat de la recherche: Config de Willster419");
 
             //Component: ModSelectionList
             //Component: seachTB
             english.Add("searchTB", "Search Mod Name:");
             german.Add("searchTB", "Suche Mod Namen:");
-            polish.Add("searchTB", "TODO");
-            french.Add("searchTB", "TODO");
+            polish.Add("searchTB", "Wyszukaj nazwę modu:");
+            french.Add("searchTB", "Rechercher le nom du mod:");
 
         }
     }
