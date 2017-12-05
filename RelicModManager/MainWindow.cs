@@ -2571,7 +2571,7 @@ namespace RelhaxModpack
         {
             int xloc = this.Location.X + this.Size.Width + 10;
             int yloc = this.Location.Y;
-            using (ViewUpdates vu = new ViewUpdates(xloc, yloc, Settings.ManagerInfoDatFile, "releaseNotes.txt"))
+            using (ViewUpdates vu = new ViewUpdates(xloc, yloc, Settings.ManagerInfoDatFile, Program.betaApplication ? "releaseNotes_beta.txt" : "releaseNotes.txt"))
             {
                 vu.ShowDialog();
             }
