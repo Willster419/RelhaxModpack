@@ -740,7 +740,9 @@ namespace RelhaxModpack
                 int index = Utils.ParseInt(jsonReplace.Split(new string[] { @"[index=" }, StringSplitOptions.None)[1].Replace(@"]", ""), -1);
                 if(index >= newObjectArray.Count)
                 {
-                    Logging.Manager("WARNING: index value is greator than array count, putting at end of the array");
+                    //if the array is empty and the index is 0, trying to add to a blank array, don't log it
+                    if(index != 0)
+                        Logging.Manager("WARNING: index value is greator than array count, putting at end of the array");
                     index = -1;
                 }
                 if (newObjectArray.Count > 0)
