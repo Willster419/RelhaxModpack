@@ -156,6 +156,12 @@
     <Compile Include="RelhaxForum.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UIComponents\RelhaxMediaPlayer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UIComponents\RelhaxMediaPlayer.Designer.cs">
+      <DependentUpon>RelhaxMediaPlayer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils\Logging.cs" />
     <Compile Include="XmlBinary\PackedSectionReader.cs" />
     <Compile Include="XmlBinary\PrimitiveFileReader.cs" />
@@ -386,6 +392,9 @@
     <EmbeddedResource Include="SelectionViewer.resx">
       <DependentUpon>SelectionViewer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UIComponents\RelhaxMediaPlayer.resx">
+      <DependentUpon>RelhaxMediaPlayer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="VersionInfo.resx">
       <DependentUpon>VersionInfo.cs</DependentUpon>
     </EmbeddedResource>
@@ -443,7 +452,17 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="WMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF "%25COMPUTERNAME%25"=="IMOSDPC04" copy /Y $(TargetPath) "D:\RelHax Manager\"</PostBuildEvent>

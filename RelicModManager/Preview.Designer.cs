@@ -55,12 +55,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Preview));
             this.DescriptionBox = new System.Windows.Forms.RichTextBox();
-            this.PreviewPicture = new System.Windows.Forms.PictureBox();
             this.NextPicButton = new System.Windows.Forms.Button();
             this.PreviousPicButton = new System.Windows.Forms.Button();
             this.PictureCountPanel = new System.Windows.Forms.Panel();
             this.DevLinkLabel = new System.Windows.Forms.LinkLabel();
             this.UpdateBox = new System.Windows.Forms.RichTextBox();
+            this.PreviewPicture = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.PreviewPicture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -74,17 +74,6 @@
             this.DescriptionBox.TabIndex = 0;
             this.DescriptionBox.Text = "";
             this.DescriptionBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.DescriptionBox_LinkClicked);
-            // 
-            // PreviewPicture
-            // 
-            this.PreviewPicture.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.PreviewPicture.Location = new System.Drawing.Point(12, 12);
-            this.PreviewPicture.Name = "PreviewPicture";
-            this.PreviewPicture.Size = new System.Drawing.Size(418, 309);
-            this.PreviewPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.PreviewPicture.TabIndex = 1;
-            this.PreviewPicture.TabStop = false;
-            this.PreviewPicture.Click += new System.EventHandler(this.PreviewPicture_Click);
             // 
             // NextPicButton
             // 
@@ -136,6 +125,17 @@
             this.UpdateBox.TabIndex = 8;
             this.UpdateBox.Text = "";
             this.UpdateBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.UpdateBox_LinkClicked);
+            // 
+            // PreviewPicture
+            // 
+            this.PreviewPicture.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.PreviewPicture.Location = new System.Drawing.Point(12, 12);
+            this.PreviewPicture.Name = "PreviewPicture";
+            this.PreviewPicture.Size = new System.Drawing.Size(418, 309);
+            this.PreviewPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.PreviewPicture.TabIndex = 1;
+            this.PreviewPicture.TabStop = false;
+            this.PreviewPicture.Click += new System.EventHandler(this.PreviewPicture_Click);
             // 
             // Preview
             // 
