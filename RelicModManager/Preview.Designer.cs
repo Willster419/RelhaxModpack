@@ -22,10 +22,10 @@
                 }
 
                 // Dispose stuff here
-                if (Youtubedisplay != null)
+                if (Browser != null)
                 {
-                    Youtubedisplay.Dispose();
-                    Youtubedisplay = null;
+                    Browser.Dispose();
+                    Browser = null;
                 }
                 if (PreviewPicture != null)
                 {

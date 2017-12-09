@@ -142,6 +142,16 @@ namespace RelhaxModpack
             polish.Add("stepsComplete", "zadania zakończone");
             french.Add("stepsComplete", "tâches terminées");
 
+            english.Add("stop", "Stop");
+            german.Add("stop", "TODO");
+            polish.Add("stop", "TODO");
+            french.Add("stop", "Arrêter");
+
+            english.Add("playPause", "Play/Pause");
+            german.Add("playPause", "TODO");
+            polish.Add("playPause", "TODO");
+            french.Add("playPause", "Jouer/Pauser");
+
             //Section: MainWindow
 
             //Componet: installRelhaxMod

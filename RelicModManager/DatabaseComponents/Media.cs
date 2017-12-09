@@ -3,7 +3,9 @@
     public enum MediaType
     {
         Picture = 1,
-        Youtube = 2
+        Webpage = 2,
+        MediaFile = 3,
+        HTML = 4
     }
     public class Media
     {

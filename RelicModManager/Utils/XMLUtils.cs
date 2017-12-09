@@ -528,11 +528,17 @@ namespace RelhaxModpack
                                                                                 switch (innerValue)
                                                                                 {
                                                                                     case 1:
-                                                                                        med.MediaType = MediaType.Picture;
-                                                                                        break;
-                                                                                    case 2:
-                                                                                        med.MediaType = MediaType.Youtube;
-                                                                                        break;
+				                                                                        med.MediaType = MediaType.Picture;
+				                                                                        break;
+				                                                                    case 2:
+				                                                                        med.MediaType = MediaType.Webpage;
+				                                                                        break;
+				                                                                    case 3:
+				                                                                        med.MediaType = MediaType.MediaFile;
+				                                                                        break;
+				                                                                    case 4:
+				                                                                        med.MediaType = MediaType.HTML;
+				                                                                        break;
                                                                                 }
                                                                                 break;
                                                                             default:
@@ -851,7 +857,13 @@ namespace RelhaxModpack
                                                                         med.MediaType = MediaType.Picture;
                                                                         break;
                                                                     case 2:
-                                                                        med.MediaType = MediaType.Youtube;
+                                                                        med.MediaType = MediaType.Webpage;
+                                                                        break;
+                                                                    case 3:
+                                                                        med.MediaType = MediaType.MediaFile;
+                                                                        break;
+                                                                    case 4:
+                                                                        med.MediaType = MediaType.HTML;
                                                                         break;
                                                                 }
                                                                 break;

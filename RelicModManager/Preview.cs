@@ -16,7 +16,8 @@ namespace RelhaxModpack
         public List<Media> Medias { get; set; }
         private Image LoadingImage;
         private int CurrentlySelected = 0;
-        private WebBrowser Youtubedisplay;
+        private WebBrowser Browser;//to change to HTML5 chrome style browser
+        private RelhaxMediaPlayer player;
         private string DateFormat;
         public SelectableDatabasePackage DBO { get; set; }
         public string LastUpdated { get; set; }
@@ -79,44 +80,77 @@ namespace RelhaxModpack
                 PreviewPicture.Dispose();
                 PreviewPicture = null;
             }
-            if (Contains(Youtubedisplay))
+            if (Controls.Contains(Browser))
             {
-                Controls.Remove(Youtubedisplay);
-                Youtubedisplay.Dispose();
-                Youtubedisplay = null;
+                Controls.Remove(Browser);
+                Browser.Dispose();
+                Browser = null;
             }
-            if (m.MediaType == MediaType.Picture)
+            if(Controls.Contains(player))
             {
-                PreviewPicture = new PictureBox()
-                {
-                    Size = PreviewComponentSize,
-                    BackColor = PreviewComponentBackColor,
-                    Location = PreviewComponentLocation,
-                    SizeMode = PreviewComponentSizeMode
-                };
-                PreviewPicture.Click += PreviewPicture_Click;
-                Controls.Add(PreviewPicture);
-                PreviewPicture.Image = Settings.getLoadingImage();
-                PreviewPicture.LoadAsync(m.URL);
-                Text = DBO.NameFormatted + " - " + CurrentlySelected;
-                Logging.Manager("Preview: started loading of picture '" + DBO.NameFormatted + "' at URL '" + m.URL + "'");
+                Controls.Remove(player);
+                player.Dispose();
+                player = null;
             }
-            else if (m.MediaType == MediaType.Youtube)
+            switch(m.MediaType)
             {
-                Youtubedisplay = new WebBrowser()
-                {
-                    Size = PreviewComponentSize,
-                    Location = PreviewComponentLocation,
-                    ScriptErrorsSuppressed = true
-                };
-                Controls.Add(Youtubedisplay);
-                Youtubedisplay.Navigate(m.URL);
-                Text = DBO.NameFormatted + " - " + CurrentlySelected;
-                Logging.Manager("Preview: started loading of youtube video '" + DBO.NameFormatted + "' at URL '" + m.URL + "'");
-            }
-            else
-            {
-                Logging.Manager("ERROR: Unknown media type: " + m.MediaType);
+                case MediaType.Picture:
+                    PreviewPicture = new PictureBox()
+                    {
+                        Size = PreviewComponentSize,
+                        BackColor = PreviewComponentBackColor,
+                        Location = PreviewComponentLocation,
+                        SizeMode = PreviewComponentSizeMode
+                    };
+                    PreviewPicture.Click += PreviewPicture_Click;
+                    Controls.Add(PreviewPicture);
+                    PreviewPicture.Image = Settings.getLoadingImage();
+                    PreviewPicture.LoadAsync(m.URL);
+                    Text = DBO.NameFormatted + " - " + CurrentlySelected;
+                    Logging.Manager("Preview: started loading of picture '" + DBO.NameFormatted + "' at URL '" + m.URL + "'");
+                    break;
+                case MediaType.Webpage:
+                    //NOTE: needs to be fixed
+                    Browser = new WebBrowser()
+                    {
+                        Size = PreviewComponentSize,
+                        Location = PreviewComponentLocation,
+                        ScriptErrorsSuppressed = true
+                    };
+                    Controls.Add(Browser);
+                    Browser.Navigate(m.URL);
+                    Text = DBO.NameFormatted + " - " + CurrentlySelected;
+                    Logging.Manager("Preview: started loading of webpage '" + DBO.NameFormatted + "' at URL '" + m.URL + "'");
+                    break;
+                case MediaType.MediaFile:
+                    player = new RelhaxMediaPlayer()
+                    {
+                        Size = PreviewComponentSize,
+                        Location = PreviewComponentLocation,
+                        //BackColor = PreviewComponentBackColor,
+                        MediaURL = m.URL,
+                        StopText = Translations.getTranslatedString("stop"),
+                        PlayPauseText = Translations.getTranslatedString("playPause")
+                    };
+                    Controls.Add(player);
+                    Text = DBO.NameFormatted + " - " + CurrentlySelected;
+                    Logging.Manager("Preview: started loading of direct media '" + DBO.NameFormatted + "' at URL '" + m.URL + "'");
+                    break;
+                case MediaType.HTML:
+                    Browser = new WebBrowser()
+                    {
+                        Size = PreviewComponentSize,
+                        Location = PreviewComponentLocation,
+                        ScriptErrorsSuppressed = true
+                    };
+                    Controls.Add(Browser);
+                    Browser.DocumentText = m.URL;
+                    Text = DBO.NameFormatted + " - " + CurrentlySelected;
+                    Logging.Manager("Preview: started loading of HTML '" + DBO.NameFormatted + "' at HTML '" + m.URL + "'");
+                    break;
+                default:
+                    Logging.Manager("WARNING: Unknown mediaType: " + m.MediaType);
+                    break;
             }
         }
         //make the linked labels for each picture in the picturesList
@@ -223,10 +257,15 @@ namespace RelhaxModpack
                 PreviewPicture.Size = new Size(width, applicationHeight - 265 - TitleBarDifference - scale);
                 tempSize = PreviewPicture.Size;
             }
-            if (Youtubedisplay != null)
+            if (Browser != null)
             {
-                Youtubedisplay.Size = new Size(width, applicationHeight - 265 - TitleBarDifference - scale);
-                tempSize = Youtubedisplay.Size;
+                Browser.Size = new Size(width, applicationHeight - 265 - TitleBarDifference - scale);
+                tempSize = Browser.Size;
+            }
+            if(player != null)
+            {
+                player.Size = new Size(width, applicationHeight - 265 - TitleBarDifference - scale);
+                tempSize = player.Size;
             }
             UpdateBox.Location = new Point(12, 12 + tempSize.Height + 6 + NextPicButton.Size.Height + 6 + DescriptionBox.Size.Height + 6);
             DescriptionBox.Location = new Point(12, 12 + tempSize.Height + 6 + NextPicButton.Size.Height + 6);

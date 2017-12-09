@@ -610,7 +610,9 @@
             this.PicturesTypeCBox.Items.AddRange(new object[] {
             "-none-",
             "1 - picture",
-            "2 - video"});
+            "2 - webpage",
+            "3 - mediaFile",
+            "4 - HTML"});
             this.PicturesTypeCBox.Location = new System.Drawing.Point(48, 111);
             this.PicturesTypeCBox.Name = "PicturesTypeCBox";
             this.PicturesTypeCBox.Size = new System.Drawing.Size(151, 21);

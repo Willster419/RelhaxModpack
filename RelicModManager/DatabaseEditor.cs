@@ -1719,13 +1719,20 @@ namespace RelhaxModpack
             {
                 URL = PictureURLTB.Text
             };
-            if (PicturesTypeCBox.SelectedIndex == 1)
+            switch(PicturesTypeCBox.SelectedIndex)
             {
-                media.MediaType = MediaType.Picture;
-            }
-            else if (PicturesTypeCBox.SelectedIndex == 2)
-            {
-                media.MediaType = MediaType.Youtube;
+                case 1:
+                    media.MediaType = MediaType.Picture;
+                    break;
+                case 2:
+                    media.MediaType = MediaType.Webpage;
+                    break;
+                case 3:
+                    media.MediaType = MediaType.MediaFile;
+                    break;
+                case 4:
+                    media.MediaType = MediaType.HTML;
+                    break;
             }
             SelectedDatabaseObject.PictureList.Insert(index, media);
             ObjectPicturesList.DataSource = null;
@@ -1757,13 +1764,20 @@ namespace RelhaxModpack
             }
             if (MessageBox.Show("Confirm you wish to edit picture entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
-            if (PicturesTypeCBox.SelectedIndex == 1)
+            switch (PicturesTypeCBox.SelectedIndex)
             {
-                media.MediaType = MediaType.Picture;
-            }
-            else if (PicturesTypeCBox.SelectedIndex == 2)
-            {
-                media.MediaType = MediaType.Youtube;
+                case 1:
+                    media.MediaType = MediaType.Picture;
+                    break;
+                case 2:
+                    media.MediaType = MediaType.Webpage;
+                    break;
+                case 3:
+                    media.MediaType = MediaType.MediaFile;
+                    break;
+                case 4:
+                    media.MediaType = MediaType.HTML;
+                    break;
             }
             media.URL = PictureURLTB.Text;
             ObjectPicturesList.DataSource = null;
@@ -1843,15 +1857,7 @@ namespace RelhaxModpack
             if (lb.DataSource == null)
                 return;
             Media med = (Media)lb.SelectedItem;
-            switch (med.MediaType)
-            {
-                case MediaType.Picture:
-                    PicturesTypeCBox.SelectedIndex = 1;
-                    break;
-                case MediaType.Youtube:
-                    PicturesTypeCBox.SelectedIndex = 2;
-                    break;
-            }
+            PicturesTypeCBox.SelectedIndex = (int)med.MediaType;
             PictureURLTB.Text = med.URL;
             MovePictureTB.Text = "" + SelectedDatabaseObject.PictureList.IndexOf(med);
             AddPictureTB.Text = "" + SelectedDatabaseObject.PictureList.IndexOf(med);
