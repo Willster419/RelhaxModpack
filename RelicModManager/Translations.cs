@@ -547,6 +547,13 @@ namespace RelhaxModpack
             polish.Add("clickHereUpdateLabel", "kliknij tutaj");
             french.Add("clickHereUpdateLabel", "Cliquez ici");
 
+            //Componet: 
+            //
+            english.Add("MissingWMP", "You are missing Windows Media Player from your system.");
+            german.Add("MissingWMP", "TODO");
+            polish.Add("MissingWMP", "TODO");
+            french.Add("MissingWMP", "TODO");
+
             //Section: PleaseWait
             //Componet: label1
             //

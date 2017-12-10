@@ -21,6 +21,7 @@ namespace RelhaxModpack
         private string DateFormat;
         public SelectableDatabasePackage DBO { get; set; }
         public string LastUpdated { get; set; }
+        Label ErrorLabel;
         
         public Preview()
         {
@@ -93,6 +94,12 @@ namespace RelhaxModpack
                 player.Dispose();
                 player = null;
             }
+            if(Controls.Contains(ErrorLabel))
+            {
+                Controls.Remove(ErrorLabel);
+                ErrorLabel.Dispose();
+                ErrorLabel = null;
+            }
             switch(m.MediaType)
             {
                 case MediaType.Picture:
@@ -124,18 +131,33 @@ namespace RelhaxModpack
                     Logging.Manager("Preview: started loading of webpage '" + DBO.NameFormatted + "' at URL '" + m.URL + "'");
                     break;
                 case MediaType.MediaFile:
-                    player = new RelhaxMediaPlayer()
+                    try
                     {
-                        Size = PreviewComponentSize,
-                        Location = PreviewComponentLocation,
-                        //BackColor = PreviewComponentBackColor,
-                        MediaURL = m.URL,
-                        StopText = Translations.getTranslatedString("stop"),
-                        PlayPauseText = Translations.getTranslatedString("playPause")
-                    };
-                    Controls.Add(player);
-                    Text = DBO.NameFormatted + " - " + CurrentlySelected;
-                    Logging.Manager("Preview: started loading of direct media '" + DBO.NameFormatted + "' at URL '" + m.URL + "'");
+                        player = new RelhaxMediaPlayer()
+                        {
+                            Size = PreviewComponentSize,
+                            Location = PreviewComponentLocation,
+                            //BackColor = PreviewComponentBackColor,
+                            MediaURL = m.URL,
+                            StopText = Translations.getTranslatedString("stop"),
+                            PlayPauseText = Translations.getTranslatedString("playPause")
+                        };
+                        Controls.Add(player);
+                        Text = DBO.NameFormatted + " - " + CurrentlySelected;
+                        Logging.Manager("Preview: started loading of direct media '" + DBO.NameFormatted + "' at URL '" + m.URL + "'");
+                    }
+                    catch (Exception e)
+                    {
+                        Utils.ExceptionLog(e);
+                        ErrorLabel = new Label()
+                        {
+                            Text = Translations.getTranslatedString("MissingWMP"),
+                            AutoSize = false,
+                            Size = PreviewComponentSize
+                        };
+                        Controls.Add(ErrorLabel);
+                        Text = DBO.NameFormatted + " - " + CurrentlySelected;
+                    }
                     break;
                 case MediaType.HTML:
                     Browser = new WebBrowser()
