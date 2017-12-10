@@ -143,12 +143,12 @@ namespace RelhaxModpack
             french.Add("stepsComplete", "tâches terminées");
 
             english.Add("stop", "Stop");
-            german.Add("stop", "TODO");
+            german.Add("stop", "Stop");
             polish.Add("stop", "TODO");
             french.Add("stop", "Arrêter");
 
             english.Add("playPause", "Play/Pause");
-            german.Add("playPause", "TODO");
+            german.Add("playPause", "Play/Pause");
             polish.Add("playPause", "TODO");
             french.Add("playPause", "Jouer/Pauser");
 
