@@ -1,3 +1,7 @@
+Version 27.3.2_BETA (12/9/2017)
+-Added new audio preview mode. Usefull for listing to sixth sense and other audio sounds.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 27.3.0 (12/7/2017)
 https://www.virustotal.com/#/file/4e1931b6d5b6fade1cda84f8ca482dbc896712fe208b78f2093a75c149643b89/detection
 -Fixed issues with JSON empty array logging
