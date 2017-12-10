@@ -69,7 +69,8 @@ namespace RelhaxModpack
         //begine the async process of loading the new picture
         public void DisplayMedia(Media m)
         {
-            PreviewPicture.Image = null;
+            if(PreviewPicture != null)
+                PreviewPicture.Image = null;
             if (Medias.Count == 0)
                 return;
             if (m.URL.Equals(""))
