@@ -13,6 +13,9 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using Newtonsoft.Json.Linq;
 using System.Collections;
+using System.Windows;
+using System.Windows.Interop;
+using IWshRuntimeLibrary;
 
 namespace RelhaxModpack
 {
@@ -34,7 +37,7 @@ namespace RelhaxModpack
             lock (_locker)              // avoid that 2 or more threads calling the Log function and writing lines in a mess
             {
                 //the method should automaticly make the file if it's not there
-                string filePath = Path.Combine(Application.StartupPath, "RelHaxLog.txt");
+                string filePath = Path.Combine(System.Windows.Forms.Application.StartupPath, "RelHaxLog.txt");
                 if (!System.IO.File.Exists(filePath))
                 {
                     System.IO.File.AppendAllText(filePath, "");
@@ -814,7 +817,7 @@ namespace RelhaxModpack
         //returns true if the CRC's of each file match, false otherwise
         public static bool CRCsMatch(string localFile, string remoteCRC)
         {
-            if (!File.Exists(localFile))
+            if (!System.IO.File.Exists(localFile))
                 return false;
             string crc = XMLUtils.GetMd5Hash(localFile);
             if (crc.Equals(remoteCRC))
@@ -1140,26 +1143,48 @@ namespace RelhaxModpack
         public static void CreateShortcut(string shortcutTarget, string shortcutName, bool create, bool log)
         {
             string modifiedName = Path.GetFileNameWithoutExtension(shortcutName) + ".lnk";
+            string desktopPath = Utils.ReplaceDirectorySeparatorChar(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), modifiedName));
             if (create)
             {
                 try
                 {
-                    IShellLink link = (IShellLink)new ShellLink();
-                    // setup shortcut information
-                    link.SetDescription("created by the Relhax Manager");
-                    link.SetPath(@shortcutTarget);
-                    link.SetIconLocation(@shortcutTarget, 0);
-                    link.SetWorkingDirectory(Path.GetDirectoryName(@shortcutTarget));
-                    link.SetArguments(""); //The arguments used when executing the exe
-                    // save it
-                    System.Runtime.InteropServices.ComTypes.IPersistFile file = (System.Runtime.InteropServices.ComTypes.IPersistFile)link;
-                    string desktopPath = Utils.ReplaceDirectorySeparatorChar(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), modifiedName));
+                    if(System.IO.File.Exists(desktopPath))
+                    {
+                        //file exists, check if needs update
+                        WshShell shell = new WshShell(); //Create a new WshShell Interface
+                        IWshShortcut link = (IWshShortcut)shell.CreateShortcut(desktopPath); //Link the interface to our shortcut
+                        //System.Windows.Forms.MessageBox.Show(link.TargetPath);
+                        if(!shortcutTarget.Equals(link.TargetPath))
+                        {
+                            //needs update
+                            link.TargetPath = shortcutTarget;
+                            link.Save();
+                        }
+                        else
+                        {
+                            //no update needed
+                        }
+                    }
+                    else
+                    {
+                        //file does not exist, needs to be created
+                        IShellLink link = (IShellLink)new ShellLink();
+                        // setup shortcut information
+                        link.SetDescription("created by the Relhax Manager");
+                        link.SetPath(@shortcutTarget);
+                        link.SetIconLocation(@shortcutTarget, 0);
+                        link.SetWorkingDirectory(Path.GetDirectoryName(@shortcutTarget));
+                        link.SetArguments(""); //The arguments used when executing the exe
+                                               // save it
+                        System.Runtime.InteropServices.ComTypes.IPersistFile file = (System.Runtime.InteropServices.ComTypes.IPersistFile)link;
+                        file.Save(desktopPath, false);
+                    }
                     if (log)
                     {
                         // Utils.AppendToInstallLog(desktopPath);
-                        Logging.Installer(desktopPath);                     // write created file with path
+                        // write created file with path
+                        Logging.Installer(desktopPath);
                     }
-                    file.Save(desktopPath, false);
                 }
                 catch (Exception ex)
                 {
@@ -1170,8 +1195,8 @@ namespace RelhaxModpack
             {
                 try
                 {
-                    if (File.Exists(modifiedName))
-                        File.Delete(modifiedName);
+                    if (System.IO.File.Exists(modifiedName))
+                        System.IO.File.Delete(modifiedName);
                 }
                 catch (Exception ex)
                 {
