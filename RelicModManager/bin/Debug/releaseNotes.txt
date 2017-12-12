@@ -1,3 +1,11 @@
+Version 27.4.0 (12/12/2017)
+https://www.virustotal.com/#/file/ec2dac02785baea4d4c2675c619f500ed56cb67cbf309dbfab63e22656684bf6/detection
+-Added new preview mode/feature: Audio. You can now preview sound mods and 6th sense sounds directly from the application via the 3rd party application NAudio
+-Added feature to check if an already created icon has the same target path as the new one. If they match, it will not overwrite the shortcut
+-Added ability in backend tools to run script for cleaning ftp files
+-Added new form window that will delete all old local zip files no longer in use
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 27.3.0 (12/7/2017)
 
 -Fixed issues with JSON empty array logging

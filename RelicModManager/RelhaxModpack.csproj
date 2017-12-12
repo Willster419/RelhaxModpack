@@ -30,7 +30,7 @@
     <ProductName>Relhax Modpack</ProductName>
     <PublisherName>Willard Wider</PublisherName>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>0.27.3.0</ApplicationVersion>
+    <ApplicationVersion>0.27.4.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -142,6 +142,12 @@
     <Compile Include="DatabaseComponents\IDatabasePackage.cs" />
     <Compile Include="DatabaseComponents\LogicalDependency.cs" />
     <Compile Include="DatabaseComponents\Media.cs" />
+    <Compile Include="FTPClean.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FTPClean.Designer.cs">
+      <DependentUpon>FTPClean.cs</DependentUpon>
+    </Compile>
     <Compile Include="InstallerComponents\Atlas.cs" />
     <Compile Include="InstallerComponents\InstallGroup.cs" />
     <Compile Include="InstallerComponents\Shortcut.cs" />
@@ -339,6 +345,9 @@
     <EmbeddedResource Include="Diagnostics.resx">
       <DependentUpon>Diagnostics.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FTPClean.resx">
+      <DependentUpon>FTPClean.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LegacyComponents\CRCCheck.resx">
       <DependentUpon>CRCCheck.cs</DependentUpon>
     </EmbeddedResource>
@@ -441,6 +450,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\DotNetZip.dll" />
+    <Content Include="3rdPartyLicences\NAudio.txt" />
     <Content Include="Resources\loading.gif" />
     <Content Include="Resources\loading_3rdguards.gif" />
     <EmbeddedResource Include="Resources\Newtonsoft.Json.dll" />
@@ -467,6 +477,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF "%25COMPUTERNAME%25"=="IMOSDPC04" copy /Y $(TargetPath) "D:\RelHax Manager\"</PostBuildEvent>

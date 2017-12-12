@@ -28,7 +28,7 @@ namespace RelhaxModpack
             Beta = 1,
             Alpha = 2
         }
-        public static ProgramVersion Version = ProgramVersion.Alpha;
+        public static ProgramVersion Version = ProgramVersion.Stable;
         [STAThread]
         static void Main()
         {
@@ -134,6 +134,12 @@ namespace RelhaxModpack
                 {
                     Logging.Manager("/databaseedit detected, loading in database edit mode");
                     Application.Run(new DatabaseEditor());
+                    return;
+                }
+                else if (Regex.IsMatch(commandArgs[i], @"ftpclean$"))
+                {
+                    Logging.Manager("/ftpclean detected, loading ftpclean window");
+                    Application.Run(new FTPClean());
                     return;
                 }
             }

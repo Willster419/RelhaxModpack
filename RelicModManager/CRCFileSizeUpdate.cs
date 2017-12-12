@@ -508,5 +508,16 @@ namespace RelhaxModpack
         {
             InfoTB.Text = "";
         }
+
+        private void RunCreateOutdatedFilesList_Click(object sender, EventArgs e)
+        {
+            OnlineScriptOutput.Text = "Running script CreateOutDatesFilesList.php...";
+            Application.DoEvents();
+            using (WebClient client = new WebClient())
+            {
+                OnlineScriptOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateOutdatedFileList.php").Replace("<br />", "\n");
+            }
+            Application.DoEvents();
+        }
     }
 }

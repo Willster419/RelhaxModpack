@@ -39,6 +39,7 @@
             this.RunCreateModInfoPHP = new System.Windows.Forms.Button();
             this.RunCreateServerInfoPHP = new System.Windows.Forms.Button();
             this.InfoTB = new System.Windows.Forms.RichTextBox();
+            this.RunCreateOutdatedFilesList = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // loadDatabaseButton
@@ -89,9 +90,9 @@
             // 
             // RunCreateDatabasePHP
             // 
-            this.RunCreateDatabasePHP.Location = new System.Drawing.Point(497, 53);
+            this.RunCreateDatabasePHP.Location = new System.Drawing.Point(434, 53);
             this.RunCreateDatabasePHP.Name = "RunCreateDatabasePHP";
-            this.RunCreateDatabasePHP.Size = new System.Drawing.Size(113, 35);
+            this.RunCreateDatabasePHP.Size = new System.Drawing.Size(119, 35);
             this.RunCreateDatabasePHP.TabIndex = 5;
             this.RunCreateDatabasePHP.Text = "Run script CreateDatabase.php";
             this.RunCreateDatabasePHP.UseVisualStyleBackColor = true;
@@ -151,11 +152,23 @@
             this.InfoTB.TabIndex = 10;
             this.InfoTB.Text = "";
             // 
+            // RunCreateOutdatedFilesList
+            // 
+            this.RunCreateOutdatedFilesList.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RunCreateOutdatedFilesList.Location = new System.Drawing.Point(559, 53);
+            this.RunCreateOutdatedFilesList.Name = "RunCreateOutdatedFilesList";
+            this.RunCreateOutdatedFilesList.Size = new System.Drawing.Size(111, 35);
+            this.RunCreateOutdatedFilesList.TabIndex = 11;
+            this.RunCreateOutdatedFilesList.Text = "Run script CreateOutDatesFilesList.php";
+            this.RunCreateOutdatedFilesList.UseVisualStyleBackColor = true;
+            this.RunCreateOutdatedFilesList.Click += new System.EventHandler(this.RunCreateOutdatedFilesList_Click);
+            // 
             // CRCFileSizeUpdate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(677, 237);
+            this.Controls.Add(this.RunCreateOutdatedFilesList);
             this.Controls.Add(this.InfoTB);
             this.Controls.Add(this.RunCreateServerInfoPHP);
             this.Controls.Add(this.RunCreateModInfoPHP);
@@ -188,5 +201,6 @@
         private System.Windows.Forms.Button RunCreateModInfoPHP;
         private System.Windows.Forms.Button RunCreateServerInfoPHP;
         private System.Windows.Forms.RichTextBox InfoTB;
+        private System.Windows.Forms.Button RunCreateOutdatedFilesList;
     }
 }
