@@ -444,6 +444,7 @@
     <Content Include="Resources\loading.gif" />
     <Content Include="Resources\loading_3rdguards.gif" />
     <EmbeddedResource Include="Resources\Newtonsoft.Json.dll" />
+    <EmbeddedResource Include="Resources\NAudio.dll" />
     <Content Include="Resources\relicbanner_for_ico.ico" />
   </ItemGroup>
   <ItemGroup>

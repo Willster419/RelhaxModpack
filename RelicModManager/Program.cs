@@ -40,8 +40,10 @@ namespace RelhaxModpack
             //https://www.codeproject.com/articles/528178/load-dll-from-embedded-resource
             string resource1 = "RelhaxModpack.Resources.DotNetZip.dll";
             string resource2 = "RelhaxModpack.Resources.Newtonsoft.Json.dll";
+            string resource3 = "RelhaxModpack.Resources.NAudio.dll";
             EmbeddedAssembly.Load(resource1, "DotNetZip.dll");
             EmbeddedAssembly.Load(resource2, "Newtonsoft.Json.dll");
+            EmbeddedAssembly.Load(resource3, "NAudio.dll");
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
             // delete RelicCopyUpdate.bat at start (it is only needed at updates, so kill it)
             try

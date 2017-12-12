@@ -666,7 +666,7 @@ namespace RelhaxModpack
             //check if old dll files can be deleted
             try
             {
-                string[] filesToDelete = { "DotNetZip.dll", "Ionic.Zip.dll", "Newtonsoft.Json.dll" };
+                string[] filesToDelete = { "DotNetZip.dll", "Ionic.Zip.dll", "Newtonsoft.Json.dll", "NAudio.dll" };
                 foreach (string s in filesToDelete)
                     if (File.Exists(Path.Combine(Application.StartupPath, s)))
                         File.Delete(Path.Combine(Application.StartupPath, s));
