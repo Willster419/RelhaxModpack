@@ -115,6 +115,7 @@
             this.Controls.Add(this.MediaPlayerLayout);
             this.Name = "RelhaxMediaPlayer";
             this.Size = new System.Drawing.Size(378, 88);
+            this.Load += new System.EventHandler(this.RelhaxMediaPlayer_Load);
             this.SizeChanged += new System.EventHandler(this.RelhaxMediaPlayer_SizeChanged);
             this.MediaPlayerLayout.ResumeLayout(false);
             this.MediaPlayerLayout.PerformLayout();
