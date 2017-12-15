@@ -152,6 +152,7 @@ namespace RelhaxModpack
                 XDocument doc = XDocument.Parse(xmlString);
                 //parse the database version
                 databaseURL = doc.XPathSelectElement("//version/database_beta_url").Value;
+                Settings.TanksOnlineFolderVersion = XMLUtils.ReadOnlineFolderFromModInfo(databaseURL);
                 string localDest = Path.Combine(Application.StartupPath, "RelHaxTemp", "modInfo_beta.xml");
                 //always delete the file before redownloading
                 if (File.Exists(localDest))
