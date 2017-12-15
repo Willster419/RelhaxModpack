@@ -1,3 +1,11 @@
+---NOTE: This is NOT an update for supporting 9.20.0.1, only an application update!!---
+Version 27.4.2 (12/15/2017)
+https://www.virustotal.com/#/file/0b32699b0fab4fce1e862e057db692499c055f957829aa4f8fafe57be7c83e72/detection
+-Fixed bugs with /beta-database command line switch, not using correct onlineFolder macro. It will now download mods specified in the beta database
+-Fixed bugs with the text patch display during file extraction
+-Fixed bugs with the atlas image packer
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 27.4.0 (12/12/2017)
 https://www.virustotal.com/#/file/ec2dac02785baea4d4c2675c619f500ed56cb67cbf309dbfab63e22656684bf6/detection
 -Added new preview mode/feature: Audio. You can now preview sound mods and 6th sense sounds directly from the application via the 3rd party application NAudio
