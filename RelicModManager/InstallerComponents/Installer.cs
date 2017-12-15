@@ -1549,7 +1549,7 @@ namespace RelhaxModpack
             InstallWorker.ReportProgress(0);
             AtlasesCreator.AtlasesArgs atlasesArgs = new AtlasesCreator.AtlasesArgs
             {
-                MaxHeight = 2048,
+                MaxHeight = 4096,
                 ImageFile = Path.Combine(a.atlasSaveDirectory, a.atlasFile),
                 MapFile = Path.Combine(a.atlasSaveDirectory, a.mapFile),
                 PowOf2 = true,

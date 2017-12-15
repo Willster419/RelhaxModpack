@@ -169,6 +169,7 @@ namespace RelhaxModpack.AtlasesCreator
                 if (result != 0)
                 {
                     Logging.Manager("There was an error making the image sheet.");
+                    //error result 7 = "failed to pack image" most likely it won't fit
                     return result;
                 }
 
