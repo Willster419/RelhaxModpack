@@ -1239,15 +1239,27 @@ namespace RelhaxModpack
                 Logging.Manager("ERROR. Wrong Trim method called. String: " + text + " with direction: " + direction.ToString());
                 return text;
             }
+            //if it won't fit, account for the "..." that will be added
+            if(TextRenderer.MeasureText(preText + midText + trailingText, font).Width > maxWidth)
+                maxWidth = maxWidth - TextRenderer.MeasureText("...", font).Width;
             while (TextRenderer.MeasureText(preText + midText + trailingText, font).Width > maxWidth)
             {
                 if (firstPass)
                 {
                     preText = text.Substring(0, l) + "...";
                     midText = text.Substring(l);
+                    i = midText.Length;
                     firstPass = false;
                 }
-                midText = text.Substring(0, --i);
+                //if truncating in the middle, use the middle subtext, not the entire text
+                if(direction == 2)
+                {
+                    midText = midText.Substring(0, --i);
+                }
+                else
+                {
+                    midText = text.Substring(0, --i);
+                }
                 if (i == 0) break;
             }
             return preText + midText + trailingText;
