@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.IO;
+using System.Globalization;
 
 namespace RelhaxModpack
 {
@@ -67,7 +68,11 @@ namespace RelhaxModpack
 
             //verify the file exists...
             if (!File.Exists(filePath))
+            {
+                Logging.Manager("WARNING: file not found");
                 return;
+            }
+
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
             //check to see if it has the header info at the top to see if we need to remove it later
@@ -259,9 +264,12 @@ namespace RelhaxModpack
                 }
             }
 
-            //check that the file exists
+            //verify the file exists...
             if (!File.Exists(fileLocation))
+            {
+                Logging.Manager("WARNING: file not found");
                 return;
+            }
 
             //replace all "fake escape characters" with real escape characters
             search = search.Replace(@"\n", "newline");
@@ -276,14 +284,22 @@ namespace RelhaxModpack
             if (lineNumber == 0)
             //search entire file and replace each instance
             {
+                bool everReplaced = false;
                 for (int i = 0; i < fileParsed.Count(); i++)
                 {
                     if (Regex.IsMatch(fileParsed[i], search))
                     {
                         fileParsed[i] = Regex.Replace(fileParsed[i], search, replace);
                         fileParsed[i] = Regex.Replace(fileParsed[i], "newline", "\n");
+                        //fileParsed[i] = Regex.Replace(fileParsed[i], @"\n", "\n");
+                        everReplaced = true;
                     }
                     sb.Append(fileParsed[i] + "\n");
+                }
+                if (!everReplaced)
+                {
+                    Logging.Manager("WARNING: Regex never matched");
+                    return;
                 }
             }
             else if (lineNumber == -1)
@@ -296,9 +312,15 @@ namespace RelhaxModpack
                     if (Regex.IsMatch(file, search))
                     {
                         file = Regex.Replace(file, search, replace);
+                        file = Regex.Replace(file, "newline", "\n");
+                        //file = Regex.Replace(file, @"\n", "\n");
+                        sb.Append(file);
                     }
-                    file = Regex.Replace(file, "newline", "\n");
-                    sb.Append(file);
+                    else
+                    {
+                        Logging.Manager("WARNING: Regex match not found");
+                        return;
+                    }
                 }
                 catch (ArgumentException)
                 {
@@ -307,6 +329,7 @@ namespace RelhaxModpack
             }
             else
             {
+                bool everReplaced = false;
                 for (int i = 0; i < fileParsed.Count(); i++)
                 {
                     if (i == lineNumber - 1)
@@ -315,9 +338,16 @@ namespace RelhaxModpack
                         if (Regex.IsMatch(value, search))
                         {
                             fileParsed[i] = Regex.Replace(fileParsed[i], search, replace);
+                            fileParsed[i] = Regex.Replace(fileParsed[i], "newline", "\n");
+                            //fileParsed[i] = Regex.Replace(fileParsed[i], @"\n", "\n");
                         }
                     }
                     sb.Append(fileParsed[i] + "\n");
+                }
+                if (!everReplaced)
+                {
+                    Logging.Manager("WARNING: Regex never matched");
+                    return;
                 }
             }
             //save the file back into the string and then the file
@@ -363,7 +393,7 @@ namespace RelhaxModpack
             //try a double nixt. it will parse a double and int. at this point it could be eithor
             try
             {
-                newValueDouble = double.Parse(testValue);
+                newValueDouble = double.Parse(testValue, CultureInfo.InvariantCulture);
                 useDouble = true;
             }
             catch (FormatException)
@@ -420,9 +450,12 @@ namespace RelhaxModpack
                 }
             }
 
-            //check that the file exists
+            //verify the file exists...
             if (!File.Exists(jsonFile))
+            {
+                Logging.Manager("WARNING: file not found");
                 return;
+            }
 
             //load file from disk...
             string file = File.ReadAllText(jsonFile);
