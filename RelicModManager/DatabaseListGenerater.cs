@@ -15,8 +15,10 @@ namespace RelhaxModpack
         private int level = 0;
         private string modName = "";
         private string configname = "N/A";
+        private string notApplicatable = "n/a";
         private string zipfile = "";
         private bool enabled = false;
+        private bool visible = false;
         private string devURL = "";
         private List<Dependency> globalDependencies;
         private List<Category> parsedCatagoryList;
@@ -60,8 +62,10 @@ namespace RelhaxModpack
 
         private void GenretateInternalSpreadsheetButton_Click(object sender, EventArgs e)
         {
+            SaveSpreadsheetFileDialog.Filter = "database.csv|database.csv";
+            //WorldOfTanks.exe|WorldOfTanks.exe
             //reset everything
-            header = "PackageName\tCategory\tMod\tConfig\tLevel\tZip\tDevURL\tEnabled";
+            header = "PackageName\tCategory\tMod\tConfig\tLevel\tZip\tDevURL\tEnabled\tVisible";
             sb = new StringBuilder();
             packageName = "";
             category = "";
@@ -71,6 +75,7 @@ namespace RelhaxModpack
             zipfile = "";
             devURL = "";
             enabled = false;
+            visible = false;
             //ask where to save the file
             if (SaveSpreadsheetFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
                 return;
@@ -81,7 +86,8 @@ namespace RelhaxModpack
             foreach(Dependency d in globalDependencies)
             {
                 packageName = d.PackageName;
-                zipfile = d.ZipFile;
+                //zipfile = d.ZipFile;
+                zipfile = string.IsNullOrWhiteSpace(d.ZipFile) ? notApplicatable : d.ZipFile;
                 enabled = d.Enabled;
                 sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
             }
@@ -90,7 +96,7 @@ namespace RelhaxModpack
             foreach (Dependency d in dependencies)
             {
                 packageName = d.PackageName;
-                zipfile = d.ZipFile;
+                zipfile = string.IsNullOrWhiteSpace(d.ZipFile) ? notApplicatable : d.ZipFile;
                 enabled = d.Enabled;
                 sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
             }
@@ -99,7 +105,7 @@ namespace RelhaxModpack
             foreach (LogicalDependency d in logicalDependencies)
             {
                 packageName = d.PackageName;
-                zipfile = d.ZipFile;
+                zipfile = string.IsNullOrWhiteSpace(d.ZipFile) ? notApplicatable : d.ZipFile;
                 enabled = d.Enabled;
                 sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
             }
@@ -114,14 +120,15 @@ namespace RelhaxModpack
                     level = 1;
                     modName = m.Name;
                     configname = "N/A";
-                    zipfile = m.ZipFile;
+                    zipfile = string.IsNullOrWhiteSpace(m.ZipFile) ? notApplicatable : m.ZipFile;
                     enabled = m.Enabled;
+                    visible = m.Visible;
                     if (m.DevURL.Equals(""))
                         devURL = "";
                     else
                         devURL = "=HYPERLINK(\"" + m.DevURL + "\",\"link\")";
                     //header = "Index,Category,Mod,Config,Level,Zip,Enabled";
-                    sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
+                    sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\t" + visible + "\n");
                     if (m.configs.Count > 0)
                         processConfigsSpreadsheetGenerate(m.configs, level + 1);
                 }
@@ -144,13 +151,13 @@ namespace RelhaxModpack
                 devURL = "";
                 packageName = con.PackageName;
                 configname = con.Name;
-                zipfile = con.ZipFile;
+                zipfile = string.IsNullOrWhiteSpace(con.ZipFile) ? notApplicatable : con.ZipFile;
                 enabled = con.Enabled;
                 if (con.DevURL.Equals(""))
                     devURL = "";
                 else
                     devURL = "=HYPERLINK(\"" + con.DevURL + "\",\"link\")";
-                sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + newLevel + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
+                sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + newLevel + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\t" + visible + "\n");
                 if (con.configs.Count > 0)
                     processConfigsSpreadsheetGenerate(con.configs, newLevel + 1);
             }
@@ -158,6 +165,7 @@ namespace RelhaxModpack
 
         private void GenerateSpreadsheetUserButton_Click(object sender, EventArgs e)
         {
+            SaveSpreadsheetFileDialog.Filter = "database_user.csv|database_user.csv";
             header = "Category\tMod\tDevURL";
             //reset everything
             sb = new StringBuilder();
