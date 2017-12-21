@@ -1,4 +1,6 @@
----NOTE: This is NOT an update for supporting 9.20.0.1, only an application update!!---
+Version 27.4.3_BETA (12/20/2017)
+-Attemps to fix double and float parsing bug for different local cultures
+
 Version 27.4.2 (12/15/2017)
 https://www.virustotal.com/#/file/0b32699b0fab4fce1e862e057db692499c055f957829aa4f8fafe57be7c83e72/detection
 -Fixed bugs with /beta-database command line switch, not using correct onlineFolder macro. It will now download mods specified in the beta database
