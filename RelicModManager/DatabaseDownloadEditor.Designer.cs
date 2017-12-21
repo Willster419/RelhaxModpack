@@ -77,6 +77,7 @@
             // 
             // SaveDownloadDialog
             // 
+            this.SaveDownloadDialog.RestoreDirectory = true;
             this.SaveDownloadDialog.SupportMultiDottedExtensions = true;
             this.SaveDownloadDialog.Title = "Save File";
             // 
