@@ -1,5 +1,9 @@
-Version 27.4.3_BETA (12/20/2017)
--Attemps to fix double and float parsing bug for different local cultures
+Version 27.4.4 (12/21/2017)
+https://www.virustotal.com/#/file/2dd89bc19ad405602ddc60fa1d569a5677f79bb1bbe358815b2daf2d44ee1b60/detection
+-Added more useful patching log statements for patch debugging
+-Fixed bug with float decimal parsing ("." vs. ",")
+-Fixed bugs with database list output generator
+--------------------------------------------------------------------------------------------------------------------------------------------
 
 Version 27.4.2 (12/15/2017)
 https://www.virustotal.com/#/file/0b32699b0fab4fce1e862e057db692499c055f957829aa4f8fafe57be7c83e72/detection
