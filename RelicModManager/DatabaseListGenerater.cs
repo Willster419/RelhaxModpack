@@ -86,8 +86,8 @@ namespace RelhaxModpack
             foreach(Dependency d in globalDependencies)
             {
                 packageName = d.PackageName;
-                //zipfile = d.ZipFile;
                 zipfile = string.IsNullOrWhiteSpace(d.ZipFile) ? notApplicatable : d.ZipFile;
+                devURL = string.IsNullOrWhiteSpace(d.DevURL) ? "" : "=HYPERLINK(\"" + d.DevURL + "\",\"link\")";
                 enabled = d.Enabled;
                 sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
             }
@@ -97,6 +97,7 @@ namespace RelhaxModpack
             {
                 packageName = d.PackageName;
                 zipfile = string.IsNullOrWhiteSpace(d.ZipFile) ? notApplicatable : d.ZipFile;
+                devURL = string.IsNullOrWhiteSpace(d.DevURL) ? "" : "=HYPERLINK(\"" + d.DevURL + "\",\"link\")";
                 enabled = d.Enabled;
                 sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
             }
@@ -106,6 +107,7 @@ namespace RelhaxModpack
             {
                 packageName = d.PackageName;
                 zipfile = string.IsNullOrWhiteSpace(d.ZipFile) ? notApplicatable : d.ZipFile;
+                devURL = string.IsNullOrWhiteSpace(d.DevURL) ? "" : "=HYPERLINK(\"" + d.DevURL + "\",\"link\")";
                 enabled = d.Enabled;
                 sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
             }
@@ -123,10 +125,7 @@ namespace RelhaxModpack
                     zipfile = string.IsNullOrWhiteSpace(m.ZipFile) ? notApplicatable : m.ZipFile;
                     enabled = m.Enabled;
                     visible = m.Visible;
-                    if (m.DevURL.Equals(""))
-                        devURL = "";
-                    else
-                        devURL = "=HYPERLINK(\"" + m.DevURL + "\",\"link\")";
+                    devURL = string.IsNullOrWhiteSpace(m.DevURL) ? "" : "=HYPERLINK(\"" + m.DevURL + "\",\"link\")";
                     //header = "Index,Category,Mod,Config,Level,Zip,Enabled";
                     sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\t" + visible + "\n");
                     if (m.configs.Count > 0)
@@ -153,10 +152,7 @@ namespace RelhaxModpack
                 configname = con.Name;
                 zipfile = string.IsNullOrWhiteSpace(con.ZipFile) ? notApplicatable : con.ZipFile;
                 enabled = con.Enabled;
-                if (con.DevURL.Equals(""))
-                    devURL = "";
-                else
-                    devURL = "=HYPERLINK(\"" + con.DevURL + "\",\"link\")";
+                devURL = string.IsNullOrWhiteSpace(con.DevURL) ? "" : "=HYPERLINK(\"" + con.DevURL + "\",\"link\")";
                 sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + newLevel + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\t" + visible + "\n");
                 if (con.configs.Count > 0)
                     processConfigsSpreadsheetGenerate(con.configs, newLevel + 1);
