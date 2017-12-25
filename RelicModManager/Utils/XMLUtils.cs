@@ -12,7 +12,7 @@ namespace RelhaxModpack
     public static class XMLUtils
     {
         public static int TotalModConfigComponents = 0;
-
+        //check to make sure an xml file is valid
         public static bool IsValidXml(string xmlString)
         {
             XmlTextReader read = new XmlTextReader(xmlString);
@@ -29,33 +29,31 @@ namespace RelhaxModpack
                 return false;
             }
         }
-
-        public static string ReadVersionFromModInfo(string f)
+        //allows one to get an xml element ro attribute from an xml string
+        public static string GetXMLElementAttributeFromFile(string file, string xpath)
         {
-            XDocument doc = XDocument.Load(f);
-            try
-            {
-                XElement element = doc.Descendants("modInfoAlpha.xml").Single();
-                return element.Attribute("version").Value;
-            }
-            catch (InvalidOperationException)
-            {
-                return "error"; // catch the Exception if no entry is found
-            }
+            XmlDocument doc = new XmlDocument();
+            doc.Load(file);
+            return GetXMLElementAttributeMain(doc, xpath);
         }
-
-        public static string ReadOnlineFolderFromModInfo(string f)
+        //allows one to get an xml element or attribute from an xml file
+        public static string GetXMLElementAttributeFromString(string xmlString, string xpath)
         {
-            XDocument doc = XDocument.Load(f);
-            try
-            {
-                XElement element = doc.Descendants("modInfoAlpha.xml").Single();
-                return element.Attribute("onlineFolder").Value;
-            }
-            catch (InvalidOperationException)
-            {
-                return "error"; // catch the Exception if no entry is found
-            }
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xmlString);
+            return GetXMLElementAttributeMain(doc, xpath);
+        }
+        //allows one to get an xml element or attribute value from the above methods
+        //element example: "//root/element"
+        //attribute example: "//root/element/@attribute"
+        //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
+        //for the folder version: //modInfoAlpha.xml/@version
+        public static string GetXMLElementAttributeMain(XmlDocument doc, string xpath)
+        {
+            XmlNode result = doc.SelectSingleNode(xpath);
+            if (result == null)
+                return null;
+            return result.InnerText;
         }
         //parses the xml mod info into the memory database (change XML reader from XMLDocument to XDocument)
         // https://www.google.de/search?q=c%23+xdocument+get+line+number&oq=c%23+xdocument+get+line+number&aqs=chrome..69i57j69i58.11773j0j7&sourceid=chrome&ie=UTF-8
