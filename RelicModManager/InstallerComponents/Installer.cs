@@ -2596,7 +2596,7 @@ namespace RelhaxModpack
                         foreach(ZipEntry ze in zip)
                         {
                             //check for "WoTAppData" foldername
-                            switch(ze.FileName.Substring(0, 10))
+                            switch(ze.FileName.Length > 10? ze.FileName.Substring(0, 10): "nothingThatITwillEVERGETTWOf342f43f545grtg45t")
                             {
                                 //other folder macros can be added here
                                 case "WoTAppData":
