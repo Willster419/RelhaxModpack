@@ -113,7 +113,8 @@ namespace RelhaxModpack
             AddAllMods();
             AddUserMods(false);
             //check the default checked mods. afterwards, any load will have the clear selection in it so it shouldn't be an issue
-            CheckDefaultMods();
+            if(!Program.testMode)
+                CheckDefaultMods();
             //finish loading
             FinishLoad();
         }
