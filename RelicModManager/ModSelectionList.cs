@@ -8,6 +8,7 @@ using System.Net;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Linq;
+using System.Xml;
 
 namespace RelhaxModpack
 {
@@ -111,6 +112,9 @@ namespace RelhaxModpack
             modTabGroups.Font = Settings.AppFont;
             AddAllMods();
             AddUserMods(false);
+            //check the default checked mods. afterwards, any load will have the clear selection in it so it shouldn't be an issue
+            CheckDefaultMods();
+            //finish loading
             FinishLoad();
         }
         #region Loading Methods
@@ -2524,6 +2528,23 @@ namespace RelhaxModpack
             }
             //set this back to false so the user can interact
             LoadingConfig = false;
+        }
+        //handles checking of the "default checked" mods
+        private void CheckDefaultMods()
+        {
+            Logging.Manager("Checking default mods");
+            //create XmlDocument
+            string xmlstring = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "default_checked.xml");
+            XmlDocument doc = new XmlDocument();
+            if(string.IsNullOrWhiteSpace(xmlstring))
+            {
+                Logging.Manager("ERROR: default_checked.xml is missing or invalid!");
+                return;
+            }
+            doc.LoadXml(xmlstring);
+            //call XMlUtils.LoadConfigV2
+            XMLUtils.LoadConfigV2(doc, ParsedCatagoryList, UserMods);
+            Logging.Manager("Finished checking default mods");
         }
         #region UI event handlers (resize, expand toggling)
         //resizing handler for the window

@@ -30,7 +30,8 @@ namespace RelhaxModpack
             "supported_clients.txt (will be deprecated)\n" +
             "databaseUpdate.txt\n" +
             "releaseNotes.txt\n" +
-            "releaseNotes_beta.txt";
+            "releaseNotes_beta.txt\n" +
+            "default_checked.xml";
         string database = "creating the database.xml file at every online version folder of WoT, containing the filename, size and MD5Hash of " +
             "the current folder, the script \"CreateMD5List.php\" is a needed subscript of CreateDatabase.php, \"relhax_db.sqlite\" is the needed sqlite database to " +
             "be fast on parsing all files and only working on new or changed files";
@@ -518,6 +519,12 @@ namespace RelhaxModpack
                 OnlineScriptOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateOutdatedFileList.php").Replace("<br />", "\n");
             }
             Application.DoEvents();
+        }
+
+        private void RunCreateOutdatedFilesList_MouseEnter(object sender, EventArgs e)
+        {
+            //todo
+            InfoTB.Text = "";
         }
     }
 }

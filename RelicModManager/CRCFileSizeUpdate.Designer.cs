@@ -162,6 +162,8 @@
             this.RunCreateOutdatedFilesList.Text = "Run script CreateOutDatesFilesList.php";
             this.RunCreateOutdatedFilesList.UseVisualStyleBackColor = true;
             this.RunCreateOutdatedFilesList.Click += new System.EventHandler(this.RunCreateOutdatedFilesList_Click);
+            this.RunCreateOutdatedFilesList.MouseEnter += new System.EventHandler(this.RunCreateOutdatedFilesList_MouseEnter);
+            this.RunCreateOutdatedFilesList.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // CRCFileSizeUpdate
             // 
