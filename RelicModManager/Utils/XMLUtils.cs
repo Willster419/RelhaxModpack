@@ -1094,20 +1094,20 @@ namespace RelhaxModpack
             }
         }
 
-        public static void LoadConfig(bool fromButton, string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
+        public static void LoadConfig(bool fromButton, string[] filePathArray, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
             //uncheck everythihng in memory first
             Utils.ClearSelectionMemory(parsedCatagoryList, userMods);
             XmlDocument doc = new XmlDocument();
-            string[] filePathSplit = filePath.Split(',');
-            if (filePathSplit.Count() > 1)
+            //not being whitespace means there is an xml filename, means it is a developer selection
+            if (!string.IsNullOrWhiteSpace(filePathArray[1]))
             {
-                string xmlString = Utils.GetStringFromZip(filePathSplit[0], filePathSplit[1]);
+                string xmlString = Utils.GetStringFromZip(filePathArray[0], filePathArray[1]);
                 doc.LoadXml(xmlString);
             }
             else
             {
-                doc.Load(filePath);
+                doc.Load(filePathArray[0]);
             }
             //check config file version
             XmlNode xmlNode = doc.SelectSingleNode("//mods");
@@ -1119,11 +1119,12 @@ namespace RelhaxModpack
             }
             if (ver.Equals("2.0"))      //the file is version v2.0, so go "loadConfigV2" (PackageName depended)
             {
-                LoadConfigV2(filePath, parsedCatagoryList, userMods);
+                Logging.Manager(string.Format("Loading mod selections v2.0 from {0}", filePathArray[0]));
+                LoadConfigV2(doc, parsedCatagoryList, userMods);
             }
             else // file is still version v1.0 (name dependend)
             {
-                LoadConfigV1(fromButton, filePath, parsedCatagoryList, userMods);
+                LoadConfigV1(fromButton, filePathArray[0], parsedCatagoryList, userMods);
             }
         }
         //loads a saved config from xml and parses it into the memory database
@@ -1262,26 +1263,9 @@ namespace RelhaxModpack
             }
         }
         //loads a saved config from xml and parses it into the memory database
-        public static void LoadConfigV2(string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
+        public static void LoadConfigV2(XmlDocument doc, List<Category> parsedCatagoryList, List<Mod> userMods)
         {
-            Logging.Manager(string.Format("Loading mod selections v2.0 from {0}", filePath));
             List<string> savedConfigList = new List<string>();
-            XPathDocument doc;
-            string[] filePathSplit = filePath.Split(',');
-            if (filePathSplit.Count() > 1)
-            {
-                // go here, if the config file selected is a developerSelection config and stored at the modInfo.dat file
-                Logging.Manager("parsing developerSelection file: " + filePath);
-                string xmlString = Utils.GetStringFromZip(filePathSplit[0], filePathSplit[1]);
-                StringReader rdr = new StringReader(xmlString);
-                doc = new XPathDocument(rdr);
-            }
-            else
-            {
-                Logging.Manager("parsing config file: " + filePath);
-                doc = new XPathDocument(filePath);
-            }
-
             foreach (var mod in doc.CreateNavigator().Select("//relhaxMods/mod"))
             {
                 savedConfigList.Add(mod.ToString());

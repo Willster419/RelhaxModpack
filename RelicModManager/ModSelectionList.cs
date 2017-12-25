@@ -2450,25 +2450,26 @@ namespace RelhaxModpack
         {
             //disable any possible UI interaction that would not be desired
             LoadingConfig = true;
-            string filePath = "";
+            //string filePath = "";
+            string[] filePathArray = new string[2];
             //get the filePath of the selection file based on the mode of loading it
             switch(LoadMode)
             {
                 case LoadConfigMode.FromAutoInstall:
-                    filePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", Program.configName);
-                    if (!File.Exists(filePath))
+                    filePathArray[0] = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", Program.configName);
+                    if (!File.Exists(filePathArray[0]))
                     {
-                        Logging.Manager(string.Format("ERROR: {0} not found, not loading configs", filePath));
+                        Logging.Manager(string.Format("ERROR: {0} not found, not loading configs", filePathArray[0]));
                         MessageBox.Show(Translations.getTranslatedString("configLoadFailed"), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Stop);
                         LoadingConfig = false;
                         return;
                     }
                     break;
                 case LoadConfigMode.FromSaveLastConfig:
-                    filePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml");
-                    if (!File.Exists(filePath))
+                    filePathArray[0] = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml");
+                    if (!File.Exists(filePathArray[0]))
                     {
-                        Logging.Manager(string.Format("ERROR: {0} not found, not loading configs", filePath));
+                        Logging.Manager(string.Format("ERROR: {0} not found, not loading configs", filePathArray[0]));
                         LoadingConfig = false;
                         return;
                     }
@@ -2482,8 +2483,14 @@ namespace RelhaxModpack
                             LoadingConfig = false;
                             return;
                         }
-                        filePath = sv.SelectedXML;
-                        if (filePath.Equals("localFile"))
+                        //from preset:
+                        //"F:\\Tanks Stuff\\RelicModManager\\RelicModManager\\bin\\Debug\\RelHaxTemp\\modInfo.dat,dirty20067.xml"
+                        filePathArray[0] = sv.SelectedXML.Split(',')[0];//the path to modInfoDat
+                        if (!filePathArray[0].Equals("localFile"))
+                            filePathArray[1] = sv.SelectedXML.Split(',')[1];//the actual fileName
+                        else
+                            filePathArray[1] = "";
+                        if (filePathArray[0].Equals("localFile"))
                         {
                             //user wants to load a personal custom config from file
                             using (OpenFileDialog loadLocation = new OpenFileDialog()
@@ -2501,19 +2508,18 @@ namespace RelhaxModpack
                                     LoadingConfig = false;
                                     return;
                                 }
-                                filePath = loadLocation.FileName;
+                                filePathArray[0] = loadLocation.FileName;
                             }
                         }
                     }
                     break;
             }
             //actually load the config
-            XMLUtils.LoadConfig(LoadMode == LoadConfigMode.FromButton, filePath, ParsedCatagoryList, UserMods);
+            XMLUtils.LoadConfig(LoadMode == LoadConfigMode.FromButton, filePathArray, ParsedCatagoryList, UserMods);
             //if it was from a button, tell the user it loaded the config sucessfully
             if (LoadMode == LoadConfigMode.FromButton)
             {
                 if (LoadMode == LoadConfigMode.FromButton) MessageBox.Show(Translations.getTranslatedString("prefrencesSet"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadingConfig = false;
                 ModSelectionList_SizeChanged(null, null);
             }
             //set this back to false so the user can interact
