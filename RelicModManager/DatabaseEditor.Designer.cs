@@ -35,8 +35,6 @@
             this.ObjectNameTB = new System.Windows.Forms.TextBox();
             this.DatabasePanelTree = new System.Windows.Forms.Panel();
             this.DatabaseEditPanel = new System.Windows.Forms.Panel();
-            this.ObjExtractPathTB = new System.Windows.Forms.TextBox();
-            this.ObjExtractPath = new System.Windows.Forms.Label();
             this.ObjectLastUpdatedLabel = new System.Windows.Forms.Label();
             this.DownloadZipfileButton = new System.Windows.Forms.Button();
             this.ObjectVersionTB = new System.Windows.Forms.TextBox();
@@ -175,8 +173,6 @@
             // DatabaseEditPanel
             // 
             this.DatabaseEditPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.DatabaseEditPanel.Controls.Add(this.ObjExtractPathTB);
-            this.DatabaseEditPanel.Controls.Add(this.ObjExtractPath);
             this.DatabaseEditPanel.Controls.Add(this.ObjectLastUpdatedLabel);
             this.DatabaseEditPanel.Controls.Add(this.DownloadZipfileButton);
             this.DatabaseEditPanel.Controls.Add(this.ObjectVersionTB);
@@ -205,22 +201,6 @@
             this.DatabaseEditPanel.Size = new System.Drawing.Size(547, 600);
             this.DatabaseEditPanel.TabIndex = 4;
             // 
-            // ObjExtractPathTB
-            // 
-            this.ObjExtractPathTB.Location = new System.Drawing.Point(91, 184);
-            this.ObjExtractPathTB.Name = "ObjExtractPathTB";
-            this.ObjExtractPathTB.Size = new System.Drawing.Size(447, 20);
-            this.ObjExtractPathTB.TabIndex = 35;
-            // 
-            // ObjExtractPath
-            // 
-            this.ObjExtractPath.AutoSize = true;
-            this.ObjExtractPath.Location = new System.Drawing.Point(8, 187);
-            this.ObjExtractPath.Name = "ObjExtractPath";
-            this.ObjExtractPath.Size = new System.Drawing.Size(62, 13);
-            this.ObjExtractPath.TabIndex = 34;
-            this.ObjExtractPath.Text = "ExtractPath";
-            // 
             // ObjectLastUpdatedLabel
             // 
             this.ObjectLastUpdatedLabel.AutoSize = true;
@@ -233,7 +213,7 @@
             // DownloadZipfileButton
             // 
             this.DownloadZipfileButton.Enabled = false;
-            this.DownloadZipfileButton.Location = new System.Drawing.Point(202, 235);
+            this.DownloadZipfileButton.Location = new System.Drawing.Point(202, 208);
             this.DownloadZipfileButton.Name = "DownloadZipfileButton";
             this.DownloadZipfileButton.Size = new System.Drawing.Size(83, 27);
             this.DownloadZipfileButton.TabIndex = 32;
@@ -264,10 +244,10 @@
             this.ObjectPropertiesTabControl.Controls.Add(this.PictureTabPage);
             this.ObjectPropertiesTabControl.Controls.Add(this.UserDatasTabPage);
             this.ObjectPropertiesTabControl.Controls.Add(this.ShortCutTabPage);
-            this.ObjectPropertiesTabControl.Location = new System.Drawing.Point(3, 268);
+            this.ObjectPropertiesTabControl.Location = new System.Drawing.Point(3, 241);
             this.ObjectPropertiesTabControl.Name = "ObjectPropertiesTabControl";
             this.ObjectPropertiesTabControl.SelectedIndex = 0;
-            this.ObjectPropertiesTabControl.Size = new System.Drawing.Size(539, 327);
+            this.ObjectPropertiesTabControl.Size = new System.Drawing.Size(539, 354);
             this.ObjectPropertiesTabControl.TabIndex = 29;
             // 
             // DescriptionTabPage
@@ -279,7 +259,7 @@
             this.DescriptionTabPage.Location = new System.Drawing.Point(4, 22);
             this.DescriptionTabPage.Name = "DescriptionTabPage";
             this.DescriptionTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.DescriptionTabPage.Size = new System.Drawing.Size(531, 301);
+            this.DescriptionTabPage.Size = new System.Drawing.Size(531, 328);
             this.DescriptionTabPage.TabIndex = 1;
             this.DescriptionTabPage.Text = "Description";
             this.DescriptionTabPage.UseVisualStyleBackColor = true;
@@ -805,7 +785,7 @@
             // ObjectAppendExtractionCB
             // 
             this.ObjectAppendExtractionCB.AutoSize = true;
-            this.ObjectAppendExtractionCB.Location = new System.Drawing.Point(243, 212);
+            this.ObjectAppendExtractionCB.Location = new System.Drawing.Point(243, 185);
             this.ObjectAppendExtractionCB.Name = "ObjectAppendExtractionCB";
             this.ObjectAppendExtractionCB.Size = new System.Drawing.Size(109, 17);
             this.ObjectAppendExtractionCB.TabIndex = 25;
@@ -815,7 +795,7 @@
             // ObjectVisibleCheckBox
             // 
             this.ObjectVisibleCheckBox.AutoSize = true;
-            this.ObjectVisibleCheckBox.Location = new System.Drawing.Point(358, 212);
+            this.ObjectVisibleCheckBox.Location = new System.Drawing.Point(358, 185);
             this.ObjectVisibleCheckBox.Name = "ObjectVisibleCheckBox";
             this.ObjectVisibleCheckBox.Size = new System.Drawing.Size(55, 17);
             this.ObjectVisibleCheckBox.TabIndex = 23;
@@ -831,7 +811,7 @@
             "single_dropDown1",
             "single_dropDown2",
             "multi"});
-            this.ObjectTypeComboBox.Location = new System.Drawing.Point(91, 210);
+            this.ObjectTypeComboBox.Location = new System.Drawing.Point(91, 183);
             this.ObjectTypeComboBox.Name = "ObjectTypeComboBox";
             this.ObjectTypeComboBox.Size = new System.Drawing.Size(146, 21);
             this.ObjectTypeComboBox.TabIndex = 21;
@@ -839,7 +819,7 @@
             // ObjectType
             // 
             this.ObjectType.AutoSize = true;
-            this.ObjectType.Location = new System.Drawing.Point(8, 213);
+            this.ObjectType.Location = new System.Drawing.Point(8, 186);
             this.ObjectType.Name = "ObjectType";
             this.ObjectType.Size = new System.Drawing.Size(27, 13);
             this.ObjectType.TabIndex = 20;
@@ -864,7 +844,7 @@
             // 
             // ApplyChangesButton
             // 
-            this.ApplyChangesButton.Location = new System.Drawing.Point(291, 235);
+            this.ApplyChangesButton.Location = new System.Drawing.Point(291, 208);
             this.ApplyChangesButton.Name = "ApplyChangesButton";
             this.ApplyChangesButton.Size = new System.Drawing.Size(244, 27);
             this.ApplyChangesButton.TabIndex = 13;
@@ -875,7 +855,7 @@
             // ObjectEnabledCheckBox
             // 
             this.ObjectEnabledCheckBox.AutoSize = true;
-            this.ObjectEnabledCheckBox.Location = new System.Drawing.Point(423, 212);
+            this.ObjectEnabledCheckBox.Location = new System.Drawing.Point(423, 185);
             this.ObjectEnabledCheckBox.Name = "ObjectEnabledCheckBox";
             this.ObjectEnabledCheckBox.Size = new System.Drawing.Size(65, 17);
             this.ObjectEnabledCheckBox.TabIndex = 12;
@@ -1201,7 +1181,5 @@
         private System.Windows.Forms.TextBox ObjectShortcutNameTB;
         private System.Windows.Forms.TextBox ObjectShortcutTB;
         private System.Windows.Forms.Label ObjectShortCutsNameLabel;
-        private System.Windows.Forms.TextBox ObjExtractPathTB;
-        private System.Windows.Forms.Label ObjExtractPath;
     }
 }

@@ -480,9 +480,6 @@ namespace RelhaxModpack
                                                     case "devURL":
                                                         m.DevURL = modNode.Value;
                                                         break;
-                                                    case "extractPath":
-                                                        m.ExtractPath = modNode.Value;
-                                                        break;
                                                     case "userDatas":
                                                         foreach (XElement userDataNode in modNode.Elements())
                                                         {
@@ -799,9 +796,6 @@ namespace RelhaxModpack
                                         break;
                                     case "devURL":
                                         c.DevURL = configNode.Value;
-                                        break;
-                                    case "extractPath":
-                                        c.ExtractPath = configNode.Value;
                                         break;
                                     case "type":
                                         c.Type = configNode.Value;
@@ -2023,10 +2017,6 @@ namespace RelhaxModpack
                     if (!m.DevURL.Trim().Equals(""))
                         modDevURL.InnerText = m.DevURL.Trim();
                     modRoot.AppendChild(modDevURL);
-                    XmlElement modExtractPath = doc.CreateElement("extractPath");
-                    if (!m.ExtractPath.Trim().Equals(""))
-                        modExtractPath.InnerText = m.ExtractPath.Trim();
-                    modRoot.AppendChild(modExtractPath);
                     //datas for the mods
                     XmlElement modDatas = doc.CreateElement("userDatas");
                     foreach (string s in m.UserFiles)
@@ -2198,10 +2188,6 @@ namespace RelhaxModpack
                 if (!cc.DevURL.Trim().Equals(""))
                     configDevURL.InnerText = cc.DevURL.Trim();
                 configRoot.AppendChild(configDevURL);
-                XmlElement configExtractPath = doc.CreateElement("extractPath");
-                if (!cc.ExtractPath.Trim().Equals(""))
-                    configExtractPath.InnerText = cc.ExtractPath.Trim();
-                configRoot.AppendChild(configExtractPath);
                 XmlElement configType = doc.CreateElement("type");
                 if (!cc.Type.ToString().Trim().Equals(""))
                     configType.InnerText = cc.Type;

@@ -26,6 +26,7 @@
         string EndAddress { get; set; }
         bool DownloadFlag { get; set; }
         bool ReadyForInstall { get; set; }
-        string ExtractPath { get; set; }
+        //removed due to lack of use and lack of usability
+        //public string ExtractPath { get; set; }
     }
 }

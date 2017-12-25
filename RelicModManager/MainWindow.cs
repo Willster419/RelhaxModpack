@@ -944,7 +944,6 @@ namespace RelhaxModpack
                             //also check that it actually has a zip file
                             if (!m.ZipFile.Equals(""))
                             {
-                                m.ExtractPath = m.ExtractPath.Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(m.ExtractPath);
                                 modsConfigsToInstall.Add(m);
                             }
 
@@ -1323,7 +1322,6 @@ namespace RelhaxModpack
                 {
                     if (!config.ZipFile.Equals(""))
                     {
-                        config.ExtractPath = config.ExtractPath.Equals("")? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(config.ExtractPath);
                         modsConfigsToInstall.Add(config);
                     }
 

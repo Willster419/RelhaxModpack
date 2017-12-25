@@ -40,6 +40,7 @@ namespace RelhaxModpack
         public bool Checked { get; set; }
         public bool DownloadFlag { get; set; }
         public bool ReadyForInstall { get; set; }
-        public string ExtractPath { get; set; }
+        //removed due to lack of use and lack of usability
+        //public string ExtractPath { get; set; }
     }
 }

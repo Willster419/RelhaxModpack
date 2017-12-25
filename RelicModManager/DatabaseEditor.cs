@@ -150,9 +150,6 @@ namespace RelhaxModpack
             ObjectDevURLTB.Enabled = false;
             ObjectDevURLTB.Text = "";
 
-            ObjExtractPathTB.Enabled = false;
-            ObjExtractPathTB.Text = "";
-
             ObjectVersionTB.Enabled = false;
             ObjectVersionTB.Text = "";
 
@@ -273,7 +270,6 @@ namespace RelhaxModpack
                 SelectedGlobalDependency.StartAddress = ObjectStartAddressTB.Text;
                 SelectedGlobalDependency.EndAddress = ObjectEndAddressTB.Text;
                 SelectedGlobalDependency.DevURL = ObjectDevURLTB.Text;
-                SelectedGlobalDependency.ExtractPath = ObjExtractPathTB.Text;
                 if (!SelectedGlobalDependency.ZipFile.Equals(ObjectZipFileTB.Text))
                 {
                     SelectedGlobalDependency.CRC = "f";
@@ -292,7 +288,6 @@ namespace RelhaxModpack
                 SelectedDependency.StartAddress = ObjectStartAddressTB.Text;
                 SelectedDependency.EndAddress = ObjectEndAddressTB.Text;
                 SelectedDependency.DevURL = ObjectDevURLTB.Text;
-                SelectedDependency.ExtractPath = ObjExtractPathTB.Text;
                 if (!SelectedDependency.ZipFile.Equals(ObjectZipFileTB.Text))
                 {
                     SelectedDependency.CRC = "f";
@@ -311,7 +306,6 @@ namespace RelhaxModpack
                 SelectedLogicalDependency.StartAddress = ObjectStartAddressTB.Text;
                 SelectedLogicalDependency.EndAddress = ObjectEndAddressTB.Text;
                 SelectedLogicalDependency.DevURL = ObjectDevURLTB.Text;
-                SelectedLogicalDependency.ExtractPath = ObjExtractPathTB.Text;
                 if (!SelectedLogicalDependency.ZipFile.Equals(ObjectZipFileTB.Text))
                 {
                     SelectedLogicalDependency.CRC = "f";
@@ -366,7 +360,6 @@ namespace RelhaxModpack
                         ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(m.Timestamp));
                     }
                     m.DevURL = ObjectDevURLTB.Text;
-                    m.ExtractPath = ObjExtractPathTB.Text;
                     m.Version = ObjectVersionTB.Text;
                     m.Enabled = ObjectEnabledCheckBox.Checked;
                     m.Visible = ObjectVisibleCheckBox.Checked;
@@ -400,7 +393,6 @@ namespace RelhaxModpack
                             ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(cfg.Timestamp));
                         }
                         cfg.DevURL = ObjectDevURLTB.Text;
-                        cfg.ExtractPath = ObjExtractPathTB.Text;
                         cfg.Version = ObjectVersionTB.Text;
                         switch (ObjectTypeComboBox.SelectedIndex)
                         {
@@ -545,7 +537,6 @@ namespace RelhaxModpack
             ObjectVersionTB.Text = "";
             ObjectLastUpdatedLabel.Text = "";
             ObjectDevURLTB.Text = "";
-            ObjExtractPathTB.Text = "";
             ObjectTypeComboBox.SelectedIndex = -1;
             ObjectAppendExtractionCB.Checked = false;
             ObjectVisibleCheckBox.Checked = false;
@@ -634,9 +625,6 @@ namespace RelhaxModpack
                     ObjectDevURLTB.Enabled = true;
                     ObjectDevURLTB.Text = SelectedGlobalDependency.DevURL;
 
-                    ObjExtractPathTB.Enabled = true;
-                    ObjExtractPathTB.Text = SelectedGlobalDependency.ExtractPath;
-
                     ObjectTypeComboBox.Enabled = false;
                     ObjectTypeComboBox.SelectedIndex = 0;
 
@@ -692,9 +680,6 @@ namespace RelhaxModpack
 
                     ObjectDevURLTB.Enabled = true;
                     ObjectDevURLTB.Text = SelectedDependency.DevURL;
-
-                    ObjExtractPathTB.Enabled = true;
-                    ObjExtractPathTB.Text = SelectedDependency.ExtractPath;
 
                     ObjectTypeComboBox.Enabled = false;
                     ObjectTypeComboBox.SelectedIndex = 0;
@@ -769,9 +754,6 @@ namespace RelhaxModpack
                     ObjectDevURLTB.Enabled = true;
                     ObjectDevURLTB.Text = SelectedLogicalDependency.DevURL;
 
-                    ObjExtractPathTB.Enabled = true;
-                    ObjExtractPathTB.Text = SelectedLogicalDependency.ExtractPath;
-
                     ObjectTypeComboBox.Enabled = false;
                     ObjectTypeComboBox.SelectedIndex = 0;
 
@@ -834,9 +816,6 @@ namespace RelhaxModpack
 
                     ObjectDevURLTB.Enabled = true;
                     ObjectDevURLTB.Text = SelectedDatabaseObject.DevURL;
-
-                    ObjExtractPathTB.Enabled = true;
-                    ObjExtractPathTB.Text = SelectedDatabaseObject.ExtractPath;
 
                     if (SelectedDatabaseObject is Config)
                     {
@@ -1211,7 +1190,6 @@ namespace RelhaxModpack
                                 cfg.ZipFile = ObjectZipFileTB.Text;
                                 cfg.DevURL = ObjectDevURLTB.Text;
                                 cfg.Version = ObjectVersionTB.Text;
-                                cfg.ExtractPath = "";
                                 switch (ObjectTypeComboBox.SelectedIndex)
                                 {
                                     case 1:
@@ -1258,7 +1236,6 @@ namespace RelhaxModpack
                                     m.Description = ObjectDescTB.Text;
                                     m.UpdateComment = ObjectUpdateNotesTB.Text;
                                     m.CRC = "";
-                                    m.ExtractPath = "";
                                     if (!ObjectZipFileTB.Text.Equals(""))
                                         m.CRC = "f";
                                     ModList.Insert(index, m);
@@ -1281,7 +1258,6 @@ namespace RelhaxModpack
                                         cfg.ZipFile = ObjectZipFileTB.Text;
                                         cfg.DevURL = ObjectDevURLTB.Text;
                                         cfg.Version = ObjectVersionTB.Text;
-                                        cfg.ExtractPath = "";
                                         switch (ObjectTypeComboBox.SelectedIndex)
                                         {
                                             case 1:
@@ -1346,7 +1322,6 @@ namespace RelhaxModpack
                                 cfg.Description = ObjectDescTB.Text;
                                 cfg.UpdateComment = ObjectUpdateNotesTB.Text;
                                 cfg.CRC = "";
-                                cfg.ExtractPath = "";
                                 if (!ObjectZipFileTB.Text.Equals(""))
                                     cfg.CRC = "f";
                                 dba.SelectedDatabaseObject.configs.Add(cfg);
@@ -1371,7 +1346,6 @@ namespace RelhaxModpack
                                         cfg.ZipFile = ObjectZipFileTB.Text;
                                         cfg.DevURL = ObjectDevURLTB.Text;
                                         cfg.Version = ObjectVersionTB.Text;
-                                        cfg.ExtractPath = "";
                                         switch (ObjectTypeComboBox.SelectedIndex)
                                         {
                                             case 1:
@@ -1417,7 +1391,6 @@ namespace RelhaxModpack
                                     m.Description = ObjectDescTB.Text;
                                     m.UpdateComment = ObjectUpdateNotesTB.Text;
                                     m.CRC = "";
-                                    m.ExtractPath = "";
                                     if (!ObjectZipFileTB.Text.Equals(""))
                                         m.CRC = "f";
                                     ModList.Insert(index, m);
@@ -2376,7 +2349,7 @@ namespace RelhaxModpack
 
         private Mod ConfigToMod(Config cfgToMove)
         {
-            Mod m = new Mod()
+            return new Mod()
             {
                 Name = cfgToMove.Name,
                 Version = cfgToMove.Version,
@@ -2396,14 +2369,12 @@ namespace RelhaxModpack
                 Description = cfgToMove.Description,
                 DevURL = cfgToMove.DevURL,
                 UserFiles = cfgToMove.UserFiles,
-                ExtractPath = cfgToMove.ExtractPath
             };
-            return m;
         }
 
         private Config ModToConfig(Mod modToMove)
         {
-            Config c = new Config()
+            return new Config()
             {
                 Name = modToMove.Name,
                 Version = modToMove.Version,
@@ -2424,9 +2395,7 @@ namespace RelhaxModpack
                 DevURL = modToMove.DevURL,
                 UserFiles = modToMove.UserFiles,
                 Type = "multi",
-                ExtractPath = modToMove.ExtractPath
             };
-            return c;
         }
 
         private void callTextBoxURL_DoubleClick(object sender, EventArgs e)
