@@ -2,7 +2,7 @@
 {
     //a patch is an instruction of how to modify a text file
     //generally a mod config file
-    class Patch
+    public class Patch
     {
         //a single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
         public string nativeProcessingFile { get; set; }
@@ -13,9 +13,13 @@
         //if xml, the mode that the xml patcher should use
         //add xml node, remove xml node, edit xml node
         public string mode { get; set; }
-        //the path to the file, relative to res_mods
+        //the starting path to the file
+        public string patchPath { get; set; }
+        //the path to the file, relative to patchPath
         public string file { get; set; }
-        //if xml, the xml xpath to the node
+        //the complete path to the file, saved at parse time
+        public string completePath { get; set; }
+        //if xml or json, the xml xpath to the node
         public string path { get; set; }
         //if regex, the optional specific lines in the text file
         //to make the modifications

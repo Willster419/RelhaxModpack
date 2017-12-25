@@ -21,64 +21,22 @@ namespace RelhaxModpack
         private static string XVMBootFileLoc1 = "\\res_mods\\configs\\xvm\\xvm.xc";
         private static string XVMBootFileLoc2 = "\\mods\\configs\\xvm\\xvm.xc";
         //method to patch a part of an xml file
-        //fileLocation is relative to res_mods folder
-        public static void XMLPatch(string filePath, string xpath, string mode, string search, string replace, string tanksLocation, string tanksVersion, bool testMods = false, string testXVMBootLoc = "")
+        
+        public static void XMLPatch(Patch p, bool testMods = false, string testXVMBootLoc = "")
         {
-            if (Regex.IsMatch(filePath, "^\\\\\\\\res_mods"))
-            {
-                //new style patch, res_mods folder
-                filePath = tanksLocation + filePath;
-            }
-            else if (Regex.IsMatch(filePath, "^\\\\\\\\mods"))
-            {
-                //new style patch, mods folder
-                filePath = tanksLocation + filePath;
-            }
-            else if (testMods)
-            {
-
-            }
-            else
-            {
-                //old style patch
-                filePath = tanksLocation + "\\res_mods" + filePath;
-            }
-
-            if (!testMods && Regex.IsMatch(filePath, "versiondir"))
-            {
-                //patch versiondir out of filePath
-                filePath = Regex.Replace(filePath, "versiondir", tanksVersion);
-            }
-            //patch xvmConfigFolderName out of fileLocation
-            if (!testMods && Regex.IsMatch(filePath, "xvmConfigFolderName"))
-            {
-                string s = GetXVMBootLoc(tanksLocation);
-                if (s != null)
-                    filePath = Regex.Replace(filePath, "xvmConfigFolderName", s);
-            }
-            else
-            {
-                //patch check mode, try to get boot xvm file from the xvm boot textbox
-                if (testXVMBootLoc.Equals("") && Regex.IsMatch(filePath, "xvmConfigFolderName"))
-                {
-                    MessageBox.Show("Attempted to use variable \"xvmConfigFolderName\", but nothing in the xvm boot file location text box");
-                    return;
-                }
-            }
-
             //verify the file exists...
-            if (!File.Exists(filePath))
+            if (!File.Exists(p.completePath))
             {
                 Logging.Manager("WARNING: file not found");
                 return;
             }
 
             XmlDocument doc = new XmlDocument();
-            doc.Load(filePath);
+            doc.Load(p.completePath);
             //check to see if it has the header info at the top to see if we need to remove it later
             bool hadHeader = false;
             XmlDocument doc3 = new XmlDocument();
-            doc3.Load(filePath);
+            doc3.Load(p.completePath);
             foreach (XmlNode node in doc3)
             {
                 if (node.NodeType == XmlNodeType.XmlDeclaration)
@@ -87,13 +45,13 @@ namespace RelhaxModpack
                 }
             }
             //determines which version of pathing will be done
-            switch (mode)
+            switch (p.mode)
             {
                 case "add":
                     //check to see if it's already there
                     //make the full node path
-                    string[] tempp = replace.Split('/');
-                    string fullNodePath = xpath;
+                    string[] tempp = p.replace.Split('/');
+                    string fullNodePath = p.path;
                     for (int i = 0; i < tempp.Count() - 1; i++)
                     {
                         fullNodePath = fullNodePath + "/" + tempp[i];
@@ -109,9 +67,9 @@ namespace RelhaxModpack
                             return;
                     }
                     //get to the node where to add the element
-                    XmlNode reff = doc.SelectSingleNode(xpath);
+                    XmlNode reff = doc.SelectSingleNode(p.path);
                     //create node(s) to add to the element
-                    string[] temp = replace.Split('/');
+                    string[] temp = p.replace.Split('/');
                     List<XmlElement> nodes = new List<XmlElement>();
                     for (int i = 0; i < temp.Count() - 1; i++)
                     {
@@ -140,59 +98,60 @@ namespace RelhaxModpack
                         parrent.InsertAfter(child, parrent.FirstChild);
                     }
                     //save it
-                    if (File.Exists(filePath)) File.Delete(filePath);
-                    doc.Save(filePath);
+                    if (File.Exists(p.completePath))
+                        File.Delete(p.completePath);
+                    doc.Save(p.completePath);
                     break;
 
                 case "edit":
                     //check to see if it's already there
-                    XmlNodeList currentSoundBanksEdit = doc.SelectNodes(xpath);
+                    XmlNodeList currentSoundBanksEdit = doc.SelectNodes(p.path);
                     foreach (XmlElement e in currentSoundBanksEdit)
                     {
                         string innerText = e.InnerText;
                         innerText = innerText.Trim();
-                        if (e.InnerText.Equals(replace))
+                        if (e.InnerText.Equals(p.replace))
                             return;
                     }
                     //find and replace
                     //XmlNodeList rel1Edit = doc.SelectNodes(xpath);
                     foreach (XmlElement eee in currentSoundBanksEdit)
                     {
-                        if (Regex.IsMatch(eee.InnerText, search))
+                        if (Regex.IsMatch(eee.InnerText, p.search))
                         {
-                            eee.InnerText = replace;
+                            eee.InnerText = p.replace;
                         }
                     }
                     //save it
-                    if (File.Exists(filePath)) File.Delete(filePath);
-                    doc.Save(filePath);
+                    if (File.Exists(p.completePath)) File.Delete(p.completePath);
+                    doc.Save(p.completePath);
                     break;
 
                 case "remove":
                     //check to see if it's there
-                    XmlNodeList currentSoundBanksRemove = doc.SelectNodes(xpath);
+                    XmlNodeList currentSoundBanksRemove = doc.SelectNodes(p.path);
                     foreach (XmlElement e in currentSoundBanksRemove)
                     {
-                        if (Regex.IsMatch(e.InnerText, search))
+                        if (Regex.IsMatch(e.InnerText, p.search))
                         {
                             e.RemoveAll();
                         }
                     }
                     //save it
-                    if (File.Exists(filePath)) File.Delete(filePath);
-                    doc.Save(filePath);
+                    if (File.Exists(p.completePath)) File.Delete(p.completePath);
+                    doc.Save(p.completePath);
                     //remove empty elements
-                    XDocument doc2 = XDocument.Load(filePath);
+                    XDocument doc2 = XDocument.Load(p.completePath);
                     doc2.Descendants().Where(e => string.IsNullOrEmpty(e.Value)).Remove();
-                    if (File.Exists(filePath))
-                        File.Delete(filePath);
-                    doc2.Save(filePath);
+                    if (File.Exists(p.completePath))
+                        File.Delete(p.completePath);
+                    doc2.Save(p.completePath);
                     break;
             }
             //check to see if we need to remove the header
             bool hasHeader = false;
             XmlDocument doc5 = new XmlDocument();
-            doc5.Load(filePath);
+            doc5.Load(p.completePath);
             foreach (XmlNode node in doc5)
             {
                 if (node.NodeType == XmlNodeType.XmlDeclaration)
@@ -207,7 +166,7 @@ namespace RelhaxModpack
             if (!hadHeader && hasHeader)
             {
                 XmlDocument doc4 = new XmlDocument();
-                doc4.Load(filePath);
+                doc4.Load(p.completePath);
                 foreach (XmlNode node in doc4)
                 {
                     if (node.NodeType == XmlNodeType.XmlDeclaration)
@@ -215,69 +174,27 @@ namespace RelhaxModpack
                         doc4.RemoveChild(node);
                     }
                 }
-                doc4.Save(filePath);
+                doc4.Save(p.completePath);
             }
         }
         //method to patch a standard text or json file
         //fileLocation is relative to res_mods folder
-        public static void RegxPatch(string fileLocation, string search, string replace, string tanksLocation, string tanksVersion, int lineNumber = 0, bool testMods = false, string testXVMBootLoc = "")
+        public static void RegxPatch(Patch p, int lineNumber = 0, bool testMods = false, string testXVMBootLoc = "")
         {
-            if (Regex.IsMatch(fileLocation, "^\\\\\\\\res_mods"))
-            {
-                //new style patch, res_mods folder
-                fileLocation = tanksLocation + fileLocation;
-            }
-            else if (Regex.IsMatch(fileLocation, "^\\\\\\\\mods"))
-            {
-                //new style patch, mods folder
-                fileLocation = tanksLocation + fileLocation;
-            }
-            else if (testMods)
-            {
-
-            }
-            else
-            {
-                //old style patch
-                fileLocation = tanksLocation + "\\res_mods" + fileLocation;
-            }
-
-            if (!testMods && Regex.IsMatch(fileLocation, "versiondir"))
-            {
-                //patch versiondir out of fileLocation
-                fileLocation = Regex.Replace(fileLocation, "versiondir", tanksVersion);
-            }
-            //patch xvmConfigFolderName out of fileLocation
-            if (!testMods && Regex.IsMatch(fileLocation, "xvmConfigFolderName"))
-            {
-                string s = GetXVMBootLoc(tanksLocation);
-                if (s != null)
-                    fileLocation = Regex.Replace(fileLocation, "xvmConfigFolderName", s);
-            }
-            else
-            {
-                //patch check mode, try to get boot xvm file from the xvm boot textbox
-                if (testXVMBootLoc.Equals("") && Regex.IsMatch(fileLocation, "xvmConfigFolderName"))
-                {
-                    MessageBox.Show("Attempted to use variable \"xvmConfigFolderName\", but nothing in the xvm boot file location text box");
-                    return;
-                }
-            }
-
             //verify the file exists...
-            if (!File.Exists(fileLocation))
+            if (!File.Exists(p.completePath))
             {
                 Logging.Manager("WARNING: file not found");
                 return;
             }
 
             //replace all "fake escape characters" with real escape characters
-            search = search.Replace(@"\n", "newline");
-            search = search.Replace(@"\r", "\r");
-            search = search.Replace(@"\t", "\t");
+            p.search = p.search.Replace(@"\n", "newline");
+            p.search = p.search.Replace(@"\r", "\r");
+            p.search = p.search.Replace(@"\t", "\t");
 
             //load file from disk...
-            string file = File.ReadAllText(fileLocation);
+            string file = File.ReadAllText(p.completePath);
             //parse each line into an index array
             string[] fileParsed = file.Split('\n');
             StringBuilder sb = new StringBuilder();
@@ -287,9 +204,9 @@ namespace RelhaxModpack
                 bool everReplaced = false;
                 for (int i = 0; i < fileParsed.Count(); i++)
                 {
-                    if (Regex.IsMatch(fileParsed[i], search))
+                    if (Regex.IsMatch(fileParsed[i], p.search))
                     {
-                        fileParsed[i] = Regex.Replace(fileParsed[i], search, replace);
+                        fileParsed[i] = Regex.Replace(fileParsed[i], p.search, p.replace);
                         fileParsed[i] = Regex.Replace(fileParsed[i], "newline", "\n");
                         //fileParsed[i] = Regex.Replace(fileParsed[i], @"\n", "\n");
                         everReplaced = true;
@@ -309,9 +226,9 @@ namespace RelhaxModpack
                 file = Regex.Replace(file, "\n", "newline");
                 try
                 {
-                    if (Regex.IsMatch(file, search))
+                    if (Regex.IsMatch(file, p.search))
                     {
-                        file = Regex.Replace(file, search, replace);
+                        file = Regex.Replace(file, p.search, p.replace);
                         file = Regex.Replace(file, "newline", "\n");
                         //file = Regex.Replace(file, @"\n", "\n");
                         sb.Append(file);
@@ -335,9 +252,9 @@ namespace RelhaxModpack
                     if (i == lineNumber - 1)
                     {
                         string value = fileParsed[i];
-                        if (Regex.IsMatch(value, search))
+                        if (Regex.IsMatch(value, p.search))
                         {
-                            fileParsed[i] = Regex.Replace(fileParsed[i], search, replace);
+                            fileParsed[i] = Regex.Replace(fileParsed[i], p.search, p.replace);
                             fileParsed[i] = Regex.Replace(fileParsed[i], "newline", "\n");
                             //fileParsed[i] = Regex.Replace(fileParsed[i], @"\n", "\n");
                         }
@@ -352,10 +269,10 @@ namespace RelhaxModpack
             }
             //save the file back into the string and then the file
             file = sb.ToString();
-            File.WriteAllText(fileLocation, file);
+            File.WriteAllText(p.completePath, file);
         }
         //method to parse json files
-        public static void JSONPatch(string jsonFile, string jsonPath, string jsonSearch, string jsonReplace, string jsonMode, string tanksLocation, string tanksVersion, bool testMods = false, string testXVMBootLoc = "")
+        public static void JSONPatch(Patch p, bool testMods = false, string testXVMBootLoc = "")
         {
             //try to convert the new value to a bool or an int or double first
             bool newValueBool = false;
@@ -364,19 +281,19 @@ namespace RelhaxModpack
             bool useBool = false;
             bool useInt = false;
             bool useDouble = false;
-            //legacy compatibility: many json patches don't have a valid regex systax for jsonSearch, assume they mean a forced replace
-            if (jsonSearch.Equals(""))
-                jsonSearch = @".*";
-            //legacy compatibility: treat jsonMode being nothing or null default to edit
-            if (jsonMode == null || jsonMode.Equals("") || jsonMode.Equals("arrayEdit"))
-                jsonMode = "edit";
+            //legacy compatibility: many json patches don't have a valid regex systax for p.search, assume they mean a forced replace
+            if (p.search.Equals(""))
+                p.search = @".*";
+            //legacy compatibility: treat p.mode being nothing or null default to edit
+            if (p.mode == null || p.mode.Equals("") || p.mode.Equals("arrayEdit"))
+                p.mode = "edit";
             //split the replace path here so both can use it later
             string[] addPathArray = null;
-            string testValue = jsonReplace;
-            if (jsonMode.Equals("add") || jsonMode.Equals("arrayAdd"))
+            string testValue = p.replace;
+            if (p.mode.Equals("add") || p.mode.Equals("arrayAdd"))
             {
                 //.Split(new string[] { @"[index=" }, StringSplitOptions.None)
-                addPathArray = jsonReplace.Split('/');
+                addPathArray = p.replace.Split('/');
                 testValue = addPathArray[addPathArray.Count() - 1];
                 testValue = testValue.Split(new string[] { @"[index=" }, StringSplitOptions.None)[0];
             }
@@ -407,58 +324,16 @@ namespace RelhaxModpack
             }
             catch (FormatException)
             { }
-            //check if it's the new structure
-            if (Regex.IsMatch(jsonFile, "^\\\\\\\\res_mods"))
-            {
-                //new style patch, res_mods folder
-                jsonFile = tanksLocation + jsonFile;
-            }
-            else if (Regex.IsMatch(jsonFile, "^\\\\\\\\mods"))
-            {
-                //new style patch, mods folder
-                jsonFile = tanksLocation + jsonFile;
-            }
-            else if (testMods)
-            {
-
-            }
-            else
-            {
-                //old style patch
-                jsonFile = tanksLocation + "\\res_mods" + jsonFile;
-            }
-
-            //patch versiondir out of fileLocation
-            if (!testMods && Regex.IsMatch(jsonFile, "versiondir"))
-            {
-                jsonFile = Regex.Replace(jsonFile, "versiondir", tanksVersion);
-            }
-            //patch xvmConfigFolderName out of fileLocation
-            if (!testMods && Regex.IsMatch(jsonFile, "xvmConfigFolderName"))
-            {
-                string s = GetXVMBootLoc(tanksLocation);
-                if (s != null)
-                    jsonFile = Regex.Replace(jsonFile, "xvmConfigFolderName", s);
-            }
-            else
-            {
-                //patch check mode, try to get boot xvm file from the xvm boot textbox
-                if (testXVMBootLoc.Equals("") && Regex.IsMatch(jsonFile, "xvmConfigFolderName"))
-                {
-                    MessageBox.Show("Attempted to use variable \"xvmConfigFolderName\", but nothing in the xvm boot file location text box");
-                    return;
-                }
-            }
-
+            
             //verify the file exists...
-            if (!File.Exists(jsonFile))
+            if (!File.Exists(p.completePath))
             {
                 Logging.Manager("WARNING: file not found");
                 return;
             }
 
             //load file from disk...
-            string file = File.ReadAllText(jsonFile);
+            string file = File.ReadAllText(p.completePath);
             //save the "$" lines
             List<StringSave> ssList = new List<StringSave>();
             StringBuilder backTogether = new StringBuilder();
@@ -508,8 +383,10 @@ namespace RelhaxModpack
                 backTogether.Append(temp + "\n");
             }
             file = backTogether.ToString();
-            JsonLoadSettings settings = new JsonLoadSettings();
-            settings.CommentHandling = CommentHandling.Ignore;
+            JsonLoadSettings settings = new JsonLoadSettings()
+            {
+                CommentHandling = CommentHandling.Ignore
+            };
             JObject root = null;
             //load json for editing
             try
@@ -518,7 +395,7 @@ namespace RelhaxModpack
             }
             catch (JsonReaderException j)
             {
-                Logging.Manager(string.Format("ERROR: Failed to patch {0}", jsonFile));
+                Logging.Manager(string.Format("ERROR: Failed to patch {0}", p.completePath));
                 if (Program.testMode)
                 {
                     //in test mode this is worthy of an EXCEPTION
@@ -528,46 +405,46 @@ namespace RelhaxModpack
             //if it failed to parse show the message (above) and pull out
             if (root == null)
             {
-                Logging.Manager(string.Format("ERROR: Failed to patch {0}", jsonFile));
+                Logging.Manager(string.Format("ERROR: Failed to patch {0}", p.completePath));
                 return;
             }
-            if (jsonMode.Equals("add"))
+            if (p.mode.Equals("add"))
             {
-                //get to object from jsonpath
-                //if in jsonReplace regex matches [array], add a blank array if not already there and return
-                //if in jsonReplace regex matches [object], add a blank object if not already there and return
+                //get to object from p.path
+                //if in p.replace regex matches [array], add a blank array if not already there and return
+                //if in p.replace regex matches [object], add a blank object if not already there and return
                 //make full json path of what user wants to add to check, if the value is already there, return if so
                 //for each split element, make objects for path IF not already exist, then property
 
                 JContainer result = null;
                 //mode 1: adding blank array
                 //add if the desired path to the array return null
-                if (Regex.IsMatch(jsonReplace,@".*\[array\]$"))
+                if (Regex.IsMatch(p.replace,@".*\[array\]$"))
                 {
-                    string propName = jsonReplace.Replace(@"[array]", "");
-                    result = (JContainer)root.SelectToken(jsonPath + "." + propName);
+                    string propName = p.replace.Replace(@"[array]", "");
+                    result = (JContainer)root.SelectToken(p.path + "." + propName);
                     if(result != null)
                     {
                         Logging.Manager("ERROR: cannot add blank array when object already exists");
                         return;
                     }
-                    JContainer pathForArray = (JContainer)root.SelectToken(jsonPath);
+                    JContainer pathForArray = (JContainer)root.SelectToken(p.path);
                     JArray ary = new JArray();
                     JProperty prop = new JProperty(propName, ary);
                     pathForArray.Add(prop);
                 }
                 //mode 2: adding property with blank object
                 //add if the desired path returns null
-                else if (Regex.IsMatch(jsonReplace,@".*\[object\]$"))
+                else if (Regex.IsMatch(p.replace,@".*\[object\]$"))
                 {
-                    string propName = jsonReplace.Replace(@"[object]", "");
-                    result = (JContainer)root.SelectToken(jsonPath + "." + propName);
+                    string propName = p.replace.Replace(@"[object]", "");
+                    result = (JContainer)root.SelectToken(p.path + "." + propName);
                     if (result != null)
                     {
                         Logging.Manager("ERROR: cannot add blank array when object already exists");
                         return;
                     }
-                    JContainer pathForArray = (JContainer)root.SelectToken(jsonPath);
+                    JContainer pathForArray = (JContainer)root.SelectToken(p.path);
                     JObject obj = new JObject();
                     JProperty prop = new JProperty(propName, obj);
                     pathForArray.Add(prop);
@@ -578,13 +455,13 @@ namespace RelhaxModpack
                 {
                     //check to see if it is there first
                     //add all elements of the new path (all the / in the replace field) up to the last one
-                    string fullJSONPath = jsonPath;
+                    string fullJSONPath = p.path;
                     for (int i = 0; i < addPathArray.Count() - 1; i++)
                     {
                         fullJSONPath = fullJSONPath + "." + addPathArray[i];
                     }
                     JToken val = root.SelectToken(fullJSONPath);
-                    //null means the JSONpath was invalid, the item is not already there
+                    //null means the fullJSONPath was invalid, the item is not already there
                     if (val != null)
                     {
                         if (!(val is JValue))
@@ -620,14 +497,14 @@ namespace RelhaxModpack
                     else
                     {
                         //at this point the json is parsed, the property is not already there
-                        JObject newJobject = (JObject)root.SelectToken(jsonPath);
+                        JObject newJobject = (JObject)root.SelectToken(p.path);
                         if (newJobject == null)//error
                         {
-                            Logging.Manager("jsonPath does not exist in the file");
+                            Logging.Manager("fullJSONPath does not exist in the file");
                             return;
                         }
                         JObject jobjectPlaceholder = newJobject;
-                        string newJsonpath = jsonPath;
+                        string newJsonpath = p.path;
                         for (int i = 0; i < addPathArray.Count(); i++)
                         {
                             if (i == addPathArray.Count() - 2)
@@ -668,16 +545,16 @@ namespace RelhaxModpack
                     }
                 }
             }
-            else if (jsonMode.Equals("edit"))
+            else if (p.mode.Equals("edit"))
             {
                 //get list of values from syntax
                 //foreach returned item, if it's not a JValue, abort patch
                 //if value equals regex value, edit it
                 //List<JToken> results = null;
-                IEnumerable<JToken> results = root.SelectTokens(jsonPath);
+                IEnumerable<JToken> results = root.SelectTokens(p.path);
                 if(results == null || results.Count() == 0)
                 {
-                    Logging.Manager("WARNING: jsonPath not found");
+                    Logging.Manager("WARNING: p.path not found");
                     return;
                 }
                 List<JValue> Jresults = new List<JValue>();
@@ -685,7 +562,7 @@ namespace RelhaxModpack
                 {
                     if(!(jt is JValue))
                     {
-                        Logging.Manager("ERROR: returned token for jsonPath is not a JValue, aborting patch");
+                        Logging.Manager("ERROR: returned token for p.path is not a JValue, aborting patch");
                         return;
                     }
                     Jresults.Add((JValue)jt);
@@ -698,12 +575,12 @@ namespace RelhaxModpack
                     string jsonValue = "" + jv.Value;
                     if (useBool)
                         jsonValue = jsonValue.ToLower();
-                    if (jsonValue.Trim().Equals(jsonReplace.Replace(@"[sl]", @"/")))
+                    if (jsonValue.Trim().Equals(p.replace.Replace(@"[sl]", @"/")))
                     {
                         //no need to update it, just return
                         continue;
                     }
-                    if (!Regex.IsMatch(jsonValue, jsonSearch))
+                    if (!Regex.IsMatch(jsonValue, p.search))
                         continue;
                     if (useBool)
                         jv.Value = newValueBool;
@@ -712,65 +589,65 @@ namespace RelhaxModpack
                     else if (useDouble)
                         jv.Value = newValueDouble;
                     else //string
-                        jv.Value = jsonReplace.Replace(@"[sl]", @"/");
+                        jv.Value = p.replace.Replace(@"[sl]", @"/");
                 }
             }
-            else if (jsonMode.Equals("remove"))
+            else if (p.mode.Equals("remove"))
             {
                 //get to array/object/property
                 //if is array, remove it
                 //else if is value, remove parent property
                 //else if is object, remove it
-                JToken cont = root.SelectToken(jsonPath);
+                JToken cont = root.SelectToken(p.path);
                 if (cont == null)
                 {
-                    Logging.Manager(string.Format("ERROR: path \"{0}\" returns null", jsonPath));
+                    Logging.Manager(string.Format("ERROR: path \"{0}\" returns null", p.path));
                     return;
                 }
                 if(cont is JValue)
                 {
                     if(cont.Parent is JArray)
                     {
-                        Logging.Manager("ERROR: Selected from jsonpath is JValue and parent is JArray. Use arrayRemove for this function");
+                        Logging.Manager("ERROR: Selected from p.path is JValue and parent is JArray. Use arrayRemove for this function");
                         return;
                     }
                 }
                 cont = cont.Parent;//to get the JProperty
-                if(Regex.IsMatch(cont.ToString(),jsonSearch))
+                if(Regex.IsMatch(cont.ToString(),p.search))
                 {
                     cont.Remove();
                 }
             }
-            else if (jsonMode.Equals("arrayAdd"))
+            else if (p.mode.Equals("arrayAdd"))
             {
                 //get to the array
                 //if split string count is > 2, abort (invalid)
                 //if split string count is 2, property and value
                 //if split string count is 1, value
                 //check thay array is of similar contents (if it has items)
-                //unless jsonSearch is "null", check each item.TString via regex if it already exists, if so abort
+                //unless p.search is "null", check each item.TString via regex if it already exists, if so abort
                 //insert into array from index
 
                 if(addPathArray.Count() > 2)
                 {
-                    Logging.Manager("ERROR: invalid syntax of jsonReplace (more than 2 items detected)");
+                    Logging.Manager("ERROR: invalid syntax of p.replace (more than 2 items detected)");
                     return;
                 }
-                JToken newObject = root.SelectToken(jsonPath);
+                JToken newObject = root.SelectToken(p.path);
                 //pull out if it failed to get the selection
                 if (newObject == null)
                 {
-                    Logging.Manager(string.Format("WARNING: path {0} not found for {1}", jsonPath, Path.GetFileName(jsonFile)));
+                    Logging.Manager(string.Format("WARNING: path {0} not found for {1}", p.path, Path.GetFileName(p.completePath)));
                     return;
                 }
                 if (!(newObject is JArray))
                 {
-                    Logging.Manager(string.Format("ERROR: the path \"{0}\" does not lead to a Jarray", jsonPath));
+                    Logging.Manager(string.Format("ERROR: the path \"{0}\" does not lead to a Jarray", p.path));
                     return;
                 }
                 JArray newObjectArray = (JArray)newObject;
-                //check for index value in jsonReplace (name/value[index=NUMBER])
-                int index = Utils.ParseInt(jsonReplace.Split(new string[] { @"[index=" }, StringSplitOptions.None)[1].Replace(@"]", ""), -1);
+                //check for index value in p.replace (name/value[index=NUMBER])
+                int index = Utils.ParseInt(p.replace.Split(new string[] { @"[index=" }, StringSplitOptions.None)[1].Replace(@"]", ""), -1);
                 if(index >= newObjectArray.Count)
                 {
                     //if the array is empty and the index is 0, trying to add to a blank array, don't log it
@@ -830,21 +707,21 @@ namespace RelhaxModpack
                     }
                 }
             }
-            else if (jsonMode.Equals("arrayRemove"))
+            else if (p.mode.Equals("arrayRemove"))
             {
-                //get to array from jsonPath
+                //get to array from p.path
                 //foreach item.ToString in the array
                 //if regex match the first one, remove and break
-                JToken newObject = root.SelectToken(jsonPath);
+                JToken newObject = root.SelectToken(p.path);
                 //pull out if it failed to get the selection
                 if (newObject == null)
                 {
-                    Logging.Manager(string.Format("WARNING: path {0} not found for {1}", jsonPath, Path.GetFileName(jsonFile)));
+                    Logging.Manager(string.Format("WARNING: path {0} not found for {1}", p.path, Path.GetFileName(p.completePath)));
                     return;
                 }
                 if (!(newObject is JArray))
                 {
-                    Logging.Manager(string.Format("ERROR: the path \"{0}\" does not lead to a JSON array", jsonPath));
+                    Logging.Manager(string.Format("ERROR: the path \"{0}\" does not lead to a JSON array", p.path));
                     return;
                 }
                 JArray newObjectArray = (JArray)newObject;
@@ -857,7 +734,7 @@ namespace RelhaxModpack
                 bool found = false;
                 for(int i = 0; i < newObjectArray.Count; i++)
                 {
-                    if(Regex.IsMatch(newObjectArray[i].ToString(),jsonSearch))
+                    if(Regex.IsMatch(newObjectArray[i].ToString(),p.search))
                     {
                         found = true;
                         newObjectArray[i].Remove();
@@ -866,25 +743,25 @@ namespace RelhaxModpack
                 }
                 if (!found)
                 {
-                    Logging.Manager(string.Format("WARNING: no results found for search \"{0}\", with path \"{1}\"", jsonSearch, jsonPath));
+                    Logging.Manager(string.Format("WARNING: no results found for search \"{0}\", with path \"{1}\"", p.search, p.path));
                     return;
                 }
             }
-            else if (jsonMode.Equals("arrayClear"))
+            else if (p.mode.Equals("arrayClear"))
             {
-                //get to array from jsonPath
+                //get to array from p.path
                 //foreach item.ToString in the array
-                //if regex match from jsonSearch, remove
-                JToken newObject = root.SelectToken(jsonPath);
+                //if regex match from p.search, remove
+                JToken newObject = root.SelectToken(p.path);
                 //pull out if it failed to get the selection
                 if (newObject == null)
                 {
-                    Logging.Manager(string.Format("WARNING: path {0} not found for {1}", jsonPath, Path.GetFileName(jsonFile)));
+                    Logging.Manager(string.Format("WARNING: path {0} not found for {1}", p.path, Path.GetFileName(p.completePath)));
                     return;
                 }
                 if (!(newObject is JArray))
                 {
-                    Logging.Manager(string.Format("ERROR: the path \"{0}\" does not lead to a JSON array", jsonPath));
+                    Logging.Manager(string.Format("ERROR: the path \"{0}\" does not lead to a JSON array", p.path));
                     return;
                 }
                 JArray newObjectArray = (JArray)newObject;
@@ -897,7 +774,7 @@ namespace RelhaxModpack
                 bool found = false;
                 for (int i = 0; i < newObjectArray.Count; i++)
                 {
-                    if (Regex.IsMatch(newObjectArray[i].ToString(), jsonSearch))
+                    if (Regex.IsMatch(newObjectArray[i].ToString(), p.search))
                     {
                         found = true;
                         newObjectArray[i].Remove();
@@ -907,13 +784,13 @@ namespace RelhaxModpack
                 }
                 if (!found)
                 {
-                    Logging.Manager(string.Format("WARNING: no results found for search \"{0}\", with path \"{1}\"", jsonSearch, jsonPath));
+                    Logging.Manager(string.Format("WARNING: no results found for search \"{0}\", with path \"{1}\"", p.search, p.path));
                     return;
                 }
             }
             else
             {
-                Logging.Manager(string.Format("ERROR: Unknown json patch mode, {0}", jsonMode));
+                Logging.Manager(string.Format("ERROR: Unknown json patch mode, {0}", p.mode));
             }
             StringBuilder rebuilder = new StringBuilder();
             string[] putBackDollas = root.ToString().Split('\n');
@@ -944,117 +821,51 @@ namespace RelhaxModpack
             }
             if (ssList.Count != 0)
             {
-                Logging.Manager(string.Format("There was an error with patching the file {0}, with extra refrences. aborting patch", jsonFile));
+                Logging.Manager(string.Format("There was an error with patching the file {0}, with extra refrences. aborting patch", p.completePath));
                 return;
             }
-            File.WriteAllText(jsonFile, rebuilder.ToString());
+            File.WriteAllText(p.completePath, rebuilder.ToString());
         }
 
-        public static void PMODPatch(string bootFile, string xvmPath, string search, string newValue, string mode, string tanksLocation, string tanksVersion, bool testMods = false, string testXVMBootLoc = "")
+        public static void PMODPatch(Patch p, bool testMods = false, string testXVMBootLoc = "")
         {
             NumByteReads = 0;
             PatchDone = false;
             GenericTraverse = 0;
-            //check if it's the new structure
-            if (Regex.IsMatch(bootFile, "^\\\\\\\\res_mods"))
-            {
-                //new style patch, res_mods folder
-                bootFile = tanksLocation + bootFile;
-            }
-            else if (Regex.IsMatch(bootFile, "^\\\\\\\\mods"))
-            {
-                //new style patch, mods folder
-                bootFile = tanksLocation + bootFile;
-            }
-            else if (testMods)
-            {
-
-            }
-            else
-            {
-                //old style patch
-                bootFile = tanksLocation + "\\res_mods" + bootFile;
-            }
-
-            //patch versiondir out of fileLocation
-            if (!testMods && Regex.IsMatch(bootFile, "versiondir"))
-            {
-                bootFile = Regex.Replace(bootFile, "versiondir", tanksVersion);
-            }
+            //check that the file exists
+            if (!File.Exists(p.completePath))
+                return;
 
             //patch "newline" out of the replace text
-            newValue = Regex.Replace(newValue, "newline", "\n");
-
-            //check that the file exists
-            if (!File.Exists(bootFile))
-                return;
+            //p.replace = Regex.Replace(p.replace, "newline", "\n");
+            p.replace = p.replace.Replace("newline", "\n");
+            
             //break down the path into an array
-            string[] pathArrayy = xvmPath.Split('.');
+            string[] pathArrayy = p.path.Split('.');
             List<string> pathArray = new List<string>();
             //convert it to a List cause it has more features
             foreach (string s in pathArrayy)
                 pathArray.Add(s);
             //load the file from disk
             NumByteReads = 0;
-            ReadInside(pathArray, bootFile, newValue, search, mode, xvmPath);
+            ReadInside(pathArray, p.completePath, p.replace, p.search, p.mode, p.path);
         }
 
-        public static void XVMPatch(string bootFile, string xvmPath, string search, string newValue, string mode, string tanksLocation, string tanksVersion, bool testMods = false, string testXVMBootLoc = "")
+        public static void XVMPatch(Patch p, bool testMods = false, string testXVMBootLoc = "")
         {
             NumByteReads = 0;
             PatchDone = false;
             GenericTraverse = 0;
-            //check if it's the new structure
-            if (Regex.IsMatch(bootFile, "^\\\\\\\\res_mods"))
-            {
-                //new style patch, res_mods folder
-                bootFile = tanksLocation + bootFile;
-            }
-            else if (Regex.IsMatch(bootFile, "^\\\\\\\\mods"))
-            {
-                //new style patch, mods folder
-                bootFile = tanksLocation + bootFile;
-            }
-            else if (testMods)
-            {
-
-            }
-            else
-            {
-                //old style patch
-                bootFile = tanksLocation + "\\res_mods" + bootFile;
-            }
-
-            //patch versiondir out of fileLocation
-            if (!testMods && Regex.IsMatch(bootFile, "versiondir"))
-            {
-                bootFile = Regex.Replace(bootFile, "versiondir", tanksVersion);
-            }
-            //patch xvmConfigFolderName out of fileLocation
-            if (!testMods && Regex.IsMatch(bootFile, "xvmConfigFolderName"))
-            {
-                string s = GetXVMBootLoc(tanksLocation);
-                if (s != null)
-                    bootFile = Regex.Replace(bootFile, "xvmConfigFolderName", s);
-            }
-            else
-            {
-                //patch check mode, try to get boot xvm file from the xvm boot textbox
-                if (testXVMBootLoc.Equals("") && Regex.IsMatch(bootFile, "xvmConfigFolderName"))
-                {
-                    MessageBox.Show("Attempted to use variable \"xvmConfigFolderName\", but nothing in the xvm boot file location text box");
-                    return;
-                }
-            }
+            //check that the file exists
+            if (!File.Exists(p.completePath))
+                return;
 
             //patch "newline" out of the replace text
-            newValue = Regex.Replace(newValue, "newline", "\n");
+            //p.replace = Regex.Replace(p.replace, "newline", "\n");
+            p.replace = p.replace.Replace("newline", "\n");
 
-            //check that the file exists
-            if (!File.Exists(bootFile))
-                return;
             //break down the path into an array
-            string[] pathArrayy = xvmPath.Split('.');
+            string[] pathArrayy = p.path.Split('.');
             List<string> pathArray = new List<string>();
             //convert it to a List cause it has more features
             foreach (string s in pathArrayy)
@@ -1065,7 +876,7 @@ namespace RelhaxModpack
 
             //read untill *start of string*${
             NumByteReads = 0;
-            string fileContents = File.ReadAllText(bootFile);
+            string fileContents = File.ReadAllText(p.completePath);
             fileContents = Regex.Replace(fileContents, @"\/\*.*\*\/", "", RegexOptions.Singleline);
             string[] removeComments = fileContents.Split('\n');
             StringBuilder bootBuilder = new StringBuilder();
@@ -1084,7 +895,7 @@ namespace RelhaxModpack
             //remove the last one
             filePath = filePath.Substring(0, filePath.Length - 1);
             filePath = filePath.Trim();
-            ReadInside(pathArray, Path.GetDirectoryName(bootFile) + "\\" + filePath, newValue, search, mode, xvmPath);
+            ReadInside(pathArray, Path.Combine(Path.GetDirectoryName(p.completePath), filePath), p.replace, p.search, p.mode, p.path);
         }
         //getting into this means that we've started reading a new config file, maybe patch this one?
         private static void ReadInside(List<string> pathArray, string newFilePath, string replaceValue, string search, string mode, string origXvmPath)
@@ -1709,7 +1520,8 @@ namespace RelhaxModpack
         //returns the folder(s) to get to the xvm config folder directory
         public static string GetXVMBootLoc(string tanksLocation, string customBootFileLoc = null, bool writeToLog = true)
         {
-            string bootFile = tanksLocation + XVMBootFileLoc1;
+            //string bootFile = tanksLocation + XVMBootFileLoc1;
+            string bootFile = Path.Combine(tanksLocation, XVMBootFileLoc1);
             if (customBootFileLoc != null)
                 bootFile = customBootFileLoc;
             if (!File.Exists(bootFile))
@@ -1718,7 +1530,8 @@ namespace RelhaxModpack
                     Logging.Manager(string.Format("ERROR: xvm config boot file does not exist at {0}, checking {1}", XVMBootFileLoc1, XVMBootFileLoc2));
                 else
                     Logging.Manager(string.Format("NOTICE: default run, xvm config boot file does not exist at {0}, checking {1}", XVMBootFileLoc1, XVMBootFileLoc2));
-                bootFile = XVMBootFileLoc2;
+                //bootFile = XVMBootFileLoc2;
+                bootFile = Path.Combine(tanksLocation, XVMBootFileLoc2);
                 if (!File.Exists(bootFile))
                 {
                     if (writeToLog)

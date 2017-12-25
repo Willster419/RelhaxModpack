@@ -1317,6 +1317,33 @@ namespace RelhaxModpack
                     if (p.file.Length > maxLength)
                         patchFileOutput = p.file.Substring(0, maxLength);
                     Application.DoEvents();
+                    //create the path to the file based on the patchPath
+                    //in createPatchList all patch strings defined as at least nothing (""), no nulls here
+                    p.completePath = "";
+                    //legacy compatibility: if patchPath is null or whitespace or nothing, default to app
+                    if (string.IsNullOrWhiteSpace(p.patchPath))
+                        p.patchPath = "app";
+                    switch(p.patchPath)
+                    {
+                        case "app":
+                        case "{app}":
+                            //TanksLocation (World_of_Tanks)
+                            p.completePath = Path.Combine(TanksLocation, p.file);
+                            break;
+                        case "appData":
+                        case "{appData}":
+                            //app data location
+                            p.completePath = Path.Combine(AppDataFolder, p.file);
+                            break;
+                    }
+                    if (p.completePath.Contains("versiondir"))
+                        p.completePath = p.completePath.Replace("versiondir", TanksVersion);
+                    if (p.completePath.Contains("xvmConfigFolderName"))
+                    {
+                        string s = PatchUtils.GetXVMBootLoc(TanksLocation);
+                        if (s != null)
+                            p.completePath = p.completePath.Replace("xvmConfigFolderName", s);
+                    }
                     if (p.type.Equals("regx") || p.type.Equals("regex"))
                     {
                         string temp = null;
@@ -1329,14 +1356,14 @@ namespace RelhaxModpack
                         if (p.lines == null)
                         {
                             //perform regex patch on entire file, line by line
-                            Logging.Manager("Regex patch, all lines, line by line, " + p.file + ", " + p.search + ", " + p.replace);
-                            PatchUtils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion);
+                            Logging.Manager("Regex patch, all lines, line by line, " + p.patchPath + ", " + p.file + ", " + p.search + ", " + p.replace);
+                            PatchUtils.RegxPatch(p);
                         }
                         else if (p.lines.Count() == 1 && tempp == -1)
                         {
                             //perform regex patch on entire file, as one whole string
-                            Logging.Manager("Regex patch, all lines, whole file, " + p.file + ", " + p.search + ", " + p.replace);
-                            PatchUtils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion, -1);
+                            Logging.Manager("Regex patch, all lines, whole file, " + p.patchPath + ", " + p.file + ", " + p.search + ", " + p.replace);
+                            PatchUtils.RegxPatch(p, -1);
                         }
                         else
                         {
@@ -1344,34 +1371,34 @@ namespace RelhaxModpack
                             {
                                 //perform regex patch on specific file lines
                                 //will need to be a standard for loop BTW
-                                Logging.Manager("Regex patch, line " + s + ", " + p.file + ", " + p.search + ", " + p.replace);
-                                PatchUtils.RegxPatch(p.file, p.search, p.replace, TanksLocation, TanksVersion, int.Parse(s));
+                                Logging.Manager("Regex patch, line " + s + ", " + p.patchPath + ", " + p.file + ", " + p.search + ", " + p.replace);
+                                PatchUtils.RegxPatch(p, int.Parse(s));
                             }
                         }
                     }
                     else if (p.type.Equals("xml"))
                     {
                         //perform xml patch
-                        Logging.Manager("Xml patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
-                        PatchUtils.XMLPatch(p.file, p.path, p.mode, p.search, p.replace, TanksLocation, TanksVersion);
+                        Logging.Manager("Xml patch, " + p.patchPath + ", " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
+                        PatchUtils.XMLPatch(p);
                     }
                     else if (p.type.Equals("json"))
                     {
                         //perform json patch
-                        Logging.Manager("Json patch, " + p.file + ", " + p.path + ", " + p.replace);
-                        PatchUtils.JSONPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
+                        Logging.Manager("Json patch, " + p.patchPath + ", " + p.file + ", " + p.path + ", " + p.replace);
+                        PatchUtils.JSONPatch(p);
                     }
                     else if (p.type.Equals("xvm"))
                     {
                         //perform xvm style json patch
-                        Logging.Manager("XVM patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
-                        PatchUtils.XVMPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
+                        Logging.Manager("XVM patch, " + p.patchPath + ", " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
+                        PatchUtils.XVMPatch(p);
                     }
                     else if (p.type.Equals("pmod"))
                     {
                         //perform pmod/generic style json patch
-                        Logging.Manager("PMOD/Generic patch, " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
-                        PatchUtils.PMODPatch(p.file, p.path, p.search, p.replace, p.mode, TanksLocation, TanksVersion);
+                        Logging.Manager("PMOD/Generic patch, " + p.patchPath + ", " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
+                        PatchUtils.PMODPatch(p);
                     }
                     args.ParrentProcessed++;
                     InstallWorker.ReportProgress(0);
@@ -1765,7 +1792,7 @@ namespace RelhaxModpack
                     if (m.Enabled && m.Checked)
                     {
                         Logging.Manager("Exracting " + Path.GetFileName(m.ZipFile));
-                        this.Unzip(Path.Combine(downloadedFilesDir, Path.GetFileName(m.ZipFile)), TanksLocation,null,99,ref tempPatchNum);
+                        Unzip(Path.Combine(downloadedFilesDir, Path.GetFileName(m.ZipFile)), TanksLocation,null,99,ref tempPatchNum);
                         tempPatchNum++;
                         InstallWorker.ReportProgress(0);
                     }
@@ -2059,10 +2086,18 @@ namespace RelhaxModpack
                 foreach (XmlNode n in patchesList)
                 {
                     //create a patch instance to take the patch information
-                    Patch p = new Patch();
-                    //p.actualPatchName = originalPatchNames[0];
-                    p.actualPatchName = actualPatchName;
-                    p.nativeProcessingFile = nativeProcessingFile;
+                    Patch p = new Patch()
+                    {
+                        //p.actualPatchName = originalPatchNames[0];
+                        actualPatchName = actualPatchName,
+                        nativeProcessingFile = nativeProcessingFile,
+                        type = "",
+                        mode = "",
+                        path = "",
+                        file = "",
+                        search = "",
+                        replace = ""
+                    };
                     //foreach node in this specific "patch" node
                     foreach (XmlNode nn in n.ChildNodes)
                     {
@@ -2092,6 +2127,9 @@ namespace RelhaxModpack
                                 break;
                             case "replace":
                                 p.replace = nn.InnerText;
+                                break;
+                            case "patchPath":
+                                p.patchPath = nn.InnerText;
                                 break;
                         }
                     }
@@ -2508,7 +2546,9 @@ namespace RelhaxModpack
                     {
                         //for this zip file instance, for each entry in the zip file,
                         //change the "versiondir" path to this version of tanks
+                        //also reset the args
                         args.ChildTotalToProcess = zip.Entries.Count;
+                        args.ChildProcessed = 0;
                         for (int i = 0; i < zip.Entries.Count; i++)
                         {
                             //grab the entry name for modifications
@@ -2553,7 +2593,27 @@ namespace RelhaxModpack
                                 sb.Append(Utils.ReplaceDirectorySeparatorChar(Path.Combine(extractFolder, zip[i].FileName)) + "\n");
                         }
                         zip.ExtractProgress += Zip_ExtractProgress;
-                        zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
+                        //zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
+                        //NEED TO TEST
+                        foreach(ZipEntry ze in zip)
+                        {
+                            //check for "WoTAppData" foldername
+                            switch(ze.FileName.Substring(0, 10))
+                            {
+                                //other folder macros can be added here
+                                case "WoTAppData":
+                                    //remove wot macro name and extract to the application data folder
+                                    ze.FileName = ze.FileName.Substring(9, ze.FileName.Length-10);
+                                    ze.Extract(AppDataFolder, ExtractExistingFileAction.OverwriteSilently);
+                                    break;
+                                default:
+                                    //extract to default app directory
+                                    ze.Extract(extractFolder, ExtractExistingFileAction.OverwriteSilently);
+                                    break;
+                            }
+                            args.ChildProcessed++;
+                        }
+                        //we made it, set j to 1 to break out of the exception catch loop
                         j = 1;
                     }
                 }
@@ -2591,7 +2651,7 @@ namespace RelhaxModpack
         //handler for when progress is made in extracting a zip file
         void Zip_ExtractProgress(object sender, ExtractProgressEventArgs e)
         {
-            args.ChildProcessed = e.EntriesExtracted;
+            //args.ChildProcessed = e.EntriesExtracted;
             if (e.CurrentEntry != null)
             {
                 args.currentFile = e.CurrentEntry.FileName;

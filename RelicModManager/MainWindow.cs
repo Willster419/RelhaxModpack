@@ -759,7 +759,7 @@ namespace RelhaxModpack
             appDataFolder = "";
             appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Wargaming.net", "WorldOfTanks");
             Logging.Manager("appDataFolder parsed as " + appDataFolder);
-            if (appDataFolder.Equals("") || !Directory.Exists(appDataFolder))
+            if (string.IsNullOrWhiteSpace(appDataFolder) || !Directory.Exists(appDataFolder))
             {
                 Logging.Manager("ERROR: appDataFolder does not exist");
                 appDataFolder = "-1";
