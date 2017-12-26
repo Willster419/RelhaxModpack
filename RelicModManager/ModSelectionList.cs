@@ -58,6 +58,8 @@ namespace RelhaxModpack
             pw = new PleaseWait(MainWindowStartX, MainWindowStartY);
             pw.Show();
             Prog = 0;
+            //set the tooltip popup hook
+            DescriptionToolTip.Popup += DescriptionToolTip_Popup;
             //apply the translations
             ApplyTranslations();
             pw.loadingDescBox.Text = Translations.getTranslatedString("readingDatabase");
@@ -117,6 +119,33 @@ namespace RelhaxModpack
                 CheckDefaultMods();
             //finish loading
             FinishLoad();
+        }
+
+        private void DescriptionToolTip_Popup(object sender, PopupEventArgs e)
+        {
+            return;
+            if(e.AssociatedControl is UIComponent ui)
+            {
+                if (ui.config == null)
+                {
+                    if (ui.mod == null)
+                        return;
+                    //mod
+                    if(!ui.mod.Enabled)
+                    {
+                        
+                    }
+                }
+                else
+                {
+                    //config
+                    if(!ui.config.Enabled)
+                    {
+                        string tooltipString = DescriptionToolTip.GetToolTip(ui.config.ModFormCheckBox);
+                        DescriptionToolTip.Show(tooltipString, ui.config.ModFormCheckBox);
+                    }
+                }
+            }
         }
         #region Loading Methods
 
@@ -210,11 +239,12 @@ namespace RelhaxModpack
             {
                 if (Path.GetExtension(s).Equals(".zip"))
                 {
-                    Mod m = new Mod();
-                    m.ZipFile = s;
-                    m.Name = Path.GetFileNameWithoutExtension(s);
-                    m.Enabled = true;
-                    UserMods.Add(m);
+                    UserMods.Add(new Mod()
+                    {
+                        ZipFile = s,
+                        Name = Path.GetFileNameWithoutExtension(s),
+                        Enabled = true
+                    });
                 }
             }
         }
@@ -331,6 +361,7 @@ namespace RelhaxModpack
                 }
             }
         }
+
         //adds all usermods to thier own userMods tab
         private void AddUserMods(bool forceUnchecked)
         {
@@ -1401,6 +1432,8 @@ namespace RelhaxModpack
                 AutoSizeMode = AutoSizeMode.GrowOnly,
                 Size = new Size(t.Size.Width - 25, 20)
             };
+            mainPanel.MouseDown += DisabledComponent_MouseDown;
+            DescriptionToolTip.SetToolTip(mainPanel, "test");
             if (m.Enabled && m.Checked && !Settings.DisableColorChange)
                 mainPanel.BackColor = Color.BlanchedAlmond;
             else
@@ -1444,6 +1477,8 @@ namespace RelhaxModpack
                 AutoSizeMode = AutoSizeMode.GrowOnly,
                 Size = new Size(t.Size.Width - 35, 30),
             };
+            configPanel.MouseDown += DisabledComponent_MouseDown;
+            DescriptionToolTip.SetToolTip(configPanel, "test");
             if (parentIsMod)
             {
                 if (m.Enabled && m.Checked && !Settings.DisableColorChange)
@@ -1773,7 +1808,44 @@ namespace RelhaxModpack
                 }
             }
         }
-        
+
+        private void DisabledComponent_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (!(e.Button == MouseButtons.Right))
+                return;
+            Panel configPanel = (Panel)sender;
+            Control c = configPanel.GetChildAtPoint(e.Location);
+            if(c is UIComponent ui)
+            {
+                if(ui.config == null)
+                {
+                    //it's a mod
+                    if (!ui.mod.Enabled)//just a check
+                    {
+                        Generic_MouseDown(ui, e);
+                    }
+                    else
+                    {
+                        Logging.Manager("ERROR: ui.config.Enabled returned true, this code is not supposed to be reached!!");
+                        return;
+                    }
+                }
+                else
+                {
+                    //it's a config
+                    if (!ui.config.Enabled)//just a check
+                    {
+                        Generic_MouseDown(ui, e);
+                    }
+                    else
+                    {
+                        Logging.Manager("ERROR: ui.config.Enabled returned true, this code is not supposed to be reached!!");
+                        return;
+                    }
+                }
+            }
+        }
+
         //method for finding the location of which to put a control
         private int getYLocation(System.Windows.Forms.Control.ControlCollection ctrl)
         {

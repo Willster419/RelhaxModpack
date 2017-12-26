@@ -241,6 +241,10 @@ namespace RelhaxModpack
             this.searchCB.TextUpdate += new System.EventHandler(this.searchComboBox_TextUpdate);
             this.searchCB.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchCB_KeyDown);
             // 
+            // DescriptionToolTip
+            // 
+            this.DescriptionToolTip.ShowAlways = true;
+            // 
             // searchTB
             // 
             this.searchTB.Location = new System.Drawing.Point(524, 53);
