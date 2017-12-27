@@ -58,8 +58,6 @@ namespace RelhaxModpack
             pw = new PleaseWait(MainWindowStartX, MainWindowStartY);
             pw.Show();
             Prog = 0;
-            //set the tooltip popup hook
-            DescriptionToolTip.Popup += DescriptionToolTip_Popup;
             //apply the translations
             ApplyTranslations();
             pw.loadingDescBox.Text = Translations.getTranslatedString("readingDatabase");
@@ -119,33 +117,6 @@ namespace RelhaxModpack
                 CheckDefaultMods();
             //finish loading
             FinishLoad();
-        }
-
-        private void DescriptionToolTip_Popup(object sender, PopupEventArgs e)
-        {
-            return;
-            if(e.AssociatedControl is UIComponent ui)
-            {
-                if (ui.config == null)
-                {
-                    if (ui.mod == null)
-                        return;
-                    //mod
-                    if(!ui.mod.Enabled)
-                    {
-                        
-                    }
-                }
-                else
-                {
-                    //config
-                    if(!ui.config.Enabled)
-                    {
-                        string tooltipString = DescriptionToolTip.GetToolTip(ui.config.ModFormCheckBox);
-                        DescriptionToolTip.Show(tooltipString, ui.config.ModFormCheckBox);
-                    }
-                }
-            }
         }
         #region Loading Methods
 
@@ -1433,7 +1404,6 @@ namespace RelhaxModpack
                 Size = new Size(t.Size.Width - 25, 20)
             };
             mainPanel.MouseDown += DisabledComponent_MouseDown;
-            DescriptionToolTip.SetToolTip(mainPanel, "test");
             if (m.Enabled && m.Checked && !Settings.DisableColorChange)
                 mainPanel.BackColor = Color.BlanchedAlmond;
             else
@@ -1478,7 +1448,6 @@ namespace RelhaxModpack
                 Size = new Size(t.Size.Width - 35, 30),
             };
             configPanel.MouseDown += DisabledComponent_MouseDown;
-            DescriptionToolTip.SetToolTip(configPanel, "test");
             if (parentIsMod)
             {
                 if (m.Enabled && m.Checked && !Settings.DisableColorChange)
