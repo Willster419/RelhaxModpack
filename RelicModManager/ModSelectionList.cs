@@ -296,6 +296,7 @@ namespace RelhaxModpack
                     };
                     //apparently there is an item in there. clear it.
                     lsl.legacyTreeView.Items.Clear();
+                    lsl.MouseDown += Lsl_MouseDown;
                     t.Controls.Add(host);
                 }
                 modTabGroups.TabPages.Add(t);
@@ -329,6 +330,38 @@ namespace RelhaxModpack
                         //default case, use default view
                         AddModDefaultView(m, c.TabPage, c);
                     }
+                }
+            }
+        }
+
+        private void Lsl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.RightButton != System.Windows.Input.MouseButtonState.Pressed)
+            {
+                return;
+            }
+            LegacySelectionList lsl = (LegacySelectionList)sender;
+            //contentPresenter
+            //object o = e.OriginalSource;
+            if(e.OriginalSource is System.Windows.Controls.ContentPresenter cp)
+            {
+                if(cp.Content is ConfigWPFCheckBox cb)
+                {
+                    if (cb.IsEnabled)
+                        return;
+                    Generic_MouseDown(cb, e);
+                }
+                else if (cp.Content is ConfigWPFRadioButton rb)
+                {
+                    if (rb.IsEnabled)
+                        return;
+                    Generic_MouseDown(rb, e);
+                }
+                else if (cp.Content is ModWPFCheckBox mcb)
+                {
+                    if (mcb.IsEnabled)
+                        return;
+                    Generic_MouseDown(mcb, e);
                 }
             }
         }
