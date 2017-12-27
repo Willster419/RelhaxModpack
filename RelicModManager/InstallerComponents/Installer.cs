@@ -1325,17 +1325,21 @@ namespace RelhaxModpack
                     //legacy compatibility: if patchPath is null or whitespace or nothing, default to app
                     if (string.IsNullOrWhiteSpace(p.patchPath))
                         p.patchPath = "app";
+                    //replace accidental "\\" with "\" (was a legacy issue)
+                    p.file = p.file.Replace(@"\\", @"\");
                     switch(p.patchPath)
                     {
                         case "app":
                         case "{app}":
                             //TanksLocation (World_of_Tanks)
-                            p.completePath = Path.Combine(TanksLocation, p.file);
+                            //p.completePath = Path.Combine(TanksLocation, p.file);
+                            p.completePath = TanksLocation + p.file;
                             break;
                         case "appData":
                         case "{appData}":
                             //app data location
-                            p.completePath = Path.Combine(AppDataFolder, p.file);
+                            //p.completePath = Path.Combine(AppDataFolder, p.file);
+                            p.completePath = TanksLocation + p.file;
                             break;
                     }
                     if (p.completePath.Contains("versiondir"))
