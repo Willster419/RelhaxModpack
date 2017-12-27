@@ -64,6 +64,7 @@ namespace RelhaxModpack
         // private FileStream fs;
         private string InstalledFilesLogPath = "";
         private object lockerInstaller = new object();
+        private Hashtable zipMacros = new Hashtable();
 
         //private static readonly Stopwatch stopWatch = new Stopwatch();
 
@@ -136,6 +137,9 @@ namespace RelhaxModpack
             long beforeExtraction = 0;
             long duringExtraction = 0;
             long afterExtraction = 0;
+            //fill the hashtable
+            zipMacros.Add("WoTAppData", AppDataFolder);
+            zipMacros.Add("_AppData", AppDataFolder);
             ResetArgs();
             InstalledFilesLogPath = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
             //Step 1: do a backup if requested
@@ -2595,47 +2599,25 @@ namespace RelhaxModpack
                         //NEED TO TEST
                         for(int i = 0; i < zip.Entries.Count; i++)
                         {
-                            //check for "WoTAppData"
-                            if (zip[i].FileName.Length > "WoTAppData".Length && zip[i].FileName.Substring(0, "WoTAppData".Length).Equals("WoTAppData"))
+                            bool processed = false;
+                            foreach(string s in zipMacros.Keys)
                             {
-                                //change the fileName and extract
-                                zip[i].FileName = zip[i].FileName.Replace("WoTAppData", "");
-                                if(!string.IsNullOrWhiteSpace(zip[i].FileName))
-                                    zip[i].Extract(AppDataFolder, ExtractExistingFileAction.OverwriteSilently);
+                                if (zip[i].FileName.Length > s.Length && zip[i].FileName.Substring(0, s.Length).Equals(s))
+                                {
+                                    processed = true;
+                                    //change the fileName and extract
+                                    zip[i].FileName = zip[i].FileName.Replace(s, "");
+                                    if (!string.IsNullOrWhiteSpace(zip[i].FileName))
+                                        zip[i].Extract((string)zipMacros[s], ExtractExistingFileAction.OverwriteSilently);
+                                    //entry was processed, safe to move on
+                                    break;
+                                }
                             }
-                            //check for "_AppData"
-                            else if (zip[i].FileName.Length > "_AppData".Length && zip[i].FileName.Substring(0, "_AppData".Length).Equals("_AppData"))
-                            {
-                                zip[i].FileName = zip[i].FileName.Replace("_AppData", "");
-                                if (!string.IsNullOrWhiteSpace(zip[i].FileName))
-                                    zip[i].Extract(AppDataFolder, ExtractExistingFileAction.OverwriteSilently);
-                            }
-                            else
+                            if (!processed)
                             {
                                 //default to extract to TanksLocation
                                 zip[i].Extract(TanksLocation, ExtractExistingFileAction.OverwriteSilently);
                             }
-                            /*
-                            //check for "WoTAppData" foldername
-                            switch(ze.FileName.Length > 10? ze.FileName.Substring(0, 10): "nothingThatITwillEVERGETTWOf342f43f545grtg45t")
-                            {
-                                //other folder macros can be added here
-                                case "WoTAppData":
-                                    //remove wot macro name and extract to the application data folder
-                                    ze.FileName = ze.FileName.Substring("WoTAppData".Length-1, ze.FileName.Length- "WoTAppData".Length);
-                                    ze.Extract(AppDataFolder, ExtractExistingFileAction.OverwriteSilently);
-                                    break;
-                                case "_AppData"://same as above, but another name
-                                    //remove wot macro name and extract to the application data folder
-                                    ze.FileName = ze.FileName.Substring("_AppData".Length-1, ze.FileName.Length - "_AppData".Length);
-                                    ze.Extract(AppDataFolder, ExtractExistingFileAction.OverwriteSilently);
-                                    break;
-                                default:
-                                    //extract to default app directory
-                                    ze.Extract(TanksLocation, ExtractExistingFileAction.OverwriteSilently);
-                                    break;
-                            }
-                            */
                             args.ChildProcessed++;
                         }
                         //we made it, set j to 1 to break out of the exception catch loop
