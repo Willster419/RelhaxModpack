@@ -1015,6 +1015,7 @@ namespace RelhaxModpack
             german.Add("appDataFolderError", "Der App-Datenordner für WoT wurde nicht gefunden. Das Löschen von WoT-Cache wird übersprungen. Bitte melden Sie dies dem Entwicklerteam.");
             polish.Add("appDataFolderError", "Nie znaleziono foderu app data dla WoT. Czyszczenie folderu cache zostanie pominięte. Prosimy zgłosić problem naszym deweloperom.");
             french.Add("appDataFolderError", "Le dossier App Data pour WoT n'as pas pus être trouvé. Nettoyage du cache vas être ignoré. Veuillez avertir l`équipe de développement");
+
             //Component: clearCacheCB
             //
             english.Add("clearCacheCB", "Clear WoT cache data");
@@ -1091,6 +1092,20 @@ namespace RelhaxModpack
             german.Add("CleanUninstallModeRBExplanation", "Schnelldeinstallation entfernt ALLE Mod-Dateien. Verwende dies, wenn du nur mit dem Relhax Modpack installiert hast und ggf. alle zusätzlich installierten Mods entfernen möchtest.");
             polish.Add("CleanUninstallModeRBExplanation", "Szybka deinstalacja usunie wszystkie pliki modyfikacji. Użyj tego trybu, jeśli instalowałeś tylko paczkę RelHax Modpack.");
             french.Add("CleanUninstallModeRBExplanation", "La désinstallation rapide supprimera tous les fichiers mod de votre installation. Utilisez-le si vos mods sont uniquement installés par le modpack relhax.");
+
+            //Component: DiagnosticUtilitiesButton
+            //
+            english.Add("DiagnosticUtilitiesButton", "Diagnostic Utilities");
+            german.Add("DiagnosticUtilitiesButton", "TODO");
+            polish.Add("DiagnosticUtilitiesButton", "Narzędzia diagnostyczne");
+            french.Add("DiagnosticUtilitiesButton", "TODO");
+
+            //Component: UninstallModeGroupBox
+            //
+            english.Add("UninstallModeGroupBox", "Uninstall Mode");
+            german.Add("UninstallModeGroupBox", "TODO");
+            polish.Add("UninstallModeGroupBox", "TODO");
+            french.Add("UninstallModeGroupBox", "TODO");
 
             //Section: Messages from ModSelectionList
 
@@ -1655,7 +1670,7 @@ namespace RelhaxModpack
             //
             english.Add("CloseApplicationButton", "Close the application?");
             german.Add("CloseApplicationButton", "Anwendung schließen");
-            polish.Add("CloseApplicationButton", "Zamknij aplikację or Zamknij program");
+            polish.Add("CloseApplicationButton", "Zamknij aplikację");
             french.Add("CloseApplicationButton", "Fermer l'application");
 
             //Componet: StartXVMStatButton_Click
