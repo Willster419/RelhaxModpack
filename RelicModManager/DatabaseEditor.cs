@@ -171,7 +171,6 @@ namespace RelhaxModpack
             DependenciesTabPage.Enabled = false;
             PictureTabPage.Enabled = false;
             UserDatasTabPage.Enabled = false;
-            ShortCutTabPage.Enabled = false;
         }
         private void DisplayDatabaseConfigs(DatabaseTreeNode parrent, List<Config> configs)
         {
@@ -574,13 +573,6 @@ namespace RelhaxModpack
             ObjectUserdatasList.DataSource = null;
             ObjectUserdatasList.Items.Clear();
             ObjectUserdatasTB.Text = "";
-
-            // Shortcut tab
-            ObjectShortcutList.DataSource = null;
-            ObjectShortcutList.Items.Clear();
-            ObjectShortcutTB.Text = "";
-            ObjectShortcutNameTB.Text = "";
-            ObjectShortcutCB.Checked = false;
         }
 
         private void DatabaseTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -646,10 +638,6 @@ namespace RelhaxModpack
                     ObjectDependenciesLabel.Text = "dependencies (click to edit)";
                     PictureTabPage.Enabled = false;
                     UserDatasTabPage.Enabled = false;
-                    ShortCutTabPage.Enabled = true;
-                    ObjectShortcutList.DataSource = null;
-                    ObjectShortcutList.Items.Clear();
-                    ObjectShortcutList.DataSource = SelectedGlobalDependency.shortCuts;
                 }
                 else if (node.Dependency != null)
                 {
@@ -719,10 +707,6 @@ namespace RelhaxModpack
 
                     PictureTabPage.Enabled = false;
                     UserDatasTabPage.Enabled = false;
-                    ShortCutTabPage.Enabled = true;
-                    ObjectShortcutList.DataSource = null;
-                    ObjectShortcutList.Items.Clear();
-                    ObjectShortcutList.DataSource = SelectedDependency.shortCuts;
                 }
                 else if (node.LogicalDependency != null)
                 {
@@ -780,10 +764,6 @@ namespace RelhaxModpack
                     ObjectDependenciesList.DataSource = SelectedLogicalDependency.DatabasePackageLogic;
                     PictureTabPage.Enabled = false;
                     UserDatasTabPage.Enabled = false;
-                    ShortCutTabPage.Enabled = true;
-                    ObjectShortcutList.DataSource = null;
-                    ObjectShortcutList.Items.Clear();
-                    ObjectShortcutList.DataSource = SelectedLogicalDependency.Shortcuts;
                 }
                 else if (node.DatabaseObject != null)
                 {
@@ -874,7 +854,6 @@ namespace RelhaxModpack
                     LogicalDependencyPanel.Enabled = true;
                     PictureTabPage.Enabled = true;
                     UserDatasTabPage.Enabled = true;
-                    ShortCutTabPage.Enabled = true;
 
                     //logicalDependencies
                     ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.LogicalDependencies;
@@ -894,15 +873,6 @@ namespace RelhaxModpack
 
                     //userdatas
                     ObjectUserdatasList.DataSource = SelectedDatabaseObject.UserFiles;
-
-                    //shortcuts
-                    ObjectShortcutList.DataSource = SelectedDatabaseObject.ShortCuts;
-                    if (SelectedDatabaseObject.ShortCuts.Count == 0)
-                    {
-                        ObjectShortcutTB.Text = "";
-                        ObjectShortcutNameTB.Text = "";
-                        ObjectShortcutCB.Checked = false;
-                    }
                 }
                 else if (node.Category != null)
                 {
@@ -960,7 +930,6 @@ namespace RelhaxModpack
 
                     PictureTabPage.Enabled = false;
                     UserDatasTabPage.Enabled = false;
-                    ShortCutTabPage.Enabled = false;
                 }
             }
             catch (Exception ex)
@@ -1836,154 +1805,6 @@ namespace RelhaxModpack
             PictureURLTB.Text = med.URL;
             MovePictureTB.Text = "" + SelectedDatabaseObject.PictureList.IndexOf(med);
             AddPictureTB.Text = "" + SelectedDatabaseObject.PictureList.IndexOf(med);
-        }
-
-        private void AddShortcutsButton_Click(object sender, EventArgs e)
-        {
-            if (ObjectShortcutNameTB.Text.Equals(""))
-            {
-                MessageBox.Show("No empty Name field allowed", "confirm", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            if (MessageBox.Show("Confirm you wish to add shortcut entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
-                return;
-            Shortcut sc = new Shortcut();
-            sc.Path = ObjectShortcutTB.Text;
-            sc.Name = Utils.GetValidFilename(ObjectShortcutNameTB.Text);
-            sc.Enabled = ObjectShortcutCB.Checked;
-            ObjectShortcutList.DataSource = null;
-            ObjectShortcutList.Items.Clear();
-            if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
-            {
-                SelectedGlobalDependency.shortCuts.Add(sc);
-                ObjectShortcutList.DataSource = SelectedGlobalDependency.shortCuts;
-            }
-            else if (DatabaseEditorMode == EditorMode.Dependency)
-            {
-                SelectedDependency.shortCuts.Add(sc);
-                ObjectShortcutList.DataSource = SelectedDependency.shortCuts;
-            }
-            else if (DatabaseEditorMode == EditorMode.LogicalDependency)
-            {
-                SelectedLogicalDependency.Shortcuts.Add(sc);
-                ObjectShortcutList.DataSource = SelectedLogicalDependency.Shortcuts;
-            }
-            else if (DatabaseEditorMode == EditorMode.DBO)
-            {
-                SelectedDatabaseObject.ShortCuts.Add(sc);
-                ObjectShortcutList.DataSource = SelectedDatabaseObject.ShortCuts;
-            }
-            else
-            {
-                MessageBox.Show("Unexpected DatabaseEditorMode at AddShortcutsButton_Click()", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            UnsavedModifications = true;
-        }
-
-        private void EditShortcutsButton_Click(object sender, EventArgs e)
-        {
-            if (ObjectShortcutList.Items.Count == 0) return;
-            if (ObjectShortcutNameTB.Text.Equals(""))
-            {
-                MessageBox.Show("No empty Name field allowed", "confirm", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            var tmpSelectedItem = ObjectShortcutList.SelectedItem;
-            Shortcut sc = (Shortcut)ObjectShortcutList.SelectedItem;
-            if (sc is null)
-            {
-                MessageBox.Show("No entry selected to modify", "confirm", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            if (MessageBox.Show("Confirm you wish to edit shortcut entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
-                return;
-            sc.Path = ObjectShortcutTB.Text;
-            sc.Name = Utils.GetValidFilename(ObjectShortcutNameTB.Text);
-            sc.Enabled = ObjectShortcutCB.Checked;
-            ObjectShortcutList.DataSource = null;
-            ObjectShortcutList.Items.Clear();
-            if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
-            {
-                ObjectShortcutList.DataSource = SelectedGlobalDependency.shortCuts;
-            }
-            else if (DatabaseEditorMode == EditorMode.Dependency)
-            {
-                ObjectShortcutList.DataSource = SelectedDependency.shortCuts;
-            }
-            else if (DatabaseEditorMode == EditorMode.LogicalDependency)
-            {
-                ObjectShortcutList.DataSource = SelectedLogicalDependency.Shortcuts;
-            }
-            else if (DatabaseEditorMode == EditorMode.DBO)
-            {
-                ObjectShortcutList.DataSource = SelectedDatabaseObject.ShortCuts;
-            }
-            else
-            {
-                MessageBox.Show("Unexpected DatabaseEditorMode at EditShortcutsButton_Click()", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            ObjectShortcutList.SelectedItem = tmpSelectedItem;
-            UnsavedModifications = true;
-        }
-
-        private void RemoveShortcutsButton_Click(object sender, EventArgs e)
-        {
-            if (ObjectShortcutList.Items.Count == 0) return;
-            Shortcut sc = (Shortcut)ObjectShortcutList.SelectedItem;
-            if (sc is null)
-            {
-                MessageBox.Show("No entry selected to modify", "confirm", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            if (MessageBox.Show("Confirm you wish to remove shortcut entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
-                return;
-            ObjectShortcutList.DataSource = null;
-            ObjectShortcutList.Items.Clear();
-            if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
-            {
-                SelectedGlobalDependency.shortCuts.Remove(sc);
-                ObjectShortcutList.DataSource = SelectedGlobalDependency.shortCuts;
-            }
-            else if (DatabaseEditorMode == EditorMode.Dependency)
-            {
-                SelectedDependency.shortCuts.Remove(sc);
-                ObjectShortcutList.DataSource = SelectedDependency.shortCuts;
-            }
-            else if (DatabaseEditorMode == EditorMode.LogicalDependency)
-            {
-                SelectedLogicalDependency.Shortcuts.Remove(sc);
-                ObjectShortcutList.DataSource = SelectedLogicalDependency.Shortcuts;
-            }
-            else if (DatabaseEditorMode == EditorMode.DBO)
-            {
-                SelectedDatabaseObject.ShortCuts.Remove(sc);
-                ObjectShortcutList.DataSource = SelectedDatabaseObject.ShortCuts;
-            }
-            else
-            {
-                MessageBox.Show("Unexpected DatabaseEditorMode at AddShortcutsButton_Click()", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            sc.Path = "";
-            sc.Name = "";
-            sc.Enabled = false;
-            ObjectShortcutTB.Text = sc.Path;
-            ObjectShortcutTB.Text = sc.Name;
-            ObjectShortcutCB.Checked = sc.Enabled;
-            UnsavedModifications = true;
-        }
-
-        private void ObjectShortcutList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ListBox lb = (ListBox)sender;
-            if (lb.DataSource == null)
-                return;
-            Shortcut shortcut = (Shortcut)lb.SelectedItem;
-            ObjectShortcutTB.Text = shortcut.Path;
-            ObjectShortcutNameTB.Text = shortcut.Name;
-            ObjectShortcutCB.Checked = shortcut.Enabled;
         }
 
         private void AddUserdatasButton_Click(object sender, EventArgs e)

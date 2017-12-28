@@ -372,6 +372,8 @@ namespace RelhaxModpack
                     Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
                 if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
                     Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
+                if (Directory.Exists(Path.Combine(TanksLocation, "_shortcuts")))
+                    Directory.Delete(Path.Combine(TanksLocation, "_shortcuts"), true);
             }
             catch (Exception ex)
             {
@@ -1034,8 +1036,6 @@ namespace RelhaxModpack
                 Utils.ExceptionLog("ExtractDatabaseObjects", ex);
             }
         }
-
-        
 
         private void SuperExtract(object sender, DoWorkEventArgs e)
         {
@@ -1850,11 +1850,38 @@ namespace RelhaxModpack
         //Step 18: Create Shortcuts
         private void CreateShortCuts()
         {
-            //create shortcuts list
-
             try
             {
-                Logging.InstallerGroup("Desktop shortcuts");                     // write comment line
+                Logging.InstallerGroup("Started Processing of Desktop shortcuts");                     // write comment line
+                //create shortcuts list
+                //Give the OS time to process the folder change...
+                System.Threading.Thread.Sleep(5);
+                //set the folder properties to read write
+                DirectoryInfo di = null;
+                FileInfo[] diArr = null;
+                try
+                {
+                    File.SetAttributes(Path.Combine(TanksLocation, "_shortcuts"), FileAttributes.Normal);
+                    di = new DirectoryInfo(Path.Combine(TanksLocation, "_shortcuts"));
+                    //get every patch file in the folder
+                    diArr = di.GetFiles(@"*.xml", System.IO.SearchOption.TopDirectoryOnly);
+                }
+                catch (UnauthorizedAccessException e)
+                {
+                    Utils.ExceptionLog("CreateShortCuts(), File.SetAttributes", e);
+                }
+
+                //get any other old shortcuts out of memory
+                Shortcuts = new List<Shortcut>();
+                for (int i = 0; i < diArr.Count(); i++)
+                {
+                    //set the attributes to normall
+                    File.SetAttributes(diArr[i].FullName, FileAttributes.Normal);
+                    //add shortcuts to the list
+                    CreateShortcutsList(diArr[i].FullName);
+                }
+                args.ParrentTotalToProcess = Shortcuts.Count;
+                args.ParrentProcessed = 0;
                 foreach (Shortcut sc in Shortcuts)
                 {
                     if (sc.Enabled)
@@ -1866,6 +1893,8 @@ namespace RelhaxModpack
                             Utils.CreateShortcut(fileTarget, sc.Name, true, true);
                         }
                     }
+                    args.ParrentProcessed++;
+                    InstallWorker.ReportProgress(0);
                 }
             }
             catch (Exception ex)
@@ -2180,7 +2209,55 @@ namespace RelhaxModpack
                     // filename only record once needed
                     patchList.Add(p);
                 }
-                //originalPatchNames.RemoveAt(0);
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("createPatchList", "ex", ex);
+            }
+        }
+        //create/fills the list of shortcuts to install
+        private void CreateShortcutsList(string xmlFile)
+        {
+            try
+            {
+                if (!File.Exists(xmlFile))
+                    return;
+                Logging.Manager(string.Format("Processing shortcut xml file: {0}", Path.GetFileName(xmlFile)));
+                XmlDocument doc = new XmlDocument();
+                doc.Load(xmlFile);
+                //loaded the xml file into memory, create an xml list of patchs
+                XmlNodeList shortcutsList = doc.SelectNodes("//shortcuts/shortcut");
+                //foreach "patch" node in the "patchs" node of the xml file
+                foreach (XmlNode n in shortcutsList)
+                {
+                    //create a patch instance to take the patch information
+                    Shortcut s = new Shortcut()
+                    {
+                        Path = "",
+                        Name = "",
+                        Enabled = false//just to be safe
+                    };
+                    //foreach node in this specific "patch" node
+                    foreach (XmlNode nn in n.ChildNodes)
+                    {
+                        //each element in the xml gets put into the
+                        //the correcpondng attribute for the Patch instance
+                        switch (nn.Name)
+                        {
+                            case "path":
+                                s.Path = nn.InnerText;
+                                break;
+                            case "name":
+                                s.Name = nn.InnerText;
+                                break;
+                            case "enabled":
+                                s.Enabled = Utils.ParseBool(nn.InnerText,false);
+                                break;
+                        }
+                    }
+                    // filename only record once needed
+                    Shortcuts.Add(s);
+                }
             }
             catch (Exception ex)
             {

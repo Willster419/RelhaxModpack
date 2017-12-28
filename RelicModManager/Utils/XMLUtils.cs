@@ -99,7 +99,7 @@ namespace RelhaxModpack
                 foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency"))
                 {
                     string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled",
-                        "appendExtraction", "packageName", "devURL", "timestamp", "shortCuts", "extractPath" };
+                        "appendExtraction", "packageName", "devURL", "timestamp", "extractPath" };
                     Dependency d = new Dependency();
                     d.PackageName = "";
                     foreach (XElement globs in dependencyNode.Elements())
@@ -133,35 +133,6 @@ namespace RelhaxModpack
                                 break;
                             case "appendExtraction":
                                 d.AppendExtraction = Utils.ParseBool(globs.Value, false);
-                                break;
-                            case "shortCuts":
-                                //parse all shortCuts
-                                foreach (XElement shortCutHolder in globs.Elements())
-                                {
-                                    Shortcut sc = new Shortcut();
-                                    string[] depScNodeList = new string[] { "path", "name", "enabled" };
-                                    foreach (XElement shortCutNode in shortCutHolder.Elements())
-                                    {
-                                        depScNodeList = depScNodeList.Except(new string[] { shortCutNode.Name.ToString() }).ToArray();
-                                        switch (shortCutNode.Name.ToString())
-                                        {
-                                            case "path":
-                                                sc.Path = shortCutNode.Value;
-                                                break;
-                                            case "name":
-                                                sc.Name = shortCutNode.Value;
-                                                break;
-                                            case "enabled":
-                                                sc.Enabled = Utils.ParseBool(shortCutNode.Value, false);
-                                                break;
-                                        }
-                                    }
-                                    if (sc != null)
-                                    {
-                                        if (depScNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => globPend {1} (line {2})", string.Join(",", depScNodeList), d.ZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
-                                        d.shortCuts.Add(sc);
-                                    }
-                                }
                                 break;
                             case "packageName":
                                 d.PackageName = globs.Value.Trim();
@@ -188,7 +159,7 @@ namespace RelhaxModpack
                 foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/dependencies/dependency"))
                 {
                     string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction",
-                        "packageName", "logicalDependencies", "devURL", "timestamp", "shortCuts", "extractPath" };
+                        "packageName", "logicalDependencies", "devURL", "timestamp", "extractPath" };
                     Dependency d = new Dependency();
                     d.PackageName = "";
                     foreach (XElement globs in dependencyNode.Elements())
@@ -229,35 +200,6 @@ namespace RelhaxModpack
                                 {
                                     Logging.Manager(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => globsPend {1} (line {2})", globs.Name.ToString(), d.ZipFile, ((IXmlLineInfo)globs).LineNumber));
                                     if (Program.testMode) { MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => globsPend {1}\n\nmore informations, see logfile", globs.Name.ToString(), d.ZipFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); };
-                                }
-                                break;
-                            case "shortCuts":
-                                //parse all shortCuts
-                                foreach (XElement shortCutHolder in globs.Elements())
-                                {
-                                    Shortcut sc = new Shortcut();
-                                    string[] depScNodeList = new string[] { "path", "name", "enabled" };
-                                    foreach (XElement shortCutNode in shortCutHolder.Elements())
-                                    {
-                                        depScNodeList = depScNodeList.Except(new string[] { shortCutNode.Name.ToString() }).ToArray();
-                                        switch (shortCutNode.Name.ToString())
-                                        {
-                                            case "path":
-                                                sc.Path = shortCutNode.Value;
-                                                break;
-                                            case "name":
-                                                sc.Name = shortCutNode.Value;
-                                                break;
-                                            case "enabled":
-                                                sc.Enabled = Utils.ParseBool(shortCutNode.Value, false);
-                                                break;
-                                        }
-                                    }
-                                    if (sc != null)
-                                    {
-                                        if (depScNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => Dep {1} (line {2})", string.Join(",", depScNodeList), d.ZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
-                                        d.shortCuts.Add(sc);
-                                    }
                                 }
                                 break;
                             case "logicalDependencies":
@@ -344,35 +286,6 @@ namespace RelhaxModpack
                                 break;
                             case "dependencyenabled":
                                 d.Enabled = Utils.ParseBool(globs.Value, false);
-                                break;
-                            case "shortCuts":
-                                //parse all shortCuts
-                                foreach (XElement shortCutHolder in globs.Elements())
-                                {
-                                    Shortcut sc = new Shortcut();
-                                    string[] logDepScNodeList = new string[] { "path", "name", "enabled" };
-                                    foreach (XElement shortCutNode in shortCutHolder.Elements())
-                                    {
-                                        logDepScNodeList = logDepScNodeList.Except(new string[] { shortCutNode.Name.ToString() }).ToArray();
-                                        switch (shortCutNode.Name.ToString())
-                                        {
-                                            case "path":
-                                                sc.Path = shortCutNode.Value;
-                                                break;
-                                            case "name":
-                                                sc.Name = shortCutNode.Value;
-                                                break;
-                                            case "enabled":
-                                                sc.Enabled = Utils.ParseBool(shortCutNode.Value, false);
-                                                break;
-                                        }
-                                    }
-                                    if (sc != null)
-                                    {
-                                        if (logDepScNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => logDep {1} (line {2})", string.Join(",", logDepScNodeList), d.ZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
-                                        d.Shortcuts.Add(sc);
-                                    }
-                                }
                                 break;
                             case "packageName":
                                 d.PackageName = globs.Value.Trim();
@@ -549,35 +462,6 @@ namespace RelhaxModpack
                                                                     break;
                                                             }
                                                             m.PictureList.Add(med);
-                                                        }
-                                                        break;
-                                                    case "shortCuts":
-                                                        //parse all shortCuts
-                                                        foreach (XElement shortCutHolder in modNode.Elements())
-                                                        {
-                                                            Shortcut sc = new Shortcut();
-                                                            string[] depScNodeList = new string[] { "path", "name", "enabled" };
-                                                            foreach (XElement shortCutNode in shortCutHolder.Elements())
-                                                            {
-                                                                depScNodeList = depScNodeList.Except(new string[] { shortCutNode.Name.ToString() }).ToArray();
-                                                                switch (shortCutNode.Name.ToString())
-                                                                {
-                                                                    case "path":
-                                                                        sc.Path = shortCutNode.Value;
-                                                                        break;
-                                                                    case "name":
-                                                                        sc.Name = shortCutNode.Value;
-                                                                        break;
-                                                                    case "enabled":
-                                                                        sc.Enabled = Utils.ParseBool(shortCutNode.Value, false);
-                                                                        break;
-                                                                }
-                                                            }
-                                                            if (sc != null)
-                                                            {
-                                                                if (depScNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => mod {1} (line {2})", string.Join(",", depScNodeList), m.ZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
-                                                                m.ShortCuts.Add(sc);
-                                                            }
                                                         }
                                                         break;
                                                     case "dependencies":
@@ -872,35 +756,6 @@ namespace RelhaxModpack
                                                     break;
                                             }
                                             c.PictureList.Add(med);
-                                        }
-                                        break;
-                                    case "shortCuts":
-                                        //parse all shortCuts
-                                        foreach (XElement shortCutHolder in configNode.Elements())
-                                        {
-                                            Shortcut sc = new Shortcut();
-                                            string[] cScNodeList = new string[] { "path", "name", "enabled" };
-                                            foreach (XElement shortCutNode in shortCutHolder.Elements())
-                                            {
-                                                cScNodeList = cScNodeList.Except(new string[] { shortCutNode.Name.ToString() }).ToArray();
-                                                switch (shortCutNode.Name.ToString())
-                                                {
-                                                    case "path":
-                                                        sc.Path = shortCutNode.Value;
-                                                        break;
-                                                    case "name":
-                                                        sc.Name = shortCutNode.Value;
-                                                        break;
-                                                    case "enabled":
-                                                        sc.Enabled = Utils.ParseBool(shortCutNode.Value, false);
-                                                        break;
-                                                }
-                                            }
-                                            if (sc != null)
-                                            {
-                                                if (cScNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => mod {1} (line {2})", string.Join(",", cScNodeList), c.ZipFile, ((IXmlLineInfo)shortCutHolder).LineNumber)); };
-                                                c.ShortCuts.Add(sc);
-                                            }
                                         }
                                         break;
                                     case "dependencies":
@@ -1715,27 +1570,6 @@ namespace RelhaxModpack
                     globalDepEnabled.InnerText = "" + d.Enabled;
                 globalDependencyRoot.AppendChild(globalDepEnabled);
                 XmlElement globalDepAppendExtraction = doc.CreateElement("appendExtraction");
-                XmlElement shortCuts = doc.CreateElement("shortCuts");
-                foreach (Shortcut sc in d.shortCuts)
-                {
-                    //declare ShortCut root
-                    XmlElement ShortCutRoot = doc.CreateElement("shortCut");
-                    //make ShortCut
-                    XmlElement ShortCutPath = doc.CreateElement("path");
-                    if (!sc.Path.Trim().Equals(""))
-                        ShortCutPath.InnerText = sc.Path.Trim();
-                    ShortCutRoot.AppendChild(ShortCutPath);
-                    XmlElement ShortCutName = doc.CreateElement("name");
-                    if (!sc.Name.Trim().Equals(""))
-                        ShortCutName.InnerText = sc.Name.Trim();
-                    ShortCutRoot.AppendChild(ShortCutName);
-                    XmlElement ShortCutEnabled = doc.CreateElement("enabled");
-                    ShortCutEnabled.InnerText = sc.Enabled.ToString().Trim();
-                    ShortCutRoot.AppendChild(ShortCutEnabled);
-                    shortCuts.AppendChild(ShortCutRoot);
-                }
-                //attach ShortCuts to root
-                globalDependencyRoot.AppendChild(shortCuts);
                 if (!d.AppendExtraction.ToString().Trim().Equals(""))
                     globalDepAppendExtraction.InnerText = "" + d.AppendExtraction;
                 globalDependencyRoot.AppendChild(globalDepAppendExtraction);
@@ -1813,27 +1647,6 @@ namespace RelhaxModpack
                     depLogicalDependencies.AppendChild(LogicalDependencyRoot);
                 }
                 dependencyRoot.AppendChild(depLogicalDependencies);
-                XmlElement shortCuts = doc.CreateElement("shortCuts");
-                foreach (Shortcut sc in d.shortCuts)
-                {
-                    //declare ShortCut root
-                    XmlElement ShortCutRoot = doc.CreateElement("shortCut");
-                    //make ShortCut
-                    XmlElement ShortCutPath = doc.CreateElement("path");
-                    if (!sc.Path.Trim().Equals(""))
-                        ShortCutPath.InnerText = sc.Path.Trim();
-                    ShortCutRoot.AppendChild(ShortCutPath);
-                    XmlElement ShortCutName = doc.CreateElement("name");
-                    if (!sc.Name.Trim().Equals(""))
-                        ShortCutName.InnerText = sc.Name.Trim();
-                    ShortCutRoot.AppendChild(ShortCutName);
-                    XmlElement ShortCutEnabled = doc.CreateElement("enabled");
-                    ShortCutEnabled.InnerText = sc.Enabled.ToString().Trim();
-                    ShortCutRoot.AppendChild(ShortCutEnabled);
-                    shortCuts.AppendChild(ShortCutRoot);
-                }
-                //attach ShortCuts to root
-                dependencyRoot.AppendChild(shortCuts);
                 DependenciesXml.AppendChild(dependencyRoot);
             }
             root.AppendChild(DependenciesXml);
@@ -1880,27 +1693,6 @@ namespace RelhaxModpack
                 if (!d.PackageName.Trim().Equals(""))
                     logicalDepPackageName.InnerText = d.PackageName.Trim();
                 logicalDependencyRoot.AppendChild(logicalDepPackageName);
-                XmlElement shortCuts = doc.CreateElement("shortCuts");
-                foreach (Shortcut sc in d.Shortcuts)
-                {
-                    //declare ShortCut root
-                    XmlElement ShortCutRoot = doc.CreateElement("shortCut");
-                    //make ShortCut
-                    XmlElement ShortCutPath = doc.CreateElement("path");
-                    if (!sc.Path.Trim().Equals(""))
-                        ShortCutPath.InnerText = sc.Path.Trim();
-                    ShortCutRoot.AppendChild(ShortCutPath);
-                    XmlElement ShortCutName = doc.CreateElement("name");
-                    if (!sc.Name.Trim().Equals(""))
-                        ShortCutName.InnerText = sc.Name.Trim();
-                    ShortCutRoot.AppendChild(ShortCutName);
-                    XmlElement ShortCutEnabled = doc.CreateElement("enabled");
-                    ShortCutEnabled.InnerText = sc.Enabled.ToString().Trim();
-                    ShortCutRoot.AppendChild(ShortCutEnabled);
-                    shortCuts.AppendChild(ShortCutRoot);
-                }
-                //attach ShortCuts to root
-                logicalDependencyRoot.AppendChild(shortCuts);
                 //attach dependency root
                 logicalDependenciesXml.AppendChild(logicalDependencyRoot);
             }
@@ -2064,27 +1856,6 @@ namespace RelhaxModpack
                         modLogicalDependencies.AppendChild(LogicalDependencyRoot);
                     }
                     modRoot.AppendChild(modLogicalDependencies);
-                    XmlElement shortCuts = doc.CreateElement("shortCuts");
-                    foreach (Shortcut sc in m.ShortCuts)
-                    {
-                        //declare ShortCut root
-                        XmlElement ShortCutRoot = doc.CreateElement("shortCut");
-                        //make ShortCut
-                        XmlElement ShortCutPath = doc.CreateElement("path");
-                        if (!sc.Path.Trim().Equals(""))
-                            ShortCutPath.InnerText = sc.Path.Trim();
-                        ShortCutRoot.AppendChild(ShortCutPath);
-                        XmlElement ShortCutName = doc.CreateElement("name");
-                        if (!sc.Name.Trim().Equals(""))
-                            ShortCutName.InnerText = sc.Name.Trim();
-                        ShortCutRoot.AppendChild(ShortCutName);
-                        XmlElement ShortCutEnabled = doc.CreateElement("enabled");
-                        ShortCutEnabled.InnerText = sc.Enabled.ToString().Trim();
-                        ShortCutRoot.AppendChild(ShortCutEnabled);
-                        shortCuts.AppendChild(ShortCutRoot);
-                    }
-                    //attach ShortCuts to root
-                    modRoot.AppendChild(shortCuts);
                     modsHolder.AppendChild(modRoot);
                 }
                 catagoryRoot.AppendChild(modsHolder);
@@ -2240,27 +2011,6 @@ namespace RelhaxModpack
                     conLogicalDependencies.AppendChild(LogicalDependencyRoot);
                 }
                 configRoot.AppendChild(conLogicalDependencies);
-                XmlElement shortCuts = doc.CreateElement("shortCuts");
-                foreach (Shortcut sc in cc.ShortCuts)
-                {
-                    //declare ShortCut root
-                    XmlElement ShortCutRoot = doc.CreateElement("shortCut");
-                    //make ShortCut
-                    XmlElement ShortCutPath = doc.CreateElement("path");
-                    if (!sc.Path.Trim().Equals(""))
-                        ShortCutPath.InnerText = sc.Path.Trim();
-                    ShortCutRoot.AppendChild(ShortCutPath);
-                    XmlElement ShortCutName = doc.CreateElement("name");
-                    if (!sc.Name.Trim().Equals(""))
-                        ShortCutName.InnerText = sc.Name.Trim();
-                    ShortCutRoot.AppendChild(ShortCutName);
-                    XmlElement ShortCutEnabled = doc.CreateElement("enabled");
-                    ShortCutEnabled.InnerText = sc.Enabled.ToString().Trim();
-                    ShortCutRoot.AppendChild(ShortCutEnabled);
-                    shortCuts.AppendChild(ShortCutRoot);
-                }
-                //attach ShortCuts to root
-                configRoot.AppendChild(shortCuts);
                 configsHolder.AppendChild(configRoot);
             }
         }
