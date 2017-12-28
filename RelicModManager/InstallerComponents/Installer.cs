@@ -58,7 +58,6 @@ namespace RelhaxModpack
         private int NumExtractorsCompleted = 0;
         private int NumAtlasCreatorsComplete = 0;
         private List<Bitmap> SavedBitmapsFromAtlas = new List<Bitmap>();
-        //private List<string> originalPatchNames;
         //https://stackoverflow.com/questions/9280054/c-sharp-hashtable-sorted-by-keys
         private SortedDictionary<string, string> originalSortedPatchNames;
         // private FileStream fs;
@@ -66,8 +65,7 @@ namespace RelhaxModpack
         private object lockerInstaller = new object();
         private Hashtable zipMacros = new Hashtable();
 
-        //private static readonly Stopwatch stopWatch = new Stopwatch();
-
+        #region boring stuff
         //the event that it can hook into
         public event InstallChangedEventHandler InstallProgressChanged;
 
@@ -105,6 +103,78 @@ namespace RelhaxModpack
             InstallWorker.DoWork += ActuallyStartUninstallation;
             InstallWorker.RunWorkerAsync();
         }
+        //handler for when progress is made in extracting a zip file
+        void Zip_ExtractProgress(object sender, ExtractProgressEventArgs e)
+        {
+            //args.ChildProcessed = e.EntriesExtracted;
+            if (e.CurrentEntry != null)
+            {
+                args.currentFile = e.CurrentEntry.FileName;
+                args.currentFileSizeProcessed = e.BytesTransferred;
+            }
+            InstallWorker.ReportProgress(0);
+        }
+
+        public void WorkerReportProgress(object sender, ProgressChangedEventArgs e)
+        {
+            OnInstallProgressChanged();
+        }
+
+        public void WorkerReportComplete(object sender, AsyncCompletedEventArgs e)
+        {
+            Logging.Manager("Installation Done");
+            args.InstalProgress = InstallerEventArgs.InstallProgress.Done;
+            OnInstallProgressChanged();
+        }
+        //reset the args
+        public void ResetArgs()
+        {
+            args.InstalProgress = InstallerEventArgs.InstallProgress.Idle;
+            args.ChildProcessed = 0;
+            args.ChildTotalToProcess = 0;
+            args.currentFile = "";
+            args.currentSubFile = "";
+            args.currentFileSizeProcessed = 0;
+            args.ParrentProcessed = 0;
+            args.ParrentTotalToProcess = 0;
+        }
+
+        private void Bg_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            lock (sender)
+            {
+                NumExtractorsCompleted++;
+                args.ParrentProcessed++;
+                InstallWorker.ReportProgress(0);
+            }
+        }
+        //gets the total number of files to process to eithor delete or copy
+        private List<string> NumFilesToProcess(string folder)
+        {
+            List<string> list = new List<string>();
+            try
+            {
+                // Get the subdirectories for the specified directory.
+                DirectoryInfo dir = new DirectoryInfo(folder);
+                DirectoryInfo[] dirs = dir.GetDirectories();
+                // Get the files in the directory
+                FileInfo[] files = dir.GetFiles();
+                foreach (FileInfo file in files)
+                {
+                    list.Add(file.FullName);
+                    args.ChildTotalToProcess++;
+                }
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    list.Add(subdir.FullName + @"\");
+                    args.ChildTotalToProcess++;
+                    list.AddRange(NumFilesToProcess(subdir.FullName));
+                }
+            }
+            catch { }
+            return list;
+        }
+        #endregion
 
         public void ActuallyStartUninstallation(object sender, DoWorkEventArgs e)
         {
@@ -120,14 +190,15 @@ namespace RelhaxModpack
                     break;
             }
             //put back the folders when done
-            if (!Directory.Exists(Path.Combine(TanksLocation, "res_mods", TanksVersion))) Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods", TanksVersion));
-            if (!Directory.Exists(Path.Combine(TanksLocation, "mods", TanksVersion))) Directory.CreateDirectory(Path.Combine(TanksLocation, "mods", TanksVersion));
+            if (!Directory.Exists(Path.Combine(TanksLocation, "res_mods", TanksVersion)))
+                Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods", TanksVersion));
+            if (!Directory.Exists(Path.Combine(TanksLocation, "mods", TanksVersion)))
+                Directory.CreateDirectory(Path.Combine(TanksLocation, "mods", TanksVersion));
             args.InstalProgress = InstallerEventArgs.InstallProgress.UninstallDone;
             InstallWorker.ReportProgress(0);
             Logging.Manager("Uninstallation process finished");
             MessageBox.Show(Translations.getTranslatedString("uninstallFinished"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
         //Start the installation on the Wokrer thread
         public void ActuallyStartInstallation(object sender, DoWorkEventArgs e)
         {
@@ -176,23 +247,26 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Setp 3a: delete log files
+            //Setp 4: delete log files if selected
             Logging.Manager("Installation deleteLogs");
             if (Settings.DeleteLogs)
             {
+                string[] logsToDelete = new string[]
+                {
+                    Path.Combine(TanksLocation, "python.log"),
+                    Path.Combine(TanksLocation, "xvm.log"),
+                    Path.Combine(TanksLocation, "pmod.log"),
+                    Path.Combine(TanksLocation, "WoTLauncher.log"),
+                    Path.Combine(TanksLocation, "cef.log")
+                };
                 Logging.Manager("deleteLogs selected: deleting wot, xvm, and pmod logs");
                 try
                 {
-                    if (File.Exists(Path.Combine(TanksLocation, "python.log")))
-                        File.Delete(Path.Combine(TanksLocation, "python.log"));
-                    if (File.Exists(Path.Combine(TanksLocation, "xvm.log")))
-                        File.Delete(Path.Combine(TanksLocation, "xvm.log"));
-                    if (File.Exists(Path.Combine(TanksLocation, "pmod.log")))
-                        File.Delete(Path.Combine(TanksLocation, "pmod.log"));
-                    if (File.Exists(Path.Combine(TanksLocation, "WoTLauncher.log")))
-                        File.Delete(Path.Combine(TanksLocation, "WoTLauncher.log"));
-                    if (File.Exists(Path.Combine(TanksLocation, "cef.log")))
-                        File.Delete(Path.Combine(TanksLocation, "cef.log"));
+                    foreach (string file in logsToDelete)
+                    {
+                        if (File.Exists(file))
+                            File.Delete(file);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -202,7 +276,7 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 4: Delete user appdata cache
+            //Step 5: Delete user appdata cache if requested
             Logging.Manager("Installation DeleteWoTCache");
             args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteWoTCache;
             if (Settings.ClearCache)
@@ -212,7 +286,7 @@ namespace RelhaxModpack
             ResetArgs();
             beforeExtraction = installTimer.ElapsedMilliseconds;
             Logging.Manager("Recorded Install time before extraction (msec): " + beforeExtraction);
-            //Step 5-10: Extracts Mods
+            //Step 6-10: Extract packages
             Logging.Manager("Installation ExtractDatabaseObjects");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractGlobalDependencies;
             ExtractDatabaseObjects();
@@ -238,11 +312,7 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 13: Patch Mods
-            //only step 16 now
-            //Step 14: InstallFonts
-            // => only Step 17 for both now
-            //Step 15: Extract User Mods
+            //Step 13: Extract User Mods
             Logging.Manager("Installation ExtractUserMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractUserMods;
             if (UserMods.Count > 0)
@@ -250,7 +320,7 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 16: Patch Mods if User Mods extracted patch files
+            //Step 14: Patch Mods
             Logging.Manager("Installation PatchMods (previously patchUserMods)");
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchUserMods;
             if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
@@ -258,7 +328,7 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 17: Extract Atlases
+            //Step 15: Parse and create Atlases
             Logging.Manager("Installation ExtractAtlases");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractAtlases;
             if (Directory.Exists(Path.Combine(TanksLocation, "_atlases")))
@@ -269,9 +339,7 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 18: Create Atlases
-            //combined with step 17
-            //Step 19: Install Fonts
+            //Step 16: Install Fonts
             Logging.Manager("Installation UserFonts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallUserFonts;
             if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
@@ -279,7 +347,7 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 20: create shortCuts
+            //Step 17: create shortCuts
             Logging.Manager("Installation CreateShortscuts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CreateShortCuts;
             if (Settings.CreateShortcuts)
@@ -287,7 +355,7 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 21: CheckDatabase and delete outdated or no more needed files
+            //Step 18: CheckDatabase and delete outdated or no more needed files
             Logging.Manager("Installation CheckDatabase");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CheckDatabase;
             if ((!Program.testMode) && (!Program.betaDatabase))
@@ -295,7 +363,7 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 22: Cleanup
+            //Step 19: Cleanup
             Logging.Manager("Intallation CleanUp");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CleanUp;
             try
@@ -317,31 +385,7 @@ namespace RelhaxModpack
             Logging.Manager("Total recorded install time (msec): " + totalExtraction);
         }
 
-        public void WorkerReportProgress(object sender, ProgressChangedEventArgs e)
-        {
-            OnInstallProgressChanged();
-        }
-
-        public void WorkerReportComplete(object sender, AsyncCompletedEventArgs e)
-        {
-            Logging.Manager("Installation Done");
-            args.InstalProgress = InstallerEventArgs.InstallProgress.Done;
-            OnInstallProgressChanged();
-        }
-
-        //reset the args
-        public void ResetArgs()
-        {
-            args.InstalProgress = InstallerEventArgs.InstallProgress.Idle;
-            args.ChildProcessed = 0;
-            args.ChildTotalToProcess = 0;
-            args.currentFile = "";
-            args.currentSubFile = "";
-            args.currentFileSizeProcessed = 0;
-            args.ParrentProcessed = 0;
-            args.ParrentTotalToProcess = 0;
-        }
-
+        
         //Step 1: Backup Mods
         public void BackupMods()
         {
@@ -991,15 +1035,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void Bg_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            lock(sender)
-            {
-                NumExtractorsCompleted++;
-                args.ParrentProcessed++;
-                InstallWorker.ReportProgress(0);
-            }
-        }
+        
 
         private void SuperExtract(object sender, DoWorkEventArgs e)
         {
@@ -1814,6 +1850,8 @@ namespace RelhaxModpack
         //Step 18: Create Shortcuts
         private void CreateShortCuts()
         {
+            //create shortcuts list
+
             try
             {
                 Logging.InstallerGroup("Desktop shortcuts");                     // write comment line
@@ -2364,34 +2402,7 @@ namespace RelhaxModpack
             }
             Logging.Manager("Extraction for " + args.atlasFile + " completed in " + sw.Elapsed.TotalSeconds.ToString("N3", System.Globalization.CultureInfo.InvariantCulture) + " seconds.");
         }
-
-        //gets the total number of files to process to eithor delete or copy
-        private List<string> NumFilesToProcess(string folder)
-        {
-            List<string> list = new List<string>();
-            try
-            {
-                // Get the subdirectories for the specified directory.
-                DirectoryInfo dir = new DirectoryInfo(folder);
-                DirectoryInfo[] dirs = dir.GetDirectories();
-                // Get the files in the directory
-                FileInfo[] files = dir.GetFiles();
-                foreach (FileInfo file in files)
-                {
-                    list.Add(file.FullName);
-                    args.ChildTotalToProcess++;
-                }
-                foreach (DirectoryInfo subdir in dirs)
-                {
-                    list.Add(subdir.FullName + @"\");
-                    args.ChildTotalToProcess++;
-                    list.AddRange(NumFilesToProcess(subdir.FullName));
-                }
-            }
-            catch { }
-            return list;
-        }
-
+        #region File IO Methods
         //recursivly deletes every file from one place to another
         private void DirectoryDelete(string sourceDirName, bool deleteSubDirs)
         {
@@ -2536,7 +2547,7 @@ namespace RelhaxModpack
                 }
             }
         }
-
+        #endregion
         //main unzip worker method
         private void Unzip(string zipFile, StringBuilder sb, int categoryGroup, ref int superPatchNum)
         {
@@ -2657,18 +2668,6 @@ namespace RelhaxModpack
                 }
             }
             
-        }
-        
-        //handler for when progress is made in extracting a zip file
-        void Zip_ExtractProgress(object sender, ExtractProgressEventArgs e)
-        {
-            //args.ChildProcessed = e.EntriesExtracted;
-            if (e.CurrentEntry != null)
-            {
-                args.currentFile = e.CurrentEntry.FileName;
-                args.currentFileSizeProcessed = e.BytesTransferred;
-            }
-            InstallWorker.ReportProgress(0);
         }
 
         #region IDisposable Support
