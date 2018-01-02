@@ -1,3 +1,9 @@
+Version 27.5.1 (01/02/2017)
+https://www.virustotal.com/#/file/59d80e87654c978a201a68d59e8b9b0d312d3eeefda2f20d15fb5c34557a1681/detection
+-Fixed bugs with the json patcher with xvm files
+-Fully removed extractpath from all packages
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 27.5.0 (01/02/2017)
 https://www.virustotal.com/#/file/3cf10af198b7dd3fd7ca07f1e7f23f07e9f976d4d29706ff379acb37c7698821/detection
 -Added new default checked mods feature. Like the old OMC, we now have the ability to have mods checked by default. Currently the only mod we have checked is the modpack button. Loading or clearing a selection will clear any default checked mods, so it is not invasive.
