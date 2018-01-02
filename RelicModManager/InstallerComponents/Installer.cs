@@ -845,6 +845,8 @@ namespace RelhaxModpack
                     }
                     InstallWorker.ReportProgress(0);
                 }
+                //set xvmConfigDir here because xvm is always a dependency, but don't log it
+                xvmConfigDir = PatchUtils.GetXVMBootLoc(TanksLocation, null, false);
                 //extract logical dependencies
                 args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractLogicalDependencies;
                 InstallWorker.ReportProgress(0);
@@ -880,8 +882,6 @@ namespace RelhaxModpack
                     }
                     InstallWorker.ReportProgress(0);
                 }
-                //set xvmConfigDir here because xvm is always a dependency, but don't log it
-                xvmConfigDir = PatchUtils.GetXVMBootLoc(TanksLocation, null, false);
                 Stopwatch sw = new Stopwatch();
                 sw.Reset();
                 sw.Start();

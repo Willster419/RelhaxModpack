@@ -1151,10 +1151,6 @@ namespace RelhaxModpack
                         globalDependenciesToInstall.RemoveAt(i);
                         i--;
                     }
-                    else
-                    {
-                        globalDependenciesToInstall[i].ExtractPath = globalDependenciesToInstall[i].ExtractPath.Trim().Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(globalDependenciesToInstall[i].ExtractPath.Trim());
-                    }
                 }
                 for (int i = 0; i < dependenciesToInstall.Count; i++)
                 {
@@ -1163,10 +1159,6 @@ namespace RelhaxModpack
                         dependenciesToInstall.RemoveAt(i);
                         i--;
                     }
-                    else
-                    {
-                        dependenciesToInstall[i].ExtractPath = dependenciesToInstall[i].ExtractPath.Trim().Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(dependenciesToInstall[i].ExtractPath.Trim());
-                    }
                 }
                 for (int i = 0; i < logicalDependenciesToInstall.Count; i++)
                 {
@@ -1174,9 +1166,6 @@ namespace RelhaxModpack
                     {
                         logicalDependenciesToInstall.RemoveAt(i);
                         i--;
-                    }
-                    {
-                        logicalDependenciesToInstall[i].ExtractPath = logicalDependenciesToInstall[i].ExtractPath.Trim().Equals("") ? Utils.ReplaceMacro(@"{app}") : Utils.ReplaceMacro(logicalDependenciesToInstall[i].ExtractPath.Trim());
                     }
                 }
             }

@@ -30,11 +30,11 @@ namespace RelhaxModpack
         //list of linked mods and configs that use 
         public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
         public string DevURL { get; set; }
-        public string ExtractPath { get; set; }
+        //public string ExtractPath { get; set; }
         public List<Shortcut> Shortcuts = new List<Shortcut>();
         public LogicalDependency() {
             ReadyForInstall = false;
-            ExtractPath = "";
+            //ExtractPath = "";
         }
         //for the tostring thing
         public override string ToString()

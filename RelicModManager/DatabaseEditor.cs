@@ -1100,7 +1100,7 @@ namespace RelhaxModpack
                         newDep.AppendExtraction = ObjectAppendExtractionCB.Checked;
                         newDep.DevURL = ObjectDevURLTB.Text;
                         newDep.CRC = "";
-                        newDep.ExtractPath = "";
+                        //newDep.ExtractPath = "";
                         if (!ObjectZipFileTB.Text.Equals(""))
                             newDep.CRC = "f";
                         int index = GlobalDependencies.IndexOf(dba.SelectedGlobalDependency);
@@ -1120,7 +1120,7 @@ namespace RelhaxModpack
                         newDep.AppendExtraction = ObjectAppendExtractionCB.Checked;
                         newDep.DevURL = ObjectDevURLTB.Text;
                         newDep.CRC = "";
-                        newDep.ExtractPath = "";
+                        //newDep.ExtractPath = "";
                         if (!ObjectZipFileTB.Text.Equals(""))
                             newDep.CRC = "f";
                         List<LogicalDependency> logicalDeps = (List<LogicalDependency>)ObjectLogicalDependenciesList.DataSource;
@@ -1140,7 +1140,7 @@ namespace RelhaxModpack
                         newDep.Enabled = ObjectEnabledCheckBox.Checked;
                         newDep.DevURL = ObjectDevURLTB.Text;
                         newDep.CRC = "";
-                        newDep.ExtractPath = "";
+                        //newDep.ExtractPath = "";
                         if (!ObjectZipFileTB.Text.Equals(""))
                             newDep.CRC = "f";
                         int index = LogicalDependencies.IndexOf(dba.SelectedLogicalDependency);
