@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<mods ver="2.0" date="2018-01-02 12:53:12">
+  <relhaxMods>
+    <mod>XVMPrebuiltConfigs_BonesXVMConfig</mod>
+    <mod>XVMPrebuiltConfigs_BonesXVMConfig_PlayersPanel_1</mod>
+    <mod>XVMPrebuiltConfigs_BonesXVMConfig_CarouselRow_2</mod>
+    <mod>XVMPrebuiltConfigs_BonesXVMConfig_MinimapHp_enable</mod>
+    <mod>XVMConfigBuilder_BattleInterfaceModifications_Headline</mod>
+    <mod>XVMConfigBuilder_BattleInterfaceModifications_6thSenseDuration_Headline</mod>
+    <mod>XVMConfigBuilder_BattleInterfaceModifications_6thSenseDuration_10sec</mod>
+    <mod>XVMconfigBuilder_BattleResultsModifications_Header</mod>
+    <mod>XVMconfigBuilder_BattleResultsModifications_BattleResultsPage_1</mod>
+    <mod>XVMConfigBuilder_ClanIcons_Base</mod>
+    <mod>XVMConfigBuilder_ClanIcons_TopClansOnly</mod>
+    <mod>XVMconfigBuilder_MarkerModifications_Header</mod>
+    <mod>XVMconfigBuilder_MarkerModifications_enabled</mod>
+    <mod>XVMconfigBuilder_MarkerModifications_default</mod>
+    <mod>XVMconfigBuilder_MinimapModifications_Header</mod>
+    <mod>XVMconfigBuilder_MinimapModifications_ZoomConfiguration_enable</mod>
+    <mod>XVMconfigBuilder_MinimapModifications_ZoomConfiguration_LeftCtrl</mod>
+    <mod>XVMconfigBuilder_MinimapModifications_ZoomConfiguration_Centered</mod>
+    <mod>XVMconfigBuilder_PlayersPanelModifications_Header</mod>
+    <mod>XVMconfigBuilder_PlayersPanelModifications_Enable</mod>
+    <mod>XVMconfigBuilder_PlayersPanelModifications_HpBars_Header</mod>
+    <mod>XVMconfigBuilder_PlayersPanelModifications_HpBars_Default</mod>
+    <mod>XVMconfigBuilder_PlayersPanelModifications_HpBars_OnAlways</mod>
+    <mod>XVMconfigBuilder_TankCarouselBaseModifications_Header</mod>
+    <mod>XVMconfigBuilder_TankCarouselBaseModifications_carousel_enable</mod>
+    <mod>XVMconfigBuilder_TankCarouselBaseModifications_carouselRow_1</mod>
+    <mod>Contour_Icon_mirror_training_room_w/o_name</mod>
+    <mod>Contour_Icon_J1mB0</mod>
+    <mod>Damage_Panel_Log_Seperate_Header</mod>
+    <mod>Damage_Panels_Header</mod>
+    <mod>Damage_Panel_zayaz_Header</mod>
+    <mod>Damage_Panel_zayaz</mod>
+    <mod>Ingame_Info_Pathfinder_by_Pavel3333_Base</mod>
+    <mod>Texture_Color_of_path</mod>
+    <mod>Ingame_Info_Pathfinder_Texture_Color_V1_Standard</mod>
+    <mod>Garage_mods_Modpack_Button_Header</mod>
+    <mod>Statistic_Session_Header</mod>
+    <mod>Statistic_Session_YK_Header</mod>
+    <mod>Statistic_Session_YK_Vanilla</mod>
+    <mod>Statistic_Session_YK_background_Header</mod>
+    <mod>Statistic_Session_YK_background_v2</mod>
+    <mod>Statistic_Session_YK_default_german</mod>
+    <mod>Sixth_Sense_Audio_Header</mod>
+    <mod>Sixth_Sense_Audio_Sauron</mod>
+    <mod>Sixth_Sense_Icon_Disable_Default_Icon</mod>
+    <mod>Sixth_Sense_Icon_Sauron</mod>
+    <mod>Sixth_Sense_Icon_Duration_Header</mod>
+    <mod>Sixth_Sense_Icon_Duration_7</mod>
+    <mod>Custom_Tank_Skins_Misc_Colored_penetration_Header</mod>
+    <mod>Custom_Tank_Skins_Misc_penetration_Artasan</mod>
+  </relhaxMods>
+  <userMods />
+</mods>
