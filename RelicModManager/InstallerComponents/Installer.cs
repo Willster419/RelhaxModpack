@@ -990,6 +990,8 @@ namespace RelhaxModpack
                     }
                     InstallWorker.ReportProgress(0);
                 }
+                //don't actually run this anymore
+                /*
                 //finish by moving WoTAppData folder contents into application data folder
                 //folder name is "WoTAppData"
                 args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractConfigs;
@@ -1029,6 +1031,7 @@ namespace RelhaxModpack
                     if (Directory.Exists(folderToMove))
                         Directory.Delete(folderToMove);
                 }
+                */
                 Logging.Manager("Finished Relhax Modpack Extraction");
             }
             catch (Exception ex)
