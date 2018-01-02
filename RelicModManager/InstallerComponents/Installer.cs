@@ -1378,7 +1378,7 @@ namespace RelhaxModpack
                         case "{appData}":
                             //app data location
                             //p.completePath = Path.Combine(AppDataFolder, p.file);
-                            p.completePath = TanksLocation + p.file;
+                            p.completePath = AppDataFolder + p.file;
                             break;
                     }
                     if (p.completePath.Contains("versiondir"))
@@ -2187,6 +2187,9 @@ namespace RelhaxModpack
                             case "mode":
                                 p.mode = nn.InnerText;
                                 break;
+                            case "patchPath":
+                                p.patchPath = nn.InnerText;
+                                break;
                             case "file":
                                 p.file = nn.InnerText;
                                 break;
@@ -2203,9 +2206,6 @@ namespace RelhaxModpack
                                 break;
                             case "replace":
                                 p.replace = nn.InnerText;
-                                break;
-                            case "patchPath":
-                                p.patchPath = nn.InnerText;
                                 break;
                         }
                     }
