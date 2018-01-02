@@ -1557,10 +1557,6 @@ namespace RelhaxModpack
                 if (!d.DevURL.Trim().Equals(""))
                     globalDepURL.InnerText = d.DevURL.Trim();
                 globalDependencyRoot.AppendChild(globalDepURL);
-                XmlElement globalDepExtractPath = doc.CreateElement("extractPath");
-                if (!d.ExtractPath.Trim().Equals(""))
-                    globalDepExtractPath.InnerText = d.ExtractPath.Trim();
-                globalDependencyRoot.AppendChild(globalDepExtractPath);
                 XmlElement globalDepCRC = doc.CreateElement("dependencyZipCRC");
                 if (!d.CRC.Trim().Equals(""))
                     globalDepCRC.InnerText = d.CRC.Trim();
@@ -1608,10 +1604,6 @@ namespace RelhaxModpack
                 if (!d.DevURL.Trim().Equals(""))
                     depdevURL.InnerText = d.DevURL.Trim();
                 dependencyRoot.AppendChild(depdevURL);
-                XmlElement depExtractPath = doc.CreateElement("extractPath");
-                if (!d.ExtractPath.Trim().Equals(""))
-                    depExtractPath.InnerText = d.ExtractPath.Trim();
-                dependencyRoot.AppendChild(depExtractPath);
                 XmlElement depCRC = doc.CreateElement("dependencyZipCRC");
                 if (!d.CRC.Trim().Equals(""))
                     depCRC.InnerText = d.CRC.Trim();
@@ -1677,10 +1669,6 @@ namespace RelhaxModpack
                 if (!d.DevURL.Trim().Equals(""))
                     logicalDepdevURL.InnerText = d.DevURL.Trim();
                 logicalDependencyRoot.AppendChild(logicalDepdevURL);
-                XmlElement logicalDepExtractPath = doc.CreateElement("extractPath");
-                if (!d.ExtractPath.Trim().Equals(""))
-                    logicalDepExtractPath.InnerText = d.ExtractPath.Trim();
-                logicalDependencyRoot.AppendChild(logicalDepExtractPath);
                 XmlElement logicalDepCRC = doc.CreateElement("dependencyZipCRC");
                 if (!d.CRC.Trim().Equals(""))
                     logicalDepCRC.InnerText = d.CRC.Trim();
