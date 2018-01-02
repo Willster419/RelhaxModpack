@@ -1,5 +1,6 @@
 Version 27.5.0 (01/02/2017)
 https://www.virustotal.com/#/file/3cf10af198b7dd3fd7ca07f1e7f23f07e9f976d4d29706ff379acb37c7698821/detection
+-Added new default checked mods feature. Like the old OMC, we now have the ability to have mods checked by default. Currently the only mod we have checked is the modpack button. Loading or clearing a selection will clear any default checked mods, so it is not invasive.
 -Modified patching system:
 --Added new property: PatchPath. Purpose is to serve as a macro for before the path to the file. Allows more file locations to be patched like appdata folder, no longer just World_of_Tanks folder.
 --Other patching optimizations
