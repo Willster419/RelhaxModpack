@@ -1,3 +1,22 @@
+Version 27.5.0 (01/02/2017)
+https://www.virustotal.com/#/file/3cf10af198b7dd3fd7ca07f1e7f23f07e9f976d4d29706ff379acb37c7698821/detection
+-Modified patching system:
+--Added new property: PatchPath. Purpose is to serve as a macro for before the path to the file. Allows more file locations to be patched like appdata folder, no longer just World_of_Tanks folder.
+--Other patching optimizations
+-Modified database package structure:
+--Removed extractPath from the package level of mod selection. Moved to macros in zip files (more on that below)
+-Fixed the bug where having a comma (,) in your config preference filename would cause the application to crash.
+-Added the ability to preview disabled mods (popular request)
+-Removed several static methods of getting specific xpath values, moved to one over-loadable method that accepts any xpath path.
+-Modified the zip extraction method:
+--Changed the extraction method from zip file based to zip entry based. This allows the abilty to change the extraction path at the entry level
+--Due to above, Added macro system for changing the extract directory for individual zip files. For example, files that start with the folder "_appdata" can now be directly placed in the user's application data folder.
+--Other zip extraction optimizations
+-Fixed potential bug of having invalid folder characters ("\\" vs. "\")
+-Moved around several code methods to make it look neater.
+-Moved shortcut creation from the database to individual xml file reading.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 27.4.4 (12/21/2017)
 https://www.virustotal.com/#/file/2dd89bc19ad405602ddc60fa1d569a5677f79bb1bbe358815b2daf2d44ee1b60/detection
 -Added more useful patching log statements for patch debugging
