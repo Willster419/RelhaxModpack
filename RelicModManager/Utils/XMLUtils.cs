@@ -1107,7 +1107,7 @@ namespace RelhaxModpack
             }
         }
         //loads a saved config from xml and parses it into the memory database
-        public static void LoadConfigV2(XmlDocument doc, List<Category> parsedCatagoryList, List<Mod> userMods)
+        public static void LoadConfigV2(XmlDocument doc, List<Category> parsedCatagoryList, List<Mod> userMods, bool defaultChecked = false)
         {
             List<string> savedConfigList = new List<string>();
             foreach (var mod in doc.CreateNavigator().Select("//relhaxMods/mod"))
@@ -1123,7 +1123,7 @@ namespace RelhaxModpack
                         if (savedConfigList.Contains(m.PackageName))
                         {
                             savedConfigList.Remove(m.PackageName);
-                            if (!m.Enabled)
+                            if (!m.Enabled && !defaultChecked)
                             {
                                 MessageBox.Show(string.Format(Translations.getTranslatedString("modDeactivated"), Utils.ReplaceMacro(m)), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
@@ -1168,7 +1168,7 @@ namespace RelhaxModpack
                         }
                         if (m.configs.Count > 0)
                         {
-                            LoadProcessConfigsV2(m.Name, m.configs, ref savedConfigList);
+                            LoadProcessConfigsV2(m.Name, m.configs, ref savedConfigList,defaultChecked);
                         }
                     }
                 }
@@ -1203,7 +1203,8 @@ namespace RelhaxModpack
                 {
                     modsNotFoundList += "\n" + s;
                 }
-                MessageBox.Show(string.Format(Translations.getTranslatedString("modsNotFoundTechnical"), modsNotFoundList), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if(!defaultChecked)
+                    MessageBox.Show(string.Format(Translations.getTranslatedString("modsNotFoundTechnical"), modsNotFoundList), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             Logging.Manager("Finished loading mod selections v2.0");
         }
@@ -1365,7 +1366,7 @@ namespace RelhaxModpack
             }
         }
 
-        private static void LoadProcessConfigsV2(string parentName, List<Config> configList, ref List<string> savedConfigList)
+        private static void LoadProcessConfigsV2(string parentName, List<Config> configList, ref List<string> savedConfigList, bool defaultChecked)
         {
             bool shouldBeBA = false;
             Panel panelRef = null;
@@ -1376,7 +1377,7 @@ namespace RelhaxModpack
                     if (savedConfigList.Contains(c.PackageName))
                     {
                         savedConfigList.Remove(c.PackageName);
-                        if (!c.Enabled)
+                        if (!c.Enabled && !defaultChecked)
                         {
                             MessageBox.Show(string.Format(Translations.getTranslatedString("configDeactivated"), Utils.ReplaceMacro(c), parentName), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
@@ -1489,7 +1490,7 @@ namespace RelhaxModpack
                     }
                     if (c.configs.Count > 0)
                     {
-                        LoadProcessConfigsV2(c.Name, c.configs, ref savedConfigList);
+                        LoadProcessConfigsV2(c.Name, c.configs, ref savedConfigList,defaultChecked);
                     }
                 }
             }

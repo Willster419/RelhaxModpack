@@ -2618,7 +2618,7 @@ namespace RelhaxModpack
             }
             doc.LoadXml(xmlstring);
             //call XMlUtils.LoadConfigV2
-            XMLUtils.LoadConfigV2(doc, ParsedCatagoryList, UserMods);
+            XMLUtils.LoadConfigV2(doc, ParsedCatagoryList, UserMods, true);
             Logging.Manager("Finished checking default mods");
         }
         #region UI event handlers (resize, expand toggling)
