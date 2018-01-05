@@ -1,3 +1,9 @@
+Version 27.5.2 (01/05/2017)
+https://www.virustotal.com/#/file/a6e9f98b45be54f02f3d4aa9c58e51d5ece43788897f765c3adfa5ccf5dc685a/detection
+-Fixed a macro parsing bug with the patching system
+-Fixed a bug with the default checked mods system
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 27.5.1 (01/02/2017)
 https://www.virustotal.com/#/file/59d80e87654c978a201a68d59e8b9b0d312d3eeefda2f20d15fb5c34557a1681/detection
 -Fixed bugs with the json patcher with xvm files
