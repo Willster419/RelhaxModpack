@@ -100,15 +100,23 @@
             this.xvmPatchRB = new System.Windows.Forms.RadioButton();
             this.PMODPatchRB = new System.Windows.Forms.RadioButton();
             this.JSONModsGroupBox = new System.Windows.Forms.GroupBox();
+            this.JSONArrayClear = new System.Windows.Forms.RadioButton();
             this.JSONArrayAdd = new System.Windows.Forms.RadioButton();
             this.JSONArrayRemove = new System.Windows.Forms.RadioButton();
             this.JSONRemove = new System.Windows.Forms.RadioButton();
             this.JSONAdd = new System.Windows.Forms.RadioButton();
             this.JSONEditArrayEdit = new System.Windows.Forms.RadioButton();
-            this.JSONArrayClear = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.RegressionTesting = new System.Windows.Forms.GroupBox();
             this.JSONRegressionTesting = new System.Windows.Forms.Button();
+            this.regexPatchPathLabel = new System.Windows.Forms.Label();
+            this.regexPatchPathCB = new System.Windows.Forms.ComboBox();
+            this.xmlPatchPathLabel = new System.Windows.Forms.Label();
+            this.xmlPatchPathCB = new System.Windows.Forms.ComboBox();
+            this.jsonPatchPathLabel = new System.Windows.Forms.Label();
+            this.jsonPatchPathCB = new System.Windows.Forms.ComboBox();
+            this.xvmPatchPathLabel = new System.Windows.Forms.Label();
+            this.xvmPatchPathCB = new System.Windows.Forms.ComboBox();
             this.xmlModsGroupBox.SuspendLayout();
             this.xvmModsGroupBox.SuspendLayout();
             this.JSONModsGroupBox.SuspendLayout();
@@ -118,7 +126,7 @@
             // 
             // regexLoadFileButton
             // 
-            this.regexLoadFileButton.Location = new System.Drawing.Point(12, 114);
+            this.regexLoadFileButton.Location = new System.Drawing.Point(12, 143);
             this.regexLoadFileButton.Name = "regexLoadFileButton";
             this.regexLoadFileButton.Size = new System.Drawing.Size(212, 23);
             this.regexLoadFileButton.TabIndex = 0;
@@ -140,14 +148,14 @@
             this.regexFilePathBox.Location = new System.Drawing.Point(12, 46);
             this.regexFilePathBox.Name = "regexFilePathBox";
             this.regexFilePathBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.regexFilePathBox.Size = new System.Drawing.Size(212, 62);
+            this.regexFilePathBox.Size = new System.Drawing.Size(212, 47);
             this.regexFilePathBox.TabIndex = 0;
             this.regexFilePathBox.Text = "";
             // 
             // regexLineLabel
             // 
             this.regexLineLabel.AutoSize = true;
-            this.regexLineLabel.Location = new System.Drawing.Point(9, 210);
+            this.regexLineLabel.Location = new System.Drawing.Point(12, 255);
             this.regexLineLabel.Name = "regexLineLabel";
             this.regexLineLabel.Size = new System.Drawing.Size(23, 13);
             this.regexLineLabel.TabIndex = 4;
@@ -155,7 +163,7 @@
             // 
             // regexLineBox
             // 
-            this.regexLineBox.Location = new System.Drawing.Point(12, 226);
+            this.regexLineBox.Location = new System.Drawing.Point(15, 271);
             this.regexLineBox.Name = "regexLineBox";
             this.regexLineBox.Size = new System.Drawing.Size(212, 20);
             this.regexLineBox.TabIndex = 1;
@@ -165,7 +173,7 @@
             this.xmlModsGroupBox.Controls.Add(this.xmlRemoveModeButton);
             this.xmlModsGroupBox.Controls.Add(this.xmlEditModsButton);
             this.xmlModsGroupBox.Controls.Add(this.xmlAddModeButton);
-            this.xmlModsGroupBox.Location = new System.Drawing.Point(250, 138);
+            this.xmlModsGroupBox.Location = new System.Drawing.Point(250, 167);
             this.xmlModsGroupBox.Name = "xmlModsGroupBox";
             this.xmlModsGroupBox.Size = new System.Drawing.Size(212, 69);
             this.xmlModsGroupBox.TabIndex = 15;
@@ -179,7 +187,6 @@
             this.xmlRemoveModeButton.Name = "xmlRemoveModeButton";
             this.xmlRemoveModeButton.Size = new System.Drawing.Size(60, 17);
             this.xmlRemoveModeButton.TabIndex = 2;
-            this.xmlRemoveModeButton.TabStop = true;
             this.xmlRemoveModeButton.Text = "remove";
             this.xmlRemoveModeButton.UseVisualStyleBackColor = true;
             this.xmlRemoveModeButton.CheckedChanged += new System.EventHandler(this.xmlRemoveModeButton_CheckedChanged);
@@ -191,7 +198,6 @@
             this.xmlEditModsButton.Name = "xmlEditModsButton";
             this.xmlEditModsButton.Size = new System.Drawing.Size(42, 17);
             this.xmlEditModsButton.TabIndex = 1;
-            this.xmlEditModsButton.TabStop = true;
             this.xmlEditModsButton.Text = "edit";
             this.xmlEditModsButton.UseVisualStyleBackColor = true;
             this.xmlEditModsButton.CheckedChanged += new System.EventHandler(this.xmlEditModsButton_CheckedChanged);
@@ -199,6 +205,7 @@
             // xmlAddModeButton
             // 
             this.xmlAddModeButton.AutoSize = true;
+            this.xmlAddModeButton.Checked = true;
             this.xmlAddModeButton.Location = new System.Drawing.Point(3, 15);
             this.xmlAddModeButton.Name = "xmlAddModeButton";
             this.xmlAddModeButton.Size = new System.Drawing.Size(43, 17);
@@ -210,7 +217,7 @@
             // 
             // regexSearchBox
             // 
-            this.regexSearchBox.Location = new System.Drawing.Point(12, 265);
+            this.regexSearchBox.Location = new System.Drawing.Point(15, 310);
             this.regexSearchBox.Name = "regexSearchBox";
             this.regexSearchBox.Size = new System.Drawing.Size(212, 20);
             this.regexSearchBox.TabIndex = 2;
@@ -218,7 +225,7 @@
             // regexSearchLabel
             // 
             this.regexSearchLabel.AutoSize = true;
-            this.regexSearchLabel.Location = new System.Drawing.Point(9, 249);
+            this.regexSearchLabel.Location = new System.Drawing.Point(12, 294);
             this.regexSearchLabel.Name = "regexSearchLabel";
             this.regexSearchLabel.Size = new System.Drawing.Size(39, 13);
             this.regexSearchLabel.TabIndex = 6;
@@ -227,7 +234,7 @@
             // regexReplaceLabel
             // 
             this.regexReplaceLabel.AutoSize = true;
-            this.regexReplaceLabel.Location = new System.Drawing.Point(9, 288);
+            this.regexReplaceLabel.Location = new System.Drawing.Point(12, 333);
             this.regexReplaceLabel.Name = "regexReplaceLabel";
             this.regexReplaceLabel.Size = new System.Drawing.Size(42, 13);
             this.regexReplaceLabel.TabIndex = 8;
@@ -236,7 +243,7 @@
             // xmlReplaceLabel
             // 
             this.xmlReplaceLabel.AutoSize = true;
-            this.xmlReplaceLabel.Location = new System.Drawing.Point(247, 288);
+            this.xmlReplaceLabel.Location = new System.Drawing.Point(247, 333);
             this.xmlReplaceLabel.Name = "xmlReplaceLabel";
             this.xmlReplaceLabel.Size = new System.Drawing.Size(42, 13);
             this.xmlReplaceLabel.TabIndex = 20;
@@ -244,7 +251,7 @@
             // 
             // xmlSearchBox
             // 
-            this.xmlSearchBox.Location = new System.Drawing.Point(250, 265);
+            this.xmlSearchBox.Location = new System.Drawing.Point(250, 310);
             this.xmlSearchBox.Name = "xmlSearchBox";
             this.xmlSearchBox.Size = new System.Drawing.Size(212, 20);
             this.xmlSearchBox.TabIndex = 8;
@@ -252,7 +259,7 @@
             // xmlSearchLabel
             // 
             this.xmlSearchLabel.AutoSize = true;
-            this.xmlSearchLabel.Location = new System.Drawing.Point(247, 249);
+            this.xmlSearchLabel.Location = new System.Drawing.Point(247, 294);
             this.xmlSearchLabel.Name = "xmlSearchLabel";
             this.xmlSearchLabel.Size = new System.Drawing.Size(39, 13);
             this.xmlSearchLabel.TabIndex = 18;
@@ -260,7 +267,7 @@
             // 
             // xmlPathBox
             // 
-            this.xmlPathBox.Location = new System.Drawing.Point(250, 226);
+            this.xmlPathBox.Location = new System.Drawing.Point(250, 271);
             this.xmlPathBox.Name = "xmlPathBox";
             this.xmlPathBox.Size = new System.Drawing.Size(212, 20);
             this.xmlPathBox.TabIndex = 7;
@@ -268,7 +275,7 @@
             // xmlPathLabel
             // 
             this.xmlPathLabel.AutoSize = true;
-            this.xmlPathLabel.Location = new System.Drawing.Point(247, 210);
+            this.xmlPathLabel.Location = new System.Drawing.Point(247, 255);
             this.xmlPathLabel.Name = "xmlPathLabel";
             this.xmlPathLabel.Size = new System.Drawing.Size(28, 13);
             this.xmlPathLabel.TabIndex = 16;
@@ -279,7 +286,7 @@
             this.xmlFilePathBox.Location = new System.Drawing.Point(250, 46);
             this.xmlFilePathBox.Name = "xmlFilePathBox";
             this.xmlFilePathBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.xmlFilePathBox.Size = new System.Drawing.Size(212, 62);
+            this.xmlFilePathBox.Size = new System.Drawing.Size(212, 47);
             this.xmlFilePathBox.TabIndex = 7;
             this.xmlFilePathBox.Text = "";
             // 
@@ -294,7 +301,7 @@
             // 
             // xmlLoadFileButton
             // 
-            this.xmlLoadFileButton.Location = new System.Drawing.Point(250, 114);
+            this.xmlLoadFileButton.Location = new System.Drawing.Point(250, 143);
             this.xmlLoadFileButton.Name = "xmlLoadFileButton";
             this.xmlLoadFileButton.Size = new System.Drawing.Size(212, 23);
             this.xmlLoadFileButton.TabIndex = 6;
@@ -304,7 +311,7 @@
             // 
             // regexPatchButton
             // 
-            this.regexPatchButton.Location = new System.Drawing.Point(28, 393);
+            this.regexPatchButton.Location = new System.Drawing.Point(12, 456);
             this.regexPatchButton.Name = "regexPatchButton";
             this.regexPatchButton.Size = new System.Drawing.Size(95, 23);
             this.regexPatchButton.TabIndex = 4;
@@ -314,7 +321,7 @@
             // 
             // xmlPatchButton
             // 
-            this.xmlPatchButton.Location = new System.Drawing.Point(266, 393);
+            this.xmlPatchButton.Location = new System.Drawing.Point(250, 456);
             this.xmlPatchButton.Name = "xmlPatchButton";
             this.xmlPatchButton.Size = new System.Drawing.Size(95, 23);
             this.xmlPatchButton.TabIndex = 10;
@@ -327,7 +334,7 @@
             this.panel1.BackColor = System.Drawing.SystemColors.WindowText;
             this.panel1.Location = new System.Drawing.Point(234, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(10, 430);
+            this.panel1.Size = new System.Drawing.Size(10, 479);
             this.panel1.TabIndex = 23;
             // 
             // xmlPatcherLabel
@@ -361,12 +368,12 @@
             this.panel2.BackColor = System.Drawing.SystemColors.WindowText;
             this.panel2.Location = new System.Drawing.Point(468, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(10, 430);
+            this.panel2.Size = new System.Drawing.Size(10, 479);
             this.panel2.TabIndex = 24;
             // 
             // jsonLoadFileButton
             // 
-            this.jsonLoadFileButton.Location = new System.Drawing.Point(483, 114);
+            this.jsonLoadFileButton.Location = new System.Drawing.Point(483, 143);
             this.jsonLoadFileButton.Name = "jsonLoadFileButton";
             this.jsonLoadFileButton.Size = new System.Drawing.Size(212, 23);
             this.jsonLoadFileButton.TabIndex = 12;
@@ -388,14 +395,14 @@
             this.jsonFilePathBox.Location = new System.Drawing.Point(483, 46);
             this.jsonFilePathBox.Name = "jsonFilePathBox";
             this.jsonFilePathBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.jsonFilePathBox.Size = new System.Drawing.Size(212, 62);
+            this.jsonFilePathBox.Size = new System.Drawing.Size(212, 47);
             this.jsonFilePathBox.TabIndex = 14;
             this.jsonFilePathBox.Text = "";
             // 
             // jsonPathLabel
             // 
             this.jsonPathLabel.AutoSize = true;
-            this.jsonPathLabel.Location = new System.Drawing.Point(480, 210);
+            this.jsonPathLabel.Location = new System.Drawing.Point(484, 255);
             this.jsonPathLabel.Name = "jsonPathLabel";
             this.jsonPathLabel.Size = new System.Drawing.Size(28, 13);
             this.jsonPathLabel.TabIndex = 4;
@@ -403,7 +410,7 @@
             // 
             // jsonPathBox
             // 
-            this.jsonPathBox.Location = new System.Drawing.Point(483, 226);
+            this.jsonPathBox.Location = new System.Drawing.Point(484, 271);
             this.jsonPathBox.Name = "jsonPathBox";
             this.jsonPathBox.Size = new System.Drawing.Size(212, 20);
             this.jsonPathBox.TabIndex = 13;
@@ -411,7 +418,7 @@
             // jsonSearchLabel
             // 
             this.jsonSearchLabel.AutoSize = true;
-            this.jsonSearchLabel.Location = new System.Drawing.Point(480, 249);
+            this.jsonSearchLabel.Location = new System.Drawing.Point(481, 294);
             this.jsonSearchLabel.Name = "jsonSearchLabel";
             this.jsonSearchLabel.Size = new System.Drawing.Size(39, 13);
             this.jsonSearchLabel.TabIndex = 6;
@@ -419,7 +426,7 @@
             // 
             // jsonSearchBox
             // 
-            this.jsonSearchBox.Location = new System.Drawing.Point(483, 265);
+            this.jsonSearchBox.Location = new System.Drawing.Point(484, 310);
             this.jsonSearchBox.Name = "jsonSearchBox";
             this.jsonSearchBox.Size = new System.Drawing.Size(212, 20);
             this.jsonSearchBox.TabIndex = 14;
@@ -427,7 +434,7 @@
             // jsonReplaceLabel
             // 
             this.jsonReplaceLabel.AutoSize = true;
-            this.jsonReplaceLabel.Location = new System.Drawing.Point(480, 288);
+            this.jsonReplaceLabel.Location = new System.Drawing.Point(481, 333);
             this.jsonReplaceLabel.Name = "jsonReplaceLabel";
             this.jsonReplaceLabel.Size = new System.Drawing.Size(42, 13);
             this.jsonReplaceLabel.TabIndex = 8;
@@ -435,7 +442,7 @@
             // 
             // jsonPatchButton
             // 
-            this.jsonPatchButton.Location = new System.Drawing.Point(499, 393);
+            this.jsonPatchButton.Location = new System.Drawing.Point(484, 456);
             this.jsonPatchButton.Name = "jsonPatchButton";
             this.jsonPatchButton.Size = new System.Drawing.Size(95, 23);
             this.jsonPatchButton.TabIndex = 16;
@@ -458,7 +465,7 @@
             // 
             // regexMakePatchButton
             // 
-            this.regexMakePatchButton.Location = new System.Drawing.Point(129, 393);
+            this.regexMakePatchButton.Location = new System.Drawing.Point(132, 456);
             this.regexMakePatchButton.Name = "regexMakePatchButton";
             this.regexMakePatchButton.Size = new System.Drawing.Size(95, 23);
             this.regexMakePatchButton.TabIndex = 5;
@@ -468,7 +475,7 @@
             // 
             // xmlMakePatchButton
             // 
-            this.xmlMakePatchButton.Location = new System.Drawing.Point(367, 393);
+            this.xmlMakePatchButton.Location = new System.Drawing.Point(367, 456);
             this.xmlMakePatchButton.Name = "xmlMakePatchButton";
             this.xmlMakePatchButton.Size = new System.Drawing.Size(95, 23);
             this.xmlMakePatchButton.TabIndex = 11;
@@ -478,7 +485,7 @@
             // 
             // jsonMakePatchButton
             // 
-            this.jsonMakePatchButton.Location = new System.Drawing.Point(600, 393);
+            this.jsonMakePatchButton.Location = new System.Drawing.Point(602, 456);
             this.jsonMakePatchButton.Name = "jsonMakePatchButton";
             this.jsonMakePatchButton.Size = new System.Drawing.Size(95, 23);
             this.jsonMakePatchButton.TabIndex = 17;
@@ -488,27 +495,27 @@
             // 
             // regexReplaceBox
             // 
-            this.regexReplaceBox.Location = new System.Drawing.Point(12, 304);
+            this.regexReplaceBox.Location = new System.Drawing.Point(15, 349);
             this.regexReplaceBox.Name = "regexReplaceBox";
-            this.regexReplaceBox.Size = new System.Drawing.Size(212, 82);
+            this.regexReplaceBox.Size = new System.Drawing.Size(212, 100);
             this.regexReplaceBox.TabIndex = 3;
             this.regexReplaceBox.Text = "";
             this.regexReplaceBox.WordWrap = false;
             // 
             // xmlReplaceBox
             // 
-            this.xmlReplaceBox.Location = new System.Drawing.Point(250, 304);
+            this.xmlReplaceBox.Location = new System.Drawing.Point(250, 349);
             this.xmlReplaceBox.Name = "xmlReplaceBox";
-            this.xmlReplaceBox.Size = new System.Drawing.Size(212, 82);
+            this.xmlReplaceBox.Size = new System.Drawing.Size(212, 100);
             this.xmlReplaceBox.TabIndex = 9;
             this.xmlReplaceBox.Text = "";
             this.xmlReplaceBox.WordWrap = false;
             // 
             // jsonReplaceBox
             // 
-            this.jsonReplaceBox.Location = new System.Drawing.Point(483, 304);
+            this.jsonReplaceBox.Location = new System.Drawing.Point(484, 349);
             this.jsonReplaceBox.Name = "jsonReplaceBox";
-            this.jsonReplaceBox.Size = new System.Drawing.Size(212, 82);
+            this.jsonReplaceBox.Size = new System.Drawing.Size(212, 100);
             this.jsonReplaceBox.TabIndex = 15;
             this.jsonReplaceBox.Text = "";
             this.jsonReplaceBox.WordWrap = false;
@@ -528,12 +535,12 @@
             this.panel3.BackColor = System.Drawing.SystemColors.WindowText;
             this.panel3.Location = new System.Drawing.Point(701, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(10, 430);
+            this.panel3.Size = new System.Drawing.Size(10, 479);
             this.panel3.TabIndex = 25;
             // 
             // xvmLoadFileButton
             // 
-            this.xvmLoadFileButton.Location = new System.Drawing.Point(717, 114);
+            this.xvmLoadFileButton.Location = new System.Drawing.Point(716, 143);
             this.xvmLoadFileButton.Name = "xvmLoadFileButton";
             this.xvmLoadFileButton.Size = new System.Drawing.Size(213, 23);
             this.xvmLoadFileButton.TabIndex = 18;
@@ -555,14 +562,14 @@
             this.xvmFilePathBox.Location = new System.Drawing.Point(717, 46);
             this.xvmFilePathBox.Name = "xvmFilePathBox";
             this.xvmFilePathBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.xvmFilePathBox.Size = new System.Drawing.Size(214, 62);
+            this.xvmFilePathBox.Size = new System.Drawing.Size(214, 47);
             this.xvmFilePathBox.TabIndex = 14;
             this.xvmFilePathBox.Text = "";
             // 
             // xvmPathLabel
             // 
             this.xvmPathLabel.AutoSize = true;
-            this.xvmPathLabel.Location = new System.Drawing.Point(717, 226);
+            this.xvmPathLabel.Location = new System.Drawing.Point(715, 258);
             this.xvmPathLabel.Name = "xvmPathLabel";
             this.xvmPathLabel.Size = new System.Drawing.Size(28, 13);
             this.xvmPathLabel.TabIndex = 4;
@@ -570,7 +577,7 @@
             // 
             // xvmPathBox
             // 
-            this.xvmPathBox.Location = new System.Drawing.Point(717, 242);
+            this.xvmPathBox.Location = new System.Drawing.Point(715, 271);
             this.xvmPathBox.Name = "xvmPathBox";
             this.xvmPathBox.Size = new System.Drawing.Size(214, 20);
             this.xvmPathBox.TabIndex = 21;
@@ -578,7 +585,7 @@
             // xvmSearchLabel
             // 
             this.xvmSearchLabel.AutoSize = true;
-            this.xvmSearchLabel.Location = new System.Drawing.Point(717, 265);
+            this.xvmSearchLabel.Location = new System.Drawing.Point(715, 294);
             this.xvmSearchLabel.Name = "xvmSearchLabel";
             this.xvmSearchLabel.Size = new System.Drawing.Size(39, 13);
             this.xvmSearchLabel.TabIndex = 6;
@@ -586,7 +593,7 @@
             // 
             // xvmSearchBox
             // 
-            this.xvmSearchBox.Location = new System.Drawing.Point(717, 281);
+            this.xvmSearchBox.Location = new System.Drawing.Point(715, 310);
             this.xvmSearchBox.Name = "xvmSearchBox";
             this.xvmSearchBox.Size = new System.Drawing.Size(214, 20);
             this.xvmSearchBox.TabIndex = 22;
@@ -594,7 +601,7 @@
             // xvmReplaceLabel
             // 
             this.xvmReplaceLabel.AutoSize = true;
-            this.xvmReplaceLabel.Location = new System.Drawing.Point(714, 304);
+            this.xvmReplaceLabel.Location = new System.Drawing.Point(712, 333);
             this.xvmReplaceLabel.Name = "xvmReplaceLabel";
             this.xvmReplaceLabel.Size = new System.Drawing.Size(42, 13);
             this.xvmReplaceLabel.TabIndex = 8;
@@ -602,7 +609,7 @@
             // 
             // xvmPathButton
             // 
-            this.xvmPathButton.Location = new System.Drawing.Point(735, 393);
+            this.xvmPathButton.Location = new System.Drawing.Point(716, 456);
             this.xvmPathButton.Name = "xvmPathButton";
             this.xvmPathButton.Size = new System.Drawing.Size(95, 23);
             this.xvmPathButton.TabIndex = 24;
@@ -621,7 +628,7 @@
             // 
             // xvmMakePatchButton
             // 
-            this.xvmMakePatchButton.Location = new System.Drawing.Point(836, 393);
+            this.xvmMakePatchButton.Location = new System.Drawing.Point(835, 456);
             this.xvmMakePatchButton.Name = "xvmMakePatchButton";
             this.xvmMakePatchButton.Size = new System.Drawing.Size(95, 23);
             this.xvmMakePatchButton.TabIndex = 26;
@@ -631,9 +638,9 @@
             // 
             // xvmReplaceBox
             // 
-            this.xvmReplaceBox.Location = new System.Drawing.Point(717, 320);
+            this.xvmReplaceBox.Location = new System.Drawing.Point(716, 349);
             this.xvmReplaceBox.Name = "xvmReplaceBox";
-            this.xvmReplaceBox.Size = new System.Drawing.Size(214, 66);
+            this.xvmReplaceBox.Size = new System.Drawing.Size(214, 100);
             this.xvmReplaceBox.TabIndex = 23;
             this.xvmReplaceBox.Text = "";
             this.xvmReplaceBox.WordWrap = false;
@@ -647,7 +654,7 @@
             this.xvmModsGroupBox.Controls.Add(this.xvmRemoveModeButton);
             this.xvmModsGroupBox.Controls.Add(this.xvmEditModeButton);
             this.xvmModsGroupBox.Controls.Add(this.xvmAddModeButton);
-            this.xvmModsGroupBox.Location = new System.Drawing.Point(717, 138);
+            this.xvmModsGroupBox.Location = new System.Drawing.Point(715, 167);
             this.xvmModsGroupBox.Name = "xvmModsGroupBox";
             this.xvmModsGroupBox.Size = new System.Drawing.Size(138, 85);
             this.xvmModsGroupBox.TabIndex = 26;
@@ -661,7 +668,6 @@
             this.xvmArrayEditModeButton.Name = "xvmArrayEditModeButton";
             this.xvmArrayEditModeButton.Size = new System.Drawing.Size(71, 17);
             this.xvmArrayEditModeButton.TabIndex = 5;
-            this.xvmArrayEditModeButton.TabStop = true;
             this.xvmArrayEditModeButton.Text = "array_edit";
             this.xvmArrayEditModeButton.UseVisualStyleBackColor = true;
             this.xvmArrayEditModeButton.CheckedChanged += new System.EventHandler(this.xvm_modeToggle);
@@ -673,7 +679,6 @@
             this.xvmArrayAddModeButton.Name = "xvmArrayAddModeButton";
             this.xvmArrayAddModeButton.Size = new System.Drawing.Size(72, 17);
             this.xvmArrayAddModeButton.TabIndex = 4;
-            this.xvmArrayAddModeButton.TabStop = true;
             this.xvmArrayAddModeButton.Text = "array_add";
             this.xvmArrayAddModeButton.UseVisualStyleBackColor = true;
             this.xvmArrayAddModeButton.CheckedChanged += new System.EventHandler(this.xvm_modeToggle);
@@ -685,7 +690,6 @@
             this.xvmArrayClearModeButton.Name = "xvmArrayClearModeButton";
             this.xvmArrayClearModeButton.Size = new System.Drawing.Size(77, 17);
             this.xvmArrayClearModeButton.TabIndex = 3;
-            this.xvmArrayClearModeButton.TabStop = true;
             this.xvmArrayClearModeButton.Text = "array_clear";
             this.xvmArrayClearModeButton.UseVisualStyleBackColor = true;
             this.xvmArrayClearModeButton.CheckedChanged += new System.EventHandler(this.xvm_modeToggle);
@@ -697,7 +701,6 @@
             this.xvmArrayRemoveModeButton.Name = "xvmArrayRemoveModeButton";
             this.xvmArrayRemoveModeButton.Size = new System.Drawing.Size(89, 17);
             this.xvmArrayRemoveModeButton.TabIndex = 6;
-            this.xvmArrayRemoveModeButton.TabStop = true;
             this.xvmArrayRemoveModeButton.Text = "array_remove";
             this.xvmArrayRemoveModeButton.UseVisualStyleBackColor = true;
             this.xvmArrayRemoveModeButton.CheckedChanged += new System.EventHandler(this.xvm_modeToggle);
@@ -710,7 +713,6 @@
             this.xvmRemoveModeButton.Name = "xvmRemoveModeButton";
             this.xvmRemoveModeButton.Size = new System.Drawing.Size(60, 17);
             this.xvmRemoveModeButton.TabIndex = 2;
-            this.xvmRemoveModeButton.TabStop = true;
             this.xvmRemoveModeButton.Text = "remove";
             this.xvmRemoveModeButton.UseVisualStyleBackColor = true;
             this.xvmRemoveModeButton.CheckedChanged += new System.EventHandler(this.xvm_modeToggle);
@@ -722,7 +724,6 @@
             this.xvmEditModeButton.Name = "xvmEditModeButton";
             this.xvmEditModeButton.Size = new System.Drawing.Size(42, 17);
             this.xvmEditModeButton.TabIndex = 1;
-            this.xvmEditModeButton.TabStop = true;
             this.xvmEditModeButton.Text = "edit";
             this.xvmEditModeButton.UseVisualStyleBackColor = true;
             this.xvmEditModeButton.CheckedChanged += new System.EventHandler(this.xvm_modeToggle);
@@ -730,6 +731,7 @@
             // xvmAddModeButton
             // 
             this.xvmAddModeButton.AutoSize = true;
+            this.xvmAddModeButton.Checked = true;
             this.xvmAddModeButton.Location = new System.Drawing.Point(3, 10);
             this.xvmAddModeButton.Name = "xvmAddModeButton";
             this.xvmAddModeButton.Size = new System.Drawing.Size(43, 17);
@@ -773,12 +775,23 @@
             this.JSONModsGroupBox.Controls.Add(this.JSONRemove);
             this.JSONModsGroupBox.Controls.Add(this.JSONAdd);
             this.JSONModsGroupBox.Controls.Add(this.JSONEditArrayEdit);
-            this.JSONModsGroupBox.Location = new System.Drawing.Point(483, 138);
+            this.JSONModsGroupBox.Location = new System.Drawing.Point(483, 167);
             this.JSONModsGroupBox.Name = "JSONModsGroupBox";
             this.JSONModsGroupBox.Size = new System.Drawing.Size(212, 69);
             this.JSONModsGroupBox.TabIndex = 27;
             this.JSONModsGroupBox.TabStop = false;
             this.JSONModsGroupBox.Text = "Mode";
+            // 
+            // JSONArrayClear
+            // 
+            this.JSONArrayClear.AutoSize = true;
+            this.JSONArrayClear.Location = new System.Drawing.Point(93, 46);
+            this.JSONArrayClear.Name = "JSONArrayClear";
+            this.JSONArrayClear.Size = new System.Drawing.Size(73, 17);
+            this.JSONArrayClear.TabIndex = 5;
+            this.JSONArrayClear.Text = "ArrayClear";
+            this.JSONArrayClear.UseVisualStyleBackColor = true;
+            this.JSONArrayClear.CheckedChanged += new System.EventHandler(this.JSONMode_CheckedChanged);
             // 
             // JSONArrayAdd
             // 
@@ -787,7 +800,6 @@
             this.JSONArrayAdd.Name = "JSONArrayAdd";
             this.JSONArrayAdd.Size = new System.Drawing.Size(68, 17);
             this.JSONArrayAdd.TabIndex = 4;
-            this.JSONArrayAdd.TabStop = true;
             this.JSONArrayAdd.Text = "ArrayAdd";
             this.JSONArrayAdd.UseVisualStyleBackColor = true;
             this.JSONArrayAdd.CheckedChanged += new System.EventHandler(this.JSONMode_CheckedChanged);
@@ -799,7 +811,6 @@
             this.JSONArrayRemove.Name = "JSONArrayRemove";
             this.JSONArrayRemove.Size = new System.Drawing.Size(89, 17);
             this.JSONArrayRemove.TabIndex = 3;
-            this.JSONArrayRemove.TabStop = true;
             this.JSONArrayRemove.Text = "ArrayRemove";
             this.JSONArrayRemove.UseVisualStyleBackColor = true;
             this.JSONArrayRemove.CheckedChanged += new System.EventHandler(this.JSONMode_CheckedChanged);
@@ -811,7 +822,6 @@
             this.JSONRemove.Name = "JSONRemove";
             this.JSONRemove.Size = new System.Drawing.Size(65, 17);
             this.JSONRemove.TabIndex = 2;
-            this.JSONRemove.TabStop = true;
             this.JSONRemove.Text = "Remove";
             this.JSONRemove.UseVisualStyleBackColor = true;
             this.JSONRemove.CheckedChanged += new System.EventHandler(this.JSONMode_CheckedChanged);
@@ -823,7 +833,6 @@
             this.JSONAdd.Name = "JSONAdd";
             this.JSONAdd.Size = new System.Drawing.Size(44, 17);
             this.JSONAdd.TabIndex = 1;
-            this.JSONAdd.TabStop = true;
             this.JSONAdd.Text = "Add";
             this.JSONAdd.UseVisualStyleBackColor = true;
             this.JSONAdd.CheckedChanged += new System.EventHandler(this.JSONMode_CheckedChanged);
@@ -831,6 +840,7 @@
             // JSONEditArrayEdit
             // 
             this.JSONEditArrayEdit.AutoSize = true;
+            this.JSONEditArrayEdit.Checked = true;
             this.JSONEditArrayEdit.Location = new System.Drawing.Point(3, 15);
             this.JSONEditArrayEdit.Name = "JSONEditArrayEdit";
             this.JSONEditArrayEdit.Size = new System.Drawing.Size(90, 17);
@@ -840,23 +850,11 @@
             this.JSONEditArrayEdit.UseVisualStyleBackColor = true;
             this.JSONEditArrayEdit.CheckedChanged += new System.EventHandler(this.JSONMode_CheckedChanged);
             // 
-            // JSONArrayClear
-            // 
-            this.JSONArrayClear.AutoSize = true;
-            this.JSONArrayClear.Location = new System.Drawing.Point(93, 46);
-            this.JSONArrayClear.Name = "JSONArrayClear";
-            this.JSONArrayClear.Size = new System.Drawing.Size(73, 17);
-            this.JSONArrayClear.TabIndex = 5;
-            this.JSONArrayClear.TabStop = true;
-            this.JSONArrayClear.Text = "ArrayClear";
-            this.JSONArrayClear.UseVisualStyleBackColor = true;
-            this.JSONArrayClear.CheckedChanged += new System.EventHandler(this.JSONMode_CheckedChanged);
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.xvmPatchRB);
             this.groupBox1.Controls.Add(this.PMODPatchRB);
-            this.groupBox1.Location = new System.Drawing.Point(861, 138);
+            this.groupBox1.Location = new System.Drawing.Point(859, 167);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(70, 85);
             this.groupBox1.TabIndex = 28;
@@ -867,9 +865,9 @@
             // 
             this.RegressionTesting.Controls.Add(this.JSONRegressionTesting);
             this.RegressionTesting.Controls.Add(this.XVMRegressionTesting);
-            this.RegressionTesting.Location = new System.Drawing.Point(12, 433);
+            this.RegressionTesting.Location = new System.Drawing.Point(12, 482);
             this.RegressionTesting.Name = "RegressionTesting";
-            this.RegressionTesting.Size = new System.Drawing.Size(919, 42);
+            this.RegressionTesting.Size = new System.Drawing.Size(918, 42);
             this.RegressionTesting.TabIndex = 29;
             this.RegressionTesting.TabStop = false;
             this.RegressionTesting.Text = "Regression testing (do not touch)";
@@ -884,11 +882,103 @@
             this.JSONRegressionTesting.UseVisualStyleBackColor = true;
             this.JSONRegressionTesting.Click += new System.EventHandler(this.JSONRegressionTesting_Click);
             // 
+            // regexPatchPathLabel
+            // 
+            this.regexPatchPathLabel.AutoSize = true;
+            this.regexPatchPathLabel.Location = new System.Drawing.Point(12, 98);
+            this.regexPatchPathLabel.Name = "regexPatchPathLabel";
+            this.regexPatchPathLabel.Size = new System.Drawing.Size(56, 13);
+            this.regexPatchPathLabel.TabIndex = 30;
+            this.regexPatchPathLabel.Text = "patchPath";
+            // 
+            // regexPatchPathCB
+            // 
+            this.regexPatchPathCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.regexPatchPathCB.FormattingEnabled = true;
+            this.regexPatchPathCB.Items.AddRange(new object[] {
+            "app",
+            "appData"});
+            this.regexPatchPathCB.Location = new System.Drawing.Point(12, 116);
+            this.regexPatchPathCB.Name = "regexPatchPathCB";
+            this.regexPatchPathCB.Size = new System.Drawing.Size(212, 21);
+            this.regexPatchPathCB.TabIndex = 31;
+            // 
+            // xmlPatchPathLabel
+            // 
+            this.xmlPatchPathLabel.AutoSize = true;
+            this.xmlPatchPathLabel.Location = new System.Drawing.Point(250, 98);
+            this.xmlPatchPathLabel.Name = "xmlPatchPathLabel";
+            this.xmlPatchPathLabel.Size = new System.Drawing.Size(56, 13);
+            this.xmlPatchPathLabel.TabIndex = 30;
+            this.xmlPatchPathLabel.Text = "patchPath";
+            // 
+            // xmlPatchPathCB
+            // 
+            this.xmlPatchPathCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.xmlPatchPathCB.FormattingEnabled = true;
+            this.xmlPatchPathCB.Items.AddRange(new object[] {
+            "app",
+            "appData"});
+            this.xmlPatchPathCB.Location = new System.Drawing.Point(250, 116);
+            this.xmlPatchPathCB.Name = "xmlPatchPathCB";
+            this.xmlPatchPathCB.Size = new System.Drawing.Size(212, 21);
+            this.xmlPatchPathCB.TabIndex = 31;
+            // 
+            // jsonPatchPathLabel
+            // 
+            this.jsonPatchPathLabel.AutoSize = true;
+            this.jsonPatchPathLabel.Location = new System.Drawing.Point(483, 98);
+            this.jsonPatchPathLabel.Name = "jsonPatchPathLabel";
+            this.jsonPatchPathLabel.Size = new System.Drawing.Size(56, 13);
+            this.jsonPatchPathLabel.TabIndex = 30;
+            this.jsonPatchPathLabel.Text = "patchPath";
+            // 
+            // jsonPatchPathCB
+            // 
+            this.jsonPatchPathCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.jsonPatchPathCB.FormattingEnabled = true;
+            this.jsonPatchPathCB.Items.AddRange(new object[] {
+            "app",
+            "appData"});
+            this.jsonPatchPathCB.Location = new System.Drawing.Point(483, 116);
+            this.jsonPatchPathCB.Name = "jsonPatchPathCB";
+            this.jsonPatchPathCB.Size = new System.Drawing.Size(212, 21);
+            this.jsonPatchPathCB.TabIndex = 31;
+            // 
+            // xvmPatchPathLabel
+            // 
+            this.xvmPatchPathLabel.AutoSize = true;
+            this.xvmPatchPathLabel.Location = new System.Drawing.Point(717, 98);
+            this.xvmPatchPathLabel.Name = "xvmPatchPathLabel";
+            this.xvmPatchPathLabel.Size = new System.Drawing.Size(56, 13);
+            this.xvmPatchPathLabel.TabIndex = 30;
+            this.xvmPatchPathLabel.Text = "patchPath";
+            // 
+            // xvmPatchPathCB
+            // 
+            this.xvmPatchPathCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.xvmPatchPathCB.FormattingEnabled = true;
+            this.xvmPatchPathCB.Items.AddRange(new object[] {
+            "app",
+            "appData"});
+            this.xvmPatchPathCB.Location = new System.Drawing.Point(717, 116);
+            this.xvmPatchPathCB.Name = "xvmPatchPathCB";
+            this.xvmPatchPathCB.Size = new System.Drawing.Size(212, 21);
+            this.xvmPatchPathCB.TabIndex = 31;
+            // 
             // PatchTester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(943, 487);
+            this.ClientSize = new System.Drawing.Size(943, 536);
+            this.Controls.Add(this.xvmPatchPathCB);
+            this.Controls.Add(this.xvmPatchPathLabel);
+            this.Controls.Add(this.jsonPatchPathCB);
+            this.Controls.Add(this.jsonPatchPathLabel);
+            this.Controls.Add(this.xmlPatchPathCB);
+            this.Controls.Add(this.xmlPatchPathLabel);
+            this.Controls.Add(this.regexPatchPathCB);
+            this.Controls.Add(this.regexPatchPathLabel);
             this.Controls.Add(this.RegressionTesting);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.JSONModsGroupBox);
@@ -1048,5 +1138,13 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox RegressionTesting;
         private System.Windows.Forms.Button JSONRegressionTesting;
+        private System.Windows.Forms.Label regexPatchPathLabel;
+        private System.Windows.Forms.ComboBox regexPatchPathCB;
+        private System.Windows.Forms.Label xmlPatchPathLabel;
+        private System.Windows.Forms.ComboBox xmlPatchPathCB;
+        private System.Windows.Forms.Label jsonPatchPathLabel;
+        private System.Windows.Forms.ComboBox jsonPatchPathCB;
+        private System.Windows.Forms.Label xvmPatchPathLabel;
+        private System.Windows.Forms.ComboBox xvmPatchPathCB;
     }
 }

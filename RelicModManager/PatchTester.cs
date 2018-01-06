@@ -46,8 +46,11 @@ namespace RelhaxModpack
             xmlFileDialog.InitialDirectory = Application.StartupPath;
             jsonFileDialog.InitialDirectory = Application.StartupPath;
             xvmFileDialog.InitialDirectory = Application.StartupPath;
-            xmlAddModeButton.Checked = true;
-            JSONEditArrayEdit.Checked = true;
+            regexPatchPathCB.SelectedIndex = 0;
+            xmlPatchPathCB.SelectedIndex = 0;
+            jsonPatchPathCB.SelectedIndex = 0;
+            xvmPatchPathCB.SelectedIndex = 0;
+
         }
 
         private void regexLoadFileButton_Click(object sender, EventArgs e)
@@ -130,7 +133,7 @@ namespace RelhaxModpack
             patch.AppendChild(type);
 
             XmlElement patchPath = doc.CreateElement("patchPath");
-            patchPath.InnerText = "";
+            patchPath.InnerText = regexPatchPathCB.SelectedIndex.ToString();
             patch.AppendChild(patchPath);
 
             XmlElement file = doc.CreateElement("file");
@@ -180,7 +183,7 @@ namespace RelhaxModpack
             patch.AppendChild(mode);
 
             XmlElement patchPath = doc.CreateElement("patchPath");
-            patchPath.InnerText = "";
+            patchPath.InnerText = xmlPatchPathCB.SelectedIndex.ToString();
             patch.AppendChild(patchPath);
 
             XmlElement file = doc.CreateElement("file");
@@ -220,7 +223,7 @@ namespace RelhaxModpack
             patch.AppendChild(mode);
 
             XmlElement patchPath = doc.CreateElement("patchPath");
-            patchPath.InnerText = "";
+            patchPath.InnerText = jsonPatchPathCB.SelectedIndex.ToString();
             patch.AppendChild(patchPath);
 
             XmlElement file = doc.CreateElement("file");
@@ -412,7 +415,7 @@ namespace RelhaxModpack
             patch.AppendChild(mode);
 
             XmlElement patchPath = doc.CreateElement("patchPath");
-            patchPath.InnerText = "";
+            patchPath.InnerText = xvmPatchPathCB.SelectedIndex.ToString();
             patch.AppendChild(patchPath);
 
             XmlElement file = doc.CreateElement("file");
