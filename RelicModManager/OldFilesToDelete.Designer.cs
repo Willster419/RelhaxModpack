@@ -146,7 +146,6 @@
             this.Text = "Old Files Question";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OldFilesToDelete_FormClosing);
             this.Load += new System.EventHandler(this.OldFilesToDelete_Load);
-            this.SizeChanged += new System.EventHandler(this.OldFilesToDelete_SizeChanged);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);

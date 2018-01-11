@@ -19,7 +19,6 @@ namespace RelhaxModpack
             deleteFilesQuestion.Text = Translations.getTranslatedString("foundOldFilesDelete2");
             noDeleteButton.Text = Translations.getTranslatedString("no");
             yesDeleteButton.Text = Translations.getTranslatedString("yes");
-            OldFilesToDelete_SizeChanged(null, null);
             if (Program.autoInstall)
                 yesDeleteButton_Click(null, null);
         }
@@ -42,14 +41,6 @@ namespace RelhaxModpack
             result = false;
             resultChosen = true;
             this.Close();
-        }
-
-        private void OldFilesToDelete_SizeChanged(object sender, EventArgs e)
-        {
-            filesList.Size = new System.Drawing.Size(this.Size.Width - filesList.Location.X - 20, this.Size.Height - filesList.Location.Y - 40 - yesDeleteButton.Size.Height - 6 -TitleBarDifference);
-            noDeleteButton.Location = new System.Drawing.Point(filesList.Location.X, filesList.Location.Y + filesList.Size.Height + 6 - TitleBarDifference);
-            yesDeleteButton.Location = new System.Drawing.Point(this.Size.Width - yesDeleteButton.Size.Width - 20, filesList.Location.Y + filesList.Size.Height + 6 - TitleBarDifference);
-            deleteFilesQuestion.Location = new System.Drawing.Point((this.Size.Width/2) - (deleteFilesQuestion.Size.Width/2) , filesList.Location.Y + filesList.Size.Height + 6);
         }
     }
 }
