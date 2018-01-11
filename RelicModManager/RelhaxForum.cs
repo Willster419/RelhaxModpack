@@ -12,12 +12,12 @@ namespace RelhaxModpack
         protected override void OnLoad(EventArgs e)
         {
             //font scaling
-            AutoScaleMode = Settings.AppScalingMode;
-            Font = Settings.AppFont;
-            if (Settings.AppScalingMode == AutoScaleMode.Dpi)
-            {
-                this.Scale(new SizeF(Settings.ScaleSize, Settings.ScaleSize));
-            }
+           // AutoScaleMode = Settings.AppScalingMode;
+           // Font = Settings.AppFont;
+           // if (Settings.AppScalingMode == AutoScaleMode.Dpi)
+           // {
+          //      this.Scale(new SizeF(Settings.ScaleSize, Settings.ScaleSize));
+           // }
             //title bar calculation
             Rectangle screenRektangle = RectangleToScreen(ClientRectangle);
             TitleHeight = screenRektangle.Top - Top;

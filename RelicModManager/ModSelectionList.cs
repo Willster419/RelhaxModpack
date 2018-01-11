@@ -274,7 +274,8 @@ namespace RelhaxModpack
                     AutoScroll = true,
                     //link the names of catagory and tab so eithor can be searched for
                     Name = c.Name,
-                    Text = c.SelectionType.Equals("single") ? c.Name + "*" : c.Name
+                    Text = c.SelectionType.Equals("single") ? c.Name + "*" : c.Name,
+                    //Font = Settings.AppFont
                 };
                 c.TabPage = t;
                 //matched the catagory to tab
@@ -2637,7 +2638,7 @@ namespace RelhaxModpack
                     {
                         //mod panel
                         Panel p = (Panel)c;
-                        resizePanel(p, t, 25);
+                        resizePanel(p, t, 0);
                     }
                     else if (c is ElementHost)
                     {
@@ -2662,13 +2663,14 @@ namespace RelhaxModpack
         //recursive resize of the control panals
         private void resizePanel(Panel current, TabPage tp, int shrinkFactor)
         {
-            current.Size = new Size(tp.Size.Width - shrinkFactor, current.Size.Height);
+            //current.Size = new Size(tp.Size.Width - shrinkFactor, current.Size.Height);
+            current.Padding = new Padding(shrinkFactor, current.Padding.Top, current.Padding.Right, current.Padding.Bottom);
             foreach (Control controfds in current.Controls)
             {
                 if (controfds is Panel)
                 {
                     Panel subpp = (Panel)controfds;
-                    resizePanel(subpp, tp, shrinkFactor + 25);
+                    resizePanel(subpp, tp, 5);
                 }
             }
         }
