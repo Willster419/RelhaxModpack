@@ -617,6 +617,7 @@ namespace RelhaxModpack
         //handler for before the window is displayed
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            SuspendLayout();
             //set window header text to current version so user knows
             //this.Text = this.Text +  " " + ManagerVersion();
             ApplicationVersionLabel.Text = "Application v" + ManagerVersion();
@@ -743,6 +744,8 @@ namespace RelhaxModpack
             ToggleUIButtons(true);
             Application.DoEvents();
             Program.saveSettings = true;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F); // for design in 96 DPI
+            ResumeLayout(false);
         }
 
         //handler for when the install relhax modpack button is pressed
