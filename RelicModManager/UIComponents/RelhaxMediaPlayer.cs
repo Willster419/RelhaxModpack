@@ -125,14 +125,6 @@ namespace RelhaxModpack
             }
         }
 
-        private void RelhaxMediaPlayer_SizeChanged(object sender, System.EventArgs e)
-        {
-            //give the table panel a 3 pixel border
-            MediaPlayerLayout.Location = new System.Drawing.Point(3, 3);
-            MediaPlayerLayout.Size = new System.Drawing.Size(this.Size.Width - 6, this.Size.Height - 6);
-            //determine if we need to adjust the seekbar
-        }
-
         private void RelhaxMediaPlayer_Load(object sender, System.EventArgs e)
         {
             //start volume at 50 percent
