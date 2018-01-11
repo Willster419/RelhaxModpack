@@ -38,7 +38,7 @@
             // SelectConfigLabel
             // 
             this.SelectConfigLabel.AutoSize = true;
-            this.SelectConfigLabel.Location = new System.Drawing.Point(12, 9);
+            this.SelectConfigLabel.Location = new System.Drawing.Point(9, 9);
             this.SelectConfigLabel.Name = "SelectConfigLabel";
             this.SelectConfigLabel.Size = new System.Drawing.Size(35, 13);
             this.SelectConfigLabel.TabIndex = 0;
@@ -46,6 +46,7 @@
             // 
             // SelectButton
             // 
+            this.SelectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.SelectButton.Location = new System.Drawing.Point(203, 232);
             this.SelectButton.Name = "SelectButton";
             this.SelectButton.Size = new System.Drawing.Size(75, 23);
@@ -56,6 +57,7 @@
             // 
             // CancelCloseButton
             // 
+            this.CancelCloseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.CancelCloseButton.Location = new System.Drawing.Point(12, 232);
             this.CancelCloseButton.Name = "CancelCloseButton";
             this.CancelCloseButton.Size = new System.Drawing.Size(75, 23);
@@ -66,11 +68,14 @@
             // 
             // SelectConfigPanel
             // 
+            this.SelectConfigPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.SelectConfigPanel.AutoScroll = true;
             this.SelectConfigPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SelectConfigPanel.Location = new System.Drawing.Point(15, 25);
+            this.SelectConfigPanel.Location = new System.Drawing.Point(12, 25);
             this.SelectConfigPanel.Name = "SelectConfigPanel";
-            this.SelectConfigPanel.Size = new System.Drawing.Size(263, 201);
+            this.SelectConfigPanel.Size = new System.Drawing.Size(266, 201);
             this.SelectConfigPanel.TabIndex = 3;
             // 
             // SelectionViewer
@@ -82,9 +87,10 @@
             this.Controls.Add(this.CancelCloseButton);
             this.Controls.Add(this.SelectButton);
             this.Controls.Add(this.SelectConfigLabel);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(300, 300);
             this.Name = "SelectionViewer";
             this.Text = "Selection Viewer";
             this.Load += new System.EventHandler(this.SelectionViewer_Load);

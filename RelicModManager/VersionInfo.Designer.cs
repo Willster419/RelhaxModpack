@@ -40,6 +40,9 @@
             // 
             // downloadedVersionInfo
             // 
+            this.downloadedVersionInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.downloadedVersionInfo.Location = new System.Drawing.Point(12, 31);
             this.downloadedVersionInfo.Name = "downloadedVersionInfo";
             this.downloadedVersionInfo.ReadOnly = true;
@@ -51,6 +54,7 @@
             // 
             // updateAcceptButton
             // 
+            this.updateAcceptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.updateAcceptButton.Location = new System.Drawing.Point(383, 178);
             this.updateAcceptButton.Name = "updateAcceptButton";
             this.updateAcceptButton.Size = new System.Drawing.Size(75, 23);
@@ -61,6 +65,7 @@
             // 
             // updateDeclineButton
             // 
+            this.updateDeclineButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.updateDeclineButton.Location = new System.Drawing.Point(12, 178);
             this.updateDeclineButton.Name = "updateDeclineButton";
             this.updateDeclineButton.Size = new System.Drawing.Size(75, 23);
@@ -80,6 +85,7 @@
             // 
             // updateQuestionLabel
             // 
+            this.updateQuestionLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.updateQuestionLabel.AutoSize = true;
             this.updateQuestionLabel.Location = new System.Drawing.Point(208, 186);
             this.updateQuestionLabel.Name = "updateQuestionLabel";
@@ -89,6 +95,7 @@
             // 
             // problemsUpdatingLabel
             // 
+            this.problemsUpdatingLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.problemsUpdatingLabel.AutoSize = true;
             this.problemsUpdatingLabel.Location = new System.Drawing.Point(9, 204);
             this.problemsUpdatingLabel.Name = "problemsUpdatingLabel";
@@ -98,6 +105,7 @@
             // 
             // clickHereUpdateLabel
             // 
+            this.clickHereUpdateLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.clickHereUpdateLabel.AutoSize = true;
             this.clickHereUpdateLabel.Location = new System.Drawing.Point(217, 204);
             this.clickHereUpdateLabel.Name = "clickHereUpdateLabel";
@@ -119,13 +127,13 @@
             this.Controls.Add(this.updateDeclineButton);
             this.Controls.Add(this.updateAcceptButton);
             this.Controls.Add(this.downloadedVersionInfo);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(480, 260);
             this.Name = "VersionInfo";
             this.ShowInTaskbar = false;
             this.Text = "Version Info";
             this.Load += new System.EventHandler(this.VersionInfo_Load);
-            this.SizeChanged += new System.EventHandler(this.VersionInfo_SizeChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 

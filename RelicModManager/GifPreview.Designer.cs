@@ -35,6 +35,9 @@
             // 
             // gifPreviewBox
             // 
+            this.gifPreviewBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gifPreviewBox.Image = global::RelhaxModpack.Properties.Resources.loading_3rdguards;
             this.gifPreviewBox.Location = new System.Drawing.Point(12, 12);
             this.gifPreviewBox.Name = "gifPreviewBox";
@@ -49,6 +52,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(292, 273);
             this.Controls.Add(this.gifPreviewBox);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;

@@ -49,6 +49,9 @@
             // listBox1
             // 
             this.listBox1.AllowDrop = true;
+            this.listBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(12, 25);
             this.listBox1.Name = "listBox1";
@@ -61,6 +64,7 @@
             // 
             // button1
             // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.Location = new System.Drawing.Point(12, 262);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(84, 23);
@@ -71,6 +75,7 @@
             // 
             // Continue
             // 
+            this.Continue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Continue.Location = new System.Drawing.Point(495, 262);
             this.Continue.Name = "Continue";
             this.Continue.Size = new System.Drawing.Size(75, 23);
@@ -81,6 +86,7 @@
             // 
             // AddPictures
             // 
+            this.AddPictures.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.AddPictures.Location = new System.Drawing.Point(102, 262);
             this.AddPictures.Name = "AddPictures";
             this.AddPictures.Size = new System.Drawing.Size(75, 23);
@@ -91,6 +97,7 @@
             // 
             // RemoveElements
             // 
+            this.RemoveElements.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.RemoveElements.Location = new System.Drawing.Point(183, 262);
             this.RemoveElements.Name = "RemoveElements";
             this.RemoveElements.Size = new System.Drawing.Size(107, 23);

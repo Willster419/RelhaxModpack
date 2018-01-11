@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Net;
 
 namespace RelhaxModpack
 {
@@ -33,12 +32,6 @@ namespace RelhaxModpack
             {
                 richTextBox1.Text = msgText;
             }
-            ViewUpdates_SizeChanged(null, null);
-        }
-
-        private void ViewUpdates_SizeChanged(object sender, EventArgs e)
-        {
-            richTextBox1.Size = new Size(this.Size.Width - 35, this.Size.Height - 65 - TitleBarDifference);
         }
 
         private void richTextBox1_LinkClicked(object sender, LinkClickedEventArgs e)

@@ -38,26 +38,28 @@ namespace RelhaxModpack
 
         private void StartTanksButton_Click(object sender, EventArgs e)
         {
-            var startInfo = new ProcessStartInfo();
-            startInfo.WorkingDirectory = Path.GetDirectoryName(WoTEXELocation);
-            startInfo.FileName = WoTEXELocation;
-            Process.Start(startInfo);
-            this.Close();
+            Process.Start(new ProcessStartInfo()
+            {
+                WorkingDirectory = Path.GetDirectoryName(WoTEXELocation),
+                FileName = WoTEXELocation
+            });
+            DialogResult = DialogResult.OK;
         }
 
         private void StartWoTLauncherButton_Click(object sender, EventArgs e)
         {
-            var startInfo = new ProcessStartInfo();
-            startInfo.WorkingDirectory = Path.GetDirectoryName(WoTLauncherLocation);
-            startInfo.FileName = WoTLauncherLocation;
-            Process.Start(startInfo);
-            this.Close();
+            Process.Start(new ProcessStartInfo()
+            {
+                WorkingDirectory = Path.GetDirectoryName(WoTLauncherLocation),
+                FileName = WoTLauncherLocation
+            });
+            DialogResult = DialogResult.OK;
         }
 
         private void StartXVMStatButton_Click(object sender, EventArgs e)
         {
             Process.Start(string.Format(XVMURL, Translations.getTranslatedString("xvmUrlLocalisation")));
-            this.Close();
+            DialogResult = DialogResult.OK;
         }
 
         private void CloseApplicationButton_Click(object sender, EventArgs e)

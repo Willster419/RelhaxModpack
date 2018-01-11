@@ -34,11 +34,14 @@
             // 
             // richTextBox1
             // 
+            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox1.Location = new System.Drawing.Point(12, 12);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
             this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.richTextBox1.Size = new System.Drawing.Size(565, 245);
+            this.richTextBox1.Size = new System.Drawing.Size(566, 243);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "Loading update text, please wait...";
             this.richTextBox1.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.richTextBox1_LinkClicked);
@@ -49,12 +52,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(590, 267);
             this.Controls.Add(this.richTextBox1);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(200, 150);
             this.Name = "ViewUpdates";
             this.Text = "View Updates";
             this.Load += new System.EventHandler(this.ViewUpdates_Load);
-            this.SizeChanged += new System.EventHandler(this.ViewUpdates_SizeChanged);
             this.ResumeLayout(false);
 
         }

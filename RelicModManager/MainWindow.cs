@@ -334,7 +334,7 @@ namespace RelhaxModpack
                     //out of date
                     VersionInfo vi = new VersionInfo();
                     vi.ShowDialog();
-                    DialogResult result = vi.result;
+                    DialogResult result = vi.DialogResult;
                     if (result.Equals(DialogResult.Yes))
                     {
                         Logging.Manager("User accepted downloading new version");
