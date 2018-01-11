@@ -90,13 +90,13 @@
             this.InfoTable = new System.Windows.Forms.TableLayoutPanel();
             this.DatabaseVersionLabel = new System.Windows.Forms.Label();
             this.ApplicationVersionLabel = new System.Windows.Forms.Label();
+            this.downloadProgress = new System.Windows.Forms.RichTextBox();
             this.DiagnosticUtilitiesButton = new System.Windows.Forms.Button();
             this.UninstallModeGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.CleanUninstallModeRB = new System.Windows.Forms.RadioButton();
             this.SmartUninstallModeRB = new System.Windows.Forms.RadioButton();
             this.ButtonTable = new System.Windows.Forms.TableLayoutPanel();
-            this.downloadProgress = new System.Windows.Forms.RichTextBox();
             this.settingsGroupBox.SuspendLayout();
             this.SettingsTable.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
@@ -1040,6 +1040,19 @@
             this.ApplicationVersionLabel.TabIndex = 1;
             this.ApplicationVersionLabel.Text = "Application v{version]";
             // 
+            // downloadProgress
+            // 
+            this.InfoTable.SetColumnSpan(this.downloadProgress, 2);
+            this.downloadProgress.DetectUrls = false;
+            this.downloadProgress.Dock = System.Windows.Forms.DockStyle.Left;
+            this.downloadProgress.Location = new System.Drawing.Point(3, 3);
+            this.downloadProgress.Name = "downloadProgress";
+            this.downloadProgress.ReadOnly = true;
+            this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.downloadProgress.Size = new System.Drawing.Size(494, 104);
+            this.downloadProgress.TabIndex = 29;
+            this.downloadProgress.Text = "";
+            // 
             // DiagnosticUtilitiesButton
             // 
             this.DiagnosticUtilitiesButton.AutoSize = true;
@@ -1133,19 +1146,6 @@
             this.ButtonTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.34F));
             this.ButtonTable.Size = new System.Drawing.Size(500, 90);
             this.ButtonTable.TabIndex = 42;
-            // 
-            // downloadProgress
-            // 
-            this.InfoTable.SetColumnSpan(this.downloadProgress, 2);
-            this.downloadProgress.DetectUrls = false;
-            this.downloadProgress.Dock = System.Windows.Forms.DockStyle.Left;
-            this.downloadProgress.Location = new System.Drawing.Point(3, 3);
-            this.downloadProgress.Name = "downloadProgress";
-            this.downloadProgress.ReadOnly = true;
-            this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.downloadProgress.Size = new System.Drawing.Size(494, 104);
-            this.downloadProgress.TabIndex = 29;
-            this.downloadProgress.Text = "";
             // 
             // MainWindow
             // 
