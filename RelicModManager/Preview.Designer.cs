@@ -66,6 +66,8 @@
             // 
             // DescriptionBox
             // 
+            this.DescriptionBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.DescriptionBox.Location = new System.Drawing.Point(12, 356);
             this.DescriptionBox.Name = "DescriptionBox";
             this.DescriptionBox.ReadOnly = true;
@@ -77,6 +79,7 @@
             // 
             // NextPicButton
             // 
+            this.NextPicButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.NextPicButton.Location = new System.Drawing.Point(355, 327);
             this.NextPicButton.Name = "NextPicButton";
             this.NextPicButton.Size = new System.Drawing.Size(75, 23);
@@ -87,6 +90,7 @@
             // 
             // PreviousPicButton
             // 
+            this.PreviousPicButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.PreviousPicButton.Location = new System.Drawing.Point(12, 327);
             this.PreviousPicButton.Name = "PreviousPicButton";
             this.PreviousPicButton.Size = new System.Drawing.Size(75, 23);
@@ -97,6 +101,8 @@
             // 
             // PictureCountPanel
             // 
+            this.PictureCountPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.PictureCountPanel.AutoScroll = true;
             this.PictureCountPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.PictureCountPanel.Location = new System.Drawing.Point(93, 327);
@@ -106,6 +112,7 @@
             // 
             // DevLinkLabel
             // 
+            this.DevLinkLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.DevLinkLabel.AutoSize = true;
             this.DevLinkLabel.Location = new System.Drawing.Point(332, 496);
             this.DevLinkLabel.Name = "DevLinkLabel";
@@ -117,6 +124,8 @@
             // 
             // UpdateBox
             // 
+            this.UpdateBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.UpdateBox.Location = new System.Drawing.Point(12, 437);
             this.UpdateBox.Name = "UpdateBox";
             this.UpdateBox.ReadOnly = true;
@@ -128,6 +137,9 @@
             // 
             // PreviewPicture
             // 
+            this.PreviewPicture.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.PreviewPicture.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.PreviewPicture.Location = new System.Drawing.Point(12, 12);
             this.PreviewPicture.Name = "PreviewPicture";
@@ -141,7 +153,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(442, 667);
+            this.ClientSize = new System.Drawing.Size(440, 517);
             this.Controls.Add(this.UpdateBox);
             this.Controls.Add(this.DevLinkLabel);
             this.Controls.Add(this.PictureCountPanel);
@@ -152,12 +164,11 @@
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(450, 700);
+            this.MinimumSize = new System.Drawing.Size(450, 550);
             this.Name = "Preview";
             this.Text = "Preview";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Preview_FormClosing);
             this.Load += new System.EventHandler(this.Preview_Load);
-            this.SizeChanged += new System.EventHandler(this.Preview_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.PreviewPicture)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

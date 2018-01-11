@@ -62,7 +62,6 @@ namespace RelhaxModpack
             UpdateBox.Text = (DBO.UpdateComment == null || DBO.UpdateComment.Equals("")) ? Translations.getTranslatedString("noUpdateInfo") : DBO.UpdateComment;
             UpdateBox.Text = UpdateBox.Text + "\n" + LastUpdated + DateFormat;
             Size = new Size(450, 700);
-            Preview_SizeChanged(null, null);
             //specify the start location
             Location = new Point(Settings.PreviewX, Settings.PreviewY);
         }
@@ -108,7 +107,8 @@ namespace RelhaxModpack
                         Size = PreviewComponentSize,
                         BackColor = PreviewComponentBackColor,
                         Location = PreviewComponentLocation,
-                        SizeMode = PreviewComponentSizeMode
+                        SizeMode = PreviewComponentSizeMode,
+                        Anchor = (AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left)
                     };
                     PreviewPicture.Click += PreviewPicture_Click;
                     Controls.Add(PreviewPicture);
@@ -123,7 +123,8 @@ namespace RelhaxModpack
                     {
                         Size = PreviewComponentSize,
                         Location = PreviewComponentLocation,
-                        ScriptErrorsSuppressed = true
+                        ScriptErrorsSuppressed = true,
+                        Anchor = (AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left)
                     };
                     Controls.Add(Browser);
                     Browser.Navigate(m.URL);
@@ -140,7 +141,8 @@ namespace RelhaxModpack
                             //BackColor = PreviewComponentBackColor,
                             MediaURL = m.URL,
                             StopText = Translations.getTranslatedString("stop"),
-                            PlayPauseText = Translations.getTranslatedString("playPause")
+                            PlayPauseText = Translations.getTranslatedString("playPause"),
+                            Anchor = (AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left)
                         };
                         Controls.Add(player);
                         Text = DBO.NameFormatted + " - " + CurrentlySelected;
@@ -164,7 +166,8 @@ namespace RelhaxModpack
                     {
                         Size = PreviewComponentSize,
                         Location = PreviewComponentLocation,
-                        ScriptErrorsSuppressed = true
+                        ScriptErrorsSuppressed = true,
+                        Anchor = (AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left)
                     };
                     Controls.Add(Browser);
                     Browser.DocumentText = m.URL;
@@ -200,7 +203,6 @@ namespace RelhaxModpack
             //i--;
             CurrentlySelected = i;
             DisplayMedia(Medias[i]);
-            Preview_SizeChanged(null, null);
         }
         //show the suplied dev url thread
         private void DevLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -218,7 +220,6 @@ namespace RelhaxModpack
                 return;
             }
             DisplayMedia(Medias[CurrentlySelected]);
-            Preview_SizeChanged(null, null);
         }
         //load the previous picture in the list
         private void PreviousPicButton_Click(object sender, EventArgs e)
@@ -230,73 +231,6 @@ namespace RelhaxModpack
                 return;
             }
             DisplayMedia(Medias[CurrentlySelected]);
-            Preview_SizeChanged(null, null);
-        }
-        //handler for if the user changes the size of the window
-        private void Preview_SizeChanged(object sender, EventArgs e)
-        {
-            //previewPicture, descriptionBox, nextPicButton and updateBox should all have the same size width.
-            int width = Size.Width - 32;
-            int applicationHeight = Size.Height;
-            //do this from bottom to top
-            UpdateBox.Size = new Size(width, UpdateBox.Size.Height);
-            DescriptionBox.Size = new Size(width, DescriptionBox.Size.Height);
-            int scale = 0;
-            switch (Settings.FontSizeforum)
-            {
-                case Settings.FontSize.Font125:
-                    scale = 30;
-                    break;
-                case Settings.FontSize.Font175:
-                    scale = 75;
-                    break;
-                case Settings.FontSize.Font225:
-                    scale = 145;
-                    break;
-                case Settings.FontSize.Font275:
-                    scale = 200;
-                    break;
-                case Settings.FontSize.DPI125:
-                    scale = 30;
-                    break;
-                case Settings.FontSize.DPI175:
-                    scale = 75;
-                    break;
-                case Settings.FontSize.DPI225:
-                    scale = 145;
-                    break;
-                case Settings.FontSize.DPI275:
-                    scale = 200;
-                    break;
-                case Settings.FontSize.DPIAUTO:
-                    int settingsScale = (int)Settings.ScaleSize;
-                    scale = settingsScale * 45;
-                    scale = scale + 30;
-                    break;
-            }
-            Size tempSize = new Size(0, 0);
-            if (PreviewPicture != null)
-            {
-                PreviewPicture.Size = new Size(width, applicationHeight - 265 - TitleBarDifference - scale);
-                tempSize = PreviewPicture.Size;
-            }
-            if (Browser != null)
-            {
-                Browser.Size = new Size(width, applicationHeight - 265 - TitleBarDifference - scale);
-                tempSize = Browser.Size;
-            }
-            if(player != null)
-            {
-                player.Size = new Size(width, applicationHeight - 265 - TitleBarDifference - scale);
-                tempSize = player.Size;
-            }
-            UpdateBox.Location = new Point(12, 12 + tempSize.Height + 6 + NextPicButton.Size.Height + 6 + DescriptionBox.Size.Height + 6);
-            DescriptionBox.Location = new Point(12, 12 + tempSize.Height + 6 + NextPicButton.Size.Height + 6);
-            NextPicButton.Location = new Point(Size.Width - 21 - NextPicButton.Size.Width, 12 + tempSize.Height + 6);
-            PreviousPicButton.Location = new Point(12, 12 + tempSize.Height + 6);
-            PictureCountPanel.Location = new Point(12 + PreviousPicButton.Size.Width + 12, 12 + tempSize.Height + 6);
-            PictureCountPanel.Size = new Size(width - PictureCountPanel.Location.X - NextPicButton.Size.Width - 4, PictureCountPanel.Size.Height);
-            DevLinkLabel.Location = new Point(Size.Width - 12 - DevLinkLabel.Size.Width - 4, applicationHeight - 49 - TitleBarDifference - 5);
         }
 
         private void DescriptionBox_LinkClicked(object sender, LinkClickedEventArgs e)
