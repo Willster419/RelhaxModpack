@@ -10,18 +10,21 @@ namespace RelhaxModpack
         {
             SuspendLayout();
             base.OnLoad(e);
-            //font scaling
-            //AutoScaleDimensions = new SizeF(96F, 96F);
-            //AutoScaleMode = Settings.AppScalingMode;
-            //Font = Settings.AppFont;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F); // for design in 96 DPI
-            this.AutoScaleMode = AutoScaleMode.Inherit;
-            /*
             if (Settings.AppScalingMode == AutoScaleMode.Dpi)
             {
-                this.Scale(new SizeF(Settings.ScaleSize, Settings.ScaleSize));
+                AutoScaleDimensions = new SizeF(96F, 96F);// for design in 96 DPI
+                AutoScaleMode = Settings.AppScalingMode;
+                Scale(new SizeF(Settings.ScaleSize, Settings.ScaleSize));
             }
-            */
+            else if (Settings.AppScalingMode == AutoScaleMode.Font)
+            {
+                AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F); // for design in 96 DPI
+            }
+            else
+            {
+
+            }
+            Font = Settings.AppFont;
             //set the UI colors
             Settings.setUIColor(this);
             ResumeLayout(false);

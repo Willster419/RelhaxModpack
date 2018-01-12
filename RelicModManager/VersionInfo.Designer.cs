@@ -148,6 +148,5 @@
         private System.Windows.Forms.Label updateQuestionLabel;
         private System.Windows.Forms.Label problemsUpdatingLabel;
         private System.Windows.Forms.LinkLabel clickHereUpdateLabel;
-
     }
 }
