@@ -110,7 +110,7 @@ namespace RelhaxModpack
             if (modTabGroups.TabPages.Count > 0)
                 modTabGroups.TabPages.Clear();
             //modTabGroups.Font = Settings.AppFont;
-            //AddAllMods();
+            AddAllMods();
             AddUserMods(false);
             //check the default checked mods. afterwards, any load will have the clear selection in it so it shouldn't be an issue
             if(!Program.testMode)
@@ -422,7 +422,7 @@ namespace RelhaxModpack
                 Settings.SetTaskbarState(Settings.AppBarStates.AlwaysOnTop);
             }
             //force a resize
-            //ModSelectionList_SizeChanged(null, null);
+            ModSelectionList_SizeChanged(null, null);
             if (Settings.ModSelectionFullscreen)
             {
                 this.WindowState = FormWindowState.Maximized;
@@ -2632,7 +2632,7 @@ namespace RelhaxModpack
                 return;
             if (this.WindowState == FormWindowState.Minimized)
                 return;
-            return;
+            //return;
             foreach (TabPage t in modTabGroups.TabPages)
             {
                 foreach (Control c in t.Controls)
