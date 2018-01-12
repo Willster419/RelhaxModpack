@@ -109,8 +109,8 @@ namespace RelhaxModpack
             CompleteModSearchList = new List<SelectableDatabasePackage>();
             if (modTabGroups.TabPages.Count > 0)
                 modTabGroups.TabPages.Clear();
-            modTabGroups.Font = Settings.AppFont;
-            AddAllMods();
+            //modTabGroups.Font = Settings.AppFont;
+            //AddAllMods();
             AddUserMods(false);
             //check the default checked mods. afterwards, any load will have the clear selection in it so it shouldn't be an issue
             if(!Program.testMode)
@@ -281,7 +281,7 @@ namespace RelhaxModpack
                 //matched the catagory to tab
                 //add to the ui every mod of that catagory
                 Utils.SortModsList(c.Mods);
-
+                
                 LegacySelectionList lsl = null;
                 if (Settings.SView == Settings.SelectionView.Legacy)
                 {
@@ -380,7 +380,7 @@ namespace RelhaxModpack
                 ModFormCheckBox modCheckBox = new ModFormCheckBox();
                 UserMods[i].ModFormCheckBox = modCheckBox;
                 modCheckBox.mod = UserMods[i];
-                modCheckBox.Font = Settings.AppFont;
+                //modCheckBox.Font = Settings.AppFont;
                 modCheckBox.AutoSize = true;
                 int yLocation = 3 + (modCheckBox.Size.Height * (i));
                 modCheckBox.Location = new System.Drawing.Point(3, yLocation);
@@ -407,8 +407,7 @@ namespace RelhaxModpack
             LoadingConfig = false;
             FirstLoad = false;
             //set the size to the last closed size
-            Size = new Size(Settings.ModSelectionWidth, Settings.ModSelectionHeight);
-            Settings.setUIColor(this);
+            //Size = new Size(Settings.ModSelectionWidth, Settings.ModSelectionHeight);
             pw.Close();
             pw.Dispose();
             //set label properties
@@ -423,7 +422,7 @@ namespace RelhaxModpack
                 Settings.SetTaskbarState(Settings.AppBarStates.AlwaysOnTop);
             }
             //force a resize
-            ModSelectionList_SizeChanged(null, null);
+            //ModSelectionList_SizeChanged(null, null);
             if (Settings.ModSelectionFullscreen)
             {
                 this.WindowState = FormWindowState.Maximized;
@@ -1380,12 +1379,13 @@ namespace RelhaxModpack
                 Size = new Size(49, 15),
                 TabIndex = 1,
                 Text = Utils.ReplaceMacro(m),
-                Font = Settings.AppFont,
+                //Font = Settings.AppFont,
                 catagory = catagory,
                 mod = m,
                 UseVisualStyleBackColor = true,
                 Enabled = m.Enabled,
-                Checked = m.Checked
+                Checked = m.Checked,
+                //UseCompatibleTextRendering = true
             };
             modCheckBox.MouseDown += Generic_MouseDown;
             //add the ToolTip description to the checkbox
@@ -1548,12 +1548,13 @@ namespace RelhaxModpack
                         AutoSize = true,
                         Location = new Point(6, getYLocation(configPanel.Controls)),
                         Size = new Size(150, 15),
-                        Font = Settings.AppFont,
+                        //Font = Settings.AppFont,
                         catagory = catagory,
                         mod = m,
                         config = con,
                         Enabled = false,
-                        Checked = false
+                        Checked = false,
+                        UseVisualStyleBackColor = true
                     };
                     //add handlers
                     configControlRB.CheckedChanged += configControlRB_CheckedChanged;
@@ -1734,12 +1735,13 @@ namespace RelhaxModpack
                         AutoSize = true,
                         Location = new Point(6, getYLocation(configPanel.Controls)),
                         Size = new Size(150, 15),
-                        Font = Settings.AppFont,
+                        //Font = Settings.AppFont,
                         catagory = catagory,
                         mod = m,
                         config = con,
                         Enabled = false,
-                        Checked = false
+                        Checked = false,
+                        UseVisualStyleBackColor = true
                     };
                     //add the ToolTip description to the checkbox
                     string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
@@ -2523,7 +2525,7 @@ namespace RelhaxModpack
 
             LoadingConfig = false;
             MessageBox.Show(Translations.getTranslatedString("selectionsCleared"));
-            ModSelectionList_SizeChanged(null, null);
+            //ModSelectionList_SizeChanged(null, null);
         }
 
         private void parseLoadConfig()
@@ -2630,6 +2632,7 @@ namespace RelhaxModpack
                 return;
             if (this.WindowState == FormWindowState.Minimized)
                 return;
+            return;
             foreach (TabPage t in modTabGroups.TabPages)
             {
                 foreach (Control c in t.Controls)

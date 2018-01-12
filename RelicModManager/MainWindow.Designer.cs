@@ -976,13 +976,13 @@
             // ErrorCounterLabel
             // 
             this.ErrorCounterLabel.AutoSize = true;
-            this.ErrorCounterLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.ErrorCounterLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ErrorCounterLabel.Location = new System.Drawing.Point(253, 230);
             this.ErrorCounterLabel.Name = "ErrorCounterLabel";
-            this.ErrorCounterLabel.Size = new System.Drawing.Size(80, 20);
+            this.ErrorCounterLabel.Size = new System.Drawing.Size(244, 20);
             this.ErrorCounterLabel.TabIndex = 38;
             this.ErrorCounterLabel.Text = "Error counter: 0";
-            this.ErrorCounterLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ErrorCounterLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.ErrorCounterLabel.Visible = false;
             // 
             // InfoTable
@@ -1022,13 +1022,13 @@
             // DatabaseVersionLabel
             // 
             this.DatabaseVersionLabel.AutoSize = true;
-            this.DatabaseVersionLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.DatabaseVersionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DatabaseVersionLabel.Location = new System.Drawing.Point(253, 250);
             this.DatabaseVersionLabel.Name = "DatabaseVersionLabel";
-            this.DatabaseVersionLabel.Size = new System.Drawing.Size(136, 20);
+            this.DatabaseVersionLabel.Size = new System.Drawing.Size(244, 20);
             this.DatabaseVersionLabel.TabIndex = 0;
             this.DatabaseVersionLabel.Text = "Latest Database v{version}";
-            this.DatabaseVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.DatabaseVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ApplicationVersionLabel
             // 
@@ -1045,6 +1045,7 @@
             this.InfoTable.SetColumnSpan(this.downloadProgress, 2);
             this.downloadProgress.DetectUrls = false;
             this.downloadProgress.Dock = System.Windows.Forms.DockStyle.Left;
+            this.downloadProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.downloadProgress.Location = new System.Drawing.Point(3, 3);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
