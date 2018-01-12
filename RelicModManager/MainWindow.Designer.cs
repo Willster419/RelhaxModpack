@@ -116,7 +116,7 @@
             // 
             this.InfoTable.SetColumnSpan(this.childProgressBar, 2);
             this.childProgressBar.Dock = System.Windows.Forms.DockStyle.Left;
-            this.childProgressBar.Location = new System.Drawing.Point(3, 153);
+            this.childProgressBar.Location = new System.Drawing.Point(3, 113);
             this.childProgressBar.Name = "childProgressBar";
             this.childProgressBar.Size = new System.Drawing.Size(494, 14);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -129,13 +129,12 @@
             // 
             // forceManuel
             // 
-            this.forceManuel.AutoSize = true;
             this.forceManuel.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.forceManuel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.forceManuel.Location = new System.Drawing.Point(1, 1);
             this.forceManuel.Margin = new System.Windows.Forms.Padding(1);
             this.forceManuel.Name = "forceManuel";
-            this.forceManuel.Size = new System.Drawing.Size(245, 18);
+            this.forceManuel.Size = new System.Drawing.Size(246, 18);
             this.forceManuel.TabIndex = 13;
             this.forceManuel.Text = "Force manual game detection";
             this.forceManuel.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -146,21 +145,21 @@
             // 
             // formPageLink
             // 
-            this.formPageLink.AutoSize = true;
             this.formPageLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.formPageLink.Location = new System.Drawing.Point(3, 190);
+            this.formPageLink.Location = new System.Drawing.Point(3, 150);
             this.formPageLink.Name = "formPageLink";
             this.formPageLink.Size = new System.Drawing.Size(244, 20);
             this.formPageLink.TabIndex = 16;
             this.formPageLink.TabStop = true;
             this.formPageLink.Text = "View Modpack Form Page";
+            this.formPageLink.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.formPageLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.formPageLink_LinkClicked);
             // 
             // parrentProgressBar
             // 
             this.InfoTable.SetColumnSpan(this.parrentProgressBar, 2);
             this.parrentProgressBar.Dock = System.Windows.Forms.DockStyle.Left;
-            this.parrentProgressBar.Location = new System.Drawing.Point(3, 133);
+            this.parrentProgressBar.Location = new System.Drawing.Point(3, 93);
             this.parrentProgressBar.Name = "parrentProgressBar";
             this.parrentProgressBar.Size = new System.Drawing.Size(494, 14);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -168,7 +167,6 @@
             // 
             // installRelhaxMod
             // 
-            this.installRelhaxMod.AutoSize = true;
             this.installRelhaxMod.Dock = System.Windows.Forms.DockStyle.Fill;
             this.installRelhaxMod.Location = new System.Drawing.Point(251, 1);
             this.installRelhaxMod.Margin = new System.Windows.Forms.Padding(1);
@@ -182,7 +180,6 @@
             // 
             // uninstallRelhaxMod
             // 
-            this.uninstallRelhaxMod.AutoSize = true;
             this.uninstallRelhaxMod.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uninstallRelhaxMod.Location = new System.Drawing.Point(251, 59);
             this.uninstallRelhaxMod.Margin = new System.Windows.Forms.Padding(1);
@@ -195,7 +192,6 @@
             // 
             // cleanInstallCB
             // 
-            this.cleanInstallCB.AutoSize = true;
             this.cleanInstallCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.cleanInstallCB.Checked = true;
             this.cleanInstallCB.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -203,7 +199,7 @@
             this.cleanInstallCB.Location = new System.Drawing.Point(1, 21);
             this.cleanInstallCB.Margin = new System.Windows.Forms.Padding(1);
             this.cleanInstallCB.Name = "cleanInstallCB";
-            this.cleanInstallCB.Size = new System.Drawing.Size(245, 18);
+            this.cleanInstallCB.Size = new System.Drawing.Size(246, 18);
             this.cleanInstallCB.TabIndex = 21;
             this.cleanInstallCB.Text = "Clean Installation (Recommended)";
             this.cleanInstallCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -214,13 +210,12 @@
             // 
             // cancerFontCB
             // 
-            this.cancerFontCB.AutoSize = true;
             this.cancerFontCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.cancerFontCB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cancerFontCB.Location = new System.Drawing.Point(1, 41);
             this.cancerFontCB.Margin = new System.Windows.Forms.Padding(1);
             this.cancerFontCB.Name = "cancerFontCB";
-            this.cancerFontCB.Size = new System.Drawing.Size(245, 18);
+            this.cancerFontCB.Size = new System.Drawing.Size(246, 18);
             this.cancerFontCB.TabIndex = 23;
             this.cancerFontCB.Text = "Cancer font";
             this.cancerFontCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -231,13 +226,12 @@
             // 
             // backupModsCheckBox
             // 
-            this.backupModsCheckBox.AutoSize = true;
             this.backupModsCheckBox.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.backupModsCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.backupModsCheckBox.Location = new System.Drawing.Point(1, 101);
             this.backupModsCheckBox.Margin = new System.Windows.Forms.Padding(1);
             this.backupModsCheckBox.Name = "backupModsCheckBox";
-            this.backupModsCheckBox.Size = new System.Drawing.Size(245, 18);
+            this.backupModsCheckBox.Size = new System.Drawing.Size(246, 33);
             this.backupModsCheckBox.TabIndex = 24;
             this.backupModsCheckBox.Text = "Backup current mods folder";
             this.backupModsCheckBox.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -251,9 +245,9 @@
             this.settingsGroupBox.AutoSize = true;
             this.settingsGroupBox.Controls.Add(this.SettingsTable);
             this.settingsGroupBox.Location = new System.Drawing.Point(12, 103);
-            this.settingsGroupBox.MaximumSize = new System.Drawing.Size(550, 0);
+            this.settingsGroupBox.MaximumSize = new System.Drawing.Size(502, 192);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(501, 159);
+            this.settingsGroupBox.Size = new System.Drawing.Size(502, 192);
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "Modpack Settings";
@@ -287,20 +281,19 @@
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.SettingsTable.Size = new System.Drawing.Size(495, 140);
+            this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
+            this.SettingsTable.Size = new System.Drawing.Size(496, 173);
             this.SettingsTable.TabIndex = 43;
             // 
             // InstantExtractionCB
             // 
-            this.InstantExtractionCB.AutoSize = true;
             this.InstantExtractionCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.InstantExtractionCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.InstantExtractionCB.Location = new System.Drawing.Point(1, 121);
+            this.InstantExtractionCB.Location = new System.Drawing.Point(1, 136);
             this.InstantExtractionCB.Margin = new System.Windows.Forms.Padding(1);
             this.InstantExtractionCB.Name = "InstantExtractionCB";
-            this.InstantExtractionCB.Size = new System.Drawing.Size(245, 18);
+            this.InstantExtractionCB.Size = new System.Drawing.Size(246, 36);
             this.InstantExtractionCB.TabIndex = 36;
             this.InstantExtractionCB.Text = "Instant extraction mode (experimental)";
             this.InstantExtractionCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -311,13 +304,12 @@
             // 
             // SuperExtractionCB
             // 
-            this.SuperExtractionCB.AutoSize = true;
             this.SuperExtractionCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.SuperExtractionCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SuperExtractionCB.Location = new System.Drawing.Point(248, 101);
+            this.SuperExtractionCB.Location = new System.Drawing.Point(249, 101);
             this.SuperExtractionCB.Margin = new System.Windows.Forms.Padding(1);
             this.SuperExtractionCB.Name = "SuperExtractionCB";
-            this.SuperExtractionCB.Size = new System.Drawing.Size(246, 18);
+            this.SuperExtractionCB.Size = new System.Drawing.Size(246, 33);
             this.SuperExtractionCB.TabIndex = 37;
             this.SuperExtractionCB.Text = "Super extraction mode (Experimental)";
             this.SuperExtractionCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -328,13 +320,12 @@
             // 
             // saveUserDataCB
             // 
-            this.saveUserDataCB.AutoSize = true;
             this.saveUserDataCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.saveUserDataCB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.saveUserDataCB.Location = new System.Drawing.Point(1, 81);
             this.saveUserDataCB.Margin = new System.Windows.Forms.Padding(1);
             this.saveUserDataCB.Name = "saveUserDataCB";
-            this.saveUserDataCB.Size = new System.Drawing.Size(245, 18);
+            this.saveUserDataCB.Size = new System.Drawing.Size(246, 18);
             this.saveUserDataCB.TabIndex = 27;
             this.saveUserDataCB.Text = "Save User created data";
             this.saveUserDataCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -345,10 +336,9 @@
             // 
             // darkUICB
             // 
-            this.darkUICB.AutoSize = true;
             this.darkUICB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.darkUICB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.darkUICB.Location = new System.Drawing.Point(248, 1);
+            this.darkUICB.Location = new System.Drawing.Point(249, 1);
             this.darkUICB.Margin = new System.Windows.Forms.Padding(1);
             this.darkUICB.Name = "darkUICB";
             this.darkUICB.Size = new System.Drawing.Size(246, 18);
@@ -362,13 +352,12 @@
             // 
             // saveLastInstallCB
             // 
-            this.saveLastInstallCB.AutoSize = true;
             this.saveLastInstallCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.saveLastInstallCB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.saveLastInstallCB.Location = new System.Drawing.Point(1, 61);
             this.saveLastInstallCB.Margin = new System.Windows.Forms.Padding(1);
             this.saveLastInstallCB.Name = "saveLastInstallCB";
-            this.saveLastInstallCB.Size = new System.Drawing.Size(245, 18);
+            this.saveLastInstallCB.Size = new System.Drawing.Size(246, 18);
             this.saveLastInstallCB.TabIndex = 26;
             this.saveLastInstallCB.Text = "Save last install\'s config";
             this.saveLastInstallCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -379,12 +368,12 @@
             // 
             // clearCacheCB
             // 
-            this.clearCacheCB.AutoSize = true;
             this.clearCacheCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.clearCacheCB.Location = new System.Drawing.Point(248, 21);
+            this.clearCacheCB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.clearCacheCB.Location = new System.Drawing.Point(249, 21);
             this.clearCacheCB.Margin = new System.Windows.Forms.Padding(1);
             this.clearCacheCB.Name = "clearCacheCB";
-            this.clearCacheCB.Size = new System.Drawing.Size(137, 17);
+            this.clearCacheCB.Size = new System.Drawing.Size(246, 18);
             this.clearCacheCB.TabIndex = 31;
             this.clearCacheCB.Text = "Clear WoT Cache Data";
             this.clearCacheCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -395,10 +384,9 @@
             // 
             // clearLogFilesCB
             // 
-            this.clearLogFilesCB.AutoSize = true;
             this.clearLogFilesCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.clearLogFilesCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.clearLogFilesCB.Location = new System.Drawing.Point(248, 41);
+            this.clearLogFilesCB.Location = new System.Drawing.Point(249, 41);
             this.clearLogFilesCB.Margin = new System.Windows.Forms.Padding(1);
             this.clearLogFilesCB.Name = "clearLogFilesCB";
             this.clearLogFilesCB.Size = new System.Drawing.Size(246, 18);
@@ -415,7 +403,7 @@
             this.ShowInstallCompleteWindowCB.AutoSize = true;
             this.ShowInstallCompleteWindowCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.ShowInstallCompleteWindowCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ShowInstallCompleteWindowCB.Location = new System.Drawing.Point(248, 61);
+            this.ShowInstallCompleteWindowCB.Location = new System.Drawing.Point(249, 61);
             this.ShowInstallCompleteWindowCB.Margin = new System.Windows.Forms.Padding(1);
             this.ShowInstallCompleteWindowCB.Name = "ShowInstallCompleteWindowCB";
             this.ShowInstallCompleteWindowCB.Size = new System.Drawing.Size(246, 18);
@@ -429,13 +417,12 @@
             // 
             // notifyIfSameDatabaseCB
             // 
-            this.notifyIfSameDatabaseCB.AutoSize = true;
             this.notifyIfSameDatabaseCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.notifyIfSameDatabaseCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.notifyIfSameDatabaseCB.Location = new System.Drawing.Point(248, 121);
+            this.notifyIfSameDatabaseCB.Location = new System.Drawing.Point(249, 136);
             this.notifyIfSameDatabaseCB.Margin = new System.Windows.Forms.Padding(1);
             this.notifyIfSameDatabaseCB.Name = "notifyIfSameDatabaseCB";
-            this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(246, 18);
+            this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(246, 36);
             this.notifyIfSameDatabaseCB.TabIndex = 33;
             this.notifyIfSameDatabaseCB.Text = "Inform if no new database available";
             this.notifyIfSameDatabaseCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -446,10 +433,9 @@
             // 
             // createShortcutsCB
             // 
-            this.createShortcutsCB.AutoSize = true;
             this.createShortcutsCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.createShortcutsCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.createShortcutsCB.Location = new System.Drawing.Point(248, 81);
+            this.createShortcutsCB.Location = new System.Drawing.Point(249, 81);
             this.createShortcutsCB.Margin = new System.Windows.Forms.Padding(1);
             this.createShortcutsCB.Name = "createShortcutsCB";
             this.createShortcutsCB.Size = new System.Drawing.Size(246, 18);
@@ -464,7 +450,7 @@
             // languageSelectionGB
             // 
             this.languageSelectionGB.Controls.Add(this.LanguageComboBox);
-            this.languageSelectionGB.Location = new System.Drawing.Point(381, 312);
+            this.languageSelectionGB.Location = new System.Drawing.Point(383, 349);
             this.languageSelectionGB.Margin = new System.Windows.Forms.Padding(1);
             this.languageSelectionGB.Name = "languageSelectionGB";
             this.languageSelectionGB.Padding = new System.Windows.Forms.Padding(2);
@@ -492,7 +478,7 @@
             // loadingImageGroupBox
             // 
             this.loadingImageGroupBox.Controls.Add(this.tableLayoutPanel8);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(381, 262);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(383, 299);
             this.loadingImageGroupBox.Margin = new System.Windows.Forms.Padding(1);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
             this.loadingImageGroupBox.Padding = new System.Windows.Forms.Padding(2);
@@ -520,11 +506,11 @@
             // 
             // thirdGuardsLoadingImageRB
             // 
-            this.thirdGuardsLoadingImageRB.AutoSize = true;
+            this.thirdGuardsLoadingImageRB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.thirdGuardsLoadingImageRB.Location = new System.Drawing.Point(0, 15);
             this.thirdGuardsLoadingImageRB.Margin = new System.Windows.Forms.Padding(0);
             this.thirdGuardsLoadingImageRB.Name = "thirdGuardsLoadingImageRB";
-            this.thirdGuardsLoadingImageRB.Size = new System.Drawing.Size(72, 16);
+            this.thirdGuardsLoadingImageRB.Size = new System.Drawing.Size(127, 16);
             this.thirdGuardsLoadingImageRB.TabIndex = 1;
             this.thirdGuardsLoadingImageRB.TabStop = true;
             this.thirdGuardsLoadingImageRB.Text = "3rdguards";
@@ -536,11 +522,11 @@
             // 
             // standardImageRB
             // 
-            this.standardImageRB.AutoSize = true;
+            this.standardImageRB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.standardImageRB.Location = new System.Drawing.Point(0, 0);
             this.standardImageRB.Margin = new System.Windows.Forms.Padding(0);
             this.standardImageRB.Name = "standardImageRB";
-            this.standardImageRB.Size = new System.Drawing.Size(68, 15);
+            this.standardImageRB.Size = new System.Drawing.Size(127, 15);
             this.standardImageRB.TabIndex = 0;
             this.standardImageRB.TabStop = true;
             this.standardImageRB.Text = "Standard";
@@ -552,21 +538,21 @@
             // 
             // findBugAddModLabel
             // 
-            this.findBugAddModLabel.AutoSize = true;
             this.findBugAddModLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(3, 170);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(3, 130);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.findBugAddModLabel.Size = new System.Drawing.Size(244, 20);
             this.findBugAddModLabel.TabIndex = 27;
             this.findBugAddModLabel.TabStop = true;
             this.findBugAddModLabel.Text = "Find a bug? Want a mod added?";
+            this.findBugAddModLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.findBugAddModLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.findBugAddModLabel_LinkClicked);
             // 
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Dock = System.Windows.Forms.DockStyle.Left;
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(253, 173);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(253, 133);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
             this.InfoTable.SetRowSpan(this.cancelDownloadButton, 3);
             this.cancelDownloadButton.Size = new System.Drawing.Size(164, 54);
@@ -584,7 +570,7 @@
             // viewTypeGB
             // 
             this.viewTypeGB.Controls.Add(this.tableLayoutPanel5);
-            this.viewTypeGB.Location = new System.Drawing.Point(179, 262);
+            this.viewTypeGB.Location = new System.Drawing.Point(181, 299);
             this.viewTypeGB.Margin = new System.Windows.Forms.Padding(1);
             this.viewTypeGB.Name = "viewTypeGB";
             this.viewTypeGB.Size = new System.Drawing.Size(200, 145);
@@ -617,7 +603,6 @@
             // 
             // selectionDefault
             // 
-            this.selectionDefault.AutoSize = true;
             this.selectionDefault.Dock = System.Windows.Forms.DockStyle.Fill;
             this.selectionDefault.Location = new System.Drawing.Point(1, 1);
             this.selectionDefault.Margin = new System.Windows.Forms.Padding(1);
@@ -633,7 +618,6 @@
             // 
             // expandNodesDefault
             // 
-            this.expandNodesDefault.AutoSize = true;
             this.expandNodesDefault.Dock = System.Windows.Forms.DockStyle.Fill;
             this.expandNodesDefault.Location = new System.Drawing.Point(1, 101);
             this.expandNodesDefault.Margin = new System.Windows.Forms.Padding(1);
@@ -651,15 +635,17 @@
             // 
             // disableColorsCB
             // 
-            this.disableColorsCB.AutoSize = true;
+            this.disableColorsCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.disableColorsCB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.disableColorsCB.Location = new System.Drawing.Point(1, 41);
             this.disableColorsCB.Margin = new System.Windows.Forms.Padding(1);
             this.disableColorsCB.Name = "disableColorsCB";
             this.disableColorsCB.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.disableColorsCB.Size = new System.Drawing.Size(192, 18);
+            this.tableLayoutPanel5.SetRowSpan(this.disableColorsCB, 2);
+            this.disableColorsCB.Size = new System.Drawing.Size(192, 38);
             this.disableColorsCB.TabIndex = 4;
             this.disableColorsCB.Text = "Disable color change";
+            this.disableColorsCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.disableColorsCB.UseVisualStyleBackColor = true;
             this.disableColorsCB.CheckedChanged += new System.EventHandler(this.disableColorsCB_CheckedChanged);
             this.disableColorsCB.MouseEnter += new System.EventHandler(this.disableColorsCB_MouseEnter);
@@ -667,7 +653,6 @@
             // 
             // selectionLegacy
             // 
-            this.selectionLegacy.AutoSize = true;
             this.selectionLegacy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.selectionLegacy.Location = new System.Drawing.Point(1, 81);
             this.selectionLegacy.Margin = new System.Windows.Forms.Padding(1);
@@ -683,7 +668,6 @@
             // 
             // disableBordersCB
             // 
-            this.disableBordersCB.AutoSize = true;
             this.disableBordersCB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.disableBordersCB.Location = new System.Drawing.Point(1, 21);
             this.disableBordersCB.Margin = new System.Windows.Forms.Padding(1);
@@ -699,20 +683,20 @@
             // 
             // donateLabel
             // 
-            this.donateLabel.AutoSize = true;
             this.donateLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.donateLabel.Location = new System.Drawing.Point(3, 210);
+            this.donateLabel.Location = new System.Drawing.Point(3, 170);
             this.donateLabel.Name = "donateLabel";
             this.donateLabel.Size = new System.Drawing.Size(244, 20);
             this.donateLabel.TabIndex = 32;
             this.donateLabel.TabStop = true;
             this.donateLabel.Text = "Donation for further development";
+            this.donateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.donateLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.donateLabel_LinkClicked);
             // 
             // fontSizeGB
             // 
             this.fontSizeGB.Controls.Add(this.tableLayoutPanel6);
-            this.fontSizeGB.Location = new System.Drawing.Point(12, 262);
+            this.fontSizeGB.Location = new System.Drawing.Point(14, 299);
             this.fontSizeGB.Margin = new System.Windows.Forms.Padding(1);
             this.fontSizeGB.Name = "fontSizeGB";
             this.fontSizeGB.Size = new System.Drawing.Size(165, 145);
@@ -751,7 +735,6 @@
             // 
             // DPI100
             // 
-            this.DPI100.AutoSize = true;
             this.DPI100.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DPI100.Location = new System.Drawing.Point(80, 1);
             this.DPI100.Margin = new System.Windows.Forms.Padding(1);
@@ -767,7 +750,6 @@
             // 
             // DPIAUTO
             // 
-            this.DPIAUTO.AutoSize = true;
             this.DPIAUTO.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DPIAUTO.Location = new System.Drawing.Point(80, 101);
             this.DPIAUTO.Margin = new System.Windows.Forms.Padding(1);
@@ -783,7 +765,6 @@
             // 
             // DPI275
             // 
-            this.DPI275.AutoSize = true;
             this.DPI275.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DPI275.Location = new System.Drawing.Point(80, 81);
             this.DPI275.Margin = new System.Windows.Forms.Padding(1);
@@ -799,7 +780,6 @@
             // 
             // DPI125
             // 
-            this.DPI125.AutoSize = true;
             this.DPI125.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DPI125.Location = new System.Drawing.Point(80, 21);
             this.DPI125.Margin = new System.Windows.Forms.Padding(1);
@@ -815,7 +795,6 @@
             // 
             // DPI225
             // 
-            this.DPI225.AutoSize = true;
             this.DPI225.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DPI225.Location = new System.Drawing.Point(80, 61);
             this.DPI225.Margin = new System.Windows.Forms.Padding(1);
@@ -831,7 +810,6 @@
             // 
             // fontSize100
             // 
-            this.fontSize100.AutoSize = true;
             this.fontSize100.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fontSize100.Location = new System.Drawing.Point(1, 1);
             this.fontSize100.Margin = new System.Windows.Forms.Padding(1);
@@ -847,7 +825,6 @@
             // 
             // fontSize275
             // 
-            this.fontSize275.AutoSize = true;
             this.fontSize275.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fontSize275.Location = new System.Drawing.Point(1, 81);
             this.fontSize275.Margin = new System.Windows.Forms.Padding(1);
@@ -863,7 +840,6 @@
             // 
             // DPI175
             // 
-            this.DPI175.AutoSize = true;
             this.DPI175.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DPI175.Location = new System.Drawing.Point(80, 41);
             this.DPI175.Margin = new System.Windows.Forms.Padding(1);
@@ -879,7 +855,6 @@
             // 
             // fontSize125
             // 
-            this.fontSize125.AutoSize = true;
             this.fontSize125.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fontSize125.Location = new System.Drawing.Point(1, 21);
             this.fontSize125.Margin = new System.Windows.Forms.Padding(1);
@@ -895,7 +870,6 @@
             // 
             // fontSize225
             // 
-            this.fontSize225.AutoSize = true;
             this.fontSize225.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fontSize225.Location = new System.Drawing.Point(1, 61);
             this.fontSize225.Margin = new System.Windows.Forms.Padding(1);
@@ -911,7 +885,6 @@
             // 
             // fontSize175
             // 
-            this.fontSize175.AutoSize = true;
             this.fontSize175.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fontSize175.Location = new System.Drawing.Point(1, 41);
             this.fontSize175.Margin = new System.Windows.Forms.Padding(1);
@@ -929,7 +902,7 @@
             // 
             this.InfoTable.SetColumnSpan(this.totalProgressBar, 2);
             this.totalProgressBar.Dock = System.Windows.Forms.DockStyle.Left;
-            this.totalProgressBar.Location = new System.Drawing.Point(3, 113);
+            this.totalProgressBar.Location = new System.Drawing.Point(3, 73);
             this.totalProgressBar.Name = "totalProgressBar";
             this.totalProgressBar.Size = new System.Drawing.Size(494, 14);
             this.totalProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -937,19 +910,18 @@
             // 
             // DiscordServerLink
             // 
-            this.DiscordServerLink.AutoSize = true;
             this.DiscordServerLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DiscordServerLink.Location = new System.Drawing.Point(3, 230);
+            this.DiscordServerLink.Location = new System.Drawing.Point(3, 190);
             this.DiscordServerLink.Name = "DiscordServerLink";
             this.DiscordServerLink.Size = new System.Drawing.Size(244, 20);
             this.DiscordServerLink.TabIndex = 35;
             this.DiscordServerLink.TabStop = true;
             this.DiscordServerLink.Text = "Discord Server";
+            this.DiscordServerLink.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.DiscordServerLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.DiscordServerLink_LinkClicked);
             // 
             // viewAppUpdates
             // 
-            this.viewAppUpdates.AutoSize = true;
             this.viewAppUpdates.Dock = System.Windows.Forms.DockStyle.Fill;
             this.viewAppUpdates.Location = new System.Drawing.Point(1, 1);
             this.viewAppUpdates.Margin = new System.Windows.Forms.Padding(1);
@@ -962,7 +934,6 @@
             // 
             // viewDBUpdates
             // 
-            this.viewDBUpdates.AutoSize = true;
             this.viewDBUpdates.Dock = System.Windows.Forms.DockStyle.Fill;
             this.viewDBUpdates.Location = new System.Drawing.Point(1, 30);
             this.viewDBUpdates.Margin = new System.Windows.Forms.Padding(1);
@@ -975,9 +946,8 @@
             // 
             // ErrorCounterLabel
             // 
-            this.ErrorCounterLabel.AutoSize = true;
             this.ErrorCounterLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ErrorCounterLabel.Location = new System.Drawing.Point(253, 230);
+            this.ErrorCounterLabel.Location = new System.Drawing.Point(253, 190);
             this.ErrorCounterLabel.Name = "ErrorCounterLabel";
             this.ErrorCounterLabel.Size = new System.Drawing.Size(244, 20);
             this.ErrorCounterLabel.TabIndex = 38;
@@ -1003,11 +973,11 @@
             this.InfoTable.Controls.Add(this.donateLabel, 0, 6);
             this.InfoTable.Controls.Add(this.DiscordServerLink, 0, 7);
             this.InfoTable.Controls.Add(this.cancelDownloadButton, 1, 4);
-            this.InfoTable.Location = new System.Drawing.Point(12, 407);
+            this.InfoTable.Location = new System.Drawing.Point(12, 447);
             this.InfoTable.MaximumSize = new System.Drawing.Size(500, 0);
             this.InfoTable.Name = "InfoTable";
             this.InfoTable.RowCount = 9;
-            this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
             this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -1016,14 +986,14 @@
             this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.InfoTable.Size = new System.Drawing.Size(500, 270);
+            this.InfoTable.Size = new System.Drawing.Size(500, 230);
             this.InfoTable.TabIndex = 39;
             // 
             // DatabaseVersionLabel
             // 
-            this.DatabaseVersionLabel.AutoSize = true;
+            this.DatabaseVersionLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.DatabaseVersionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DatabaseVersionLabel.Location = new System.Drawing.Point(253, 250);
+            this.DatabaseVersionLabel.Location = new System.Drawing.Point(253, 210);
             this.DatabaseVersionLabel.Name = "DatabaseVersionLabel";
             this.DatabaseVersionLabel.Size = new System.Drawing.Size(244, 20);
             this.DatabaseVersionLabel.TabIndex = 0;
@@ -1032,13 +1002,14 @@
             // 
             // ApplicationVersionLabel
             // 
-            this.ApplicationVersionLabel.AutoSize = true;
+            this.ApplicationVersionLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ApplicationVersionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ApplicationVersionLabel.Location = new System.Drawing.Point(3, 250);
+            this.ApplicationVersionLabel.Location = new System.Drawing.Point(3, 210);
             this.ApplicationVersionLabel.Name = "ApplicationVersionLabel";
             this.ApplicationVersionLabel.Size = new System.Drawing.Size(244, 20);
             this.ApplicationVersionLabel.TabIndex = 1;
             this.ApplicationVersionLabel.Text = "Application v{version]";
+            this.ApplicationVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // downloadProgress
             // 
@@ -1049,13 +1020,12 @@
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
             this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.downloadProgress.Size = new System.Drawing.Size(494, 104);
+            this.downloadProgress.Size = new System.Drawing.Size(494, 64);
             this.downloadProgress.TabIndex = 29;
             this.downloadProgress.Text = "";
             // 
             // DiagnosticUtilitiesButton
             // 
-            this.DiagnosticUtilitiesButton.AutoSize = true;
             this.DiagnosticUtilitiesButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DiagnosticUtilitiesButton.Location = new System.Drawing.Point(1, 59);
             this.DiagnosticUtilitiesButton.Margin = new System.Windows.Forms.Padding(1);
@@ -1069,7 +1039,7 @@
             // UninstallModeGroupBox
             // 
             this.UninstallModeGroupBox.Controls.Add(this.tableLayoutPanel7);
-            this.UninstallModeGroupBox.Location = new System.Drawing.Point(381, 352);
+            this.UninstallModeGroupBox.Location = new System.Drawing.Point(383, 389);
             this.UninstallModeGroupBox.Margin = new System.Windows.Forms.Padding(1);
             this.UninstallModeGroupBox.Name = "UninstallModeGroupBox";
             this.UninstallModeGroupBox.Padding = new System.Windows.Forms.Padding(2);
@@ -1097,11 +1067,11 @@
             // 
             // CleanUninstallModeRB
             // 
-            this.CleanUninstallModeRB.AutoSize = true;
+            this.CleanUninstallModeRB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CleanUninstallModeRB.Location = new System.Drawing.Point(0, 19);
             this.CleanUninstallModeRB.Margin = new System.Windows.Forms.Padding(0);
             this.CleanUninstallModeRB.Name = "CleanUninstallModeRB";
-            this.CleanUninstallModeRB.Size = new System.Drawing.Size(52, 17);
+            this.CleanUninstallModeRB.Size = new System.Drawing.Size(127, 19);
             this.CleanUninstallModeRB.TabIndex = 1;
             this.CleanUninstallModeRB.TabStop = true;
             this.CleanUninstallModeRB.Text = "Clean";
@@ -1112,11 +1082,11 @@
             // 
             // SmartUninstallModeRB
             // 
-            this.SmartUninstallModeRB.AutoSize = true;
+            this.SmartUninstallModeRB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SmartUninstallModeRB.Location = new System.Drawing.Point(0, 0);
             this.SmartUninstallModeRB.Margin = new System.Windows.Forms.Padding(0);
             this.SmartUninstallModeRB.Name = "SmartUninstallModeRB";
-            this.SmartUninstallModeRB.Size = new System.Drawing.Size(52, 17);
+            this.SmartUninstallModeRB.Size = new System.Drawing.Size(127, 19);
             this.SmartUninstallModeRB.TabIndex = 0;
             this.SmartUninstallModeRB.TabStop = true;
             this.SmartUninstallModeRB.Text = "Smart";
@@ -1176,20 +1146,14 @@
             this.languageSelectionGB.ResumeLayout(false);
             this.loadingImageGroupBox.ResumeLayout(false);
             this.tableLayoutPanel8.ResumeLayout(false);
-            this.tableLayoutPanel8.PerformLayout();
             this.viewTypeGB.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
-            this.tableLayoutPanel5.PerformLayout();
             this.fontSizeGB.ResumeLayout(false);
             this.tableLayoutPanel6.ResumeLayout(false);
-            this.tableLayoutPanel6.PerformLayout();
             this.InfoTable.ResumeLayout(false);
-            this.InfoTable.PerformLayout();
             this.UninstallModeGroupBox.ResumeLayout(false);
             this.tableLayoutPanel7.ResumeLayout(false);
-            this.tableLayoutPanel7.PerformLayout();
             this.ButtonTable.ResumeLayout(false);
-            this.ButtonTable.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
