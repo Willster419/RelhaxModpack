@@ -9,10 +9,9 @@ namespace RelhaxModpack
     //ro config name, pictures, description, and any update comments
     public partial class Preview : RelhaxForum
     {
-        private Size PreviewComponentSize = new Size(418, 309);
+        private Size PreviewComponentSize = new Size(418, 309);//hard-coded designer size
         private Point PreviewComponentLocation = new Point(12, 12);
         private Color PreviewComponentBackColor = SystemColors.ControlDarkDark;
-        private PictureBoxSizeMode PreviewComponentSizeMode = PictureBoxSizeMode.Zoom;
         public List<Media> Medias { get; set; }
         private Image LoadingImage;
         private int CurrentlySelected = 0;
@@ -61,9 +60,13 @@ namespace RelhaxModpack
             DateFormat = DBO.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(DBO.Timestamp);
             UpdateBox.Text = (DBO.UpdateComment == null || DBO.UpdateComment.Equals("")) ? Translations.getTranslatedString("noUpdateInfo") : DBO.UpdateComment;
             UpdateBox.Text = UpdateBox.Text + "\n" + LastUpdated + DateFormat;
-            Size = new Size(450, 700);
             //specify the start location
             Location = new Point(Settings.PreviewX, Settings.PreviewY);
+            //re-apply the backColor if it's the picture
+            if((PreviewPicture != null) && (Medias[CurrentlySelected].MediaType == MediaType.Picture))
+            {
+                PreviewPicture.BackColor = PreviewComponentBackColor;
+            }
         }
         //sets the window title to reflect the new picture, and
         //begine the async process of loading the new picture
@@ -99,6 +102,12 @@ namespace RelhaxModpack
                 ErrorLabel.Dispose();
                 ErrorLabel = null;
             }
+            //calculate the new component size
+            //width is from the top left of previous to the top right of next
+            //height is PreviewComponentLocation (12) Y to location of top left of preview - 6
+            int picturewidth = (NextPicButton.Location.X + NextPicButton.Size.Width)- PreviousPicButton.Location.X;
+            int pictureHeight = PreviousPicButton.Location.Y - 6 - PreviewComponentLocation.Y;
+            PreviewComponentSize = new Size(picturewidth, pictureHeight);
             switch(m.MediaType)
             {
                 case MediaType.Picture:
@@ -107,7 +116,7 @@ namespace RelhaxModpack
                         Size = PreviewComponentSize,
                         BackColor = PreviewComponentBackColor,
                         Location = PreviewComponentLocation,
-                        SizeMode = PreviewComponentSizeMode,
+                        SizeMode = PictureBoxSizeMode.Zoom,
                         Anchor = (AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left)
                     };
                     PreviewPicture.Click += PreviewPicture_Click;
@@ -153,7 +162,7 @@ namespace RelhaxModpack
                         Utils.ExceptionLog(e);
                         ErrorLabel = new Label()
                         {
-                            Text = Translations.getTranslatedString("MissingWMP"),
+                            Text = "ERROR",
                             AutoSize = false,
                             Size = PreviewComponentSize
                         };
