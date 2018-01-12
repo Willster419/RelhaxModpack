@@ -4,7 +4,7 @@ using System.Windows.Forms;
 namespace RelhaxModpack
 {
     //the loading window to show on startup
-    public partial class PleaseWait : RelhaxForum
+    public partial class PleaseWait : Form
     {
         private int startX = -1;
         private int startY = -1;

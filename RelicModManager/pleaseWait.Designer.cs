@@ -44,7 +44,7 @@
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label1.Location = new System.Drawing.Point(8, 5);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(274, 21);
+            this.label1.Size = new System.Drawing.Size(274, 26);
             this.label1.TabIndex = 0;
             this.label1.Text = "Loading...please wait...";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -53,11 +53,11 @@
             // loadingDescBox
             // 
             this.loadingDescBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.loadingDescBox.Location = new System.Drawing.Point(8, 29);
+            this.loadingDescBox.Location = new System.Drawing.Point(8, 34);
             this.loadingDescBox.Name = "loadingDescBox";
             this.loadingDescBox.ReadOnly = true;
             this.loadingDescBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.loadingDescBox.Size = new System.Drawing.Size(274, 58);
+            this.loadingDescBox.Size = new System.Drawing.Size(274, 72);
             this.loadingDescBox.TabIndex = 2;
             this.loadingDescBox.Text = "";
             this.loadingDescBox.UseWaitCursor = true;
@@ -67,9 +67,9 @@
             this.backgroundPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.backgroundPanel.Controls.Add(this.forgroundPanel);
             this.backgroundPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.backgroundPanel.Location = new System.Drawing.Point(8, 93);
+            this.backgroundPanel.Location = new System.Drawing.Point(8, 112);
             this.backgroundPanel.Name = "backgroundPanel";
-            this.backgroundPanel.Size = new System.Drawing.Size(274, 16);
+            this.backgroundPanel.Size = new System.Drawing.Size(274, 20);
             this.backgroundPanel.TabIndex = 4;
             this.backgroundPanel.UseWaitCursor = true;
             // 
@@ -81,7 +81,7 @@
             this.forgroundPanel.Location = new System.Drawing.Point(0, 0);
             this.forgroundPanel.Name = "forgroundPanel";
             this.forgroundPanel.Padding = new System.Windows.Forms.Padding(2);
-            this.forgroundPanel.Size = new System.Drawing.Size(264, 12);
+            this.forgroundPanel.Size = new System.Drawing.Size(264, 16);
             this.forgroundPanel.TabIndex = 5;
             this.forgroundPanel.UseWaitCursor = true;
             // 
@@ -100,7 +100,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(290, 117);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(290, 140);
             this.tableLayoutPanel1.TabIndex = 5;
             this.tableLayoutPanel1.UseWaitCursor = true;
             // 
@@ -108,7 +108,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(290, 117);
+            this.ClientSize = new System.Drawing.Size(290, 140);
             this.ControlBox = false;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
