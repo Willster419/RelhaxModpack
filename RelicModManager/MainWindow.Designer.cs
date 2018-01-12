@@ -118,7 +118,7 @@
             this.childProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.childProgressBar.Location = new System.Drawing.Point(3, 113);
             this.childProgressBar.Name = "childProgressBar";
-            this.childProgressBar.Size = new System.Drawing.Size(477, 14);
+            this.childProgressBar.Size = new System.Drawing.Size(450, 14);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.childProgressBar.TabIndex = 11;
             // 
@@ -134,7 +134,7 @@
             this.forceManuel.Location = new System.Drawing.Point(1, 1);
             this.forceManuel.Margin = new System.Windows.Forms.Padding(1);
             this.forceManuel.Name = "forceManuel";
-            this.forceManuel.Size = new System.Drawing.Size(236, 18);
+            this.forceManuel.Size = new System.Drawing.Size(223, 18);
             this.forceManuel.TabIndex = 13;
             this.forceManuel.Text = "Force manual game detection";
             this.forceManuel.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -148,7 +148,7 @@
             this.formPageLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.formPageLink.Location = new System.Drawing.Point(3, 150);
             this.formPageLink.Name = "formPageLink";
-            this.formPageLink.Size = new System.Drawing.Size(236, 20);
+            this.formPageLink.Size = new System.Drawing.Size(222, 20);
             this.formPageLink.TabIndex = 16;
             this.formPageLink.TabStop = true;
             this.formPageLink.Text = "View Modpack Form Page";
@@ -161,18 +161,18 @@
             this.parrentProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.parrentProgressBar.Location = new System.Drawing.Point(3, 93);
             this.parrentProgressBar.Name = "parrentProgressBar";
-            this.parrentProgressBar.Size = new System.Drawing.Size(477, 14);
+            this.parrentProgressBar.Size = new System.Drawing.Size(450, 14);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.parrentProgressBar.TabIndex = 17;
             // 
             // installRelhaxMod
             // 
             this.installRelhaxMod.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.installRelhaxMod.Location = new System.Drawing.Point(242, 1);
+            this.installRelhaxMod.Location = new System.Drawing.Point(229, 1);
             this.installRelhaxMod.Margin = new System.Windows.Forms.Padding(1);
             this.installRelhaxMod.Name = "installRelhaxMod";
             this.ButtonTable.SetRowSpan(this.installRelhaxMod, 2);
-            this.installRelhaxMod.Size = new System.Drawing.Size(240, 56);
+            this.installRelhaxMod.Size = new System.Drawing.Size(226, 56);
             this.installRelhaxMod.TabIndex = 19;
             this.installRelhaxMod.Text = "Install Relhax Modpack";
             this.installRelhaxMod.UseVisualStyleBackColor = true;
@@ -181,10 +181,10 @@
             // uninstallRelhaxMod
             // 
             this.uninstallRelhaxMod.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uninstallRelhaxMod.Location = new System.Drawing.Point(242, 59);
+            this.uninstallRelhaxMod.Location = new System.Drawing.Point(229, 59);
             this.uninstallRelhaxMod.Margin = new System.Windows.Forms.Padding(1);
             this.uninstallRelhaxMod.Name = "uninstallRelhaxMod";
-            this.uninstallRelhaxMod.Size = new System.Drawing.Size(240, 30);
+            this.uninstallRelhaxMod.Size = new System.Drawing.Size(226, 30);
             this.uninstallRelhaxMod.TabIndex = 20;
             this.uninstallRelhaxMod.Text = "Uninstall Relhax Modpack";
             this.uninstallRelhaxMod.UseVisualStyleBackColor = true;
@@ -199,7 +199,7 @@
             this.cleanInstallCB.Location = new System.Drawing.Point(1, 21);
             this.cleanInstallCB.Margin = new System.Windows.Forms.Padding(1);
             this.cleanInstallCB.Name = "cleanInstallCB";
-            this.cleanInstallCB.Size = new System.Drawing.Size(236, 18);
+            this.cleanInstallCB.Size = new System.Drawing.Size(223, 18);
             this.cleanInstallCB.TabIndex = 21;
             this.cleanInstallCB.Text = "Clean Installation (Recommended)";
             this.cleanInstallCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -215,7 +215,7 @@
             this.cancerFontCB.Location = new System.Drawing.Point(1, 41);
             this.cancerFontCB.Margin = new System.Windows.Forms.Padding(1);
             this.cancerFontCB.Name = "cancerFontCB";
-            this.cancerFontCB.Size = new System.Drawing.Size(236, 18);
+            this.cancerFontCB.Size = new System.Drawing.Size(223, 18);
             this.cancerFontCB.TabIndex = 23;
             this.cancerFontCB.Text = "Cancer font";
             this.cancerFontCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -231,7 +231,7 @@
             this.backupModsCheckBox.Location = new System.Drawing.Point(1, 101);
             this.backupModsCheckBox.Margin = new System.Windows.Forms.Padding(1);
             this.backupModsCheckBox.Name = "backupModsCheckBox";
-            this.backupModsCheckBox.Size = new System.Drawing.Size(236, 33);
+            this.backupModsCheckBox.Size = new System.Drawing.Size(223, 33);
             this.backupModsCheckBox.TabIndex = 24;
             this.backupModsCheckBox.Text = "Backup current mods folder";
             this.backupModsCheckBox.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -246,7 +246,7 @@
             this.settingsGroupBox.Location = new System.Drawing.Point(12, 103);
             this.settingsGroupBox.MaximumSize = new System.Drawing.Size(502, 192);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(483, 192);
+            this.settingsGroupBox.Size = new System.Drawing.Size(456, 192);
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "Modpack Settings";
@@ -282,7 +282,7 @@
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
-            this.SettingsTable.Size = new System.Drawing.Size(477, 173);
+            this.SettingsTable.Size = new System.Drawing.Size(450, 173);
             this.SettingsTable.TabIndex = 43;
             // 
             // InstantExtractionCB
@@ -292,7 +292,7 @@
             this.InstantExtractionCB.Location = new System.Drawing.Point(1, 136);
             this.InstantExtractionCB.Margin = new System.Windows.Forms.Padding(1);
             this.InstantExtractionCB.Name = "InstantExtractionCB";
-            this.InstantExtractionCB.Size = new System.Drawing.Size(236, 36);
+            this.InstantExtractionCB.Size = new System.Drawing.Size(223, 36);
             this.InstantExtractionCB.TabIndex = 36;
             this.InstantExtractionCB.Text = "Instant extraction mode (experimental)";
             this.InstantExtractionCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -305,10 +305,10 @@
             // 
             this.SuperExtractionCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.SuperExtractionCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SuperExtractionCB.Location = new System.Drawing.Point(239, 101);
+            this.SuperExtractionCB.Location = new System.Drawing.Point(226, 101);
             this.SuperExtractionCB.Margin = new System.Windows.Forms.Padding(1);
             this.SuperExtractionCB.Name = "SuperExtractionCB";
-            this.SuperExtractionCB.Size = new System.Drawing.Size(237, 33);
+            this.SuperExtractionCB.Size = new System.Drawing.Size(223, 33);
             this.SuperExtractionCB.TabIndex = 37;
             this.SuperExtractionCB.Text = "Super extraction mode (Experimental)";
             this.SuperExtractionCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -324,7 +324,7 @@
             this.saveUserDataCB.Location = new System.Drawing.Point(1, 81);
             this.saveUserDataCB.Margin = new System.Windows.Forms.Padding(1);
             this.saveUserDataCB.Name = "saveUserDataCB";
-            this.saveUserDataCB.Size = new System.Drawing.Size(236, 18);
+            this.saveUserDataCB.Size = new System.Drawing.Size(223, 18);
             this.saveUserDataCB.TabIndex = 27;
             this.saveUserDataCB.Text = "Save User created data";
             this.saveUserDataCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -337,10 +337,10 @@
             // 
             this.darkUICB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.darkUICB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.darkUICB.Location = new System.Drawing.Point(239, 1);
+            this.darkUICB.Location = new System.Drawing.Point(226, 1);
             this.darkUICB.Margin = new System.Windows.Forms.Padding(1);
             this.darkUICB.Name = "darkUICB";
-            this.darkUICB.Size = new System.Drawing.Size(237, 18);
+            this.darkUICB.Size = new System.Drawing.Size(223, 18);
             this.darkUICB.TabIndex = 30;
             this.darkUICB.Text = "Dark UI";
             this.darkUICB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -356,7 +356,7 @@
             this.saveLastInstallCB.Location = new System.Drawing.Point(1, 61);
             this.saveLastInstallCB.Margin = new System.Windows.Forms.Padding(1);
             this.saveLastInstallCB.Name = "saveLastInstallCB";
-            this.saveLastInstallCB.Size = new System.Drawing.Size(236, 18);
+            this.saveLastInstallCB.Size = new System.Drawing.Size(223, 18);
             this.saveLastInstallCB.TabIndex = 26;
             this.saveLastInstallCB.Text = "Save last install\'s config";
             this.saveLastInstallCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -369,10 +369,10 @@
             // 
             this.clearCacheCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.clearCacheCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.clearCacheCB.Location = new System.Drawing.Point(239, 21);
+            this.clearCacheCB.Location = new System.Drawing.Point(226, 21);
             this.clearCacheCB.Margin = new System.Windows.Forms.Padding(1);
             this.clearCacheCB.Name = "clearCacheCB";
-            this.clearCacheCB.Size = new System.Drawing.Size(237, 18);
+            this.clearCacheCB.Size = new System.Drawing.Size(223, 18);
             this.clearCacheCB.TabIndex = 31;
             this.clearCacheCB.Text = "Clear WoT Cache Data";
             this.clearCacheCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -385,10 +385,10 @@
             // 
             this.clearLogFilesCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.clearLogFilesCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.clearLogFilesCB.Location = new System.Drawing.Point(239, 41);
+            this.clearLogFilesCB.Location = new System.Drawing.Point(226, 41);
             this.clearLogFilesCB.Margin = new System.Windows.Forms.Padding(1);
             this.clearLogFilesCB.Name = "clearLogFilesCB";
-            this.clearLogFilesCB.Size = new System.Drawing.Size(237, 18);
+            this.clearLogFilesCB.Size = new System.Drawing.Size(223, 18);
             this.clearLogFilesCB.TabIndex = 32;
             this.clearLogFilesCB.Text = "Clear log files";
             this.clearLogFilesCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -402,10 +402,10 @@
             this.ShowInstallCompleteWindowCB.AutoSize = true;
             this.ShowInstallCompleteWindowCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.ShowInstallCompleteWindowCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ShowInstallCompleteWindowCB.Location = new System.Drawing.Point(239, 61);
+            this.ShowInstallCompleteWindowCB.Location = new System.Drawing.Point(226, 61);
             this.ShowInstallCompleteWindowCB.Margin = new System.Windows.Forms.Padding(1);
             this.ShowInstallCompleteWindowCB.Name = "ShowInstallCompleteWindowCB";
-            this.ShowInstallCompleteWindowCB.Size = new System.Drawing.Size(237, 18);
+            this.ShowInstallCompleteWindowCB.Size = new System.Drawing.Size(223, 18);
             this.ShowInstallCompleteWindowCB.TabIndex = 34;
             this.ShowInstallCompleteWindowCB.Text = "Show Install complete window";
             this.ShowInstallCompleteWindowCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -418,10 +418,10 @@
             // 
             this.notifyIfSameDatabaseCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.notifyIfSameDatabaseCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.notifyIfSameDatabaseCB.Location = new System.Drawing.Point(239, 136);
+            this.notifyIfSameDatabaseCB.Location = new System.Drawing.Point(226, 136);
             this.notifyIfSameDatabaseCB.Margin = new System.Windows.Forms.Padding(1);
             this.notifyIfSameDatabaseCB.Name = "notifyIfSameDatabaseCB";
-            this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(237, 36);
+            this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(223, 36);
             this.notifyIfSameDatabaseCB.TabIndex = 33;
             this.notifyIfSameDatabaseCB.Text = "Inform if no new database available";
             this.notifyIfSameDatabaseCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -434,10 +434,10 @@
             // 
             this.createShortcutsCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.createShortcutsCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.createShortcutsCB.Location = new System.Drawing.Point(239, 81);
+            this.createShortcutsCB.Location = new System.Drawing.Point(226, 81);
             this.createShortcutsCB.Margin = new System.Windows.Forms.Padding(1);
             this.createShortcutsCB.Name = "createShortcutsCB";
-            this.createShortcutsCB.Size = new System.Drawing.Size(237, 18);
+            this.createShortcutsCB.Size = new System.Drawing.Size(223, 18);
             this.createShortcutsCB.TabIndex = 35;
             this.createShortcutsCB.Text = "Create Shortcuts";
             this.createShortcutsCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -453,7 +453,7 @@
             this.languageSelectionGB.Margin = new System.Windows.Forms.Padding(1);
             this.languageSelectionGB.Name = "languageSelectionGB";
             this.languageSelectionGB.Padding = new System.Windows.Forms.Padding(2);
-            this.languageSelectionGB.Size = new System.Drawing.Size(132, 40);
+            this.languageSelectionGB.Size = new System.Drawing.Size(105, 40);
             this.languageSelectionGB.TabIndex = 30;
             this.languageSelectionGB.TabStop = false;
             this.languageSelectionGB.Text = "Language";
@@ -470,7 +470,7 @@
             "Francais"});
             this.LanguageComboBox.Location = new System.Drawing.Point(2, 15);
             this.LanguageComboBox.Name = "LanguageComboBox";
-            this.LanguageComboBox.Size = new System.Drawing.Size(128, 21);
+            this.LanguageComboBox.Size = new System.Drawing.Size(101, 21);
             this.LanguageComboBox.TabIndex = 4;
             this.LanguageComboBox.SelectedIndexChanged += new System.EventHandler(this.LanguageComboBox_SelectedIndexChanged);
             // 
@@ -481,7 +481,7 @@
             this.loadingImageGroupBox.Margin = new System.Windows.Forms.Padding(1);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
             this.loadingImageGroupBox.Padding = new System.Windows.Forms.Padding(2);
-            this.loadingImageGroupBox.Size = new System.Drawing.Size(131, 48);
+            this.loadingImageGroupBox.Size = new System.Drawing.Size(104, 48);
             this.loadingImageGroupBox.TabIndex = 26;
             this.loadingImageGroupBox.TabStop = false;
             this.loadingImageGroupBox.Text = "Loading Image";
@@ -500,7 +500,7 @@
             this.tableLayoutPanel8.RowCount = 2;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(127, 31);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(100, 31);
             this.tableLayoutPanel8.TabIndex = 7;
             // 
             // thirdGuardsLoadingImageRB
@@ -509,7 +509,7 @@
             this.thirdGuardsLoadingImageRB.Location = new System.Drawing.Point(0, 15);
             this.thirdGuardsLoadingImageRB.Margin = new System.Windows.Forms.Padding(0);
             this.thirdGuardsLoadingImageRB.Name = "thirdGuardsLoadingImageRB";
-            this.thirdGuardsLoadingImageRB.Size = new System.Drawing.Size(127, 16);
+            this.thirdGuardsLoadingImageRB.Size = new System.Drawing.Size(100, 16);
             this.thirdGuardsLoadingImageRB.TabIndex = 1;
             this.thirdGuardsLoadingImageRB.TabStop = true;
             this.thirdGuardsLoadingImageRB.Text = "3rdguards";
@@ -525,7 +525,7 @@
             this.standardImageRB.Location = new System.Drawing.Point(0, 0);
             this.standardImageRB.Margin = new System.Windows.Forms.Padding(0);
             this.standardImageRB.Name = "standardImageRB";
-            this.standardImageRB.Size = new System.Drawing.Size(127, 15);
+            this.standardImageRB.Size = new System.Drawing.Size(100, 15);
             this.standardImageRB.TabIndex = 0;
             this.standardImageRB.TabStop = true;
             this.standardImageRB.Text = "Standard";
@@ -540,7 +540,7 @@
             this.findBugAddModLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.findBugAddModLabel.Location = new System.Drawing.Point(3, 130);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
-            this.findBugAddModLabel.Size = new System.Drawing.Size(236, 20);
+            this.findBugAddModLabel.Size = new System.Drawing.Size(222, 20);
             this.findBugAddModLabel.TabIndex = 27;
             this.findBugAddModLabel.TabStop = true;
             this.findBugAddModLabel.Text = "Find a bug? Want a mod added?";
@@ -551,7 +551,7 @@
             // 
             this.cancelDownloadButton.Dock = System.Windows.Forms.DockStyle.Right;
             this.cancelDownloadButton.Enabled = false;
-            this.cancelDownloadButton.Location = new System.Drawing.Point(316, 133);
+            this.cancelDownloadButton.Location = new System.Drawing.Point(289, 133);
             this.cancelDownloadButton.Name = "cancelDownloadButton";
             this.InfoTable.SetRowSpan(this.cancelDownloadButton, 3);
             this.cancelDownloadButton.Size = new System.Drawing.Size(164, 54);
@@ -685,7 +685,7 @@
             this.donateLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.donateLabel.Location = new System.Drawing.Point(3, 170);
             this.donateLabel.Name = "donateLabel";
-            this.donateLabel.Size = new System.Drawing.Size(236, 20);
+            this.donateLabel.Size = new System.Drawing.Size(222, 20);
             this.donateLabel.TabIndex = 32;
             this.donateLabel.TabStop = true;
             this.donateLabel.Text = "Donation for further development";
@@ -903,7 +903,7 @@
             this.totalProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.totalProgressBar.Location = new System.Drawing.Point(3, 73);
             this.totalProgressBar.Name = "totalProgressBar";
-            this.totalProgressBar.Size = new System.Drawing.Size(477, 14);
+            this.totalProgressBar.Size = new System.Drawing.Size(450, 14);
             this.totalProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.totalProgressBar.TabIndex = 34;
             // 
@@ -912,7 +912,7 @@
             this.DiscordServerLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DiscordServerLink.Location = new System.Drawing.Point(3, 190);
             this.DiscordServerLink.Name = "DiscordServerLink";
-            this.DiscordServerLink.Size = new System.Drawing.Size(236, 20);
+            this.DiscordServerLink.Size = new System.Drawing.Size(222, 20);
             this.DiscordServerLink.TabIndex = 35;
             this.DiscordServerLink.TabStop = true;
             this.DiscordServerLink.Text = "Discord Server";
@@ -925,7 +925,7 @@
             this.viewAppUpdates.Location = new System.Drawing.Point(1, 1);
             this.viewAppUpdates.Margin = new System.Windows.Forms.Padding(1);
             this.viewAppUpdates.Name = "viewAppUpdates";
-            this.viewAppUpdates.Size = new System.Drawing.Size(239, 27);
+            this.viewAppUpdates.Size = new System.Drawing.Size(226, 27);
             this.viewAppUpdates.TabIndex = 36;
             this.viewAppUpdates.Text = "View latest application updates";
             this.viewAppUpdates.UseVisualStyleBackColor = true;
@@ -937,7 +937,7 @@
             this.viewDBUpdates.Location = new System.Drawing.Point(1, 30);
             this.viewDBUpdates.Margin = new System.Windows.Forms.Padding(1);
             this.viewDBUpdates.Name = "viewDBUpdates";
-            this.viewDBUpdates.Size = new System.Drawing.Size(239, 27);
+            this.viewDBUpdates.Size = new System.Drawing.Size(226, 27);
             this.viewDBUpdates.TabIndex = 37;
             this.viewDBUpdates.Text = "View latest database updates";
             this.viewDBUpdates.UseVisualStyleBackColor = true;
@@ -946,9 +946,9 @@
             // ErrorCounterLabel
             // 
             this.ErrorCounterLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ErrorCounterLabel.Location = new System.Drawing.Point(245, 190);
+            this.ErrorCounterLabel.Location = new System.Drawing.Point(231, 190);
             this.ErrorCounterLabel.Name = "ErrorCounterLabel";
-            this.ErrorCounterLabel.Size = new System.Drawing.Size(235, 20);
+            this.ErrorCounterLabel.Size = new System.Drawing.Size(222, 20);
             this.ErrorCounterLabel.TabIndex = 38;
             this.ErrorCounterLabel.Text = "Error counter: 0";
             this.ErrorCounterLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -985,16 +985,16 @@
             this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.InfoTable.Size = new System.Drawing.Size(483, 233);
+            this.InfoTable.Size = new System.Drawing.Size(456, 233);
             this.InfoTable.TabIndex = 39;
             // 
             // DatabaseVersionLabel
             // 
             this.DatabaseVersionLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.DatabaseVersionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DatabaseVersionLabel.Location = new System.Drawing.Point(245, 210);
+            this.DatabaseVersionLabel.Location = new System.Drawing.Point(231, 210);
             this.DatabaseVersionLabel.Name = "DatabaseVersionLabel";
-            this.DatabaseVersionLabel.Size = new System.Drawing.Size(235, 23);
+            this.DatabaseVersionLabel.Size = new System.Drawing.Size(222, 23);
             this.DatabaseVersionLabel.TabIndex = 0;
             this.DatabaseVersionLabel.Text = "Latest Database v{version}";
             this.DatabaseVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1005,7 +1005,7 @@
             this.ApplicationVersionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ApplicationVersionLabel.Location = new System.Drawing.Point(3, 210);
             this.ApplicationVersionLabel.Name = "ApplicationVersionLabel";
-            this.ApplicationVersionLabel.Size = new System.Drawing.Size(236, 23);
+            this.ApplicationVersionLabel.Size = new System.Drawing.Size(222, 23);
             this.ApplicationVersionLabel.TabIndex = 1;
             this.ApplicationVersionLabel.Text = "Application v{version]";
             this.ApplicationVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1019,7 +1019,7 @@
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
             this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.downloadProgress.Size = new System.Drawing.Size(477, 64);
+            this.downloadProgress.Size = new System.Drawing.Size(450, 64);
             this.downloadProgress.TabIndex = 29;
             this.downloadProgress.Text = "";
             // 
@@ -1029,7 +1029,7 @@
             this.DiagnosticUtilitiesButton.Location = new System.Drawing.Point(1, 59);
             this.DiagnosticUtilitiesButton.Margin = new System.Windows.Forms.Padding(1);
             this.DiagnosticUtilitiesButton.Name = "DiagnosticUtilitiesButton";
-            this.DiagnosticUtilitiesButton.Size = new System.Drawing.Size(239, 30);
+            this.DiagnosticUtilitiesButton.Size = new System.Drawing.Size(226, 30);
             this.DiagnosticUtilitiesButton.TabIndex = 40;
             this.DiagnosticUtilitiesButton.Text = "Diagnostic Utilities";
             this.DiagnosticUtilitiesButton.UseVisualStyleBackColor = true;
@@ -1042,7 +1042,7 @@
             this.UninstallModeGroupBox.Margin = new System.Windows.Forms.Padding(1);
             this.UninstallModeGroupBox.Name = "UninstallModeGroupBox";
             this.UninstallModeGroupBox.Padding = new System.Windows.Forms.Padding(2);
-            this.UninstallModeGroupBox.Size = new System.Drawing.Size(131, 55);
+            this.UninstallModeGroupBox.Size = new System.Drawing.Size(104, 55);
             this.UninstallModeGroupBox.TabIndex = 41;
             this.UninstallModeGroupBox.TabStop = false;
             this.UninstallModeGroupBox.Text = "Uninstall Mode";
@@ -1061,7 +1061,7 @@
             this.tableLayoutPanel7.RowCount = 2;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(127, 38);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(100, 38);
             this.tableLayoutPanel7.TabIndex = 6;
             // 
             // CleanUninstallModeRB
@@ -1070,7 +1070,7 @@
             this.CleanUninstallModeRB.Location = new System.Drawing.Point(0, 19);
             this.CleanUninstallModeRB.Margin = new System.Windows.Forms.Padding(0);
             this.CleanUninstallModeRB.Name = "CleanUninstallModeRB";
-            this.CleanUninstallModeRB.Size = new System.Drawing.Size(127, 19);
+            this.CleanUninstallModeRB.Size = new System.Drawing.Size(100, 19);
             this.CleanUninstallModeRB.TabIndex = 1;
             this.CleanUninstallModeRB.TabStop = true;
             this.CleanUninstallModeRB.Text = "Clean";
@@ -1085,7 +1085,7 @@
             this.SmartUninstallModeRB.Location = new System.Drawing.Point(0, 0);
             this.SmartUninstallModeRB.Margin = new System.Windows.Forms.Padding(0);
             this.SmartUninstallModeRB.Name = "SmartUninstallModeRB";
-            this.SmartUninstallModeRB.Size = new System.Drawing.Size(127, 19);
+            this.SmartUninstallModeRB.Size = new System.Drawing.Size(100, 19);
             this.SmartUninstallModeRB.TabIndex = 0;
             this.SmartUninstallModeRB.TabStop = true;
             this.SmartUninstallModeRB.Text = "Smart";
@@ -1112,7 +1112,7 @@
             this.ButtonTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
             this.ButtonTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
             this.ButtonTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.34F));
-            this.ButtonTable.Size = new System.Drawing.Size(483, 90);
+            this.ButtonTable.Size = new System.Drawing.Size(456, 90);
             this.ButtonTable.TabIndex = 42;
             // 
             // MainWindow
@@ -1120,7 +1120,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(510, 686);
+            this.ClientSize = new System.Drawing.Size(481, 686);
             this.Controls.Add(this.fontSizeGB);
             this.Controls.Add(this.InfoTable);
             this.Controls.Add(this.viewTypeGB);
