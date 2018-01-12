@@ -36,6 +36,7 @@ namespace RelhaxModpack
         private string Md5DatabaseFile = "";
         private XDocument ModInfoDocument;
         int Prog = 0;
+        private double DPISCALE = 0;
         private enum LoadConfigMode
         {
             Error = -1,
@@ -53,6 +54,10 @@ namespace RelhaxModpack
         //called on application startup
         private void ModSelectionList_Load(object sender, EventArgs e)
         {
+            //get the DPI scale value
+            Graphics graphics = this.CreateGraphics();
+            DPISCALE = graphics.DpiX;
+            DPISCALE = DPISCALE / 96F;
             Md5DatabaseFile = Path.Combine(Application.StartupPath, "RelHaxDownloads", "MD5HashDatabase.xml");
             //create the loading window
             pw = new PleaseWait(MainWindowStartX, MainWindowStartY);
@@ -1627,11 +1632,12 @@ namespace RelhaxModpack
                         //create it if it's null
                         if (configControlDD == null)
                         {
+                            double scaledWidth = 225 * DPISCALE;
                             configControlDD = new ConfigFormComboBox()
                             {
                                 AutoSize = true,
                                 Location = new Point(0, 0),
-                                Size = new Size(225, 15),
+                                Size = new Size((int)scaledWidth, 15),
                                 Enabled = false,
                                 DropDownStyle = ComboBoxStyle.DropDownList
                             };
@@ -1648,11 +1654,12 @@ namespace RelhaxModpack
                         //create it if it's null
                         if (configControlDD2 == null)
                         {
+                            double scaledWidth = 225 * DPISCALE;
                             configControlDD2 = new ConfigFormComboBox()
                             {
                                 AutoSize = true,
                                 Location = new Point(0, 0),
-                                Size = new Size(225, 15),
+                                Size = new Size((int)scaledWidth, 15),
                                 Enabled = false,
                                 DropDownStyle = ComboBoxStyle.DropDownList
                             };
