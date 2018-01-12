@@ -87,7 +87,6 @@
             this.Controls.Add(this.CancelCloseButton);
             this.Controls.Add(this.SelectButton);
             this.Controls.Add(this.SelectConfigLabel);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(300, 300);

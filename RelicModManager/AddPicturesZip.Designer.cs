@@ -123,7 +123,6 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.AddSelectionsPicturesLabel);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Name = "AddPicturesZip";
             this.Text = "Add selection and pictures";
             this.ResumeLayout(false);

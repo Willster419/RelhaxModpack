@@ -127,7 +127,6 @@
             this.Controls.Add(this.updateDeclineButton);
             this.Controls.Add(this.updateAcceptButton);
             this.Controls.Add(this.downloadedVersionInfo);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(480, 260);
             this.Name = "VersionInfo";

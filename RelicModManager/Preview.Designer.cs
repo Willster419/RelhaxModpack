@@ -162,7 +162,6 @@
             this.Controls.Add(this.PreviewPicture);
             this.Controls.Add(this.DescriptionBox);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(450, 550);
             this.Name = "Preview";

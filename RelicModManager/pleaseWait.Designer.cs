@@ -81,7 +81,7 @@
             this.forgroundPanel.Location = new System.Drawing.Point(0, 0);
             this.forgroundPanel.Name = "forgroundPanel";
             this.forgroundPanel.Padding = new System.Windows.Forms.Padding(2);
-            this.forgroundPanel.Size = new System.Drawing.Size(264, 16);
+            this.forgroundPanel.Size = new System.Drawing.Size(272, 16);
             this.forgroundPanel.TabIndex = 5;
             this.forgroundPanel.UseWaitCursor = true;
             // 
@@ -111,7 +111,6 @@
             this.ClientSize = new System.Drawing.Size(290, 140);
             this.ControlBox = false;
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
