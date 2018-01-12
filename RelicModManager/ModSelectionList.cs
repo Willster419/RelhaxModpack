@@ -109,7 +109,7 @@ namespace RelhaxModpack
             CompleteModSearchList = new List<SelectableDatabasePackage>();
             if (modTabGroups.TabPages.Count > 0)
                 modTabGroups.TabPages.Clear();
-            //modTabGroups.Font = Settings.AppFont;
+            modTabGroups.Font = Settings.AppFont;
             AddAllMods();
             AddUserMods(false);
             //check the default checked mods. afterwards, any load will have the clear selection in it so it shouldn't be an issue
@@ -1379,13 +1379,11 @@ namespace RelhaxModpack
                 Size = new Size(49, 15),
                 TabIndex = 1,
                 Text = Utils.ReplaceMacro(m),
-                //Font = Settings.AppFont,
                 catagory = catagory,
                 mod = m,
                 UseVisualStyleBackColor = true,
                 Enabled = m.Enabled,
                 Checked = m.Checked,
-                //UseCompatibleTextRendering = true
             };
             modCheckBox.MouseDown += Generic_MouseDown;
             //add the ToolTip description to the checkbox
@@ -1498,20 +1496,20 @@ namespace RelhaxModpack
             }
             int spacer = modCheckBox.Location.Y + modCheckBox.Size.Height + 5;
             switch (Settings.FontSizeforum)
-            {
+            {//do i actualyl need this??
                 case Settings.FontSize.Font100:
                     break;
                 case Settings.FontSize.Font125:
-                    spacer += 3;
+                    spacer += 2;
                     break;
                 case Settings.FontSize.Font175:
-                    spacer += 6;
+                    spacer += 4;
                     break;
                 case Settings.FontSize.Font225:
-                    spacer += 9;
+                    spacer += 6;
                     break;
                 case Settings.FontSize.Font275:
-                    spacer += 12;
+                    spacer += 8;
                     break;
             }
             if (parentIsMod)
@@ -1548,7 +1546,6 @@ namespace RelhaxModpack
                         AutoSize = true,
                         Location = new Point(6, getYLocation(configPanel.Controls)),
                         Size = new Size(150, 15),
-                        //Font = Settings.AppFont,
                         catagory = catagory,
                         mod = m,
                         config = con,
@@ -2632,7 +2629,7 @@ namespace RelhaxModpack
                 return;
             if (this.WindowState == FormWindowState.Minimized)
                 return;
-            //return;
+            WindowSizeTB.Text = "" + this.Size.Width + " x " + this.Size.Height;
             foreach (TabPage t in modTabGroups.TabPages)
             {
                 foreach (Control c in t.Controls)
