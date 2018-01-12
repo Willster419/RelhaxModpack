@@ -12,17 +12,13 @@ namespace RelhaxModpack
             base.OnLoad(e);
             if (Settings.AppScalingMode == AutoScaleMode.Dpi)
             {
-                AutoScaleDimensions = new SizeF(96F, 96F);// for design in 96 DPI
+                AutoScaleDimensions = new SizeF(96F, 96F);//for design in 96 DPI
                 AutoScaleMode = Settings.AppScalingMode;
                 Scale(new SizeF(Settings.ScaleSize, Settings.ScaleSize));
             }
-            else if (Settings.AppScalingMode == AutoScaleMode.Font)
-            {
-                AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F); // for design in 96 DPI
-            }
             else
             {
-
+                AutoScaleMode = Settings.AppScalingMode;
             }
             Font = Settings.AppFont;
             //set the UI colors

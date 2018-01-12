@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace RelhaxModpack
@@ -19,6 +20,19 @@ namespace RelhaxModpack
             startX = x;
             startY = y;
             InitializeComponent();
+            if (Settings.AppScalingMode == AutoScaleMode.Dpi)
+            {
+                AutoScaleDimensions = new SizeF(96F, 96F);// for design in 96 DPI
+                AutoScaleMode = Settings.AppScalingMode;
+                Scale(new SizeF(Settings.ScaleSize, Settings.ScaleSize));
+            }
+            else
+            {
+                AutoScaleMode = Settings.AppScalingMode;
+            }
+            Font = Settings.AppFont;
+            //set the UI colors
+            Settings.setUIColor(this);
         }
         private void PleaseWait_Load(object sender, EventArgs e)
         {
