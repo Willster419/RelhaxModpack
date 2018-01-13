@@ -28,14 +28,14 @@ namespace RelhaxModpack
             Beta = 1,
             Alpha = 2
         }
-        public static ProgramVersion Version = ProgramVersion.Stable;
+        public static ProgramVersion Version = ProgramVersion.Alpha;
         [STAThread]
         static void Main()
         {
-            Logging.Manager("|------------------------------------------------------------------------------------------------|");
-            Logging.Manager("Main Entry point launched");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Logging.Manager("|------------------------------------------------------------------------------------------------|");
+            Logging.Manager("Main Entry point launched");
             //loading embeded dlls from the application
             //https://www.codeproject.com/articles/528178/load-dll-from-embedded-resource
             string resource1 = "RelhaxModpack.Resources.DotNetZip.dll";
