@@ -65,7 +65,7 @@
             this.Volume.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Volume.Location = new System.Drawing.Point(203, 57);
             this.Volume.Name = "Volume";
-            this.Volume.Size = new System.Drawing.Size(128, 24);
+            this.Volume.Size = new System.Drawing.Size(128, 45);
             this.Volume.TabIndex = 4;
             this.Volume.Scroll += new System.EventHandler(this.Volume_Scroll);
             // 
@@ -74,9 +74,9 @@
             this.FileName.AutoSize = true;
             this.FileName.Location = new System.Drawing.Point(3, 0);
             this.FileName.Name = "FileName";
-            this.FileName.Size = new System.Drawing.Size(35, 13);
+            this.FileName.Size = new System.Drawing.Size(51, 13);
             this.FileName.TabIndex = 6;
-            this.FileName.Text = "label1";
+            this.FileName.Text = "FileName";
             // 
             // Seekbar
             // 
@@ -84,6 +84,8 @@
             this.Seekbar.Name = "Seekbar";
             this.Seekbar.Size = new System.Drawing.Size(400, 45);
             this.Seekbar.TabIndex = 7;
+            this.Seekbar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Seekbar_MouseMove);
+            this.Seekbar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Seekbar_MouseMove);
             // 
             // RelhaxMediaPlayer
             // 

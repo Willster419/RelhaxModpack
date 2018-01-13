@@ -96,11 +96,6 @@ namespace RelhaxModpack
             Seekbar.Value = (int)newPos;
             audioFileReader2.Position = Seekbar.Value;
         }
-        //to process a single click
-        private void Seekbar_MouseDown(object sender, MouseEventArgs e)
-        {
-            Seekbar_MouseMove(sender, e);
-        }
 
         private void Stop_Click(object sender, System.EventArgs e)
         {
@@ -121,6 +116,7 @@ namespace RelhaxModpack
                     break;
                 case PlaybackState.Playing:
                     waveOutDevice.Pause();
+                    UITimer.Stop();
                     break;
             }
         }
