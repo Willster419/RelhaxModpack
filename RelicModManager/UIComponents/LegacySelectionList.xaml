@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="324" d:DesignWidth="330" ClipToBounds="False">
-    <TreeView Height="200" Name="legacyTreeView" Width="120" Foreground="#37000000" ItemsSource="{Binding}">
+    <TreeView Name="legacyTreeView" Foreground="#37000000" ItemsSource="{Binding}">
         <TreeViewItem />
         <TreeViewItem>
             <TreeViewItem />

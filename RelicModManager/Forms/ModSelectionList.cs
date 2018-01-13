@@ -298,7 +298,8 @@ namespace RelhaxModpack
                         Size = new Size(t.Size.Width - 5 - 5, t.Size.Height - 5 - 5),
                         BackColorTransparent = false,
                         BackColor = Color.White,
-                        Child = lsl
+                        Child = lsl,
+                        Dock = DockStyle.Fill
                     };
                     //apparently there is an item in there. clear it.
                     lsl.legacyTreeView.Items.Clear();
@@ -2647,23 +2648,6 @@ namespace RelhaxModpack
                         Panel p = (Panel)c;
                         //resizePanel(p, t, 0);//PAD
                         resizePanel(p, t, 25);//SIZE
-                    }
-                    else if (c is ElementHost)
-                    {
-                        ElementHost eh = (ElementHost)c;
-                        eh.Size = new Size(t.Size.Width - 12, t.Size.Height - 10);
-                        LegacySelectionList lsl = (LegacySelectionList)eh.Child;
-                        try
-                        {
-                            lsl.RenderSize = new System.Windows.Size(eh.Size.Width - 2, eh.Size.Height - 2);
-                            lsl.legacyTreeView.Width = eh.Size.Width - 4;
-                            lsl.legacyTreeView.Height = eh.Size.Height - 4;
-                        }
-                        catch
-                        {
-                            // values are negative !
-                            // this is catching the exception if the ModSelectionWindow is going to minimize
-                        }
                     }
                 }
             }
