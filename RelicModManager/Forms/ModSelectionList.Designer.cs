@@ -107,7 +107,7 @@ namespace RelhaxModpack
             // 
             this.continueButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.continueButton.AutoSize = true;
-            this.continueButton.Location = new System.Drawing.Point(698, 394);
+            this.continueButton.Location = new System.Drawing.Point(710, 394);
             this.continueButton.Name = "continueButton";
             this.continueButton.Size = new System.Drawing.Size(80, 41);
             this.continueButton.TabIndex = 5;
@@ -119,7 +119,7 @@ namespace RelhaxModpack
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.AutoSize = true;
-            this.cancelButton.Location = new System.Drawing.Point(610, 394);
+            this.cancelButton.Location = new System.Drawing.Point(622, 394);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(82, 41);
             this.cancelButton.TabIndex = 6;
@@ -149,7 +149,7 @@ namespace RelhaxModpack
             // 
             this.loadConfigButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.loadConfigButton.AutoSize = true;
-            this.loadConfigButton.Location = new System.Drawing.Point(359, 394);
+            this.loadConfigButton.Location = new System.Drawing.Point(371, 394);
             this.loadConfigButton.Name = "loadConfigButton";
             this.loadConfigButton.Size = new System.Drawing.Size(113, 41);
             this.loadConfigButton.TabIndex = 9;
@@ -161,7 +161,7 @@ namespace RelhaxModpack
             // 
             this.saveConfigButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.saveConfigButton.AutoSize = true;
-            this.saveConfigButton.Location = new System.Drawing.Point(475, 394);
+            this.saveConfigButton.Location = new System.Drawing.Point(487, 394);
             this.saveConfigButton.Name = "saveConfigButton";
             this.saveConfigButton.Size = new System.Drawing.Size(129, 41);
             this.saveConfigButton.TabIndex = 10;
@@ -182,7 +182,7 @@ namespace RelhaxModpack
             // 
             this.clearSelectionsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.clearSelectionsButton.AutoSize = true;
-            this.clearSelectionsButton.Location = new System.Drawing.Point(249, 394);
+            this.clearSelectionsButton.Location = new System.Drawing.Point(261, 394);
             this.clearSelectionsButton.Name = "clearSelectionsButton";
             this.clearSelectionsButton.Size = new System.Drawing.Size(104, 41);
             this.clearSelectionsButton.TabIndex = 13;
@@ -218,7 +218,7 @@ namespace RelhaxModpack
             this.modTabGroups.Multiline = true;
             this.modTabGroups.Name = "modTabGroups";
             this.modTabGroups.SelectedIndex = 0;
-            this.modTabGroups.Size = new System.Drawing.Size(766, 312);
+            this.modTabGroups.Size = new System.Drawing.Size(778, 312);
             this.modTabGroups.TabIndex = 4;
             this.modTabGroups.Selected += new System.Windows.Forms.TabControlEventHandler(this.modTabGroups_Selected);
             this.modTabGroups.Click += new System.EventHandler(this.modTabGroups_Click);
@@ -227,7 +227,7 @@ namespace RelhaxModpack
             // 
             this.expandAllButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.expandAllButton.AutoSize = true;
-            this.expandAllButton.Location = new System.Drawing.Point(629, 12);
+            this.expandAllButton.Location = new System.Drawing.Point(641, 12);
             this.expandAllButton.Name = "expandAllButton";
             this.expandAllButton.Size = new System.Drawing.Size(149, 34);
             this.expandAllButton.TabIndex = 16;
@@ -239,7 +239,7 @@ namespace RelhaxModpack
             // 
             this.colapseAllButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.colapseAllButton.AutoSize = true;
-            this.colapseAllButton.Location = new System.Drawing.Point(474, 12);
+            this.colapseAllButton.Location = new System.Drawing.Point(486, 12);
             this.colapseAllButton.Name = "colapseAllButton";
             this.colapseAllButton.Size = new System.Drawing.Size(149, 34);
             this.colapseAllButton.TabIndex = 17;
@@ -250,7 +250,7 @@ namespace RelhaxModpack
             // searchCB
             // 
             this.searchCB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchCB.Location = new System.Drawing.Point(474, 52);
+            this.searchCB.Location = new System.Drawing.Point(486, 52);
             this.searchCB.Name = "searchCB";
             this.searchCB.Size = new System.Drawing.Size(304, 21);
             this.searchCB.TabIndex = 18;
@@ -263,7 +263,7 @@ namespace RelhaxModpack
             // 
             this.searchTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.searchTB.AutoSize = true;
-            this.searchTB.Location = new System.Drawing.Point(369, 55);
+            this.searchTB.Location = new System.Drawing.Point(381, 55);
             this.searchTB.Name = "searchTB";
             this.searchTB.Size = new System.Drawing.Size(99, 13);
             this.searchTB.TabIndex = 19;
@@ -275,7 +275,7 @@ namespace RelhaxModpack
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(790, 447);
+            this.ClientSize = new System.Drawing.Size(802, 447);
             this.Controls.Add(this.searchTB);
             this.Controls.Add(this.searchCB);
             this.Controls.Add(this.colapseAllButton);
@@ -293,7 +293,7 @@ namespace RelhaxModpack
             this.Controls.Add(this.modTabGroups);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(800, 480);
+            this.MinimumSize = new System.Drawing.Size(812, 480);
             this.Name = "ModSelectionList";
             this.Text = "Relhax Mod Selection";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ModSelectionList_FormClosing);

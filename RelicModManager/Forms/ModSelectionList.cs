@@ -2645,7 +2645,8 @@ namespace RelhaxModpack
                     {
                         //mod panel
                         Panel p = (Panel)c;
-                        resizePanel(p, t, 0);
+                        //resizePanel(p, t, 0);//PAD
+                        resizePanel(p, t, 25);//SIZE
                     }
                     else if (c is ElementHost)
                     {
@@ -2670,14 +2671,14 @@ namespace RelhaxModpack
         //recursive resize of the control panals
         private void resizePanel(Panel current, TabPage tp, int shrinkFactor)
         {
-            //current.Size = new Size(tp.Size.Width - shrinkFactor, current.Size.Height);
-            current.Padding = new Padding(shrinkFactor, current.Padding.Top, current.Padding.Right, current.Padding.Bottom);
+            current.Size = new Size(tp.Size.Width - shrinkFactor, current.Size.Height);//SIZE
+            //current.Padding = new Padding(shrinkFactor, current.Padding.Top, shrinkFactor, current.Padding.Bottom);//PAD
             foreach (Control controfds in current.Controls)
             {
-                if (controfds is Panel)
+                if (controfds is Panel subpp)
                 {
-                    Panel subpp = (Panel)controfds;
-                    resizePanel(subpp, tp, 5);
+                    //resizePanel(subpp, tp, 5);//PAD
+                    resizePanel(subpp, tp, shrinkFactor + 25);//SIZE
                 }
             }
         }
