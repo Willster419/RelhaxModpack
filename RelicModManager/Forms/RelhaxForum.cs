@@ -24,6 +24,12 @@ namespace RelhaxModpack
             //set the UI colors
             Settings.setUIColor(this);
             ResumeLayout(false);
+            OnPostLoad();
+        }
+        public virtual void OnPostLoad()
+        {
+            //stub, to be overridden
+            //so that any code that should run after UI scaling can be done
         }
     }
 }

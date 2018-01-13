@@ -429,10 +429,6 @@ namespace RelhaxModpack
             }
             //force a resize
             ModSelectionList_SizeChanged(null, null);
-            if (Settings.ModSelectionFullscreen)
-            {
-                this.WindowState = FormWindowState.Maximized;
-            }
             if (Settings.SView == Settings.SelectionView.Default)
             {
                 colapseAllButton.Enabled = false;
@@ -474,6 +470,13 @@ namespace RelhaxModpack
                     DialogResult = DialogResult.OK;
                     return;
                 }
+            }
+        }
+        public override void OnPostLoad()
+        {
+            if (Settings.ModSelectionFullscreen)
+            {
+                this.WindowState = FormWindowState.Maximized;
             }
         }
 #endregion
@@ -2642,12 +2645,15 @@ namespace RelhaxModpack
             {
                 foreach (Control c in t.Controls)
                 {
-                    if (c is Panel)
+                    //mod panel
+                    if (c is Panel p)
                     {
-                        //mod panel
-                        Panel p = (Panel)c;
                         //resizePanel(p, t, 0);//PAD
                         resizePanel(p, t, 25);//SIZE
+                    }
+                    else if (c is ElementHost eh)
+                    {
+                        eh.Dock = DockStyle.Fill;
                     }
                 }
             }
