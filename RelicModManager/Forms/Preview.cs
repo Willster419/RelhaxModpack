@@ -62,8 +62,11 @@ namespace RelhaxModpack
             UpdateBox.Text = UpdateBox.Text + "\n" + LastUpdated + DateFormat;
             //specify the start location
             Location = new Point(Settings.PreviewX, Settings.PreviewY);
+        }
+        public override void OnPostLoad()
+        {
             //re-apply the backColor if it's the picture
-            if((PreviewPicture != null) && (Medias[CurrentlySelected].MediaType == MediaType.Picture))
+            if ((PreviewPicture != null) && (Medias.Count > CurrentlySelected) && (Medias[CurrentlySelected].MediaType == MediaType.Picture))
             {
                 PreviewPicture.BackColor = PreviewComponentBackColor;
             }
