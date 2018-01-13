@@ -116,10 +116,10 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddPicturesZip.cs">
+    <Compile Include="Forms\AddPicturesZip.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddPicturesZip.Designer.cs">
+    <Compile Include="Forms\AddPicturesZip.Designer.cs">
       <DependentUpon>AddPicturesZip.cs</DependentUpon>
     </Compile>
     <Compile Include="AtlasesCreator\AtlasesArgs.cs" />
@@ -142,10 +142,10 @@
     <Compile Include="DatabaseComponents\IDatabasePackage.cs" />
     <Compile Include="DatabaseComponents\LogicalDependency.cs" />
     <Compile Include="DatabaseComponents\Media.cs" />
-    <Compile Include="FTPClean.cs">
+    <Compile Include="Forms\FTPClean.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FTPClean.Designer.cs">
+    <Compile Include="Forms\FTPClean.Designer.cs">
       <DependentUpon>FTPClean.cs</DependentUpon>
     </Compile>
     <Compile Include="InstallerComponents\Atlas.cs" />
@@ -153,16 +153,16 @@
     <Compile Include="InstallerComponents\Shortcut.cs" />
     <Compile Include="InstallerComponents\Texture.cs" />
     <Compile Include="DatabaseComponents\Category.cs" />
-    <Compile Include="CiInfo.cs" />
-    <Compile Include="Diagnostics.cs">
+    <Compile Include="Utils\CiInfo.cs" />
+    <Compile Include="Forms\Diagnostics.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Diagnostics.Designer.cs">
+    <Compile Include="Forms\Diagnostics.Designer.cs">
       <DependentUpon>Diagnostics.cs</DependentUpon>
     </Compile>
     <Compile Include="InstallerComponents\AsyncDownloadArgs.cs" />
     <Compile Include="InstallerComponents\XmlUnpack.cs" />
-    <Compile Include="RelhaxForum.cs">
+    <Compile Include="Forms\RelhaxForum.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UIComponents\RelhaxMediaPlayer.cs">
@@ -206,34 +206,34 @@
     <Compile Include="LegacyComponents\CRCCHECK2.Designer.cs">
       <DependentUpon>CRCCHECK2.cs</DependentUpon>
     </Compile>
-    <Compile Include="CRCFileSizeUpdate.cs">
+    <Compile Include="Forms\CRCFileSizeUpdate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CRCFileSizeUpdate.Designer.cs">
+    <Compile Include="Forms\CRCFileSizeUpdate.Designer.cs">
       <DependentUpon>CRCFileSizeUpdate.cs</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseAdder.cs">
+    <Compile Include="Forms\DatabaseAdder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DatabaseAdder.Designer.cs">
+    <Compile Include="Forms\DatabaseAdder.Designer.cs">
       <DependentUpon>DatabaseAdder.cs</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseDownloadEditor.cs">
+    <Compile Include="Forms\DatabaseDownloadEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DatabaseDownloadEditor.Designer.cs">
+    <Compile Include="Forms\DatabaseDownloadEditor.Designer.cs">
       <DependentUpon>DatabaseDownloadEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseEditor.cs">
+    <Compile Include="Forms\DatabaseEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DatabaseEditor.Designer.cs">
+    <Compile Include="Forms\DatabaseEditor.Designer.cs">
       <DependentUpon>DatabaseEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseListGenerater.cs">
+    <Compile Include="Forms\DatabaseListGenerater.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DatabaseListGenerater.Designer.cs">
+    <Compile Include="Forms\DatabaseListGenerater.Designer.cs">
       <DependentUpon>DatabaseListGenerater.cs</DependentUpon>
     </Compile>
     <Compile Include="DatabaseComponents\DatabaseLogic.cs" />
@@ -247,63 +247,63 @@
     <Compile Include="LegacyComponents\FirstLoadHelper.Designer.cs">
       <DependentUpon>FirstLoadHelper.cs</DependentUpon>
     </Compile>
-    <Compile Include="GifPreview.cs">
+    <Compile Include="Forms\GifPreview.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GifPreview.Designer.cs">
+    <Compile Include="Forms\GifPreview.Designer.cs">
       <DependentUpon>GifPreview.cs</DependentUpon>
     </Compile>
     <Compile Include="InstallerComponents\Installer.cs" />
     <Compile Include="InstallerComponents\InstallerEventArgs.cs" />
-    <Compile Include="InstallFinished.cs">
+    <Compile Include="Forms\InstallFinished.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InstallFinished.Designer.cs">
+    <Compile Include="Forms\InstallFinished.Designer.cs">
       <DependentUpon>InstallFinished.cs</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\LegacySelectionList.xaml.cs">
       <DependentUpon>LegacySelectionList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.cs">
+    <Compile Include="Forms\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainWindow.Designer.cs">
+    <Compile Include="Forms\MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="DatabaseComponents\Mod.cs" />
     <Compile Include="UIComponents\ModFormCheckBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ModSelectionList.cs">
+    <Compile Include="Forms\ModSelectionList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ModSelectionList.Designer.cs">
+    <Compile Include="Forms\ModSelectionList.Designer.cs">
       <DependentUpon>ModSelectionList.cs</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\ModWPFCheckBox.cs" />
-    <Compile Include="OldFilesToDelete.cs">
+    <Compile Include="Forms\OldFilesToDelete.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OldFilesToDelete.Designer.cs">
+    <Compile Include="Forms\OldFilesToDelete.Designer.cs">
       <DependentUpon>OldFilesToDelete.cs</DependentUpon>
     </Compile>
     <Compile Include="InstallerComponents\Patch.cs" />
-    <Compile Include="PatchTester.cs">
+    <Compile Include="Forms\PatchTester.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PatchTester.Designer.cs">
+    <Compile Include="Forms\PatchTester.Designer.cs">
       <DependentUpon>PatchTester.cs</DependentUpon>
     </Compile>
-    <Compile Include="PleaseWait.cs">
+    <Compile Include="Forms\PleaseWait.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PleaseWait.Designer.cs">
+    <Compile Include="Forms\PleaseWait.Designer.cs">
       <DependentUpon>PleaseWait.cs</DependentUpon>
     </Compile>
-    <Compile Include="Preview.cs">
+    <Compile Include="Forms\Preview.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Preview.Designer.cs">
+    <Compile Include="Forms\Preview.Designer.cs">
       <DependentUpon>Preview.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -316,36 +316,36 @@
     <Compile Include="UIComponents\SelectionRadioButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SelectionViewer.cs">
+    <Compile Include="Forms\SelectionViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SelectionViewer.Designer.cs">
+    <Compile Include="Forms\SelectionViewer.Designer.cs">
       <DependentUpon>SelectionViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Settings.cs" />
+    <Compile Include="Utils\Settings.cs" />
     <Compile Include="InstallerComponents\StringSave.cs" />
-    <Compile Include="Translations.cs" />
+    <Compile Include="Utils\Translations.cs" />
     <Compile Include="UIComponents\UIComponent.cs" />
     <Compile Include="Utils\Utils.cs" />
-    <Compile Include="VersionInfo.cs">
+    <Compile Include="Forms\VersionInfo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="VersionInfo.Designer.cs">
+    <Compile Include="Forms\VersionInfo.Designer.cs">
       <DependentUpon>VersionInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewUpdates.cs">
+    <Compile Include="Forms\ViewUpdates.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ViewUpdates.Designer.cs">
+    <Compile Include="Forms\ViewUpdates.Designer.cs">
       <DependentUpon>ViewUpdates.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AddPicturesZip.resx">
+    <EmbeddedResource Include="Forms\AddPicturesZip.resx">
       <DependentUpon>AddPicturesZip.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Diagnostics.resx">
+    <EmbeddedResource Include="Forms\Diagnostics.resx">
       <DependentUpon>Diagnostics.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FTPClean.resx">
+    <EmbeddedResource Include="Forms\FTPClean.resx">
       <DependentUpon>FTPClean.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LegacyComponents\CRCCheck.resx">
@@ -354,46 +354,46 @@
     <EmbeddedResource Include="LegacyComponents\CRCCHECK2.resx">
       <DependentUpon>CRCCHECK2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CRCFileSizeUpdate.resx">
+    <EmbeddedResource Include="Forms\CRCFileSizeUpdate.resx">
       <DependentUpon>CRCFileSizeUpdate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DatabaseAdder.resx">
+    <EmbeddedResource Include="Forms\DatabaseAdder.resx">
       <DependentUpon>DatabaseAdder.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DatabaseDownloadEditor.resx">
+    <EmbeddedResource Include="Forms\DatabaseDownloadEditor.resx">
       <DependentUpon>DatabaseDownloadEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DatabaseEditor.resx">
+    <EmbeddedResource Include="Forms\DatabaseEditor.resx">
       <DependentUpon>DatabaseEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DatabaseListGenerater.resx">
+    <EmbeddedResource Include="Forms\DatabaseListGenerater.resx">
       <DependentUpon>DatabaseListGenerater.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LegacyComponents\FirstLoadHelper.resx">
       <DependentUpon>FirstLoadHelper.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GifPreview.resx">
+    <EmbeddedResource Include="Forms\GifPreview.resx">
       <DependentUpon>GifPreview.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InstallFinished.resx">
+    <EmbeddedResource Include="Forms\InstallFinished.resx">
       <DependentUpon>InstallFinished.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainWindow.resx">
+    <EmbeddedResource Include="Forms\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ModSelectionList.resx">
+    <EmbeddedResource Include="Forms\ModSelectionList.resx">
       <DependentUpon>ModSelectionList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OldFilesToDelete.resx">
+    <EmbeddedResource Include="Forms\OldFilesToDelete.resx">
       <DependentUpon>OldFilesToDelete.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PatchTester.resx">
+    <EmbeddedResource Include="Forms\PatchTester.resx">
       <DependentUpon>PatchTester.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PleaseWait.resx">
+    <EmbeddedResource Include="Forms\PleaseWait.resx">
       <DependentUpon>PleaseWait.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Preview.resx">
+    <EmbeddedResource Include="Forms\Preview.resx">
       <DependentUpon>Preview.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -401,20 +401,20 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SelectionViewer.resx">
+    <EmbeddedResource Include="Forms\SelectionViewer.resx">
       <DependentUpon>SelectionViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UIComponents\RelhaxMediaPlayer.resx">
       <DependentUpon>RelhaxMediaPlayer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="VersionInfo.resx">
+    <EmbeddedResource Include="Forms\VersionInfo.resx">
       <DependentUpon>VersionInfo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewUpdates.resx">
+    <EmbeddedResource Include="Forms\ViewUpdates.resx">
       <DependentUpon>ViewUpdates.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="app.config" />
-    <None Include="packages.config" />
+    <None Include="Properties\app.config" />
+    <None Include="Properties\packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\scaling.manifest" />
     <None Include="Properties\Settings.settings">
@@ -426,7 +426,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="scalingcfg.config" />
+    <None Include="Properties\scalingcfg.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
@@ -485,16 +485,16 @@
     <PostBuildEvent>IF "%25COMPUTERNAME%25"=="IMOSDPC04" copy /Y $(TargetPath) "D:\RelHax Manager\"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>echo /// https://stackoverflow.com/questions/4450231/can-i-make-a-constant-from-a-compile-time-env-variable-in-csharp/4453285 &gt;&gt; "$(ProjectDir)\CiInfo.cs"
-echo namespace RelhaxModpack &gt; "$(ProjectDir)\CiInfo.cs"
-echo { &gt;&gt; "$(ProjectDir)\CiInfo.cs"
-echo     ///^&lt;summary^&gt;Info about the continuous integration server build that produced this binary.^&lt;/summary^&gt; &gt;&gt; "$(ProjectDir)\CiInfo.cs"
-echo     public static class CiInfo &gt;&gt; "$(ProjectDir)\CiInfo.cs"
-echo     { &gt;&gt; "$(ProjectDir)\CiInfo.cs"
-echo         ///^&lt;summary^&gt;String of the build number and build date/time, and other useful info.^&lt;/summary^&gt; &gt;&gt; "$(ProjectDir)\CiInfo.cs"
-echo         public const string BuildTag = "%25DATE%25 %25TIME%25"; &gt;&gt; "$(ProjectDir)\CiInfo.cs"
-echo     } &gt;&gt; "$(ProjectDir)\CiInfo.cs"
-echo } &gt;&gt; "$(ProjectDir)\CiInfo.cs"
+    <PreBuildEvent>echo /// https://stackoverflow.com/questions/4450231/can-i-make-a-constant-from-a-compile-time-env-variable-in-csharp/4453285 &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
+echo namespace RelhaxModpack &gt; "$(ProjectDir)\Utils\CiInfo.cs"
+echo { &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
+echo     ///^&lt;summary^&gt;Info about the continuous integration server build that produced this binary.^&lt;/summary^&gt; &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
+echo     public static class CiInfo &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
+echo     { &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
+echo         ///^&lt;summary^&gt;String of the build number and build date/time, and other useful info.^&lt;/summary^&gt; &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
+echo         public const string BuildTag = "%25DATE%25 %25TIME%25"; &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
+echo     } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
+echo } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
 </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
