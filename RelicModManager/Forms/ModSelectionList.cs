@@ -1833,9 +1833,10 @@ namespace RelhaxModpack
                 if(ui.config == null)
                 {
                     //it's a mod
-                    if (!ui.mod.Enabled)//just a check
+                    if(ui.mod.ModFormCheckBox is Control cont)
                     {
-                        Generic_MouseDown(ui, e);
+                        if (!cont.Enabled)
+                            Generic_MouseDown(ui, e);
                     }
                     else
                     {
@@ -1846,9 +1847,10 @@ namespace RelhaxModpack
                 else
                 {
                     //it's a config
-                    if (!ui.config.Enabled)//just a check
+                    if(ui.config.ConfigUIComponent is Control cont)
                     {
-                        Generic_MouseDown(ui, e);
+                        if (!cont.Enabled)
+                            Generic_MouseDown(ui, e);
                     }
                     else
                     {
