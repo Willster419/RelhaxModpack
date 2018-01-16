@@ -177,7 +177,6 @@
             this.Controls.Add(this.LocalFolderTB);
             this.Controls.Add(this.LocalFolderButton);
             this.Controls.Add(this.LocalFolderLabel);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Name = "FTPClean";
             this.Text = "FTPClean";
             this.ResumeLayout(false);
