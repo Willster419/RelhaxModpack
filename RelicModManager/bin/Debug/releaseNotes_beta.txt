@@ -1,4 +1,4 @@
-Version 27.7.2 (01/19/2017)
+Version 27.7.2 (01/19/2018)
 https://www.virustotal.com/#/file/80f1efb6878618099b48b30bfbe86d844425df432b413c718571a87b6c008ef7/detection
 -Fixed resizing preference being forgotten for ModSelectionList
 -Added resizing preference for Preview. Added check for Preview start location to verify it is on the screen
@@ -7,13 +7,13 @@ https://www.virustotal.com/#/file/80f1efb6878618099b48b30bfbe86d844425df432b413c
 -Re-organized settings in main form window. game settings are on the left side, modpack settings are on the right
 --------------------------------------------------------------------------------------------------------------------------------------------
 
-Version 27.7.1 (01/15/2017)
+Version 27.7.1 (01/15/2018)
 https://www.virustotal.com/#/file/2bb34635c955f823f2668c23a56b0c27b5361c555e74382880ab93253bac4052/detection
 -Added high DPI support for the Windows FTPClean (Internal), InstallFinished, OldFilesToDelete
 -Fixed Bug with previewing disabled components (some would not show)
 --------------------------------------------------------------------------------------------------------------------------------------------
 
-Version 27.7.0 (1/13/2017)
+Version 27.7.0 (1/13/2018)
 https://www.virustotal.com/#/file/1a15f483b5b7ff762f063a6116bfdf76c991f54811c96c4b7d6a3bcb0ad3a64b/detection
 -Fixed issues with 4K and high DPI displays
 -re-wrote some Main Window and Mod selection list code to be neater
@@ -24,19 +24,19 @@ https://www.virustotal.com/#/file/1a15f483b5b7ff762f063a6116bfdf76c991f54811c96c
 -Fixed seekbar and pause/play button of the media option in previews.
 --------------------------------------------------------------------------------------------------------------------------------------------
 
-Version 27.5.2 (01/05/2017)
+Version 27.5.2 (01/05/2018)
 https://www.virustotal.com/#/file/a6e9f98b45be54f02f3d4aa9c58e51d5ece43788897f765c3adfa5ccf5dc685a/detection
 -Fixed a macro parsing bug with the patching system
 -Fixed a bug with the default checked mods system
 --------------------------------------------------------------------------------------------------------------------------------------------
 
-Version 27.5.1 (01/02/2017)
+Version 27.5.1 (01/02/2018)
 https://www.virustotal.com/#/file/59d80e87654c978a201a68d59e8b9b0d312d3eeefda2f20d15fb5c34557a1681/detection
 -Fixed bugs with the json patcher with xvm files
 -Fully removed extractpath from all packages
 --------------------------------------------------------------------------------------------------------------------------------------------
 
-Version 27.5.0 (01/02/2017)
+Version 27.5.0 (01/02/2018)
 https://www.virustotal.com/#/file/3cf10af198b7dd3fd7ca07f1e7f23f07e9f976d4d29706ff379acb37c7698821/detection
 -Added new default checked mods feature. Like the old OMC, we now have the ability to have mods checked by default. Currently the only mod we have checked is the modpack button. Loading or clearing a selection will clear any default checked mods, so it is not invasive.
 -Modified patching system:
