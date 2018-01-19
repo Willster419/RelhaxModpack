@@ -1135,6 +1135,33 @@ namespace RelhaxModpack
         {
             return DateTime.FromFileTime(timestamp).ToString();
         }
+
+        /// <summary>Checks if a point is inside the possible monitor space</summary>
+        /// <param name="p">The point to check</param>
+        public static bool PointWithinScreen(System.Drawing.Point p)
+        {
+            //if eithor x or y are negative it's an invalid location
+            if (p.X < 0 || p.Y < 0)
+                return false;
+            int totalWidth = 0, totalHeight = 0;
+            foreach(Screen s in Screen.AllScreens)
+            {
+                totalWidth += s.Bounds.Width;
+                totalHeight += s.Bounds.Height;
+            }
+            if (totalWidth > p.X && totalHeight > p.Y)
+                return true;
+            return false;
+        }
+
+        /// <summary>Checks if a point is inside the possible monitor space</summary>
+        /// <param name="x">The x cordinate of the point</param>
+        /// <param name="y">The y cordinate of the point</param>
+        public static bool PointWithinScreen(int x, int y)
+        {
+            return PointWithinScreen(new System.Drawing.Point(x, y));
+        }
+
         // https://stackoverflow.com/questions/4897655/create-shortcut-on-desktop-c-sharp
         /// <summary>Creates or removes a shortcut at the specified pathname.</summary> 
         /// <param name="shortcutTarget">The path where the original file is located.</param> 

@@ -39,8 +39,6 @@ namespace RelhaxModpack
         public static bool InstantExtraction { get; set; }
         //toggle super extraction
         public static bool SuperExtraction { get; set; }
-        public static int ModSelectionHeight { get; set; }
-        public static int ModSelectionWidth { get; set; }
         public static string FontName { get; set; }
         public static float ScaleSize { get; set; }
         //file and folder locations
@@ -76,9 +74,17 @@ namespace RelhaxModpack
         public const float Scale275 = 2.75f;//2.75 font scaling
         public const string DefaultFontType = "Microsoft Sans Serif";
         public const string ComicSansFontType = "Comic Sans MS";
+        //ModSelectionlist window settigns
+        public static int ModSelectionHeight { get; set; }
+        public static int ModSelectionWidth { get; set; }
         public static bool ModSelectionFullscreen = false;
+        //Preview widnow settings
         public static int PreviewX = 0;
         public static int PreviewY = 0;
+        public static bool PreviewFullscreen { get; set; }
+        public static int PreviewHeight { get; set; }
+        public static int PreviewWidth { get; set; }
+        //
         public static string CustomModInfoPath = "";
         //enumeration for the type of uninstall mode
         public enum UninstallModes
@@ -117,6 +123,9 @@ namespace RelhaxModpack
             CreateShortcuts = true;
             CleanInstallation = true;
             SuperExtraction = false;
+            PreviewFullscreen = false;
+            PreviewWidth = 450;
+            PreviewHeight = 550;
             Logging.Manager("Loading application settings");
             if (!File.Exists(SettingsXmlFile))
             {
@@ -136,6 +145,9 @@ namespace RelhaxModpack
                 NotifyIfSameDatabase = false;
                 CreateShortcuts = false;
                 InstantExtraction = false;
+                PreviewFullscreen = false;
+                PreviewWidth = 450;
+                PreviewHeight = 550;
                 Logging.Manager("Language: " + CultureInfo.CurrentCulture.DisplayName);
                 string lang = CultureInfo.InstalledUICulture.Name.Split('-')[0].ToLower();
                 switch (lang)

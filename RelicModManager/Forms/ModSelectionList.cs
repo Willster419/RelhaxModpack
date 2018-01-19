@@ -474,12 +474,15 @@ namespace RelhaxModpack
         }
         public override void OnPostLoad()
         {
+            //set the size to be the orig saved size
+            Size = new Size(Settings.ModSelectionWidth, Settings.ModSelectionHeight);
+            //then set it to fullscreen if it was fullscreen before
             if (Settings.ModSelectionFullscreen)
             {
-                this.WindowState = FormWindowState.Maximized;
+                WindowState = FormWindowState.Maximized;
             }
         }
-#endregion
+        #endregion
         //adds a mod m to a tabpage t, OMC treeview style
         private void AddModOMCView(Mod m, TabPage t, LegacySelectionList lsl, Category c)
         {
@@ -2506,16 +2509,25 @@ namespace RelhaxModpack
         //handler for when the close button is pressed
         private void ModSelectionList_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //save the size of this window for later.
-            Settings.ModSelectionHeight = Size.Height;
-            Settings.ModSelectionWidth = Size.Width;
+            //put the taskbar back if we need to
             if (TaskBarHidden)
                 Settings.SetTaskbarState(Settings.AppBarStates.AutoHide);
-            //save wether the window was in fullscreen mods before closing
-            if (WindowState == FormWindowState.Maximized)
-                Settings.ModSelectionFullscreen = true;
-            else
-                Settings.ModSelectionFullscreen = false;
+            //save wether the window was in fullscreen mode before closing
+            //also only save the size if the window is normal
+            switch (WindowState)
+            {
+                case FormWindowState.Maximized:
+                    Settings.ModSelectionFullscreen = true;
+                    break;
+                case FormWindowState.Minimized:
+                    Settings.ModSelectionFullscreen = false;
+                    break;
+                case FormWindowState.Normal:
+                    Settings.ModSelectionHeight = Size.Height;
+                    Settings.ModSelectionWidth = Size.Width;
+                    Settings.ModSelectionFullscreen = false;
+                    break;
+            }
             //close the preview window if it is open
             if (p != null)
             {

@@ -61,15 +61,22 @@ namespace RelhaxModpack
             UpdateBox.Text = (DBO.UpdateComment == null || DBO.UpdateComment.Equals("")) ? Translations.getTranslatedString("noUpdateInfo") : DBO.UpdateComment;
             UpdateBox.Text = UpdateBox.Text + "\n" + LastUpdated + DateFormat;
             //specify the start location
-            Location = new Point(Settings.PreviewX, Settings.PreviewY);
+            if (Utils.PointWithinScreen(Settings.PreviewX, Settings.PreviewY))
+            {
+                StartPosition = FormStartPosition.Manual;
+                Location = new Point(Settings.PreviewX, Settings.PreviewY);
+            }
         }
         public override void OnPostLoad()
         {
             //re-apply the backColor if it's the picture
             if ((PreviewPicture != null) && (Medias.Count > CurrentlySelected) && (Medias[CurrentlySelected].MediaType == MediaType.Picture))
-            {
                 PreviewPicture.BackColor = PreviewComponentBackColor;
-            }
+            //set the size to be the orig saved size
+            Size = new Size(Settings.PreviewWidth, Settings.PreviewHeight);
+            //then set it to fullscreen if it was fullscreen before
+            if (Settings.PreviewFullscreen)
+                WindowState = FormWindowState.Maximized;
         }
         //sets the window title to reflect the new picture, and
         //begine the async process of loading the new picture
@@ -265,8 +272,27 @@ namespace RelhaxModpack
 
         private void Preview_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // if preview window is minimized and will be closed directly via the taskbar, windows send -32000 coordinate X and Y, so not storing it
-            if (Location.X > 0 && Location.Y > 0)
+            //save wether the window was in fullscreen mode before closing
+            //also only save the size if the window is normal
+            switch (WindowState)
+            {
+                case FormWindowState.Maximized:
+                    //save maximized property
+                    Settings.PreviewFullscreen = true;
+                    break;
+                case FormWindowState.Minimized:
+                    //save maximized property
+                    Settings.PreviewFullscreen = false;
+                    break;
+                case FormWindowState.Normal:
+                    //save maximzed property and window size
+                    Settings.PreviewFullscreen = false;
+                    Settings.PreviewHeight = Size.Height;
+                    Settings.PreviewWidth = Size.Width;
+                    break;
+            }
+            //save the location of the preview window if it's within the screen bounds
+            if(Utils.PointWithinScreen(Location))
             {
                 Settings.PreviewX = Location.X;
                 Settings.PreviewY = Location.Y;
