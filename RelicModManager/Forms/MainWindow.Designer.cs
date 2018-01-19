@@ -449,7 +449,7 @@
             // languageSelectionGB
             // 
             this.languageSelectionGB.Controls.Add(this.LanguageComboBox);
-            this.languageSelectionGB.Location = new System.Drawing.Point(363, 349);
+            this.languageSelectionGB.Location = new System.Drawing.Point(363, 354);
             this.languageSelectionGB.Margin = new System.Windows.Forms.Padding(1);
             this.languageSelectionGB.Name = "languageSelectionGB";
             this.languageSelectionGB.Padding = new System.Windows.Forms.Padding(2);
@@ -481,7 +481,7 @@
             this.loadingImageGroupBox.Margin = new System.Windows.Forms.Padding(1);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
             this.loadingImageGroupBox.Padding = new System.Windows.Forms.Padding(2);
-            this.loadingImageGroupBox.Size = new System.Drawing.Size(104, 48);
+            this.loadingImageGroupBox.Size = new System.Drawing.Size(104, 53);
             this.loadingImageGroupBox.TabIndex = 26;
             this.loadingImageGroupBox.TabStop = false;
             this.loadingImageGroupBox.Text = "Loading Image";
@@ -500,16 +500,16 @@
             this.tableLayoutPanel8.RowCount = 2;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(100, 31);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(100, 36);
             this.tableLayoutPanel8.TabIndex = 7;
             // 
             // thirdGuardsLoadingImageRB
             // 
             this.thirdGuardsLoadingImageRB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.thirdGuardsLoadingImageRB.Location = new System.Drawing.Point(0, 15);
+            this.thirdGuardsLoadingImageRB.Location = new System.Drawing.Point(0, 18);
             this.thirdGuardsLoadingImageRB.Margin = new System.Windows.Forms.Padding(0);
             this.thirdGuardsLoadingImageRB.Name = "thirdGuardsLoadingImageRB";
-            this.thirdGuardsLoadingImageRB.Size = new System.Drawing.Size(100, 16);
+            this.thirdGuardsLoadingImageRB.Size = new System.Drawing.Size(100, 18);
             this.thirdGuardsLoadingImageRB.TabIndex = 1;
             this.thirdGuardsLoadingImageRB.TabStop = true;
             this.thirdGuardsLoadingImageRB.Text = "3rdguards";
@@ -525,7 +525,7 @@
             this.standardImageRB.Location = new System.Drawing.Point(0, 0);
             this.standardImageRB.Margin = new System.Windows.Forms.Padding(0);
             this.standardImageRB.Name = "standardImageRB";
-            this.standardImageRB.Size = new System.Drawing.Size(100, 15);
+            this.standardImageRB.Size = new System.Drawing.Size(100, 18);
             this.standardImageRB.TabIndex = 0;
             this.standardImageRB.TabStop = true;
             this.standardImageRB.Text = "Standard";
@@ -1038,11 +1038,11 @@
             // UninstallModeGroupBox
             // 
             this.UninstallModeGroupBox.Controls.Add(this.tableLayoutPanel7);
-            this.UninstallModeGroupBox.Location = new System.Drawing.Point(363, 389);
+            this.UninstallModeGroupBox.Location = new System.Drawing.Point(363, 396);
             this.UninstallModeGroupBox.Margin = new System.Windows.Forms.Padding(1);
             this.UninstallModeGroupBox.Name = "UninstallModeGroupBox";
             this.UninstallModeGroupBox.Padding = new System.Windows.Forms.Padding(2);
-            this.UninstallModeGroupBox.Size = new System.Drawing.Size(104, 55);
+            this.UninstallModeGroupBox.Size = new System.Drawing.Size(104, 48);
             this.UninstallModeGroupBox.TabIndex = 41;
             this.UninstallModeGroupBox.TabStop = false;
             this.UninstallModeGroupBox.Text = "Uninstall Mode";
@@ -1061,16 +1061,16 @@
             this.tableLayoutPanel7.RowCount = 2;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(100, 38);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(100, 31);
             this.tableLayoutPanel7.TabIndex = 6;
             // 
             // CleanUninstallModeRB
             // 
             this.CleanUninstallModeRB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CleanUninstallModeRB.Location = new System.Drawing.Point(0, 19);
+            this.CleanUninstallModeRB.Location = new System.Drawing.Point(0, 15);
             this.CleanUninstallModeRB.Margin = new System.Windows.Forms.Padding(0);
             this.CleanUninstallModeRB.Name = "CleanUninstallModeRB";
-            this.CleanUninstallModeRB.Size = new System.Drawing.Size(100, 19);
+            this.CleanUninstallModeRB.Size = new System.Drawing.Size(100, 16);
             this.CleanUninstallModeRB.TabIndex = 1;
             this.CleanUninstallModeRB.TabStop = true;
             this.CleanUninstallModeRB.Text = "Clean";
@@ -1085,7 +1085,7 @@
             this.SmartUninstallModeRB.Location = new System.Drawing.Point(0, 0);
             this.SmartUninstallModeRB.Margin = new System.Windows.Forms.Padding(0);
             this.SmartUninstallModeRB.Name = "SmartUninstallModeRB";
-            this.SmartUninstallModeRB.Size = new System.Drawing.Size(100, 19);
+            this.SmartUninstallModeRB.Size = new System.Drawing.Size(100, 15);
             this.SmartUninstallModeRB.TabIndex = 0;
             this.SmartUninstallModeRB.TabStop = true;
             this.SmartUninstallModeRB.Text = "Smart";
