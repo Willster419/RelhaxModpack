@@ -156,7 +156,7 @@ namespace RelhaxModpack
 
             //Componet: installRelhaxMod
             //The button for installing the modpack
-            english.Add("installRelhaxMod", "Start Mod Selection");
+            english.Add("installRelhaxMod", "Start mod selection");
             german.Add("installRelhaxMod", "Auswahl der Mods");
             polish.Add("installRelhaxMod", "Przejdź Do Wyboru Modyfikacji");
             french.Add("installRelhaxMod", "Sélection des mods");
@@ -170,7 +170,7 @@ namespace RelhaxModpack
 
             //Componet: toolTip
             //MainForm
-            english.Add("mainFormToolTip", "Right Click for extended description");
+            english.Add("mainFormToolTip", "Right click for extended description");
             german.Add("mainFormToolTip", "Rechtsklick für eine erweiterte Beschreibung");
             polish.Add("mainFormToolTip", "Rozwiń opis PPM");
             french.Add("mainFormToolTip", "TODO");
@@ -185,14 +185,14 @@ namespace RelhaxModpack
 
             //Componet: forceManuel
             //
-            english.Add("languageSelectionGB", "Language Selection");
+            english.Add("languageSelectionGB", "Language selection");
             german.Add("languageSelectionGB", "Sprachauswahl");
             polish.Add("languageSelectionGB", "Wybór języka");
             french.Add("languageSelectionGB", "Choix de langue");
 
             //Componet: formPageLink
             //
-            english.Add("formPageLink", "View Modpack Form Page (NA)");
+            english.Add("formPageLink", "View modpack forum page (NA)");
             german.Add("formPageLink", "Zeige Modpack Forumbeiträge (NA)");
             polish.Add("formPageLink", "Forum Paczki (NA)");
             french.Add("formPageLink", "Afficher la page du formulaire (NA)");
@@ -206,15 +206,15 @@ namespace RelhaxModpack
 
             //Componet: cleanInstallCB
             //
-            english.Add("cleanInstallCB", "Clean Installation (Recommended)");
+            english.Add("cleanInstallCB", "Clean installation (recommended)");
             german.Add("cleanInstallCB", "Saubere Installation (empfohlen)");
             polish.Add("cleanInstallCB", "Czysta instalacja (Zalecane)");
             french.Add("cleanInstallCB", "Installation propre (Recommandé)");
 
             //Componet: cancerFontCB
             //
-            english.Add("cancerFontCB", "Comic Sans Font");
-            german.Add("cancerFontCB", "Comic Sans Schriftart");
+            english.Add("cancerFontCB", "Comic Sans font");
+            german.Add("cancerFontCB", "Comic Sans schriftart");
             polish.Add("cancerFontCB", "Czcionka Comic Sans");
             french.Add("cancerFontCB", "Police Comic Sans");
 
@@ -242,27 +242,27 @@ namespace RelhaxModpack
             //Componet: cleanUninstallCB
             //
             english.Add("cleanUninstallCB", "Clean uninstallation");
-            german.Add("cleanUninstallCB", "Saubere Deinstallation");
+            german.Add("cleanUninstallCB", "Saubere deinstallation");
             polish.Add("cleanUninstallCB", "Czysta deinstalacja");
             french.Add("cleanUninstallCB", "Désinstallation propre");
 
             //Componet: saveLastInstallCB
             //
-            english.Add("saveLastInstallCB", "Save last install\'s config");
+            english.Add("saveLastInstallCB", "Save selection of last install");
             german.Add("saveLastInstallCB", "Speicherung der letzten Installation");
             polish.Add("saveLastInstallCB", "Zapisz ostatnią konfigurację instalacji");
             french.Add("saveLastInstallCB", "Sauvegarder la denière configuration");
 
             //Componet: largerFontButton
             //
-            english.Add("largerFontButton", "Larger Font");
+            english.Add("largerFontButton", "Larger font");
             german.Add("largerFontButton", "Grössere Schriftart");
             polish.Add("largerFontButton", "Większa czcionka");
             french.Add("largeFontButton", "Grande police");
 
             //Componet: loadingImageGroupBox
             //
-            english.Add("loadingImageGroupBox", "Loading Image");
+            english.Add("loadingImageGroupBox", "Loading image");
             german.Add("loadingImageGroupBox", "Ladebild");
             polish.Add("loadingImageGroupBox", "Ładowanie obrazka");
             french.Add("loadingImageGroupBox", "Image de chargement");
@@ -283,7 +283,7 @@ namespace RelhaxModpack
 
             //Componet: cancelDownloadButton
             //
-            english.Add("cancelDownloadButton", "Cancel Download");
+            english.Add("cancelDownloadButton", "Cancel download");
             german.Add("cancelDownloadButton", "Download abbrechen");
             polish.Add("cancelDownloadButton", "Anuluj pobieranie");
             french.Add("cancelDownloadButton", "Anuler le téléchargement");
@@ -305,8 +305,8 @@ namespace RelhaxModpack
 
             //Componet: DiscordServerLink
             //
-            english.Add("DiscordServerLink", "Discord Server");
-            german.Add("DiscordServerLink", "Discord Server");
+            english.Add("DiscordServerLink", "Discord server");
+            german.Add("DiscordServerLink", "Discord server");
             polish.Add("DiscordServerLink", "Serwer Discorda");
             french.Add("DiscordServerLink", "Serveur Discord");
 
@@ -340,24 +340,24 @@ namespace RelhaxModpack
 
             //Componet: createShortcutsCB
             //
-            english.Add("createShortcutsCB", "Create Desktop Shortcuts");
-            german.Add("createShortcutsCB", "Erstelle Desktop Verknüpfungen");
+            english.Add("createShortcutsCB", "Create desktop shortcuts");
+            german.Add("createShortcutsCB", "Erstelle desktop verknüpfungen");
             polish.Add("createShortcutsCB", "Stwórz skróty na pulpicie");
             french.Add("createShortcutsCB", "Créer des raccourcis sur le bureau");
 
             //Componet: InstantExtractionCB
             //
-            english.Add("InstantExtractionCB", "Instant Extraction mode (experimental)");
-            german.Add("InstantExtractionCB", "Direkter Entpack-Modus (experimentell)");
+            english.Add("InstantExtractionCB", "Instant extraction mode (experimental)");
+            german.Add("InstantExtractionCB", "Direkter entpack-modus (experimentell)");
             polish.Add("InstantExtractionCB", "Tryb szybkiego wypakowywania (eksperymentalny)");
             french.Add("InstantExtractionCB", "Mode d'extraction instantané (expérimental)");
 
             //Componet: SuperExtractionCB
             //
-            english.Add("SuperExtractionCB", "Super extraction mode");
-            german.Add("SuperExtractionCB", "Erweiterter Entpack-Modus");
-            polish.Add("SuperExtractionCB", "Tryb przyspieszonego wypakowywania");
-            french.Add("SuperExtractionCB", "Super mode d'extraction");
+            english.Add("SuperExtractionCB", "Super extraction mode (experimental)");
+            german.Add("SuperExtractionCB", "Erweiterter entpack-modus (experimentell)");
+            polish.Add("SuperExtractionCB", "Tryb przyspieszonego wypakowywania (eksperymentalny)");
+            french.Add("SuperExtractionCB", "Super mode d'extraction (expérimental)");
 
             //Componet: SmartUninstallModeRB
             //
@@ -377,10 +377,10 @@ namespace RelhaxModpack
 
             //Componet: helperText
             //
-            english.Add("helperText", "Welcome to the RelHax Modpack! I have tried to make the modpack as straight-forward as possible, but questions may still arise. Hover over (or right click) a setting to have it explained. You won't see this dialog box again, unless you delete the settings xml file.");
-            german.Add("helperText", "Willkommen im RelHax Modpack! Ich habe versucht, das Modpack so einfach wie möglich zu gestalten, aber Fragen können dennoch entstehen. Rechtsklick auf eine Einstellung erklärt diese dann. Du siehst diese Dialogbox nicht mehr, ausser du löscht die xml Datei.");
-            polish.Add("helperText", "Witamy w paczce RelHax! Próbowałem stworzyć jak najprostszą w użytku paczkę modyfikacji, ale wciąż możesz mieć pytania. Kliknik PPM na opcji, by wyświetlić opis. Nie zobaczysz tej wiadomości ponownie, dopóki nie usuniesz pliku ustawień xml.");
-            french.Add("helperText", "Bienvenue au ModPack Relhax! J'ai aissayé de faire le modpack le plus simple possible, mais des questions peuvent survenir. Survolez (ou cliquez droit) un paramètre pour voire une explication. Vous n'allez plus voire cette boite, sauf si vous supprimez le fichier de configuration xml ");
+            english.Add("helperText", "Welcome to the Relhax Modpack! I have tried to make the modpack as straight-forward as possible, but questions may still arise. Hover over (or right click) a setting to have it explained. You won't see this dialog box again, unless you delete the settings xml file.");
+            german.Add("helperText", "Willkommen im Relhax Modpack! Ich habe versucht, das Modpack so einfach wie möglich zu gestalten, aber Fragen können dennoch entstehen. Rechtsklick auf eine Einstellung erklärt diese dann. Du siehst diese Dialogbox nicht mehr, ausser du löscht die xml Datei.");
+            polish.Add("helperText", "Witamy w paczce Relhax! Próbowałem stworzyć jak najprostszą w użytku paczkę modyfikacji, ale wciąż możesz mieć pytania. Kliknik PPM na opcji, by wyświetlić opis. Nie zobaczysz tej wiadomości ponownie, dopóki nie usuniesz pliku ustawień xml.");
+            french.Add("helperText", "Bienvenue au Modpack Relhax! J'ai aissayé de faire le modpack le plus simple possible, mais des questions peuvent survenir. Survolez (ou cliquez droit) un paramètre pour voire une explication. Vous n'allez plus voire cette boite, sauf si vous supprimez le fichier de configuration xml ");
 
             //Component: donateLabel
             english.Add("donateLabel", "Donation for further development");
@@ -454,8 +454,8 @@ namespace RelhaxModpack
 
             //Componet: readingDatabase
             //
-            english.Add("readingDatabase", "Reading Database");
-            german.Add("readingDatabase", "Lese Datenbank");
+            english.Add("readingDatabase", "Reading database");
+            german.Add("readingDatabase", "Lese datenbank");
             polish.Add("readingDatabase", "Wczytywanie baz danych");
             french.Add("readingDatabase", "Chargement de la base de données");
 
@@ -469,14 +469,14 @@ namespace RelhaxModpack
             //Section: Preview
             //Componet: descriptionBox
             //
-            english.Add("noDescription", "No Description Provided");
+            english.Add("noDescription", "No description provided");
             german.Add("noDescription", "keine Beschreibung verfügbar");
             polish.Add("noDescription", "nie podano opisu");
             french.Add("noDescription", "non Description fournie");
 
             //Componet: updateBox
             //
-            english.Add("noUpdateInfo", "No Update Info Provided");
+            english.Add("noUpdateInfo", "No update info provided");
             german.Add("noUpdateInfo", "keine Aktualisierungsinformationen verfügbar");
             polish.Add("noUpdateInfo", "brak informacji o aktualizacji");
             french.Add("noUpdateInfo", "Aucune information mise à jour fournie");
@@ -498,8 +498,8 @@ namespace RelhaxModpack
 
             //Componet: DevLinkLabel
             //
-            english.Add("DevLinkLabel", "Developer Website");
-            german.Add("DevLinkLabel", "Entwickler Webseite");
+            english.Add("DevLinkLabel", "Developer website");
+            german.Add("DevLinkLabel", "Entwickler webseite");
             polish.Add("DevLinkLabel", "Strona Dewelopera");
             french.Add("DevLinkLabel", "Site web du développeur");
 
@@ -520,9 +520,9 @@ namespace RelhaxModpack
 
             //Componet: newVersionAvailableLabel
             //
-            english.Add("newVersionAvailableLabel", "New Version Available");
-            german.Add("newVersionAvailableLabel", "Neue Version verfügbar");
-            polish.Add("newVersionAvailableLabel", "Dostępna Nowa Wersja");
+            english.Add("newVersionAvailableLabel", "New version available");
+            german.Add("newVersionAvailableLabel", "Neue version verfügbar");
+            polish.Add("newVersionAvailableLabel", "Dostępna nowa wersja");
             french.Add("newVersionAvailableLabel", "Nouvelle version disponible");
 
             //Componet: updateQuestionLabel
@@ -546,13 +546,6 @@ namespace RelhaxModpack
             german.Add("clickHereUpdateLabel", "klick hier");
             polish.Add("clickHereUpdateLabel", "kliknij tutaj");
             french.Add("clickHereUpdateLabel", "Cliquez ici");
-
-            //Componet: 
-            //
-            english.Add("MissingWMP", "You are missing Windows Media Player from your system.");
-            german.Add("MissingWMP", "TODO");
-            polish.Add("MissingWMP", "TODO");
-            french.Add("MissingWMP", "TODO");
 
             //Section: PleaseWait
             //Componet: label1
@@ -636,14 +629,14 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("loadingSettings", "Loading Settings");
+            english.Add("loadingSettings", "Loading settings");
             german.Add("loadingSettings", "Einstellungen laden");
             polish.Add("loadingSettings", "Ładowanie ustawnień");
             french.Add("loadingSettings", "Chargement des paramètres");
 
             //Componet: 
             //
-            english.Add("loadingTranslations", "Loading Translations");
+            english.Add("loadingTranslations", "Loading translations");
             german.Add("loadingTranslations", "Laden der Übersetzungen");
             polish.Add("loadingTranslations", "ładowanie tłumaczenia");
             french.Add("loadingTranslations", "Chargement des traductions");
@@ -664,29 +657,29 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("installingFonts", "Installing Fonts");
+            english.Add("installingFonts", "Installing fonts");
             german.Add("installingFonts", "Installieren von Schriftarten");
             polish.Add("installingFonts", "Instalowanie czcionek");
             french.Add("installingFonts", "Installation des polices");
 
             //Componet: 
             //
-            english.Add("loadingExtractionText", "Loading Extraction Text");
+            english.Add("loadingExtractionText", "Loading extraction text");
             german.Add("loadingExtractionText", "Extraktionstext laden");
             polish.Add("loadingExtractionText", "Ładowanie tekstu");
             french.Add("loadingExtractionText", "Chargement du texte d'extraction");
 
             //Componet: 
             //
-            english.Add("extractingRelhaxMods", "Extracting RelHax Mods");
-            german.Add("extractingRelhaxMods", "Extrahieren von RelHax Mods");
-            polish.Add("extractingRelhaxMods", "Wypakowywanie modyfikacji RelHax");
+            english.Add("extractingRelhaxMods", "Extracting Relhax mods");
+            german.Add("extractingRelhaxMods", "Extrahieren von Relhax mods");
+            polish.Add("extractingRelhaxMods", "Wypakowywanie modyfikacji mods");
             french.Add("extractingRelhaxMods", "Extraction des mods Relhax");
 
             //Componet: 
             //
-            english.Add("extractingUserMods", "Extracting User Mods");
-            german.Add("extractingUserMods", "Extrahieren von benutzerdefinierten Mods");
+            english.Add("extractingUserMods", "Extracting user mods");
+            german.Add("extractingUserMods", "Extrahieren von benutzerdefinierten mods");
             polish.Add("extractingUserMods", "Wypakowywanie modyfikacji użytkownika");
             french.Add("extractingUserMods", "Extraction des mods d'utilisateur");
 
@@ -949,16 +942,16 @@ namespace RelhaxModpack
             //Component:
             //progress message
             english.Add("uninstallingFile", "Uninstalling file");
-            german.Add("uninstallingFile", "Deinstalliere Datei");
+            german.Add("uninstallingFile", "Deinstalliere datei");
             polish.Add("uninstallingFile", "Odinstalowanie pliku");
             french.Add("uninstallingFile", "Désinstallation du fichier");
 
             //Component: uninstallfinished messagebox
             //
-            english.Add("uninstallFinished", "Uninstallation of Mods finished.");
-            german.Add("uninstallFinished", "Deinstallation der Mods beendet.");
+            english.Add("uninstallFinished", "Uninstallation of mods finished.");
+            german.Add("uninstallFinished", "Deinstallation der mods beendet.");
             polish.Add("uninstallFinished", "Deinstalacja (modyfikacji) zakończona");
-            french.Add("uninstallFinished", "Désinstallation des Mods terminé");
+            french.Add("uninstallFinished", "Désinstallation des mods terminé");
 
             //Componet: 
             //
