@@ -1726,7 +1726,8 @@ namespace RelhaxModpack
             Control[] translationSetList = new Control[] { forceManuel, cleanInstallCB, backupModsCheckBox, cancerFontCB, saveLastInstallCB, saveUserDataCB, darkUICB,
                 installRelhaxMod, uninstallRelhaxMod, settingsGroupBox,loadingImageGroupBox, languageSelectionGB, findBugAddModLabel, formPageLink, selectionDefault, selectionLegacy, donateLabel,
                 cancelDownloadButton, fontSizeGB, expandNodesDefault, disableBordersCB, clearCacheCB, DiscordServerLink, viewAppUpdates, viewDBUpdates, disableColorsCB, clearLogFilesCB,
-                notifyIfSameDatabaseCB, ShowInstallCompleteWindowCB,  createShortcutsCB, InstantExtractionCB, DiagnosticUtilitiesButton, UninstallModeGroupBox, SmartUninstallModeRB, CleanUninstallModeRB };
+                notifyIfSameDatabaseCB, ShowInstallCompleteWindowCB,  createShortcutsCB, InstantExtractionCB, DiagnosticUtilitiesButton, UninstallModeGroupBox, SmartUninstallModeRB,
+                CleanUninstallModeRB, SuperExtractionCB };
             foreach (var set in translationSetList)
             {
                 set.Text = Translations.getTranslatedString(set.Name);
