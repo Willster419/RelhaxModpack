@@ -274,6 +274,15 @@ namespace RelhaxModpack
                         case "SuperExtraction":
                             SuperExtraction = bool.Parse(n.InnerText);
                             break;
+                        case "PreviewFullscreen":
+                            PreviewFullscreen = bool.Parse(n.InnerText);
+                            break;
+                        case "PreviewWidth":
+                            PreviewWidth = int.Parse(n.InnerText);
+                            break;
+                        case "PreviewHeight":
+                            PreviewHeight = int.Parse(n.InnerText);
+                            break;
                     }
                 }
             }
@@ -373,7 +382,16 @@ namespace RelhaxModpack
             settingsHolder.AppendChild(xpreviewY);
             XmlElement customModInfoPath = doc.CreateElement("customModInfoPath");
             if (CustomModInfoPath != "") { customModInfoPath.InnerText = CustomModInfoPath; }
-            settingsHolder.AppendChild(customModInfoPath); 
+            settingsHolder.AppendChild(customModInfoPath);
+            XmlElement xPreviewFullscreen = doc.CreateElement("PreviewFullscreen");
+            xPreviewFullscreen.InnerText = "" + PreviewFullscreen;
+            settingsHolder.AppendChild(xPreviewFullscreen);
+            XmlElement xPreviewWidth = doc.CreateElement("PreviewWidth");
+            xPreviewWidth.InnerText = "" + PreviewWidth;
+            settingsHolder.AppendChild(xPreviewWidth);
+            XmlElement xPreviewHeight = doc.CreateElement("PreviewHeight");
+            xPreviewHeight.InnerText = "" + PreviewHeight;
+            settingsHolder.AppendChild(xPreviewHeight);
 
             doc.Save(SettingsXmlFile);
             Logging.Manager("Settings saved sucessfully");
