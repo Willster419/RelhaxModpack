@@ -1,3 +1,12 @@
+Version 27.7.2 (01/19/2017)
+https://www.virustotal.com/#/file/80f1efb6878618099b48b30bfbe86d844425df432b413c718571a87b6c008ef7/detection
+-Fixed resizing preference being forgotten for ModSelectionList
+-Added resizing preference for Preview. Added check for Preview start location to verify it is on the screen
+-Fixed SuperExtraction checkbox not changing language from language selection
+-Normalized upper and lower casing for text on the main form window. Also Fixed any clipping text
+-Re-organized settings in main form window. game settings are on the left side, modpack settings are on the right
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 27.7.1 (01/15/2017)
 https://www.virustotal.com/#/file/2bb34635c955f823f2668c23a56b0c27b5361c555e74382880ab93253bac4052/detection
 -Added high DPI support for the Windows FTPClean (Internal), InstallFinished, OldFilesToDelete
