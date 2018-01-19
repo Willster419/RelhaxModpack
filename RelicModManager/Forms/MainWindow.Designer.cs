@@ -43,15 +43,15 @@
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
             this.SettingsTable = new System.Windows.Forms.TableLayoutPanel();
             this.InstantExtractionCB = new System.Windows.Forms.CheckBox();
-            this.SuperExtractionCB = new System.Windows.Forms.CheckBox();
             this.saveUserDataCB = new System.Windows.Forms.CheckBox();
-            this.darkUICB = new System.Windows.Forms.CheckBox();
-            this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
-            this.clearCacheCB = new System.Windows.Forms.CheckBox();
-            this.clearLogFilesCB = new System.Windows.Forms.CheckBox();
             this.ShowInstallCompleteWindowCB = new System.Windows.Forms.CheckBox();
             this.notifyIfSameDatabaseCB = new System.Windows.Forms.CheckBox();
             this.createShortcutsCB = new System.Windows.Forms.CheckBox();
+            this.darkUICB = new System.Windows.Forms.CheckBox();
+            this.clearCacheCB = new System.Windows.Forms.CheckBox();
+            this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
+            this.SuperExtractionCB = new System.Windows.Forms.CheckBox();
+            this.clearLogFilesCB = new System.Windows.Forms.CheckBox();
             this.languageSelectionGB = new System.Windows.Forms.GroupBox();
             this.LanguageComboBox = new System.Windows.Forms.ComboBox();
             this.loadingImageGroupBox = new System.Windows.Forms.GroupBox();
@@ -301,22 +301,6 @@
             this.InstantExtractionCB.MouseEnter += new System.EventHandler(this.InstantExtractionCB_MouseEnter);
             this.InstantExtractionCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
-            // SuperExtractionCB
-            // 
-            this.SuperExtractionCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.SuperExtractionCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SuperExtractionCB.Location = new System.Drawing.Point(1, 101);
-            this.SuperExtractionCB.Margin = new System.Windows.Forms.Padding(1);
-            this.SuperExtractionCB.Name = "SuperExtractionCB";
-            this.SuperExtractionCB.Size = new System.Drawing.Size(223, 33);
-            this.SuperExtractionCB.TabIndex = 37;
-            this.SuperExtractionCB.Text = "Super extraction mode (Experimental)";
-            this.SuperExtractionCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.SuperExtractionCB.UseVisualStyleBackColor = true;
-            this.SuperExtractionCB.CheckedChanged += new System.EventHandler(this.SuperExtractionCB_CheckedChanged);
-            this.SuperExtractionCB.MouseEnter += new System.EventHandler(this.SuperExtractionCB_MouseEnter);
-            this.SuperExtractionCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
             // saveUserDataCB
             // 
             this.saveUserDataCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -332,70 +316,6 @@
             this.saveUserDataCB.CheckedChanged += new System.EventHandler(this.saveUserDataCB_CheckedChanged);
             this.saveUserDataCB.MouseEnter += new System.EventHandler(this.saveUserDataCB_MouseEnter);
             this.saveUserDataCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // darkUICB
-            // 
-            this.darkUICB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.darkUICB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.darkUICB.Location = new System.Drawing.Point(226, 1);
-            this.darkUICB.Margin = new System.Windows.Forms.Padding(1);
-            this.darkUICB.Name = "darkUICB";
-            this.darkUICB.Size = new System.Drawing.Size(223, 18);
-            this.darkUICB.TabIndex = 30;
-            this.darkUICB.Text = "Dark UI";
-            this.darkUICB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.darkUICB.UseVisualStyleBackColor = true;
-            this.darkUICB.CheckedChanged += new System.EventHandler(this.darkUICB_CheckedChanged);
-            this.darkUICB.MouseEnter += new System.EventHandler(this.darkUICB_MouseEnter);
-            this.darkUICB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // saveLastInstallCB
-            // 
-            this.saveLastInstallCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.saveLastInstallCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.saveLastInstallCB.Location = new System.Drawing.Point(226, 101);
-            this.saveLastInstallCB.Margin = new System.Windows.Forms.Padding(1);
-            this.saveLastInstallCB.Name = "saveLastInstallCB";
-            this.saveLastInstallCB.Size = new System.Drawing.Size(223, 33);
-            this.saveLastInstallCB.TabIndex = 26;
-            this.saveLastInstallCB.Text = "Save last install\'s config";
-            this.saveLastInstallCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.saveLastInstallCB.UseVisualStyleBackColor = true;
-            this.saveLastInstallCB.CheckedChanged += new System.EventHandler(this.saveLastInstallCB_CheckedChanged);
-            this.saveLastInstallCB.MouseEnter += new System.EventHandler(this.saveLastInstallCB_MouseEnter);
-            this.saveLastInstallCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // clearCacheCB
-            // 
-            this.clearCacheCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.clearCacheCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.clearCacheCB.Location = new System.Drawing.Point(1, 41);
-            this.clearCacheCB.Margin = new System.Windows.Forms.Padding(1);
-            this.clearCacheCB.Name = "clearCacheCB";
-            this.clearCacheCB.Size = new System.Drawing.Size(223, 18);
-            this.clearCacheCB.TabIndex = 31;
-            this.clearCacheCB.Text = "Clear WoT Cache Data";
-            this.clearCacheCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.clearCacheCB.UseVisualStyleBackColor = true;
-            this.clearCacheCB.CheckedChanged += new System.EventHandler(this.clearCacheCB_CheckedChanged);
-            this.clearCacheCB.MouseEnter += new System.EventHandler(this.clearCacheCB_MouseEnter);
-            this.clearCacheCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // clearLogFilesCB
-            // 
-            this.clearLogFilesCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.clearLogFilesCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.clearLogFilesCB.Location = new System.Drawing.Point(1, 21);
-            this.clearLogFilesCB.Margin = new System.Windows.Forms.Padding(1);
-            this.clearLogFilesCB.Name = "clearLogFilesCB";
-            this.clearLogFilesCB.Size = new System.Drawing.Size(223, 18);
-            this.clearLogFilesCB.TabIndex = 32;
-            this.clearLogFilesCB.Text = "Clear log files";
-            this.clearLogFilesCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.clearLogFilesCB.UseVisualStyleBackColor = true;
-            this.clearLogFilesCB.CheckedChanged += new System.EventHandler(this.clearLogFilesCB_CheckedChanged);
-            this.clearLogFilesCB.MouseEnter += new System.EventHandler(this.clearLogFilesCB_MouseEnter);
-            this.clearLogFilesCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // ShowInstallCompleteWindowCB
             // 
@@ -445,6 +365,86 @@
             this.createShortcutsCB.CheckedChanged += new System.EventHandler(this.CreateShortcutsCB_CheckedChanged);
             this.createShortcutsCB.MouseEnter += new System.EventHandler(this.CreateShortcutsCB_MouseEnter);
             this.createShortcutsCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
+            // darkUICB
+            // 
+            this.darkUICB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.darkUICB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.darkUICB.Location = new System.Drawing.Point(226, 1);
+            this.darkUICB.Margin = new System.Windows.Forms.Padding(1);
+            this.darkUICB.Name = "darkUICB";
+            this.darkUICB.Size = new System.Drawing.Size(223, 18);
+            this.darkUICB.TabIndex = 30;
+            this.darkUICB.Text = "Dark UI";
+            this.darkUICB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.darkUICB.UseVisualStyleBackColor = true;
+            this.darkUICB.CheckedChanged += new System.EventHandler(this.darkUICB_CheckedChanged);
+            this.darkUICB.MouseEnter += new System.EventHandler(this.darkUICB_MouseEnter);
+            this.darkUICB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
+            // clearCacheCB
+            // 
+            this.clearCacheCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.clearCacheCB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.clearCacheCB.Location = new System.Drawing.Point(1, 41);
+            this.clearCacheCB.Margin = new System.Windows.Forms.Padding(1);
+            this.clearCacheCB.Name = "clearCacheCB";
+            this.clearCacheCB.Size = new System.Drawing.Size(223, 18);
+            this.clearCacheCB.TabIndex = 31;
+            this.clearCacheCB.Text = "Clear WoT Cache Data";
+            this.clearCacheCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.clearCacheCB.UseVisualStyleBackColor = true;
+            this.clearCacheCB.CheckedChanged += new System.EventHandler(this.clearCacheCB_CheckedChanged);
+            this.clearCacheCB.MouseEnter += new System.EventHandler(this.clearCacheCB_MouseEnter);
+            this.clearCacheCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
+            // saveLastInstallCB
+            // 
+            this.saveLastInstallCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.saveLastInstallCB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.saveLastInstallCB.Location = new System.Drawing.Point(226, 101);
+            this.saveLastInstallCB.Margin = new System.Windows.Forms.Padding(1);
+            this.saveLastInstallCB.Name = "saveLastInstallCB";
+            this.saveLastInstallCB.Size = new System.Drawing.Size(223, 33);
+            this.saveLastInstallCB.TabIndex = 26;
+            this.saveLastInstallCB.Text = "Save last install\'s config";
+            this.saveLastInstallCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.saveLastInstallCB.UseVisualStyleBackColor = true;
+            this.saveLastInstallCB.CheckedChanged += new System.EventHandler(this.saveLastInstallCB_CheckedChanged);
+            this.saveLastInstallCB.MouseEnter += new System.EventHandler(this.saveLastInstallCB_MouseEnter);
+            this.saveLastInstallCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
+            // SuperExtractionCB
+            // 
+            this.SuperExtractionCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.SuperExtractionCB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SuperExtractionCB.Location = new System.Drawing.Point(1, 101);
+            this.SuperExtractionCB.Margin = new System.Windows.Forms.Padding(1);
+            this.SuperExtractionCB.Name = "SuperExtractionCB";
+            this.SuperExtractionCB.Size = new System.Drawing.Size(223, 33);
+            this.SuperExtractionCB.TabIndex = 37;
+            this.SuperExtractionCB.Text = "Super extraction mode (Experimental)";
+            this.SuperExtractionCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.SuperExtractionCB.UseVisualStyleBackColor = true;
+            this.SuperExtractionCB.CheckedChanged += new System.EventHandler(this.SuperExtractionCB_CheckedChanged);
+            this.SuperExtractionCB.MouseEnter += new System.EventHandler(this.SuperExtractionCB_MouseEnter);
+            this.SuperExtractionCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
+            // clearLogFilesCB
+            // 
+            this.clearLogFilesCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.clearLogFilesCB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.clearLogFilesCB.Location = new System.Drawing.Point(1, 21);
+            this.clearLogFilesCB.Margin = new System.Windows.Forms.Padding(1);
+            this.clearLogFilesCB.Name = "clearLogFilesCB";
+            this.clearLogFilesCB.Size = new System.Drawing.Size(223, 18);
+            this.clearLogFilesCB.TabIndex = 32;
+            this.clearLogFilesCB.Text = "Clear log files";
+            this.clearLogFilesCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.clearLogFilesCB.UseVisualStyleBackColor = true;
+            this.clearLogFilesCB.CheckedChanged += new System.EventHandler(this.clearLogFilesCB_CheckedChanged);
+            this.clearLogFilesCB.MouseEnter += new System.EventHandler(this.clearLogFilesCB_MouseEnter);
+            this.clearLogFilesCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // languageSelectionGB
             // 
