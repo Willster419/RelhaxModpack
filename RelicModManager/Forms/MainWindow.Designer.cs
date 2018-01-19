@@ -131,7 +131,7 @@
             // 
             this.forceManuel.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.forceManuel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.forceManuel.Location = new System.Drawing.Point(1, 1);
+            this.forceManuel.Location = new System.Drawing.Point(226, 41);
             this.forceManuel.Margin = new System.Windows.Forms.Padding(1);
             this.forceManuel.Name = "forceManuel";
             this.forceManuel.Size = new System.Drawing.Size(223, 18);
@@ -196,7 +196,7 @@
             this.cleanInstallCB.Checked = true;
             this.cleanInstallCB.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cleanInstallCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cleanInstallCB.Location = new System.Drawing.Point(1, 21);
+            this.cleanInstallCB.Location = new System.Drawing.Point(1, 1);
             this.cleanInstallCB.Margin = new System.Windows.Forms.Padding(1);
             this.cleanInstallCB.Name = "cleanInstallCB";
             this.cleanInstallCB.Size = new System.Drawing.Size(223, 18);
@@ -212,7 +212,7 @@
             // 
             this.cancerFontCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.cancerFontCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cancerFontCB.Location = new System.Drawing.Point(1, 41);
+            this.cancerFontCB.Location = new System.Drawing.Point(226, 21);
             this.cancerFontCB.Margin = new System.Windows.Forms.Padding(1);
             this.cancerFontCB.Name = "cancerFontCB";
             this.cancerFontCB.Size = new System.Drawing.Size(223, 18);
@@ -228,10 +228,10 @@
             // 
             this.backupModsCheckBox.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.backupModsCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.backupModsCheckBox.Location = new System.Drawing.Point(1, 101);
+            this.backupModsCheckBox.Location = new System.Drawing.Point(1, 81);
             this.backupModsCheckBox.Margin = new System.Windows.Forms.Padding(1);
             this.backupModsCheckBox.Name = "backupModsCheckBox";
-            this.backupModsCheckBox.Size = new System.Drawing.Size(223, 33);
+            this.backupModsCheckBox.Size = new System.Drawing.Size(223, 18);
             this.backupModsCheckBox.TabIndex = 24;
             this.backupModsCheckBox.Text = "Backup current mods folder";
             this.backupModsCheckBox.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -258,19 +258,19 @@
             this.SettingsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.SettingsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.SettingsTable.Controls.Add(this.InstantExtractionCB, 0, 6);
-            this.SettingsTable.Controls.Add(this.SuperExtractionCB, 1, 5);
-            this.SettingsTable.Controls.Add(this.backupModsCheckBox, 0, 5);
-            this.SettingsTable.Controls.Add(this.saveUserDataCB, 0, 4);
-            this.SettingsTable.Controls.Add(this.darkUICB, 1, 0);
-            this.SettingsTable.Controls.Add(this.saveLastInstallCB, 0, 3);
-            this.SettingsTable.Controls.Add(this.clearCacheCB, 1, 1);
-            this.SettingsTable.Controls.Add(this.cancerFontCB, 0, 2);
-            this.SettingsTable.Controls.Add(this.forceManuel, 0, 0);
-            this.SettingsTable.Controls.Add(this.clearLogFilesCB, 1, 2);
-            this.SettingsTable.Controls.Add(this.cleanInstallCB, 0, 1);
+            this.SettingsTable.Controls.Add(this.saveUserDataCB, 0, 3);
+            this.SettingsTable.Controls.Add(this.cleanInstallCB, 0, 0);
+            this.SettingsTable.Controls.Add(this.cancerFontCB, 1, 1);
             this.SettingsTable.Controls.Add(this.ShowInstallCompleteWindowCB, 1, 3);
             this.SettingsTable.Controls.Add(this.notifyIfSameDatabaseCB, 1, 6);
             this.SettingsTable.Controls.Add(this.createShortcutsCB, 1, 4);
+            this.SettingsTable.Controls.Add(this.darkUICB, 1, 0);
+            this.SettingsTable.Controls.Add(this.clearCacheCB, 0, 2);
+            this.SettingsTable.Controls.Add(this.saveLastInstallCB, 1, 5);
+            this.SettingsTable.Controls.Add(this.SuperExtractionCB, 0, 5);
+            this.SettingsTable.Controls.Add(this.forceManuel, 1, 2);
+            this.SettingsTable.Controls.Add(this.clearLogFilesCB, 0, 1);
+            this.SettingsTable.Controls.Add(this.backupModsCheckBox, 0, 4);
             this.SettingsTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SettingsTable.Location = new System.Drawing.Point(3, 16);
             this.SettingsTable.Name = "SettingsTable";
@@ -305,7 +305,7 @@
             // 
             this.SuperExtractionCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.SuperExtractionCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SuperExtractionCB.Location = new System.Drawing.Point(226, 101);
+            this.SuperExtractionCB.Location = new System.Drawing.Point(1, 101);
             this.SuperExtractionCB.Margin = new System.Windows.Forms.Padding(1);
             this.SuperExtractionCB.Name = "SuperExtractionCB";
             this.SuperExtractionCB.Size = new System.Drawing.Size(223, 33);
@@ -321,7 +321,7 @@
             // 
             this.saveUserDataCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.saveUserDataCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.saveUserDataCB.Location = new System.Drawing.Point(1, 81);
+            this.saveUserDataCB.Location = new System.Drawing.Point(1, 61);
             this.saveUserDataCB.Margin = new System.Windows.Forms.Padding(1);
             this.saveUserDataCB.Name = "saveUserDataCB";
             this.saveUserDataCB.Size = new System.Drawing.Size(223, 18);
@@ -353,10 +353,10 @@
             // 
             this.saveLastInstallCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.saveLastInstallCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.saveLastInstallCB.Location = new System.Drawing.Point(1, 61);
+            this.saveLastInstallCB.Location = new System.Drawing.Point(226, 101);
             this.saveLastInstallCB.Margin = new System.Windows.Forms.Padding(1);
             this.saveLastInstallCB.Name = "saveLastInstallCB";
-            this.saveLastInstallCB.Size = new System.Drawing.Size(223, 18);
+            this.saveLastInstallCB.Size = new System.Drawing.Size(223, 33);
             this.saveLastInstallCB.TabIndex = 26;
             this.saveLastInstallCB.Text = "Save last install\'s config";
             this.saveLastInstallCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -369,7 +369,7 @@
             // 
             this.clearCacheCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.clearCacheCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.clearCacheCB.Location = new System.Drawing.Point(226, 21);
+            this.clearCacheCB.Location = new System.Drawing.Point(1, 41);
             this.clearCacheCB.Margin = new System.Windows.Forms.Padding(1);
             this.clearCacheCB.Name = "clearCacheCB";
             this.clearCacheCB.Size = new System.Drawing.Size(223, 18);
@@ -385,7 +385,7 @@
             // 
             this.clearLogFilesCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.clearLogFilesCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.clearLogFilesCB.Location = new System.Drawing.Point(226, 41);
+            this.clearLogFilesCB.Location = new System.Drawing.Point(1, 21);
             this.clearLogFilesCB.Margin = new System.Windows.Forms.Padding(1);
             this.clearLogFilesCB.Name = "clearLogFilesCB";
             this.clearLogFilesCB.Size = new System.Drawing.Size(223, 18);
