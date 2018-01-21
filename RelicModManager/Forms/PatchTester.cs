@@ -133,7 +133,7 @@ namespace RelhaxModpack
             patch.AppendChild(type);
 
             XmlElement patchPath = doc.CreateElement("patchPath");
-            patchPath.InnerText = regexPatchPathCB.SelectedIndex.ToString();
+            patchPath.InnerText = regexPatchPathCB.SelectedItem.ToString();
             patch.AppendChild(patchPath);
 
             XmlElement file = doc.CreateElement("file");
@@ -183,7 +183,7 @@ namespace RelhaxModpack
             patch.AppendChild(mode);
 
             XmlElement patchPath = doc.CreateElement("patchPath");
-            patchPath.InnerText = xmlPatchPathCB.SelectedIndex.ToString();
+            patchPath.InnerText = xmlPatchPathCB.SelectedItem.ToString();
             patch.AppendChild(patchPath);
 
             XmlElement file = doc.CreateElement("file");
@@ -223,7 +223,7 @@ namespace RelhaxModpack
             patch.AppendChild(mode);
 
             XmlElement patchPath = doc.CreateElement("patchPath");
-            patchPath.InnerText = jsonPatchPathCB.SelectedIndex.ToString();
+            patchPath.InnerText = jsonPatchPathCB.SelectedItem.ToString();
             patch.AppendChild(patchPath);
 
             XmlElement file = doc.CreateElement("file");
@@ -415,7 +415,7 @@ namespace RelhaxModpack
             patch.AppendChild(mode);
 
             XmlElement patchPath = doc.CreateElement("patchPath");
-            patchPath.InnerText = xvmPatchPathCB.SelectedIndex.ToString();
+            patchPath.InnerText = xvmPatchPathCB.SelectedItem.ToString();
             patch.AppendChild(patchPath);
 
             XmlElement file = doc.CreateElement("file");
