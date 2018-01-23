@@ -124,11 +124,12 @@
             // DatabaseTreeView
             // 
             this.DatabaseTreeView.BackColor = System.Drawing.SystemColors.Window;
+            this.DatabaseTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DatabaseTreeView.ForeColor = System.Drawing.Color.Blue;
             this.DatabaseTreeView.HideSelection = false;
-            this.DatabaseTreeView.Location = new System.Drawing.Point(3, 3);
+            this.DatabaseTreeView.Location = new System.Drawing.Point(0, 0);
             this.DatabaseTreeView.Name = "DatabaseTreeView";
-            this.DatabaseTreeView.Size = new System.Drawing.Size(497, 592);
+            this.DatabaseTreeView.Size = new System.Drawing.Size(503, 598);
             this.DatabaseTreeView.TabIndex = 0;
             this.DatabaseTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.DatabaseTreeView_AfterSelect);
             this.DatabaseTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.DatabaseTreeView_NodeMouseClick);
@@ -151,6 +152,9 @@
             // 
             // DatabasePanelTree
             // 
+            this.DatabasePanelTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.DatabasePanelTree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.DatabasePanelTree.Controls.Add(this.DatabaseTreeView);
             this.DatabasePanelTree.Location = new System.Drawing.Point(12, 30);
@@ -160,6 +164,7 @@
             // 
             // DatabaseEditPanel
             // 
+            this.DatabaseEditPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.DatabaseEditPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.DatabaseEditPanel.Controls.Add(this.ObjectLastUpdatedLabel);
             this.DatabaseEditPanel.Controls.Add(this.DownloadZipfileButton);
@@ -798,13 +803,14 @@
             this.ObjectPackageName.AutoSize = true;
             this.ObjectPackageName.Location = new System.Drawing.Point(8, 32);
             this.ObjectPackageName.Name = "ObjectPackageName";
-            this.ObjectPackageName.Size = new System.Drawing.Size(78, 13);
+            this.ObjectPackageName.Size = new System.Drawing.Size(77, 13);
             this.ObjectPackageName.TabIndex = 3;
-            this.ObjectPackageName.Text = "PackageName";
+            this.ObjectPackageName.Text = "packageName";
             // 
             // SaveDatabaseButton
             // 
-            this.SaveDatabaseButton.Location = new System.Drawing.Point(966, 636);
+            this.SaveDatabaseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.SaveDatabaseButton.Location = new System.Drawing.Point(964, 637);
             this.SaveDatabaseButton.Name = "SaveDatabaseButton";
             this.SaveDatabaseButton.Size = new System.Drawing.Size(104, 23);
             this.SaveDatabaseButton.TabIndex = 5;
@@ -814,7 +820,8 @@
             // 
             // LoadDatabaseButton
             // 
-            this.LoadDatabaseButton.Location = new System.Drawing.Point(876, 636);
+            this.LoadDatabaseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.LoadDatabaseButton.Location = new System.Drawing.Point(874, 637);
             this.LoadDatabaseButton.Name = "LoadDatabaseButton";
             this.LoadDatabaseButton.Size = new System.Drawing.Size(84, 23);
             this.LoadDatabaseButton.TabIndex = 6;
@@ -824,7 +831,8 @@
             // 
             // RemoveEntryButton
             // 
-            this.RemoveEntryButton.Location = new System.Drawing.Point(12, 636);
+            this.RemoveEntryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.RemoveEntryButton.Location = new System.Drawing.Point(12, 637);
             this.RemoveEntryButton.Name = "RemoveEntryButton";
             this.RemoveEntryButton.Size = new System.Drawing.Size(75, 23);
             this.RemoveEntryButton.TabIndex = 8;
@@ -834,7 +842,8 @@
             // 
             // AddEntryButton
             // 
-            this.AddEntryButton.Location = new System.Drawing.Point(174, 636);
+            this.AddEntryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.AddEntryButton.Location = new System.Drawing.Point(174, 637);
             this.AddEntryButton.Name = "AddEntryButton";
             this.AddEntryButton.Size = new System.Drawing.Size(75, 23);
             this.AddEntryButton.TabIndex = 9;
@@ -900,7 +909,8 @@
             // 
             // MoveButton
             // 
-            this.MoveButton.Location = new System.Drawing.Point(93, 636);
+            this.MoveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.MoveButton.Location = new System.Drawing.Point(93, 637);
             this.MoveButton.Name = "MoveButton";
             this.MoveButton.Size = new System.Drawing.Size(75, 23);
             this.MoveButton.TabIndex = 28;
@@ -910,8 +920,9 @@
             // 
             // SearchBox
             // 
+            this.SearchBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.SearchBox.FormattingEnabled = true;
-            this.SearchBox.Location = new System.Drawing.Point(523, 3);
+            this.SearchBox.Location = new System.Drawing.Point(523, 6);
             this.SearchBox.Name = "SearchBox";
             this.SearchBox.Size = new System.Drawing.Size(547, 21);
             this.SearchBox.TabIndex = 29;
@@ -922,7 +933,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1078, 671);
+            this.ClientSize = new System.Drawing.Size(1080, 672);
             this.Controls.Add(this.SearchBox);
             this.Controls.Add(this.MoveButton);
             this.Controls.Add(this.LogicalDependencyRB);
@@ -935,9 +946,8 @@
             this.Controls.Add(this.SaveDatabaseButton);
             this.Controls.Add(this.DatabaseEditPanel);
             this.Controls.Add(this.DatabasePanelTree);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(1090, 705);
             this.Name = "DatabaseEditor";
             this.Text = "DatabaseEditor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DatabaseEditor_FormClosing);
