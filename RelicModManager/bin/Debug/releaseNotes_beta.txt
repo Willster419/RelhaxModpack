@@ -1,3 +1,9 @@
+Version 27.7.3 (01/29/2018)
+https://www.virustotal.com/#/file/dc742c805fe2f487a1bb5736c11b707331a0efd5a03ae1e5243888a4faf53d4e/detection
+-Fixed bugs with the patchPath parameter during export of the patch designer
+-Made the database editor resizeable/fullscreen-able
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 27.7.2 (01/19/2018)
 https://www.virustotal.com/#/file/80f1efb6878618099b48b30bfbe86d844425df432b413c718571a87b6c008ef7/detection
 -Fixed resizing preference being forgotten for ModSelectionList
