@@ -121,7 +121,7 @@ namespace RelhaxModpack
                 else if (Regex.IsMatch(commandArgs[i], @"databaseupdate$"))
                 {
                     Logging.Manager("/databaseupdate detected, loading in database update mode");
-                    Application.Run(new CRCFileSizeUpdate());
+                    Application.Run(new DatabaseUpdater());
                     return;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"databaseoutput$"))

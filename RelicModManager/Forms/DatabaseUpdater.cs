@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace RelhaxModpack
 {
-    public partial class CRCFileSizeUpdate : Form
+    public partial class DatabaseUpdater : Form
     {
         private WebClient downloader;
         private List<Dependency> globalDependencies;
@@ -39,7 +39,7 @@ namespace RelhaxModpack
             "added the \"selections\" (developerSelections) names, creation date and filenames to the modInfo.xml, adding all parsed develeoperSelection-Config " +
             "files to the modInfo.dat archive";
 
-        public CRCFileSizeUpdate()
+        public DatabaseUpdater()
         {
             InitializeComponent();
         }
@@ -485,7 +485,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             using (WebClient client = new WebClient())
             {
-                OnlineScriptOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateServerInfo.php").Replace("<br />", "\n");
+                OnlineScriptOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateManagerInfo.php").Replace("<br />", "\n");
             }
             Application.DoEvents();
         }

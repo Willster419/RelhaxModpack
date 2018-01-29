@@ -1,6 +1,6 @@
 ﻿namespace RelhaxModpack
 {
-    partial class CRCFileSizeUpdate
+    partial class DatabaseUpdater
     {
         /// <summary>
         /// Required designer variable.
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DatabaseUpdater));
             this.loadDatabaseButton = new System.Windows.Forms.Button();
             this.databaseLocationTextBox = new System.Windows.Forms.RichTextBox();
             this.updateDatabaseOnline = new System.Windows.Forms.Button();
@@ -54,18 +55,18 @@
             // 
             // databaseLocationTextBox
             // 
-            this.databaseLocationTextBox.Location = new System.Drawing.Point(101, 14);
+            this.databaseLocationTextBox.Location = new System.Drawing.Point(12, 59);
             this.databaseLocationTextBox.Name = "databaseLocationTextBox";
             this.databaseLocationTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.databaseLocationTextBox.Size = new System.Drawing.Size(327, 39);
+            this.databaseLocationTextBox.Size = new System.Drawing.Size(316, 39);
             this.databaseLocationTextBox.TabIndex = 1;
             this.databaseLocationTextBox.Text = "-none-";
             // 
             // updateDatabaseOnline
             // 
-            this.updateDatabaseOnline.Location = new System.Drawing.Point(12, 59);
+            this.updateDatabaseOnline.Location = new System.Drawing.Point(116, 12);
             this.updateDatabaseOnline.Name = "updateDatabaseOnline";
-            this.updateDatabaseOnline.Size = new System.Drawing.Size(95, 35);
+            this.updateDatabaseOnline.Size = new System.Drawing.Size(95, 41);
             this.updateDatabaseOnline.TabIndex = 3;
             this.updateDatabaseOnline.Text = "update database (online method)";
             this.updateDatabaseOnline.UseVisualStyleBackColor = true;
@@ -90,9 +91,9 @@
             // 
             // RunCreateDatabasePHP
             // 
-            this.RunCreateDatabasePHP.Location = new System.Drawing.Point(434, 53);
+            this.RunCreateDatabasePHP.Location = new System.Drawing.Point(12, 145);
             this.RunCreateDatabasePHP.Name = "RunCreateDatabasePHP";
-            this.RunCreateDatabasePHP.Size = new System.Drawing.Size(119, 35);
+            this.RunCreateDatabasePHP.Size = new System.Drawing.Size(155, 35);
             this.RunCreateDatabasePHP.TabIndex = 5;
             this.RunCreateDatabasePHP.Text = "Run script CreateDatabase.php";
             this.RunCreateDatabasePHP.UseVisualStyleBackColor = true;
@@ -102,18 +103,21 @@
             // 
             // OnlineScriptOutput
             // 
-            this.OnlineScriptOutput.Location = new System.Drawing.Point(12, 100);
+            this.OnlineScriptOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.OnlineScriptOutput.Location = new System.Drawing.Point(345, 12);
             this.OnlineScriptOutput.Name = "OnlineScriptOutput";
             this.OnlineScriptOutput.ReadOnly = true;
-            this.OnlineScriptOutput.Size = new System.Drawing.Size(416, 130);
+            this.OnlineScriptOutput.Size = new System.Drawing.Size(435, 424);
             this.OnlineScriptOutput.TabIndex = 6;
             this.OnlineScriptOutput.Text = "";
             // 
             // updateDatabaseOffline
             // 
-            this.updateDatabaseOffline.Location = new System.Drawing.Point(113, 59);
+            this.updateDatabaseOffline.Location = new System.Drawing.Point(233, 12);
             this.updateDatabaseOffline.Name = "updateDatabaseOffline";
-            this.updateDatabaseOffline.Size = new System.Drawing.Size(95, 35);
+            this.updateDatabaseOffline.Size = new System.Drawing.Size(95, 41);
             this.updateDatabaseOffline.TabIndex = 7;
             this.updateDatabaseOffline.Text = "update database (local method)";
             this.updateDatabaseOffline.UseVisualStyleBackColor = true;
@@ -121,9 +125,9 @@
             // 
             // RunCreateModInfoPHP
             // 
-            this.RunCreateModInfoPHP.Location = new System.Drawing.Point(559, 12);
+            this.RunCreateModInfoPHP.Location = new System.Drawing.Point(173, 145);
             this.RunCreateModInfoPHP.Name = "RunCreateModInfoPHP";
-            this.RunCreateModInfoPHP.Size = new System.Drawing.Size(111, 35);
+            this.RunCreateModInfoPHP.Size = new System.Drawing.Size(155, 35);
             this.RunCreateModInfoPHP.TabIndex = 8;
             this.RunCreateModInfoPHP.Text = "Run script CreateModInfo.php";
             this.RunCreateModInfoPHP.UseVisualStyleBackColor = true;
@@ -133,11 +137,11 @@
             // 
             // RunCreateServerInfoPHP
             // 
-            this.RunCreateServerInfoPHP.Location = new System.Drawing.Point(434, 12);
+            this.RunCreateServerInfoPHP.Location = new System.Drawing.Point(12, 104);
             this.RunCreateServerInfoPHP.Name = "RunCreateServerInfoPHP";
-            this.RunCreateServerInfoPHP.Size = new System.Drawing.Size(119, 35);
+            this.RunCreateServerInfoPHP.Size = new System.Drawing.Size(155, 35);
             this.RunCreateServerInfoPHP.TabIndex = 9;
-            this.RunCreateServerInfoPHP.Text = "Run script CreateServerInfo.php";
+            this.RunCreateServerInfoPHP.Text = "Run script CreateManagerInfo.php";
             this.RunCreateServerInfoPHP.UseVisualStyleBackColor = true;
             this.RunCreateServerInfoPHP.Click += new System.EventHandler(this.RunCreateServerInfoPHP_Click);
             this.RunCreateServerInfoPHP.MouseEnter += new System.EventHandler(this.RunCreateServerInfoPHP_MouseEnter);
@@ -145,19 +149,20 @@
             // 
             // InfoTB
             // 
-            this.InfoTB.Location = new System.Drawing.Point(434, 100);
+            this.InfoTB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.InfoTB.Location = new System.Drawing.Point(12, 186);
             this.InfoTB.Name = "InfoTB";
             this.InfoTB.ReadOnly = true;
-            this.InfoTB.Size = new System.Drawing.Size(238, 130);
+            this.InfoTB.Size = new System.Drawing.Size(317, 250);
             this.InfoTB.TabIndex = 10;
             this.InfoTB.Text = "";
             // 
             // RunCreateOutdatedFilesList
             // 
-            this.RunCreateOutdatedFilesList.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RunCreateOutdatedFilesList.Location = new System.Drawing.Point(559, 53);
+            this.RunCreateOutdatedFilesList.Location = new System.Drawing.Point(173, 104);
             this.RunCreateOutdatedFilesList.Name = "RunCreateOutdatedFilesList";
-            this.RunCreateOutdatedFilesList.Size = new System.Drawing.Size(111, 35);
+            this.RunCreateOutdatedFilesList.Size = new System.Drawing.Size(155, 35);
             this.RunCreateOutdatedFilesList.TabIndex = 11;
             this.RunCreateOutdatedFilesList.Text = "Run script CreateOutDatesFilesList.php";
             this.RunCreateOutdatedFilesList.UseVisualStyleBackColor = true;
@@ -165,11 +170,11 @@
             this.RunCreateOutdatedFilesList.MouseEnter += new System.EventHandler(this.RunCreateOutdatedFilesList_MouseEnter);
             this.RunCreateOutdatedFilesList.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
-            // CRCFileSizeUpdate
+            // DatabaseUpdater
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(677, 237);
+            this.ClientSize = new System.Drawing.Size(790, 447);
             this.Controls.Add(this.RunCreateOutdatedFilesList);
             this.Controls.Add(this.InfoTB);
             this.Controls.Add(this.RunCreateServerInfoPHP);
@@ -180,9 +185,9 @@
             this.Controls.Add(this.updateDatabaseOnline);
             this.Controls.Add(this.databaseLocationTextBox);
             this.Controls.Add(this.loadDatabaseButton);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.Name = "CRCFileSizeUpdate";
+            this.Name = "DatabaseUpdater";
             this.Text = "CRCFileSizeUpdate";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CRCFileSizeUpdate_FormClosing);
             this.Load += new System.EventHandler(this.CRCFileSizeUpdate_Load);

@@ -207,11 +207,11 @@
     <Compile Include="LegacyComponents\CRCCHECK2.Designer.cs">
       <DependentUpon>CRCCHECK2.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\CRCFileSizeUpdate.cs">
+    <Compile Include="Forms\DatabaseUpdater.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\CRCFileSizeUpdate.Designer.cs">
-      <DependentUpon>CRCFileSizeUpdate.cs</DependentUpon>
+    <Compile Include="Forms\DatabaseUpdater.Designer.cs">
+      <DependentUpon>DatabaseUpdater.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\DatabaseAdder.cs">
       <SubType>Form</SubType>
@@ -355,8 +355,8 @@
     <EmbeddedResource Include="LegacyComponents\CRCCHECK2.resx">
       <DependentUpon>CRCCHECK2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\CRCFileSizeUpdate.resx">
-      <DependentUpon>CRCFileSizeUpdate.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\DatabaseUpdater.resx">
+      <DependentUpon>DatabaseUpdater.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DatabaseAdder.resx">
       <DependentUpon>DatabaseAdder.cs</DependentUpon>
