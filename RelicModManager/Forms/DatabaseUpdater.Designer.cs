@@ -40,7 +40,7 @@
             this.RunCreateModInfoPHP = new System.Windows.Forms.Button();
             this.RunCreateServerInfoPHP = new System.Windows.Forms.Button();
             this.InfoTB = new System.Windows.Forms.RichTextBox();
-            this.RunCreateOutdatedFilesList = new System.Windows.Forms.Button();
+            this.RunCreateOutdatedFileList = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // loadDatabaseButton
@@ -158,24 +158,24 @@
             this.InfoTB.TabIndex = 10;
             this.InfoTB.Text = "";
             // 
-            // RunCreateOutdatedFilesList
+            // RunCreateOutdatedFileList
             // 
-            this.RunCreateOutdatedFilesList.Location = new System.Drawing.Point(173, 104);
-            this.RunCreateOutdatedFilesList.Name = "RunCreateOutdatedFilesList";
-            this.RunCreateOutdatedFilesList.Size = new System.Drawing.Size(155, 35);
-            this.RunCreateOutdatedFilesList.TabIndex = 11;
-            this.RunCreateOutdatedFilesList.Text = "Run script CreateOutDatesFilesList.php";
-            this.RunCreateOutdatedFilesList.UseVisualStyleBackColor = true;
-            this.RunCreateOutdatedFilesList.Click += new System.EventHandler(this.RunCreateOutdatedFilesList_Click);
-            this.RunCreateOutdatedFilesList.MouseEnter += new System.EventHandler(this.RunCreateOutdatedFilesList_MouseEnter);
-            this.RunCreateOutdatedFilesList.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            this.RunCreateOutdatedFileList.Location = new System.Drawing.Point(173, 104);
+            this.RunCreateOutdatedFileList.Name = "RunCreateOutdatedFileList";
+            this.RunCreateOutdatedFileList.Size = new System.Drawing.Size(155, 35);
+            this.RunCreateOutdatedFileList.TabIndex = 11;
+            this.RunCreateOutdatedFileList.Text = "Run script CreateOutdatedFileList.php";
+            this.RunCreateOutdatedFileList.UseVisualStyleBackColor = true;
+            this.RunCreateOutdatedFileList.Click += new System.EventHandler(this.RunCreateOutdatedFilesList_Click);
+            this.RunCreateOutdatedFileList.MouseEnter += new System.EventHandler(this.RunCreateOutdatedFileList_MouseEnter);
+            this.RunCreateOutdatedFileList.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // DatabaseUpdater
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(790, 447);
-            this.Controls.Add(this.RunCreateOutdatedFilesList);
+            this.Controls.Add(this.RunCreateOutdatedFileList);
             this.Controls.Add(this.InfoTB);
             this.Controls.Add(this.RunCreateServerInfoPHP);
             this.Controls.Add(this.RunCreateModInfoPHP);
@@ -208,6 +208,6 @@
         private System.Windows.Forms.Button RunCreateModInfoPHP;
         private System.Windows.Forms.Button RunCreateServerInfoPHP;
         private System.Windows.Forms.RichTextBox InfoTB;
-        private System.Windows.Forms.Button RunCreateOutdatedFilesList;
+        private System.Windows.Forms.Button RunCreateOutdatedFileList;
     }
 }

@@ -25,9 +25,7 @@ namespace RelhaxModpack
         StringBuilder filesNotFoundSB = new StringBuilder();
         string serverInfo = "creating the manageInfo.dat file, containing the files: " +
             "\nmanager_version.xml\n" +
-            "manager version.txt (will be deprecated)\n" +
             "supported_clients.xml\n" +
-            "supported_clients.txt (will be deprecated)\n" +
             "databaseUpdate.txt\n" +
             "releaseNotes.txt\n" +
             "releaseNotes_beta.txt\n" +
@@ -214,7 +212,8 @@ namespace RelhaxModpack
             //update the file size
             //save config file
             XMLUtils.SaveDatabase(databaseLocationTextBox.Text, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
-            MessageBox.Show(filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
+            //MessageBox.Show(filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
+            OnlineScriptOutput.Text = filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString();
             Program.databaseUpdateOnline = false;
         }
 
@@ -409,7 +408,8 @@ namespace RelhaxModpack
             //update the file size
             //save config file
             XMLUtils.SaveDatabase(databaseLocationTextBox.Text, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
-            MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
+            //MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
+            OnlineScriptOutput.Text = globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString();
         }
 
         private void processConfigsCRCUpdate_old(List<Config> cfgList)
@@ -521,10 +521,10 @@ namespace RelhaxModpack
             Application.DoEvents();
         }
 
-        private void RunCreateOutdatedFilesList_MouseEnter(object sender, EventArgs e)
+        private void RunCreateOutdatedFileList_MouseEnter(object sender, EventArgs e)
         {
             //todo
-            InfoTB.Text = "";
+            InfoTB.Text = "Creates an xml list of files not linked in modInfo.xml, but still in the folder.";
         }
     }
 }
