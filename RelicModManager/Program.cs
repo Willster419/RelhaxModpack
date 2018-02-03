@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using RelhaxModpack.Forms;
 
 namespace RelhaxModpack
 {
@@ -28,7 +29,7 @@ namespace RelhaxModpack
             Beta = 1,
             Alpha = 2
         }
-        public static ProgramVersion Version = ProgramVersion.Stable;
+        public static ProgramVersion Version = ProgramVersion.Alpha;
         [STAThread]
         static void Main()
         {
@@ -60,6 +61,10 @@ namespace RelhaxModpack
             string[] commandArgs = Environment.GetCommandLineArgs();
             //log command line
             Logging.Manager("command line: " + string.Join(" ", commandArgs));
+            //start the background taskbar form
+            //later to be done as an option
+            BackgroundForm bf = new BackgroundForm();
+            bf.Show();
             for (int i = 0; i < commandArgs.Count(); i++)
             {
                 //check what type of arg each one is
@@ -154,7 +159,8 @@ namespace RelhaxModpack
                 Utils.ExceptionLog("Main", "loadHashes", ex);
             }
             Logging.Manager("Attempting to load MainWindow");
-            Application.Run(new MainWindow());
+            bf.HostWindow = new MainWindow();
+            Application.Run(bf.HostWindow);
         }
 
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)

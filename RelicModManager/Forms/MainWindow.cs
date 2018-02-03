@@ -290,7 +290,7 @@ namespace RelhaxModpack
         }
 
         //method to check for updates to the application on startup
-        private void CheckmanagerUpdates()
+        public void CheckmanagerUpdates()
         {
             Logging.Manager("Starting check for application updates");
             //download the updates
