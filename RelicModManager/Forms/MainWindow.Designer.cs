@@ -1007,7 +1007,7 @@
             this.ApplicationVersionLabel.Name = "ApplicationVersionLabel";
             this.ApplicationVersionLabel.Size = new System.Drawing.Size(222, 23);
             this.ApplicationVersionLabel.TabIndex = 1;
-            this.ApplicationVersionLabel.Text = "Application v{version]";
+            this.ApplicationVersionLabel.Text = "Application v{version}";
             this.ApplicationVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // downloadProgress

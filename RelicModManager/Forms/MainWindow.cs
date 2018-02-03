@@ -361,6 +361,9 @@ namespace RelhaxModpack
                                 break;
                             }
                         }
+                        //check if the application is windowState normal
+                        if (WindowState != FormWindowState.Normal)
+                            WindowState = FormWindowState.Normal;
 
                         if (File.Exists(newExeName)) File.Delete(newExeName);
                         string modpackExeURL = Program.betaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
@@ -627,7 +630,8 @@ namespace RelhaxModpack
             gp = new LoadingGifPreview(this.Location.X + this.Size.Width + 5, this.Location.Y);
             //show the wait screen
             PleaseWait wait = new PleaseWait();
-            wait.Show();
+            if(!Program.silentStart)
+                wait.Show();
             WebRequest.DefaultWebProxy = null;
             Application.DoEvents();
             Logging.Manager(string.Format("|RelHax Modpack {0} ({1})", ManagerVersion(), Program.Version == Program.ProgramVersion.Beta ? "beta" : Program.Version == Program.ProgramVersion.Alpha ? "alpha" : "stable"));
@@ -738,7 +742,8 @@ namespace RelhaxModpack
                 //Settings.FirstLoad = false;
                 generic_MouseLeave(null, null);
             }
-            wait.Close();
+            if (!Program.silentStart)
+                wait.Close();
             ToggleUIButtons(true);
             Application.DoEvents();
             Program.saveSettings = true;

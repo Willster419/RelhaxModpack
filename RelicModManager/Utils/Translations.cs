@@ -152,6 +152,36 @@ namespace RelhaxModpack
             polish.Add("playPause", "TODO");
             french.Add("playPause", "Jouer/Pauser");
 
+            //Section: BackgroundForm
+
+            //Component: MenuItemRestore
+            //The menu item for restoring the application
+            english.Add("MenuItemRestore", "Restore");
+            german.Add("MenuItemRestore", "TODO");
+            polish.Add("MenuItemRestore", "TODO");
+            french.Add("MenuItemRestore", "TODO");
+
+            //Component: MenuItemCheckUpdates
+            //The menu item for restoring the application
+            english.Add("MenuItemCheckUpdates", "Check for Updates");
+            german.Add("MenuItemCheckUpdates", "TODO");
+            polish.Add("MenuItemCheckUpdates", "TODO");
+            french.Add("MenuItemCheckUpdates", "TODO");
+
+            //Component: MenuItemAppClose
+            //The menu item for restoring the application
+            english.Add("MenuItemAppClose", "Close");
+            german.Add("MenuItemAppClose", "TODO");
+            polish.Add("MenuItemAppClose", "TODO");
+            french.Add("MenuItemAppClose", "TODO");
+
+            //Component: newDBApplied
+            //MessageBox for when a new database version is applied
+            english.Add("newDBApplied", "New database version applied");
+            german.Add("newDBApplied", "TODO");
+            polish.Add("newDBApplied", "TODO");
+            french.Add("newDBApplied", "TODO");
+
             //Section: MainWindow
 
             //Componet: installRelhaxMod

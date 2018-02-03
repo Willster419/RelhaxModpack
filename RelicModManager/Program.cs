@@ -22,6 +22,7 @@ namespace RelhaxModpack
         public static bool databaseUpdateOnline = false;
         public static bool betaDatabase = false;
         public static bool betaApplication = false;
+        public static bool silentStart = false;
         public static string configName = "";
         public enum ProgramVersion
         {
@@ -98,6 +99,11 @@ namespace RelhaxModpack
                     Logging.Manager("/beta-application detected, welcome beta tester");
                     betaApplication = true;
                 }
+                else if (Regex.IsMatch(commandArgs[i], @"silent-start"))
+                {
+                    Logging.Manager("/silent-start detected, loading in silent mode");
+                    silentStart = true;
+                }
                 else if (Regex.IsMatch(commandArgs[i], @"auto-install$"))
                 {
                     Logging.Manager("/auto-install detected");
@@ -160,6 +166,8 @@ namespace RelhaxModpack
             }
             Logging.Manager("Attempting to load MainWindow");
             bf.HostWindow = new MainWindow();
+            if (silentStart)
+                bf.HostWindow.WindowState = FormWindowState.Minimized;
             Application.Run(bf.HostWindow);
         }
 

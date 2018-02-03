@@ -54,7 +54,7 @@
             this.MenuItemCheckUpdates,
             this.MenuItemAppClose});
             this.RelhaxMenuStrip.Name = "RelhaxMenuStrip";
-            this.RelhaxMenuStrip.Size = new System.Drawing.Size(172, 92);
+            this.RelhaxMenuStrip.Size = new System.Drawing.Size(172, 70);
             this.RelhaxMenuStrip.Text = "Test";
             // 
             // MenuItemRestore
@@ -89,6 +89,7 @@
             this.ShowInTaskbar = false;
             this.Text = "BackgroundForm";
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
+            this.Load += new System.EventHandler(this.BackgroundForm_Load);
             this.SizeChanged += new System.EventHandler(this.BackgroundForm_SizeChanged);
             this.RelhaxMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
