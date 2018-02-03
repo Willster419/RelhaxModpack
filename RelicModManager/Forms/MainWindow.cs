@@ -358,7 +358,7 @@ namespace RelhaxModpack
                             {
                                 Logging.Manager("User canceled update, because he does not want to end the parallel running Relhax instance.");
                                 Application.Exit();
-                                break;
+                                return;
                             }
                         }
                         //check if the application is windowState normal
