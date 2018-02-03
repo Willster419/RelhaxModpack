@@ -1338,7 +1338,11 @@ namespace RelhaxModpack
                     //set the attributes to normall
                     File.SetAttributes(diArr[i].FullName, FileAttributes.Normal);
                     //add patches to patchList
-                    this.createPatchList(diArr[i].FullName);
+                    // modify the xml filename for logging purpose
+                    string nativeProcessingFile = Path.GetFileNameWithoutExtension(diArr[i].Name);
+                    string actualPatchName = originalSortedPatchNames[nativeProcessingFile];
+                    Logging.Manager(string.Format("Adding patches from file: {0}", actualPatchName));
+                    createPatchList(diArr[i].FullName);
                 }
                 args.ParrentTotalToProcess = patchList.Count;
                 args.ParrentProcessed = 0;
