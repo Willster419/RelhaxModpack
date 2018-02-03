@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace RelhaxModpack
+﻿namespace RelhaxModpack
 {
     //a config is a configuration for a mod to make the mod function if a certain way
     //in some scenarios, the config is the mod itself
@@ -9,7 +7,7 @@ namespace RelhaxModpack
         //can the user select multiple configs or one only?
         public string Type { get; set; }
         
-        //public List<Config> configs = new List<Config>();
+        
         //the list of dependencies for this catagory
         //the parent of a config is a mod OR another config
         public SelectableDatabasePackage Parent { get; set; }

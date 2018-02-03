@@ -272,6 +272,7 @@ namespace RelhaxModpack
         //must be only one catagory
         private void AddAllMods()
         {
+            //start build category selections
             foreach (Category c in ParsedCatagoryList)
             {
                 TabPage t = new TabPage(c.Name)
@@ -308,69 +309,54 @@ namespace RelhaxModpack
                 }
                 modTabGroups.TabPages.Add(t);
             }
+            //end build category selections
+            //start package zip file crc checking
+            if (FirstLoad)
+            {
+                Prog = 0;
+                foreach (Category c in ParsedCatagoryList)
+                {
+                    foreach (Mod m in c.Mods)
+                    {
+                        if (pw != null)
+                        {
+                            pw.loadingDescBox.Text = string.Format("{0} {1}", "Checking dl cache of mod", m.Name);
+                            pw.SetProgress(Prog++);
+                            Application.DoEvents();
+                        }
+
+                    }
+                }
+            }
+            //end package zip file crc checking
+            //start ui building
+            Prog = 0;
+            pw.SetProgress(0);
+            Application.DoEvents();
             foreach (Category c in ParsedCatagoryList)
             {
                 foreach (Mod m in c.Mods)
                 {
-
                     if (pw != null)
                     {
                         pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.getTranslatedString("loading"), m.Name);
-                        Prog++;
-                        pw.SetProgress(Prog);
+                        pw.SetProgress(Prog++);
                         Application.DoEvents();
                     }
 
-                    if (Settings.SView == Settings.SelectionView.Default)
+                    switch(Settings.SView)
                     {
-                        //use default UI
-                        AddModDefaultView(m, c.TabPage, c);
-                    }
-                    else if (Settings.SView == Settings.SelectionView.Legacy)
-                    {
-                        //use legacy OMC UI
-                        ElementHost h = (ElementHost)c.TabPage.Controls[0];
-                        AddModOMCView(m, c.TabPage, (LegacySelectionList)h.Child, c);
-                    }
-                    else
-                    {
-                        //default case, use default view
-                        AddModDefaultView(m, c.TabPage, c);
+                        case Settings.SelectionView.Default:
+                            AddModDefaultView(m, c.TabPage, c);
+                            break;
+                        case Settings.SelectionView.Legacy:
+                            ElementHost h = (ElementHost)c.TabPage.Controls[0];
+                            AddModOMCView(m, c.TabPage, (LegacySelectionList)h.Child, c);
+                            break;
                     }
                 }
             }
-        }
-
-        private void Lsl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (e.RightButton != System.Windows.Input.MouseButtonState.Pressed)
-            {
-                return;
-            }
-            LegacySelectionList lsl = (LegacySelectionList)sender;
-            //contentPresenter
-            //object o = e.OriginalSource;
-            if(e.OriginalSource is System.Windows.Controls.ContentPresenter cp)
-            {
-                if(cp.Content is ConfigWPFCheckBox cb)
-                {
-                    if (cb.IsEnabled)
-                        return;
-                    Generic_MouseDown(cb, e);
-                }
-                else if (cp.Content is ConfigWPFRadioButton rb)
-                {
-                    if (rb.IsEnabled)
-                        return;
-                    Generic_MouseDown(rb, e);
-                }
-                else if (cp.Content is ModWPFCheckBox mcb)
-                {
-                    if (mcb.IsEnabled)
-                        return;
-                    Generic_MouseDown(mcb, e);
-                }
-            }
+            //end ui building
         }
 
         //adds all usermods to thier own userMods tab
@@ -483,6 +469,29 @@ namespace RelhaxModpack
             }
         }
         #endregion
+        //checks the crc of the zip file for each md and config
+        private void CheckCRC(Mod m)
+        {
+            //get the local md5 hash. a -1 indicates the file is not on the disk
+            string oldCRC2 = GetMD5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", m.ZipFile));
+            if ((!m.ZipFile.Equals("")) && (!m.CRC.Equals(oldCRC2)))
+            {
+                m.DownloadFlag = true;
+            }
+            if(m.configs.Count > 0)
+            {
+                foreach (Config c in m.configs)
+                    CheckCRC(c);
+            }
+        }
+        private void CheckCRC(Config c)
+        {
+            string oldCRC = GetMD5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", c.ZipFile));
+            if ((!c.CRC.Equals("")) && (!oldCRC.Equals(c.CRC)))
+            {
+                c.DownloadFlag = true;
+            }
+        }
         //adds a mod m to a tabpage t, OMC treeview style
         private void AddModOMCView(Mod m, TabPage t, LegacySelectionList lsl, Category c)
         {
@@ -543,27 +552,13 @@ namespace RelhaxModpack
             if (m.configs.Count > 0)
                 AddConfigsOMCView(c, m, m.configs, tvi, true);
             //if the CRC's don't match and the mod actually has a zip file
-            if (FirstLoad)
+            if (m.DownloadFlag)
             {
-                //get the local md5 hash. a -1 indicates the file is not on the disk
-                string oldCRC2 = GetMD5Hash(modDownloadFilePath);
-                if ((!m.ZipFile.Equals("")) && (!m.CRC.Equals(oldCRC2)))
-                {
-                    modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Translations.getTranslatedString("updated"));
-                    m.DownloadFlag = true;
-                    if ((m.Size > 0))
-                        modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Utils.SizeSuffix(m.Size, 1, true));
-                }
+                modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Translations.getTranslatedString("updated"));
+                if ((m.Size > 0))
+                    modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Utils.SizeSuffix(m.Size, 1, true));
             }
-            else
-            {
-                if (m.DownloadFlag)
-                {
-                    modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Translations.getTranslatedString("updated"));
-                    if ((m.Size > 0))
-                        modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Utils.SizeSuffix(m.Size, 1, true));
-                }
-            }
+            
             tvi.Header = modCheckBox;
             //add it's handlers, right click and when checked
             modCheckBox.MouseDown += Generic_MouseDown;
@@ -661,27 +656,14 @@ namespace RelhaxModpack
                     if (configControlRB.IsEnabled)
                         if (con.Checked)
                             configControlRB.IsChecked = true;
-                    //run the checksum logix
-                    if (FirstLoad)
+                    
+                    if (con.DownloadFlag)
                     {
-                        string oldCRC = GetMD5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.ZipFile));
-                        if ((!con.CRC.Equals("")) && (!oldCRC.Equals(con.CRC)))
-                        {
-                            configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Translations.getTranslatedString("updated"));
-                            con.DownloadFlag = true;
-                            if (con.Size > 0)
-                                configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Utils.SizeSuffix(con.Size, 1, true));
-                        }
+                        configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Translations.getTranslatedString("updated"));
+                        if (con.Size > 0)
+                            configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Utils.SizeSuffix(con.Size, 1, true));
                     }
-                    else
-                    {
-                        if (con.DownloadFlag)
-                        {
-                            configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Translations.getTranslatedString("updated"));
-                            if (con.Size > 0)
-                                configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Utils.SizeSuffix(con.Size, 1, true));
-                        }
-                    }
+                    
                     //add the handlers at the end
                     configControlRB.Checked += configControlRB_Click;
                     configControlRB.Unchecked += configControlRB_Click;
@@ -770,28 +752,15 @@ namespace RelhaxModpack
                     configControlDDALL.MinWidth = 100;
                     ComboBoxItem cbi = null;
                     string toAdd = Utils.ReplaceMacro(con);
-                    //run the CRC logics
-                    if (FirstLoad)
+                    
+                    if (con.DownloadFlag)
                     {
-                        string oldCRC = GetMD5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.ZipFile));
-                        if ((!con.CRC.Equals("")) && (!oldCRC.Equals(con.CRC)))
-                        {
-                            toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
-                            con.DownloadFlag = true;
-                            if (con.Size > 0)
-                                toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.Size, 1, true));
-                        }
+                        toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
+                        con.DownloadFlag = true;
+                        if (con.Size > 0)
+                            toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.Size, 1, true));
                     }
-                    else
-                    {
-                        if (con.DownloadFlag)
-                        {
-                            toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
-                            con.DownloadFlag = true;
-                            if (con.Size > 0)
-                                toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.Size, 1, true));
-                        }
-                    }
+                    
                     //add it
                     if (con.Enabled)
                     {
@@ -892,28 +861,15 @@ namespace RelhaxModpack
                     if (configControlCB.IsEnabled)
                         if (con.Checked)
                             configControlCB.IsChecked = true;
-                    //run the checksum logix
-                    if (FirstLoad)
+                    
+                    if (con.DownloadFlag)
                     {
-                        string oldCRC = XMLUtils.GetMd5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.ZipFile));
-                        if ((!con.CRC.Equals("")) && (!oldCRC.Equals(con.CRC)))
-                        {
-                            configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Translations.getTranslatedString("updated"));
-                            con.DownloadFlag = true;
-                            if (con.Size > 0)
-                                configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Utils.SizeSuffix(con.Size, 1, true));
-                        }
+                        configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Translations.getTranslatedString("updated"));
+                        con.DownloadFlag = true;
+                        if (con.Size > 0)
+                            configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Utils.SizeSuffix(con.Size, 1, true));
                     }
-                    else
-                    {
-                        if (con.DownloadFlag)
-                        {
-                            configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Translations.getTranslatedString("updated"));
-                            con.DownloadFlag = true;
-                            if (con.Size > 0)
-                                configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Utils.SizeSuffix(con.Size, 1, true));
-                        }
-                    }
+                    
                     //add the handlers at the end
                     configControlCB.Checked += configControlCB_Click;
                     configControlCB.Unchecked += configControlCB_Click;
@@ -1409,32 +1365,14 @@ namespace RelhaxModpack
             //add it to the search list
             CompleteModSearchList.Add(m);
             //the mod checksum logic
-            if (!m.ZipFile.Equals(""))
+            
+            if (m.DownloadFlag)
             {
-                string modDownloadPath = Path.Combine(Application.StartupPath, "RelHaxDownloads", m.ZipFile);
-                //firstLoad was there first
-                if (FirstLoad)
-                {
-                    string oldCRC2 = GetMD5Hash(modDownloadPath);
-                    //if the CRC's don't match and the mod actually has a zip file
-                    if ((!m.CRC.Equals(oldCRC2)))
-                    {
-                        modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
-                        m.DownloadFlag = true;
-                        if ((m.Size > 0))
-                            modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.Size, 1, true));
-                    }
-                }
-                else
-                {
-                    if (m.DownloadFlag)
-                    {
-                        modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
-                        if ((m.Size > 0))
-                            modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.Size, 1, true));
-                    }
-                }
+                modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
+                if ((m.Size > 0))
+                    modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.Size, 1, true));
             }
+                
             //in theory it should trigger the handler for checked
             //when initially made it should be false, if Enabled from
             //from user configs
@@ -1602,29 +1540,14 @@ namespace RelhaxModpack
                             configControlRB.Checked = true;
                     configControlRB.Text = Utils.ReplaceMacro(con);
                     //run checksum logic
-                    if (!con.ZipFile.Equals(""))
+                    
+                    if (con.DownloadFlag)
                     {
-                        if (FirstLoad)
-                        {
-                            string oldCRC = GetMD5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.ZipFile));
-                            if ((!oldCRC.Equals(con.CRC)))
-                            {
-                                configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
-                                con.DownloadFlag = true;
-                                if (con.Size > 0)
-                                    configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.Size, 1, true));
-                            }
-                        }
-                        else
-                        {
-                            if (con.DownloadFlag)
-                            {
-                                configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
-                                if (con.Size > 0)
-                                    configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.Size, 1, true));
-                            }
-                        }
+                        configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
+                        if (con.Size > 0)
+                            configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.Size, 1, true));
                     }
+                        
                     //add the config to the form
                     configPanel.Controls.Add(configControlRB);
                     //process the subconfigs
@@ -1689,26 +1612,14 @@ namespace RelhaxModpack
                     ComboBoxItem cbi = null;
                     string toAdd = Utils.ReplaceMacro(con);
                     //run the checksum locics
-                    if (FirstLoad)
+                    
+                    if (con.DownloadFlag)
                     {
-                        string oldCRC = GetMD5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.ZipFile));
-                        if ((!con.CRC.Equals("")) && (!oldCRC.Equals(con.CRC)))
-                        {
-                            con.DownloadFlag = true;
-                            toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
-                            if (con.Size > 0)
-                                toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.Size, 1, true));
-                        }
+                        toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
+                        if (con.Size > 0)
+                            toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.Size, 1, true));
                     }
-                    else
-                    {
-                        if (con.DownloadFlag)
-                        {
-                            toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
-                            if (con.Size > 0)
-                                toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.Size, 1, true));
-                        }
-                    }
+                    
                     //add it
                     if (con.Enabled)
                     {
@@ -1792,26 +1703,14 @@ namespace RelhaxModpack
                     
                     //checksum logic
                     configControlCB.Text = Utils.ReplaceMacro(con);
-                    if (FirstLoad)
+                    
+                    if (con.DownloadFlag)
                     {
-                        string oldCRC = GetMD5Hash(Path.Combine(Application.StartupPath, "RelHaxDownloads", con.ZipFile));
-                        if ((!con.CRC.Equals("")) && (!oldCRC.Equals(con.CRC)))
-                        {
-                            con.DownloadFlag = true;
-                            configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Translations.getTranslatedString("updated"));
-                            if (con.Size > 0)
-                                configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Utils.SizeSuffix(con.Size, 1, true));
-                        }
+                        configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Translations.getTranslatedString("updated"));
+                        if (con.Size > 0)
+                            configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Utils.SizeSuffix(con.Size, 1, true));
                     }
-                    else
-                    {
-                        if (con.DownloadFlag)
-                        {
-                            configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Translations.getTranslatedString("updated"));
-                            if (con.Size > 0)
-                                configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Utils.SizeSuffix(con.Size, 1, true));
-                        }
-                    }
+                    
                     //add config to the form
                     configPanel.Controls.Add(configControlCB);
                     //process subconfigs
@@ -2476,6 +2375,39 @@ namespace RelhaxModpack
                         Medias = DBO.PictureList
                     };
                     p.Show();
+                }
+            }
+        }
+
+        //Handler for allowing right click of disabled mods
+        private void Lsl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.RightButton != System.Windows.Input.MouseButtonState.Pressed)
+            {
+                return;
+            }
+            LegacySelectionList lsl = (LegacySelectionList)sender;
+            //contentPresenter
+            //object o = e.OriginalSource;
+            if (e.OriginalSource is System.Windows.Controls.ContentPresenter cp)
+            {
+                if (cp.Content is ConfigWPFCheckBox cb)
+                {
+                    if (cb.IsEnabled)
+                        return;
+                    Generic_MouseDown(cb, e);
+                }
+                else if (cp.Content is ConfigWPFRadioButton rb)
+                {
+                    if (rb.IsEnabled)
+                        return;
+                    Generic_MouseDown(rb, e);
+                }
+                else if (cp.Content is ModWPFCheckBox mcb)
+                {
+                    if (mcb.IsEnabled)
+                        return;
+                    Generic_MouseDown(mcb, e);
                 }
             }
         }
