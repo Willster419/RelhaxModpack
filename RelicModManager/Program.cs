@@ -62,10 +62,6 @@ namespace RelhaxModpack
             string[] commandArgs = Environment.GetCommandLineArgs();
             //log command line
             Logging.Manager("command line: " + string.Join(" ", commandArgs));
-            //start the background taskbar form
-            //later to be done as an option
-            BackgroundForm bf = new BackgroundForm();
-            bf.Show();
             for (int i = 0; i < commandArgs.Count(); i++)
             {
                 //check what type of arg each one is
@@ -164,10 +160,14 @@ namespace RelhaxModpack
             {
                 Utils.ExceptionLog("Main", "loadHashes", ex);
             }
-            Logging.Manager("Attempting to load MainWindow");
+            //start the background taskbar form
+            Logging.Manager("Attempting to load taskbar form and main window");
+            BackgroundForm bf = new BackgroundForm();
+            bf.Show();
             bf.HostWindow = new MainWindow();
             if (silentStart)
                 bf.HostWindow.WindowState = FormWindowState.Minimized;
+            Logging.Manager("Loading of taskbar form and main window complete");
             Application.Run(bf.HostWindow);
         }
 
