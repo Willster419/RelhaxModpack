@@ -496,6 +496,13 @@ namespace RelhaxModpack
             polish.Add("buildingUI", "Budowanie interfejsu");
             french.Add("buildingUI", "Construction de l'interface");
 
+            //Componet: checkingCache
+            //
+            english.Add("checkingCache", "checking download cache of ");
+            german.Add("checkingCache", "TODO");
+            polish.Add("checkingCache", "TODO");
+            french.Add("checkingCache", "TODO");
+
             //Section: Preview
             //Componet: descriptionBox
             //

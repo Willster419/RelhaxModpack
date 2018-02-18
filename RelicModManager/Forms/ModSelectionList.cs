@@ -320,11 +320,11 @@ namespace RelhaxModpack
                     {
                         if (pw != null)
                         {
-                            pw.loadingDescBox.Text = string.Format("{0} {1}", "Checking dl cache of mod", m.Name);
+                            pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.getTranslatedString("checkingCache"), m.Name);
                             pw.SetProgress(Prog++);
                             Application.DoEvents();
                         }
-
+                        CheckCRC(m);
                     }
                 }
             }
