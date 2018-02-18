@@ -23,6 +23,8 @@ namespace RelhaxModpack
         public static bool betaDatabase = false;
         public static bool betaApplication = false;
         public static bool silentStart = false;
+        public static bool forceVisible = false;
+        public static bool forceEnabled = false;
         public static string configName = "";
         public enum ProgramVersion
         {
@@ -106,6 +108,16 @@ namespace RelhaxModpack
                     autoInstall = true;
                     //parse the config file and advance the counter
                     configName = commandArgs[++i];
+                }
+                else if (Regex.IsMatch(commandArgs[i], @"forceVisible$"))
+                {
+                    Logging.Manager("/forceVisible detected, loading all invisible mods in selection list");
+                    forceVisible = true;
+                }
+                else if (Regex.IsMatch(commandArgs[i], @"forceEnabled$"))
+                {
+                    Logging.Manager("/forceEnabled detected, loading all visible mods as enabled");
+                    forceEnabled = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"crccheck2$"))
                 {

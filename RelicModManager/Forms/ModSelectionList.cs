@@ -495,8 +495,25 @@ namespace RelhaxModpack
         //adds a mod m to a tabpage t, OMC treeview style
         private void AddModOMCView(Mod m, TabPage t, LegacySelectionList lsl, Category c)
         {
-            if (!m.Visible)
+            //if forceVisible, show it anyway
+            if (!m.Visible && !Program.forceVisible)
                 return;
+            bool parentForcedEnabled = false;
+            bool parentForcedVisible = false;
+            //write if the mod is forced to be enabled or visible
+            if (!m.Visible && Program.forceVisible)
+            {
+                parentForcedVisible = true;
+                m.Name = m.Name + " [forcedVisible]";
+            }
+            if (!m.Enabled && Program.forceEnabled)
+            {
+                parentForcedEnabled = true;
+                m.Name = m.Name + " [forcedEnabled]";
+            }
+            //force the mod to be enabled at this point (if command line arguement)
+            if (Program.forceEnabled)
+                m.Enabled = true;
             if (Settings.DarkUI)
                 lsl.legacyTreeView.Background = System.Windows.Media.Brushes.Gray;
             //helpfull stuff
@@ -550,7 +567,7 @@ namespace RelhaxModpack
                 tvi.IsExpanded = true;
             //process configs
             if (m.configs.Count > 0)
-                AddConfigsOMCView(c, m, m.configs, tvi, true);
+                AddConfigsOMCView(c, m, m.configs, tvi, parentForcedVisible,parentForcedEnabled, true);
             //if the CRC's don't match and the mod actually has a zip file
             if (m.DownloadFlag)
             {
@@ -568,7 +585,8 @@ namespace RelhaxModpack
             modCheckBox.Unchecked += modCheckBoxL_Click;
         }
 
-        void AddConfigsOMCView(Category c, Mod m, List<Config> configs, System.Windows.Controls.TreeViewItem tvi, bool parentIsMod = false, Config parentConfig = null)
+        void AddConfigsOMCView(Category c, Mod m, List<Config> configs, System.Windows.Controls.TreeViewItem tvi,
+        bool parentForcedVisible, bool parentForcedEnabled, bool parentIsMod = false,  Config parentConfig = null)
         {
             //create the twp possible drop down options, and the mod optional config check box i guess
             ConfigWPFComboBox configControlDD = null;
@@ -576,8 +594,23 @@ namespace RelhaxModpack
             //process the configs
             foreach (Config con in configs)
             {
-                if (!con.Visible)
+                //if forceVisible, show it anyway
+                if (!con.Visible && !Program.forceVisible)
                     continue;
+                //write if the mod is forced to be enabled or visible
+                if ((!con.Visible || parentForcedVisible) && Program.forceVisible)
+                {
+                    parentForcedVisible = true;
+                    con.Name = con.Name + " [forcedVisible]";
+                }
+                if ((!con.Enabled || parentForcedEnabled) && Program.forceEnabled)
+                {
+                    parentForcedEnabled = true;
+                    con.Name = con.Name + " [forcedEnabled]";
+                }
+                //force the mod to be enabled at this point (if command line arguement)
+                if (Program.forceEnabled)
+                    con.Enabled = true;
                 //link stuff in memory
                 con.ParentMod = m;
                 if (parentIsMod)
@@ -675,7 +708,7 @@ namespace RelhaxModpack
                     tvi.Items.Add(configControlTVI);
                     //process the subconfigs
                     if (con.configs.Count > 0)
-                        AddConfigsOMCView(c, m, con.configs, configControlTVI, false, con);
+                        AddConfigsOMCView(c, m, con.configs, configControlTVI,parentForcedVisible,parentForcedEnabled, false, con);
                 }
                 else if (con.Type.Equals("single_dropdown") || con.Type.Equals("single_dropdown1") || con.Type.Equals("single_dropdown2"))
                 {
@@ -881,7 +914,7 @@ namespace RelhaxModpack
                     tvi.Items.Add(configControlTVI);
                     //process the subconfigs
                     if (con.configs.Count > 0)
-                        AddConfigsOMCView(c, m, con.configs, configControlTVI, false, con);
+                        AddConfigsOMCView(c, m, con.configs, configControlTVI,parentForcedVisible,parentForcedEnabled, false, con);
                 }
                 else
                 {
@@ -1337,9 +1370,26 @@ namespace RelhaxModpack
         //adds a mod m to a tabpage t
         private void AddModDefaultView(Mod m, TabPage t, Category catagory)
         {
-            if (!m.Visible)
+            //if forceVisible, show it anyway
+            if (!m.Visible && !Program.forceVisible)
                 return;
             int newPanelCount = t.Controls.Count + 1;
+            bool parentForcedEnabled = false;
+            bool parentForcedVisible = false;
+            //write if the mod is forced to be enabled or visible
+            if (!m.Visible && Program.forceVisible)
+            {
+                parentForcedVisible = true;
+                m.Name = m.Name + " [forcedVisible]";
+            }
+            if (!m.Enabled && Program.forceEnabled)
+            {
+                parentForcedEnabled = true;
+                m.Name = m.Name + " [forcedEnabled]";
+            }
+            //force the mod to be enabled at this point (if command line arguement)
+            if (Program.forceEnabled)
+                m.Enabled = true;
             //make the mod check box
             ModFormCheckBox modCheckBox = new ModFormCheckBox() {
                 AutoSize = true,
@@ -1409,7 +1459,7 @@ namespace RelhaxModpack
             mainPanel.Controls.Add(modCheckBox);
             //processes the subconfigs here
             if (m.configs.Count > 0)
-                AddConfigsDefaultView(t, m, catagory, modCheckBox, mainPanel, true, m.configs, mainPanel);
+                AddConfigsDefaultView(t, m, catagory, modCheckBox, mainPanel, true, m.configs, mainPanel, parentForcedVisible,parentForcedEnabled);
             //add to tab
             t.Controls.Add(mainPanel);
             //add the event handler before changing the checked state so the event
@@ -1417,7 +1467,8 @@ namespace RelhaxModpack
             modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
         }
 
-        private void AddConfigsDefaultView(TabPage t, Mod m, Category catagory, ModFormCheckBox modCheckBox, Panel mainPanel, bool parentIsMod, List<Config> configs, Panel topPanal, Config parentConfig = null)
+        private void AddConfigsDefaultView(TabPage t, Mod m, Category catagory, ModFormCheckBox modCheckBox, Panel mainPanel, bool parentIsMod, List<Config> configs,
+            Panel topPanal, bool parentForcedVisible, bool parentForcedEnabled, Config parentConfig = null)
         {
             //make config panel
             Panel configPanel = new Panel()
@@ -1475,8 +1526,23 @@ namespace RelhaxModpack
             ConfigFormComboBox configControlDD2 = null;
             foreach (Config con in configs)
             {
-                if (!con.Visible)
+                //if forceVisible, show it anyway
+                if (!con.Visible && !Program.forceVisible)
                     continue;
+                //write if the mod is forced to be enabled or visible
+                if ((!con.Visible || parentForcedVisible) && Program.forceVisible)
+                {
+                    parentForcedVisible = true;
+                    con.Name = con.Name + " [forcedVisible]";
+                }
+                if ((!con.Enabled || parentForcedEnabled) && Program.forceEnabled)
+                {
+                    parentForcedEnabled = true;
+                    con.Name = con.Name + " [forcedEnabled]";
+                }
+                //force the config to be enabled at this point (if command line arguement)
+                if (Program.forceEnabled)
+                    con.Enabled = true;
                 ConfigFormComboBox configControlDDALL = null;
                 con.ParentMod = m;
                 if (parentIsMod)
@@ -1552,7 +1618,7 @@ namespace RelhaxModpack
                     configPanel.Controls.Add(configControlRB);
                     //process the subconfigs
                     if (con.configs.Count > 0)
-                        AddConfigsDefaultView(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
+                        AddConfigsDefaultView(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, parentForcedVisible,parentForcedEnabled, con);
                 }
                 else if (con.Type.Equals("single_dropdown") || con.Type.Equals("single_dropdown1") || con.Type.Equals("single_dropdown2"))
                 {
@@ -1715,7 +1781,7 @@ namespace RelhaxModpack
                     configPanel.Controls.Add(configControlCB);
                     //process subconfigs
                     if (con.configs.Count > 0)
-                        AddConfigsDefaultView(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, con);
+                        AddConfigsDefaultView(t, m, catagory, modCheckBox, configPanel, false, con.configs, topPanal, parentForcedVisible, parentForcedEnabled, con);
                 }
                 else
                 {
