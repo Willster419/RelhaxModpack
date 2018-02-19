@@ -1,3 +1,10 @@
+Beta Version 27.8.0 (02/18/2018)
+-Added ability for database managers to start modpack with forced enabled and/or visible mod components
+-Split loading screen section into crc checks, then UI building
+-Added application to system tray, with abilities to close, restore, and check for application and database updates
+-Added ability for modpack to start silently in the background
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 27.7.3 (01/29/2018)
 https://www.virustotal.com/#/file/dc742c805fe2f487a1bb5736c11b707331a0efd5a03ae1e5243888a4faf53d4e/detection
 -Fixed bugs with the patchPath parameter during export of the patch designer
