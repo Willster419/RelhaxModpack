@@ -58,7 +58,7 @@ namespace RelhaxModpack
         // string tempOldDownload; => using userToken at Async download
         private List<Mod> userMods;
         string currentModDownloading;
-        private Installer ins;
+        public Installer ins;
         private Installer unI;
         private string tanksVersion;//0.9.x.y
         List<double> timeRemainArray;

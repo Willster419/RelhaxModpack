@@ -49,7 +49,7 @@ namespace RelhaxModpack.Forms
 
         private void MenuItemCheckUpdates_Click(object sender, EventArgs e)
         {
-            if (HostWindow != null)
+            if (HostWindow != null && HostWindow.ins == null)
             {
                 using (PleaseWait wait = new PleaseWait())
                 {
