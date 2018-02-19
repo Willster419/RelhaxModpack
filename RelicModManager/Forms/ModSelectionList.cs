@@ -491,6 +491,11 @@ namespace RelhaxModpack
             {
                 c.DownloadFlag = true;
             }
+            if (c.configs.Count > 0)
+            {
+                foreach (Config con in c.configs)
+                    CheckCRC(con);
+            }
         }
         //adds a mod m to a tabpage t, OMC treeview style
         private void AddModOMCView(Mod m, TabPage t, LegacySelectionList lsl, Category c)
