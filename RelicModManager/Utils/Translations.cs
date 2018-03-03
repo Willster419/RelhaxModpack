@@ -384,10 +384,10 @@ namespace RelhaxModpack
 
             //Componet: SuperExtractionCB
             //
-            english.Add("SuperExtractionCB", "Super extraction mode (experimental)");
-            german.Add("SuperExtractionCB", "Erweiterter entpack-modus (experimentell)");
-            polish.Add("SuperExtractionCB", "Tryb przyspieszonego wypakowywania (eksperymentalny)");
-            french.Add("SuperExtractionCB", "Super mode d'extraction (expérimental)");
+            english.Add("SuperExtractionCB", "Multicore extraction mode (experimental)");
+            german.Add("SuperExtractionCB", "TODO");
+            polish.Add("SuperExtractionCB", "TODO");
+            french.Add("SuperExtractionCB", "TODO");
 
             //Componet: SmartUninstallModeRB
             //
