@@ -110,6 +110,8 @@
             this.MoveButton = new System.Windows.Forms.Button();
             this.SearchBox = new System.Windows.Forms.ComboBox();
             this.ObjectUserdatasToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.ObjectLevel = new System.Windows.Forms.Label();
+            this.ObjectLevelLabel = new System.Windows.Forms.Label();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.ObjectPropertiesTabControl.SuspendLayout();
@@ -166,6 +168,8 @@
             // 
             this.DatabaseEditPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.DatabaseEditPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.DatabaseEditPanel.Controls.Add(this.ObjectLevelLabel);
+            this.DatabaseEditPanel.Controls.Add(this.ObjectLevel);
             this.DatabaseEditPanel.Controls.Add(this.ObjectLastUpdatedLabel);
             this.DatabaseEditPanel.Controls.Add(this.DownloadZipfileButton);
             this.DatabaseEditPanel.Controls.Add(this.ObjectVersionTB);
@@ -929,6 +933,24 @@
             this.SearchBox.SelectionChangeCommitted += new System.EventHandler(this.SearchBox_SelectionChangeCommitted);
             this.SearchBox.TextUpdate += new System.EventHandler(this.SearchBox_TextUpdate);
             // 
+            // ObjectLevel
+            // 
+            this.ObjectLevel.AutoSize = true;
+            this.ObjectLevel.Location = new System.Drawing.Point(6, 211);
+            this.ObjectLevel.Name = "ObjectLevel";
+            this.ObjectLevel.Size = new System.Drawing.Size(29, 13);
+            this.ObjectLevel.TabIndex = 34;
+            this.ObjectLevel.Text = "level";
+            // 
+            // ObjectLevelLabel
+            // 
+            this.ObjectLevelLabel.AutoSize = true;
+            this.ObjectLevelLabel.Location = new System.Drawing.Point(88, 211);
+            this.ObjectLevelLabel.Name = "ObjectLevelLabel";
+            this.ObjectLevelLabel.Size = new System.Drawing.Size(23, 13);
+            this.ObjectLevelLabel.TabIndex = 35;
+            this.ObjectLevelLabel.Text = "null";
+            // 
             // DatabaseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1054,5 +1076,7 @@
         private System.Windows.Forms.Button DownloadZipfileButton;
         private System.Windows.Forms.Label ObjectLastUpdatedLabel;
         private System.Windows.Forms.ToolTip ObjectUserdatasToolTip;
+        private System.Windows.Forms.Label ObjectLevelLabel;
+        private System.Windows.Forms.Label ObjectLevel;
     }
 }

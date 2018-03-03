@@ -45,6 +45,8 @@ namespace RelhaxModpack
         public string Description = "";
         //bool for wether the package is selected to install
         public bool Checked = false;
+        //keeping track of the level in the tree where it is. 0 is topmost level
+        public int Level = -1;
         //the list of cache files that should be backed up before wiping the directory
         public List<string> UserFiles = new List<string>();
         //the list of SelectablePackage entries within this instance of SelectablePackages

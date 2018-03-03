@@ -34,7 +34,7 @@ namespace RelhaxModpack
         // string GameVersion = ""; => changed to Settings.TanksVersion => could be accessed from ANY place of code
         // string OnlineFolderVersion = ""; => changed to Settings.tanksOnlineFolderVersion => could be accessed from ANY place of code
         private StringBuilder InUseSB;
-        private List<SelectablePackage> ListThatContainsConfig;
+        private List<SelectablePackage> ListThatContainsPackage;
         private bool UnsavedModifications = false;
         List<string> allPackageNames = new List<string>();
 
@@ -62,7 +62,7 @@ namespace RelhaxModpack
         private void DatabaseEditor_Load(object sender, EventArgs e)
         {
             DatabaseEditorMode = EditorMode.GlobalDependnecy;
-            ResetUI();
+            ResetUI(true,false);
         }
         //loads the database depending on the mode of the radiobuttons
         private void DisplayDatabase(bool resetUI = true)
@@ -122,16 +122,19 @@ namespace RelhaxModpack
 
             }
             if (resetUI)
-                ResetUI();
+                ResetUI(true,false);
         }
-        private void ResetUI()
+        private void ResetUI(bool clearSelects, bool hardReset)
         {
-            SelectedGlobalDependency = null;
-            SelectedDependency = null;
-            SelectedLogicalDependency = null;
-            SelectedDatabaseObject = null;
-            SelectedCategory = null;
-
+            if(clearSelects)
+            {
+                SelectedGlobalDependency = null;
+                SelectedDependency = null;
+                SelectedLogicalDependency = null;
+                SelectedDatabaseObject = null;
+                SelectedCategory = null;
+            }
+            //main panel
             ObjectNameTB.Enabled = false;
             ObjectNameTB.Text = "";
 
@@ -153,6 +156,9 @@ namespace RelhaxModpack
             ObjectVersionTB.Enabled = false;
             ObjectVersionTB.Text = "";
 
+            ObjectLevelLabel.Text = "";
+            ObjectLastUpdatedLabel.Text = "";
+
             ObjectTypeComboBox.Enabled = false;
             ObjectTypeComboBox.SelectedIndex = 0;
 
@@ -171,7 +177,41 @@ namespace RelhaxModpack
             DependenciesTabPage.Enabled = false;
             PictureTabPage.Enabled = false;
             UserDatasTabPage.Enabled = false;
+            if(hardReset)
+            {
+                // Description tab
+                ObjectDescTB.Text = "";
+                ObjectUpdateNotesTB.Text = "";
+
+                // Dependencies tab
+                ObjectDependenciesList.DataSource = null;
+                ObjectDependenciesList.Items.Clear();
+                ObjectDependenciesLabel.Text = "dependencies (click to edit)";
+                CurrentDependenciesCB.DataSource = null;
+                CurrentDependenciesCB.Items.Clear();
+                CurrentDependenciesCB.SelectedIndex = -1;
+                ObjectLogicalDependenciesList.DataSource = null;
+                ObjectLogicalDependenciesList.Items.Clear();
+                CurrentLogicalDependenciesCB.DataSource = null;
+                CurrentLogicalDependenciesCB.Items.Clear();
+                CurrentLogicalDependenciesCB.SelectedIndex = -1;
+                LogicalDependnecyNegateFlagCB.CheckedChanged -= LogicalDependnecyNegateFlagCB_CheckedChanged;
+                LogicalDependnecyNegateFlagCB.Checked = false;
+                LogicalDependnecyNegateFlagCB.CheckedChanged += LogicalDependnecyNegateFlagCB_CheckedChanged;
+
+                // Pictures tab
+                ObjectPicturesList.DataSource = null;
+                ObjectPicturesList.Items.Clear();
+                PicturesTypeCBox.SelectedIndex = -1;
+                PictureURLTB.Text = "";
+
+                // Userdata tab
+                ObjectUserdatasList.DataSource = null;
+                ObjectUserdatasList.Items.Clear();
+                ObjectUserdatasTB.Text = "";
+            }
         }
+
         private void DisplayDatabaseConfigs(DatabaseTreeNode parrent, List<SelectablePackage> configs)
         {
             foreach (SelectablePackage c in configs)
@@ -319,148 +359,74 @@ namespace RelhaxModpack
             }
             else if (SelectedCategory != null)
             {
-                int index = ParsedCategoryList.IndexOf(SelectedCategory);
-                SelectedCategory.Name = ObjectNameTB.Text;
-                switch (ObjectTypeComboBox.SelectedIndex)
-                {
-                    case 1:
-                        SelectedCategory.SelectionType = "single1";
-                        break;
-                    case 2:
-                        SelectedCategory.SelectionType = "single1";
-                        break;
-                    case 3:
-                        SelectedCategory.SelectionType = "single1";
-                        break;
-                    case 4:
-                        SelectedCategory.SelectionType = "multi";
-                        break;
-                    default:
-                        SelectedCategory.SelectionType = "multi";
-                        break;
-                }
-                ParsedCategoryList[index] = SelectedCategory;
+                MessageBox.Show("Editing Categories is not supported. Talk to Willster about why you fell this change is needed");
+                return;
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-                if (SelectedDatabaseObject is SelectablePackage)
+                if(!AcceptableType(SelectedDatabaseObject))
                 {
-#error this needs to be updated
-                    SelectablePackage m = (SelectablePackage)SelectedDatabaseObject;
-                    List<SelectablePackage> ModList = ListContainsMod(m);
-                    int index = ModList.IndexOf(m);
-                    //make changes
-                    m.Name = ObjectNameTB.Text;
-                    m.PackageName = ObjectPackageNameTB.Text;
-                    m.StartAddress = ObjectStartAddressTB.Text;
-                    m.EndAddress = ObjectEndAddressTB.Text;
-                    if (!SelectedDatabaseObject.ZipFile.Equals(ObjectZipFileTB.Text))
-                    {
-                        m.CRC = "f";
-                        m.ZipFile = ObjectZipFileTB.Text;
-                        m.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
-                        ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(m.Timestamp));
-                    }
-                    m.DevURL = ObjectDevURLTB.Text;
-                    m.Version = ObjectVersionTB.Text;
-                    m.Enabled = ObjectEnabledCheckBox.Checked;
-                    m.Visible = ObjectVisibleCheckBox.Checked;
-                    m.Description = ObjectDescTB.Text;
-                    m.UpdateComment = ObjectUpdateNotesTB.Text;
-                    ModList[index] = m;
+                    MessageBox.Show("Invalid index of package type for level");
+                    return;
                 }
-                else if (SelectedDatabaseObject is SelectablePackage)
+                //get the Packages list that contains this package
+                ListThatContainsPackage = null;
+                ListContainsPackage(SelectedDatabaseObject);
+                //found the list, get the index of the currnet entry
+                int index = ListThatContainsPackage.IndexOf(SelectedDatabaseObject);
+                //make changes
+                SelectedDatabaseObject.Name = ObjectNameTB.Text;
+                SelectedDatabaseObject.PackageName = ObjectPackageNameTB.Text;
+                SelectedDatabaseObject.StartAddress = ObjectStartAddressTB.Text;
+                SelectedDatabaseObject.EndAddress = ObjectEndAddressTB.Text;
+                if (!SelectedDatabaseObject.ZipFile.Equals(ObjectZipFileTB.Text))
                 {
-                    if (ObjectTypeComboBox.SelectedIndex == -1 || ObjectTypeComboBox.SelectedIndex == 0)
-                    {
-                        MessageBox.Show("Invalid Index of config type");
-                        return;
-                    }
-                    ListThatContainsConfig = null;
-                    SelectablePackage cfg = (SelectablePackage)SelectedDatabaseObject;
-                    ListContainsConfig(cfg);
-                    if (ListThatContainsConfig != null)
-                    {
-                        int index = ListThatContainsConfig.IndexOf(cfg);
-                        //make changes
-                        cfg.Name = ObjectNameTB.Text;
-                        cfg.PackageName = ObjectPackageNameTB.Text;
-                        cfg.StartAddress = ObjectStartAddressTB.Text;
-                        cfg.EndAddress = ObjectEndAddressTB.Text;
-                        if (!SelectedDatabaseObject.ZipFile.Equals(ObjectZipFileTB.Text))
-                        {
-                            cfg.CRC = "f";
-                            cfg.ZipFile = ObjectZipFileTB.Text;
-                            cfg.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
-                            ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(cfg.Timestamp));
-                        }
-                        cfg.DevURL = ObjectDevURLTB.Text;
-                        cfg.Version = ObjectVersionTB.Text;
-                        switch (ObjectTypeComboBox.SelectedIndex)
-                        {
-                            case 1:
-                                cfg.Type = "single1";
-                                break;
-                            case 2:
-                                cfg.Type = "single_dropdown1";
-                                break;
-                            case 3:
-                                cfg.Type = "single_dropdown2";
-                                break;
-                            case 4:
-                                cfg.Type = "multi";
-                                break;
-                        }
-                        cfg.Enabled = ObjectEnabledCheckBox.Checked;
-                        cfg.Visible = ObjectVisibleCheckBox.Checked;
-                        cfg.Description = ObjectDescTB.Text;
-                        cfg.UpdateComment = ObjectUpdateNotesTB.Text;
-                        ListThatContainsConfig[index] = cfg;
-                    }
+                    SelectedDatabaseObject.CRC = "f";
+                    SelectedDatabaseObject.ZipFile = ObjectZipFileTB.Text;
+                    SelectedDatabaseObject.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
+                    ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedDatabaseObject.Timestamp));
                 }
+                SelectedDatabaseObject.DevURL = ObjectDevURLTB.Text;
+                SelectedDatabaseObject.Version = ObjectVersionTB.Text;
+                SelectedDatabaseObject.Type = (string)ObjectTypeComboBox.SelectedItem;
+                SelectedDatabaseObject.Enabled = ObjectEnabledCheckBox.Checked;
+                SelectedDatabaseObject.Visible = ObjectVisibleCheckBox.Checked;
+                SelectedDatabaseObject.Description = ObjectDescTB.Text;
+                SelectedDatabaseObject.UpdateComment = ObjectUpdateNotesTB.Text;
+                ListThatContainsPackage[index] = SelectedDatabaseObject;
+                
             }
             this.DisplayDatabase(false);
             UnsavedModifications = true;
         }
-        private List<SelectablePackage> ListContainsMod(SelectablePackage mod)
+        private void ListContainsPackage(SelectablePackage sp)
         {
+            ListThatContainsPackage = null;
             foreach (Category cat in ParsedCategoryList)
             {
-                if (cat.Packages.Contains(mod))
-                    return cat.Packages;
-            }
-            return null;
-        }
-        private void ListContainsConfig(SelectablePackage cfg)
-        {
-            foreach (Category cat in ParsedCategoryList)
-            {
+                if (cat.Packages.Contains(sp))
+                {
+                    ListThatContainsPackage = cat.Packages;
+                    return;
+                }
                 foreach (SelectablePackage m in cat.Packages)
                 {
-                    if (m.Packages.Contains(cfg) && ListThatContainsConfig == null)
-                    {
-                        ListThatContainsConfig = m.Packages;
-                        return;
-                    }
-                    if (m.Packages.Count > 0)
-                    {
-                        ListContainsConfigRecursive(m.Packages, cfg);
-                    }
+                    ListContainsPackageRecursive(m.Packages, sp);
                 }
             }
         }
-        private void ListContainsConfigRecursive(List<SelectablePackage> cfgList, SelectablePackage cfg)
+        private void ListContainsPackageRecursive(List<SelectablePackage> packageList, SelectablePackage sp)
         {
-            foreach (SelectablePackage c in cfgList)
+            foreach (SelectablePackage c in packageList)
             {
-                if (c.Packages.Contains(cfg) && ListThatContainsConfig == null)
+                if (c.Packages.Contains(sp) && ListThatContainsPackage == null)
                 {
-                    ListThatContainsConfig = c.Packages;
+                    ListThatContainsPackage = c.Packages;
                     return;
                 }
                 if (c.Packages.Count > 0)
                 {
-                    ListContainsConfigRecursive(c.Packages, cfg);
+                    ListContainsPackageRecursive(c.Packages, sp);
                 }
             }
         }
@@ -476,7 +442,7 @@ namespace RelhaxModpack
             if (rb1.Checked)
             {
                 DatabaseEditorMode = EditorMode.GlobalDependnecy;
-                clearDatabaseDetailsUI();
+                ResetUI(false, true);
                 DisplayDatabase();
             }
         }
@@ -492,7 +458,7 @@ namespace RelhaxModpack
             if (rb1.Checked)
             {
                 DatabaseEditorMode = EditorMode.Dependency;
-                clearDatabaseDetailsUI();
+                ResetUI(false, true);
                 DisplayDatabase();
             }
         }
@@ -508,7 +474,7 @@ namespace RelhaxModpack
             if (rb1.Checked)
             {
                 DatabaseEditorMode = EditorMode.LogicalDependency;
-                clearDatabaseDetailsUI();
+                ResetUI(false, true);
                 DisplayDatabase();
             }
         }
@@ -524,56 +490,9 @@ namespace RelhaxModpack
             if (rb1.Checked)
             {
                 DatabaseEditorMode = EditorMode.DBO;
-                clearDatabaseDetailsUI();
+                ResetUI(false, true);
                 DisplayDatabase();
             }
-        }
-
-        private void clearDatabaseDetailsUI()
-        {
-            ObjectNameTB.Text = "";
-            ObjectPackageNameTB.Text = "";
-            ObjectStartAddressTB.Text = "";
-            ObjectEndAddressTB.Text = "";
-            ObjectZipFileTB.Text = "";
-            ObjectVersionTB.Text = "";
-            ObjectLastUpdatedLabel.Text = "";
-            ObjectDevURLTB.Text = "";
-            ObjectTypeComboBox.SelectedIndex = -1;
-            ObjectAppendExtractionCB.Checked = false;
-            ObjectVisibleCheckBox.Checked = false;
-            ObjectEnabledCheckBox.Checked = false;
-
-            // Description tab
-            ObjectDescTB.Text = "";
-            ObjectUpdateNotesTB.Text = "";
-
-            // Dependencies tab
-            ObjectDependenciesList.DataSource = null;
-            ObjectDependenciesList.Items.Clear();
-            ObjectDependenciesLabel.Text = "dependencies (click to edit)";
-            CurrentDependenciesCB.DataSource = null;
-            CurrentDependenciesCB.Items.Clear();
-            CurrentDependenciesCB.SelectedIndex = -1;
-            ObjectLogicalDependenciesList.DataSource = null;
-            ObjectLogicalDependenciesList.Items.Clear();
-            CurrentLogicalDependenciesCB.DataSource = null;
-            CurrentLogicalDependenciesCB.Items.Clear();
-            CurrentLogicalDependenciesCB.SelectedIndex = -1;
-            LogicalDependnecyNegateFlagCB.CheckedChanged -= LogicalDependnecyNegateFlagCB_CheckedChanged;
-            LogicalDependnecyNegateFlagCB.Checked = false;
-            LogicalDependnecyNegateFlagCB.CheckedChanged += LogicalDependnecyNegateFlagCB_CheckedChanged;
-
-            // Pictures tab
-            ObjectPicturesList.DataSource = null;
-            ObjectPicturesList.Items.Clear();
-            PicturesTypeCBox.SelectedIndex = -1;
-            PictureURLTB.Text = "";
-
-            // Userdata tab
-            ObjectUserdatasList.DataSource = null;
-            ObjectUserdatasList.Items.Clear();
-            ObjectUserdatasTB.Text = "";
         }
 
         private void DatabaseTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -584,9 +503,7 @@ namespace RelhaxModpack
                 DatabaseTreeView.Focus();
                 e.Node.ForeColor = System.Drawing.Color.Blue;
                 currentSelectedIndex = DatabaseTreeView.SelectedNode.Index;
-                //DatabaseTreeView.SelectedNode.BackColor = Color.Blue;
-                //DatabaseTreeView.SelectedNode.ForeColor = Color.Blue;
-                clearDatabaseDetailsUI();
+                ResetUI(false, true);
                 DatabaseTreeNode node = (DatabaseTreeNode)DatabaseTreeView.SelectedNode;
                 if (node.GlobalDependency != null)
                 {
@@ -609,6 +526,8 @@ namespace RelhaxModpack
 
                     ObjectZipFileTB.Enabled = true;
                     ObjectZipFileTB.Text = node.GlobalDependency.ZipFile;
+
+                    ObjectLevelLabel.Text = "0";
 
                     ObjectVersionTB.Enabled = false;
 
@@ -674,6 +593,8 @@ namespace RelhaxModpack
 
                     ObjectTypeComboBox.Enabled = false;
                     ObjectTypeComboBox.SelectedIndex = 0;
+
+                    ObjectLevelLabel.Text = "0";
 
                     ObjectEnabledCheckBox.Enabled = true;
                     ObjectEnabledCheckBox.Checked = SelectedDependency.Enabled;
@@ -744,6 +665,8 @@ namespace RelhaxModpack
                     ObjectTypeComboBox.Enabled = false;
                     ObjectTypeComboBox.SelectedIndex = 0;
 
+                    ObjectLevelLabel.Text = "0";
+
                     ObjectEnabledCheckBox.Enabled = true;
                     ObjectEnabledCheckBox.Checked = SelectedLogicalDependency.Enabled;
 
@@ -800,37 +723,30 @@ namespace RelhaxModpack
                     ObjectDevURLTB.Enabled = true;
                     ObjectDevURLTB.Text = SelectedDatabaseObject.DevURL;
 
-                    if (SelectedDatabaseObject is SelectablePackage)
+                    ObjectTypeComboBox.Enabled = true;
+                    switch (SelectedDatabaseObject.Type)
                     {
-                        ObjectTypeComboBox.Enabled = true;
-                        SelectablePackage cfg = (SelectablePackage)SelectedDatabaseObject;
-                        switch (cfg.Type)
-                        {
-                            case "single":
-                                ObjectTypeComboBox.SelectedIndex = 1;
-                                break;
-                            case "single1":
-                                ObjectTypeComboBox.SelectedIndex = 1;
-                                break;
-                            case "single_dropdown":
-                                ObjectTypeComboBox.SelectedIndex = 2;
-                                break;
-                            case "single_dropdown1":
-                                ObjectTypeComboBox.SelectedIndex = 2;
-                                break;
-                            case "single_dropdown2":
-                                ObjectTypeComboBox.SelectedIndex = 3;
-                                break;
-                            case "multi":
-                                ObjectTypeComboBox.SelectedIndex = 4;
-                                break;
-                        }
+                        case "single":
+                            ObjectTypeComboBox.SelectedIndex = 1;
+                            break;
+                        case "single1":
+                            ObjectTypeComboBox.SelectedIndex = 1;
+                            break;
+                        case "single_dropdown":
+                            ObjectTypeComboBox.SelectedIndex = 2;
+                            break;
+                        case "single_dropdown1":
+                            ObjectTypeComboBox.SelectedIndex = 2;
+                            break;
+                        case "single_dropdown2":
+                            ObjectTypeComboBox.SelectedIndex = 3;
+                            break;
+                        case "multi":
+                            ObjectTypeComboBox.SelectedIndex = 4;
+                            break;
                     }
-                    else
-                    {
-                        ObjectTypeComboBox.Enabled = false;
-                        ObjectTypeComboBox.SelectedIndex = 0;
-                    }
+                    
+                    ObjectLevelLabel.Text = "" + SelectedDatabaseObject.Level;
 
                     ObjectEnabledCheckBox.Enabled = true;
                     ObjectEnabledCheckBox.Checked = SelectedDatabaseObject.Enabled;
@@ -897,6 +813,8 @@ namespace RelhaxModpack
                     ObjectVersionTB.Enabled = false;
 
                     ObjectLastUpdatedLabel.Text = "";
+
+                    ObjectLevelLabel.Text = "-1";
 
                     ObjectDevURLTB.Enabled = false;
 
@@ -989,82 +907,16 @@ namespace RelhaxModpack
                     }
                     else if (DatabaseEditorMode == EditorMode.DBO)
                     {
-                        if (SelectedDatabaseObject is SelectablePackage)
+                        if (!AcceptableType(dba.SelectedDatabaseObject))
                         {
-                            //mod->mod
-                            //mod->config
-#error this needs to also be updated
-                            SelectablePackage modToMove = (SelectablePackage)SelectedDatabaseObject;
-                            if (dba.SelectedDatabaseObject is SelectablePackage)
-                            {
-                                SelectablePackage Ref = (SelectablePackage)dba.SelectedDatabaseObject;
-                                //remove mod from list
-                                List<SelectablePackage> ModList = ListContainsMod(modToMove);
-                                ModList.Remove(modToMove);
-                                //add mod to other list
-                                ModList = ListContainsMod(Ref);
-                                int index = ModList.IndexOf(Ref);
-                                ModList.Insert(index, modToMove);
-                            }
-                            else if (dba.SelectedDatabaseObject is SelectablePackage)
-                            {
-                                SelectablePackage Ref = (SelectablePackage)dba.SelectedDatabaseObject;
-                                //remove mod first
-                                List<SelectablePackage> ModList = ListContainsMod(modToMove);
-                                ModList.Remove(modToMove);
-                                //convert to config
-                                SelectablePackage c = ModToConfig(modToMove);
-                                //move to config list
-                                ListContainsConfig(Ref);
-                                if (ListThatContainsConfig != null)
-                                {
-                                    int index = ListThatContainsConfig.IndexOf(Ref);
-                                    ListThatContainsConfig.Insert(index, c);
-                                }
-                            }
+                            MessageBox.Show("Invalid index of package type for level");
+                            return;
                         }
-                        else if (SelectedDatabaseObject is SelectablePackage)
-                        {
-                            //config->mod
-                            //config->config
-                            ListThatContainsConfig = null;
-                            SelectablePackage cfgToMove = (SelectablePackage)SelectedDatabaseObject;
-                            if (dba.SelectedDatabaseObject is SelectablePackage)
-                            {
-                                SelectablePackage Ref = (SelectablePackage)dba.SelectedDatabaseObject;
-                                //remove config from list
-                                ListContainsConfig(cfgToMove);
-                                if (ListThatContainsConfig != null)
-                                {
-                                    ListThatContainsConfig.Remove(cfgToMove);
-                                }
-                                //add config to other list
-                                ListThatContainsConfig = null;
-                                ListContainsConfig(Ref);
-                                if (ListThatContainsConfig != null)
-                                {
-                                    int index = ListThatContainsConfig.IndexOf(Ref);
-                                    ListThatContainsConfig.Insert(index, cfgToMove);
-                                }
-                            }
-                            else if (dba.SelectedDatabaseObject is SelectablePackage)
-                            {
-                                SelectablePackage Ref = (SelectablePackage)dba.SelectedDatabaseObject;
-                                //remove the config first
-                                ListContainsConfig(cfgToMove);
-                                if (ListThatContainsConfig != null)
-                                {
-                                    //make move
-                                    ListThatContainsConfig.Remove(cfgToMove);
-                                }
-                                //convert it to a mod
-                                SelectablePackage m = ConfigToMod(cfgToMove);
-                                //move it to mod list
-                                List<SelectablePackage> ModList = ListContainsMod(Ref);
-                                int index2 = ModList.IndexOf(Ref);
-                                ModList.Insert(index2, m);
-                            }
-                        }
+                        ListContainsPackage(SelectedDatabaseObject);
+                        ListThatContainsPackage.Remove(SelectedDatabaseObject);
+                        ListContainsPackage(dba.SelectedDatabaseObject);
+                        int index = ListThatContainsPackage.IndexOf(dba.SelectedDatabaseObject);
+                        ListThatContainsPackage.Insert(index, SelectedDatabaseObject);
                     }
                 }
             }
@@ -1142,7 +994,6 @@ namespace RelhaxModpack
                         newDep.Enabled = ObjectEnabledCheckBox.Checked;
                         newDep.DevURL = ObjectDevURLTB.Text;
                         newDep.CRC = "";
-                        //newDep.ExtractPath = "";
                         if (!ObjectZipFileTB.Text.Equals(""))
                             newDep.CRC = "f";
                         int index = LogicalDependencies.IndexOf(dba.SelectedLogicalDependency);
@@ -1151,225 +1002,37 @@ namespace RelhaxModpack
                     }
                     else if (DatabaseEditorMode == EditorMode.DBO)
                     {
-#error this needs to be redone
-                        if (SelectedDatabaseObject is SelectablePackage)//config
+                        if (!AcceptableType(dba.SelectedDatabaseObject))
                         {
-                            if (dba.sublist)
-                            {
-                                SelectablePackage cfg = new SelectablePackage();
-                                cfg.Name = ObjectNameTB.Text;
-                                cfg.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
-                                cfg.StartAddress = ObjectStartAddressTB.Text;
-                                cfg.EndAddress = ObjectEndAddressTB.Text;
-                                cfg.ZipFile = ObjectZipFileTB.Text;
-                                cfg.DevURL = ObjectDevURLTB.Text;
-                                cfg.Version = ObjectVersionTB.Text;
-                                switch (ObjectTypeComboBox.SelectedIndex)
-                                {
-                                    case 1:
-                                        cfg.Type = "single1";
-                                        break;
-                                    case 2:
-                                        cfg.Type = "single_dropdown1";
-                                        break;
-                                    case 3:
-                                        cfg.Type = "single_dropdown2";
-                                        break;
-                                    case 4:
-                                        cfg.Type = "multi";
-                                        break;
-                                }
-                                cfg.Enabled = ObjectEnabledCheckBox.Checked;
-                                cfg.Visible = ObjectVisibleCheckBox.Checked;
-                                cfg.Description = ObjectDescTB.Text;
-                                cfg.UpdateComment = ObjectUpdateNotesTB.Text;
-                                cfg.CRC = "";
-                                if (!ObjectZipFileTB.Text.Equals(""))
-                                    cfg.CRC = "f";
-                                dba.SelectedDatabaseObject.Packages.Add(cfg);
-                            }
-                            else
-                            {
-                                //mod->mod
-                                if(dba.SelectedDatabaseObject is SelectablePackage)//mod
-                                {
-                                    SelectablePackage mm = (SelectablePackage)dba.SelectedDatabaseObject;
-                                    List<SelectablePackage> ModList = ListContainsMod(mm);
-                                    int index = ModList.IndexOf(mm);
-                                    //make changes
-                                    SelectablePackage m = new SelectablePackage();
-                                    m.Name = ObjectNameTB.Text;
-                                    m.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
-                                    m.StartAddress = ObjectStartAddressTB.Text;
-                                    m.EndAddress = ObjectEndAddressTB.Text;
-                                    m.ZipFile = ObjectZipFileTB.Text;
-                                    m.DevURL = ObjectDevURLTB.Text;
-                                    m.Version = ObjectVersionTB.Text;
-                                    m.Enabled = ObjectEnabledCheckBox.Checked;
-                                    m.Visible = ObjectVisibleCheckBox.Checked;
-                                    m.Description = ObjectDescTB.Text;
-                                    m.UpdateComment = ObjectUpdateNotesTB.Text;
-                                    m.CRC = "";
-                                    if (!ObjectZipFileTB.Text.Equals(""))
-                                        m.CRC = "f";
-                                    ModList.Insert(index, m);
-                                }
-                                //mod->config
-                                else if (dba.SelectedDatabaseObject is SelectablePackage)
-                                {
-                                    SelectablePackage cfgg = (SelectablePackage)dba.SelectedDatabaseObject;
-                                    ListThatContainsConfig = null;
-                                    ListContainsConfig(cfgg);
-                                    if (ListThatContainsConfig != null)
-                                    {
-                                        int index = ListThatContainsConfig.IndexOf(cfgg);
-                                        //make changes
-                                        SelectablePackage cfg = new SelectablePackage();
-                                        cfg.Name = ObjectNameTB.Text;
-                                        cfg.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
-                                        cfg.StartAddress = ObjectStartAddressTB.Text;
-                                        cfg.EndAddress = ObjectEndAddressTB.Text;
-                                        cfg.ZipFile = ObjectZipFileTB.Text;
-                                        cfg.DevURL = ObjectDevURLTB.Text;
-                                        cfg.Version = ObjectVersionTB.Text;
-                                        switch (ObjectTypeComboBox.SelectedIndex)
-                                        {
-                                            case 1:
-                                                cfg.Type = "single1";
-                                                break;
-                                            case 2:
-                                                cfg.Type = "single_dropdown1";
-                                                break;
-                                            case 3:
-                                                cfg.Type = "single_dropdown2";
-                                                break;
-                                            case 4:
-                                                cfg.Type = "multi";
-                                                break;
-                                        }
-                                        cfg.Enabled = ObjectEnabledCheckBox.Checked;
-                                        cfg.Visible = ObjectVisibleCheckBox.Checked;
-                                        cfg.Description = ObjectDescTB.Text;
-                                        cfg.UpdateComment = ObjectUpdateNotesTB.Text;
-                                        cfg.CRC = "";
-                                        if (!ObjectZipFileTB.Text.Equals(""))
-                                            cfg.CRC = "f";
-                                        ListThatContainsConfig.Insert(index, cfg);
-                                    }
-                                }
-                            }
+                            MessageBox.Show("Invalid index of package type for level");
+                            return;
                         }
-                        else if (SelectedDatabaseObject is SelectablePackage)
+                        //make changes
+                        SelectablePackage cfg = new SelectablePackage()
                         {
-                            if (ObjectTypeComboBox.SelectedIndex == -1 || ObjectTypeComboBox.SelectedIndex == 0)
-                            {
-                                MessageBox.Show("Invalid Index of config type");
-                                return;
-                            }
-                            if (dba.sublist)
-                            {
-                                SelectablePackage cfg = new SelectablePackage();
-                                cfg.Name = ObjectNameTB.Text;
-                                cfg.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
-                                cfg.StartAddress = ObjectStartAddressTB.Text;
-                                cfg.EndAddress = ObjectEndAddressTB.Text;
-                                cfg.ZipFile = ObjectZipFileTB.Text;
-                                cfg.DevURL = ObjectDevURLTB.Text;
-                                cfg.Version = ObjectVersionTB.Text;
-                                switch (ObjectTypeComboBox.SelectedIndex)
-                                {
-                                    case 1:
-                                        cfg.Type = "single1";
-                                        break;
-                                    case 2:
-                                        cfg.Type = "single_dropdown1";
-                                        break;
-                                    case 3:
-                                        cfg.Type = "single_dropdown2";
-                                        break;
-                                    case 4:
-                                        cfg.Type = "multi";
-                                        break;
-                                }
-                                cfg.Enabled = ObjectEnabledCheckBox.Checked;
-                                cfg.Visible = ObjectVisibleCheckBox.Checked;
-                                cfg.Description = ObjectDescTB.Text;
-                                cfg.UpdateComment = ObjectUpdateNotesTB.Text;
-                                cfg.CRC = "";
-                                if (!ObjectZipFileTB.Text.Equals(""))
-                                    cfg.CRC = "f";
-                                dba.SelectedDatabaseObject.Packages.Add(cfg);
-                            }
-                            else
-                            {
-                                //config->config
-                                if(dba.SelectedDatabaseObject is SelectablePackage)
-                                {
-                                    SelectablePackage cfgg = (SelectablePackage)dba.SelectedDatabaseObject;
-                                    ListThatContainsConfig = null;
-                                    ListContainsConfig(cfgg);
-                                    if (ListThatContainsConfig != null)
-                                    {
-                                        int index = ListThatContainsConfig.IndexOf(cfgg);
-                                        //make changes
-                                        SelectablePackage cfg = new SelectablePackage();
-                                        cfg.Name = ObjectNameTB.Text;
-                                        cfg.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
-                                        cfg.StartAddress = ObjectStartAddressTB.Text;
-                                        cfg.EndAddress = ObjectEndAddressTB.Text;
-                                        cfg.ZipFile = ObjectZipFileTB.Text;
-                                        cfg.DevURL = ObjectDevURLTB.Text;
-                                        cfg.Version = ObjectVersionTB.Text;
-                                        switch (ObjectTypeComboBox.SelectedIndex)
-                                        {
-                                            case 1:
-                                                cfg.Type = "single1";
-                                                break;
-                                            case 2:
-                                                cfg.Type = "single_dropdown1";
-                                                break;
-                                            case 3:
-                                                cfg.Type = "single_dropdown2";
-                                                break;
-                                            case 4:
-                                                cfg.Type = "multi";
-                                                break;
-                                        }
-                                        cfg.Enabled = ObjectEnabledCheckBox.Checked;
-                                        cfg.Visible = ObjectVisibleCheckBox.Checked;
-                                        cfg.Description = ObjectDescTB.Text;
-                                        cfg.UpdateComment = ObjectUpdateNotesTB.Text;
-                                        cfg.CRC = "";
-                                        if (!ObjectZipFileTB.Text.Equals(""))
-                                            cfg.CRC = "f";
-                                        ListThatContainsConfig.Insert(index, cfg);
-                                    }
-                                }
-                                //config->mod
-                                else if (dba.SelectedDatabaseObject is SelectablePackage)
-                                {
-                                    SelectablePackage mm = (SelectablePackage)dba.SelectedDatabaseObject;
-                                    List<SelectablePackage> ModList = ListContainsMod(mm);
-                                    int index = ModList.IndexOf(mm);
-                                    //make changes
-                                    SelectablePackage m = new SelectablePackage();
-                                    m.Name = ObjectNameTB.Text;
-                                    m.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
-                                    m.StartAddress = ObjectStartAddressTB.Text;
-                                    m.EndAddress = ObjectEndAddressTB.Text;
-                                    m.ZipFile = ObjectZipFileTB.Text;
-                                    m.DevURL = ObjectDevURLTB.Text;
-                                    m.Version = ObjectVersionTB.Text;
-                                    m.Enabled = ObjectEnabledCheckBox.Checked;
-                                    m.Visible = ObjectVisibleCheckBox.Checked;
-                                    m.Description = ObjectDescTB.Text;
-                                    m.UpdateComment = ObjectUpdateNotesTB.Text;
-                                    m.CRC = "";
-                                    if (!ObjectZipFileTB.Text.Equals(""))
-                                        m.CRC = "f";
-                                    ModList.Insert(index, m);
-                                }
-                            }
+                            Name = ObjectNameTB.Text,
+                            PackageName = GetNewPackageName(ObjectPackageNameTB.Text),
+                            StartAddress = ObjectStartAddressTB.Text,
+                            EndAddress = ObjectEndAddressTB.Text,
+                            ZipFile = ObjectZipFileTB.Text,
+                            DevURL = ObjectDevURLTB.Text,
+                            Version = ObjectVersionTB.Text,
+                            Enabled = ObjectEnabledCheckBox.Checked,
+                            Visible = ObjectVisibleCheckBox.Checked,
+                            Description = ObjectDescTB.Text,
+                            UpdateComment = ObjectUpdateNotesTB.Text,
+                            CRC = ObjectZipFileTB.Text.Equals("")? "" : "f",
+                            Type = (string)ObjectTypeComboBox.SelectedItem
+                        };
+                        if (dba.sublist)
+                        {
+                            dba.SelectedDatabaseObject.Packages.Add(cfg);
+                        }
+                        else
+                        {
+                            ListContainsPackage(dba.SelectedDatabaseObject);
+                            int index = ListThatContainsPackage.IndexOf(dba.SelectedDatabaseObject);
+                            ListThatContainsPackage.Insert(index, cfg);
                         }
                     }
                 }
@@ -1422,25 +1085,8 @@ namespace RelhaxModpack
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-#error this needs to be rewritten
-                if (SelectedDatabaseObject is SelectablePackage)
-                {
-                    SelectablePackage m = (SelectablePackage)SelectedDatabaseObject;
-                    List<SelectablePackage> ModList = ListContainsMod(m);
-                    int index = ModList.IndexOf(m);
-                    ModList.RemoveAt(index);
-                }
-                else if (SelectedDatabaseObject is SelectablePackage)
-                {
-                    ListThatContainsConfig = null;
-                    SelectablePackage cfg = (SelectablePackage)SelectedDatabaseObject;
-                    ListContainsConfig(cfg);
-                    if (ListThatContainsConfig != null)
-                    {
-                        int index = ListThatContainsConfig.IndexOf(cfg);
-                        ListThatContainsConfig.RemoveAt(index);
-                    }
-                }
+                ListContainsPackage(SelectedDatabaseObject);
+                ListThatContainsPackage.Remove(SelectedDatabaseObject);
             }
             DisplayDatabase(false);
             UnsavedModifications = true;
@@ -2174,58 +1820,6 @@ namespace RelhaxModpack
             return packageName;
         }
 
-#error this and below needs to be removed
-        private SelectablePackage ConfigToMod(SelectablePackage cfgToMove)
-        {
-            return new SelectablePackage()
-            {
-                Name = cfgToMove.Name,
-                Version = cfgToMove.Version,
-                ZipFile = cfgToMove.ZipFile,
-                Packages = cfgToMove.Packages,
-                StartAddress = cfgToMove.StartAddress,
-                LogicalDependencies = cfgToMove.LogicalDependencies,
-                Dependencies = cfgToMove.Dependencies,
-                PictureList = cfgToMove.PictureList,
-                EndAddress = cfgToMove.EndAddress,
-                CRC = cfgToMove.CRC,
-                Enabled = cfgToMove.Enabled,
-                Visible = cfgToMove.Visible,
-                PackageName = cfgToMove.PackageName,
-                Size = cfgToMove.Size,
-                UpdateComment = cfgToMove.UpdateComment,
-                Description = cfgToMove.Description,
-                DevURL = cfgToMove.DevURL,
-                UserFiles = cfgToMove.UserFiles,
-            };
-        }
-
-        private SelectablePackage ModToConfig(SelectablePackage modToMove)
-        {
-            return new SelectablePackage()
-            {
-                Name = modToMove.Name,
-                Version = modToMove.Version,
-                ZipFile = modToMove.ZipFile,
-                Packages = modToMove.Packages,
-                StartAddress = modToMove.StartAddress,
-                LogicalDependencies = modToMove.LogicalDependencies,
-                Dependencies = modToMove.Dependencies,
-                PictureList = modToMove.PictureList,
-                EndAddress = modToMove.EndAddress,
-                CRC = modToMove.CRC,
-                Enabled = modToMove.Enabled,
-                Visible = modToMove.Visible,
-                PackageName = modToMove.PackageName,
-                Size = modToMove.Size,
-                UpdateComment = modToMove.UpdateComment,
-                Description = modToMove.Description,
-                DevURL = modToMove.DevURL,
-                UserFiles = modToMove.UserFiles,
-                Type = "multi",
-            };
-        }
-
         private void callTextBoxURL_DoubleClick(object sender, EventArgs e)
         {
             if (sender is TextBox)
@@ -2258,6 +1852,30 @@ namespace RelhaxModpack
             {
                 DatabaseTreeView_NodeMouseClick(null, new TreeNodeMouseClickEventArgs(e.Node, MouseButtons.Left, 0, 0, 0));
             }
+        }
+        //checks to make sure that the selected database object (before applying an edit) is of acceptable type)
+        //(level 0 can only be single1 and multi, other levels can take all)
+        private bool AcceptableType(SelectablePackage SelectedDatabaseObjectt)
+        {
+            if (SelectedDatabaseObjectt.Level == 0)
+            {
+                //top level, can only be single1 and multi
+                if (!(ObjectTypeComboBox.SelectedIndex == 1 || ObjectTypeComboBox.SelectedIndex == 4))
+                {
+                    return false;
+                }
+                return true;
+            }
+            else if (SelectedDatabaseObjectt.Level > 0)
+            {
+                if (ObjectTypeComboBox.SelectedIndex == -1 || ObjectTypeComboBox.SelectedIndex == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+            else
+                return false;
         }
     }
 }
