@@ -218,7 +218,7 @@ namespace RelhaxModpack
                 Downloader = new WebClient();
                 Downloader.DownloadProgressChanged += downloader_DownloadProgressChanged;
                 Downloader.DownloadFileCompleted += downloader_DownloadFileCompleted;
-                Downloader.Proxy = null;
+                //Downloader.Proxy = null;
                 Downloader.DownloadFileAsync(args.url, args.zipFile, args);
                 Logging.Manager("downloading " + Path.GetFileName(args.zipFile));
                 //UI components
@@ -295,7 +295,7 @@ namespace RelhaxModpack
             Logging.Manager("Starting check for application updates");
             //download the updates
             WebClient updater = new WebClient();
-            updater.Proxy = null;
+            //updater.Proxy = null;
             if (File.Exists(Settings.ManagerInfoDatFile))
                 File.Delete(Settings.ManagerInfoDatFile);
             try
@@ -632,7 +632,7 @@ namespace RelhaxModpack
             PleaseWait wait = new PleaseWait();
             if(!Program.silentStart)
                 wait.Show();
-            WebRequest.DefaultWebProxy = null;
+            //WebRequest.DefaultWebProxy = null;
             Application.DoEvents();
             Logging.Manager(string.Format("|RelHax Modpack {0} ({1})", ManagerVersion(), Program.Version == Program.ProgramVersion.Beta ? "beta" : Program.Version == Program.ProgramVersion.Alpha ? "alpha" : "stable"));
             Logging.Manager(string.Format("|Built on {0}", compileTime()));
