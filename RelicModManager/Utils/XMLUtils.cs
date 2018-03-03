@@ -100,8 +100,10 @@ namespace RelhaxModpack
                 {
                     string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled",
                         "appendExtraction", "packageName", "devURL", "timestamp"};
-                    Dependency d = new Dependency();
-                    d.PackageName = "";
+                    Dependency d = new Dependency()
+                    {
+                        PackageName = "",
+                    };
                     foreach (XElement globs in dependencyNode.Elements())
                     {
                         depNodeList = depNodeList.Except(new string[] { globs.Name.ToString() }).ToArray();
@@ -157,8 +159,10 @@ namespace RelhaxModpack
                 {
                     string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "appendExtraction",
                         "packageName", "logicalDependencies", "devURL", "timestamp"};
-                    Dependency d = new Dependency();
-                    d.PackageName = "";
+                    Dependency d = new Dependency()
+                    {
+                        PackageName = ""
+                    };
                     foreach (XElement globs in dependencyNode.Elements())
                     {
                         depNodeList = depNodeList.Except(new string[] { globs.Name.ToString() }).ToArray();
@@ -250,8 +254,10 @@ namespace RelhaxModpack
                 foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/logicalDependencies/logicalDependency"))
                 {
                     string[] depNodeList = new string[] { "dependencyZipFile", "dependencyZipCRC", "startAddress", "endAddress", "dependencyenabled", "packageName", "devURL", "timestamp"};
-                    LogicalDependency d = new LogicalDependency();
-                    d.PackageName = "";
+                    LogicalDependency d = new LogicalDependency()
+                    {
+                        PackageName = ""
+                    };
                     foreach (XElement globs in dependencyNode.Elements())
                     {
                         depNodeList = depNodeList.Except(new string[] { globs.Name.ToString() }).ToArray();
@@ -326,8 +332,11 @@ namespace RelhaxModpack
                                             string[] modNodeList = new string[] { "name", "version", "zipFile", "timestamp", "startAddress", "endAddress", "crc", "enabled",
                                                 "visible", "packageName", "size", "description", "updateComment", "devURL", "userDatas", "pictures", "dependencies",
                                                 "logicalDependencies", "configs"};
-                                            SelectablePackage m = new SelectablePackage();
-                                            m.PackageName = "";
+                                            SelectablePackage m = new SelectablePackage()
+                                            {
+                                                PackageName = "",
+                                                Level = 0
+                                            };
                                             foreach (XElement modNode in modHolder.Elements())
                                             {
                                                 modNodeList = modNodeList.Except(new string[] { modNode.Name.ToString() }).ToArray();
@@ -528,7 +537,7 @@ namespace RelhaxModpack
                                                         break;
                                                     case "configs":
                                                         //run the process configs method
-                                                        XMLUtils.ProcessConfigs(modNode, m, true);
+                                                        XMLUtils.ProcessConfigs(modNode, m, true,m.Level+1);
                                                         break;
                                                     default:
                                                         Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) (line {3})", modNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)modNode).LineNumber));
@@ -603,7 +612,7 @@ namespace RelhaxModpack
             }
         }
         //recursivly processes the configs
-        public static void ProcessConfigs(XElement holder, SelectablePackage m, bool parentIsMod, SelectablePackage con = null)
+        public static void ProcessConfigs(XElement holder, SelectablePackage m, bool parentIsMod, int level, SelectablePackage con = null)
         {
             try
             {
@@ -616,8 +625,11 @@ namespace RelhaxModpack
                             string[] confNodeList = new string[] { "name", "version", "zipFile", "timestamp", "startAddress", "endAddress", "crc",
                                 "enabled", "visible", "packageName", "size", "updateComment", "description", "devURL", "type", "configs", "userDatas",
                                 "pictures", "dependencies", "logicalDependencies"};
-                            SelectablePackage c = new SelectablePackage();
-                            c.PackageName = "";
+                            SelectablePackage c = new SelectablePackage()
+                            {
+                                PackageName = "",
+                                Level = level
+                            };
                             foreach (XElement configNode in configHolder.Elements())
                             {
                                 confNodeList = confNodeList.Except(new string[] { configNode.Name.ToString() }).ToArray();
@@ -674,7 +686,7 @@ namespace RelhaxModpack
                                         c.Type = configNode.Value;
                                         break;
                                     case "configs":
-                                        XMLUtils.ProcessConfigs(configNode, m, false, c);
+                                        XMLUtils.ProcessConfigs(configNode, m, false, c.Level+1 ,c);
                                         break;
                                     case "userDatas":
                                         foreach (XElement userDataNode in configNode.Elements())
