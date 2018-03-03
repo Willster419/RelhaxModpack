@@ -7,13 +7,15 @@ namespace RelhaxModpack
     //the mod selection dislpay window
     public class Category
     {
-        public string Name { get; set; }
+        public string Name = "";
         //the selection type of the catagory. can a user select
         //multiple mods of this catagory, or just one?
-        public string SelectionType { get; set; }
+        public string SelectionType = "";
         //for super extraction, the group that should be used for the category
-        public int InstallGroup { get; set; }
-        public List<Mod> Mods = new List<Mod>();
+        public int InstallGroup = 0;
+        //the TabPage refrence for the UI
+        public TabPage @TabPage = null;
+        public List<SelectablePackage> Packages = new List<SelectablePackage>();
         //list of dependencies required if anything is
         //selected from this catagory
         public List<Dependency> Dependencies = new List<Dependency>();
@@ -23,19 +25,17 @@ namespace RelhaxModpack
         }
         //returns the mod with the specified name
         //if it does not exist, it returns null
-        public Mod GetMod(string modName)
+        public SelectablePackage GetSelectablePackage(string packageNameOld)
         {
-            if (Mods == null || Mods.Count == 0)
+            if (Packages == null || Packages.Count == 0)
                 return null;
-            foreach (Mod m in Mods)
+            foreach (SelectablePackage sp in Packages)
             {
-                if (m.Name.Equals(modName))
-                    return m;
+                if (sp.Name.Equals(packageNameOld))
+                    return sp;
             }
             return null;
         }
-        //the TabPage refrence for the UI
-        public TabPage @TabPage { get; set; }
         //sorts the catagories
         public static int CompareCatagories(Category x, Category y)
         {

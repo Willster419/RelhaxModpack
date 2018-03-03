@@ -3,9 +3,9 @@
     //an item to add ot a ComboBox
     class ComboBoxItem
     {
-        public Config config { get; set; }
+        public SelectablePackage config { get; set; }
         public string displayName { get; set; }
-        public ComboBoxItem(Config cfg, string display)
+        public ComboBoxItem(SelectablePackage cfg, string display)
         {
             config = cfg;
             displayName = display;

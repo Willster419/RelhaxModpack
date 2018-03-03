@@ -1,0 +1,81 @@
+﻿using RelhaxModpack.DatabaseComponents;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+
+namespace RelhaxModpack
+{
+    //a selectable package could be a mod or a config
+    public class SelectablePackage : DatabasePackage
+    {
+        //the name of the package for the user display
+        public string Name = "";
+        public string NameFormatted
+        {
+            get {
+                    return Name.Replace("{version}",Version);
+                    //string replace takes much less time than replaceMacro
+                    //also nameFormatted currently only ever has {version} macro
+                    //Utils.ReplaceMacro(Name,"version",Version);
+                }
+        }
+        //the TabPage refrence
+        public TabPage TabIndex = null;
+        //the Category refrence
+        public Category ParentCategory = null;
+        //can the user select multiple configs or one only?
+        public string Type = "";
+        //the refrence for the direct parent of this package
+        public SelectablePackage Parent = null;
+        //the refrence for the absolute top of the package tree
+        public SelectablePackage TopParent = null;
+        //the UI element refrence for this package
+        public UIComponent @UIComponent = null;
+        //the UI element refrence for the direct parent of this package
+        public UIComponent ParentUIComponent = null;
+        //the UI element refrence for the absolute top of the package tree
+        public UIComponent TopParentUIComponent = null;
+        //a flag to determine wether or not the mod should be shown
+        public bool Visible = true;
+        //size of the mod zip file
+        public Int64 Size = 0;
+        //update comments of the package
+        public string UpdateComment = "";
+        //description of the package
+        public string Description = "";
+        //bool for wether the package is selected to install
+        public bool Checked = false;
+        //the list of cache files that should be backed up before wiping the directory
+        public List<string> UserFiles = new List<string>();
+        //the list of SelectablePackage entries within this instance of SelectablePackages
+        public List<SelectablePackage> Packages = new List<SelectablePackage>();
+        //list of LogicalDependency and Dependency package names used for linking the dependencies and logicaldependencies
+        public List<LogicalDependency> LogicalDependencies = new List<LogicalDependency>();
+        public List<Dependency> Dependencies = new List<Dependency>();
+        //list of media preview items associated with this package
+        public List<Media> PictureList = new List<Media>();
+        public SelectablePackage() { }
+        //sorts the mods
+        public static int CompareMods(SelectablePackage x, SelectablePackage y)
+        {
+            return x.Name.CompareTo(y.Name);
+        }
+        //for old (v1.0) method of getting package names
+        public SelectablePackage GetPackage(string packageNameOld)
+        {
+            if (Packages == null || Packages.Count == 0)
+                return null;
+            foreach (SelectablePackage sp in Packages)
+            {
+                if (sp.Name.Equals(packageNameOld))
+                    return sp;
+            }
+            return null;
+        }
+        //for display in combobox
+        public override string ToString()
+        {
+            return NameFormatted;
+        }
+    }
+}

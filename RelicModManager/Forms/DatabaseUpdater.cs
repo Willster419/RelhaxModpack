@@ -178,7 +178,7 @@ namespace RelhaxModpack
             }
             foreach (Category c in parsedCatagoryList)
             {
-                foreach (Mod m in c.Mods)
+                foreach (SelectablePackage m in c.Packages)
                 {
                     if (m.ZipFile.Trim().Equals(""))
                     {
@@ -202,9 +202,9 @@ namespace RelhaxModpack
                             filesNotFoundSB.Append(m.ZipFile + "\n");
                         }
                     }
-                    if (m.configs.Count > 0)
+                    if (m.Packages.Count > 0)
                     {
-                        this.processConfigsCRCUpdate(m.configs);
+                        this.processConfigsCRCUpdate(m.Packages);
                     }
                 }
             }
@@ -217,10 +217,10 @@ namespace RelhaxModpack
             Program.databaseUpdateOnline = false;
         }
 
-        private void processConfigsCRCUpdate(List<Config> cfgList)
+        private void processConfigsCRCUpdate(List<SelectablePackage> cfgList)
         {
             string hash;
-            foreach (Config cat in cfgList)
+            foreach (SelectablePackage cat in cfgList)
             {
                 if (cat.ZipFile.Trim().Equals(""))
                 {
@@ -251,9 +251,9 @@ namespace RelhaxModpack
                     }
 
                 }
-                if (cat.configs.Count > 0)
+                if (cat.Packages.Count > 0)
                 {
-                    this.processConfigsCRCUpdate(cat.configs);
+                    this.processConfigsCRCUpdate(cat.Packages);
                 }
             }
         }
@@ -385,7 +385,7 @@ namespace RelhaxModpack
             }
             foreach (Category c in parsedCatagoryList)
             {
-                foreach (Mod m in c.Mods)
+                foreach (SelectablePackage m in c.Packages)
                 {
                     int index = this.getZipIndex(m.ZipFile);
                     if (index != -1)
@@ -398,9 +398,9 @@ namespace RelhaxModpack
                             modsSB.Append(m.ZipFile + "\n");
                         }
                     }
-                    if (m.configs.Count > 0)
+                    if (m.Packages.Count > 0)
                     {
-                        this.processConfigsCRCUpdate_old(m.configs);
+                        this.processConfigsCRCUpdate_old(m.Packages);
                     }
                 }
             }
@@ -412,9 +412,9 @@ namespace RelhaxModpack
             OnlineScriptOutput.Text = globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString();
         }
 
-        private void processConfigsCRCUpdate_old(List<Config> cfgList)
+        private void processConfigsCRCUpdate_old(List<SelectablePackage> cfgList)
         {
-            foreach (Config cat in cfgList)
+            foreach (SelectablePackage cat in cfgList)
             {
                 int cindex = this.getZipIndex(cat.ZipFile);
                 if (cindex != -1)
@@ -427,9 +427,9 @@ namespace RelhaxModpack
                         configsSB.Append(cat.ZipFile + "\n");
                     }
                 }
-                if (cat.configs.Count > 0)
+                if (cat.Packages.Count > 0)
                 {
-                    this.processConfigsCRCUpdate_old(cat.configs);
+                    this.processConfigsCRCUpdate_old(cat.Packages);
                 }
             }
         }

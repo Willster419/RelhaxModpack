@@ -114,7 +114,7 @@ namespace RelhaxModpack
             foreach (Category cat in parsedCatagoryList)
             {
                 category = cat.Name;
-                foreach (Mod m in cat.Mods)
+                foreach (SelectablePackage m in cat.Packages)
                 {
                     //remove the old devURL value if there
                     devURL = "";
@@ -128,8 +128,8 @@ namespace RelhaxModpack
                     devURL = string.IsNullOrWhiteSpace(m.DevURL) ? "" : "=HYPERLINK(\"" + m.DevURL + "\",\"link\")";
                     //header = "Index,Category,Mod,Config,Level,Zip,Enabled";
                     sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\t" + visible + "\n");
-                    if (m.configs.Count > 0)
-                        processConfigsSpreadsheetGenerate(m.configs, level + 1);
+                    if (m.Packages.Count > 0)
+                        processConfigsSpreadsheetGenerate(m.Packages, level + 1);
                 }
             }
             try
@@ -142,9 +142,9 @@ namespace RelhaxModpack
                 SpreadsheetLocation.Text = "Failed to save in " + SaveSpreadsheetFileDialog.FileName + " (IOException, probably file open in another window)";
             }
         }
-        private void processConfigsSpreadsheetGenerate(List<Config> configList, int newLevel)
+        private void processConfigsSpreadsheetGenerate(List<SelectablePackage> configList, int newLevel)
         {
-            foreach (Config con in configList)
+            foreach (SelectablePackage con in configList)
             {
                 //remove the old devURL value if there
                 devURL = "";
@@ -154,8 +154,8 @@ namespace RelhaxModpack
                 enabled = con.Enabled;
                 devURL = string.IsNullOrWhiteSpace(con.DevURL) ? "" : "=HYPERLINK(\"" + con.DevURL + "\",\"link\")";
                 sb.Append(packageName + "\t" + category + "\t" + modName + "\t" + configname + "\t" + newLevel + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\t" + visible + "\n");
-                if (con.configs.Count > 0)
-                    processConfigsSpreadsheetGenerate(con.configs, newLevel + 1);
+                if (con.Packages.Count > 0)
+                    processConfigsSpreadsheetGenerate(con.Packages, newLevel + 1);
             }
         }
 
@@ -181,7 +181,7 @@ namespace RelhaxModpack
             foreach (Category cat in parsedCatagoryList)
             {
                 category = cat.Name;
-                foreach (Mod m in cat.Mods)
+                foreach (SelectablePackage m in cat.Packages)
                 {
                     //remove the old devURL value if there
                     devURL = "";
@@ -191,8 +191,8 @@ namespace RelhaxModpack
                     else
                         devURL = "=HYPERLINK(\"" + m.DevURL + "\",\"link\")";
                     sb.Append(category + "\t" + modName + "\t" + devURL + "\n");
-                    if (m.configs.Count > 0)
-                        processConfigsSpreadsheetGenerateUser(m.configs, level + 1);
+                    if (m.Packages.Count > 0)
+                        processConfigsSpreadsheetGenerateUser(m.Packages, level + 1);
                 }
             }
             try
@@ -206,9 +206,9 @@ namespace RelhaxModpack
             }
         }
 
-        private void processConfigsSpreadsheetGenerateUser(List<Config> configList, int newLevel)
+        private void processConfigsSpreadsheetGenerateUser(List<SelectablePackage> configList, int newLevel)
         {
-            foreach (Config con in configList)
+            foreach (SelectablePackage con in configList)
             {
                 //remove the old devURL value if there
                 devURL = "";
@@ -223,8 +223,8 @@ namespace RelhaxModpack
                 else
                     devURL = "=HYPERLINK(\"" + con.DevURL + "\",\"link\")";
                 sb.Append(category + "\t" + configname + "\t" + devURL + "\n");
-                if (con.configs.Count > 0)
-                    processConfigsSpreadsheetGenerateUser(con.configs, newLevel + 1);
+                if (con.Packages.Count > 0)
+                    processConfigsSpreadsheetGenerateUser(con.Packages, newLevel + 1);
             }
         }
 

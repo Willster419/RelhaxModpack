@@ -37,9 +37,9 @@ namespace RelhaxModpack
         public List<Dependency> Dependencies { get; set; }
         public List<LogicalDependency> LogicalDependencies { get; set; }
         public List<Dependency> AppendedDependencies { get; set; }
-        public List<SelectableDatabasePackage> ModsConfigsToInstall { get; set; }
-        public List<SelectableDatabasePackage> ModsConfigsWithData { get; set; }
-        public List<Mod> UserMods { get; set; }
+        public List<SelectablePackage> ModsConfigsToInstall { get; set; }
+        public List<SelectablePackage> ModsConfigsWithData { get; set; }
+        public List<SelectablePackage> UserMods { get; set; }
         public List<Shortcut> Shortcuts { get; set; }
         private List<Patch> patchList { get; set; }
         private List<XmlUnpack> xmlUnpackList { get; set; }
@@ -421,7 +421,7 @@ namespace RelhaxModpack
         {
             try
             {
-                foreach (SelectableDatabasePackage dbo in ModsConfigsWithData)
+                foreach (SelectablePackage dbo in ModsConfigsWithData)
                 {
                     try
                     {
@@ -768,7 +768,7 @@ namespace RelhaxModpack
                     if (!d.ZipFile.Equals(""))
                         args.ParrentTotalToProcess++;
 
-                foreach (SelectableDatabasePackage dbo in ModsConfigsToInstall)
+                foreach (SelectablePackage dbo in ModsConfigsToInstall)
                     if (!dbo.ZipFile.Equals(""))
                         args.ParrentTotalToProcess++;
 
@@ -921,7 +921,7 @@ namespace RelhaxModpack
                     //extract mods and configs
                     args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractMods;
                     InstallWorker.ReportProgress(0);
-                    foreach (SelectableDatabasePackage dbo in ModsConfigsToInstall)
+                    foreach (SelectablePackage dbo in ModsConfigsToInstall)
                     {
                         if (!dbo.ZipFile.Equals(""))
                         {
@@ -1054,7 +1054,7 @@ namespace RelhaxModpack
                 //single mode: all one name
                 //parallel mode: catagory_patchNum-of-category
                 int superPatchNum = 0;
-                foreach(Mod m in c.Mods)
+                foreach(SelectablePackage m in c.Packages)
                 {
                     if(m.Enabled && m.Checked)
                     {
@@ -1075,9 +1075,9 @@ namespace RelhaxModpack
                             Unzip(Path.Combine(downloadedFilesDir, m.ZipFile), sb, m.ParentCategory.InstallGroup, ref superPatchNum);
                             Logging.Manager("Extraction finished of file " + m.ZipFile + ", superPatchNum=" + superPatchNum);
                         }
-                        if(m.configs.Count > 0)
+                        if(m.Packages.Count > 0)
                         {
-                            SuperExtractConfigs(m.configs,downloadedFilesDir, sender, sb, ref superPatchNum);
+                            SuperExtractConfigs(m.Packages,downloadedFilesDir, sender, sb, ref superPatchNum);
                         }
                     }
                 }
@@ -1085,9 +1085,9 @@ namespace RelhaxModpack
                 sb.Clear();
             }
         }
-        private void SuperExtractConfigs(List<Config> configsToExtract, string downloadedFilesDir, object sender, StringBuilder sb, ref int superPatchNum)
+        private void SuperExtractConfigs(List<SelectablePackage> configsToExtract, string downloadedFilesDir, object sender, StringBuilder sb, ref int superPatchNum)
         {
-            foreach (Config config in configsToExtract)
+            foreach (SelectablePackage config in configsToExtract)
             {
                 if (config.Enabled && config.Checked)
                 {
@@ -1103,12 +1103,12 @@ namespace RelhaxModpack
                             }
                         }
                         Logging.Manager("Extraction started  of file " + config.ZipFile + ", superPatchNum=" + superPatchNum);
-                        Unzip(Path.Combine(downloadedFilesDir, config.ZipFile), sb, config.ParentMod.ParentCategory.InstallGroup, ref superPatchNum);
+                        Unzip(Path.Combine(downloadedFilesDir, config.ZipFile), sb, config.ParentCategory.InstallGroup, ref superPatchNum);
                         Logging.Manager("Extraction finished of file " + config.ZipFile + ", superPatchNum=" + superPatchNum);
                     }
-                    if(config.configs.Count > 0)
+                    if(config.Packages.Count > 0)
                     {
-                        SuperExtractConfigs(config.configs,downloadedFilesDir, sender, sb, ref superPatchNum);
+                        SuperExtractConfigs(config.Packages,downloadedFilesDir, sender, sb, ref superPatchNum);
                     }
                 }
             }
@@ -1122,7 +1122,7 @@ namespace RelhaxModpack
                 Logging.InstallerGroup("RestoreUserData");
                 args.ParrentTotalToProcess = ModsConfigsWithData.Count;
                 InstallWorker.ReportProgress(0);
-                foreach (SelectableDatabasePackage dbo in ModsConfigsWithData)
+                foreach (SelectablePackage dbo in ModsConfigsWithData)
                 {
                     try
                     {
@@ -1836,7 +1836,7 @@ namespace RelhaxModpack
                 //extract user mods
                 Logging.Manager("Starting Relhax Modpack User Mod Extraction");
                 string downloadedFilesDir = Path.Combine(Application.StartupPath, "RelHaxUserMods");
-                foreach (Mod m in UserMods)
+                foreach (SelectablePackage m in UserMods)
                 {
                     if (m.Enabled && m.Checked)
                     {

@@ -140,7 +140,7 @@
     <Compile Include="AtlasesCreator\Packing\OutOfSpaceException.cs" />
     <Compile Include="AtlasesCreator\Packing\RectanglePacker.cs" />
     <Compile Include="AtlasesCreator\Program.cs" />
-    <Compile Include="DatabaseComponents\IDatabasePackage.cs" />
+    <Compile Include="DatabaseComponents\DatabasePackage.cs" />
     <Compile Include="DatabaseComponents\LogicalDependency.cs" />
     <Compile Include="DatabaseComponents\Media.cs" />
     <Compile Include="Forms\BackgroundForm.cs">
@@ -186,9 +186,8 @@
     <Compile Include="Utils\NativeMethods.cs" />
     <Compile Include="Utils\PatchUtils.cs" />
     <Compile Include="UIComponents\DeveloperSelections.cs" />
-    <Compile Include="UIComponents\CompleteModSearchList.cs" />
+    <Compile Include="LegacyComponents\CompleteModSearchList.cs" />
     <Compile Include="UIComponents\ComboBoxItem.cs" />
-    <Compile Include="DatabaseComponents\Config.cs" />
     <Compile Include="UIComponents\ConfigFormCheckBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -244,7 +243,7 @@
       <DependentUpon>DatabaseListGenerater.cs</DependentUpon>
     </Compile>
     <Compile Include="DatabaseComponents\DatabaseLogic.cs" />
-    <Compile Include="DatabaseComponents\SelectableDatabasePackage.cs" />
+    <Compile Include="DatabaseComponents\SelectablePackage.cs" />
     <Compile Include="UIComponents\DatabaseTreeNode.cs" />
     <Compile Include="DatabaseComponents\Dependency.cs" />
     <Compile Include="Utils\EmbeddedAssembly.cs" />
@@ -277,7 +276,6 @@
     <Compile Include="Forms\MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseComponents\Mod.cs" />
     <Compile Include="UIComponents\ModFormCheckBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -461,6 +459,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\DotNetZip.dll" />
     <Content Include="3rdPartyLicences\NAudio.txt" />
+    <Content Include="3rdPartyLicences\SpriteSheetPacker.txt" />
     <Content Include="Resources\loading.gif" />
     <Content Include="Resources\loading_3rdguards.gif" />
     <EmbeddedResource Include="Resources\Newtonsoft.Json.dll" />

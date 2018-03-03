@@ -34,14 +34,14 @@ namespace RelhaxModpack
         //The list of all mods
         private List<Category> parsedCatagoryLists;
         //queue for downloading mods
-        private List<IDatabasePackage> DatabasePackagesToDownload;
+        private List<DatabasePackage> DatabasePackagesToDownload;
         //The ordered lists to install
         private List<Dependency> globalDependenciesToInstall;
         private List<Dependency> dependenciesToInstall;
         private List<LogicalDependency> logicalDependenciesToInstall;
-        private List<SelectableDatabasePackage> modsConfigsToInstall;
+        private List<SelectablePackage> modsConfigsToInstall;
         private List<Dependency> appendedDependenciesToInstall;
-        private List<SelectableDatabasePackage> ModsWithShortcuts;
+        private List<SelectablePackage> ModsWithShortcuts;
         private List<Shortcut> Shortcuts;
         private List<InstallGroup> InstallGroups;
         //list of all current dependencies
@@ -56,7 +56,7 @@ namespace RelhaxModpack
         //counter for Utils.exception calls
         public static int errorCounter = 0;
         // string tempOldDownload; => using userToken at Async download
-        private List<Mod> userMods;
+        private List<SelectablePackage> userMods;
         string currentModDownloading;
         public Installer ins;
         private Installer unI;
@@ -72,7 +72,7 @@ namespace RelhaxModpack
         private object lockerMain = new object();
         private LoadingGifPreview gp;
         List<string> supportedVersions = new List<string>();
-        List<SelectableDatabasePackage> modsConfigsWithData;
+        List<SelectablePackage> modsConfigsWithData;
         private float scale = 1.0f;
         public static float originalMainWindowHeight { get; set; }
         public static float originalMainWindowWidth { get; set; }
@@ -900,14 +900,14 @@ namespace RelhaxModpack
             globalDependenciesToInstall = new List<Dependency>(list.GlobalDependencies);
             dependenciesToInstall = new List<Dependency>();
             logicalDependenciesToInstall = new List<LogicalDependency>();
-            modsConfigsToInstall = new List<SelectableDatabasePackage>();
+            modsConfigsToInstall = new List<SelectablePackage>();
             appendedDependenciesToInstall = new List<Dependency>();
-            modsConfigsWithData = new List<SelectableDatabasePackage>();
+            modsConfigsWithData = new List<SelectablePackage>();
             patchList = new List<Patch>();
-            userMods = new List<Mod>();
-            ModsWithShortcuts = new List<SelectableDatabasePackage>();
+            userMods = new List<SelectablePackage>();
+            ModsWithShortcuts = new List<SelectablePackage>();
             Shortcuts = new List<Shortcut>();
-            DatabasePackagesToDownload = new List<IDatabasePackage>();
+            DatabasePackagesToDownload = new List<DatabasePackage>();
             InstallGroups = new List<InstallGroup>();
 
             //code for super extraction mode. seperates the categories into installer groups.
@@ -939,7 +939,7 @@ namespace RelhaxModpack
                 foreach (Category c in parsedCatagoryLists)
                 {
                     //will itterate through every catagory once
-                    foreach (Mod m in c.Mods)
+                    foreach (SelectablePackage m in c.Packages)
                     {
                         //will itterate through every mod of every catagory once
                         if (m.Enabled && m.Checked)
@@ -960,8 +960,8 @@ namespace RelhaxModpack
                                 ModsWithShortcuts.Add(m);
 
                             //check for configs
-                            if (m.configs.Count > 0)
-                                ProcessConfigs(m.configs);
+                            if (m.Packages.Count > 0)
+                                ProcessConfigs(m.Packages);
 
                             //at least one mod of this catagory is checked, add any dependenciesToInstall required
                             if (c.Dependencies.Count > 0)
@@ -1008,7 +1008,7 @@ namespace RelhaxModpack
                         foreach (Category c in parsedCatagoryLists)
                         {
                             //will itterate through every catagory once
-                            foreach (Mod m in c.Mods)
+                            foreach (SelectablePackage m in c.Packages)
                             {
                                 foreach (LogicalDependency ld in m.LogicalDependencies)
                                 {
@@ -1024,8 +1024,8 @@ namespace RelhaxModpack
                                         d.DatabasePackageLogic.Add(dbl);
                                     }
                                 }
-                                if (m.configs.Count > 0)
-                                    ProcessConfigsLogical(d, m.configs);
+                                if (m.Packages.Count > 0)
+                                    ProcessConfigsLogical(d, m.Packages);
                             }
                         }
                     }
@@ -1088,9 +1088,9 @@ namespace RelhaxModpack
             {
                 foreach (Dependency d in globalDependenciesToInstall)
                 {
-                    if (d.Enabled && d.shortCuts.Count > 0)
+                    if (d.Enabled && d.ShortCuts.Count > 0)
                     {
-                        foreach (Shortcut sc in d.shortCuts)
+                        foreach (Shortcut sc in d.ShortCuts)
                         {
                             if (sc.Enabled)
                             {
@@ -1101,9 +1101,9 @@ namespace RelhaxModpack
                 }
                 foreach (Dependency d in dependenciesToInstall)
                 {
-                    if (d.Enabled && d.shortCuts.Count > 0)
+                    if (d.Enabled && d.ShortCuts.Count > 0)
                     {
-                        foreach (Shortcut sc in d.shortCuts)
+                        foreach (Shortcut sc in d.ShortCuts)
                         {
                             if (sc.Enabled)
                             {
@@ -1114,9 +1114,9 @@ namespace RelhaxModpack
                 }
                 foreach (LogicalDependency ld in logicalDependenciesToInstall)
                 {
-                    if (ld.Enabled && ld.Shortcuts.Count > 0)
+                    if (ld.Enabled && ld.ShortCuts.Count > 0)
                     {
-                        foreach (Shortcut sc in ld.Shortcuts)
+                        foreach (Shortcut sc in ld.ShortCuts)
                         {
                             if (sc.Enabled)
                             {
@@ -1125,7 +1125,7 @@ namespace RelhaxModpack
                         }
                     }
                 }
-                foreach (SelectableDatabasePackage dbo in modsConfigsToInstall)
+                foreach (SelectablePackage dbo in modsConfigsToInstall)
                 {
                     if (dbo.Enabled && dbo.ShortCuts.Count > 0)
                     {
@@ -1285,7 +1285,7 @@ namespace RelhaxModpack
                 else
                     ld.ReadyForInstall = true;
             }
-            foreach (SelectableDatabasePackage dbo in modsConfigsToInstall)
+            foreach (SelectablePackage dbo in modsConfigsToInstall)
             {
                 if (dbo.DownloadFlag)
                 {
@@ -1307,9 +1307,9 @@ namespace RelhaxModpack
             GC.Collect();
         }
 
-        private void ProcessConfigs(List<Config> configList)
+        private void ProcessConfigs(List<SelectablePackage> configList)
         {
-            foreach (Config config in configList)
+            foreach (SelectablePackage config in configList)
             {
                 if (config.Enabled && config.Checked)
                 {
@@ -1327,8 +1327,8 @@ namespace RelhaxModpack
                         ModsWithShortcuts.Add(config);
 
                     //check for configs
-                    if (config.configs.Count > 0)
-                        ProcessConfigs(config.configs);
+                    if (config.Packages.Count > 0)
+                        ProcessConfigs(config.Packages);
 
                     //check for dependencies
                     if (config.Dependencies.Count > 0)
@@ -1337,9 +1337,9 @@ namespace RelhaxModpack
             }
         }
 
-        private void ProcessConfigsLogical(LogicalDependency d, List<Config> configList)
+        private void ProcessConfigsLogical(LogicalDependency d, List<SelectablePackage> configList)
         {
-            foreach (Config config in configList)
+            foreach (SelectablePackage config in configList)
             {
                 foreach (LogicalDependency ld in config.LogicalDependencies)
                 {

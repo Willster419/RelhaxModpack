@@ -326,7 +326,7 @@ namespace RelhaxModpack
                                             string[] modNodeList = new string[] { "name", "version", "zipFile", "timestamp", "startAddress", "endAddress", "crc", "enabled",
                                                 "visible", "packageName", "size", "description", "updateComment", "devURL", "userDatas", "pictures", "dependencies",
                                                 "logicalDependencies", "configs"};
-                                            Mod m = new Mod();
+                                            SelectablePackage m = new SelectablePackage();
                                             m.PackageName = "";
                                             foreach (XElement modNode in modHolder.Elements())
                                             {
@@ -540,7 +540,7 @@ namespace RelhaxModpack
                                             {
                                                 if (modNodeList.Length > 0) { Logging.Manager(string.Format("Error: modInfo.xml nodes not used: {0} => mod {1} ({2}) (line {3})", string.Join(",", modNodeList), m.Name, m.ZipFile, ((IXmlLineInfo)modHolder).LineNumber)); };
                                                 if (m.PackageName.Equals("")) { string rad = Utils.RandomString(30); m.PackageName = rad; Logging.Manager("PackageName is random generated: " + rad); };              // to avoid exceptions
-                                                cat.Mods.Add(m);
+                                                cat.Packages.Add(m);
                                             };
                                             break;
                                         default:
@@ -603,7 +603,7 @@ namespace RelhaxModpack
             }
         }
         //recursivly processes the configs
-        public static void ProcessConfigs(XElement holder, Mod m, bool parentIsMod, Config con = null)
+        public static void ProcessConfigs(XElement holder, SelectablePackage m, bool parentIsMod, SelectablePackage con = null)
         {
             try
             {
@@ -616,7 +616,7 @@ namespace RelhaxModpack
                             string[] confNodeList = new string[] { "name", "version", "zipFile", "timestamp", "startAddress", "endAddress", "crc",
                                 "enabled", "visible", "packageName", "size", "updateComment", "description", "devURL", "type", "configs", "userDatas",
                                 "pictures", "dependencies", "logicalDependencies"};
-                            Config c = new Config();
+                            SelectablePackage c = new SelectablePackage();
                             c.PackageName = "";
                             foreach (XElement configNode in configHolder.Elements())
                             {
@@ -830,9 +830,9 @@ namespace RelhaxModpack
                             if (c.PackageName.Equals("")) { string rad = Utils.RandomString(30); c.PackageName = rad; Logging.Manager("PackageName is random generated: " + rad); };              // to avoid exceptions
                             //attach it to eithor the config of correct level or the mod
                             if (parentIsMod)
-                                m.configs.Add(c);
+                                m.Packages.Add(c);
                             else
-                                con.configs.Add(c);
+                                con.Packages.Add(c);
                             break;
                         default:
                             Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => expected nodes: config (line {3})", configHolder.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)configHolder).LineNumber));
@@ -847,7 +847,7 @@ namespace RelhaxModpack
             }
         }
         //saves the currently checked configs and mods
-        public static void SaveConfig(bool fromButton, string fileToConvert, List<Category> parsedCatagoryList, List<Mod> userMods)
+        public static void SaveConfig(bool fromButton, string fileToConvert, List<Category> parsedCatagoryList, List<SelectablePackage> userMods)
         {
             //dialog box to ask where to save the config to
             System.Windows.Forms.SaveFileDialog saveLocation = new System.Windows.Forms.SaveFileDialog();
@@ -890,15 +890,15 @@ namespace RelhaxModpack
             //check every mod
             foreach (Category c in parsedCatagoryList)
             {
-                foreach (Mod m in c.Mods)
+                foreach (SelectablePackage m in c.Packages)
                 {
                     if (m.Checked)
                     {
                         //add it to the list
                         nodeRelhax.Add(new XElement("mod", m.PackageName));
-                        if (m.configs.Count > 0)
+                        if (m.Packages.Count > 0)
                         {
-                            XMLUtils.SaveProcessConfigs(ref doc, m.configs);
+                            XMLUtils.SaveProcessConfigs(ref doc, m.Packages);
                         }
                     }
                 }
@@ -906,7 +906,7 @@ namespace RelhaxModpack
 
             var nodeUserMods = doc.Descendants("userMods").FirstOrDefault();
             //check user mods
-            foreach (Mod m in userMods)
+            foreach (SelectablePackage m in userMods)
             {
                 if (m.Checked)
                 {
@@ -921,24 +921,24 @@ namespace RelhaxModpack
             }
         }
 
-        private static void SaveProcessConfigs(ref XDocument doc, List<Config> configList)
+        private static void SaveProcessConfigs(ref XDocument doc, List<SelectablePackage> configList)
         {
             var node = doc.Descendants("relhaxMods").FirstOrDefault();
-            foreach (Config cc in configList)
+            foreach (SelectablePackage cc in configList)
             {
                 if (cc.Checked)
                 {
                     //add the config to the list
                     node.Add(new XElement("mod", cc.PackageName));
-                    if (cc.configs.Count > 0)
+                    if (cc.Packages.Count > 0)
                     {
-                        XMLUtils.SaveProcessConfigs(ref doc, cc.configs);
+                        XMLUtils.SaveProcessConfigs(ref doc, cc.Packages);
                     }
                 }
             }
         }
 
-        public static void LoadConfig(bool fromButton, string[] filePathArray, List<Category> parsedCatagoryList, List<Mod> userMods)
+        public static void LoadConfig(bool fromButton, string[] filePathArray, List<Category> parsedCatagoryList, List<SelectablePackage> userMods)
         {
             //uncheck everythihng in memory first
             Utils.ClearSelectionMemory(parsedCatagoryList, userMods);
@@ -972,7 +972,7 @@ namespace RelhaxModpack
             }
         }
         //loads a saved config from xml and parses it into the memory database
-        public static void LoadConfigV1(bool fromButton, string filePath, List<Category> parsedCatagoryList, List<Mod> userMods)
+        public static void LoadConfigV1(bool fromButton, string filePath, List<Category> parsedCatagoryList, List<SelectablePackage> userMods)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
@@ -983,7 +983,7 @@ namespace RelhaxModpack
             {
                 //gets the inside of each mod
                 //also store each config that needsto be Enabled
-                Mod m = new Mod();
+                SelectablePackage m = new SelectablePackage();
                 foreach (XmlNode nn in n.ChildNodes)
                 {
                     switch (nn.Name)
@@ -1001,18 +1001,18 @@ namespace RelhaxModpack
                             if (m.Enabled)
                             {
                                 m.Checked = true;
-                                if (m.ModFormCheckBox != null)
+                                if (m.TopParentUIComponent != null)
                                 {
-                                    if (m.ModFormCheckBox is ModFormCheckBox)
+                                    if (m.TopParentUIComponent is ModFormCheckBox)
                                     {
-                                        ModFormCheckBox mfcb = (ModFormCheckBox)m.ModFormCheckBox;
+                                        ModFormCheckBox mfcb = (ModFormCheckBox)m.TopParentUIComponent;
                                         mfcb.Checked = true;
                                         if (!Settings.DisableColorChange)
                                             mfcb.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
-                                    else if (m.ModFormCheckBox is ModWPFCheckBox)
+                                    else if (m.TopParentUIComponent is ModWPFCheckBox)
                                     {
-                                        ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.ModFormCheckBox;
+                                        ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.TopParentUIComponent;
                                         mfCB2.IsChecked = true;
                                     }
                                 }
@@ -1021,17 +1021,17 @@ namespace RelhaxModpack
                             else
                             {
                                 //uncheck
-                                if (m.ModFormCheckBox != null)
+                                if (m.TopParentUIComponent != null)
                                 {
-                                    if (m.ModFormCheckBox is ModFormCheckBox)
+                                    if (m.TopParentUIComponent is ModFormCheckBox)
                                     {
-                                        ModFormCheckBox mfcb = (ModFormCheckBox)m.ModFormCheckBox;
+                                        ModFormCheckBox mfcb = (ModFormCheckBox)m.TopParentUIComponent;
                                         mfcb.Checked = false;
                                         mfcb.Parent.BackColor = Settings.getBackColor();
                                     }
-                                    else if (m.ModFormCheckBox is ModWPFCheckBox)
+                                    else if (m.TopParentUIComponent is ModWPFCheckBox)
                                     {
-                                        ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.ModFormCheckBox;
+                                        ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.TopParentUIComponent;
                                         mfCB2.IsChecked = false;
                                     }
                                 }
@@ -1052,7 +1052,7 @@ namespace RelhaxModpack
             foreach (XmlNode n in xmlUserModList)
             {
                 //gets the inside of each user mod
-                Mod m = new Mod();
+                SelectablePackage m = new SelectablePackage();
                 foreach (XmlNode nn in n.ChildNodes)
                 {
                     switch (nn.Name)
@@ -1065,9 +1065,9 @@ namespace RelhaxModpack
                                 if (File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename)))
                                 {
                                     m.Checked = true;
-                                    if (m.ModFormCheckBox != null)
+                                    if (m.TopParentUIComponent != null)
                                     {
-                                        ModFormCheckBox mfcb = (ModFormCheckBox)m.ModFormCheckBox;
+                                        ModFormCheckBox mfcb = (ModFormCheckBox)m.TopParentUIComponent;
                                         mfcb.Checked = true;
                                     }
                                     Logging.Manager(string.Format("checking user mod {0}", m.ZipFile));
@@ -1107,7 +1107,7 @@ namespace RelhaxModpack
             }
         }
         //loads a saved config from xml and parses it into the memory database
-        public static void LoadConfigV2(XmlDocument doc, List<Category> parsedCatagoryList, List<Mod> userMods, bool defaultChecked = false)
+        public static void LoadConfigV2(XmlDocument doc, List<Category> parsedCatagoryList, List<SelectablePackage> userMods, bool defaultChecked = false)
         {
             List<string> savedConfigList = new List<string>();
             foreach (var mod in doc.CreateNavigator().Select("//relhaxMods/mod"))
@@ -1116,7 +1116,7 @@ namespace RelhaxModpack
             }
             foreach (Category c in parsedCatagoryList)
             {
-                foreach (Mod m in c.Mods)
+                foreach (SelectablePackage m in c.Packages)
                 {
                     if (m.Visible)
                     {
@@ -1130,18 +1130,18 @@ namespace RelhaxModpack
                             else
                             {
                                 m.Checked = true;
-                                if (m.ModFormCheckBox != null)
+                                if (m.TopParentUIComponent != null)
                                 {
-                                    if (m.ModFormCheckBox is ModFormCheckBox)
+                                    if (m.TopParentUIComponent is ModFormCheckBox)
                                     {
-                                        ModFormCheckBox mfcb = (ModFormCheckBox)m.ModFormCheckBox;
+                                        ModFormCheckBox mfcb = (ModFormCheckBox)m.TopParentUIComponent;
                                         mfcb.Checked = true;
                                         if (!Settings.DisableColorChange)
                                             mfcb.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
-                                    else if (m.ModFormCheckBox is ModWPFCheckBox)
+                                    else if (m.TopParentUIComponent is ModWPFCheckBox)
                                     {
-                                        ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.ModFormCheckBox;
+                                        ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.TopParentUIComponent;
                                         mfCB2.IsChecked = true;
                                     }
                                 }
@@ -1151,24 +1151,24 @@ namespace RelhaxModpack
                         else
                         {
                             //uncheck
-                            if (m.ModFormCheckBox != null)
+                            if (m.TopParentUIComponent != null)
                             {
-                                if (m.ModFormCheckBox is ModFormCheckBox)
+                                if (m.TopParentUIComponent is ModFormCheckBox)
                                 {
-                                    ModFormCheckBox mfcb = (ModFormCheckBox)m.ModFormCheckBox;
+                                    ModFormCheckBox mfcb = (ModFormCheckBox)m.TopParentUIComponent;
                                     mfcb.Checked = false;
                                     mfcb.Parent.BackColor = Settings.getBackColor();
                                 }
-                                else if (m.ModFormCheckBox is ModWPFCheckBox)
+                                else if (m.TopParentUIComponent is ModWPFCheckBox)
                                 {
-                                    ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.ModFormCheckBox;
+                                    ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.TopParentUIComponent;
                                     mfCB2.IsChecked = false;
                                 }
                             }
                         }
-                        if (m.configs.Count > 0)
+                        if (m.Packages.Count > 0)
                         {
-                            LoadProcessConfigsV2(m.Name, m.configs, ref savedConfigList,defaultChecked);
+                            LoadProcessConfigsV2(m.Name, m.Packages, ref savedConfigList,defaultChecked);
                         }
                     }
                 }
@@ -1178,7 +1178,7 @@ namespace RelhaxModpack
             {
                 savedUserConfigList.Add(userMod.ToString());
             }
-            foreach (Mod um in userMods)
+            foreach (SelectablePackage um in userMods)
             {
                 if (savedUserConfigList.Contains(um.Name))
                 {
@@ -1187,9 +1187,9 @@ namespace RelhaxModpack
                     {
                         //it will be done in the UI code
                         um.Checked = true;
-                        if (um.ModFormCheckBox != null)
+                        if (um.TopParentUIComponent != null)
                         {
-                            ModFormCheckBox mfcb = (ModFormCheckBox)um.ModFormCheckBox;
+                            ModFormCheckBox mfcb = (ModFormCheckBox)um.TopParentUIComponent;
                             mfcb.Checked = true;
                         }
                         Logging.Manager(string.Format("Checking user mod {0}", um.ZipFile));
@@ -1209,7 +1209,7 @@ namespace RelhaxModpack
             Logging.Manager("Finished loading mod selections v2.0");
         }
 
-        private static void LoadProcessConfigsV1(XmlNode holder, Mod m, bool parentIsMod, Config con = null)
+        private static void LoadProcessConfigsV1(XmlNode holder, SelectablePackage m, bool parentIsMod, SelectablePackage con = null)
         {
             foreach (XmlNode nnn in holder.ChildNodes)
             {
@@ -1227,7 +1227,7 @@ namespace RelhaxModpack
                         continue;
                     }
                 }
-                Config c = new Config();
+                SelectablePackage c = new SelectablePackage();
                 foreach (XmlNode nnnn in nnn.ChildNodes)
                 {
                     switch (nnnn.Name)
@@ -1235,13 +1235,13 @@ namespace RelhaxModpack
                         case "name":
                             if (parentIsMod)
                             {
-                                c = m.GetConfig(nnnn.InnerText);
+                                c = m.GetPackage(nnnn.InnerText);
                                 if ((c != null) && (!c.Visible))
                                     return;
                             }
                             else
                             {
-                                c = con.GetSubConfig(nnnn.InnerText);
+                                c = con.GetPackage(nnnn.InnerText);
                                 if ((c != null) && (!c.Visible))
                                     return;
                             }
@@ -1254,18 +1254,18 @@ namespace RelhaxModpack
                             if (c.Enabled)
                             {
                                 c.Checked = true;
-                                if (c.ConfigUIComponent != null)
+                                if (c.UIComponent != null)
                                 {
-                                    if (c.ConfigUIComponent is ConfigFormCheckBox)
+                                    if (c.UIComponent is ConfigFormCheckBox)
                                     {
-                                        ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.ConfigUIComponent;
+                                        ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.UIComponent;
                                         CBTemp.Checked = true;
                                         if (!Settings.DisableColorChange)
                                             CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
-                                    else if (c.ConfigUIComponent is ConfigFormComboBox)
+                                    else if (c.UIComponent is ConfigFormComboBox)
                                     {
-                                        ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.ConfigUIComponent;
+                                        ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.UIComponent;
                                         foreach (Object o in CBTemp.Items)
                                         {
                                             if (o is ComboBoxItem)
@@ -1281,21 +1281,21 @@ namespace RelhaxModpack
                                         if (!Settings.DisableColorChange)
                                             CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
-                                    else if (c.ConfigUIComponent is ConfigFormRadioButton)
+                                    else if (c.UIComponent is ConfigFormRadioButton)
                                     {
-                                        ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.ConfigUIComponent;
+                                        ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.UIComponent;
                                         CBTemp.Checked = true;
                                         if (!Settings.DisableColorChange)
                                             CBTemp.Parent.BackColor = System.Drawing.Color.BlanchedAlmond;
                                     }
-                                    else if (c.ConfigUIComponent is ConfigWPFCheckBox)
+                                    else if (c.UIComponent is ConfigWPFCheckBox)
                                     {
-                                        ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.ConfigUIComponent;
+                                        ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.UIComponent;
                                         CBTemp.IsChecked = true;
                                     }
-                                    else if (c.ConfigUIComponent is ConfigWPFComboBox)
+                                    else if (c.UIComponent is ConfigWPFComboBox)
                                     {
-                                        ConfigWPFComboBox CBTemp = (ConfigWPFComboBox)c.ConfigUIComponent;
+                                        ConfigWPFComboBox CBTemp = (ConfigWPFComboBox)c.UIComponent;
                                         foreach (Object o in CBTemp.Items)
                                         {
                                             if (o is ComboBoxItem)
@@ -1309,9 +1309,9 @@ namespace RelhaxModpack
                                             }
                                         }
                                     }
-                                    else if (c.ConfigUIComponent is ConfigWPFRadioButton)
+                                    else if (c.UIComponent is ConfigWPFRadioButton)
                                     {
-                                        ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.ConfigUIComponent;
+                                        ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.UIComponent;
                                         CBTemp.IsChecked = true;
                                     }
                                 }
@@ -1319,37 +1319,37 @@ namespace RelhaxModpack
                             }
                             else
                             {
-                                if (c.ConfigUIComponent != null)
+                                if (c.UIComponent != null)
                                 {
-                                    if (c.ConfigUIComponent is ConfigFormCheckBox)
+                                    if (c.UIComponent is ConfigFormCheckBox)
                                     {
-                                        ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.ConfigUIComponent;
+                                        ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.UIComponent;
                                         CBTemp.Checked = false;
                                         CBTemp.Parent.BackColor = Settings.getBackColor();
                                     }
-                                    else if (c.ConfigUIComponent is ConfigFormComboBox)
+                                    else if (c.UIComponent is ConfigFormComboBox)
                                     {
-                                        ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.ConfigUIComponent;
+                                        ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.UIComponent;
                                         CBTemp.Parent.BackColor = Settings.getBackColor();
                                     }
-                                    else if (c.ConfigUIComponent is ConfigFormRadioButton)
+                                    else if (c.UIComponent is ConfigFormRadioButton)
                                     {
-                                        ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.ConfigUIComponent;
+                                        ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.UIComponent;
                                         CBTemp.Checked = false;
                                         CBTemp.Parent.BackColor = Settings.getBackColor();
                                     }
-                                    else if (c.ConfigUIComponent is ConfigWPFCheckBox)
+                                    else if (c.UIComponent is ConfigWPFCheckBox)
                                     {
-                                        ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.ConfigUIComponent;
+                                        ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.UIComponent;
                                         CBTemp.IsChecked = false;
                                     }
-                                    else if (c.ConfigUIComponent is ConfigWPFComboBox)
+                                    else if (c.UIComponent is ConfigWPFComboBox)
                                     {
                                         //do nothing...
                                     }
-                                    else if (c.ConfigUIComponent is ConfigWPFRadioButton)
+                                    else if (c.UIComponent is ConfigWPFRadioButton)
                                     {
-                                        ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.ConfigUIComponent;
+                                        ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.UIComponent;
                                         CBTemp.IsChecked = false;
                                     }
                                 }
@@ -1366,11 +1366,11 @@ namespace RelhaxModpack
             }
         }
 
-        private static void LoadProcessConfigsV2(string parentName, List<Config> configList, ref List<string> savedConfigList, bool defaultChecked)
+        private static void LoadProcessConfigsV2(string parentName, List<SelectablePackage> configList, ref List<string> savedConfigList, bool defaultChecked)
         {
             bool shouldBeBA = false;
             Panel panelRef = null;
-            foreach (Config c in configList)
+            foreach (SelectablePackage c in configList)
             {
                 if (c.Visible)
                 {
@@ -1384,19 +1384,19 @@ namespace RelhaxModpack
                         else
                         {
                             c.Checked = true;
-                            if (c.ConfigUIComponent != null)
+                            if (c.UIComponent != null)
                             {
-                                if (c.ConfigUIComponent is ConfigFormCheckBox)
+                                if (c.UIComponent is ConfigFormCheckBox)
                                 {
-                                    ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.ConfigUIComponent;
+                                    ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.UIComponent;
                                     CBTemp.Checked = true;
                                     shouldBeBA = true;
                                     if (CBTemp.Parent is Panel)
                                         panelRef = (Panel)CBTemp.Parent;
                                 }
-                                else if (c.ConfigUIComponent is ConfigFormComboBox)
+                                else if (c.UIComponent is ConfigFormComboBox)
                                 {
-                                    ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.ConfigUIComponent;
+                                    ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.UIComponent;
                                     foreach (Object o in CBTemp.Items)
                                     {
                                         if (o is ComboBoxItem)
@@ -1413,22 +1413,22 @@ namespace RelhaxModpack
                                     if (CBTemp.Parent is Panel)
                                         panelRef = (Panel)CBTemp.Parent;
                                 }
-                                else if (c.ConfigUIComponent is ConfigFormRadioButton)
+                                else if (c.UIComponent is ConfigFormRadioButton)
                                 {
-                                    ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.ConfigUIComponent;
+                                    ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.UIComponent;
                                     CBTemp.Checked = true;
                                     shouldBeBA = true;
                                     if (CBTemp.Parent is Panel)
                                         panelRef = (Panel)CBTemp.Parent;
                                 }
-                                else if (c.ConfigUIComponent is ConfigWPFCheckBox)
+                                else if (c.UIComponent is ConfigWPFCheckBox)
                                 {
-                                    ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.ConfigUIComponent;
+                                    ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.UIComponent;
                                     CBTemp.IsChecked = true;
                                 }
-                                else if (c.ConfigUIComponent is ConfigWPFComboBox)
+                                else if (c.UIComponent is ConfigWPFComboBox)
                                 {
-                                    ConfigWPFComboBox CBTemp = (ConfigWPFComboBox)c.ConfigUIComponent;
+                                    ConfigWPFComboBox CBTemp = (ConfigWPFComboBox)c.UIComponent;
                                     foreach (Object o in CBTemp.Items)
                                     {
                                         if (o is ComboBoxItem)
@@ -1442,9 +1442,9 @@ namespace RelhaxModpack
                                         }
                                     }
                                 }
-                                else if (c.ConfigUIComponent is ConfigWPFRadioButton)
+                                else if (c.UIComponent is ConfigWPFRadioButton)
                                 {
-                                    ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.ConfigUIComponent;
+                                    ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.UIComponent;
                                     CBTemp.IsChecked = true;
                                 }
                             }
@@ -1453,44 +1453,44 @@ namespace RelhaxModpack
                     }
                     else
                     {
-                        if (c.ConfigUIComponent != null)
+                        if (c.UIComponent != null)
                         {
-                            if (c.ConfigUIComponent is ConfigFormCheckBox)
+                            if (c.UIComponent is ConfigFormCheckBox)
                             {
-                                ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.ConfigUIComponent;
+                                ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.UIComponent;
                                 CBTemp.Checked = false;
                                 CBTemp.Parent.BackColor = Settings.getBackColor();
                             }
-                            else if (c.ConfigUIComponent is ConfigFormComboBox)
+                            else if (c.UIComponent is ConfigFormComboBox)
                             {
-                                ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.ConfigUIComponent;
+                                ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.UIComponent;
                                 CBTemp.Parent.BackColor = Settings.getBackColor();
                             }
-                            else if (c.ConfigUIComponent is ConfigFormRadioButton)
+                            else if (c.UIComponent is ConfigFormRadioButton)
                             {
-                                ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.ConfigUIComponent;
+                                ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.UIComponent;
                                 CBTemp.Checked = false;
                                 CBTemp.Parent.BackColor = Settings.getBackColor();
                             }
-                            else if (c.ConfigUIComponent is ConfigWPFCheckBox)
+                            else if (c.UIComponent is ConfigWPFCheckBox)
                             {
-                                ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.ConfigUIComponent;
+                                ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.UIComponent;
                                 CBTemp.IsChecked = false;
                             }
-                            else if (c.ConfigUIComponent is ConfigWPFComboBox)
+                            else if (c.UIComponent is ConfigWPFComboBox)
                             {
                                 //do nothing...
                             }
-                            else if (c.ConfigUIComponent is ConfigWPFRadioButton)
+                            else if (c.UIComponent is ConfigWPFRadioButton)
                             {
-                                ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.ConfigUIComponent;
+                                ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.UIComponent;
                                 CBTemp.IsChecked = false;
                             }
                         }
                     }
-                    if (c.configs.Count > 0)
+                    if (c.Packages.Count > 0)
                     {
-                        LoadProcessConfigsV2(c.Name, c.configs, ref savedConfigList,defaultChecked);
+                        LoadProcessConfigsV2(c.Name, c.Packages, ref savedConfigList,defaultChecked);
                     }
                 }
             }
@@ -1711,7 +1711,7 @@ namespace RelhaxModpack
                 catagoryRoot.AppendChild(catagoryDependencies);
                 //mods for catagory
                 XmlElement modsHolder = doc.CreateElement("mods");
-                foreach (Mod m in c.Mods)
+                foreach (SelectablePackage m in c.Packages)
                 {
                     //add it to the list
                     XmlElement modRoot = doc.CreateElement("mod");
@@ -1800,8 +1800,8 @@ namespace RelhaxModpack
                     //configs for the mods
                     XmlElement configsHolder = doc.CreateElement("configs");
                     //if statement here
-                    if (m.configs.Count > 0)
-                        SaveDatabaseConfigLevel(doc, configsHolder, m.configs);
+                    if (m.Packages.Count > 0)
+                        SaveDatabaseConfigLevel(doc, configsHolder, m.Packages);
                     modRoot.AppendChild(configsHolder);
                     XmlElement modDependencies = doc.CreateElement("dependencies");
                     foreach (Dependency d in m.Dependencies)
@@ -1858,9 +1858,9 @@ namespace RelhaxModpack
             doc.Save(saveLocation);
         }
 
-        private static void SaveDatabaseConfigLevel(XmlDocument doc, XmlElement configsHolder, List<Config> configsList)
+        private static void SaveDatabaseConfigLevel(XmlDocument doc, XmlElement configsHolder, List<SelectablePackage> configsList)
         {
-            foreach (Config cc in configsList)
+            foreach (SelectablePackage cc in configsList)
             {
                 //add the config to the list
                 XmlElement configRoot = doc.CreateElement("config");
@@ -1954,8 +1954,8 @@ namespace RelhaxModpack
                 //configs for the configs (meta)
                 XmlElement configsHolderSub = doc.CreateElement("configs");
                 //if statement here
-                if (cc.configs.Count > 0)
-                    SaveDatabaseConfigLevel(doc, configsHolderSub, cc.configs);
+                if (cc.Packages.Count > 0)
+                    SaveDatabaseConfigLevel(doc, configsHolderSub, cc.Packages);
                 configRoot.AppendChild(configsHolderSub);
                 //dependencies for the configs
                 XmlElement catDependencies = doc.CreateElement("dependencies");

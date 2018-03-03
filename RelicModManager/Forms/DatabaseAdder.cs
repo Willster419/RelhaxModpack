@@ -10,8 +10,8 @@ namespace RelhaxModpack
         public Dependency SelectedGlobalDependency;
         public Dependency SelectedDependency;
         public LogicalDependency SelectedLogicalDependency;
-        public SelectableDatabasePackage SelectedDatabaseObject;
-        private List<Config> configList;
+        public SelectablePackage SelectedDatabaseObject;
+        private List<SelectablePackage> configList;
         private bool ignoreResult = true;
         public bool sublist = false;
         public DatabaseAdder(EditorMode mode, List<Dependency> GlobalDependency, List<Dependency> Dependencies, List<LogicalDependency> LogicalDepdnedncies, List<Category> ParsedCatList, bool moveMode)
@@ -67,7 +67,7 @@ namespace RelhaxModpack
             {
                 Category selectedCat = (Category)cb.SelectedItem;
                 ModPanel.Enabled = true;
-                ModCB.DataSource = selectedCat.Mods;
+                ModCB.DataSource = selectedCat.Packages;
             }
             else if (Mode == EditorMode.GlobalDependnecy)
             {
@@ -86,20 +86,20 @@ namespace RelhaxModpack
         private void ModCB_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox cb = (ComboBox)sender;
-            Mod selectedMod = (Mod)cb.SelectedItem;
+            SelectablePackage selectedMod = (SelectablePackage)cb.SelectedItem;
             SelectedDatabaseObject = selectedMod;
-            if (selectedMod.configs.Count == 0)
+            if (selectedMod.Packages.Count == 0)
             {
                 ConfigPanel.Enabled = false;
             }
             else
             {
                 ConfigPanel.Enabled = true;
-                configList = new List<Config>();
-                foreach (Config c in selectedMod.configs)
+                configList = new List<SelectablePackage>();
+                foreach (SelectablePackage c in selectedMod.Packages)
                 {
                     configList.Add(c);
-                    processConfigs(c.configs);
+                    processConfigs(c.Packages);
                 }
                 ConfigCB.SelectedIndexChanged -= ConfigCB_SelectedIndexChanged;
                 ConfigCB.DataSource = configList;
@@ -108,19 +108,19 @@ namespace RelhaxModpack
             }
         }
 
-        private void processConfigs(List<Config> cfgList)
+        private void processConfigs(List<SelectablePackage> cfgList)
         {
-            foreach(Config c in cfgList)
+            foreach(SelectablePackage c in cfgList)
             {
                 configList.Add(c);
-                processConfigs(c.configs);
+                processConfigs(c.Packages);
             }
         }
 
         private void ConfigCB_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox cb = (ComboBox)sender;
-            SelectedDatabaseObject = (Config)cb.SelectedItem;
+            SelectedDatabaseObject = (SelectablePackage)cb.SelectedItem;
         }
 
         private void applyButton_Click(object sender, EventArgs e)

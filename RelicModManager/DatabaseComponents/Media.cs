@@ -11,16 +11,10 @@
     {
         //SAMPLE YOUTUBE URL: https://www.youtube.com/v/ZwY2E0hjGuU?version=3&autoplay=1
         //http and https both work
-        public string URL { get; set; }
-        //media type, 1 = picture (default), 2 = youtube video
-        public MediaType MediaType { get; set; }
-        //constructor to setup the picture with the "name" and
-        //the URL where the picture is located
-        public Media()
-        {
-            //default media type to picture
-            MediaType = MediaType.Picture;
-        }
+        public string URL = "";
+        //media type
+        public MediaType MediaType = MediaType.Picture;
+        public Media() {  }
 
         public override string ToString()
         {

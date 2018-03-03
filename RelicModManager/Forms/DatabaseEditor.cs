@@ -28,13 +28,13 @@ namespace RelhaxModpack
         private Dependency SelectedGlobalDependency;
         private Dependency SelectedDependency;
         private LogicalDependency SelectedLogicalDependency;
-        private SelectableDatabasePackage SelectedDatabaseObject;
+        private SelectablePackage SelectedDatabaseObject;
         private Category SelectedCategory;
         private int currentSelectedIndex = -1;
         // string GameVersion = ""; => changed to Settings.TanksVersion => could be accessed from ANY place of code
         // string OnlineFolderVersion = ""; => changed to Settings.tanksOnlineFolderVersion => could be accessed from ANY place of code
         private StringBuilder InUseSB;
-        private List<Config> ListThatContainsConfig;
+        private List<SelectablePackage> ListThatContainsConfig;
         private bool UnsavedModifications = false;
         List<string> allPackageNames = new List<string>();
 
@@ -108,7 +108,7 @@ namespace RelhaxModpack
                     allPackageNames.Add(cat.Name);
                     DatabaseTreeNode catNode = new DatabaseTreeNode(cat, 4);
                     DatabaseTreeView.Nodes.Add(catNode);
-                    foreach (Mod m in cat.Mods)
+                    foreach (SelectablePackage m in cat.Packages)
                     {
                         SearchBox.Items.Add(m.PackageName);
                         allPackageNames.Add(m.PackageName);
@@ -116,7 +116,7 @@ namespace RelhaxModpack
                         catNode.Nodes.Add(modNode);
                         if (SelectedDatabaseObject != null && SelectedDatabaseObject.PackageName.Equals(m.PackageName))
                             modNode.EnsureVisible();
-                        DisplayDatabaseConfigs(modNode, m.configs);
+                        DisplayDatabaseConfigs(modNode, m.Packages);
                     }
                 }
 
@@ -172,9 +172,9 @@ namespace RelhaxModpack
             PictureTabPage.Enabled = false;
             UserDatasTabPage.Enabled = false;
         }
-        private void DisplayDatabaseConfigs(DatabaseTreeNode parrent, List<Config> configs)
+        private void DisplayDatabaseConfigs(DatabaseTreeNode parrent, List<SelectablePackage> configs)
         {
-            foreach (Config c in configs)
+            foreach (SelectablePackage c in configs)
             {
                 SearchBox.Items.Add(c.PackageName);
                 allPackageNames.Add(c.PackageName);
@@ -182,7 +182,7 @@ namespace RelhaxModpack
                 parrent.Nodes.Add(ConfigParrent);
                 if (SelectedDatabaseObject != null && SelectedDatabaseObject.PackageName.Equals(c.PackageName))
                     ConfigParrent.EnsureVisible();
-                DisplayDatabaseConfigs(ConfigParrent, c.configs);
+                DisplayDatabaseConfigs(ConfigParrent, c.Packages);
             }
         }
         //show the load database dialog and load the database
@@ -343,10 +343,11 @@ namespace RelhaxModpack
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-                if (SelectedDatabaseObject is Mod)
+                if (SelectedDatabaseObject is SelectablePackage)
                 {
-                    Mod m = (Mod)SelectedDatabaseObject;
-                    List<Mod> ModList = ListContainsMod(m);
+#error this needs to be updated
+                    SelectablePackage m = (SelectablePackage)SelectedDatabaseObject;
+                    List<SelectablePackage> ModList = ListContainsMod(m);
                     int index = ModList.IndexOf(m);
                     //make changes
                     m.Name = ObjectNameTB.Text;
@@ -368,7 +369,7 @@ namespace RelhaxModpack
                     m.UpdateComment = ObjectUpdateNotesTB.Text;
                     ModList[index] = m;
                 }
-                else if (SelectedDatabaseObject is Config)
+                else if (SelectedDatabaseObject is SelectablePackage)
                 {
                     if (ObjectTypeComboBox.SelectedIndex == -1 || ObjectTypeComboBox.SelectedIndex == 0)
                     {
@@ -376,7 +377,7 @@ namespace RelhaxModpack
                         return;
                     }
                     ListThatContainsConfig = null;
-                    Config cfg = (Config)SelectedDatabaseObject;
+                    SelectablePackage cfg = (SelectablePackage)SelectedDatabaseObject;
                     ListContainsConfig(cfg);
                     if (ListThatContainsConfig != null)
                     {
@@ -421,45 +422,45 @@ namespace RelhaxModpack
             this.DisplayDatabase(false);
             UnsavedModifications = true;
         }
-        private List<Mod> ListContainsMod(Mod mod)
+        private List<SelectablePackage> ListContainsMod(SelectablePackage mod)
         {
             foreach (Category cat in ParsedCategoryList)
             {
-                if (cat.Mods.Contains(mod))
-                    return cat.Mods;
+                if (cat.Packages.Contains(mod))
+                    return cat.Packages;
             }
             return null;
         }
-        private void ListContainsConfig(Config cfg)
+        private void ListContainsConfig(SelectablePackage cfg)
         {
             foreach (Category cat in ParsedCategoryList)
             {
-                foreach (Mod m in cat.Mods)
+                foreach (SelectablePackage m in cat.Packages)
                 {
-                    if (m.configs.Contains(cfg) && ListThatContainsConfig == null)
+                    if (m.Packages.Contains(cfg) && ListThatContainsConfig == null)
                     {
-                        ListThatContainsConfig = m.configs;
+                        ListThatContainsConfig = m.Packages;
                         return;
                     }
-                    if (m.configs.Count > 0)
+                    if (m.Packages.Count > 0)
                     {
-                        ListContainsConfigRecursive(m.configs, cfg);
+                        ListContainsConfigRecursive(m.Packages, cfg);
                     }
                 }
             }
         }
-        private void ListContainsConfigRecursive(List<Config> cfgList, Config cfg)
+        private void ListContainsConfigRecursive(List<SelectablePackage> cfgList, SelectablePackage cfg)
         {
-            foreach (Config c in cfgList)
+            foreach (SelectablePackage c in cfgList)
             {
-                if (c.configs.Contains(cfg) && ListThatContainsConfig == null)
+                if (c.Packages.Contains(cfg) && ListThatContainsConfig == null)
                 {
-                    ListThatContainsConfig = c.configs;
+                    ListThatContainsConfig = c.Packages;
                     return;
                 }
-                if (c.configs.Count > 0)
+                if (c.Packages.Count > 0)
                 {
-                    ListContainsConfigRecursive(c.configs, cfg);
+                    ListContainsConfigRecursive(c.Packages, cfg);
                 }
             }
         }
@@ -799,10 +800,10 @@ namespace RelhaxModpack
                     ObjectDevURLTB.Enabled = true;
                     ObjectDevURLTB.Text = SelectedDatabaseObject.DevURL;
 
-                    if (SelectedDatabaseObject is Config)
+                    if (SelectedDatabaseObject is SelectablePackage)
                     {
                         ObjectTypeComboBox.Enabled = true;
-                        Config cfg = (Config)SelectedDatabaseObject;
+                        SelectablePackage cfg = (SelectablePackage)SelectedDatabaseObject;
                         switch (cfg.Type)
                         {
                             case "single":
@@ -988,30 +989,31 @@ namespace RelhaxModpack
                     }
                     else if (DatabaseEditorMode == EditorMode.DBO)
                     {
-                        if (SelectedDatabaseObject is Mod)
+                        if (SelectedDatabaseObject is SelectablePackage)
                         {
                             //mod->mod
                             //mod->config
-                            Mod modToMove = (Mod)SelectedDatabaseObject;
-                            if (dba.SelectedDatabaseObject is Mod)
+#error this needs to also be updated
+                            SelectablePackage modToMove = (SelectablePackage)SelectedDatabaseObject;
+                            if (dba.SelectedDatabaseObject is SelectablePackage)
                             {
-                                Mod Ref = (Mod)dba.SelectedDatabaseObject;
+                                SelectablePackage Ref = (SelectablePackage)dba.SelectedDatabaseObject;
                                 //remove mod from list
-                                List<Mod> ModList = ListContainsMod(modToMove);
+                                List<SelectablePackage> ModList = ListContainsMod(modToMove);
                                 ModList.Remove(modToMove);
                                 //add mod to other list
                                 ModList = ListContainsMod(Ref);
                                 int index = ModList.IndexOf(Ref);
                                 ModList.Insert(index, modToMove);
                             }
-                            else if (dba.SelectedDatabaseObject is Config)
+                            else if (dba.SelectedDatabaseObject is SelectablePackage)
                             {
-                                Config Ref = (Config)dba.SelectedDatabaseObject;
+                                SelectablePackage Ref = (SelectablePackage)dba.SelectedDatabaseObject;
                                 //remove mod first
-                                List<Mod> ModList = ListContainsMod(modToMove);
+                                List<SelectablePackage> ModList = ListContainsMod(modToMove);
                                 ModList.Remove(modToMove);
                                 //convert to config
-                                Config c = ModToConfig(modToMove);
+                                SelectablePackage c = ModToConfig(modToMove);
                                 //move to config list
                                 ListContainsConfig(Ref);
                                 if (ListThatContainsConfig != null)
@@ -1021,15 +1023,15 @@ namespace RelhaxModpack
                                 }
                             }
                         }
-                        else if (SelectedDatabaseObject is Config)
+                        else if (SelectedDatabaseObject is SelectablePackage)
                         {
                             //config->mod
                             //config->config
                             ListThatContainsConfig = null;
-                            Config cfgToMove = (Config)SelectedDatabaseObject;
-                            if (dba.SelectedDatabaseObject is Config)
+                            SelectablePackage cfgToMove = (SelectablePackage)SelectedDatabaseObject;
+                            if (dba.SelectedDatabaseObject is SelectablePackage)
                             {
-                                Config Ref = (Config)dba.SelectedDatabaseObject;
+                                SelectablePackage Ref = (SelectablePackage)dba.SelectedDatabaseObject;
                                 //remove config from list
                                 ListContainsConfig(cfgToMove);
                                 if (ListThatContainsConfig != null)
@@ -1045,9 +1047,9 @@ namespace RelhaxModpack
                                     ListThatContainsConfig.Insert(index, cfgToMove);
                                 }
                             }
-                            else if (dba.SelectedDatabaseObject is Mod)
+                            else if (dba.SelectedDatabaseObject is SelectablePackage)
                             {
-                                Mod Ref = (Mod)dba.SelectedDatabaseObject;
+                                SelectablePackage Ref = (SelectablePackage)dba.SelectedDatabaseObject;
                                 //remove the config first
                                 ListContainsConfig(cfgToMove);
                                 if (ListThatContainsConfig != null)
@@ -1056,9 +1058,9 @@ namespace RelhaxModpack
                                     ListThatContainsConfig.Remove(cfgToMove);
                                 }
                                 //convert it to a mod
-                                Mod m = ConfigToMod(cfgToMove);
+                                SelectablePackage m = ConfigToMod(cfgToMove);
                                 //move it to mod list
-                                List<Mod> ModList = ListContainsMod(Ref);
+                                List<SelectablePackage> ModList = ListContainsMod(Ref);
                                 int index2 = ModList.IndexOf(Ref);
                                 ModList.Insert(index2, m);
                             }
@@ -1149,11 +1151,12 @@ namespace RelhaxModpack
                     }
                     else if (DatabaseEditorMode == EditorMode.DBO)
                     {
-                        if (SelectedDatabaseObject is Mod)
+#error this needs to be redone
+                        if (SelectedDatabaseObject is SelectablePackage)//config
                         {
                             if (dba.sublist)
                             {
-                                Config cfg = new Config();
+                                SelectablePackage cfg = new SelectablePackage();
                                 cfg.Name = ObjectNameTB.Text;
                                 cfg.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
                                 cfg.StartAddress = ObjectStartAddressTB.Text;
@@ -1183,18 +1186,18 @@ namespace RelhaxModpack
                                 cfg.CRC = "";
                                 if (!ObjectZipFileTB.Text.Equals(""))
                                     cfg.CRC = "f";
-                                dba.SelectedDatabaseObject.configs.Add(cfg);
+                                dba.SelectedDatabaseObject.Packages.Add(cfg);
                             }
                             else
                             {
                                 //mod->mod
-                                if(dba.SelectedDatabaseObject is Mod)
+                                if(dba.SelectedDatabaseObject is SelectablePackage)//mod
                                 {
-                                    Mod mm = (Mod)dba.SelectedDatabaseObject;
-                                    List<Mod> ModList = ListContainsMod(mm);
+                                    SelectablePackage mm = (SelectablePackage)dba.SelectedDatabaseObject;
+                                    List<SelectablePackage> ModList = ListContainsMod(mm);
                                     int index = ModList.IndexOf(mm);
                                     //make changes
-                                    Mod m = new Mod();
+                                    SelectablePackage m = new SelectablePackage();
                                     m.Name = ObjectNameTB.Text;
                                     m.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
                                     m.StartAddress = ObjectStartAddressTB.Text;
@@ -1212,16 +1215,16 @@ namespace RelhaxModpack
                                     ModList.Insert(index, m);
                                 }
                                 //mod->config
-                                else if (dba.SelectedDatabaseObject is Config)
+                                else if (dba.SelectedDatabaseObject is SelectablePackage)
                                 {
-                                    Config cfgg = (Config)dba.SelectedDatabaseObject;
+                                    SelectablePackage cfgg = (SelectablePackage)dba.SelectedDatabaseObject;
                                     ListThatContainsConfig = null;
                                     ListContainsConfig(cfgg);
                                     if (ListThatContainsConfig != null)
                                     {
                                         int index = ListThatContainsConfig.IndexOf(cfgg);
                                         //make changes
-                                        Config cfg = new Config();
+                                        SelectablePackage cfg = new SelectablePackage();
                                         cfg.Name = ObjectNameTB.Text;
                                         cfg.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
                                         cfg.StartAddress = ObjectStartAddressTB.Text;
@@ -1256,7 +1259,7 @@ namespace RelhaxModpack
                                 }
                             }
                         }
-                        else if (SelectedDatabaseObject is Config)
+                        else if (SelectedDatabaseObject is SelectablePackage)
                         {
                             if (ObjectTypeComboBox.SelectedIndex == -1 || ObjectTypeComboBox.SelectedIndex == 0)
                             {
@@ -1265,7 +1268,7 @@ namespace RelhaxModpack
                             }
                             if (dba.sublist)
                             {
-                                Config cfg = new Config();
+                                SelectablePackage cfg = new SelectablePackage();
                                 cfg.Name = ObjectNameTB.Text;
                                 cfg.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
                                 cfg.StartAddress = ObjectStartAddressTB.Text;
@@ -1295,21 +1298,21 @@ namespace RelhaxModpack
                                 cfg.CRC = "";
                                 if (!ObjectZipFileTB.Text.Equals(""))
                                     cfg.CRC = "f";
-                                dba.SelectedDatabaseObject.configs.Add(cfg);
+                                dba.SelectedDatabaseObject.Packages.Add(cfg);
                             }
                             else
                             {
                                 //config->config
-                                if(dba.SelectedDatabaseObject is Config)
+                                if(dba.SelectedDatabaseObject is SelectablePackage)
                                 {
-                                    Config cfgg = (Config)dba.SelectedDatabaseObject;
+                                    SelectablePackage cfgg = (SelectablePackage)dba.SelectedDatabaseObject;
                                     ListThatContainsConfig = null;
                                     ListContainsConfig(cfgg);
                                     if (ListThatContainsConfig != null)
                                     {
                                         int index = ListThatContainsConfig.IndexOf(cfgg);
                                         //make changes
-                                        Config cfg = new Config();
+                                        SelectablePackage cfg = new SelectablePackage();
                                         cfg.Name = ObjectNameTB.Text;
                                         cfg.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
                                         cfg.StartAddress = ObjectStartAddressTB.Text;
@@ -1343,13 +1346,13 @@ namespace RelhaxModpack
                                     }
                                 }
                                 //config->mod
-                                else if (dba.SelectedDatabaseObject is Mod)
+                                else if (dba.SelectedDatabaseObject is SelectablePackage)
                                 {
-                                    Mod mm = (Mod)dba.SelectedDatabaseObject;
-                                    List<Mod> ModList = ListContainsMod(mm);
+                                    SelectablePackage mm = (SelectablePackage)dba.SelectedDatabaseObject;
+                                    List<SelectablePackage> ModList = ListContainsMod(mm);
                                     int index = ModList.IndexOf(mm);
                                     //make changes
-                                    Mod m = new Mod();
+                                    SelectablePackage m = new SelectablePackage();
                                     m.Name = ObjectNameTB.Text;
                                     m.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
                                     m.StartAddress = ObjectStartAddressTB.Text;
@@ -1419,17 +1422,18 @@ namespace RelhaxModpack
             }
             else if (DatabaseEditorMode == EditorMode.DBO)
             {
-                if (SelectedDatabaseObject is Mod)
+#error this needs to be rewritten
+                if (SelectedDatabaseObject is SelectablePackage)
                 {
-                    Mod m = (Mod)SelectedDatabaseObject;
-                    List<Mod> ModList = ListContainsMod(m);
+                    SelectablePackage m = (SelectablePackage)SelectedDatabaseObject;
+                    List<SelectablePackage> ModList = ListContainsMod(m);
                     int index = ModList.IndexOf(m);
                     ModList.RemoveAt(index);
                 }
-                else if (SelectedDatabaseObject is Config)
+                else if (SelectedDatabaseObject is SelectablePackage)
                 {
                     ListThatContainsConfig = null;
-                    Config cfg = (Config)SelectedDatabaseObject;
+                    SelectablePackage cfg = (SelectablePackage)SelectedDatabaseObject;
                     ListContainsConfig(cfg);
                     if (ListThatContainsConfig != null)
                     {
@@ -1467,7 +1471,7 @@ namespace RelhaxModpack
                         InUseSB.Append(string.Format("Category: {0}", c.Name));
                     }
                 }
-                foreach (Mod m in c.Mods)
+                foreach (SelectablePackage m in c.Packages)
                 {
                     foreach (Dependency d in m.Dependencies)
                     {
@@ -1485,14 +1489,14 @@ namespace RelhaxModpack
                             InUseSB.Append(string.Format("Mod: {0}\n", m.PackageName));
                         }
                     }
-                    ProcessConfigsInUse(InUseSB, m.configs, InUse, packageName);
+                    ProcessConfigsInUse(InUseSB, m.Packages, InUse, packageName);
                 }
             }
             return InUse;
         }
-        private void ProcessConfigsInUse(StringBuilder sb, List<Config> configs, bool InUse, string packageName)
+        private void ProcessConfigsInUse(StringBuilder sb, List<SelectablePackage> configs, bool InUse, string packageName)
         {
-            foreach (Config c in configs)
+            foreach (SelectablePackage c in configs)
             {
                 foreach (Dependency d in c.Dependencies)
                 {
@@ -1510,7 +1514,7 @@ namespace RelhaxModpack
                         InUseSB.Append(string.Format("Config: {0}\n", c.PackageName));
                     }
                 }
-                ProcessConfigsInUse(sb, c.configs, InUse, packageName);
+                ProcessConfigsInUse(sb, c.Packages, InUse, packageName);
             }
         }
 
@@ -1916,7 +1920,7 @@ namespace RelhaxModpack
             foreach (Category c in ParsedCategoryList)
             {
                 //will itterate through every catagory once
-                foreach (Mod m in c.Mods)
+                foreach (SelectablePackage m in c.Packages)
                 {
                     foreach (LogicalDependency ld in m.LogicalDependencies)
                     {
@@ -1932,15 +1936,15 @@ namespace RelhaxModpack
                             d.DatabasePackageLogic.Add(dbl);
                         }
                     }
-                    if (m.configs.Count > 0)
-                        ProcessConfigsLogical(d, m.configs);
+                    if (m.Packages.Count > 0)
+                        ProcessConfigsLogical(d, m.Packages);
                 }
             }
         }
 
-        private void ProcessConfigsLogical(LogicalDependency d, List<Config> configList)
+        private void ProcessConfigsLogical(LogicalDependency d, List<SelectablePackage> configList)
         {
-            foreach (Config config in configList)
+            foreach (SelectablePackage config in configList)
             {
                 foreach (LogicalDependency ld in config.LogicalDependencies)
                 {
@@ -1956,8 +1960,8 @@ namespace RelhaxModpack
                         d.DatabasePackageLogic.Add(dl);
                     }
                 }
-                if (config.configs.Count > 0)
-                    ProcessConfigsLogical(d, config.configs);
+                if (config.Packages.Count > 0)
+                    ProcessConfigsLogical(d, config.Packages);
             }
         }
 
@@ -1967,7 +1971,7 @@ namespace RelhaxModpack
             foreach (Category c in ParsedCategoryList)
             {
                 //will itterate through every catagory once
-                foreach (Mod m in c.Mods)
+                foreach (SelectablePackage m in c.Packages)
                 {
                     foreach (Dependency dep in m.Dependencies)
                     {
@@ -1976,16 +1980,16 @@ namespace RelhaxModpack
                             objectsThatUseDependency.Add(m.PackageName);
                         }
                     }
-                    if (m.configs.Count > 0)
-                        ProcessConfigsLogical(d, m.configs,objectsThatUseDependency);
+                    if (m.Packages.Count > 0)
+                        ProcessConfigsLogical(d, m.Packages,objectsThatUseDependency);
                 }
             }
             return objectsThatUseDependency;
         }
         
-        private void ProcessConfigsLogical(Dependency d, List<Config> configList, List<string> objectsThatUseDependency)
+        private void ProcessConfigsLogical(Dependency d, List<SelectablePackage> configList, List<string> objectsThatUseDependency)
         {
-            foreach (Config config in configList)
+            foreach (SelectablePackage config in configList)
             {
                 foreach (Dependency dep in config.Dependencies)
                 {
@@ -1994,8 +1998,8 @@ namespace RelhaxModpack
                         objectsThatUseDependency.Add(config.PackageName);
                     }
                 }
-                if (config.configs.Count > 0)
-                    ProcessConfigsLogical(d, config.configs, objectsThatUseDependency);
+                if (config.Packages.Count > 0)
+                    ProcessConfigsLogical(d, config.Packages, objectsThatUseDependency);
             }
         }
 
@@ -2131,15 +2135,15 @@ namespace RelhaxModpack
             }
             foreach (Category c in ParsedCategoryList)
             {
-                foreach (Mod m in c.Mods)
+                foreach (SelectablePackage m in c.Packages)
                 {
                     if (m.PackageName.Equals(PackageName))
                     {
                         duplicate++;
                     }
-                    if (m.configs.Count > 0)
+                    if (m.Packages.Count > 0)
                     {
-                        DuplicatePackageNameConfig(m.configs, PackageName, duplicate);
+                        DuplicatePackageNameConfig(m.Packages, PackageName, duplicate);
                     }
                 }
             }
@@ -2149,9 +2153,9 @@ namespace RelhaxModpack
                 return false;
         }
 
-        private void DuplicatePackageNameConfig(List<Config> configList, string PackageName, int duplicate)
+        private void DuplicatePackageNameConfig(List<SelectablePackage> configList, string PackageName, int duplicate)
         {
-            foreach(Config c in configList)
+            foreach(SelectablePackage c in configList)
             {
                 if(c.PackageName.Equals(PackageName))
                 {
@@ -2170,14 +2174,15 @@ namespace RelhaxModpack
             return packageName;
         }
 
-        private Mod ConfigToMod(Config cfgToMove)
+#error this and below needs to be removed
+        private SelectablePackage ConfigToMod(SelectablePackage cfgToMove)
         {
-            return new Mod()
+            return new SelectablePackage()
             {
                 Name = cfgToMove.Name,
                 Version = cfgToMove.Version,
                 ZipFile = cfgToMove.ZipFile,
-                configs = cfgToMove.configs,
+                Packages = cfgToMove.Packages,
                 StartAddress = cfgToMove.StartAddress,
                 LogicalDependencies = cfgToMove.LogicalDependencies,
                 Dependencies = cfgToMove.Dependencies,
@@ -2195,14 +2200,14 @@ namespace RelhaxModpack
             };
         }
 
-        private Config ModToConfig(Mod modToMove)
+        private SelectablePackage ModToConfig(SelectablePackage modToMove)
         {
-            return new Config()
+            return new SelectablePackage()
             {
                 Name = modToMove.Name,
                 Version = modToMove.Version,
                 ZipFile = modToMove.ZipFile,
-                configs = modToMove.configs,
+                Packages = modToMove.Packages,
                 StartAddress = modToMove.StartAddress,
                 LogicalDependencies = modToMove.LogicalDependencies,
                 Dependencies = modToMove.Dependencies,

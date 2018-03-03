@@ -18,7 +18,7 @@ namespace RelhaxModpack
         private WebBrowser Browser;//to change to HTML5 chrome style browser
         private RelhaxMediaPlayer player;
         private string DateFormat;
-        public SelectableDatabasePackage DBO { get; set; }
+        public SelectablePackage DBO { get; set; }
         public string LastUpdated { get; set; }
         Label ErrorLabel;
         

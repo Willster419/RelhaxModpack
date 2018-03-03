@@ -3,7 +3,7 @@
     class ConfigWPFCheckBox : System.Windows.Controls.CheckBox, UIComponent
     {
         public Category catagory { get; set; }
-        public Mod mod { get; set; }
-        public Config config { get; set; }
+        public SelectablePackage mod { get; set; }
+        public SelectablePackage config { get; set; }
     }
 }
