@@ -65,9 +65,7 @@
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.selectionDefault = new System.Windows.Forms.RadioButton();
             this.expandNodesDefault = new System.Windows.Forms.CheckBox();
-            this.disableColorsCB = new System.Windows.Forms.CheckBox();
             this.selectionLegacy = new System.Windows.Forms.RadioButton();
-            this.disableBordersCB = new System.Windows.Forms.CheckBox();
             this.donateLabel = new System.Windows.Forms.LinkLabel();
             this.fontSizeGB = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
@@ -584,9 +582,7 @@
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel5.Controls.Add(this.selectionDefault, 0, 0);
             this.tableLayoutPanel5.Controls.Add(this.expandNodesDefault, 0, 5);
-            this.tableLayoutPanel5.Controls.Add(this.disableColorsCB, 0, 2);
             this.tableLayoutPanel5.Controls.Add(this.selectionLegacy, 0, 4);
-            this.tableLayoutPanel5.Controls.Add(this.disableBordersCB, 0, 1);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
@@ -632,24 +628,6 @@
             this.expandNodesDefault.MouseEnter += new System.EventHandler(this.expandNodesDefault_MouseEnter);
             this.expandNodesDefault.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
-            // disableColorsCB
-            // 
-            this.disableColorsCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.disableColorsCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.disableColorsCB.Location = new System.Drawing.Point(1, 41);
-            this.disableColorsCB.Margin = new System.Windows.Forms.Padding(1);
-            this.disableColorsCB.Name = "disableColorsCB";
-            this.disableColorsCB.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.tableLayoutPanel5.SetRowSpan(this.disableColorsCB, 2);
-            this.disableColorsCB.Size = new System.Drawing.Size(172, 38);
-            this.disableColorsCB.TabIndex = 4;
-            this.disableColorsCB.Text = "Disable color change";
-            this.disableColorsCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.disableColorsCB.UseVisualStyleBackColor = true;
-            this.disableColorsCB.CheckedChanged += new System.EventHandler(this.disableColorsCB_CheckedChanged);
-            this.disableColorsCB.MouseEnter += new System.EventHandler(this.disableColorsCB_MouseEnter);
-            this.disableColorsCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
             // selectionLegacy
             // 
             this.selectionLegacy.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -664,21 +642,6 @@
             this.selectionLegacy.CheckedChanged += new System.EventHandler(this.selectionLegacy_CheckedChanged);
             this.selectionLegacy.MouseEnter += new System.EventHandler(this.selectionView_MouseEnter);
             this.selectionLegacy.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // disableBordersCB
-            // 
-            this.disableBordersCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.disableBordersCB.Location = new System.Drawing.Point(1, 21);
-            this.disableBordersCB.Margin = new System.Windows.Forms.Padding(1);
-            this.disableBordersCB.Name = "disableBordersCB";
-            this.disableBordersCB.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.disableBordersCB.Size = new System.Drawing.Size(172, 18);
-            this.disableBordersCB.TabIndex = 3;
-            this.disableBordersCB.Text = "Disable borders";
-            this.disableBordersCB.UseVisualStyleBackColor = true;
-            this.disableBordersCB.CheckedChanged += new System.EventHandler(this.disableBordersCB_CheckedChanged);
-            this.disableBordersCB.MouseEnter += new System.EventHandler(this.disableBordersCB_MouseEnter);
-            this.disableBordersCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // donateLabel
             // 
@@ -1188,7 +1151,6 @@
         private System.Windows.Forms.RadioButton fontSize125;
         private System.Windows.Forms.RadioButton fontSize100;
         private System.Windows.Forms.RadioButton DPI100;
-        private System.Windows.Forms.CheckBox disableBordersCB;
         private System.Windows.Forms.RadioButton DPI125;
         private System.Windows.Forms.RadioButton DPI175;
         private System.Windows.Forms.ProgressBar totalProgressBar;
@@ -1196,7 +1158,6 @@
         private System.Windows.Forms.CheckBox clearCacheCB;
         private System.Windows.Forms.Button viewAppUpdates;
         private System.Windows.Forms.Button viewDBUpdates;
-        private System.Windows.Forms.CheckBox disableColorsCB;
         private System.Windows.Forms.CheckBox clearLogFilesCB;
         private System.Windows.Forms.RadioButton DPIAUTO;
         private System.Windows.Forms.RadioButton DPI275;

@@ -1730,7 +1730,7 @@ namespace RelhaxModpack
             //set translation text
             Control[] translationSetList = new Control[] { forceManuel, cleanInstallCB, backupModsCheckBox, cancerFontCB, saveLastInstallCB, saveUserDataCB, darkUICB,
                 installRelhaxMod, uninstallRelhaxMod, settingsGroupBox,loadingImageGroupBox, languageSelectionGB, findBugAddModLabel, formPageLink, selectionDefault, selectionLegacy, donateLabel,
-                cancelDownloadButton, fontSizeGB, expandNodesDefault, disableBordersCB, clearCacheCB, DiscordServerLink, viewAppUpdates, viewDBUpdates, disableColorsCB, clearLogFilesCB,
+                cancelDownloadButton, fontSizeGB, expandNodesDefault, clearCacheCB, DiscordServerLink, viewAppUpdates, viewDBUpdates, clearLogFilesCB,
                 notifyIfSameDatabaseCB, ShowInstallCompleteWindowCB,  createShortcutsCB, InstantExtractionCB, DiagnosticUtilitiesButton, UninstallModeGroupBox, SmartUninstallModeRB,
                 CleanUninstallModeRB, SuperExtractionCB };
             foreach (var set in translationSetList)
@@ -1749,9 +1749,7 @@ namespace RelhaxModpack
                 this.saveUserDataCB.Checked = Settings.SaveUserData;
                 this.darkUICB.Checked = Settings.DarkUI;
                 this.expandNodesDefault.Checked = Settings.ExpandAllLegacy;
-                this.disableBordersCB.Checked = Settings.DisableBorders;
                 this.clearCacheCB.Checked = Settings.ClearCache;
-                this.disableColorsCB.Checked = Settings.DisableColorChange;
                 this.clearLogFilesCB.Checked = Settings.DeleteLogs;
                 this.Font = Settings.AppFont;
                 this.notifyIfSameDatabaseCB.Checked = Settings.NotifyIfSameDatabase;
@@ -2250,12 +2248,7 @@ namespace RelhaxModpack
         {
             Settings.ExpandAllLegacy = expandNodesDefault.Checked;
         }
-
-        private void disableBordersCB_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.DisableBorders = disableBordersCB.Checked;
-        }
-
+        
         private void clearCacheCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.ClearCache = clearCacheCB.Checked;
@@ -2510,11 +2503,6 @@ namespace RelhaxModpack
         private void clearLogFilesCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.DeleteLogs = clearLogFilesCB.Checked;
-        }
-
-        private void disableColorsCB_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.DisableColorChange = disableColorsCB.Checked;
         }
 
         private void notifyIfSameDatabaseCB_CheckedChanged(object sender, EventArgs e)

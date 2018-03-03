@@ -141,7 +141,7 @@ namespace RelhaxModpack
                 SaveLastConfig = false;
                 SaveUserData = false;
                 ClearCache = false;
-                DisableBorders = false;
+                DisableBorders = true;
                 NotifyIfSameDatabase = false;
                 CreateShortcuts = false;
                 InstantExtraction = false;
@@ -171,7 +171,7 @@ namespace RelhaxModpack
                 UninstallMode = UninstallModes.Smart;
                 ExpandAllLegacy = false;
                 ModSelectionFullscreen = false;
-                DisableColorChange = false;
+                DisableColorChange = true;
                 DeleteLogs = false;
                 PreviewX = 0;
                 PreviewY = 0;
@@ -227,10 +227,12 @@ namespace RelhaxModpack
                             ExpandAllLegacy = bool.Parse(n.InnerText);
                             break;
                         case "disableBorders":
-                            DisableBorders = bool.Parse(n.InnerText);
+                            //feature disabled/removed
+                            DisableBorders = true;
                             break;
                         case "disableColorChange":
-                            DisableColorChange = bool.Parse(n.InnerText);
+                            //feature disabled/removed
+                            DisableColorChange = true;
                             break;
                         case "deleteLogs":
                             DeleteLogs = bool.Parse(n.InnerText);
@@ -325,10 +327,12 @@ namespace RelhaxModpack
             xexpandAllLegacy.InnerText = "" + ExpandAllLegacy;
             settingsHolder.AppendChild(xexpandAllLegacy);
             XmlElement xdisableBorders = doc.CreateElement("disableBorders");
-            xdisableBorders.InnerText = "" + DisableBorders;
+            //feature disabled/removed
+            xdisableBorders.InnerText = "" + true;
             settingsHolder.AppendChild(xdisableBorders);
             XmlElement xdisableColorChange = doc.CreateElement("disableColorChange");
-            xdisableColorChange.InnerText = "" + DisableColorChange;
+            //feature disabled/removed
+            xdisableColorChange.InnerText = "" + true;
             settingsHolder.AppendChild(xdisableColorChange);
             XmlElement xdeleteLogs = doc.CreateElement("deleteLogs");
             xdeleteLogs.InnerText = "" + DeleteLogs;
