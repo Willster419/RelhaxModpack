@@ -1,9 +1,11 @@
-﻿namespace RelhaxModpack
+﻿/*
+namespace RelhaxModpack
 {
-    public class ConfigFormComboBox : System.Windows.Forms.ComboBox, UIComponent
+    public class ModFormCheckBox : System.Windows.Forms.CheckBox, UIComponent
     {
         public Category catagory { get; set; }
         public SelectablePackage mod { get; set; }
         public SelectablePackage config { get; set; }
     }
 }
+*/

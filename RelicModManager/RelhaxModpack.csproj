@@ -162,6 +162,22 @@
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="LegacyComponents\Config.cs" />
     <Compile Include="LegacyComponents\Mod.cs" />
+    <Compile Include="UIComponents\IPackageUIComponent.cs" />
+    <Compile Include="UIComponents\RelhaxFormCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UIComponents\RelhaxFormComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UIComponents\RelhaxFormRadioButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UIComponents\RelhaxUserCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UIComponents\RelhaxWPFCheckBox.cs" />
+    <Compile Include="UIComponents\RelhaxWPFComboBox.cs" />
+    <Compile Include="UIComponents\RelhaxWPFRadioButton.cs" />
     <Compile Include="Utils\CiInfo.cs" />
     <Compile Include="Forms\Diagnostics.cs">
       <SubType>Form</SubType>
@@ -190,18 +206,12 @@
     <Compile Include="UIComponents\DeveloperSelections.cs" />
     <Compile Include="LegacyComponents\CompleteModSearchList.cs" />
     <Compile Include="UIComponents\ComboBoxItem.cs" />
-    <Compile Include="UIComponents\ConfigFormCheckBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UIComponents\ConfigFormComboBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UIComponents\ConfigFormRadioButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UIComponents\ConfigWPFCheckBox.cs" />
-    <Compile Include="UIComponents\ConfigWPFComboBox.cs" />
-    <Compile Include="UIComponents\ConfigWPFRadioButton.cs" />
+    <Compile Include="LegacyComponents\ConfigFormCheckBox.cs" />
+    <Compile Include="LegacyComponents\ConfigFormComboBox.cs" />
+    <Compile Include="LegacyComponents\ConfigFormRadioButton.cs" />
+    <Compile Include="LegacyComponents\ConfigWPFCheckBox.cs" />
+    <Compile Include="LegacyComponents\ConfigWPFComboBox.cs" />
+    <Compile Include="LegacyComponents\ConfigWPFRadioButton.cs" />
     <Compile Include="LegacyComponents\CRCCheck.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -278,16 +288,14 @@
     <Compile Include="Forms\MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\ModFormCheckBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="LegacyComponents\ModFormCheckBox.cs" />
     <Compile Include="Forms\ModSelectionList.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ModSelectionList.Designer.cs">
       <DependentUpon>ModSelectionList.cs</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\ModWPFCheckBox.cs" />
+    <Compile Include="LegacyComponents\ModWPFCheckBox.cs" />
     <Compile Include="Forms\OldFilesToDelete.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -332,7 +340,7 @@
     <Compile Include="Utils\Settings.cs" />
     <Compile Include="InstallerComponents\StringSave.cs" />
     <Compile Include="Utils\Translations.cs" />
-    <Compile Include="UIComponents\UIComponent.cs" />
+    <Compile Include="LegacyComponents\UIComponent.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="Forms\VersionInfo.cs">
       <SubType>Form</SubType>

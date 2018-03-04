@@ -1,4 +1,5 @@
-﻿namespace RelhaxModpack
+﻿/*
+namespace RelhaxModpack
 {
     public interface UIComponent
     {
@@ -7,3 +8,4 @@
         SelectablePackage config { get; set; }
     }
 }
+*/

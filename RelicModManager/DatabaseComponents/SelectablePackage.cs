@@ -1,4 +1,5 @@
 ﻿using RelhaxModpack.DatabaseComponents;
+using RelhaxModpack.UIComponents;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -30,11 +31,11 @@ namespace RelhaxModpack
         //the refrence for the absolute top of the package tree
         public SelectablePackage TopParent = null;
         //the UI element refrence for this package
-        public UIComponent @UIComponent = null;
+        public IPackageUIComponent UIComponent = null;
         //the UI element refrence for the direct parent of this package
-        public UIComponent ParentUIComponent = null;
+        public IPackageUIComponent ParentUIComponent = null;
         //the UI element refrence for the absolute top of the package tree
-        public UIComponent TopParentUIComponent = null;
+        public IPackageUIComponent TopParentUIComponent = null;
         //a flag to determine wether or not the mod should be shown
         public bool Visible = true;
         //size of the mod zip file
@@ -44,9 +45,40 @@ namespace RelhaxModpack
         //description of the package
         public string Description = "";
         //bool for wether the package is selected to install
-        public bool Checked = false;
+        protected internal bool _Checked = false;
+        public bool Checked
+        {
+            get
+            {
+                return _Checked;
+            }
+            set
+            {
+                _Checked = value;
+                if(UIComponent != null)
+                    UIComponent.OnCheckedChanged(value);
+            }
+        }
+        //overriding the enabled so we can trigger the UI components
+        public override bool Enabled
+        {
+            get { return _Enabled; }
+            set
+            {
+                _Enabled = value;
+                if (UIComponent != null)
+                    UIComponent.OnEnabledChanged(value);
+            }
+        }
         //keeping track of the level in the tree where it is. 0 is topmost level
         public int Level = -1;
+        //the list of all dropDown options for each package type
+        public RelhaxFormComboBox[] RelhaxFormComboBoxList = new RelhaxFormComboBox[2];
+        public RelhaxWPFComboBox[] RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
+        //the TreeViewItem for WPF
+        public System.Windows.Controls.TreeViewItem @TreeViewItem = new System.Windows.Controls.TreeViewItem();
+        //the panels for default view
+        public Panel @Panel = null;
         //the list of cache files that should be backed up before wiping the directory
         public List<string> UserFiles = new List<string>();
         //the list of SelectablePackage entries within this instance of SelectablePackages

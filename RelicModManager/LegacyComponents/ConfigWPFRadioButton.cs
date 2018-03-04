@@ -1,4 +1,5 @@
-﻿namespace RelhaxModpack
+﻿/*
+namespace RelhaxModpack
 {
     class ConfigWPFRadioButton : System.Windows.Controls.RadioButton, UIComponent
     {
@@ -7,3 +8,4 @@
         public SelectablePackage config { get; set; }
     }
 }
+*/

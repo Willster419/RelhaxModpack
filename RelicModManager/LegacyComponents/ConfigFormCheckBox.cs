@@ -1,4 +1,5 @@
-﻿namespace RelhaxModpack
+﻿/*
+namespace RelhaxModpack
 {
     public class ConfigFormCheckBox : System.Windows.Forms.CheckBox, UIComponent
     {
@@ -7,3 +8,4 @@
         public SelectablePackage config { get; set; }
     }
 }
+*/

@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Linq;
 using System.Xml;
+using RelhaxModpack.UIComponents;
 
 namespace RelhaxModpack
 {
@@ -343,15 +344,14 @@ namespace RelhaxModpack
                         pw.SetProgress(Prog++);
                         Application.DoEvents();
                     }
-
-                    switch(Settings.SView)
+                    switch (Settings.SView)
                     {
                         case Settings.SelectionView.Default:
-                            AddModDefaultView(m, c.TabPage, c);
+                            AddPackage(m, c, null, null);
                             break;
                         case Settings.SelectionView.Legacy:
                             ElementHost h = (ElementHost)c.TabPage.Controls[0];
-                            AddModOMCView(m, c.TabPage, (LegacySelectionList)h.Child, c);
+                            AddPackage(m, c, null, (LegacySelectionList)h.Child);
                             break;
                     }
                 }
@@ -363,35 +363,39 @@ namespace RelhaxModpack
         private void AddUserMods(bool forceUnchecked)
         {
             //make the new tab
-            TabPage tb = new TabPage("User Mods");
-            tb.AutoScroll = true;
+            TabPage tb = new TabPage("User Mods")
+            {
+                AutoScroll = true
+            };
             //add all mods to the tab page
             for (int i = 0; i < UserMods.Count; i++)
             {
                 //make modCheckBox
-                ModFormCheckBox modCheckBox = new ModFormCheckBox();
-                UserMods[i].TopParentUIComponent = modCheckBox;
-                modCheckBox.mod = UserMods[i];
-                //modCheckBox.Font = Settings.AppFont;
-                modCheckBox.AutoSize = true;
-                int yLocation = 3 + (modCheckBox.Size.Height * (i));
-                modCheckBox.Location = new System.Drawing.Point(3, yLocation);
-                modCheckBox.TabIndex = 1;
-                modCheckBox.Text = UserMods[i].Name;
+                RelhaxUserCheckBox UserPackage = new RelhaxUserCheckBox();
+                UserPackage.Package = UserMods[i];
+                int yLocation = 3 + (UserPackage.Size.Height * (i));
+                UserPackage.Location = new System.Drawing.Point(3, yLocation);
+                UserPackage.Text = UserMods[i].Name;
                 if (forceUnchecked)
                 {
-                    modCheckBox.Checked = false;
+                    UserPackage.Checked = false;
                 }
                 else
                 {
-                    modCheckBox.Checked = UserMods[i].Checked;
+                    UserPackage.Checked = UserMods[i].Checked;
                 }
-                modCheckBox.UseVisualStyleBackColor = true;
-                modCheckBox.Enabled = true;
-                modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
-                tb.Controls.Add(modCheckBox);
+                UserMods[i].Enabled = true;
+                UserPackage.Enabled = true;
+                UserPackage.CheckedChanged += UserPackage_CheckedChanged;
+                tb.Controls.Add(UserPackage);
             }
             modTabGroups.TabPages.Add(tb);
+        }
+
+        private void UserPackage_CheckedChanged(object sender, EventArgs e)
+        {
+            RelhaxUserCheckBox cb = (RelhaxUserCheckBox)sender;
+            cb.Package.Checked = cb.Checked;
         }
 
         private void FinishLoad()
@@ -484,6 +488,399 @@ namespace RelhaxModpack
                     CheckCRC(c);
             }
         }
+        //new method for adding mods with the same code
+        private void AddPackage(SelectablePackage sp, Category c, SelectablePackage parent, LegacySelectionList lsl)
+        {
+            if (LoadingConfig)
+                return;
+            //if set to show all mods at comamnd line, show them
+            if (!Program.forceVisible && !sp.Visible)
+                return;
+            //setup the refrences
+            if(sp.Level == 0)
+            {
+                sp.TopParent = sp;
+                sp.Parent = sp;
+            }
+            else
+            {
+                sp.Parent = parent;
+            }
+            string packageDisplayName = sp.NameFormatted;
+            //write if the package is forced to be visible and/or enabled
+            if(Program.forceVisible)
+            {
+                if(!sp.Visible || !sp.Parent.Visible || !sp.TopParent.Visible)
+                {
+                    packageDisplayName = packageDisplayName + " [invisible]";
+                    sp.Visible = true;
+                }
+            }
+            if(Program.forceEnabled)
+            {
+                if(!sp.Enabled || !sp.Parent.Enabled || !sp.TopParent.Enabled)
+                {
+                    packageDisplayName = packageDisplayName + " [disabled]";
+                    sp.Enabled = true;
+                }
+            }
+            sp.ParentCategory = c;
+            sp.TabIndex = c.TabPage;
+            if(sp.Level == 0 || sp.Level == 1)
+                CompleteModSearchList.Add(sp);
+            //write if the package needs to be downloaded
+            //if the CRC's don't match and the package actually has a zip file
+            if (sp.DownloadFlag)
+            {
+                packageDisplayName = string.Format("{0} ({1})", packageDisplayName, Translations.getTranslatedString("updated"));
+                if ((sp.Size > 0))
+                    packageDisplayName = string.Format("{0} ({1})", packageDisplayName, Utils.SizeSuffix(sp.Size, 1, true));
+            }
+            string dateFormat = sp.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(sp.Timestamp);
+            string tooltipString = sp.Description.Equals("") ? NoDescriptionAvailable : sp.Description + (sp.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
+            //determine if the mod can be enabled or not, reguardless if the package is enabled or not
+            bool canBeEnabled = true;
+            SelectablePackage temp = sp;
+            while(temp.Level > 0)
+            {
+                if (!temp.Enabled)
+                    canBeEnabled = false;
+                temp = temp.Parent;
+            }
+            //special code for each type of view
+            switch (Settings.SView)
+            {
+                case Settings.SelectionView.Default:
+                    int newPanelCount = c.TabPage.Controls.Count + 1;
+                    switch(sp.Type)
+                    {
+                        case "single":
+                        case "single1":
+                            sp.UIComponent = new RelhaxFormRadioButton()
+                            {
+                                //autosize is true by default...
+                                Location = new Point(3, getYLocation(sp.Panel.Controls)),
+                                Size = new Size(150, 15),
+                                Text = packageDisplayName,
+                                Package = sp,
+                                Enabled = canBeEnabled,
+                                Checked = (canBeEnabled && sp.Checked) ? true : false,
+                                AutoCheck = false
+                            };
+                            break;
+                        case "single_dropdown":
+                        case "single_dropdown1":
+#warning dropdown logic null check
+                            if(sp.RelhaxFormComboBoxList[0] == null)
+                                sp.RelhaxFormComboBoxList[0] = new RelhaxFormComboBox()
+                                {
+                                    //autosize should be true...
+                                    //location used to determind if addedyet
+                                    Location = new Point(6, getYLocation(sp.Panel.Controls)),
+                                    Size = new Size((int)(225*DPISCALE),15),
+                                    Enabled = false,
+                                    DropDownStyle = ComboBoxStyle.DropDownList
+                                };
+                            if(sp.Enabled)
+                            {
+                                ComboBoxItem cbi = new ComboBoxItem(sp, packageDisplayName);
+                                sp.RelhaxFormComboBoxList[0].Items.Add(cbi);
+                                if(sp.Checked)
+                                {
+                                    sp.RelhaxFormComboBoxList[0].Enabled = true;
+                                    sp.RelhaxFormComboBoxList[0].SelectedItem = cbi;
+                                    DescriptionToolTip.SetToolTip(sp.RelhaxFormComboBoxList[0], tooltipString);
+                                }
+                            }
+                            break;
+                        case "single_dropdown2":
+#warning dropdown logic null check
+                            if (sp.RelhaxFormComboBoxList[1] == null)
+                                sp.RelhaxFormComboBoxList[1] = new RelhaxFormComboBox()
+                                {
+                                    //autosize should be true...
+                                    //location used to determind if addedyet
+                                    Location = new Point(6, getYLocation(sp.Panel.Controls)),
+                                    Size = new Size((int)(225 * DPISCALE), 15),
+                                    Enabled = false,
+                                    DropDownStyle = ComboBoxStyle.DropDownList
+                                };
+                            if (sp.Enabled)
+                            {
+                                ComboBoxItem cbi = new ComboBoxItem(sp, packageDisplayName);
+                                sp.RelhaxFormComboBoxList[1].Items.Add(cbi);
+                                if (sp.Checked)
+                                {
+                                    sp.RelhaxFormComboBoxList[1].Enabled = true;
+                                    sp.RelhaxFormComboBoxList[1].SelectedItem = cbi;
+                                    DescriptionToolTip.SetToolTip(sp.RelhaxFormComboBoxList[1], tooltipString);
+                                }
+                            }
+                            break;
+                        case "multi":
+                            sp.UIComponent = new RelhaxFormCheckBox()
+                            {
+                                Location = new Point(3, getYLocation(sp.Panel.Controls)),
+                                Size = new Size(150, 15),
+                                Text = packageDisplayName,
+                                Package = sp,
+                                Enabled = canBeEnabled,
+                                Checked = (canBeEnabled && sp.Checked) ? true : false,
+                            };
+                            break;
+                    }
+                    //start code for dealing with panels
+                    if(sp.Level == 0)
+                    {
+                        if(sp.Panel == null)
+                        {
+                            sp.Panel = new Panel()
+                            {
+                                BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
+                                //autosize is true by default...?
+                                Size = new Size(c.TabPage.Size.Width - 25, 20),
+                                Location = new Point(5, getYLocation(c.TabPage.Controls))
+                            };
+                            //sp.Panel.MouseDown += DisabledComponent_MouseDown;
+                            sp.ParentCategory.TabPage.Controls.Add(sp.Panel);
+                        }
+                    }
+                    else
+                    {
+                        if(sp.Panel == null)
+                        {
+                            sp.Panel = new Panel()
+                            {
+                                BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
+                                Size = new Size(c.TabPage.Size.Width - 35, 30),
+                                Location = new Point(13, getYLocation(sp.Parent.Panel.Controls))
+                            };
+                            //sp.Panel.MouseDown += DisabledComponent_MouseDown;
+                            sp.Parent.Panel.Controls.Add(sp.Panel);
+                        }
+                    }
+                    //end code for dealing with panels
+                    //color change code
+                    if (canBeEnabled && sp.Enabled && sp.Checked && !Settings.DisableColorChange)
+                        sp.Panel.BackColor = Color.BlanchedAlmond;
+                    else
+                        sp.Panel.BackColor = Settings.getBackColor();
+                    //color change code
+                    //start code for handlers tooltips and attaching
+                    if ((sp.UIComponent != null) && (sp.UIComponent is Control cont))
+                    {
+                        //take care of spacing and handlers
+                        cont.MouseDown += Generic_MouseDown;
+                        //ADD HANDLERS HERE
+                        if(cont is RelhaxFormCheckBox FormCheckBox)
+                        {
+                            //SOMETHING LIKE THIS
+                            //FormCheckBox.CheckedChanged += Generic_MouseDown;
+                            //FormCheckBox.handler = Generic_MouseDown;
+                            //can therefore be toggled in the OnCheckedChanged method
+                        }
+                        else if(cont is RelhaxFormRadioButton FormRadioButton)
+                        {
+
+                        }
+                        else if (cont is RelhaxFormComboBox FormComboBox)
+                        {
+                            //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
+                            FormComboBox.MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
+
+                        }
+                        //add tooltip and attach to display
+                        DescriptionToolTip.SetToolTip(cont, tooltipString);
+                        sp.Panel.Controls.Add(cont);
+                    }
+                    //end code for handlers tooltips and attaching
+                    break;
+                case Settings.SelectionView.Legacy:
+                    if (Settings.DarkUI)
+                        lsl.legacyTreeView.Background = System.Windows.Media.Brushes.Gray;
+                    //in WPF underscores are only displayed when there's two of them
+                    packageDisplayName = packageDisplayName.Replace(@"_", @"__");
+                    switch(sp.Type)
+                    {
+                        case "single":
+                        case "single1":
+                            sp.UIComponent = new RelhaxWPFRadioButton()
+                            {
+                                ToolTip = tooltipString,
+                                Package = sp,
+                                FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
+                                HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
+                                VerticalContentAlignment = System.Windows.VerticalAlignment.Center,
+                                FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
+                                Content = packageDisplayName,
+                                IsEnabled = canBeEnabled,
+                                IsChecked = (canBeEnabled && sp.Checked) ? true : false
+                            };
+                            System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem()
+                            {
+                                IsExpanded = Settings.ExpandAllLegacy ? true : false,
+                                Header = sp.UIComponent
+                            };
+                            if (sp.Level > 0)
+                            {
+                                sp.Parent.TreeViewItem.Items.Add(configControlTVI);
+                            }
+                            break;
+                        case "single_dropdown":
+                        case "single_dropdown1":
+#warning this logic needs to be checked
+                            if(sp.Parent.RelhaxWPFComboBoxList[0] == null)
+                                sp.Parent.RelhaxWPFComboBoxList[0] = new RelhaxWPFComboBox()
+                                {
+                                    IsEditable = false,
+                                    Name = "notAddedYet",
+                                    IsEnabled = false,
+                                    FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
+                                    FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
+                                    MinWidth = 100
+                                };
+                            //here means the entry index is not null
+                            if(sp.Enabled)
+                            {
+                                ComboBoxItem cbi = new ComboBoxItem(sp, sp.NameFormatted);
+                                sp.Parent.RelhaxWPFComboBoxList[0].Items.Add(cbi);
+                                if (sp.Checked)
+                                {
+                                    sp.Parent.RelhaxWPFComboBoxList[0].SelectedItem = cbi;
+                                    sp.Parent.RelhaxWPFComboBoxList[0].ToolTip = tooltipString;
+                                }
+                            }
+                            if(sp.Parent.RelhaxWPFComboBoxList[0].Name.Equals("notAddedYet"))
+                            {
+                                sp.Parent.RelhaxWPFComboBoxList[0].Name = "added";
+                                sp.Parent.RelhaxWPFComboBoxList[0].PreviewMouseRightButtonDown += Generic_MouseDown;
+                                //ADD HANDLER HERE
+                                if (sp.Parent.RelhaxWPFComboBoxList[0].Items.Count > 0)
+                                {
+                                    sp.Parent.RelhaxWPFComboBoxList[0].IsEnabled = true;
+                                    if (sp.Parent.RelhaxWPFComboBoxList[0].SelectedIndex == -1)
+                                        sp.Parent.RelhaxWPFComboBoxList[0].SelectedIndex = 0;
+                                }
+                                System.Windows.Controls.TreeViewItem configControlTVI2 = new System.Windows.Controls.TreeViewItem()
+                                {
+                                    Header = sp.Parent.RelhaxWPFComboBoxList[0]
+                                };
+                                sp.Parent.TreeViewItem.Items.Add(configControlTVI2);
+                            }
+                            break;
+                        case "single_dropdown2":
+#warning dropdown logic null check
+                            if (sp.Parent.RelhaxWPFComboBoxList[1] == null)
+                                sp.Parent.RelhaxWPFComboBoxList[1] = new RelhaxWPFComboBox()
+                                {
+                                    IsEditable = false,
+                                    Name = "notAddedYet",
+                                    IsEnabled = false,
+                                    FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
+                                    FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
+                                    MinWidth = 100
+                                };
+                            //here means the entry index is not null
+                            if (sp.Enabled)
+                            {
+                                ComboBoxItem cbi = new ComboBoxItem(sp, sp.NameFormatted);
+                                sp.Parent.RelhaxWPFComboBoxList[1].Items.Add(cbi);
+                                if (sp.Checked)
+                                {
+                                    sp.Parent.RelhaxWPFComboBoxList[1].SelectedItem = cbi;
+                                    sp.Parent.RelhaxWPFComboBoxList[1].ToolTip = tooltipString;
+                                }
+                            }
+                            if (sp.Parent.RelhaxWPFComboBoxList[1].Name.Equals("notAddedYet"))
+                            {
+                                sp.Parent.RelhaxWPFComboBoxList[1].Name = "added";
+                                sp.Parent.RelhaxWPFComboBoxList[1].PreviewMouseRightButtonDown += Generic_MouseDown;
+                                //ADD HANDLER HERE
+                                if (sp.Parent.RelhaxWPFComboBoxList[1].Items.Count > 0)
+                                {
+                                    sp.Parent.RelhaxWPFComboBoxList[1].IsEnabled = true;
+                                    if (sp.Parent.RelhaxWPFComboBoxList[1].SelectedIndex == -1)
+                                        sp.Parent.RelhaxWPFComboBoxList[1].SelectedIndex = 0;
+                                }
+                                System.Windows.Controls.TreeViewItem configControlTVI2 = new System.Windows.Controls.TreeViewItem()
+                                {
+                                    Header = sp.Parent.RelhaxWPFComboBoxList[1]
+                                };
+                                sp.Parent.TreeViewItem.Items.Add(configControlTVI2);
+                            }
+                            break;
+                        case "multi":
+                            sp.UIComponent = new RelhaxWPFCheckBox()
+                            {
+                                ToolTip = tooltipString,
+                                Package = sp,
+                                FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
+                                HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
+                                VerticalContentAlignment = System.Windows.VerticalAlignment.Center,
+                                FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
+                                Content = packageDisplayName,
+                                IsEnabled = canBeEnabled,
+                                IsChecked = (canBeEnabled && sp.Checked) ? true : false,
+                            };
+                            System.Windows.Controls.TreeViewItem configControlTVI3 = new System.Windows.Controls.TreeViewItem()
+                            {
+                                IsExpanded = Settings.ExpandAllLegacy ? true : false,
+                                Header = sp.UIComponent
+                            };
+                            sp.Parent.TreeViewItem.Items.Add(configControlTVI3);
+                            break;
+                    }
+                    //set the font size
+                    if((sp.UIComponent != null) && (sp.UIComponent is System.Windows.Controls.Control cont2))
+                    {
+                        switch (Settings.FontSizeforum)
+                        {
+                            case Settings.FontSize.Font125:
+                                cont2.FontSize = cont2.FontSize + 4;
+                                break;
+                            case Settings.FontSize.Font175:
+                                cont2.FontSize = cont2.FontSize + 8;
+                                break;
+                            case Settings.FontSize.Font225:
+                                cont2.FontSize = cont2.FontSize + 12;
+                                break;
+                            case Settings.FontSize.Font275:
+                                cont2.FontSize = cont2.FontSize + 16;
+                                break;
+                        }
+                        cont2.MouseDown += Generic_MouseDown;
+                        if(sp.UIComponent is System.Windows.Controls.RadioButton rb)
+                        {
+                            //ADD CHECKED HEADERS HERE
+
+                        }
+                        else if(sp.UIComponent is System.Windows.Controls.CheckBox cb)
+                        {
+                            //AND HERE
+
+                        }
+                    }
+                    //make the root tree view item for the package and set it with the UI component
+                    if(sp.Level == 0)
+                    {
+                        System.Windows.Controls.TreeViewItem tvi = new System.Windows.Controls.TreeViewItem()
+                        {
+                            IsExpanded = Settings.ExpandAllLegacy ? true : false,
+                            Header = sp.UIComponent
+                        };
+                        lsl.legacyTreeView.Items.Add(tvi);
+                    }
+                    break;
+            }
+            if(sp.Packages.Count > 0)
+            {
+                foreach(SelectablePackage sp2 in sp.Packages)
+                {
+                    AddPackage(sp2, c, sp, lsl);
+                }
+            }
+        }
+        /*
         //adds a mod m to a tabpage t, OMC treeview style
         private void AddModOMCView(SelectablePackage m, TabPage t, LegacySelectionList lsl, Category c)
         {
@@ -1786,7 +2183,8 @@ namespace RelhaxModpack
                 }
             }
         }
-
+        */
+        /*
         private void DisabledComponent_MouseDown(object sender, MouseEventArgs e)
         {
             if (!(e.Button == MouseButtons.Right))
@@ -1825,7 +2223,7 @@ namespace RelhaxModpack
                 }
             }
         }
-
+        */
         //method for finding the location of which to put a control
         private int getYLocation(System.Windows.Forms.Control.ControlCollection ctrl)
         {
@@ -1835,13 +2233,13 @@ namespace RelhaxModpack
             //only look for the dropDown menu options or checkboxes
             foreach (Control c in ctrl)
             {
-                if ((c is ConfigFormCheckBox) || (c is ConfigFormComboBox) || (c is Panel) || (c is ConfigFormRadioButton) || (c is ModFormCheckBox))
+                if ((c is RelhaxFormCheckBox) || (c is RelhaxFormComboBox) || (c is Panel) || (c is RelhaxFormRadioButton))
                 {
                     y += c.Size.Height;
                     //spacing
                     y += 2;
                 }
-                if (c is ConfigFormComboBox)
+                if (c is RelhaxFormCheckBox)
                 {
                     switch (Settings.FontSizeforum)
                     {
@@ -1878,7 +2276,7 @@ namespace RelhaxModpack
             }
             return y;
         }
-        
+        /*
         //handler for when a mod checkbox is changed
         void modCheckBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -2379,9 +2777,11 @@ namespace RelhaxModpack
             else
                 configPanel.BackColor = Settings.getBackColor();
         }
+        */
         //generic hander for when any mouse button is clicked for MouseDown Events
         void Generic_MouseDown(object sender, EventArgs e)
         {
+            /*
             //we only care about the right mouse click tho
             if (e is MouseEventArgs)
             {
@@ -2443,11 +2843,13 @@ namespace RelhaxModpack
                     p.Show();
                 }
             }
+            */
         }
 
         //Handler for allowing right click of disabled mods
         private void Lsl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            /*
             if (e.RightButton != System.Windows.Input.MouseButtonState.Pressed)
             {
                 return;
@@ -2476,6 +2878,7 @@ namespace RelhaxModpack
                     Generic_MouseDown(mcb, e);
                 }
             }
+            */
         }
 
         //handler to set the cancel bool to false
@@ -2792,6 +3195,7 @@ namespace RelhaxModpack
 
         private void searchCB_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            /*
             ComboBox sendah = (ComboBox)sender;
             if (sendah.SelectedIndex == -1 || IgnoreSelections)
             {
@@ -2866,6 +3270,7 @@ namespace RelhaxModpack
                     this.ModSelectionList_SizeChanged(null, null);
                 }
             }
+            */
         }
 
         private void searchCB_KeyDown(object sender, KeyEventArgs e)

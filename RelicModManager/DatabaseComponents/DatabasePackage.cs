@@ -27,7 +27,12 @@ namespace RelhaxModpack.DatabaseComponents
         public string Version = "";
         public long Timestamp = 0;
         public string ZipFile = "";
-        public bool Enabled = false;
+        protected internal bool _Enabled = false;
+        public virtual bool Enabled
+        {
+            get { return _Enabled; }
+            set { _Enabled = value; }
+        }
         public string CRC = "";
         public string StartAddress = "";
         public string EndAddress = "";

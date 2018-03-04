@@ -594,18 +594,9 @@ namespace RelhaxModpack
             {
                 foreach (SelectablePackage m in c.Packages)
                 {
-                    m.Checked = false;
-                    if (m.TopParentUIComponent is ModFormCheckBox)
-                    {
-                        ModFormCheckBox mfcb = (ModFormCheckBox)m.TopParentUIComponent;
-                        mfcb.Checked = false;
-                        mfcb.Parent.BackColor = Settings.getBackColor();
-                    }
-                    else if (m.TopParentUIComponent is ModWPFCheckBox)
-                    {
-                        ModWPFCheckBox mfCB2 = (ModWPFCheckBox)m.TopParentUIComponent;
-                        mfCB2.IsChecked = false;
-                    }
+                    if(m.Checked)
+                        m.Checked = false;
+                    //no need to clobber over UI controls, that is now done for us
                     Utils.UncheckProcessConfigs(m.Packages);
                 }
             }
@@ -613,12 +604,9 @@ namespace RelhaxModpack
             {
                 foreach (SelectablePackage um in UserMods)
                 {
-                    um.Checked = false;
-                    if (um.TopParentUIComponent != null)
-                    {
-                        ModFormCheckBox mfcb = (ModFormCheckBox)um.TopParentUIComponent;
-                        mfcb.Checked = false;
-                    }
+                    if(um.Checked)
+                        um.Checked = false;
+#warning user mod
                 }
             }
         }
@@ -627,57 +615,8 @@ namespace RelhaxModpack
         {
             foreach (SelectablePackage c in configList)
             {
-                c.Checked = false;
-                if (c.UIComponent is ConfigFormCheckBox)
-                {
-                    ConfigFormCheckBox CBTemp = (ConfigFormCheckBox)c.UIComponent;
-                    CBTemp.Checked = false;
-                    CBTemp.Parent.BackColor = Settings.getBackColor();
-                }
-                else if (c.UIComponent is ConfigFormComboBox)
-                {
-                    ConfigFormComboBox CBTemp = (ConfigFormComboBox)c.UIComponent;
-                    if (CBTemp.Items.Count == 0)
-                    {
-                        CBTemp.SelectedIndex = -1;
-                    }
-                    else
-                    {
-                        if (CBTemp.SelectedIndex != 0)
-                            CBTemp.SelectedIndex = 0;
-                    }
-                    CBTemp.Parent.BackColor = Settings.getBackColor();
-                }
-                else if (c.UIComponent is ConfigFormRadioButton)
-                {
-                    ConfigFormRadioButton CBTemp = (ConfigFormRadioButton)c.UIComponent;
-                    CBTemp.Checked = false;
-                    CBTemp.Parent.BackColor = Settings.getBackColor();
-                }
-                else if (c.UIComponent is ConfigWPFCheckBox)
-                {
-                    ConfigWPFCheckBox CBTemp = (ConfigWPFCheckBox)c.UIComponent;
-                    CBTemp.IsChecked = false;
-                }
-                else if (c.UIComponent is ConfigWPFComboBox)
-                {
-                    //do nothing...
-                    ConfigWPFComboBox CBTemp = (ConfigWPFComboBox)c.UIComponent;
-                    if (CBTemp.Items.Count == 0)
-                    {
-                        CBTemp.SelectedIndex = -1;
-                    }
-                    else
-                    {
-                        if (CBTemp.SelectedIndex != 0)
-                            CBTemp.SelectedIndex = 0;
-                    }
-                }
-                else if (c.UIComponent is ConfigWPFRadioButton)
-                {
-                    ConfigWPFRadioButton CBTemp = (ConfigWPFRadioButton)c.UIComponent;
-                    CBTemp.IsChecked = false;
-                }
+                if(c.Checked)
+                    c.Checked = false;
                 Utils.UncheckProcessConfigs(c.Packages);
             }
         }
