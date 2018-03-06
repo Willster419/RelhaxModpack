@@ -49,6 +49,8 @@ namespace RelhaxModpack
         public static string RelhaxTempFolder = Path.Combine(Application.StartupPath, "RelHaxTemp");
         public static string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
         public static string ModInfoDatFile = Path.Combine(RelhaxTempFolder, "modInfo.dat");
+        public const string DefaultStartAddress = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
+        public const string DefaultEndAddress = @"";
         //file and folder macro locations
         public static string AppDataFolder = "";
         public static string TanksLocation = "";

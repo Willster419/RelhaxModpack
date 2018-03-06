@@ -242,14 +242,14 @@ namespace RelhaxModpack
             Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocation, "//modInfoAlpha.xml/@version");
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
             Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocation, "//modInfoAlpha.xml/@onlineFolder");
-            this.Text = String.Format("DatabaseEditor      GameVersion: {0}    OnlineFolder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion);
+            Text = String.Format("DatabaseEditor      GameVersion: {0}    OnlineFolder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion);
             GlobalDependencies = new List<Dependency>();
             Dependencies = new List<Dependency>();
             LogicalDependencies = new List<LogicalDependency>();
             ParsedCategoryList = new List<Category>();
             XMLUtils.CreateModStructure(DatabaseLocation, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
             DatabaseEditorMode = EditorMode.GlobalDependnecy;
-            this.DisplayDatabase();
+            DisplayDatabase();
         }
         //show the save database dialog and save the database
         private void SaveDatabaseButton_Click(object sender, EventArgs e)
@@ -818,13 +818,7 @@ namespace RelhaxModpack
 
                     ObjectDevURLTB.Enabled = false;
 
-                    ObjectTypeComboBox.Enabled = true;
-                    if (SelectedCategory.SelectionType.Substring(0, 5).Equals("multi"))
-                        ObjectTypeComboBox.SelectedIndex = 4;
-                    else if (SelectedCategory.SelectionType.Substring(0, 6).Equals("single"))
-                        ObjectTypeComboBox.SelectedIndex = 1;
-                    else
-                        ObjectTypeComboBox.SelectedIndex = 4;
+                    ObjectTypeComboBox.Enabled = false;
 
                     ObjectEnabledCheckBox.Enabled = false;
 
@@ -1616,6 +1610,13 @@ namespace RelhaxModpack
             List<string> objectsThatUseDependency = new List<string>();
             foreach (Category c in ParsedCategoryList)
             {
+                foreach(Dependency catd in c.Dependencies)
+                {
+                    if(catd.PackageName.Equals(d.PackageName))
+                    {
+                        objectsThatUseDependency.Add(c.Name);
+                    }
+                }
                 //will itterate through every catagory once
                 foreach (SelectablePackage m in c.Packages)
                 {

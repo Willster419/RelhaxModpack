@@ -47,7 +47,6 @@ namespace RelhaxModpack
             FromModInfoDat = 3//this is when the manager is reading the modInfo.xml from the downloaded moInfo.dat file
         };
         private LoadConfigMode LoadMode = LoadConfigMode.FromButton;
-
         public ModSelectionList()
         {
             InitializeComponent();
@@ -281,8 +280,6 @@ namespace RelhaxModpack
                     AutoScroll = true,
                     //link the names of catagory and tab so eithor can be searched for
                     Name = c.Name,
-                    Text = c.SelectionType.Equals("single") ? c.Name + "*" : c.Name,
-                    //Font = Settings.AppFont
                 };
                 c.TabPage = t;
                 //matched the catagory to tab
@@ -491,8 +488,6 @@ namespace RelhaxModpack
         //new method for adding mods with the same code
         private void AddPackage(SelectablePackage sp, Category c, SelectablePackage parent, LegacySelectionList lsl)
         {
-            if (LoadingConfig)
-                return;
             //if set to show all mods at comamnd line, show them
             if (!Program.forceVisible && !sp.Visible)
                 return;
@@ -547,6 +542,8 @@ namespace RelhaxModpack
                     canBeEnabled = false;
                 temp = temp.Parent;
             }
+            if (!temp.Enabled)
+                canBeEnabled = false;
             //special code for each type of view
             switch (Settings.SView)
             {

@@ -34,8 +34,8 @@ namespace RelhaxModpack.DatabaseComponents
             set { _Enabled = value; }
         }
         public string CRC = "";
-        public string StartAddress = "";
-        public string EndAddress = "";
+        public string StartAddress = Settings.DefaultStartAddress;
+        public string EndAddress = Settings.DefaultEndAddress;
         public bool DownloadFlag = false;
         public bool ReadyForInstall = false;
         public bool AppendExtraction = false;

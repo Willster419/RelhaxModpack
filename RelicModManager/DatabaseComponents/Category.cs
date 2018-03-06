@@ -8,9 +8,6 @@ namespace RelhaxModpack
     public class Category
     {
         public string Name = "";
-        //the selection type of the catagory. can a user select
-        //multiple mods of this catagory, or just one?
-        public string SelectionType = "";
         //for super extraction, the group that should be used for the category
         public int InstallGroup = 0;
         //the TabPage refrence for the UI
