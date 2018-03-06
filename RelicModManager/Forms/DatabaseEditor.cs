@@ -239,9 +239,9 @@ namespace RelhaxModpack
             if (!File.Exists(DatabaseLocation))
                 return;
             //for the folder version: //modInfoAlpha.xml/@version
-            Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocation, "//modInfoAlpha.xml/@version");
+            Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocation, "//modInfo.xml/@version");
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
-            Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocation, "//modInfoAlpha.xml/@onlineFolder");
+            Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocation, "//modInfo.xml/@onlineFolder");
             Text = String.Format("DatabaseEditor      GameVersion: {0}    OnlineFolder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion);
             GlobalDependencies = new List<Dependency>();
             Dependencies = new List<Dependency>();
