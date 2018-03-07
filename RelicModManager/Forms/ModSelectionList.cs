@@ -446,7 +446,7 @@ namespace RelhaxModpack
             }
             if (LoadMode == LoadConfigMode.FromAutoInstall || LoadMode == LoadConfigMode.FromSaveLastConfig)
             {
-                this.parseLoadConfig();
+                this.ParseLoadConfig();
                 if (LoadMode == LoadConfigMode.FromAutoInstall)
                 {
                     if(pw != null)
@@ -559,11 +559,11 @@ namespace RelhaxModpack
                                 BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
                                 //autosize is true by default...?
                                 Size = new Size(c.TabPage.Size.Width - 25, 20),
-                                Location = new Point(5, getYLocation(c.TabPage.Controls)),
+                                Location = new Point(5, GetYLocation(c.TabPage.Controls)),
                                 AutoSize = true,
                                 AutoSizeMode = AutoSizeMode.GrowOnly
                             };
-                            //sp.ParentPanel.MouseDown += DisabledComponent_MouseDown;
+                            sp.ParentPanel.MouseDown += DisabledComponent_MouseDown;
                             sp.ParentCategory.TabPage.Controls.Add(sp.ParentPanel);
                         }
                     }
@@ -576,11 +576,11 @@ namespace RelhaxModpack
                             {
                                 BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
                                 Size = new Size(c.TabPage.Size.Width - 35, 30),
-                                Location = new Point(13, getYLocation(sp.ParentPanel.Controls)),
+                                Location = new Point(13, GetYLocation(sp.ParentPanel.Controls)),
                                 AutoSize = true,
                                 AutoSizeMode = AutoSizeMode.GrowOnly
                             };
-                            //sp.Panel.MouseDown += DisabledComponent_MouseDown;
+                            sp.ParentPanel.MouseDown += DisabledComponent_MouseDown;
                         }
                     }
                     //end code for dealing with panels
@@ -591,7 +591,7 @@ namespace RelhaxModpack
                             sp.UIComponent = new RelhaxFormRadioButton()
                             {
                                 //autosize is true by default...
-                                Location = new Point(3, getYLocation(sp.ParentPanel.Controls)),
+                                Location = new Point(3, GetYLocation(sp.ParentPanel.Controls)),
                                 //Size = new Size(150, 15),
                                 Text = packageDisplayName,
                                 Package = sp,
@@ -609,7 +609,7 @@ namespace RelhaxModpack
                                 {
                                     //autosize should be true...
                                     //location used to determind if addedyet
-                                    Location = new Point(6, getYLocation(sp.ParentPanel.Controls)),
+                                    Location = new Point(6, GetYLocation(sp.ParentPanel.Controls)),
                                     Size = new Size((int)(225 * DPISCALE), 15),
                                     Enabled = false,
                                     Name = "notAddedYet",
@@ -648,7 +648,7 @@ namespace RelhaxModpack
                                 {
                                     //autosize should be true...
                                     //location used to determind if addedyet
-                                    Location = new Point(6, getYLocation(sp.ParentPanel.Controls)),
+                                    Location = new Point(6, GetYLocation(sp.ParentPanel.Controls)),
                                     Size = new Size((int)(225 * DPISCALE), 15),
                                     Enabled = false,
                                     Name = "notAddedYet",
@@ -683,7 +683,7 @@ namespace RelhaxModpack
                         case "multi":
                             sp.UIComponent = new RelhaxFormCheckBox()
                             {
-                                Location = new Point(3, getYLocation(sp.ParentPanel.Controls)),
+                                Location = new Point(3, GetYLocation(sp.ParentPanel.Controls)),
                                 //Size = new Size(150, 15),
                                 Text = packageDisplayName,
                                 Package = sp,
@@ -894,10 +894,11 @@ namespace RelhaxModpack
                     {
                         BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
                         Size = new Size(c.TabPage.Size.Width - 35, 30),
-                        Location = new Point(13, getYLocation(sp.ParentPanel.Controls)),
+                        Location = new Point(13, GetYLocation(sp.ParentPanel.Controls)),
                         AutoSize = true,
                         AutoSizeMode = AutoSizeMode.GrowOnly
                     };
+                    sp.ChildPanel.MouseDown += DisabledComponent_MouseDown;
                     sp.ParentPanel.Controls.Add(sp.ChildPanel);
                 }
                 foreach(SelectablePackage sp2 in sp.Packages)
@@ -906,6 +907,14 @@ namespace RelhaxModpack
                 }
             }
         }
+
+        //when a single/single1 mod is selected
+
+        //when a single_dropdown mod is selected
+
+        //when a multi mod is selected
+
+        
         /*
         //when a legacy mod checkbox is clicked
         void modCheckBoxL_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -1351,48 +1360,8 @@ namespace RelhaxModpack
             }
         }
         */
-        /*
-        private void DisabledComponent_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (!(e.Button == MouseButtons.Right))
-                return;
-            Panel configPanel = (Panel)sender;
-            Control c = configPanel.GetChildAtPoint(e.Location);
-            if(c is UIComponent ui)
-            {
-                if(ui.config == null)
-                {
-                    //it's a mod
-                    if(ui.mod.TopParentUIComponent is Control cont)
-                    {
-                        if (!cont.Enabled)
-                            Generic_MouseDown(ui, e);
-                    }
-                    else
-                    {
-                        Logging.Manager("ERROR: ui.config.Enabled returned true, this code is not supposed to be reached!!");
-                        return;
-                    }
-                }
-                else
-                {
-                    //it's a config
-                    if(ui.config.TopParentUIComponent is Control cont)
-                    {
-                        if (!cont.Enabled)
-                            Generic_MouseDown(ui, e);
-                    }
-                    else
-                    {
-                        Logging.Manager("ERROR: ui.config.Enabled returned true, this code is not supposed to be reached!!");
-                        return;
-                    }
-                }
-            }
-        }
-        */
         //method for finding the location of which to put a control
-        private int getYLocation(System.Windows.Forms.Control.ControlCollection ctrl)
+        private int GetYLocation(System.Windows.Forms.Control.ControlCollection ctrl)
         {
             int y = 0;
             //the first 5 pixels to give it room
@@ -1945,51 +1914,32 @@ namespace RelhaxModpack
                 configPanel.BackColor = Settings.getBackColor();
         }
         */
+
+        #region Preview Code
         //generic hander for when any mouse button is clicked for MouseDown Events
         void Generic_MouseDown(object sender, EventArgs e)
         {
-            /*
-            //we only care about the right mouse click tho
-            if (e is MouseEventArgs)
+            if(sender is IPackageUIComponent ipc)
             {
-                MouseEventArgs ee = (MouseEventArgs)e;
-                if (ee.Button != MouseButtons.Right)
-                    return;
+                SelectablePackage spc = ipc.Package;
+                if (spc.DevURL == null)
+                    spc.DevURL = "";
+                if (p != null)
+                {
+                    p.Close();
+                    p.Dispose();
+                    p = null;
+                    GC.Collect();
+                }
+                p = new Preview()
+                {
+                    LastUpdated = LastUpdated,
+                    DBO = spc,
+                    Medias = spc.PictureList
+                };
+                p.Show();
             }
-            else if (e is System.Windows.Input.MouseButtonEventArgs)
-            {
-                System.Windows.Input.MouseButtonEventArgs ee = (System.Windows.Input.MouseButtonEventArgs)e;
-                if (ee.RightButton != System.Windows.Input.MouseButtonState.Pressed)
-                {
-                    return;
-                }
-            }
-            if (sender is UIComponent)
-            {
-                UIComponent UIC = (UIComponent)sender;
-                SelectablePackage DBO = null;
-                //check if comboBox before mod or config
-                //check config before checking mod
-                if (sender is ConfigFormComboBox)
-                {
-                    ConfigFormComboBox cfcb = (ConfigFormComboBox)sender;
-                    ComboBoxItem cbi = (ComboBoxItem)cfcb.SelectedItem;
-                    DBO = cbi.config;
-                }
-                else if (sender is ConfigWPFComboBox)
-                {
-                    ConfigWPFComboBox cwpfcb = (ConfigWPFComboBox)sender;
-                    ComboBoxItem cbi = (ComboBoxItem)cwpfcb.SelectedItem;
-                    DBO = cbi.config;
-                }
-                else if (UIC.config != null)
-                {
-                    DBO = UIC.config;
-                }
-                else if (UIC.mod != null)
-                {
-                    DBO = UIC.mod;
-                }
+                /*
                 if (DBO != null)
                 {
                     if (DBO.DevURL == null)
@@ -2009,103 +1959,45 @@ namespace RelhaxModpack
                     };
                     p.Show();
                 }
-            }
-            */
+                */
         }
-
+        
+        private void DisabledComponent_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (!(e.Button == MouseButtons.Right))
+                return;
+            Panel configPanel = (Panel)sender;
+            Control c = configPanel.GetChildAtPoint(e.Location);
+            if(c is IPackageUIComponent ui)
+            {
+                Generic_MouseDown(ui, null);
+            }
+        }
+        
         //Handler for allowing right click of disabled mods
         private void Lsl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            /*
             if (e.RightButton != System.Windows.Input.MouseButtonState.Pressed)
             {
                 return;
             }
             LegacySelectionList lsl = (LegacySelectionList)sender;
-            //contentPresenter
-            //object o = e.OriginalSource;
             if (e.OriginalSource is System.Windows.Controls.ContentPresenter cp)
             {
-                if (cp.Content is ConfigWPFCheckBox cb)
+                if(cp.Content is IPackageUIComponent ipc)
                 {
-                    if (cb.IsEnabled)
-                        return;
-                    Generic_MouseDown(cb, e);
-                }
-                else if (cp.Content is ConfigWPFRadioButton rb)
-                {
-                    if (rb.IsEnabled)
-                        return;
-                    Generic_MouseDown(rb, e);
-                }
-                else if (cp.Content is ModWPFCheckBox mcb)
-                {
-                    if (mcb.IsEnabled)
-                        return;
-                    Generic_MouseDown(mcb, e);
+                    if(!(ipc.Package == null) && !ipc.Package.Enabled)
+                    {
+                        //disabled component, display via generic handler
+                        Generic_MouseDown(ipc, null);
+                    }
                 }
             }
-            */
         }
+        #endregion
 
-        //handler to set the cancel bool to false
-        private void continueButton_Click(object sender, EventArgs e)
-        {
-            //save the last config if told to do so
-            if (Settings.SaveLastConfig)
-            {
-                XMLUtils.SaveConfig(false, null, ParsedCatagoryList, UserMods);
-            }
-            DialogResult = DialogResult.OK;
-        }
-        //handler for when the cancal button is clicked
-        private void cancelButton_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-        //handler for when the "load config" button is pressed
-        private void loadConfigButton_Click(object sender, EventArgs e)
-        {
-            LoadMode = LoadConfigMode.FromButton;
-            this.parseLoadConfig();
-        }
-        //handler for when the "save config" button is pressed
-        private void saveConfigButton_Click(object sender, EventArgs e)
-        {
-            XMLUtils.SaveConfig(true, null, ParsedCatagoryList, UserMods);
-        }
-        //handler for when the close button is pressed
-        private void ModSelectionList_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //put the taskbar back if we need to
-            if (TaskBarHidden)
-                Settings.SetTaskbarState(Settings.AppBarStates.AutoHide);
-            //save wether the window was in fullscreen mode before closing
-            //also only save the size if the window is normal
-            switch (WindowState)
-            {
-                case FormWindowState.Maximized:
-                    Settings.ModSelectionFullscreen = true;
-                    break;
-                case FormWindowState.Minimized:
-                    Settings.ModSelectionFullscreen = false;
-                    break;
-                case FormWindowState.Normal:
-                    Settings.ModSelectionHeight = Size.Height;
-                    Settings.ModSelectionWidth = Size.Width;
-                    Settings.ModSelectionFullscreen = false;
-                    break;
-            }
-            //close the preview window if it is open
-            if (p != null)
-            {
-                p.Close();
-                p.Dispose();
-                p = null;
-            }
-        }
-
-        private void clearSelectionsButton_Click(object sender, EventArgs e)
+        #region Config and selection code
+        private void ClearSelectionsButton_Click(object sender, EventArgs e)
         {
             //not actually *loading* a config, but want to disable the handlers anyways
             LoadingConfig = true;
@@ -2118,14 +2010,14 @@ namespace RelhaxModpack
             //ModSelectionList_SizeChanged(null, null);
         }
 
-        private void parseLoadConfig()
+        private void ParseLoadConfig()
         {
             //disable any possible UI interaction that would not be desired
             LoadingConfig = true;
             //string filePath = "";
             string[] filePathArray = new string[2];
             //get the filePath of the selection file based on the mode of loading it
-            switch(LoadMode)
+            switch (LoadMode)
             {
                 case LoadConfigMode.FromAutoInstall:
                     filePathArray[0] = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", Program.configName);
@@ -2204,7 +2096,7 @@ namespace RelhaxModpack
             //create XmlDocument
             string xmlstring = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "default_checked.xml");
             XmlDocument doc = new XmlDocument();
-            if(string.IsNullOrWhiteSpace(xmlstring))
+            if (string.IsNullOrWhiteSpace(xmlstring))
             {
                 Logging.Manager("ERROR: default_checked.xml is missing or invalid!");
                 return;
@@ -2214,7 +2106,65 @@ namespace RelhaxModpack
             XMLUtils.LoadConfigV2(doc, ParsedCatagoryList, UserMods, true);
             Logging.Manager("Finished checking default mods");
         }
-        #region UI event handlers (resize, expand toggling)
+        #endregion
+
+        #region UI event handlers (resize, button press, expand toggling)
+        //handler to set the cancel bool to false
+        private void ContinueButton_Click(object sender, EventArgs e)
+        {
+            //save the last config if told to do so
+            if (Settings.SaveLastConfig)
+            {
+                XMLUtils.SaveConfig(false, null, ParsedCatagoryList, UserMods);
+            }
+            DialogResult = DialogResult.OK;
+        }
+        //handler for when the cancal button is clicked
+        private void CancelButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        //handler for when the "load config" button is pressed
+        private void LoadConfigButton_Click(object sender, EventArgs e)
+        {
+            LoadMode = LoadConfigMode.FromButton;
+            this.ParseLoadConfig();
+        }
+        //handler for when the "save config" button is pressed
+        private void SaveConfigButton_Click(object sender, EventArgs e)
+        {
+            XMLUtils.SaveConfig(true, null, ParsedCatagoryList, UserMods);
+        }
+        //handler for when the close button is pressed
+        private void ModSelectionList_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //put the taskbar back if we need to
+            if (TaskBarHidden)
+                Settings.SetTaskbarState(Settings.AppBarStates.AutoHide);
+            //save wether the window was in fullscreen mode before closing
+            //also only save the size if the window is normal
+            switch (WindowState)
+            {
+                case FormWindowState.Maximized:
+                    Settings.ModSelectionFullscreen = true;
+                    break;
+                case FormWindowState.Minimized:
+                    Settings.ModSelectionFullscreen = false;
+                    break;
+                case FormWindowState.Normal:
+                    Settings.ModSelectionHeight = Size.Height;
+                    Settings.ModSelectionWidth = Size.Width;
+                    Settings.ModSelectionFullscreen = false;
+                    break;
+            }
+            //close the preview window if it is open
+            if (p != null)
+            {
+                p.Close();
+                p.Dispose();
+                p = null;
+            }
+        }
         //resizing handler for the window
         private void ModSelectionList_SizeChanged(object sender, EventArgs e)
         {

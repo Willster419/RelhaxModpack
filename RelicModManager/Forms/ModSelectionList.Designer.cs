@@ -113,7 +113,7 @@ namespace RelhaxModpack
             this.continueButton.TabIndex = 5;
             this.continueButton.Text = "Continue";
             this.continueButton.UseVisualStyleBackColor = true;
-            this.continueButton.Click += new System.EventHandler(this.continueButton_Click);
+            this.continueButton.Click += new System.EventHandler(this.ContinueButton_Click);
             // 
             // cancelButton
             // 
@@ -125,7 +125,7 @@ namespace RelhaxModpack
             this.cancelButton.TabIndex = 6;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // WindowSizeTB
             // 
@@ -155,7 +155,7 @@ namespace RelhaxModpack
             this.loadConfigButton.TabIndex = 9;
             this.loadConfigButton.Text = "Load Pref";
             this.loadConfigButton.UseVisualStyleBackColor = true;
-            this.loadConfigButton.Click += new System.EventHandler(this.loadConfigButton_Click);
+            this.loadConfigButton.Click += new System.EventHandler(this.LoadConfigButton_Click);
             // 
             // saveConfigButton
             // 
@@ -167,7 +167,7 @@ namespace RelhaxModpack
             this.saveConfigButton.TabIndex = 10;
             this.saveConfigButton.Text = "Save Pref";
             this.saveConfigButton.UseVisualStyleBackColor = true;
-            this.saveConfigButton.Click += new System.EventHandler(this.saveConfigButton_Click);
+            this.saveConfigButton.Click += new System.EventHandler(this.SaveConfigButton_Click);
             // 
             // TabIndicatesTB
             // 
@@ -188,7 +188,7 @@ namespace RelhaxModpack
             this.clearSelectionsButton.TabIndex = 13;
             this.clearSelectionsButton.Text = "Clear Selections";
             this.clearSelectionsButton.UseVisualStyleBackColor = true;
-            this.clearSelectionsButton.Click += new System.EventHandler(this.clearSelectionsButton_Click);
+            this.clearSelectionsButton.Click += new System.EventHandler(this.ClearSelectionsButton_Click);
             // 
             // TanksPath
             // 
