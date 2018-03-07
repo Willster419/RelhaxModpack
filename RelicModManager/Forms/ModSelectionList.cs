@@ -904,21 +904,6 @@ namespace RelhaxModpack
             }
             if(sp.Packages.Count > 0)
             {
-                /*
-                if(Settings.SView == Settings.SelectionView.Default && sp.ChildPanel == null)
-                {
-                    sp.ChildPanel = new Panel()
-                    {
-                        BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
-                        Size = new Size(c.TabPage.Size.Width - 35, 30),
-                        Location = new Point(13, GetYLocation(sp.ParentPanel.Controls)),
-                        AutoSize = true,
-                        AutoSizeMode = AutoSizeMode.GrowOnly
-                    };
-                    sp.ChildPanel.MouseDown += DisabledComponent_MouseDown;
-                    sp.ParentPanel.Controls.Add(sp.ChildPanel);
-                }
-                */
                 foreach(SelectablePackage sp2 in sp.Packages)
                 {
                     AddPackage(sp2, c, sp);
@@ -955,49 +940,22 @@ namespace RelhaxModpack
             if (!spc.Enabled || !spc.Parent.Enabled || !spc.TopParent.Enabled)
                 return;
             //uncheck all packages at this level that are single
-            if(spc.Level == 0)
+            foreach (SelectablePackage childPackage in spc.Parent.Packages)
             {
-                foreach (SelectablePackage childPackage in spc.ParentCategory.Packages)
+                if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
                 {
                     if (childPackage.Equals(spc))
                         continue;
-                    if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
-                    {
-                        childPackage.Checked = false;
-                        PropagateDownNotChecked(childPackage);
-                    }
+                    childPackage.Checked = false;
+                    PropagateDownNotChecked(childPackage);
                 }
             }
-            else
-            {
-                foreach (SelectablePackage childPackage in spc.Parent.Packages)
-                {
-                    if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
-                    {
-                        if (childPackage.Equals(spc))
-                            continue;
-                        childPackage.Checked = false;
-                        PropagateDownNotChecked(childPackage);
-                    }
-                }
-            }
-            if(spc.Level == 0 && spc.Checked)
-            {
-                //allow single selection of level 0 to be turned off
-                spc.Checked = false;
-                PropagateUpNotChecked(spc);
-                PropagateDownNotChecked(spc);
-            }
-            else
-            {
-                //check the acutal mod
-                spc.Checked = true;
-                //propagate up (down will be taken care of)
-                //up may go down, down won't go back up
-                PropagateUpChecked(spc);
-                PropagateDownChecked(spc);
-            }
-            
+            //check the acutal package
+            spc.Checked = true;
+            //propagate up (down will be taken care of)
+            //up may go down, down won't go back up
+            PropagateUpChecked(spc);
+            PropagateDownChecked(spc);
         }
 
         //when a single_dropdown mod is selected
@@ -1041,39 +999,20 @@ namespace RelhaxModpack
         void PropagateUpChecked(SelectablePackage spc)
         {
             spc.Parent.Checked = true;
-            if (spc.Level == 0 || spc.Level == 1)
+            if (spc.Parent.Type.Equals("single") || spc.Parent.Type.Equals("single1"))
             {
-                if (spc.Parent.Type.Equals("single") || spc.Parent.Type.Equals("single1"))
+                foreach (SelectablePackage childPackage in spc.Parent.Parent.Packages)
                 {
-                    foreach (SelectablePackage childPackage in spc.Parent.ParentCategory.Packages)
+                    if (childPackage.Equals(spc.Parent))
+                        continue;
+                    if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
                     {
-                        if (childPackage.Equals(spc.Parent))
-                            continue;
-                        if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
-                        {
-                            childPackage.Checked = false;
-                            PropagateDownNotChecked(childPackage);
-                        }
+                        childPackage.Checked = false;
+                        PropagateDownNotChecked(childPackage);
                     }
                 }
             }
-            else
-            {
-                if (spc.Parent.Type.Equals("single") || spc.Parent.Type.Equals("single1"))
-                {
-                    foreach (SelectablePackage childPackage in spc.Parent.Parent.Packages)
-                    {
-                        if (childPackage.Equals(spc.Parent))
-                            continue;
-                        if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
-                        {
-                            childPackage.Checked = false;
-                            PropagateDownNotChecked(childPackage);
-                        }
-                    }
-                }
-            }
-            if (spc.Parent.Level > 0)
+            if (spc.Parent.Level >= 0)
                 PropagateUpChecked(spc.Parent);
         }
 
@@ -1081,7 +1020,7 @@ namespace RelhaxModpack
         //NOTE: the only component that can propagate up for a not checked is a multi
         void PropagateUpNotChecked(SelectablePackage spc)
         {
-            if (spc.Level == 0)
+            if (spc.Level == -1)
                 return;
             //if nothing cheched at this level, uncheck the parent and propagate up not checked agailn
             bool anythingChecked = false;
