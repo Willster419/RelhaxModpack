@@ -6,7 +6,7 @@ namespace RelhaxModpack.UIComponents
     {
         public SelectablePackage Package { get; set; }
         //up to two handlers may be needed
-        public EventHandler[] handler = new EventHandler[2];
+        public EventHandler handler;
         public void OnEnabledChanged(bool Enabled)
         {
             this.Enabled = Enabled;

@@ -459,6 +459,7 @@ namespace RelhaxModpack
                 }
             }
         }
+
         public override void OnPostLoad()
         {
             //set the size to be the orig saved size
@@ -500,6 +501,7 @@ namespace RelhaxModpack
             else
             {
                 sp.Parent = parent;
+                sp.TopParent = parent.TopParent;
             }
             string packageDisplayName = sp.NameFormatted;
             //write if the package is forced to be visible and/or enabled
@@ -708,14 +710,11 @@ namespace RelhaxModpack
                         //ADD HANDLERS HERE
                         if(cont is RelhaxFormCheckBox FormCheckBox)
                         {
-                            //SOMETHING LIKE THIS
-                            //FormCheckBox.CheckedChanged += Generic_MouseDown;
-                            //FormCheckBox.handler = Generic_MouseDown;
-                            //can therefore be toggled in the OnCheckedChanged method
+                            FormCheckBox.Click += OnMultiPackageClick;
                         }
                         else if(cont is RelhaxFormRadioButton FormRadioButton)
                         {
-
+                            FormRadioButton.Click += OnSinglePackageClick;
                         }
                         //add tooltip and attach to display
                         DescriptionToolTip.SetToolTip(cont, tooltipString);
@@ -869,12 +868,12 @@ namespace RelhaxModpack
                         if(sp.UIComponent is System.Windows.Controls.RadioButton rb)
                         {
                             //ADD CHECKED HEADERS HERE
-
+                            rb.Click += OnWPFComponentCheck;
                         }
                         else if(sp.UIComponent is System.Windows.Controls.CheckBox cb)
                         {
                             //AND HERE
-
+                            cb.Click += OnWPFComponentCheck;
                         }
                     }
                     //make the root tree view item for the package and set it with the UI component
@@ -908,13 +907,213 @@ namespace RelhaxModpack
             }
         }
 
+        //generic handler to disable the auto check like in forms, but for WPF
+        void OnWPFComponentCheck(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if(sender is RelhaxWPFCheckBox cb)
+            {
+                if ((bool)cb.IsChecked)
+                    cb.IsChecked = false;
+                else if (!(bool)cb.IsChecked)
+                    cb.IsChecked = true;
+                OnMultiPackageClick(sender, e);
+            }
+            else if (sender is RelhaxWPFRadioButton rb)
+            {
+                if ((bool)rb.IsChecked)
+                    rb.IsChecked = false;
+                else if (!(bool)rb.IsChecked)
+                    rb.IsChecked = true;
+                OnSinglePackageClick(sender, e);
+            }
+        }
+
         //when a single/single1 mod is selected
+        void OnSinglePackageClick(object sender, EventArgs e)
+        {
+            IPackageUIComponent ipc = (IPackageUIComponent)sender;
+            SelectablePackage spc = ipc.Package;
+            if (!spc.Enabled || !spc.Parent.Enabled || !spc.TopParent.Enabled)
+                return;
+            //uncheck all packages at this level that are single
+            if(spc.Level == 0)
+            {
+                foreach (SelectablePackage childPackage in spc.ParentCategory.Packages)
+                {
+                    if (childPackage.Equals(spc))
+                        continue;
+                    if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                    {
+                        childPackage.Checked = false;
+                        PropagateDownNotChecked(childPackage);
+                    }
+                }
+            }
+            else
+            {
+                foreach (SelectablePackage childPackage in spc.Parent.Packages)
+                {
+                    if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                    {
+                        if (childPackage.Equals(spc))
+                            continue;
+                        childPackage.Checked = false;
+                        PropagateDownNotChecked(childPackage);
+                    }
+                }
+            }
+            if(spc.Level == 0 && spc.Checked)
+            {
+                //allow single selection of level 0 to be turned off
+                spc.Checked = false;
+                PropagateUpNotChecked(spc);
+                PropagateDownNotChecked(spc);
+            }
+            else
+            {
+                //check the acutal mod
+                spc.Checked = true;
+                //propagate up (down will be taken care of)
+                //up may go down, down won't go back up
+                PropagateUpChecked(spc);
+                PropagateDownChecked(spc);
+            }
+            
+        }
 
         //when a single_dropdown mod is selected
+        void OnSingleDDPackageClick(object sender, EventArgs e)
+        {
+            IPackageUIComponent ipc = (IPackageUIComponent)sender;
+            SelectablePackage spc = ipc.Package;
+            if (!spc.Enabled || !spc.Parent.Enabled || !spc.TopParent.Enabled)
+                return;
+
+        }
 
         //when a multi mod is selected
+        void OnMultiPackageClick(object sender, EventArgs e)
+        {
+            IPackageUIComponent ipc = (IPackageUIComponent)sender;
+            SelectablePackage spc = ipc.Package;
+            if (!spc.Enabled || !spc.Parent.Enabled || !spc.TopParent.Enabled)
+                return;
+            //can be enabled
+            if(!spc.Checked)
+            {
+                //check it and propagate change
+                spc.Checked = true;
+                //up the ndown
+                PropagateUpChecked(spc);
+                PropagateDownChecked(spc);
+            }
+            else if(spc.Checked)
+            {
+                //uncheck it and propagate change
+                spc.Checked = false;
+                //up then down
+                PropagateUpNotChecked(spc);
+                PropagateDownNotChecked(spc);
+            }
+        }
 
-        
+        //propagates the change back up the selection tree
+        //can be sent from any component
+        void PropagateUpChecked(SelectablePackage spc)
+        {
+            spc.Parent.Checked = true;
+            if (spc.Level == 0 || spc.Level == 1)
+            {
+                if (spc.Parent.Type.Equals("single") || spc.Parent.Type.Equals("single1"))
+                {
+                    foreach (SelectablePackage childPackage in spc.Parent.ParentCategory.Packages)
+                    {
+                        if (childPackage.Equals(spc.Parent))
+                            continue;
+                        if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                        {
+                            childPackage.Checked = false;
+                            PropagateDownNotChecked(childPackage);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (spc.Parent.Type.Equals("single") || spc.Parent.Type.Equals("single1"))
+                {
+                    foreach (SelectablePackage childPackage in spc.Parent.Parent.Packages)
+                    {
+                        if (childPackage.Equals(spc.Parent))
+                            continue;
+                        if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                        {
+                            childPackage.Checked = false;
+                            PropagateDownNotChecked(childPackage);
+                        }
+                    }
+                }
+            }
+            if (spc.Parent.Level > 0)
+                PropagateUpChecked(spc.Parent);
+        }
+
+        //propagates the change back up the selection tree
+        //NOTE: the only component that can propagate up for a not checked is a multi
+        void PropagateUpNotChecked(SelectablePackage spc)
+        {
+            if (spc.Level == 0)
+                return;
+            //if nothing cheched at this level, uncheck the parent and propagate up not checked agailn
+            bool anythingChecked = false;
+            foreach(SelectablePackage childPackage in spc.Parent.Packages)
+            {
+                if (childPackage.Enabled && childPackage.Checked)
+                    anythingChecked = true;
+            }
+            if(!anythingChecked)
+            {
+                spc.Parent.Checked = false;
+                PropagateUpNotChecked(spc.Parent);
+            }
+        }
+
+        //propagaetes the change down the selection tree
+        void PropagateDownChecked(SelectablePackage spc)
+        {
+            bool singleSelected = false;
+            foreach(SelectablePackage childPackage in spc.Packages)
+            {
+                if((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                {
+                    if(!singleSelected)
+                    {
+                        childPackage.Checked = true;
+                        singleSelected = true;
+                        PropagateDownChecked(childPackage);
+                    }
+                    else
+                    {
+                        childPackage.Checked = false;
+                    }
+                }
+                //TODO: dropdown options
+            }
+        }
+
+        //propagaetes the change down the selection tree
+        void PropagateDownNotChecked(SelectablePackage spc)
+        {
+            foreach(SelectablePackage childPackage in spc.Packages)
+            {
+                if (!childPackage.Enabled)
+                    continue;
+                childPackage.Checked = false;
+                //TODO: dropdown options
+                PropagateDownNotChecked(childPackage);
+            }
+        }
+
         /*
         //when a legacy mod checkbox is clicked
         void modCheckBoxL_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -1919,6 +2118,9 @@ namespace RelhaxModpack
         //generic hander for when any mouse button is clicked for MouseDown Events
         void Generic_MouseDown(object sender, EventArgs e)
         {
+            if (e is MouseEventArgs m)
+                if (m.Button != MouseButtons.Right)
+                    return;
             if(sender is IPackageUIComponent ipc)
             {
                 SelectablePackage spc = ipc.Package;

@@ -5,11 +5,11 @@
         public SelectablePackage Package { get; set; }
         public void OnEnabledChanged(bool Enabled)
         {
-            this.IsEnabled = Enabled;
+            IsEnabled = Enabled;
         }
         public void OnCheckedChanged(bool Checked)
         {
-            this.IsChecked = Checked;
+            IsChecked = Checked;
         }
     }
 }
