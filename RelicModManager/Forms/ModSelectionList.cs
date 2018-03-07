@@ -548,120 +548,157 @@ namespace RelhaxModpack
             switch (Settings.SView)
             {
                 case Settings.SelectionView.Default:
-                    int newPanelCount = c.TabPage.Controls.Count + 1;
-                    switch(sp.Type)
+                    //int newPanelCount = c.TabPage.Controls.Count + 1;
+                    //start code for dealing with panels
+                    if (sp.Level == 0)
+                    {
+                        if (sp.ParentPanel == null)
+                        {
+                            sp.ParentPanel = new Panel()
+                            {
+                                BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
+                                //autosize is true by default...?
+                                Size = new Size(c.TabPage.Size.Width - 25, 20),
+                                Location = new Point(5, getYLocation(c.TabPage.Controls)),
+                                AutoSize = true,
+                                AutoSizeMode = AutoSizeMode.GrowOnly
+                            };
+                            //sp.ParentPanel.MouseDown += DisabledComponent_MouseDown;
+                            sp.ParentCategory.TabPage.Controls.Add(sp.ParentPanel);
+                        }
+                    }
+                    else if (sp.Level > 0)
+                    {
+                        sp.ParentPanel = sp.Parent.ChildPanel;
+                        if (sp.ParentPanel == null)
+                        {
+                            sp.ParentPanel = new Panel()
+                            {
+                                BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
+                                Size = new Size(c.TabPage.Size.Width - 35, 30),
+                                Location = new Point(13, getYLocation(sp.ParentPanel.Controls)),
+                                AutoSize = true,
+                                AutoSizeMode = AutoSizeMode.GrowOnly
+                            };
+                            //sp.Panel.MouseDown += DisabledComponent_MouseDown;
+                        }
+                    }
+                    //end code for dealing with panels
+                    switch (sp.Type)
                     {
                         case "single":
                         case "single1":
                             sp.UIComponent = new RelhaxFormRadioButton()
                             {
                                 //autosize is true by default...
-                                Location = new Point(3, getYLocation(sp.Panel.Controls)),
-                                Size = new Size(150, 15),
+                                Location = new Point(3, getYLocation(sp.ParentPanel.Controls)),
+                                //Size = new Size(150, 15),
                                 Text = packageDisplayName,
                                 Package = sp,
                                 Enabled = canBeEnabled,
                                 Checked = (canBeEnabled && sp.Checked) ? true : false,
-                                AutoCheck = false
+                                AutoCheck = false,
+                                AutoSize = true
                             };
                             break;
                         case "single_dropdown":
                         case "single_dropdown1":
-#warning dropdown logic null check
-                            if(sp.RelhaxFormComboBoxList[0] == null)
-                                sp.RelhaxFormComboBoxList[0] = new RelhaxFormComboBox()
+                            if (sp.Parent.RelhaxFormComboBoxList[0] == null)
+                            {
+                                sp.Parent.RelhaxFormComboBoxList[0] = new RelhaxFormComboBox()
                                 {
                                     //autosize should be true...
                                     //location used to determind if addedyet
-                                    Location = new Point(6, getYLocation(sp.Panel.Controls)),
-                                    Size = new Size((int)(225*DPISCALE),15),
+                                    Location = new Point(6, getYLocation(sp.ParentPanel.Controls)),
+                                    Size = new Size((int)(225 * DPISCALE), 15),
                                     Enabled = false,
+                                    Name = "notAddedYet",
                                     DropDownStyle = ComboBoxStyle.DropDownList
                                 };
+                                //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
+                                sp.Parent.RelhaxFormComboBoxList[0].MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
+                            }
                             if(sp.Enabled)
                             {
                                 ComboBoxItem cbi = new ComboBoxItem(sp, packageDisplayName);
-                                sp.RelhaxFormComboBoxList[0].Items.Add(cbi);
+                                sp.Parent.RelhaxFormComboBoxList[0].Items.Add(cbi);
                                 if(sp.Checked)
                                 {
-                                    sp.RelhaxFormComboBoxList[0].Enabled = true;
-                                    sp.RelhaxFormComboBoxList[0].SelectedItem = cbi;
-                                    DescriptionToolTip.SetToolTip(sp.RelhaxFormComboBoxList[0], tooltipString);
+                                    //sp.Parent.RelhaxFormComboBoxList[0].Enabled = true;
+                                    sp.Parent.RelhaxFormComboBoxList[0].SelectedItem = cbi;
+                                    DescriptionToolTip.SetToolTip(sp.Parent.RelhaxFormComboBoxList[0], tooltipString);
                                 }
+                            }
+                            if(sp.Parent.RelhaxFormComboBoxList[0].Name.Equals("notAddedYet"))
+                            {
+                                if (sp.Parent.RelhaxFormComboBoxList[0].Items.Count > 0)
+                                {
+                                    sp.Parent.RelhaxFormComboBoxList[0].Enabled = true;
+                                    if (sp.Parent.RelhaxFormComboBoxList[0].SelectedIndex == -1)
+                                        sp.Parent.RelhaxFormComboBoxList[0].SelectedIndex = 0;
+                                }
+                                sp.Parent.RelhaxFormComboBoxList[0].Name = "added";
+                                sp.ParentPanel.Controls.Add(sp.Parent.RelhaxFormComboBoxList[0]);
                             }
                             break;
                         case "single_dropdown2":
-#warning dropdown logic null check
-                            if (sp.RelhaxFormComboBoxList[1] == null)
-                                sp.RelhaxFormComboBoxList[1] = new RelhaxFormComboBox()
+                            if (sp.Parent.RelhaxFormComboBoxList[1] == null)
+                            {
+                                sp.Parent.RelhaxFormComboBoxList[1] = new RelhaxFormComboBox()
                                 {
                                     //autosize should be true...
                                     //location used to determind if addedyet
-                                    Location = new Point(6, getYLocation(sp.Panel.Controls)),
+                                    Location = new Point(6, getYLocation(sp.ParentPanel.Controls)),
                                     Size = new Size((int)(225 * DPISCALE), 15),
                                     Enabled = false,
+                                    Name = "notAddedYet",
                                     DropDownStyle = ComboBoxStyle.DropDownList
                                 };
+                                //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
+                                sp.Parent.RelhaxFormComboBoxList[1].MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
+                            }
                             if (sp.Enabled)
                             {
                                 ComboBoxItem cbi = new ComboBoxItem(sp, packageDisplayName);
-                                sp.RelhaxFormComboBoxList[1].Items.Add(cbi);
+                                sp.Parent.RelhaxFormComboBoxList[1].Items.Add(cbi);
                                 if (sp.Checked)
                                 {
-                                    sp.RelhaxFormComboBoxList[1].Enabled = true;
-                                    sp.RelhaxFormComboBoxList[1].SelectedItem = cbi;
-                                    DescriptionToolTip.SetToolTip(sp.RelhaxFormComboBoxList[1], tooltipString);
+                                    //sp.Parent.RelhaxFormComboBoxList[1].Enabled = true;
+                                    sp.Parent.RelhaxFormComboBoxList[1].SelectedItem = cbi;
+                                    DescriptionToolTip.SetToolTip(sp.Parent.RelhaxFormComboBoxList[1], tooltipString);
                                 }
+                            }
+                            if (sp.Parent.RelhaxFormComboBoxList[1].Name.Equals("notAddedYet"))
+                            {
+                                if(sp.Parent.RelhaxFormComboBoxList[1].Items.Count > 0)
+                                {
+                                    sp.Parent.RelhaxFormComboBoxList[1].Enabled = true;
+                                    if (sp.Parent.RelhaxFormComboBoxList[1].SelectedIndex == -1)
+                                        sp.Parent.RelhaxFormComboBoxList[1].SelectedIndex = 0;
+                                }
+                                sp.Parent.RelhaxFormComboBoxList[1].Name = "added";
+                                sp.ParentPanel.Controls.Add(sp.Parent.RelhaxFormComboBoxList[1]);
                             }
                             break;
                         case "multi":
                             sp.UIComponent = new RelhaxFormCheckBox()
                             {
-                                Location = new Point(3, getYLocation(sp.Panel.Controls)),
-                                Size = new Size(150, 15),
+                                Location = new Point(3, getYLocation(sp.ParentPanel.Controls)),
+                                //Size = new Size(150, 15),
                                 Text = packageDisplayName,
                                 Package = sp,
                                 Enabled = canBeEnabled,
                                 Checked = (canBeEnabled && sp.Checked) ? true : false,
+                                AutoSize = true,
+                                AutoCheck = false
                             };
                             break;
                     }
-                    //start code for dealing with panels
-                    if(sp.Level == 0)
-                    {
-                        if(sp.Panel == null)
-                        {
-                            sp.Panel = new Panel()
-                            {
-                                BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
-                                //autosize is true by default...?
-                                Size = new Size(c.TabPage.Size.Width - 25, 20),
-                                Location = new Point(5, getYLocation(c.TabPage.Controls))
-                            };
-                            //sp.Panel.MouseDown += DisabledComponent_MouseDown;
-                            sp.ParentCategory.TabPage.Controls.Add(sp.Panel);
-                        }
-                    }
-                    else
-                    {
-                        if(sp.Panel == null)
-                        {
-                            sp.Panel = new Panel()
-                            {
-                                BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
-                                Size = new Size(c.TabPage.Size.Width - 35, 30),
-                                Location = new Point(13, getYLocation(sp.Parent.Panel.Controls))
-                            };
-                            //sp.Panel.MouseDown += DisabledComponent_MouseDown;
-                            sp.Parent.Panel.Controls.Add(sp.Panel);
-                        }
-                    }
-                    //end code for dealing with panels
                     //color change code
                     if (canBeEnabled && sp.Enabled && sp.Checked && !Settings.DisableColorChange)
-                        sp.Panel.BackColor = Color.BlanchedAlmond;
+                        sp.ParentPanel.BackColor = Color.BlanchedAlmond;
                     else
-                        sp.Panel.BackColor = Settings.getBackColor();
+                        sp.ParentPanel.BackColor = Settings.getBackColor();
                     //color change code
                     //start code for handlers tooltips and attaching
                     if ((sp.UIComponent != null) && (sp.UIComponent is Control cont))
@@ -680,15 +717,9 @@ namespace RelhaxModpack
                         {
 
                         }
-                        else if (cont is RelhaxFormComboBox FormComboBox)
-                        {
-                            //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
-                            FormComboBox.MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
-
-                        }
                         //add tooltip and attach to display
                         DescriptionToolTip.SetToolTip(cont, tooltipString);
-                        sp.Panel.Controls.Add(cont);
+                        sp.ParentPanel.Controls.Add(cont);
                     }
                     //end code for handlers tooltips and attaching
                     break;
@@ -713,19 +744,15 @@ namespace RelhaxModpack
                                 IsEnabled = canBeEnabled,
                                 IsChecked = (canBeEnabled && sp.Checked) ? true : false
                             };
-                            System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem()
-                            {
-                                IsExpanded = Settings.ExpandAllLegacy ? true : false,
-                                Header = sp.UIComponent
-                            };
                             if (sp.Level > 0)
                             {
-                                sp.Parent.TreeViewItem.Items.Add(configControlTVI);
+                                sp.TreeViewItem.Header = sp.UIComponent;
+                                sp.TreeViewItem.IsExpanded = Settings.ExpandAllLegacy ? true : false;
+                                sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
                             }
                             break;
                         case "single_dropdown":
                         case "single_dropdown1":
-#warning this logic needs to be checked
                             if(sp.Parent.RelhaxWPFComboBoxList[0] == null)
                                 sp.Parent.RelhaxWPFComboBoxList[0] = new RelhaxWPFComboBox()
                                 {
@@ -758,15 +785,11 @@ namespace RelhaxModpack
                                     if (sp.Parent.RelhaxWPFComboBoxList[0].SelectedIndex == -1)
                                         sp.Parent.RelhaxWPFComboBoxList[0].SelectedIndex = 0;
                                 }
-                                System.Windows.Controls.TreeViewItem configControlTVI2 = new System.Windows.Controls.TreeViewItem()
-                                {
-                                    Header = sp.Parent.RelhaxWPFComboBoxList[0]
-                                };
-                                sp.Parent.TreeViewItem.Items.Add(configControlTVI2);
+                                sp.TreeViewItem.Header = sp.Parent.RelhaxWPFComboBoxList[0];
+                                sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
                             }
                             break;
                         case "single_dropdown2":
-#warning dropdown logic null check
                             if (sp.Parent.RelhaxWPFComboBoxList[1] == null)
                                 sp.Parent.RelhaxWPFComboBoxList[1] = new RelhaxWPFComboBox()
                                 {
@@ -799,11 +822,8 @@ namespace RelhaxModpack
                                     if (sp.Parent.RelhaxWPFComboBoxList[1].SelectedIndex == -1)
                                         sp.Parent.RelhaxWPFComboBoxList[1].SelectedIndex = 0;
                                 }
-                                System.Windows.Controls.TreeViewItem configControlTVI2 = new System.Windows.Controls.TreeViewItem()
-                                {
-                                    Header = sp.Parent.RelhaxWPFComboBoxList[1]
-                                };
-                                sp.Parent.TreeViewItem.Items.Add(configControlTVI2);
+                                sp.TreeViewItem.Header = sp.Parent.RelhaxWPFComboBoxList[1];
+                                sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
                             }
                             break;
                         case "multi":
@@ -819,12 +839,12 @@ namespace RelhaxModpack
                                 IsEnabled = canBeEnabled,
                                 IsChecked = (canBeEnabled && sp.Checked) ? true : false,
                             };
-                            System.Windows.Controls.TreeViewItem configControlTVI3 = new System.Windows.Controls.TreeViewItem()
+                            if(sp.Level > 0)
                             {
-                                IsExpanded = Settings.ExpandAllLegacy ? true : false,
-                                Header = sp.UIComponent
-                            };
-                            sp.Parent.TreeViewItem.Items.Add(configControlTVI3);
+                                sp.TreeViewItem.Header = sp.UIComponent;
+                                sp.TreeViewItem.IsExpanded = Settings.ExpandAllLegacy ? true : false;
+                                sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
+                            }
                             break;
                     }
                     //set the font size
@@ -860,17 +880,26 @@ namespace RelhaxModpack
                     //make the root tree view item for the package and set it with the UI component
                     if(sp.Level == 0)
                     {
-                        System.Windows.Controls.TreeViewItem tvi = new System.Windows.Controls.TreeViewItem()
-                        {
-                            IsExpanded = Settings.ExpandAllLegacy ? true : false,
-                            Header = sp.UIComponent
-                        };
-                        lsl.legacyTreeView.Items.Add(tvi);
+                        sp.TreeViewItem.Header = sp.UIComponent;
+                        sp.TreeViewItem.IsExpanded = Settings.ExpandAllLegacy ? true : false;
+                        lsl.legacyTreeView.Items.Add(sp.TreeViewItem);
                     }
                     break;
             }
             if(sp.Packages.Count > 0)
             {
+                if(Settings.SView == Settings.SelectionView.Default && sp.ChildPanel == null)
+                {
+                    sp.ChildPanel = new Panel()
+                    {
+                        BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
+                        Size = new Size(c.TabPage.Size.Width - 35, 30),
+                        Location = new Point(13, getYLocation(sp.ParentPanel.Controls)),
+                        AutoSize = true,
+                        AutoSizeMode = AutoSizeMode.GrowOnly
+                    };
+                    sp.ParentPanel.Controls.Add(sp.ChildPanel);
+                }
                 foreach(SelectablePackage sp2 in sp.Packages)
                 {
                     AddPackage(sp2, c, sp, lsl);
@@ -878,439 +907,6 @@ namespace RelhaxModpack
             }
         }
         /*
-        //adds a mod m to a tabpage t, OMC treeview style
-        private void AddModOMCView(SelectablePackage m, TabPage t, LegacySelectionList lsl, Category c)
-        {
-            //if forceVisible, show it anyway
-            if (!m.Visible && !Program.forceVisible)
-                return;
-            bool parentForcedEnabled = false;
-            bool parentForcedVisible = false;
-            //write if the mod is forced to be enabled or visible
-            if (!m.Visible && Program.forceVisible)
-            {
-                parentForcedVisible = true;
-                m.Name = m.Name + " [forcedVisible]";
-            }
-            if (!m.Enabled && Program.forceEnabled)
-            {
-                parentForcedEnabled = true;
-                m.Name = m.Name + " [forcedEnabled]";
-            }
-            //force the mod to be enabled at this point (if command line arguement)
-            if (Program.forceEnabled)
-                m.Enabled = true;
-            if (Settings.DarkUI)
-                lsl.legacyTreeView.Background = System.Windows.Media.Brushes.Gray;
-            //helpfull stuff
-            string modDownloadFilePath = Path.Combine(Application.StartupPath, "RelHaxDownloads", m.ZipFile);
-            //link the catagory and mod in memory
-            m.ParentCategory = c;
-            //if there are underscores you need to actually display them
-            string nameForModCB = Utils.ReplaceMacro(m);
-            nameForModCB = nameForModCB.Replace(@"_", @"__");
-            //create base mod checkbox
-            //http://wpftutorial.net/ToolTip.html
-            string dateFormat = m.Timestamp == 0 ? "": Utils.ConvertFiletimeTimestampToDate(m.Timestamp);
-            string tooltipString = m.Description.Equals("") ? NoDescriptionAvailable : m.Description + (m.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
-            ModWPFCheckBox modCheckBox = new ModWPFCheckBox()
-            {
-                ToolTip = tooltipString,
-                mod = m,
-                catagory = c,
-                FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
-                HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
-                VerticalContentAlignment = System.Windows.VerticalAlignment.Center,
-                FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
-                Content = nameForModCB,
-                IsEnabled = m.Enabled,
-                IsChecked = (m.Enabled && m.Checked) ? true : false
-            };
-            //add the root UI object to the memory database
-            m.TopParentUIComponent = modCheckBox;
-            m.TabIndex = t;
-            CompleteModSearchList.Add(m);
-            switch (Settings.FontSizeforum)
-            {
-                case Settings.FontSize.Font100:
-                    break;
-                case Settings.FontSize.Font125:
-                    modCheckBox.FontSize = modCheckBox.FontSize + 4;
-                    break;
-                case Settings.FontSize.Font175:
-                    modCheckBox.FontSize = modCheckBox.FontSize + 8;
-                    break;
-                case Settings.FontSize.Font225:
-                    modCheckBox.FontSize = modCheckBox.FontSize + 12;
-                    break;
-                case Settings.FontSize.Font275:
-                    modCheckBox.FontSize = modCheckBox.FontSize + 16;
-                    break;
-            }
-            //make the tree view item for the modCheckBox
-            System.Windows.Controls.TreeViewItem tvi = new System.Windows.Controls.TreeViewItem();
-            if (Settings.ExpandAllLegacy)
-                tvi.IsExpanded = true;
-            //process configs
-            if (m.Packages.Count > 0)
-                AddConfigsOMCView(c, m, m.Packages, tvi, parentForcedVisible,parentForcedEnabled, true);
-            //if the CRC's don't match and the mod actually has a zip file
-            if (m.DownloadFlag)
-            {
-                modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Translations.getTranslatedString("updated"));
-                if ((m.Size > 0))
-                    modCheckBox.Content = string.Format("{0} ({1})", modCheckBox.Content, Utils.SizeSuffix(m.Size, 1, true));
-            }
-            
-            tvi.Header = modCheckBox;
-            //add it's handlers, right click and when checked
-            modCheckBox.MouseDown += Generic_MouseDown;
-            //add the mod check box to the legacy tree view
-            lsl.legacyTreeView.Items.Add(tvi);
-            modCheckBox.Checked += modCheckBoxL_Click;
-            modCheckBox.Unchecked += modCheckBoxL_Click;
-        }
-
-        void AddConfigsOMCView(Category c, SelectablePackage m, List<SelectablePackage> configs, System.Windows.Controls.TreeViewItem tvi,
-        bool parentForcedVisible, bool parentForcedEnabled, bool parentIsMod = false, SelectablePackage parentConfig = null)
-        {
-            //create the twp possible drop down options, and the mod optional config check box i guess
-            ConfigWPFComboBox configControlDD = null;
-            ConfigWPFComboBox configControlDD2 = null;
-            //process the configs
-            foreach (SelectablePackage con in configs)
-            {
-                //if forceVisible, show it anyway
-                if (!con.Visible && !Program.forceVisible)
-                    continue;
-                //write if the mod is forced to be enabled or visible
-                if ((!con.Visible || parentForcedVisible) && Program.forceVisible)
-                {
-                    parentForcedVisible = true;
-                    con.Name = con.Name + " [forcedVisible]";
-                }
-                if ((!con.Enabled || parentForcedEnabled) && Program.forceEnabled)
-                {
-                    parentForcedEnabled = true;
-                    con.Name = con.Name + " [forcedEnabled]";
-                }
-                //force the mod to be enabled at this point (if command line arguement)
-                if (Program.forceEnabled)
-                    con.Enabled = true;
-                //link stuff in memory
-                con.Parent = m;
-                if (parentIsMod)
-                {
-                    CompleteModSearchList.Add(con);
-                    con.Parent = m;
-                }
-                else
-                    con.Parent = parentConfig;
-                //create the init stuff for each config
-                ConfigWPFComboBox configControlDDALL = null;
-                if (con.Type.Equals("single") || con.Type.Equals("single1"))
-                {
-                    string nameForModCB = Utils.ReplaceMacro(con);
-                    //if there are underscores you need to actually display them
-                    nameForModCB = nameForModCB.Replace(@"_", @"__");
-                    //make the radio button
-                    string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
-                    string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + (con.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
-                    ConfigWPFRadioButton configControlRB = new ConfigWPFRadioButton()
-                    {
-                        ToolTip = tooltipString,
-                        FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
-                        FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
-                        HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
-                        VerticalContentAlignment = System.Windows.VerticalAlignment.Center,
-                        catagory = c,
-                        mod = m,
-                        config = con,
-                        IsEnabled = false,
-                        IsChecked = false,
-                        Content = nameForModCB
-                    };
-                    switch (Settings.FontSizeforum)
-                    {
-                        case Settings.FontSize.Font100:
-                            break;
-                        case Settings.FontSize.Font125:
-                            configControlRB.FontSize = configControlRB.FontSize + 4;
-                            break;
-                        case Settings.FontSize.Font175:
-                            configControlRB.FontSize = configControlRB.FontSize + 8;
-                            break;
-                        case Settings.FontSize.Font225:
-                            configControlRB.FontSize = configControlRB.FontSize + 12;
-                            break;
-                        case Settings.FontSize.Font275:
-                            configControlRB.FontSize = configControlRB.FontSize + 16;
-                            break;
-                    }
-                    //add the UI component to the config item in memory database
-                    con.UIComponent = configControlRB;
-                    //get all levels up to the mod, then deal with the mod
-                    bool canBeEnabled = true;
-                    //check all parent configs, if any
-#error this no longer works
-                    if (con.Parent is SelectablePackage)
-                    {
-                        SelectablePackage parentConfig2 = (SelectablePackage)con.Parent;
-                        while (parentConfig2 is SelectablePackage)
-                        {
-                            if (!parentConfig2.Enabled)
-                                canBeEnabled = false;
-                            if (parentConfig2.Parent is SelectablePackage)
-                                break;
-                            parentConfig2 = (SelectablePackage)parentConfig2.Parent;
-                        }
-                    }
-                    //check the parent mod, if not already enabled
-                    if (!con.Parent.Enabled)
-                        canBeEnabled = false;
-                    //check itself (before it reks itself)
-                    if (!con.Enabled)
-                        canBeEnabled = false;
-                    if (canBeEnabled)
-                        configControlRB.IsEnabled = true;
-                    if (configControlRB.IsEnabled)
-                        if (con.Checked)
-                            configControlRB.IsChecked = true;
-                    
-                    if (con.DownloadFlag)
-                    {
-                        configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Translations.getTranslatedString("updated"));
-                        if (con.Size > 0)
-                            configControlRB.Content = string.Format("{0} ({1})", configControlRB.Content, Utils.SizeSuffix(con.Size, 1, true));
-                    }
-                    
-                    //add the handlers at the end
-                    configControlRB.Checked += configControlRB_Click;
-                    configControlRB.Unchecked += configControlRB_Click;
-                    configControlRB.MouseDown += Generic_MouseDown;
-                    //add it to the mod config list
-                    System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
-                    configControlTVI.IsExpanded = Settings.ExpandAllLegacy ? true : false;
-                    configControlTVI.Header = configControlRB;
-                    tvi.Items.Add(configControlTVI);
-                    //process the subconfigs
-                    if (con.Packages.Count > 0)
-                        AddConfigsOMCView(c, m, con.Packages, configControlTVI,parentForcedVisible,parentForcedEnabled, false, con);
-                }
-                else if (con.Type.Equals("single_dropdown") || con.Type.Equals("single_dropdown1") || con.Type.Equals("single_dropdown2"))
-                {
-                    //set the all to whichever one it actually is
-                    if (con.Type.Equals("single_dropdown") || con.Type.Equals("single_dropdown1"))
-                    {
-                        if(configControlDD == null)
-                        {
-                            configControlDD = new ConfigWPFComboBox()
-                            {
-                                IsEditable = false,
-                                Name = "notAddedYet",
-                                IsEnabled = false,
-                                FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
-                                FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal
-                            };
-                            switch (Settings.FontSizeforum)
-                            {
-                                case Settings.FontSize.Font100:
-                                    break;
-                                case Settings.FontSize.Font125:
-                                    configControlDD.FontSize = configControlDD.FontSize + 4;
-                                    break;
-                                case Settings.FontSize.Font175:
-                                    configControlDD.FontSize = configControlDD.FontSize + 8;
-                                    break;
-                                case Settings.FontSize.Font225:
-                                    configControlDD.FontSize = configControlDD.FontSize + 12;
-                                    break;
-                                case Settings.FontSize.Font275:
-                                    configControlDD.FontSize = configControlDD.FontSize + 16;
-                                    break;
-                            }
-                        }
-                        configControlDDALL = configControlDD;
-                        //add the UI component to the config item in memory database
-                        con.UIComponent = configControlDD;
-                    }
-                    else if (con.Type.Equals("single_dropdown2"))
-                    {
-                        if (configControlDD2 == null)
-                        {
-                            configControlDD2 = new ConfigWPFComboBox()
-                            {
-                                IsEditable = false,
-                                Name = "notAddedYet",
-                                IsEnabled = false,
-                                FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
-                                FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal
-                            };
-                            switch (Settings.FontSizeforum)
-                            {
-                                case Settings.FontSize.Font100:
-                                    break;
-                                case Settings.FontSize.Font125:
-                                    configControlDD2.FontSize = configControlDD2.FontSize + 4;
-                                    break;
-                                case Settings.FontSize.Font175:
-                                    configControlDD2.FontSize = configControlDD2.FontSize + 8;
-                                    break;
-                                case Settings.FontSize.Font225:
-                                    configControlDD2.FontSize = configControlDD2.FontSize + 12;
-                                    break;
-                                case Settings.FontSize.Font275:
-                                    configControlDD2.FontSize = configControlDD2.FontSize + 16;
-                                    break;
-                            }
-                        }
-                        configControlDDALL = configControlDD2;
-                        //add the UI component to the config item in memory database
-                        con.UIComponent = configControlDD2;
-                    }
-                    //make the dropdown selection list
-                    configControlDDALL.MinWidth = 100;
-                    ComboBoxItem cbi = null;
-                    string toAdd = Utils.ReplaceMacro(con);
-                    
-                    if (con.DownloadFlag)
-                    {
-                        toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
-                        con.DownloadFlag = true;
-                        if (con.Size > 0)
-                            toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.Size, 1, true));
-                    }
-                    
-                    //add it
-                    if (con.Enabled)
-                    {
-                        cbi = new ComboBoxItem(con, toAdd);
-                        configControlDDALL.Items.Add(cbi);
-                        if (con.Checked)
-                        {
-                            configControlDDALL.SelectedItem = cbi;
-                            string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
-                            string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + (con.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
-                            configControlDDALL.ToolTip = tooltipString;
-                        }
-                    }
-                    //add the dropdown to the thing. it will only run this once
-                    if (configControlDDALL.Name.Equals("notAddedYet"))
-                    {
-                        configControlDDALL.Name = "added";
-                        configControlDDALL.catagory = c;
-                        configControlDDALL.mod = m;
-                        configControlDDALL.SelectionChanged += configControlDDALL_SelectionChanged;
-                        configControlDDALL.PreviewMouseRightButtonDown += Generic_MouseDown;
-                        if (configControlDDALL.Items.Count > 0)
-                            configControlDDALL.IsEnabled = true;
-                        if (configControlDDALL.SelectedIndex == -1)
-                            configControlDDALL.SelectedIndex = 0;
-                        System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
-                        string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
-                        string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + (con.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
-                        configControlDDALL.ToolTip = tooltipString;
-                        configControlTVI.Header = configControlDDALL;
-                        tvi.Items.Add(configControlTVI);
-                    }
-                }
-                else if (con.Type.Equals("multi"))
-                {
-                    string nameForModCB = Utils.ReplaceMacro(con);
-                    //if there are underscores you need to actually display them
-                    nameForModCB = nameForModCB.Replace(@"_", @"__");
-                    //make the checkbox and add the tooltip
-                    string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
-                    string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + (con.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
-                    ConfigWPFCheckBox configControlCB = new ConfigWPFCheckBox()
-                    {
-                        ToolTip = tooltipString,
-                        FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
-                        FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
-                        HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
-                        VerticalContentAlignment = System.Windows.VerticalAlignment.Center,
-                        catagory = c,
-                        mod = m,
-                        config = con,
-                        IsEnabled = false,
-                        IsChecked = false,
-                        Content = nameForModCB
-                    };
-                    switch (Settings.FontSizeforum)
-                    {
-                        case Settings.FontSize.Font100:
-                            break;
-                        case Settings.FontSize.Font125:
-                            configControlCB.FontSize = configControlCB.FontSize + 4;
-                            break;
-                        case Settings.FontSize.Font175:
-                            configControlCB.FontSize = configControlCB.FontSize + 8;
-                            break;
-                        case Settings.FontSize.Font225:
-                            configControlCB.FontSize = configControlCB.FontSize + 12;
-                            break;
-                        case Settings.FontSize.Font275:
-                            configControlCB.FontSize = configControlCB.FontSize + 16;
-                            break;
-                    }
-                    //add the UI component to the config item in memory database
-                    con.UIComponent = configControlCB;
-                    //logic for determining if it can be Enabled
-                    //get all levels up to the mod, then deal with the mod
-                    bool canBeEnabled = true;
-                    //check all parent configs, if any
-#error like above, re-write
-                    if (con.Parent is SelectablePackage parentConfig2)
-                    {
-                        while (parentConfig2 is SelectablePackage)
-                        {
-                            if (!parentConfig2.Enabled)
-                                canBeEnabled = false;
-                            if (parentConfig2.Parent is SelectablePackage)
-                                break;
-                            parentConfig2 = (SelectablePackage)parentConfig2.Parent;
-                        }
-                    }
-                    //check the parent mod
-                    if (!con.Parent.Enabled)
-                        canBeEnabled = false;
-                    //check itself (before it reks itself)
-                    if (!con.Enabled)
-                        canBeEnabled = false;
-                    if (canBeEnabled)
-                        configControlCB.IsEnabled = true;
-                    if (configControlCB.IsEnabled)
-                        if (con.Checked)
-                            configControlCB.IsChecked = true;
-                    
-                    if (con.DownloadFlag)
-                    {
-                        configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Translations.getTranslatedString("updated"));
-                        con.DownloadFlag = true;
-                        if (con.Size > 0)
-                            configControlCB.Content = string.Format("{0} ({1})", configControlCB.Content, Utils.SizeSuffix(con.Size, 1, true));
-                    }
-                    
-                    //add the handlers at the end
-                    configControlCB.Checked += configControlCB_Click;
-                    configControlCB.Unchecked += configControlCB_Click;
-                    configControlCB.MouseDown += Generic_MouseDown;
-                    //add it to the mod config list
-                    System.Windows.Controls.TreeViewItem configControlTVI = new System.Windows.Controls.TreeViewItem();
-                    configControlTVI.IsExpanded = Settings.ExpandAllLegacy ? true : false;
-                    configControlTVI.Header = configControlCB;
-                    tvi.Items.Add(configControlTVI);
-                    //process the subconfigs
-                    if (con.Packages.Count > 0)
-                        AddConfigsOMCView(c, m, con.Packages, configControlTVI,parentForcedVisible,parentForcedEnabled, false, con);
-                }
-                else
-                {
-                    Logging.Manager(string.Format("WARNING: Unknown config type for {0}: {1}", con.Name, con.Type));
-                }
-
-            }
-        }
         //when a legacy mod checkbox is clicked
         void modCheckBoxL_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -1751,432 +1347,6 @@ namespace RelhaxModpack
                             tempCB.IsChecked = false;
                         }
                     }
-                }
-            }
-        }
-
-        //adds a mod m to a tabpage t
-        private void AddModDefaultView(SelectablePackage m, TabPage t, Category catagory)
-        {
-            //if forceVisible, show it anyway
-            if (!m.Visible && !Program.forceVisible)
-                return;
-            int newPanelCount = t.Controls.Count + 1;
-            bool parentForcedEnabled = false;
-            bool parentForcedVisible = false;
-            //write if the mod is forced to be enabled or visible
-            if (!m.Visible && Program.forceVisible)
-            {
-                parentForcedVisible = true;
-                m.Name = m.Name + " [forcedVisible]";
-            }
-            if (!m.Enabled && Program.forceEnabled)
-            {
-                parentForcedEnabled = true;
-                m.Name = m.Name + " [forcedEnabled]";
-            }
-            //force the mod to be enabled at this point (if command line arguement)
-            if (Program.forceEnabled)
-                m.Enabled = true;
-            //make the mod check box
-            ModFormCheckBox modCheckBox = new ModFormCheckBox() {
-                AutoSize = true,
-                Location = new Point(3, 3),
-                Size = new Size(49, 15),
-                TabIndex = 1,
-                Text = Utils.ReplaceMacro(m),
-                catagory = catagory,
-                mod = m,
-                UseVisualStyleBackColor = true,
-                Enabled = m.Enabled,
-                Checked = m.Checked,
-            };
-            modCheckBox.MouseDown += Generic_MouseDown;
-            //add the ToolTip description to the checkbox
-            string dateFormat = m.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(m.Timestamp);
-            string tooltipString = m.Description.Equals("") ? NoDescriptionAvailable : m.Description + (m.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
-            DescriptionToolTip.SetToolTip(modCheckBox, tooltipString);
-            //link the mod components to the UI
-            m.TabIndex = t;
-            m.TopParentUIComponent = modCheckBox;
-            m.ParentCategory = catagory;
-            //add it to the search list
-            CompleteModSearchList.Add(m);
-            //the mod checksum logic
-            
-            if (m.DownloadFlag)
-            {
-                modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Translations.getTranslatedString("updated"));
-                if ((m.Size > 0))
-                    modCheckBox.Text = string.Format("{0} ({1})", modCheckBox.Text, Utils.SizeSuffix(m.Size, 1, true));
-            }
-                
-            //in theory it should trigger the handler for checked
-            //when initially made it should be false, if Enabled from
-            //from user configs
-            //make the main panel
-            Panel mainPanel = new Panel()
-            {
-                BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
-                TabIndex = 0,
-                AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowOnly,
-                Size = new Size(t.Size.Width - 25, 20)
-            };
-            mainPanel.MouseDown += DisabledComponent_MouseDown;
-            if (m.Enabled && m.Checked && !Settings.DisableColorChange)
-                mainPanel.BackColor = Color.BlanchedAlmond;
-            else
-                mainPanel.BackColor = Settings.getBackColor();
-            int panelCountYLocation = 70 * (newPanelCount - 1);
-            //if this is not the first mod being added to the panel
-            int panelYLocation = 6; //tab plus delimiter
-            if (newPanelCount > 1)
-            {
-                //create a list of other controlls and put this one 6 pixels below the others
-                foreach (Control c in t.Controls)
-                {
-                    panelYLocation += c.Size.Height;
-                    panelYLocation += 6;
-                }
-                panelCountYLocation = (newPanelCount - 1) * (t.Controls[0].Size.Height);
-                panelCountYLocation = panelCountYLocation + 5;
-            }
-            mainPanel.Location = new Point(5, panelYLocation);
-            //add to main panel
-            mainPanel.Controls.Add(modCheckBox);
-            //processes the subconfigs here
-            if (m.Packages.Count > 0)
-                AddConfigsDefaultView(t, m, catagory, modCheckBox, mainPanel, true, m.Packages, mainPanel, parentForcedVisible,parentForcedEnabled);
-            //add to tab
-            t.Controls.Add(mainPanel);
-            //add the event handler before changing the checked state so the event
-            //event handler is #triggered
-            modCheckBox.CheckedChanged += new EventHandler(modCheckBox_CheckedChanged);
-        }
-
-        private void AddConfigsDefaultView(TabPage t, SelectablePackage m, Category catagory, ModFormCheckBox modCheckBox, Panel mainPanel, bool parentIsMod, List<SelectablePackage> configs,
-            Panel topPanal, bool parentForcedVisible, bool parentForcedEnabled, SelectablePackage parentConfig = null)
-        {
-            //make config panel
-            Panel configPanel = new Panel()
-            {
-                Enabled = true,
-                BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
-                Location = new System.Drawing.Point(3, 10),
-                AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowOnly,
-                Size = new Size(t.Size.Width - 35, 30),
-            };
-            configPanel.MouseDown += DisabledComponent_MouseDown;
-            if (parentIsMod)
-            {
-                if (m.Enabled && m.Checked && !Settings.DisableColorChange)
-                    configPanel.BackColor = Color.BlanchedAlmond;
-                else
-                    configPanel.BackColor = Settings.getBackColor();
-            }
-            else
-            {
-                if (parentConfig.Enabled && parentConfig.Checked && !Settings.DisableColorChange)
-                    configPanel.BackColor = Color.BlanchedAlmond;
-                else
-                    configPanel.BackColor = Settings.getBackColor();
-            }
-            int spacer = modCheckBox.Location.Y + modCheckBox.Size.Height + 5;
-            switch (Settings.FontSizeforum)
-            {
-                //TODO do i actualyl need this??
-                case Settings.FontSize.Font100:
-                    break;
-                case Settings.FontSize.Font125:
-                    spacer += 2;
-                    break;
-                case Settings.FontSize.Font175:
-                    spacer += 4;
-                    break;
-                case Settings.FontSize.Font225:
-                    spacer += 6;
-                    break;
-                case Settings.FontSize.Font275:
-                    spacer += 8;
-                    break;
-            }
-            if (parentIsMod)
-            {
-                configPanel.Location = new Point(configPanel.Location.X + 10, spacer);
-            }
-            else
-            {
-                configPanel.Location = new Point(configPanel.Location.X + 10, getYLocation(mainPanel.Controls));
-            }
-            mainPanel.Controls.Add(configPanel);
-            ConfigFormComboBox configControlDD = null;
-            ConfigFormComboBox configControlDD2 = null;
-            foreach (SelectablePackage con in configs)
-            {
-                //if forceVisible, show it anyway
-                if (!con.Visible && !Program.forceVisible)
-                    continue;
-                //write if the mod is forced to be enabled or visible
-                if ((!con.Visible || parentForcedVisible) && Program.forceVisible)
-                {
-                    parentForcedVisible = true;
-                    con.Name = con.Name + " [forcedVisible]";
-                }
-                if ((!con.Enabled || parentForcedEnabled) && Program.forceEnabled)
-                {
-                    parentForcedEnabled = true;
-                    con.Name = con.Name + " [forcedEnabled]";
-                }
-                //force the config to be enabled at this point (if command line arguement)
-                if (Program.forceEnabled)
-                    con.Enabled = true;
-                ConfigFormComboBox configControlDDALL = null;
-                con.TopParent = m;
-                if (parentIsMod)
-                {
-                    con.Parent = m;
-                    CompleteModSearchList.Add(con);
-                }
-                else
-                {
-                    con.Parent = parentConfig;
-                }
-                if (con.Type.Equals("single") || con.Type.Equals("single1"))
-                {
-                    //make default radioButton
-                    ConfigFormRadioButton configControlRB = new ConfigFormRadioButton()
-                    {
-                        AutoSize = true,
-                        Location = new Point(6, getYLocation(configPanel.Controls)),
-                        Size = new Size(150, 15),
-                        catagory = catagory,
-                        mod = m,
-                        config = con,
-                        Enabled = false,
-                        Checked = false,
-                        UseVisualStyleBackColor = true
-                    };
-                    //add handlers
-                    configControlRB.CheckedChanged += configControlRB_CheckedChanged;
-                    configControlRB.MouseDown += Generic_MouseDown;
-                    //add the ToolTip description to the checkbox
-                    string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
-                    string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + (con.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
-                    DescriptionToolTip.SetToolTip(configControlRB, tooltipString);
-                    //link the UI to the package
-                    con.UIComponent = configControlRB;
-                    //logic for determining if it can be Enabled
-                    //get all levels up to the mod, then deal with the mod
-                    bool canBeEnabled = true;
-                    //check all parent configs, if any
-#error this will no longer work like above
-                    if (con.Parent is SelectablePackage parentConfig2)
-                    {
-                        while (parentConfig2 is SelectablePackage)
-                        {
-                            if (!parentConfig2.Enabled)
-                                canBeEnabled = false;
-                            if (parentConfig2.Parent is SelectablePackage)
-                                break;
-                            parentConfig2 = (SelectablePackage)parentConfig2.Parent;
-                        }
-                    }
-                    //check the parent mod
-                    if (!con.TopParent.Enabled)
-                        canBeEnabled = false;
-                    //check itself (before it reks itself)
-                    if (!con.Enabled)
-                        canBeEnabled = false;
-                    if (canBeEnabled)
-                        configControlRB.Enabled = true;
-                    if (configControlRB.Enabled)
-                        if (con.Checked)
-                            configControlRB.Checked = true;
-                    configControlRB.Text = Utils.ReplaceMacro(con);
-                    //run checksum logic
-                    
-                    if (con.DownloadFlag)
-                    {
-                        configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Translations.getTranslatedString("updated"));
-                        if (con.Size > 0)
-                            configControlRB.Text = string.Format("{0} ({1})", configControlRB.Text, Utils.SizeSuffix(con.Size, 1, true));
-                    }
-                        
-                    //add the config to the form
-                    configPanel.Controls.Add(configControlRB);
-                    //process the subconfigs
-                    if (con.Packages.Count > 0)
-                        AddConfigsDefaultView(t, m, catagory, modCheckBox, configPanel, false, con.Packages, topPanal, parentForcedVisible,parentForcedEnabled, con);
-                }
-                else if (con.Type.Equals("single_dropdown") || con.Type.Equals("single_dropdown1") || con.Type.Equals("single_dropdown2"))
-                {
-                    //set the all one to the version is actually is
-                    if (con.Type.Equals("single_dropdown") || con.Type.Equals("single_dropdown1"))
-                    {
-                        //create it if it's null
-                        if (configControlDD == null)
-                        {
-                            double scaledWidth = 225 * DPISCALE;
-                            configControlDD = new ConfigFormComboBox()
-                            {
-                                AutoSize = true,
-                                Location = new Point(0, 0),
-                                Size = new Size((int)scaledWidth, 15),
-                                Enabled = false,
-                                DropDownStyle = ComboBoxStyle.DropDownList
-                            };
-                            configControlDD.SelectedIndexChanged += configControlDD_SelectedIndexChanged;
-                            //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
-                            configControlDD.MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
-                            configControlDD.MouseDown += Generic_MouseDown;
-                        }
-                        configControlDDALL = configControlDD;
-                        con.UIComponent = configControlDD;
-                    }
-                    else if (con.Type.Equals("single_dropdown2"))
-                    {
-                        //create it if it's null
-                        if (configControlDD2 == null)
-                        {
-                            double scaledWidth = 225 * DPISCALE;
-                            configControlDD2 = new ConfigFormComboBox()
-                            {
-                                AutoSize = true,
-                                Location = new Point(0, 0),
-                                Size = new Size((int)scaledWidth, 15),
-                                Enabled = false,
-                                DropDownStyle = ComboBoxStyle.DropDownList
-                            };
-                            configControlDD2.SelectedIndexChanged += configControlDD_SelectedIndexChanged;
-                            //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
-                            configControlDD2.MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
-                            configControlDD2.MouseDown += Generic_MouseDown;
-                        }
-                        configControlDDALL = configControlDD2;
-                        con.UIComponent = configControlDD2;
-                    }
-                    
-                    //make a dropDown selection box
-                    if (configControlDDALL.Location.X == 0 && configControlDDALL.Location.Y == 0)
-                    {
-                        //init the box, including adding the label
-                        configControlDDALL.Location = new Point(6, getYLocation(configPanel.Controls));
-                        configPanel.Controls.Add(configControlDDALL);
-                    }
-                    ComboBoxItem cbi = null;
-                    string toAdd = Utils.ReplaceMacro(con);
-                    //run the checksum locics
-                    
-                    if (con.DownloadFlag)
-                    {
-                        toAdd = string.Format("{0} ({1})", toAdd, Translations.getTranslatedString("updated"));
-                        if (con.Size > 0)
-                            toAdd = string.Format("{0} ({1})", toAdd, Utils.SizeSuffix(con.Size, 1, true));
-                    }
-                    
-                    //add it
-                    if (con.Enabled)
-                    {
-                        cbi = new ComboBoxItem(con, toAdd);
-                        configControlDDALL.Items.Add(cbi);
-                        if (con.Checked)
-                        {
-                            configControlDDALL.SelectedItem = cbi;
-                            configControlDDALL.Enabled = true;
-                            //set the tooltip to the checked option
-                            string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
-                            string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + (con.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
-                            DescriptionToolTip.SetToolTip(configControlDDALL, tooltipString);
-                        }
-                    }
-                    if (configControlDDALL.Items.Count > 0)
-                    {
-                        configControlDDALL.Enabled = true;
-                        if (configControlDDALL.SelectedIndex == -1)
-                        {
-                            configControlDDALL.SelectedIndex = 0;
-                            //set the tooltip since nothing has been selected
-                            ComboBoxItem cbiTT = (ComboBoxItem)configControlDDALL.Items[0];
-                            string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
-                            string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + (con.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
-                            DescriptionToolTip.SetToolTip(configControlDDALL, tooltipString);
-                        }
-                    }
-                }
-                else if (con.Type.Equals("multi"))
-                {
-                    //make a checkBox
-                    ConfigFormCheckBox configControlCB = new ConfigFormCheckBox()
-                    {
-                        AutoSize = true,
-                        Location = new Point(6, getYLocation(configPanel.Controls)),
-                        Size = new Size(150, 15),
-                        //Font = Settings.AppFont,
-                        catagory = catagory,
-                        mod = m,
-                        config = con,
-                        Enabled = false,
-                        Checked = false,
-                        UseVisualStyleBackColor = true
-                    };
-                    //add the ToolTip description to the checkbox
-                    string dateFormat = con.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(con.Timestamp);
-                    string tooltipString = con.Description.Equals("") ? NoDescriptionAvailable : con.Description + (con.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
-                    DescriptionToolTip.SetToolTip(configControlCB, tooltipString);
-                    //link the Ui to the config
-                    con.UIComponent = configControlCB;
-                    //add handlers
-                    configControlCB.CheckedChanged += configControlCB_CheckedChanged;
-                    configControlCB.MouseDown += Generic_MouseDown;
-                    //logic for determining if it can be Enabled
-                    //get all levels up to the mod, then deal with the mod
-                    bool canBeEnabled = true;
-                    //check all parent configs, if any
-#error will not work anymore
-                    if (con.Parent is SelectablePackage parentConfig2)
-                    {
-                        while (parentConfig2 is SelectablePackage)
-                        {
-                            if (!parentConfig2.Enabled)
-                                canBeEnabled = false;
-                            if (parentConfig2.Parent is SelectablePackage)
-                                break;
-                            parentConfig2 = (SelectablePackage)parentConfig2.Parent;
-                        }
-                    }
-                    //check the parent mod
-                    if (!con.TopParent.Enabled)
-                        canBeEnabled = false;
-                    //check itself (before it reks itself)
-                    if (!con.Enabled)
-                        canBeEnabled = false;
-                    if (canBeEnabled)
-                        configControlCB.Enabled = true;
-                    if (configControlCB.Enabled)
-                        if (con.Checked)
-                            configControlCB.Checked = true;
-                    
-                    //checksum logic
-                    configControlCB.Text = Utils.ReplaceMacro(con);
-                    
-                    if (con.DownloadFlag)
-                    {
-                        configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Translations.getTranslatedString("updated"));
-                        if (con.Size > 0)
-                            configControlCB.Text = string.Format("{0} ({1})", configControlCB.Text, Utils.SizeSuffix(con.Size, 1, true));
-                    }
-                    
-                    //add config to the form
-                    configPanel.Controls.Add(configControlCB);
-                    //process subconfigs
-                    if (con.Packages.Count > 0)
-                        AddConfigsDefaultView(t, m, catagory, modCheckBox, configPanel, false, con.Packages, topPanal, parentForcedVisible, parentForcedEnabled, con);
-                }
-                else
-                {
-                    Logging.Manager(string.Format("WARNING: Unknown config type for {0}: {1}", con.Name, con.Type));
                 }
             }
         }

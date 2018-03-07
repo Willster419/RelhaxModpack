@@ -77,8 +77,9 @@ namespace RelhaxModpack
         public RelhaxWPFComboBox[] RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
         //the TreeViewItem for WPF
         public System.Windows.Controls.TreeViewItem @TreeViewItem = new System.Windows.Controls.TreeViewItem();
-        //the panels for default view
-        public Panel @Panel = null;
+        //the panel that this package sits in
+        public Panel ParentPanel = null;
+        public Panel ChildPanel = null;
         //the list of cache files that should be backed up before wiping the directory
         public List<string> UserFiles = new List<string>();
         //the list of SelectablePackage entries within this instance of SelectablePackages
