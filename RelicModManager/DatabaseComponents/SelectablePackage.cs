@@ -71,7 +71,7 @@ namespace RelhaxModpack
             }
         }
         //keeping track of the level in the tree where it is. 0 is topmost level
-        public int Level = -1;
+        public int Level = -2;
         //the list of all dropDown options for each package type
         public RelhaxFormComboBox[] RelhaxFormComboBoxList = new RelhaxFormComboBox[2];
         public RelhaxWPFComboBox[] RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];

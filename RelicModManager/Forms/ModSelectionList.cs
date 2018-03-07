@@ -285,25 +285,80 @@ namespace RelhaxModpack
                 //matched the catagory to tab
                 //add to the ui every mod of that catagory
                 Utils.SortModsList(c.Packages);
-                
-                LegacySelectionList lsl = null;
-                if (Settings.SView == Settings.SelectionView.Legacy)
+                //make the holder for the entire category list
+                c.CategoryHeader = new SelectablePackage()
                 {
-                    //create the WPF host for this tabPage
-                    lsl = new LegacySelectionList();
-                    ElementHost host = new ElementHost()
-                    {
-                        Location = new Point(5, 5),
-                        Size = new Size(t.Size.Width - 5 - 5, t.Size.Height - 5 - 5),
-                        BackColorTransparent = false,
-                        BackColor = Color.White,
-                        Child = lsl,
-                        Dock = DockStyle.Fill
-                    };
-                    //apparently there is an item in there. clear it.
-                    lsl.legacyTreeView.Items.Clear();
-                    lsl.MouseDown += Lsl_MouseDown;
-                    t.Controls.Add(host);
+                    Name = "---------[" + c.Name + "]---------",
+                    TabIndex = c.TabPage,
+                    ParentCategory = c,
+                    Type = "multi",
+                    Visible = true,
+                    Enabled = true,
+                    Level = -1,//because it's technically the category
+                    PackageName = "Category_" + c.Name.Replace(' ', '_') + "_header"
+                };
+                c.CategoryHeader.Parent = c.CategoryHeader;
+                c.CategoryHeader.TopParent = c.CategoryHeader;
+                LegacySelectionList lsl = null;
+                switch(Settings.SView)
+                {
+                    case Settings.SelectionView.Default:
+                        RelhaxFormCheckBox cb = new RelhaxFormCheckBox()
+                        {
+                            Package = c.CategoryHeader,
+                            Text = c.CategoryHeader.NameFormatted,
+                            AutoSize = true,
+                            AutoCheck = false
+                        };
+                        c.CategoryHeader.UIComponent = cb;
+                        c.CategoryHeader.ParentUIComponent = cb;
+                        c.CategoryHeader.TopParentUIComponent = cb;
+                        c.CategoryHeader.Packages = c.Packages;
+                        c.CategoryHeader.ParentPanel = new Panel()
+                        {
+                            BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
+                            //autosize is true by default...?
+                            Size = new Size(c.TabPage.Size.Width - 25, 60),
+                            Location = new Point(5, GetYLocation(c.TabPage.Controls)),
+                            AutoSize = true,
+                            AutoSizeMode = AutoSizeMode.GrowOnly
+                        };
+                        c.CategoryHeader.ParentPanel.Controls.Add(cb);
+                        c.TabPage.Controls.Add(c.CategoryHeader.ParentPanel);
+                        cb.Click += OnMultiPackageClick;
+                        break;
+                    case Settings.SelectionView.Legacy:
+                        //create the WPF host for this tabPage
+                        lsl = new LegacySelectionList();
+                        ElementHost host = new ElementHost()
+                        {
+                            Location = new Point(5, 5),
+                            Size = new Size(t.Size.Width - 5 - 5, t.Size.Height - 5 - 5),
+                            BackColorTransparent = false,
+                            BackColor = Color.White,
+                            Child = lsl,
+                            Dock = DockStyle.Fill
+                        };
+                        //apparently there is an item in there. clear it.
+                        lsl.legacyTreeView.Items.Clear();
+                        lsl.MouseDown += Lsl_MouseDown;
+                        t.Controls.Add(host);
+                        RelhaxWPFCheckBox cb2 = new RelhaxWPFCheckBox()
+                        {
+                            Package = c.CategoryHeader,
+                            Content = c.CategoryHeader.NameFormatted
+                        };
+                        c.CategoryHeader.UIComponent = cb2;
+                        c.CategoryHeader.ParentUIComponent = cb2;
+                        c.CategoryHeader.TopParentUIComponent = cb2;
+                        c.CategoryHeader.Packages = c.Packages;
+                        if (Settings.DarkUI)
+                            lsl.legacyTreeView.Background = System.Windows.Media.Brushes.Gray;
+                        c.CategoryHeader.TreeViewItem.Header = c.CategoryHeader.UIComponent;
+                        c.CategoryHeader.TreeViewItem.IsExpanded = Settings.ExpandAllLegacy ? true : false;
+                        lsl.legacyTreeView.Items.Add(c.CategoryHeader.TreeViewItem);
+                        cb2.Click += OnWPFComponentCheck;
+                        break;
                 }
                 modTabGroups.TabPages.Add(t);
             }
@@ -344,11 +399,10 @@ namespace RelhaxModpack
                     switch (Settings.SView)
                     {
                         case Settings.SelectionView.Default:
-                            AddPackage(m, c, null, null);
+                            AddPackage(m, c, c.CategoryHeader);
                             break;
                         case Settings.SelectionView.Legacy:
-                            ElementHost h = (ElementHost)c.TabPage.Controls[0];
-                            AddPackage(m, c, null, (LegacySelectionList)h.Child);
+                            AddPackage(m, c, c.CategoryHeader);
                             break;
                     }
                 }
@@ -487,22 +541,14 @@ namespace RelhaxModpack
             }
         }
         //new method for adding mods with the same code
-        private void AddPackage(SelectablePackage sp, Category c, SelectablePackage parent, LegacySelectionList lsl)
+        private void AddPackage(SelectablePackage sp, Category c, SelectablePackage parent)
         {
             //if set to show all mods at comamnd line, show them
             if (!Program.forceVisible && !sp.Visible)
                 return;
             //setup the refrences
-            if(sp.Level == 0)
-            {
-                sp.TopParent = sp;
-                sp.Parent = sp;
-            }
-            else
-            {
-                sp.Parent = parent;
-                sp.TopParent = parent.TopParent;
-            }
+            sp.Parent = parent;
+            sp.TopParent = c.CategoryHeader;
             string packageDisplayName = sp.NameFormatted;
             //write if the package is forced to be visible and/or enabled
             if(Program.forceVisible)
@@ -527,64 +573,48 @@ namespace RelhaxModpack
                 CompleteModSearchList.Add(sp);
             //write if the package needs to be downloaded
             //if the CRC's don't match and the package actually has a zip file
-            if (sp.DownloadFlag)
+            string dateFormat = "";
+            string tooltipString = "";
+            if (sp.Level >=0)
             {
-                packageDisplayName = string.Format("{0} ({1})", packageDisplayName, Translations.getTranslatedString("updated"));
-                if ((sp.Size > 0))
-                    packageDisplayName = string.Format("{0} ({1})", packageDisplayName, Utils.SizeSuffix(sp.Size, 1, true));
+                if (sp.DownloadFlag)
+                {
+                    packageDisplayName = string.Format("{0} ({1})", packageDisplayName, Translations.getTranslatedString("updated"));
+                    if ((sp.Size > 0))
+                        packageDisplayName = string.Format("{0} ({1})", packageDisplayName, Utils.SizeSuffix(sp.Size, 1, true));
+                }
+                dateFormat = sp.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(sp.Timestamp);
+                tooltipString = sp.Description.Equals("") ? NoDescriptionAvailable : sp.Description + (sp.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
             }
-            string dateFormat = sp.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(sp.Timestamp);
-            string tooltipString = sp.Description.Equals("") ? NoDescriptionAvailable : sp.Description + (sp.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
             //determine if the mod can be enabled or not, reguardless if the package is enabled or not
+            //start at level -1 that can be enabled
             bool canBeEnabled = true;
             SelectablePackage temp = sp;
-            while(temp.Level > 0)
+            while(temp.Level >= 0)
             {
                 if (!temp.Enabled)
                     canBeEnabled = false;
                 temp = temp.Parent;
             }
-            if (!temp.Enabled)
-                canBeEnabled = false;
             //special code for each type of view
             switch (Settings.SView)
             {
                 case Settings.SelectionView.Default:
-                    //int newPanelCount = c.TabPage.Controls.Count + 1;
                     //start code for dealing with panels
-                    if (sp.Level == 0)
+                    if (sp.Parent.ChildPanel == null)
                     {
-                        if (sp.ParentPanel == null)
+                        sp.Parent.ChildPanel = new Panel()
                         {
-                            sp.ParentPanel = new Panel()
-                            {
-                                BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
-                                //autosize is true by default...?
-                                Size = new Size(c.TabPage.Size.Width - 25, 20),
-                                Location = new Point(5, GetYLocation(c.TabPage.Controls)),
-                                AutoSize = true,
-                                AutoSizeMode = AutoSizeMode.GrowOnly
-                            };
-                            sp.ParentPanel.MouseDown += DisabledComponent_MouseDown;
-                            sp.ParentCategory.TabPage.Controls.Add(sp.ParentPanel);
-                        }
+                            BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
+                            Size = new Size(c.TabPage.Size.Width - 35, 30),
+                            AutoSize = true,
+                            AutoSizeMode = AutoSizeMode.GrowOnly
+                        };
+                        sp.Parent.ChildPanel.Location = new Point(13, GetYLocation(sp.Parent.ParentPanel.Controls));
+                        sp.Parent.ChildPanel.MouseDown += DisabledComponent_MouseDown;
+                        sp.Parent.ParentPanel.Controls.Add(sp.Parent.ChildPanel);
                     }
-                    else if (sp.Level > 0)
-                    {
-                        sp.ParentPanel = sp.Parent.ChildPanel;
-                        if (sp.ParentPanel == null)
-                        {
-                            sp.ParentPanel = new Panel()
-                            {
-                                BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
-                                Size = new Size(c.TabPage.Size.Width - 35, 30),
-                                Location = new Point(13, GetYLocation(sp.ParentPanel.Controls)),
-                                AutoSize = true,
-                                AutoSizeMode = AutoSizeMode.GrowOnly
-                            };
-                            sp.ParentPanel.MouseDown += DisabledComponent_MouseDown;
-                        }
-                    }
+                    sp.ParentPanel = sp.Parent.ChildPanel;
                     //end code for dealing with panels
                     switch (sp.Type)
                     {
@@ -723,8 +753,6 @@ namespace RelhaxModpack
                     //end code for handlers tooltips and attaching
                     break;
                 case Settings.SelectionView.Legacy:
-                    if (Settings.DarkUI)
-                        lsl.legacyTreeView.Background = System.Windows.Media.Brushes.Gray;
                     //in WPF underscores are only displayed when there's two of them
                     packageDisplayName = packageDisplayName.Replace(@"_", @"__");
                     switch(sp.Type)
@@ -743,12 +771,6 @@ namespace RelhaxModpack
                                 IsEnabled = canBeEnabled,
                                 IsChecked = (canBeEnabled && sp.Checked) ? true : false
                             };
-                            if (sp.Level > 0)
-                            {
-                                sp.TreeViewItem.Header = sp.UIComponent;
-                                sp.TreeViewItem.IsExpanded = Settings.ExpandAllLegacy ? true : false;
-                                sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
-                            }
                             break;
                         case "single_dropdown":
                         case "single_dropdown1":
@@ -838,12 +860,6 @@ namespace RelhaxModpack
                                 IsEnabled = canBeEnabled,
                                 IsChecked = (canBeEnabled && sp.Checked) ? true : false,
                             };
-                            if(sp.Level > 0)
-                            {
-                                sp.TreeViewItem.Header = sp.UIComponent;
-                                sp.TreeViewItem.IsExpanded = Settings.ExpandAllLegacy ? true : false;
-                                sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
-                            }
                             break;
                     }
                     //set the font size
@@ -869,24 +885,26 @@ namespace RelhaxModpack
                         {
                             //ADD CHECKED HEADERS HERE
                             rb.Click += OnWPFComponentCheck;
+                            sp.TreeViewItem.Header = sp.UIComponent;
+                            sp.TreeViewItem.IsExpanded = Settings.ExpandAllLegacy ? true : false;
+                            sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
                         }
                         else if(sp.UIComponent is System.Windows.Controls.CheckBox cb)
                         {
                             //AND HERE
                             cb.Click += OnWPFComponentCheck;
+                            sp.TreeViewItem.Header = sp.UIComponent;
+                            sp.TreeViewItem.IsExpanded = Settings.ExpandAllLegacy ? true : false;
+                            sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
                         }
                     }
                     //make the root tree view item for the package and set it with the UI component
-                    if(sp.Level == 0)
-                    {
-                        sp.TreeViewItem.Header = sp.UIComponent;
-                        sp.TreeViewItem.IsExpanded = Settings.ExpandAllLegacy ? true : false;
-                        lsl.legacyTreeView.Items.Add(sp.TreeViewItem);
-                    }
+                    
                     break;
             }
             if(sp.Packages.Count > 0)
             {
+                /*
                 if(Settings.SView == Settings.SelectionView.Default && sp.ChildPanel == null)
                 {
                     sp.ChildPanel = new Panel()
@@ -900,9 +918,10 @@ namespace RelhaxModpack
                     sp.ChildPanel.MouseDown += DisabledComponent_MouseDown;
                     sp.ParentPanel.Controls.Add(sp.ChildPanel);
                 }
+                */
                 foreach(SelectablePackage sp2 in sp.Packages)
                 {
-                    AddPackage(sp2, c, sp, lsl);
+                    AddPackage(sp2, c, sp);
                 }
             }
         }

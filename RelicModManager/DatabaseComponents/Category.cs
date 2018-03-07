@@ -12,6 +12,8 @@ namespace RelhaxModpack
         public int InstallGroup = 0;
         //the TabPage refrence for the UI
         public TabPage @TabPage = null;
+        //the holder for all packages of a catagory
+        public SelectablePackage CategoryHeader = null;
         public List<SelectablePackage> Packages = new List<SelectablePackage>();
         //list of dependencies required if anything is
         //selected from this catagory
