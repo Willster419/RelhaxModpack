@@ -153,7 +153,7 @@ namespace RelhaxModpack
                     MessageBox.Show(string.Format(Translations.getTranslatedString("testModeDatabaseNotFound"), databaseURL));
                     Application.Exit();
                 }
-                Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseURL, "//modInfoAlpha.xml/@onlineFolder");
+                Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseURL, "//modInfo.xml/@onlineFolder");
             }
             else if (Program.betaDatabase)
             {
@@ -162,7 +162,7 @@ namespace RelhaxModpack
                 XDocument doc = XDocument.Parse(xmlString);
                 //parse the database version
                 databaseURL = doc.XPathSelectElement("//version/database_beta_url").Value;
-                Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseURL, "//modInfoAlpha.xml/@onlineFolder");
+                Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseURL, "//modInfo.xml/@onlineFolder");
                 string localDest = Path.Combine(Application.StartupPath, "RelHaxTemp", "modInfo_beta.xml");
                 //always delete the file before redownloading
                 if (File.Exists(localDest))
