@@ -32,6 +32,7 @@ namespace RelhaxModpack
         public int MainWindowStartY { get; set; }
         bool FirstLoad = true;
         bool IgnoreSelections = true;
+        bool IgnoreSearchBoxFocus = false;
         private string NoDescriptionAvailable = Translations.getTranslatedString("noDescription");
         private string LastUpdated = Translations.getTranslatedString("lastUpdated");
         private string Md5DatabaseFile = "";
@@ -956,7 +957,7 @@ namespace RelhaxModpack
         //when a single/single1 mod is selected
         void OnSinglePackageClick(object sender, EventArgs e)
         {
-            if (LoadingConfig)
+            if (LoadingConfig || IgnoreSearchBoxFocus)
                 return;
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = ipc.Package;
@@ -984,7 +985,7 @@ namespace RelhaxModpack
         //when a single_dropdown mod is selected
         void OnSingleDDPackageClick(object sender, EventArgs e)
         {
-            if (LoadingConfig)
+            if (LoadingConfig || IgnoreSearchBoxFocus)
                 return;
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = null;
@@ -1020,7 +1021,7 @@ namespace RelhaxModpack
         //when a multi mod is selected
         void OnMultiPackageClick(object sender, EventArgs e)
         {
-            if (LoadingConfig)
+            if (LoadingConfig || IgnoreSearchBoxFocus)
                 return;
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = ipc.Package;
@@ -1657,7 +1658,6 @@ namespace RelhaxModpack
 
         private void searchCB_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            /*
             ComboBox sendah = (ComboBox)sender;
             if (sendah.SelectedIndex == -1 || IgnoreSelections)
             {
@@ -1665,74 +1665,38 @@ namespace RelhaxModpack
             }
             if (Settings.SView == Settings.SelectionView.Default)
             {
-#error will not work anymore
-                if (sendah.SelectedItem is SelectablePackage)
+                if (sendah.SelectedItem is SelectablePackage c)
                 {
-                    SelectablePackage m = (SelectablePackage)sendah.SelectedItem;
-                    if (modTabGroups.TabPages.Contains(m.TabIndex))
-                    {
-                        modTabGroups.SelectedTab = m.TabIndex;
-                    }
-                    ModFormCheckBox c = (ModFormCheckBox)m.TopParentUIComponent;
-                    c.Focus();
-
-                }
-                else if (sendah.SelectedItem is SelectablePackage)
-                {
-                    SelectablePackage c = (SelectablePackage)sendah.SelectedItem;
                     if (modTabGroups.TabPages.Contains(c.TopParent.TabIndex))
                     {
                         modTabGroups.SelectedTab = c.TopParent.TabIndex;
                     }
-                    if (c.UIComponent is ConfigFormCheckBox)
+                    if (c.UIComponent is Control cont)
                     {
-                        ConfigFormCheckBox cb = (ConfigFormCheckBox)c.UIComponent;
-                        cb.Focus();
-                    }
-                    else if (c.UIComponent is ConfigFormComboBox)
-                    {
-                        ConfigFormComboBox cb = (ConfigFormComboBox)c.UIComponent;
-                        cb.Focus();
-                    }
-                    else if (c.UIComponent is ConfigFormRadioButton)
-                    {
-                        //this one is the problem
-                        ConfigFormRadioButton cb = (ConfigFormRadioButton)c.UIComponent;
-                        cb.CheckedChanged -= configControlRB_CheckedChanged;
-                        bool realChecked = cb.Checked;
-                        cb.Focus();
-                        cb.Checked = realChecked;
-                        cb.CheckedChanged += configControlRB_CheckedChanged;
+                        IgnoreSearchBoxFocus = true;
+                        cont.Focus();
+                        IgnoreSearchBoxFocus = false;
                     }
                 }
             }
             else if (Settings.SView == Settings.SelectionView.Legacy)
             {
-#error will not work
-                if (sendah.SelectedItem is SelectablePackage)
+                if (sendah.SelectedItem is SelectablePackage m)
                 {
-                    SelectablePackage m = (SelectablePackage)sendah.SelectedItem;
                     if (modTabGroups.TabPages.Contains(m.TabIndex))
                     {
                         modTabGroups.SelectedTab = m.TabIndex;
                     }
-                    ModWPFCheckBox c = (ModWPFCheckBox)m.TopParentUIComponent;
-                    c.Focus();
-                    this.ModSelectionList_SizeChanged(null, null);
-                }
-                else if (sendah.SelectedItem is SelectablePackage)
-                {
-                    SelectablePackage c = (SelectablePackage)sendah.SelectedItem;
-                    if (modTabGroups.TabPages.Contains(c.TopParent.TabIndex))
+                    if(m.UIComponent is System.Windows.Controls.Control c)
                     {
-                        modTabGroups.SelectedTab = c.TopParent.TabIndex;
+                        IgnoreSearchBoxFocus = true;
+                        c.Focus();
+                        IgnoreSearchBoxFocus = false;
                     }
-                    System.Windows.Controls.Control con = (System.Windows.Controls.Control)c.UIComponent;
-                    con.Focus();
-                    this.ModSelectionList_SizeChanged(null, null);
+                    
+                    //this.ModSelectionList_SizeChanged(null, null);
                 }
             }
-            */
         }
 
         private void searchCB_KeyDown(object sender, KeyEventArgs e)
