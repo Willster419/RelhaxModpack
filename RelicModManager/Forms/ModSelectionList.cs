@@ -649,6 +649,9 @@ namespace RelhaxModpack
                                 };
                                 //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
                                 sp.Parent.RelhaxFormComboBoxList[0].MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
+                                sp.Parent.RelhaxFormComboBoxList[0].MouseDown += Generic_MouseDown;
+                                sp.Parent.RelhaxFormComboBoxList[0].SelectedIndexChanged += OnSingleDDPackageClick;
+                                sp.Parent.RelhaxFormComboBoxList[0].handler = OnSingleDDPackageClick;
                             }
                             if(sp.Enabled)
                             {
@@ -688,6 +691,9 @@ namespace RelhaxModpack
                                 };
                                 //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
                                 sp.Parent.RelhaxFormComboBoxList[1].MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
+                                sp.Parent.RelhaxFormComboBoxList[1].MouseDown += Generic_MouseDown;
+                                sp.Parent.RelhaxFormComboBoxList[1].SelectedIndexChanged += OnSingleDDPackageClick;
+                                sp.Parent.RelhaxFormComboBoxList[1].handler = OnSingleDDPackageClick;
                             }
                             if (sp.Enabled)
                             {
@@ -799,6 +805,8 @@ namespace RelhaxModpack
                             {
                                 sp.Parent.RelhaxWPFComboBoxList[0].Name = "added";
                                 sp.Parent.RelhaxWPFComboBoxList[0].PreviewMouseRightButtonDown += Generic_MouseDown;
+                                sp.Parent.RelhaxWPFComboBoxList[0].SelectionChanged += OnSingleDDPackageClick;
+                                sp.Parent.RelhaxWPFComboBoxList[0].handler = OnSingleDDPackageClick;
                                 //ADD HANDLER HERE
                                 if (sp.Parent.RelhaxWPFComboBoxList[0].Items.Count > 0)
                                 {
@@ -836,6 +844,8 @@ namespace RelhaxModpack
                             {
                                 sp.Parent.RelhaxWPFComboBoxList[1].Name = "added";
                                 sp.Parent.RelhaxWPFComboBoxList[1].PreviewMouseRightButtonDown += Generic_MouseDown;
+                                sp.Parent.RelhaxWPFComboBoxList[1].SelectionChanged += OnSingleDDPackageClick;
+                                sp.Parent.RelhaxWPFComboBoxList[1].handler = OnSingleDDPackageClick;
                                 //ADD HANDLER HERE
                                 if (sp.Parent.RelhaxWPFComboBoxList[1].Items.Count > 0)
                                 {
@@ -883,7 +893,6 @@ namespace RelhaxModpack
                         cont2.MouseDown += Generic_MouseDown;
                         if(sp.UIComponent is System.Windows.Controls.RadioButton rb)
                         {
-                            //ADD CHECKED HEADERS HERE
                             rb.Click += OnWPFComponentCheck;
                             sp.TreeViewItem.Header = sp.UIComponent;
                             sp.TreeViewItem.IsExpanded = Settings.ExpandAllLegacy ? true : false;
@@ -891,7 +900,6 @@ namespace RelhaxModpack
                         }
                         else if(sp.UIComponent is System.Windows.Controls.CheckBox cb)
                         {
-                            //AND HERE
                             cb.Click += OnWPFComponentCheck;
                             sp.TreeViewItem.Header = sp.UIComponent;
                             sp.TreeViewItem.IsExpanded = Settings.ExpandAllLegacy ? true : false;
@@ -914,6 +922,8 @@ namespace RelhaxModpack
         //generic handler to disable the auto check like in forms, but for WPF
         void OnWPFComponentCheck(object sender, System.Windows.RoutedEventArgs e)
         {
+            if (LoadingConfig)
+                return;
             if(sender is RelhaxWPFCheckBox cb)
             {
                 if ((bool)cb.IsChecked)
@@ -935,6 +945,8 @@ namespace RelhaxModpack
         //when a single/single1 mod is selected
         void OnSinglePackageClick(object sender, EventArgs e)
         {
+            if (LoadingConfig)
+                return;
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = ipc.Package;
             if (!spc.Enabled || !spc.Parent.Enabled || !spc.TopParent.Enabled)
@@ -952,25 +964,53 @@ namespace RelhaxModpack
             }
             //check the acutal package
             spc.Checked = true;
-            //propagate up (down will be taken care of)
-            //up may go down, down won't go back up
-            PropagateUpChecked(spc);
-            PropagateDownChecked(spc);
+            //down
+            PropagateChecked(spc, false);
+            //up
+            PropagateChecked(spc, true);
         }
 
         //when a single_dropdown mod is selected
         void OnSingleDDPackageClick(object sender, EventArgs e)
         {
+            if (LoadingConfig)
+                return;
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
-            SelectablePackage spc = ipc.Package;
+            SelectablePackage spc = null;
+            if(ipc is RelhaxFormComboBox cb1)
+            {
+                ComboBoxItem cbi = (ComboBoxItem)cb1.SelectedItem;
+                spc = cbi.Package;
+            }
+            else if (ipc is RelhaxWPFComboBox cb2)
+            {
+                ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
+                spc = cbi.Package;
+            }
             if (!spc.Enabled || !spc.Parent.Enabled || !spc.TopParent.Enabled)
                 return;
-
+            foreach(SelectablePackage childPackage in spc.Parent.Packages)
+            {
+                if (childPackage.Equals(spc))
+                    continue;
+                //uncheck all packages of the same type
+                if(childPackage.Type.Equals(spc.Type))
+                {
+                    childPackage.Checked = false;
+                }
+            }
+            //verify selected is actually checked
+            if (!spc.Checked)
+                spc.Checked = true;
+            //dropdown packages only need to propagate up when selected...
+            PropagateChecked(spc, true);
         }
 
         //when a multi mod is selected
         void OnMultiPackageClick(object sender, EventArgs e)
         {
+            if (LoadingConfig)
+                return;
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = ipc.Package;
             if (!spc.Enabled || !spc.Parent.Enabled || !spc.TopParent.Enabled)
@@ -980,9 +1020,10 @@ namespace RelhaxModpack
             {
                 //check it and propagate change
                 spc.Checked = true;
-                //up the ndown
-                PropagateUpChecked(spc);
-                PropagateDownChecked(spc);
+                //down
+                PropagateChecked(spc,false);
+                //up
+                PropagateChecked(spc,true);
             }
             else if(spc.Checked)
             {
@@ -996,24 +1037,102 @@ namespace RelhaxModpack
 
         //propagates the change back up the selection tree
         //can be sent from any component
-        void PropagateUpChecked(SelectablePackage spc)
+        //true = up, false = down
+        void PropagateChecked(SelectablePackage spc, bool upDown)
         {
-            spc.Parent.Checked = true;
-            if (spc.Parent.Type.Equals("single") || spc.Parent.Type.Equals("single1"))
+            //the parent of the package we just checked
+            SelectablePackage parent = null;
+            if (upDown)
+                parent = spc.Parent;
+            else
+                parent = spc;
+            parent.Checked = true;
+            bool hasSingles = false;
+            bool singleSelected = false;
+            bool hasDD1 = false;
+            bool DD1Selected = false;
+            bool hasDD2 = false;
+            bool DD2Selected = false;
+            foreach (SelectablePackage childPackage in parent.Packages)
             {
-                foreach (SelectablePackage childPackage in spc.Parent.Parent.Packages)
+                if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
                 {
-                    if (childPackage.Equals(spc.Parent))
-                        continue;
+                    hasSingles = true;
+                    if (childPackage.Checked)
+                        singleSelected = true;
+                }
+                else if ((childPackage.Type.Equals("single_dropdown") || childPackage.Type.Equals("single_dropdown1")) && childPackage.Enabled)
+                {
+                    hasDD1 = true;
+                    if (childPackage.Checked)
+                        DD1Selected = true;
+                }
+                else if (childPackage.Type.Equals("single_dropdown2") && childPackage.Enabled)
+                {
+                    hasDD2 = true;
+                    if (childPackage.Checked)
+                        DD2Selected = true;
+                }
+            }
+            //if going up, will only ever see radiobuttons
+            if (upDown && (parent.Type.Equals("single") || parent.Type.Equals("single1")))
+            {
+                foreach (SelectablePackage childPackage in parent.Parent.Packages)
+                {
                     if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
                     {
-                        childPackage.Checked = false;
-                        PropagateDownNotChecked(childPackage);
+                        if (!childPackage.Equals(parent))
+                        {
+                            childPackage.Checked = false;
+                            PropagateDownNotChecked(childPackage);
+                        }
+                    }
+                }
+                singleSelected = true;
+            }
+            if (hasSingles && !singleSelected)
+            {
+                //select one
+                foreach(SelectablePackage childPackage in parent.Packages)
+                {
+                    if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                    {
+                        childPackage.Checked = true;
+                        PropagateChecked(childPackage,false);
+                        break;
+                        //PropagateDownChecked(childPackage);
                     }
                 }
             }
-            if (spc.Parent.Level >= 0)
-                PropagateUpChecked(spc.Parent);
+            if(hasDD1 && !DD1Selected)
+            {
+                //select one
+                foreach (SelectablePackage childPackage in parent.Packages)
+                {
+                    if ((childPackage.Type.Equals("single_dropdown") || childPackage.Type.Equals("single_dropdown1")) && childPackage.Enabled)
+                    {
+                        childPackage.Checked = true;
+                        break;
+                        //no need to propagate, dropdown has no children
+                    }
+                }
+            }
+            if(hasDD2 && !DD2Selected)
+            {
+                //select one
+                foreach (SelectablePackage childPackage in parent.Packages)
+                {
+                    if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                    {
+                        childPackage.Checked = true;
+                        break;
+                        //no need to propagate, dropdown has no children
+                    }
+                }
+            }
+            if(upDown)
+                if (spc.Parent.Level >= 0)
+                    PropagateChecked(parent,true);
         }
 
         //propagates the change back up the selection tree
@@ -1037,14 +1156,28 @@ namespace RelhaxModpack
         }
 
         //propagaetes the change down the selection tree
+        void PropagateDownNotChecked(SelectablePackage spc)
+        {
+            foreach(SelectablePackage childPackage in spc.Packages)
+            {
+                if (!childPackage.Enabled)
+                    continue;
+                childPackage.Checked = false;
+                if(childPackage.Packages.Count > 0)
+                    PropagateDownNotChecked(childPackage);
+            }
+        }
+
+        /*
+        //propagaetes the change down the selection tree
         void PropagateDownChecked(SelectablePackage spc)
         {
             bool singleSelected = false;
-            foreach(SelectablePackage childPackage in spc.Packages)
+            foreach (SelectablePackage childPackage in spc.Packages)
             {
-                if((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
                 {
-                    if(!singleSelected)
+                    if (!singleSelected)
                     {
                         childPackage.Checked = true;
                         singleSelected = true;
@@ -1056,467 +1189,11 @@ namespace RelhaxModpack
                     }
                 }
                 //TODO: dropdown options
-            }
-        }
 
-        //propagaetes the change down the selection tree
-        void PropagateDownNotChecked(SelectablePackage spc)
-        {
-            foreach(SelectablePackage childPackage in spc.Packages)
-            {
-                if (!childPackage.Enabled)
-                    continue;
-                childPackage.Checked = false;
-                //TODO: dropdown options
-                PropagateDownNotChecked(childPackage);
-            }
-        }
-
-        /*
-        //when a legacy mod checkbox is clicked
-        void modCheckBoxL_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (LoadingConfig)
-                return;
-            ModWPFCheckBox cb = (ModWPFCheckBox)sender;
-            SelectablePackage m = cb.mod;
-            Category cat = m.ParentCategory;
-            System.Windows.Controls.TreeViewItem TVI = (System.Windows.Controls.TreeViewItem)cb.Parent;
-            System.Windows.Controls.TreeView TV = (System.Windows.Controls.TreeView)TVI.Parent;
-            //check to see if this is a single selection categtory
-            //if it is, then uncheck the other mod, then check this one
-            if ((bool)cb.IsChecked && cat.SelectionType.Equals("single"))
-            {
-                //check if any other mods in this catagory are already checked
-                bool anyModsChecked = false;
-                foreach (SelectablePackage mm in cat.Packages)
-                {
-                    if (mm.Checked)
-                    {
-                        anyModsChecked = true;
-                        mm.Checked = false;
-                    }
-                }
-                if (anyModsChecked)
-                {
-                    cb.IsChecked = false;
-                    //all other mods in this category need to be unchecked
-                    foreach (System.Windows.Controls.TreeViewItem tvi in TV.Items)
-                    {
-                        ModWPFCheckBox modCB = (ModWPFCheckBox)tvi.Header;
-                        if ((bool)modCB.IsChecked)
-                        {
-                            modCB.IsChecked = false;
-                            modCB.mod.Checked = false;
-                        }
-                    }
-                }
-                //now it is safe to check the mod we want
-                cb.Checked -= modCheckBoxL_Click;
-                cb.Unchecked -= modCheckBoxL_Click;
-                cb.IsChecked = true;
-                cb.mod.Checked = true;
-                cb.Checked += modCheckBoxL_Click;
-                cb.Unchecked += modCheckBoxL_Click;
-            }
-            //check the mod in memory database
-            m.Checked = (bool)cb.IsChecked;
-            //this section deals with enabling the configs, if there are any
-            if (m.Packages.Count == 0)
-                return;
-            if (m.Checked)
-            {
-                //mod checked, check at least one single1, one single_dropdown1, one single_dropdown2
-                //checking for single/single1 configs
-                bool configSelected = false;
-                foreach (SelectablePackage con in m.Packages)
-                {
-                    if ((!con.Visible) || (!con.Enabled))
-                        continue;
-                    if ((con.Type.Equals("single")) || (con.Type.Equals("single1")))
-                    {
-                        if (con.Checked)
-                            configSelected = true;
-                    }
-                }
-                if (!configSelected)
-                {
-                    foreach (SelectablePackage con in m.Packages)
-                    {
-                        if ((!con.Visible) || (!con.Enabled))
-                            continue;
-                        if ((con.Type.Equals("single")) || (con.Type.Equals("single1")))
-                        {
-                            con.Checked = true;
-                            ConfigWPFRadioButton cwpfrb = (ConfigWPFRadioButton)con.UIComponent;
-                            cwpfrb.IsChecked = true;
-                            break;
-                        }
-                    }
-                }
-                //checking for single_dropdown/single_dropdown1 configs
-                configSelected = false;
-                foreach (SelectablePackage con in m.Packages)
-                {
-                    if ((!con.Visible) || (!con.Enabled))
-                        continue;
-                    if ((con.Type.Equals("single_dropdown")) || (con.Type.Equals("single_dropdown1")))
-                    {
-                        if (con.Checked)
-                            configSelected = true;
-                    }
-                }
-                if (!configSelected)
-                {
-                    foreach (SelectablePackage con in m.Packages)
-                    {
-                        if ((!con.Visible) || (!con.Enabled))
-                            continue;
-                        if ((con.Type.Equals("single_dropdown")) || (con.Type.Equals("single_dropdown1")))
-                        {
-                            con.Checked = true;
-                            ConfigWPFComboBox cwpfcb = (ConfigWPFComboBox)con.UIComponent;
-                            bool breakOut = false;
-                            foreach (ComboBoxItem cbi in cwpfcb.Items)
-                            {
-                                if (cbi.config.Name.Equals(con.Name))
-                                {
-                                    cwpfcb.SelectionChanged -= configControlDDALL_SelectionChanged;
-                                    cwpfcb.SelectedItem = cbi;
-                                    cwpfcb.SelectionChanged += configControlDDALL_SelectionChanged;
-                                    breakOut = true;
-                                    break;
-                                }
-                            }
-                            if (breakOut)
-                                break;
-                        }
-                    }
-                }
-                //checking for single_dropdown2 configs
-                configSelected = false;
-                foreach (SelectablePackage con in m.Packages)
-                {
-                    if ((!con.Visible) || (!con.Enabled) || (!con.Type.Equals("single_dropdown2")))
-                        continue;
-                    if (con.Checked)
-                        configSelected = true;
-                }
-                if (!configSelected)
-                {
-                    foreach (SelectablePackage con in m.Packages)
-                    {
-                        if ((!con.Visible) || (!con.Enabled) || (!con.Type.Equals("single_dropdown2")))
-                            continue;
-                        con.Checked = true;
-                        ConfigWPFComboBox cwpfcb = (ConfigWPFComboBox)con.UIComponent;
-                        bool breakOut = false;
-                        foreach (ComboBoxItem cbi in cwpfcb.Items)
-                        {
-                            if (cbi.config.Name.Equals(con.Name))
-                            {
-                                cwpfcb.SelectionChanged -= configControlDDALL_SelectionChanged;
-                                cwpfcb.SelectedItem = cbi;
-                                cwpfcb.SelectionChanged += configControlDDALL_SelectionChanged;
-                                breakOut = true;
-                                break;
-                            }
-                        }
-                        if (breakOut)
-                            break;
-                    }
-                }
-            }
-            else
-            {
-                //mod not checked, uncheck all the configs
-                foreach (SelectablePackage cfg in m.Packages)
-                {
-                    if (cfg.Enabled)
-                    {
-                        cfg.Checked = false;
-                        // if (cfg.configUIComponent is ConfigFormCheckBox)
-                        if (cfg.UIComponent is ConfigWPFCheckBox)
-                        {
-                            // ConfigFormCheckBox cfcb = (ConfigFormCheckBox)cfg.configUIComponent;
-                            ConfigWPFCheckBox cfcb = (ConfigWPFCheckBox)cfg.UIComponent;
-                            // cfcb.Checked = false;
-                            cfcb.IsChecked = false;
-                        }
-                        // else if (cfg.configUIComponent is ConfigFormRadioButton)
-                        else if (cfg.UIComponent is ConfigWPFRadioButton) 
-                        {
-                            // ConfigFormRadioButton cfrb = (ConfigFormRadioButton)cfg.configUIComponent;
-                            ConfigWPFRadioButton cfrb = (ConfigWPFRadioButton)cfg.UIComponent;
-                            // cfrb.Checked = false;
-                            cfrb.IsChecked = false;
-                        }
-                        // else if (cfg.configUIComponent is ConfigFormComboBox)
-                        else if (cfg.UIComponent is ConfigWPFComboBox) 
-                        {
-                            // ConfigFormComboBox cfcb = (ConfigFormComboBox)cfg.configUIComponent;
-                            ConfigWPFComboBox cfcb = (ConfigWPFComboBox)cfg.UIComponent;
-                            // cfcb.SelectedIndexChanged -= configControlDD_SelectedIndexChanged;
-                            cfcb.SelectionChanged -= configControlDDALL_SelectionChanged;
-                            cfcb.SelectedIndex = -1;
-                            // cfcb.SelectedIndexChanged += configControlDD_SelectedIndexChanged;
-                            cfcb.SelectionChanged += configControlDDALL_SelectionChanged;
-                        }
-                    }
-                }
-            }
-        }
-        //when a legacy checkbox of OMC view is clicked
-        void configControlCB_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (LoadingConfig)
-                return;
-            //checkboxes still don't need to be be unselected
-            ConfigWPFCheckBox cb = (ConfigWPFCheckBox)sender;
-            SelectablePackage m = cb.mod;
-            SelectablePackage cfg = cb.config;
-            System.Windows.Controls.TreeViewItem tvi = (System.Windows.Controls.TreeViewItem)cb.Parent;
-            cfg.Checked = (bool)cb.IsChecked;
-            //propagate the check if required
-            if (tvi.Parent is System.Windows.Controls.TreeViewItem && cfg.Checked)
-            {
-                System.Windows.Controls.TreeViewItem parenttvi = (System.Windows.Controls.TreeViewItem)tvi.Parent;
-                if (parenttvi.Header is ModWPFCheckBox)
-                {
-                    ModWPFCheckBox c = (ModWPFCheckBox)parenttvi.Header;
-                    c.IsChecked = true;
-                }
-                else if (parenttvi.Header is ConfigWPFCheckBox)
-                {
-                    ConfigWPFCheckBox c = (ConfigWPFCheckBox)parenttvi.Header;
-                    c.IsChecked = true;
-                }
-                else if (parenttvi.Header is ConfigWPFRadioButton)
-                {
-                    ConfigWPFRadioButton c = (ConfigWPFRadioButton)parenttvi.Header;
-                    c.IsChecked = true;
-                }
-            }
-            //process the subconfigs
-            bool configSelected = false;
-            int radioButtonCount = 0;
-            if (cfg.Packages.Count > 0 && cfg.Checked)
-            {
-                //determine if at least one radioButton is checked
-                foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
-                {
-                    if (subTVI.Header is ConfigWPFRadioButton)
-                    {
-                        radioButtonCount++;
-                        ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
-                        SelectablePackage subc = subRB.config;
-                        if ((bool)subRB.IsEnabled && (bool)subRB.IsChecked)
-                        {
-                            //getting here means cb is Enabled
-                            subRB.IsEnabled = true;
-                            //this needs to be changed
-                            if (subc.Checked)
-                                configSelected = true;
-                        }
-                    }
-                }
-                if (!configSelected && (bool)cb.IsChecked && (bool)cb.IsEnabled && radioButtonCount > 0)
-                {
-                    foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
-                    {
-                        if (subTVI.Header is ConfigWPFRadioButton)
-                        {
-                            ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
-                            SelectablePackage subc = subRB.config;
-                            if ((bool)subRB.IsEnabled && subc.Enabled)
-                            {
-                                subc.Checked = true;
-                                subRB.IsChecked = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            else if (cfg.Packages.Count > 0 && !cfg.Checked)
-            {
-                foreach (SelectablePackage c in cfg.Packages)
-                {
-                    if (c.Type.Equals("single") || c.Type.Equals("single1") || c.Type.Equals("multi"))
-                    {
-                        c.Checked = false;
-                        if (c.UIComponent is ConfigWPFCheckBox)
-                        {
-                            ConfigWPFCheckBox tempCB = (ConfigWPFCheckBox)c.UIComponent;
-                            tempCB.IsChecked = false;
-                        }
-                        else if (c.UIComponent is ConfigWPFRadioButton)
-                        {
-                            ConfigWPFRadioButton tempCB = (ConfigWPFRadioButton)c.UIComponent;
-                            tempCB.IsChecked = false;
-                        }
-                    }
-                }
-            }
-        }
-        //when a dropdown legacy combobox is index changed
-        void configControlDDALL_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            ConfigWPFComboBox cb = (ConfigWPFComboBox)sender;
-            if (!LoadingConfig)
-            {
-                //propagate the check if required
-                System.Windows.Controls.TreeViewItem tvi = (System.Windows.Controls.TreeViewItem)cb.Parent;
-                ComboBoxItem cbi22 = (ComboBoxItem)cb.SelectedItem;
-                if (tvi.Parent is System.Windows.Controls.TreeViewItem && cb.SelectedIndex != -1)
-                {
-                    System.Windows.Controls.TreeViewItem parenttvi = (System.Windows.Controls.TreeViewItem)tvi.Parent;
-                    if (parenttvi.Header is ModWPFCheckBox)
-                    {
-                        ModWPFCheckBox c = (ModWPFCheckBox)parenttvi.Header;
-                        c.IsChecked = true;
-                    }
-                    else if (parenttvi.Header is ConfigWPFCheckBox)
-                    {
-                        ConfigWPFCheckBox c = (ConfigWPFCheckBox)parenttvi.Header;
-                        c.IsChecked = true;
-                    }
-                    else if (parenttvi.Header is ConfigWPFRadioButton)
-                    {
-                        ConfigWPFRadioButton c = (ConfigWPFRadioButton)parenttvi.Header;
-                        c.IsChecked = true;
-                    }
-                }
-            }
-            //first check if this is init, meaning first time Enabled
-            //but now this should never have to run
-            //getting here means that an item is confirmed to be selected
-            //itterate through the items, get each config, disable it
-            //enable the selected one at the end
-            foreach (ComboBoxItem cbi in cb.Items)
-            {
-                cbi.config.Checked = false;
-            }
-            ComboBoxItem cbi2 = (ComboBoxItem)cb.SelectedItem;
-            cbi2.config.Checked = true;
-            //set the new tooltip
-            string dateFormat = cbi2.config.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(cbi2.config.Timestamp);
-            string tooltipString = cbi2.config.Description.Equals("") ? NoDescriptionAvailable : cbi2.config.Description + (cbi2.config.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
-            cb.ToolTip = tooltipString;
-        }
-        //when a radiobutton of the legacy view mode is clicked
-        void configControlRB_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (LoadingConfig)
-                return;
-            //get all required cool stuff
-            ConfigWPFRadioButton cb = (ConfigWPFRadioButton)sender;
-            SelectablePackage m = cb.mod;
-            SelectablePackage cfg = cb.config;
-            //the config treeview
-            System.Windows.Controls.TreeViewItem tvi = (System.Windows.Controls.TreeViewItem)cb.Parent;
-            //the mod treeview
-            System.Windows.Controls.TreeViewItem item1 = (System.Windows.Controls.TreeViewItem)tvi.Parent;
-            if ((bool)cb.IsEnabled && (bool)cb.IsChecked)
-            {
-                //uincheck all single and single1 mods
-                foreach (System.Windows.Controls.TreeViewItem item in item1.Items)
-                {
-                    if (item.Header is ConfigWPFRadioButton)
-                    {
-                        ConfigWPFRadioButton rb = (ConfigWPFRadioButton)item.Header;
-                        if ((bool)rb.IsEnabled && (bool)rb.IsChecked && (!rb.Equals(cb)))
-                        {
-                            rb.config.Checked = false;
-                            rb.IsChecked = false;
-                        }
-                    }
-                }
-            }
-            cfg.Checked = (bool)cb.IsChecked;
-            //propagate the check if required
-            if (tvi.Parent is System.Windows.Controls.TreeViewItem && cfg.Checked)
-            {
-                System.Windows.Controls.TreeViewItem parenttvi = (System.Windows.Controls.TreeViewItem)tvi.Parent;
-                if (parenttvi.Header is ModWPFCheckBox)
-                {
-                    ModWPFCheckBox c = (ModWPFCheckBox)parenttvi.Header;
-                    c.IsChecked = true;
-                }
-                else if (parenttvi.Header is ConfigWPFCheckBox)
-                {
-                    ConfigWPFCheckBox c = (ConfigWPFCheckBox)parenttvi.Header;
-                    c.IsChecked = true;
-                }
-                else if (parenttvi.Header is ConfigWPFRadioButton)
-                {
-                    ConfigWPFRadioButton c = (ConfigWPFRadioButton)parenttvi.Header;
-                    c.IsChecked = true;
-                }
-            }
-            //process the subconfigs
-            bool configSelected = false;
-            int radioButtonCount = 0;
-            if (cfg.Packages.Count > 0 && cfg.Checked)
-            {
-                //determine if at least one radioButton is checked
-                foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
-                {
-                    if (subTVI.Header is ConfigWPFRadioButton)
-                    {
-                        radioButtonCount++;
-                        ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
-                        SelectablePackage subc = subRB.config;
-                        if ((bool)subRB.IsEnabled && (bool)subRB.IsChecked)
-                        {
-                            //getting here means cb is Enabled
-                            subRB.IsEnabled = true;
-                            //this needs to be changed
-                            if (subc.Checked)
-                                configSelected = true;
-                        }
-                    }
-                }
-                if (!configSelected && (bool)cb.IsChecked && (bool)cb.IsEnabled && radioButtonCount > 0)
-                {
-                    foreach (System.Windows.Controls.TreeViewItem subTVI in tvi.Items)
-                    {
-                        if (subTVI.Header is ConfigWPFRadioButton)
-                        {
-                            ConfigWPFRadioButton subRB = (ConfigWPFRadioButton)subTVI.Header;
-                            SelectablePackage subc = subRB.config;
-                            if ((bool)subRB.IsEnabled && subc.Enabled)
-                            {
-                                subc.Checked = true;
-                                subRB.IsChecked = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            else if (cfg.Packages.Count > 0 && !cfg.Checked)
-            {
-                foreach (SelectablePackage c in cfg.Packages)
-                {
-                    if (c.Type.Equals("single") || c.Type.Equals("single1") || c.Type.Equals("multi"))
-                    {
-                        c.Checked = false;
-                        if (c.UIComponent is ConfigWPFCheckBox)
-                        {
-                            ConfigWPFCheckBox tempCB = (ConfigWPFCheckBox)c.UIComponent;
-                            tempCB.IsChecked = false;
-                        }
-                        else if (c.UIComponent is ConfigWPFRadioButton)
-                        {
-                            ConfigWPFRadioButton tempCB = (ConfigWPFRadioButton)c.UIComponent;
-                            tempCB.IsChecked = false;
-                        }
-                    }
-                }
             }
         }
         */
+
         //method for finding the location of which to put a control
         private int GetYLocation(System.Windows.Forms.Control.ControlCollection ctrl)
         {
@@ -1569,519 +1246,29 @@ namespace RelhaxModpack
             }
             return y;
         }
-        /*
-        //handler for when a mod checkbox is changed
-        void modCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (LoadingConfig)
-                return;
-            ModFormCheckBox cbUser = (ModFormCheckBox)sender;
-            if (cbUser.Parent is TabPage)
-            {
-                //user mod code
-                TabPage t = (TabPage)cbUser.Parent;
-                if (t.Text.Equals("User Mods"))
-                {
-                    //verified, this is a check from the user checkboxes
-                    cbUser.mod.Checked = cbUser.Checked;
-                    return;
-                }
-            }
-            //the mod info handler should only be concerned with checking for enabling componets
-
-            //get all required info for this checkbox change
-            ModFormCheckBox cb = (ModFormCheckBox)sender;
-            //this parent could nwo be the radioButton config selection panel or the config panel
-            Panel modPanel = (Panel)cb.Parent;
-            TabPage modTab = (TabPage)modPanel.Parent;
-            SelectablePackage m = cb.mod;
-            Category cat = cb.catagory;
-
-            //just a check
-            if (!m.Visible)
-                return;
-
-            //check to see if the mod is part of a single selection only catagory
-            //if it is uncheck the other mods first, then deal with mod loop selection
-            if (cat.SelectionType.Equals("single") && cb.Checked)
-            {
-                //check if any other mods in this catagory are already checked
-                bool anyModsChecked = false;
-                foreach (SelectablePackage mm in cat.Packages)
-                {
-                    if (mm.Checked)
-                    {
-                        anyModsChecked = true;
-                        mm.Checked = false;
-                    }
-                }
-                if (anyModsChecked)
-                {
-                    //not safe to check the mod
-                    //uncheck the other mod first
-                    //each checkbox uncheck it
-                    foreach (var cc in modTab.Controls)
-                    {
-                        if (cc is Panel)
-                        {
-                            //it's a mod panel
-                            Panel pp = (Panel)cc;
-                            foreach (var ccc in pp.Controls)
-                            {
-                                if (ccc is ModFormCheckBox)
-                                {
-                                    ModFormCheckBox cbb = (ModFormCheckBox)ccc;
-                                    //disable the other mods
-                                    cbb.Checked = false;
-                                    cbb.mod.Checked = false;
-                                }
-                            }
-                        }
-                    }
-                    //now it's safe to check the mods
-                    //remove the handler for a sec to prevent stack overflow
-                    cb.CheckedChanged -= modCheckBox_CheckedChanged;
-                    cb.Checked = true;
-                    cb.mod.Checked = true;
-                    cb.CheckedChanged += modCheckBox_CheckedChanged;
-                }
-
-            }
-            //toggle the mod in memory, Enabled or disabled
-            m.Checked = cb.Checked;
-            //toggle the mod panel color
-            if (cb.Checked && !Settings.DisableColorChange)
-            {
-                modPanel.BackColor = Color.BlanchedAlmond;
-            }
-            else
-            {
-                modPanel.BackColor = Settings.getBackColor();
-            }
-            //this deals with enabling the componets and triggering the handlers
-            if (m.Packages.Count == 0)
-                return;
-            //the first one is always the mod checkbox
-            //the second one is always the config panel
-            Panel configPanel = (Panel)modPanel.Controls[1];
-            if (cb.Checked && !Settings.DisableColorChange)
-            {
-                configPanel.BackColor = Color.BlanchedAlmond;
-            }
-            else
-            {
-                configPanel.BackColor = Settings.getBackColor();
-            }
-            if (m.Checked)
-            {
-                //mod checked, check at least one single1, one single_dropdown1, one single_dropdown2
-                //checking for single/single1 configs
-                bool configSelected = false;
-                foreach (SelectablePackage con in m.Packages)
-                {
-                    if ((!con.Visible) || (!con.Enabled))
-                        continue;
-                    if ((con.Type.Equals("single")) || (con.Type.Equals("single1")))
-                    {
-                        if (con.Checked)
-                            configSelected = true;
-                    }
-                }
-                if (!configSelected)
-                {
-                    foreach (SelectablePackage con in m.Packages)
-                    {
-                        if ((!con.Visible) || (!con.Enabled))
-                            continue;
-                        if ((con.Type.Equals("single")) || (con.Type.Equals("single1")))
-                        {
-                            con.Checked = true;
-                            ConfigFormRadioButton cfrb = (ConfigFormRadioButton)con.UIComponent;
-                            cfrb.Checked = true;
-                            break;
-                        }
-                    }
-                }
-                //checking for single_dropdown/single_dropdown1 configs
-                configSelected = false;
-                foreach (SelectablePackage con in m.Packages)
-                {
-                    if ((!con.Visible) || (!con.Enabled))
-                        continue;
-                    if ((con.Type.Equals("single_dropdown")) || (con.Type.Equals("single_dropdown1")))
-                    {
-                        if (con.Checked)
-                            configSelected = true;
-                    }
-                }
-                if (!configSelected)
-                {
-                    foreach (SelectablePackage con in m.Packages)
-                    {
-                        if ((!con.Visible) || (!con.Enabled))
-                            continue;
-                        if ((con.Type.Equals("single_dropdown")) || (con.Type.Equals("single_dropdown1")))
-                        {
-                            con.Checked = true;
-                            ConfigFormComboBox cfcb = (ConfigFormComboBox)con.UIComponent;
-                            bool breakOut = false;
-                            foreach (ComboBoxItem cbi in cfcb.Items)
-                            {
-                                if (cbi.config.Name.Equals(con.Name))
-                                {
-                                    cfcb.SelectedIndexChanged -= configControlDD_SelectedIndexChanged;
-                                    cfcb.SelectedItem = cbi;
-                                    cfcb.SelectedIndexChanged += configControlDD_SelectedIndexChanged;
-                                    breakOut = true;
-                                    break;
-                                }
-                            }
-                            if (breakOut)
-                                break;
-                        }
-                    }
-                }
-                //checking for single_dropdown2 configs
-                configSelected = false;
-                foreach (SelectablePackage con in m.Packages)
-                {
-                    if ((!con.Visible) || (!con.Enabled) || (!con.Type.Equals("single_dropdown2")))
-                        continue;
-                    if (con.Checked)
-                        configSelected = true;
-                }
-                if (!configSelected)
-                {
-                    foreach (SelectablePackage con in m.Packages)
-                    {
-                        if ((!con.Visible) || (!con.Enabled) || (!con.Type.Equals("single_dropdown2")))
-                            continue;
-                        con.Checked = true;
-                        ConfigFormComboBox cfcb = (ConfigFormComboBox)con.UIComponent;
-                        bool breakOut = false;
-                        foreach (ComboBoxItem cbi in cfcb.Items)
-                        {
-                            if (cbi.config.Name.Equals(con.Name))
-                            {
-                                cfcb.SelectedIndexChanged -= configControlDD_SelectedIndexChanged;
-                                cfcb.SelectedItem = cbi;
-                                cfcb.SelectedIndexChanged += configControlDD_SelectedIndexChanged;
-                                breakOut = true;
-                                break;
-                            }
-                        }
-                        if (breakOut)
-                            break;
-                    }
-                }
-            }
-            else
-            {
-                //mod not checked, uncheck all the configs
-                foreach (SelectablePackage cfg in m.Packages)
-                {
-                    if (cfg.Enabled)
-                    {
-                        cfg.Checked = false;
-                        if (cfg.UIComponent is ConfigFormCheckBox)
-                        {
-                            ConfigFormCheckBox cfcb = (ConfigFormCheckBox)cfg.UIComponent;
-                            cfcb.Checked = false;
-                        }
-                        else if (cfg.UIComponent is ConfigFormRadioButton)
-                        {
-                            ConfigFormRadioButton cfrb = (ConfigFormRadioButton)cfg.UIComponent;
-                            cfrb.Checked = false;
-                        }
-                        else if (cfg.UIComponent is ConfigFormComboBox)
-                        {
-                            ConfigFormComboBox cfcb = (ConfigFormComboBox)cfg.UIComponent;
-                            cfcb.SelectedIndexChanged -= configControlDD_SelectedIndexChanged;
-                            cfcb.SelectedIndex = 0;
-                            cfcb.SelectedIndexChanged += configControlDD_SelectedIndexChanged;
-                        }
-                    }
-                }
-            }
-        }
-
-        //handler for when the config checkbox is checked or unchecked
-        void configControlCB_CheckedChanged(object sender, EventArgs e)
-        {
-            if (LoadingConfig)
-                return;
-            //checkboxes don't need to be unselected
-            ConfigFormCheckBox cb = (ConfigFormCheckBox)sender;
-            SelectablePackage m = cb.mod;
-            SelectablePackage cfg = cb.config;
-            Category cat = cb.catagory;
-            Panel configPanel = (Panel)cb.Parent;
-            //checkbox is Enabled, toggle checked and checked
-            cfg.Checked = cb.Checked;
-            //propagate the check back up if required
-#error will not work
-            if (cfg.Checked)
-            {
-                SelectablePackage obj = cfg.Parent;
-                if (obj is SelectablePackage)
-                {
-                    SelectablePackage parentM = (SelectablePackage)obj;
-                    if (parentM.TopParentUIComponent is ModFormCheckBox)
-                    {
-                        ModFormCheckBox tempCB = (ModFormCheckBox)parentM.TopParentUIComponent;
-                        if (!tempCB.Checked)
-                            tempCB.Checked = true;
-                    }
-                }
-                else if (obj is SelectablePackage)
-                {
-                    SelectablePackage parentC = (SelectablePackage)obj;
-                    parentC.Checked = true;
-                    if (parentC.UIComponent is ConfigFormCheckBox)
-                    {
-                        ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.UIComponent;
-                        if (!parentCB.Checked)
-                            parentCB.Checked = true;
-                    }
-                    else if (parentC.UIComponent is ConfigFormRadioButton)
-                    {
-                        ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.UIComponent;
-                        if (!parentRB.Checked)
-                            parentRB.Checked = true;
-                    }
-                }
-            }
-            //process any subconfigs
-            bool configSelected = false;
-            int radioButtonCount = 0;
-            if (cfg.Packages.Count > 0 && cb.Checked)
-            {
-                foreach (SelectablePackage c in cfg.Packages)
-                {
-                    if (c.Type.Equals("single") || c.Type.Equals("single1"))
-                    {
-                        radioButtonCount++;
-                        if (c.Checked)
-                            configSelected = true;
-                    }
-                }
-                if (!configSelected && radioButtonCount > 0)
-                {
-                    //select the first one and leave
-                    foreach (SelectablePackage c in cfg.Packages)
-                    {
-                        if ((c.Type.Equals("single") || c.Type.Equals("single1")) && c.Enabled)
-                        {
-                            c.Checked = true;
-                            ConfigFormRadioButton subRB = (ConfigFormRadioButton)c.UIComponent;
-                            subRB.Checked = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            else if (cfg.Packages.Count > 0 && !cb.Checked)
-            {
-                foreach (SelectablePackage c in cfg.Packages)
-                {
-                    if (c.Type.Equals("single") || c.Type.Equals("single1") || c.Type.Equals("multi"))
-                    {
-                        c.Checked = false;
-                        if (c.UIComponent is ConfigFormCheckBox)
-                        {
-                            ConfigFormCheckBox tempCB = (ConfigFormCheckBox)c.UIComponent;
-                            tempCB.Checked = false;
-                        }
-                        else if (c.UIComponent is ConfigFormRadioButton)
-                        {
-                            ConfigFormRadioButton tempCB = (ConfigFormRadioButton)c.UIComponent;
-                            tempCB.Checked = false;
-                        }
-                    }
-                }
-            }
-            //trigger the panel color change
-            if (cb.Checked && !Settings.DisableColorChange)
-                configPanel.BackColor = Color.BlanchedAlmond;
-            else
-                configPanel.BackColor = Settings.getBackColor();
-        }
-        //handler for when a config selection is made from the drop down list
-        void configControlDD_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (LoadingConfig)
-                return;
-            //uncheck all other dorp down configs
-            ConfigFormComboBox cb = (ConfigFormComboBox)sender;
-            //due to recursion, save the cbi up here
-            ComboBoxItem cbi2 = (ComboBoxItem)cb.SelectedItem;
-            //propagate the check back up if required
-            if (cb.SelectedIndex != -1)
-            {
-                ComboBoxItem cbi22 = (ComboBoxItem)cb.SelectedItem;
-                SelectablePackage obj = cbi22.config.Parent;
-#error will not work
-                if (obj is SelectablePackage)
-                {
-                    SelectablePackage parentM = (SelectablePackage)obj;
-                    if (parentM.TopParentUIComponent is ModFormCheckBox)
-                    {
-                        ModFormCheckBox tempCB = (ModFormCheckBox)parentM.TopParentUIComponent;
-                        //adding the if statement prevents it from running again when it's not needed to
-                        if (!tempCB.Checked)
-                            tempCB.Checked = true;
-                    }
-                }
-                else if (obj is SelectablePackage)
-                {
-                    SelectablePackage parentC = (SelectablePackage)obj;
-                    parentC.Checked = true;
-                    if (parentC.UIComponent is ConfigFormCheckBox)
-                    {
-                        ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.UIComponent;
-                        if (!parentCB.Checked)
-                            parentCB.Checked = true;
-                    }
-                    else if (parentC.UIComponent is ConfigFormRadioButton)
-                    {
-                        ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.UIComponent;
-                        if (!parentRB.Checked)
-                            parentRB.Checked = true;
-                    }
-                }
-            }
-            //itterate through the items, get each config, disable it
-            //unless it's the same name as the selectedItem
-            foreach (ComboBoxItem cbi in cb.Items)
-            {
-                cbi.config.Checked = false;
-            }
-            //ComboBoxItem cbi2 = (ComboBoxItem)cb.SelectedItem;
-            cb.SelectedItem = cbi2;
-            cbi2.config.Checked = true;
-            string dateFormat = cbi2.config.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(cbi2.config.Timestamp);
-            string tooltipString = cbi2.config.Description.Equals("") ? NoDescriptionAvailable : cbi2.config.Description + (cbi2.config.Timestamp == 0 ? "" : "\n\n" + LastUpdated + dateFormat);
-            DescriptionToolTip.SetToolTip(cb, tooltipString);
-            Panel configPanel = (Panel)cb.Parent;
-            if (!Settings.DisableColorChange)
-                configPanel.BackColor = Color.BlanchedAlmond;
-        }
-        //handler for when a config radioButton is pressed
-        void configControlRB_CheckedChanged(object sender, EventArgs e)
-        {
-            if (LoadingConfig)
-                return;
-            //get all required cool stuff
-            ConfigFormRadioButton rb = (ConfigFormRadioButton)sender;
-            Panel configPanel = (Panel)rb.Parent;
-            SelectablePackage m = rb.mod;
-            SelectablePackage cfg = rb.config;
-            Category cat = rb.catagory;
-            cfg.Checked = rb.Checked;
-            //propagate the check back up if required
-#error will not work
-            if (cfg.Checked)
-            {
-                SelectablePackage obj = cfg.Parent;
-                if (obj is SelectablePackage)
-                {
-                    SelectablePackage parentM = (SelectablePackage)obj;
-                    if (parentM.TopParentUIComponent is ModFormCheckBox)
-                    {
-                        ModFormCheckBox tempCB = (ModFormCheckBox)parentM.TopParentUIComponent;
-                        if (!tempCB.Checked)
-                            tempCB.Checked = true;
-                    }
-                }
-                else if (obj is SelectablePackage)
-                {
-                    SelectablePackage parentC = (SelectablePackage)obj;
-                    parentC.Checked = true;
-                    if (parentC.UIComponent is ConfigFormCheckBox)
-                    {
-                        ConfigFormCheckBox parentCB = (ConfigFormCheckBox)parentC.UIComponent;
-                        if (!parentCB.Checked)
-                            parentCB.Checked = true;
-                    }
-                    else if (parentC.UIComponent is ConfigFormRadioButton)
-                    {
-                        ConfigFormRadioButton parentRB = (ConfigFormRadioButton)parentC.UIComponent;
-                        if (!parentRB.Checked)
-                            parentRB.Checked = true;
-                    }
-                }
-            }
-            //propagate the change back down if required
-            bool configSelected = false;
-            int radioButtonCount = 0;
-            if (cfg.Packages.Count > 0 && rb.Checked)
-            {
-                //configs present and the radio button is checked
-                //singles - at lease one must be selected
-                foreach (SelectablePackage c in cfg.Packages)
-                {
-                    if (c.Type.Equals("single") || c.Type.Equals("single1"))
-                    {
-                        radioButtonCount++;
-                        if (c.Checked)
-                            configSelected = true;
-                    }
-                }
-                if (!configSelected && radioButtonCount > 0)
-                {
-                    //select the first one and leave
-                    foreach (SelectablePackage c in cfg.Packages)
-                    {
-                        if ((c.Type.Equals("single") || c.Type.Equals("single1")) && c.Enabled)
-                        {
-                            c.Checked = true;
-                            ConfigFormRadioButton subRB = (ConfigFormRadioButton)c.UIComponent;
-                            subRB.Checked = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            else if (cfg.Packages.Count > 0 && !rb.Checked)
-            {
-                //configs present and the radio button is not checked
-                //singles - uncheck all of them
-                foreach (SelectablePackage c in cfg.Packages)
-                {
-                    if (c.Type.Equals("single") || c.Type.Equals("single1") || c.Type.Equals("multi"))
-                    {
-                        c.Checked = false;
-                        if (c.UIComponent is ConfigFormCheckBox)
-                        {
-                            ConfigFormCheckBox tempCB = (ConfigFormCheckBox)c.UIComponent;
-                            tempCB.Checked = false;
-                        }
-                        else if (c.UIComponent is ConfigFormRadioButton)
-                        {
-                            ConfigFormRadioButton tempCB = (ConfigFormRadioButton)c.UIComponent;
-                            tempCB.Checked = false;
-                        }
-                    }
-                }
-            }
-            //trigger the panel color change
-            if (rb.Checked && !Settings.DisableColorChange)
-                configPanel.BackColor = Color.BlanchedAlmond;
-            else
-                configPanel.BackColor = Settings.getBackColor();
-        }
-        */
 
         #region Preview Code
         //generic hander for when any mouse button is clicked for MouseDown Events
         void Generic_MouseDown(object sender, EventArgs e)
         {
+            if (LoadingConfig)
+                return;
             if (e is MouseEventArgs m)
                 if (m.Button != MouseButtons.Right)
                     return;
             if(sender is IPackageUIComponent ipc)
             {
                 SelectablePackage spc = ipc.Package;
+                if (ipc is RelhaxFormComboBox cb1)
+                {
+                    ComboBoxItem cbi = (ComboBoxItem)cb1.SelectedItem;
+                    spc = cbi.Package;
+                }
+                else if (ipc is RelhaxWPFComboBox cb2)
+                {
+                    ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
+                    spc = cbi.Package;
+                }
                 if (spc.DevURL == null)
                     spc.DevURL = "";
                 if (p != null)
@@ -2099,31 +1286,12 @@ namespace RelhaxModpack
                 };
                 p.Show();
             }
-                /*
-                if (DBO != null)
-                {
-                    if (DBO.DevURL == null)
-                        DBO.DevURL = "";
-                    if (p != null)
-                    {
-                        p.Close();
-                        p.Dispose();
-                        p = null;
-                        GC.Collect();
-                    }
-                    p = new Preview()
-                    {
-                        LastUpdated = this.LastUpdated,
-                        DBO = DBO,
-                        Medias = DBO.PictureList
-                    };
-                    p.Show();
-                }
-                */
         }
         
         private void DisabledComponent_MouseDown(object sender, MouseEventArgs e)
         {
+            if (LoadingConfig)
+                return;
             if (!(e.Button == MouseButtons.Right))
                 return;
             Panel configPanel = (Panel)sender;
@@ -2137,6 +1305,8 @@ namespace RelhaxModpack
         //Handler for allowing right click of disabled mods
         private void Lsl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            if (LoadingConfig)
+                return;
             if (e.RightButton != System.Windows.Input.MouseButtonState.Pressed)
             {
                 return;

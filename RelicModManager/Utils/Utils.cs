@@ -592,12 +592,14 @@ namespace RelhaxModpack
             Logging.Manager("Unchecking all mods");
             foreach (Category c in parsedCatagoryList)
             {
+                if (c.CategoryHeader.Checked)
+                    c.CategoryHeader.Checked = false;
                 foreach (SelectablePackage m in c.Packages)
                 {
                     if(m.Checked)
                         m.Checked = false;
                     //no need to clobber over UI controls, that is now done for us
-                    Utils.UncheckProcessConfigs(m.Packages);
+                    UncheckProcessConfigs(m.Packages);
                 }
             }
             if (UserMods != null)

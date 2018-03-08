@@ -57,6 +57,28 @@ namespace RelhaxModpack
                 _Checked = value;
                 if(UIComponent != null)
                     UIComponent.OnCheckedChanged(value);
+                if ((Type.Equals("single_dropdown") || Type.Equals("single_dropdown1")) && Enabled)
+                {
+                    if (Parent.RelhaxFormComboBoxList[0] != null)
+                    {
+                        Parent.RelhaxFormComboBoxList[0].OnDropDownSelectionChanged(this, value);
+                    }
+                    else
+                    {
+                        Parent.RelhaxWPFComboBoxList[0].OnDropDownSelectionChanged(this,value);
+                    }
+                }
+                else if (Type.Equals("single_dropdown2") && Enabled)
+                {
+                    if (Parent.RelhaxFormComboBoxList[1] != null)
+                    {
+                        Parent.RelhaxFormComboBoxList[1].OnDropDownSelectionChanged(this,value);
+                    }
+                    else
+                    {
+                        Parent.RelhaxWPFComboBoxList[1].OnDropDownSelectionChanged(this,value);
+                    }
+                }
             }
         }
         //overriding the enabled so we can trigger the UI components

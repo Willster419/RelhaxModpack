@@ -3,16 +3,16 @@
     //an item to add ot a ComboBox
     class ComboBoxItem
     {
-        public SelectablePackage config { get; set; }
-        public string displayName { get; set; }
+        public SelectablePackage Package { get; set; }
+        public string DisplayName { get; set; }
         public ComboBoxItem(SelectablePackage cfg, string display)
         {
-            config = cfg;
-            displayName = display;
+            Package = cfg;
+            DisplayName = display;
         }
         public override string ToString()
         {
-            return displayName;
+            return DisplayName;
         }
     }
 }
