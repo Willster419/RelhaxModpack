@@ -141,7 +141,7 @@ namespace RelhaxModpack
 
         private void Bg_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            lock (sender)
+            lock (lockerInstaller)
             {
                 NumExtractorsCompleted++;
                 args.ParrentProcessed++;
@@ -1063,7 +1063,7 @@ namespace RelhaxModpack
                             sb.Append("/*  " + m.ZipFile + "  */\n");
                             if (Settings.InstantExtraction)
                             {
-                                lock (sender)
+                                lock (lockerInstaller)
                                 {
                                     while (!m.ReadyForInstall)
                                         System.Threading.Thread.Sleep(20);
@@ -1096,7 +1096,7 @@ namespace RelhaxModpack
                         sb.Append("/*  " + config.ZipFile + "  */\n");
                         if (Settings.InstantExtraction)
                         {
-                            lock (sender)
+                            lock (lockerInstaller)
                             {
                                 while (!config.ReadyForInstall)
                                     System.Threading.Thread.Sleep(20);
