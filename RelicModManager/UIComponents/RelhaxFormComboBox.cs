@@ -19,13 +19,14 @@ namespace RelhaxModpack.UIComponents
             for(int i = 0; i < Items.Count; i++)
             {
                 ComboBoxItem cbi = (ComboBoxItem)Items[i];
-                if (cbi.Package.Equals(spc) && value)
+                if (cbi.Package.Equals(spc) && value && cbi.Package.Enabled && !cbi.Package.Checked)
                 {
-                    if (cbi.Package.Enabled && !cbi.Package.Checked)
-                        cbi.Package._Checked = true;
-                    SelectedIndexChanged -= handler;
+                    cbi.Package._Checked = true;
+                    if(handler != null)
+                        SelectedIndexChanged -= handler;
                     SelectedItem = cbi;
-                    SelectedIndexChanged += handler;
+                    if (handler != null)
+                        SelectedIndexChanged += handler;
                     continue;
                 }//if value is false it will uncheck all the packages
                 if (cbi.Package.Enabled && cbi.Package.Checked)
@@ -33,9 +34,11 @@ namespace RelhaxModpack.UIComponents
             }
             if (!value)
             {
-                SelectedIndexChanged -= handler;
+                if (handler != null)
+                    SelectedIndexChanged -= handler;
                 SelectedIndex = 0;
-                SelectedIndexChanged += handler;
+                if (handler != null)
+                    SelectedIndexChanged += handler;
             }
         }
     }

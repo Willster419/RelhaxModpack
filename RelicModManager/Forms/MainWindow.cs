@@ -208,7 +208,9 @@ namespace RelhaxModpack
             {
                 //downloader components
                 AsyncDownloadArgs args = new AsyncDownloadArgs();
-                args.url = new Uri(Utils.ReplaceMacro(DatabasePackagesToDownload[downloadCounter].StartAddress) + DatabasePackagesToDownload[downloadCounter].ZipFile + DatabasePackagesToDownload[downloadCounter].EndAddress);
+                //args.url = new Uri(Utils.ReplaceMacro(DatabasePackagesToDownload[downloadCounter].StartAddress) + DatabasePackagesToDownload[downloadCounter].ZipFile + DatabasePackagesToDownload[downloadCounter].EndAddress);
+                args.url = new Uri(DatabasePackagesToDownload[downloadCounter].StartAddress.Replace(@"{onlineFolder}", Settings.TanksOnlineFolderVersion)
+                    + DatabasePackagesToDownload[downloadCounter].ZipFile + DatabasePackagesToDownload[downloadCounter].EndAddress);
                 args.zipFile = Path.Combine(Settings.RelhaxDownloadsFolder,DatabasePackagesToDownload[downloadCounter].ZipFile);
                 //for the next file in the queue, delete it.
                 if (File.Exists(args.zipFile)) File.Delete(args.zipFile);
@@ -881,6 +883,7 @@ namespace RelhaxModpack
             //have the application display that it is loading. it is actually doing installation calculations
             downloadProgress.Text = Translations.getTranslatedString("loading");
             Application.DoEvents();
+            Utils.BuildMacroHash();
             //run the installer calculations
             ProcessInstallCalculations(list);
         }

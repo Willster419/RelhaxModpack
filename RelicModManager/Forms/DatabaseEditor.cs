@@ -1752,7 +1752,8 @@ namespace RelhaxModpack
                 return;
             }
             string DownloadURL = ObjectStartAddressTB.Text + ObjectZipFileTB.Text + ObjectEndAddressTB.Text;
-            DatabaseDownloadEditor editor = new DatabaseDownloadEditor(Utils.ReplaceMacro(DownloadURL), Path.GetFileName(ObjectZipFileTB.Text));
+#warning testing below
+            DatabaseDownloadEditor editor = new DatabaseDownloadEditor(DownloadURL.Replace(@"{onlineFolder}", Settings.TanksOnlineFolderVersion), Path.GetFileName(ObjectZipFileTB.Text));
             editor.Show();
         }
 

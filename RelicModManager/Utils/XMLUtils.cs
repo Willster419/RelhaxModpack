@@ -1287,12 +1287,13 @@ namespace RelhaxModpack
                             savedConfigList.Remove(m.PackageName);
                             if (!m.Enabled && !defaultChecked && !Program.forceEnabled)
                             {
-                                MessageBox.Show(string.Format(Translations.getTranslatedString("modDeactivated"), Utils.ReplaceMacro(m)), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MessageBox.Show(string.Format(Translations.getTranslatedString("modDeactivated"),
+                                    m.NameFormatted), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
                             else
                             {
                                 m.Checked = true;
-                                Logging.Manager(string.Format("Checking mod {0}", Utils.ReplaceMacro(m)));
+                                Logging.Manager(string.Format("Checking mod {0}", m.NameFormatted));
                             }
                         }
                         else
@@ -1385,7 +1386,7 @@ namespace RelhaxModpack
                             if (c.Enabled)
                             {
                                 c.Checked = true;
-                                Logging.Manager(string.Format("Checking mod {0}", Utils.ReplaceMacro(c)));
+                                Logging.Manager(string.Format("Checking mod {0}", c.NameFormatted));
                             }
                             else
                             {
@@ -1417,12 +1418,12 @@ namespace RelhaxModpack
                         savedConfigList.Remove(c.PackageName);
                         if (!c.Enabled && !defaultChecked)
                         {
-                            MessageBox.Show(string.Format(Translations.getTranslatedString("configDeactivated"), Utils.ReplaceMacro(c), parentName), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(string.Format(Translations.getTranslatedString("configDeactivated"), c.NameFormatted, parentName), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         else
                         {
                             c.Checked = true;
-                            Logging.Manager(string.Format("Checking mod {0}", Utils.ReplaceMacro(c)));
+                            Logging.Manager(string.Format("Checking mod {0}", c.NameFormatted));
                         }
                     }
                     else

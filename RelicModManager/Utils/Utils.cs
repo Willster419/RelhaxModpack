@@ -27,6 +27,8 @@ namespace RelhaxModpack
         private static int iTrimmedLogLength = -300000; // minimum of how much of the old log to leave
         private static object _locker = new object();
 
+        private static Hashtable macroList;
+
         //logs string info to the log output
         // public static void AppendToLog(string info)
         // {
@@ -992,7 +994,7 @@ namespace RelhaxModpack
         {
             return DateTime.Now.ToUniversalTime().ToFileTime();
         }
-
+        
         public static string ReplaceMacro(string text, string macro, string macrotext)
         {
             bool search = true;
@@ -1011,33 +1013,24 @@ namespace RelhaxModpack
             return text;
         }
 
-        public static string ReplaceMacro(object obj)
+        //builds the hashtable once rather than each time we want to use it
+        public static void BuildMacroHash()
         {
-            Hashtable macroList = new Hashtable();
-            string text = "";
+            macroList = new Hashtable
+            {
+                { "app", Settings.TanksLocation },
+                { "onlineFolder", Settings.TanksOnlineFolderVersion },
+                { "versiondir", Settings.TanksVersion },
+                { "appData", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) },
+                { "relhax", Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) },
+                { "temp", Settings.RelhaxTempFolder },
+                { "desktop", Environment.GetFolderPath(Environment.SpecialFolder.Desktop) }
+            };
+        }
+        public static string ReplaceMacro(string text)
+        {
             try
             {
-                if (obj is string)
-                {
-                    text = obj.ToString();
-                }
-                else if (obj is SelectablePackage)
-                {
-                    text = ((SelectablePackage)obj).Name;
-                    macroList.Add("version", ((SelectablePackage)obj).Version);
-                }
-                else
-                {
-                    Logging.Manager("Error: get ReplaceMacro() call with unknown object type");
-                    return "unknown object type at call ReplaceMacro()";
-                }
-                macroList.Add("app", Settings.TanksLocation);
-                macroList.Add("onlineFolder", Settings.TanksOnlineFolderVersion);
-                macroList.Add("versiondir", Settings.TanksVersion);
-                macroList.Add("appData", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
-                macroList.Add("relhax", Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
-                macroList.Add("temp", Settings.RelhaxTempFolder);
-                macroList.Add("desktop", Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
                 foreach (DictionaryEntry macro in macroList)
                 {
                     text = System.Text.RegularExpressions.Regex.Replace(text, @"{" + @macro.Key.ToString() + @"}", @macro.Value.ToString(), System.Text.RegularExpressions.RegexOptions.IgnoreCase);
@@ -1045,12 +1038,11 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.ExceptionLog("ReplaceMacro", string.Format("Result string: {0}", text), ex);
-                Utils.DumbObjectToLog("macroList", macroList);
+                ExceptionLog("ReplaceMacro", string.Format("Result string: {0}", text), ex);
+                DumbObjectToLog("macroList", macroList);
             }
             return text;
         }
-
         public static string RemoveLeadingSlash(string s)
         {
             return s.TrimStart('/').TrimStart('\\');
