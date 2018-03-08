@@ -8,23 +8,7 @@ namespace RelhaxModpack
         private Timer UITimer = new Timer();
         IWavePlayer waveOutDevice = new WaveOut();
         MediaFoundationReader audioFileReader2;
-        public string MediaURL
-        {
-            get
-            {
-                return MediaURL;
-            }
-            set
-            {
-                Application.DoEvents();
-                audioFileReader2 = new MediaFoundationReader(value);
-                waveOutDevice.Init(audioFileReader2);
-                audioFileReader2.Position = 0;
-                waveOutDevice.Stop();
-                Seekbar.Maximum = (int)audioFileReader2.Length;
-                FileName.Text = System.IO.Path.GetFileName(value);
-            }
-        }
+        public string MediaURL;        
         public string StopText
         {
             get
@@ -47,6 +31,7 @@ namespace RelhaxModpack
                 PlayPause.Text = value;
             }
         }
+
         public RelhaxMediaPlayer()
         {
             InitializeComponent();
@@ -61,8 +46,8 @@ namespace RelhaxModpack
         {
             if (waveOutDevice.PlaybackState != PlaybackState.Playing)
                 Stop_Click(null,null);
-            if(Seekbar.Minimum <= audioFileReader2.Position && audioFileReader2.Position <= Seekbar.Maximum)
-                Seekbar.Value = (int)audioFileReader2.Position;
+            if(Seekbar.Minimum <= audioFileReader2.CurrentTime.TotalMilliseconds && audioFileReader2.CurrentTime.TotalMilliseconds <= Seekbar.Maximum)
+                Seekbar.Value = (int)audioFileReader2.CurrentTime.TotalMilliseconds;
         }
 
         private void Volume_Scroll(object sender, System.EventArgs e)
@@ -94,7 +79,7 @@ namespace RelhaxModpack
             //set the seekbar UI value to the scrolled location
             double newPos = Seekbar.Maximum * seekPos;
             Seekbar.Value = (int)newPos;
-            audioFileReader2.Position = Seekbar.Value;
+            audioFileReader2.CurrentTime = new System.TimeSpan(0, 0, 0, 0, Seekbar.Value);
         }
 
         private void Stop_Click(object sender, System.EventArgs e)
@@ -123,6 +108,15 @@ namespace RelhaxModpack
 
         private void RelhaxMediaPlayer_Load(object sender, System.EventArgs e)
         {
+            //init
+            FileName.Text = "LOADING";
+            Application.DoEvents();
+            audioFileReader2 = new MediaFoundationReader(MediaURL);
+            waveOutDevice.Init(audioFileReader2);
+            waveOutDevice.Stop();
+            //https://stackoverflow.com/questions/10371741/naudio-seeking-and-navigation-to-play-from-the-specified-position
+            Seekbar.Maximum = (int)audioFileReader2.TotalTime.TotalMilliseconds;
+            FileName.Text = System.IO.Path.GetFileName(MediaURL);
             //start volume at 50 percent
             Volume.Value = 5;
             waveOutDevice.Volume = 0.5f;
