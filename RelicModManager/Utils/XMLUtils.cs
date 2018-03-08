@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -1231,7 +1232,6 @@ namespace RelhaxModpack
                                 if (File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename)))
                                 {
                                     m.Checked = true;
-#warning check user checkbox code for this
                                     Logging.Manager(string.Format("checking user mod {0}", m.ZipFile));
                                 }
                             }
@@ -1323,7 +1323,6 @@ namespace RelhaxModpack
                     {
                         //it will be done in the UI code
                         um.Checked = true;
-#warning see above
                         Logging.Manager(string.Format("Checking user mod {0}", um.ZipFile));
                     }
                 }
@@ -1337,6 +1336,21 @@ namespace RelhaxModpack
                 }
                 if(!defaultChecked)
                     MessageBox.Show(string.Format(Translations.getTranslatedString("modsNotFoundTechnical"), modsNotFoundList), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            //check for structure issues
+            if(!defaultChecked)
+            {
+                List<SelectablePackage> brokenPackages = Utils.IsValidStructure(parsedCatagoryList);
+                if (brokenPackages.Count > 0)
+                {
+                    //list the broken packages
+                    StringBuilder sb = new StringBuilder();
+                    foreach(SelectablePackage sp in brokenPackages)
+                    {
+                        sb.Append(string.Format("Name: {0}, Parent: {1}, Category: {2}\n", sp.NameFormatted, sp.Parent.NameFormatted, sp.ParentCategory.Name));
+                    }
+                    MessageBox.Show(Translations.getTranslatedString("modsBrokenStructure") + sb.ToString());
+                }
             }
             Logging.Manager("Finished loading mod selections v2.0");
         }

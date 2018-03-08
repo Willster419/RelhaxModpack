@@ -1218,6 +1218,13 @@ namespace RelhaxModpack
 
             //Componet: 
             //
+            english.Add("modsBrokenStructure", "The following mods were disabled due to modifications in the package structure. You need to re-check them if you want to install them:\n");
+            german.Add("modsBrokenStructure", "TODO");
+            polish.Add("modsBrokenStructure", "TODO");
+            french.Add("modsBrokenStructure", "TODO");
+
+            //Componet: 
+            //
             english.Add("oldSavedConfigFile", "The saved preferences file your are using is in an outdated format and will be inaccurate in the future. Convert it to the new format? (A backup of the old format will be made)");
             german.Add("oldSavedConfigFile", "Die Konfigurationsdatei die benutzt wurde, wird in Zukunft immer ungenauer werden. Soll auf das neue Standardformat umgestellt werden? (Eine Sicherung des alten Formats erfolgt)");
             polish.Add("oldSavedConfigFile", "Zapisana konfiguracja jest w przestarzałym formacie i może powodować nieścisłości. Czy chcesz przekonwertować ją na nowszy zapis?");

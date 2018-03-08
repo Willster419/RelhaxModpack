@@ -28,6 +28,7 @@ namespace RelhaxModpack
         private static object _locker = new object();
 
         private static Hashtable macroList;
+        private static List<SelectablePackage> brokenPackages;
 
         //logs string info to the log output
         // public static void AppendToLog(string info)
@@ -610,7 +611,6 @@ namespace RelhaxModpack
                 {
                     if(um.Checked)
                         um.Checked = false;
-#warning user mod
                 }
             }
         }
@@ -965,6 +965,89 @@ namespace RelhaxModpack
                 Utils.ExceptionLog("DirectoryDelete", "Folder=" + folderPath, ex);
             }
         }
+        //checks for invalid structure in the selected packages
+        //ex: a new mandatory option was added to a mod, but the user does not have it selected
+        public static List<SelectablePackage> IsValidStructure(List<Category> ParsedCategoryList)
+        {
+            brokenPackages = new List<SelectablePackage>();
+            foreach(Category cat in ParsedCategoryList)
+            {
+                if(cat.Packages.Count > 0)
+                {
+                    foreach (SelectablePackage sp in cat.Packages)
+                        IsValidStructure(sp);
+                }
+            }
+            return brokenPackages;
+        }
+
+        private static void IsValidStructure(SelectablePackage Package)
+        {
+            if(Package.Checked)
+            {
+                //if it's the top level, chedk the category header
+                if(Package.Level == 0)
+                {
+                    if (!Package.ParentCategory.CategoryHeader.Checked)
+                        Package.ParentCategory.CategoryHeader.Checked = true;
+                }
+                bool hasSingles = false;
+                bool singleSelected = false;
+                bool hasDD1 = false;
+                bool DD1Selected = false;
+                bool hasDD2 = false;
+                bool DD2Selected = false;
+                foreach (SelectablePackage childPackage in Package.Packages)
+                {
+                    if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                    {
+                        hasSingles = true;
+                        if (childPackage.Checked)
+                            singleSelected = true;
+                    }
+                    else if ((childPackage.Type.Equals("single_dropdown") || childPackage.Type.Equals("single_dropdown1")) && childPackage.Enabled)
+                    {
+                        hasDD1 = true;
+                        if (childPackage.Checked)
+                            DD1Selected = true;
+                    }
+                    else if (childPackage.Type.Equals("single_dropdown2") && childPackage.Enabled)
+                    {
+                        hasDD2 = true;
+                        if (childPackage.Checked)
+                            DD2Selected = true;
+                    }
+                }
+                if (hasSingles && !singleSelected)
+                {
+                    Package.Checked = false;
+                    if (!brokenPackages.Contains(Package))
+                        brokenPackages.Add(Package);
+                }
+                if (hasDD1 && !DD1Selected)
+                {
+                    Package.Checked = false;
+                    if (!brokenPackages.Contains(Package))
+                        brokenPackages.Add(Package);
+                }
+                if (hasDD2 && !DD2Selected)
+                {
+                    Package.Checked = false;
+                    if (!brokenPackages.Contains(Package))
+                        brokenPackages.Add(Package);
+                }
+                if(Package.Checked && !Package.Parent.Checked)
+                {
+                    Package.Checked = false;
+                    if (!brokenPackages.Contains(Package))
+                        brokenPackages.Add(Package);
+                }
+            }
+            if (Package.Packages.Count > 0)
+                foreach (SelectablePackage sep in Package.Packages)
+                    IsValidStructure(sep);
+        }
+
         // https://stackoverflow.com/questions/30494/compare-version-identifiers
         /// <summary>
         /// Compare versions of form "1,2,3,4" or "1.2.3.4". Throws FormatException

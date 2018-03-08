@@ -215,12 +215,16 @@ namespace RelhaxModpack
             {
                 if (Path.GetExtension(s).Equals(".zip"))
                 {
-                    UserMods.Add(new SelectablePackage()
+                    SelectablePackage sp = new SelectablePackage()
                     {
                         ZipFile = s,
                         Name = Path.GetFileNameWithoutExtension(s),
-                        Enabled = true
-                    });
+                        Enabled = true,
+                        Level = 0
+                    };
+                    sp.Parent = sp;
+                    sp.TopParent = sp;
+                    UserMods.Add(sp);
                 }
             }
         }
@@ -422,10 +426,14 @@ namespace RelhaxModpack
             for (int i = 0; i < UserMods.Count; i++)
             {
                 //make modCheckBox
-                RelhaxUserCheckBox UserPackage = new RelhaxUserCheckBox();
-                UserPackage.Package = UserMods[i];
+                RelhaxUserCheckBox UserPackage = new RelhaxUserCheckBox()
+                {
+                    Package = UserMods[i],
+                    AutoCheck = false,
+                    AutoSize = true
+                };
                 int yLocation = 3 + (UserPackage.Size.Height * (i));
-                UserPackage.Location = new System.Drawing.Point(3, yLocation);
+                UserPackage.Location = new Point(3, yLocation);
                 UserPackage.Text = UserMods[i].Name;
                 if (forceUnchecked)
                 {
@@ -437,7 +445,10 @@ namespace RelhaxModpack
                 }
                 UserMods[i].Enabled = true;
                 UserPackage.Enabled = true;
-                UserPackage.CheckedChanged += UserPackage_CheckedChanged;
+                UserMods[i].UIComponent = UserPackage;
+                UserMods[i].ParentUIComponent = UserPackage;
+                UserMods[i].TopParentUIComponent = UserPackage;
+                UserPackage.Click += OnMultiPackageClick;
                 tb.Controls.Add(UserPackage);
             }
             modTabGroups.TabPages.Add(tb);
@@ -1020,6 +1031,8 @@ namespace RelhaxModpack
             {
                 //check it and propagate change
                 spc.Checked = true;
+                if (ipc is RelhaxUserCheckBox)
+                    return;
                 //down
                 PropagateChecked(spc,false);
                 //up
@@ -1029,6 +1042,8 @@ namespace RelhaxModpack
             {
                 //uncheck it and propagate change
                 spc.Checked = false;
+                if (ipc is RelhaxUserCheckBox)
+                    return;
                 //up then down
                 PropagateUpNotChecked(spc);
                 PropagateDownNotChecked(spc);
